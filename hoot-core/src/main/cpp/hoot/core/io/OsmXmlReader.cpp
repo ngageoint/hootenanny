@@ -43,6 +43,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -62,22 +64,29 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
-_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
-_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
-_useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
-_addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
-_preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing()),
-_numRead(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+_numRead(0)
 {
+  setConfiguration(conf());
 }
 
 OsmXmlReader::~OsmXmlReader()
 {
   close();
+}
+
+void OsmXmlReader::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
+  setKeepStatusTag(configOptions.getReaderKeepStatusTag());
+  setUseFileStatus(configOptions.getReaderUseFileStatus()),
+  setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
+  setPreserveAllTags(configOptions.getReaderPreserveAllTags());
+  setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
+  setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
+  setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -343,6 +352,26 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   }
   file.close();
 
+  // We don't support cropping during streaming, and there is a check in
+  // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
+  // a bounds has been set.
+  LOG_VARD(_bounds.isNull());
+  if (!_bounds.isNull())
+  {
+    // We're going to mimic how the API DB readers handle the bounds by including any features that
+    // cross over the boundary threshold.
+    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
+    MapCropper cropper(_bounds);
+    LOG_INFO(cropper.getInitStatusMessage());
+    cropper.setKeepEntireFeaturesCrossingBounds(true);
+    // negation of previous setting; won't support this yet here (if ever) b/c api db readers aren't
+    // set up to handle the bounds in this way; if we want to support this, then we also need to
+    // implement it in the api db readers
+    //cropper.setKeepOnlyFeaturesInsideBounds(true);
+    cropper.apply(_map);
+    LOG_INFO(cropper.getCompletedStatusMessage());
+  }
+
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -394,10 +423,10 @@ const QString& OsmXmlReader::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
-                                const QString & /* localName */,
-                                const QString &qName,
-                                const QXmlAttributes &attributes)
+bool OsmXmlReader::startElement(const QString& /* namespaceURI */,
+                                const QString& /* localName */,
+                                const QString& qName,
+                                const QXmlAttributes& attributes)
 {
   try
   {
@@ -672,9 +701,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
   return true;
 }
 
-bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
-                              const QString & /* localName */,
-                              const QString &qName)
+bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
+                              const QString& /* localName */,
+                              const QString& qName)
 {
   if (_element)
   {

@@ -48,15 +48,15 @@ class Way;
 
 /**
  * Provides a clean crop at the edges of the map rather than the ragged crop you get from Osmosis.
- * As a result it introduces new nodes into the data and may split ways up into multiple ways.
+ * As a result, it introduces new nodes into the data and may split ways up into multiple ways.
  *
- * In the class outside and inside are referenced. Outside refers to a geometry that is wholly
+ * In the class, outside and inside are referenced. Outside refers to a geometry that is wholly
  * outside the region that will be kept. Inside refers to a geometry that is at least partially
  * inside the region that will be kept.
  *
- * This class works with four pass as long as all data, bounds and crop geometry are in WGS84.
- * If the data before this operation is in a planar projection then it should be reprojected using
- * ReprojectToGeographicOp.
+ * This class works with four pass conflation (used in Hadoop only) as long as all data, bounds and
+ * crop geometry are in WGS84. If the data before this operation is in a planar projection then it
+ * should be reprojected using ReprojectToGeographicOp.
  */
 class MapCropper : public OsmMapOperation, public Serializable, public Boundable,
   public Configurable, public OperationStatusInfo
@@ -86,7 +86,7 @@ public:
    * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
    * This value will not be serialized.
    */
-  virtual void setBounds(const geos::geom::Envelope &bounds) override { _nodeBounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds) override { _nodeBounds = bounds; }
 
   virtual void writeObject(QDataStream& os) const override;
 
@@ -98,14 +98,29 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Cropped " + QString::number(_numAffected) + " elements"; }
 
+  void setInvert(bool invert);
+  void setKeepEntireFeaturesCrossingBounds(bool keep);
+  void setKeepOnlyFeaturesInsideBounds(bool keep);
+
 private:
 
   geos::geom::Envelope _envelope;
   std::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;
-  bool _removeNodes;
   geos::geom::Envelope _nodeBounds;
+  // If true, won't split apart features straddling the specified bounds.
+  bool _keepEntireFeaturesCrossingBounds;
+  // If true, will only keep features falling completely inside the specified bounds. This overrides
+  // _keepEntireFeaturesCrossingBounds and sets it to false;
+  bool _keepOnlyFeaturesInsideBounds;
+
   int _statusUpdateInterval;
+
+  int _numWaysInBounds;
+  int _numWaysOutOfBounds;
+  int _numWaysCrossingThreshold;
+  int _numCrossingWaysKept;
+  int _numCrossingWaysRemoved;
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 

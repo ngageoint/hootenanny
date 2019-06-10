@@ -21,7 +21,7 @@ convert (input) (output)
 convert "(input1[;layer]) [input2[;layer]]" (output)
 --------------------------------------
 
-=== Configuration Options
+=== Conversion Operations
 
 If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before writing the 
 result to the output. If a schema translation script is specified in schema.translation.script a TranslationVisitor is automatically added
@@ -34,6 +34,11 @@ example:
 hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \ 
   -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
 --------------------------------------
+
+=== Bounded Conversions
+
+If a configuration option matching, `convert.bounding.box.*` is set to a valid bounding box, supporting readers will read data only from 
+the specified bounds.
 
 ==== Schema Translation
 

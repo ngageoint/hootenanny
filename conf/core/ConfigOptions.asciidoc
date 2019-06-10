@@ -719,6 +719,29 @@ Creates example review tags for debugging. All reviews created with this mechani
 
 Bounds used by the map cropper when cropping a map, of the form: minx,miny,maxx,maxy
 
+=== crop.invert
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, will keep the data falling within the crop bounds. If true, will keep only data outside
+of the bounds.
+
+=== crop.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, will not break apart features crossing the crop bounds. Ignored if crop.invert is enabled.
+
+=== crop.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, will throw out any features that do not fall completely within the crop bounds. Ignored if
+crop.invert is enabled.
+
 === debug.maps.filename
 
 * Data Type: string
@@ -3886,6 +3909,13 @@ The format used to write the element payload portion of the Spark changeset file
 * Default Value: `255`
 
 The maximum length, in characters, that the SplitNameVisitor will allow for a name tag.
+
+=== stats.generic.data.file
+
+* Data Type: string
+* Default Value: `${HOOT_HOME}/conf/core/GenericStats.json`
+
+Path to a json file containing definitions for the generic set of statistics values.
 
 === stats.translate.script
 

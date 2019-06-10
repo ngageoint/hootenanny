@@ -2,25 +2,25 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.1458483" minlon="11.6376592" maxlat="48.1458483" maxlon="11.6376592"/>
     <node visible="true" id="-1939932" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1458482999999973" lon="11.6376591999999999">
-        <tag k="cuisine" v="malaysian"/>
-        <tag k="addr:city" v="München"/>
-        <tag k="source" v="navteq"/>
-        <tag k="language" v="GER"/>
-        <tag k="addr:housenumber" v="5"/>
-        <tag k="name" v="Champor"/>
+        <tag k="addr:country" v="DE"/>
+        <tag k="addr:street" v="Warthestraße;WARTHESTRASSE"/>
         <tag k="alt_name" v="NITAYA'S RESTAURANT"/>
         <tag k="website" v="http://www.champor.de/"/>
-        <tag k="addr:country" v="DE"/>
         <tag k="amenity" v="restaurant"/>
-        <tag k="REF1" v="01c422"/>
-        <tag k="phone" v="89-99317764"/>
-        <tag k="REVIEW" v="01c422"/>
-        <tag k="REF2" v="none"/>
-        <tag k="addr:street" v="Warthestraße;WARTHESTRASSE"/>
-        <tag k="addr:postcode" v="81927"/>
-        <tag k="access" v="yes"/>
-        <tag k="uuid" v="{c50e9a71-63a7-5197-a808-2c9422815b5d};{1d139ba7-b5d9-5688-b3e7-164cedf3b78b}"/>
         <tag k="addr:language" v="GER"/>
+        <tag k="addr:housenumber" v="5"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Champor"/>
+        <tag k="REF1" v="01c422"/>
+        <tag k="REF2" v="none"/>
+        <tag k="uuid" v="{c50e9a71-63a7-5197-a808-2c9422815b5d};{1d139ba7-b5d9-5688-b3e7-164cedf3b78b}"/>
+        <tag k="addr:city" v="München"/>
+        <tag k="language" v="GER"/>
+        <tag k="addr:postcode" v="81927"/>
+        <tag k="REVIEW" v="01c422"/>
+        <tag k="access" v="yes"/>
+        <tag k="phone" v="89-99317764"/>
+        <tag k="source" v="navteq"/>
+        <tag k="cuisine" v="malaysian"/>
     </node>
 </osm>

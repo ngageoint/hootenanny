@@ -211,7 +211,6 @@
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Sur 4"/>
         <tag k="source:datetime" v="2015-08-24T16:13:18.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
@@ -241,7 +240,6 @@
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Lecuna"/>
         <tag k="source:datetime" v="2015-05-11T03:32:46.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
@@ -276,7 +274,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-26" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-45"/>
@@ -293,7 +290,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-37"/>
@@ -304,7 +300,6 @@
         <tag k="surface" v="asphalt"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Baralt"/>
         <tag k="source:datetime" v="2014-04-16T16:03:47.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
@@ -342,7 +337,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-38"/>
@@ -359,7 +353,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-21" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-35"/>
@@ -370,7 +363,6 @@
         <tag k="surface" v="asphalt"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Baralt"/>
         <tag k="source:datetime" v="2014-04-16T16:03:47.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
@@ -398,7 +390,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Lecuna"/>
         <tag k="source:datetime" v="2014-06-22T17:21:17.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
@@ -438,7 +429,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-28"/>
@@ -460,7 +450,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
@@ -480,7 +469,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
@@ -497,7 +485,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
@@ -508,7 +495,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. San Martín"/>
         <tag k="source:datetime" v="2015-10-15T16:12:12.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
@@ -535,7 +521,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Lecuna"/>
         <tag k="source:datetime" v="2014-06-22T17:21:17.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
@@ -564,7 +549,6 @@
         <tag k="surface" v="asphalt"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Baralt"/>
         <tag k="source:datetime" v="2016-01-14T14:25:09.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
@@ -595,7 +579,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Oeste 8"/>
         <tag k="source:datetime" v="2014-09-04T14:24:35.000Z;2019-01-17T19:50:06Z;2014-05-19T20:08:16.000Z"/>
         <tag k="way_area" v="-999999"/>
@@ -622,24 +605,23 @@
         <nd ref="-16"/>
         <nd ref="-52"/>
         <nd ref="-7"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Av. Oeste 8"/>
-        <tag k="source:datetime" v="2014-09-04T14:24:37.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{9999fb82-3240-4c16-83c4-777553acb980}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.666Z"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.666Z"/>
         <tag k="highway" v="secondary"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Oeste 8"/>
+        <tag k="uuid" v="{9999fb82-3240-4c16-83c4-777553acb980}"/>
+        <tag k="source:datetime" v="2014-09-04T14:24:37.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="lanes" v="3"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
@@ -657,7 +639,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-57"/>
@@ -682,7 +663,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
@@ -705,7 +685,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
@@ -725,7 +704,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Baralt"/>
         <tag k="source:datetime" v="2015-08-11T15:27:57.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>

@@ -16,8 +16,8 @@
         <nd ref="-5318597"/>
         <nd ref="-5318598"/>
         <nd ref="-5318595"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="building 2"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5401868" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -27,19 +27,19 @@
         <nd ref="-5318592"/>
         <nd ref="-5318594"/>
         <nd ref="-5318586"/>
-        <tag k="building" v="yes"/>
         <tag k="name" v="building 1"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5401868" role="reviewee"/>
         <member type="way" ref="-5401869" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="Building"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Unmatched buildings are overlapping."/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Unmatched buildings are overlapping."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

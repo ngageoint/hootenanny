@@ -69,6 +69,11 @@ public:
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }
+  int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
+  int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
+  int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
+  int getNumChanges() const
+  { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
 private:
 
@@ -83,6 +88,7 @@ private:
   long _numFromElementsParsed;
   long _numToElementsParsed;
   bool _allowDeletingReferenceFeatures;
+  QMap<Change::ChangeType, int> _changesByType;
 
 };
 

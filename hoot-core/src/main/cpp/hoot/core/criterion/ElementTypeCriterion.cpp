@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementTypeCriterion.h"
 
@@ -33,6 +33,9 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, NodeTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, WayTypeCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationTypeCriterion)
 
 bool ElementTypeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
