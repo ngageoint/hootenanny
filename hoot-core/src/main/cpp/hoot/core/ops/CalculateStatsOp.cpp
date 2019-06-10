@@ -29,7 +29,6 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>

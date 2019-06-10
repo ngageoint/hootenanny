@@ -58,25 +58,28 @@ protected:
 };
 
 // Helper classes for data driven stats
-class NodeTypeCriterion : public ElementTypeCriterion
+class NodeCriterion : public ElementTypeCriterion
 {
 public:
-  static std::string className() { return "hoot::NodeTypeCriterion"; }
-  NodeTypeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+
+  static std::string className() { return "hoot::NodeCriterion"; }
+  NodeCriterion() : ElementTypeCriterion(ElementType::Node) {}
 };
 
-class WayTypeCriterion : public ElementTypeCriterion
+class WayCriterion : public ElementTypeCriterion
 {
 public:
-  static std::string className() { return "hoot::WayTypeCriterion"; }
-  WayTypeCriterion() : ElementTypeCriterion(ElementType::Way) {}
+
+  static std::string className() { return "hoot::WayCriterion"; }
+  WayCriterion() : ElementTypeCriterion(ElementType::Way) {}
 };
 
-class RelationTypeCriterion : public ElementTypeCriterion
+class RelationCriterion : public ElementTypeCriterion
 {
 public:
-  static std::string className() { return "hoot::RelationTypeCriterion"; }
-  RelationTypeCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+
+  static std::string className() { return "hoot::RelationCriterion"; }
+  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
 };
 
 }

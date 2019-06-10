@@ -95,7 +95,7 @@ public:
   /**
    * See the associated configuration options text for details.
    */
-  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs);
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
 

@@ -159,7 +159,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
         LOG_VART(e1);
         nodeCount1 =
           (int)FilteredVisitor::getStat(
-            new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e1);
+            new NodeCriterion(), new ElementCountVisitor(), map, e1);
       }
       LOG_VART(nodeCount1);
 
@@ -168,7 +168,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
       {
         nodeCount2 =
           (int)FilteredVisitor::getStat(
-            new ElementTypeCriterion(ElementType::Node), new ElementCountVisitor(), map, e2);
+            new NodeCriterion(), new ElementCountVisitor(), map, e2);
       }
       LOG_VART(nodeCount2);
 
