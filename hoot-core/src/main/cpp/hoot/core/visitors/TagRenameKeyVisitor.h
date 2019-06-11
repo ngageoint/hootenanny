@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
@@ -37,12 +37,8 @@ namespace hoot
 
 /**
  * Renames all keys for all elements with the specified key to a new key
- *
- * This is an ElementOsmMapVisitor instead of a ElementVisitor to appease the
- * PrepExactHighwayData.js script in the train-highways regression test. Finishing #2831 would
- * make it possible to change this back to an ElementVisitor.
  */
-class TagRenameKeyVisitor : public ElementOsmMapVisitor, public Configurable,
+class TagRenameKeyVisitor : public ElementVisitor, public Configurable,
   public OperationStatusInfo
 {
 public:
@@ -53,7 +49,7 @@ public:
 
   TagRenameKeyVisitor(const QString& oldKey, const QString& newKey);
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  virtual void visit(const ElementPtr& e) override;
 
   virtual void setConfiguration(const Settings& conf);
 
