@@ -326,6 +326,18 @@ public class DbUtils {
     }
 
     /**
+     * Check to see if the map contains the tag bbox and return it, else null
+     * @param mapId
+     * @return bbox string for the map, null if doesnt exist
+     */
+    public static String getMapBbox(long mapId) {
+        Map<String, String> tags = getMapsTableTags(mapId);
+        String sourceInfo = tags.get("bbox");
+
+        return sourceInfo;
+    }
+
+    /**
      * Inserts a mapid to the folder mapping table if it doesn't exist
      * Updates mapid's parent if it does exist
      *
