@@ -710,6 +710,7 @@ public class GrailResource {
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
         tags.put("source", "rails");
+        tags.put("bbox", bbox);
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 

@@ -560,8 +560,28 @@ public class MapResource {
 
         if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
                 || (extents.get("maxlon") == null)) {
+
+            // check for bbox tag in maps
+            String bboxTag = DbUtils.getMapBbox(Long.parseLong(mapId));
+            if(bboxTag != null) {
+                //This is how UI sends a bbox `${minx},${miny},${maxx},${maxy}`
+                String[] bboxCoords = bboxTag.split(",");
+                ret.put("minlon", Double.parseDouble(bboxCoords[0]));
+                ret.put("maxlon", Double.parseDouble(bboxCoords[2]));
+                ret.put("minlat", Double.parseDouble(bboxCoords[1]));
+                ret.put("maxlat", Double.parseDouble(bboxCoords[3]));
+            } else {
+                ret.put("minlon", -180);
+                ret.put("maxlon", 180);
+                ret.put("minlat", -90);
+                ret.put("maxlat", 90);
+            }
+
+            ret.put("firstlon", 0);
+            ret.put("firstlat", 0);
             ret.put("nodescount", 0);
-            return Response.status(Status.NO_CONTENT).entity(ret).build();
+
+            return Response.status(Status.OK).entity(ret).build();
         }
 
         JSONObject anode = currMap.retrieveANode(queryBounds);
