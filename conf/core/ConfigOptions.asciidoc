@@ -4309,21 +4309,6 @@ databases are capped at 2000 nodes per way.
 
 The minimum size that a way should be split into for merging. Units in meters.
 
-=== way.remover.bounds
-
-* Data Type: string
-* Default Value: ``
-
-Bounds used by the RemoveWaysByBoundsOp when removing ways, of the form: minx,miny,maxx,maxy
-
-=== way.remover.invert.bounds
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the RemoveWaysByBoundsOp will remove ways outside of the bounds specified by
-way.remover.bounds.  Otherwise it will remove ways within the specified bounds.
-
 === way.splitter.max.length
 
 * Data Type: double
