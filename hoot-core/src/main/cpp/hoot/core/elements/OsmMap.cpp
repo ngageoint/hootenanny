@@ -38,8 +38,8 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveElementOp.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -426,7 +426,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
       r->replaceElement(from, to);
     }
 
-    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+    RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -472,7 +472,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 
     //  Don't remove the element if it is being replaced by itself
     if (!elem.contains(from->getId()))
-      RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+      RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -515,7 +515,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   if (containsNode(oldId))
   {
-    RemoveNodeOp::removeNodeNoCheck(shared_from_this(), oldId);
+    RemoveNodeByEid::removeNodeNoCheck(shared_from_this(), oldId);
   }
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));

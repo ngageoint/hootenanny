@@ -56,7 +56,6 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(OsmMap* map);
-
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   void setRecursive(bool recursive) { _recursive = recursive; }

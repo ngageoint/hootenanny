@@ -139,7 +139,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         //Translate the features (which includes applying tag overrides set below)
-        convertOps.add("hoot::TranslationOp");
+        convertOps.add("hoot::SchemaTranslationVisitor");
         options.add("schema.translation.direction=toogr");
         options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
 

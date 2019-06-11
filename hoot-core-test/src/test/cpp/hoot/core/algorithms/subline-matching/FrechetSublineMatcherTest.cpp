@@ -41,7 +41,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -142,8 +142,10 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
 
     FrechetSublineMatcher uut;
     uut.setConfiguration(s);

@@ -35,7 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -78,8 +78,10 @@ public:
       0.040583,
       angleHistogramExtractor.extract(
         *map,
-        map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref1(), "001f4b")[0]),
-        map->getWay(FindWaysVisitor::findWaysByTag(map, MetadataTags::Ref2(), "001f4b")[0])),
+        map->getWay(
+          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "001f4b")[0]),
+        map->getWay(
+          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref2(), "001f4b")[0])),
       1e-6);
   }
 };

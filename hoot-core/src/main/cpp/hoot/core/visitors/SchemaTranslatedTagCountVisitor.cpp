@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "TranslatedTagCountVisitor.h"
+#include "SchemaTranslatedTagCountVisitor.h"
 
 // hoot
 #include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
@@ -44,9 +44,9 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, TranslatedTagCountVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
-TranslatedTagCountVisitor::TranslatedTagCountVisitor(
+SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   const std::shared_ptr<ScriptSchemaTranslator>& t) :
   _map(),
   _populatedCount(),
@@ -63,7 +63,7 @@ TranslatedTagCountVisitor::TranslatedTagCountVisitor(
   _schema = _translator->getOgrOutputSchema();
 }
 
-void TranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
+void SchemaTranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
 {
   const std::shared_ptr<const FeatureDefinition>& defn = f->getFeatureDefinition();
 
@@ -97,7 +97,7 @@ void TranslatedTagCountVisitor::_countTags(std::shared_ptr<Feature>& f)
   }
 }
 
-void TranslatedTagCountVisitor::visit(const ConstElementPtr& e)
+void SchemaTranslatedTagCountVisitor::visit(const ConstElementPtr& e)
 {
   if (e->getTags().getInformationCount() > 0)
   {

@@ -31,7 +31,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/util/Log.h>
@@ -169,7 +169,7 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
     }
     else
     {
-      RemoveElementOp::removeElement(_map->shared_from_this(), ElementId(type, id));
+      RemoveElementByEid::removeElement(_map->shared_from_this(), ElementId(type, id));
     }
   }
 }

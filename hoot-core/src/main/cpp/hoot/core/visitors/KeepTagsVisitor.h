@@ -28,35 +28,26 @@
 #define KEEPTAGSVISITOR_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 namespace hoot
 {
 
-class Element;
-
 /**
  * Keeps any tags with keys matching those passed to this visitor; removes all others
  */
-class KeepTagsVisitor : public ElementVisitor, public Configurable
+class KeepTagsVisitor : public RemoveTagsVisitor
 {
 public:
 
   static std::string className() { return "hoot::KeepTagsVisitor"; }
 
   KeepTagsVisitor();
-  KeepTagsVisitor(QStringList keys);
-
-  void setConfiguration(const Settings& conf);
+  explicit KeepTagsVisitor(const QStringList& keys);
 
   virtual void visit(const std::shared_ptr<Element>& e);
 
-  virtual QString getDescription() const { return "Keeps only tags with specified keys"; }
-
-private:
-
-  QStringList _keys;
+  virtual QString getDescription() const { return "Keeps tags by key"; }
 };
 
 }

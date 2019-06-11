@@ -42,7 +42,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateAreaVisitor.h>
 
 // TGS
@@ -80,13 +80,18 @@ public:
     map->visitRw(uut);
 
     // these "duplicates" should not be removed.
-    CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "tag difference").size());
-    CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "small difference").size());
-    CPPUNIT_ASSERT_EQUAL(2ul, FindWaysVisitor::findWaysByTag(map, "note", "different name").size());
+    CPPUNIT_ASSERT_EQUAL(
+      2ul, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "tag difference").size());
+    CPPUNIT_ASSERT_EQUAL(
+      2ul, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "small difference").size());
+    CPPUNIT_ASSERT_EQUAL(
+      2ul, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "different name").size());
 
     // these duplicates should be removed.
-    CPPUNIT_ASSERT_EQUAL(1ul, FindWaysVisitor::findWaysByTag(map, "note", "double").size());
-    CPPUNIT_ASSERT_EQUAL(1ul, FindWaysVisitor::findWaysByTag(map, "note", "triple").size());
+    CPPUNIT_ASSERT_EQUAL(
+      1ul, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "double").size());
+    CPPUNIT_ASSERT_EQUAL(
+      1ul, ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "triple").size());
   }
 
 };

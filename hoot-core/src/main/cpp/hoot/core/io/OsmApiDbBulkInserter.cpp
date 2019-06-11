@@ -247,41 +247,44 @@ void OsmApiDbBulkInserter::_closeOutputFiles()
 void OsmApiDbBulkInserter::_logStats(const bool debug)
 {
   QStringList messages;
-  messages.append(QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
-  messages.append(
-    QString("\tNode tags: ") + StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
-  messages.append(
-    QString("\tMaximum node ID: ") + StringUtils::formatLargeNumber(_idMappings.currentNodeId));
-  messages.append(QString("\tWays: ") + StringUtils::formatLargeNumber(_writeStats.waysWritten));
-  messages.append(
-    QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
-  messages.append(
-    QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
-  messages.append(
-    QString("\tMaximum way ID: ") + StringUtils::formatLargeNumber(_idMappings.currentWayId));
-  messages.append(
-    QString("\tRelations: ") + StringUtils::formatLargeNumber(_writeStats.relationsWritten));
-  messages.append(
-    QString("\tRelation members: ") +
-    StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
-  messages.append(
-    QString("\tRelation tags: ") + StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
-  messages.append(
-    QString("\tMaximum relation ID: ") +
-    StringUtils::formatLargeNumber(_idMappings.currentRelationId));
-  messages.append(
-    QString("\tUnresolved relation members: ") +
-    StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
   messages.append(
     QString("\tTotal features: ") + StringUtils::formatLargeNumber(_getTotalFeaturesWritten()));
-  messages.append(
-    QString("\tChangesets: ") + StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
-  messages.append(
-    QString("\tChangeset change size (each): ") +
-    StringUtils::formatLargeNumber(_maxChangesetSize));
-  messages.append(
-    QString("\tExecutable SQL records: ") +
-    StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
+  if (debug)
+  {
+    messages.append(QString("\tNodes: ") + StringUtils::formatLargeNumber(_writeStats.nodesWritten));
+    messages.append(
+      QString("\tNode tags: ") + StringUtils::formatLargeNumber(_writeStats.nodeTagsWritten));
+    messages.append(
+      QString("\tMaximum node ID: ") + StringUtils::formatLargeNumber(_idMappings.currentNodeId));
+    messages.append(QString("\tWays: ") + StringUtils::formatLargeNumber(_writeStats.waysWritten));
+    messages.append(
+      QString("\tWay nodes: ") + StringUtils::formatLargeNumber(_writeStats.wayNodesWritten));
+    messages.append(
+      QString("\tWay tags: ") + StringUtils::formatLargeNumber(_writeStats.wayTagsWritten));
+    messages.append(
+      QString("\tMaximum way ID: ") + StringUtils::formatLargeNumber(_idMappings.currentWayId));
+    messages.append(
+      QString("\tRelations: ") + StringUtils::formatLargeNumber(_writeStats.relationsWritten));
+    messages.append(
+      QString("\tRelation members: ") +
+      StringUtils::formatLargeNumber(_writeStats.relationMembersWritten));
+    messages.append(
+      QString("\tRelation tags: ") + StringUtils::formatLargeNumber(_writeStats.relationTagsWritten));
+    messages.append(
+      QString("\tMaximum relation ID: ") +
+      StringUtils::formatLargeNumber(_idMappings.currentRelationId));
+    messages.append(
+      QString("\tUnresolved relation members: ") +
+      StringUtils::formatLargeNumber(_writeStats.relationMembersUnresolved));
+    messages.append(
+      QString("\tChangesets: ") + StringUtils::formatLargeNumber(_changesetData.changesetsWritten));
+    messages.append(
+      QString("\tChangeset change size (each): ") +
+      StringUtils::formatLargeNumber(_maxChangesetSize));
+    messages.append(
+      QString("\tExecutable SQL records: ") +
+       StringUtils::formatLargeNumber(_getTotalRecordsWritten()));
+  }
 
   for (int i = 0; i < messages.size(); i++)
   {

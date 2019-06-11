@@ -24,10 +24,9 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "RemoveNodeOp.h"
+#include "RemoveNodeByEid.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/util/Validate.h>
@@ -37,9 +36,7 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, RemoveNodeOp)
-
-RemoveNodeOp::RemoveNodeOp(bool doCheck, bool removeFully) :
+RemoveNodeByEid::RemoveNodeByEid(bool doCheck, bool removeFully) :
 _nodeIdToRemove(-std::numeric_limits<int>::max()),
 _doCheck(doCheck),
 _removeFully(removeFully),
@@ -47,7 +44,7 @@ _removeOnlyUnused(false)
 {
 }
 
-RemoveNodeOp::RemoveNodeOp(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused) :
+RemoveNodeByEid::RemoveNodeByEid(long nId, bool doCheck, bool removeFully, bool removeOnlyUnused) :
 _nodeIdToRemove(nId),
 _doCheck(doCheck),
 _removeFully(removeFully),
@@ -55,13 +52,13 @@ _removeOnlyUnused(removeOnlyUnused)
 {
 }
 
-void RemoveNodeOp::_removeNodeNoCheck(OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNodeNoCheck(OsmMapPtr& map, long nId)
 {
   map->_index->removeNode(map->getNode(_nodeIdToRemove));
   map->_nodes.erase(nId);
 }
 
-void RemoveNodeOp::_removeNode(OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNode(OsmMapPtr& map, long nId)
 {
   const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
@@ -75,7 +72,7 @@ void RemoveNodeOp::_removeNode(OsmMapPtr& map, long nId)
   _removeNodeNoCheck(map, nId);
 }
 
-void RemoveNodeOp::_removeNodeFully(OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNodeFully(OsmMapPtr& map, long nId)
 {
   // copy the set because we may modify it later.
   set<long> rid = map->getIndex().getElementToRelationMap()->
@@ -99,11 +96,11 @@ void RemoveNodeOp::_removeNodeFully(OsmMapPtr& map, long nId)
   VALIDATE(map->validate());
 }
 
-void RemoveNodeOp::apply(OsmMapPtr& map)
+void RemoveNodeByEid::apply(OsmMapPtr& map)
 {
   if (_nodeIdToRemove == -std::numeric_limits<int>::max())
   {
-    throw IllegalArgumentException("No node ID specified for RemoveNodeOp.");
+    throw IllegalArgumentException("No node ID specified for RemoveNodeByEid.");
   }
 
   if (_removeFully)
@@ -114,21 +111,21 @@ void RemoveNodeOp::apply(OsmMapPtr& map)
     _removeNode(map, _nodeIdToRemove);
 }
 
-void RemoveNodeOp::removeNode(OsmMapPtr map, long nId, bool removeOnlyUnused)
+void RemoveNodeByEid::removeNode(OsmMapPtr map, long nId, bool removeOnlyUnused)
 {
-  RemoveNodeOp nodeRemover(nId, true, false, removeOnlyUnused);
+  RemoveNodeByEid nodeRemover(nId, true, false, removeOnlyUnused);
   nodeRemover.apply(map);
 }
 
-void RemoveNodeOp::removeNodeNoCheck(OsmMapPtr map, long nId)
+void RemoveNodeByEid::removeNodeNoCheck(OsmMapPtr map, long nId)
 {
-  RemoveNodeOp nodeRemover(nId, false);
+  RemoveNodeByEid nodeRemover(nId, false);
   nodeRemover.apply(map);
 }
 
-void RemoveNodeOp::removeNodeFully(OsmMapPtr map, long nId)
+void RemoveNodeByEid::removeNodeFully(OsmMapPtr map, long nId)
 {
-  RemoveNodeOp nodeRemover(nId, true, true);
+  RemoveNodeByEid nodeRemover(nId, true, true);
   nodeRemover.apply(map);
 }
 

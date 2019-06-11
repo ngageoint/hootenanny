@@ -41,7 +41,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 
@@ -157,8 +157,8 @@ WayPtr WayAverager::average()
 
   result->setTags(tags);
 
-  RemoveWayOp::removeWay(_map.shared_from_this(), _w1->getId());
-  RemoveWayOp::removeWay(_map.shared_from_this(), _w2->getId());
+  RemoveWayByEid::removeWay(_map.shared_from_this(), _w1->getId());
+  RemoveWayByEid::removeWay(_map.shared_from_this(), _w2->getId());
 
   _map.addWay(result);
 

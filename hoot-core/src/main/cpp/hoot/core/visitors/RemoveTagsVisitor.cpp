@@ -43,21 +43,6 @@ _numTagsRemoved(0)
   setConfiguration(conf());
 }
 
-RemoveTagsVisitor::RemoveTagsVisitor(const QString& key) :
-_negateCriterion(false),
-_numTagsRemoved(0)
-{
-  addKey(key);
-}
-
-RemoveTagsVisitor::RemoveTagsVisitor(const QString& key1, const QString& key2) :
-_negateCriterion(false),
-_numTagsRemoved(0)
-{
-  addKey(key1);
-  addKey(key2);
-}
-
 RemoveTagsVisitor::RemoveTagsVisitor(const QStringList& keys) :
 _keys(keys),
 _negateCriterion(false),
@@ -67,11 +52,13 @@ _numTagsRemoved(0)
 
 void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 {
+  // TODO: We could also add support for chained criteria here like in RemoveElementsVisitor
+
   ConfigOptions configOptions(conf);
-  _keys = configOptions.getRemoveTagsVisitorKeys();
+  _keys = configOptions.getTagFilterKeys();
   LOG_VART(_keys);
   _negateCriterion = configOptions.getElementCriterionNegate();
-  _setCriterion(configOptions.getRemoveTagsVisitorElementCriterion());
+  _setCriterion(configOptions.getTagFilterElementCriterion());
 }
 
 void RemoveTagsVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -97,13 +84,9 @@ void RemoveTagsVisitor::_setCriterion(const QString& criterionName)
   }
 }
 
-void RemoveTagsVisitor::addKey(const QString& key)
-{
-  _keys.append(key);
-}
-
 void RemoveTagsVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  // see if the element passes the filter (if there is one)
   if (_criterion.get() && !_criterion->isSatisfied(e))
   {
     return;

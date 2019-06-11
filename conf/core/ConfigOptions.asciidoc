@@ -1595,15 +1595,6 @@ Split the bounding box of an HTTP read request into smaller bounding boxes that 
 Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
 large to query at once (see `json.reader.http.bbox.max.size`).
 
-=== keep.tags.visitor.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
-other tags from elements.
-
 === language.detection.detector
 
 * Data Type: string
@@ -2269,31 +2260,13 @@ When exporting to MGCP:
 NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
 255 characters. Extra text will be truncated.
 
-=== ogr.reader.bounding.box
-
-* Data Type: string
-* Default Value: ``
-
-If specified the OGR reader will limit data read from the data source to only features that
-intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
-of the input data source.
-
-The method OGRLayer::SetSpatialFilterRect is used to limit the bounding box. Some formats will
-intelligently use indexes, others will simply filter features after reading from the data source.
-
-Example Usage:
-
-----
-hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm
-----
-
 === ogr.reader.bounding.box.latlng
 
-* Data Type: string
-* Default Value: ``
+* Data Type: bool
+* Default Value: `false`
 
-Similar to `ogr.reader.bounding.box` but uses WGS84 to specify the bounds rather than the source
-projection. Only one of the two options can be specified.
+If true, then the coordinates specified by `convert.bounding.box` are assumed to be in the WGS84
+coordinate system.
 
 A best effort will be made to convert between the two projections. The translated bounding box
 will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
@@ -2656,22 +2629,6 @@ The probability that a name will be modified.
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 'hoot info --operators | grep Perty' displays information about the available operations.
-
-=== perty.random.error.x
-
-* Data Type: double
-* Default Value: `0`
-
-The sigma rx parameter for PERTY (random error in X). This is only relevant when perty.algorithm
-is set to FullCovariance.
-
-=== perty.random.error.y
-
-* Data Type: double
-* Default Value: `0`
-
-The sigma ry parameter for PERTY (random error in Y). This is only relevant when perty.algorithm
-is set to FullCovariance.
 
 === perty.remove.random.probability
 
@@ -3497,22 +3454,15 @@ E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 Should the element remover remove the elements recursively?
 
-=== remove.tags.visitor.element.criterion
-
-* Data Type: string
-* Default Value: ``
-
-The plugin name of an element criterion used to select tags to remove.  To pass in complex
-nested criterion, use the Hootenanny Javascript interface instead.
-
-=== remove.tags.visitor.keys
+=== tag.filter.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
-list items with a semicolon and surround the entire list in double quotes.
+A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.  From
+the command line, separate list items with a semicolon and surround the entire list in double
+quotes.
 
 === replace.tag.visitor.match.tag
 
@@ -3613,15 +3563,15 @@ weighting is determined based on the circular error.
 * Default Value: ``
 
 The optional direction that the translation script should translate in, used by the convert command,
-TranslationOp, and TranslationVisitor. Valid values are: `toogr` and `toosm`. `toogr` will translate
-in a direction appropriate for an OGR output. `toosm` will translate in a direction appropriate for
-an OSM output. The script specified by the schema.translation.script configuration option must be
-compatible with the translation direction chosen. If no translation direction is specified when
-translating with the convert command, the convert command will attempt to determine the correct
-direction and notify the user which direction was determined. If the convert command cannot
-determine the direction, it will use the `toosm` direction and also notify the user. The
-TranslationOp and TranslationVisitor used outside of the convert command will return an error if
-no direction was specified.
+SchemaTranslationOp, and SchemaTranslationVisitor. Valid values are: `toogr` and `toosm`. `toogr`
+will translate in a direction appropriate for an OGR output. `toosm` will translate in a direction
+appropriate for an OSM output. The script specified by the schema.translation.script configuration
+option must be compatible with the translation direction chosen. If no translation direction is
+specified when translating with the convert command, the convert command will attempt to determine
+the correct direction and notify the user which direction was determined. If the convert command
+cannot determine the direction, it will use the `toosm` direction and also notify the user. The
+SchemaTranslationOp and SchemaTranslationVisitor used outside of the convert command will return
+an error if no direction was specified.
 
 === schema.translation.override
 
@@ -3642,14 +3592,14 @@ NOTE: This assumes that you know exactly what tags you want to modify/delete
 * Data Type: string
 * Default Value: ``
 
-The script used by the TranslationVisitor and TranslationOp for schema translation. Required if
-converting to/from an OGR format.  Use either the base name of a Python translation file (without
-the .py extension) or the full path to a Javascript file (.js). If this configuration option is
-added to a call to the convert command and neither TranslationVisitor or TranslationOp is specified
-the convert command will add the translation operation as the first conversion operation. If you
-want the translation operation to occur in a different order, then you must explicitly specify
-it in convert.ops. For more information on translation files read the "Translation" section of the
-Hootenanny User Guide.
+The script used by the SchemaTranslationVisitor and SchemaTranslationOp for schema translation.
+Required if converting to/from an OGR format.  Use either the base name of a Python translation
+file (without the .py extension) or the full path to a Javascript file (.js). If this configuration
+option is added to a call to the convert command and neither SchemaTranslationVisitor or
+SchemaTranslationOp is specified the convert command will add the translation operation as the
+first conversion operation. If you want the translation operation to occur in a different order,
+then you must explicitly specify it in convert.ops. For more information on translation files read
+the "Translation" section of the Hootenanny User Guide.
 
 === score.graph.debug.images
 
@@ -3980,6 +3930,15 @@ Primarily, this is useful within the node.js interface.
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
 delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
+
+=== tag.filter.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The plugin name of an element criterion used to select tags to keep/remove used by
+KeepTagsVisitor/RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the
+Hootenanny Javascript interface instead.
 
 === tag.key.contains.criterion.text
 
@@ -4331,21 +4290,6 @@ databases are capped at 2000 nodes per way.
 * Default Value: `5`
 
 The minimum size that a way should be split into for merging. Units in meters.
-
-=== way.remover.bounds
-
-* Data Type: string
-* Default Value: ``
-
-Bounds used by the RemoveWaysByBoundsOp when removing ways, of the form: minx,miny,maxx,maxy
-
-=== way.remover.invert.bounds
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, the RemoveWaysByBoundsOp will remove ways outside of the bounds specified by
-way.remover.bounds.  Otherwise it will remove ways within the specified bounds.
 
 === way.splitter.max.length
 

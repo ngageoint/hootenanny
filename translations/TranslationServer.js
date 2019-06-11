@@ -51,37 +51,37 @@ var fcodeLookup = {
 
 var translationsMap = {
     toogr: {
-        TDSv40: new hoot.TranslationOp({
+        TDSv40: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
             'schema.translation.direction': 'toogr'
         }),
-        TDSv61: new hoot.TranslationOp({
+        TDSv61: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
             'schema.translation.direction': 'toogr'
         }),
-        MGCP: new hoot.TranslationOp({
+        MGCP: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
             'schema.translation.direction': 'toogr'
         }),
-        GGDMv30: new hoot.TranslationOp({
+        GGDMv30: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
             'schema.translation.direction': 'toogr'
         })
     },
     toosm: {
-        TDSv40: new hoot.TranslationOp({
+        TDSv40: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv40.js',
             'schema.translation.direction': 'toosm'
         }),
-        TDSv61: new hoot.TranslationOp({
+        TDSv61: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
             'schema.translation.direction': 'toosm'
         }),
-        MGCP: new hoot.TranslationOp({
+        MGCP: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/MGCP_TRD4.js',
             'schema.translation.direction': 'toosm'
         }),
-        GGDMv30: new hoot.TranslationOp({
+        GGDMv30: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/GGDMv30.js',
             'schema.translation.direction': 'toosm'
         })

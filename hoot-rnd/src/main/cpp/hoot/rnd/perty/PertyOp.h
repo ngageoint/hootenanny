@@ -89,14 +89,6 @@ public:
   void setNamedOps(QStringList namedOps) { _namedOps = namedOps; }
 
   /**
-   * Sets the random error. This is the sigma value for Rx and Ry. The same sigma value is used
-   * for all values in each matrix. See [1] for more information.
-   * @note There were problems with taking the sqrtm when sigma is zero. Now I make sigma a small
-   * value (1e-6) when sigma is zero.
-   */
-  void setRandomError(Meters sigmaX, Meters sigmaY);
-
-  /**
    * Seeds the permutation process. By default a seed is generated based on time. The seed should
    * be non-negative or -1 to generate a seed based on time.
    */

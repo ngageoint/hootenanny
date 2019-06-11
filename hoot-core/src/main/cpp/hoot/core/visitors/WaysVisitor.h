@@ -22,26 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "WayCriterion.h"
+#ifndef WAYSVISITOR_H
+#define WAYSVISITOR_H
 
-// hoot
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, WayCriterion)
-
-WayCriterion::WayCriterion()
+class WaysVisitor : public ConstElementVisitor
 {
+public:
+
+  WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) {}
+
+  virtual void visit(const std::shared_ptr<const Element>& e) override;
+
+  /**
+   * Convenience method.
+   */
+  static std::vector<ConstWayPtr> extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e);
+
+  virtual QString getDescription() const { return "Collects the ways visited"; }
+
+private:
+
+  std::vector<ConstWayPtr>& _w;
+};
+
 }
 
-bool WayCriterion::isSatisfied(const ConstElementPtr& e) const
-{
-  return e->getElementType() == ElementType::Way;
-}
-
-}
+#endif // WAYSVISITOR_H

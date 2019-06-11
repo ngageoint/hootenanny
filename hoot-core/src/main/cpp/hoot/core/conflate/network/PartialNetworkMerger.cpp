@@ -38,7 +38,7 @@
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ExtractNodesVisitor.h>
+#include <hoot/core/visitors/NodesVisitor.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;
@@ -112,7 +112,7 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
 
   // go through all the nodes in the scrap
   QList<ConstNodePtr> scrapNodeList;
-  ExtractNodesVisitor extractVisitor(scrapNodeList);
+  NodesVisitor extractVisitor(scrapNodeList);
   str2->visitRo(*map, extractVisitor);
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
   QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);

@@ -30,9 +30,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
@@ -144,7 +144,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
       _remove(map, e[i].getElementId(), removeSet);
     }
 
-    RemoveRelationOp::removeRelation(map, eid.getId());
+    RemoveRelationByEid::removeRelation(map, eid.getId());
     _numAffected++;
   }
   else if (eid.getType() == ElementType::Way)
@@ -158,12 +158,12 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
       _remove(map, ElementId::node(nodes[i]), removeSet);
     }
 
-    RemoveWayOp::removeWay(map, w->getId());
+    RemoveWayByEid::removeWay(map, w->getId());
     _numAffected++;
   }
   else if (eid.getType() == ElementType::Node)
   {
-    RemoveNodeOp::removeNodeNoCheck(map, eid.getId());
+    RemoveNodeByEid::removeNodeNoCheck(map, eid.getId());
     _numAffected++;
   }
   else

@@ -22,36 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef EXTRACTNODESVISITOR_H
-#define EXTRACTNODESVISITOR_H
-
-// hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/Node.h>
-
-// Qt
-#include <QList>
+#include "NodesVisitor.h"
 
 namespace hoot
 {
 
-class ExtractNodesVisitor : public ConstElementVisitor
+void NodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-public:
-
-  ExtractNodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
-
-  virtual void visit(const std::shared_ptr<const Element>& e);
-
-  virtual QString getDescription() const { return "Returns the node IDs visited"; }
-
-private:
-
-  QList<ConstNodePtr>& _n;
-};
-
+  if (e->getElementType() == ElementType::Node)
+  {
+    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
+    _n.append(n);
+  }
 }
 
-#endif // EXTRACTNODESVISITOR_H
+}

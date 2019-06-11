@@ -24,66 +24,61 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVETAGSVISITOR_H
-#define REMOVETAGSVISITOR_H
+#ifndef SCHEMATRANSLATIONOP_H
+#define SCHEMATRANSLATIONOP_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+
+// Qt
+#include <QString>
 
 namespace hoot
 {
 
 /**
- * Removes any tags with keys matching those passed to this visitor
+ * Applies a translation to an entire map. If doing a translation via the convert command, consider
+ * using TranslationVisitor instead if memory is a concern, as it does not require the whole map
+ * to be read into memory at once.
  *
- * This really should be a ElementVisitor. See #2831.
+ * This is currently only needed to support translations from the Javascript interface. Once
+ * #2831 is completed, we can remove this class and replace it in js files with calls to
+ * SchemaTranslationVisitor.
  */
-class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
-  public ElementCriterionConsumer, public OperationStatusInfo
+class SchemaTranslationOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::RemoveTagsVisitor"; }
+  static std::string className() { return "hoot::SchemaTranslationOp"; }
 
-  RemoveTagsVisitor();
-  explicit RemoveTagsVisitor(const QStringList& keys);
+  SchemaTranslationOp();
 
-  virtual void addCriterion(const ElementCriterionPtr& e);
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   void setConfiguration(const Settings& conf);
 
-  virtual void visit(const std::shared_ptr<Element>& e);
+  /**
+   * Set the path to the translation script.
+   */
+  void setTranslationScript(QString path) { _translator.setTranslationScript(path); }
 
-  virtual QString getDescription() const { return "Removes tags by key"; }
-
-  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
+  virtual QString getDescription() const { return _translator.getDescription(); }
 
   virtual QString getInitStatusMessage() const
-  { return "Removing tags..."; }
+  { return _translator.getInitStatusMessage(); }
 
   virtual QString getCompletedStatusMessage() const
-  {
-    return
-      "Removed " + QString::number(_numTagsRemoved) + " tags from " +
-      QString::number(_numAffected) + " different elements";
-  }
-
-protected:
-
-  QStringList _keys;
-  std::shared_ptr<ElementCriterion> _criterion;
-  //This allows for negating the criterion as an option sent in from the command line.
-  bool _negateCriterion;
-  long _numTagsRemoved;
+  { return _translator.getCompletedStatusMessage(); }
 
 private:
 
-  void _setCriterion(const QString& criterionName);
+  SchemaTranslationVisitor _translator;
+  bool _toOgr;
 };
 
 }
 
-#endif // REMOVETAGSVISITOR_H
+#endif // SCHEMATRANSLATIONOP_H
