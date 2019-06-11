@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVEWAYOP_H
-#define REMOVEWAYOP_H
+#ifndef REMOVEWAYBYEID_H
+#define REMOVEWAYBYEID_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -35,9 +35,9 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveWayOp class is used to remove ways from an OsmMap
+ * @brief The RemoveWayByEid class is used to remove ways from an OsmMap
  */
-class RemoveWayOp : public OsmMapOperation
+class RemoveWayByEid : public OsmMapOperation
 {
 public:
 
@@ -45,23 +45,23 @@ public:
    * @brief className gets the name of the class as a string
    * @return class name
    */
-  static std::string className() { return "hoot::RemoveWayOp"; }
+  static std::string className() { return "hoot::RemoveWayByEid"; }
   std::string getClassName() const { return className(); }
 
   /**
-   * @brief RemoveWayOp is used to remove ways from maps
+   * @brief RemoveWayByEid is used to remove ways from maps
    * @param removeFully if true, way is removed from all relations in the map, then
    *                    removed from the map's way collection.
    */
-  RemoveWayOp(bool removeFully = false);
+  RemoveWayByEid(bool removeFully = false);
 
   /**
-   * @brief RemoveWayOp is used to remove ways from maps
+   * @brief RemoveWayByEid is used to remove ways from maps
    * @param wId ID of the way to remove
    * @param removeFully if true, way is removed from all relations in the map, then
    *                    removed from the map's way collection.
    */
-  RemoveWayOp(long wId, bool removeFully = false);
+  RemoveWayByEid(long wId, bool removeFully = false);
 
   /**
    * @brief apply Apply the operation to the given map
@@ -89,7 +89,7 @@ public:
    */
   static void removeWayFully(OsmMapPtr map, long wId);
 
-  virtual QString getDescription() const { return "Removes a single way by ID"; }
+  virtual QString getDescription() const { return "Removes a single way by element ID"; }
 
 private:
 
@@ -102,4 +102,4 @@ private:
 
 }
 
-#endif // REMOVEWAYOP_H
+#endif // REMOVEWAYBYEID_H

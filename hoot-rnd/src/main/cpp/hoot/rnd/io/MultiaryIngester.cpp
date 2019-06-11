@@ -34,7 +34,7 @@
 #include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmChangeWriterFactory.h>
@@ -208,7 +208,7 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
   std::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
   QList<ElementVisitorPtr> visitors;
 
-  std::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+  std::shared_ptr<SchemaTranslationVisitor> translationVisitor(new SchemaTranslationVisitor());
   // I think we always want to be going to OSM here unless otherwise specified (or maybe
   // regardless if its specified), but that should be verified.
   QString translationDirection =

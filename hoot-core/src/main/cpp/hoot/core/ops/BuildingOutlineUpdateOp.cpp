@@ -38,7 +38,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -47,7 +47,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -110,7 +110,7 @@ public:
       {
         if (n2w.getWaysByNode(oldNodes[i]).size() == 0 && _map.containsNode(oldNodes[i]))
         {
-          RemoveNodeOp::removeNode(_map.shared_from_this(), oldNodes[i]);
+          RemoveNodeByEid::removeNode(_map.shared_from_this(), oldNodes[i]);
         }
       }
     }
@@ -347,7 +347,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     // remove replaced outline ways
     foreach (long id, removeWayIds)
     {
-      RemoveWayOp::removeWayFully(_map, id);
+      RemoveWayByEid::removeWayFully(_map, id);
     }
   }
   else

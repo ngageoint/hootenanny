@@ -33,7 +33,6 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

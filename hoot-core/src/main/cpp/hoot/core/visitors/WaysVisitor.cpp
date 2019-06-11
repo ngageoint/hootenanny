@@ -22,48 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef KEEPBUILDINGSVISITOR_H
-#define KEEPBUILDINGSVISITOR_H
+#include "WaysVisitor.h"
 
-// hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
+using namespace std;
 
 namespace hoot
 {
 
-/**
- * Removes all ways and relations that are not part of a building.
- *
- * This could do bad things if the element is in use.
- */
-class KeepBuildingsVisitor : public ConstElementVisitor, public OsmMapConsumer
+void WaysVisitor::visit(const std::shared_ptr<const Element>& e)
 {
-public:
-
-  static std::string className() { return "hoot::KeepBuildingsVisitor"; }
-
-  KeepBuildingsVisitor() {}
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * KeepBuildingsVisitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual QString getDescription() const
-  { return "Removes all ways and relations that are not part of a building"; }
-
-private:
-
-  OsmMap* _map;
-};
-
+  if (e->getElementType() == ElementType::Way)
+  {
+    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+    _w.push_back(w);
+  }
 }
 
-#endif // KEEPBUILDINGSVISITOR_H
+vector<ConstWayPtr> WaysVisitor::extractWays(const ConstOsmMapPtr& map, const ConstElementPtr& e)
+{
+  vector<ConstWayPtr> result;
+  WaysVisitor v(result);
+
+  e->visitRo(*map, v);
+  return result;
+}
+
+}

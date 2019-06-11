@@ -79,9 +79,9 @@ class Roundabout;
 class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider
 {
   // Friend classes that need to modify private elements
-  friend class RemoveNodeOp;
-  friend class RemoveWayOp;
-  friend class RemoveRelationOp;
+  friend class RemoveNodeByEid;
+  friend class RemoveWayByEid;
+  friend class RemoveRelationByEid;
 
 public:
 

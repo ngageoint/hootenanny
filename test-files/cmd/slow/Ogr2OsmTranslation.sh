@@ -18,5 +18,5 @@ cd $HOOT_HOME
 hoot convert --warn -D schema.translation.script=translations/Identity.js /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesA.osm
 hoot stats --brief test-output/AllDataTypesA.osm | grep -w 'Nodes\|Ways\|Relations'
 
-hoot convert --warn -D schema.translation.script=translations/Identity.js -D ogr.reader.bounding.box=-104.931,38.823,-104.869,38.877 /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesABBox.osm
+hoot convert --warn -D schema.translation.script=translations/Identity.js -D convert.bounding.box=-104.931,38.823,-104.869,38.877 /vsizip/./test-output/AllDataTypesA.zip test-output/AllDataTypesABBox.osm
 hoot stats --brief test-output/AllDataTypesABBox.osm | grep -w 'Nodes\|Ways\|Relations'

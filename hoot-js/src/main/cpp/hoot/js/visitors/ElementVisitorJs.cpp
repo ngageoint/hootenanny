@@ -80,20 +80,11 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
   const QString className = str(args.This()->GetConstructorName());
   LOG_VART(className);
   ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
-  ConstElementVisitor* constVis = dynamic_cast<ConstElementVisitor*>(vis);
-  if (!constVis)
-  {
-    // We need to allow ElementVisitor as well. - #2831
-    throw HootException(
-      QString("Only ConstElementVisitors may be used in Hootenanny Javascript. Tried to use: ") +
-      QString(className + "  Change your ElementVisitor class to inherit from ") +
-      ("ConstElementVisitor, ElementOsmMapVisitor, or ConstElementOsmMapVisitor."));
-  }
-  ElementVisitorJs* obj = new ElementVisitorJs(constVis);
+  ElementVisitorJs* obj = new ElementVisitorJs(vis);
   //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
-  PopulateConsumersJs::populateConsumers<ConstElementVisitor>(constVis, args);
+  PopulateConsumersJs::populateConsumers<ElementVisitor>(vis, args);
 
   args.GetReturnValue().Set(args.This());
 }

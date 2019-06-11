@@ -26,7 +26,7 @@
  */
 #include "ReviewMarker.h"
 
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
 
@@ -240,7 +240,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, const std::vector<ElementId>& ids,
 void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)
 {
   LOG_TRACE("Removing review element: " << eid);
-  RemoveElementOp::removeElement(map, eid);
+  RemoveElementByEid::removeElement(map, eid);
 }
 
 }

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -58,12 +58,12 @@ void RemoveReviewUnknown2Visitor::visit(const std::shared_ptr<Element>& e)
         //  Remove all UNKNOWN2 elements in this relation
         if (element->getStatus() == Status::Unknown2)
         {
-          RemoveElementOp::removeElement(map, id);
+          RemoveElementByEid::removeElement(map, id);
           _numElements++;
         }
       }
       //  Finally remove the review relation
-      RemoveElementOp::removeElement(map, r->getElementId());
+      RemoveElementByEid::removeElement(map, r->getElementId());
       _numAffected++;
     }
   }

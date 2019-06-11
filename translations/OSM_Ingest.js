@@ -44,7 +44,7 @@ function translateAttributes(attrs, layerName, geometryType)
     if (!(attrs.uuid)) attrs.uuid = createUuid();
 
     // Say where the data came from
-    // NOTE: layerName will be empty if using a translationOp to convert the OSM file.
+    // NOTE: layerName will be empty if using a SchemaTranslationVisitor to convert the OSM file.
     // This is due to not having metadata pass from OSM reader -> map -> translation
     if (layerName !== '')
     {

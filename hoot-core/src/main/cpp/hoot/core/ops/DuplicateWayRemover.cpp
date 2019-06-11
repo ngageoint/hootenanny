@@ -37,7 +37,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -314,7 +314,7 @@ void DuplicateWayRemover::_replaceMultiple(const ConstWayPtr& oldWay,
 {
   if (ways.size() < 1)
   {
-    RemoveWayOp::removeWay(_map, oldWay->getId());
+    RemoveWayByEid::removeWay(_map, oldWay->getId());
     return;
   }
 

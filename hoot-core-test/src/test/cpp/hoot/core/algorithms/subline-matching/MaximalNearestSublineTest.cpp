@@ -38,7 +38,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -129,8 +129,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    long n1 = FindWaysVisitor::findWaysByTag(map, "note", "1")[0];
-    long n2 = FindWaysVisitor::findWaysByTag(map, "note", "2")[0];
+    long n1 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0];
+    long n2 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0];
     WayPtr left = MaximalNearestSubline::getMaximalNearestSubline(map,
           map->getWay(n1),
           map->getWay(n2),
@@ -177,8 +177,8 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    long n3 = FindWaysVisitor::findWaysByTag(map, "note", "3")[0];
-    long n4 = FindWaysVisitor::findWaysByTag(map, "note", "4")[0];
+    long n3 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "3")[0];
+    long n4 = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "4")[0];
     WayPtr left = MaximalNearestSubline::getMaximalNearestSubline(
           map,
           map->getWay(n3),

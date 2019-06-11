@@ -48,7 +48,6 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
-#include <hoot/core/visitors/ExtractWaysVisitor.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/util/Log.h>
 

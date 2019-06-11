@@ -38,25 +38,25 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
-FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor& visitor) :
+FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
   _criterion(&criterion),
   _visitor(&visitor)
 {
 }
 
-FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitorPtr visitor) :
+FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor) :
   _criterion(&criterion),
   _visitor(visitor.get())
 {
 }
 
-FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor) :
+FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
   _criterion(criterion.get()),
   _visitor(visitor.get())
 {
 }
 
-FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ConstElementVisitor* visitor) :
+FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor) :
   _criterion(criterion),
   _visitor(visitor)
 {
@@ -74,7 +74,7 @@ void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
   _criterionDelete = e;
 }
 
-void FilteredVisitor::addVisitor(const ConstElementVisitorPtr& v)
+void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
 {
   if (_visitor)
   {
@@ -103,15 +103,19 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
   }
   _map = map;
 }
+
 void FilteredVisitor::visit(const ConstElementPtr& e)
 {
   if (_criterion->isSatisfied(e))
   {
-    _visitor->visit(e);
+    // This is bad. Making this change was the result of a cascading set of const correctness
+    // changes necessary in order to be able to call ElementVisitor from js files and not just
+    // ConstElementVisitor (#2831). We may need some redesign.
+    _visitor->visit(std::const_pointer_cast<Element>(e));
   }
 }
 
-double FilteredVisitor::getStat(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor,
+double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                                 const ConstOsmMapPtr& map)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
@@ -125,7 +129,7 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ConstElementVisit
   return stat->getStat();
 }
 
-double FilteredVisitor::getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
+double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
   FilteredVisitor filteredVisitor(criterion, visitor);

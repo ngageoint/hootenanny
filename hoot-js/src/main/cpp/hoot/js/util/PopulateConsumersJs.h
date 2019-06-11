@@ -317,7 +317,6 @@ public:
       c->addVisitor(obj->getVisitor());
     }
   }
-
 };
 
 }

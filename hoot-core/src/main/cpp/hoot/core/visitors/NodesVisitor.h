@@ -22,39 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef NODESVISITOR_H
+#define NODESVISITOR_H
 
+// hoot
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/Node.h>
 
-// Hoots
-#include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/WayCriterion.h>
-
-using namespace geos::geom;
+// Qt
+#include <QList>
 
 namespace hoot
 {
 
-class WayCriterionTest : public HootTestFixture
+class NodesVisitor : public ConstElementVisitor
 {
-  CPPUNIT_TEST_SUITE(WayCriterionTest);
-  CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST_SUITE_END();
-
 public:
 
-  void runBasicTest()
-  {
-    WayCriterion uut;
+  NodesVisitor(QList<ConstNodePtr>& n) : _n(n) {}
 
-    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-    CPPUNIT_ASSERT(!uut.isSatisfied(node1));
+  virtual void visit(const std::shared_ptr<const Element>& e);
 
-    WayPtr way1(new Way(Status::Unknown1, -1, 15.0));
-    CPPUNIT_ASSERT(uut.isSatisfied(way1));
-  }
+  virtual QString getDescription() const { return "Collects the nodes visited"; }
+
+private:
+
+  QList<ConstNodePtr>& _n;
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(WayCriterionTest, "quick");
-
 }
+
+#endif // NODESVISITOR_H

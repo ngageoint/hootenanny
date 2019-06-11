@@ -41,8 +41,8 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayOp.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
@@ -196,7 +196,7 @@ void MapCropper::apply(OsmMapPtr& map)
     {
       // remove the way
       LOG_TRACE("Dropping: " << w << "...");
-      RemoveWayOp::removeWayFully(result, w->getId());
+      RemoveWayByEid::removeWayFully(result, w->getId());
       _numWaysOutOfBounds++;
     }
     else if (_isWhollyInside(e))
@@ -209,7 +209,7 @@ void MapCropper::apply(OsmMapPtr& map)
     {
       // remove the way
       LOG_TRACE("Dropping: " << w << "...");
-      RemoveWayOp::removeWayFully(result, w->getId());
+      RemoveWayByEid::removeWayFully(result, w->getId());
       _numWaysOutOfBounds++;
     }
     else if (!_keepEntireFeaturesCrossingBounds)
@@ -278,7 +278,7 @@ void MapCropper::apply(OsmMapPtr& map)
           // remove the node
           LOG_TRACE(
             "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-          RemoveNodeOp::removeNodeNoCheck(result, it->second->getId());
+          RemoveNodeByEid::removeNodeNoCheck(result, it->second->getId());
           nodesRemoved++;
         }
       }
@@ -354,7 +354,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   if (e == 0)
   {
     LOG_TRACE("Removing way: " << way->getId() << "...");
-    RemoveWayOp::removeWayFully(map, way->getId());
+    RemoveWayByEid::removeWayFully(map, way->getId());
     _numCrossingWaysRemoved++;
   }
   else

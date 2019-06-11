@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef REMOVERELATIONOP_H
-#define REMOVERELATIONOP_H
+#ifndef REMOVERELATIONBYEID_H
+#define REMOVERELATIONBYEID_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -35,9 +35,9 @@ namespace hoot
 {
 
 /**
- * @brief The RemoveRelationOp class removes a relation from an OsmMap
+ * @brief The RemoveRelationEid class removes a relation from an OsmMap
  */
-class RemoveRelationOp : public OsmMapOperation
+class RemoveRelationByEid : public OsmMapOperation
 {
 public:
 
@@ -45,19 +45,19 @@ public:
    * @brief className gets the class name as a string
    * @return class name
    */
-  static std::string className() { return "hoot::RemoveRelationOp"; }
+  static std::string className() { return "hoot::RemoveRelationByEid"; }
   std::string getClassName() const { return className(); }
 
   /**
-   * @brief RemoveRelationOp Default constructor
+   * @brief RemoveRelationByEid Default constructor
    */
-  RemoveRelationOp();
+  RemoveRelationByEid();
 
   /**
-   * @brief RemoveRelationOp
+   * @brief RemoveRelationByEid
    * @param rId ID of relation to remove
    */
-  RemoveRelationOp(long rId);
+  RemoveRelationByEid(long rId);
 
   /**
    * @brief apply Peform the remove operation
@@ -78,7 +78,7 @@ public:
    */
   static void removeRelation(OsmMapPtr map, long rId);
 
-  virtual QString getDescription() const { return "Removes a single relation by ID"; }
+  virtual QString getDescription() const { return "Removes a single relation by element ID"; }
 
 private:
 
@@ -87,4 +87,4 @@ private:
 
 }
 
-#endif // REMOVERELATIONOP_H
+#endif // REMOVERELATIONBYEID_H

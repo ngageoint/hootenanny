@@ -36,7 +36,7 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
@@ -155,7 +155,7 @@ vector<WayPtr> WaySplitter::split(WayLocation& splitPoint)
     //  Record the parent id for the way joiner
     result[1]->setPid(_a->getId());
 
-    RemoveWayOp::removeWay(_map, _a->getId());
+    RemoveWayByEid::removeWay(_map, _a->getId());
     _map->addWay(result[0]);
     _map->addWay(result[1]);
   }

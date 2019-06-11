@@ -32,11 +32,11 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -231,7 +231,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
         if (newWays.size() > 0 && replace)
         {
           // Remove pWay
-          RemoveWayOp::removeWayFully(pMap, pWay->getId());
+          RemoveWayByEid::removeWayFully(pMap, pWay->getId());
           pMap->addNode(pCenterNode);
         }
       }
@@ -271,11 +271,11 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
     _pCenterNode = getNewCenter(pMap);
 
   // Remove roundabout way & extra nodes
-  RemoveWayOp::removeWayFully(pMap, _roundaboutWay->getId());
+  RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin();
        it != extraNodeIDs.end(); ++it)
   {
-    RemoveNodeOp::removeNode(pMap, *it);
+    RemoveNodeByEid::removeNode(pMap, *it);
   }
 
   // Add center node
@@ -386,7 +386,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
           endpoint = node2;
         //  If the way doesn't exist anymore because of splitting, find the ways with the right endpoint
         std::vector<long> waysWithNode =
-          FindWaysVisitor::findWaysByNode(pMap, endpoint->getId());
+          ElementIdsVisitor::findWaysByNode(pMap, endpoint->getId());
         if (waysWithNode.size() < 1)
           continue;
 
@@ -424,11 +424,11 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     // Need to remove temp parts no matter what
     // Delete temp ways we added
     for (size_t i = 0; i < _tempWays.size(); i++)
-      RemoveWayOp::removeWayFully(pMap, _tempWays[i]->getId());
+      RemoveWayByEid::removeWayFully(pMap, _tempWays[i]->getId());
 
     // Remove center node if no other ways are using it
     if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(_pCenterNode->getId()).size() < 1)
-      RemoveNodeOp::removeNodeFully(pMap, _pCenterNode->getId());
+      RemoveNodeByEid::removeNodeFully(pMap, _pCenterNode->getId());
   }
 }
 

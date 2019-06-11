@@ -28,8 +28,7 @@
 #define ADDUUIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -38,10 +37,8 @@ namespace hoot
 /**
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
  * into FilteredVisitor.
- *
- * This really should be a ElementVisitor. See #2831.
  */
-class AddUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public Configurable
+class AddUuidVisitor : public ElementVisitor, public Configurable
 {
 public:
 
@@ -50,17 +47,10 @@ public:
   AddUuidVisitor();
   AddUuidVisitor(QString key);
 
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * AddUuidVisitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
   /**
    * Adds a tag with a UUID to all valid elements.
    */
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ElementPtr& e);
 
   virtual QString getDescription() const { return "Adds unique ID tags"; }
 
@@ -68,7 +58,6 @@ public:
 
 private:
 
-  OsmMap* _map;
   QString _key;
 };
 

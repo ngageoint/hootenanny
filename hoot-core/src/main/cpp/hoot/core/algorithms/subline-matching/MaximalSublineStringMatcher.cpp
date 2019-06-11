@@ -39,7 +39,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/visitors/WaysVisitor.h>
 #include <hoot/core/criterion/MultiLineStringCriterion.h>
 
 // Standard
@@ -150,8 +150,8 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
 
   // extract the ways from the elements. In most cases it will return a vector of 1, but
   // multilinestrings may contain multiple ways
-  vector<ConstWayPtr> ways1 = ExtractWaysVisitor::extractWays(map, e1);
-  vector<ConstWayPtr> ways2 = ExtractWaysVisitor::extractWays(map, e2);
+  vector<ConstWayPtr> ways1 = WaysVisitor::extractWays(map, e1);
+  vector<ConstWayPtr> ways2 = WaysVisitor::extractWays(map, e2);
   LOG_VART(ways1.size());
   LOG_VART(ways2.size());
 
