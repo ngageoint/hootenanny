@@ -232,7 +232,7 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0445596964999986" lon="-69.4084859930700020">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-13"/>
         <nd ref="-12"/>
         <nd ref="-11"/>
@@ -242,7 +242,7 @@
         <nd ref="-13"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-19"/>
         <nd ref="-18"/>
         <nd ref="-17"/>
@@ -252,7 +252,7 @@
         <nd ref="-19"/>
         <tag k="hoot:status" v="3"/>
     </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-57"/>
         <nd ref="-56"/>
         <nd ref="-55"/>
@@ -375,9 +375,9 @@
     <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-7" role="outer"/>
         <member type="way" ref="-6" role="outer"/>
-        <member type="way" ref="-13" role="outer"/>
+        <member type="way" ref="-12" role="outer"/>
+        <member type="way" ref="-13" role="inner"/>
         <member type="way" ref="-14" role="inner"/>
-        <member type="way" ref="-15" role="inner"/>
         <tag k="feature_area" v="33731.4"/>
         <tag k="hoot:status" v="3"/>
         <tag k="addr:street" v="Avenida Florencio Jimenez"/>
