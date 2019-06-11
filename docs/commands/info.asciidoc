@@ -335,7 +335,7 @@ input1.osm input2.osm output.osm
 hoot convert -D convert.ops="hoot::DuplicateWayRemover" input1.osm input2.osm output.osm
 
 # visitor example - writes a map based on the input data with all of the specified tags removed from the nodes
-hoot convert -D convert.ops="hoot::RemoveTagsVisitor" -D remove.tags.visitor.element.criterion="hoot::WayCriterion" -D remove.tags.visitor.keys="source;error:circular" input1.osm input2.osm output.osm
+hoot convert -D convert.ops="hoot::RemoveTagsVisitor" -D remove.tags.visitor.element.criterion="hoot::WayCriterion" -D tag.filter.keys="source;error:circular" input1.osm input2.osm output.osm
 --------------------------------------
 
 === Subline Matchers

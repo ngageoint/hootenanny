@@ -49,15 +49,11 @@ public:
   static std::string className() { return "hoot::RemoveTagsVisitor"; }
 
   RemoveTagsVisitor();
-  explicit RemoveTagsVisitor(const QString& key);
-  RemoveTagsVisitor(const QString& key1, const QString& key2);
   explicit RemoveTagsVisitor(const QStringList& keys);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   void setConfiguration(const Settings& conf);
-
-  void addKey(const QString& key);
 
   virtual void visit(const std::shared_ptr<Element>& e);
 
@@ -75,7 +71,7 @@ public:
       QString::number(_numAffected) + " different elements";
   }
 
-private:
+protected:
 
   QStringList _keys;
   std::shared_ptr<ElementCriterion> _criterion;
@@ -83,10 +79,11 @@ private:
   bool _negateCriterion;
   long _numTagsRemoved;
 
+private:
+
   void _setCriterion(const QString& criterionName);
 };
 
 }
-
 
 #endif // REMOVETAGSVISITOR_H

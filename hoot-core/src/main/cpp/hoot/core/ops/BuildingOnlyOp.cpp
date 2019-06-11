@@ -56,13 +56,14 @@ void BuildingOnlyOp::apply(std::shared_ptr<OsmMap>& map)
   _map = map;
 
   // Setup a visitor to remove superfluous tags
-  RemoveTagsVisitor removeTagVtor;
-  removeTagVtor.addKey(MetadataTags::ErrorCircular());
-  removeTagVtor.addKey("OBJECTID");
-  removeTagVtor.addKey("PAGENUMBER");
-  removeTagVtor.addKey("SHAPE_AREA");
-  removeTagVtor.addKey("SHAPE_LENG");
-  removeTagVtor.addKey("hoot:layername");
+  QStringList tagsToRemove;
+  tagsToRemove.append(MetadataTags::ErrorCircular());
+  tagsToRemove.append("OBJECTID");
+  tagsToRemove.append("PAGENUMBER");
+  tagsToRemove.append("SHAPE_AREA");
+  tagsToRemove.append("SHAPE_LENG");
+  tagsToRemove.append("hoot:layername");
+  RemoveTagsVisitor removeTagVtor(tagsToRemove);
 
   // Setup a visitor to change uppercase "BUILDING" tag to lower
   ReplaceTagVisitor replaceTagVtor("BUILDING", "yes", "building", "yes");

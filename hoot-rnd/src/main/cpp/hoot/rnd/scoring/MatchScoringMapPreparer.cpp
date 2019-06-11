@@ -91,7 +91,10 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   if (removeNodes)
   {
     // remove all REF1/REF2 tags from the nodes.
-    RemoveTagsVisitor removeRef(MetadataTags::Ref1(), MetadataTags::Ref2());
+    QStringList keys;
+    keys.append(MetadataTags::Ref1());
+    keys.append(MetadataTags::Ref2());
+    RemoveTagsVisitor removeRef(keys);
     NodeCriterion nodeCrit;
     FilteredVisitor removeRefV(nodeCrit, removeRef);
     map->visitRw(removeRefV);

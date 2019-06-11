@@ -28,32 +28,32 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, KeepTagsVisitor)
 
-KeepTagsVisitor::KeepTagsVisitor()
-{
-  setConfiguration(conf());
-}
-
-KeepTagsVisitor::KeepTagsVisitor(QStringList keys) :
-_keys(keys)
+KeepTagsVisitor::KeepTagsVisitor() :
+RemoveTagsVisitor()
 {
 }
 
-void KeepTagsVisitor::setConfiguration(const Settings& conf)
+KeepTagsVisitor::KeepTagsVisitor(const QStringList& keys) :
+RemoveTagsVisitor(keys)
 {
-  _keys = ConfigOptions(conf).getKeepTagsVisitorKeys();
 }
 
 void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  // see if the element passes the filter (if there is one)
+  if (_criterion.get() && !_criterion->isSatisfied(e))
+  {
+    return;
+  }
+  _numAffected++;
+
   //get a copy of the tags for modifying
   Tags tags;
   tags.addTags(e->getTags());
@@ -62,6 +62,7 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
     if (!_keys.contains(it.key()))
     {
       tags.remove(it.key());
+      _numTagsRemoved++;
     }
   }
   e->setTags(tags);

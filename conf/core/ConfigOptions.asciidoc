@@ -1595,15 +1595,6 @@ Split the bounding box of an HTTP read request into smaller bounding boxes that 
 Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
 large to query at once (see `json.reader.http.bbox.max.size`).
 
-=== keep.tags.visitor.keys
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of tag keys for which the KeepTagsVisitor will retain on elements, while removing all
-other tags from elements.
-
 === language.detection.detector
 
 * Data Type: string
@@ -3481,22 +3472,15 @@ E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
 
 Should the element remover remove the elements recursively?
 
-=== remove.tags.visitor.element.criterion
-
-* Data Type: string
-* Default Value: ``
-
-The plugin name of an element criterion used to select tags to remove.  To pass in complex
-nested criterion, use the Hootenanny Javascript interface instead.
-
-=== remove.tags.visitor.keys
+=== tag.filter.keys
 
 * Data Type: list
 * Default Value:
 ** ``
 
-A list of tag keys the RemoveTagsVisitor will remove on elements.  From the command line, separate
-list items with a semicolon and surround the entire list in double quotes.
+A list of tag keys the KeepTagsVisitor/RemoveTagsVisitor will keep/remove on/from elements.  From
+the command line, separate list items with a semicolon and surround the entire list in double
+quotes.
 
 === replace.tag.visitor.match.tag
 
@@ -3964,6 +3948,15 @@ Primarily, this is useful within the node.js interface.
 Key/value pairs to use with TagCriterion. Delimit keys and values with '='.  From the command line,
 delimit multiple key/value pairs with ';' and surround the entire list in double quotes.
 E.g. "highway=road;amenity=school"
+
+=== tag.filter.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+The plugin name of an element criterion used to select tags to keep/remove used by
+KeepTagsVisitor/RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the
+Hootenanny Javascript interface instead.
 
 === tag.key.contains.criterion.text
 
