@@ -336,7 +336,7 @@ def processFile(fileName,enValues):
 
     tschema = {}
 
-    for (rawFeatureName,fieldName,fieldValue,dataType,dataLength,dataMeasure,dataRange,fDefinition,fMoreText, fNote) in reader:
+    for (rawFeatureName,fieldName,fieldValue,dataType,dataLength,dataMeasure,dataRange,fDefinition,fMoreText,fNote) in reader:
 
         if rawFeatureName == '': # Empty feature/line
             continue
@@ -390,7 +390,7 @@ def processFile(fileName,enValues):
                 tschema[fName]['columns'][aName] = {}
                 tschema[fName]['columns'][aName] = { 'name':aName,
                                                      'desc':aDesc,
-                                                     'definition':fDefinition,
+                                                     'definition':fDefinition + ' ' + fMoreText,
                                                      'optional':'R'
                                                    }
             

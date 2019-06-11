@@ -1600,7 +1600,7 @@ mgcp = {
         {
             var fcodeMap = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL015',
-                'ford':'BH070', 'waterway':'BH140', 'bridge':'AQ040',
+                'ford':'BH070', 'waterway':'BH140', 'bridge':'AQ040', 'tomb':'AL036'
             };
 
             for (var i in fcodeMap)

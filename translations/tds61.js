@@ -1765,7 +1765,7 @@ tds61 = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
                 'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
                 'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
-                'mine:access':'AA010', 'cutting':'DB070'
+                'mine:access':'AA010', 'cutting':'DB070', 'tomb':'AL036'
                            };
 
             for (var i in fcodeMap)
