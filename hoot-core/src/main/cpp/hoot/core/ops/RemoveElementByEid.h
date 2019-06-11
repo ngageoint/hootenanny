@@ -120,7 +120,6 @@ private:
 
   ElementId _eIdToRemove;
   bool _doCheck;
-
 };
 
 }

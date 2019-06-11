@@ -2260,31 +2260,13 @@ When exporting to MGCP:
 NOTE: According to the MGCP and Shapefile specifications, the "TXT" field has a maximum length of
 255 characters. Extra text will be truncated.
 
-=== ogr.reader.bounding.box
-
-* Data Type: string
-* Default Value: ``
-
-If specified the OGR reader will limit data read from the data source to only features that
-intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
-of the input data source.
-
-The method OGRLayer::SetSpatialFilterRect is used to limit the bounding box. Some formats will
-intelligently use indexes, others will simply filter features after reading from the data source.
-
-Example Usage:
-
-----
-hoot convert -D schema.translation.script=$HOOT_HOME/translations/Identity.js -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 test-files/jakarta_raya_coastline.shp output.osm
-----
-
 === ogr.reader.bounding.box.latlng
 
-* Data Type: string
-* Default Value: ``
+* Data Type: bool
+* Default Value: `false`
 
-Similar to `ogr.reader.bounding.box` but uses WGS84 to specify the bounds rather than the source
-projection. Only one of the two options can be specified.
+If true, then the coordinates specified by `convert.bounding.box` are assumed to be in the WGS84
+coordinate system.
 
 A best effort will be made to convert between the two projections. The translated bounding box
 will approximate the minimum bounding rectangle of the lat/lng bounding box. In some cases this
