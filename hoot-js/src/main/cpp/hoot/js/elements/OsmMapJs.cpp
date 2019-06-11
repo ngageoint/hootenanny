@@ -262,7 +262,7 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
     }
     else
     {
-      std::shared_ptr<ConstElementVisitor> v =
+      std::shared_ptr<ElementVisitor> v =
           ObjectWrap::Unwrap<ElementVisitorJs>(args[0]->ToObject())->getVisitor();
 
       map->getMap()->visitRw(*v);
