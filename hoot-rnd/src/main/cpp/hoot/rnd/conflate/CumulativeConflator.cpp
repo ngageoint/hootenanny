@@ -38,7 +38,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/rnd/visitors/KeepReviewsVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/criterion/NeedsReviewCriterion.h>
 
 namespace hoot
 {
@@ -151,7 +152,9 @@ void CumulativeConflator::conflate(const QStringList& inputs, const QString& out
       //copy the map and save the reviews
       LOG_DEBUG("Caching reviews...");
       reviewCache.reset(new OsmMap(cumulativeMap->getProjection()));
-      KeepReviewsVisitor vis;
+      // remove everything but the reviews from this map
+      RemoveElementsVisitor vis(true);
+      vis.addCriterion(ElementCriterionPtr(new NeedsReviewCriterion(cumulativeMap)));
       reviewCache->visitRw(vis);
       LOG_DEBUG("Cached " << reviewCache->getElementCount() << " reviews.");
     }
