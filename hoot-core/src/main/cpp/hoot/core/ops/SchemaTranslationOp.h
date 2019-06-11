@@ -40,13 +40,10 @@ namespace hoot
 {
 
 /**
- * Applies a translation to an entire map. If doing a translation via the convert command, consider
- * using TranslationVisitor instead if memory is a concern, as it does not require the whole map
- * to be read into memory at once.
- *
- * This is currently only needed to support translations from the Javascript interface. Once
- * #2831 is completed, we can remove this class and replace it in js files with calls to
- * SchemaTranslationVisitor.
+ * Applies a translation to an entire map. This would be needed if doing a translation from the JS
+ * interface. If doing a translation via the convert command, consider using TranslationVisitor
+ * instead if memory is a concern, as it does not require the whole map to be read into memory at
+ * once.
  */
 class SchemaTranslationOp : public OsmMapOperation, public Configurable, public OperationStatusInfo
 {

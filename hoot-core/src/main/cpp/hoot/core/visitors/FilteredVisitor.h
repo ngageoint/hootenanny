@@ -32,6 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/ElementVisitorConsumer.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -52,40 +53,40 @@ public:
   /**
    * Calls the visit method on visitor whenever ElementCriterion::isSatisfied == true.
    */
-  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitor& visitor);
+  FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor);
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary visitor. In this
    * case FilteredVisitor will take ownership of the visitor and delete it when destructed.
    */
-  FilteredVisitor(const ElementCriterion& criterion, ConstElementVisitorPtr visitor);
+  FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor);
 
   /**
    * Similar to the first, but takes smart pointer params.
    */
-  FilteredVisitor(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor);
+  FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor);
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
    * visitor. In this case FilteredVisitor will take ownership of the criterion and visitor and
    * delete it when destructed.
    */
-  FilteredVisitor(ElementCriterion* criterion, ConstElementVisitor* visitor);
+  FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
-  virtual void addVisitor(const ConstElementVisitorPtr& v);
+  virtual void addVisitor(const ElementVisitorPtr& v);
 
-  ConstElementVisitor& getChildVisitor() const { return *_visitor; }
+  ElementVisitor& getChildVisitor() const { return *_visitor; }
 
   virtual void setOsmMap(OsmMap* map);
   virtual void setOsmMap(const OsmMap* map);
 
   virtual void visit(const ConstElementPtr& e);
 
-  static double getStat(ElementCriterionPtr criterion, ConstElementVisitorPtr visitor,
+  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
-  static double getStat(ElementCriterion* criterion, ConstElementVisitor* visitor,
+  static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
   virtual QString getDescription() const { return ""; }
@@ -95,8 +96,8 @@ private:
   const ElementCriterion* _criterion;
   std::shared_ptr<ElementCriterion> _criterionDelete;
   const OsmMap* _map;
-  ConstElementVisitor* _visitor;
-  std::shared_ptr<ConstElementVisitor> _visitDelete;
+  ElementVisitor* _visitor;
+  std::shared_ptr<ElementVisitor> _visitDelete;
 };
 
 }

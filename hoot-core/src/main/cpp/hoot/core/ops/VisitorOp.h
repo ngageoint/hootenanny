@@ -35,7 +35,7 @@ namespace hoot
 {
 
 class OsmMap;
-class ConstElementVisitor;
+class ElementVisitor;
 
 /**
  * Given a visitor this operation applies the visitor to the map as a read/write operation.
@@ -47,14 +47,14 @@ public:
   static std::string className() { return "hoot::VisitorOp"; }
 
   VisitorOp() {}
-  VisitorOp(const ConstElementVisitorPtr& v) { _visitor = v; }
+  VisitorOp(const ElementVisitorPtr& v) { _visitor = v; }
 
   /**
    * Takes ownership of the visitor.
    */
-  VisitorOp(ConstElementVisitor* v) { _visitor.reset(v); }
+  VisitorOp(ElementVisitor* v) { _visitor.reset(v); }
 
-  virtual void addVisitor(const ConstElementVisitorPtr& e);
+  virtual void addVisitor(const ElementVisitorPtr& e);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
@@ -62,7 +62,7 @@ public:
 
 private:
 
-  std::shared_ptr<ConstElementVisitor> _visitor;
+  std::shared_ptr<ElementVisitor> _visitor;
 };
 
 }

@@ -138,7 +138,7 @@ private:
   void _addStat(const QString& name, double value);
   void _addStat(const char* name, double value);
   void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
-  double GetRequestedStatValue(const ConstElementVisitor* pVisitor, StatCall call);
+  double GetRequestedStatValue(const ElementVisitor* pVisitor, StatCall call);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -147,9 +147,9 @@ private:
    * @param [out] featureType base feature type for the found matchCreator
    * @return ptr to match creator, if found, otherwise std::shared_ptr to null
    */
-  std::shared_ptr<MatchCreator> getMatchCreator(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
-                                                const QString &matchCreatorName,
-                                                CreatorDescription::BaseFeatureType &featureType);
+  std::shared_ptr<MatchCreator> getMatchCreator(
+    const std::vector<std::shared_ptr<MatchCreator>>& matchCreators,
+    const QString &matchCreatorName, CreatorDescription::BaseFeatureType &featureType);
 
   double _applyVisitor(const hoot::FilteredVisitor &v, StatCall call = Stat);
   double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, StatCall call = Stat);
