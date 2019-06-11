@@ -57,6 +57,28 @@ protected:
   ElementType::Type _elementType;
 };
 
+// Helper classes for data driven stats
+class NodeTypeCriterion : public ElementTypeCriterion
+{
+public:
+  static std::string className() { return "hoot::NodeTypeCriterion"; }
+  NodeTypeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+};
+
+class WayTypeCriterion : public ElementTypeCriterion
+{
+public:
+  static std::string className() { return "hoot::WayTypeCriterion"; }
+  WayTypeCriterion() : ElementTypeCriterion(ElementType::Way) {}
+};
+
+class RelationTypeCriterion : public ElementTypeCriterion
+{
+public:
+  static std::string className() { return "hoot::RelationTypeCriterion"; }
+  RelationTypeCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+};
+
 }
 
 #endif // ELEMENTTYPECRITERION_H

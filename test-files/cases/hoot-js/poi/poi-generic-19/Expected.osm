@@ -3,23 +3,23 @@
     <bounds minlat="31.1525" minlon="29.8502609592" maxlat="31.15275958431" maxlon="29.850278"/>
     <node visible="true" id="-7180" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1527595843100009" lon="29.8502609591999999">
         <tag k="source" v="geonames"/>
-        <tag k="uuid" v="{33d3977e-0451-5e0f-a8ad-687038806b1c};GeoNames.org:7931938"/>
-        <tag k="name" v="Al Maks"/>
         <tag k="amenity" v="pub"/>
+        <tag k="name" v="Al Maks"/>
+        <tag k="uuid" v="{33d3977e-0451-5e0f-a8ad-687038806b1c};GeoNames.org:7931938"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-7179" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.1524999999999963" lon="29.8502779999999994">
-        <tag k="place" v="village"/>
-        <tag k="name:ar" v="المكس"/>
-        <tag k="is_in" v="Egypt, جمهورية مصر العربية"/>
-        <tag k="name:fr" v="Al Maks"/>
-        <tag k="name:ar1" v="المكس"/>
-        <tag k="name:de" v="Al Maks"/>
         <tag k="int_name" v="El Maks, Al Maks"/>
         <tag k="is_in:country_code" v="EG"/>
         <tag k="source" v="geonames"/>
+        <tag k="name:de" v="Al Maks"/>
         <tag k="name" v="المكس"/>
+        <tag k="name:ar" v="المكس"/>
         <tag k="name:en" v="Al Maks"/>
+        <tag k="name:fr" v="Al Maks"/>
+        <tag k="is_in" v="Egypt, جمهورية مصر العربية"/>
+        <tag k="name:ar1" v="المكس"/>
+        <tag k="place" v="village"/>
         <tag k="error:circular" v="15"/>
     </node>
 </osm>

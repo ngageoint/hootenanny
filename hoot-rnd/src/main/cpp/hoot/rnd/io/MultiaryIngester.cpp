@@ -66,7 +66,8 @@ _logUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
   //conf().set(ConfigOptions::getMaxElementsPerPartialMapKey(), 1000);
 }
 
-void MultiaryIngester::_doInputErrorChecking(const QString& newInput, const QString& translationScript,
+void MultiaryIngester::_doInputErrorChecking(const QString& newInput,
+                                             const QString& translationScript,
                                              const QString& referenceOutput,
                                              const QString& changesetOutput)
 {
@@ -116,7 +117,7 @@ void MultiaryIngester::ingest(const QString& newInput, const QString& translatio
   _doInputErrorChecking(newInput, translationScript, referenceOutput, changesetOutput);
 
   //script for translating input to OSM
-  conf().set(ConfigOptions::getTranslationScriptKey(), translationScript);
+  conf().set(ConfigOptions::getSchemaTranslationScriptKey(), translationScript);
 
   const QStringList dbUrlParts = referenceOutput.split("/");
   const QString mapName = dbUrlParts[dbUrlParts.size() - 1];
@@ -192,7 +193,8 @@ void MultiaryIngester::_sortInputFile(const QString& input)
   LOG_INFO("Time elapsed: " << StringUtils::secondsToDhms(_timer.elapsed()));
 }
 
-std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(const QString& sortedNewInput)
+std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream(
+  const QString& sortedNewInput)
 {
   std::shared_ptr<PartialOsmMapReader> newInputReader =
     std::dynamic_pointer_cast<PartialOsmMapReader>(
@@ -205,7 +207,23 @@ std::shared_ptr<ElementInputStream> MultiaryIngester::_getFilteredNewInputStream
   //filter data down to POIs only, translate each element, and assign it a unique hash id
   std::shared_ptr<PoiCriterion> elementCriterion(new PoiCriterion());
   QList<ElementVisitorPtr> visitors;
-  visitors.append(std::shared_ptr<TranslationVisitor>(new TranslationVisitor()));
+
+  std::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+  // I think we always want to be going to OSM here unless otherwise specified (or maybe
+  // regardless if its specified), but that should be verified.
+  QString translationDirection =
+    conf().getString(ConfigOptions::getSchemaTranslationDirectionKey());
+  if (translationDirection.trimmed().isEmpty())
+  {
+    translationDirection = "toosm";
+  }
+  LOG_VARD(translationDirection);
+  translationVisitor->setTranslationDirection(translationDirection);
+  // always set the direction before setting the script
+  translationVisitor->setTranslationScript(
+    conf().getString(ConfigOptions::getSchemaTranslationScriptKey()));
+
+  visitors.append(translationVisitor);
   visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
   std::shared_ptr<ElementInputStream> filteredNewInputStream(
     new ElementCriterionVisitorInputStream(inputStream, elementCriterion, visitors));

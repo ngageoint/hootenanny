@@ -28,9 +28,10 @@
         <nd ref="-1148841"/>
         <nd ref="-1148836"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="created_by" v="Potlatch 0.10f"/>
-        <tag k="operator" v="San Francisco Unified School District"/>
-        <tag k="name" v="Hilltop Special Services Center"/>
         <tag k="amenity" v="school"/>
+        <tag k="created_by" v="Potlatch 0.10f"/>
+        <tag k="name" v="Hilltop Special Services Center"/>
+        <tag k="operator" v="San Francisco Unified School District"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

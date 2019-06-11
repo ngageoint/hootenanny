@@ -57,6 +57,7 @@ public:
   static const QString ERROR_CIRCULAR;
   inline static const QString& ErrorCircular()          { return ERROR_CIRCULAR; }
   inline static const QString SourceDateTime()          { return "source:datetime"; }
+  inline static const QString SourceIngestDateTime()    { return "source:ingest:datetime"; }
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
@@ -157,8 +158,15 @@ public:
 
   inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
 
-  // identifies multilinestring relations hoot adds during conflation
-  inline static const QString HootMultilineString()      { return "hoot:multilinestring"; }
+  /**
+   * identifies multilinestring relations hoot adds during conflation
+   */
+  inline static const QString HootMultilineString()     { return "hoot:multilinestring"; }
+
+  /**
+   * identifies ElementConflatableCriteria that consider an element conflatable
+   */
+  inline static const QString HootConflatableCriteria() { return "hoot:conflatable:criteria"; }
 
   /**
    * ID Unique to a training data set with multiary training data.

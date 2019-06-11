@@ -12,25 +12,29 @@
         <nd ref="-377374"/>
         <nd ref="-377376"/>
         <nd ref="-377363"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-377372" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-377374"/>
         <nd ref="-377370"/>
         <nd ref="-377368"/>
         <nd ref="-377366"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-377365" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-377363"/>
         <nd ref="-377364"/>
         <nd ref="-377366"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-377415" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-377372" role="outer"/>
         <member type="way" ref="-377365" role="outer"/>
         <member type="way" ref="-377379" role="outer"/>
-        <tag k="note" v="POI"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="note" v="POI"/>
         <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
         <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

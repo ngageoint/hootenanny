@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
 
@@ -38,7 +38,7 @@ namespace hoot
 
 /*
  * The tests in this class will fail with any translator other than the current default,
- * DictionaryTranslator.
+ * ToEnglishDictionaryTranslator.
  */
 class ImplicitPoiTypeTaggerTest : public HootTestFixture
 {
@@ -102,7 +102,8 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator =
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     map->visitRw(uut);
 
     HOOT_STR_EQUALS("amenity = pub\n"
@@ -180,7 +181,8 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator =
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -215,7 +217,8 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator =
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(2, map->getNode(1)->getTags().size());
@@ -250,7 +253,8 @@ public:
     uut.setAllowTaggingSpecificFeatures(true);
     uut.setMatchEndOfNameSingleTokenFirst(true);
     uut.setTranslateNamesToEnglish(true);
-    uut._translator = std::shared_ptr<DictionaryTranslator>(new DictionaryTranslator());
+    uut._translator =
+      std::shared_ptr<ToEnglishDictionaryTranslator>(new ToEnglishDictionaryTranslator());
     map->visitRw(uut);
     LOG_VART(map->getNode(1)->getTags());
 

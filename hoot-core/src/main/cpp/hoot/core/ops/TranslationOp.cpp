@@ -30,13 +30,7 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/ScriptTranslator.h>
-#include <hoot/core/io/ScriptToOgrTranslator.h>
-#include <hoot/core/io/ScriptTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/TranslationVisitor.h>
 
 namespace hoot
 {
@@ -45,7 +39,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, TranslationOp)
 
 TranslationOp::TranslationOp()
 {
-  setConfiguration(conf());
 }
 
 void TranslationOp::apply(std::shared_ptr<OsmMap> &map)

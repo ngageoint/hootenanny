@@ -18,6 +18,7 @@ Feature: Review Bookmarks
         And I scroll element into view and press "conflate2"
         Then I wait 5 "seconds" to see "Conflating …"
         Then I wait 2 "minutes" to see "mergedBookmarkCucumberTest"
+        Then I should not see the "#processingDiv" on the page
 
     Scenario: Create Bookmark with Note
         Then I click the "Bookmark Review" link

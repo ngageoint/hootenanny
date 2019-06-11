@@ -31,12 +31,14 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,6 +62,7 @@ import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
 import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.namemapping.PreConfiguredNameMapping;
@@ -69,7 +72,9 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.models.db.Folders;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 
 
 /**
@@ -184,6 +189,54 @@ public class DbUtils {
     }
 
     /**
+     * Creates a new folder under the parent directory
+     * if not already present and returns it's id
+     *
+     * @param folderName folder name
+     * @param parentId parent directory id that the folder will get linked to
+     */
+    public static Long createFolder(String folderName, Long parentId, Long userId, Boolean isPublic) {
+        Long folderId = getFolderByNameForUser(folderName, parentId, userId);
+
+        if (folderId == null) {
+            folderId = createQuery()
+                    .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
+                    .from()
+                    .fetchOne();
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+
+            createQuery()
+                    .insert(folders).columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
+                    .values(folderId, now, folderName, isPublic, userId, parentId).execute();
+        }
+
+        return folderId;
+    }
+
+    public static Long getFolderByNameForUser(String name, Long parentId, Long userId) {
+        SQLQuery<Long> sql = createQuery()
+                .select(folders.id)
+                .from(folders)
+                .where(folders.displayName.eq(name).and(folders.parentId.eq(parentId).and(folders.userId.eq(userId))));
+        return sql.fetchFirst();
+    }
+
+    public static void setFolderMapping(Long mapId, Long folderId) {
+        Long newId = createQuery()
+            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
+            .from()
+            .fetchOne();
+
+        createQuery()
+            .insert(folderMapMappings)
+            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
+            .values(newId, mapId, folderId).execute();
+    }
+
+
+    /**
      * Sets the parent directory for the specified folder
      *
      * @param folderId folder id whos parent we are setting
@@ -263,6 +316,13 @@ public class DbUtils {
                 .set(Collections.singletonList(maps.tags),
                         Collections.singletonList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
                 .execute();
+    }
+
+    public static boolean grailEligible(long inputId) {
+        Map<String, String> tags = getMapsTableTags(inputId);
+        String sourceInfo = tags.get("source");
+
+        return sourceInfo != null && sourceInfo.equals("rails");
     }
 
     /**

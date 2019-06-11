@@ -89,6 +89,7 @@ In addition to conflating maps together, Hootenanny can also:
 * [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes
 * Plot [node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-plot.asciidoc)
 * [Snap](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) unconnected roads to neighboring roads
+* [Process](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc) map postal address data
 * [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data
 * Translate feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English
@@ -105,12 +106,31 @@ Access to Hootenanny core capabilities are exposed through a web services API fo
 The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
 # Command Line Interface
-[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.  
+[Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available and exposes additional functionalities not available from the web user interface.
 
-[Examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
+Example:
+
+```
+#  conflate two datasets together
+hoot conflate input1.osm input2.osm output.osm
+```
+
+[More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
 # Programming Language Bindings
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
+
+Example:
+
+```
+//  conflate two datasets together
+var hoot = require(process.env.HOOT_HOME + '/lib/HootJs');
+var map = new hoot.OsmMap();
+hoot.loadMap(map, "input1.osm", false, 1);
+hoot.loadMap(map, "input2.osm", false, 2);
+new hoot.UnifyingConflator().apply(map)
+hoot.saveMap(map, "output.osm");
+```
 
 # Documentation
 * [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
@@ -130,7 +150,9 @@ Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/ma
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 * If you have any support questions, please create an issue in this repository.
 
-# [Contributing](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/CONTRIBUTING.md)
+# Development
+* [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
+* [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
 
 # Redistribution
 Hootenanny was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with DigitalGlobe.  The government has "unlimited rights" and is releasing this software to increase the impact of government instruments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the GNU General Public License. The GPL license is available in LICENSE.txt

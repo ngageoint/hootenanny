@@ -2,8 +2,9 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.74020563419" minlon="-77.58210987120999" maxlat="38.74045425152" maxlon="-77.58186579018999"/>
     <node visible="true" id="-85812" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7404542515199992" lon="-77.5820248521099955">
-        <tag k="name" v="poi1"/>
         <tag k="amenity" v="community_centre"/>
+        <tag k="name" v="poi1"/>
+        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-85810" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403395284699954" lon="-77.5820696380699957"/>
     <node visible="true" id="-85808" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.7403269758899924" lon="-77.5820106294799814"/>
@@ -24,8 +25,9 @@
         <nd ref="-85810"/>
         <nd ref="-85797"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="alt_name" v="poi2"/>
-        <tag k="name" v="poly1"/>
         <tag k="amenity" v="arts_centre"/>
+        <tag k="name" v="poly1"/>
+        <tag k="alt_name" v="poi2"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

@@ -2,34 +2,34 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="48.19067499999999" minlon="11.6165934" maxlat="48.19067499999999" maxlon="11.6165934"/>
     <node visible="true" id="-1804986" timestamp="1970-01-01T00:00:00Z" version="1" lat="48.1906749999999917" lon="11.6165933999999993">
-        <tag k="hoot:mismatch" v="1"/>
-        <tag k="addr:city" v="München"/>
-        <tag k="source" v="navteq"/>
-        <tag k="language" v="GER"/>
-        <tag k="note" v="LPG mit ACME Anschluß"/>
-        <tag k="name" v="Auto-Friedl"/>
-        <tag k="addr:housenumber" v="36"/>
-        <tag k="fuel:octane_91" v="yes"/>
-        <tag k="brand" v="Sprint;SPRINT"/>
-        <tag k="addr:full" v="SITULISTRASSE 36 80939 MÜNCHEN"/>
-        <tag k="alt_name" v="SPRINT"/>
-        <tag k="fuel:octane_95" v="yes"/>
-        <tag k="shop" v="kiosk"/>
-        <tag k="fuel:octane_98" v="yes"/>
-        <tag k="hoot:wrong" v="1"/>
-        <tag k="amenity" v="fuel"/>
-        <tag k="phone" v="+49 89 3256423"/>
-        <tag k="REF1" v="01d659"/>
-        <tag k="fuel:lpg" v="yes"/>
-        <tag k="REF2" v="01d659"/>
-        <tag k="fuel:biodiesel" v="yes"/>
         <tag k="addr:street" v="Situlistraße;FREISINGER LANDSTRASSE"/>
+        <tag k="alt_name" v="SPRINT"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="addr:language" v="GER"/>
+        <tag k="addr:housenumber" v="36"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Auto-Friedl"/>
+        <tag k="fuel:diesel" v="yes"/>
+        <tag k="hoot:mismatch" v="1"/>
+        <tag k="brand" v="Sprint;SPRINT"/>
+        <tag k="REF1" v="01d659"/>
+        <tag k="REF2" v="01d659"/>
+        <tag k="uuid" v="{722338b3-e645-58bc-9c27-b54c293380a3};{5d55c2a2-1fa6-5c9f-8adf-6d0f1facb169}"/>
+        <tag k="addr:city" v="München"/>
+        <tag k="operator" v="Sprint"/>
+        <tag k="language" v="GER"/>
+        <tag k="hoot:wrong" v="1"/>
+        <tag k="addr:full" v="SITULISTRASSE 36 80939 MÜNCHEN"/>
+        <tag k="fuel:octane_91" v="yes"/>
         <tag k="addr:postcode" v="80939"/>
         <tag k="access" v="yes"/>
-        <tag k="uuid" v="{722338b3-e645-58bc-9c27-b54c293380a3};{5d55c2a2-1fa6-5c9f-8adf-6d0f1facb169}"/>
-        <tag k="operator" v="Sprint"/>
-        <tag k="fuel:diesel" v="yes"/>
-        <tag k="addr:language" v="GER"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="fuel:octane_95" v="yes"/>
+        <tag k="note" v="LPG mit ACME Anschluß"/>
+        <tag k="fuel:lpg" v="yes"/>
+        <tag k="phone" v="+49 89 3256423"/>
+        <tag k="fuel:octane_98" v="yes"/>
+        <tag k="shop" v="kiosk"/>
+        <tag k="source" v="navteq"/>
+        <tag k="fuel:biodiesel" v="yes"/>
     </node>
 </osm>

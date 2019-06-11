@@ -41,7 +41,7 @@ public class MapLayer {
     private String name;
     private Timestamp date;
     private String lastAccessed;
-    private boolean canExportToOsmApiDb;
+    private boolean grail;
     private Boolean isPublic;
     private long userId;
     private long folderId;
@@ -83,12 +83,12 @@ public class MapLayer {
         this.date = new Timestamp(date.getTime());
     }
 
-    public boolean getCanExportToOsmApiDb() {
-        return canExportToOsmApiDb;
+    public boolean getGrail() {
+        return grail;
     }
 
-    public void setCanExportToOsmApiDb(boolean canExport) {
-        this.canExportToOsmApiDb = canExport;
+    public void setGrail(boolean canExport) {
+        this.grail = canExport;
     }
 
     public String getLastAccessed() {

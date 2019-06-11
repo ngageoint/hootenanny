@@ -42,7 +42,7 @@
     },
     {
         "categories": [
-            "hgispoi"
+            "poi"
         ],
         "isA": "place",
         "name": "place=allotments",
@@ -73,7 +73,7 @@
     },
     {
         "categories": [
-            "hgispoi"
+            "poi"
         ],
         "isA": "place",
         "name": "place=buffer_zone",
@@ -170,7 +170,7 @@
     },
     {
         "categories": [
-            "hgispoi"
+            "poi"
         ],
         "isA": "place",
         "name": "place=farm",
@@ -178,7 +178,7 @@
     },
     {
         "categories": [
-            "hgispoi"
+            "poi"
         ],
         "isA": "place",
         "name": "place=free_trade_zone",
@@ -242,7 +242,7 @@
             "place=maritime_farm"
         ],
         "categories": [
-            "hgispoi"
+            "poi"
         ],
         "isA": "place",
         "name": "place=marine_farm",

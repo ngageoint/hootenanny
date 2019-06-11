@@ -6,7 +6,7 @@
             "area"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "shop",
         "objectType": "tag"
     },

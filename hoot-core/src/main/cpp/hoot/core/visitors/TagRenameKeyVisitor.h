@@ -37,6 +37,10 @@ namespace hoot
 
 /**
  * Renames all keys for all elements with the specified key to a new key
+ *
+ * This is an ElementOsmMapVisitor instead of a ElementVisitor to appease the
+ * PrepExactHighwayData.js script in the train-highways regression test. Finishing #2831 would
+ * make it possible to change this back to an ElementVisitor.
  */
 class TagRenameKeyVisitor : public ElementOsmMapVisitor, public Configurable,
   public OperationStatusInfo

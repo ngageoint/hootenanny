@@ -2,72 +2,72 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="31.5656075" minlon="35.75" maxlat="31.566667" maxlon="35.7704385"/>
     <node visible="true" id="-951427" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5656074999999987" lon="35.7517369999999985">
-        <tag k="source" v="mgcp"/>
-        <tag k="source:text" v="Hill"/>
-        <tag k="source:horiz_accuracy_cat" v="accurate"/>
-        <tag k="source:date_time" v="2010-11-01T00:00:00Z"/>
-        <tag k="name" v="Al ‘Āşī"/>
-        <tag k="source:vertical_source_category" v="no_elevations"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:abs_horiz_accuracy" v="25"/>
-        <tag k="source:copyright" v="Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
         <tag k="source:review_source_type" v="NA"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="REF2" v="0006de"/>
-        <tag k="place" v="locality"/>
-        <tag k="name:id" v="-1440057"/>
-        <tag k="name:feature_id" v="-970038"/>
-        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
-        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
-        <tag k="uuid" v="mgcp:0786A6D0-CD75-48A3-A93C-6D206389DFD5"/>
         <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="name" v="Al ‘Āşī"/>
+        <tag k="name:id" v="-1440057"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="REF2" v="0006de"/>
+        <tag k="uuid" v="mgcp:0786A6D0-CD75-48A3-A93C-6D206389DFD5"/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:copyright" v="Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="place" v="locality"/>
+        <tag k="source:text" v="Hill"/>
+        <tag k="name:feature_id" v="-970038"/>
+        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="source:date_time" v="2010-11-01T00:00:00Z"/>
+        <tag k="source" v="mgcp"/>
     </node>
     <node visible="true" id="-951426" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5661085000000021" lon="35.7704384999999974">
-        <tag k="source" v="mgcp"/>
-        <tag k="source:text" v="Hill"/>
-        <tag k="source:horiz_accuracy_cat" v="accurate"/>
-        <tag k="source:date_time" v="2010-11-01T00:00:00Z"/>
-        <tag k="name" v="Umm al ‘Iz̧ām"/>
-        <tag k="source:vertical_source_category" v="no_elevations"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:abs_horiz_accuracy" v="25"/>
-        <tag k="source:copyright" v="Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
         <tag k="source:review_source_type" v="NA"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="REF2" v="00097b"/>
-        <tag k="place" v="locality"/>
-        <tag k="name:id" v="-1450810"/>
-        <tag k="name:feature_id" v="-974490"/>
-        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
-        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
-        <tag k="uuid" v="mgcp:0942E189-8A20-488F-AAAA-373EFFA9176F"/>
         <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="name" v="Umm al ‘Iz̧ām"/>
+        <tag k="name:id" v="-1450810"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="REF2" v="00097b"/>
+        <tag k="uuid" v="mgcp:0942E189-8A20-488F-AAAA-373EFFA9176F"/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:copyright" v="Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="place" v="locality"/>
+        <tag k="source:text" v="Hill"/>
+        <tag k="name:feature_id" v="-974490"/>
+        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="source:date_time" v="2010-11-01T00:00:00Z"/>
+        <tag k="source" v="mgcp"/>
     </node>
     <node visible="true" id="-951425" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.5666670000000025" lon="35.7500000000000000">
-        <tag k="REF1" v="0006de"/>
+        <tag k="int_name" v="El ‘Asi; Al Asi"/>
+        <tag k="name:de" v="Al Asi"/>
+        <tag k="name" v="العاصي"/>
         <tag k="name:ar" v="العاصي"/>
-        <tag k="is_in" v="Jordan, الأردن"/>
+        <tag k="name:en" v="Al Asi"/>
         <tag k="name:fr" v="Al Asi"/>
         <tag k="natural" v="peak"/>
-        <tag k="name:de" v="Al Asi"/>
-        <tag k="int_name" v="El ‘Asi; Al Asi"/>
-        <tag k="name" v="العاصي"/>
-        <tag k="name:en" v="Al Asi"/>
+        <tag k="REF1" v="0006de"/>
+        <tag k="is_in" v="Jordan, الأردن"/>
         <tag k="error:circular" v="15"/>
     </node>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-951425" role="reviewee"/>
         <member type="node" ref="-951427" role="reviewee"/>
-        <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="hoot:review:note" v="Somewhat similar (200m) - similar names and generic type"/>
         <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Somewhat similar (200m) - similar names and generic type"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

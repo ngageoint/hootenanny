@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -49,7 +49,6 @@ class DataConverterTest : public HootTestFixture
   CPPUNIT_TEST(runColumnsNotOsmToShpTest2);
   CPPUNIT_TEST(runBothTranslationAndColumnsTest);
   CPPUNIT_TEST(runFeatureLimitNonOgrInputsTest);
-  CPPUNIT_TEST(runSpecifyTranslationFromCommandLineAndInConvertOptionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -96,8 +95,7 @@ public:
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
-      converter.setColumns(cols);
-      converter.setColsArgSpecified(true);
+      converter.setShapeFileColumns(cols);
       QStringList inputs;
       inputs.append("test1.shp");
       converter.convert(inputs, "test2.osm");
@@ -121,8 +119,8 @@ public:
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
-      converter.setColumns(cols);
-      converter.setColsArgSpecified(true);
+      converter.setShapeFileColumns(cols);
+
       QStringList inputs;
       inputs.append("test1.osm");
       converter.convert(inputs, "test2.osm");
@@ -147,8 +145,7 @@ public:
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
-      converter.setColumns(cols);
-      converter.setColsArgSpecified(true);
+      converter.setShapeFileColumns(cols);
       QStringList inputs;
       inputs.append("test1.shp");
       converter.convert(inputs, "test2.osm");
@@ -168,7 +165,7 @@ public:
     try
     {
       DataConverter converter;
-      converter.setFeatureReadLimit(2);
+      converter.setOgrFeatureReadLimit(2);
       QStringList inputs;
       inputs.append("test1.osm");
       converter.convert(inputs, "test2.osm");
@@ -181,61 +178,8 @@ public:
     CPPUNIT_ASSERT(
       exceptionMsg.contains("Read limit may only be specified when converting OGR inputs"));
   }
-
-  void runSpecifyTranslationFromCommandLineAndInConvertOptionTest()
-  {
-    QString exceptionMsg("");
-
-    try
-    {
-      DataConverter converter;
-      converter.setTranslation("MyTranslation.js");
-
-      QStringList convertOps;
-      convertOps.append("hoot::TranslationOp");
-      Settings conf;
-      conf.set(ConfigOptions().getConvertOpsKey(), convertOps);
-      converter.setConfiguration(conf);
-
-      QStringList inputs;
-      inputs.append("test1.shp");
-      converter.convert(inputs, "test2.osm");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(
-      exceptionMsg.contains(
-        "Cannot specify both a translation as an input parameter as a configuration option"));
-    exceptionMsg = "";
-
-    try
-    {
-      DataConverter converter;
-      converter.setTranslation("MyTranslation.js");
-
-      QStringList convertOps;
-      convertOps.append("hoot::TranslationVisitor");
-      Settings conf;
-      conf.set(ConfigOptions().getConvertOpsKey(), convertOps);
-      converter.setConfiguration(conf);
-
-      QStringList inputs;
-      inputs.append("test1.shp");
-      converter.convert(inputs, "test2.osm");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(
-      exceptionMsg.contains(
-        "Cannot specify both a translation as an input parameter as a configuration option"));
-  }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DataConverterTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DataConverterTest, "quick");
 
 }

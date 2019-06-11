@@ -28,9 +28,13 @@ package hoot.services.controllers.conflation;
 
 import static hoot.services.HootProperties.RPT_STORE_PATH;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -63,6 +67,7 @@ class UpdateMapTagsCommand implements InternalCommand {
         // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
         tags.put("input1", params.getInput1());
         tags.put("input2", params.getInput2());
+        tags.put("grail", String.valueOf(DbUtils.grailEligible(Long.parseLong(params.getInput1()))));
 
         // Need to reformat the list of hoot command options to json properties
         tags.put("params", JsonUtils.escapeJson(JsonUtils.pojoToJSON(params)));
@@ -94,12 +99,7 @@ class UpdateMapTagsCommand implements InternalCommand {
 
     private void updateMapTags() {
         try {
-            // Currently we do not have any way to get map id directly from hoot
-            // core command when it runs so for now we need get the all the map ids matching name and pick
-            // first one..
-            // THIS WILL NEED TO CHANGE when we implement handle map by Id instead of name..
-
-            Long mapId = DbUtils.getMapIdFromRef(mapName, userId);
+            Long mapId = DbUtils.getMapIdByJobId(jobId);
             if (mapId != null) {
                 // Hack alert!
                 // Add special handling of stats tag key
@@ -110,8 +110,26 @@ class UpdateMapTagsCommand implements InternalCommand {
                     String statsName = tags.get(statsKey);
                     File statsFile = new File(statsName);
                     if (statsFile.exists()) {
-                        String stats = FileUtils.readFileToString(statsFile, "UTF-8");
-                        tags.put(statsKey, stats);
+                        List<String> stats = new ArrayList<>();
+                        try (BufferedReader br = new BufferedReader(new FileReader(statsFile))) {
+                            String line;
+                            boolean capture = false;
+                            int idx;
+                            while ((line = br.readLine()) != null) {
+                               if ((idx = line.indexOf("stats = ")) > -1) {
+                                   capture = true;
+                                   line = line.substring(idx);
+                               }
+                               if (line.isEmpty()) {
+                                   break;
+                               }
+                               if (capture) {
+                                   stats.add(line);
+                               }
+                            }
+                        }
+
+                        tags.put(statsKey, String.join("\n", stats));
 
                         if (!statsFile.delete()) {
                             logger.error("Error deleting {} file", statsFile.getAbsolutePath());

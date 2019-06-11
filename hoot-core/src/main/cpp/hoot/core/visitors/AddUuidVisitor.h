@@ -38,6 +38,8 @@ namespace hoot
 /**
  * Adds a UUID with a specific key. If you want to limit the features that will be tagged then look
  * into FilteredVisitor.
+ *
+ * This really should be a ElementVisitor. See #2831.
  */
 class AddUuidVisitor : public ConstElementVisitor, public ConstOsmMapConsumer, public Configurable
 {

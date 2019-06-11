@@ -28,7 +28,7 @@
 #define PERTY_NAME_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/rnd/perty/RngConsumer.h>
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * A simple random name changer. This is not part of the original perty paper.
  */
-class PertyNameVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable,
+class PertyNameVisitor : public ElementVisitor, public RngConsumer, public Configurable,
   public OperationStatusInfo
 {
 public:

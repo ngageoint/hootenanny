@@ -5,7 +5,7 @@
             "node"
         ],
         "influence": 1,
-        "isA": "hgispoi",
+        "isA": "poi",
         "name": "junction",
         "objectType": "tag"
     },

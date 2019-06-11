@@ -44,6 +44,10 @@
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/TranslationOp.h>
+#include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/ops/BuildingPartMergeOp.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
 
 // std
 #include <vector>
@@ -75,7 +79,7 @@ void elementTranslatorThread::run()
     // singletons that cause issues when you try to multithread stuff.
     QMutexLocker lock(_pInitMutex);
     ogrWriter.reset(new OgrWriter());
-    ogrWriter->setScriptPath(_translation);
+    ogrWriter->setSchemaTranslationScript(_translation);
     ogrWriter->initTranslator();
     ogrWriter->setCache(_pElementCache);
   }
@@ -85,13 +89,13 @@ void elementTranslatorThread::run()
     pNewElement = _pElementQ->dequeue();
 
     std::shared_ptr<geos::geom::Geometry> g;
-    std::vector<ScriptToOgrTranslator::TranslatedFeature> tf;
+    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature> tf;
     ogrWriter->translateToFeatures(cacheProvider, pNewElement, g, tf);
 
     { // Mutex Scope
       QMutexLocker lock(_pTransFeaturesQMutex);
       _pTransFeaturesQ->enqueue(std::pair<std::shared_ptr<geos::geom::Geometry>,
-                                std::vector<ScriptToOgrTranslator::TranslatedFeature>>(g, tf));
+                                std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>(g, tf));
     }
   }
 
@@ -99,16 +103,14 @@ void elementTranslatorThread::run()
     QMutexLocker lock(_pTransFeaturesQMutex);
     *_pFinishedTranslating = true;
   }
-
-  LOG_DEBUG("Done Translating");
 }
 
 void ogrWriterThread::run()
 {
   // Messing with these parameters did not improve performance...
   // http://trac.osgeo.org/gdal/wiki/ConfigOptions
-  // e.g. using CPLSetConfigOption to set "GDAL_CACHEMAX" to "512"
-  // or using CPLSetConfigOption to set "FGDB_BULK_LOAD" to "YES"
+  // e.g. using CPLSetConfigOption to set "GDAL_CACHEMAX" to "512" or using CPLSetConfigOption
+  // to set "FGDB_BULK_LOAD" to "YES"
 
   //  Create an isolate for our thread
   v8::Isolate::CreateParams params;
@@ -119,14 +121,14 @@ void ogrWriterThread::run()
 
   bool done = false;
   std::pair<std::shared_ptr<geos::geom::Geometry>,
-    std::vector<ScriptToOgrTranslator::TranslatedFeature>> feature;
+    std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>> feature;
 
   // Setup writer
   std::shared_ptr<OgrWriter> ogrWriter;
   { // Mutex Scope
     QMutexLocker lock(_pInitMutex);
     ogrWriter.reset(new OgrWriter());
-    ogrWriter->setScriptPath(_translation);
+    ogrWriter->setSchemaTranslationScript(_translation);
     ogrWriter->open(_output);
   }
 
@@ -163,15 +165,12 @@ void ogrWriterThread::run()
     }
   }
   ogrWriter->close();
-
-  LOG_DEBUG("Done Writing Features");
 }
 
 int DataConverter::logWarnCount = 0;
 
 DataConverter::DataConverter() :
-_colsArgSpecified(false),
-_featureReadLimit(0),
+_ogrFeatureReadLimit(0),
 _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
@@ -180,6 +179,10 @@ void DataConverter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
+  setOgrFeatureReadLimit(config.getOgrReaderLimit());
+  setShapeFileColumns(config.getShapeFileWriterCols());
+  setTranslation(config.getSchemaTranslationScript());
+  _translationDirection = config.getSchemaTranslationDirection().trimmed().toLower();
   LOG_VARD(_convertOps);
 }
 
@@ -191,27 +194,37 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   _progress.setSource(JOB_SOURCE);
   _progress.setState(Progress::JobState::Running);
 
-   _progress.set(
+  _progress.set(
     0.0,
     "Converting " + inputs.join(", ").right(_printLengthMax) + " to " +
     output.right(_printLengthMax) + "...");
 
-  //We require that a translation be present when converting to OGR.  We may be able to absorb this
-  //logic into _convert (see notes below).
-  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output, true) && !_translation.isEmpty())
+  // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and
+  // writing do their translations inline (don't use TranslationOp or TranslationVisitor), and OGR
+  // reading support for layer names, conversions involving OGR data must follow a separate logic
+  // path from non-OGR data. It would be nice at some point to be able to do everything generically
+  // from within the _convert method.
+
+  // We require that a translation be present when converting to OGR, the translation direction be
+  // to OGR or unspecified, and that only one input is specified.
+  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output, true) &&
+      !_translation.isEmpty() &&
+      (_translationDirection.isEmpty() || _translationDirection == "toogr"))
   {
     _convertToOgr(inputs.at(0), output);
   }
-  /* We require that a translation be present when converting from OGR.
-   * Would like to be absorb some or all of this logic into _convert but not sure its feasible.
-   */
-  else if (inputs.size() >= 1 && !_translation.isEmpty() &&
-           IoUtils::areSupportedOgrFormats(inputs, true))
+  // We require that a translation be present when converting from OGR, the translation direction be
+  // to OSM or unspecified, and multiple inputs are supported.
+  else if (inputs.size() >= 1 && IoUtils::areSupportedOgrFormats(inputs, true) &&
+           !_translation.isEmpty() &&
+           (_translationDirection.isEmpty() || _translationDirection == "toosm"))
   {
     _convertFromOgr(inputs, output);
   }
-  //If this wasn't a to/from OGR conversion OR no translation was specified, just call the general
-  //convert routine (a translation will be applied to non-OGR inputs, if present).
+  // If this wasn't a to/from OGR conversion, or no translation was specified, or a translation
+  // direction different than what was expected for the input/output formats was specified, just
+  // call the generic convert routine. If no translation direction was specified, we'll try to guess
+  // it and let the user know that we did.
   else
   {
     _convert(inputs, output);
@@ -229,9 +242,8 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(inputs);
   LOG_VART(output);
   LOG_VART(_translation);
-  LOG_VART(_colsArgSpecified);
-  LOG_VART(_columns);
-  LOG_VART(_featureReadLimit);
+  LOG_VART(_shapeFileColumns);
+  LOG_VART(_ogrFeatureReadLimit);
   if (inputs.size() > 0)
   {
     LOG_VART(IoUtils::isSupportedOsmFormat(inputs.at(0)));
@@ -240,10 +252,6 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
   LOG_VART(IoUtils::areSupportedOgrFormats(inputs, true));
   LOG_VART(IoUtils::isSupportedOsmFormat(output));
   LOG_VART(IoUtils::isSupportedOgrFormat(output));
-
-  //I was tempted to also add an exception that prevents you from trying to convert from one format
-  //as input and the same format as output.  We do that in a couple of tests, and while there may
-  //be a way to rework the tests so we don't do it anymore, I haven't looked into it. - BDW
 
   if (inputs.size() == 0)
   {
@@ -255,31 +263,26 @@ void DataConverter::_validateInput(const QStringList& inputs, const QString& out
     throw HootException("No output specified.");
   }
 
-  //I don't think it would be possible for translation to work along with the export columns
-  //specified, as you'd be first changing your column names with the translation and then trying
-  //to export old column names.  If this isn't true, then we could remove this.
-  if (!_translation.isEmpty() && _colsArgSpecified)
+  // I don't think it would be possible for translation to work along with the export columns
+  // specified, as you'd be first changing your column names with the translation and then trying
+  // to export old column names.  If this isn't true, then we could remove this check and allow it.
+  if (!_translation.isEmpty() && _shapeFileColumnsSpecified())
   {
     throw HootException("Cannot specify both a translation and export columns.");
   }
 
-  if (!_translation.isEmpty() && (_convertOps.contains("hoot::TranslationOp") ||
-                                  _convertOps.contains("hoot::TranslationVisitor")))
-  {
-    throw HootException(
-      "Cannot specify both a translation as an input parameter as a configuration option.");
-  }
-
-  //We may eventually be able to relax the restriction here of requiring the input be an OSM
-  //format, but since cols were originally only used with osm2shp, let's keep it here for now.
-  if (_colsArgSpecified && !output.toLower().endsWith(".shp"))
+  // We may eventually be able to relax the restriction here of requiring the input be an OSM
+  // format, but since cols were originally only used with osm2shp and there's no evidence of a need
+  // for anything other than an OSM input whe converting to shape, let's keep this check here for
+  // now.
+  if (_shapeFileColumnsSpecified() && !output.toLower().endsWith(".shp"))
   {
     throw HootException(
       "Columns may only be specified when converting to the shape file format.");
   }
 
-  //Should the feature read limit eventually be supported for all types of inputs?
-  if (_featureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
+  // Feature read limit currently is only implemented for OGR inputs.
+  if (_ogrFeatureReadLimit > 0 && !IoUtils::areSupportedOgrFormats(inputs, true))
   {
     throw HootException("Read limit may only be specified when converting OGR inputs.");
   }
@@ -333,17 +336,16 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
   QMutex initMutex;
   QMutex transFeaturesMutex;
   QQueue<std::pair<std::shared_ptr<geos::geom::Geometry>,
-         std::vector<ScriptToOgrTranslator::TranslatedFeature>>> transFeaturesQ;
+         std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
-  // Read all elements
-  // We should figure out a way to make this not-memory bound in the future
+  // Read all elements; TODO: We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
   LOG_DEBUG("Element Cache Filled");
 
-  // Note the OGR writer is the slowest part of this whole operation,
-  // but it's relatively opaque to us as a 3rd party library. So the best we
-  // can do right now is try to translate & write in parallel
+  // Note the OGR writer is the slowest part of this whole operation, but it's relatively opaque
+  // to us as a 3rd party library. So the best we can do right now is try to translate & write in
+  // parallel.
 
   // Setup & start translator thread
   hoot::elementTranslatorThread transThread;
@@ -368,7 +370,6 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
   writerThread.start();
   LOG_DEBUG("OGR Writer Thread Started");
 
-  // Wait for writer to finish
   LOG_DEBUG("Waiting for writer to finish...");
   writerThread.wait();
 }
@@ -377,18 +378,34 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 {
   LOG_DEBUG("_convertToOgr (formerly known as osm2ogr)");
 
+  // This code path has always assumed translation to OGR and never reads the direction, but let's
+  // warn callers that the opposite direction they specified won't be used.
+  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()) == "toosm")
+  {
+    LOG_INFO(
+      "Ignoring specified schema.translation.direction=toosm and using toogr to write to " <<
+      "OGR output...");
+  }
+
+  // Translation for going to OGR is always required and happens in the writer itself. It is not to
+  // be done with convert ops, so let's ignore any translation ops that were specified.
+  _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
+  _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
+  LOG_VARD(_convertOps);
+
+  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
   if (OsmMapReaderFactory::hasElementInputStream(input) &&
-      // TODO: I *believe* this ops size restriction needs to be replaced with a check similar to
-      // what is in _convert...but not sure.
+      // multithreaded code doesn't support conversion ops. could it?
       _convertOps.size() == 0 &&
-      //none of the convert bounding box supports are able to do streaming I/O at this point
+      // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
   {
+    _progress.set(0.0, "Loading and translating map: ..." + input.right(_printLengthMax) + "...");
     _transToOgrMT(input, output);
   }
   else
   {
-    // The number of steps here must be updated as you add/remove job steps in the logic.
+    // The number of task steps here must be updated as you add/remove job steps in the logic.
     int numSteps = 2;
     if (_convertOps.size() > 0)
     {
@@ -419,7 +436,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
       "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     std::shared_ptr<OgrWriter> writer(new OgrWriter());
-    writer->setScriptPath(_translation);
+    writer->setSchemaTranslationScript(_translation);
     writer->open(output);
     writer->write(map);
     currentStep++;
@@ -526,28 +543,41 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   QElapsedTimer timer;
   timer.start();
 
+  // This code path has always assumed translation to OSM and never reads the direction, but let's
+  // warn callers that the opposite direction they specified won't be used.
+  if (conf().getString(ConfigOptions::getSchemaTranslationDirectionKey()) == "toogr")
+  {
+    LOG_INFO(
+      "Ignoring specified schema.translation.direction=toogr and using toosm to write to " <<
+      "OSM output...");
+  }
+
   _progress.set(0.0, "Loading maps: ..." + inputs.join(",").right(_printLengthMax) + "...");
 
   OsmMapPtr map(new OsmMap());
   OgrReader reader;
-  if (_featureReadLimit > 0)
+  if (_ogrFeatureReadLimit > 0)
   {
-    reader.setLimit(_featureReadLimit);
+    reader.setLimit(_ogrFeatureReadLimit);
   }
-  reader.setTranslationFile(_translation);
+  reader.setSchemaTranslationScript(_translation);
 
-  // The ordering for these ogr2osm ops matters.
+  // see similar note in _convertToOgr
+  _convertOps.removeAll(QString::fromStdString(TranslationOp::className()));
+  _convertOps.removeAll(QString::fromStdString(TranslationVisitor::className()));
+
+  // The ordering for these added ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
-    _convertOps.prepend("hoot::BuildingPartMergeOp");
+    _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
   }
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
-    _convertOps.prepend("hoot::MergeNearbyNodes");
+    _convertOps.prepend(QString::fromStdString(MergeNearbyNodes::className()));
   }
   LOG_VARD(_convertOps);
 
-  // The number of steps here must be updated as you add/remove job steps in the logic.
+  // The number of task steps here must be updated as you add/remove job steps in the logic.
   int numTasks = 2;
   if (_convertOps.size() > 0)
   {
@@ -615,6 +645,62 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   currentTask++;
 }
 
+void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
+{
+  //For non OGR conversions, the translation must be passed in as an op.
+  if (!_translation.trimmed().isEmpty())
+  {
+    //a previous check was done to make sure both a translation and export cols weren't specified
+    assert(!_shapeFileColumnsSpecified());
+
+    if (!_convertOps.contains(QString::fromStdString(TranslationOp::className())) &&
+        !_convertOps.contains(QString::fromStdString(TranslationVisitor::className())))
+    {
+      // If a translation script was specified but not the translation op, we'll add auto add the op
+      // as the first conversion operation. If the caller wants the translation done after some
+      // other op, then they need to explicitly add it to the op list. Always adding the visitor
+      // instead of the op, bc its streamable. However, if any other ops in the group aren't
+      // streamable it won't matter anyway.
+      _convertOps.prepend(QString::fromStdString(TranslationVisitor::className()));
+    }
+    else if (_convertOps.contains(QString::fromStdString(TranslationOp::className())))
+    {
+      // replacing TranslationOp with TranslationVisitor for the reason mentioned above
+      _convertOps.replaceInStrings(
+        QString::fromStdString(TranslationOp::className()),
+        QString::fromStdString(TranslationVisitor::className()));
+    }
+    LOG_VARD(_convertOps);
+
+    // If the translation direction wasn't specified, try to guess it.
+    if (_translationDirection.isEmpty())
+    {
+      _translationDirection = _outputFormatToTranslationDirection(output);
+      // This gets read by the TranslationVisitor and cannot be empty.
+      conf().set(ConfigOptions::getSchemaTranslationDirectionKey(), _translationDirection);
+    }
+  }
+}
+
+QString DataConverter::_outputFormatToTranslationDirection(const QString& output) const
+{
+  if (IoUtils::isSupportedOgrFormat(output, true))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toogr' based on output format...");
+    return "toogr";
+  }
+  else if (IoUtils::isSupportedOsmFormat(output))
+  {
+    LOG_INFO("No translation direction specified. Assuming 'toosm' based on output format...");
+    return "toosm";
+  }
+  else
+  {
+    LOG_INFO("No translation direction specified. Using 'toosm'...");
+    return "toosm";
+  }
+}
+
 void DataConverter::_convert(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("general convert");
@@ -623,21 +709,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
 
-  //For non OGR conversions, the translation must be passed in as an op.
-  if (!_translation.trimmed().isEmpty())
-  {
-    //a previous check was done to make sure both a translation and export cols weren't specified
-    assert(!_colsArgSpecified);
-    //a previous check was done to make sure a translation wasn't specified as both a command line
-    //input and a convert op
-    assert(_convertOps.contains("hoot::TranslationOp") &&
-           _convertOps.contains("hoot::TranslationVisitor"));
-
-    _convertOps.prepend("hoot::TranslationOp");
-    LOG_VARD(_convertOps);
-    conf().set(ConfigOptions::getTranslationScriptKey(), _translation);
-    LOG_VART(conf().get(ConfigOptions().getTranslationScriptKey()));
-  }
+  _handleGeneralConvertTranslationOpts(output);
 
   //check to see if all of the i/o can be streamed
   const bool isStreamable =
@@ -665,11 +737,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   {
     //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
     //it is ever made streamable, then we'd have to refactor this.
-    assert(!_colsArgSpecified);
+    assert(!_shapeFileColumnsSpecified());
 
     //stream the i/o
     ElementStreamer::stream(
-      inputs, output, QStringList(),
+      inputs, output, _convertOps,
       Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
         (float)(currentTask - 1) / (float)numTasks, taskWeight));
@@ -706,10 +778,11 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
       (float)(currentTask - 1) / (float)numTasks,
       "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
-    if (output.toLower().endsWith(".shp") && _colsArgSpecified)
+    if (output.toLower().endsWith(".shp") && _shapeFileColumnsSpecified())
     {
-      // If the user specified cols, then we want to export them.
-      _exportToShapeWithCols(output, _columns, map);
+      // If the user specified cols, then we want to export them. This requires a separate logic
+      // path from the generic convert logic.
+      _exportToShapeWithCols(output, _shapeFileColumns, map);
     }
     else
     {

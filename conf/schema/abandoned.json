@@ -1,8 +1,5 @@
 [
     {
-        "categories": [
-            "hgispoi"
-        ],
         "isA": "place",
         "name": "abandoned:place=farm",
         "objectType": "tag",

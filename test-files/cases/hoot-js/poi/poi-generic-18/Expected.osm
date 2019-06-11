@@ -2,35 +2,35 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="31.658611" minlon="35.62" maxlat="31.658611" maxlon="35.62"/>
     <node visible="true" id="-183178" timestamp="1970-01-01T00:00:00Z" version="1" lat="31.6586109999999969" lon="35.6199999999999974">
+        <tag k="alt_name" v="‘Abd al Khāliq, Tall"/>
+        <tag k="source:review_source_type" v="NA"/>
+        <tag k="source:abs_vert_accuracy" v="-32765"/>
+        <tag k="name:ar" v="تل عبد الخالق"/>
+        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="natural" v="peak"/>
+        <tag k="name:de" v="Tall Abd al Khaliq"/>
+        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
+        <tag k="name:fr" v="Tall Abd al Khaliq"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="تل عبد الخالق"/>
+        <tag k="name:en" v="Tall Abd al Khaliq"/>
+        <tag k="name:id" v="-1439206"/>
+        <tag k="int_name" v="Tall ‘Abd al Khāliq; Tall Abd al Khaliq"/>
+        <tag k="REF1" v="000243"/>
+        <tag k="source:abs_horiz_accuracy" v="25"/>
+        <tag k="REF2" v="000243"/>
+        <tag k="uuid" v="mgcp:2332161C-75B7-4A45-9DC6-303D87147E43"/>
+        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
+        <tag k="source:copyright" v="Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
+        <tag k="place" v="locality"/>
+        <tag k="source:text" v="Hill"/>
+        <tag k="name:feature_id" v="-969685"/>
+        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
+        <tag k="source:horiz_accuracy_cat" v="accurate"/>
+        <tag k="source:vertical_source_category" v="no_elevations"/>
+        <tag k="source:date_time" v="2010-11-01T00:00:00Z"/>
         <tag k="is_in" v="Jordan, الأردن"/>
         <tag k="source" v="mgcp"/>
-        <tag k="source:text" v="Hill"/>
-        <tag k="name:de" v="Tall Abd al Khaliq"/>
-        <tag k="int_name" v="Tall ‘Abd al Khāliq; Tall Abd al Khaliq"/>
-        <tag k="source:horiz_accuracy_cat" v="accurate"/>
-        <tag k="source:date_time" v="2010-11-01T00:00:00Z"/>
-        <tag k="name" v="تل عبد الخالق"/>
-        <tag k="source:vertical_source_category" v="no_elevations"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="source:abs_horiz_accuracy" v="25"/>
-        <tag k="alt_name" v="‘Abd al Khāliq, Tall"/>
-        <tag k="source:copyright" v="Copyright 2012 by the National Geospatial-Intelligence Agency, U.S. Government. No domestic copyright claimed under Title 17 U.S.C. All rights reserved."/>
-        <tag k="source:abs_vert_accuracy_eval" v="NA"/>
-        <tag k="source:review_source_type" v="NA"/>
-        <tag k="source:description" v="Very High Resolution Commercial Monoscopic Imagery"/>
-        <tag k="name:fr" v="Tall Abd al Khaliq"/>
-        <tag k="REF1" v="000243"/>
-        <tag k="REF2" v="000243"/>
-        <tag k="name:id" v="-1439206"/>
-        <tag k="name:feature_id" v="-969685"/>
-        <tag k="name:en" v="Tall Abd al Khaliq"/>
-        <tag k="place" v="locality"/>
-        <tag k="source:abs_horiz_accuracy_eval" v="emc_product_specification"/>
-        <tag k="source:commercial_distribution_restriction" v="Limited distribution. Official use only by MGCP members."/>
-        <tag k="uuid" v="mgcp:2332161C-75B7-4A45-9DC6-303D87147E43"/>
-        <tag k="source:abs_vert_accuracy" v="-32765"/>
-        <tag k="natural" v="peak"/>
-        <tag k="name:ar" v="تل عبد الخالق"/>
-        <tag k="error:circular" v="15"/>
     </node>
 </osm>

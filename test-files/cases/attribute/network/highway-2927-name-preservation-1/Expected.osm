@@ -271,7 +271,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Este 2"/>
         <tag k="source:datetime" v="2014-04-17T22:53:50.000Z;2019-01-17T19:50:06Z;2014-06-22T20:55:22.000Z"/>
         <tag k="bicycle" v="yes"/>
@@ -307,7 +306,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-18" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-33"/>
@@ -324,7 +322,6 @@
         <tag k="z_order" v="-999999"/>
         <tag k="lit" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Bulevar Panteón"/>
         <tag k="source:datetime" v="2015-07-01T16:10:48.000Z;2015-07-01T16:10:50.000Z;2014-09-04T18:33:58.000Z;2014-09-04T18:34:00.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
@@ -363,7 +360,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-19"/>
@@ -381,7 +377,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-8"/>
@@ -411,7 +406,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15"/>
@@ -427,7 +421,6 @@
         <tag k="surface" v="paving_stones"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Oeste 2"/>
         <tag k="source:datetime" v="2013-12-19T16:36:19.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
@@ -453,7 +446,6 @@
         <nd ref="-13"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Sur 2"/>
         <tag k="source:datetime" v="2014-02-08T15:54:54.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
@@ -494,7 +486,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
@@ -507,24 +498,23 @@
         <nd ref="-81"/>
         <nd ref="-80"/>
         <nd ref="-35"/>
-        <tag k="surface" v="concrete"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Av. Oeste 0"/>
-        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z;2015-08-11T16:12:27.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="2"/>
-        <tag k="uuid" v="{c708f207-166d-4d9c-936f-158a78dacb43}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.659Z"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="no"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.659Z"/>
         <tag k="highway" v="pedestrian"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Oeste 0"/>
+        <tag k="uuid" v="{c708f207-166d-4d9c-936f-158a78dacb43}"/>
+        <tag k="lit" v="yes"/>
+        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z;2015-08-11T16:12:27.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="lanes" v="2"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-10"/>
@@ -541,7 +531,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-35"/>
@@ -561,7 +550,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
@@ -580,7 +568,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
@@ -597,14 +584,12 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-3"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
         <tag k="name" v="Av. Sur"/>
         <tag k="source:datetime" v="2013-11-14T15:44:07.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
@@ -648,7 +633,6 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
@@ -676,6 +660,5 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="error:circular" v="15"/>
     </way>
 </osm>

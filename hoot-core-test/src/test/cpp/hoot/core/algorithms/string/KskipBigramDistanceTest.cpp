@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -37,7 +37,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/string/KskipBigramDistance.h>
-#include <hoot/core/language/DictionaryTranslator.h>
+#include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -124,7 +124,7 @@ public:
 
   QString te(const char* s)
   {
-    return DictionaryTranslator().translateStreet(QString::fromUtf8(s));
+    return ToEnglishDictionaryTranslator().translateStreet(QString::fromUtf8(s));
   }
 
   QString joinBigrams(QSet<QString> bigrams)

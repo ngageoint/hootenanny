@@ -458,7 +458,7 @@ gifd = {
             gifd.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
-            gifd.toChange = hoot.Settings.get("translation.override");
+            gifd.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Debug:

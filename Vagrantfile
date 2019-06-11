@@ -1,8 +1,43 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$nfsShare = false
-$fouoShare = false
+# Allowing stuff to be set during "vagrant up"
+# E.g.
+# To use NFS, have 12CPU and 24Gb RAM
+#  NFSSHARE=true VBCPU=12 VBRAM=24576 vagrant up
+$nfsShare = ENV['NFSSHARE']
+if $nfsShare.nil?
+  $nfsShare = false
+else
+  puts '## Using NFS for file syncing'
+end
+
+$fouoShare = ENV['FOUOSHARE']
+if $fouoShare.nil?
+  $fouoShare = false
+else
+  puts '## Mounting /fouo on the VM'
+end
+
+$vbCpu = ENV['VBCPU']
+if $vbCpu.nil?
+  $vbCpu = 4
+else
+  puts '## Allocating ' + $vbCpu + ' CPU cores to the VM'
+end
+
+$vbRam = ENV['VBRAM']
+if $vbRam.nil?
+  $vbRam = 10240
+else
+  puts '## Allocating ' + $vbRam + ' RAM to the VM'
+end
+
+# By default, don't try to add software repos or run "yum upgrade" in the VM's
+# Not sure if this need to be able to be triggered from the commandline
+$addRepos = "no"
+$yumUpdate = "no"
+
 
 Vagrant.configure(2) do |config|
   # Hoot port mapping
@@ -35,7 +70,8 @@ Vagrant.configure(2) do |config|
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
-      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm3.2xlarge')
+      aws.instance_type = ENV.fetch('AWS_INSTANCE_TYPE', 'm5.2xlarge')
+
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
 
       if ENV.key?('AWS_KEYPAIR_NAME')
@@ -64,7 +100,8 @@ Vagrant.configure(2) do |config|
 
       # Setting up provisioners for AWS, in the correct order, depending on the OS platform.
       if os == 'CentOS7'
-        override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvisionCentOS7.sh'
+        override.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
+        # override.vm.provision 'hoot', type: 'shell', :privileged => false, :path => 'VagrantProvisionCentOS7.sh'
         tomcat_script = 'sudo systemctl restart tomcat8'
       end
 
@@ -96,7 +133,7 @@ Vagrant.configure(2) do |config|
   end
 
   def set_provisioners(config)
-    config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
+    config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
     config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"   
     config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
     config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
@@ -118,6 +155,10 @@ Vagrant.configure(2) do |config|
     hoot_centos7.vm.hostname = "hoot-centos"
 
     mount_shares(hoot_centos7)
+
+    # We do want to add repos and update this box
+    $addRepos = "yes"
+    $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
     aws_provider(hoot_centos7, 'CentOS7')
   end
@@ -146,7 +187,6 @@ Vagrant.configure(2) do |config|
     hoot_centos7_core.nfs.map_gid = Process.gid
     hoot_centos7_core.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
     hoot_centos7_core.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
-
     hoot_centos7_core.vm.provision "hoot", type: "shell", :privileged => false, :path => "scripts/util/Centos7_only_core.sh"
   end
 
@@ -179,8 +219,10 @@ Vagrant.configure(2) do |config|
     #vb.gui = true
 
   # Customize the amount of memory on the VM:
-    vb.memory = 10240
-    vb.cpus = 4
+    # vb.memory = 10240
+    # vb.cpus = 4
+    vb.memory = $vbRam
+    vb.cpus = $vbCpu
   end
 
   # VSphere provider

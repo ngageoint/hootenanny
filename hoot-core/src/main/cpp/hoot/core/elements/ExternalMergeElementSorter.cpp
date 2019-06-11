@@ -96,7 +96,7 @@ void ExternalMergeElementSorter::sort(ElementInputStreamPtr input)
 
 void ExternalMergeElementSorter::_sort(ElementInputStreamPtr input)
 {
-  LOG_INFO("Sorting input by element ID and type...");
+  LOG_INFO("Sorting elements on external disk...");
 
   //if only one file was written, skip merging
   _createSortedFileOutputs(input);

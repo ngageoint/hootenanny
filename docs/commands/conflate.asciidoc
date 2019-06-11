@@ -62,7 +62,7 @@ hoot conflate -D conflate.pre.ops="hoot::RemoveElementsVisitor" \
 
 # Translate features to a schema before conflating them
 hoot conflate -D conflate.pre.ops="hoot::TranslationOp" \
-  -D translation.script=myTranslation.js input1.osm input2.osm output.osm
+  -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
   
 # Align a second map towards a first map before conflating them
 hoot conflate -D conflate.pre.ops="hoot::RubberSheet" -D rubber.sheet.ref=true input1.osm \
@@ -72,7 +72,8 @@ hoot conflate -D conflate.pre.ops="hoot::RubberSheet" -D rubber.sheet.ref=true i
 # the area being conflated so that only data from the second map is stitched in around the 
 # first map
 hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
-  -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false
+  -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false \
+  input1.osm input2.osm output.osm
 -------------------------------------
 
 ==== See Also

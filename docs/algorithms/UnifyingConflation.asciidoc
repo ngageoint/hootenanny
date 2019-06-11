@@ -135,7 +135,7 @@ matches B, B matches C, but A misses C.
 
 [[confictexamples]]
 .Simple Example of Conflicting and Non-Conflicting Lines
-image::images/ConflictExamples.png[]
+image::algorithms/images/ConflictExamples.png[]
 
 The aggressive approach, inspired by <<li2011>>, selects a set of
 non-conflicting matches that maximizes the score of all the non-conflicting
@@ -209,7 +209,7 @@ reviewing.
 This is an open problem that require more investigation.
 
 .Example of delayed conflict detection
-image::images/DelayedConflict.png[]
+image::algorithms/images/DelayedConflict.png[]
 
 === Export
 

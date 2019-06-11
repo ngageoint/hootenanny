@@ -28,11 +28,12 @@
 #define CALCULATESTATSOP_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/info/SingleStat.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QList>
@@ -45,10 +46,13 @@ class FilteredVisitor;
 /**
  * Calcs the set of stats that feeds the stats command.
  *
- * @todo This has grown quite large and could probably be made a little less maintenance-prone
- * with some abstractions. - see #2908
+ * Statistics data definitions which can be defined generically have moved to a json file:
+ * ConfigOptions.getStatsGenericDataFile()
+ * The json file contains two StatData struct lists containing the slow and quick generic stat
+ * definitions. See the CalculateStatsOp::StatCall and CalculateStatsOp::StatData comments
+ * below for an explanation of the entries.
  */
-class CalculateStatsOp : public ConstOsmMapOperation
+class CalculateStatsOp : public ConstOsmMapOperation, public Configurable
 {
 public:
 
@@ -83,17 +87,58 @@ public:
 
   virtual QString getDescription() const { return "Calculates map statistics"; }
 
+  // Configurable
+  virtual void setConfiguration(const Settings& conf);
+
 private:
 
+  // Enum defining what stat value of the SingleStatistic or NumericStatistic
+  // implementation of the specific visitor is being used.
+  enum StatCall
+  {
+    Stat,           // SingleStatistic::getStat()
+    Min,            // NumericStatistic::getMin()
+    Max,            // NumericStatistic::getMax()
+    Average,        // NumericStatistic::getAverage()
+    InfoCount,      // NumericStatistic::getInformationCount()
+    InfoMin,        // NumericStatistic::getInformationMin()
+    InfoMax,        // NumericStatistic::getInformationMax()
+    InfoAverage,    // NumericStatistic::getInformationAverage()
+    InfoDiff,       // NumericStatistic::getInformationCountDiff()
+  };
+
+  // Structure definition for a generic statistics calculation
+  struct StatData
+  {
+    QString name;       // name of the output statistics value
+    QString visitor;    // visitor object name used to collect the data
+    QString criterion;  // criterion object name used if a FilteredVisitor is desired, otherwise an empty string
+    StatCall statCall;  // defines how the visitor data is being interpreted
+  };
+
+  const Settings* _pConf;
   ElementCriterionPtr _criterion;
   //simple map name string for logging purposes
   QString _mapName;
+  std::shared_ptr<const OsmMap> _constMap;
   bool _quick;
   //We differentiate between maps that are the input to a conflation job vs those that are the
   //output of a conflation job.  Another option would be to refactor this class for both maps
   //meant to be input to a conflation job and those that are output from a conflation job.
   bool _inputIsConflatedMapOutput;
   QList<SingleStat> _stats;
+
+  QHash<QString,std::shared_ptr<ElementCriterion>> _criterionCache;
+  QHash<QString,std::shared_ptr<ConstElementVisitor>> _appliedVisitorCache;
+
+  QList<StatData> _quickStatData;
+  QList<StatData> _slowStatData;
+
+  void _readGenericStatsData();
+  void _addStat(const QString& name, double value);
+  void _addStat(const char* name, double value);
+  void _interpretStatData(std::shared_ptr<const OsmMap>& constMap, StatData& d);
+  double GetRequestedStatValue(const ConstElementVisitor* pVisitor, StatCall call);
 
   /**
    * @brief getMatchCreator finds the match creator (in the supplied vector) by name
@@ -106,18 +151,15 @@ private:
                                                 const QString &matchCreatorName,
                                                 CreatorDescription::BaseFeatureType &featureType);
 
-  double _applyVisitor(std::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v);
-
-  double _applyVisitor(std::shared_ptr<const OsmMap>& map, const hoot::FilteredVisitor &v,
-                       boost::any& visitorData);
-
-  void _applyVisitor(const std::shared_ptr<const OsmMap>& map, ConstElementVisitor *v);
+  double _applyVisitor(const hoot::FilteredVisitor &v, StatCall call = Stat);
+  double _applyVisitor(const hoot::FilteredVisitor &v, boost::any& visitorData, StatCall call = Stat);
+  double _applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call = Stat);
+  void _applyVisitor(ConstElementVisitor *v);
 
   static bool _matchDescriptorCompare(const CreatorDescription& m1,
                                       const CreatorDescription& m2);
 
-  void _generateFeatureStats(std::shared_ptr<const OsmMap>& map,
-                             const CreatorDescription::BaseFeatureType& featureType,
+  void _generateFeatureStats(const CreatorDescription::BaseFeatureType& featureType,
                              const float conflatableCount,
                              const CreatorDescription::FeatureCalcType& type,
                              ElementCriterionPtr criterion,
@@ -125,6 +167,7 @@ private:
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
     const CreatorDescription::BaseFeatureType& featureType);
+
 };
 
 }
