@@ -152,9 +152,11 @@ void CumulativeConflator::conflate(const QStringList& inputs, const QString& out
       //copy the map and save the reviews
       LOG_DEBUG("Caching reviews...");
       reviewCache.reset(new OsmMap(cumulativeMap->getProjection()));
-      // remove everything but the reviews from this map
+      // remove everything but the reviews here
       RemoveElementsVisitor vis(true);
-      vis.addCriterion(ElementCriterionPtr(new NeedsReviewCriterion(cumulativeMap)));
+      std::shared_ptr<NeedsReviewCriterion> crit(new NeedsReviewCriterion());
+      crit->setOsmMap(cumulativeMap.get());
+      vis.addCriterion(crit);
       reviewCache->visitRw(vis);
       LOG_DEBUG("Cached " << reviewCache->getElementCount() << " reviews.");
     }
