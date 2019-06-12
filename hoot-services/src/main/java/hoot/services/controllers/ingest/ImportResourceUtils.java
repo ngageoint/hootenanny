@@ -50,8 +50,8 @@ final class ImportResourceUtils {
     }
 
     static UploadClassification finalizeUploadClassification(int zipCnt, int shpZipCnt, int fgdbZipCnt, int osmZipCnt,
-            int geojsonZipCnt, int geonamesZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geojsonCnt,
-            int geonamesCnt) {
+            int geojsonZipCnt, int geonamesZipCnt, int gpkgZipCnt, int shpCnt, int fgdbCnt, int osmCnt, int geojsonCnt,
+            int geonamesCnt, int gpkgCnt) {
         // if fgdb zip > 0 then all becomes fgdb so it can be uzipped first
         // if fgdb zip == 0 and shp zip > then it is standard zip.
         // if fgdb zip == 0 and shp zip == 0 and osm zip > 0 then it is osm zip
@@ -70,6 +70,8 @@ final class ImportResourceUtils {
                     classification = GEOJSON;
                 } else if (geonamesCnt > 0) { // Mix of One or more all osm zip + osm
                     classification = GEONAMES;
+                } else if (gpkgCnt > 0) {
+                	classification = GPKG;
                 } else {
                     // One or more zip (all ogr) || One or more zip (all osm)
                     // If contains zip of just shape or osm then we will etl zip directly
@@ -86,6 +88,8 @@ final class ImportResourceUtils {
             classification = GEOJSON;
         } else if (geonamesCnt > 0) {
             classification = GEONAMES;
+        } else if (gpkgCnt > 0) {
+        	classification = GPKG;
         } else {
             throw new RuntimeException("Error during classification: unable to classify uploaded file!");
         }
@@ -102,11 +106,13 @@ final class ImportResourceUtils {
         int fgdbZipCnt = counts.getOrDefault(FGDB_ZIP, 0);
         int geojsonZipCnt = counts.getOrDefault(GEOJSON_ZIP, 0);
         int geonamesZipCnt = counts.getOrDefault(GEONAMES_ZIP, 0);
+        int gpkgZipCnt = counts.getOrDefault(GEOPACKAGE_ZIP, 0);
         int osmCnt = counts.getOrDefault(OSM, 0);
         int shpCnt = counts.getOrDefault(SHP, 0);
         int fgdbCnt = counts.getOrDefault(FGDB, 0);
         int geojsonCnt = counts.getOrDefault(GEOJSON, 0);
         int geonamesCnt = counts.getOrDefault(GEONAMES, 0);
+        int gpkgCnt = counts.getOrDefault(GPKG, 0);
 
         if ((uploadClassification == OSM) || (uploadClassification == PBF)) {
             filesToImport.add(uploadedFile);
@@ -117,6 +123,9 @@ final class ImportResourceUtils {
         } else if ((uploadClassification == GEONAMES) || (uploadClassification == TXT)) {
             filesToImport.add(uploadedFile);
             geonamesCnt++;
+        } else if ((uploadClassification == GPKG)) {
+        	filesToImport.add(uploadedFile);
+        	gpkgCnt++;
         } else if (uploadClassification == SHP) {
             filesToImport.add(uploadedFile);
             shpCnt++;
@@ -129,6 +138,7 @@ final class ImportResourceUtils {
             osmZipCnt += zipCounts.get(OSM_ZIP);
             geojsonZipCnt += zipCounts.get(GEOJSON_ZIP);
             geonamesZipCnt += zipCounts.get(GEONAMES_ZIP);
+            gpkgZipCnt += zipCounts.get(GEOPACKAGE_ZIP);
         } else if (uploadedFile.getName().equalsIgnoreCase("gdb")) {
             if (uploadType.equalsIgnoreCase("DIR")) {
                 filesToImport.add(uploadedFile.getParentFile());
@@ -141,11 +151,13 @@ final class ImportResourceUtils {
         counts.put(OSM_ZIP, osmZipCnt);
         counts.put(GEOJSON_ZIP, geojsonZipCnt);
         counts.put(GEONAMES_ZIP, geonamesZipCnt);
+        counts.put(GEOPACKAGE_ZIP, gpkgZipCnt);
         counts.put(SHP, shpCnt);
         counts.put(FGDB, fgdbCnt);
         counts.put(OSM, osmCnt);
         counts.put(GEOJSON, geojsonCnt);
         counts.put(GEONAMES, geonamesCnt);
+        counts.put(GPKG, gpkgCnt);
 
         return filesToImport;
     }
@@ -170,11 +182,12 @@ final class ImportResourceUtils {
                 FileFilterUtils.suffixFileFilter(OSM.toString().toLowerCase()),
                 FileFilterUtils.suffixFileFilter(GEOJSON.toString().toLowerCase()),
                 FileFilterUtils.suffixFileFilter(GEONAMES.toString().toLowerCase()),
+                FileFilterUtils.suffixFileFilter(GPKG.toString().toLowerCase()),
                 FileFilterUtils.suffixFileFilter(PBF.toString().toLowerCase()), FileFilterUtils.nameFileFilter("gdb"));
 
         Collection<File> files = FileUtils.listFiles(targetFolder, fileFilter, null);
 
-        int shpCnt = 0, osmCnt = 0, geojsonCnt = 0, geonamesCnt = 0, fgdbCnt = 0;
+        int shpCnt = 0, osmCnt = 0, geojsonCnt = 0, geonamesCnt = 0, gpkgCnt = 0, fgdbCnt = 0;
 
         for (File file : files) {
             String ext = FilenameUtils.getExtension(file.getName());
@@ -196,6 +209,9 @@ final class ImportResourceUtils {
             } else if (uploadedFileType == GEONAMES) {
                 filesToImport.add(file);
                 geonamesCnt++;
+            } else if (uploadedFileType == GPKG) {
+            	filesToImport.add(file);
+            	gpkgCnt++;
             }
         }
 
@@ -212,6 +228,7 @@ final class ImportResourceUtils {
         stats.put(OSM_ZIP, osmCnt);
         stats.put(GEOJSON_ZIP, geojsonCnt);
         stats.put(GEONAMES_ZIP, geonamesCnt);
+        stats.put(GEOPACKAGE_ZIP, gpkgCnt);
 
         return stats;
     }
