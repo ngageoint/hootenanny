@@ -169,6 +169,8 @@ public class ExportResource {
                 params.setInputType("db");
 
                 for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
+                    //check map for user visibility
+
                     params.setInput(map);
                     params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(map)));
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
@@ -178,13 +180,15 @@ public class ExportResource {
                 workflow.add(zipCommand);
 
             } else {
+                //check map for user visibility
+
                 workflow.add(getCommand(user, jobId, params, debugLevel));
                 Command zipCommand = getZIPCommand(workDir, outputName);
                 workflow.add(zipCommand);
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
-                    DbUtils.getMapIdFromRef(params.getInput(), user.getId())));
+                    null /*don't need mapid for export because job is not writing output to db*/));
         }
         catch (WebApplicationException wae) {
             logger.error(wae.getMessage(), wae);
