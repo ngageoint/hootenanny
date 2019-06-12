@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPHIGHWAYSVISITOR_H
 #define KEEPHIGHWAYSVISITOR_H
@@ -37,6 +37,10 @@ namespace hoot
 /**
  * Removes all ways and relations that are not part of a linear highway.
  * Note: You may have to run this multiple times to get the desired effect.
+ *
+ * It may be possible to remove this class after both #3276 are completed and any regression tests
+ * using it can be converted to use RemoveElementsVisitor combined with a NotCriterion instead
+ * (second part may not be possible given how this class has been written).
  */
 class KeepHighwaysVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
@@ -47,7 +51,6 @@ public:
   KeepHighwaysVisitor() {}
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
-
   /**
    * KeepHighwaysVisitor requires a read/write map.
    */

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EIDMAPPER_H
 #define EIDMAPPER_H
@@ -33,6 +33,7 @@ namespace hoot
 class EidMapper
 {
 public:
+
   /**
    * Map from one eid to another. This is most useful when EIDs are replaced during the merge
    * process.

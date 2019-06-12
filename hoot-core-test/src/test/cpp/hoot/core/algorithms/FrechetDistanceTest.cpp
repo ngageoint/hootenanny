@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -68,8 +68,10 @@ public:
   void simpleFrechet()
   {
     OsmMapPtr map = createTestMapSimple();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     FrechetDistance fd_simple(map, w1, w2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.00, fd_simple.distance(), 0.01);
@@ -78,8 +80,10 @@ public:
   void tailFrechet()
   {
     OsmMapPtr map = createTailMap();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -109,7 +113,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(optimal_subline.second[i].first, sublines[0].second[i].first);
       CPPUNIT_ASSERT_EQUAL(optimal_subline.second[i].second, sublines[0].second[i].second);
     }
-
   }
 
   frechet_subline createTailSubline()
@@ -183,8 +186,10 @@ public:
     };
 
     OsmMapPtr map = createTestMapHomologous();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -230,8 +235,10 @@ public:
     };
 
     OsmMapPtr map = createTestMapPartial();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -281,8 +288,10 @@ public:
     };
 
     OsmMapPtr map = createTestSplitMap();
-    WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w1")[0]);
-    WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "w2")[0]);
+    WayPtr w1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
+    WayPtr w2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w2")[0]);
 
     FrechetDistance fd(map, w1, w2);
 
@@ -308,7 +317,6 @@ public:
         CPPUNIT_ASSERT_DOUBLES_EQUAL(manual[i].second[j].second, matches[i].second[j].second, 0.01);
       }
     }
-
   }
 
   OsmMapPtr createTestMapHomologous()
@@ -415,7 +423,6 @@ public:
     matches.push_back(frechet_subline(2.0, secondary_subline));
     return matches;
   }
-
 };
 
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FrechetDistanceTest, "current");

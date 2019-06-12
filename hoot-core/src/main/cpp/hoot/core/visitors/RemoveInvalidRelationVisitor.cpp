@@ -30,7 +30,7 @@
 //  hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
@@ -83,7 +83,7 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
           element->setTags(merged);
         }
         //  Delete the relation
-        RemoveRelationOp::removeRelation(_map->shared_from_this(), r->getId());
+        RemoveRelationByEid::removeRelation(_map->shared_from_this(), r->getId());
         _numAffected++;
       }
     }

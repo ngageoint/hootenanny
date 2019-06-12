@@ -22,50 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef KEEPREVIEWSVISITOR_H
-#define KEEPREVIEWSVISITOR_H
+#include "SchemaTranslationOp.h"
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
 
-/**
- * Remove all elements that are not review relations.
- *
- * This could do bad things if the element is in use.
- */
-class KeepReviewsVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
+HOOT_FACTORY_REGISTER(OsmMapOperation, SchemaTranslationOp)
+
+SchemaTranslationOp::SchemaTranslationOp()
 {
-public:
-
-  static std::string className() { return "hoot::KeepReviewsVisitor"; }
-
-  KeepReviewsVisitor() {}
-
-  virtual ~KeepReviewsVisitor() {}
-
-  virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  /**
-   * KeepReviewsVisitor requires a read/write map.
-   */
-  virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
-
-  virtual void visit(const ConstElementPtr& e);
-
-  virtual QString getDescription() const
-  { return "Remove all elements that are not review relations"; }
-
-private:
-
-  OsmMap* _map;
-};
-
 }
 
-#endif // KEEPREVIEWSVISITOR_H
+void SchemaTranslationOp::apply(std::shared_ptr<OsmMap> &map)
+{
+  map->visitRw(_translator);
+}
+
+void SchemaTranslationOp::setConfiguration(const Settings& conf)
+{
+  _translator.setConfiguration(conf);
+}
+
+}

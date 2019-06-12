@@ -43,6 +43,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hoot.services.utils.DbUtils;
 
 
@@ -52,95 +55,8 @@ import hoot.services.utils.DbUtils;
 public class MapInfoResource {
     private static final Logger logger = LoggerFactory.getLogger(MapInfoResource.class);
 
-    private static final String[] maptables = {
-            "changesets",
-            "current_nodes",
-            "current_relation_members",
-            "current_relations",
-            "current_way_nodes",
-            "current_ways"
-    };
-
 
     public MapInfoResource() {}
-
-    /**
-     * Service method endpoint for retrieving the physical size of a map record.
-     *
-     * GET hoot-services/info/map/size?mapid=1
-     *
-     * @param mapIds
-     *            id of the map for which to retrieve size
-     * @return JSON containing size information
-     */
-    @GET
-    @Path("/size")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCombinedMapSize(@QueryParam("mapid") String mapIds) {
-        long combinedMapSize = 0;
-
-        try {
-            String[] mapids = mapIds.split(",");
-            for (String mapId : mapids) {
-                if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-                    for (String table : maptables) {
-                        combinedMapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
-                    }
-                }
-            }
-        }
-        catch (Exception e) {
-            String message = "Error getting combined map size for: " + mapIds + ".  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
-        }
-
-        JSONObject entity = new JSONObject();
-        entity.put("mapid", mapIds);
-        entity.put("size_byte", combinedMapSize);
-
-        return Response.ok(entity.toJSONString()).build();
-    }
-
-    /**
-     * Service method endpoint for retrieving the physical size of multiple map records.
-     *
-     * GET hoot-services/info/map/sizes?mapid=54,62
-     *
-     * @param mapIds
-     *            ids of the maps for which to retrieve sizes
-     * @return JSON containing a list of size information for all current maps
-     */
-    @GET
-    @Path("/sizes")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMapSizes(@QueryParam("mapid") String mapIds) {
-        JSONArray layers = new JSONArray();
-
-        try {
-            String[] mapids = mapIds.split(",");
-            for (String mapId : mapids) {
-                long mapSize = 0;
-                for (String table : maptables) {
-                    if (Long.parseLong(mapId) != -1) { // skips OSM API db layer
-                        mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
-                    }
-                }
-                JSONObject layer = new JSONObject();
-                layer.put("id", Long.parseLong(mapId));
-                layer.put("size", mapSize);
-                layers.add(layer);
-            }
-        }
-        catch (Exception e) {
-            String message = "Error getting map size.  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(message).build());
-        }
-
-        JSONObject entity = new JSONObject();
-        entity.put("layers", layers);
-
-        return Response.ok(entity.toJSONString()).build();
-    }
 
     /**
      * Service endpoint for maximum data size for export conflate and ingest.

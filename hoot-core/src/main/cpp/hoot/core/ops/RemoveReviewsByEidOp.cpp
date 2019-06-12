@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
@@ -84,7 +84,7 @@ void RemoveReviewsByEidOp::apply(const OsmMapPtr &map)
     ++it)
   {
     // just remove the review, not its children.
-    RemoveElementOp::removeElement(map, *it);
+    RemoveElementByEid::removeElement(map, *it);
     _numAffected++;
   }
 

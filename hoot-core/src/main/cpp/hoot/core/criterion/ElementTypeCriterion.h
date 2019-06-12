@@ -50,7 +50,8 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ElementTypeCriterion(_elementType)); }
 
-  virtual QString getDescription() const { return "Filters based on element type"; }
+  virtual QString getDescription() const
+  { return "Identifies elements based on the specified type"; }
 
 protected:
 
@@ -58,25 +59,31 @@ protected:
 };
 
 // Helper classes for data driven stats
-class NodeTypeCriterion : public ElementTypeCriterion
+class NodeCriterion : public ElementTypeCriterion
 {
 public:
-  static std::string className() { return "hoot::NodeTypeCriterion"; }
-  NodeTypeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+
+  static std::string className() { return "hoot::NodeCriterion"; }
+  NodeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+  virtual QString getDescription() const { return "Identifies nodes"; }
 };
 
-class WayTypeCriterion : public ElementTypeCriterion
+class WayCriterion : public ElementTypeCriterion
 {
 public:
-  static std::string className() { return "hoot::WayTypeCriterion"; }
-  WayTypeCriterion() : ElementTypeCriterion(ElementType::Way) {}
+
+  static std::string className() { return "hoot::WayCriterion"; }
+  WayCriterion() : ElementTypeCriterion(ElementType::Way) {}
+  virtual QString getDescription() const { return "Identifies ways"; }
 };
 
-class RelationTypeCriterion : public ElementTypeCriterion
+class RelationCriterion : public ElementTypeCriterion
 {
 public:
-  static std::string className() { return "hoot::RelationTypeCriterion"; }
-  RelationTypeCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+
+  static std::string className() { return "hoot::RelationCriterion"; }
+  RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+  virtual QString getDescription() const { return "Identifies relations"; }
 };
 
 }

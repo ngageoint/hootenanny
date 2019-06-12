@@ -45,7 +45,7 @@
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
@@ -62,8 +62,7 @@ void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
   std::shared_ptr<RemoveElementsVisitor> removeRelationsVis(new RemoveElementsVisitor());
-  removeRelationsVis->addCriterion(
-    ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)));
+  removeRelationsVis->addCriterion(ElementCriterionPtr(new RelationCriterion));
   VisitorOp(removeRelationsVis).apply(map);
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
@@ -89,7 +88,7 @@ void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 
   // remove all ways first
   std::shared_ptr<RemoveElementsVisitor> removeWaysVis(new RemoveElementsVisitor());
-  removeWaysVis->addCriterion(ElementCriterionPtr(new ElementTypeCriterion(ElementType::Way)));
+  removeWaysVis->addCriterion(ElementCriterionPtr(new WayCriterion()));
   VisitorOp(removeWaysVis).apply(map);
 
   // remove anything that is not a node and in the list of intersections found

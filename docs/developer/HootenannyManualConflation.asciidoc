@@ -30,9 +30,13 @@ hoot crop TranslatedOutput2.osm CroppedOutput2.osm "-77.0551,38.8845,-77.0281,38
 hoot clean CroppedOutput1.osm CleanedOutput1.osm
 hoot clean CroppedOutput2.osm CleanedOutput2.osm
 
-# prune (optional)
-hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput1.osm BuildingsOutput1.osm
-hoot convert -D "convert.ops=hoot::KeepBuildingsVisitor" CleanedOutput2.osm BuildingsOutput2.osm
+# prune (optional); keep only buildings
+hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
+  -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
+  -D element.criterion.negate=true CleanedOutput1.osm BuildingsOutput1.osm
+hoot convert -D convert.ops=hoot::RemoveElementsVisitor \
+  -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
+  -D element.criterion.negate=true CleanedOutput2.osm BuildingsOutput2.osm
 
 # add ref tags
 hoot convert -D convert.ops=hoot::AddRef1Visitor BuildingsOutput1.osm Ref1.osm

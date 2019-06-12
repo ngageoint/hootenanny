@@ -32,7 +32,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 
 // Standard
 #include <iostream>
@@ -98,7 +98,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
         LOG_TRACE("Removing node. " << n->getElementId());
-        RemoveNodeOp::removeNodeNoCheck(map, n->getId());
+        RemoveNodeByEid::removeNodeNoCheck(map, n->getId());
         _numAffected++;
       }
       else

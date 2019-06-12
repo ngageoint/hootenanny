@@ -82,7 +82,7 @@ function initialize()
 //    converts OSM+ tags to NFDD "English" Attributes
 //
 // This can be called via the following for testing:
-// hoot convert -D "convert.ops=hoot::TranslationOp"  \
+// hoot convert -D "convert.ops=hoot::SchemaTranslationVisitor"  \
 //      -D schema.translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
 function translateAttributes(attrs, layerName, geometryType)

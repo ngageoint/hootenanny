@@ -28,7 +28,7 @@
 #define ELEMENTVISITORCONSUMER_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 namespace hoot
 {
@@ -39,7 +39,7 @@ public:
 
   virtual ~ElementVisitorConsumer(){}
 
-  virtual void addVisitor(const ConstElementVisitorPtr& e) = 0;
+  virtual void addVisitor(const ElementVisitorPtr& e) = 0;
 };
 
 }

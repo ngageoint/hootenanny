@@ -34,7 +34,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
-#include <hoot/core/visitors/TranslationVisitor.h>
+#include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
@@ -310,7 +310,7 @@ std::shared_ptr<ElementInputStream> ImplicitTagRawRulesDeriver::_getInputStream(
   //"none" allows for bypassing translation for an input; e.g. OSM data
   if (translationScript.toLower() != "none")
   {
-    std::shared_ptr<TranslationVisitor> translationVisitor(new TranslationVisitor());
+    std::shared_ptr<SchemaTranslationVisitor> translationVisitor(new SchemaTranslationVisitor());
 
     // I think we always want to be going to OSM here unless otherwise specified (or maybe
     // regardless if its specified), but that should be verified.

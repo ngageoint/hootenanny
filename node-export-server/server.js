@@ -253,7 +253,6 @@ function doExport(req, res, hash, input) {
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounding.box';
         var bbox = exports.validateBbox(req.query.bbox);
-        if (input.substring(0,2) === 'PG') bbox_param = 'ogr.reader.bounding.box.latlng';
 
         if (input.substring(0,4) === 'http') {
             var cert_param = '';
@@ -272,6 +271,7 @@ function doExport(req, res, hash, input) {
         if (isFile) {
             command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
+	    if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
                     command += ' -D convert.ops=hoot::TranslationOp';
@@ -293,6 +293,7 @@ function doExport(req, res, hash, input) {
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
             if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
+            if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             // Set per schema config options
             if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
         }

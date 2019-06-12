@@ -50,7 +50,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/visitors/ExtractWaysVisitor.h>
+#include <hoot/core/visitors/WaysVisitor.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Factory.h>
@@ -458,11 +458,12 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayP
 
 void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  ElementPtr snapTo) const
 {
-  class ExtractWaysVisitor : public ElementOsmMapVisitor
+  // TODO: get rid of this?
+  class WaysVisitor : public ElementOsmMapVisitor
   {
   public:
 
-    ExtractWaysVisitor(vector<WayPtr>& w) : _w(w) {}
+    WaysVisitor(vector<WayPtr>& w) : _w(w) {}
 
     static vector<WayPtr> getWays(const OsmMapPtr& map, const ElementPtr& e)
     {
@@ -475,7 +476,7 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
         }
         else
         {
-          ExtractWaysVisitor v(result);
+          WaysVisitor v(result);
           v.setOsmMap(map.get());
           e->visitRo(*map, v);
         }
@@ -502,8 +503,8 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee,  Elem
   // convert all the elements into arrays of ways. If it is a way already then it creates a vector
   // of size 1 with that way, if they're relations w/ complex multilinestrings then you'll get all
   // the component ways.
-  vector<WayPtr> snapeeWays = ExtractWaysVisitor::getWays(map, snapee);
-  vector<WayPtr> snapToWays = ExtractWaysVisitor::getWays(map, snapTo);
+  vector<WayPtr> snapeeWays = WaysVisitor::getWays(map, snapee);
+  vector<WayPtr> snapToWays = WaysVisitor::getWays(map, snapTo);
 
   assert(snapToWays.size() == snapeeWays.size());
 
@@ -548,7 +549,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
 
   LOG_VART(match->getElementId());
 
-  vector<ConstWayPtr> waysV = ExtractWaysVisitor::extractWays(map, splitee);
+  vector<ConstWayPtr> waysV = WaysVisitor::extractWays(map, splitee);
   set<ConstWayPtr, WayPtrCompare> ways;
   ways.insert(waysV.begin(), waysV.end());
 

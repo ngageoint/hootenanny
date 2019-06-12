@@ -34,7 +34,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
 
@@ -123,7 +123,7 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
       // remove unused nodes of previous way
       for (long nodeId : nodeIds)
       {
-        RemoveNodeOp removeOp(nodeId, true, false, true);
+        RemoveNodeByEid removeOp(nodeId, true, false, true);
         removeOp.apply(mapPtr);
       }
 
