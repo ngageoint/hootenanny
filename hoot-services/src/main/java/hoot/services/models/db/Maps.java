@@ -53,6 +53,8 @@ public class Maps {
 
     private Long folderId;
 
+    private Long size;
+
     public java.sql.Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -109,6 +111,14 @@ public class Maps {
         this.folderId = folderId;
     }
 
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public Long getSize() {
+        return this.size;
+    }
+
     @Override
     public String toString() {
         Map<String,Object> map = new HashMap<String, Object>();
@@ -119,6 +129,7 @@ public class Maps {
         map.put("userId", createdAt);
         map.put("publicCol", publicCol);
         map.put("folderId", folderId);
+        map.put("size", size);
         return new JSONObject(map).toJSONString();
     }
 
