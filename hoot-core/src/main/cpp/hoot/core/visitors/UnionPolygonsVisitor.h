@@ -59,7 +59,7 @@ public:
   { return "Combines all areas together into a single area"; }
 
   virtual QString getInitStatusMessage() const
-  { return "Combining ares..."; }
+  { return "Combining areas..."; }
 
   virtual QString getCompletedStatusMessage() const
   { return "Combined " + QString::number(_numAffected) + " areas"; }

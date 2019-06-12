@@ -49,6 +49,10 @@
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/criterion/ReviewScoreCriterion.h>
+#include <hoot/core/criterion/ReviewRelationCriterion.h>
 
 // Standard
 #include <fstream>
@@ -174,6 +178,8 @@ int ConflateCmd::runSimple(QStringList args)
   {
     _numTotalTasks++;
   }
+  // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
+  // each op internally.
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     _numTotalTasks++;
@@ -440,23 +446,30 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
     // after the review relations have been removed or some building relations may still remain that
     // are involved in reviews.
 
+    const QString buildingOutlineUpdateOpName =
+      QString::fromStdString(BuildingOutlineUpdateOp::className());
+    const QString removeElementsVisitorName =
+      QString::fromStdString(RemoveElementsVisitor::className());
+    const QString reviewRelationCritName =
+      QString::fromStdString(ReviewRelationCriterion::className());
+
     QStringList postConflateOps = ConfigOptions().getConflatePostOps();
     LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
     // Currently, all these things will be true if we're running Attribute Conflation, but I'm
     // specifying them anyway to harden this a bit.
     if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
-        postConflateOps.contains("hoot::RemoveElementsVisitor") &&
+        postConflateOps.contains(removeElementsVisitorName) &&
         ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
-          "hoot::ReviewRelationCriterion") &&
-        postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
+          reviewRelationCritName) &&
+        postConflateOps.contains(buildingOutlineUpdateOpName))
     {
-      const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
-      const int buildingOutlineOpIndex = postConflateOps.indexOf("hoot::BuildingOutlineUpdateOp");
+      const int removeElementsVisIndex = postConflateOps.indexOf(removeElementsVisitorName);
+      const int buildingOutlineOpIndex = postConflateOps.indexOf(buildingOutlineUpdateOpName);
       if (removeElementsVisIndex > buildingOutlineOpIndex)
       {
-        postConflateOps.removeAll("hoot::BuildingOutlineUpdateOp");
-        postConflateOps.append("hoot::BuildingOutlineUpdateOp");
-        conf().set("conflate.post.ops", postConflateOps);
+        postConflateOps.removeAll(buildingOutlineUpdateOpName);
+        postConflateOps.append(buildingOutlineUpdateOpName);
+        conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
       }
     }
 
@@ -467,7 +480,7 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
       QStringList removeElementsCriteria =
         conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
       removeElementsCriteria.replaceInStrings(
-        "hoot::ReviewRelationCriterion", "hoot::ReviewScoreCriterion");
+        reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
       conf().set(
         ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
     }
