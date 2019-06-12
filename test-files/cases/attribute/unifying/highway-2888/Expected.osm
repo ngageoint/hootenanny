@@ -3532,7 +3532,7 @@
     <node visible="true" id="-1" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1717205287399990" lon="73.5031247058399941">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-979" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-813" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-840"/>
         <nd ref="-824"/>
         <nd ref="-823"/>
@@ -3550,26 +3550,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="300.2"/>
     </way>
-    <way visible="true" id="-947" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1050"/>
-        <nd ref="-1022"/>
-        <nd ref="-1018"/>
-        <nd ref="-1024"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Haveeree Hingun"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="length" v="1119"/>
-    </way>
-    <way visible="true" id="-917" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-796" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-976"/>
         <nd ref="-978"/>
         <nd ref="-979"/>
@@ -3594,7 +3575,26 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1701.6"/>
     </way>
-    <way visible="true" id="-878" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-791" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1050"/>
+        <nd ref="-1022"/>
+        <nd ref="-1018"/>
+        <nd ref="-1024"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="length" v="1119"/>
+    </way>
+    <way visible="true" id="-768" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-930"/>
         <nd ref="-929"/>
         <nd ref="-928"/>
@@ -3648,26 +3648,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="30352.6"/>
     </way>
-    <way visible="true" id="-862" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-891"/>
-        <nd ref="-890"/>
-        <nd ref="-902"/>
-        <nd ref="-901"/>
-        <nd ref="-900"/>
-        <nd ref="-899"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Roashanee Magu"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="length" v="141.5"/>
-    </way>
-    <way visible="true" id="-839" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-767" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-663"/>
         <nd ref="-665"/>
         <nd ref="-667"/>
@@ -3687,7 +3668,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="554.9"/>
     </way>
-    <way visible="true" id="-832" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-764" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-323"/>
         <nd ref="-673"/>
         <nd ref="-674"/>
@@ -3711,7 +3692,26 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="557.8"/>
     </way>
-    <way visible="true" id="-766" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-748" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-891"/>
+        <nd ref="-890"/>
+        <nd ref="-902"/>
+        <nd ref="-901"/>
+        <nd ref="-900"/>
+        <nd ref="-899"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Roashanee Magu"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:datetime" v="2015-10-22T17:31:39.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="length" v="141.5"/>
+    </way>
+    <way visible="true" id="-687" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-560"/>
         <nd ref="-559"/>
         <nd ref="-558"/>
@@ -3737,7 +3737,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="334.9"/>
     </way>
-    <way visible="true" id="-751" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-656" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-521"/>
         <nd ref="-517"/>
         <nd ref="-483"/>
@@ -3761,7 +3761,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="217.2"/>
     </way>
-    <way visible="true" id="-720" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-623" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-466"/>
         <nd ref="-465"/>
         <nd ref="-463"/>
@@ -3794,7 +3794,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="413.6"/>
     </way>
-    <way visible="true" id="-622" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-560" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-371"/>
         <nd ref="-372"/>
         <tag k="oneway" v="yes"/>
@@ -3811,7 +3811,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="134.4"/>
     </way>
-    <way visible="true" id="-500" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-420" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-219"/>
         <nd ref="-721"/>
         <nd ref="-199"/>
@@ -3836,7 +3836,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="761.4"/>
     </way>
-    <way visible="true" id="-481" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-408" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-167"/>
         <nd ref="-168"/>
         <nd ref="-169"/>
@@ -3868,7 +3868,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="412.4"/>
     </way>
-    <way visible="true" id="-442" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-351" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1172"/>
         <nd ref="-764"/>
         <nd ref="-763"/>
@@ -3885,7 +3885,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="124.3"/>
     </way>
-    <way visible="true" id="-432" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-333" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-767"/>
         <nd ref="-768"/>
         <nd ref="-769"/>
@@ -3906,7 +3906,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="100.5"/>
     </way>
-    <way visible="true" id="-417" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-310" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1145"/>
         <nd ref="-1144"/>
         <tag k="hoot:status" v="3"/>
@@ -3921,7 +3921,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="125.9"/>
     </way>
-    <way visible="true" id="-408" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-292" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-368"/>
         <nd ref="-339"/>
         <nd ref="-340"/>
@@ -3945,7 +3945,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="559.2"/>
     </way>
-    <way visible="true" id="-370" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-209" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1172"/>
         <nd ref="-321"/>
         <nd ref="-23"/>
@@ -3964,7 +3964,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="156"/>
     </way>
-    <way visible="true" id="-363" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-197" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-29"/>

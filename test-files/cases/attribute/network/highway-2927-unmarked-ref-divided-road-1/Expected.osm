@@ -1,213 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.4997" minlon="-66.92059999999999" maxlat="10.5029" maxlon="-66.91669999999999"/>
-    <node visible="true" id="-67" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.4998810231100013" lon="-66.9189074321199939">
+    <node visible="true" id="-92" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.4998810231100013" lon="-66.9189074321199939">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-66" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.4998604597799989" lon="-66.9188191467099927">
+    <node visible="true" id="-91" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.4998604597799989" lon="-66.9188191467099927">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-65" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.4997972783799991" lon="-66.9185478879700071">
+    <node visible="true" id="-90" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.4997972783799991" lon="-66.9185478879700071">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-64" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5000853238699996" lon="-66.9187692859299972">
+    <node visible="true" id="-89" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5000853238699996" lon="-66.9187692859299972">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-63" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5004951816999998" lon="-66.9186780643999981">
+    <node visible="true" id="-88" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5004951816999998" lon="-66.9186780643999981">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-62" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5011153773500006" lon="-66.9185667172800009">
+    <node visible="true" id="-87" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5011153773500006" lon="-66.9185667172800009">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-61" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5002144495099987" lon="-66.9203518304800014">
+    <node visible="true" id="-86" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5002144495099987" lon="-66.9203518304800014">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-60" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5001903106799990" lon="-66.9201516782899972">
+    <node visible="true" id="-85" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5001903106799990" lon="-66.9201516782899972">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-59" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5001468854300004" lon="-66.9199419429599942">
+    <node visible="true" id="-84" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5001468854300004" lon="-66.9199419429599942">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-58" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5000569472900001" lon="-66.9196014045700025">
+    <node visible="true" id="-83" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5000569472900001" lon="-66.9196014045700025">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-57" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5000239723099984" lon="-66.9194572242199968">
+    <node visible="true" id="-82" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5000239723099984" lon="-66.9194572242199968">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-56" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5026311725999975" lon="-66.9202954139200017">
+    <node visible="true" id="-81" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5026311725999975" lon="-66.9202954139200017">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-55" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5011785931099979" lon="-66.9176940783000020">
+    <node visible="true" id="-80" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5011785931099979" lon="-66.9176940783000020">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-54" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5009767157099994" lon="-66.9167081692999943">
+    <node visible="true" id="-79" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5009767157099994" lon="-66.9167081692999943">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-53" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5025108126000006" lon="-66.9179020508999969">
+    <node visible="true" id="-78" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5025108126000006" lon="-66.9179020508999969">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-52" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5023250189699997" lon="-66.9171032446199803">
+    <node visible="true" id="-77" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5023250189699997" lon="-66.9171032446199803">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-51" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5028723977399974" lon="-66.9195550650800044">
+    <node visible="true" id="-76" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5028723977399974" lon="-66.9195550650800044">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-50" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5027733335800004" lon="-66.9191175683799884">
+    <node visible="true" id="-75" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5027733335800004" lon="-66.9191175683799884">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-49" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5026354579600003" lon="-66.9184036784899945">
+    <node visible="true" id="-74" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5026354579600003" lon="-66.9184036784899945">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-48" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5020512768699987" lon="-66.9184060968199930">
+    <node visible="true" id="-73" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5020512768699987" lon="-66.9184060968199930">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-47" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5014790620700023" lon="-66.9185278235199945">
+    <node visible="true" id="-72" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5014790620700023" lon="-66.9185278235199945">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-46" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5027782611200013" lon="-66.9182588634100028">
+    <node visible="true" id="-71" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5027782611200013" lon="-66.9182588634100028">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-45" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5026080403400002" lon="-66.9182933376900024">
+    <node visible="true" id="-70" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5026080403400002" lon="-66.9182933376900024">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-44" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5022517654500014" lon="-66.9182879955099850">
+    <node visible="true" id="-69" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5022517654500014" lon="-66.9182879955099850">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-43" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5028019984899998" lon="-66.9181629386299903">
+    <node visible="true" id="-68" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5028019984899998" lon="-66.9181629386299903">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-42" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5025877388799991" lon="-66.9182116356000023">
+    <node visible="true" id="-67" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5025877388799991" lon="-66.9182116356000023">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-41" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5018439092000015" lon="-66.9179112165300012">
+    <node visible="true" id="-66" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5018439092000015" lon="-66.9179112165300012">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-40" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016984065799974" lon="-66.9172775671599993">
+    <node visible="true" id="-65" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016984065799974" lon="-66.9172775671599993">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-39" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016887457600010" lon="-66.9172277782199956">
+    <node visible="true" id="-64" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016887457600010" lon="-66.9172277782199956">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-38" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5019573328599982" lon="-66.9184260814800069">
+    <node visible="true" id="-63" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5019573328599982" lon="-66.9184260814800069">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-37" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5019406905700006" lon="-66.9183505367499976">
+    <node visible="true" id="-62" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5019406905700006" lon="-66.9183505367499976">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-36" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5014555671500016" lon="-66.9184526182300061">
+    <node visible="true" id="-61" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5014555671500016" lon="-66.9184526182300061">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-35" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5013612691200020" lon="-66.9185075180800055">
+    <node visible="true" id="-60" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5013612691200020" lon="-66.9185075180800055">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-34" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5013524818399997" lon="-66.9184683888800009">
+    <node visible="true" id="-59" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5013524818399997" lon="-66.9184683888800009">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-33" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5014334137999992" lon="-66.9188287745400032">
+    <node visible="true" id="-58" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5014334137999992" lon="-66.9188287745400032">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-32" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5013709919200000" lon="-66.9185508130999978">
+    <node visible="true" id="-57" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5013709919200000" lon="-66.9185508130999978">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-31" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5015229450700005" lon="-66.9198194749599935">
+    <node visible="true" id="-56" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5015229450700005" lon="-66.9198194749599935">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-30" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5008864321500006" lon="-66.9200366815399974">
+    <node visible="true" id="-55" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5008864321500006" lon="-66.9200366815399974">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-29" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5002040527599974" lon="-66.9202656235199953">
+    <node visible="true" id="-54" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5002040527599974" lon="-66.9202656235199953">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-28" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5028447813099994" lon="-66.9194331024600046">
+    <node visible="true" id="-53" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5028447813099994" lon="-66.9194331024600046">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-27" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5022131226899997" lon="-66.9196067043800014">
+    <node visible="true" id="-52" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5022131226899997" lon="-66.9196067043800014">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-26" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5018042930899984" lon="-66.9197283843299999">
+    <node visible="true" id="-51" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5018042930899984" lon="-66.9197283843299999">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-25" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016857529800021" lon="-66.9199025736400017">
+    <node visible="true" id="-50" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016857529800021" lon="-66.9199025736400017">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-24" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016560947599995" lon="-66.9197763657799953">
+    <node visible="true" id="-49" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5016560947599995" lon="-66.9197763657799953">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-23" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5025904524500007" lon="-66.9201932269999986">
+    <node visible="true" id="-48" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5025904524500007" lon="-66.9201932269999986">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-22" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5023933489200019" lon="-66.9204466658000001">
+    <node visible="true" id="-47" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5023933489200019" lon="-66.9204466658000001">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-21" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5024632862199994" lon="-66.9205040500300044">
+    <node visible="true" id="-46" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841" lat="10.5024632862199994" lon="-66.9205040500300044">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-20" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5011113656299990" lon="-66.9173657575999954">
+    <node visible="true" id="-45" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5011113656299990" lon="-66.9173657575999954">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-19" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5008601733099987" lon="-66.9174064675100055">
+    <node visible="true" id="-44" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5008601733099987" lon="-66.9174064675100055">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-18" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5000216885800004" lon="-66.9176102020399810">
+    <node visible="true" id="-43" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5000216885800004" lon="-66.9176102020399810">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-17" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5018287567800002" lon="-66.9178452289699948">
+    <node visible="true" id="-42" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5018287567800002" lon="-66.9178452289699948">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-16" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5024595645600023" lon="-66.9176817127400057">
+    <node visible="true" id="-41" timestamp="2019-01-17T19:50:05Z" version="1" changeset="841" lat="10.5024595645600023" lon="-66.9176817127400057">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5025802255145120" lon="-66.9205999999999932">
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5025802255145120" lon="-66.9205999999999932">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5023860765049317" lon="-66.9205999999999932">
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5023860765049317" lon="-66.9205999999999932">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5022740980780522" lon="-66.9205999999999932">
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5022740980780522" lon="-66.9205999999999932">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9198328378480340">
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9198328378480340">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5018478484657400" lon="-66.9205999999999932">
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5018478484657400" lon="-66.9205999999999932">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9181414315535363">
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9181414315535363">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9182340475983892">
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9182340475983892">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5028999999999986" lon="-66.9195911270657859">
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5028999999999986" lon="-66.9195911270657859">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5022209583745791" lon="-66.9166999999999916">
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5022209583745791" lon="-66.9166999999999916">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5009748792788962" lon="-66.9166999999999916">
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5009748792788962" lon="-66.9166999999999916">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9199789801348146">
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9199789801348146">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5002515743978755" lon="-66.9205999999999932">
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5002515743978755" lon="-66.9205999999999932">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4997000000000007" lon="-66.9181243895426690">
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4997000000000007" lon="-66.9181243895426690">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4996999999999989" lon="-66.9188525813828505">
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4996999999999989" lon="-66.9188525813828505">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4997000000000007" lon="-66.9176873631122788">
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4997000000000007" lon="-66.9176873631122788">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-87" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-18"/>
-        <nd ref="-19"/>
-        <nd ref="-20"/>
-        <nd ref="-39"/>
+    <way visible="true" id="-75" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-26"/>
+        <nd ref="-43"/>
+        <nd ref="-44"/>
+        <nd ref="-45"/>
+        <nd ref="-64"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -231,12 +231,34 @@
         <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-35"/>
-        <nd ref="-34"/>
-        <nd ref="-55"/>
-        <nd ref="-20"/>
-        <nd ref="-54"/>
-        <nd ref="-6"/>
+        <nd ref="-53"/>
+        <nd ref="-75"/>
+        <nd ref="-74"/>
+        <nd ref="-70"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="highway" v="primary"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Oeste 8"/>
+        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
+        <tag k="source:datetime" v="2014-05-19T20:08:16.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="lanes" v="2"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-60"/>
+        <nd ref="-59"/>
+        <nd ref="-80"/>
+        <nd ref="-45"/>
+        <nd ref="-79"/>
+        <nd ref="-31"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
@@ -259,9 +281,9 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-29" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-17"/>
-        <nd ref="-16"/>
+    <way visible="true" id="-50" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-42"/>
+        <nd ref="-41"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.676Z"/>
@@ -275,9 +297,9 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-26" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-45"/>
-        <nd ref="-42"/>
+    <way visible="true" id="-47" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-70"/>
+        <nd ref="-67"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.666Z"/>
@@ -291,10 +313,10 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-24" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-37"/>
-        <nd ref="-44"/>
-        <nd ref="-42"/>
+    <way visible="true" id="-45" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-62"/>
+        <nd ref="-69"/>
+        <nd ref="-67"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
@@ -319,12 +341,12 @@
         <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-23" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-39"/>
-        <nd ref="-40"/>
-        <nd ref="-17"/>
-        <nd ref="-41"/>
-        <nd ref="-37"/>
+    <way visible="true" id="-44" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-64"/>
+        <nd ref="-65"/>
+        <nd ref="-42"/>
+        <nd ref="-66"/>
+        <nd ref="-62"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
@@ -338,9 +360,9 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-22" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-38"/>
-        <nd ref="-37"/>
+    <way visible="true" id="-43" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-63"/>
+        <nd ref="-62"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
@@ -354,10 +376,10 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-21" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-35"/>
-        <nd ref="-36"/>
-        <nd ref="-37"/>
+    <way visible="true" id="-42" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-60"/>
+        <nd ref="-61"/>
+        <nd ref="-62"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
@@ -382,18 +404,18 @@
         <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-19" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-24"/>
-        <nd ref="-33"/>
-        <nd ref="-32"/>
-        <nd ref="-35"/>
-        <tag k="z_order" v="-999999"/>
+    <way visible="true" id="-40" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-49"/>
+        <nd ref="-58"/>
+        <nd ref="-57"/>
+        <nd ref="-60"/>
         <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Av. Lecuna"/>
-        <tag k="source:datetime" v="2014-06-22T17:21:17.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="source:datetime" v="2014-06-22T17:21:17.000Z;2014-06-22T17:21:18.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="4"/>
         <tag k="maxspeed" v="40"/>
         <tag k="uuid" v="{7c809bd2-1b65-4e0e-9713-1e7ddc4f43a7};{95fc9085-85fa-4657-a06e-41cc9b5868db}"/>
@@ -409,11 +431,11 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-18" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-24"/>
-        <nd ref="-31"/>
-        <nd ref="-30"/>
-        <nd ref="-29"/>
+    <way visible="true" id="-39" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-49"/>
+        <nd ref="-56"/>
+        <nd ref="-55"/>
+        <nd ref="-54"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="oneway" v="yes"/>
         <tag k="hoot:status" v="3"/>
@@ -430,11 +452,11 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-17" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-28"/>
-        <nd ref="-27"/>
-        <nd ref="-26"/>
-        <nd ref="-24"/>
+    <way visible="true" id="-38" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-53"/>
+        <nd ref="-52"/>
+        <nd ref="-51"/>
+        <nd ref="-49"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="oneway" v="yes"/>
         <tag k="hoot:status" v="3"/>
@@ -451,10 +473,10 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-22"/>
-        <nd ref="-21"/>
-        <nd ref="-15"/>
+    <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-47"/>
+        <nd ref="-46"/>
+        <nd ref="-40"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="oneway" v="no"/>
         <tag k="hoot:status" v="3"/>
@@ -470,9 +492,9 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-21"/>
-        <nd ref="-14"/>
+    <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46"/>
+        <nd ref="-39"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.669Z"/>
@@ -486,11 +508,11 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-12"/>
-        <nd ref="-23"/>
-        <nd ref="-22"/>
-        <nd ref="-13"/>
+    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="-48"/>
+        <nd ref="-47"/>
+        <nd ref="-38"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
         <tag k="lit" v="yes"/>
@@ -514,10 +536,10 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-11"/>
-        <nd ref="-25"/>
-        <nd ref="-24"/>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="-50"/>
+        <nd ref="-49"/>
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
         <tag k="hoot:status" v="3"/>
@@ -540,10 +562,10 @@
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-42"/>
-        <nd ref="-43"/>
-        <nd ref="-10"/>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-67"/>
+        <nd ref="-68"/>
+        <nd ref="-35"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
         <tag k="z_order" v="-999999"/>
         <tag k="surface" v="asphalt"/>
@@ -568,43 +590,32 @@
         <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-8"/>
-        <nd ref="-51"/>
-        <nd ref="-28"/>
-        <nd ref="-50"/>
-        <nd ref="-49"/>
-        <nd ref="-45"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Oeste 8"/>
-        <tag k="source:datetime" v="2014-09-04T14:24:35.000Z;2019-01-17T19:50:06Z;2014-05-19T20:08:16.000Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="30"/>
-        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="highway" v="primary"/>
-        <tag k="destination" v="Centro"/>
-    </way>
-    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-42"/>
+    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-33"/>
+        <nd ref="-76"/>
         <nd ref="-53"/>
-        <nd ref="-16"/>
-        <nd ref="-52"/>
-        <nd ref="-7"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
+        <tag k="source:datetime" v="2014-12-24T02:49:57.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="lanes" v="2"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-67"/>
+        <nd ref="-78"/>
+        <nd ref="-41"/>
+        <nd ref="-77"/>
+        <nd ref="-32"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="oneway" v="yes"/>
         <tag k="maxspeed" v="40"/>
@@ -623,10 +634,10 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5"/>
-        <nd ref="-56"/>
-        <nd ref="-21"/>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-30"/>
+        <nd ref="-81"/>
+        <nd ref="-46"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="1"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
@@ -640,14 +651,14 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-57"/>
-        <nd ref="-58"/>
-        <nd ref="-59"/>
-        <nd ref="-60"/>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-82"/>
+        <nd ref="-83"/>
+        <nd ref="-84"/>
+        <nd ref="-85"/>
+        <nd ref="-54"/>
+        <nd ref="-86"/>
         <nd ref="-29"/>
-        <nd ref="-61"/>
-        <nd ref="-4"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="oneway" v="yes"/>
         <tag k="hoot:status" v="3"/>
@@ -664,12 +675,12 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-3"/>
-        <nd ref="-65"/>
-        <nd ref="-66"/>
-        <nd ref="-67"/>
-        <nd ref="-57"/>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-28"/>
+        <nd ref="-90"/>
+        <nd ref="-91"/>
+        <nd ref="-92"/>
+        <nd ref="-82"/>
         <tag k="source" v="Yahoo;osm:line"/>
         <tag k="oneway" v="yes"/>
         <tag k="hoot:status" v="3"/>
@@ -686,19 +697,19 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-9"/>
-        <nd ref="-46"/>
-        <nd ref="-45"/>
-        <nd ref="-48"/>
-        <nd ref="-38"/>
-        <nd ref="-47"/>
-        <nd ref="-35"/>
-        <nd ref="-62"/>
+    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-34"/>
+        <nd ref="-71"/>
+        <nd ref="-70"/>
+        <nd ref="-73"/>
         <nd ref="-63"/>
-        <nd ref="-64"/>
-        <nd ref="-66"/>
-        <nd ref="-2"/>
+        <nd ref="-72"/>
+        <nd ref="-60"/>
+        <nd ref="-87"/>
+        <nd ref="-88"/>
+        <nd ref="-89"/>
+        <nd ref="-91"/>
+        <nd ref="-27"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>

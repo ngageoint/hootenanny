@@ -35,7 +35,6 @@
 #include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/util/PopulateConsumersJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
 
 using namespace std;
@@ -66,15 +65,10 @@ void ReviewMarkerJs::mark(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   OsmMapPtr osmMap = toCpp<OsmMapPtr>(args[0]);
-
   ElementPtr e = toCpp<ElementPtr>(args[1]);
-
   QString note = toCpp<QString>(args[2]);
-
   QString reviewType = toCpp<QString>(args[3]);
-
   double score = toCpp<double>(args[4]);
-
   vector<QString> choices = toCpp<vector<QString>>(args[5]);
 
   ReviewMarker().mark(osmMap, e, note, reviewType, score, choices);

@@ -1,133 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="4.16848169976" minlon="73.50070843439001" maxlat="4.180162998169999" maxlon="73.51883655624"/>
-    <node visible="true" id="-1799" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1759623362674168" lon="73.5026682661406170">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1734" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1797596278676927" lon="73.5092299319423574">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1711" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1722668849725260" lon="73.5022735773988956">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1639" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1794516316119212" lon="73.5084169111925974">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1638" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1731848790157127" lon="73.5023748512333412">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1630" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1771946860820695" lon="73.5027896690011744">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1616" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1741055159683373" lon="73.5024536987735075">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1548" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1765731277000286" lon="73.5027313992581668">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1537" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1773921248794155" lon="73.5028062568999445">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1502" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1788151229388246" lon="73.5066593438483693">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1472" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1735120022629237" lon="73.5024061897148187">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1453" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1781489820082571" lon="73.5053707550013229">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1442" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1796333228133795" lon="73.5088970080014406">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1439" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1794882154148372" lon="73.5085157531500073">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1438" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1793132681347167" lon="73.5080400302208261">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1436" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1791930937874167" lon="73.5077117487793430">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1429" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1729158657953747" lon="73.5023381900521287">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1427" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1783177368545346" lon="73.5053392763576312">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1425" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1781977467585820" lon="73.5049945717283890">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1423" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1781064968203863" lon="73.5047228528450063">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1420" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1779904045813279" lon="73.5044293979169083">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1419" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1778830717608324" lon="73.5040982922900952">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1417" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1777918095419766" lon="73.5038347521338977">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1415" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1775794675366269" lon="73.5032664596243990">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1413" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1753475810404908" lon="73.5025942616264274">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1411" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1791302854033212" lon="73.5075411617840615">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1409" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1789568557056240" lon="73.5070544787504474">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1406" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1789052276953562" lon="73.5068962008104592">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1405" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1787822381640867" lon="73.5065746747084461">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1403" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1786646023994996" lon="73.5062753560929423">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1401" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1785597990613983" lon="73.5060255942155436">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1398" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1785557707136682" lon="73.5059509184540900">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1397" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1784529160037946" lon="73.5056584072197126">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1351" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1777234318313505" lon="73.5036540766527509">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1343" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1792447845698408" lon="73.5078353533348690">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1324" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1737192380212891" lon="73.5024189060423083">
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="amenity" v="police"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Police Station"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-    </node>
-    <node visible="true" id="-1287" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1780915598090109" lon="73.5059929203423366">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1260" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1747161081617534" lon="73.5025194898918670">
-        <tag k="hoot:status" v="2"/>
-    </node>
-    <node visible="true" id="-1251" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1776441109306344" lon="73.5034554893008902">
-        <tag k="hoot:status" v="2"/>
-    </node>
     <node visible="true" id="-1177" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1753916048199997" lon="73.5032219321300033">
         <tag k="hoot:status" v="1"/>
     </node>
@@ -3659,7 +3532,178 @@
     <node visible="true" id="-1" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919" lat="4.1717205287399990" lon="73.5031247058399941">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-865" timestamp="2019-01-24T18:58:28Z" version="1">
+    <node visible="true" id="74" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1776441109306344" lon="73.5034554893008902">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="83" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1747161081617534" lon="73.5025194898918670">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="110" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1780915598090109" lon="73.5059929203423366">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="147" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1737192380212891" lon="73.5024189060423083">
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="amenity" v="police"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Police Station"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2014-10-08T02:06:40.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+    </node>
+    <node visible="true" id="166" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1792447845698408" lon="73.5078353533348690">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="174" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1777234318313505" lon="73.5036540766527509">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="220" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1784529160037946" lon="73.5056584072197126">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="221" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1785557707136682" lon="73.5059509184540900">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="224" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1785597990613983" lon="73.5060255942155436">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="226" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1786646023994996" lon="73.5062753560929423">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="228" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1787822381640867" lon="73.5065746747084461">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="229" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1789052276953562" lon="73.5068962008104592">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="232" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1789568557056240" lon="73.5070544787504474">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="234" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1791302854033212" lon="73.5075411617840615">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="236" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1753475810404908" lon="73.5025942616264274">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="238" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1775794675366269" lon="73.5032664596243990">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="240" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1777918095419766" lon="73.5038347521338977">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="242" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1778830717608324" lon="73.5040982922900952">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="243" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1779904045813279" lon="73.5044293979169083">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="246" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1781064968203863" lon="73.5047228528450063">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="248" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1781977467585820" lon="73.5049945717283890">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="250" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1783177368545346" lon="73.5053392763576312">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="252" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1729158657953747" lon="73.5023381900521287">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="259" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1791930937874167" lon="73.5077117487793430">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="261" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1793132681347167" lon="73.5080400302208261">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="262" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1794882154148372" lon="73.5085157531500073">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="265" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1796333228133795" lon="73.5088970080014406">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="276" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1781489820082571" lon="73.5053707550013229">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="295" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1735120022629237" lon="73.5024061897148187">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="325" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1788151229388246" lon="73.5066593438483693">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="360" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1773921248794155" lon="73.5028062568999445">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="371" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1765731277000286" lon="73.5027313992581668">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="439" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1741055159683373" lon="73.5024536987735075">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="453" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1771946860820695" lon="73.5027896690011744">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="461" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1731848790157127" lon="73.5023748512333412">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="462" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1794516316119212" lon="73.5084169111925974">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="534" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1722668849725260" lon="73.5022735773988956">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="557" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1797596278676927" lon="73.5092299319423574">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="622" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800" lat="4.1759623362674168" lon="73.5026682661406170">
+        <tag k="hoot:status" v="2"/>
+    </node>
+    <way visible="true" id="-767" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-663"/>
+        <nd ref="-665"/>
+        <nd ref="-667"/>
+        <nd ref="-669"/>
+        <nd ref="-235"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="length" v="554.9"/>
+    </way>
+    <way visible="true" id="-764" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-323"/>
+        <nd ref="-673"/>
+        <nd ref="-674"/>
+        <nd ref="-675"/>
+        <nd ref="-661"/>
+        <nd ref="-662"/>
+        <nd ref="-663"/>
+        <nd ref="-672"/>
+        <nd ref="-319"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Kandi Dhon Maniku Goalhi"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="length" v="557.8"/>
+    </way>
+    <way visible="true" id="-756" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-930"/>
         <nd ref="-929"/>
         <nd ref="-928"/>
@@ -3713,7 +3757,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="28910"/>
     </way>
-    <way visible="true" id="-862" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-748" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-891"/>
         <nd ref="-890"/>
         <nd ref="-902"/>
@@ -3732,51 +3776,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="141.5"/>
     </way>
-    <way visible="true" id="-839" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-663"/>
-        <nd ref="-665"/>
-        <nd ref="-667"/>
-        <nd ref="-669"/>
-        <nd ref="-235"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Haveeree Hingun"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="length" v="554.9"/>
-    </way>
-    <way visible="true" id="-832" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-323"/>
-        <nd ref="-673"/>
-        <nd ref="-674"/>
-        <nd ref="-675"/>
-        <nd ref="-661"/>
-        <nd ref="-662"/>
-        <nd ref="-663"/>
-        <nd ref="-672"/>
-        <nd ref="-319"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Kandi Dhon Maniku Goalhi"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:23.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="length" v="557.8"/>
-    </way>
-    <way visible="true" id="-751" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-656" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-521"/>
         <nd ref="-517"/>
         <nd ref="-483"/>
@@ -3800,7 +3800,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="217.2"/>
     </way>
-    <way visible="true" id="-720" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-623" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-466"/>
         <nd ref="-465"/>
         <nd ref="-463"/>
@@ -3833,7 +3833,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="413.6"/>
     </way>
-    <way visible="true" id="-484" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-411" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-199"/>
         <nd ref="-720"/>
         <nd ref="-719"/>
@@ -3876,7 +3876,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="676.4"/>
     </way>
-    <way visible="true" id="-481" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-408" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-167"/>
         <nd ref="-168"/>
         <nd ref="-169"/>
@@ -3908,39 +3908,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="412.4"/>
     </way>
-    <way visible="true" id="-442" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1172"/>
-        <nd ref="-764"/>
-        <nd ref="-763"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Sabudheli Magu"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="length" v="124.3"/>
-    </way>
-    <way visible="true" id="-417" timestamp="2019-01-24T18:58:28Z" version="1">
-        <nd ref="-1145"/>
-        <nd ref="-1144"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Boduthakurufaanu magu"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-        <tag k="length" v="125.9"/>
-    </way>
-    <way visible="true" id="-377" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-397" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-237"/>
         <nd ref="-235"/>
         <nd ref="-319"/>
@@ -4008,7 +3976,39 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="19486.7"/>
     </way>
-    <way visible="true" id="-370" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-351" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1172"/>
+        <nd ref="-764"/>
+        <nd ref="-763"/>
+        <tag k="source" v="Bing"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Sabudheli Magu"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2014-11-28T17:29:46.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="length" v="124.3"/>
+    </way>
+    <way visible="true" id="-310" timestamp="2019-01-24T18:58:28Z" version="1">
+        <nd ref="-1145"/>
+        <nd ref="-1144"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Boduthakurufaanu magu"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:datetime" v="2011-06-11T18:24:40.000Z;2019-01-24T18:58:28Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+        <tag k="length" v="125.9"/>
+    </way>
+    <way visible="true" id="-209" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-1172"/>
         <nd ref="-321"/>
         <nd ref="-23"/>
@@ -4027,7 +4027,7 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="156"/>
     </way>
-    <way visible="true" id="-363" timestamp="2019-01-24T18:58:28Z" version="1">
+    <way visible="true" id="-197" timestamp="2019-01-24T18:58:28Z" version="1">
         <nd ref="-31"/>
         <nd ref="-30"/>
         <nd ref="-29"/>
@@ -4058,74 +4058,6 @@
         <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="1341.4"/>
-    </way>
-    <way visible="true" id="-355" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800">
-        <nd ref="-1287"/>
-        <nd ref="-1453"/>
-        <nd ref="-1425"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Chanbeylee Magu"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
-    </way>
-    <way visible="true" id="-296" timestamp="2019-01-14T12:12:36Z" version="1">
-        <nd ref="-1734"/>
-        <nd ref="-1442"/>
-        <nd ref="-1439"/>
-        <nd ref="-1639"/>
-        <nd ref="-1438"/>
-        <nd ref="-1343"/>
-        <nd ref="-1436"/>
-        <nd ref="-1411"/>
-        <nd ref="-1409"/>
-        <nd ref="-1406"/>
-        <nd ref="-1502"/>
-        <nd ref="-1405"/>
-        <nd ref="-1403"/>
-        <nd ref="-1401"/>
-        <nd ref="-1398"/>
-        <nd ref="-1397"/>
-        <nd ref="-1427"/>
-        <nd ref="-1425"/>
-        <nd ref="-1423"/>
-        <nd ref="-1420"/>
-        <nd ref="-1419"/>
-        <nd ref="-1417"/>
-        <nd ref="-1351"/>
-        <nd ref="-1251"/>
-        <nd ref="-1415"/>
-        <nd ref="-1537"/>
-        <nd ref="-1630"/>
-        <nd ref="-1548"/>
-        <nd ref="-1799"/>
-        <nd ref="-1413"/>
-        <nd ref="-1260"/>
-        <nd ref="-1616"/>
-        <nd ref="-1324"/>
-        <nd ref="-1472"/>
-        <nd ref="-1638"/>
-        <nd ref="-1429"/>
-        <nd ref="-1711"/>
-        <tag k="source" v="DigitalGlobe"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
-        <tag k="name" v="Haveeree Hingun"/>
-        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="DigitalGlobe"/>
-        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z"/>
-        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
-        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
     </way>
     <way visible="true" id="-185" timestamp="2019-01-24T18:58:28Z" version="1" changeset="919">
         <nd ref="-1097"/>
@@ -7348,8 +7280,76 @@
         <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
         <tag k="length" v="717"/>
     </way>
-    <relation visible="true" id="-1139" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-296" role="reviewee"/>
+    <way visible="true" id="111" timestamp="2019-01-14T12:12:36Z" version="1">
+        <nd ref="557"/>
+        <nd ref="265"/>
+        <nd ref="262"/>
+        <nd ref="462"/>
+        <nd ref="261"/>
+        <nd ref="166"/>
+        <nd ref="259"/>
+        <nd ref="234"/>
+        <nd ref="232"/>
+        <nd ref="229"/>
+        <nd ref="325"/>
+        <nd ref="228"/>
+        <nd ref="226"/>
+        <nd ref="224"/>
+        <nd ref="221"/>
+        <nd ref="220"/>
+        <nd ref="250"/>
+        <nd ref="248"/>
+        <nd ref="246"/>
+        <nd ref="243"/>
+        <nd ref="242"/>
+        <nd ref="240"/>
+        <nd ref="174"/>
+        <nd ref="74"/>
+        <nd ref="238"/>
+        <nd ref="360"/>
+        <nd ref="453"/>
+        <nd ref="371"/>
+        <nd ref="622"/>
+        <nd ref="236"/>
+        <nd ref="83"/>
+        <nd ref="439"/>
+        <nd ref="147"/>
+        <nd ref="295"/>
+        <nd ref="461"/>
+        <nd ref="252"/>
+        <nd ref="534"/>
+        <tag k="source" v="DigitalGlobe"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Haveeree Hingun"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2015-10-22T17:25:22.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+    </way>
+    <way visible="true" id="170" timestamp="2019-01-14T12:12:36Z" version="1" changeset="800">
+        <nd ref="110"/>
+        <nd ref="276"/>
+        <nd ref="248"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:imagery:layerName" v="2019-01-04 - WV03_VNIR"/>
+        <tag k="name" v="Chanbeylee Magu"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:datetime" v="2014-11-28T17:34:21.000Z"/>
+        <tag k="source:imagery:id" v="5ce2e89d91bbea89ecf6dbf5915a50e2"/>
+        <tag k="source:imagery:datetime" v="2019-01-04 06:01:44"/>
+    </way>
+    <relation visible="true" id="-1136" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="111" role="reviewee"/>
         <member type="way" ref="-166" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:status" v="3"/>
@@ -7360,11 +7360,11 @@
         <tag k="hoot:review:score" v="0.459373"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1138" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1135" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-173" role="reviewee"/>
-        <member type="way" ref="-355" role="reviewee"/>
         <member type="way" ref="-58" role="reviewee"/>
-        <member type="way" ref="-296" role="reviewee"/>
+        <member type="way" ref="170" role="reviewee"/>
+        <member type="way" ref="111" role="reviewee"/>
         <member type="way" ref="-166" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:status" v="3"/>

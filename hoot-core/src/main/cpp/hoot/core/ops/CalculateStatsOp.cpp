@@ -512,7 +512,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
   }
 }
 
-double CalculateStatsOp::GetRequestedStatValue(const ConstElementVisitor* pVisitor, StatCall call)
+double CalculateStatsOp::GetRequestedStatValue(const ElementVisitor* pVisitor, StatCall call)
 {
   if (call == Stat)
   {
@@ -567,7 +567,7 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& vis
     fv = critFv.get();
   }
 
-  ConstElementVisitor& childVisitor = v.getChildVisitor();
+  ElementVisitor& childVisitor = v.getChildVisitor();
 
   _constMap->visitRo(*fv);
 

@@ -36,7 +36,7 @@
 namespace hoot
 {
 
-class ConstElementVisitor;
+class ElementVisitor;
 
 class ElementVisitorJs : public node::ObjectWrap
 {
@@ -44,17 +44,17 @@ public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  std::shared_ptr<ConstElementVisitor> getVisitor() { return _v; }
+  std::shared_ptr<ElementVisitor> getVisitor() { return _v; }
 
 private:
 
-  ElementVisitorJs(ConstElementVisitor* v) : _v(v) {}
+  ElementVisitorJs(ElementVisitor* v) : _v(v) {}
   ElementVisitorJs() {}
   ~ElementVisitorJs() {}
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  std::shared_ptr<ConstElementVisitor> _v;
+  std::shared_ptr<ElementVisitor> _v;
 };
 
 }
