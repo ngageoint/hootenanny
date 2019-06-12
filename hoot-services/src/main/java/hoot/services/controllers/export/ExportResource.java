@@ -169,7 +169,8 @@ public class ExportResource {
                 params.setInputType("db");
 
                 for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
-                    //check map for user visibility
+                    // These functions ensure the map + containing folder are either owned by the user -or- public.
+                    MapResource.getMapForUser(user, map, false, false);
 
                     params.setInput(map);
                     params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(map)));
@@ -180,7 +181,8 @@ public class ExportResource {
                 workflow.add(zipCommand);
 
             } else {
-                //check map for user visibility
+                // These functions ensure the map + containing folder are either owned by the user -or- public.
+                MapResource.getMapForUser(user, params.getInput(), false, false);
 
                 workflow.add(getCommand(user, jobId, params, debugLevel));
                 Command zipCommand = getZIPCommand(workDir, outputName);
