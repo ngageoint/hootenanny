@@ -80,7 +80,7 @@
     <tag k='height' v='57' />
     <tag k='is_in:country_code' v='EH' />
     <tag k='man_made' v='tower' />
-    <tag k='material' v='aluminum' />
+    <tag k='material' v='aluminium' />
     <tag k='navigation:landmark' v='yes' />
     <tag k='note' v='Another Tower' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -246,7 +246,7 @@
     <tag k='condition' v='construction' />
     <tag k='error:circular' v='15' />
     <tag k='is_in:country_code' v='EH' />
-    <tag k='material' v='aluminum' />
+    <tag k='material' v='aluminium' />
     <tag k='material:vertical2' v='wood' />
     <tag k='name' v='Another Garden Shed' />
     <tag k='note' v='In the backyard' />
@@ -3029,7 +3029,7 @@
     <tag k='product' v='radioactive_material' />
     <tag k='product2' v='explosive' />
     <tag k='product3' v='ammunition' />
-    <tag k='raw_material' v='aluminum' />
+    <tag k='raw_material' v='aluminium' />
     <tag k='raw_material2' v='radioactive_material' />
     <tag k='raw_material3' v='plastic' />
     <tag k='security:classification' v='UNCLASSIFIED' />

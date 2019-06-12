@@ -52,9 +52,9 @@ tds70 = {
         tds70.AttrLookup = translate.makeAttrLookup(tds70.rawSchema);
 
         // Debug:
-        print("tds70.AttrLookup");
-        translate.dumpLookup(tds70.AttrLookup);
-        print("##########");
+        // print("tds70.AttrLookup");
+        // translate.dumpLookup(tds70.AttrLookup);
+        // print("##########");
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
         // if we DON't want the new structure, just return the tds70.rawSchema
@@ -189,9 +189,9 @@ tds70 = {
         tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
 
         // Debug:
-        print("tdsAttrLookup");
-        translate.dumpLookup(tdsAttrLookup);
-        print('##########');
+        // print("tdsAttrLookup");
+        // translate.dumpLookup(tdsAttrLookup);
+        // print('##########');
 
         // Add the ESRI Feature Dataset name to the schema
         //  newSchema = translate.addFdName(newSchema,'TDS');
