@@ -33,6 +33,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/MapCropper.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -451,7 +452,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             boundedNodeCount++;
             const long nodeId = resultIterator.value(0).toLongLong();
             LOG_VART(ElementId(ElementType::Node, nodeId));
-            nodeIds.insert( QString::number(nodeId));
+            nodeIds.insert(QString::number(nodeId));
           }
         }
         //  Iterate any new ways that are members of relations that need to be queried
@@ -513,6 +514,29 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VARD(boundedNodeCount);
   LOG_VARD(boundedWayCount);
   LOG_VARD(boundedRelationCount);
+
+  ConfigOptions conf;
+  if (!conf.getCropInvert() &&
+      (!conf.getCropKeepEntireFeaturesCrossingBounds() ||
+       conf.getCropKeepOnlyFeaturesInsideBounds()))
+  {
+    // The default behavior of the db bounded read is to return the entirety of features found
+    // within the bounds, even if sections of those features exist outside the bounds. If MapCropper
+    // is configured to not keep sections of features crossing the bounds or only keep features
+    // that exist entirely in the bounds (and not set to inverted, which cancels those two settings
+    // out), we'll perform a post crop operation. Clearly, it would be more efficient to run a
+    // different query to pull the features back the way we want them from the start, and that's
+    // possibly something to look into in the future.
+    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
+    MapCropper cropper(_bounds);
+    LOG_INFO(cropper.getInitStatusMessage());
+    cropper.setKeepEntireFeaturesCrossingBounds(
+      ConfigOptions().getCropKeepEntireFeaturesCrossingBounds());
+    cropper.setKeepOnlyFeaturesInsideBounds(ConfigOptions().getCropKeepOnlyFeaturesInsideBounds());
+    cropper.apply(map);
+    LOG_INFO(cropper.getCompletedStatusMessage());
+  }
+
   LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());

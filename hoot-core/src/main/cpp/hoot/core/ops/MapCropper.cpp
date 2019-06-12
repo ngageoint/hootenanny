@@ -146,7 +146,10 @@ void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
   else
   {
     _keepOnlyFeaturesInsideBounds = keep;
-    _keepEntireFeaturesCrossingBounds = false;
+    if (_keepOnlyFeaturesInsideBounds)
+    {
+      _keepEntireFeaturesCrossingBounds = false;
+    }
   }
 }
 
