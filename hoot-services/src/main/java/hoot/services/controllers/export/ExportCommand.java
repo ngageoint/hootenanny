@@ -129,7 +129,7 @@ class ExportCommand extends ExternalCommand {
             options.add("writer.include.circular.error.tags=false");
 
             convertOps.add("hoot::RemoveTagsVisitor");
-            options.add("remove.tags.visitor.keys=hoot:status;hoot:building:match;error:circular");
+            options.add("tag.filter.keys=hoot:status;hoot:building:match;error:circular");
         }
 
         //Decompose building relations for non-osm formats only
