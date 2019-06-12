@@ -31,28 +31,28 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/stats/ConflateStatsHelper.h>
+#include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/io/MapStatsWriter.h>
-#include <hoot/core/ops/CalculateStatsOp.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/info/IoSingleStat.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/ops/CalculateStatsOp.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/IoUtils.h>
-#include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/criterion/ReviewScoreCriterion.h>
 #include <hoot/core/criterion/ReviewRelationCriterion.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 // Standard
 #include <fstream>
@@ -190,32 +190,60 @@ int ConflateCmd::runSimple(QStringList args)
   }
   int currentTask = 1;
 
-  // read input 1
-  progress.set(
-    _getJobPercentComplete(currentTask - 1),
-    "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
   OsmMapPtr map(new OsmMap());
-  IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
-                   Status::Unknown1);
-  currentTask++;
-
   ChangesetProviderPtr pTagChanges;
-  if (isDiffConflate)
+
+  //  Loading order is important if datasource IDs 2 is true but 1 is not
+  if (!ConfigOptions().getReaderConflateUseDataSourceIds1() &&
+       ConfigOptions().getReaderConflateUseDataSourceIds2() &&
+      !isDiffConflate)
   {
-    // Store original IDs for tag diff
+    //  For Attribute conflation, the secondary IDs are the ones that we want
+    //  to preserve.  So loading them first allows for all of them to be loaded
+    //  without conflict, even if they are negative.  Then the reference dataset
+    //  is loaded with negative IDs
     progress.set(
-      _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
-    diffConflator.storeOriginalMap(map);
-    diffConflator.markInputElements(map);
+      _getJobPercentComplete(currentTask - 1),
+      "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    currentTask++;
+
+    // read input 1
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+                     Status::Unknown1);
     currentTask++;
   }
+  else
+  {
+    // read input 1
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+                     Status::Unknown1);
+    currentTask++;
 
-  progress.set(
-    _getJobPercentComplete(currentTask - 1),
-    "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
-  IoUtils::loadMap(
-    map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
-  currentTask++;
+    if (isDiffConflate)
+    {
+      // Store original IDs for tag diff
+      progress.set(
+        _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
+      diffConflator.storeOriginalMap(map);
+      diffConflator.markInputElements(map);
+      currentTask++;
+    }
+
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    currentTask++;
+  }
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);

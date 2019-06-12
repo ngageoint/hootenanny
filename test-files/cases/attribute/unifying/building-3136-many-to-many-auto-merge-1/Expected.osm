@@ -126,22 +126,22 @@
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2" role="outer"/>
         <member type="way" ref="-1" role="outer"/>
-        <tag k="feature_area" v="39128.8"/>
+        <tag k="feature_area" v="1602.1"/>
         <tag k="hoot:status" v="3"/>
         <tag k="amenity" v="fast_food"/>
         <tag k="addr:street" v="Avenida Libertador"/>
-        <tag k="name" v="Building 3"/>
-        <tag k="alt_types" v="shop=supermarket"/>
+        <tag k="name" v="Building 5"/>
+        <tag k="alt_types" v="shop=mall"/>
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
-        <tag k="shop" v="mall"/>
-        <tag k="alt_name" v="Building 1;Building 2;Building 4;Building 5"/>
+        <tag k="shop" v="supermarket"/>
+        <tag k="alt_name" v="Building 1;Building 2;Building 3;Building 4"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2014-08-23T18:09:40Z;2015-06-30T21:43:19Z"/>
+        <tag k="source:datetime" v="2015-06-30T21:43:19Z;2014-08-23T18:09:40Z"/>
         <tag k="addr:city" v="Barquisimeto"/>
-        <tag k="width" v="160.1"/>
-        <tag k="angle" v="69.3"/>
-        <tag k="length" v="338.1"/>
+        <tag k="width" v="33.8"/>
+        <tag k="angle" v="359.4"/>
+        <tag k="length" v="63.2"/>
         <tag k="type" v="multipolygon"/>
     </relation>
 </osm>
