@@ -147,7 +147,7 @@ bool RemoveElementsVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
   return criteriaSatisfied;
 }
 
-void RemoveElementsVisitor::visit(const ConstElementPtr& e)
+void RemoveElementsVisitor::visit(const ElementPtr& e)
 {
   LOG_VART(_criteria.size());
   if (_criteria.size() == 0)
@@ -155,21 +155,17 @@ void RemoveElementsVisitor::visit(const ConstElementPtr& e)
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
   }
 
-  const ElementType type = e->getElementType();
-  const long id = e->getId();
-  const std::shared_ptr<Element>& ee = _map->getElement(type, id);
-
-  if (_criteriaSatisfied(ee))
+  if (_criteriaSatisfied(e))
   {
     LOG_TRACE("Removing element: " << e);
     _count++;
     if (_recursive)
     {
-      RecursiveElementRemover(ee->getElementId()).apply(_map->shared_from_this());
+      RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
     }
     else
     {
-      RemoveElementByEid::removeElement(_map->shared_from_this(), ElementId(type, id));
+      RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
   }
 }

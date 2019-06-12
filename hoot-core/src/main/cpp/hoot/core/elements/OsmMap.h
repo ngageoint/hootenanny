@@ -285,7 +285,9 @@ public:
   void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
   void visitRelationsRw(ConstElementVisitor& visitor);
+  void visitRelationsRw(ElementVisitor& visitor);
 
   long getNodeCount() const { return _nodes.size(); }
   long getWayCount() const { return _ways.size(); }
