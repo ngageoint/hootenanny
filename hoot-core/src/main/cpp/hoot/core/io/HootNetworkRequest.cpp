@@ -165,8 +165,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
   {
     _error = reply->errorString();
     //  Remove authentication information if present
-    if (request.url() != url)
-      _error.replace(request.url().toString(), url.toString(), Qt::CaseInsensitive);
+    if (request.url() != tempUrl)
+      _error.replace(request.url().toString(), tempUrl.toString(), Qt::CaseInsensitive);
     return false;
   }
 
