@@ -125,23 +125,6 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
   // AOI.
   _parseBuffer();
 
-  // If we have a bounded query, let's check for the crop related option overrides.
-  if (ConfigUtils::boundsOptionEnabled())
-  {
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-      ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-      ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-      ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-      ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
-  }
-
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
   //sortedElements2 is the newer state of the data
@@ -305,11 +288,31 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
     // We must preserve the original element IDs while loading in order for changeset derivation
     // to work.
 
-    // load the first map
+    // load the first map; If we have a bounded query, let's check for the crop related option
+    // overrides.
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+        ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+        ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
+    }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
 
     // append the second map onto the first one
     OsmMapPtr tmpMap(new OsmMap());
+    // same as above but for the secondary features
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+        ConfigOptions().getChangesetSecondaryKeepEntireFeaturesCrossingBounds());
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+        ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
+    }
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
     try
     {
@@ -333,6 +336,15 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   {
     // Just load the first map, but as unknown2 to end up with a changeset made up of just this
     // input.
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+        ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
+      conf().set(
+        ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+        ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
+    }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
   }
   _currentTaskNum++;
@@ -375,6 +387,10 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
                                                           OsmMapPtr& map2, Progress progress)
 {
   // Preserving source IDs is important here.
+
+  // There's no need to check for the crop related config opts here, as we do in
+  // _handleUnstreamableConvertOpsInMemory, as a bounded query will always prevent us from
+  // streaming.
 
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
@@ -440,14 +456,42 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
     // Preserving source IDs is important here.
     if (!_singleInput)
     {
-      // Load each input into a separate map.
+      // Load each input into a separate map; see related comments in
+      // _handleUnstreamableConvertOpsInMemory
+      if (ConfigUtils::boundsOptionEnabled())
+      {
+        conf().set(
+          ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+          ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
+        conf().set(
+          ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+          ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
+      }
       IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+      if (ConfigUtils::boundsOptionEnabled())
+      {
+        conf().set(
+          ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+          ConfigOptions().getChangesetSecondaryKeepEntireFeaturesCrossingBounds());
+        conf().set(
+          ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+          ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
+      }
       IoUtils::loadMap(map2, input2, true, Status::Unknown2);
     }
     else
     {
       // Just load the first map, but as unknown2 to end up with a changeset made up of just this
       // input.
+      if (ConfigUtils::boundsOptionEnabled())
+      {
+        conf().set(
+          ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+          ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
+        conf().set(
+          ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+          ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
+      }
       IoUtils::loadMap(map1, input1, true, Status::Unknown2);;
     }
     _currentTaskNum++;
