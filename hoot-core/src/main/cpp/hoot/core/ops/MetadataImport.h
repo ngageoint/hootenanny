@@ -30,7 +30,11 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/MetadataOp.h>
+
+// geos
+#include <geos/geom/Geometry.h>
 
 namespace hoot
 {
@@ -49,8 +53,9 @@ private:
   // MetadataOp
   virtual void _apply();
 
-  void applyToElement(ElementPtr pElement);
+
   bool areMetadataTagsEqual(ElementPtr p1, ElementPtr p2);
+  bool applyToElement(ElementPtr pElement, WayPtr pTagSource, std::shared_ptr<geos::geom::Geometry>& geom );
 };
 
 }

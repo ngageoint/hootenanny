@@ -32,11 +32,11 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/Factory.h>
 
 // geos
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
 
 using namespace geos::geom;
@@ -82,7 +82,7 @@ void MetadataImport::_apply()
 
   // merge polygons with matching metadata tags
   QList<WayPtr> importWays;
-  QList<shared_ptr<Geometry>> mergedImportPolys;
+  QList<shared_ptr<Geometry>> mergedImportGeom;
 
   for (int ds = 0; ds < datasetWays.length(); ds++)
   {
@@ -94,8 +94,8 @@ void MetadataImport::_apply()
       if (areMetadataTagsEqual(datasetWays[ds], importWays[im]))
       {
         // merge polygon with existing polygon
-        mergedImportPolys[im] =
-            shared_ptr<Geometry>(mergedImportPolys[im]->Union(datasetPolys[ds].get()));
+        mergedImportGeom[im] =
+            shared_ptr<Geometry>(mergedImportGeom[im]->Union(datasetPolys[ds].get()));
         matched = true;
         break;
       }
@@ -105,7 +105,7 @@ void MetadataImport::_apply()
     {
       // create new polygon entry
       importWays.push_back(datasetWays[ds]);
-      mergedImportPolys.push_back(datasetPolys[ds]);
+      mergedImportGeom.push_back(datasetPolys[ds]);
     }
   }
 
@@ -136,10 +136,16 @@ void MetadataImport::_apply()
   // apply tags to all elements contained in the mergedImportPolys
   for (int im = 0; im < importWays.length(); im++)
   {
-
+    for (int ie = 0; ie < elementsToProcess.length(); ie++)
+    {
+      if (applyToElement(elementsToProcess[ie], importWays[im], mergedImportGeom[im]))
+      {
+        // remove successfuly processed element
+        elementsToProcess.removeAt(ie);
+        ie--;
+      }
+    }
   }
-
-
 }
 
 bool MetadataImport::areMetadataTagsEqual(ElementPtr p1, ElementPtr p2)
@@ -167,9 +173,51 @@ bool MetadataImport::areMetadataTagsEqual(ElementPtr p1, ElementPtr p2)
   return true;
 }
 
-void MetadataImport::applyToElement( ElementPtr )//pElement)
+bool MetadataImport::applyToElement( ElementPtr pElement, WayPtr pTagSource, shared_ptr<Geometry>& geom )
 {
+  // check if element is inside poly
+  //Way* pw = dynamic_cast<Way*>(pElement.get());
+  Node* pn = dynamic_cast<Node*>(pElement.get());
+  //Relation* pr = dynamic_cast<Relation*>(pElement.get());
 
+  bool assign = false;
+
+  if (pn)
+  {
+    // check node point
+    shared_ptr<Point> pp = shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(
+                                               Coordinate(pn->getX(),pn->getY())));
+    if (geom->contains(pp.get())) assign = true;
+  }
+
+  if (pw)
+  {
+
+  }
+
+  if (assign)
+  {
+    Tags srcTags = pTagSource->getTags();
+    Tags destTags = pElement->getTags();
+
+    // finally copy over the tags
+    for (QString tag : _tags.keys())
+    {
+      if (srcTags.contains(tag))
+      {
+        destTags[tag] = srcTags[tag];
+      }
+      else
+      {
+        destTags[tag] = _tags[tag];
+      }
+    }
+
+    pElement->setTags(destTags);
+    return true;
+  }
+
+  return false;
 }
 
 }
