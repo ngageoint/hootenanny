@@ -49,11 +49,11 @@ public:
   MetadataOp() : _pConf(&conf()) {}
 
   // OsmMapOperation (partial)
-  virtual void apply(std::shared_ptr<OsmMap>& map) override
+  virtual void apply(std::shared_ptr<OsmMap>& pMap) override
   {
-    _map = map;
+    _pMap = pMap;
     _configure();
-    _process();
+    _apply();
   }
 
   // OperationStatusInfo
@@ -64,14 +64,17 @@ public:
   virtual void setConfiguration(const Settings& conf) {
     LOG_INFO( "MetadataOp setConfiguration");_pConf = &conf; }
 
-private:
+protected:
 
-  const Settings* _pConf;
-  std::shared_ptr<OsmMap> _map;
+  std::shared_ptr<OsmMap> _pMap;
   QPair<QString,QString> _datasetIndicator;
   QHash<QString,QString> _tags;
 
-  virtual void _process() = 0;
+private:
+
+  const Settings* _pConf;
+
+  virtual void _apply() = 0;
 
   void _configure()
   {

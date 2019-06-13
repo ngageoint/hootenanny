@@ -35,7 +35,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, MetadataExport)
 
-void MetadataExport::_process()
+void MetadataExport::_apply()
 {
   LOG_INFO( "EXPORTING METADATA" );
 }

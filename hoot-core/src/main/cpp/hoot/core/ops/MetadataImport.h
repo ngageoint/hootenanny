@@ -29,6 +29,7 @@
 #define METADATAIMPORT_H
 
 // Hoot
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/ops/MetadataOp.h>
 
 namespace hoot
@@ -46,7 +47,10 @@ public:
 private:
 
   // MetadataOp
-  virtual void _process();
+  virtual void _apply();
+
+  void applyToElement(ElementPtr pElement);
+  bool areMetadataTagsEqual(ElementPtr p1, ElementPtr p2);
 };
 
 }

@@ -46,7 +46,7 @@ public:
 private:
 
   // MetadataOp
-  virtual void _process();
+  virtual void _apply();
 };
 
 }
