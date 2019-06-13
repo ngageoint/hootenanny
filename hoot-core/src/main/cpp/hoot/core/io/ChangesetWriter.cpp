@@ -206,7 +206,7 @@ void ChangesetWriter::_parseBuffer()
 
     QString bboxStr;
     QString convertBoundsParamName;
-    //only one of these three should be specified
+    //only one of these three should be specified (why?)
     if (!ConfigOptions().getConvertBoundingBox().isEmpty())
     {
       bboxStr = ConfigOptions().getConvertBoundingBox();
