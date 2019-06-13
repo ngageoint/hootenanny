@@ -169,7 +169,8 @@ public class DbUtils {
      * @return map ID
      */
     public static Long getMapIdByName(String mapName, Long userId) {
-        //the user check here is in case there are duplicate map names for different users
+        //FIXME: the user check here is in case there are duplicate map names for different users
+        //but it does not account for maps in public folders
         return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName).and(maps.userId.eq(userId))).fetchOne();
     }
 
