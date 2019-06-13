@@ -168,12 +168,12 @@ public class ExportResource {
             } else if (inputType.equalsIgnoreCase("dbs")) {
                 params.setInputType("db");
 
-                for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
+                for (String mapid: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
                     // These functions ensure the map + containing folder are either owned by the user -or- public.
-                    MapResource.getMapForUser(user, map, false, false);
+                    MapResource.getMapForUser(user, mapid, false, false);
 
-                    params.setInput(map);
-                    params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(map)));
+                    params.setInput(mapid);
+                    params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(mapid)));
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
                 }
 
