@@ -3,10 +3,8 @@ set -e
 
 # Wholesale Building Replacement Workflow
 #
-# This could work for other data types but only buildings have been attempted so far. The main takeaway from this test if you're trying
-# to do your own similar workflow is the changeset derivation itself...ends up looking something like:
-#
-# hoot changeset-derive -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true ref.osm sec.osm changeset.osc
+# This test is lenient regarding the AOI, in that it will modify some features in the ref data that lie just outside of it. This workflow 
+# could work for other polygon or point data types but only buildings have been attempted so far.
 
 TEST_NAME=ServiceBuildingReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -27,6 +25,20 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 
 # CONFIG OPTS
 
+# Additional config opts that may end up being useful for: 
+
+# debugging:
+#-D writer.include.debug.tags=true
+
+# tweaking tag reading/writing behavior:
+#-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true
+
+# tweaking cookie cutting behavior:
+#-D cookie.cutter.alpha=1000 -D cookie.cutter.alpha.shape.buffer=0.0
+
+# tweaking changeset derivation behavior:
+#-D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
+
 # opts to apply to all the commands; 
 # - changeset.xml.writer.add.timestamp=false and reader.add.source.datetime=false are for testing purposes primarily so that the simple 
 # diff between gold and output changesets works (we don't have a map diff for changesets).
@@ -46,21 +58,7 @@ PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.e
 # falling completely within the bounds would require some significant work to the ApiDbReader bounds query. Bounds reading by the OsmXmlReader,
 # however, could currently support both of the scenarios but it is hardcoded to behave in the same fashion as the db readers for now.
 # TODO: comment on rop.keep.entire.features.crossing.bounds
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D convert.bounding.box.keep.only.features.inside.bounds=false"
-
-# Additional config opts that may end up being useful for: 
-
-# debugging:
-#-D writer.include.debug.tags=true
-
-# tweaking tag reading/writing behavior:
-#-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true
-
-# tweaking cookie cutting behavior:
-#-D cookie.cutter.alpha=1000 -D cookie.cutter.alpha.shape.buffer=0.0
-
-# tweaking changeset derivation behavior:
-#-D changeset.allow.deleting.reference.features=true -D changeset.buffer=0.0
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false"
 
 # DATA PREP
 
@@ -143,5 +141,4 @@ hoot convert $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced
 hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
 # cleanup
-#scripts/database/CleanOsmApiDB.sh 
 hoot delete-db-map $HOOT_OPTS $DB_OPTS $SEC_LAYER
