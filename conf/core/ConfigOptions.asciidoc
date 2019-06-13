@@ -434,6 +434,38 @@ derivation time.
 
 The text description that is written to the OSM API database with a changeset.
 
+=== changeset.reference.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.entire.features.crossing.bounds for the reference input when deriving
+changesets with a bounds.
+
+=== changeset.secondary.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.entire.features.crossing.bounds for the secondary input when deriving
+changesets with a bounds.
+
+=== changeset.reference.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.only.features.inside.bounds for the reference input when deriving
+changesets with a bounds.
+
+=== changeset.secondary.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.only.features.inside.bounds for the secondary input when deriving
+changesets with a bounds.
+
 === changeset.max.size
 
 * Data Type: long

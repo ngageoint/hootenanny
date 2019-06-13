@@ -51,6 +51,7 @@
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -123,6 +124,23 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
   // Allow for a buffer around the AOI where the changeset derivation is to occur, if there is an
   // AOI.
   _parseBuffer();
+
+  // If we have a bounded query, let's check for the crop related option overrides.
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+      ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+      ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+      ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+      ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
+  }
 
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
@@ -393,7 +411,7 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
 
 void ChangesetWriter::_readInputsFully(const QString& input1, const QString& input2,
                                        OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
-{
+{  
   if (ConfigOptions().getConvertOps().size() > 0)
   {
     if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
