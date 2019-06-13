@@ -228,10 +228,12 @@ void ChangesetWriter::_parseBuffer()
         "A changeset buffer was specified but no convert bounding box was specified.");
     }
     geos::geom::Envelope convertBounds = GeometryUtils::envelopeFromConfigString(bboxStr);
+    // shrink the bbox by the specified distance to give us a buffer for reconnecting split
+    // features
     convertBounds.expandBy(changesetBuffer, changesetBuffer);
-    conf().set(
-      convertBoundsParamName,
-      GeometryUtils::envelopeToConfigString(convertBounds));
+    // This change breaks a bunch of tests not calling changeset-derive...why?
+    //convertBounds.expandBy(-1 * changesetBuffer, -1 * changesetBuffer);
+    conf().set(convertBoundsParamName, GeometryUtils::envelopeToConfigString(convertBounds));
   }
 }
 

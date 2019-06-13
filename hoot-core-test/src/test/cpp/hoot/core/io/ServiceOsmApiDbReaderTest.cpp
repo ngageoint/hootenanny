@@ -175,6 +175,10 @@ public:
     reader.open(ServicesDbTestUtils::getOsmApiDbUrl().toString());
     OsmMapPtr map(new OsmMap());
 
+    // The default behavior is return both features entirely within the bounds and those that
+    // cross the bounds. This uses MapCropper internally, so other variations on the cropping are
+    // tested in MapCropperTest.
+
     reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
     reader.read(map);
 

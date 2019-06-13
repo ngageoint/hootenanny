@@ -361,9 +361,12 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
     MapCropper cropper(_bounds);
     LOG_INFO(cropper.getInitStatusMessage());
+    // We don't reuse MapCropper's version of these options, since we want the freedom to have
+    // different default values than what MapCropper uses.
     cropper.setKeepEntireFeaturesCrossingBounds(
-      ConfigOptions().getCropKeepEntireFeaturesCrossingBounds());
-    cropper.setKeepOnlyFeaturesInsideBounds(ConfigOptions().getCropKeepOnlyFeaturesInsideBounds());
+      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+    cropper.setKeepOnlyFeaturesInsideBounds(
+      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
     cropper.apply(_map);
     LOG_INFO(cropper.getCompletedStatusMessage());
   }
@@ -419,10 +422,8 @@ const QString& OsmXmlReader::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-bool OsmXmlReader::startElement(const QString& /* namespaceURI */,
-                                const QString& /* localName */,
-                                const QString& qName,
-                                const QXmlAttributes& attributes)
+bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/,
+                                const QString& qName, const QXmlAttributes& attributes)
 {
   try
   {

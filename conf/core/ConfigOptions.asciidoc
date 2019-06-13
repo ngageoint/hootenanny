@@ -632,6 +632,24 @@ Same as convert.bounding.box but the resultant bounds filtering is only applied 
 database data sources when used with the convert and conflate commands.  This setting takes
 precendence over the convert.bounding.box setting for Hootenanny API database data sources only.
 
+=== convert.bounding.box.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, will not break apart features crossing the convert bounds. This is analagous to
+crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
+command only and kept as a separate option with a different default value.
+
+=== convert.bounding.box.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, will throw out any features that do not fall completely within the convert bounds. This is
+analagous to crop.keep.entire.features.crossing.bounds used with the crop command, but used with
+the convert command only and kept as a separate option.
+
 === convert.bounding.box.osm.api.database
 
 * Data Type: string

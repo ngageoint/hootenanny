@@ -194,7 +194,9 @@ public:
   }
 
   void runBoundsTest()
-  {
+  {   
+    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
+
     OsmXmlReader uut;
     uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
     OsmMapPtr map(new OsmMap());

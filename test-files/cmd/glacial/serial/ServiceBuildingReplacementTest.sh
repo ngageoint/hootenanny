@@ -46,7 +46,7 @@ PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.e
 # falling completely within the bounds would require some significant work to the ApiDbReader bounds query. Bounds reading by the OsmXmlReader,
 # however, could currently support both of the scenarios but it is hardcoded to behave in the same fashion as the db readers for now.
 # TODO: comment on rop.keep.entire.features.crossing.bounds
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D crop.keep.entire.features.crossing.bounds=true -D crop.keep.only.features.inside.bounds=false"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D convert.bounding.box.keep.only.features.inside.bounds=false"
 
 # Additional config opts that may end up being useful for: 
 

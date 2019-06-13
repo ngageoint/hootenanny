@@ -402,8 +402,8 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
   {
     if (n2w->getWaysByNode(from->getId()).size() != 0)
     {
-      throw HootException("Trying to replace a node with a non-node when the node is part of a "
-        "way.");
+      throw HootException(
+        "Trying to replace a node with a non-node when the node is part of a way.");
     }
   }
 

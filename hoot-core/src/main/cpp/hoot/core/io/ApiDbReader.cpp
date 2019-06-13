@@ -515,24 +515,25 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VARD(boundedWayCount);
   LOG_VARD(boundedRelationCount);
 
+  // The default behavior of the db bounded read is to return the entirety of features found
+  // within the bounds, even if sections of those features exist outside the bounds. Only run the
+  // crop operation if the crop related option are different than the default behavior. Clearly, it
+  // would be more efficient to run a different query to pull the features back the way we want
+  // them from the start and skip this step completely. That's possibly something to look into
+  // doing in the future.
   ConfigOptions conf;
-  if (!conf.getCropInvert() &&
-      (!conf.getCropKeepEntireFeaturesCrossingBounds() ||
-       conf.getCropKeepOnlyFeaturesInsideBounds()))
+  if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
+       conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
   {
-    // The default behavior of the db bounded read is to return the entirety of features found
-    // within the bounds, even if sections of those features exist outside the bounds. If MapCropper
-    // is configured to not keep sections of features crossing the bounds or only keep features
-    // that exist entirely in the bounds (and not set to inverted, which cancels those two settings
-    // out), we'll perform a post crop operation. Clearly, it would be more efficient to run a
-    // different query to pull the features back the way we want them from the start, and that's
-    // possibly something to look into in the future.
     LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
     MapCropper cropper(_bounds);
     LOG_INFO(cropper.getInitStatusMessage());
+    // We don't reuse MapCropper's version of these options, since we want the freedom to have
+    // different default values than what MapCropper uses.
     cropper.setKeepEntireFeaturesCrossingBounds(
-      ConfigOptions().getCropKeepEntireFeaturesCrossingBounds());
-    cropper.setKeepOnlyFeaturesInsideBounds(ConfigOptions().getCropKeepOnlyFeaturesInsideBounds());
+      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+    cropper.setKeepOnlyFeaturesInsideBounds(
+      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
     cropper.apply(map);
     LOG_INFO(cropper.getCompletedStatusMessage());
   }
