@@ -2276,6 +2276,10 @@ tds40 = {
             tds40.lookup = translate.createLookup(tds40.rules.one2one);
         }
 
+        // A little cleaning before we try to untangle stuff
+        delete attrs.SHAPE_Length;
+        delete attrs.SHAPE_Area;
+        
         // Untangle TDS attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         tds40.untangleAttributes(attrs, tags);

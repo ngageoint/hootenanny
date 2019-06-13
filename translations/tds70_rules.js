@@ -211,6 +211,8 @@ tds70.rules = {
     'WID':'width', // Width
     'WOC':'width:crest', // Dam Crest Width
     'ZI016_WD1':'width:minimum_traveled_way', // Route Pavement Information : Route Minimum Travelled Way Width
+    'ZI016_WD2':'width:total_usable', // Route Pavement Information : Route Total Usable Width
+    'ZI016_WT2':'width:second_way', // Route Pavement Information : Width of Second Travelled Way
     'ZI017_GAW':'gauge', // Track Information : Railway Gauge
     'ZI026_CTUL':'cartographic_scale:lower', // Feature Metadata : Cartographic Usability Range <lower value>
     'ZI026_CTUU':'cartographic_scale:upper', // Feature Metadata : Cartographic Usability Range <upper value>

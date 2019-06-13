@@ -223,9 +223,6 @@ tds70 = {
         // This is quicker than going through the Schema due to the way the Schema is arranged
         var attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
-print('Validate: ' + attrs.F_CODE);
-print('Validate: ' + attrList);
-
         var othList = {};
 
         if (attrs.OTH)
@@ -347,7 +344,7 @@ print('Validate: ' + attrList);
         {
             if (tds70.rawSchema[i].fcode == attrs.F_CODE && tds70.rawSchema[i].geom == geometryType)
             {
-                print('Got Feature:' + tds70.rawSchema[i].name);
+                // print('Got Feature:' + tds70.rawSchema[i].name);
                 feature = tds70.rawSchema[i];
                 break;
             }
@@ -2195,6 +2192,11 @@ print('Validate: ' + attrList);
             tds70.lookup = translate.createLookup(tds70.rules.one2one);
         }
 
+        // A little cleaning before we try to untangle stuff
+        // NOTE: Untangle came from TDSv6 && MGCP. I don't know if we still need it.
+        delete attrs.SHAPE_Length;
+        delete attrs.SHAPE_Area;
+
         // Untangle TDS attributes & OSM tags.
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         tds70.untangleAttributes(attrs, tags);
@@ -2233,7 +2235,6 @@ print('Validate: ' + attrList);
         // not in v8 yet: // var tTags = Object.assign({},tags);
         var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
         delete notUsedAttrs.F_CODE;
-        delete notUsedAttrs.FCSUBTYPE;
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
