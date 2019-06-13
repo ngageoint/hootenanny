@@ -577,7 +577,7 @@ public class FolderResource {
         if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
-        throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it").build());
+        throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this folder").build());
     }
     public static Folders folderFromList(List<Folders> folders, Long folderId) {
         for(Folders folder : folders) {
