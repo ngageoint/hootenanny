@@ -27,11 +27,15 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=50 -D perty.systematic.error.y=50 -D perty.ops="
-# TODO: comment on crop.keep.entire.features.crossing.bounds
-# don't forget about WayJoiner
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hootUnifyingConflator -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D convert.bounding.box.keep.only.features.inside.bounds=false"
-
-# hoot convert --trace -D log.class.filter="MapCropper;GeometryConverter" -D writer.include.debug.tags=true -D convert.ops=hoot::MapCropper -D crop.bounds=-71.4698,42.4866,-71.4657,42.4902 -D crop.keep.entire.features.crossing.bounds=false -D crop.keep.only.features.inside.bounds=false test-files/BostonSubsetRoadBuilding_FromOsm.osm test-output/cmd/glacial/serial/ServiceRoadReplacementTest/crop-test-out-1.osm > test-output/cmd/glacial/serial/ServiceRoadReplacementTest/out
+# TODO: comment on crop.keep.entire.features.crossing.bounds; don't forget about WayJoiner
+# same as building
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnifyingConflator -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D convert.bounding.box.keep.only.features.inside.bounds=false"
+# new way for roads with no snapping
+#CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnifyingConflator -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D convert.bounding.box.keep.only.features.inside.bounds=false"
+# new way with conflation snapping
+#CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnifyingConflator -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D convert.bounding.box.keep.only.features.inside.bounds=false"
+# new way with unconnected snapping
+#CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnconnectedWaySnapper -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D convert.bounding.box.keep.only.features.inside.bounds=false -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.to.way.node.criterion=hoot:HighwayNodeCriterion -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2"
 
 # DATA PREP
 
@@ -67,14 +71,14 @@ hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER
 #echo ""
 #hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc
 #diff $IN_DIR/$TEST_NAME-changeset-2.osc $OUT_DIR/$TEST_NAME-changeset-2.osc
-#echo ""
+echo ""
 echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; sql changeset out)..."
 echo ""
 hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-2a.osc.sql $REF_LAYER
 #diff $IN_DIR/$TEST_NAME-changeset-2.osc.sql $OUT_DIR/$TEST_NAME-changeset-2.osc.sql
-echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; sql changeset out)..."
-echo ""
-hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2b.osc.sql $REF_LAYER
+#echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; sql changeset out)..."
+#echo ""
+#hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2b.osc.sql $REF_LAYER
 #diff $IN_DIR/$TEST_NAME-changeset-2.osc.sql $OUT_DIR/$TEST_NAME-changeset-2.osc.sql
 
 # CHANGESET APPLICATION
@@ -82,7 +86,7 @@ hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $
 echo ""
 echo "Applying the changeset to the reference data..."
 echo ""
-hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUT_DIR/$TEST_NAME-changeset-2b.osc.sql $OSM_API_DB_URL
+hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUT_DIR/$TEST_NAME-changeset-2a.osc.sql $OSM_API_DB_URL
 echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""

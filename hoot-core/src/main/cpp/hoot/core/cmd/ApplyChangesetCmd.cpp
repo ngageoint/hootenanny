@@ -87,6 +87,13 @@ public:
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
     {
       //  Get the endpoint URL
+      const QString urlStr = args[args.size() - 1];
+      if (!urlStr.toLower().startsWith("http://"))
+      {
+        throw IllegalArgumentException(
+          QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
+          QString("Tried to write to: " + urlStr));
+      }
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
 
