@@ -343,8 +343,8 @@ public class ExportResource {
     }
     
     /**
-     * Returns the contents of a geopackage job output file
-     * using `hoot node-density-tiles` to build a k-d tree output geopackage
+     * Returns the contents of a gpkg job output file
+     * using `hoot node-density-tiles` to build a k-d tree output gpkg
      * of task areas with roughly equal numbers of features
      *
      * GET hoot-services/job/export/gpkg/[job id from exportjob]
@@ -354,14 +354,14 @@ public class ExportResource {
      * @param ext
      *            parameter overrides the file extension of the file being downloaded
      *            but is also used to identify the export file on the server, so not really!
-     * @return job output geopackage
+     * @return job output gpkg
      *
      * @throws WebApplicationException
      *             if the job with ID = id does not exist, the referenced job
      *             output file no longer exists.
      */
     @GET
-    @Path("/geopackage/{id}")
+    @Path("/gpkg/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGeoPackageOutput(@PathParam("id") String jobId,
                                  @QueryParam("ext") String ext) {
