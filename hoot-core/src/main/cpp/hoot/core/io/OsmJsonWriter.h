@@ -112,6 +112,8 @@ protected:
   bool _firstElement;
   bool _writeEmptyTags;
   bool _writeHootFormat;
+  long _numWritten;
+  long _statusUpdateInterval;
 
   static QString _typeName(ElementType e);
 

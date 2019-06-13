@@ -89,7 +89,8 @@ public:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);
 
-    MapCropper::crop(map, env);
+    MapCropper cropper(env);
+    cropper.apply(map);
     SuperfluousWayRemover::removeWays(map);
     SuperfluousNodeRemover().apply(map);
 

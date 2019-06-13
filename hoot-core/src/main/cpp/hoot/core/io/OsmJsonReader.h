@@ -252,6 +252,26 @@ protected:
 
   OsmMapPtr _map;
 
+  long _numRead;
+  long _statusUpdateInterval;
+
+  /** List of JSON strings, one for each HTTP response */
+  QStringList _results;
+  /** Mutex guarding the results list */
+  std::mutex _resultsMutex;
+  /** Essentially the work queue of bounding boxes that the threads query from */
+  QList<geos::geom::Envelope> _bboxes;
+  /** Mutex guarding the bounding box list */
+  std::mutex _bboxMutex;
+  /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
+  bool _bboxContinue;
+  /** Flag indicating whether or not the bounding box (if it exists) should be split and run in parallel */
+  bool _runParallel;
+  /** Grid division size (0.25 degrees lat/lon default) */
+  double _coordGridSize;
+  /** Number of threads to process the HTTP requests */
+  int _threadCount;
+
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
@@ -304,23 +324,6 @@ protected:
    *   list until the queue is empty.
    */
   void _doHttpRequestFunc();
-
-  /** List of JSON strings, one for each HTTP response */
-  QStringList _results;
-  /** Mutex guarding the results list */
-  std::mutex _resultsMutex;
-  /** Essentially the work queue of bounding boxes that the threads query from */
-  QList<geos::geom::Envelope> _bboxes;
-  /** Mutex guarding the bounding box list */
-  std::mutex _bboxMutex;
-  /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
-  bool _bboxContinue;
-  /** Flag indicating whether or not the bounding box (if it exists) should be split and run in parallel */
-  bool _runParallel;
-  /** Grid division size (0.25 degrees lat/lon default) */
-  double _coordGridSize;
-  /** Number of threads to process the HTTP requests */
-  int _threadCount;
 };
 
 }
