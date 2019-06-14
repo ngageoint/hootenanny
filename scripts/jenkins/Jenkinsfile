@@ -171,6 +171,10 @@ pipeline {
         }
     }
     post {
+        always {
+            // Always halt the VM to save resources, but don't destroy so devs can troubleshoot on failures
+            sh "vagrant halt ${params.Box}"
+        }
         aborted {
             script {
                 notifySlack("ABORTED", "#builds_hoot")
