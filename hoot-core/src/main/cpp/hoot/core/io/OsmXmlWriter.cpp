@@ -67,7 +67,7 @@ _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
 _numWritten(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
 }
 
@@ -435,7 +435,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _bounds.expandToInclude(n->getX(), n->getY());
 
   _numWritten++;
-  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  if (_numWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
@@ -510,7 +510,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _writer->writeEndElement();
 
   _numWritten++;
-  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  if (_numWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
@@ -542,7 +542,7 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _writer->writeEndElement();
 
   _numWritten++;
-  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  if (_numWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }

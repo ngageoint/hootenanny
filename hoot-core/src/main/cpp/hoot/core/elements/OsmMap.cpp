@@ -402,8 +402,8 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
   {
     if (n2w->getWaysByNode(from->getId()).size() != 0)
     {
-      throw HootException("Trying to replace a node with a non-node when the node is part of a "
-        "way.");
+      throw HootException(
+        "Trying to replace a node with a non-node when the node is part of a way.");
     }
   }
 
@@ -761,6 +761,25 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   }
 }
 
+void OsmMap::visitWaysRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(std::dynamic_pointer_cast<Way>(it->second));
+    }
+  }
+}
+
 void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
@@ -776,6 +795,25 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
     if (containsRelation(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitRelationsRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRs = getRelations();
+  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(std::dynamic_pointer_cast<Relation>(it->second));
     }
   }
 }

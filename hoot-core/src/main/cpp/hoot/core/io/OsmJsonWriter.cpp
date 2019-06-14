@@ -38,6 +38,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -59,7 +60,9 @@ OsmJsonWriter::OsmJsonWriter(int precision)
     _out(0),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
     _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
-    _writeHootFormat(true)
+    _writeHootFormat(true),
+    _numWritten(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
 }
 
@@ -181,6 +184,13 @@ void OsmJsonWriter::_writeNodes()
     if (_hasTags(n)) _write(",");
     _writeTags(n);
     _write("}", false);
+
+    _numWritten++;
+    if (_numWritten % (_statusUpdateInterval) == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    }
   }
 }
 
@@ -267,6 +277,13 @@ void OsmJsonWriter::_writeWays()
     if (_hasTags(w)) _write(",");
     _writeTags(w);
 
+    _numWritten++;
+    if (_numWritten % (_statusUpdateInterval) == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    }
+
     ++it;
   }
 }
@@ -306,6 +323,13 @@ void OsmJsonWriter::_writeRelations()
     _write("]");
     if (_hasTags(r)) _write(",");
     _writeTags(r);
+
+    _numWritten++;
+    if (_numWritten % (_statusUpdateInterval) == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    }
 
     ++it;
   }

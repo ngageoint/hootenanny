@@ -34,6 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -72,6 +73,8 @@ OsmJsonReader::OsmJsonReader()
     _url(""),
     _isFile(false),
     _isWeb(false),
+    _numRead(0),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _bboxContinue(true),
     _runParallel(ConfigOptions().getJsonReaderHttpBboxParallel()),
     _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
@@ -112,9 +115,6 @@ bool OsmJsonReader::isSupported(const QString& url)
   return false;
 }
 
-/**
- * Opens the specified URL for reading.
- */
 void OsmJsonReader::open(const QString& url)
 {
   try
@@ -160,10 +160,6 @@ void OsmJsonReader::close()
     _file.close();
 }
 
-/**
- * Reads the specified map. When this method is complete
- * the input will likely be closed.
- */
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
@@ -328,6 +324,12 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree &item)
 
   // Add node to map
   _map->addNode(pNode);
+
+  _numRead++;
+  if (_numRead % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+  }
 }
 
 void OsmJsonReader::_parseOverpassWay(const pt::ptree &item)
@@ -360,6 +362,12 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree &item)
 
   // Add way to map
   _map->addWay(pWay);
+
+  _numRead++;
+  if (_numRead % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+  }
 }
 
 void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item)
@@ -397,6 +405,12 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item)
 
   // Add relation to map
   _map->addRelation(pRelation);
+
+  _numRead++;
+  if (_numRead % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+  }
 }
 
 void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
