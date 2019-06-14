@@ -49,7 +49,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -349,7 +348,7 @@ public class FolderResource {
                 ||
                 !parentFolder.getUserId().equals(user.getId())
         )) {
-            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders in this request").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own both folders to move it").build());
         }
 
 
@@ -449,7 +448,7 @@ public class FolderResource {
         Folders f = getFolderForUser(user, folderId);
         // User must also -own- the folder:
         if(!f.getUserId().equals(user.getId())) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED).type(MediaType.TEXT_PLAIN).entity("You must own the folder to set/view it's attributes").build());
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to change it's visibility").build());
         }
         List<Folders> affectedFolders = new ArrayList<Folders>();
         try(Connection conn = getConnection() ) {
@@ -577,7 +576,7 @@ public class FolderResource {
         if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
-        throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the folder to modify it").build());
+        throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this folder").build());
     }
     public static Folders folderFromList(List<Folders> folders, Long folderId) {
         for(Folders folder : folders) {

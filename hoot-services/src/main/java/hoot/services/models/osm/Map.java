@@ -687,7 +687,7 @@ public class Map extends Maps {
 
         Long ownerId = t.get(maps.userId);
         Long folderId = t.get(folderMapMappings.folderId);
-        Boolean isPublic = t.get(maps.publicCol);
+        Boolean isPublic = t.get(folders.publicCol);
 
 
         this.setPublicCol(isPublic);

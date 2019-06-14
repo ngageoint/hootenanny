@@ -28,7 +28,7 @@ Feature: Translation Ingest, Edit, and Save
         And I add to "translationText" textarea with: //translateToOsm - takes 'attrs' and returns OSM 'tags'
         And I add to "translationText" textarea with: var translateToOsm = function(attrs, layerName) {return translation_assistant.translateAttributes(attrs, layerName, attributeMapping, fcode, schema);};
         Then I click first "Save Edits"
-        And I should see a link "Cucumber Translation"
+        Then I scroll "Cucumber Translation" into view
         And I hover over the "label" with text "Translations"
         And I hover over the "a" with text "Cucumber Translation"
         And I should see "Jakarta Coastline"
@@ -42,4 +42,4 @@ Feature: Translation Ingest, Edit, and Save
         Then I scroll "Cucumber Translation" into view
         Then I delete the "Cucumber Translation" translation
         And I accept the alert
-        And I should not see a link "Cucumber Translation"
+        And I wait 5 "seconds" to not see "Cucumber Translation"
