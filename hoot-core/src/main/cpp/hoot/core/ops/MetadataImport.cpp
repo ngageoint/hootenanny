@@ -49,6 +49,11 @@ void MetadataImport::_apply()
 {
   LOG_INFO( "IMPORTING METADATA" );
 
+  _datasetWayPolys.clear();
+  _mergedImportGeoms.clear();
+  _elementsToProcess.clear();
+  _nodeLocations.clear();
+
   // don't process anything without a dataset indicator
   if (_datasetIndicator.first.length() == 0) return;
 
@@ -85,26 +90,26 @@ void MetadataImport::_findDatasetWays()
     {
       LOG_INFO( "Found dataset indicator in way " << pWay->getId());
 
-      _datasetWays.push_back(pWay);
-      _datasetPolys.push_back(elementConverter.convertToPolygon(pWay));
+      // store dataset way and its polygon geometry
+      _datasetWayPolys[pWay] = elementConverter.convertToPolygon(pWay);
     }
   }
 }
 
 void MetadataImport::_mergePolygonsWithMatchingMetadata()
 {
-  for (int ds = 0; ds < _datasetWays.length(); ds++)
+  for (WayPtr pCheckWay : _datasetWayPolys.keys())
   {
     bool matched = false;
 
     // check if current way matches any existing merged polys
-    for (int im = 0; im < _mergedImportWaysRep.length(); im++)
+    for (WayPtr pMergedWay : _mergedImportGeoms.keys())
     {
-      if (_areMetadataTagsEqual(_datasetWays[ds], _mergedImportWaysRep[im]))
+      if (_areMetadataTagsEqual(pCheckWay, pMergedWay))
       {
         // merge polygon with existing polygon
-        _mergedImportGeoms[im] =
-            shared_ptr<Geometry>(_mergedImportGeoms[im]->Union(_datasetPolys[ds].get()));
+        _mergedImportGeoms[pMergedWay] = shared_ptr<Geometry>(
+              _mergedImportGeoms[pMergedWay]->Union(_datasetWayPolys[pCheckWay].get()));
         matched = true;
         break;
       }
@@ -113,8 +118,7 @@ void MetadataImport::_mergePolygonsWithMatchingMetadata()
     if (!matched)
     {
       // create new polygon entry
-      _mergedImportWaysRep.push_back(_datasetWays[ds]);
-      _mergedImportGeoms.push_back(_datasetPolys[ds]);
+      _mergedImportGeoms[pCheckWay] = _datasetWayPolys[pCheckWay];
     }
   }
 }
@@ -123,7 +127,7 @@ void MetadataImport::_gatherTargetElements()
 {
   for (WayMap::const_iterator it = _allWays.begin(); it != _allWays.end(); ++it)
   {
-    if (!_datasetWays.contains(it->second) &&        // ignore the ways providing the dataset
+    if (!_datasetWayPolys.contains(it->second) &&        // ignore the ways providing the dataset
         it->second->getTags().hasInformationTag())
     {
       _elementsToProcess.push_back(it->second);
@@ -265,24 +269,22 @@ bool MetadataImport::_applyToElement( ElementPtr pElement )
     }
   }
 
-  shared_ptr<Geometry> geomWithMostNodes;
+  WayPtr datasetWayWithMostNodes;
   int nodeCount = 0;
 
-  foreach (shared_ptr<Geometry> geom, _mergedImportGeoms)
+  foreach (WayPtr pWay, _mergedImportGeoms.keys())
   {
-    if (nodeCountPerGeom[geom] > nodeCount)
+    shared_ptr<Geometry> pGeom =_mergedImportGeoms[pWay];
+    if (nodeCountPerGeom[pGeom] > nodeCount)
     {
-      geomWithMostNodes = geom;
-      nodeCount = nodeCountPerGeom[geom];
+      datasetWayWithMostNodes = pWay;
+      nodeCount = nodeCountPerGeom[pGeom];
     }
   }
 
-  if (geomWithMostNodes)
+  if (datasetWayWithMostNodes)
   {
-    int index = _mergedImportGeoms.indexOf(geomWithMostNodes);
-    WayPtr pTagSource = _mergedImportWaysRep[index];
-
-    Tags srcTags = pTagSource->getTags();
+    Tags srcTags = datasetWayWithMostNodes->getTags();
     Tags destTags = pElement->getTags();
 
     // finally copy over the tags

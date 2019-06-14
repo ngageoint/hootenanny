@@ -63,12 +63,8 @@ private:
   NodeMap _allNodes;
   RelationMap _allRels;
 
-  QList<WayPtr> _datasetWays;
-  QList<std::shared_ptr<geos::geom::Polygon>> _datasetPolys;
-
-  QList<WayPtr> _mergedImportWaysRep;
-  QList<std::shared_ptr<geos::geom::Geometry>> _mergedImportGeoms;
-
+  QMap<WayPtr,std::shared_ptr<geos::geom::Polygon>> _datasetWayPolys;
+  QMap<WayPtr,std::shared_ptr<geos::geom::Geometry>> _mergedImportGeoms;
   QList<ElementPtr> _elementsToProcess;
   QHash<long,std::shared_ptr<geos::geom::Geometry>> _nodeLocations;
 
