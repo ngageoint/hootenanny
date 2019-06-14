@@ -125,8 +125,8 @@ Envelope HootApiDb::calculateEnvelope() const
   // if you're having performance issues read this:
   // http://www.postgresql.org/docs/8.0/static/functions-aggregate.html
   QSqlQuery boundsQuery = _exec("SELECT MIN(latitude) as minLat, MAX(latitude) AS maxLat "
-                             ", MIN(longitude) as minLon, MAX(longitude) AS maxLon"
-                             " FROM " + getCurrentNodesTableName(mapId));
+                                ", MIN(longitude) as minLon, MAX(longitude) AS maxLon"
+                                " FROM " + getCurrentNodesTableName(mapId));
 
   if (boundsQuery.next())
   {

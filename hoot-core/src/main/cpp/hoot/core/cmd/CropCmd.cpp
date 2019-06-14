@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -89,7 +89,8 @@ public:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);
 
-    MapCropper::crop(map, env);
+    MapCropper cropper(env);
+    cropper.apply(map);
     SuperfluousWayRemover::removeWays(map);
     SuperfluousNodeRemover().apply(map);
 

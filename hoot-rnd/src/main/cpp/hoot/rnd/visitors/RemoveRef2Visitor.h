@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 
 // Qt
 #include <QMap>
@@ -45,7 +45,7 @@ namespace hoot
  *
  * This class is re-entrant, but not thread safe.
  */
-class RemoveRef2Visitor : public ConstElementVisitor, public ConstOsmMapConsumer,
+class RemoveRef2Visitor : public ElementVisitor, public ConstOsmMapConsumer,
   public ElementCriterionConsumer
 {
 
@@ -65,7 +65,7 @@ public:
   virtual void setOsmMap(OsmMap* map);
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ElementPtr& e);
 
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const;

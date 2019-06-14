@@ -61,7 +61,7 @@ void RemoveRef2VisitorMultipleCriterion::addCriterion(const ElementCriterionPtr&
   _ref2Criterion = chainCrit->_criteria[1];
 }
 
-void RemoveRef2VisitorMultipleCriterion::visit(const ConstElementPtr& e)
+void RemoveRef2VisitorMultipleCriterion::visit(const ElementPtr& e)
 {
   if (!_ref1Criterion || !_ref2Criterion)
   {
