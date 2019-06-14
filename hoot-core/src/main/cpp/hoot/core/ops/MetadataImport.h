@@ -44,6 +44,31 @@
 namespace hoot
 {
 
+/*
+ * MetadataImport imports a specific set of tags from one as 'dataset' specified way to all
+ * elements containd in it.
+ *
+ * A dataset is defined by the tag/value pair defined in the 'metadata.dataset.indicator.tag'
+ * configuration variable. The key/value pair defines the tag and value expected from the
+ * element that is to be considered the dataset (called DatasetTag).
+ *
+ * The specific set of tags and their default values are defined in the 'metadata.tags'
+ * configuration variable. The list of key/value pairs specifies the tags that are to be
+ * considered for import from the dataset element and their default values (called MetadataTags).
+ *
+ * Process:
+ * - Find all ways marked as datasets (meaning they contain the matching DatasetTag) and convert
+ *   them to geos::geom::Polygons.
+ * - Merge all resulting Polygons whose MetadataTags values are identical into one or more
+ *   DatasetPolygons.
+ * - Find all (non-dataset) way and node elements which have one or more non-debug tags and check
+ *   if they are contained in the DatasetPolygon. If an element is overlapping more than one
+ *   DatasetPolygon assign it to the one that contains the greatest number of its nodes. This way
+ *   processing is basically the same for all element types.
+ * - Copy all tags and values defined in the MetadataTags list from the DatasetPolygon to the
+ *   element. If one or more MetadataTags are not specified in the DatasetPolygon assign it using
+ *   its default value as specified in the ConfigOptions.
+ */
 class MetadataImport : public MetadataOp
 {
 public:

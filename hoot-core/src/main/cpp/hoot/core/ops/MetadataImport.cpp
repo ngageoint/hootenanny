@@ -47,12 +47,11 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, MetadataImport)
 
 void MetadataImport::_apply()
 {
-  LOG_INFO( "IMPORTING METADATA" );
-
   _datasetWayPolys.clear();
   _mergedImportGeoms.clear();
   _elementsToProcess.clear();
   _nodeLocations.clear();
+  _numAffected = 0;
 
   // don't process anything without a dataset indicator
   if (_datasetIndicator.first.length() == 0) return;
@@ -60,6 +59,8 @@ void MetadataImport::_apply()
   _allWays = _pMap->getWays();
   _allNodes = _pMap->getNodes();
   _allRels = _pMap->getRelations();
+
+  _numProcessed = _allWays.size() + _allNodes.size() + _allRels.size();
 
   // find all dataset ways and create Polygon object for each
   _findDatasetWays();
@@ -88,7 +89,7 @@ void MetadataImport::_findDatasetWays()
 
     if (tags.contains(indiKey) && tags[indiKey]==indiVal)
     {
-      LOG_INFO( "Found dataset indicator in way " << pWay->getId());
+      LOG_TRACE( "Found dataset indicator in way " << pWay->getId());
 
       // store dataset way and its polygon geometry
       _datasetWayPolys[pWay] = elementConverter.convertToPolygon(pWay);
@@ -300,7 +301,11 @@ bool MetadataImport::_applyToElement( ElementPtr pElement )
       }
     }
 
+    LOG_TRACE( "Copied metadata tags from way id " << datasetWayWithMostNodes->getId()
+               << " to element id " << pElement->getId());
+
     pElement->setTags(destTags);
+    _numAffected++;
     return true;
   }
 
