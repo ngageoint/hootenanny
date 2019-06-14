@@ -1087,11 +1087,11 @@ void HootApiDb::_lazyFlushBulkInsert()
 
 void HootApiDb::open(const QUrl& url)
 {
-  LOG_DEBUG("Opening database connection: " << url.toString() << "...");
+  LOG_DEBUG("Opening database connection: " << url.toString(QUrl::RemoveUserInfo) << "...");
 
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString());
+    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
   }
 
   _resetQueries();

@@ -463,7 +463,7 @@ void OsmJsonReader::scrubBigInts(QString& jsonStr)
 void OsmJsonReader::_readFromHttp()
 {
   if (!_url.isValid())
-    throw HootException("Invalid URL: " + _url.toString());
+    throw HootException("Invalid URL: " + _url.toString(QUrl::RemoveUserInfo));
   //  Update the `srsname` parameter to use EPSG:4326
 
   QUrlQuery urlQuery(_url);
