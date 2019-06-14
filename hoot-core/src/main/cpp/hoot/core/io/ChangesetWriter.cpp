@@ -348,6 +348,7 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
     }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
   }
+  OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-full-map");
   _currentTaskNum++;
 
   // Apply our convert ops to the entire map. If any of these are map consumers (OsmMapOperation)
@@ -380,6 +381,8 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   {
     map1->visitRw(remove1Vis);
   }
+  OsmMapWriterFactory::writeDebugMap(map1, "separated-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, "separated-map-2");
   _currentTaskNum++;
 }
 
@@ -408,6 +411,8 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
     // input.
     IoUtils::loadMap(map1, input1, true, Status::Unknown2);
   }
+  OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-map-2");
   _currentTaskNum++;
 
   // Apply our convert ops to each map separately.
@@ -493,10 +498,12 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
           ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
           ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
       }
-      IoUtils::loadMap(map1, input1, true, Status::Unknown2);;
+      IoUtils::loadMap(map1, input1, true, Status::Unknown2);
     }
     _currentTaskNum++;
   }
+  OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, "after-initial-read-map-2");
 
   // We don't want to include review relations.
   progress.set(
@@ -511,6 +518,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   {
     map2->visitRw(removeElementsVisitor);
   }
+  OsmMapWriterFactory::writeDebugMap(map1, "after-remove-reviews-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
   _currentTaskNum++;
 
   //  Truncate tags over 255 characters to push into OSM API.
@@ -522,6 +531,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   {
     map2->visitRw(truncateTags);
   }
+  OsmMapWriterFactory::writeDebugMap(map1, "after-truncate-tags-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, "after-truncate-tags-map-2");
   _currentTaskNum++;
 
   // Node comparisons require hashes be present on the elementss
@@ -533,6 +544,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   {
     map2->visitRw(hashVis);
   }
+  OsmMapWriterFactory::writeDebugMap(map1, "after-adding-hashes-map-1");
+  OsmMapWriterFactory::writeDebugMap(map2, "after-adding-hashes-map-2");
   _currentTaskNum++;
 }
 
