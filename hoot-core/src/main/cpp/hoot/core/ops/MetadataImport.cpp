@@ -203,29 +203,83 @@ bool MetadataImport::_applyToElement( ElementPtr pElement )
   Node* pn = dynamic_cast<Node*>(pElement.get());
   Relation* pr = dynamic_cast<Relation*>(pElement.get());
 
-  shared_ptr<Geometry> containedIn;
+  vector<long> elementNodes;
 
   if (pn)
   {
-    long nodeId = pn->getId();
-
-    if (_nodeLocations.contains(nodeId))
-    {
-      containedIn = _nodeLocations[nodeId];
-    }
+    elementNodes.push_back(pn->getId());
   }
 
   if (pw)
   {
+     vector<long> nodes = pw->getNodeIds();
+     elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
   }
 
   if (pr)
   {
+    for (RelationData::Entry entry : pr->getMembers())
+    {
+      ElementPtr pMember =_pMap->getElement(entry.getElementId());
+
+      switch(pMember->getElementType().getEnum())
+      {
+        case ElementType::Way:
+        {
+          const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
+          vector<long> nodes = pWay->getNodeIds();
+          elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
+          break;
+        }
+
+        case ElementType::Node:
+        {
+          const NodePtr& pNode = std::dynamic_pointer_cast<Node>(pMember);
+          elementNodes.push_back(pNode->getId());
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
   }
 
-  if (containedIn)
+  // count number of nodes per dataset
+  QMap<shared_ptr<Geometry>,int> nodeCountPerGeom;
+
+  for (long nodeId : elementNodes)
   {
-    int index = _mergedImportGeoms.indexOf(containedIn);
+    if (_nodeLocations.contains(nodeId))
+    {
+      shared_ptr<Geometry> geom = _nodeLocations[nodeId];
+
+      if (nodeCountPerGeom.contains(geom) )
+      {
+        nodeCountPerGeom[geom]++;
+      }
+      else
+      {
+        nodeCountPerGeom[geom] = 1;
+      }
+    }
+  }
+
+  shared_ptr<Geometry> geomWithMostNodes;
+  int nodeCount = 0;
+
+  foreach (shared_ptr<Geometry> geom, _mergedImportGeoms)
+  {
+    if (nodeCountPerGeom[geom] > nodeCount)
+    {
+      geomWithMostNodes = geom;
+      nodeCount = nodeCountPerGeom[geom];
+    }
+  }
+
+  if (geomWithMostNodes)
+  {
+    int index = _mergedImportGeoms.indexOf(geomWithMostNodes);
     WayPtr pTagSource = _mergedImportWaysRep[index];
 
     Tags srcTags = pTagSource->getTags();
