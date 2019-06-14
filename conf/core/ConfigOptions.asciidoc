@@ -4631,7 +4631,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
+https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 

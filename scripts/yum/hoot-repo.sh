@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-HOOT_BASEURL="${HOOT_BASEURL:-https://s3.amazonaws.com/hoot-repo/el7/deps/release}"
+HOOT_BASEURL="${HOOT_BASEURL:-https://hoot-repo.s3.amazonaws.com/el7/deps/release}"
 HOOT_KEY=/etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
 
 cat > $HOOT_KEY <<EOF

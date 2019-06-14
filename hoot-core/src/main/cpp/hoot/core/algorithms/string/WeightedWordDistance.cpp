@@ -71,7 +71,7 @@ WeightedWordDistance::WeightedWordDistance()
   {
     LOG_WARN("Unable to locate words.sqlite. This should be downloaded during the make "
       "process. It can be manually downloaded from "
-      "https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2 "
+      "https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2 "
       "or similar. You can also override the default name with the " +
       ConfigOptions::getWeightedWordDistanceDictionaryKey() + " config option.");
     dictPath = ConfPath::search(ConfigOptions().getWeightedWordDistanceAbridgedDictionary());
