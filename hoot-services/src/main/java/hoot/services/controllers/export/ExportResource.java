@@ -213,7 +213,7 @@ public class ExportResource {
             }
             MapResource.updateLastAccessed(mapid);
         }
-
+        
         return Response.ok(json).build();
     }
 
@@ -342,45 +342,6 @@ public class ExportResource {
         return response;
     }
     
-    /**
-     * Returns the contents of a gpkg job output file
-     * using `hoot node-density-tiles` to build a k-d tree output gpkg
-     * of task areas with roughly equal numbers of features
-     *
-     * GET hoot-services/job/export/gpkg/[job id from exportjob]
-     *
-     * @param jobId
-     *            job id
-     * @param ext
-     *            parameter overrides the file extension of the file being downloaded
-     *            but is also used to identify the export file on the server, so not really!
-     * @return job output gpkg
-     *
-     * @throws WebApplicationException
-     *             if the job with ID = id does not exist, the referenced job
-     *             output file no longer exists.
-     */
-    @GET
-    @Path("/gpkg/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getGeoPackageOutput(@PathParam("id") String jobId,
-                                 @QueryParam("ext") String ext) {
-        Response response;
-
-        try {
-            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "gpkg" : ext);
-            response = Response.ok(FileUtils.readFileToString(out, "UTF-8")).build();
-        }
-        catch (WebApplicationException e) {
-            throw e;
-        }
-        catch (Exception e) {
-            throw new WebApplicationException(e);
-        }
-
-        return response;
-    }
-
     /**
      * Based on the existence of translation script extension, it will send the
      * list of available translations script for export.
