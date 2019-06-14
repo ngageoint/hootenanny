@@ -194,8 +194,8 @@ int ConflateCmd::runSimple(QStringList args)
   ChangesetProviderPtr pTagChanges;
 
   //  Loading order is important if datasource IDs 2 is true but 1 is not
-  if (!ConfigOptions().getReaderConflateUseDataSourceIds1() &&
-       ConfigOptions().getReaderConflateUseDataSourceIds2() &&
+  if (!ConfigOptions().getConflateUseDataSourceIds1() &&
+       ConfigOptions().getConflateUseDataSourceIds2() &&
       !isDiffConflate)
   {
     //  For Attribute conflation, the secondary IDs are the ones that we want
@@ -206,14 +206,14 @@ int ConflateCmd::runSimple(QStringList args)
       _getJobPercentComplete(currentTask - 1),
       "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
     IoUtils::loadMap(
-      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+      map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
 
     // read input 1
     progress.set(
       _getJobPercentComplete(currentTask - 1),
       "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
-    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(),
                      Status::Unknown1);
     currentTask++;
   }
@@ -223,7 +223,7 @@ int ConflateCmd::runSimple(QStringList args)
     progress.set(
       _getJobPercentComplete(currentTask - 1),
       "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
-    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(),
                      Status::Unknown1);
     currentTask++;
 
@@ -241,7 +241,7 @@ int ConflateCmd::runSimple(QStringList args)
       _getJobPercentComplete(currentTask - 1),
       "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
     IoUtils::loadMap(
-      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+      map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
 

@@ -3,8 +3,6 @@ set -e
 
 # Wholesale Road Replacement Workflow with Strict AOI Handling
 #
-# TODO: This doesn't work yet.
-#
 # This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that extend outside of it. This 
 # workflow could work for other linear data types but only roads have been attempted so far. See related notes in 
 # ServiceBuildingReplacementTest.sh
@@ -31,11 +29,11 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=50 -D perty.systematic.error.y=50 -D perty.ops="
-# new way for roads with no snapping
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=true"
-# new way with conflation snapping
-#CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnifyingConflator -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=true"
-# new way with unconnected snapping
+# no snapping
+#CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=true"
+# conflation snapping
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer= -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnifyingConflator -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=true -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true"
+# unconnected snapping
 #CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D changeset.buffer=0.0002 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnconnectedWaySnapper -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=true -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2"
 
 # DATA PREP
@@ -80,7 +78,7 @@ hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $
 echo ""
 echo "Applying the changeset to the reference data..."
 echo ""
-hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUT_DIR/$TEST_NAME-changeset-2a.osc.sql $OSM_API_DB_URL
+hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $OSM_API_DB_URL
 echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""

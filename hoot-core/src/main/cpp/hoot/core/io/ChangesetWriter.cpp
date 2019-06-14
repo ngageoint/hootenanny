@@ -202,7 +202,7 @@ void ChangesetWriter::_parseBuffer()
   const double changesetBuffer = ConfigOptions().getChangesetBuffer();
   if (changesetBuffer > 0.0)
   {
-    //allow for calculating the changeset with a slightly larger AOI than the default specified
+    //allow for calculating the changeset with a slightly different AOI than the default specified
     //bounding box
 
     QString bboxStr;
@@ -225,8 +225,9 @@ void ChangesetWriter::_parseBuffer()
     }
     else
     {
-      throw HootException(
-        "A changeset buffer was specified but no convert bounding box was specified.");
+      throw IllegalArgumentException(
+        QString("A changeset buffer was specified but no convert bounding box was specified ") +
+        QString("with the convert.bounding.box configuration option."));
     }
     geos::geom::Envelope convertBounds = GeometryUtils::envelopeFromConfigString(bboxStr);
     // shrink the bbox by the specified distance to give us a small buffer for reconnecting split

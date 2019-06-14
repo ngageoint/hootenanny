@@ -623,6 +623,24 @@ are: reference, cookieCutter, average, and advancedConflation.
 A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
 User Guide "Feature Filtering" section for filter usage examples.
 
+=== conflate.use.data.source.ids.1
+
+* Data Type: bool
+* Default Value: `true`
+
+Determines whether the reader used by the conflate command to read the first input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
+=== conflate.use.data.source.ids.2
+
+* Data Type: bool
+* Default Value: `false`
+
+Determines whether the reader used by the conflate command to read the second input dataset will
+use the element ID's specified by the input datasets (true) or use internal ID management for the
+inputs (false).
+
 === conflator.min.valid.score
 
 * Data Type: double
@@ -3388,24 +3406,6 @@ The number of trees used to train a random forest conflation model.
 
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
-
-=== reader.conflate.use.data.source.ids.1
-
-* Data Type: bool
-* Default Value: `true`
-
-Determines whether the reader used by the conflate command to read the first input dataset will
-use the element ID's specified by the input datasets (true) or use internal ID management for the
-inputs (false).
-
-=== reader.conflate.use.data.source.ids.2
-
-* Data Type: bool
-* Default Value: `false`
-
-Determines whether the reader used by the conflate command to read the second input dataset will
-use the element ID's specified by the input datasets (true) or use internal ID management for the
-inputs (false).
 
 === reader.keep.status.tag
 
