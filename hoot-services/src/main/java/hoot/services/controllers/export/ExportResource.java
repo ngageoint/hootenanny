@@ -213,7 +213,6 @@ public class ExportResource {
             }
             MapResource.updateLastAccessed(mapid);
         }
-        
         return Response.ok(json).build();
     }
 
@@ -341,7 +340,6 @@ public class ExportResource {
 
         return response;
     }
-    
     /**
      * Based on the existence of translation script extension, it will send the
      * list of available translations script for export.
