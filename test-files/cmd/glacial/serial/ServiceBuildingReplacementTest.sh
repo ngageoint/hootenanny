@@ -53,11 +53,8 @@ PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.e
 # - I've chosen to leave conflation (hoot::UnifyingConflator) out as the last op in convert.ops, since it hasn't been needed yet to make 
 # the building output look good...it may be needed at some point, though, and would likely be needed with features like roads. 
 # - The RemoveElementsVisitor is set up to keep only buildings.
-# - The behavior of API DB readers when using convert.bounding.box is to return features that cross the bounds in addition to those within it,
-# so you will see features slightly passed the bounds modified by the changeset in this workflow. To restrict the changes to just features
-# falling completely within the bounds would require some significant work to the ApiDbReader bounds query. Bounds reading by the OsmXmlReader,
-# however, could currently support both of the scenarios but it is hardcoded to behave in the same fashion as the db readers for now.
-# TODO: comment on rop.keep.entire.features.crossing.bounds
+# - The changeset.reference.* and changeset.secondary.* options are set up to return features that cross over the AOI boundary, so you will 
+# see features slightly passed the AOI bounds be modified by the changeset in this workflow.
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false"
 
 # DATA PREP
