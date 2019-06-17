@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/ops/MetadataOp.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -47,6 +48,15 @@ private:
 
   // MetadataOp
   virtual void _apply();
+
+  // private data
+  double _cellSize = 0.025; // todo: put in config
+
+  // process sequence functions
+  void _createCells();
+
+  // helper functions
+  long _addNodeToPoly(double x, double y, WayPtr& pPoly);
 };
 
 }

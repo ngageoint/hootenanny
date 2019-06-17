@@ -29,6 +29,12 @@
 #define METADATAOP_H
 
 // Hoot
+#include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/WayMap.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -37,6 +43,10 @@
 // Qt
 #include <QString>
 #include <QPair>
+
+// geos
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Polygon.h>
 
 namespace hoot
 {
@@ -48,27 +58,33 @@ public:
   static std::string className() { return "hoot::MetadataOp"; }
   MetadataOp() : _pConf(&conf()) {}
 
-  // OsmMapOperation (partial)
-  virtual void apply(std::shared_ptr<OsmMap>& pMap) override
-  {
-    _pMap = pMap;
-    _configure();
-    _apply();
-  }
+  // OsmMapOperation
+  virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Processing metadata..."; }
   virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
   // Configurable
-  virtual void setConfiguration(const Settings& conf) {
-    LOG_INFO( "MetadataOp setConfiguration");_pConf = &conf; }
+  virtual void setConfiguration(const Settings& conf);
 
 protected:
+
+  WayMap _allWays;
+  NodeMap _allNodes;
+  RelationMap _allRels;
 
   std::shared_ptr<OsmMap> _pMap;
   QPair<QString,QString> _datasetIndicator;
   QHash<QString,QString> _tags;
+
+  QList<ElementPtr> _elementsToProcess;
+  QMap<WayPtr,std::shared_ptr<geos::geom::Polygon>> _datasetWayPolys;
+  QMap<WayPtr,std::shared_ptr<geos::geom::Geometry>> _mergedImportGeoms;
+  QHash<long,std::shared_ptr<geos::geom::Geometry>> _nodeLocations;
+
+  // shared processing functions
+  void _gatherTargetElements();
 
 private:
 
@@ -76,25 +92,7 @@ private:
 
   virtual void _apply() = 0;
 
-  void _configure()
-  {
-    ConfigOptions opts = ConfigOptions(*_pConf);
-    QStringList indicator = opts.getMetadataDatasetIndicatorTag();
-    QStringList tags = opts.getMetadataTags();
-
-    if (indicator.length() > 1)
-    {
-      _datasetIndicator.first = indicator[0];
-      _datasetIndicator.second = indicator[1];
-    }
-
-    for (int i = 0; i < tags.length(); i+=2)
-    {
-      QString key = tags[i];
-      QString value = (i < tags.length()-1) ? tags[i+1] : "";
-      _tags[key] = value;
-    }
-  }
+  void _configure();
 };
 
 }

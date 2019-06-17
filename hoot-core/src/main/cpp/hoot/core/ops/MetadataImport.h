@@ -29,17 +29,10 @@
 #define METADATAIMPORT_H
 
 // Hoot
-#include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/elements/NodeMap.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/WayMap.h>
 #include <hoot/core/ops/MetadataOp.h>
 
 // geos
-#include <geos/geom/Geometry.h>
-#include <geos/geom/Polygon.h>
+
 
 namespace hoot
 {
@@ -83,20 +76,9 @@ private:
   // MetadataOp
   virtual void _apply();
 
-  // private data
-  WayMap _allWays;
-  NodeMap _allNodes;
-  RelationMap _allRels;
-
-  QMap<WayPtr,std::shared_ptr<geos::geom::Polygon>> _datasetWayPolys;
-  QMap<WayPtr,std::shared_ptr<geos::geom::Geometry>> _mergedImportGeoms;
-  QList<ElementPtr> _elementsToProcess;
-  QHash<long,std::shared_ptr<geos::geom::Geometry>> _nodeLocations;
-
   // process sequence functions
   void _findDatasetWays();
   void _mergePolygonsWithMatchingMetadata();
-  void _gatherTargetElements();
   void _importMetadataToElements();
 
   // helper functions

@@ -29,13 +29,10 @@
 
 // Hoot
 #include <hoot/core/elements/ElementConverter.h>
-
-
 #include <hoot/core/util/Factory.h>
 
 // geos
-#include <geos/geom/GeometryFactory.h>
-
+//#include <geos/geom/GeometryFactory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -47,21 +44,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, MetadataImport)
 
 void MetadataImport::_apply()
 {
-  _datasetWayPolys.clear();
-  _mergedImportGeoms.clear();
-  _elementsToProcess.clear();
-  _nodeLocations.clear();
-  _numAffected = 0;
-
-  // don't process anything without a dataset indicator
-  if (_datasetIndicator.first.length() == 0) return;
-
-  _allWays = _pMap->getWays();
-  _allNodes = _pMap->getNodes();
-  _allRels = _pMap->getRelations();
-
-  _numProcessed = _allWays.size() + _allNodes.size() + _allRels.size();
-
   // find all dataset ways and create Polygon object for each
   _findDatasetWays();
 
@@ -120,45 +102,6 @@ void MetadataImport::_mergePolygonsWithMatchingMetadata()
     {
       // create new polygon entry
       _mergedImportGeoms[pCheckWay] = _datasetWayPolys[pCheckWay];
-    }
-  }
-}
-
-void MetadataImport::_gatherTargetElements()
-{
-  for (WayMap::const_iterator it = _allWays.begin(); it != _allWays.end(); ++it)
-  {
-    if (!_datasetWayPolys.contains(it->second) &&        // ignore the ways providing the dataset
-        it->second->getTags().hasInformationTag())
-    {
-      _elementsToProcess.push_back(it->second);
-    }
-  }
-
-  for (RelationMap::const_iterator it = _allRels.begin(); it != _allRels.end(); ++it)
-  {
-    if (it->second->getTags().hasInformationTag())
-      _elementsToProcess.push_back(it->second);
-  }
-
-  for (NodeMap::const_iterator it = _allNodes.begin(); it != _allNodes.end(); ++it)
-  {
-    NodePtr pNode = it->second;
-
-    if (pNode->getTags().hasInformationTag())
-      _elementsToProcess.push_back(pNode);
-
-    // determine all node locations for assigning elements to datasets
-    shared_ptr<Point> pPoint = shared_ptr<Point>(
-          GeometryFactory::getDefaultInstance()->createPoint(
-            Coordinate(pNode->getX(),pNode->getY())));
-
-    for (shared_ptr<Geometry> geom : _mergedImportGeoms)
-    {
-      if (geom->contains(pPoint.get()))
-      {
-        _nodeLocations[pNode->getId()] = geom;
-      }
     }
   }
 }
