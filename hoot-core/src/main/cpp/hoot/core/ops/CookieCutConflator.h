@@ -24,12 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COOKIECUTTEROP_H
-#define COOKIECUTTEROP_H
+#ifndef COOKIE_CUT_CONFLATOR_H
+#define COOKIE_CUT_CONFLATOR_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -37,38 +36,23 @@ namespace hoot
 class OsmMap;
 
 /**
- * Splits the map into ref/source (unknown1/unknown2), cuts the ref's shape out of the source, then
- * combines the the entire ref map back with the source map with the hole cut in it.
+ * TODO
  */
-class CookieCutterOp : public OsmMapOperation, public Configurable
+class CookieCutConflator : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::CookieCutterOp"; }
+  static std::string className() { return "hoot::CookieCutConflator"; }
 
-  CookieCutterOp();
+  CookieCutConflator();
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual void setConfiguration(const Settings& conf);
-
-  void setAlpha(double alpha) { _alpha = alpha; }
-  void setAlphaShapeBuffer(double alphaShapeBuffer) { _alphaShapeBuffer = alphaShapeBuffer; }
-  void setCrop(bool crop) { _crop = crop; }
-  void setSwapInputs(bool swap) { _swapInputs = swap; }
-
-  virtual QString getDescription() const override { return "Applies the cookie cut operation"; }
-
-private:
-
-  double _alpha;
-  double _alphaShapeBuffer;
-  bool _crop;
-  bool _swapInputs;
+  virtual QString getDescription() const override { return "TODO"; }
 };
 
 }
 
-#endif // COOKIECUTTEROP_H
+#endif // COOKIE_CUT_CONFLATOR_H

@@ -67,7 +67,7 @@ class ElementId;
  * works fine for now.
  */
 class UnifyingConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable, public ProgressReporter
+  public Configurable, public ProgressReporter
 {
 public:
 

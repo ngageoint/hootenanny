@@ -145,7 +145,11 @@ int ConflateCmd::runSimple(QStringList args)
   if (args.size() != 3)
   {
     cout << getHelp() << endl << endl;
-    throw HootException(QString("%1 takes three parameters.").arg(getName()));
+    throw IllegalArgumentException(
+      QString("%1 takes three parameters. You provided %2: %3")
+        .arg(getName())
+        .arg(args.size())
+        .arg(args.join(",")));
   }
 
   const QString input1 = args[0];

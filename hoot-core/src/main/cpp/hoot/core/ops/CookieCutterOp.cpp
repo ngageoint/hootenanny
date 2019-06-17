@@ -36,13 +36,18 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, CookieCutterOp)
 
-CookieCutterOp::CookieCutterOp()
+CookieCutterOp::CookieCutterOp() :
+_alpha(1000.0),
+_alphaShapeBuffer(0.0),
+_crop(false),
+_swapInputs(false)
 {
   setConfiguration(conf());
 }
@@ -57,34 +62,54 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
 
 void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 {
+  // This assumes that your replacement data has status Unknown1, and the data you are replacing
+  // has status Unknown2.
+
+  Status removeFromCutterMapStatus;
+  Status removeFromDoughMapStatus;
+  //if (!_swapInputs)
+  //{
+    //removeFromCutterMapStatus = Status::Unknown2;
+    //removeFromDoughMapStatus = Status::Unknown1;
+  //}
+  //else
+  //{
+    removeFromCutterMapStatus = Status::Unknown1;
+    removeFromDoughMapStatus = Status::Unknown2;
+  //}
+
   // remove unknown2 out of the input map and create a new map, which will be our ref map (unknown1
   // map; cutter shape map)
   std::shared_ptr<OsmMap> refMap(new OsmMap(map));
   RemoveElementsVisitor unknown2Remover;
   unknown2Remover.setRecursive(true);
-  unknown2Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+  unknown2Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(removeFromCutterMapStatus)));
   refMap->visitRw(unknown2Remover);
   LOG_VARD(refMap->getNodes().size());
+  OsmMapWriterFactory::writeDebugMap(refMap, "cookie-cutter-op-ref-map");
 
   // create an alpha shape based on the ref map (unknown1)
   std::shared_ptr<OsmMap> cutShapeMap =
     AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
   LOG_VARD(cutShapeMap->getNodes().size());
+  OsmMapWriterFactory::writeDebugMap(cutShapeMap, "cookie-cutter-op-cut-shape-map");
 
   // remove unknown1 out of the input and create a new map, which will be our source map
   // (unknown2 map; dough map)
   std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
   RemoveElementsVisitor unknown1Remover;
   unknown1Remover.setRecursive(true);
-  unknown1Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
+  unknown1Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(removeFromDoughMapStatus)));
   doughMap->visitRw(unknown1Remover);
   LOG_VARD(doughMap->getNodes().size());
+  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-op-dough-map");
 
   // cookie cut the alpha shape obtained from the ref map (cutter map) out of the source map
   // (dough map)
   CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-op-dough-cookie-cut-map");
 
   // combine the ref map (cutter map) back with the source map (dough map); Effectively, we've
   // replaced all of the data in the dough map whose AOI coincides with the ref map (cutter map)
@@ -94,6 +119,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   std::shared_ptr<OsmMap> result = refMap;
   LOG_VARD(result->getNodes().size());
   map.reset(new OsmMap(result));
+  OsmMapWriterFactory::writeDebugMap(map, "cookie-cutter-op-final-map");
 }
 
 }

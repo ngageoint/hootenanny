@@ -46,6 +46,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
+// TODO: move this to elements namespace
+#include <hoot/core/algorithms/changeset/ElementComparer.h>
 using namespace hoot::elements;
 
 // Qt
@@ -117,13 +119,30 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
   }
   _srs = appendFromMap->getProjection();
 
+  ElementComparer elementComparer;
+
   const RelationMap& allRelations = appendFromMap->getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     RelationPtr relation = it->second;
     if (containsElement(ElementId(relation->getElementId())))
     {
-      throw HootException("Map already contains this relation: " + relation->toString());
+      // if they aren't the same, throw error; otherwise we just skip adding it since we already
+      // have it
+      ElementPtr existingElement = getElement(relation->getElementId());
+      if (!elementComparer.isSame(relation, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+          .arg(relation->getElementId().toString())
+          .arg(getElement(relation->getElementId())->toString())
+          .arg(relation->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        break;
+      }
     }
     RelationPtr r = RelationPtr(new Relation(*relation));
     addRelation(r);
@@ -135,7 +154,20 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     WayPtr way = it->second;
     if (containsElement(ElementId(way->getElementId())))
     {
-      throw HootException("Map already contains this way: " + way->toString());
+      ElementPtr existingElement = getElement(way->getElementId());
+      if (!elementComparer.isSame(way, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+          .arg(way->getElementId().toString())
+          .arg(getElement(way->getElementId())->toString())
+          .arg(way->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        break;
+      }
     }
     WayPtr w = WayPtr(new Way(*way));
     addWay(w);
@@ -148,7 +180,20 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     NodePtr node = itn->second;
     if (containsElement(ElementId(node->getElementId())))
     {
-      throw HootException("Map already contains this node: " + node->toString());
+      ElementPtr existingElement = getElement(node->getElementId());
+      if (!elementComparer.isSame(node, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+            .arg(node->getElementId().toString())
+            .arg(getElement(node->getElementId())->toString())
+            .arg(node->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        break;
+      }
     }
     NodePtr n = NodePtr(new Node(*node));
     addNode(n);

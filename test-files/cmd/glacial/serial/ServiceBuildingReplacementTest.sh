@@ -28,7 +28,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 # Additional config opts that may end up being useful for: 
 
 # debugging:
-#-D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=test-output/cmd/glacial/serial/ServiceBuildingReplacementTest/debug.osm
+#-D log.class.filter= -D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=test-output/cmd/glacial/serial/ServiceBuildingReplacementTest/debug.osm
 
 # tweaking tag reading/writing behavior:
 #-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true

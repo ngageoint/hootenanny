@@ -57,7 +57,10 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
 
-  assert(e1->getElementType() == e2->getElementType());
+  if (e1->getElementType() != e2->getElementType())
+  {
+    return false;
+  }
 
   //only nodes have been converted over to use hash comparisons so far
   if (e1->getElementType() != ElementType::Node)

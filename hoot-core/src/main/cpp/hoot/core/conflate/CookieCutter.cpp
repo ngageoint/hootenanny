@@ -37,6 +37,7 @@
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 using namespace geos::geom;
 
@@ -51,7 +52,11 @@ _outputBuffer(outputBuffer)
 
 void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
 {
+  OsmMapWriterFactory::writeDebugMap(cutterShapeMap, "cookie-cutter-cutter-shape-map");
+  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-map");
+
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeMap);
+  LOG_VARD(GeometryUtils::toEnvelope(env));
   env.Merge(CalculateMapBoundsVisitor::getBounds(doughMap));
 
   // reproject the dough and cutter into the same planar projection.
@@ -84,6 +89,7 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   // clean up any ugly bits left over
   SuperfluousWayRemover::removeWays(doughMap);
   SuperfluousNodeRemover::removeNodes(doughMap);
+  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-final-map");
 }
 
 }

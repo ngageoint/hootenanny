@@ -81,7 +81,7 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "CookieCutterOpTest.osm");
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterOpTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterOpTest.osm",
                      _outputPath + "CookieCutterOpTest.osm");
   }
 
