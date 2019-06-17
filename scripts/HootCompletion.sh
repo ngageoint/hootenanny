@@ -50,12 +50,9 @@ _HootTest()
 
   OPTIONS='--current --quick --slow --glacial --all --quiet --core --single --names --all-names --warn --info --debug'
   case "$cur" in
-    --*)
-    COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) );;
-#   Generate the completion matches and load them into $COMPREPLY array.
-#   xx) May add more cases here.
-#   yy)
-#   zz)
+    *)
+        COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) )
+        ;;
   esac
 
   case "$prev" in

@@ -180,10 +180,10 @@ bool OsmApiDb::isSupported(const QUrl& url)
 
 void OsmApiDb::open(const QUrl& url)
 {
-  LOG_DEBUG("Opening database connection: " << url.toString() << "...");
+  LOG_DEBUG("Opening database connection: " << url.toString(QUrl::RemoveUserInfo) << "...");
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString());
+    throw HootException("An unsupported URL was passed into OsmApiDb: " + url.toString(QUrl::RemoveUserInfo));
   }
   ApiDb::open(url);
 }
