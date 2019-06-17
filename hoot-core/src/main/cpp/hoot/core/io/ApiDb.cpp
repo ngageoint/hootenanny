@@ -186,7 +186,7 @@ void ApiDb::open(const QUrl& url)
 
   if (_db.tables().size() == 0)
   {
-    throw HootException("Attempting to open _db " + url.toString() +
+    throw HootException("Attempting to open _db " + url.toString(QUrl::RemoveUserInfo) +
                         " but found zero tables. Does the DB exist? Has it been populated?");
   }
 
@@ -197,7 +197,7 @@ void ApiDb::open(const QUrl& url)
     LOG_WARN("Error disabling Postgresql INFO messages.");
   }
 
-  LOG_DEBUG("Successfully opened db: " << url.toString());
+  LOG_DEBUG("Successfully opened db: " << url.toString(QUrl::RemoveUserInfo));
   LOG_DEBUG("Postgres database version: " << DbUtils::getPostgresDbVersion(_db));
 }
 

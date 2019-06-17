@@ -69,7 +69,7 @@ _HootTest()
 
   OPTIONS='--current --quick --slow --glacial --all --quick-only --slow-only --glacial-only --case-only --single --names --all-names --fatal --error --status --warn --info --verbose --debug --trace --diff --include --exclude --parallel'
   case "$cur" in
-    --*)
+    *)
         COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) )
         ;;
   esac
