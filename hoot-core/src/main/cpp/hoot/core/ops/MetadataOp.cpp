@@ -42,7 +42,7 @@ void MetadataOp::apply(std::shared_ptr<OsmMap>& pMap)
 
   _elementsToProcess.clear();
   _datasetWayPolys.clear();
-  _mergedImportGeoms.clear();
+  _mergedGeoms.clear();
   _nodeLocations.clear();
   _numAffected = 0;
 
@@ -86,21 +86,29 @@ void MetadataOp::_configure()
   }
 }
 
-void MetadataOp::_gatherTargetElements()
+void MetadataOp::_gatherProcessElements()
 {
+  int elementCount = 0;
+  int nodeCount = 0;
+  int nodesInDatasets = 0;
+
   for (WayMap::const_iterator it = _allWays.begin(); it != _allWays.end(); ++it)
   {
     if (!_datasetWayPolys.contains(it->second) &&        // ignore the ways providing the dataset
         it->second->getTags().hasInformationTag())
     {
       _elementsToProcess.push_back(it->second);
+      elementCount++;
     }
   }
 
   for (RelationMap::const_iterator it = _allRels.begin(); it != _allRels.end(); ++it)
   {
     if (it->second->getTags().hasInformationTag())
+    {
       _elementsToProcess.push_back(it->second);
+      elementCount++;
+    }
   }
 
   for (NodeMap::const_iterator it = _allNodes.begin(); it != _allNodes.end(); ++it)
@@ -108,21 +116,124 @@ void MetadataOp::_gatherTargetElements()
     NodePtr pNode = it->second;
 
     if (pNode->getTags().hasInformationTag())
+    {
       _elementsToProcess.push_back(pNode);
+      elementCount++;
+    }
 
     // determine all node locations for assigning elements to datasets
     shared_ptr<Point> pPoint = shared_ptr<Point>(
           GeometryFactory::getDefaultInstance()->createPoint(
             Coordinate(pNode->getX(),pNode->getY())));
 
-    for (shared_ptr<Geometry> geom : _mergedImportGeoms)
+    nodeCount++;
+
+    for (shared_ptr<Geometry> geom : _mergedGeoms)
     {
       if (geom->contains(pPoint.get()))
       {
         _nodeLocations[pNode->getId()] = geom;
+        nodesInDatasets++;
+        break;
       }
     }
   }
+
+  LOG_INFO( "Non-debug elements: " << elementCount);
+  LOG_INFO( nodeCount << " nodes of which " << nodesInDatasets << " are inside datasets" );
+}
+
+WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
+{
+  // This function determines which dataset an element is assigned to. Currently it counts the
+  // number of nodes of an element and assigns it the dataset that contain the largest number.
+  // However in the future this may need to be more specific, for example picking the largest
+  // area for closed ways or the longest distance for open ones.
+
+  // check if element is inside poly
+  Way* pw = dynamic_cast<Way*>(pElement.get());
+  Node* pn = dynamic_cast<Node*>(pElement.get());
+  Relation* pr = dynamic_cast<Relation*>(pElement.get());
+
+  vector<long> elementNodes;
+
+  if (pn)
+  {
+    elementNodes.push_back(pn->getId());
+  }
+
+  if (pw)
+  {
+     vector<long> nodes = pw->getNodeIds();
+     elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
+  }
+
+  if (pr)
+  {
+    for (RelationData::Entry entry : pr->getMembers())
+    {
+      ElementPtr pMember =_pMap->getElement(entry.getElementId());
+
+      if (pMember)
+      {
+        switch(pMember->getElementType().getEnum())
+        {
+          case ElementType::Way:
+          {
+            const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
+            vector<long> nodes = pWay->getNodeIds();
+            elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
+            break;
+          }
+
+          case ElementType::Node:
+          {
+            const NodePtr& pNode = std::dynamic_pointer_cast<Node>(pMember);
+            elementNodes.push_back(pNode->getId());
+            break;
+          }
+
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  // count number of nodes per dataset
+  QMap<shared_ptr<Geometry>,int> nodeCountPerGeom;
+
+  for (long nodeId : elementNodes)
+  {
+    if (_nodeLocations.contains(nodeId))
+    {
+      shared_ptr<Geometry> geom = _nodeLocations[nodeId];
+
+      if (nodeCountPerGeom.contains(geom) )
+      {
+        nodeCountPerGeom[geom]++;
+      }
+      else
+      {
+        nodeCountPerGeom[geom] = 1;
+      }
+    }
+  }
+
+  WayPtr datasetWayWithMostNodes;
+  int nodeCount = 0;
+
+  foreach (WayPtr pWay, _mergedGeoms.keys())
+  {
+    shared_ptr<Geometry> pGeom =_mergedGeoms[pWay];
+    if (nodeCountPerGeom[pGeom] > nodeCount)
+    {
+      datasetWayWithMostNodes = pWay;
+      nodeCount = nodeCountPerGeom[pGeom];
+    }
+  }
+
+  return datasetWayWithMostNodes;
 }
 
 }

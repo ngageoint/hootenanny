@@ -52,7 +52,7 @@ void MetadataImport::_apply()
 
   // gather all potential target elements for metadata tags and
   // create node location lookup
-  _gatherTargetElements();
+  _gatherProcessElements();
 
   // apply tags to all elements contained in the _mergedImportGeoms
   _importMetadataToElements();
@@ -86,13 +86,13 @@ void MetadataImport::_mergePolygonsWithMatchingMetadata()
     bool matched = false;
 
     // check if current way matches any existing merged polys
-    for (WayPtr pMergedWay : _mergedImportGeoms.keys())
+    for (WayPtr pMergedWay : _mergedGeoms.keys())
     {
       if (_areMetadataTagsEqual(pCheckWay, pMergedWay))
       {
         // merge polygon with existing polygon
-        _mergedImportGeoms[pMergedWay] = shared_ptr<Geometry>(
-              _mergedImportGeoms[pMergedWay]->Union(_datasetWayPolys[pCheckWay].get()));
+        _mergedGeoms[pMergedWay] = shared_ptr<Geometry>(
+              _mergedGeoms[pMergedWay]->Union(_datasetWayPolys[pCheckWay].get()));
         matched = true;
         break;
       }
@@ -101,7 +101,7 @@ void MetadataImport::_mergePolygonsWithMatchingMetadata()
     if (!matched)
     {
       // create new polygon entry
-      _mergedImportGeoms[pCheckWay] = _datasetWayPolys[pCheckWay];
+      _mergedGeoms[pCheckWay] = _datasetWayPolys[pCheckWay];
     }
   }
 }
@@ -146,89 +146,11 @@ bool MetadataImport::_areMetadataTagsEqual(ElementPtr p1, ElementPtr p2)
 
 bool MetadataImport::_applyToElement( ElementPtr pElement )
 {
-  // check if element is inside poly
-  Way* pw = dynamic_cast<Way*>(pElement.get());
-  Node* pn = dynamic_cast<Node*>(pElement.get());
-  Relation* pr = dynamic_cast<Relation*>(pElement.get());
+  WayPtr assignedDataset = _assignToDataset( pElement );
 
-  vector<long> elementNodes;
-
-  if (pn)
+  if (assignedDataset)
   {
-    elementNodes.push_back(pn->getId());
-  }
-
-  if (pw)
-  {
-     vector<long> nodes = pw->getNodeIds();
-     elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
-  }
-
-  if (pr)
-  {
-    for (RelationData::Entry entry : pr->getMembers())
-    {
-      ElementPtr pMember =_pMap->getElement(entry.getElementId());
-
-      switch(pMember->getElementType().getEnum())
-      {
-        case ElementType::Way:
-        {
-          const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
-          vector<long> nodes = pWay->getNodeIds();
-          elementNodes.insert(elementNodes.end(), nodes.begin(), nodes.end());
-          break;
-        }
-
-        case ElementType::Node:
-        {
-          const NodePtr& pNode = std::dynamic_pointer_cast<Node>(pMember);
-          elementNodes.push_back(pNode->getId());
-          break;
-        }
-
-        default:
-          break;
-      }
-    }
-  }
-
-  // count number of nodes per dataset
-  QMap<shared_ptr<Geometry>,int> nodeCountPerGeom;
-
-  for (long nodeId : elementNodes)
-  {
-    if (_nodeLocations.contains(nodeId))
-    {
-      shared_ptr<Geometry> geom = _nodeLocations[nodeId];
-
-      if (nodeCountPerGeom.contains(geom) )
-      {
-        nodeCountPerGeom[geom]++;
-      }
-      else
-      {
-        nodeCountPerGeom[geom] = 1;
-      }
-    }
-  }
-
-  WayPtr datasetWayWithMostNodes;
-  int nodeCount = 0;
-
-  foreach (WayPtr pWay, _mergedImportGeoms.keys())
-  {
-    shared_ptr<Geometry> pGeom =_mergedImportGeoms[pWay];
-    if (nodeCountPerGeom[pGeom] > nodeCount)
-    {
-      datasetWayWithMostNodes = pWay;
-      nodeCount = nodeCountPerGeom[pGeom];
-    }
-  }
-
-  if (datasetWayWithMostNodes)
-  {
-    Tags srcTags = datasetWayWithMostNodes->getTags();
+    Tags srcTags = assignedDataset->getTags();
     Tags destTags = pElement->getTags();
 
     // finally copy over the tags
@@ -244,7 +166,7 @@ bool MetadataImport::_applyToElement( ElementPtr pElement )
       }
     }
 
-    LOG_TRACE( "Copied metadata tags from way id " << datasetWayWithMostNodes->getId()
+    LOG_TRACE( "Copied metadata tags from way id " << assignedDataset->getId()
                << " to element id " << pElement->getId());
 
     pElement->setTags(destTags);

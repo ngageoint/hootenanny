@@ -54,6 +54,7 @@ private:
 
   // process sequence functions
   void _createCells();
+  void _exportMetadatFromElements();
 
   // helper functions
   long _addNodeToPoly(double x, double y, WayPtr& pPoly);

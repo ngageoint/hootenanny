@@ -80,11 +80,12 @@ protected:
 
   QList<ElementPtr> _elementsToProcess;
   QMap<WayPtr,std::shared_ptr<geos::geom::Polygon>> _datasetWayPolys;
-  QMap<WayPtr,std::shared_ptr<geos::geom::Geometry>> _mergedImportGeoms;
+  QMap<WayPtr,std::shared_ptr<geos::geom::Geometry>> _mergedGeoms;
   QHash<long,std::shared_ptr<geos::geom::Geometry>> _nodeLocations;
 
   // shared processing functions
-  void _gatherTargetElements();
+  void _gatherProcessElements();
+  WayPtr _assignToDataset( ElementPtr pElement );
 
 private:
 

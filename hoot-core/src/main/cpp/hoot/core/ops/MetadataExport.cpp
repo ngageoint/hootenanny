@@ -49,10 +49,12 @@ void MetadataExport::_apply()
   // create cells
   _createCells();
 
-  // gather all potential target elements for metadata tags and
+  // gather all potential source elements for metadata tags and
   // create node location lookup
-  _gatherTargetElements();
+  _gatherProcessElements();
 
+  // apply tags from elements to the dataset
+  _exportMetadatFromElements();
 }
 
 void MetadataExport::_createCells()
@@ -60,11 +62,6 @@ void MetadataExport::_createCells()
   const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_pMap);
 
   ElementConverter elementConverter(_pMap);
-
-  //  LOG_INFO(bounds.getMinX());
-  //  LOG_INFO(bounds.getMaxX());
-  //  LOG_INFO(bounds.getMinY());
-  //  LOG_INFO(bounds.getMaxY());
 
   double minX = bounds.getMinX();
   double maxX = bounds.getMaxX();
@@ -88,13 +85,57 @@ void MetadataExport::_createCells()
       _addNodeToPoly(x + _cellSize, y + _cellSize, pGrid);
       _addNodeToPoly(x, y + _cellSize, pGrid);
       pGrid->addNode(startId);
+
+      // mark as dataset and add to map
+      pGrid->setTag(_datasetIndicator.first, _datasetIndicator.second);
       _pMap->addElement(pGrid);
 
+      // convert to poly for assigning nodes based on location
       _datasetWayPolys[pGrid] = elementConverter.convertToPolygon(pGrid);
+
+      // add these to the _mergedGeoms list (merging is for import only but we still need this
+      // proper node location assignment)
+      _mergedGeoms[pGrid] = _datasetWayPolys[pGrid];
 
       LOG_INFO( "Added grid element " << pGrid->getId());
     }
   }
+}
+
+void MetadataExport::_exportMetadatFromElements()
+{
+  QList<WayPtr> modifiedDataset;
+
+  for (int ie = 0; ie < _elementsToProcess.length(); ie++)
+  {
+    WayPtr assignedDataset = _assignToDataset( _elementsToProcess[ie] );
+
+    if (assignedDataset)
+    {
+      Tags destTags = assignedDataset->getTags();
+      Tags srcTags = _elementsToProcess[ie]->getTags();
+
+      for (QString tag : _tags.keys())
+      {
+        // if we have the tag and it's not default, assign it
+        if (srcTags.contains(tag) && srcTags[tag] != _tags[tag])
+        {
+          destTags[tag] = srcTags[tag];
+        }
+        // else assign the default unless it's already assigned
+        else if (!destTags.contains(tag))
+        {
+          destTags[tag] = _tags[tag];
+        }
+      }
+
+      assignedDataset->setTags(destTags);
+      if (!modifiedDataset.contains(assignedDataset))
+        modifiedDataset.push_back(assignedDataset);
+    }
+  }
+
+  _numAffected = modifiedDataset.length();
 }
 
 long MetadataExport::_addNodeToPoly(double x, double y, WayPtr& pPoly)
