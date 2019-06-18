@@ -168,9 +168,12 @@ public class ExportResource {
             } else if (inputType.equalsIgnoreCase("dbs")) {
                 params.setInputType("db");
 
-                for (String map: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
-                    params.setInput(map);
-                    params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(map)));
+                for (String mapid: Arrays.asList(params.getInput().split(","))) { // make list of all maps in input
+                    // These functions ensure the map + containing folder are either owned by the user -or- public.
+                    MapResource.getMapForUser(user, mapid, false, false);
+
+                    params.setInput(mapid);
+                    params.setOutputName(DbUtils.getDisplayNameById(Long.valueOf(mapid)));
                     workflow.add(getCommand(user, jobId, params, debugLevel)); // convert each map...
                 }
 
@@ -178,13 +181,16 @@ public class ExportResource {
                 workflow.add(zipCommand);
 
             } else {
+                // These functions ensure the map + containing folder are either owned by the user -or- public.
+                MapResource.getMapForUser(user, params.getInput(), false, false);
+
                 workflow.add(getCommand(user, jobId, params, debugLevel));
                 Command zipCommand = getZIPCommand(workDir, outputName);
                 workflow.add(zipCommand);
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
-                    DbUtils.getMapIdFromRef(params.getInput(), user.getId())));
+                    null /*don't need mapid for export because job is not writing output to db*/));
         }
         catch (WebApplicationException wae) {
             logger.error(wae.getMessage(), wae);
