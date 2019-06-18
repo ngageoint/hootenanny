@@ -90,7 +90,14 @@ public abstract class ExternalCommand implements Command {
 
     protected static List<String> toHootOptions(List<String> options) {
         List<String> hootOptions = new LinkedList<>();
-        options.forEach(option -> { hootOptions.add("-D"); hootOptions.add(option); });
+        options.forEach(option -> {
+            if (option.endsWith(".conf")) {
+                hootOptions.add("-C");
+            } else {
+                hootOptions.add("-D");
+            }
+            hootOptions.add(option);
+        });
         return hootOptions;
     }
 
