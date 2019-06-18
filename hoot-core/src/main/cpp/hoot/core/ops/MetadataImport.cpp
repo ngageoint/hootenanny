@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
 #include <hoot/core/util/Factory.h>
 
 // geos
@@ -56,6 +58,21 @@ void MetadataImport::_apply()
 
   // apply tags to all elements contained in the _mergedImportGeoms
   _importMetadataToElements();
+
+  // delete dataset ways
+  for (WayPtr pDataset: _datasetWayPolys.keys())
+  {
+    // store way nodes for deletion
+    vector<long> nodes = pDataset->getNodeIds();
+
+    // remove the way
+    RemoveWayOp::removeWayFully(_pMap,pDataset->getId());
+
+    for (long node: nodes)
+    {
+      RemoveNodeOp::removeNodeFully(_pMap,node);
+    }
+  }
 }
 
 void MetadataImport::_findDatasetWays()
