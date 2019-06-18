@@ -28,6 +28,7 @@
 #define HIGHWAY_TAG_ONLY_MERGER_H
 
 // Hoot
+#include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 

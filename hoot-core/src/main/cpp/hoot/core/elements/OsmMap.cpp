@@ -31,6 +31,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementId.h>
@@ -59,6 +60,7 @@ namespace hoot
 std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap()
+  : _idSwap(new IdSwap())
 {
   if (!_wgs84)
   {
@@ -81,6 +83,7 @@ OsmMap::OsmMap(const OsmMapPtr& map)
 }
 
 OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs)
+  : _idSwap(new IdSwap())
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
@@ -256,6 +259,9 @@ void OsmMap::clear()
 
   _index->reset();
   _listeners.clear();
+
+  _roundabouts.clear();
+  _idSwap.reset();
 }
 
 bool OsmMap::containsElement(const ElementId& eid) const
@@ -290,6 +296,7 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   _index.reset(new OsmMapIndex(*this));
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();
+  _idSwap = from->getIdSwap();
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();

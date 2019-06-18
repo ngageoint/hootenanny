@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
-  <node id='-13398257' action='modify' visible='true' lat='10.0794046' lon='-69.3123302' />
-  <node id='-13398269' action='modify' visible='true' lat='10.0784114' lon='-69.3122434' />
-  <node id='-13398271' action='modify' visible='true' lat='10.0785827' lon='-69.3103585' />
-  <node id='-13398275' action='modify' visible='true' lat='10.0795924' lon='-69.310462' />
-  <way id='-13398290' action='modify' visible='true'>
-    <nd ref='-13398257' />
-    <nd ref='-13398275' />
-    <nd ref='-13398271' />
-    <nd ref='-13398269' />
-    <nd ref='-13398257' />
+  <node id='13398257' visible='true' lat='10.0794046' lon='-69.3123302' />
+  <node id='13398269' visible='true' lat='10.0784114' lon='-69.3122434' />
+  <node id='13398271' visible='true' lat='10.0785827' lon='-69.3103585' />
+  <node id='13398275' visible='true' lat='10.0795924' lon='-69.310462' />
+  <way id='13398290' visible='true'>
+    <nd ref='13398257' />
+    <nd ref='13398275' />
+    <nd ref='13398271' />
+    <nd ref='13398269' />
+    <nd ref='13398257' />
     <tag k='angle' v='264.7' />
     <tag k='building' v='yes' />
     <tag k='feature_area' v='23056.3' />

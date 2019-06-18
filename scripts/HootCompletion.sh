@@ -31,6 +31,22 @@ _hoot ()   #  By convention, the function name
             COMPREPLY=( $(compgen -f -- ${cur}) )
             ;;
     esac
+
+    case "$prev" in
+         -C)
+             OPTIONS=`pushd $HOOT_HOME/conf/core/ > /dev/null; ls *Algorithm.conf; popd > /dev/null`
+             OPTIONS+=' Testing.conf '
+             OPTIONS+=`pushd $HOOT_HOME/conf/core/ > /dev/null; ls *Conflation.conf; popd > /dev/null`
+             COMPREPLY=( $(compgen -W '$OPTIONS' -- $cur ) )
+             COMPREPLY+=( $(compgen -d -- $cur ) )
+             COMPREPLY+=( $(compgen -f -X '!*.conf' -- $cur ) )
+             ;;
+# Add this in when `hoot` can spit out all of the ConfigOptions.asciidoc options
+#         -D)
+#             OPTIONS=``
+#             COMPREPLY=( $(compgen -W '$OPTIONS' -- $cur ) )
+#             ;;
+    esac
   fi
 
   return 0
@@ -48,7 +64,7 @@ _HootTest()
   cur=${COMP_WORDS[COMP_CWORD]}
   prev=${COMP_WORDS[COMP_CWORD-1]}
 
-  OPTIONS='--current --quick --slow --glacial --all --quiet --core --single --names --all-names --warn --info --debug'
+  OPTIONS='--current --quick --slow --glacial --all --quick-only --slow-only --glacial-only --case-only --single --names --all-names --fatal --error --status --warn --info --verbose --debug --trace --diff --include --exclude --parallel'
   case "$cur" in
     --*)
     COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) );;
