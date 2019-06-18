@@ -155,17 +155,53 @@ void RemoveDuplicateAreaVisitor::_removeOne(const std::shared_ptr<Element>& e1,
   _numAffected++;
 }
 
-void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
+void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (!e.get())
   {
     return;
   }
+  //LOG_VART(->getElementId());
 
   if (e->getElementType() != ElementType::Node)
   {
-    std::shared_ptr<Element> ee = _map->getElement(e->getElementId());
-    visit(ee);
+    AreaCriterion areaCrit;
+    std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
+    // if the envelope is null or the element is incomplete.
+    if (env->isNull() ||
+        CompletelyContainedByMapElementVisitor::isComplete(_map, e->getElementId()) == false ||
+        areaCrit.isSatisfied(e) == false)
+    {
+      LOG_TRACE("Envelope null or incomplete element.");
+      return;
+    }
+    set<ElementId> neighbors = _map->getIndex().findWayRelations(*env);
+    LOG_VART(neighbors.size());
+
+    for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
+    {
+      ElementId eit = *it;
+      if (e->getElementId() < eit && eit.getType() != ElementType::Node)
+      {
+        std::shared_ptr<Element> e2 = _map->getElement(*it);
+
+        // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
+        // a parent.
+        // run _equals() first as it is much faster than isSatisfied() (which ends up doing lots of
+        // regex matching)
+        if (e2 != 0 && _equals(e, e2) && areaCrit.isSatisfied(e2) )
+        {
+          LOG_TRACE("e2 is area and e1/e2 equal.");
+          // remove the crummier one.
+          _removeOne(e, e2);
+          // if we've deleted the element we're visiting.
+          if (_map->containsElement(e) == false)
+          {
+            return;
+          }
+        }
+      }
+    }
   }
 
   _numProcessed++;
@@ -174,52 +210,6 @@ void RemoveDuplicateAreaVisitor::visit(const ConstElementPtr& e)
     PROGRESS_INFO(
       "\tProcessed " << StringUtils::formatLargeNumber(_numProcessed) <<
       " elements for duplicate area removal.");
-  }
-}
-
-void RemoveDuplicateAreaVisitor::visit(const std::shared_ptr<Element>& e1)
-{
-  if (!e1.get())
-  {
-    return;
-  }
-  //LOG_VART(e1->getElementId());
-
-  AreaCriterion areaCrit;
-  std::shared_ptr<Envelope> env(e1->getEnvelope(_map->shared_from_this()));
-  // if the envelope is null or the element is incomplete.
-  if (env->isNull() ||
-      CompletelyContainedByMapElementVisitor::isComplete(_map, e1->getElementId()) == false ||
-      areaCrit.isSatisfied(e1) == false)
-  {
-    LOG_TRACE("Envelope null or incomplete element.");
-    return;
-  }
-  set<ElementId> neighbors = _map->getIndex().findWayRelations(*env);
-  LOG_VART(neighbors.size());
-
-  for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
-  {
-    ElementId eit = *it;
-    if (e1->getElementId() < eit && eit.getType() != ElementType::Node)
-    {
-      std::shared_ptr<Element> e2 = _map->getElement(*it);
-
-      // check to see if e2 is null, it is possible that we removed it w/ a previous call to remove
-      // a parent.
-      // run _equals() first as it is much faster than isSatisfied() (which ends up doing lots of regex matching)
-      if (e2 != 0 && _equals(e1, e2) && areaCrit.isSatisfied(e2) )
-      {
-        LOG_TRACE("e2 is area and e1/e2 equal.");
-        // remove the crummier one.
-        _removeOne(e1, e2);
-        // if we've deleted the element we're visiting.
-        if (_map->containsElement(e1) == false)
-        {
-          return;
-        }
-      }
-    }
   }
 }
 

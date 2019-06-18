@@ -51,7 +51,7 @@ public:
 
   virtual void addCriterion(const ElementCriterionPtr& e) override;
 
-  virtual void visit(const ConstElementPtr& e) override;
+  virtual void visit(const ElementPtr& e) override;
 
   virtual bool ref1CriterionSatisfied(const ConstElementPtr& e) const override;
   virtual bool ref2CriterionSatisfied(const ConstElementPtr& e) const override;

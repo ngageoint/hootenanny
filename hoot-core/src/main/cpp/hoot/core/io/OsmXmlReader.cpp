@@ -358,16 +358,15 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
-    // We're going to mimic how the API DB readers handle the bounds by including any features that
-    // cross over the boundary threshold.
     LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
     MapCropper cropper(_bounds);
     LOG_INFO(cropper.getInitStatusMessage());
-    cropper.setKeepEntireFeaturesCrossingBounds(true);
-    // negation of previous setting; won't support this yet here (if ever) b/c api db readers aren't
-    // set up to handle the bounds in this way; if we want to support this, then we also need to
-    // implement it in the api db readers
-    //cropper.setKeepOnlyFeaturesInsideBounds(true);
+    // We don't reuse MapCropper's version of these options, since we want the freedom to have
+    // different default values than what MapCropper uses.
+    cropper.setKeepEntireFeaturesCrossingBounds(
+      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+    cropper.setKeepOnlyFeaturesInsideBounds(
+      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
     cropper.apply(_map);
     LOG_INFO(cropper.getCompletedStatusMessage());
   }
@@ -423,10 +422,8 @@ const QString& OsmXmlReader::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-bool OsmXmlReader::startElement(const QString& /* namespaceURI */,
-                                const QString& /* localName */,
-                                const QString& qName,
-                                const QXmlAttributes& attributes)
+bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/,
+                                const QString& qName, const QXmlAttributes& attributes)
 {
   try
   {

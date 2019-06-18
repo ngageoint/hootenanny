@@ -31,7 +31,6 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
-import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,9 +71,7 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
-import hoot.services.models.db.Folders;
 import hoot.services.models.db.QUsers;
-import hoot.services.models.db.Users;
 
 
 /**
@@ -172,6 +169,8 @@ public class DbUtils {
      * @return map ID
      */
     public static Long getMapIdByName(String mapName, Long userId) {
+        //FIXME: the user check here is in case there are duplicate map names for different users
+        //but it does not account for maps in public folders
         return createQuery().select(maps.id).from(maps).where(maps.displayName.eq(mapName).and(maps.userId.eq(userId))).fetchOne();
     }
 

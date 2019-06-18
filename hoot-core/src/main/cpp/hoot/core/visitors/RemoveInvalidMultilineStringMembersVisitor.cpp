@@ -45,7 +45,7 @@ RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersV
 {
 }
 
-void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
+void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 {
   //  Only look for relations
   if (e->getElementType() == ElementType::Relation)

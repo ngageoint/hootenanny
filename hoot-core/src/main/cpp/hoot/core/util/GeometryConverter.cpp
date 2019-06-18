@@ -73,6 +73,8 @@ _constMap(map)
 std::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const GeometryCollection* gc,
   Status s, double circularError)
 {
+  LOG_TRACE("Converting geometry collection...");
+
   if (gc->getNumGeometries() > 1)
   {
     LOG_DEBUG("Creating relation. convertGeometryCollection");
@@ -135,12 +137,15 @@ std::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geome
 NodePtr GeometryConverter::convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map,
                                               Status s, double circularError)
 {
+  LOG_TRACE("Converting point to node...");
   return _createNode(map, Coordinate(point->getX(), point->getY()), s, circularError);
 }
 
 WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
   const OsmMapPtr& map, Status s, double circularError)
 {
+  LOG_TRACE("Converting line string to way...");
+
   WayPtr way;
   if (ls->getNumPoints() > 0)
   {
@@ -161,6 +166,8 @@ WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
 std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(const MultiLineString* mls,
   const OsmMapPtr& map, Status s, double circularError)
 {
+  LOG_TRACE("Converting multiline string to element...");
+
   if (mls->getNumGeometries() > 1)
   {
     RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
@@ -184,6 +191,8 @@ std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(cons
 RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
   const OsmMapPtr& map, Status s, double circularError)
 {
+  LOG_TRACE("Converting multipolygon to relation...");
+
   RelationPtr r(
     new Relation(
       s, map->createNextRelationId(), circularError, MetadataTags::RelationMultiPolygon()));
@@ -199,6 +208,8 @@ RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon*
 std::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError)
 {
+  LOG_TRACE("Converting polygon to element...");
+
   // if the geometry is empty.
   if (polygon->isEmpty())
   {

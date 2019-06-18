@@ -77,7 +77,8 @@ public:
 private:
 
   static void _read(
-    const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OsmMapReader>& reader, const QString& url);
+    const std::shared_ptr<OsmMap>& map, const std::shared_ptr<OsmMapReader>& reader,
+    const QString& url);
 
   static std::shared_ptr<OsmMapReader> _createReader(const QString& url);
 };

@@ -43,6 +43,7 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -168,7 +169,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstElementPtr e)
   }
 }
 
-void OsmGeoJsonWriter::_writeGeometry(const vector<long> &nodes, string type)
+void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
 {
   //  Build a temporary vector of valid nodes
   vector<long> temp_nodes;
@@ -258,6 +259,13 @@ void OsmGeoJsonWriter::_writeNodes()
     else
       _write(",", true);
     _writeNode(_map->getNode(nids[i]));
+
+    _numWritten++;
+    if (_numWritten % (_statusUpdateInterval) == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    }
   }
 }
 
@@ -323,6 +331,13 @@ void OsmGeoJsonWriter::_writeWays()
         }
       }
     }
+
+    _numWritten++;
+    if (_numWritten % (_statusUpdateInterval) == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    }
   }
 }
 
@@ -359,6 +374,13 @@ void OsmGeoJsonWriter::_writeRelations()
     _writeGeometry(r);
     _write("}");
     _write("}", false);
+
+    _numWritten++;
+    if (_numWritten % (_statusUpdateInterval) == 0)
+    {
+      PROGRESS_INFO(
+        "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
+    }
   }
 }
 
