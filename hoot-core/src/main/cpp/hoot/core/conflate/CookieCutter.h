@@ -48,10 +48,10 @@ public:
   /**
    * Uses an input map geometry to cut the shape out of another map
    *
-   * @param cutterShapeMap the input geometry use for cutting
+   * @param cutterShapeOutlineMap the input geometry use for cutting
    * @param doughMap the map to be cut from
    */
-  void cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap);
+  void cut(OsmMapPtr cutterShapeOutlineMap, OsmMapPtr doughMap);
 
 private:
 

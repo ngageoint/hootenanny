@@ -28,7 +28,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 # Additional config opts that may end up being useful for: 
 
 # debugging:
-#-D log.class.filter= -D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=test-output/cmd/glacial/serial/ServiceBuildingReplacementTest/debug.osm
+#-D log.class.filter= -D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm
 
 # tweaking tag reading/writing behavior:
 #-D reader.preserve.all.tags=true -D reader.use.file.status=true -D reader.keep.status.tag=true
@@ -103,6 +103,9 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D id.gen
 # This changeset derivation has cookie cutting applied to it which cuts a subset AOI out of ref data and puts the secondary data into 
 # that location. Then, it derives a changeset that is the difference between the unmodified ref data and the data with the section of 
 # new data added to it. The resultant changeset should have deleted all ref data within the AOI and added all the secondary data within it.
+# TODO: Its important to note that CookieCutterOp expects the data being replaced have status Unknown2 and the replacement data to have status
+# Unknown1. In changeset derivation, however, we always want our data being kept to have status Unknown2. BUT somehow this is working the way we
+# want...need to understand why.
 CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."

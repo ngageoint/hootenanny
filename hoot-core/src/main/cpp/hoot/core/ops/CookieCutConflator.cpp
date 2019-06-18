@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+
 namespace hoot
 {
 

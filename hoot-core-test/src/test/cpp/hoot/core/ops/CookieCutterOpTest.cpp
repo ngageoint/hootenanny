@@ -52,9 +52,8 @@ class CookieCutterOpTest : public HootTestFixture
 
 public:
 
-  CookieCutterOpTest()
-    : HootTestFixture("test-files/ops/CookieCutterOp/",
-                      "test-output/ops/CookieCutterOp/")
+  CookieCutterOpTest() :
+  HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
     setResetType(ResetBasic);
   }
@@ -64,6 +63,7 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
+    // TODO: switch back?
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "DcTigerRoads-cropped.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
