@@ -49,9 +49,6 @@ private:
   // MetadataOp
   virtual void _apply();
 
-  // private data
-  double _cellSize = 0.025; // todo: put in config
-
   // process sequence functions
   void _createCells();
   void _exportMetadatFromElements();

@@ -70,13 +70,17 @@ public:
 
 protected:
 
+  // configuration data
+  QPair<QString,QString> _datasetIndicator;
+  QHash<QString,QString> _tags;
+  double _gridCellSize;
+
+  // protected data
+  std::shared_ptr<OsmMap> _pMap;
+
   WayMap _allWays;
   NodeMap _allNodes;
   RelationMap _allRels;
-
-  std::shared_ptr<OsmMap> _pMap;
-  QPair<QString,QString> _datasetIndicator;
-  QHash<QString,QString> _tags;
 
   QList<ElementPtr> _elementsToProcess;
   QMap<WayPtr,std::shared_ptr<geos::geom::Polygon>> _datasetWayPolys;

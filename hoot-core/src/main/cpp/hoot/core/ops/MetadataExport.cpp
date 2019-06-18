@@ -68,22 +68,34 @@ void MetadataExport::_createCells()
   double minY = bounds.getMinY();
   double maxY = bounds.getMaxY();
 
-  minX = floor(minX / _cellSize) * _cellSize;
-  maxX = ceil(maxX / _cellSize) * _cellSize - _cellSize / 2;
-  minY = floor(minY / _cellSize) * _cellSize;
-  maxY = ceil(maxY / _cellSize) * _cellSize - _cellSize / 2;
+  double gridX = _gridCellSize;
+  double gridY = _gridCellSize;
 
-  for (double x = minX; x < maxX; x += _cellSize)
+  if (_gridCellSize == 0)
   {
-    for (double y = minY; y < maxY; y += _cellSize)
+    gridX = maxX - minX;
+    gridY = maxY - minY;
+  }
+  else
+  {
+    // align the bounds with the grid spacing
+    minX = floor(minX / gridX) * gridX;
+    maxX = ceil(maxX / gridX) * gridX - gridX / 2;
+    minY = floor(minY / gridY) * gridY;
+    maxY = ceil(maxY / gridY) * gridY - gridY / 2;
+  }
+
+  for (double x = minX; x < maxX; x += gridX)
+  {
+    for (double y = minY; y < maxY; y += gridY)
     {
       WayPtr pGrid(new Way(Status::Unknown1, _pMap->createNextWayId(), -1));
 
       // create grid poly
       long startId = _addNodeToPoly(x ,y, pGrid);
-      _addNodeToPoly(x + _cellSize, y, pGrid);
-      _addNodeToPoly(x + _cellSize, y + _cellSize, pGrid);
-      _addNodeToPoly(x, y + _cellSize, pGrid);
+      _addNodeToPoly(x + gridX, y, pGrid);
+      _addNodeToPoly(x + gridX, y + gridY, pGrid);
+      _addNodeToPoly(x, y + gridY, pGrid);
       pGrid->addNode(startId);
 
       // mark as dataset and add to map
@@ -97,7 +109,7 @@ void MetadataExport::_createCells()
       // proper node location assignment)
       _mergedGeoms[pGrid] = _datasetWayPolys[pGrid];
 
-      LOG_INFO( "Added grid element " << pGrid->getId());
+      LOG_TRACE( "Added grid element " << pGrid->getId());
     }
   }
 }
@@ -115,17 +127,30 @@ void MetadataExport::_exportMetadatFromElements()
       Tags destTags = assignedDataset->getTags();
       Tags srcTags = _elementsToProcess[ie]->getTags();
 
+      // assign the tags we find
       for (QString tag : _tags.keys())
       {
-        // if we have the tag and it's not default, assign it
-        if (srcTags.contains(tag) && srcTags[tag] != _tags[tag])
+        if (srcTags.contains(tag))
         {
-          destTags[tag] = srcTags[tag];
-        }
-        // else assign the default unless it's already assigned
-        else if (!destTags.contains(tag))
-        {
-          destTags[tag] = _tags[tag];
+          if (!destTags.contains(tag))
+          {
+            // assign src tag as new tag
+            destTags[tag] = srcTags[tag];
+          }
+          else
+          {
+            // attach src tag if not already assigned
+            QStringList assignedDestTags = destTags[tag].split(";");
+            QStringList newTags = srcTags[tag].split(";");
+
+            foreach (QString newTag, newTags)
+            {
+              if (!assignedDestTags.contains(newTag))
+              {
+                destTags[tag] += ";" + newTag;
+              }
+            }
+          }
         }
       }
 
@@ -133,6 +158,21 @@ void MetadataExport::_exportMetadatFromElements()
       if (!modifiedDataset.contains(assignedDataset))
         modifiedDataset.push_back(assignedDataset);
     }
+  }
+
+  // make sure all tags are set, if not, assign the default
+  foreach (WayPtr pDataset, _mergedGeoms.keys())
+  {
+    Tags destTags = pDataset->getTags();
+
+    for (QString tag : _tags.keys())
+    {
+      if (!destTags.contains(tag)) destTags[tag] = _tags[tag];
+    }
+
+    pDataset->setTags(destTags);
+    if (!modifiedDataset.contains(pDataset))
+      modifiedDataset.push_back(pDataset);
   }
 
   _numAffected = modifiedDataset.length();

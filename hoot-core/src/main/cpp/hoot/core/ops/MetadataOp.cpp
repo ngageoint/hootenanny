@@ -62,7 +62,6 @@ void MetadataOp::apply(std::shared_ptr<OsmMap>& pMap)
 
 void MetadataOp::setConfiguration(const Settings& conf)
 {
-  LOG_INFO( "MetadataOp setConfiguration");
   _pConf = &conf;
 }
 
@@ -71,6 +70,7 @@ void MetadataOp::_configure()
   ConfigOptions opts = ConfigOptions(*_pConf);
   QStringList indicator = opts.getMetadataDatasetIndicatorTag();
   QStringList tags = opts.getMetadataTags();
+  _gridCellSize = opts.getMetadataGridCellSize();
 
   if (indicator.length() > 1)
   {
@@ -139,8 +139,8 @@ void MetadataOp::_gatherProcessElements()
     }
   }
 
-  LOG_INFO( "Non-debug elements: " << elementCount);
-  LOG_INFO( nodeCount << " nodes of which " << nodesInDatasets << " are inside datasets" );
+  LOG_TRACE( "Non-debug elements: " << elementCount);
+  LOG_TRACE( nodeCount << " nodes of which " << nodesInDatasets << " are inside datasets" );
 }
 
 WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
