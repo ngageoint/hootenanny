@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
-  <node id='13398257' visible='true' lat='10.0794046' lon='-69.3123302' />
-  <node id='13398269' visible='true' lat='10.0784114' lon='-69.3122434' />
-  <node id='13398271' visible='true' lat='10.0785827' lon='-69.3103585' />
-  <node id='13398275' visible='true' lat='10.0795924' lon='-69.310462' />
-  <way id='13398290' visible='true'>
+  <node id='13398257' visible='true' version='1' lat='10.0794046' lon='-69.3123302' />
+  <node id='13398269' visible='true' version='1' lat='10.0784114' lon='-69.3122434' />
+  <node id='13398271' visible='true' version='1' lat='10.0785827' lon='-69.3103585' />
+  <node id='13398275' visible='true' version='1' lat='10.0795924' lon='-69.310462' />
+  <way id='13398290' visible='true' version='1'>
     <nd ref='13398257' />
     <nd ref='13398275' />
     <nd ref='13398271' />
