@@ -51,7 +51,6 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -657,8 +656,6 @@ public class MapResource {
      *            ID of map record or folder to be modified
      * @param modName
      *            The new name for the dataset
-     * @param inputType
-     *            Flag for either dataset or folder
      * @return jobId Success = True/False
      */
     @PUT
@@ -723,7 +720,6 @@ public class MapResource {
     @Path("/{mapId}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
-        Users user = Users.fromRequest(request);
         Map m = getMapForRequest(request, mapId, true, false);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
@@ -746,17 +742,16 @@ public class MapResource {
 
         return Response.ok().entity(ret).build();
     }
-    
+
     @GET
     @Path("/{mapId}/startingIndex")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllIds(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
-    	Users user = Users.fromRequest(request);
-    	Map m = getMapForRequest(request, mapId, true, false);
-    	
-    	HashMap <String, Long> getIdsMap = m.getIdIndex();
-    	
-    	return Response.ok().entity(getIdsMap).build();
+        Map m = getMapForRequest(request, mapId, true, false);
+
+        HashMap <String, Long> getIdsMap = m.getIdIndex();
+
+        return Response.ok().entity(getIdsMap).build();
     }
 
     /**
