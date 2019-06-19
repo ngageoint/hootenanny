@@ -77,8 +77,15 @@ private:
   virtual void _apply();
 
   // process sequence functions
+
+  // finds all way polygons that are marked as datasets
   void _findDatasetWays();
+
+  // merge all geos geometries/polygons of datasets which have the exact same Metadata tags
+  // and values
   void _mergePolygonsWithMatchingMetadata();
+
+  // copies all metadata tags from the dataset to the elements
   void _importMetadataToElements();
 
   // helper functions

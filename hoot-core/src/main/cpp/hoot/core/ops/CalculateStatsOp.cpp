@@ -444,7 +444,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
-        if(pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
+        if (pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
       }
       catch (...)
       {

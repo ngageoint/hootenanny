@@ -54,7 +54,7 @@ void MetadataExport::_apply()
   _gatherProcessElements();
 
   // apply tags from elements to the dataset
-  _exportMetadatFromElements();
+  _exportMetadataFromElements();
 }
 
 void MetadataExport::_createCells()
@@ -114,7 +114,7 @@ void MetadataExport::_createCells()
   }
 }
 
-void MetadataExport::_exportMetadatFromElements()
+void MetadataExport::_exportMetadataFromElements()
 {
   QList<WayPtr> modifiedDataset;
 

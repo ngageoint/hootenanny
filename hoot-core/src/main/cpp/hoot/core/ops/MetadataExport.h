@@ -35,6 +35,29 @@
 namespace hoot
 {
 
+/*
+ * MetadataExport exports a specific set of tags collected from all elements into one or more
+ * 'dataset' ways.
+ *
+ * A dataset is marked with the tag/value pair defined in the 'metadata.dataset.indicator.tag'
+ * configuration variable.
+ *
+ * The specific set of tags and their default values are defined in the 'metadata.tags'
+ * configuration variable. The list of key/value pairs specifies the tags that are to be
+ * considered for export from the source elements and their default values (called MetadataTags).
+ *
+ * Process:
+ * - Create a polygon grid or a single bounding polygon defining the new dataset object(s) and
+ *   Mark them with the DatasetTag.
+ * - Find all (non-dataset) way and node elements which have one or more non-debug tags and find
+ *   out which dataset contains them. This uses the same logic as in import
+ *   (MetadataOp::assignToDataset).
+ * - From each element copy the MetadataTags to the dataset. If there are MetadataTags with the
+ *   same key but different values, add them to the respective dataset tag in a semicolon
+ *   delimited list.
+ * - Make sure each dataset has all DatasetTags assigned. Fill in the missing ones with the
+ *   default values defined in the config.
+ */
 class MetadataExport : public MetadataOp
 {
 public:
@@ -50,8 +73,12 @@ private:
   virtual void _apply();
 
   // process sequence functions
+
+  // creates the dataset cells or bounding polygon
   void _createCells();
-  void _exportMetadatFromElements();
+
+  // copies the metadata tags from the elements to the corresponding datasets
+  void _exportMetadataFromElements();
 
   // helper functions
   long _addNodeToPoly(double x, double y, WayPtr& pPoly);

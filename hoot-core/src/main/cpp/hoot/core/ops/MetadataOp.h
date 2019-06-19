@@ -88,7 +88,13 @@ protected:
   QHash<long,std::shared_ptr<geos::geom::Geometry>> _nodeLocations;
 
   // shared processing functions
+
+  // collects all elements in the map that have information tags and creates
+  // a geos Point for determining their location in relation to a dataset in
+  // _assignToDataset
   void _gatherProcessElements();
+
+  // determines the dataset way to which an element belongs
   WayPtr _assignToDataset( ElementPtr pElement );
 
 private:
