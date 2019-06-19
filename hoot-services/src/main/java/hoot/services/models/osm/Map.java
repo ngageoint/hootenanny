@@ -638,6 +638,7 @@ public class Map extends Maps {
             mapLayer.setDate(mapLayerRecord.getCreatedAt());
             mapLayer.setPublicCol(mapLayerRecord.getPublicCol());
             mapLayer.setUserId(mapLayerRecord.getUserId());
+            mapLayer.setSize( mapLayerRecord.getSize() == null ? 0 : mapLayerRecord.getSize() );
             mapLayer.setFolderId( (mapLayerRecord.getFolderId()) == null ? 0 : mapLayerRecord.getFolderId());
             java.util.Map<String, String> tags = PostgresUtils.postgresObjToHStore(mapLayerRecord.getTags());
             if (tags.containsKey("lastAccessed")) {
@@ -645,6 +646,7 @@ public class Map extends Maps {
             } else {
                 mapLayer.setLastAccessed(MapLayer.format.format(mapLayerRecord.getCreatedAt()));
             }
+            mapLayer.setGrail(tags.get("grail") != null && tags.get("grail").equals("true"));
 
             mapLayerList.add(mapLayer);
         }

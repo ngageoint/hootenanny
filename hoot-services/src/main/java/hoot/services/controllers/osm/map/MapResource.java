@@ -118,6 +118,15 @@ import hoot.services.utils.XmlDocumentBuilder;
 public class MapResource {
     private static final Logger logger = LoggerFactory.getLogger(MapResource.class);
 
+    private static final String[] maptables = {
+            "changesets",
+            "current_nodes",
+            "current_relation_members",
+            "current_relations",
+            "current_way_nodes",
+            "current_ways"
+    };
+
     @Autowired
     private JobProcessor jobProcessor;
 
@@ -149,12 +158,12 @@ public class MapResource {
             .orderBy(maps.displayName.asc());
         if(user != null) {
             q.where(
-                    // Owned by the current user
-                    maps.userId.eq(user.getId()).or(
-                            // or not in a folder // or in a public folder.
-                            folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)).or(folders.publicCol.isTrue())
-                            )
-                    );
+                // Owned by the current user
+                maps.userId.eq(user.getId()).or(
+                    // or not in a folder // or in a public folder.
+                    folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)).or(folders.publicCol.isTrue())
+                )
+            );
         }
         List<Tuple> mapLayerRecords = q.fetch();
 
@@ -173,12 +182,36 @@ public class MapResource {
             }
             if(parentFolder == null || parentFolder.equals(0L) || foldersTheUserCanSee.contains(parentFolder)) {
                 Maps m = t.get(maps);
+                m.setSize(getMapSize(m.getId()));
                 m.setPublicCol(parentFolderIsPublic);
                 m.setFolderId(parentFolder);
                 mapLayersOut.add(m);
             }
         }
         return Map.mapLayerRecordsToLayers(mapLayersOut);
+    }
+
+    /**
+     * For retrieving the physical size of a map record
+     * @param mapId
+     * @return physical size of a map record
+     */
+    private Long getMapSize(long mapId) {
+        long mapSize = 0;
+
+        try {
+            for (String table : maptables) {
+                if (mapId != -1) { // skips OSM API db layer
+                    mapSize += DbUtils.getTableSizeInBytes(table + "_" + mapId);
+                }
+            }
+
+            return mapSize;
+        }
+        catch (Exception e) {
+            String message = "Error getting map size.  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(message).build());
+        }
     }
 
     private static Document generateExtentOSM(String maxlon, String maxlat, String minlon, String minlat) {
@@ -527,8 +560,28 @@ public class MapResource {
 
         if ((extents.get("minlat") == null) || (extents.get("maxlat") == null) || (extents.get("minlon") == null)
                 || (extents.get("maxlon") == null)) {
+
+            // check for bbox tag in maps
+            String bboxTag = DbUtils.getMapBbox(Long.parseLong(mapId));
+            if(bboxTag != null) {
+                //This is how UI sends a bbox `${minx},${miny},${maxx},${maxy}`
+                String[] bboxCoords = bboxTag.split(",");
+                ret.put("minlon", Double.parseDouble(bboxCoords[0]));
+                ret.put("maxlon", Double.parseDouble(bboxCoords[2]));
+                ret.put("minlat", Double.parseDouble(bboxCoords[1]));
+                ret.put("maxlat", Double.parseDouble(bboxCoords[3]));
+            } else {
+                ret.put("minlon", -180);
+                ret.put("maxlon", 180);
+                ret.put("minlat", -90);
+                ret.put("maxlat", 90);
+            }
+
+            ret.put("firstlon", 0);
+            ret.put("firstlat", 0);
             ret.put("nodescount", 0);
-            return Response.status(Status.NO_CONTENT).entity(ret).build();
+
+            return Response.status(Status.OK).entity(ret).build();
         }
 
         JSONObject anode = currMap.retrieveANode(queryBounds);
@@ -816,7 +869,7 @@ public class MapResource {
         }
         Map m = new Map(mapIdNum);
         if(user != null && !m.isVisibleTo(user)) {
-            throw new NotAuthorizedException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+            throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this map").build());
         }
         if(user != null && userDesiresModify && !m.getUserId().equals(user.getId())) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the map to modify it").build());
