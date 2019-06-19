@@ -1,9 +1,33 @@
-
 == Grail work notes
 
-There are various operations we labeled as 'grail' work and these notes should be used as a reminder of implementation
+There are various operations we labeled as 'grail' work and these notes should be used as a reminder of
 implementation decisions.
 
 === Grail pull from OSM and MapEdit
 
+Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
+you should see the option to "Pull Remote Data". Once selected you will be prompted to select a bounding
+box region by either drawing the bounding box or using the visual extent as your bounding box. Once selected
+you can submit the job for running. After the job has completed you should see a folder with the name of
+grail_*coordinates for your bounding box* which should contain a filed named "reference" (the MapEdit data)
+and a file named "secondary" (the OSM data).
 
+
+=== Derive Differential Changeset
+
+Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
+you should see the option for "Derive Differential Changeset". This tool is used for gathering only the data
+in OSM that isn't already in MapEdit and pushing it to MapEdit so it will only consist of adds. There will not
+be any files generated that you can view in the UI because this service will take the OSM and MapEdit data from
+the database and calculate the differential on the server without saving the datasets. In the jobs panel you can
+find the Derive Changeset job and under the actions there will be a cloud icon with an up arrow. This is what
+you use to upload the differential results to MapEdit, but before doing that you can view stats on the differential
+upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations.
+
+=== Grail Conflate
+
+The result of a conflation job, where the reference dataset is the result of a grail pull, becomes grail conflate
+eligible. In the jobs panel you will see under actions a triangle icon, the same icon that is to the left
+of a derive changeset job type. If you click this a derive changeset job will kick off and the result of
+that job is what you can upload to MapEdit. This will be similar to differential changeset, but it will
+include modify and deletes alongside the potential adds.

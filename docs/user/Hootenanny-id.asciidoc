@@ -226,6 +226,28 @@ Once a bounding box (or visual extent) has been selected, additional options to 
 .Clipping a layer using a defined bounding box. The imagery basemap displayed is the DigitalGlobe GBM service.
 image::user/images/id/hoot_clip.png[scaledwidth="75%"]
 
+===== Grail Tools
+
+*Grail pull from OSM and MapEdit*
+
+Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
+you should see the option to "Pull Remote Data". Once selected you will be prompted to select a bounding
+box region by either drawing the bounding box or using the visual extent as your bounding box. Once selected
+you can submit the job for running. After the job has completed you should see a folder with the name of
+grail_*coordinates for your bounding box* which should contain a filed named "reference" (the MapEdit data)
+and a file named "secondary" (the OSM data).
+
+*Derive Differential Changeset*
+
+Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
+you should see the option for "Derive Differential Changeset". This tool is used for gathering only the data
+in OSM that isn't already in MapEdit and pushing it to MapEdit so it will only consist of adds. There will not
+be any files generated that you can view in the UI because this service will take the OSM and MapEdit data from
+the database and calculate the differential on the server without saving the datasets. In the jobs panel you can
+find the Derive Changeset job and under the actions there will be a cloud icon with an up arrow. This is what
+you use to upload the differential results to MapEdit, but before doing that you can view stats on the differential
+upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations.
+
 ==== Help
 
 To access the help for Hootenanny, click on the bookmark icon below the Background Settings button or type the 'h' shortcut key. Each section provides relevant background on different functionality found within the Hootenanny UI. Users can navigate between sections by clicking on the section title e.g. Adding Layers and scrolling through the contents.
