@@ -59,10 +59,14 @@ CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
 echo ""
-#hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-1.osc
-hoot convert $GENERAL_OPTS -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-cookie-cut.osm
-hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $REF_LAYER $OUT_DIR/$TEST_NAME-cookie-cut.osm OUT_DIR/$TEST_NAME-cookie-conflated.osm
-hoot changeset-derive $GENERAL_OPTS -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $REF_LAYER $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-changeset-1.osc
+hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-1.osc
+
+#hoot convert $GENERAL_OPTS -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-cookie-cut.osm
+
+#hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $REF_LAYER $OUT_DIR/$TEST_NAME-cookie-cut.osm OUT_DIR/$TEST_NAME-cookie-conflated.osm
+
+#hoot changeset-derive $GENERAL_OPTS -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $REF_LAYER $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-changeset-1.osc
+
 #diff $IN_DIR/$TEST_NAME-changeset-1.osc $OUT_DIR/$TEST_NAME-changeset-1.osc
 #echo ""
 #echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; xml changeset out)..."

@@ -289,7 +289,7 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
     // We must preserve the original element IDs while loading in order for changeset derivation
     // to work.
 
-    // load the first map; If we have a bounded query, let's check for the crop related option
+    // Load the first map. If we have a bounded query, let's check for the crop related option
     // overrides.
     if (ConfigUtils::boundsOptionEnabled())
     {
@@ -327,7 +327,7 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
       {
         throw HootException(
           QString("It is not possible to run a non-streamable map operation ") +
-          QString("OsmMapOperation) on two data sources with overlapping element IDs: ") +
+          QString("(OsmMapOperation) on two data sources with overlapping element IDs: ") +
           e.what());
       }
       throw e;

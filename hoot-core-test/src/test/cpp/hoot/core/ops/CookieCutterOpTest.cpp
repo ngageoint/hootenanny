@@ -63,7 +63,6 @@ public:
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
-    // TODO: switch back?
     reader.setDefaultStatus(Status::Unknown1);
     reader.read(_inputPath + "DcTigerRoads-cropped.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

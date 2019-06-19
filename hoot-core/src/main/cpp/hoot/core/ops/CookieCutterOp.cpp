@@ -46,8 +46,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, CookieCutterOp)
 CookieCutterOp::CookieCutterOp() :
 _alpha(1000.0),
 _alphaShapeBuffer(0.0),
-_crop(false),
-_swapInputs(false)
+_crop(false)//,
+//_swapInputs(false)
 {
   setConfiguration(conf());
 }
@@ -65,7 +65,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // This assumes that the incoming map has status Unknown1 for the replacement data and status
   // Unknown2 for the data being replaced. For inline changeset derivation with this op, this order
   // is reversed: use Unknown2 for the replacement data and Unknown1 for the data being replace
-  // (TODO: this is weird).
+  // (TODO: that you have to reverse it for changeset derivation is weird).
 
   Status removeFromCutterMapStatus;
   Status removeFromDoughMapStatus;
@@ -107,17 +107,19 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_VARD(doughMap->getNodes().size());
   OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-op-dough-map");
 
-  // Cookie cut the outline shape obtained from the cutter shape map out of the dough map.
+  // Cookie cut the outline shape obtained from the cutter shape Unknown1 map out of the dough
+  // Unknown2 map.
   CookieCutter(_crop, 0.0).cut(cutterShapeOutlineMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-op-cookie-cut-map");
 
-  // Combine the cutter shape map back into hole created by cookie cutting in the dough map.
-  // Effectively, we've replaced all of the data in the dough map whose AOI coincides with the
-  // cutter shape map with the cutter shape map's data (or vice versa for when running inline with
-  // changeset derivation).
-  cutterShapeMap->setProjection(cookieCutMap->getProjection()); // TODO: I think this is causing projection problems.
+  // Combine the cutter shape Unknown1 map back into hole created by cookie cutting the dough
+  // Unknown2 map. Effectively, we've replaced all of the data in the dough Unknown2 map whose AOI
+  // coincides with the cutter shape with the cutter shape map's Unknown1 data (or vice versa for
+  // when running this inline with changeset derivation).
+  // TODO: I think this setter is causing projection problems.
+  cutterShapeMap->setProjection(cookieCutMap->getProjection());
   cutterShapeMap->append(cookieCutMap);
   std::shared_ptr<OsmMap> result = cutterShapeMap;
   LOG_VARD(result->getNodes().size());
