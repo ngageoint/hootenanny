@@ -57,7 +57,7 @@ public:
   void setAlpha(double alpha) { _alpha = alpha; }
   void setAlphaShapeBuffer(double alphaShapeBuffer) { _alphaShapeBuffer = alphaShapeBuffer; }
   void setCrop(bool crop) { _crop = crop; }
-  //void setSwapInputs(bool swap) { _swapInputs = swap; }
+  void setSwapInputs(bool swap) { _swapInputs = swap; }
 
   virtual QString getDescription() const override { return "Applies the cookie cut operation"; }
 
@@ -66,7 +66,7 @@ private:
   double _alpha;
   double _alphaShapeBuffer;
   bool _crop;
-  //bool _swapInputs;
+  bool _swapInputs;
 };
 
 }

@@ -50,8 +50,8 @@ void CookieCutConflator::apply(std::shared_ptr<OsmMap>& map)
   CookieCutterOp mapGenerator;
 
   LOG_DEBUG("Generating replacement map...");
-  //mapGenerator.setSwapInputs(false);
-  //mapGenerator.setCrop(false);
+  mapGenerator.setSwapInputs(false);
+  mapGenerator.setCrop(false);
   OsmMapPtr replacementMap(new OsmMap(map));
   mapGenerator.apply(replacementMap);
   replacementMap->visitRw(hashVis);
@@ -59,8 +59,8 @@ void CookieCutConflator::apply(std::shared_ptr<OsmMap>& map)
   OsmMapWriterFactory::writeDebugMap(replacementMap, "cookie-cut-conflate-replacement-map");
 
   LOG_DEBUG("Generating map to replace...");
-  //mapGenerator.setSwapInputs(true);
-  //mapGenerator.setCrop(true);
+  mapGenerator.setSwapInputs(true);
+  mapGenerator.setCrop(false);
   OsmMapPtr mapBeingReplaced(new OsmMap(map));
   mapGenerator.apply(mapBeingReplaced);
   mapBeingReplaced->visitRw(hashVis);

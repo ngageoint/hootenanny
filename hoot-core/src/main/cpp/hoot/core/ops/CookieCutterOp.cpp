@@ -46,8 +46,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, CookieCutterOp)
 CookieCutterOp::CookieCutterOp() :
 _alpha(1000.0),
 _alphaShapeBuffer(0.0),
-_crop(false)//,
-//_swapInputs(false)
+_crop(false),
+_swapInputs(false)
 {
   setConfiguration(conf());
 }
@@ -69,16 +69,16 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 
   Status removeFromCutterMapStatus;
   Status removeFromDoughMapStatus;
-//  if (!_swapInputs)  // TODO: probably remove this?
-//  {
+  if (!_swapInputs)  // TODO: probably remove this?
+  {
     removeFromCutterMapStatus = Status::Unknown2;
     removeFromDoughMapStatus = Status::Unknown1;
-//  }
-//  else
-//  {
-    //removeFromCutterMapStatus = Status::Unknown1;
-    //removeFromDoughMapStatus = Status::Unknown2;
-//  }
+  }
+  else
+  {
+    removeFromCutterMapStatus = Status::Unknown1;
+    removeFromDoughMapStatus = Status::Unknown2;
+  }
 
   // Remove Unknown2 out of the full input map and create a new map, which will be our cutter shape
   // map with data and having status = Unknown1.

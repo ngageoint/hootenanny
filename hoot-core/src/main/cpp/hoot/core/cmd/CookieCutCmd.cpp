@@ -35,6 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
@@ -89,12 +90,16 @@ public:
 
     OsmMapPtr cutterShapeMap(new OsmMap());
     IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
+    OsmMapWriterFactory::writeDebugMap(cutterShapeMap, "cookie-cut-cmd-cutter-shape-map");
 
     // load up the "dough"
     OsmMapPtr doughMap(new OsmMap());
     IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
+    OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut-cmd-dough-map");
+
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;
+    OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut-cmd-cookie-cut-map");
 
     // reproject back into lat/lng
     MapProjector::projectToWgs84(result);

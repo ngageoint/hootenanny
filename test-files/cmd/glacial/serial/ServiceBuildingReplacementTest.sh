@@ -5,6 +5,8 @@ set -e
 #
 # This test is lenient regarding the AOI, in that it will modify some features in the ref data that lie just outside of it. This workflow 
 # could work for other polygon or point data types but only buildings have been attempted so far.
+#
+# TODO: There is a building right in the lower right corner of the AOI that gets unnecessarily duplicated (has both ref and sec features).
 
 TEST_NAME=ServiceBuildingReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
