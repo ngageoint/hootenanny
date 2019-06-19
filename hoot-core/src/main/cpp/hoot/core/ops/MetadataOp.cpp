@@ -27,6 +27,10 @@
 
 #include "MetadataOp.h"
 
+// Hoot
+#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveWayOp.h>
+
 // geos
 #include <geos/geom/GeometryFactory.h>
 
@@ -234,6 +238,20 @@ WayPtr MetadataOp::_assignToDataset( ElementPtr pElement )
   }
 
   return datasetWayWithMostNodes;
+}
+
+void MetadataOp::_removeDatasetWay(WayPtr pDataset)
+{
+  // store way nodes for deletion
+  vector<long> nodes = pDataset->getNodeIds();
+
+  // remove the way
+  RemoveWayOp::removeWayFully(_pMap,pDataset->getId());
+
+  for (long node: nodes)
+  {
+    RemoveNodeOp::removeNodeFully(_pMap,node);
+  }
 }
 
 }

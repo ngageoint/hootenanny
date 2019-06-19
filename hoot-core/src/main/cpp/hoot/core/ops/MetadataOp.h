@@ -97,6 +97,9 @@ protected:
   // determines the dataset way to which an element belongs
   WayPtr _assignToDataset( ElementPtr pElement );
 
+  // removes unused or unneeded dataset ways and their nodes
+  void _removeDatasetWay(WayPtr pDataset);
+
 private:
 
   const Settings* _pConf;

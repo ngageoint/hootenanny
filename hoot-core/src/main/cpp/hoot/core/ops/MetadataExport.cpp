@@ -46,6 +46,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, MetadataExport)
 
 void MetadataExport::_apply()
 {
+  _modifiedDatasets.clear();
+
   // create cells
   _createCells();
 
@@ -55,6 +57,15 @@ void MetadataExport::_apply()
 
   // apply tags from elements to the dataset
   _exportMetadataFromElements();
+
+  // remove datasets which contain no elements
+  foreach (WayPtr pDataset, _mergedGeoms.keys())
+  {
+    if (!_modifiedDatasets.contains(pDataset))
+    {
+      _removeDatasetWay(pDataset);
+    }
+  }
 }
 
 void MetadataExport::_createCells()
@@ -116,8 +127,6 @@ void MetadataExport::_createCells()
 
 void MetadataExport::_exportMetadataFromElements()
 {
-  QList<WayPtr> modifiedDataset;
-
   for (int ie = 0; ie < _elementsToProcess.length(); ie++)
   {
     WayPtr assignedDataset = _assignToDataset( _elementsToProcess[ie] );
@@ -155,8 +164,8 @@ void MetadataExport::_exportMetadataFromElements()
       }
 
       assignedDataset->setTags(destTags);
-      if (!modifiedDataset.contains(assignedDataset))
-        modifiedDataset.push_back(assignedDataset);
+      if (!_modifiedDatasets.contains(assignedDataset))
+        _modifiedDatasets.push_back(assignedDataset);
     }
   }
 
@@ -171,11 +180,9 @@ void MetadataExport::_exportMetadataFromElements()
     }
 
     pDataset->setTags(destTags);
-    if (!modifiedDataset.contains(pDataset))
-      modifiedDataset.push_back(pDataset);
   }
 
-  _numAffected = modifiedDataset.length();
+  _numAffected = _modifiedDatasets.length();
 }
 
 long MetadataExport::_addNodeToPoly(double x, double y, WayPtr& pPoly)

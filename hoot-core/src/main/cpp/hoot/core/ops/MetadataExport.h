@@ -72,6 +72,9 @@ private:
   // MetadataOp
   virtual void _apply();
 
+  // private data
+  QList<WayPtr> _modifiedDatasets;
+
   // process sequence functions
 
   // creates the dataset cells or bounding polygon
