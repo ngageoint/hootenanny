@@ -35,6 +35,7 @@ import static hoot.services.controllers.ingest.UploadClassification.OSM;
 import static hoot.services.controllers.ingest.UploadClassification.SHP;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
+import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
@@ -113,7 +114,7 @@ class ImportCommand extends ExternalCommand {
             }
             command = hootConvertCommand;
         }
-        else if ((classification == OSM) || (classification == GEOJSON) || (classification == GEONAMES)) {
+        else if ((classification == OSM) || (classification == GEOJSON) || (classification == GEONAMES) || (classification == GPKG)) {
             command = hootConvertCommand;
         }
 

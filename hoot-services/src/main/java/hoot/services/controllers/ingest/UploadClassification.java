@@ -29,10 +29,10 @@ package hoot.services.controllers.ingest;
 
 enum UploadClassification {
     // Compressed file types
-    OSM_ZIP, SHAPE_ZIP, FGDB_ZIP, GEOJSON_ZIP, GEONAMES_ZIP, ZIP,
+    OSM_ZIP, SHAPE_ZIP, FGDB_ZIP, GEOJSON_ZIP, GEONAMES_ZIP, GPKG_ZIP, ZIP,
 
     // Single file types
-    OSM, SHP, FGDB, GEONAMES, PBF, TXT, GEOJSON,
+    OSM, SHP, FGDB, GEONAMES, PBF, TXT, GEOJSON, GPKG,
 
     OTHER
 }
