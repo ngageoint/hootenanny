@@ -32,6 +32,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -47,6 +48,8 @@ _buffer(buffer)
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
+  OsmMapWriterFactory::writeDebugMap(inputMap, "alpha-shape-input-map");
+
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
@@ -67,6 +70,8 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     Relation* r = result->getRelation(it->first).get();
     r->setTag("area", "yes");
   }
+
+  OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
 
   return result;
 }

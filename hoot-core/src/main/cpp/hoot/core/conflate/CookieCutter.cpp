@@ -90,7 +90,7 @@ void CookieCutter::cut(OsmMapPtr cutterShapeOutlineMap, OsmMapPtr doughMap)
   // clean up any ugly bits left over
   SuperfluousWayRemover::removeWays(doughMap);
   SuperfluousNodeRemover::removeNodes(doughMap);
-  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-result-map");
+  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-cookie-cut-map");
 }
 
 }

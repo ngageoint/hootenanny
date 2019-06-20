@@ -339,7 +339,8 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
-  // Read all elements; TODO: We should figure out a way to make this not-memory bound in the future
+  // Read all elements
+  // TODO: We should figure out a way to make this not-memory bound in the future
   _fillElementCache(input, pElementCache, elementQ);
   LOG_DEBUG("Element Cache Filled");
 
@@ -396,6 +397,9 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
   if (OsmMapReaderFactory::hasElementInputStream(input) &&
       // multithreaded code doesn't support conversion ops. could it?
+      // TODO: if we have a single convert op that is a SchemaTranslationOp or
+      // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
+      // translation...seems like we should
       _convertOps.size() == 0 &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())

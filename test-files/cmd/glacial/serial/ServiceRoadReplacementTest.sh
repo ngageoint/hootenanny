@@ -26,7 +26,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 # CONFIG OPTS
 
 # -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm
-GENERAL_OPTS="--warn -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+GENERAL_OPTS="--warn -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=50 -D perty.systematic.error.y=50 -D perty.ops="
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false"

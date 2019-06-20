@@ -69,6 +69,8 @@ _encodingErrorCount(0),
 _numWritten(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
+  // TODO: this could cause big problems with tests
+  _addExportTagsVisitor.setIncludeIds(_includeDebug);
 }
 
 OsmXmlWriter::~OsmXmlWriter()

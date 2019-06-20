@@ -119,6 +119,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
                                    const std::shared_ptr<const Element>& e) const
 {
+  // TODO: set the hoot hash tag here if it doesn't exist?
   if (!re->getTags().contains(MetadataTags::HootHash()) ||
       !e->getTags().contains(MetadataTags::HootHash()))
   {

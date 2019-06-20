@@ -117,6 +117,8 @@ private:
 
   bool _includeDebugTags;
 
+  QMap<ElementId, ElementId> _remappedIds;
+
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };
 

@@ -63,6 +63,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
   LOG_VARD(path);
   LOG_VARD(changesetProvider->hasMoreChanges());
 
+  _remappedIds.clear();
   _changesetBounds.init();
 
   _outputSql.setFileName(path);
@@ -202,6 +203,7 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   if (changeElement->getId() < 0)
   {
     id = _db.getNextId(element->getElementType().getEnum());
+    _remappedIds[changeElement->getElementId()] = ElementId(changeElement->getElementType(), id);
   }
   else
   {
@@ -470,6 +472,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
   Tags tags = element->getTags();
   if (_includeDebugTags)
   {
+    tags.set(MetadataTags::HootId(), QString::number(element->getId()));
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
   }
   LOG_VART(tags);
@@ -525,20 +528,26 @@ void OsmApiDbSqlChangesetFileWriter::_createWayNodes(ConstWayPtr way)
   const std::vector<long> nodeIds = way->getNodeIds();
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
-    const long nodeId = nodeIds.at(i);
-    LOG_VART(ElementId(ElementType::Node, nodeId));
+    // If this was a newly created node its id was remapped when it was created, but the way still
+    // has the old way node id.
+    ElementId nodeElementId = ElementId(ElementType::Node, nodeIds.at(i));
+    if (_remappedIds.contains(nodeElementId))
+    {
+      nodeElementId = _remappedIds[nodeElementId];
+    }
+    LOG_VART(nodeElementId);
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
         .arg(way->getId())
-        .arg(nodeId)
+        .arg(nodeElementId.getId())
         .arg(i + 1);
     _outputSql.write(("INSERT INTO " + ApiDb::getWayNodesTableName() + " " + values).toUtf8());
 
     values =
       QString("(way_id, node_id, sequence_id) VALUES (%1, %2, %3);\n")
         .arg(way->getId())
-        .arg(nodeId)
+        .arg(nodeElementId.getId())
         .arg(i + 1);
     _outputSql.write(("INSERT INTO " + ApiDb::getCurrentWayNodesTableName() + " " + values).toUtf8());
   }
@@ -553,13 +562,21 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
   {
     const RelationData::Entry member = members[i];
     LOG_VART(member.getElementId());
+    // If the member was a newly created element its id was remapped when it was created, but the
+    // relation still has the old element id.
+    ElementId memberElementId = member.getElementId();
+    if (_remappedIds.contains(memberElementId))
+    {
+      memberElementId = _remappedIds[memberElementId];
+    }
+    LOG_VART(memberElementId);
 
     QString values =
       QString(
         "(relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (%1, '%2', %3, '%4', 1, %5);\n")
         .arg(relation->getId())
-        .arg(member.getElementId().getType().toString())
-        .arg(member.getElementId().getId())
+        .arg(memberElementId.getType().toString())
+        .arg(memberElementId.getId())
         .arg(member.getRole())
         .arg(i + 1);
     _outputSql.write(("INSERT INTO " + ApiDb::getRelationMembersTableName() + " " + values).toUtf8());
@@ -568,8 +585,8 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
       QString(
         "(relation_id, member_type, member_id, member_role, sequence_id) VALUES (%1, '%2', %3, '%4', %5);\n")
         .arg(relation->getId())
-        .arg(member.getElementId().getType().toString())
-        .arg(member.getElementId().getId())
+        .arg(memberElementId.getType().toString())
+        .arg(memberElementId.getId())
         .arg(member.getRole())
         .arg(i + 1);
     _outputSql.write(
