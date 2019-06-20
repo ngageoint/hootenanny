@@ -48,7 +48,7 @@ _precision(ConfigOptions().getWriterPrecision())
 {
   if (!_db.isSupported(targetDatabaseUrl))
   {
-    throw HootException("Unsupported URL: " + targetDatabaseUrl.toString());
+    throw HootException("Unsupported URL: " + targetDatabaseUrl.toString(QUrl::RemoveUserInfo));
   }
   _db.open(targetDatabaseUrl);
 

@@ -58,7 +58,6 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
-
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   virtual QString getDescription() const

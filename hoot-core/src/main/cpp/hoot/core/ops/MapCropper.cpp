@@ -146,7 +146,10 @@ void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
   else
   {
     _keepOnlyFeaturesInsideBounds = keep;
-    _keepEntireFeaturesCrossingBounds = false;
+    if (_keepOnlyFeaturesInsideBounds)
+    {
+      _keepEntireFeaturesCrossingBounds = false;
+    }
   }
 }
 
@@ -172,6 +175,10 @@ void MapCropper::apply(OsmMapPtr& map)
   _numAffected = 0;
   OsmMapPtr result = map;
 
+  LOG_VARD(_keepEntireFeaturesCrossingBounds);
+  LOG_VARD(_keepOnlyFeaturesInsideBounds);
+  LOG_VARD(_envelope);
+
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
   {
     throw HootException("If the node bounds is set the projection must be geographic.");
@@ -186,10 +193,10 @@ void MapCropper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
-    //LOG_VART(w);
+    LOG_VART(w);
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& e = *(ls->getEnvelopeInternal());
-    //LOG_VART(e);
+    LOG_VART(e);
 
     // if the way is completely outside the region we're keeping
     if (_isWhollyOutside(e))
@@ -218,11 +225,15 @@ void MapCropper::apply(OsmMapPtr& map)
       _cropWay(result, w->getId());
       _numWaysCrossingThreshold++;
     }
+    else
+    {
+      LOG_TRACE("Skipping: " << w);
+    }
 
     wayCtr++;
     if (wayCtr % _statusUpdateInterval == 0)
     {
-      PROGRESS_DEBUG("Cropped " << wayCtr << " / " << ways.size() << " ways.");
+      PROGRESS_INFO("Cropped " << wayCtr << " / " << ways.size() << " ways.");
     }
   }
 
@@ -287,7 +298,7 @@ void MapCropper::apply(OsmMapPtr& map)
     nodeCtr++;
     if (nodeCtr % _statusUpdateInterval == 0)
     {
-      PROGRESS_DEBUG("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
+      PROGRESS_INFO("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
     }
   }
   LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));
@@ -299,22 +310,6 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_numWaysCrossingThreshold);
   LOG_VARD(_numCrossingWaysKept);
   LOG_VARD(_numCrossingWaysRemoved);
-}
-
-void MapCropper::crop(OsmMapPtr map, const Envelope& envelope)
-{
-  MapCropper mc(envelope);
-  LOG_INFO(mc.getInitStatusMessage());
-  mc.apply(map);
-  LOG_INFO(mc.getCompletedStatusMessage());
-}
-
-void MapCropper::crop(OsmMapPtr map, const std::shared_ptr<const Geometry>& g, bool invert)
-{
-  MapCropper mc(g, invert);
-  LOG_INFO(mc.getInitStatusMessage());
-  mc.apply(map);
-  LOG_INFO(mc.getCompletedStatusMessage());
 }
 
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
@@ -359,7 +354,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   }
   else
   {
-    LOG_TRACE("Replacing way: " << way->getId() << "...");
+    LOG_TRACE("Replacing way: " << way->getId() << " with element: " << e->getElementId() << "...");
     e->setTags(way->getTags());
     map->replace(way, e);
     _numCrossingWaysKept++;

@@ -160,9 +160,22 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
       {
         long id = reader.attributes().value("ref").toString().toLong();
         std::dynamic_pointer_cast<XmlWay>(element)->addNode(id);
+        //  Update the node to way map
+        _nodeIdsToWays[id].insert(element->id());
       }
       else if (name == "member")
-        std::dynamic_pointer_cast<XmlRelation>(element)->addMember(reader.attributes());
+      {
+        std::shared_ptr<XmlRelation> relation = std::dynamic_pointer_cast<XmlRelation>(element);
+        relation->addMember(reader.attributes());
+        XmlMember& member = relation->getMember(relation->getMemberCount() - 1);
+        //  Update the node/way/relation to relation maps
+        if (member.isNode())
+          _nodeIdsToRelations[member.getRef()].insert(element->id());
+        else if (member.isWay())
+          _wayIdsToRelations[member.getRef()].insert(element->id());
+        else if (member.isRelation())
+          _relationIdsToRelations[member.getRef()].insert(element->id());
+      }
     }
     //  End element for create/modify/delete
     else if (type == QXmlStreamReader::EndElement)
@@ -417,18 +430,39 @@ bool XmlChangeset::addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlN
   //  Only add the nodes that are "sendable"
   if (canSend(node))
   {
-    //  Add create nodes if the ID map's ID is negative, modify and delete IDs don't matter
+    //  Add create nodes if the ID map's ID is negative, modify IDs don't matter
     if ((type == ChangesetType::TypeCreate && _idMap.getNewId(ElementType::Node, node->id()) < 0) ||
-         type != ChangesetType::TypeCreate)
+         type != ChangesetType::TypeDelete)
     {
       //  Add the node
       changeset->add(ElementType::Node, type, node->id());
       markBuffered(node);
+      return true;
     }
-    return true;
+    else if (type == ChangesetType::TypeDelete)
+    {
+      bool sendable = true;
+      //  Deleting nodes can't happen until the ways and relations that have the node are deleted
+      if (_nodeIdsToRelations.find(node->id()) != _nodeIdsToRelations.end())
+      {
+        std::set<long> relationIds = _nodeIdsToRelations[node->id()];
+        sendable = addParentRelations(changeset, relationIds);
+      }
+      if (_nodeIdsToWays.find(node->id()) != _nodeIdsToWays.end())
+      {
+        std::set<long> wayIds = _nodeIdsToWays[node->id()];
+        sendable = addParentWays(changeset, wayIds);
+      }
+      if (sendable)
+      {
+        //  Add the node
+        changeset->add(ElementType::Node, type, node->id());
+        markBuffered(node);
+        return true;
+      }
+    }
   }
-  else
-    return false;
+  return false;
 }
 
 bool XmlChangeset::moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node)
@@ -462,6 +496,7 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWa
 {
   if (canSend(way))
   {
+    bool sendable = true;
     //  Only creates/modifies require pre-processing
     if (type != ChangesetType::TypeDelete)
     {
@@ -476,13 +511,66 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWa
         }
       }
     }
+    else
+    {
+      if (_wayIdsToRelations.find(way->id()) != _wayIdsToRelations.end())
+      {
+        std::set<long> relationIds = _wayIdsToRelations[way->id()];
+        sendable = addParentRelations(changeset, relationIds);
+      }
+    }
     //  Add the way last
-    changeset->add(ElementType::Way, type, way->id());
-    markBuffered(way);
-    return true;
+    if (sendable)
+    {
+      changeset->add(ElementType::Way, type, way->id());
+      markBuffered(way);
+      return true;
+    }
   }
-  else
-    return false;
+  return false;
+}
+
+bool XmlChangeset::addParentWays(ChangesetInfoPtr& changeset, const std::set<long>& way_ids)
+{
+  bool sendable = true;
+  for (std::set<long>::iterator it = way_ids.begin(); it != way_ids.end(); ++it)
+  {
+    long wayId = *it;
+    //  The relation is either a modify or a delete, add it to the changeset
+    if (_ways[ChangesetType::TypeModify].find(wayId) != _ways[ChangesetType::TypeModify].end())
+    {
+      XmlWay* way = dynamic_cast<XmlWay*>(_allWays[wayId].get());
+      //  Check ways that aren't already in this changeset or finished
+      if (!changeset->contains(ElementType::Way, ChangesetType::TypeModify, way->id()) &&
+          way->getStatus() != XmlElement::Finalized)
+      {
+        if (canSend(way))
+        {
+          changeset->add(ElementType::Way, ChangesetType::TypeModify, wayId);
+          markBuffered(way);
+        }
+        else if (way->getStatus() != XmlElement::Finalized)
+          sendable = false;
+      }
+    }
+    else if (_ways[ChangesetType::TypeDelete].find(wayId) != _ways[ChangesetType::TypeDelete].end())
+    {
+      XmlWay* way = dynamic_cast<XmlWay*>(_allWays[wayId].get());
+      //  Check ways that aren't already in this changeset or finished
+      if (!changeset->contains(ElementType::Way, ChangesetType::TypeDelete, way->id()) &&
+          way->getStatus() != XmlElement::Finalized)
+      {
+        if (canSend(way))
+        {
+          changeset->add(ElementType::Way, ChangesetType::TypeDelete, wayId);
+          markBuffered(way);
+        }
+        else
+          sendable = false;
+      }
+    }
+  }
+  return sendable;
 }
 
 bool XmlChangeset::moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way)
@@ -536,6 +624,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
 {
   if (canSend(relation))
   {
+    bool sendable = true;
     //  Deletes require no pre-processing
     if (type != ChangesetType::TypeDelete)
     {
@@ -577,13 +666,67 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
         }
       }
     }
+    else
+    {
+      if (_relationIdsToRelations.find(relation->id()) != _relationIdsToRelations.end())
+      {
+        std::set<long> relationIds = _relationIdsToRelations[relation->id()];
+        sendable = addParentRelations(changeset, relationIds);
+      }
+    }
     //  Add the relation last
-    changeset->add(ElementType::Relation, type, relation->id());
-    markBuffered(relation);
-    return true;
+    if (sendable)
+    {
+      changeset->add(ElementType::Relation, type, relation->id());
+      markBuffered(relation);
+      return true;
+    }
   }
-  else
-    return false;
+  return false;
+}
+
+bool XmlChangeset::addParentRelations(ChangesetInfoPtr& changeset, const std::set<long>& relation_ids)
+{
+  bool sendable = true;
+  for (std::set<long>::iterator it = relation_ids.begin(); it != relation_ids.end(); ++it)
+  {
+    long relationId = *it;
+    //  The relation is either a modify or a delete, add it to the changeset
+    if (_relations[ChangesetType::TypeModify].find(relationId) != _relations[ChangesetType::TypeModify].end())
+    {
+      XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[relationId].get());
+      //  Relations in this changeset or ones that are done don't need to be added
+      if (!changeset->contains(ElementType::Relation, ChangesetType::TypeModify, relation->id()) &&
+          relation->getStatus() != XmlElement::Finalized)
+      {
+        if (canSend(relation))
+        {
+          changeset->add(ElementType::Relation, ChangesetType::TypeModify, relationId);
+          markBuffered(relation);
+        }
+        else
+          sendable = false;
+      }
+    }
+    else if (_relations[ChangesetType::TypeDelete].find(relationId) != _relations[ChangesetType::TypeDelete].end())
+    {
+      XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[relationId].get());
+      //  Relations in this changeset or ones that are done don't need to be added
+      if (!changeset->contains(ElementType::Relation, ChangesetType::TypeDelete, relation->id()) &&
+          relation->getStatus() != XmlElement::Finalized)
+      {
+        if (canSend(relation))
+        {
+          changeset->add(ElementType::Relation, ChangesetType::TypeDelete, relationId);
+          markBuffered(relation);
+        }
+        else
+          sendable = false;
+      }
+    }
+  }
+  return sendable;
+
 }
 
 bool XmlChangeset::moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation)

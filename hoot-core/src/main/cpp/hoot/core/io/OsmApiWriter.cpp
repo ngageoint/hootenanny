@@ -118,13 +118,13 @@ bool OsmApiWriter::apply()
     _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
-  int progress = 0;
-  int increment = 1;
+  float progress = 0.0f;
+  float increment = 0.01f;
   //  Setup the increment
   if (total < 100000)
-    increment = 10;
+    increment = 0.1f;
   else if (total < 1000000)
-    increment = 5;
+    increment = 0.05f;
   //  Iterate all changes until there are no more elements to send
   while (_changeset.hasElementsToSend())
   {
@@ -165,18 +165,19 @@ bool OsmApiWriter::apply()
     //  Show the progress
     if (_showProgress)
     {
+      float percent_complete = _changeset.getProcessedCount() / (float)total;
       //  Actual progress is calculated and once it passes the next increment it is reported
-      if (_changeset.getProcessedCount() / (double)total * 100.0 >= progress + increment)
+      if (percent_complete >= progress + increment)
       {
-        progress += increment;
-        _progress.set((float)progress, "Uploading changeset...");
+        progress = percent_complete - fmod(percent_complete, increment);
+        _progress.set(percent_complete, "Uploading changeset...");
       }
     }
   }
-  LOG_INFO("Upload progress: 100%");
   //  Wait for the threads to shutdown
   for (int i = 0; i < _maxWriters; ++i)
     _threadPool[i].join();
+  LOG_INFO("Upload progress: 100%");
   //  Keep some stats
   _stats.append(SingleStat("API Upload Time (sec)", timer.getElapsedAndRestart()));
   _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
@@ -352,7 +353,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
     capabilities.setPath(API_PATH_CAPABILITIES);
     request->networkRequest(capabilities);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
-    LOG_DEBUG("Capabilities: " << capabilities.toString());
+    LOG_DEBUG("Capabilities: " << capabilities.toString(QUrl::RemoveUserInfo));
     LOG_DEBUG("Response: " << responseXml);
     _capabilities = _parseCapabilities(responseXml);
   }

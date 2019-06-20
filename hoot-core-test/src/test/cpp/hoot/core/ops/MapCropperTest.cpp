@@ -261,7 +261,8 @@ public:
 
     Envelope env(0.30127,0.345,0.213,0.28154);
 
-    MapCropper::crop(map, env);
+    MapCropper uut(env);
+    uut.apply(map);
 
     //compare relations
     const RelationMap relations = map->getRelations();

@@ -38,6 +38,7 @@
 //  Standard
 #include <array>
 #include <map>
+#include <set>
 #include <vector>
 
 //  Hoot
@@ -53,6 +54,10 @@ class ChangesetInfo;
 typedef std::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
 typedef std::map<long, XmlElementPtr, osm_id_sort> XmlElementMap;
 typedef QVector<XmlElementMap> ChangesetTypeMap;
+typedef std::map<long, std::set<long>> NodeIdToWayIdMap;
+typedef std::map<long, std::set<long>> NodeIdToRelationIdMap;
+typedef std::map<long, std::set<long>> WayIdToRelationIdMap;
+typedef std::map<long, std::set<long>> RelationIdToRelationIdMap;
 
 /** XML Changeset data object */
 class XmlChangeset
@@ -251,6 +256,17 @@ private:
   bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way);
   bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation);
   /**
+   * @brief addParentWays/Relations Add any parents (ways, relations) to the changeset if needed
+   *  by a modify or delete operation.  For example, to delete a node, any way or relation parent
+   *  also needs to be checked before the node can be added to the changeset.  If the parent is in
+   *  the current changeset or the parent is finalized, the deleted element can be added.
+   * @param changeset Changeset to add parent to
+   * @param way_ids/relation_ids Set of IDs to check against if the parent is able to be added
+   * @return False if adding the element is blocked by the parents that are passed in
+   */
+  bool addParentWays(ChangesetInfoPtr& changeset, const std::set<long>& way_ids);
+  bool addParentRelations(ChangesetInfoPtr& changeset, const std::set<long>& relation_ids);
+  /**
    * @brief moveNode/Way/Relation Move an element from one subset to another, used by the splitting action
    * @param source Subset containing the element
    * @param destination Subset to move to
@@ -395,6 +411,11 @@ private:
   std::vector<XmlElement*> _sendBuffer;
   /** Negative ID generator */
   DefaultIdGenerator _idGen;
+  /** Reverse ID to ID maps for deleting elements validation */
+  NodeIdToWayIdMap _nodeIdsToWays;
+  NodeIdToRelationIdMap _nodeIdsToRelations;
+  WayIdToRelationIdMap _wayIdsToRelations;
+  RelationIdToRelationIdMap _relationIdsToRelations;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */

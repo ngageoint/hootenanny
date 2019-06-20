@@ -125,8 +125,8 @@ Envelope HootApiDb::calculateEnvelope() const
   // if you're having performance issues read this:
   // http://www.postgresql.org/docs/8.0/static/functions-aggregate.html
   QSqlQuery boundsQuery = _exec("SELECT MIN(latitude) as minLat, MAX(latitude) AS maxLat "
-                             ", MIN(longitude) as minLon, MAX(longitude) AS maxLon"
-                             " FROM " + getCurrentNodesTableName(mapId));
+                                ", MIN(longitude) as minLon, MAX(longitude) AS maxLon"
+                                " FROM " + getCurrentNodesTableName(mapId));
 
   if (boundsQuery.next())
   {
@@ -1087,11 +1087,11 @@ void HootApiDb::_lazyFlushBulkInsert()
 
 void HootApiDb::open(const QUrl& url)
 {
-  LOG_DEBUG("Opening database connection: " << url.toString() << "...");
+  LOG_DEBUG("Opening database connection: " << url.toString(QUrl::RemoveUserInfo) << "...");
 
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString());
+    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
   }
 
   _resetQueries();

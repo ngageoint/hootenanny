@@ -434,6 +434,38 @@ derivation time.
 
 The text description that is written to the OSM API database with a changeset.
 
+=== changeset.reference.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.entire.features.crossing.bounds for the reference input when deriving
+changesets with a bounds.
+
+=== changeset.secondary.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.entire.features.crossing.bounds for the secondary input when deriving
+changesets with a bounds.
+
+=== changeset.reference.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.only.features.inside.bounds for the reference input when deriving
+changesets with a bounds.
+
+=== changeset.secondary.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+Overrides crop.keep.only.features.inside.bounds for the secondary input when deriving
+changesets with a bounds.
+
 === changeset.max.size
 
 * Data Type: long
@@ -631,6 +663,24 @@ hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input output
 Same as convert.bounding.box but the resultant bounds filtering is only applied to Hootenanny API
 database data sources when used with the convert and conflate commands.  This setting takes
 precendence over the convert.bounding.box setting for Hootenanny API database data sources only.
+
+=== convert.bounding.box.keep.entire.features.crossing.bounds
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, will not break apart features crossing the convert bounds. This is analagous to
+crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
+command only and kept as a separate option with a different default value.
+
+=== convert.bounding.box.keep.only.features.inside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, will throw out any features that do not fall completely within the convert bounds. This is
+analagous to crop.keep.entire.features.crossing.bounds used with the crop command, but used with
+the convert command only and kept as a separate option.
 
 === convert.bounding.box.osm.api.database
 
@@ -3807,8 +3857,9 @@ for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.n
 * Data Type: string
 * Default Value: ``
 
-Status of ways or way nodes being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1'
-to snap reference ways or 'Input2' to snap secondary ways.
+Status of ways or way nodes being snapped to.  Valid values are 'Input1' or 'Input2'.  Specify
+'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to secondary
+ways.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -3834,7 +3885,7 @@ way snapping.
 * Default Value: ``
 
 Status of ways being snapped.  Valid values are 'Input1' or 'Input2'.  Specify 'Input1' to
-snap reference ways 'Input2' to snap secondary ways.
+snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference ways.
 
 === snap.unconnected.ways.use.existing.way.nodes
 

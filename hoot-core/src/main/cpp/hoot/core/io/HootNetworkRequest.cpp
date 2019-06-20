@@ -166,7 +166,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
     _error = reply->errorString();
     //  Remove authentication information if present
     if (request.url() != tempUrl)
-      _error.replace(request.url().toString(), tempUrl.toString(), Qt::CaseInsensitive);
+      _error.replace(request.url().toString(), tempUrl.toString(QUrl::RemoveUserInfo), Qt::CaseInsensitive);
     return false;
   }
 
@@ -211,7 +211,7 @@ void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_o
   }
   //  Create the client object and get the HTTP header
   OAuth::Client requestClient(_consumer.get(), _tokenRequest.get());
-  string header = requestClient.getHttpHeader(op, request.url().toString().toStdString());
+  string header = requestClient.getHttpHeader(op, request.url().toString(QUrl::RemoveUserInfo).toStdString());
   //  Set the Authorization header for OAuth
   request.setRawHeader("Authorization", QString(header.c_str()).toUtf8());
 }

@@ -30,7 +30,10 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.tuple;
 import static hoot.services.HootProperties.MAP_QUERY_DIMENSIONS;
 import static hoot.services.HootProperties.MAX_QUERY_NODES;
+import static hoot.services.models.db.QChangesets.changesets;
 import static hoot.services.models.db.QCurrentNodes.currentNodes;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
+import static hoot.services.models.db.QCurrentWays.currentWays;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
@@ -701,4 +704,37 @@ public class Map extends Maps {
     public static boolean mapExists(long id) {
         return createQuery().from(QMaps.maps).where(QMaps.maps.id.eq(id)).fetchCount() > 0;
     }
+
+    public HashMap<String, Long> getIdIndex() {
+
+        HashMap<String, Long> idIndex = new HashMap<String,Long>();
+
+        Long changeset = createQuery(getId())
+            .select(changesets.id.min())
+            .from(changesets)
+            .fetchFirst();
+
+        Long node = createQuery(getId())
+            .select(currentNodes.id.min())
+            .from(currentNodes)
+            .fetchFirst();
+
+        Long way = createQuery(getId())
+            .select(currentWays.id.min())
+            .from(currentWays)
+            .fetchFirst();
+
+        Long relation = createQuery(getId())
+            .select(currentRelations.id.min())
+            .from(currentRelations)
+            .fetchFirst();
+
+        idIndex.put("changeset", changeset == null || changeset >= 0 ? -1 : changeset - 1);
+        idIndex.put("node", node == null || node >= 0  ?  -1 : node - 1);
+        idIndex.put("way", way == null || way >= 0 ? -1 : way - 1);
+        idIndex.put("relation", relation == null || relation >= 0 ? -1 : relation - 1);
+
+        return idIndex;
+    }
+
 }

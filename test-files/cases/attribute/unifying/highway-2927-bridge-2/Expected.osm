@@ -1167,9 +1167,11 @@
         <tag k="bdw-id" v="{607c2a36-d410-462c-bcfe-cf528efb36d2}"/>
     </way>
     <way visible="true" id="-142169" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-183"/>
+        <nd ref="-70"/>
+        <nd ref="-69"/>
+        <nd ref="-68"/>
         <nd ref="-196"/>
-        <nd ref="-195"/>
-        <nd ref="-34"/>
         <tag k="oneway" v="no"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
@@ -1177,30 +1179,18 @@
         <tag k="bdw-id" v="{d1b83733-2e73-430d-a3c0-1327c4352912}"/>
     </way>
     <way visible="true" id="-142153" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-282"/>
-        <nd ref="-281"/>
+        <nd ref="-171"/>
+        <nd ref="-65"/>
+        <nd ref="-64"/>
+        <nd ref="-63"/>
+        <nd ref="-62"/>
+        <nd ref="-61"/>
         <nd ref="-280"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
         <tag k="name" v="Avenida Los Leones"/>
         <tag k="source:datetime" v="2013-10-26T16:12:11Z"/>
         <tag k="bdw-id" v="{be45bbff-72c6-44ab-865d-da9ccb9aeb14}"/>
-    </way>
-    <way visible="true" id="-142142" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-290"/>
-        <nd ref="-289"/>
-        <nd ref="-288"/>
-        <nd ref="-287"/>
-        <nd ref="-286"/>
-        <nd ref="-285"/>
-        <nd ref="-284"/>
-        <nd ref="-283"/>
-        <nd ref="-282"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Avenida 9"/>
-        <tag k="source:datetime" v="2012-07-10T17:03:24Z"/>
-        <tag k="bdw-id" v="{8d570128-1cda-4e73-ae68-a45e8ea56df2}"/>
     </way>
     <way visible="true" id="-142141" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-275"/>
@@ -1221,15 +1211,6 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-10T16:22:23Z"/>
         <tag k="bdw-id" v="{ef7b4cf9-7bd7-4c8b-af43-343bb12118f2}"/>
-    </way>
-    <way visible="true" id="-142139" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-267"/>
-        <nd ref="-266"/>
-        <nd ref="-290"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
-        <tag k="bdw-id" v="{2809ebbe-7b86-4049-a8dc-d5f32d26d181}"/>
     </way>
     <way visible="true" id="-142138" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-278"/>
@@ -1253,15 +1234,6 @@
         <tag k="name" v="Avenida 9"/>
         <tag k="source:datetime" v="2012-07-10T17:03:24Z"/>
         <tag k="bdw-id" v="{8d570128-1cda-4e73-ae68-a45e8ea56df2}"/>
-    </way>
-    <way visible="true" id="-142136" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-258"/>
-        <nd ref="-257"/>
-        <nd ref="-278"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-10T15:32:23Z"/>
-        <tag k="bdw-id" v="{e7159cc3-10a3-4162-bd74-91a42efcf54a}"/>
     </way>
     <way visible="true" id="-142135" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-273"/>
@@ -1319,15 +1291,6 @@
         <tag k="source:datetime" v="2012-07-12T16:14:18Z"/>
         <tag k="bdw-id" v="{0e4a3555-a203-4f60-930f-2453ea55da17}"/>
     </way>
-    <way visible="true" id="-142128" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-238"/>
-        <nd ref="-237"/>
-        <nd ref="-236"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2013-10-26T16:12:16Z"/>
-        <tag k="bdw-id" v="{ce5ed05b-ab6e-4533-becd-513a7bbb445a}"/>
-    </way>
     <way visible="true" id="-142127" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-227"/>
         <nd ref="-226"/>
@@ -1337,25 +1300,6 @@
         <tag k="bdw-id" v="{45f42e2c-f3f1-4fbe-a174-6cb6857349fe}"/>
     </way>
     <way visible="true" id="-142126" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-247"/>
-        <nd ref="-225"/>
-        <nd ref="-224"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
-        <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
-    </way>
-    <way visible="true" id="-142125" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-249"/>
-        <nd ref="-222"/>
-        <nd ref="-221"/>
-        <nd ref="-220"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-10T16:22:20Z"/>
-        <tag k="bdw-id" v="{3c7f6574-477c-46c6-89b0-71e0ed7944b8}"/>
-    </way>
-    <way visible="true" id="-142124" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-250"/>
         <nd ref="-219"/>
         <nd ref="-218"/>
@@ -1365,20 +1309,19 @@
         <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
         <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
     </way>
+    <way visible="true" id="-142124" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-247"/>
+        <nd ref="-225"/>
+        <nd ref="-224"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
+        <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
+    </way>
     <way visible="true" id="-142123" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-217"/>
         <nd ref="-216"/>
         <nd ref="-215"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2013-10-26T16:12:18Z"/>
-        <tag k="bdw-id" v="{23973f69-7830-4ee2-be77-9592a2c17bf3}"/>
-    </way>
-    <way visible="true" id="-142120" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-183"/>
-        <nd ref="-182"/>
-        <nd ref="-181"/>
-        <nd ref="-217"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
         <tag k="source:datetime" v="2013-10-26T16:12:18Z"/>
@@ -1455,16 +1398,6 @@
         <tag k="source:datetime" v="2012-07-10T16:22:20Z"/>
         <tag k="bdw-id" v="{3c7f6574-477c-46c6-89b0-71e0ed7944b8}"/>
     </way>
-    <way visible="true" id="-142112" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-230"/>
-        <nd ref="-161"/>
-        <nd ref="-160"/>
-        <nd ref="-159"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
-        <tag k="bdw-id" v="{260cc32c-6acc-4c50-b63e-6eeec120615b}"/>
-    </way>
     <way visible="true" id="-142111" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-159"/>
         <nd ref="-158"/>
@@ -1475,12 +1408,9 @@
         <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
     </way>
     <way visible="true" id="-142110" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-126"/>
+        <nd ref="-122"/>
         <nd ref="-180"/>
-        <nd ref="-157"/>
-        <nd ref="-156"/>
-        <nd ref="-155"/>
-        <nd ref="-154"/>
-        <nd ref="-183"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
@@ -1548,23 +1478,16 @@
         <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
     </way>
     <way visible="true" id="-142101" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-126"/>
-        <nd ref="-122"/>
         <nd ref="-180"/>
+        <nd ref="-157"/>
+        <nd ref="-156"/>
+        <nd ref="-155"/>
+        <nd ref="-154"/>
+        <nd ref="-183"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
         <tag k="bdw-id" v="{b467cee0-609e-473f-8127-a9f37fd29840}"/>
-    </way>
-    <way visible="true" id="-142100" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-238"/>
-        <nd ref="-121"/>
-        <nd ref="-120"/>
-        <nd ref="-275"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-13T01:28:03Z"/>
-        <tag k="bdw-id" v="{28cdb02b-9f22-4d16-93ea-7bcf3230d333}"/>
     </way>
     <way visible="true" id="-142099" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-204"/>
@@ -1590,18 +1513,6 @@
         <tag k="name" v="Avenida 10"/>
         <tag k="source:datetime" v="2013-11-11T14:00:58Z"/>
         <tag k="bdw-id" v="{efdc47f0-b9fa-48e7-b7a1-d5bee0cd35d8}"/>
-    </way>
-    <way visible="true" id="-142097" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-244"/>
-        <nd ref="-117"/>
-        <nd ref="-116"/>
-        <nd ref="-115"/>
-        <nd ref="-238"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Avenida 12"/>
-        <tag k="source:datetime" v="2013-10-26T16:12:21Z"/>
-        <tag k="bdw-id" v="{8a1fd2bd-e512-4b92-9a5c-37688bf5241b}"/>
     </way>
     <way visible="true" id="-142096" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-217"/>
@@ -1678,10 +1589,10 @@
         <tag k="bdw-id" v="{60de46a5-bb9b-48ea-b3b9-abdd7e0438d5}"/>
     </way>
     <way visible="true" id="-142090" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-252"/>
-        <nd ref="-81"/>
-        <nd ref="-80"/>
         <nd ref="-249"/>
+        <nd ref="-222"/>
+        <nd ref="-221"/>
+        <nd ref="-220"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-10T16:22:20Z"/>
@@ -1709,25 +1620,9 @@
         <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
         <tag k="bdw-id" v="{45f42e2c-f3f1-4fbe-a174-6cb6857349fe}"/>
     </way>
-    <way visible="true" id="-142086" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-183"/>
-        <nd ref="-70"/>
-        <nd ref="-69"/>
-        <nd ref="-68"/>
-        <nd ref="-196"/>
-        <tag k="oneway" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="source:datetime" v="2013-12-04T07:47:26Z"/>
-        <tag k="bdw-id" v="{d1b83733-2e73-430d-a3c0-1327c4352912}"/>
-    </way>
     <way visible="true" id="-142085" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-171"/>
-        <nd ref="-65"/>
-        <nd ref="-64"/>
-        <nd ref="-63"/>
-        <nd ref="-62"/>
-        <nd ref="-61"/>
+        <nd ref="-282"/>
+        <nd ref="-281"/>
         <nd ref="-280"/>
         <tag k="hoot:status" v="3"/>
         <tag k="highway" v="secondary"/>
@@ -1775,82 +1670,6 @@
         <tag k="highway" v="road"/>
         <tag k="bdw-id" v="{97de30bd-cf94-4781-9242-24a38ad7d345}"/>
     </way>
-    <way visible="true" id="-142081" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-282"/>
-        <nd ref="-72"/>
-        <nd ref="-67"/>
-        <nd ref="-42"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Avenida Los Leones"/>
-        <tag k="source:datetime" v="2013-10-26T16:12:11Z"/>
-        <tag k="bdw-id" v="{be45bbff-72c6-44ab-865d-da9ccb9aeb14}"/>
-    </way>
-    <way visible="true" id="-142080" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-41"/>
-        <nd ref="-71"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
-        <tag k="bdw-id" v="{6e1509b9-a960-4bd6-845e-6ac143dc8d18}"/>
-    </way>
-    <way visible="true" id="-142079" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-40"/>
-        <nd ref="-73"/>
-        <nd ref="-226"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
-        <tag k="bdw-id" v="{efc93331-7a05-42f4-a7fc-78ab5793d04d}"/>
-    </way>
-    <way visible="true" id="-142078" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-143"/>
-        <nd ref="-96"/>
-        <nd ref="-95"/>
-        <nd ref="-94"/>
-        <nd ref="-93"/>
-        <nd ref="-39"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:19Z;2012-07-12T16:24:57Z"/>
-        <tag k="bdw-id" v="{5e17d515-6288-4493-9e60-c6039b5fce66}"/>
-    </way>
-    <way visible="true" id="-142077" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-38"/>
-        <nd ref="-114"/>
-        <nd ref="-258"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="Avenida 10"/>
-        <tag k="source:datetime" v="2013-11-11T14:00:58Z"/>
-        <tag k="bdw-id" v="{efdc47f0-b9fa-48e7-b7a1-d5bee0cd35d8}"/>
-    </way>
-    <way visible="true" id="-142076" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-37"/>
-        <nd ref="-123"/>
-        <nd ref="-168"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Avenida 11"/>
-        <tag k="source:datetime" v="2012-07-10T17:03:23Z"/>
-        <tag k="bdw-id" v="{d3f5dac4-74c6-42fe-b0bf-bad11de41657}"/>
-    </way>
-    <way visible="true" id="-142075" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36"/>
-        <nd ref="-153"/>
-        <nd ref="-152"/>
-        <nd ref="-151"/>
-        <nd ref="-150"/>
-        <nd ref="-149"/>
-        <nd ref="-148"/>
-        <nd ref="-147"/>
-        <nd ref="-146"/>
-        <nd ref="-203"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
-        <tag k="bdw-id" v="{6cdcf24d-4846-4e30-9360-c782f3239ee5}"/>
-    </way>
     <way visible="true" id="-142074" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-35"/>
         <nd ref="-230"/>
@@ -1883,45 +1702,6 @@
         <tag k="source:datetime" v="2013-10-26T16:12:21Z"/>
         <tag k="bdw-id" v="{8a1fd2bd-e512-4b92-9a5c-37688bf5241b}"/>
     </way>
-    <way visible="true" id="-142071" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
-        <nd ref="-208"/>
-        <nd ref="-207"/>
-        <nd ref="-206"/>
-        <nd ref="-227"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
-        <tag k="bdw-id" v="{45f42e2c-f3f1-4fbe-a174-6cb6857349fe}"/>
-    </way>
-    <way visible="true" id="-142070" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-227"/>
-        <nd ref="-209"/>
-        <nd ref="-31"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
-        <tag k="bdw-id" v="{e1882670-308b-4243-9802-b0f59e00fcd8}"/>
-    </way>
-    <way visible="true" id="-142069" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-280"/>
-        <nd ref="-223"/>
-        <nd ref="-30"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-10T16:30:24Z"/>
-        <tag k="bdw-id" v="{841e511f-12b8-465b-8dcf-3f2e88245c4f}"/>
-    </way>
-    <way visible="true" id="-142068" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-29"/>
-        <nd ref="-229"/>
-        <nd ref="-228"/>
-        <nd ref="-252"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
-        <tag k="bdw-id" v="{f91dbab1-668f-46c8-9e15-8682f41aa02f}"/>
-    </way>
     <way visible="true" id="-142067" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-235"/>
@@ -1934,16 +1714,6 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2012-07-10T16:22:20Z"/>
         <tag k="bdw-id" v="{3c7f6574-477c-46c6-89b0-71e0ed7944b8}"/>
-    </way>
-    <way visible="true" id="-142066" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-278"/>
-        <nd ref="-259"/>
-        <nd ref="-27"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Calle 16"/>
-        <tag k="source:datetime" v="2012-07-10T17:03:25Z"/>
-        <tag k="bdw-id" v="{7b9e474f-b2b4-4427-bae9-a57622382722}"/>
     </way>
     <way visible="true" id="-142065" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-273"/>
@@ -1963,15 +1733,6 @@
         <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
         <tag k="bdw-id" v="{2809ebbe-7b86-4049-a8dc-d5f32d26d181}"/>
     </way>
-    <way visible="true" id="-142063" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-24"/>
-        <nd ref="-277"/>
-        <nd ref="-276"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2012-07-10T16:22:23Z"/>
-        <tag k="bdw-id" v="{ef7b4cf9-7bd7-4c8b-af43-343bb12118f2}"/>
-    </way>
     <way visible="true" id="-142062" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-23"/>
         <nd ref="-279"/>
@@ -1981,5 +1742,244 @@
         <tag k="name" v="Avenida 9"/>
         <tag k="source:datetime" v="2012-07-10T17:03:24Z"/>
         <tag k="bdw-id" v="{8d570128-1cda-4e73-ae68-a45e8ea56df2}"/>
+    </way>
+    <way visible="true" id="-142061" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-143"/>
+        <nd ref="-96"/>
+        <nd ref="-95"/>
+        <nd ref="-94"/>
+        <nd ref="-93"/>
+        <nd ref="-39"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z;2012-07-12T16:24:57Z"/>
+        <tag k="bdw-id" v="{5e17d515-6288-4493-9e60-c6039b5fce66}"/>
+    </way>
+    <way visible="true" id="-142059" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="-229"/>
+        <nd ref="-228"/>
+        <nd ref="-252"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:21Z"/>
+        <tag k="bdw-id" v="{f91dbab1-668f-46c8-9e15-8682f41aa02f}"/>
+    </way>
+    <way visible="true" id="-142058" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-24"/>
+        <nd ref="-277"/>
+        <nd ref="-276"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-10T16:22:23Z"/>
+        <tag k="bdw-id" v="{ef7b4cf9-7bd7-4c8b-af43-343bb12118f2}"/>
+    </way>
+    <way visible="true" id="-142057" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-252"/>
+        <nd ref="-81"/>
+        <nd ref="-80"/>
+        <nd ref="-249"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-10T16:22:20Z"/>
+        <tag k="bdw-id" v="{3c7f6574-477c-46c6-89b0-71e0ed7944b8}"/>
+    </way>
+    <way visible="true" id="-142056" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-230"/>
+        <nd ref="-161"/>
+        <nd ref="-160"/>
+        <nd ref="-159"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
+        <tag k="bdw-id" v="{260cc32c-6acc-4c50-b63e-6eeec120615b}"/>
+    </way>
+    <way visible="true" id="-142055" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-40"/>
+        <nd ref="-73"/>
+        <nd ref="-226"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:19Z"/>
+        <tag k="bdw-id" v="{efc93331-7a05-42f4-a7fc-78ab5793d04d}"/>
+    </way>
+    <way visible="true" id="-142053" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-32"/>
+        <nd ref="-208"/>
+        <nd ref="-207"/>
+        <nd ref="-206"/>
+        <nd ref="-227"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="bdw-id" v="{45f42e2c-f3f1-4fbe-a174-6cb6857349fe}"/>
+    </way>
+    <way visible="true" id="-142052" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="-153"/>
+        <nd ref="-152"/>
+        <nd ref="-151"/>
+        <nd ref="-150"/>
+        <nd ref="-149"/>
+        <nd ref="-148"/>
+        <nd ref="-147"/>
+        <nd ref="-146"/>
+        <nd ref="-203"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="bdw-id" v="{6cdcf24d-4846-4e30-9360-c782f3239ee5}"/>
+    </way>
+    <way visible="true" id="-142051" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-227"/>
+        <nd ref="-209"/>
+        <nd ref="-31"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-12T16:14:17Z"/>
+        <tag k="bdw-id" v="{e1882670-308b-4243-9802-b0f59e00fcd8}"/>
+    </way>
+    <way visible="true" id="-142050" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-278"/>
+        <nd ref="-259"/>
+        <nd ref="-27"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Calle 16"/>
+        <tag k="source:datetime" v="2012-07-10T17:03:25Z"/>
+        <tag k="bdw-id" v="{7b9e474f-b2b4-4427-bae9-a57622382722}"/>
+    </way>
+    <way visible="true" id="-142049" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-41"/>
+        <nd ref="-71"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
+        <tag k="bdw-id" v="{6e1509b9-a960-4bd6-845e-6ac143dc8d18}"/>
+    </way>
+    <way visible="true" id="-142048" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-267"/>
+        <nd ref="-266"/>
+        <nd ref="-290"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-10T15:32:21Z"/>
+        <tag k="bdw-id" v="{2809ebbe-7b86-4049-a8dc-d5f32d26d181}"/>
+    </way>
+    <way visible="true" id="-142047" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-290"/>
+        <nd ref="-289"/>
+        <nd ref="-288"/>
+        <nd ref="-287"/>
+        <nd ref="-286"/>
+        <nd ref="-285"/>
+        <nd ref="-284"/>
+        <nd ref="-283"/>
+        <nd ref="-282"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Avenida 9"/>
+        <tag k="source:datetime" v="2012-07-10T17:03:24Z"/>
+        <tag k="bdw-id" v="{8d570128-1cda-4e73-ae68-a45e8ea56df2}"/>
+    </way>
+    <way visible="true" id="-142046" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-282"/>
+        <nd ref="-72"/>
+        <nd ref="-67"/>
+        <nd ref="-42"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Avenida Los Leones"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:11Z"/>
+        <tag k="bdw-id" v="{be45bbff-72c6-44ab-865d-da9ccb9aeb14}"/>
+    </way>
+    <way visible="true" id="-142045" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-38"/>
+        <nd ref="-114"/>
+        <nd ref="-258"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Avenida 10"/>
+        <tag k="source:datetime" v="2013-11-11T14:00:58Z"/>
+        <tag k="bdw-id" v="{efdc47f0-b9fa-48e7-b7a1-d5bee0cd35d8}"/>
+    </way>
+    <way visible="true" id="-142044" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-238"/>
+        <nd ref="-121"/>
+        <nd ref="-120"/>
+        <nd ref="-275"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-13T01:28:03Z"/>
+        <tag k="bdw-id" v="{28cdb02b-9f22-4d16-93ea-7bcf3230d333}"/>
+    </way>
+    <way visible="true" id="-142043" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-244"/>
+        <nd ref="-117"/>
+        <nd ref="-116"/>
+        <nd ref="-115"/>
+        <nd ref="-238"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name" v="Avenida 12"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:21Z"/>
+        <tag k="bdw-id" v="{8a1fd2bd-e512-4b92-9a5c-37688bf5241b}"/>
+    </way>
+    <way visible="true" id="-142042" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-196"/>
+        <nd ref="-195"/>
+        <nd ref="-34"/>
+        <tag k="oneway" v="no"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="source:datetime" v="2013-12-04T07:47:26Z"/>
+        <tag k="bdw-id" v="{d1b83733-2e73-430d-a3c0-1327c4352912}"/>
+    </way>
+    <way visible="true" id="-142041" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-280"/>
+        <nd ref="-223"/>
+        <nd ref="-30"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-10T16:30:24Z"/>
+        <tag k="bdw-id" v="{841e511f-12b8-465b-8dcf-3f2e88245c4f}"/>
+    </way>
+    <way visible="true" id="-142040" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="-123"/>
+        <nd ref="-168"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Avenida 11"/>
+        <tag k="source:datetime" v="2012-07-10T17:03:23Z"/>
+        <tag k="bdw-id" v="{d3f5dac4-74c6-42fe-b0bf-bad11de41657}"/>
+    </way>
+    <way visible="true" id="74377404" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-183"/>
+        <nd ref="-182"/>
+        <nd ref="-181"/>
+        <nd ref="-217"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:18Z"/>
+        <tag k="bdw-id" v="{23973f69-7830-4ee2-be77-9592a2c17bf3}"/>
+    </way>
+    <way visible="true" id="170931988" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-238"/>
+        <nd ref="-237"/>
+        <nd ref="-236"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="source:datetime" v="2013-10-26T16:12:16Z"/>
+        <tag k="bdw-id" v="{ce5ed05b-ab6e-4533-becd-513a7bbb445a}"/>
+    </way>
+    <way visible="true" id="170934989" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-258"/>
+        <nd ref="-257"/>
+        <nd ref="-278"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2012-07-10T15:32:23Z"/>
+        <tag k="bdw-id" v="{e7159cc3-10a3-4162-bd74-91a42efcf54a}"/>
     </way>
 </osm>

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# THIS SCRIPT WAS USED BY THE OLD STYLE HOLY GRAIL TESTS THAT ARE NO LONGER IN USE. ITS KEPT HERE AS REFERENCE FOR OTHER TESTS ONLY
+#
 # This is a base test script for conflating datasets where one dataset comes from an osm api database and the other 
 # from a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow 
 # with MapEdit data looks like (aka Holy Grail).  See ServiceOsmApiDbHootApiDbAllDataTypesConflateTest.sh for an 

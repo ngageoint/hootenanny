@@ -79,7 +79,8 @@ void CookieCutter::cut(OsmMapPtr cutterShapeMap, OsmMapPtr doughMap)
   cutterShapeMap.reset();
   // remove the cookie cutter portion from the "dough"
   // if crop is true, then the cookie cutter portion is kept and the "dough" is dropped.
-  MapCropper::crop(doughMap, cutterShape, !_crop);
+  MapCropper cropper(cutterShape, !_crop);
+  cropper.apply(doughMap);
   // clean up any ugly bits left over
   SuperfluousWayRemover::removeWays(doughMap);
   SuperfluousNodeRemover::removeNodes(doughMap);

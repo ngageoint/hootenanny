@@ -73,11 +73,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf) override;
 
-  static void crop(std::shared_ptr<OsmMap> map, const geos::geom::Envelope& envelope);
-
-  static void crop(std::shared_ptr<OsmMap> map,
-                   const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
-
   virtual std::string getClassName() const override { return className(); }
 
   virtual void readObject(QDataStream& is) override;
