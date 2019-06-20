@@ -613,7 +613,7 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 }
 
 void WayJoinerAdvanced::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                         WayPtr& toRemove)
+                                                WayPtr& toRemove)
 {
   // this is kind of a mess
 
@@ -667,7 +667,7 @@ void WayJoinerAdvanced::_determineKeeperFeature(WayPtr parent, WayPtr child, Way
 }
 
 bool WayJoinerAdvanced::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,
-                                             ConstWayPtr wayWithTagsToLose)
+                                                    ConstWayPtr wayWithTagsToLose)
 {
   OneWayCriterion oneWayCrit;
   if (oneWayCrit.isSatisfied(wayWithTagsToLose) &&

@@ -50,7 +50,6 @@ public:
    * Static method to join all joinable ways using WayJoinerBasic
    */
   static void joinWays(const OsmMapPtr& map);
-
 };
 
 }

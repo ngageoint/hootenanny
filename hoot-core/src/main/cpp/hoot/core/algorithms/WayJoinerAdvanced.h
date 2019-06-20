@@ -94,6 +94,8 @@ protected:
    */
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
+private:
+
   /**
    * A more aggressive joining approach that tries to join up any unnamed generic roads in the
    * output with a non-generic named road.  Best to be run after other joining routines and will

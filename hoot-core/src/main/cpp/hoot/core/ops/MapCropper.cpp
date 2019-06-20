@@ -356,6 +356,26 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   {
     LOG_TRACE("Replacing way: " << way->getId() << " with element: " << e->getElementId() << "...");
     e->setTags(way->getTags());
+    if (e->getElementType() == ElementType::Way)
+    {
+      WayPtr newWay = std::dynamic_pointer_cast<Way>(e);
+      //newWay->setPid(way->getPid());
+      newWay->setPid(way->getId());
+    }
+    else if (e->getElementType() == ElementType::Relation)
+    {
+      RelationPtr newRelation = std::dynamic_pointer_cast<Relation>(e);
+      const vector<RelationData::Entry>& members = newRelation->getMembers();
+      for (size_t i = 0; i < members.size(); i++)
+      {
+        RelationData::Entry element = members[i];
+        if (element.getElementId().getType() == ElementType::Way)
+        {
+          WayPtr memberWay = map->getWay(element.getElementId().getId());
+          memberWay->setPid(way->getId());
+        }
+      }
+    }
     map->replace(way, e);
     _numCrossingWaysKept++;
   }
@@ -466,6 +486,7 @@ void MapCropper::readObject(QDataStream& is)
   }
 }
 
+// TODO: should this be used anywhere?
 std::shared_ptr<Way> MapCropper::_reintroduceWay(OsmMapPtr map, std::shared_ptr<const Way> w,
   const LineString* ls)
 {
