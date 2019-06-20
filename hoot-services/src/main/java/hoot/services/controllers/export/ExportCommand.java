@@ -61,7 +61,7 @@ class ExportCommand extends ExternalCommand {
         //If no translation, we are keeping osm tag schema, but still provide the
         //following no-op translation so that tag overrides can be run
         if (params.getTranslation() == null || params.getTranslation().isEmpty()) {
-            params.setTranslation("translations/OSM_Export.js");
+            params.setTranslation("translations/RenderDb.js");
         }
         if (params.getAppend()) {
             appendToFGDB();
@@ -135,12 +135,18 @@ class ExportCommand extends ExternalCommand {
         //Decompose building relations for non-osm formats only
         if (!params.getOutputType().equalsIgnoreCase("osm") && !params.getOutputType().equalsIgnoreCase("osm.pbf")) {
             convertOps.add("hoot::DecomposeBuildingRelationsVisitor");
-
         }
 
         //Translate the features (which includes applying tag overrides set below)
         convertOps.add("hoot::SchemaTranslationVisitor");
-        options.add("schema.translation.direction=toogr");
+
+        //If no translation, we are keeping osm tag schema, so use the toosm direction
+        String direction = "toogr";
+        if (params.getOutputType().equalsIgnoreCase("osm") && params.getTranslation().equalsIgnoreCase("translations/RenderDb.js")) {
+            direction = "toosm";
+        }
+        options.add("schema.translation.direction=" + direction);
+
         options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
 
         // By default export removes hoot conflation review related tags

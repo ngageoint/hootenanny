@@ -58,12 +58,18 @@ function initialize()
 
     } // End !_global
 
+    // Get any tag override changes
+    toChange = hoot.Settings.get("schema.translation.override");
+
+
 } // End Initialize
 
 // IMPORT
 // translateAttributes - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
+    // Translation overrides if set
+    if (toChange) attrs = translate.overrideValues(attrs, toChange);
     return attrs;
 } // End of Translate Attributes
 
@@ -72,6 +78,10 @@ function translateToOsm(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + tableName
 function translateToOgr(tags, elementType, geometryType)
 {
+
+    // Translation overrides if set
+    if (toChange) tags = translate.overrideValues(tags, toChange);
+
     // Debug:
     if (config.getOgrDebugDumptags() == 'true')
     {
