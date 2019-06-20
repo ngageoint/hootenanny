@@ -1,3 +1,4 @@
+:imagesdir: ./user
 
 = Hootenanny - User Interface Guide
 
