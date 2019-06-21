@@ -121,7 +121,8 @@ public:
    * @param connectTo Way to connect the disconnected way to
    * @returns True if the ways were successfully snapped together
    */
-  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected, const WayPtr& connectTo);
+  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
+                                       const WayPtr& connectTo);
 
 private:
 
@@ -165,6 +166,7 @@ private:
   QList<long> _snappedWayNodeIds;
   long _numSnappedToWays;
   long _numSnappedToWayNodes;
+  WayPtr _snappedToWay;
 
   int _taskStatusUpdateInterval;
   OsmMapPtr _map;
@@ -247,7 +249,8 @@ private:
   bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap);
 
   /**
-   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting point
+   * @brief _snapUnconnectedNodeToWay Snap a particular node into a way at its closest intersecting
+   * point
    * @param nodeToSnap Node to snap/add into the way
    * @param wayToSnapTo Way to connect/add the node into
    * @return True if successful
@@ -262,6 +265,8 @@ private:
    * @return True if successful
    */
   bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
+
+  long _getPid(const ConstWayPtr& way) const;
 };
 
 }

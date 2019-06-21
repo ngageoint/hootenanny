@@ -29,7 +29,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 # CONFIG OPTS
 
 # -D writer.include.debug.tags=true -D log.class.filter=
-GENERAL_OPTS="--trace -D log.class.filter=MapCropper -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
+GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;NamedOp;UnconnectedWaySnapper -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 
@@ -73,27 +73,37 @@ CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features
 #hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-1.osc
 
 #-D reader.preserve.all.tags=true -D reader.keep.status.tag=true
+echo "read ref"
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $REF_LAYER $OUT_DIR/$TEST_NAME-ref-cropped.osm
 
+echo "read sec"
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
 #hoot convert $GENERAL_OPTS -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-sec-cropped.osm
 
+echo "gen alpha shape"
 hoot generate-alpha-shape $GENERAL_OPTS -D reader.use.data.source.ids=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/alpha-shape-debug.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm 1000 0 $OUT_DIR/$TEST_NAME-cutter-shape.osm
 
+echo "cookie cut"
 #-D cookie.cutter.alpha.shape.buffer=-15.0 -D cookie.cutter.alpha=1000
 hoot cookie-cut $GENERAL_OPTS -D reader.use.data.source.ids=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/cookie-cut-debug.osm $OUT_DIR/$TEST_NAME-cutter-shape.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm 0.0
 
-hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/conflate-debug.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-conflated.osm
+# TODO: do we want -D tag.merger.default=hoot::AverageTagMerger here, hoot::OverwriteTag1Merger, or something else completely?
 
-hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/snap-debug.osm -D convert.ops="hoot::UnconnectedWaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=0.5 -D snap.unconnected.ways.snap.tolerance=10.0 $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-snapped.osm
+echo "conflate"
+hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D way.joiner=hoot::WayJoinerAdvanced -D tag.merger.default=hoot::OverwriteTag2Merger -D way.joiner.advanced.keep.feature.status.override=unknown2 -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/conflate-debug.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-conflated.osm
+
+echo "snap"
+hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::WayJoinerAdvanced -D tag.merger.default=hoot::OverwriteTag2Merger -D way.joiner.advanced.keep.feature.status.override=unknown2 -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/snap-debug.osm -D convert.ops="hoot::UnconnectedWaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=6.0 -D snap.unconnected.ways.snap.tolerance=10.0 $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-snapped.osm
+
+#hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D conflate.post.ops="hoot::SuperfluousNodeRemover;hoot::SmallWayMerger;hoot::ReplaceRoundabouts;hoot::RemoveMissingElementsVisitor;hoot::RemoveInvalidReviewRelationsVisitor;hoot::RemoveDuplicateReviewsOp;hoot::BuildingOutlineUpdateOp;hoot::UnconnectedWaySnapper;hoot::WayJoinerOp;hoot::RemoveInvalidRelationVisitor;hoot::RemoveInvalidMultilineStringMembersVisitor;hoot::SuperfluousWayRemover;hoot::RemoveDuplicateWayNodesVisitor;hoot::RemoveEmptyRelationsOp;hoot::AddHilbertReviewSortOrderOp" -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=0.5 -D snap.unconnected.ways.snap.tolerance=10.0 -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/conflate-debug.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-conflated-and-snapped.osm
 
 #-D reader.use.file.status=true
 #-D changeset.allow.deleting.reference.features=false -D changeset.buffer=0.0002
 
-echo "xml changeset"
+echo "derive xml changeset"
 hoot changeset-derive $GENERAL_OPTS -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/changeset-derive-debug.osm -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-1.osc
 
-echo "sql changeset"
+echo "derive sql changeset"
 hoot changeset-derive $GENERAL_OPTS -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/changeset-derive-debug.osm -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
 
 #diff $IN_DIR/$TEST_NAME-changeset-1.osc $OUT_DIR/$TEST_NAME-changeset-1.osc

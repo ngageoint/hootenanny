@@ -104,6 +104,8 @@ private:
   void _joinUnsplitWaysAtNode();
 
   void _determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove);
+  void _determineKeeperFeatureWithOverride(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                           WayPtr& toRemove, const QString& keepStatusOverrideStr);
 
   bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose);
 

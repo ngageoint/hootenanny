@@ -113,7 +113,9 @@ void WayJoinerAdvanced::_joinParentChild()
     }
     else
     {
-      LOG_TRACE("Parent with ID: " << parent_id << " does not exist.");
+      LOG_TRACE(
+        "Parent with ID: " << parent_id << " does not exist. Skipping join with " <<
+        way->getElementId());
     }
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
@@ -122,7 +124,9 @@ void WayJoinerAdvanced::_joinParentChild()
         !Tags::haveMatchingName(parentTags, wayTags))
     {
       // TODO: move this check down to _joinWays?
-      LOG_TRACE("Conflicting name tags.  Skipping parent/child join.");
+      LOG_TRACE(
+        "Conflicting name tags between " << way->getElementId() << " and " <<
+        parent->getElementId() << ".  Skipping parent/child join.");
       continue;
     }
     else
@@ -200,6 +204,10 @@ void WayJoinerAdvanced::_joinAtNode()
           {
             LOG_VART(child->getElementId());
           }
+          LOG_VART(way->getId() != child->getId());
+          LOG_VART(_areJoinable(way, child));
+          LOG_VART(way->getStatus());
+          LOG_VART(child->getStatus());
           if (child && way->getId() != child->getId() && _areJoinable(way, child))
           {
             Tags cTags = child->getTags();
@@ -218,7 +226,9 @@ void WayJoinerAdvanced::_joinAtNode()
             }
             else
             {
-              LOG_TRACE("Ways had conflicting names.  Not joining:");
+              LOG_TRACE(
+                "Ways " << way->getElementId() << " and " << child->getElementId() <<
+                " had conflicting names.  Not joining.");
               LOG_VART(pTags);
               LOG_VART(cTags);
             }
@@ -366,7 +376,9 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       }
       else
       {
-        LOG_TRACE("Ways had conflicting names.  Not joining:");
+        LOG_TRACE(
+          "Ways " << parent->getElementId() << " and " << child->getElementId() <<
+          " had conflicting names.  Not joining:");
         LOG_VART(parentTags);
         LOG_VART(childTags);
       }
@@ -392,7 +404,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   //  Make sure that there are nodes in the ways
   if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
   {
-    LOG_TRACE("One or more of the ways to be joined are empty. Skipping join.");
+    LOG_TRACE(
+      "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<
+      " to be joined are empty. Skipping join.");
     return false;
   }
 
@@ -429,7 +443,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   }
   else
   {
-    LOG_TRACE("No join type found.");
+    LOG_TRACE(
+      "No join type found for " << parent->getElementId() << " and " << child->getElementId() <<
+      ".");
 
     if (keeperWasReversed)
     {
@@ -445,7 +461,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   AreaCriterion areaCrit;
   if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
   {
-    LOG_TRACE("One or more of the ways to be joined are areas. Skipping join.");
+    LOG_TRACE(
+      "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<
+      " to be joined are areas. Skipping join.");
     return false;
   }
 
@@ -457,14 +475,18 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges() &&
       onlyOneIsABridge)
   {
-    LOG_TRACE("Only one of the features to be joined is a bridge. Skipping join.");
+    LOG_TRACE(
+      "Only one of the features: " << parent->getElementId() << " and " << child->getElementId() <<
+      " to be joined is a bridge. Skipping join.");
     return false;
   }
 
   // don't try to join streets with conflicting one way info
   if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
-    LOG_TRACE("Conflicting one way street tags.  Skipping join.");
+    LOG_TRACE(
+      "Conflicting one way street tags between " << parent->getElementId() << " and " <<
+      child->getElementId() << ".  Skipping join.");
     return false;
   }
 
@@ -473,7 +495,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (highwayCrit.isSatisfied(wayWithTagsToKeep) && highwayCrit.isSatisfied(wayWithTagsToLose) &&
       OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
-    LOG_TRACE("Conflicting highway type tags.  Skipping join.")
+    LOG_TRACE(
+      "Conflicting highway type tags between " << parent->getElementId() << " and " <<
+      child->getElementId() << ".  Skipping join.")
     return false;
   }
 
@@ -528,7 +552,9 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   child->getTags().clear();
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
-  LOG_TRACE("Keeper way: " << parent);
+  LOG_TRACE(
+    "Joined ways: " << parent->getElementId() << " and " << child->getElementId() <<
+    "; way kept: " << parent << "; way removed: " << child);
 
   _numJoined++;
 
@@ -612,10 +638,90 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
     " attempts.");
 }
 
+void WayJoinerAdvanced::_determineKeeperFeatureWithOverride(WayPtr parent, WayPtr child,
+                                                            WayPtr& keeper, WayPtr& toRemove,
+                                                            const QString& keepStatusOverrideStr)
+{
+  // TODO: clean this up
+
+  const Status keepStatusOverride = Status::fromString(keepStatusOverrideStr);
+  LOG_VART(keepStatusOverride);
+  if (keepStatusOverride == Status::Unknown1)
+  {
+    if (parent->getStatus() == Status::Unknown1)
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else if (child->getStatus() == Status::Unknown1)
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  else if (keepStatusOverride == Status::Unknown2)
+  {
+    if (parent->getStatus() == Status::Unknown2)
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else if (child->getStatus() == Status::Unknown2)
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  else if (keepStatusOverride == Status::Conflated)
+  {
+    if (parent->getStatus() == Status::Conflated)
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+    else if (child->getStatus() == Status::Conflated)
+    {
+      keeper = child;
+      toRemove = parent;
+    }
+    else
+    {
+      keeper = parent;
+      toRemove = child;
+    }
+  }
+  else
+  {
+    throw IllegalArgumentException(
+      "Invalid WayJoinerAdvanced keep feature status override: " + keepStatusOverride.toString());
+  }
+}
+
 void WayJoinerAdvanced::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
                                                 WayPtr& toRemove)
 {
-  // this is kind of a mess
+  // This logic is kind of a mess.
+
+  // TODO: This option was implemented for cookie cut replacement changeset derivation. Possibly,
+  // rather than use the option, a new way joiner inheriting this one could be created instead to
+  // override this method only.
+  const QString keepStatusOverrideStr =
+    ConfigOptions().getWayJoinerAdvancedKeepFeatureStatusOverride().trimmed();
+  if (!keepStatusOverrideStr.isEmpty())
+  {
+    _determineKeeperFeatureWithOverride(parent, child, keeper, toRemove, keepStatusOverrideStr);
+    return;
+  }
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);

@@ -355,7 +355,10 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   else
   {
     LOG_TRACE("Replacing way: " << way->getId() << " with element: " << e->getElementId() << "...");
+
     e->setTags(way->getTags());
+
+    // retain the parent ID
     if (e->getElementType() == ElementType::Way)
     {
       WayPtr newWay = std::dynamic_pointer_cast<Way>(e);
@@ -376,7 +379,9 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
         }
       }
     }
+
     map->replace(way, e);
+
     _numCrossingWaysKept++;
   }
 }
