@@ -29,14 +29,17 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(WayJoiner, CookieCutConflateWayJoiner)
 
-CookieCutConflateWayJoiner::CookieCutConflateWayJoiner()
+CookieCutConflateWayJoiner::CookieCutConflateWayJoiner() :
+WayJoinerAdvanced::WayJoinerAdvanced()
 {
+  _leavePid = true;
 }
 
 void CookieCutConflateWayJoiner::joinWays(const OsmMapPtr& map)
@@ -47,8 +50,9 @@ void CookieCutConflateWayJoiner::joinWays(const OsmMapPtr& map)
 
 bool CookieCutConflateWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
 {
-  // join anything up except invalid
-  return w1->getStatus() != Status::Invalid && w2->getStatus() != Status::Invalid;
+  //return w1->getStatus() != Status::Invalid && w2->getStatus() != Status::Invalid;
+  return (w1->getStatus() == Status::Unknown1 && w2->getStatus() == Status::Unknown2) ||
+         (w2->getStatus() == Status::Unknown1 && w1->getStatus() == Status::Unknown2);
 }
 
 void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(WayPtr parent, WayPtr child,
@@ -78,6 +82,59 @@ void CookieCutConflateWayJoiner::_determineKeeperFeatureForId(WayPtr parent, Way
                                                               WayPtr& keeper, WayPtr& toRemove) const
 {
   _determineKeeperFeatureForTags(parent, child, keeper, toRemove);
+}
+
+long CookieCutConflateWayJoiner::_getPid(const ConstWayPtr& way) const
+{
+  LOG_VART(way->hasPid());
+  long pid = WayData::PID_EMPTY;
+  if (way->hasPid())
+  {
+    pid = way->getPid();
+  }
+  else if (way->getTags().contains(MetadataTags::HootSplitParentId()))
+  {
+    pid = way->getTags()[MetadataTags::HootSplitParentId()].toLong();
+  }
+  return pid;
+}
+
+//bool CookieCutConflateWayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
+//{
+//  const bool joined = WayJoinerAdvanced::_joinWays(parent, child);
+//  // TODO: hack
+//  const long pid = _getPid(_wayKeptAfterJoin);
+//  if (joined && pid != WayData::PID_EMPTY)
+//  {
+//    // TODO: probably slow
+//    WayPtr newWay(new Way(*_wayKeptAfterJoin));
+//    newWay->setId(pid);
+//    newWay->setStatus(Status::Unknown1);
+//    ReplaceElementOp wayReplacer(
+//      _wayKeptAfterJoin->getElementId(), newWay->getElementId(), true);
+//    wayReplacer.apply(_map);
+//  }
+//  return joined;
+//}
+
+void CookieCutConflateWayJoiner::join(const OsmMapPtr& map)
+{
+  //  Call base class implementation
+  WayJoinerAdvanced::join(map);
+
+  // TODO: this drops ways
+//  WayMap ways = _map->getWays();
+//  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+//  {
+//    WayPtr way = it->second;
+//    const long pid = _getPid(way);
+//    if (pid != WayData::PID_EMPTY)
+//    {
+//      ElementPtr newWay(way->clone());
+//      newWay->setId(pid);
+//      _map->replace(way, newWay);
+//    }
+//  }
 }
 
 }

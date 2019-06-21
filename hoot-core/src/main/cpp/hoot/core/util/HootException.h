@@ -91,7 +91,7 @@ private:
  * a hoot exception from a hoot exception pointer. If you simply
  * "HootException* e = getException(); throw *myexception;" you will throw an exception of the
  * HootException type rather than NeedsReview or similar. C++11 has some fascilities that may help
- * here, but we haven't migrated just yet.
+ * with simplifying this eventually...
  *
  * To work around this we expose HootExceptionThrower::rethrowPointer(). This method takes a pointer
  * to an exception and loops through all known exceptions and throws an exception of the appropriate

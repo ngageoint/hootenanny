@@ -36,6 +36,9 @@ namespace hoot
 
 /**
  * TODO
+ *
+ * TODO: using this conflator ends up with less joining than what we expect and get with
+ * WayJoinerAdvanced
  */
 class CookieCutConflateWayJoiner : public WayJoinerAdvanced
 {
@@ -50,7 +53,17 @@ public:
    */
   static void joinWays(const OsmMapPtr& map);
 
+  /**
+   * @see WayJoiner
+   */
+  virtual void join(const OsmMapPtr& map) override;
+
 protected:
+
+  /**
+   * TODO
+   */
+  //virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
   /**
    * TODO
@@ -82,6 +95,10 @@ protected:
    */
   virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
                                             WayPtr& toRemove) const override;
+
+private:
+
+  long _getPid(const ConstWayPtr& way) const;
 };
 
 }

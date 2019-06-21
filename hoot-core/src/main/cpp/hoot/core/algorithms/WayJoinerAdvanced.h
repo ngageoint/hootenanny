@@ -67,6 +67,8 @@ public:
 
 protected:
 
+  WayPtr _wayKeptAfterJoin;
+
   /**
    * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that
    * parent
@@ -117,6 +119,8 @@ protected:
                                             WayPtr& toRemove) const;
 
 private:
+
+  QString _callingMethod;
 
   /**
    * A more aggressive joining approach that tries to join up any unnamed generic roads in the

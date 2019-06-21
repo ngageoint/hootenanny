@@ -132,6 +132,7 @@ void WayJoinerAdvanced::_joinParentChild()
     else
     {
       //  Join this way to the parent
+      _callingMethod = "_joinParentChild";
       _joinWays(parent, way);
     }
   }
@@ -221,6 +222,7 @@ void WayJoinerAdvanced::_joinAtNode()
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags))
             {
+              _callingMethod = "_joinAtNode";
               _joinWays(way, child);
               break;
             }
@@ -372,6 +374,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
           Tags::haveMatchingName(parentTags, childTags))
       {
+        _callingMethod = "_rejoinSiblings";
         _joinWays(parent, child);
       }
       else
@@ -394,6 +397,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (!parent || !child)
     return false;
 
+  LOG_VART(_callingMethod);
   LOG_VART(parent->getId());
   LOG_VART(child->getId());
   LOG_VART(parent->getStatus());
@@ -547,6 +551,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
     wayWithIdToKeep->addNodes(parent_nodes);
   }
 
+  // TODO: this causes some problems in CookieCutConflateWayJoiner
   //  Keep the conflated status in the parent if the child being merged is conflated
   if ((wayWithIdToKeep->getStatus() == Status::Conflated ||
        wayWithIdToLose->getStatus() == Status::Conflated) ||
@@ -565,6 +570,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
     "Joined ways: " << wayWithIdToKeep->getElementId() << " and " <<
     wayWithIdToLose->getElementId() << "; way kept: " << wayWithIdToKeep << "; way removed: " <<
     wayWithIdToLose);
+  _wayKeptAfterJoin = wayWithIdToKeep;
 
   _numJoined++;
 

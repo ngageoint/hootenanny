@@ -276,6 +276,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
           LOG_TRACE(
             "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
 
+          // TODO: use setLeavePid(true) in WayJoiner
+
           // retain the parent id of the snapped to way
           // TODO: The call to this _getPid method is a hack until I can get the cookie cut
           // replacement workflow right. The problem is that we've called the way joiner after
@@ -292,11 +294,14 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
               " on snapped way: " << wayToSnap->getElementId());
           }
 
-          // retain the status of the snapped to way
-          wayToSnap->setStatus(_snappedToWay->getStatus());
-          LOG_TRACE(
-            "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
-            _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
+          // TODO: if used, this prevents correct id/tag transfer during way joining; if not used,
+          // the we don't get enough way joining...need to make changes to get all the way
+          // joining we want as well as the correct tag/id transfers
+//          // retain the status of the snapped to way
+//          wayToSnap->setStatus(_snappedToWay->getStatus());
+//          LOG_TRACE(
+//            "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
+//            _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
 
           LOG_VART(wayToSnap);
           LOG_VART(_snappedToWay);
