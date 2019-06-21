@@ -65,6 +65,7 @@ class OsmMapIndex;
 class OsmMapListener;
 class ElementId;
 class Roundabout;
+class IdSwap;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
@@ -297,6 +298,10 @@ public:
   void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
   std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
 
+  //  Handle ID preservation swaps
+  void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
+  std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
+
 protected:
 
   mutable IdGenerator* _idGen;
@@ -324,6 +329,8 @@ protected:
   std::vector<std::shared_ptr<Element>> _replaceTmpArray;
 
   std::vector<std::shared_ptr<Roundabout>> _roundabouts;
+
+  std::shared_ptr<IdSwap> _idSwap;
 
   void _copy(const std::shared_ptr<const OsmMap>& from);
 

@@ -27,8 +27,9 @@
 #include "RemoveNodeByEid.h"
 
 // hoot
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Validate.h>
 
 using namespace std;

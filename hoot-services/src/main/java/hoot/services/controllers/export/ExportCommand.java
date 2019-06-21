@@ -97,7 +97,7 @@ class ExportCommand extends ExternalCommand {
         }
 
         if ((tdsTemplate != null) && tdsTemplate.exists()) {
-            File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "."     + params.getOutputType().toLowerCase());
+            File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "." + params.getOutputType().toLowerCase());
             try {
                 FileUtils.forceMkdir(outputDir);
             }
@@ -144,8 +144,8 @@ class ExportCommand extends ExternalCommand {
         options.add("schema.translation.script=" + new File(HOME_FOLDER, params.getTranslation()).getAbsolutePath());
 
         // By default export removes hoot conflation review related tags
-        if (!params.getTagOverrides().isEmpty()) {
-            options.add("schema.translation.override=" + params.getTagOverrides() );
+        if (!params.getTagOverrides().isEmpty() && !("{}".equalsIgnoreCase(params.getTagOverrides())) ) {
+            options.add("schema.translation.override=" + params.getTagOverrides());
         }
 
         // Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
@@ -163,11 +163,11 @@ class ExportCommand extends ExternalCommand {
 
         //Add conf files for specific translation ops
         if (params.getTranslation().equalsIgnoreCase("translations/DNC.js")) {
-            options.add("-C DncExport.conf");
+            options.add("DncExport.conf");
         }
 
         if (params.getTranslation().equalsIgnoreCase("translations/MGCP_TRD4_Cartographic.js")) {
-            options.add("-C MgcpCartoExport.conf");
+            options.add("MgcpCartoExport.conf");
         }
 
         return options;

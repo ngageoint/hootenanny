@@ -262,34 +262,6 @@
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5091249962365421" lon="-66.9153999999999911">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-42"/>
-        <nd ref="-57"/>
-        <nd ref="-81"/>
-        <nd ref="-31"/>
-        <tag k="surface" v="paving_stones"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Este 2"/>
-        <tag k="source:datetime" v="2014-06-22T20:55:22.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="uuid" v="{82fc4cc9-b0a0-42e9-a811-c99032648c0d}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.675Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="horse" v="no"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="motor_vehicle" v="no"/>
-        <tag k="highway" v="pedestrian"/>
-    </way>
     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-41"/>
         <nd ref="-68"/>
@@ -313,7 +285,7 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-35" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+    <way visible="true" id="-32" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-23"/>
         <nd ref="-51"/>
         <nd ref="-34"/>
@@ -325,79 +297,6 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Este 5"/>
         <tag k="uuid" v="{11e395a8-210c-4a0d-91a7-60eddfd1db7a};{b66a0d8c-a774-4a2d-9a6b-608c1a9a8a74}"/>
-        <tag k="source:datetime" v="2013-11-13T13:09:28.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="-34" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-50"/>
-        <nd ref="-49"/>
-        <nd ref="-48"/>
-        <nd ref="-47"/>
-        <nd ref="-46"/>
-        <nd ref="-45"/>
-        <nd ref="-44"/>
-        <nd ref="-43"/>
-        <nd ref="-42"/>
-        <tag k="alt_name" v="Av. Norte;Avenida Norte"/>
-        <tag k="surface" v="paved"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Bulevar Panteón"/>
-        <tag k="source:datetime" v="2015-07-01T16:10:48.000Z;2015-07-01T16:10:50.000Z;2014-09-04T18:33:58.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="uuid" v="{753ce517-048e-4002-bafb-b0862d0ff356}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.707Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="motor_vehicle" v="no"/>
-        <tag k="highway" v="pedestrian"/>
-    </way>
-    <way visible="true" id="-33" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-37"/>
-        <nd ref="-38"/>
-        <nd ref="-39"/>
-        <nd ref="-40"/>
-        <nd ref="-41"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.709Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="Av. Norte 2"/>
-        <tag k="uuid" v="{377c951a-e46e-4e98-90b6-861082355bdd}"/>
-        <tag k="source:datetime" v="2015-10-29T12:28:42.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="-32" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
-        <nd ref="-34"/>
-        <nd ref="-35"/>
-        <nd ref="-36"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.696Z;2019-01-17T19:50:05.710Z"/>
-        <tag k="highway" v="residential"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="Av. Este 5"/>
-        <tag k="uuid" v="{11e395a8-210c-4a0d-91a7-60eddfd1db7a};{836530a3-2d45-455c-8f9e-b99211129bfb}"/>
         <tag k="source:datetime" v="2013-11-13T13:09:28.000Z;2019-01-17T19:50:06Z"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="way_area" v="-999999"/>
@@ -434,125 +333,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
-    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-32"/>
-        <nd ref="-89"/>
-        <nd ref="-88"/>
-        <nd ref="-87"/>
-        <nd ref="-86"/>
-        <nd ref="-85"/>
-        <nd ref="-84"/>
-        <nd ref="-83"/>
-        <nd ref="-82"/>
-        <nd ref="-42"/>
-        <tag k="surface" v="paving_stones"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Oeste 2"/>
-        <tag k="source:datetime" v="2013-12-19T16:36:19.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="2"/>
-        <tag k="uuid" v="{82fc4cc9-b0a0-42e9-a811-c99032648c0d}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.675Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="horse" v="no"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="motor_vehicle" v="no"/>
-        <tag k="highway" v="pedestrian"/>
-    </way>
-    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88"/>
-        <nd ref="-30"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Sur 2"/>
-        <tag k="source:datetime" v="2014-02-08T15:54:54.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="uuid" v="{fdc60078-3a67-4381-9d4c-642c5ac1287f}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.665Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="motor_vehicle" v="no"/>
-        <tag k="highway" v="pedestrian"/>
-    </way>
-    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-29"/>
-        <nd ref="-96"/>
-        <nd ref="-95"/>
-        <nd ref="-94"/>
-        <nd ref="-93"/>
-        <nd ref="-92"/>
-        <nd ref="-91"/>
-        <nd ref="-90"/>
-        <nd ref="-55"/>
-        <nd ref="-22"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Urdaneta"/>
-        <tag k="source:datetime" v="2014-09-04T18:33:58.000Z;2014-09-04T18:34:00.000Z;2014-05-07T19:27:30.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{00c72cfc-5feb-48a1-a372-ac8334e7db28};{7b7843fb-5c2c-4397-b0ae-87d592f04b7f}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.682Z;2019-01-17T19:50:05.664Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="motor_vehicle" v="yes"/>
-        <tag k="highway" v="primary"/>
-    </way>
-    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-28"/>
-        <nd ref="-104"/>
-        <nd ref="-103"/>
-        <nd ref="-102"/>
-        <nd ref="-101"/>
-        <nd ref="-100"/>
-        <nd ref="-99"/>
-        <nd ref="-98"/>
-        <nd ref="-97"/>
-        <nd ref="-52"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="oneway" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.659Z"/>
-        <tag k="highway" v="pedestrian"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="Av. Oeste 0"/>
-        <tag k="uuid" v="{c708f207-166d-4d9c-936f-158a78dacb43}"/>
-        <tag k="lit" v="yes"/>
-        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z;2015-08-11T16:12:27.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="surface" v="concrete"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27"/>
         <nd ref="-51"/>
@@ -563,25 +343,6 @@
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="uuid" v="{29d921bc-4aec-4207-a979-95fccd269ac6}"/>
         <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-52"/>
-        <nd ref="-26"/>
-        <tag k="source" v="Yahoo;osm:line"/>
-        <tag k="oneway" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.694Z"/>
-        <tag k="highway" v="pedestrian"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="Av. Este 0"/>
-        <tag k="uuid" v="{c2c53a8b-3491-4720-9148-c4ee0ec23958}"/>
-        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="surface" v="concrete"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="way_area" v="-999999"/>
         <tag k="osm_id" v="-999999"/>
@@ -648,7 +409,173 @@
         <tag k="motor_vehicle" v="yes"/>
         <tag k="highway" v="primary"/>
     </way>
-    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-28"/>
+        <nd ref="-104"/>
+        <nd ref="-103"/>
+        <nd ref="-102"/>
+        <nd ref="-101"/>
+        <nd ref="-100"/>
+        <nd ref="-99"/>
+        <nd ref="-98"/>
+        <nd ref="-97"/>
+        <nd ref="-52"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="no"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.659Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Oeste 0"/>
+        <tag k="uuid" v="{c708f207-166d-4d9c-936f-158a78dacb43}"/>
+        <tag k="lit" v="yes"/>
+        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z;2015-08-11T16:12:27.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="lanes" v="2"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88"/>
+        <nd ref="-30"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Av. Sur 2"/>
+        <tag k="source:datetime" v="2014-02-08T15:54:54.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="uuid" v="{fdc60078-3a67-4381-9d4c-642c5ac1287f}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.665Z"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="highway" v="pedestrian"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-32"/>
+        <nd ref="-89"/>
+        <nd ref="-88"/>
+        <nd ref="-87"/>
+        <nd ref="-86"/>
+        <nd ref="-85"/>
+        <nd ref="-84"/>
+        <nd ref="-83"/>
+        <nd ref="-82"/>
+        <nd ref="-42"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Av. Oeste 2"/>
+        <tag k="source:datetime" v="2013-12-19T16:36:19.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="2"/>
+        <tag k="uuid" v="{82fc4cc9-b0a0-42e9-a811-c99032648c0d}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.675Z"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="horse" v="no"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="highway" v="pedestrian"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-52"/>
+        <nd ref="-26"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="no"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.694Z"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Este 0"/>
+        <tag k="uuid" v="{c2c53a8b-3491-4720-9148-c4ee0ec23958}"/>
+        <tag k="source:datetime" v="2014-06-22T21:12:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-42"/>
+        <nd ref="-57"/>
+        <nd ref="-81"/>
+        <nd ref="-31"/>
+        <tag k="surface" v="paving_stones"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="lit" v="yes"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Av. Este 2"/>
+        <tag k="source:datetime" v="2014-06-22T20:55:22.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="uuid" v="{82fc4cc9-b0a0-42e9-a811-c99032648c0d}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.675Z"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="horse" v="no"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="highway" v="pedestrian"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="-96"/>
+        <nd ref="-95"/>
+        <nd ref="-94"/>
+        <nd ref="-93"/>
+        <nd ref="-92"/>
+        <nd ref="-91"/>
+        <nd ref="-90"/>
+        <nd ref="-55"/>
+        <nd ref="-22"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Av. Urdaneta"/>
+        <tag k="source:datetime" v="2014-09-04T18:33:58.000Z;2014-09-04T18:34:00.000Z;2014-05-07T19:27:30.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="3"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="uuid" v="{00c72cfc-5feb-48a1-a372-ac8334e7db28};{7b7843fb-5c2c-4397-b0ae-87d592f04b7f}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.682Z;2019-01-17T19:50:05.664Z"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="motor_vehicle" v="yes"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18"/>
         <nd ref="-71"/>
         <nd ref="-70"/>
@@ -665,6 +592,79 @@
         <tag k="source:datetime" v="2014-04-16T15:31:08.000Z;2019-01-17T19:50:06Z"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="lanes" v="2"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="-1" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-34"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.696Z;2019-01-17T19:50:05.710Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Este 5"/>
+        <tag k="uuid" v="{11e395a8-210c-4a0d-91a7-60eddfd1db7a};{836530a3-2d45-455c-8f9e-b99211129bfb}"/>
+        <tag k="source:datetime" v="2013-11-13T13:09:28.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="582" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-50"/>
+        <nd ref="-49"/>
+        <nd ref="-48"/>
+        <nd ref="-47"/>
+        <nd ref="-46"/>
+        <nd ref="-45"/>
+        <nd ref="-44"/>
+        <nd ref="-43"/>
+        <nd ref="-42"/>
+        <tag k="alt_name" v="Av. Norte;Avenida Norte"/>
+        <tag k="surface" v="paved"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="lit" v="yes"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Bulevar Panteón"/>
+        <tag k="source:datetime" v="2015-07-01T16:10:48.000Z;2015-07-01T16:10:50.000Z;2014-09-04T18:33:58.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="uuid" v="{753ce517-048e-4002-bafb-b0862d0ff356}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.707Z"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="motor_vehicle" v="no"/>
+        <tag k="highway" v="pedestrian"/>
+    </way>
+    <way visible="true" id="781" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-37"/>
+        <nd ref="-38"/>
+        <nd ref="-39"/>
+        <nd ref="-40"/>
+        <nd ref="-41"/>
+        <tag k="source" v="Yahoo;osm:line"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.709Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Norte 2"/>
+        <tag k="uuid" v="{377c951a-e46e-4e98-90b6-861082355bdd}"/>
+        <tag k="source:datetime" v="2015-10-29T12:28:42.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="way_area" v="-999999"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>

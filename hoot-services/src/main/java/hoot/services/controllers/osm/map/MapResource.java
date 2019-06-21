@@ -720,7 +720,6 @@ public class MapResource {
     @Path("/{mapId}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTags(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
-        Users user = Users.fromRequest(request);
         Map m = getMapForRequest(request, mapId, true, false);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
@@ -742,6 +741,17 @@ public class MapResource {
         }
 
         return Response.ok().entity(ret).build();
+    }
+
+    @GET
+    @Path("/{mapId}/startingIndex")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllIds(@Context HttpServletRequest request, @PathParam("mapId") String mapId) {
+        Map m = getMapForRequest(request, mapId, true, false);
+
+        HashMap <String, Long> getIdsMap = m.getIdIndex();
+
+        return Response.ok().entity(getIdsMap).build();
     }
 
     /**
