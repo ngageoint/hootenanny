@@ -47,6 +47,8 @@ namespace hoot
  * from this point forward, Some time should probably be spent exploring ways to make the classes
  * containing the information printed out by this command auto-register themselves in a more
  * extensible way.
+ *
+ * TODO: add the capability to list WayJoiner implementations
  */
 class InfoCmd : public BaseCommand
 {

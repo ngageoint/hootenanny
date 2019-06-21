@@ -271,12 +271,10 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         {
           assert(_snappedToWay);
 
-          // TODO: still need to verify _snappedToWay is always going to be correct
+          // TODO: still need to verify _snappedToWay is always going to be the way actually
+          // snapped to
           LOG_TRACE(
             "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
-
-          // retain the id of the snapped to way - can't do this here
-          //wayToSnap->setId(_snappedToWay->getId());
 
           // retain the parent id of the snapped to way
           // TODO: The call to this _getPid method is a hack until I can get the cookie cut
@@ -296,6 +294,9 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
 
           // retain the status of the snapped to way
           wayToSnap->setStatus(_snappedToWay->getStatus());
+          LOG_TRACE(
+            "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
+            _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
 
           LOG_VART(wayToSnap);
           LOG_VART(_snappedToWay);
@@ -548,6 +549,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
   // node belongs to.
   const std::set<ElementId> wayNodesToSnapTo =
     _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Node);
+  if (wayNodesToSnapTo.size() == 0)
+  {
+    LOG_TRACE(
+      "No nearby way nodes to snap to for " << nodeToSnap->getElementId() <<
+      ". Skipping snapping...");
+  }
+
   // For each way node neighbor, let's try snapping to the first one that we can.
   for (std::set<ElementId>::const_iterator wayNodesToSnapToItr = wayNodesToSnapTo.begin();
        wayNodesToSnapToItr != wayNodesToSnapTo.end(); ++wayNodesToSnapToItr)
@@ -564,7 +572,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
       // Compare all the ways that a contain the neighbor and all the ways that contain our input
       // node.  If there's overlap, then we pass b/c we don't want to try to snap the input way
       // node to a way its already on.
-      if (!OsmUtils::nodesAreContainedByTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map) /*&&
+      if (!OsmUtils::nodesAreContainedInTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map) /*&&
           // I don't think this distance check is necessary...leaving here disabled for the time
           // being just in case. See similar check in _snapUnconnectedNodeToWay
           Distance::euclidean(wayNodeToSnapTo->toCoordinate(), nodeToSnap->toCoordinate()) <=
@@ -608,6 +616,12 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
 
         // Don't snap the node more than once.
         return true;
+      }
+      else
+      {
+        LOG_TRACE(
+          "Nodes " << wayNodeToSnapTo->getElementId() << " and " << nodeToSnap->getElementId() <<
+          " are contained in the same way. Skipping snapping...")
       }
     }
   }
@@ -748,6 +762,18 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
 
       return true;
     }
+    else
+    {
+      LOG_TRACE(
+        "Node to snap: " << nodeToSnap->getElementId() << " not within snap distance: " <<
+        _maxSnapDistance << " of " << wayToSnapTo->getElementId());
+    }
+  }
+  else
+  {
+    LOG_TRACE(
+      "Way to snap to: " << wayToSnapTo->getElementId() << " contains node to snap: " <<
+      nodeToSnap->getElementId())
   }
   return false;
 }

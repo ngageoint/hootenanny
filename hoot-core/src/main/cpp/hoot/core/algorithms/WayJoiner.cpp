@@ -168,7 +168,7 @@ void WayJoiner::_joinAtNode()
   }
 }
 
-bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2)
+bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
 {
   return
     //  Same status => Joinable

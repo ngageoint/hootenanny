@@ -56,7 +56,7 @@ public:
   WayJoinerAdvanced();
 
   /**
-   * Static method to join all joinable ways using WayJoinerBasic
+   * Static method to join all joinable ways using WayJoinerAdvanced
    */
   static void joinWays(const OsmMapPtr& map);
 
@@ -94,6 +94,28 @@ protected:
    */
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
+  /**
+   * TODO
+   *
+   * @param parent
+   * @param child
+   * @param keeper
+   * @param toRemove
+   */
+  virtual void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                              WayPtr& toRemove) const;
+
+  /**
+   * TODO
+   *
+   * @param parent
+   * @param child
+   * @param keeper
+   * @param toRemove
+   */
+  virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                            WayPtr& toRemove) const;
+
 private:
 
   /**
@@ -102,10 +124,6 @@ private:
    * likely result in some undesirable joins.
    */
   void _joinUnsplitWaysAtNode();
-
-  void _determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove);
-  void _determineKeeperFeatureWithOverride(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                           WayPtr& toRemove, const QString& keepStatusOverrideStr);
 
   bool _handleOneWayStreetReversal(WayPtr wayWithTagsToKeep, ConstWayPtr wayWithTagsToLose);
 

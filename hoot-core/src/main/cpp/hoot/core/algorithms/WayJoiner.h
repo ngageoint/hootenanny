@@ -83,7 +83,7 @@ protected:
    * @brief areJoinable Check the status of the ways to see if they are compatible when joining at
    * a node; essentially UNKNOWN1 and UNKNOWN2 ways aren't joinable together
    */
-  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2);
+  virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const;
 
   /**
    * @brief resetParents Resets parent id for all ways after joining operation has completed

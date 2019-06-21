@@ -410,10 +410,16 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
     return false;
   }
 
+  WayPtr wayWithIdToKeep;
+  WayPtr wayWithIdToLose;
+  _determineKeeperFeatureForId(parent, child, wayWithIdToKeep, wayWithIdToLose);
+  LOG_VART(wayWithIdToKeep);
+  LOG_VART(wayWithIdToLose);
+
   // make sure tags go in the right direction
   WayPtr wayWithTagsToKeep;
   WayPtr wayWithTagsToLose;
-  _determineKeeperFeature(parent, child, wayWithTagsToKeep, wayWithTagsToLose);
+  _determineKeeperFeatureForTags(parent, child, wayWithTagsToKeep, wayWithTagsToLose);
   LOG_VART(wayWithTagsToKeep);
   LOG_VART(wayWithTagsToLose);
 
@@ -421,10 +427,10 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   // This needs to be done before we check the merge type.
   const bool keeperWasReversed = _handleOneWayStreetReversal(wayWithTagsToKeep, wayWithTagsToLose);
 
-  vector<long> parent_nodes = parent->getNodeIds();
+  vector<long> parent_nodes = wayWithIdToKeep->getNodeIds();
   LOG_VART(parent_nodes.size());
   LOG_VART(parent_nodes);
-  vector<long> child_nodes = child->getNodeIds();
+  vector<long> child_nodes = wayWithIdToLose->getNodeIds();
   LOG_VART(child_nodes.size());
   LOG_VART(child_nodes);
   //  make sure that they share the same node
@@ -444,8 +450,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   else
   {
     LOG_TRACE(
-      "No join type found for " << parent->getElementId() << " and " << child->getElementId() <<
-      ".");
+      "No join type found for " << wayWithIdToKeep->getElementId() << " and " <<
+      wayWithIdToLose->getElementId() << ".");
 
     if (keeperWasReversed)
     {
@@ -459,11 +465,11 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   //  Don't join area ways
   AreaCriterion areaCrit;
-  if (areaCrit.isSatisfied(parent) || areaCrit.isSatisfied(child))
+  if (areaCrit.isSatisfied(wayWithIdToKeep) || areaCrit.isSatisfied(wayWithIdToLose))
   {
     LOG_TRACE(
-      "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<
-      " to be joined are areas. Skipping join.");
+      "One or more of the ways: " << wayWithIdToKeep->getElementId() << " and " <<
+      wayWithIdToLose->getElementId() << " to be joined are areas. Skipping join.");
     return false;
   }
 
@@ -476,8 +482,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
       onlyOneIsABridge)
   {
     LOG_TRACE(
-      "Only one of the features: " << parent->getElementId() << " and " << child->getElementId() <<
-      " to be joined is a bridge. Skipping join.");
+      "Only one of the features: " << wayWithIdToKeep->getElementId() << " and " <<
+      wayWithIdToLose->getElementId() << " to be joined is a bridge. Skipping join.");
     return false;
   }
 
@@ -485,8 +491,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (OsmUtils::oneWayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
-      "Conflicting one way street tags between " << parent->getElementId() << " and " <<
-      child->getElementId() << ".  Skipping join.");
+      "Conflicting one way street tags between " << wayWithIdToKeep->getElementId() << " and " <<
+      wayWithIdToLose->getElementId() << ".  Skipping join.");
     return false;
   }
 
@@ -496,15 +502,15 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
       OsmUtils::nonGenericHighwayConflictExists(wayWithTagsToKeep, wayWithTagsToLose))
   {
     LOG_TRACE(
-      "Conflicting highway type tags between " << parent->getElementId() << " and " <<
-      child->getElementId() << ".  Skipping join.")
+      "Conflicting highway type tags between " << wayWithIdToKeep->getElementId() << " and " <<
+      wayWithIdToLose->getElementId() << ".  Skipping join.")
     return false;
   }
 
   // Checks done, now we're ready to merge.
 
   //  Remove the split parent id
-  child->resetPid();
+  wayWithIdToLose->resetPid();
 
   //  Merge the tags
 
@@ -524,37 +530,41 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
     mergedTags.set(MetadataTags::Length(), QString::number(totalLength));
   }
 
-  parent->setTags(mergedTags);
+  wayWithIdToKeep->setTags(mergedTags);
 
   //  Remove the duplicate node id of the overlap
   if (joinType == JoinAtNodeMergeType::ParentFirst)
   {
     //  Remove the first node of the child and append to parent
     child_nodes.erase(child_nodes.begin());
-    parent->addNodes(child_nodes);
+    wayWithIdToKeep->addNodes(child_nodes);
   }
   else if (joinType == JoinAtNodeMergeType::ParentLast)
   {
     //  Remove the last of the children and prepend them to the parent
     child_nodes.pop_back();
-    parent->setNodes(child_nodes);
-    parent->addNodes(parent_nodes);
+    wayWithIdToKeep->setNodes(child_nodes);
+    wayWithIdToKeep->addNodes(parent_nodes);
   }
 
   //  Keep the conflated status in the parent if the child being merged is conflated
-  if ((parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated) ||
-      (parent->getStatus() == Status::Unknown1 && child->getStatus() == Status::Unknown2) ||
-      (parent->getStatus() == Status::Unknown2 && child->getStatus() == Status::Unknown1))
-    parent->setStatus(Status::Conflated);
+  if ((wayWithIdToKeep->getStatus() == Status::Conflated ||
+       wayWithIdToLose->getStatus() == Status::Conflated) ||
+      (wayWithIdToKeep->getStatus() == Status::Unknown1 &&
+       wayWithIdToLose->getStatus() == Status::Unknown2) ||
+      (wayWithIdToKeep->getStatus() == Status::Unknown2 &&
+       wayWithIdToLose->getStatus() == Status::Unknown1))
+    wayWithIdToKeep->setStatus(Status::Conflated);
 
   //  Update any relations that contain the child to use the parent and remove the child.
-  ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
-  child->getTags().clear();
-  RecursiveElementRemover(child->getElementId()).apply(_map);
+  ReplaceElementOp(wayWithIdToLose->getElementId(), wayWithIdToKeep->getElementId()).apply(_map);
+  wayWithIdToLose->getTags().clear();
+  RecursiveElementRemover(wayWithIdToLose->getElementId()).apply(_map);
 
   LOG_TRACE(
-    "Joined ways: " << parent->getElementId() << " and " << child->getElementId() <<
-    "; way kept: " << parent << "; way removed: " << child);
+    "Joined ways: " << wayWithIdToKeep->getElementId() << " and " <<
+    wayWithIdToLose->getElementId() << "; way kept: " << wayWithIdToKeep << "; way removed: " <<
+    wayWithIdToLose);
 
   _numJoined++;
 
@@ -638,90 +648,10 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
     " attempts.");
 }
 
-void WayJoinerAdvanced::_determineKeeperFeatureWithOverride(WayPtr parent, WayPtr child,
-                                                            WayPtr& keeper, WayPtr& toRemove,
-                                                            const QString& keepStatusOverrideStr)
-{
-  // TODO: clean this up
-
-  const Status keepStatusOverride = Status::fromString(keepStatusOverrideStr);
-  LOG_VART(keepStatusOverride);
-  if (keepStatusOverride == Status::Unknown1)
-  {
-    if (parent->getStatus() == Status::Unknown1)
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-    else if (child->getStatus() == Status::Unknown1)
-    {
-      keeper = child;
-      toRemove = parent;
-    }
-    else
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-  }
-  else if (keepStatusOverride == Status::Unknown2)
-  {
-    if (parent->getStatus() == Status::Unknown2)
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-    else if (child->getStatus() == Status::Unknown2)
-    {
-      keeper = child;
-      toRemove = parent;
-    }
-    else
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-  }
-  else if (keepStatusOverride == Status::Conflated)
-  {
-    if (parent->getStatus() == Status::Conflated)
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-    else if (child->getStatus() == Status::Conflated)
-    {
-      keeper = child;
-      toRemove = parent;
-    }
-    else
-    {
-      keeper = parent;
-      toRemove = child;
-    }
-  }
-  else
-  {
-    throw IllegalArgumentException(
-      "Invalid WayJoinerAdvanced keep feature status override: " + keepStatusOverride.toString());
-  }
-}
-
-void WayJoinerAdvanced::_determineKeeperFeature(WayPtr parent, WayPtr child, WayPtr& keeper,
-                                                WayPtr& toRemove)
+void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                                       WayPtr& toRemove) const
 {
   // This logic is kind of a mess.
-
-  // TODO: This option was implemented for cookie cut replacement changeset derivation. Possibly,
-  // rather than use the option, a new way joiner inheriting this one could be created instead to
-  // override this method only.
-  const QString keepStatusOverrideStr =
-    ConfigOptions().getWayJoinerAdvancedKeepFeatureStatusOverride().trimmed();
-  if (!keepStatusOverrideStr.isEmpty())
-  {
-    _determineKeeperFeatureWithOverride(parent, child, keeper, toRemove, keepStatusOverrideStr);
-    return;
-  }
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);
@@ -770,6 +700,13 @@ void WayJoinerAdvanced::_determineKeeperFeature(WayPtr parent, WayPtr child, Way
     keeper = parent;
     toRemove = child;
   }
+}
+
+void WayJoinerAdvanced::_determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
+                                                     WayPtr& toRemove) const
+{
+  keeper = parent;
+  toRemove = child;
 }
 
 bool WayJoinerAdvanced::_handleOneWayStreetReversal(WayPtr wayWithTagsToKeep,

@@ -330,7 +330,7 @@ public:
    * @param map the map containing the nodes
    * @return true if there is at least one way that contains both nodes; false otherwise
    */
-  static bool nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+  static bool nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                             const ConstOsmMapPtr& map);
 };
 

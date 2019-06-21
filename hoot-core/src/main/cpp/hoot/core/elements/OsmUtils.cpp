@@ -327,7 +327,7 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   return closestWayNodeId;
 }
 
-bool OsmUtils::nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+bool OsmUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                              const ConstOsmMapPtr& map)
 {
   const std::set<long>& waysContainingNode1 =

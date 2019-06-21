@@ -4336,17 +4336,7 @@ The way joiner implementation used by the `WayJoinerOp` to repair way splits aft
 This operation can take on the following two options:
 * `hoot::WayJoinerBasic`
 * `hoot::WayJoinerAdvanced`
-
-=== way.joiner.advanced.keep.feature.status.override
-
-* Data Type: string
-* Default Value: ``
-
-Overrides the default behavior of `WayJoinerAdvanced` for determining which set of feature tags
-are kept when joining ways. Valid values are 'unknown1', 'unknown2', or 'conflated'. If 'unknown1'
-or 'unknown2' is specified, neither feature in the pair of features being joined has that status,
-and at least one of them has a conflated status, then 'conflated' will be used instead. This option
-will always override the behavior of `tag.merger.default` when joining ways.
+* `hoot::CookieCutConflateWayJoiner`
 
 === way.matcher.heading.delta
 
