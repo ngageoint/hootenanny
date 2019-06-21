@@ -1920,6 +1920,36 @@ List of match creators to use during conflation. This can modify what features w
 
 Used in the calculation of the match parallel score, cos (delta) ^ match.parallel.exponent
 
+=== metadata.dataset.indicator.tag
+
+* Data Type: list
+* Default Value:
+** `source:metadata`
+** `dataset`
+
+Single tag/value pair indicating that an element is a dataset used as import source or export destination
+for metadata values.
+
+=== metadata.tags
+
+* Data Type: list
+* Default Value:
+** `attribution`
+** `test-attribution`
+** `source`
+** `test-source`
+
+List of tag/value pairs of metatdata tags with default values to be distributed (import) or
+collected (export).
+
+=== metadata.grid.cell.size
+
+* Data Type: double
+* Default Value: `0.25`
+
+Cell size of the dataset grid created when exporting metadata tags to dataset elements. If this
+value is set to 0 a single polygon using the bounds of the source data is being created instead.
+
 === max.elements.per.partial.map
 
 * Data Type: double
