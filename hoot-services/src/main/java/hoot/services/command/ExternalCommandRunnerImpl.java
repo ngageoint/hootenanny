@@ -92,6 +92,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         //e.g. /home/vagrant/hoot/userfiles/tmp
         out = out.replaceAll(HootProperties.HOME_FOLDER, "<path>");
 
+        //escape single quotes
+        out = out.replaceAll("'", "''");
+
         return out;
     }
 
