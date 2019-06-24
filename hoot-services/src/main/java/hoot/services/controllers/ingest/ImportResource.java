@@ -128,6 +128,7 @@ public class ImportResource {
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
                                       @QueryParam("FOLDER_ID") String folderId,
+                                      @QueryParam("AS_SINGLE") boolean asSingle,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
         Users user = Users.fromRequest(request);
@@ -146,6 +147,7 @@ public class ImportResource {
             List<String> fileNames = new ArrayList<>();
             List<File> zipsToImport = new ArrayList<>();
             String etlName = inputName;
+            Boolean multiToSingle = asSingle;
 
             for (File uploadedFile : uploadedFiles) {
                 String uploadedFileName = uploadedFile.getName();
@@ -210,8 +212,8 @@ public class ImportResource {
                 // massage some variables to make it look like an osm file was uploaded
                 osmCnt = 1;
                 shpCnt = fgdbCnt = geonamesCnt = shpZipCnt = geonamesZipCnt = fgdbZipCnt = zipCnt = osmZipCnt = 0;
-            }
-
+            }            
+            
             UploadClassification finalUploadClassification = ImportResourceUtils.finalizeUploadClassification(zipCnt,
                     shpZipCnt, fgdbZipCnt, osmZipCnt, geojsonZipCnt, geonamesZipCnt, gpkgZipCnt, shpCnt, fgdbCnt, osmCnt,
                     geojsonCnt, geonamesCnt, gpkgCnt);
@@ -226,7 +228,7 @@ public class ImportResource {
                 InternalCommand setFolderCommand = updateParentCommandFactory.build(jobId, Long.parseLong(folderId), etlName, user, this.getClass());
                 workflow.add(setFolderCommand);
             }
-
+            
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
 
             Map<String, Object> res = new HashMap<String, Object>();
