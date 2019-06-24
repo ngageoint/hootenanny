@@ -53,7 +53,7 @@ using namespace std;
 namespace hoot
 {
 
-const QString Settings::BASE_CONFIG_OPTION_KEY = "base.config";
+const char* BASE_CONFIG_OPTION_KEY = "base.config";
 
 class JsonLoader
 {
@@ -115,6 +115,16 @@ private:
 
   void _loadTags(pt::ptree& tree)
   {
+    pt::ptree::assoc_iterator it = tree.find(BASE_CONFIG_OPTION_KEY);
+    if (it != tree.not_found())
+    {
+      //  Split the base configs and process them in order
+      QString base = it->second.data().c_str();
+      const QStringList baseConfigs = base.trimmed().split(",", QString::SplitBehavior::SkipEmptyParts);
+      for (const QString value : baseConfigs)
+        load(ConfPath::search(value));
+    }
+    //  Iterate all of the children key/value pairs
     for (pt::ptree::value_type& element : tree.get_child(""))
     {
       const QString name = QString::fromUtf8(element.first.c_str());
@@ -122,12 +132,12 @@ private:
       //  Skip comments
       if (name.startsWith("#"))
         continue;
-      // Ignore the base config option, as its used to load a base configuration file and is done
-      // elsewhere.
-      if (name != Settings::BASE_CONFIG_OPTION_KEY && !_s->hasKey(name))
-      {
+      //  Skip base config
+      if (name == BASE_CONFIG_OPTION_KEY)
+        continue;
+      //  Throw an exception for unrecognized keys
+      if (!_s->hasKey(name))
         throw HootException("Unknown JSON setting: (" + name + ")");
-      }
       //  Set key/value pair as name and data, data() turns everything to a string
       _s->set(name, QString::fromUtf8(element.second.data().c_str()));
     }
