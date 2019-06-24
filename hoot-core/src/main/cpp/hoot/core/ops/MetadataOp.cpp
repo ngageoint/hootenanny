@@ -28,8 +28,8 @@
 #include "MetadataOp.h"
 
 // Hoot
-#include <hoot/core/ops/RemoveNodeOp.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 
 // geos
 #include <geos/geom/GeometryFactory.h>
@@ -246,11 +246,11 @@ void MetadataOp::_removeDatasetWay(WayPtr pDataset)
   vector<long> nodes = pDataset->getNodeIds();
 
   // remove the way
-  RemoveWayOp::removeWayFully(_pMap,pDataset->getId());
+  RemoveWayByEid::removeWayFully(_pMap,pDataset->getId());
 
   for (long node: nodes)
   {
-    RemoveNodeOp::removeNodeFully(_pMap,node);
+    RemoveNodeByEid::removeNodeFully(_pMap,node);
   }
 }
 
