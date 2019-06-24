@@ -623,11 +623,44 @@ public class GrailResource {
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
+        /**
+         * Readable format of the below url:
+         *
+         * [out:json][timeout:3600][bbox:{{bbox}}];
+         * (
+         *   node;<;>;
+         * )->.all;
+         *
+         * (
+         *   relation[natural=coastline];
+         *   way[natural=coastline];<;>;
+         *   relation[boundary=census];>;
+         *   relation[boundary=administrative];
+         *   way[boundary=administrative];>;
+         *   node[boundary=administrative];
+         * )->.exclude;
+         *
+         * (.all; - .exclude;);
+         *
+         * out body;
+         * >;
+         * out meta qt;
+         *
+         */
         String url = "'"
                 + PUBLIC_OVERPASS_URL
-                + "/api/interpreter?data=[out:json];(node("
-                + new BoundingBox(bbox).toOverpassString()
-                + ");<;>;);out%20meta%20qt;"
+                + "/api/interpreter?data=[out:json][bbox:" + new BoundingBox(bbox).toOverpassString() + "];"
+                + "(node;<;>;)->.all;"
+                + "(relation[natural=coastline];"
+                + "way[natural=coastline];<;>;"
+                + "relation[boundary=census];>;"
+                + "relation[boundary=administrative];"
+                + "way[boundary=administrative];>;"
+                + "node[boundary=administrative];"
+                + ")->.exclude;"
+                + "(.all;%20-%20.exclude;);"
+                + "out%20body;>;"
+                + "out%20meta%20qt;"
                 + "'";
         params.setInput1(url);
         params.setOutput(mapName);
@@ -699,7 +732,7 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
 //        String url = RAILSPORT_PULL_URL +
-//                "/mapfull?bbox=" + new BoundingBox(bbox).toServicesString();
+//                "?bbox=" + new BoundingBox(bbox).toServicesString();
 //        params.setInput1(url);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setWorkDir(workDir);
