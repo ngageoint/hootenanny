@@ -26,18 +26,22 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -623,45 +627,24 @@ public class GrailResource {
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
-        /**
-         * Readable format of the below url:
-         *
-         * [out:json][timeout:3600][bbox:{{bbox}}];
-         * (
-         *   node;<;>;
-         * )->.all;
-         *
-         * (
-         *   relation[natural=coastline];
-         *   way[natural=coastline];<;>;
-         *   relation[boundary=census];>;
-         *   relation[boundary=administrative];
-         *   way[boundary=administrative];>;
-         *   node[boundary=administrative];
-         * )->.exclude;
-         *
-         * (.all; - .exclude;);
-         *
-         * out body;
-         * >;
-         * out meta qt;
-         *
-         */
-        String url = "'"
-                + PUBLIC_OVERPASS_URL
-                + "/api/interpreter?data=[out:json][bbox:" + new BoundingBox(bbox).toOverpassString() + "];"
-                + "(node;<;>;)->.all;"
-                + "(relation[natural=coastline];"
-                + "way[natural=coastline];<;>;"
-                + "relation[boundary=census];>;"
-                + "relation[boundary=administrative];"
-                + "way[boundary=administrative];>;"
-                + "node[boundary=administrative];"
-                + ")->.exclude;"
-                + "(.all;%20-%20.exclude;);"
-                + "out%20body;>;"
-                + "out%20meta%20qt;"
-                + "'";
+
+        // Get grail overpass query from the file and store it in a string
+        String overpassQuery;
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            logger.error("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getAbsolutePath());
+            return Response.status(Response.Status.BAD_REQUEST).entity("Could not find grail overpass query file").build();
+        }
+
+        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+        try {
+            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
+
+        String url = "'" + PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery + "'";
         params.setInput1(url);
         params.setOutput(mapName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
