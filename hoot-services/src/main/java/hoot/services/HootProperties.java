@@ -84,6 +84,7 @@ public final class HootProperties {
     public static final String INGEST_SIZE_THRESHOLD;
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String HTTP_TIMEOUT;
+    public static final String GRAIL_OVERPASS_QUERY;
     public static final String OSMAPI_DB_NAME;
     public static final String MAP_QUERY_DIMENSIONS;
     public static final String MAP_QUERY_AREA_DEGREES;
@@ -140,7 +141,7 @@ public final class HootProperties {
     private static final String RAILSPORT_PROTOCOL;
     private static final String RAILSPORT_HOST;
     private static final String RAILSPORT_PORT;
-    private static final String RAILSPORT_API_VERSION;
+    private static final String RAILSPORT_API;
 
     public static final String OAUTH_REDIRECTURL;
     public static final String OAUTH_PROVIDERURL;
@@ -218,6 +219,7 @@ public final class HootProperties {
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         HTTP_TIMEOUT = getProperty("httpTimeout");
+        GRAIL_OVERPASS_QUERY = getProperty("grailOverpassQueryPath");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");
         MAX_QUERY_NODES = getProperty("maxQueryNodes");
@@ -302,17 +304,17 @@ public final class HootProperties {
         RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";
         RAILSPORT_HOST = "${RAILSPORT_HOST}";
         RAILSPORT_PORT = "${RAILSPORT_PORT}";
-        RAILSPORT_API_VERSION = "${RAILSPORT_API_VERSION}";
+        RAILSPORT_API = "${RAILSPORT_API}";
 
         // Some sites don't need a port number
         // This _should_ goto https at some stage
         if (replaceSensitiveData(RAILSPORT_PORT).equals("XXX")) {
             RAILSPORT_PUSH_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST;
-            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + "/api/" + RAILSPORT_API_VERSION;
+            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + RAILSPORT_API;
             RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + "/api/capabilities";
         } else {
             RAILSPORT_PUSH_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT;
-            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT + "/api/" + RAILSPORT_API_VERSION;
+            RAILSPORT_PULL_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT + RAILSPORT_API;
             RAILSPORT_CAPABILITIES_URL = RAILSPORT_PROTOCOL + RAILSPORT_HOST + ":" + RAILSPORT_PORT  + "/api/capabilities";
         }
 

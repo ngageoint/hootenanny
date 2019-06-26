@@ -29,4 +29,4 @@ export OVERPASS_API_URL=https://overpass-api.de
 export RAILS_PROTOCOL=http
 export RAILS_HOST=localhost
 export RAILS_PORT=3000
-export RAILS_API_VERSION=0.6
+export RAILS_API=/api/0.6/map

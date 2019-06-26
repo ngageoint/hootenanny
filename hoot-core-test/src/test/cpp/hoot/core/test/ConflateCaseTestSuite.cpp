@@ -52,26 +52,6 @@ ConflateCaseTestSuite::ConflateCaseTestSuite(const QString& dir, bool hideDisabl
   LOG_VART(_numTests);
 }
 
-void ConflateCaseTestSuite::_loadBaseConfig(const QString& testConfigFile, QStringList& confs)
-{
-  // need to grab the whole current config here to avoid errors when calling loadJson
-  Settings tempConfig = conf();
-  tempConfig.loadJson(ConfPath::search(testConfigFile));
-  if (tempConfig.hasKey(Settings::BASE_CONFIG_OPTION_KEY))
-  {
-    const QStringList baseConfigs =
-      tempConfig.getString(Settings::BASE_CONFIG_OPTION_KEY).trimmed().split(",");
-    for (int i = 0; i < baseConfigs.size(); i++)
-    {
-      const QString baseConfig = baseConfigs.at(i);
-      if (!baseConfig.isEmpty() && !confs.contains(baseConfig))
-      {
-        confs.append(baseConfig);
-      }
-    }
-  }
-}
-
 void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
 {
   if (dir.endsWith(".off"))
@@ -85,11 +65,6 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
   if (fi.exists())
   {
     const QString testConfFile = fi.absoluteFilePath();
-
-    // Check for a specified base config option, which allows the test to load a separate base
-    // configuration as its starting point. The other settings in its config file will override
-    // whatever is in the base configuration.
-    _loadBaseConfig(testConfFile, confs);
 
     // load the test's config file
     confs.append(testConfFile);

@@ -45,6 +45,7 @@ class SettingsTest : public HootTestFixture
   CPPUNIT_TEST(envTest);
   CPPUNIT_TEST(replaceTest);
   CPPUNIT_TEST(storeTest);
+  CPPUNIT_TEST(baseSettingsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -114,6 +115,32 @@ public:
     HOOT_STR_EQUALS(uut.getString("perty.csm.D"), "2");
     HOOT_STR_EQUALS(uut.getString("osm.map.writer.factory.writer"), "1");
     HOOT_STR_EQUALS(uut.getString("osm.map.reader.factory.reader"), "2");
+  }
+
+  void baseSettingsTest()
+  {
+    Settings uut;
+    uut.loadDefaults();
+
+    //  The following
+    //  Default value before change in JSON
+    CPPUNIT_ASSERT_EQUAL(false, uut.getBool("uuid.helper.repeatable"));
+    //  Default value before change in AttributeConflation.conf
+    HOOT_STR_EQUALS("hoot::OverwriteTag2Merger", uut.getString("tag.merger.default"));
+    CPPUNIT_ASSERT_EQUAL(false, uut.getBool("highway.merge.tags.only"));
+    //  Default value before change in NetworkAlgorithm.conf
+    HOOT_STR_EQUALS("hoot::HighwayRfClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("hoot::MaximalNearestSublineMatcher", uut.getString("way.subline.matcher"));
+
+    uut.loadFromString("{ \"base.config\": \"AttributeConflation.conf,NetworkAlgorithm.conf\", \"uuid.helper.repeatable\": \"true\" }");
+    //  From the JSON
+    CPPUNIT_ASSERT_EQUAL(true, uut.getBool("uuid.helper.repeatable"));
+    //  From AttributeConflation.conf
+    HOOT_STR_EQUALS("hoot::OverwriteTag1Merger", uut.getString("tag.merger.default"));
+    CPPUNIT_ASSERT_EQUAL(true, uut.getBool("highway.merge.tags.only"));
+    //  From NetworkAlgorithm.conf
+    HOOT_STR_EQUALS("hoot::HighwayExpertClassifier", uut.getString("conflate.match.highway.classifier"));
+    HOOT_STR_EQUALS("hoot::MaximalSublineMatcher", uut.getString("way.subline.matcher"));
   }
 };
 
