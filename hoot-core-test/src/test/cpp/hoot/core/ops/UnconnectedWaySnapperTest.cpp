@@ -60,7 +60,7 @@ public:
     : HootTestFixture("test-files/ops/UnconnectedWaySnapper/",
                       "test-output/ops/UnconnectedWaySnapper/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runSnapTest()
