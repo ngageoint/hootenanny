@@ -70,7 +70,7 @@ public:
     : HootTestFixture("test-files/ops/DuplicateWayRemoverTest/",
                       "test-output/ops/DuplicateWayRemoverTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runTest()
