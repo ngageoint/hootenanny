@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __PROBABLE_PATH_CALCULATOR_H__
@@ -37,6 +37,7 @@
 #include <tgs/HashMap.h>
 #include <tgs/TgsExport.h>
 #include <tgs/RasterOps/Image.hpp>
+#include <tgs/Statistics/Random.h>
 
 namespace Tgs
 {
@@ -100,6 +101,7 @@ namespace Tgs
     };
 
     ProbablePathCalculator();
+    ProbablePathCalculator(const RandomPtr& random);
 
     virtual ~ProbablePathCalculator();
 
@@ -209,6 +211,8 @@ namespace Tgs
     std::vector<PpRoute> _routes;
     int _verbose;
     std::stringstream _null;
+    /** Pointer to the random number generator object, defaults to Tgs::Random::instance() */
+    RandomPtr _randomGenerator;
 
     bool _addReturnPaths(const PpPoint& source, const Destination& destination);
 

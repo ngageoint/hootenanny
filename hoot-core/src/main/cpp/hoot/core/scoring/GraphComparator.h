@@ -22,15 +22,23 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GRAPHCOMPARATOR_H
 #define GRAPHCOMPARATOR_H
 
-// hoot
+//  Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/scoring/BaseComparator.h>
+
+//  Standard
+#include <mutex>
+#include <queue>
+#include <thread>
+
+//  Tgs
+#include <tgs/Statistics/Random.h>
 
 namespace hoot
 {
@@ -63,31 +71,55 @@ public:
 
   void setIterations(int i) { _iterations = i; }
 
-  void drawCostDistance(OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output);
+  void setMaxThreads(int t) { _maxThreads = t; }
+
+  void drawCostDistance(OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output, double& maxGraphCost);
 
 private:
-
+  /** Number of times to iterate of the map calculating scores */
   int _iterations;
-  geos::geom::Coordinate _r;
+  /** Median score of all iterations */
   double _median;
+  /** Mean score of all iterations */
   double _mean;
-  // confidence interval
+  /** Confidence interval of scores over all iterations */
   double _ci;
-  // sampled standard deviation
+  /** Sampled standard deviation over all iterations */
   double _s;
-  double _maxGraphCost;
+  /** Flag to output debug images of graph comparisons */
   bool _debugImages;
+  /** Structure of information to build an iteration of the comparator */
+  struct WorkInfo
+  {
+    int index;
+    geos::geom::Coordinate coord;
+    OsmMapPtr referenceMap;
+  };
+  /** Queue of WorkInfo objects preallocated for the threads to work on */
+  std::queue<WorkInfo> _workQueue;
+  std::mutex _workQueueMutex;
+  /** Maximum number of threads to process the graph comparator iterations */
+  int _maxThreads;
+  /** Pool of threads to process iterations of _maxThreads count */
+  std::vector<std::thread> _threadPool;
+  /** Vector of error values - returned from _calculateError() in each iteration */
+  std::vector<double> _results;
+  std::mutex _resultsMutex;
+  /**
+   * @brief _graphCompareThreadFunc - Thread function that processes a graph comparison operation
+   */
+  void _graphCompareThreadFunc();
 
-  cv::Mat _calculateCostDistance(OsmMapPtr map, geos::geom::Coordinate c);
+  cv::Mat _calculateCostDistance(OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
 
-  void _calculateRasterCost(cv::Mat& mat);
+  void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random);
 
   void _exportGraphImage(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
-                         QString path);
+                         QString path, const geos::geom::Coordinate& coord);
 
   void _init();
 
-  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp);
+  cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost);
 
   void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
     double startCost, double endCost);
