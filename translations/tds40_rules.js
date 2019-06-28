@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
-    TDS One2one rules
+    TDSv40 One2one rules
 */
 
-tds.rules = {
+tds40.rules = {
     // ##### Start of One2One Rules #####
 
     // FCODE rules for Import
@@ -489,7 +489,7 @@ tds.rules = {
     // BGT - Basin Gate Type
     // ['BGT','-999999',undefined,undefined], // No Information
     ['BGT','1','seamark:gate:category','caisson'], // Caisson
-    ['BGT','2','seamark:gate:category','lock_gate'], // Lock Gate
+    ['BGT','2','seamark:gate:category','lock'], // Lock Gate
     ['BGT','3','seamark:gate:category','tide_lock'], // Tide Lock
     ['BGT','999','seamark:gate:category','other'], // Other
 
@@ -1185,7 +1185,7 @@ tds.rules = {
     ['FFN','257','use','fabricated_metal_product_manufacturing'], // Fabricated Metal Product Manufacture
     ['FFN','260','use','electronic_equipment_manufacturing'], // Electronic Equipment Manufacture
     ['FFN','270','use','electrical_equipment_manufacturing'], // Electrical Equipment Manufacture
-    ['FFN','272','shop','propane'], // Propane Sale
+    ['FFN','272','shop','gas'], // Propane Sale
     ['FFN','280','use','machinery_manufacturing'], // Machinery Manufacture
     ['FFN','289','use','transportation_equipment_manufacturing'], // Transportation Equipment Manufacturing
     ['FFN','290','use','motor_vehicle_manufacturing'], // Motor Vehicle Manufacture
@@ -1229,13 +1229,13 @@ tds.rules = {
     ['FFN','464','shop','specialized'], // Specialized Store
     ['FFN','465','shop','non-specialized'], // Non-specialized Store
     ['FFN','466','shop','convenience'], // Convenience Store
-    ['FFN','470','shop','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
+    ['FFN','470','amenity','fuel'], // Petrol Sale -- links to AQ170 Motor Vehicle Station
     ['FFN','473','amenity','sales_yard'], // Sales Yard
     ['FFN','474','shop','precious_metal'], // Precious Metal Merchant
     ['FFN','475','amenity','marketplace'], // Market
-    ['FFN','476','shop','grocery'], // Grocery
+    ['FFN','476','shop','supermarket'], // Grocery
     ['FFN','477','amenity','pharmacy'], // Pharmacy
-    ['FFN','478','shop','pet-shop'], // Pet-shop
+    ['FFN','478','shop','pet'], // Pet-shop
     ['FFN','480','use','transportation'], // Transport
     ['FFN','481','use','terminal'], // Terminal
     ['FFN','482','public_transport','station'], // Station
@@ -1277,7 +1277,7 @@ tds.rules = {
     ['FFN','551','tourism','hotel'], // Hotel
     ['FFN','552','tourism','resort_hotel'], // Resort Hotel
     ['FFN','553','tourism','motel'], // Motel
-    ['FFN','554','tourism','guest-house'], // Guest-house
+    ['FFN','554','tourism','guest_house'], // Guest-house
     ['FFN','555','tourism','hostel'], // Hostel
     ['FFN','556','use','dormitory'], // Dormitory
     ['FFN','557','use','vacation_cottage'], // Vacation Cottage
@@ -1305,7 +1305,7 @@ tds.rules = {
     ['FFN','622','use','wireless_repeater'], // Wireless Repeater
     ['FFN','625','use','satellite_telecommunications'], // Satellite Telecommunications
     ['FFN','626','man_made','ground_station'], // Satellite Ground Control
-    ['FFN','633','use','public_records'], // Public Records
+    ['FFN','633','amenity','public_records'], // Public Records
     ['FFN','640','office','financial_services'], // Financial Services
     ['FFN','642','office','central_banking'], // Central Banking
     ['FFN','643','amenity','bank'], // Retail Banking
@@ -1398,7 +1398,7 @@ tds.rules = {
     ['FFN','885','amenity','child_care'], // Day Care
     ['FFN','887','use','social_work'], // Social Work
     ['FFN','888','use','emergency_relief_services'], // Emergency Relief Services
-    ['FFN','890','amenity','arts_centre'], // Cultural, Arts and Entertainment
+    ['FFN','890','amenity','cultural_centre'], // Cultural, Arts and Entertainment
     ['FFN','891','amenity','theatre'], // Theatre
     ['FFN','892','amenity','auditorium'], // Auditorium
     ['FFN','893','amenity','community_centre'], // Community Centre
@@ -1425,7 +1425,7 @@ tds.rules = {
     ['FFN','954','amenity','club'], // Club
     ['FFN','955','leisure','yacht_club'], // Yacht-club
     ['FFN','961','shop','laundry'], // Laundry
-    ['FFN','962','shop','beauty_treatment'], // Beauty Treatment
+    ['FFN','962','shop','beauty'], // Beauty Treatment
     ['FFN','963','shop','funeral_directors'], // Funeral Services
     ['FFN','964','amenity','crematorium'], // Cremation
     ['FFN','965','amenity','mortuary'], // Mortuary Services
@@ -1524,8 +1524,8 @@ tds.rules = {
 
     // GSGCHC - Runway Direction (high end) : Surface Slope (high) (interval closure)
     ['GSGCHC','2','aeroway:runway_highend:slope:closure','open_interval'], // Open Interval
-    ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['GSGCHC','3','aeroway:runway_highend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['GSGCHC','4','aeroway:runway_highend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['GSGCHC','5','aeroway:runway_highend:slope:closure','closed_interval'], // Closed Interval
     ['GSGCHC','6','aeroway:runway_highend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['GSGCHC','7','aeroway:runway_highend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -1534,8 +1534,8 @@ tds.rules = {
 
     // GSGCLC - Runway Direction (low end) : Surface Slope (low) (interval closure)
     ['GSGCLC','2','aeroway:runway_lowend:slope:closure','open_interval'], // Open Interval
-    ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than-or-equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than-or-equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['GSGCLC','3','aeroway:runway_lowend:slope:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['GSGCLC','4','aeroway:runway_lowend:slope:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
     ['GSGCLC','5','aeroway:runway_lowend:slope:closure','closed_interval'], // Closed Interval
     ['GSGCLC','6','aeroway:runway_lowend:slope:closure','greater-than_semi-interval'], // Greater-than Semi-interval
     ['GSGCLC','7','aeroway:runway_lowend:slope:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
@@ -2220,7 +2220,7 @@ tds.rules = {
 
     // MCC - Structural Material Type
     // ['MCC','-999999',undefined,undefined], // No Information
-    ['MCC','2','material','aluminum'], // Aluminum
+    ['MCC','2','material','aluminium'], // Aluminum
     ['MCC','5','material','asphalt'], // Asphalt
     ['MCC','7','material','bedrock'], // Bedrock
     ['MCC','8','material','boulders'], // Boulders
@@ -2549,7 +2549,7 @@ tds.rules = {
 
     // PYM - Pylon Material
     // ['PYM','-999999',undefined,undefined], // No Information
-    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminium'], // Aluminum
     ['PYM','3','tower:material','concrete'], // Concrete
     ['PYM','4','tower:material','masonry'], // Masonry
     ['PYM','5','tower:material','metal'], // Metal
@@ -3196,7 +3196,7 @@ tds.rules = {
     // VCM - Vertical Construction Material 
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminium'], // Aluminum
     ['VCM','3','material:vertical','brick'], // Brick
     ['VCM','4','material:vertical','concrete'], // Concrete
     ['VCM','5','material:vertical','fibreglass'], // Fibreglass
@@ -3226,8 +3226,8 @@ tds.rules = {
     // ['VDT','-999999',undefined,undefined], // No Information
     ['VDT','groundLevel','source:datum:vertical','ground_level'], // Ground Level
     ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level'], // Mean Sea Level (MSL)
-    ['VDT','ngvd29','source:datum:vertical','national_geodetic_source:datum:vertical_1929'], // National Geodetic Vertical Datum (NGVD) 1929
-    ['VDT','navd88','source:datum:vertical','north_american_source:datum:vertical_1988'], // North American Vertical Datum (NAVD) 1988
+    ['VDT','ngvd29','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
+    ['VDT','navd88','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
     ['VDT','wgs84Egm08','source:datum:vertical','wgs_84_egm08_geoid'], // WGS 84 EGM08 Geoid
     ['VDT','wgs84Egm96','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
     ['VDT','wgs84','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
@@ -3543,7 +3543,7 @@ tds.rules = {
     // ZI014_PPO - Manufacturing Information : Product
     // ['ZI014_PPO','-999999',undefined,undefined], // No Information
     ['ZI014_PPO','1','product','aircraft'], // Aircraft
-    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminium'], // Aluminum
     ['ZI014_PPO','3','product','ammunition'], // Ammunition
     ['ZI014_PPO','4','product','asphalt'], // Asphalt
     ['ZI014_PPO','5','product','motor_vehicle'], // Motor Vehicle
@@ -3661,7 +3661,7 @@ tds.rules = {
 
     // ZI014_PRW - Manufacturing Information : Raw Material -- Includes codes from PRW
     // ['ZI014_PRW','-999999',undefined,undefined], // No Information
-    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminium'], // Aluminum
     ['ZI014_PRW','2','raw_material','asphalt'], // Asphalt
     ['ZI014_PRW','5','raw_material','bauxite'], // Bauxite
     ['ZI014_PRW','9','raw_material','cement'], // Cement
@@ -4283,6 +4283,16 @@ tds.rules = {
     // Backward compatibility for 'oil'
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
+
+    ['MCC','2','material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['VDT','ngvd29','source:datum:vertical','national_geodetic_source:datum:vertical_1929'], // National Geodetic Vertical Datum (NGVD) 1929
+    ['VDT','navd88','source:datum:vertical','north_american_source:datum:vertical_1988'], // North American Vertical Datum (NAVD) 1988
 
     // Fix up some of the Defaults
     // ['FFN','-999999','building','yes'], // Map to No Information
@@ -5387,4 +5397,4 @@ tds.rules = {
     }, // End of subtypeList
     // ##### End of ESRI FCSubtype Rules #####
 
-} // End of tds.rules
+} // End of tds40.rules

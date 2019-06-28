@@ -186,7 +186,7 @@
         <tag k="communication:radio_broadcast" v="yes"/>
         <tag k="note" v="Another Tower"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
-        <tag k="material" v="aluminum"/>
+        <tag k="material" v="aluminium"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="navigation:landmark" v="yes"/>
         <tag k="source:vertical_source:type" v="dted_2"/>
@@ -278,7 +278,7 @@
         <tag k="construction" v="shed"/>
         <tag k="security:dissemination_control:non_ic" v="DS"/>
         <tag k="name" v="Another Garden Shed"/>
-        <tag k="material" v="aluminum"/>
+        <tag k="material" v="aluminium"/>
         <tag k="security:resource_owner" v="USA"/>
         <tag k="addr:full" v="Jason's Backyard"/>
         <tag k="roof:shape" v="with_smokestack"/>
@@ -3219,7 +3219,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:non_spatial_source:type" v="commercial_data"/>
         <tag k="by_product" v="scrap-metal"/>
-        <tag k="raw_material" v="aluminum"/>
+        <tag k="raw_material" v="aluminium"/>
         <tag k="product" v="radioactive_material"/>
         <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
         <tag k="man_made" v="works"/>

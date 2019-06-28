@@ -12,6 +12,12 @@
         "PATH" : "translations/TDSv40.js"
     },
     {
+        "NAME" : "TDSv70",
+        "DESCRIPTION" : "NSG Topographic Data Store (TDS) v7.0",
+        "CANEXPORT" : true,
+        "PATH" : "translations/TDSv70.js"
+    },
+    {
         "NAME" : "MGCP",
         "DESCRIPTION" : "Multinational Geospatial Co-production Program (MGCP) TRD3&4",
         "CANEXPORT" : true,

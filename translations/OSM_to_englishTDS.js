@@ -46,13 +46,13 @@ hoot.require('translate')
 // we don't need to expose it to the main Hoot program
 function getDbSchema()
 {
-     return tds.getDbSchema();
+     return tds40.getDbSchema();
 }
 
 // Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
-     return tds.schema.getDbSchema();
+     return tds40.schema.getDbSchema();
 }
 
 

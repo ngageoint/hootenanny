@@ -28,38 +28,39 @@ def printJavascript(schema):
         if 'definition' in schema[f]:
             print '          definition:"%s",' % (schema[f]['definition'])
         print '          geom:"%s",' % (schema[f]['geom'])
-        print '          columns:[ '
+        print '          columns:['
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
             print '                     { name:"%s",' % (k)
             print '                       desc:"%s" ,' % (schema[f]['columns'][k]['desc'])
-            print '                       optional:"%s" ,' % (schema[f]['columns'][k]['optional'])
+            print '                       optional:"%s",' % (schema[f]['columns'][k]['optional'])
 
             #if schema[f]['columns'][k]['length'] != '':
             if 'definition' in schema[f]['columns'][k]:
-                print '                       definition:"%s", ' % (schema[f]['columns'][k]['definition'])
+                print '                       definition:"%s",' % (schema[f]['columns'][k]['definition'])
 
             if 'length' in schema[f]['columns'][k]:
-                print '                       length:"%s", ' % (schema[f]['columns'][k]['length'])
+                print '                       length:"%s",' % (schema[f]['columns'][k]['length'])
 
             if 'units' in schema[f]['columns'][k]:
-                print '                       units:"%s", ' % (schema[f]['columns'][k]['units'])
+                print '                       units:"%s",' % (schema[f]['columns'][k]['units'])
 
             #if schema[f]['columns'][k]['type'].find('numeration') != -1:
             if 'func' in schema[f]['columns'][k]:
                 print '                       type:"enumeration",'
-                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations: %s' % (schema[f]['columns'][k]['func'])
 
             elif schema[f]['columns'][k]['type'] == 'enumeration':
                 #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
                 print '                       type:"enumeration",'
-                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
-                    print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
-                print '                        ] // End of Enumerations '
+                    print '                           { name:"%s",value:"%s" },' % (l['name'],l['value'])
+                # print '                        ] // End of Enumerations '
+                print '                        ]'
 
             #elif schema[f]['columns'][k]['type'] == 'textEnumeration':
                 #print '                       type:"Xenumeration",'
@@ -68,23 +69,29 @@ def printJavascript(schema):
 
             else:
                 print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
-                print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s"' % (schema[f]['columns'][k]['defValue'])
 
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '                     } // End of %s' % (k)
+                # print '                     } // End of %s' % (k)
+                print '                     }'
             else:
-                print '                     }, // End of %s' % (k)
+                # print '                     }, // End of %s' % (k)
+                print '                     },'
                 num_attrib -= 1
 
-        print '                    ] // End of Columns'
+        # print '                    ] // End of Columns'
+        print '                    ]'
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            # print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            print '          }'
         else:
-            print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            # print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            print '          },'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
+    # print '    ]; // End of schema\n'
+    print '    ];'
 # End printJavascript
 
 
@@ -418,7 +425,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    xmlDoc = minidom.parse(args.xmlFile)
+    # Apparently, reding to a string and then parseing is quicker
+    if args.xmlFile.endswith(".gz"):
+        infile =  gzip.open(args.xmlFile, 'rb')
+    else:
+        infile = open(args.xmlFile, 'rb')
+
+    content = infile.read()
+
+    # xmlDoc = minidom.parse(args.xmlFile)
+    xmlDoc = minidom.parseString(content)
 
     schema = {}
 
@@ -472,6 +488,7 @@ if __name__ == "__main__":
         dumpEnumerations(schema,'enumMGCP')
 
     else:
+        printCopyright()
         printJSHeader('mgcp')
         printFuncList(schema)
         printJavascript(schema)

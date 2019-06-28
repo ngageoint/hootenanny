@@ -532,19 +532,23 @@ tds61 = {
     }, // End manyFeatures
 
     // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
-    fixTransType : function(tags)
+    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
+    fixTransType : function(tags,geometry)
     {
         if (tags.railway)
         {
             tags['transport:type'] = 'railway';
+            if (geometry == 'Point') delete tags.railway;
         }
         else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
         {
             tags['transport:type'] = 'pedestrian';
+            if (geometry == 'Point') delete tags.highway;
         }
         else if (tags.highway)
         {
             tags['transport:type'] = 'road';
+            if (geometry == 'Point') delete tags.highway;
         }
     },
 
@@ -1110,8 +1114,9 @@ tds61 = {
         }
 
         // Fords and Roads
-        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
-        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+        // Putting this on hold
+        // if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+        // if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         // AK030 - Amusement Parks
         // F_CODE translation == tourism but FFN translation could be leisure.
@@ -1760,7 +1765,7 @@ tds61 = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
                 'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
                 'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
-                'mine:access':'AA010', 'cutting':'DB070'
+                'mine:access':'AA010', 'cutting':'DB070', 'tomb':'AL036'
                            };
 
             for (var i in fcodeMap)
@@ -1850,7 +1855,7 @@ tds61 = {
        {
            if (tags.bridge && tags.bridge !== 'no')
            {
-               tds61.fixTransType(tags);
+               tds61.fixTransType(tags,geometryType);
                tags.location = 'surface';
                tags.layer = '1';
                tags.on_bridge = 'yes';
@@ -1858,26 +1863,26 @@ tds61 = {
 
            if (tags.tunnel && tags.tunnel !== 'no')
            {
-               tds61.fixTransType(tags);
+               tds61.fixTransType(tags,geometryType);
                // tags.layer = '-1';
                tags.in_tunnel = 'yes';
            }
 
            if (tags.embankment && tags.embankment !== 'no')
            {
-               tds61.fixTransType(tags);
+               tds61.fixTransType(tags,geometryType);
                tags.layer = '1';
            }
 
            if (tags.cutting && tags.cutting !== 'no')
            {
-               tds61.fixTransType(tags);
+               tds61.fixTransType(tags,geometryType);
                tags.layer = '-1';
            }
 
            if (tags.ford && tags.ford !== 'no')
            {
-               tds61.fixTransType(tags);
+               tds61.fixTransType(tags,geometryType);
                tags.location = 'on_waterbody_bottom';
            }
 
@@ -2323,6 +2328,10 @@ tds61 = {
 
             tds61.lookup = translate.createLookup(tds61.rules.one2one);
         }
+
+        // A little cleaning before we try to untangle stuff
+        delete attrs.SHAPE_Length;
+        delete attrs.SHAPE_Area;
 
         // Untangle TDS attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import

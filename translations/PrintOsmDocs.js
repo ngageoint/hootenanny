@@ -36,7 +36,7 @@
 
 // Set up stubs for the namespaces.
 // If we don't do this, v8 complains about "xx.rules"
-tds = {}
+tds40 = {}
 tds61 = {}
 mgcp = {}
 ggdm30 = {}

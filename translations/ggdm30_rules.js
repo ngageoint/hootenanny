@@ -1128,7 +1128,7 @@ ggdm30.rules = {
     ['BSC','12','bridge:structure','transporter'], // Transporter
     ['BSC','15','bridge:structure','slab'], // Slab
     ['BSC','16','bridge:structure','stringer_beam'], // Stringer Beam
-    ['BSC','19','bridge:structure','bowstring-bridge'], // Bowstring-bridge
+    ['BSC','19','bridge:structure','bowstring'], // Bowstring-bridge
     ['BSC','22','bridge:structure','covered'], // Covered
     ['BSC','26','bridge:structure','closed_spandrel_arch'], // Closed Spandrel Arch
     ['BSC','27','bridge:structure','cable_stayed'], // Cable Stayed
@@ -1666,7 +1666,7 @@ ggdm30.rules = {
     // ['CTC','-999999',undefined,undefined], // No Information
     ['CTC','1','culvert:type','regular_with_soil'], // Regular with Soil
     ['CTC','2','culvert:type','box_with_soil'], // Box with Soil
-    ['CTC','3','culvert:type','box_with_load'], // Box with Load
+    ['CTC','3','culvert:type','load_bearing_box'], // Box with Load
     ['CTC','999','culvert:type','other'], // Other
 
     // CUL - Cultural Context Type
@@ -1705,7 +1705,7 @@ ggdm30.rules = {
     // CVT2 - Conveyor Type [2]
     // CVT3 - Conveyor Type [3]
 
-    // CWT - Contained within Tunnel
+    // CWT - Contained Within Tunnel
     // ['CWT','-999999',undefined,undefined], // No Information
     ['CWT','1000','in_tunnel','no'],
     ['CWT','1001','in_tunnel','yes'], // Need to think about this
@@ -3296,7 +3296,7 @@ ggdm30.rules = {
     ['MCC','74','material','plastic'], // Plastic
     ['MCC','77','material','prestressed_concrete'], // Prestressed Concrete
     ['MCC','83','material','reinforced_concrete'], // Reinforced Concrete
-    ['MCC','84','material','rocks'], // Rocks
+    ['MCC','84','material','rock'], // Rocks
     ['MCC','86','material','rubble'], // Rubble
     ['MCC','88','material','sand'], // Sand
     ['MCC','103','material','frozen_water'], // Frozen Water
@@ -3913,7 +3913,7 @@ ggdm30.rules = {
 
     // PYM - Pylon Material
     // ['PYM','-999999',undefined,undefined], // No Information
-    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminium'], // Aluminum
     ['PYM','3','tower:material','concrete'], // Concrete
     ['PYM','4','tower:material','masonry'], // Masonry
     ['PYM','5','tower:material','metal'], // Metal
@@ -4473,7 +4473,7 @@ ggdm30.rules = {
     ['STP','13','soil:type','mh:micraceous'], // MH: Micraceous
     ['STP','14','soil:type','oh:organic_clay'], // OH: Organic Clay
     ['STP','15','soil:type','pt:peat'], // PT: Peat
-    ['STP','17','soil:type','ml-cl:silt,_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
+    ['STP','17','soil:type','ml-cl:silt_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
     ['STP','18','soil:type','evaporite'], // Evaporite
     ['STP','99','soil:type','not_evaluated'], // Not Evaluated
     ['STP','999','soil:type','other'], // Other
@@ -4712,18 +4712,18 @@ ggdm30.rules = {
 
     // TXP - Taxiway Type
     // ['TXP','-999999',undefined,undefined], // No Information
-    ['TXP','1','taxiway:type','parallel_taxiway'], // Parallel Taxiway
-    ['TXP','2','taxiway:type','stub_taxiway'], // Stub Taxiway
-    ['TXP','3','taxiway:type','rapid_exit_and/or_turnoff_taxiway'], // Rapid Exit and/or Turnoff Taxiway
-    ['TXP','4','taxiway:type','turnaround_taxiway'], // Turnaround Taxiway
+    ['TXP','1','taxiway:type','parallel'], // Parallel Taxiway
+    ['TXP','2','taxiway:type','stub'], // Stub Taxiway
+    ['TXP','3','taxiway:type','rapid_exit_and/or_turnoff'], // Rapid Exit and/or Turnoff Taxiway
+    ['TXP','4','taxiway:type','turnaround'], // Turnaround Taxiway
     ['TXP','5','taxiway:type','dispersal'], // Dispersal
     ['TXP','6','taxiway:type','loop'], // Loop
     ['TXP','7','taxiway:type','perimeter'], // Perimeter
-    ['TXP','8','taxiway:type','apron_taxiway'], // Apron Taxiway
+    ['TXP','8','taxiway:type','apron'], // Apron Taxiway
     ['TXP','9','taxiway:type','aircraft_stand_taxilane'], // Aircraft Stand Taxilane
     ['TXP','10','taxiway:type','lead-in_taxilane'], // Lead-in Taxilane
     ['TXP','11','taxiway:type','lead-out_taxilane'], // Lead-out Taxilane
-    ['TXP','12','taxiway:type','air_taxiway'], // Air Taxiway
+    ['TXP','12','taxiway:type','air'], // Air Taxiway
     ['TXP','13','taxiway:type','helicopter_ground_taxiway'], // Helicopter Ground Taxiway
     ['TXP','999','taxiway:type','other'], // Other
 
@@ -4829,7 +4829,7 @@ ggdm30.rules = {
     // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminium'], // Aluminum
     ['VCM','3','material:vertical','brick'], // Brick
     ['VCM','4','material:vertical','concrete'], // Concrete
     ['VCM','5','material:vertical','fibreglass'], // Fibreglass
@@ -4876,7 +4876,7 @@ ggdm30.rules = {
     // ['VDT','-999999',undefined,undefined], // No Information
     ['VDT','1','source:datum:vertical','wgs_84_ellipsoid'], // WGS 84 Ellipsoid
     ['VDT','2','source:datum:vertical','wgs_84_egm96_geoid'], // WGS 84 EGM96 Geoid
-    ['VDT','3','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['VDT','3','source:datum:vertical','mean_sea_level'], // Mean Sea Level (MSL)
     ['VDT','4','source:datum:vertical','north_american_vertical_datum_(navd)_1988'], // North American Vertical Datum (NAVD) 1988
     ['VDT','5','source:datum:vertical','national_geodetic_vertical_datum_(ngvd)_1929'], // National Geodetic Vertical Datum (NGVD) 1929
     ['VDT','6','source:datum:vertical','ground_level'], // Ground Level
@@ -5006,12 +5006,12 @@ ggdm30.rules = {
 
     // WFT - Well Type
     // ['WFT','-999999',undefined,undefined], // No Information
-    ['WFT','2','well:type','walled-in'], // Walled-in
-    ['WFT','3','well:type','artesian'], // Artesian
-    ['WFT','5','well:type','dug_or_drilled'], // Dug or Drilled
-    ['WFT','6','well:type','dug'], // Dug
-    ['WFT','7','well:type','drilled'], // Drilled
-    ['WFT','999','well:type','other'], // Other
+    ['WFT','2','water_well:type','walled-in'], // Walled-in
+    ['WFT','3','water_well:type','artesian'], // Artesian
+    ['WFT','5','water_well:type','dug_or_drilled'], // Dug or Drilled
+    ['WFT','6','water_well:type','dug'], // Dug
+    ['WFT','7','water_well:type','drilled'], // Drilled
+    ['WFT','999','water_well:type','other'], // Other
 
     // WLE - Water Level Effect
     // ['WLE','-999999',undefined,undefined], // No Information
@@ -5943,7 +5943,7 @@ ggdm30.rules = {
     // ['ZI024_SCC','-999999',undefined,undefined], // No Information
     ['ZI024_SCC','1','water:type','alkaline'], // Alkaline
     ['ZI024_SCC','4','water:type','mineral'], // Mineral
-    ['ZI024_SCC','10','water:type','saline'], // Saline
+    ['ZI024_SCC','10','water:type','salt'], // Saline
     ['ZI024_SCC','11','water:type','fresh'], // Fresh
     ['ZI024_SCC','12','water:type','brackish'], // Brackish
     ['ZI024_SCC','13','water:type','seawater'], // Seawater
@@ -6065,7 +6065,7 @@ ggdm30.rules = {
     // ['ZI032_PYM','10','raw:ZI032_PYM','iron'], // Iron
     // ['ZI032_PYM','999','raw:ZI032_PYM','other'], // Other
 
-    // ZI032_TOS - Pylon Information : Tower Shape
+    // ZI032_TOS - Pylon Information : Tower Shape - See TOS
     // ['ZI032_TOS','-999999',undefined,undefined], // No Information
     // ['ZI032_TOS','6','raw:ZI032_TOS','mast'], // Mast
     // ['ZI032_TOS','8','raw:ZI032_TOS','pole'], // Pole
@@ -6209,6 +6209,18 @@ ggdm30.rules = {
     // Backward compatibility for 'oil'
     ['ZI014_PPO','83','product','oil'], // Petroleum
     ['ZI014_PPO','83','product','fuel'], // Close...
+
+    ['MCC','2','material','aluminum'], // Aluminum
+    ['PYM','1','tower:material','aluminum'], // Aluminum
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
+    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['ZI004_RCG','28','attribution','australian_geospatial-intelligence_organization_(australia)'], // Australian Geospatial-Intelligence Organization (Australia)
+    ['ZI004_RCG','36','attribution','bureau_geographie,_hydrographie,_oceanographie_et_meteorologie_(france)'], // Bureau Geographie, Hydrographie, Oceanographie et Meteorologie (France)
+    ['ZI004_RCG','39','attribution','geoinformation_service_of_the_hungarian_defence_forces_(hungary)'], // Geoinformation Service of the Hungarian Defence Forces (Hungary)
+    ['ZI004_RCG','45','attribution','geoint_new_zealand_(new_zealand)'], // GEOINT New Zealand (New Zealand)
 
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
