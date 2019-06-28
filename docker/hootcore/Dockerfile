@@ -65,7 +65,6 @@ RUN yum install -q -y \
     osmosis \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
-    hoot-postgis24_95 \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
