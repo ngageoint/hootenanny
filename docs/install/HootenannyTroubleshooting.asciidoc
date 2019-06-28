@@ -67,8 +67,6 @@ To re-create the hoot database, run the UpdateHoot-CentOS6.sh script with only t
 
 * *When using PSQL, asked for a password for a database (rather than for a user) and don't have it?* -> Possibly, you have authentication still set to MD5 in the pg_hba.conf file. Temporarily set unset if from MD5 (see Postgres install steps) to use PSQL. Set it back to MD5 when you've finished using PSQL.
 
-* *Not sure if the Postgis extension has been installed properly?*->
-	** Check to see if following table exists in +wfsstoredb:spatial_ref_sys+
 
 * *liquibase update fails to run on the hoot database?*->
 	** The update will fail if you do not reference the path to the changelog files in exactly the same way the hoot database references them in the databasechangelog table. If they are referenced from a different path, then you will lose all your data. As a last resort if the liquibase update does not work, you can run the `$HOOT_HOME/database/DeleteAllTables.sh` script and then re-create the tables with `$HOOT_HOME/DbSchema.sql`. You will lose all existing data with this method.
@@ -139,11 +137,9 @@ sudo rm -rf /var/lib/tomcat8/webapps/hoot*-services*
 	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/db.properties+
 	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
-	**  +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+
 	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/db/db.properties+
 		. `HOOTAPI_CONNECTION_POOL_MAX_ACTIVE=90`
 		. `HOOTAPI_CONNECTION_POOL_MAX_IDLE=30`
-	** Also, verify +/var/lib/tomcat8/webapps/hoot-services/WEB-INF/workspace+ has read and write permission so it can create WFS store config xml files.
 
 * *Seeing this error: "convert Unable to open /path/to/file.shp"* -> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
 

@@ -60,9 +60,6 @@ To re-create the hoot database, recompile Hootenanny using the --with-services o
 
 * *When using PSQL, asked for a password for a database (rather than for a user) and don't have it?* -> Possibly, you have authentication still set to MD5 in the pg_hba.conf file. Temporarily set unset if from MD5 (see Postgres install steps) to use PSQL. Set it back to MD5 when you've finished using PSQL.
 
-* *Not sure if the Postgis extension has been installed properly?*->
-	** Check to see if following table exists in +wfsstoredb:spatial_ref_sys+
-
 * *Getting a change log lock error?* ->
 
 Delete all change log locks:
@@ -96,32 +93,9 @@ tail -f /usr/share/tomcat8/logs/catalina.out | grep -i -e ERROR -e SEVERE
 	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/db/db.properties+
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+ 
-	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 
 	** Also, verify +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/db/db.properties+
 		. +HOOTAPI_CONNECTION_POOL_MAX_ACTIVE=90+
 		. +HOOTAPI_CONNECTION_POOL_MAX_IDLE=30+
-	** Also, verify +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace+ has read and write permission so it can create WFS store config xml files.
-
-* *Having problems with the WFS?* ->
-	** Verify wfsstoredb has been properly set up (see database troubleshooting section).
-	** Check +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace/jdbc/WFS_Connection.xml+ 
-	** Verify +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace+ has had its permissions set correctly.
-
-* *Seeing this WFS error?* ->
-
---------------------------------------
-2014-09-11 10:26:27 ERROR AbstractResourceManager:268 - Could not create resource web services: Error initializing WFS/FeatureStores: Cannot add feature store 'ex_601e0eb1bb994c3c949ddbed78424c6b': no such feature store has been configured.
-2014-09-11 10:26:27 ERROR AbstractResourceManager:270 - Cause was: Cannot add feature store 'ex_601e0eb1bb994c3c949ddbed78424c6b': no such feature store has been configured.
---------------------------------------
-
-You're seeing expired WFS links. To remove them:
-
---------------------------------------
-cd $HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/workspace
-sudo rm -f datasources/feature/ex_*.xml 
-sudo rm -f datasources/feature/*.properties
-sudo rm -f services/ex_*.xml
---------------------------------------
 
 * *Seeing this error: "convert Unable to open /path/to/file.shp"* -> Possibly you do not have the Postgres extension installed for GDAL. See related troubleshooting tip in the "Core" section.
 
