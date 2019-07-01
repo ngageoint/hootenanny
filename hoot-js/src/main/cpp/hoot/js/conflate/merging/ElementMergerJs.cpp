@@ -90,7 +90,6 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
   try
   {
     HandleScope scope(current);
-    //Context::Scope context_scope(current->GetCallingContext());
     if (args.Length() != 1)
     {
       args.GetReturnValue().Set(
@@ -108,9 +107,9 @@ void ElementMergerJs::mergeElements(const FunctionCallbackInfo<Value>& args)
     Handle<Object> returnMap = OsmMapJs::create(map);
     args.GetReturnValue().Set(returnMap);
   }
-  //This error handling has been proven to not work in that it never seems to return the
-  //error message to the nodejs calling service....making debugging a nightmare...or I'm just
-  //doing something wrong here.  Either way, need to fix this. - #2231
+  // This error handling has been proven to not work as it never returns the error message to the
+  // nodejs calling service....makes debugging very difficult. Need to fix: #2231. As a workaround,
+  // use scripts/core/MergeElements.js to see log output duriing merging.
   catch (const HootException& e)
   {
     LOG_ERROR(e.getWhat());
@@ -144,6 +143,7 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
 {  
   const MergeType mergeType = _determineMergeType(map);
   LOG_VART(_mergeTypeToString(mergeType));
+
   ElementId mergeTargetId;
   //merge target id won't be passed in for poi/poly, as the poi/poly merging picks the target
   //element itself
@@ -236,19 +236,17 @@ ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr m
   {
     mergeType = MergeType::PoiToPolygon;
   }
-  else if (OsmUtils::contains<PoiCriterion>(map, 2) &&
-           !containsPolys && !containsAreas &&
+  else if (OsmUtils::contains<PoiCriterion>(map, 2) && !containsPolys && !containsAreas &&
            !containsBuildings)
   {
     mergeType = MergeType::PoiToPoi;
   }
-  else if (OsmUtils::contains<BuildingCriterion>(map, 2) &&
-           !containsAreas && !containsPois)
+  else if (OsmUtils::contains<BuildingCriterion>(map, 2) && !containsAreas && !containsPois)
   {
     mergeType = MergeType::BuildingToBuilding;
   }
-  else if (OsmUtils::contains<NonBuildingAreaCriterion>(map, 2) &&
-           !containsBuildings && !containsPois)
+  else if (OsmUtils::contains<NonBuildingAreaCriterion>(map, 2) && !containsBuildings &&
+           !containsPois)
   {
     mergeType = MergeType::AreaToArea;
   }

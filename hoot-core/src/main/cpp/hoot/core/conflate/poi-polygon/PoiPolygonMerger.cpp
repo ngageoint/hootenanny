@@ -289,6 +289,63 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   return *newElement.begin();
 }
 
+ElementId PoiPolygonMerger::_getElementIdByType(OsmMapPtr map, const ElementCriterion& typeCrit)
+{
+  UniqueElementIdVisitor idSetVis;
+  FilteredVisitor filteredVis(typeCrit, idSetVis);
+  map->visitRo(filteredVis);
+  const std::set<ElementId>& ids = idSetVis.getElementSet();
+  if (ids.size() != 1)
+  {
+    throw IllegalArgumentException(
+      "Exactly one POI and one polygon should be passed to POI/Polygon merging.");
+  }
+  return *ids.begin();
+}
+
+void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const ElementId& polyId)
+{
+  //If the features involved in the merging don't have statuses, let's arbitrarily set them to
+  //Unknown1, since poi/poly requires it.  Setting them artificially *shouldn't* have a negative
+  //effect on the poi/poly merging, though. Below we are failing when seeing a conflated status...we
+  //could rework to update that status as well.
+
+  StatusUpdateVisitor status1Vis(Status::Unknown1, true);
+  FilteredVisitor filteredVis1(PoiPolygonPoiCriterion(), status1Vis);
+  map->visitRw(filteredVis1);
+
+  StatusUpdateVisitor status2Vis(Status::Unknown2, true);
+  FilteredVisitor filteredVis2(PoiPolygonPolyCriterion(), status2Vis);
+  map->visitRw(filteredVis2);
+
+  // The BuildingMerger (used by both poi/poly and building merging) assumes that all input elements
+  // will either have an Unknown1 or Unknown2 status. If we are merging an element that was
+  // previously merged and given a conflated status, we need to replace that status with the
+  // appropriate unconflated status, if we can determine it. This logic could possibly be combined
+  // with the invalid status related logic above.
+  ElementPtr poi = map->getElement(poiId);
+  ElementPtr poly = map->getElement(polyId);
+  // pois always get merged into polys
+  if (poi->getStatus() == Status::Conflated)
+  {
+    // don't think this should ever occur
+    throw IllegalArgumentException(
+      "POI being merged with polygon cannot must have an Unknown1 or Unknown2 status.");
+  }
+  else if (poly->getStatus() == Status::Conflated)
+  {
+    // we've already handled invalid statuses above
+    if (poi->getStatus() == Status::Unknown1)
+    {
+      poly->setStatus(Status::Unknown2);
+    }
+    else if (poi->getStatus() == Status::Unknown2)
+    {
+      poly->setStatus(Status::Unknown1);
+    }
+  }
+}
+
 ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
 {
   //Trying to merge more than one POI into the polygon has proven problematic due to the building
@@ -297,46 +354,16 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
 
   LOG_INFO("Merging one POI and one polygon...");
 
-  StatusUpdateVisitor statusVisitor(Status::Unknown1, true);
-  PoiPolygonPoiCriterion poiCrit;
-  PoiPolygonPolyCriterion polyCrit;
-
-  //If the features involved in the merging don't have statuses, let's arbitrarily set them to
-  //Unknown1, since poi/poly requires it.  Setting them artificially *shouldn't* have a negative
-  //effect on the poi/poly merging, though.
-
-  FilteredVisitor filteredVis1(poiCrit, statusVisitor);
-  map->visitRw(filteredVis1);
-
-  FilteredVisitor filteredVis2(polyCrit, statusVisitor);
-  map->visitRw(filteredVis2);
-
-  //get our poi id
-  UniqueElementIdVisitor idSetVis1;
-  FilteredVisitor filteredVis3(poiCrit, idSetVis1);
-  map->visitRo(filteredVis3);
-  const std::set<ElementId>& poiIds = idSetVis1.getElementSet();
-  if (poiIds.size() != 1)
-  {
-    throw IllegalArgumentException(
-      "Exactly one POI should be passed to PoiPolygonMerger::mergePoiAndPolygon.");
-  }
-  const ElementId poiId = *poiIds.begin();
+  // determine which element is which
+  const ElementId poiId = _getElementIdByType(map, PoiPolygonPoiCriterion());
   LOG_VART(poiId);
-
-  //get our poly id
-  UniqueElementIdVisitor idSetVis2;
-  FilteredVisitor filteredVis4(polyCrit, idSetVis2);
-  map->visitRo(filteredVis4);
-  const std::set<ElementId>& polyIds = idSetVis2.getElementSet();
-  if (polyIds.size() != 1)
-  {
-    throw IllegalArgumentException(
-      "Exactly one polygon should be passed to PoiPolygonMerger::mergePoiAndPolygon.");
-  }
-  const ElementId polyId = *polyIds.begin();
+  const ElementId polyId = _getElementIdByType(map, PoiPolygonPolyCriterion());
   LOG_VART(polyId);
 
+  // handle invalid and conflated statuses
+  _fixStatuses(map, poiId, polyId);
+
+  // do the merging
   std::set<std::pair<ElementId, ElementId>> pairs;
   //Ordering doesn't matter here, since the poi is always merged into the poly.
   pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
@@ -344,7 +371,8 @@ ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
   std::vector<std::pair<ElementId, ElementId>> replacedElements;
   merger.apply(map, replacedElements);
 
-  LOG_INFO("Merged the POI into the polygon.");
+  LOG_INFO("Merged POI: " << poiId << " into polygon: " << polyId);
+  LOG_DEBUG("Merged feature: " << map->getElement(polyId));
 
   return polyId;
 }

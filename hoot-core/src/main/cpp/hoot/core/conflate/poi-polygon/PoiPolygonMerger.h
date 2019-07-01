@@ -33,6 +33,8 @@
 namespace hoot
 {
 
+class ElementCriterion;
+
 /**
  * Merges POIs with polygons
  *
@@ -62,7 +64,8 @@ public:
    */
   explicit PoiPolygonMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   virtual QString toString() const override;
 
@@ -97,6 +100,10 @@ private:
   Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
 
   std::vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
+
+  static ElementId _getElementIdByType(OsmMapPtr map, const ElementCriterion& typeCrit);
+
+  static void _fixStatuses(OsmMapPtr map, const ElementId& poiId, const ElementId& polyId);
 };
 
 }

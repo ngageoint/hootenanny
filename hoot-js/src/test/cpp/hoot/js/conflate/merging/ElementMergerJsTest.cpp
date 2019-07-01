@@ -119,6 +119,7 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(invalidFeatureCombinationTest2);
   CPPUNIT_TEST(invalidFeatureCombinationTest3);
   CPPUNIT_TEST(invalidFeatureCombinationTest4);
+  // TODO: add test for input feature with conflated status (building and poi/poly merging only)
   CPPUNIT_TEST_SUITE_END();
 
 public:
