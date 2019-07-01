@@ -72,13 +72,13 @@ GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
       _mean(0.0),
       _ci(-1.0),
       _s(-1.0),
-      _maxGraphCost(0.),
-      _debugImages(false)
+      _debugImages(false),
+      _maxThreads(10)
 {
   _init();
 }
 
-cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c)
+cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random)
 {
   // make a copy of the map so we can manipulate it.
   map.reset(new OsmMap(map));
@@ -112,22 +112,22 @@ cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c)
   sp.calculateCost();
 
   // paint graph onto raster
-  //_exportGraphImage(map, *graph, sp, "/home/jason.surratt/tmp/graph.png");
-  cv::Mat mat = _paintGraph(map, *graph, sp);
+  //_exportGraphImage(map, *graph, sp, "/tmp/graph.png");
+  cv::Mat mat = _paintGraph(map, *graph, sp, maxGraphCost);
 
   // calculate cost distance raster
-  _calculateRasterCost(mat);
+  _calculateRasterCost(mat, random);
 
   return mat;
 }
 
-void GraphComparator::_calculateRasterCost(cv::Mat& mat)
+void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random)
 {
-  ProbablePathCalculator ppc;
+  ProbablePathCalculator ppc(random);
   ppc.setRandomNoise(0.0);
   ppc.setRandomPatches(0.0, 1);
   vector<float> friction(_width * _height, 5.0 * _pixelSize);
-  Tgs::Image<float> cost(_width, _height);
+  Image<float> cost(_width, _height);
 
   for (int y = 0; y < _height; y++)
   {
@@ -154,10 +154,7 @@ void GraphComparator::_calculateRasterCost(cv::Mat& mat)
 double GraphComparator::compareMaps()
 {
   _updateBounds();
-  double diffScoreSum = 0.0;
 
-  vector<double> scores;
-  int same = 0;
   // sampled standard deviation
   _s = -1;
   // 1.645 for 90% confidence, 1.96 for 95% confidence, and 2.58 for 99% confidence.
@@ -165,34 +162,80 @@ double GraphComparator::compareMaps()
   double zalpha = 1.645;
   _ci = -1;
 
-  // do this a bunch of times
-  for (int i = 0; i < _iterations && same < 4; i++)
+  _results.resize(_iterations);
+  //  Setup the work queue
+  for (int i = 0; i < _iterations; ++i)
   {
+    WorkInfo info;
+    info.index = i;
     // generate a random source point
-    _r.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+    info.coord.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
           _projectedBounds.MinX;
-    _r.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+    info.coord.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
           _projectedBounds.MinY;
-
-    OsmMapPtr referenceMap;
     // pick one map as the reference map
     if (Random::instance()->coinToss())
-    {
-      referenceMap = _mapP1;
-    }
+      info.referenceMap = _mapP1;
     else
-    {
-      referenceMap = _mapP2;
-    }
+      info.referenceMap = _mapP2;
 
-    _maxGraphCost = 0.0;
+    _workQueue.push(info);
+  }
+  //  Start up all of the threads
+  for (int i = 0; i < _maxThreads; ++i)
+    _threadPool.push_back(thread(&GraphComparator::_graphCompareThreadFunc, this));
+  //  Wait for the threads to finish working
+  for (int i = 0; i < _maxThreads; ++i)
+    _threadPool[i].join();
+  //  Perform the final calculations
+  vector<double> scores;
+  double diffScoreSum = 0.0;
+  for (int i = 0; i < _iterations; ++i)
+  {
+    double error = _results[i];
+    // keep a running tally of the differences.
+    diffScoreSum += error;
+    scores.push_back(1 - error);
+  }
+
+  sort(scores.begin(), scores.end());
+  _median = scores[scores.size() / 2];
+  _mean = 1 - (diffScoreSum / _iterations);
+
+  double v = 0;
+  for (int i = 0; i < _iterations; ++i)
+    v += (scores[i] - _mean) * (scores[i] - _mean);
+  //  Calculate the sampled standard deviation
+  _s = sqrt(v / (scores.size() - 1));
+  //  Calculate the confidence interval
+  _ci = zalpha * _s / sqrt(scores.size());
+
+  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
+
+  return _mean;
+}
+
+void GraphComparator::_graphCompareThreadFunc()
+{
+  //  Lock the mutex before checking the contents of the work queue
+  _workQueueMutex.lock();
+  while (!_workQueue.empty())
+  {
+    //  Grab the work info to process
+    WorkInfo info = _workQueue.front();
+    _workQueue.pop();
+    //  Make sure to unlock the queue
+    _workQueueMutex.unlock();
+
+    double maxGraphCost = 0.0;
+    RandomPtr random(new Random(info.index));
 
     // find the random source point's nearest point on a feature in one of the maps
-    _r = _findNearestPointOnFeature(referenceMap, _r);
+    info.coord = _findNearestPointOnFeature(info.referenceMap, info.coord);
 
     // generate a cost distance raster for each map
-    cv::Mat image1 = _calculateCostDistance(_mapP1, _r);
-    cv::Mat image2 = _calculateCostDistance(_mapP2, _r);
+    cv::Mat image1 = _calculateCostDistance(_mapP1, info.coord, maxGraphCost, random);
+    cv::Mat image2 = _calculateCostDistance(_mapP2, info.coord, maxGraphCost, random);
 
     // take the difference of the two rasters and normalize
     double error = _calculateError(image1, image2);
@@ -205,53 +248,33 @@ double GraphComparator::compareMaps()
       const float* image2Data = image2.ptr<float>(0);
       float* diffData = diff.ptr<float>(0);
       size_t size = (image1.dataend - image1.datastart) / sizeof(float);
-      for (size_t j = 0; j < size; j++)
-      {
+      for (size_t j = 0; j < size; ++j)
         diffData[j] = fabs(image1Data[j] - image2Data[j]);
-      }
 
       QDir().mkpath("test-output/route-image");
-      QString s1 = QString("test-output/route-image/route-%1-a.png").arg(i, 3, 10, QChar('0'));
-      QString s2 = QString("test-output/route-image/route-%1-b.png").arg(i, 3, 10, QChar('0'));
-      QString sdiff = QString("test-output/route-image/route-%1-diff.png").arg(i, 3, 10, QChar('0'));
-      _saveImage(image1, s1, _maxGraphCost * 3);
-      _saveImage(image2, s2, _maxGraphCost * 3);
-      _saveImage(diff, sdiff, _maxGraphCost * 3);
+      QString s1 = QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
+      QString s2 = QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
+      QString sdiff = QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
+      _saveImage(image1, s1, maxGraphCost * 3);
+      _saveImage(image2, s2, maxGraphCost * 3);
+      _saveImage(diff, sdiff, maxGraphCost * 3);
     }
-
     image1.release();
     image2.release();
+    //  Lock the results mutex before writing to it
+    _resultsMutex.lock();
+    _results[info.index] = error;
+    _resultsMutex.unlock();
 
-    // keep a running tally of the differences.
-    diffScoreSum += error;
-
-    scores.push_back(1 - error);
-    sort(scores.begin(), scores.end());
-    _median = scores[scores.size() / 2];
-    _mean = 1 - (diffScoreSum / (i + 1));
-
-    if (scores.size() > 1)
-    {
-      double v = 0;
-      for (size_t i = 0; i < scores.size(); i++)
-      {
-        v += (scores[i] - _mean) * (scores[i] - _mean);
-      }
-      _s = sqrt(v / (scores.size() - 1));
-
-      _ci = zalpha * _s / sqrt(scores.size());
-    }
-
-    PROGRESS_INFO(i << " / " << _iterations << " mean: " << _mean << "   ");
+    //  Lock the mutex to check the contents
+    _workQueueMutex.lock();
   }
-
-  LOG_INFO(_iterations << " / " << _iterations << " mean: " << _mean << "   ");
-
-  return _mean;
+  //  Work queue is empty, unlock the mutex and exit the thread
+  _workQueueMutex.unlock();
 }
 
 void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
-                                       QString output)
+                                       QString output, double& maxGraphCost)
 {
   _updateBounds();
   // make a copy of the map so we can manipulate it.
@@ -296,7 +319,7 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   sp.calculateCost();
   LOG_DEBUG("Cost done");
 
-  cv::Mat mat = _paintGraph(map, *graph, sp);
+  cv::Mat mat = _paintGraph(map, *graph, sp, maxGraphCost);
 
   _saveImage(mat, output, -1.0, false);
   _saveImage(mat, output.replace(".png", "2.png"), -1.0, true);
@@ -327,7 +350,8 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
 }
 
 void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
-                                        ShortestPath& sp, QString path)
+                                        ShortestPath& sp, QString path,
+                                        const geos::geom::Coordinate& coord)
 {
   const NodeMap& nodes = map->getNodes();
 
@@ -352,7 +376,7 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
 
   pen.setWidth(7);
   pt.setPen(pen);
-  gp.drawPoint(pt, _r.x, _r.y, m);
+  gp.drawPoint(pt, coord.x, coord.y, m);
 
   pen.setWidth(3);
   QColor c;
@@ -394,7 +418,7 @@ void GraphComparator::_init()
   _debugImages = false;
 }
 
-cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp)
+cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost)
 {
   const WayMap& ways = map->getWays();
 
@@ -421,7 +445,7 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
         double startCost = cost;
         double endCost = sp.getNodeCost(w->getNodeIds()[w->getNodeCount() - 1]);
         _paintWay(mat, map, w, friction, startCost, endCost);
-        _maxGraphCost = std::max(startCost, endCost);
+        maxGraphCost = std::max(startCost, endCost);
       }
     }
   }

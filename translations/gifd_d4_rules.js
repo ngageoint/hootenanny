@@ -736,111 +736,111 @@ gifd.rules = {
        ['ATN','997',undefined,undefined], // Unpopulated
 
        // AUA - ATS Use Attribute
-       ['AUA','0','raw:AUA','unknown'], // Unknown
-       ['AUA','1','raw:AUA','advisory_area_(ada)'], // Advisory Area (ADA)
-       ['AUA','2','raw:AUA','air_defense_identification_zone_(adiz)'], // Air Defense Identification Zone (ADIZ)
-       ['AUA','3','raw:AUA','air_route_traffic_control_center_(artcc)'], // Air Route Traffic Control Center (ARTCC)
-       ['AUA','4','raw:AUA','alert_area'], // Alert Area
-       ['AUA','5','raw:AUA','area_control_center_(acc)'], // Area Control Center (ACC)
-       ['AUA','6','raw:AUA','buffer_zone_(bz)'], // Buffer Zone (BZ)
-       ['AUA','7','raw:AUA','canadian_air_defense_identification_zone_(cadiz)'], // Canadian Air Defense Identification Zone (CADIZ)
-       ['AUA','8','raw:AUA','control_area_(cta)'], // Control Area (CTA)
-       ['AUA','9','raw:AUA','control_zone_(ctlz)'], // Control Zone (CTLZ)
-       ['AUA','10','raw:AUA','danger_area'], // Danger Area
-       ['AUA','11','raw:AUA','dew_east_military_identification_zone_(demiz)'], // Dew East Military Identification Zone (DEMIZ)
-       ['AUA','12','raw:AUA','distant_early_warning_identification_zone_(dewiz)'], // Distant Early Warning Identification Zone (DEWIZ)
-       ['AUA','13','raw:AUA','flight_information_region_(fir)'], // Flight Information Region (FIR)
-       ['AUA','14','raw:AUA','french_peripheral_identification_zone_(lip)'], // French Peripheral Identification Zone (LIP)
-       ['AUA','15','raw:AUA','military_aerodrome_traffic_zone_(maiz)'], // Military Aerodrome Traffic Zone (MAIZ)
-       ['AUA','16','raw:AUA','military_common_area_control_(mcac)'], // Military Common Area Control (MCAC)
-       ['AUA','17','raw:AUA','military_climb_corridor_(mcc)'], // Military Climb Corridor (MCC)
-       ['AUA','18','raw:AUA','military_flying_area_(canada,_mfa)'], // Military Flying Area (Canada, MFA)
-       ['AUA','19','raw:AUA','mid-canada_identification_zone_(midiz)'], // Mid-Canada Identification Zone (MIDIZ)
-       ['AUA','20','raw:AUA','military_operations_area_(moa)'], // Military Operations Area (MOA)
-       ['AUA','21','raw:AUA','military_terminal_control_area_(mtca)'], // Military Terminal Control Area (MTCA)
-       ['AUA','22','raw:AUA','military_upper_control_area_(muca)'], // Military Upper Control Area (MUCA)
-       ['AUA','23','raw:AUA','oceanic_control_area_(non-faa)_(oca)'], // Oceanic Control Area (non-FAA) (OCA)
-       ['AUA','24','raw:AUA','operating_area_(oparea)'], // Operating Area (OPAREA)
-       ['AUA','25','raw:AUA','prohibited_area'], // Prohibited Area
-       ['AUA','26','raw:AUA','positive_control_area_(pca)'], // Positive Control Area (PCA)
-       ['AUA','27','raw:AUA','positive_control_zone_(pcz)'], // Positive Control Zone (PCZ)
-       ['AUA','28','raw:AUA','radar_area'], // Radar Area
-       ['AUA','29','raw:AUA','restricted_area'], // Restricted Area
-       ['AUA','30','raw:AUA','security_identification_zone_(siz)'], // Security Identification Zone (SIZ)
-       ['AUA','31','raw:AUA','special_air_traffic_rules_area'], // Special Air Traffic Rules Area
-       ['AUA','32','raw:AUA','special_rules_zone'], // Special Rules Zone
-       ['AUA','33','raw:AUA','transition_area_(for_chart_use_only_-_ta)'], // Transition Area (For Chart Use Only - TA)
-       ['AUA','34','raw:AUA','terminal_control_area_(tca)'], // Terminal Control Area (TCA)
-       ['AUA','35','raw:AUA','continental_control_area_(cca)'], // Continental Control Area (CCA)
-       ['AUA','36','raw:AUA','special_operations_area_(air)'], // Special Operations Area (Air)
-       ['AUA','37','raw:AUA','terminal_radar_service_area_(trsa)'], // Terminal Radar Service Area (TRSA)
-       ['AUA','38','raw:AUA','upper_advisory_area_(uda)'], // Upper Advisory Area (UDA)
-       ['AUA','39','raw:AUA','upper_control_area_(uta)'], // Upper Control Area (UTA)
-       ['AUA','40','raw:AUA','upper_flight_information_region_(uir)'], // Upper Flight Information Region (UIR)
-       ['AUA','41','raw:AUA','warning_area'], // Warning Area
-       ['AUA','42','raw:AUA','zone_of_interior_(zi)'], // Zone of Interior (ZI)
-       ['AUA','44','raw:AUA','korea_limited_identification_zone_(kliz)'], // Korea Limited Identification Zone (KLIZ)
-       ['AUA','45','raw:AUA','uncontrolled_airspace'], // Uncontrolled Airspace
-       ['AUA','46','raw:AUA','controlled_airspace'], // Controlled Airspace
-       ['AUA','47','raw:AUA','airport_traffic_area_(ata)'], // Airport Traffic Area (ATA)
-       ['AUA','48','raw:AUA','airport_radar_service_area_(arsa)'], // Airport Radar Service Area (ARSA)
-       ['AUA','49','raw:AUA','controlled_firing_area'], // Controlled Firing Area
-       ['AUA','50','raw:AUA','parachute_jump_area'], // Parachute Jump Area
-       ['AUA','51','raw:AUA','airport_advisory_area'], // Airport Advisory Area
-       ['AUA','52','raw:AUA','designated_mountainous_area'], // Designated Mountainous Area
-       ['AUA','54','raw:AUA','non-free_flying_area'], // Non-Free Flying Area
-       ['AUA','55','raw:AUA','control_zone_-_no_fixed_wing_special_vfr_permitted'], // Control Zone - No Fixed Wing Special VFR Permitted
-       ['AUA','56','raw:AUA','altimeter_change_boundary'], // Altimeter Change Boundary
-       ['AUA','57','raw:AUA','defense_area'], // Defense Area
-       ['AUA','58','raw:AUA','aerodrome_control_zone'], // Aerodrome Control Zone
-       ['AUA','59','raw:AUA','class_c_control_zone'], // Class C Control Zone
-       ['AUA','60','raw:AUA','sparsely_settled_area'], // Sparsely Settled Area
-       ['AUA','61','raw:AUA','northern_domestic_airspace'], // Northern Domestic Airspace
-       ['AUA','62','raw:AUA','icao'], // ICAO
-       ['AUA','63','raw:AUA','upper_airspace_centers_operational_air_traffic'], // Upper Airspace Centers Operational Air Traffic
-       ['AUA','64','raw:AUA','controlled_visual_flight_rules_(cvfr)'], // Controlled Visual Flight Rules (CVFR)
-       ['AUA','65','raw:AUA','bird_hazard_areas'], // Bird Hazard Areas
-       ['AUA','66','raw:AUA','temporary_reserved_airspace_(tra)'], // Temporary Reserved Airspace (TRA)
-       ['AUA','67','raw:AUA','air_route_traffic_control_center_sector_or_discrete_sector'], // Air Route Traffic Control Center Sector or Discrete Sector
-       ['AUA','68','raw:AUA','sub-flight_information_region_(sub_fir)'], // Sub-Flight Information Region (SUB FIR)
-       ['AUA','69','raw:AUA','radar_area_sector_boundary'], // Radar Area Sector Boundary
-       ['AUA','70','raw:AUA','oceanic_control_area_(faa)_(oca)'], // Oceanic Control Area (FAA) (OCA)
-       ['AUA','71','raw:AUA','touchdown_zone'], // Touchdown Zone
-       ['AUA','74','raw:AUA','refueling/track_area'], // Refueling/Track Area
-       ['AUA','75','raw:AUA','berlin_control_zone'], // Berlin Control Zone
-       ['AUA','79','raw:AUA','special_use_airspace_exclusions'], // Special Use Airspace Exclusions
-       ['AUA','80','raw:AUA','radar_stage_1'], // Radar Stage 1
-       ['AUA','81','raw:AUA','radar_stage_2'], // Radar Stage 2
-       ['AUA','82','raw:AUA','radar_stage_3'], // Radar Stage 3
-       ['AUA','83','raw:AUA','berlin_control_zone_associated_corridors'], // Berlin Control Zone Associated Corridors
+       ['AUA','0','airspace:type','unknown'], // Unknown
+       ['AUA','1','airspace:type','advisory_area_(ada)'], // Advisory Area (ADA)
+       ['AUA','2','airspace:type','air_defense_identification_zone_(adiz)'], // Air Defense Identification Zone (ADIZ)
+       ['AUA','3','airspace:type','air_route_traffic_control_center_(artcc)'], // Air Route Traffic Control Center (ARTCC)
+       ['AUA','4','airspace:type','alert_area'], // Alert Area
+       ['AUA','5','airspace:type','area_control_center_(acc)'], // Area Control Center (ACC)
+       ['AUA','6','airspace:type','buffer_zone_(bz)'], // Buffer Zone (BZ)
+       ['AUA','7','airspace:type','canadian_air_defense_identification_zone_(cadiz)'], // Canadian Air Defense Identification Zone (CADIZ)
+       ['AUA','8','airspace:type','control_area_(cta)'], // Control Area (CTA)
+       ['AUA','9','airspace:type','control_zone_(ctlz)'], // Control Zone (CTLZ)
+       ['AUA','10','airspace:type','danger_area'], // Danger Area
+       ['AUA','11','airspace:type','dew_east_military_identification_zone_(demiz)'], // Dew East Military Identification Zone (DEMIZ)
+       ['AUA','12','airspace:type','distant_early_warning_identification_zone_(dewiz)'], // Distant Early Warning Identification Zone (DEWIZ)
+       ['AUA','13','airspace:type','flight_information_region_(fir)'], // Flight Information Region (FIR)
+       ['AUA','14','airspace:type','french_peripheral_identification_zone_(lip)'], // French Peripheral Identification Zone (LIP)
+       ['AUA','15','airspace:type','military_aerodrome_traffic_zone_(maiz)'], // Military Aerodrome Traffic Zone (MAIZ)
+       ['AUA','16','airspace:type','military_common_area_control_(mcac)'], // Military Common Area Control (MCAC)
+       ['AUA','17','airspace:type','military_climb_corridor_(mcc)'], // Military Climb Corridor (MCC)
+       ['AUA','18','airspace:type','military_flying_area_(canada,_mfa)'], // Military Flying Area (Canada, MFA)
+       ['AUA','19','airspace:type','mid-canada_identification_zone_(midiz)'], // Mid-Canada Identification Zone (MIDIZ)
+       ['AUA','20','airspace:type','military_operations_area_(moa)'], // Military Operations Area (MOA)
+       ['AUA','21','airspace:type','military_terminal_control_area_(mtca)'], // Military Terminal Control Area (MTCA)
+       ['AUA','22','airspace:type','military_upper_control_area_(muca)'], // Military Upper Control Area (MUCA)
+       ['AUA','23','airspace:type','oceanic_control_area_(non-faa)_(oca)'], // Oceanic Control Area (non-FAA) (OCA)
+       ['AUA','24','airspace:type','operating_area_(oparea)'], // Operating Area (OPAREA)
+       ['AUA','25','airspace:type','prohibited_area'], // Prohibited Area
+       ['AUA','26','airspace:type','positive_control_area_(pca)'], // Positive Control Area (PCA)
+       ['AUA','27','airspace:type','positive_control_zone_(pcz)'], // Positive Control Zone (PCZ)
+       ['AUA','28','airspace:type','radar_area'], // Radar Area
+       ['AUA','29','airspace:type','restricted_area'], // Restricted Area
+       ['AUA','30','airspace:type','security_identification_zone_(siz)'], // Security Identification Zone (SIZ)
+       ['AUA','31','airspace:type','special_air_traffic_rules_area'], // Special Air Traffic Rules Area
+       ['AUA','32','airspace:type','special_rules_zone'], // Special Rules Zone
+       ['AUA','33','airspace:type','transition_area_(for_chart_use_only_-_ta)'], // Transition Area (For Chart Use Only - TA)
+       ['AUA','34','airspace:type','terminal_control_area_(tca)'], // Terminal Control Area (TCA)
+       ['AUA','35','airspace:type','continental_control_area_(cca)'], // Continental Control Area (CCA)
+       ['AUA','36','airspace:type','special_operations_area_(air)'], // Special Operations Area (Air)
+       ['AUA','37','airspace:type','terminal_radar_service_area_(trsa)'], // Terminal Radar Service Area (TRSA)
+       ['AUA','38','airspace:type','upper_advisory_area_(uda)'], // Upper Advisory Area (UDA)
+       ['AUA','39','airspace:type','upper_control_area_(uta)'], // Upper Control Area (UTA)
+       ['AUA','40','airspace:type','upper_flight_information_region_(uir)'], // Upper Flight Information Region (UIR)
+       ['AUA','41','airspace:type','warning_area'], // Warning Area
+       ['AUA','42','airspace:type','zone_of_interior_(zi)'], // Zone of Interior (ZI)
+       ['AUA','44','airspace:type','korea_limited_identification_zone_(kliz)'], // Korea Limited Identification Zone (KLIZ)
+       ['AUA','45','airspace:type','uncontrolled_airspace'], // Uncontrolled Airspace
+       ['AUA','46','airspace:type','controlled_airspace'], // Controlled Airspace
+       ['AUA','47','airspace:type','airport_traffic_area_(ata)'], // Airport Traffic Area (ATA)
+       ['AUA','48','airspace:type','airport_radar_service_area_(arsa)'], // Airport Radar Service Area (ARSA)
+       ['AUA','49','airspace:type','controlled_firing_area'], // Controlled Firing Area
+       ['AUA','50','airspace:type','parachute_jump_area'], // Parachute Jump Area
+       ['AUA','51','airspace:type','airport_advisory_area'], // Airport Advisory Area
+       ['AUA','52','airspace:type','designated_mountainous_area'], // Designated Mountainous Area
+       ['AUA','54','airspace:type','non-free_flying_area'], // Non-Free Flying Area
+       ['AUA','55','airspace:type','control_zone_-_no_fixed_wing_special_vfr_permitted'], // Control Zone - No Fixed Wing Special VFR Permitted
+       ['AUA','56','airspace:type','altimeter_change_boundary'], // Altimeter Change Boundary
+       ['AUA','57','airspace:type','defense_area'], // Defense Area
+       ['AUA','58','airspace:type','aerodrome_control_zone'], // Aerodrome Control Zone
+       ['AUA','59','airspace:type','class_c_control_zone'], // Class C Control Zone
+       ['AUA','60','airspace:type','sparsely_settled_area'], // Sparsely Settled Area
+       ['AUA','61','airspace:type','northern_domestic_airspace'], // Northern Domestic Airspace
+       ['AUA','62','airspace:type','icao'], // ICAO
+       ['AUA','63','airspace:type','upper_airspace_centers_operational_air_traffic'], // Upper Airspace Centers Operational Air Traffic
+       ['AUA','64','airspace:type','controlled_visual_flight_rules_(cvfr)'], // Controlled Visual Flight Rules (CVFR)
+       ['AUA','65','airspace:type','bird_hazard_areas'], // Bird Hazard Areas
+       ['AUA','66','airspace:type','temporary_reserved_airspace_(tra)'], // Temporary Reserved Airspace (TRA)
+       ['AUA','67','airspace:type','air_route_traffic_control_center_sector_or_discrete_sector'], // Air Route Traffic Control Center Sector or Discrete Sector
+       ['AUA','68','airspace:type','sub-flight_information_region_(sub_fir)'], // Sub-Flight Information Region (SUB FIR)
+       ['AUA','69','airspace:type','radar_area_sector_boundary'], // Radar Area Sector Boundary
+       ['AUA','70','airspace:type','oceanic_control_area_(faa)_(oca)'], // Oceanic Control Area (FAA) (OCA)
+       ['AUA','71','airspace:type','touchdown_zone'], // Touchdown Zone
+       ['AUA','74','airspace:type','refueling/track_area'], // Refueling/Track Area
+       ['AUA','75','airspace:type','berlin_control_zone'], // Berlin Control Zone
+       ['AUA','79','airspace:type','special_use_airspace_exclusions'], // Special Use Airspace Exclusions
+       ['AUA','80','airspace:type','radar_stage_1'], // Radar Stage 1
+       ['AUA','81','airspace:type','radar_stage_2'], // Radar Stage 2
+       ['AUA','82','airspace:type','radar_stage_3'], // Radar Stage 3
+       ['AUA','83','airspace:type','berlin_control_zone_associated_corridors'], // Berlin Control Zone Associated Corridors
        ['AUA','997',undefined,undefined], // Unpopulated
-       ['AUA','998','raw:AUA','not_applicable'], // Not Applicable
-       ['AUA','999','raw:AUA','other'], // Other
+       ['AUA','998','airspace:type','not_applicable'], // Not Applicable
+       ['AUA','999','airspace:type','other'], // Other
 
        // AUB - Airspace Use Boundary
        ['AUB','0','raw:AUB','unknown'], // Unknown
-       ['AUB','1','raw:AUB','flight_information_region_(fir)'], // Flight Information Region (FIR)
-       ['AUB','2','raw:AUB','sub-fir'], // Sub-FIR
-       ['AUB','3','raw:AUB','control_zone_(ctz/ctr)'], // Control Zone (CTZ/CTR)
-       ['AUB','4','raw:AUB','military_ctz/ctr'], // Military CTZ/CTR
-       ['AUB','6','raw:AUB','special_rules_zone_(srz)'], // Special Rules Zone (SRZ)
-       ['AUB','7','raw:AUB','advisory_area_(ada)'], // Advisory Area (ADA)
-       ['AUB','8','raw:AUB','terminal_control_area_(tca)/military_tca_(mtma)'], // Terminal Control Area (TCA)/Military TCA (MTMA)
-       ['AUB','13','raw:AUB','area_control_center_(acc)'], // Area Control Center (ACC)
-       ['AUB','14','raw:AUB','radar_area'], // Radar Area
-       ['AUB','19','raw:AUB','upper_information_region_(uir)'], // Upper Information Region (UIR)
-       ['AUB','20','raw:AUB','upper_control_area'], // Upper Control Area
-       ['AUB','21','raw:AUB','military_upper'], // Military Upper
-       ['AUB','22','raw:AUB','upper_advisory_area_(uda)'], // Upper Advisory Area (UDA)
-       ['AUB','23','raw:AUB','control_area_(cta)'], // Control Area (CTA)
-       ['AUB','24','raw:AUB','special_rules_area'], // Special Rules Area
-       ['AUB','27','raw:AUB','air-to-air_refueling_area/track/route'], // Air-to-Air Refueling Area/Track/Route
-       ['AUB','29','raw:AUB','oceanic_control_area_(non-faa)_(oca)'], // Oceanic Control Area (non-FAA) (OCA)
-       ['AUB','30','raw:AUB','oceanic_control_area_(faa)_(oca)'], // Oceanic Control Area (FAA) (OCA)
-       ['AUB','32','raw:AUB','air_defense_identification_zone_(adiz)'], // Air Defense Identification Zone (ADIZ)
-       ['AUB','33','raw:AUB','buffer_zone'], // Buffer Zone
-       ['AUB','58','raw:AUB','air_route_traffic_control_center_(artcc)'], // Air Route Traffic Control Center (ARTCC)
-       ['AUB','999','raw:AUB','other'], // Other
+       ['AUB','1','airspace_boundary:type','flight_information_region_(fir)'], // Flight Information Region (FIR)
+       ['AUB','2','airspace_boundary:type','sub-fir'], // Sub-FIR
+       ['AUB','3','airspace_boundary:type','control_zone_(ctz/ctr)'], // Control Zone (CTZ/CTR)
+       ['AUB','4','airspace_boundary:type','military_ctz/ctr'], // Military CTZ/CTR
+       ['AUB','6','airspace_boundary:type','special_rules_zone_(srz)'], // Special Rules Zone (SRZ)
+       ['AUB','7','airspace_boundary:type','advisory_area_(ada)'], // Advisory Area (ADA)
+       ['AUB','8','airspace_boundary:type','terminal_control_area_(tca)/military_tca_(mtma)'], // Terminal Control Area (TCA)/Military TCA (MTMA)
+       ['AUB','13','airspace_boundary:type','area_control_center_(acc)'], // Area Control Center (ACC)
+       ['AUB','14','airspace_boundary:type','radar_area'], // Radar Area
+       ['AUB','19','airspace_boundary:type','upper_information_region_(uir)'], // Upper Information Region (UIR)
+       ['AUB','20','airspace_boundary:type','upper_control_area'], // Upper Control Area
+       ['AUB','21','airspace_boundary:type','military_upper'], // Military Upper
+       ['AUB','22','airspace_boundary:type','upper_advisory_area_(uda)'], // Upper Advisory Area (UDA)
+       ['AUB','23','airspace_boundary:type','control_area_(cta)'], // Control Area (CTA)
+       ['AUB','24','airspace_boundary:type','special_rules_area'], // Special Rules Area
+       ['AUB','27','airspace_boundary:type','air-to-air_refueling_area/track/route'], // Air-to-Air Refueling Area/Track/Route
+       ['AUB','29','airspace_boundary:type','oceanic_control_area_(non-faa)_(oca)'], // Oceanic Control Area (non-FAA) (OCA)
+       ['AUB','30','airspace_boundary:type','oceanic_control_area_(faa)_(oca)'], // Oceanic Control Area (FAA) (OCA)
+       ['AUB','32','airspace_boundary:type','air_defense_identification_zone_(adiz)'], // Air Defense Identification Zone (ADIZ)
+       ['AUB','33','airspace_boundary:type','buffer_zone'], // Buffer Zone
+       ['AUB','58','airspace_boundary:type','air_route_traffic_control_center_(artcc)'], // Air Route Traffic Control Center (ARTCC)
+       ['AUB','999','airspace_boundary:type','other'], // Other
 
        // AUL - Airspace Use Limitations
        ['AUL','0','raw:AUL','unknown'], // Unknown
@@ -2276,7 +2276,7 @@ gifd.rules = {
 
        // MCC - Material Composition Category
        ['MCC','0','material','unknown'], // Unknown
-       ['MCC','2','material','aluminum'], // Aluminum
+       ['MCC','2','material','aluminium'], // Aluminum
        ['MCC','4','material','ash'], // Ash
        ['MCC','5','material','asphalt'], // Asphalt
        ['MCC','7','material','bedrock'], // Bedrock
@@ -2330,7 +2330,7 @@ gifd.rules = {
        ['MCC','80','material','quartz'], // Quartz
        ['MCC','81','material','radiolaria'], // Radiolaria
        ['MCC','83','material','reinforced_concrete'], // Reinforced Concrete
-       ['MCC','84','material','rock/rocky'], // Rock/Rocky
+       ['MCC','84','material','rock'], // Rock/Rocky
        ['MCC','88','material','sand'], // Sand
        ['MCC','90','material','schist'], // Schist
        ['MCC','92','material','scoria'], // Scoria
@@ -3256,7 +3256,7 @@ gifd.rules = {
        // PRO - Product Category
        ['PRO','0','product','unknown'], // Unknown
        ['PRO','1','product','aircraft'], // Aircraft
-       ['PRO','2','product','aluminum'], // Aluminum
+       ['PRO','2','product','aluminium'], // Aluminum
        ['PRO','3','product','ammunition'], // Ammunition
        ['PRO','5','product','asphalt'], // Asphalt
        ['PRO','9','product','brick'], // Brick
@@ -3807,7 +3807,7 @@ gifd.rules = {
 
        // SMC - Surface Material Category
        ['SMC','0','surface','unknown'], // Unknown
-       ['SMC','2','surface','aluminum'], // Aluminum
+       ['SMC','2','surface','aluminium'], // Aluminum
        ['SMC','4','surface','ash'], // Ash
        ['SMC','5','surface','asphalt'], // Asphalt
        ['SMC','6','surface','basalt'], // Basalt
@@ -4236,27 +4236,27 @@ gifd.rules = {
        // ['STL','998',undefined,undefined], // Not Applicable
        ['STL','998','raw:STL','not_applicable'], // Not Applicable
 
-       // STP - Soil Types
-       ['STP','0','raw:STP','unknown'], // Unknown
-       ['STP','1','raw:STP','gw_well_graded_gravels_or_gravel-sand_mixtures,_little_or_no_fines'], // GW Well graded gravels or gravel-sand mixtures, little or no fines
-       ['STP','2','raw:STP','gp_poorly_graded_gravels_or_gravel-sand_mixtures,_little_or_no_fines'], // GP Poorly graded gravels or gravel-sand mixtures, little or no fines
-       ['STP','3','raw:STP','gm_silty_gravels,_gravel-sand-silt_mixtures'], // GM Silty gravels, gravel-sand-silt mixtures
-       ['STP','4','raw:STP','gc_clayey_gravels,_gravel-sand-clay_mixtures'], // GC Clayey gravels, gravel-sand-clay mixtures
-       ['STP','5','raw:STP','sw_well_graded_sand_or_gravelly_sands,_little_or_no_fines'], // SW Well graded sand or gravelly sands, little or no fines
-       ['STP','6','raw:STP','sp_poorly_graded_sands_or_gravelly_sands,_little_or_no_fines'], // SP Poorly graded sands or gravelly sands, little or no fines
-       ['STP','7','raw:STP','sm_silty_sands,_sand-silt_mixture'], // SM Silty sands, sand-silt mixture
-       ['STP','8','raw:STP','sc_clayey_sands,_sand-clay_mixtures'], // SC Clayey sands, sand-clay mixtures
-       ['STP','9','raw:STP','ml_inorganic_silts_and_very_fine_sands,_rock_floor,_silty_or_clayey_fine_sands_or_clayey_with_slight_plasticity'], // ML Inorganic silts and very fine sands, rock floor, silty or clayey fine sands or clayey with slight plasticity
-       ['STP','10','raw:STP','cl_inorganic_clays_of_low_to_medium_plasticity,_gravelly_clays,_sandy_clays,_silty_clays,_lean_clays'], // CL Inorganic clays of low to medium plasticity, gravelly clays, sandy clays, silty clays, lean clays
-       ['STP','11','raw:STP','ol_organic_silts_and_organic_silty_clays'], // OL Organic silts and organic silty clays
-       ['STP','12','raw:STP','ch_inorganic_clays_of_high_plasticity,_fat_clays'], // CH Inorganic clays of high plasticity, fat clays
-       ['STP','13','raw:STP','mh_inorganic_silts,_micaceous_or_diatomaceous'], // MH Inorganic silts, micaceous or diatomaceous
-       ['STP','14','raw:STP','oh_organic_clays_of_medium_to_high_plasticity,_organic_silts'], // OH Organic clays of medium to high plasticity, organic silts
-       ['STP','15','raw:STP','pt_peat_and_other_highly_organic_soils'], // PT Peat and other highly organic soils
-       ['STP','17','raw:STP','ml-cl_soil_type_having_both_ml_and_cl_characteristics'], // ML-CL Soil type having both ML and CL characteristics
-       ['STP','18','raw:STP','evaporites'], // Evaporites
-       ['STP','99','raw:STP','not_evaluated'], // Not Evaluated
-       ['STP','999','raw:STP','other'], // Other
+       // STP - Soil Type
+       // ['STP','-999999',undefined,undefined], // No Information
+       ['STP','1','soil:type','gw:well-graded_gravel'], // GW: Well-graded Gravel
+       ['STP','2','soil:type','gp:poorly-graded_gravel'], // GP: Poorly-graded Gravel
+       ['STP','3','soil:type','gm:silty_gravel_sand'], // GM: Silty Gravel Sand
+       ['STP','4','soil:type','gc:clayey_gravel'], // GC: Clayey Gravel
+       ['STP','5','soil:type','sw:well-graded_sand'], // SW: Well-graded Sand
+       ['STP','6','soil:type','sp:poorly-graded_sand'], // SP: Poorly-graded Sand
+       ['STP','7','soil:type','sm:silty_sand'], // SM: Silty Sand
+       ['STP','8','soil:type','sc:clayey_sand'], // SC: Clayey Sand
+       ['STP','9','soil:type','ml:silt_and_fine_sand'], // ML: Silt and Fine Sand
+       ['STP','10','soil:type','cl:lean_clay'], // CL: Lean Clay
+       ['STP','11','soil:type','ol:organic_silt_and_clay'], // OL: Organic Silt and Clay
+       ['STP','12','soil:type','ch:fat_clay'], // CH: Fat Clay
+       ['STP','13','soil:type','mh:micraceous'], // MH: Micraceous
+       ['STP','14','soil:type','oh:organic_clay'], // OH: Organic Clay
+       ['STP','15','soil:type','pt:peat'], // PT: Peat
+       ['STP','17','soil:type','ml-cl:silt_fine_sand_and_lean_clay'], // ML-CL: Silt, Fine Sand and Lean Clay
+       ['STP','18','soil:type','evaporite'], // Evaporite
+       ['STP','99','soil:type','not_evaluated'], // Not Evaluated
+       ['STP','999','soil:type','other'], // Other
 
        // STQ - Summer Tree Cover Density Code
        ['STQ','0','raw:STQ','unknown'], // Unknown

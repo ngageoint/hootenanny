@@ -54,8 +54,6 @@ private:
 
   bool _hideDisableTests;
   int _numTests;
-
-  void _loadBaseConfig(const QString& testConfigFile, QStringList& confs);
 };
 
 }

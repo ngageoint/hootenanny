@@ -33,69 +33,69 @@
     Based on mgcp/__init__.js script
 */
 
-tds = {
+tds40 = {
     // getDbSchema - Load the standard schema or modify it into the TDS structure
     getDbSchema: function() {
-        tds.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-        tds.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+        tds40.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
+        tds40.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
         // Warning: This is <GLOBAL> so we can get access to it from other functions
-        tds.rawSchema = tds.schema.getDbSchema();
+        tds40.rawSchema = tds40.schema.getDbSchema();
 
         // Add the Very ESRI specific FCSubtype attribute
-        if (config.getOgrEsriFcsubtype() == 'true') tds.rawSchema = translate.addFCSubtype(tds.rawSchema);
+        if (config.getOgrEsriFcsubtype() == 'true') tds40.rawSchema = translate.addFCSubtype(tds40.rawSchema);
 
         // Add the eLTDS attributes
-        if (config.getOgrTdsAddEtds() == 'true') tds.rawSchema = translate.addEtds(tds.rawSchema);
+        if (config.getOgrTdsAddEtds() == 'true') tds40.rawSchema = translate.addEtds(tds40.rawSchema);
 
         // Add empty "extra" feature layers if needed
-        if (config.getOgrNoteExtra() == 'file') tds.rawSchema = translate.addExtraFeature(tds.rawSchema);
+        if (config.getOgrNoteExtra() == 'file') tds40.rawSchema = translate.addExtraFeature(tds40.rawSchema);
 
      /*
         // This has been removed since we no longer have text enumerations in the schema
 
         // Go go through the Schema and fix/add attributes
-        for (var i=0, slen = tds.rawSchema.length; i < slen; i++)
+        for (var i=0, slen = tds40.rawSchema.length; i < slen; i++)
         {
             // Cycle throught he columns and "edit" the attribute fields with Text Enumerations
             // We convert these to plain String types and avoid having to handle String enumerations
-            for (var j=0, clen = tds.rawSchema[i].columns.length; j < clen; j++)
+            for (var j=0, clen = tds40.rawSchema[i].columns.length; j < clen; j++)
             {
                 // exploit the Object and avoid a Switch :-)
-                if (tds.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
+                if (tds40.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
                 {
-                    tds.rawSchema[i].columns[j].type = "String";
-                    delete tds.rawSchema[i].columns[j].enumerations;
+                    tds40.rawSchema[i].columns[j].type = "String";
+                    delete tds40.rawSchema[i].columns[j].enumerations;
                 }
-            } // End For tds.rawSchema.columns.length
-        } // End For tds.rawSchema.length
+            } // End For tds40.rawSchema.columns.length
+        } // End For tds40.rawSchema.length
      */
 
         // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-        tds.AttrLookup = translate.makeAttrLookup(tds.rawSchema);
+        tds40.AttrLookup = translate.makeAttrLookup(tds40.rawSchema);
 
         // Debug
-        // print("tds.AttrLookup");
-        // translate.dumpLookup(tds.AttrLookup);
+        // print("tds40.AttrLookup");
+        // translate.dumpLookup(tds40.AttrLookup);
 
         // Decide if we are going to use TDS structure or 1 FCODE / File
-        // if we DON't want the new structure, just return the tds.rawSchema
+        // if we DON't want the new structure, just return the tds40.rawSchema
         if (config.getOgrThematicStructure() == 'false')
         {
             // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-            tds.layerNameLookup = translate.makeLayerNameLookup(tds.rawSchema);
+            tds40.layerNameLookup = translate.makeLayerNameLookup(tds40.rawSchema);
 
-            // Now add an o2s[A,L,P] feature to the tds.rawSchema
+            // Now add an o2s[A,L,P] feature to the tds40.rawSchema
             // We can drop features but this is a nice way to see what we would drop
-            tds.rawSchema = translate.addEmptyFeature(tds.rawSchema);
+            tds40.rawSchema = translate.addEmptyFeature(tds40.rawSchema);
 
             // Add the empty Review layers
-            tds.rawSchema = translate.addReviewFeature(tds.rawSchema);
+            tds40.rawSchema = translate.addReviewFeature(tds40.rawSchema);
 
             // Debugging:
-            // translate.dumpSchema(tds.rawSchema);
+            // translate.dumpSchema(tds40.rawSchema);
 
-            return tds.rawSchema;
+            return tds40.rawSchema;
         }
 
         // OK, now we build a new schema
@@ -107,9 +107,9 @@ tds = {
         // layerList is used to keep track of what we have already seen
         var layerList = [];
         var geomType = '';
-        for (var fc in tds.rules.thematicGroupList)
+        for (var fc in tds40.rules.thematicGroupList)
         {
-            layerName = tds.rules.thematicGroupList[fc];
+            layerName = tds40.rules.thematicGroupList[fc];
             if (~layerList.indexOf(layerName)) continue;  // Funky use of ~ instead of '!== -1'
             layerList.push(layerName);
 
@@ -136,7 +136,7 @@ tds = {
 
         // Loop through the old schema and populate the new one
         var newSchemaLen = newSchema.length; // cached as we use this a lot
-        for (var os = 0, osLen = tds.rawSchema.length; os < osLen; os++)
+        for (var os = 0, osLen = tds40.rawSchema.length; os < osLen; os++)
         {
             // The table looks like:
             // 'PGB230':'AeronauticPnt', // AircraftHangar
@@ -145,8 +145,8 @@ tds = {
             // ....
             // So we add the geometry to the FCODE
 
-            fCode = tds.rawSchema[os].geom.charAt(0) + tds.rawSchema[os].fcode;
-            layerName = tds.rules.thematicGroupList[fCode];
+            fCode = tds40.rawSchema[os].geom.charAt(0) + tds40.rawSchema[os].fcode;
+            layerName = tds40.rules.thematicGroupList[fCode];
 
             // Loop through the new schema and find the right layer
             for (var ns = 0; ns < newSchemaLen; ns++)
@@ -157,28 +157,28 @@ tds = {
                     // now start adding attrs from the raw schema. This Is Not Pretty
 
                     // Loop through the columns in the OLD schema
-                    for (var cos = 0, cosLen = tds.rawSchema[os].columns.length; cos < cosLen; cos++)
+                    for (var cos = 0, cosLen = tds40.rawSchema[os].columns.length; cos < cosLen; cos++)
                     {
                         var same = false;
                         // Loop through the columns in the NEW schema
                         for (var cns = 0, cnsLen = newSchema[ns].columns.length; cns < cnsLen; cns++)
                         {
                             // If the attribute names match then we can ignore it, unless it is enumerated
-                            if (tds.rawSchema[os].columns[cos].name == newSchema[ns].columns[cns].name)
+                            if (tds40.rawSchema[os].columns[cos].name == newSchema[ns].columns[cns].name)
                             {
                                 same = true;
-                                if (tds.rawSchema[os].columns[cos].type !== 'enumeration' ) break;
+                                if (tds40.rawSchema[os].columns[cos].type !== 'enumeration' ) break;
 
                                 // Now for some more uglyness....
                                 // loop through the enumerated values  in the OLD schema
-                                for (var oen = 0, oenlen = tds.rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
+                                for (var oen = 0, oenlen = tds40.rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
                                 {
                                     var esame = false;
                                     // Loop through the enumerated values in the NEW schema
                                     for (var nen = 0, nenlen = newSchema[ns].columns[cns].enumerations.length; nen < nenlen; nen++)
                                     {
                                         // If the names match, ignore it
-                                        if (tds.rawSchema[os].columns[cos].enumerations[oen].name == newSchema[ns].columns[cns].enumerations[nen].name)
+                                        if (tds40.rawSchema[os].columns[cos].enumerations[oen].name == newSchema[ns].columns[cns].enumerations[nen].name)
                                         {
                                             esame = true;
                                             break;
@@ -187,7 +187,7 @@ tds = {
                                     // if the enumerated value isn't in the new list, add it
                                     if (!esame)
                                     {
-                                        newSchema[ns].columns[cns].enumerations.push(tds.rawSchema[os].columns[cos].enumerations[oen]);
+                                        newSchema[ns].columns[cns].enumerations.push(tds40.rawSchema[os].columns[cos].enumerations[oen]);
                                     }
                                 } // End oen loop
                             } // End if enumeration
@@ -197,15 +197,15 @@ tds = {
                         if (!same)
                         {
                             // Remove the Default Value so we get all Null values on export
-                            // delete tds.rawSchema[os].columns[cos].defValue;
-                            //tds.rawSchema[os].columns[cos].defValue = undefined;
+                            // delete tds40.rawSchema[os].columns[cos].defValue;
+                            //tds40.rawSchema[os].columns[cos].defValue = undefined;
 
-                            newSchema[ns].columns.push(tds.rawSchema[os].columns[cos]);
+                            newSchema[ns].columns.push(tds40.rawSchema[os].columns[cos]);
                         }
                     } // End osc loop
                 } // End if layerName
             } // End newSchema loop
-        } // end tds.rawSchema loop
+        } // end tds40.rawSchema loop
 
         // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
         tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
@@ -218,7 +218,7 @@ tds = {
         // newSchema = translate.addFdName(newSchema,'TDS');
         if (config.getOgrEsriFdname() !== "") newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
 
-        // Now add the o2s feature to the tds.rawSchema
+        // Now add the o2s feature to the tds40.rawSchema
         // We can drop features but this is a nice way to see what we would drop
         // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
         // DON'T get put under the Feature Dataset in the output
@@ -240,7 +240,7 @@ tds = {
 
         // First, use the lookup table to quickly drop all attributes that are not part of the feature
         // This is quicker than going through the Schema due to the way the Schema is arranged
-        var attrList = tds.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+        var attrList = tds40.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
         var othList = {};
 
@@ -272,21 +272,21 @@ tds = {
 
                 // Now check the length of the text fields
                 // We need more info from the customer about this: What to do if it is too long
-                if (val in tds.rules.txtLength)
+                if (val in tds40.rules.txtLength)
                 {
-                    if (attrs[val].length > tds.rules.txtLength[val])
+                    if (attrs[val].length > tds40.rules.txtLength[val])
                     {
                         // First try splitting the attribute and grabbing the first value
                         var tStr = attrs[val].split(';');
-                        if (tStr[0].length <= tds.rules.txtLength[val])
+                        if (tStr[0].length <= tds40.rules.txtLength[val])
                         {
                             attrs[val] = tStr[0];
                         }
                         else
                         {
                             // Still too long. Chop to the maximum length
-                            attrs[val] = tStr[0].substring(0,tds.rules.txtLength[val]);
-                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds.rules.txtLength[val] + ' characters.');
+                            attrs[val] = tStr[0].substring(0,tds40.rules.txtLength[val]);
+                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds40.rules.txtLength[val] + ' characters.');
                         }
                     } // End text attr length > max length
                     // It's text fo skip the next test
@@ -310,11 +310,11 @@ tds = {
         // No quick and easy way to do this unless we build yet another lookup table
         var feature = {};
 
-        for (var i=0, sLen = tds.rawSchema.length; i < sLen; i++)
+        for (var i=0, sLen = tds40.rawSchema.length; i < sLen; i++)
         {
-            if (tds.rawSchema[i].fcode == attrs.F_CODE && tds.rawSchema[i].geom == geometryType)
+            if (tds40.rawSchema[i].fcode == attrs.F_CODE && tds40.rawSchema[i].geom == geometryType)
             {
-                feature = tds.rawSchema[i];
+                feature = tds40.rawSchema[i];
                 break;
             }
         }
@@ -372,8 +372,8 @@ tds = {
     // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
     validateTDSAttrs: function(gFcode, attrs) {
 
-        var tdsAttrList = tdsAttrLookup[tds.rules.thematicGroupList[gFcode]];
-        var AttrList = tds.AttrLookup[gFcode];
+        var tdsAttrList = tdsAttrLookup[tds40.rules.thematicGroupList[gFcode]];
+        var AttrList = tds40.AttrLookup[gFcode];
 
         for (var i = 0, len = tdsAttrList.length; i < len; i++)
         {
@@ -514,18 +514,18 @@ tds = {
         for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
         {
             // pre processing
-            tds.applyToTdsPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
+            tds40.applyToTdsPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds.rules.numBiased, 'backward',tds.rules.intList);
-            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds40.rules.numBiased, 'backward',tds40.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds40.rules.txtBiased, 'backward');
 
             // one 2 one - we call the version that knows about OTH fields
-            translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds.lookup, tds.fcodeLookup);
+            translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds40.lookup, tds40.fcodeLookup);
 
             // post processing
-            tds.applyToTdsPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
+            tds40.applyToTdsPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
             returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
         }
@@ -535,19 +535,23 @@ tds = {
 
 
     // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
-    fixTransType : function(tags)
+    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
+    fixTransType : function(tags,geometry)
     {
         if (tags.railway)
         {
             tags['transport:type'] = 'railway';
+            if (geometry == 'Point') delete tags.railway;
         }
         else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
         {
             tags['transport:type'] = 'pedestrian';
+            if (geometry == 'Point') delete tags.highway;
         }
         else if (tags.highway)
         {
             tags['transport:type'] = 'road';
+            if (geometry == 'Point') delete tags.highway;
         }
     },
 
@@ -588,7 +592,7 @@ tds = {
             }
 
             // Check for an FCODE as a tag
-            if (col in tds.fcodeLookup['F_CODE'])
+            if (col in tds40.fcodeLookup['F_CODE'])
             {
                 attrs.F_CODE = col;
                 delete attrs[col];
@@ -596,14 +600,14 @@ tds = {
             }
 
             // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
-            if (~tds.rules.ignoreList.indexOf(col)) continue;
+            if (~tds40.rules.ignoreList.indexOf(col)) continue;
 
             // Look for Attributes
-            if (col in tds.rules.numBiased) continue;
+            if (col in tds40.rules.numBiased) continue;
 
-            if (col in tds.rules.txtBiased) continue;
+            if (col in tds40.rules.txtBiased) continue;
 
-            if (col in tds.lookup) continue;
+            if (col in tds40.lookup) continue;
 
             // Drop the "GEOM" attribute
             if (col == 'GEOM')
@@ -671,11 +675,11 @@ tds = {
             }
 
             // Now see if we need to swap attr names
-            if (col in tds.rules.swapList)
+            if (col in tds40.rules.swapList)
             {
                 // Debug:
-                // print('Swapped: ' + tds.rules.swapList[i]);
-                attrs[tds.rules.swapList[col]] = attrs[col];
+                // print('Swapped: ' + tds40.rules.swapList[i]);
+                attrs[tds40.rules.swapList[col]] = attrs[col];
                 delete attrs[col];
                 continue;
             }
@@ -698,11 +702,11 @@ tds = {
         // not set
         // Doing this after the main cleaning loop so all of the -999999 values are
         // already gone and we can just check for existance
-        for (var i in tds.rules.closureList)
+        for (var i in tds40.rules.closureList)
         {
             if (attrs[i])
             {
-                if (attrs[tds.rules.closureList[i][0]] || attrs[tds.rules.closureList[i][1]])
+                if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
                 {
                     continue;
                 }
@@ -729,13 +733,13 @@ tds = {
             // Funky but it makes life easier
             var llayerName = layerName.toString().toLowerCase();
 
-            for (var row in tds.rules.fCodeMap)
+            for (var row in tds40.rules.fCodeMap)
             {
-                for (var val in tds.rules.fCodeMap[row][1])
+                for (var val in tds40.rules.fCodeMap[row][1])
                 {
-                    if (llayerName == tds.rules.fCodeMap[row][1][val])
+                    if (llayerName == tds40.rules.fCodeMap[row][1][val])
                     {
-                        attrs.F_CODE = tds.rules.fCodeMap[row][0];
+                        attrs.F_CODE = tds40.rules.fCodeMap[row][0];
                         break;
                     }
                 }
@@ -846,11 +850,11 @@ tds = {
         }
         else
         {
-            if (tds.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+            if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
 
 
-        if (tds.osmPostRules == undefined)
+        if (tds40.osmPostRules == undefined)
         {
             // ##############
             // A "new" way of specifying rules. Jason came up with this while playing around with NodeJs
@@ -890,14 +894,14 @@ tds = {
             ["t.wetland && !(t.natural)","t.natural = 'wetland'"]
             ];
 
-            tds.osmPostRules = translate.buildComplexRules(rulesList);
+            tds40.osmPostRules = translate.buildComplexRules(rulesList);
         }
 
-        // translate.applyComplexRules(tags,attrs,tds.osmPostRules);
+        // translate.applyComplexRules(tags,attrs,tds40.osmPostRules);
         // Pulling this out of translate
-        for (var i = 0, rLen = tds.osmPostRules.length; i < rLen; i++)
+        for (var i = 0, rLen = tds40.osmPostRules.length; i < rLen; i++)
         {
-            if (tds.osmPostRules[i][0](tags)) tds.osmPostRules[i][1](tags,attrs);
+            if (tds40.osmPostRules[i][0](tags)) tds40.osmPostRules[i][1](tags,attrs);
         }
 
         // ##############
@@ -1113,8 +1117,8 @@ tds = {
         }
 
         // Fords & Roads
-        if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
-        if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
+        // if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
+        // if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
         // AK030 - Amusement Parks
         // F_CODE translation == tourism but FFN translation could be leisure
@@ -1338,7 +1342,7 @@ tds = {
         }
 
 
-        if (tds.PreRules == undefined)
+        if (tds40.PreRules == undefined)
         {
         // See ToOsmPostProcessing for more details about rulesList
             var rulesList = [
@@ -1395,15 +1399,15 @@ tds = {
             ["t.waterway == 'riverbank'","t.waterway = 'river'"]
             ];
 
-            tds.PreRules = translate.buildComplexRules(rulesList);
+            tds40.PreRules = translate.buildComplexRules(rulesList);
         }
 
         // Apply the rulesList
-        // translate.applyComplexRules(tags,attrs,tds.PreRules);
+        // translate.applyComplexRules(tags,attrs,tds40.PreRules);
         // Pulling this out of translate
-        for (var i = 0, rLen = tds.PreRules.length; i < rLen; i++)
+        for (var i = 0, rLen = tds40.PreRules.length; i < rLen; i++)
         {
-            if (tds.PreRules[i][0](tags)) tds.PreRules[i][1](tags,attrs);
+            if (tds40.PreRules[i][0](tags)) tds40.PreRules[i][1](tags,attrs);
         }
 
         // Fix up OSM 'walls' around facilities
@@ -1743,16 +1747,16 @@ tds = {
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
         // standard one2one rules
-        if (!(attrs.F_CODE) && tds.fcodeLookup)
+        if (!(attrs.F_CODE) && tds40.fcodeLookup)
         {
             for (var col in tags)
             {
                 var value = tags[col];
-                if (col in tds.fcodeLookup)
+                if (col in tds40.fcodeLookup)
                 {
-                    if (value in tds.fcodeLookup[col])
+                    if (value in tds40.fcodeLookup[col])
                     {
-                        var row = tds.fcodeLookup[col][value];
+                        var row = tds40.fcodeLookup[col][value];
                         attrs.F_CODE = row[1];
                         // Debug
                         // print('FCODE: Got ' + attrs.F_CODE);
@@ -1785,8 +1789,8 @@ tds = {
             var fcodeMap = {
                 'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
                 'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
-                'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
-                'mine:access':'AA010'
+                'barrier':'AP040', 'tourism':'AL013','junction':'AP020','mine:access':'AA010', 
+                'tomb':'AL036'
                            };
 
             for (var i in fcodeMap)
@@ -1830,7 +1834,7 @@ tds = {
        {
            if (tags.bridge && tags.bridge !== 'no')
            {
-               tds.fixTransType(tags);
+               tds40.fixTransType(tags,geometryType);
                tags.location = 'surface';
                tags.layer = '1';
                tags.on_bridge = 'yes';
@@ -1838,26 +1842,26 @@ tds = {
 
            if (tags.tunnel && tags.tunnel !== 'no')
            {
-               tds.fixTransType(tags);
+               tds40.fixTransType(tags,geometryType);
                // tags.layer = '-1';
                tags.in_tunnel = 'yes';
            }
 
            if (tags.embankment && tags.embankment !== 'no')
            {
-               tds.fixTransType(tags);
+               tds40.fixTransType(tags,geometryType);
                tags.layer = '1';
            }
 
            if (tags.cutting && tags.cutting !== 'no')
            {
-               tds.fixTransType(tags);
+               tds40.fixTransType(tags,geometryType);
                tags.layer = '-1';
            }
 
            if (tags.ford && tags.ford !== 'no')
            {
-               tds.fixTransType(tags);
+               tds40.fixTransType(tags,geometryType);
                tags.location = 'on_waterbody_bottom';
            }
 
@@ -1981,7 +1985,7 @@ tds = {
             attrs.UFI = 'raw_id:' + tags['hoot:id'];
         }        else
         {
-            if (tds.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
+            if (tds40.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
         }
 
         // Add Weather Restrictions to transportation features
@@ -2206,19 +2210,19 @@ tds = {
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (tds.configIn == undefined)
+        if (tds40.configIn == undefined)
         {
-            tds.configIn = {};
-            tds.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
-            tds.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-            tds.configIn.OgrAddUuid = config.getOgrAddUuid();
+            tds40.configIn = {};
+            tds40.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
+            tds40.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds40.configIn.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes
-            tds.toChange = hoot.Settings.get("schema.translation.override");
+            tds40.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Debug:
-        if (tds.configIn.OgrDebugDumptags == 'true')
+        if (tds40.configIn.OgrDebugDumptags == 'true')
         {
             print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
             var kList = Object.keys(attrs).sort()
@@ -2233,13 +2237,13 @@ tds = {
             // Add some metadata
             if (! tags.uuid)
             {
-                if (tds.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+                if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
             }
 
             if (! tags.source) tags.source = 'tdsv40:' + layerName.toLowerCase();
 
             // Debug:
-            if (tds.configIn.OgrDebugDumptags == 'true')
+            if (tds40.configIn.OgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(tags).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
@@ -2251,33 +2255,37 @@ tds = {
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
-        if (tds.fcodeLookup == undefined)
+        if (tds40.fcodeLookup == undefined)
         {
             // Add the FCODE rules for Import
-            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds.rules.fcodeOne2oneIn);
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneIn);
 
-            tds.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+            tds40.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
             // Debug
-            // translate.dumpOne2OneLookup(tds.fcodeLookup);
+            // translate.dumpOne2OneLookup(tds40.fcodeLookup);
         }
 
-        if (tds.lookup == undefined)
+        if (tds40.lookup == undefined)
         {
             // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
             // other tables are not set either
 
             // Support TDS v30 and other Import Only attributes
-            tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneIn);
+            tds40.rules.one2one.push.apply(tds40.rules.one2one,tds40.rules.one2oneIn);
 
-            tds.lookup = translate.createLookup(tds.rules.one2one);
+            tds40.lookup = translate.createLookup(tds40.rules.one2one);
         }
 
+        // A little cleaning before we try to untangle stuff
+        delete attrs.SHAPE_Length;
+        delete attrs.SHAPE_Area;
+        
         // Untangle TDS attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
-        tds.untangleAttributes(attrs, tags);
+        tds40.untangleAttributes(attrs, tags);
 
         // Debug:
-        if (tds.configIn.OgrDebugDumptags == 'true')
+        if (tds40.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(attrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2287,13 +2295,13 @@ tds = {
         }
 
         // pre processing
-        tds.applyToOsmPreProcessing(attrs, layerName, geometryType);
+        tds40.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
 
         // Use the FCODE to add some tags
         if (attrs.F_CODE)
         {
-            var ftag = tds.fcodeLookup['F_CODE'][attrs.F_CODE];
+            var ftag = tds40.fcodeLookup['F_CODE'][attrs.F_CODE];
             if (ftag)
             {
                 tags[ftag[0]] = ftag[1];
@@ -2315,31 +2323,31 @@ tds = {
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-        translate.applySimpleNumBiased(notUsedAttrs, tags, tds.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds.rules.txtBiased, 'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, tds40.rules.numBiased, 'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds40.rules.txtBiased, 'forward');
 
         // one 2 one
-        //translate.applyOne2One(notUsedAttrs, tags, tds.lookup, {'k':'v'});
-        translate.applyOne2OneQuiet(notUsedAttrs, tags, tds.lookup);
+        //translate.applyOne2One(notUsedAttrs, tags, tds40.lookup, {'k':'v'});
+        translate.applyOne2OneQuiet(notUsedAttrs, tags, tds40.lookup);
 
         // Translate the XXX2, XXX3 etc attributes
-        translate.fix23Attr(notUsedAttrs, tags, tds.lookup);
+        translate.fix23Attr(notUsedAttrs, tags, tds40.lookup);
 
         // Crack open the OTH field and populate the appropriate attributes
         // The OTH format is _supposed_ to be (<attr>:<value>) but anything is possible
-        if (attrs.OTH) translate.processOTH(attrs, tags, tds.lookup);
+        if (attrs.OTH) translate.processOTH(attrs, tags, tds40.lookup);
 
         // post processing
-        tds.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+        tds40.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
 
         // Debug: Add the FCODE to the tags
-        if (tds.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
+        if (tds40.configIn.OgrDebugAddfcode == 'true') tags['raw:debugFcode'] = attrs.F_CODE;
 
         // Override tag values if appropriate
-        translate.overrideValues(tags,tds.toChange);
+        translate.overrideValues(tags,tds40.toChange);
 
         // Debug:
-        if (tds.configIn.OgrDebugDumptags == 'true')
+        if (tds40.configIn.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedAttrs).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
@@ -2365,31 +2373,31 @@ tds = {
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
         // Doing this so we don't have to keep calling into Hoot core
-        if (tds.configOut == undefined)
+        if (tds40.configOut == undefined)
         {
-            tds.configOut = {};
-            tds.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-            tds.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-            tds.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-            tds.configOut.OgrSplitO2s = config.getOgrSplitO2s();
-            tds.configOut.OgrThematicStructure = config.getOgrThematicStructure();
-            tds.configOut.OgrThrowError = config.getOgrThrowError();
-            tds.configOut.OgrAddUuid = config.getOgrAddUuid();
+            tds40.configOut = {};
+            tds40.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+            tds40.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
+            tds40.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+            tds40.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+            tds40.configOut.OgrThematicStructure = config.getOgrThematicStructure();
+            tds40.configOut.OgrThrowError = config.getOgrThrowError();
+            tds40.configOut.OgrAddUuid = config.getOgrAddUuid();
 
             // Get any changes to OSM tags
             // NOTE: the rest of the config variables will change to this style of assignment soon
-            tds.toChange = hoot.Settings.get("schema.translation.override");
+            tds40.toChange = hoot.Settings.get("schema.translation.override");
         }
 
         // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
-        if (tds.rawSchema == undefined)
+        if (tds40.rawSchema == undefined)
         {
-            var tmp_schema = tds.getDbSchema();
+            var tmp_schema = tds40.getDbSchema();
         }
 
         // Start processing here
         // Debug
-        if (tds.configOut.OgrDebugDumptags == 'true')
+        if (tds40.configOut.OgrDebugDumptags == 'true')
         {
             print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
             var kList = Object.keys(tags).sort()
@@ -2405,31 +2413,31 @@ tds = {
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
-        if (tds.fcodeLookup == undefined)
+        if (tds40.fcodeLookup == undefined)
         {
             // Add the FCODE rules for Export
-            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds.rules.fcodeOne2oneOut);
+            fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneOut);
 
-            tds.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+            tds40.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
             // Debug
-            // translate.dumpOne2OneLookup(tds.fcodeLookup);
+            // translate.dumpOne2OneLookup(tds40.fcodeLookup);
         }
 
-        if (tds.lookup == undefined)
+        if (tds40.lookup == undefined)
         {
             // Add "other" rules to the one2one
-            tds.rules.one2one.push.apply(tds.rules.one2one,tds.rules.one2oneOut);
+            tds40.rules.one2one.push.apply(tds40.rules.one2one,tds40.rules.one2oneOut);
 
-            tds.lookup = translate.createBackwardsLookup(tds.rules.one2one);
+            tds40.lookup = translate.createBackwardsLookup(tds40.rules.one2one);
             // Debug
-            // translate.dumpOne2OneLookup(tds.lookup);
+            // translate.dumpOne2OneLookup(tds40.lookup);
         }
 
         // Override values if appropriate
-        translate.overrideValues(tags,tds.toChange);
+        translate.overrideValues(tags,tds40.toChange);
 
         // Pre Processing
-        tds.applyToTdsPreProcessing(tags, attrs, geometryType);
+        tds40.applyToTdsPreProcessing(tags, attrs, geometryType);
 
         // Make a copy of the input tags so we can remove them as they get translated. What is left is
         // the not used tags
@@ -2443,30 +2451,30 @@ tds = {
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
         // NOTE: These delete tags as they are used
-        translate.applySimpleNumBiased(attrs, notUsedTags, tds.rules.numBiased, 'backward',tds.rules.intList);
-        translate.applySimpleTxtBiased(attrs, notUsedTags, tds.rules.txtBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, notUsedTags, tds40.rules.numBiased, 'backward',tds40.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags, tds40.rules.txtBiased, 'backward');
 
         // Translate the XXX:2, XXX2, XXX:3 etc attributes
         // Note: This deletes tags as they are used
-        translate.fix23Tags(notUsedTags, attrs, tds.lookup);
+        translate.fix23Tags(notUsedTags, attrs, tds40.lookup);
 
         // one 2 one - we call the version that knows about OTH fields
         // NOTE: This deletes tags as they are used
-        translate.applyTdsOne2One(notUsedTags, attrs, tds.lookup, tds.fcodeLookup);
+        translate.applyTdsOne2One(notUsedTags, attrs, tds40.lookup, tds40.fcodeLookup);
 
         // post processing
-        // tds.applyToTdsPostProcessing(attrs, tableName, geometryType);
-        tds.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
+        // tds40.applyToTdsPostProcessing(attrs, tableName, geometryType);
+        tds40.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (tds.configOut.OgrDebugDumptags == 'true')
+        if (tds40.configOut.OgrDebugDumptags == 'true')
         {
             var kList = Object.keys(notUsedTags).sort()
             for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
         }
 
         // If we have unused tags, add them to the memo field
-        if (Object.keys(notUsedTags).length > 0 && tds.configOut.OgrNoteExtra == 'attribute')
+        if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
         {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
@@ -2477,11 +2485,11 @@ tds = {
         // push the feature to o2s layer
         var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-        if (tds.AttrLookup[gFcode.toUpperCase()])
+        if (tds40.AttrLookup[gFcode.toUpperCase()])
         {
             // Check if we need to make more features
             // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
-            returnData = tds.manyFeatures(geometryType,tags,attrs);
+            returnData = tds40.manyFeatures(geometryType,tags,attrs);
 
             // Debug: Add the first feature
             //returnData.push({attrs: attrs, tableName: ''});
@@ -2492,27 +2500,27 @@ tds = {
             {
                 // Make sure that we have a valid FCODE
                 var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-                if (tds.AttrLookup[gFcode.toUpperCase()])
+                if (tds40.AttrLookup[gFcode.toUpperCase()])
                 {
                     // Validate attrs: remove all that are not supposed to be part of a feature
-                    tds.validateAttrs(geometryType,returnData[i]['attrs']);
+                    tds40.validateAttrs(geometryType,returnData[i]['attrs']);
 
                     // Now set the FCSubtype
                     // NOTE: If we export to shapefile, GAIT _will_ complain about this
-                    if (tds.configOut.OgrEsriFcsubtype == 'true')
+                    if (tds40.configOut.OgrEsriFcsubtype == 'true')
                     {
-                        returnData[i]['attrs']['FCSUBTYPE'] = tds.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
+                        returnData[i]['attrs']['FCSUBTYPE'] = tds40.rules.subtypeList[returnData[i]['attrs']['F_CODE']];
                     }
 
                     // If we are using the TDS structre, fill the rest of the unused attrs in the schema
-                    if (tds.configOut.OgrThematicStructure == 'true')
+                    if (tds40.configOut.OgrThematicStructure == 'true')
                     {
-                        returnData[i]['tableName'] = tds.rules.thematicGroupList[gFcode];
-                        tds.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+                        returnData[i]['tableName'] = tds40.rules.thematicGroupList[gFcode];
+                        tds40.validateTDSAttrs(gFcode, returnData[i]['attrs']);
                     }
                     else
                     {
-                        returnData[i]['tableName'] = tds.layerNameLookup[gFcode.toUpperCase()];
+                        returnData[i]['tableName'] = tds40.layerNameLookup[gFcode.toUpperCase()];
                     }
                 }
                 else
@@ -2525,7 +2533,7 @@ tds = {
             } // End returnData loop
 
             // If we have unused tags, throw them into the "extra" layer
-            if (Object.keys(notUsedTags).length > 0 && tds.configOut.OgrNoteExtra == 'file')
+            if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'file')
             {
                 var extraFeature = {};
                 extraFeature.tags = JSON.stringify(notUsedTags);
@@ -2554,7 +2562,7 @@ tds = {
     else // We DON'T have a feature
         {
             // For the UI: Throw an error and die if we don't have a valid feature
-            if (tds.configOut.OgrThrowError == 'true')
+            if (tds40.configOut.OgrThrowError == 'true')
             {
                 if (! attrs.F_CODE)
                 {
@@ -2575,7 +2583,7 @@ tds = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (tds.configOut.getOgrDebugDumptags == 'true')
+            if (tds40.configOut.getOgrDebugDumptags == 'true')
             {
                 var kList = Object.keys(attrs).sort()
                 for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
@@ -2595,7 +2603,7 @@ tds = {
             // Shapefiles can't handle fields > 254 chars
             // If the tags are > 254 char, split into pieces. Not pretty but stops errors
             // A nicer thing would be to arrange the tags until they fit neatly
-            if (str.length < 255 || tds.configOut.OgrSplitO2s == 'false')
+            if (str.length < 255 || tds40.configOut.OgrSplitO2s == 'false')
             {
                 // return {attrs:{tag1:str}, tableName: tableName};
                 attrs = {tag1:str};
@@ -2620,7 +2628,7 @@ tds = {
         } // End We DON'T have a feature
 
         // Debug:
-        if (tds.configOut.OgrDebugDumptags == 'true')
+        if (tds40.configOut.OgrDebugDumptags == 'true')
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {

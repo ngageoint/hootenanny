@@ -49,6 +49,11 @@ class MultiaryPoiMergeCacheTest : public HootTestFixture
 
 public:
 
+  MultiaryPoiMergeCacheTest()
+  {
+    setResetType(ResetAll);
+  }
+
   /**
    * Basic set of tests to see if the merged elements look as expected.
    */

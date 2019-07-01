@@ -1288,8 +1288,8 @@ ufd = {
         ['MCC','-32767',undefined,undefined], // Null
         // ['MCC','0','material','unknown'],
         ['MCC','0',undefined,undefined],
-        ['MCC','2','material','aluminum'],
-        ['MCC','Aluminum','material','aluminum'],
+        ['MCC','2','material','aluminium'],
+        ['MCC','Aluminum','material','aluminium'],
         ['MCC','5','material','asphalt'],
         ['MCC','Asphalt','material','asphalt'],
         ['MCC','7','material','bedrock'], // Bedrock

@@ -55,7 +55,7 @@ public:
   CookieCutterOpTest() :
   HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runTest()

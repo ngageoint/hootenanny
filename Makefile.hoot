@@ -13,7 +13,7 @@ SHELL=/bin/bash
 
 # If you're adding another schema file be sure and update the archive target
 # too.
-SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js
+SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js translations/tds70_schema.js translations/tds70_full_schema.js translations/etds70_rules.js translations/etds70_osm_rules.js
 
 -include Makefile.inc
 
@@ -158,19 +158,20 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 
 ##### MGCP
 # Build the MGCP schema
-translations/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+translations/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.5_20190208.xml.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP  "To English" rules
-translations/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+translations/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.5_20190208.xml.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the MGCP "From English" rules
-translations/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.1_20130628.xml
+translations/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.5_20190208.xml.gz
 	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+#	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv40
 translations/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
@@ -190,7 +191,8 @@ translations/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/transla
 # Build the TDS40 "From English" rules
 translations/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
 	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
+#	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 #### TDSv61
 # TDSv61 is built from the TDSv60 spec with NGA's extensions
@@ -211,6 +213,32 @@ translations/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/transla
 
 # Build the TDS61 "From English" rules
 translations/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
+	mkdir -p $(@D)
+	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+#### TDSv70
+# TDSv70 schema is built from an XML file made from a sample FGDB
+#translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz conf/translations/TDSv70.xml.gz
+translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+	mkdir -p $(@D)
+	$^ > $@ || (rm -f $@ ; exit -1)
+
+# TDSv70 full schema is built from an XML file made from a sample FGDB
+# This one has all of the Text Enumerations
+#translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
+translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+	mkdir -p $(@D)
+	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS70 "To English" rules
+#translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
+translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+	mkdir -p $(@D)
+	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
+
+# Build the TDS70 "From English" rules
+#translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
+translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
@@ -415,6 +443,11 @@ archive: js-make services-docs docs
 	cp translations/tds61_full_schema.js $(HOOT_TARNAME)/translations/tds61_full_schema.js
 	cp translations/etds61_rules.js $(HOOT_TARNAME)/translations/etds61_rules.js
 	cp translations/etds61_osm_rules.js $(HOOT_TARNAME)/translations/etds61_osm_rules.js
+	# TDSv70
+	cp translations/tds70_schema.js $(HOOT_TARNAME)/translations/tds70_schema.js
+	cp translations/tds70_full_schema.js $(HOOT_TARNAME)/translations/tds70_full_schema.js
+	cp translations/etds70_rules.js $(HOOT_TARNAME)/translations/etds70_rules.js
+	cp translations/etds70_osm_rules.js $(HOOT_TARNAME)/translations/etds70_osm_rules.js
 	# MGCP
 	cp translations/mgcp_schema.js $(HOOT_TARNAME)/translations/mgcp_schema.js
 	cp translations/emgcp_rules.js $(HOOT_TARNAME)/translations/emgcp_rules.js
