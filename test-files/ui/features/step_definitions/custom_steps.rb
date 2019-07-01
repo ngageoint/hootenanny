@@ -875,12 +875,6 @@ When(/^I delete any existing "([^"]*)" folder if necessary$/) do |text|
   end
 end
 
-Then(/^I open the wfs export url$/) do
-  url = find('input.wfsfileExportOutputName').value
-  visit url
-  # need a way to check the WFS GetCapabilities response is valid
-end
-
 Then(/^I should see "([^"]*)" bookmark first and "([^"]*)" bookmark second$/) do |rb1, rb2|
   spans = find('#reviewBookmarksContent').all('span.strong')
   expect(spans.first).to have_content(rb1)
