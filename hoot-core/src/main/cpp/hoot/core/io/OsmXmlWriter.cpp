@@ -280,7 +280,8 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
       _writer->writeAttribute("version", QString::number(e->getVersion()));
     }
   }
-  if (e->getChangeset() != ElementData::CHANGESET_EMPTY)
+  if (e->getChangeset() != ElementData::CHANGESET_EMPTY &&
+      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset
   {
     _writer->writeAttribute("changeset", QString::number(e->getChangeset()));
   }
