@@ -51,6 +51,7 @@ class PreserveTypesTagMergerTest : public HootTestFixture
   CPPUNIT_TEST(overwrite1Test);
   CPPUNIT_TEST(overwrite1OverlappingKeysTest);
   CPPUNIT_TEST(skipTagsTest);
+  // TODO: need better ancestor tests
   CPPUNIT_TEST_SUITE_END();
 
 public:

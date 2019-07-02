@@ -79,8 +79,8 @@ private:
   // mergeTags
   void _removeRedundantAltTypeTags(Tags& tags) const;
 
-  //bool _isAncestor(const QString& childKey, const QString& childVal, const QString& parentKey,
-                   //const QString& parentVal) const;
+  bool _isAncestor(const QString& childKey, const QString& childVal, const QString& parentKey,
+                   const QString& parentVal) const;
 };
 
 }

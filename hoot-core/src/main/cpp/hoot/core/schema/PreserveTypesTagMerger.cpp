@@ -68,6 +68,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     tagsToBeOverwritten = t2;
   }
 
+  // handle name and text tags in the standard fashion
   TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result);
   TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result);
   LOG_TRACE("Tags after name/text merging: " << result);
@@ -84,7 +85,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   LOG_TRACE("Tags after alt_types handling: " << result);
 
   // Combine the rest of the tags together. If two tags with the same key are found, use the most
-  // specific one. Use both if they aren't related in any way.
+  // specific one. Keep both if they aren't related in any way.
   OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::ConstIterator it = tagsToOverwriteWith.constBegin();
        it != tagsToOverwriteWith.constEnd(); ++it)
@@ -93,12 +94,14 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.value());
 
     bool skippingTagPreservation = false;
+    // ignore tags that we're specified to be explicitly skipped
     if (_skipTagKeys.find(it.key()) != _skipTagKeys.end())
     {
       LOG_TRACE(
         "Explicitly skipping type handling for tag: " << it.key() << "=" <<  it.value() << "...");
       skippingTagPreservation = true;
     }
+    // ignore metadata tags
     else if (schema.isMetaData(it.key(), it.value()))
     {
       LOG_TRACE(
@@ -130,7 +133,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         result[it.key()] = tagsToBeOverwritten[it.key()];
       }
       else if (schema.isAncestor(
-                 it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.value()]))
+                 it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.key()]))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
@@ -145,10 +148,10 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         }
         else
         {
-          //arbitrarily use first one and add second to an alt_types field
+          // arbitrarily use first tag and add the second to an alt_types field
           LOG_TRACE(
-              "Both tag sets contain same type: " << it.key() <<
-              " but neither is more specific.  Keeping both...");
+            "Both tag sets contain same type: " << it.key() <<
+            " but neither is more specific.  Keeping both...");
         }
         result[it.key()] = it.value();
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
@@ -168,6 +171,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
     }
+    // None of the special cases for skipping or type merging apply to this tag, so let's just add
+    // it as is.
     else if (!it.value().isEmpty())
     {
       LOG_TRACE("Adding tag: " << it.key() << "=" << it.value() << "...");
@@ -176,6 +181,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   }
   LOG_TRACE("Tags after type handling: " << result);
 
+  // handle all the remaining tags that don't conflict
   for (Tags::ConstIterator it = tagsToBeOverwritten.constBegin();
        it != tagsToBeOverwritten.constEnd(); ++it)
   {
@@ -196,13 +202,12 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   return result;
 }
 
-//bool PreserveTypesTagMerger::_isAncestor(const QString& childKey, const QString& childVal,
-//                                         const QString& parentKey, const QString& parentVal) const
-//{
-//  return
-//    OsmSchema::getInstance().isAncestor(
-//      it.key() % "=" % it.key(), it.key() % "=" % tagsToBeOverwritten[it.value()]);
-//}
+bool PreserveTypesTagMerger::_isAncestor(const QString& childKey, const QString& childVal,
+                                         const QString& parentKey, const QString& parentVal) const
+{
+  return
+    OsmSchema::getInstance().isAncestor(childKey % "=" % childVal, parentKey % "=" % parentVal);
+}
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 {
