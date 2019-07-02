@@ -77,7 +77,7 @@ public:
    * @param map a map containing the two features to merge
    * @return the ID of the element that was merged into
    */
-  static ElementId mergePoiAndPolygon(OsmMapPtr map);
+  static ElementId mergeOnePoiAndOnePolygon(OsmMapPtr map);
 
   virtual QString getDescription() const { return "Merges POIs into polygons"; }
 

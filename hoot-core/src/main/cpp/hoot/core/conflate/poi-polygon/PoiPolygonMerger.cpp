@@ -109,10 +109,12 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   std::shared_ptr<const TagMerger> tagMerger;
   if (_autoMergeManyPoiToOnePolyMatches)
   {
+    LOG_TRACE("PreserveTypesTagMerger");
     tagMerger.reset(new PreserveTypesTagMerger());
   }
   else
   {
+    LOG_VART(ConfigOptions().getTagMergerDefault());
     tagMerger = TagMergerFactory::getInstance().getDefaultPtr();
   }
   if (poiTags1.size())
@@ -162,6 +164,11 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   if (poisMerged > 0)
   {
+    if (finalBuildingTags.contains(MetadataTags::HootPoiPolygonPoisMerged()))
+    {
+      poisMerged += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged()].toLong();
+    }
+    LOG_VART(poisMerged);
     finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
     finalBuilding->setStatus(Status::Conflated);
   }
@@ -348,7 +355,7 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   }
 }
 
-ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
+ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 {
   // Trying to merge more than one POI into the polygon has proven problematic due to the building
   // merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging

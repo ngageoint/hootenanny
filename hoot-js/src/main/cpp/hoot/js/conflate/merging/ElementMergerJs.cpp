@@ -145,16 +145,16 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   LOG_VART(_mergeTypeToString(mergeType));
 
   ElementId mergeTargetId;
-  //merge target id won't be passed in for poi/poly, as the poi/poly merging picks the target
-  //element itself
+  // merge target id won't be passed in for poi/poly, as the poi/poly merging picks the target
+  // element itself
   if (mergeType != MergeType::PoiToPolygon)
   {
     mergeTargetId = _getMergeTargetFeatureId(map);
     LOG_VART(mergeTargetId);
   }
 
-  //We're using a mix of generic conflation scripts and custom built classes to merge features
-  //here, depending on the feature type.
+  // We're using a mix of generic conflation scripts and custom built classes to merge features
+  // here, depending on the feature type.
   bool scriptMerge = false;
   switch (mergeType)
   {
@@ -165,7 +165,7 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
     case MergeType::PoiToPolygon:
       // POI/Poly always merges into the polygon and there's only one of them, so we let the
       // routine determine the merge target ID.
-      mergeTargetId = PoiPolygonMerger::mergePoiAndPolygon(map);
+      mergeTargetId = PoiPolygonMerger::mergeOnePoiAndOnePolygon(map);
       break;
 
     case MergeType::PoiToPoi:
@@ -183,8 +183,8 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
   }
   LOG_VART(scriptMerge);
 
-  //By convention, we're setting the status of any element that gets merged with something to
-  //conflated, even if its yet to be reviewed against something else.
+  // By convention, we're setting the status of any element that gets merged with something to
+  // conflated, even if its yet to be reviewed against something else.
   ElementPtr mergedElement = map->getElement(mergeTargetId);
   assert(mergedElement);
   mergedElement->setStatus(Status(Status::Conflated));
@@ -219,10 +219,10 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
-  //Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
-  //multiple feature types within the same map.  After the initial feature requirements are
-  //satisified, any other features in the map with types other than what we know how to merge should
-  //just pass through.
+  // Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
+  // multiple feature types within the same map.  After the initial feature requirements are
+  // satisified, any other features in the map with types other than what we know how to merge
+  // should just pass through.
 
   MergeType mergeType;
 
