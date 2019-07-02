@@ -83,8 +83,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   }
   LOG_TRACE("Tags after alt_types handling: " << result);
 
-  //combine the rest of the tags together; if two tags with the same key are found, use the most
-  //specific one or use both if they aren't related in any way
+  // Combine the rest of the tags together. If two tags with the same key are found, use the most
+  // specific one. Use both if they aren't related in any way.
   OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::ConstIterator it = tagsToOverwriteWith.constBegin();
        it != tagsToOverwriteWith.constEnd(); ++it)
@@ -119,8 +119,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     if (!skippingTagPreservation && !tagsToBeOverwritten[it.key()].trimmed().isEmpty())
     {
       LOG_VART(tagsToBeOverwritten[it.key()]);
-      //if one is more specific than the other, add it, but then remove both tags so we don't
-      //try to add them again
+      // If one is more specific than the other, add it, but then remove both tags so we don't
+      // try to add them again.
       if (schema.isAncestor(
             it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
       {
@@ -130,7 +130,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         result[it.key()] = tagsToBeOverwritten[it.key()];
       }
       else if (schema.isAncestor(
-                 it.key() % "=" % it.key(), it.key() % "=" % tagsToBeOverwritten[it.value()]))
+                 it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.value()]))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
@@ -139,10 +139,17 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       }
       else if (it.key() != ALT_TYPES_TAG_KEY)
       {
-        //arbitrarily use first one and add second to an alt_types field
-        LOG_TRACE(
-          "Both tag sets contain same type: " << it.key() <<
-          " but neither is more specific.  Keeping both...");
+        if (tagsToBeOverwritten[it.key()] == tagsToOverwriteWith[it.key()])
+        {
+          LOG_TRACE("Merging duplicate tag: " << it.key() << "=" << it.value() << "...");
+        }
+        else
+        {
+          //arbitrarily use first one and add second to an alt_types field
+          LOG_TRACE(
+              "Both tag sets contain same type: " << it.key() <<
+              " but neither is more specific.  Keeping both...");
+        }
         result[it.key()] = it.value();
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
         if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
@@ -188,6 +195,14 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 
   return result;
 }
+
+//bool PreserveTypesTagMerger::_isAncestor(const QString& childKey, const QString& childVal,
+//                                         const QString& parentKey, const QString& parentVal) const
+//{
+//  return
+//    OsmSchema::getInstance().isAncestor(
+//      it.key() % "=" % it.key(), it.key() % "=" % tagsToBeOverwritten[it.value()]);
+//}
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
 {

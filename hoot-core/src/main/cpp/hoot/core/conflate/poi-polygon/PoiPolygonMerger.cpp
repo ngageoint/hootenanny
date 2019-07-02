@@ -164,6 +164,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   if (poisMerged > 0)
   {
+    // If the poly merge target was previously conflated, let's add to the total number of POIs that
+    // have been merged.
     if (finalBuildingTags.contains(MetadataTags::HootPoiPolygonPoisMerged()))
     {
       poisMerged += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged()].toLong();
