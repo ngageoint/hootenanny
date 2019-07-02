@@ -163,6 +163,8 @@ void ElementMergerJs::_mergeElements(OsmMapPtr map, Isolate* current)
       break;
 
     case MergeType::PoiToPolygon:
+      // POI/Poly always merges into the polygon and there's only one of them, so we let the
+      // routine determine the merge target ID.
       mergeTargetId = PoiPolygonMerger::mergePoiAndPolygon(map);
       break;
 
@@ -218,8 +220,9 @@ ElementId ElementMergerJs::_getMergeTargetFeatureId(ConstOsmMapPtr map)
 ElementMergerJs::MergeType ElementMergerJs::_determineMergeType(ConstOsmMapPtr map)
 {
   //Making sure maps don't come in mixed, so callers don't have the expectation that they can merge
-  //multiple feature types within the same map.  Any features in the map with types other than what
-  //we know how to merge will just pass through.
+  //multiple feature types within the same map.  After the initial feature requirements are
+  //satisified, any other features in the map with types other than what we know how to merge should
+  //just pass through.
 
   MergeType mergeType;
 

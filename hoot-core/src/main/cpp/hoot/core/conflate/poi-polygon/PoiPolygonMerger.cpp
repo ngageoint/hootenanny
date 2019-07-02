@@ -305,15 +305,17 @@ ElementId PoiPolygonMerger::_getElementIdByType(OsmMapPtr map, const ElementCrit
 
 void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const ElementId& polyId)
 {
-  //If the features involved in the merging don't have statuses, let's arbitrarily set them to
-  //Unknown1, since poi/poly requires it.  Setting them artificially *shouldn't* have a negative
-  //effect on the poi/poly merging, though. Below we are failing when seeing a conflated status...we
-  //could rework to update that status as well.
+  // If the features involved in the merging don't have statuses, let's arbitrarily set them to
+  // Unknown1, since the building merging code used by poi/poly requires it.  Setting them
+  // artificially *shouldn't* have a negative effect on the poi/poly merging, though. Below we are
+  // failing when seeing a conflated status...we could rework to update that status as well.
 
+  // If the poly has an invalid status, we'll give it an Unknown1 status instead.
   StatusUpdateVisitor status1Vis(Status::Unknown1, true);
   FilteredVisitor filteredVis1(PoiPolygonPoiCriterion(), status1Vis);
   map->visitRw(filteredVis1);
 
+  // If the POI has an invalid status, we'll give it an Unknown2 status instead.
   StatusUpdateVisitor status2Vis(Status::Unknown2, true);
   FilteredVisitor filteredVis2(PoiPolygonPolyCriterion(), status2Vis);
   map->visitRw(filteredVis2);
@@ -348,9 +350,9 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
 
 ElementId PoiPolygonMerger::mergePoiAndPolygon(OsmMapPtr map)
 {
-  //Trying to merge more than one POI into the polygon has proven problematic due to the building
-  //merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
-  //at this time.
+  // Trying to merge more than one POI into the polygon has proven problematic due to the building
+  // merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
+  // at this time.
 
   LOG_INFO("Merging one POI and one polygon...");
 
