@@ -48,21 +48,16 @@ namespace hoot
  * elements.  It can do this because only the parent elements are needed for actual merging.  The
  * invalid map input case is necessary b/c the UI sends the server only the features that need
  * merging and then handles removing any constituent features itself after the merge with a call to
- * the OSM services.  Technically, we have no client code sending in valid maps with constituent
- * features for merging yet, but since that could change, and its easy to support, we'll supporting
- * both types of inputs.
+ * the OSM services.  Technically, we have no known client code sending in valid maps with
+ * constituent features for merging at this time, but since that could change, and its easy to
+ * support, we'll supporting both types of inputs.
  *
  * This class has a mix of functionality where the merging is done by hoot-js calls into generic
  * scripts and functionality where the merging is done strictly by hoot-core code.  Arguably, you
- * could do all the merging via hoot-core code which would make the workflow simpler, make the code
+ * could do all the merging via hoot-core C++ code which would make the workflow simpler, the code
  * easier to read, and avoid unnecessary calls out to Javascript.  However, since the generic
- * scripts have their own merge functions already defined that users may want to customize, for c
- * onsistency's sake it makes more sense to use this hybrid approach.  The downside to this approach
- * is that if we ever want to expose element merging outside of a js script (command line), we
- * won't be able to do it for any merging that uses the script logic.  If having a hoot merge
- * command ever becomes a priority, then we can think about converting the script merge logic in
- * this class to hoot-core merge logic, moving all of this class's merge logic to hoot-core, and
- * then wrapping calls to the hoot-core class with this class.
+ * scripts have their own merge functions already defined that users may want to customize, for
+ * consistency's sake it makes more sense to use this hybrid approach.
  */
 class ElementMergerJs : public node::ObjectWrap
 {
@@ -71,13 +66,14 @@ public:
 
  typedef enum MergeType
  {
-   PoiToPoi = 0,
-   PoiToPolygon,
-   AreaToArea,
-   BuildingToBuilding
+   PoiToPoi = 0,        // supports multiple
+   PoiToPolygon,        // one poi and one poly
+   AreaToArea,          // supports multiple
+   BuildingToBuilding   // supports multiple
   } MergeType;
 
  static void Init(v8::Handle<v8::Object> target);
+ static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
@@ -86,7 +82,6 @@ private:
   ElementMergerJs();
   ~ElementMergerJs();
 
-  static void mergeElements(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void _mergeElements(OsmMapPtr map, v8::Isolate* current);
 
   static MergeType _determineMergeType(ConstOsmMapPtr map);

@@ -46,6 +46,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;
 
@@ -451,6 +452,43 @@ std::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
   return buildBuilding(map, eids, _manyToManyMatch && _mergeManyToManyMatches);
 }
 
+void BuildingMerger::_fixStatuses(OsmMapPtr map)
+{
+  UniqueElementIdVisitor idVis;
+  map->visitRo(idVis);
+  const QList<ElementId> idVisList =
+    QList<ElementId>::fromStdList(
+      std::list<ElementId>(idVis.getElementSet().begin(), idVis.getElementSet().end()));
+  ElementPtr firstElement = map->getElement(idVisList.at(0));
+  ElementPtr secondElement = map->getElement(idVisList.at(1));
+  // not handling invalid statuses here like is done in PoiPolygonMerger::mergePoiAndPolygon b/c
+  // not sure how to do it yet
+  if (firstElement->getStatus() == Status::Conflated &&
+      secondElement->getStatus() != Status::Conflated)
+  {
+    if (secondElement->getStatus() == Status::Unknown1)
+    {
+      firstElement->getStatus() == Status::Unknown2;
+    }
+    else if (secondElement->getStatus() == Status::Unknown2)
+    {
+      firstElement->getStatus() == Status::Unknown1;
+    }
+  }
+  else if (secondElement->getStatus() == Status::Conflated &&
+           firstElement->getStatus() != Status::Conflated)
+  {
+    if (firstElement->getStatus() == Status::Unknown1)
+    {
+      secondElement->getStatus() == Status::Unknown2;
+    }
+    else if (firstElement->getStatus() == Status::Unknown2)
+    {
+      secondElement->getStatus() == Status::Unknown1;
+    }
+  }
+}
+
 void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId)
 {
   LOG_INFO("Merging buildings...");
@@ -465,9 +503,18 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMergingKey(), "false");
   LOG_VART(ConfigOptions().getBuildingKeepMoreComplexGeometryWhenAutoMerging());
 
-  int buildingsMerged = 0;
+  // See related note about statuses in PoiPolygonMerger::mergePoiAndPolygon. Don't know how to
+  // handle this situation for more than two buildings yet. The logic below will fail in situations
+  // where we have more than one conflated building as input...haven't seen that in the wild yet
+  // though.
+  if (map->getElementCount() == 2)
+  {
+    _fixStatuses(map);
+  }
 
+  int buildingsMerged = 0;
   BuildingCriterion buildingCrit;
+  const QString statusErrMsg = "Elements being merged must have an Unknown1 or Unknown2 status.";
 
   const WayMap ways = map->getWays();
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
@@ -476,6 +523,11 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     if (way->getElementId() != mergeTargetId && buildingCrit.isSatisfied(way))
     {
       LOG_VART(way);
+      if (way->getStatus() == Status::Conflated)
+      {
+        throw IllegalArgumentException(statusErrMsg);
+      }
+
       std::set<std::pair<ElementId, ElementId>> pairs;
       pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
       BuildingMerger merger(pairs);
@@ -493,6 +545,11 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
     if (relation->getElementId() != mergeTargetId && buildingCrit.isSatisfied(relation))
     {
       LOG_VART(relation);
+      if (relation->getStatus() == Status::Conflated)
+      {
+        throw IllegalArgumentException(statusErrMsg);
+      }
+
       std::set<std::pair<ElementId, ElementId>> pairs;
       pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
       BuildingMerger merger(pairs);
