@@ -124,16 +124,18 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       LOG_VART(tagsToBeOverwritten[it.key()]);
       // If one is more specific than the other, add it, but then remove both tags so we don't
       // try to add them again.
-      if (schema.isAncestor(
-            it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
+      //if (schema.isAncestor(
+            //it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
+      if (_isAncestor(it.key(), tagsToBeOverwritten[it.key()], it.key(), it.value()))
       {
         LOG_TRACE(
           it.key() % "=" % tagsToBeOverwritten[it.key()] << " is more specific than " <<
           it.key() % "=" % it.value() << ".  Using more specific tag.");
         result[it.key()] = tagsToBeOverwritten[it.key()];
       }
-      else if (schema.isAncestor(
-                 it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.key()]))
+      //else if (schema.isAncestor(
+                 //it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.key()]))
+      else if (_isAncestor(it.key(), it.value(), it.key(), tagsToBeOverwritten[it.key()]))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
@@ -205,6 +207,19 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
 bool PreserveTypesTagMerger::_isAncestor(const QString& childKey, const QString& childVal,
                                          const QString& parentKey, const QString& parentVal) const
 {
+  // It seems like OsmSchema::isAncestor doesn't handle generic type tags correctly, e.g.
+  // building=yes. Its also possible that it does handle them correctly and our schema is not
+  // correct somehow. Until that's determined, I'm adding this custom logic to make sure that if,
+  // for example, building=yes is compared to building=mosque we always end up with the more
+  // specific building=mosque in the output.
+
+  // If the tags have the same key, the parent is generic, and the child is not, the parent is
+  // an ancestor of the child. not completely sure this is covering all possible cases yet...
+  if (childKey == parentKey && (parentVal == "yes" || parentVal == "true") && childVal != "yes" &&
+      childVal != "true")
+  {
+    return true;
+  }
   return
     OsmSchema::getInstance().isAncestor(childKey % "=" % childVal, parentKey % "=" % parentVal);
 }
