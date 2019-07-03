@@ -35,8 +35,7 @@ pipeline {
         stage("Box Name") {
             steps {
                 script {
-                    // named 3327 for testing in jenkins
-                    if (env.BRANCH_NAME.startsWith("3327")) {
+                    if (env.BRANCH_NAME.startsWith("release")) {
                         BOX_NAME = "release"
                     }
                     else {
