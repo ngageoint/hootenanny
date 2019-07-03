@@ -78,8 +78,13 @@ Vagrant.configure(2) do |config|
         aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
       end
 
+      $security_grp = ENV['AWS_SECURITY_GROUP']
       if ENV.key?('AWS_SECURITY_GROUP')
-        aws.security_groups = ENV['AWS_SECURITY_GROUP']
+        if $security_grp.is_a?(String) and $security_grp.include? ',' and $security_grp.split(',').length > 0
+            aws.security_groups = $security_grp.split(',')
+        else
+            aws.security_groups = $security_grp
+        end
       end
 
       aws.tags = {
