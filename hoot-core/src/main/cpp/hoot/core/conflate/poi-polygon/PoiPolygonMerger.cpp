@@ -70,18 +70,23 @@ std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
 {
   std::shared_ptr<const TagMerger> tagMerger;
   std::string tagMergerClass;
+  // Always preserve types when merging many POIs in. This can go away if we stay with defaulting
+  // poi/poly merging to use PreserveTypesTagMerger.
   if (_autoMergeManyPoiToOnePolyMatches)
   {
     tagMergerClass = PreserveTypesTagMerger::className();
   }
+  // Otherwise, allow for calling class to specify the tag merger outside of Configurable.
   else if (!_tagMergerClass.trimmed().isEmpty())
   {
     tagMergerClass = _tagMergerClass.toStdString();
   }
+  // Otherwise, let's see if the tag merger was set specifically for poi/poly.
   else if (!ConfigOptions().getPoiPolygonTagMerger().trimmed().isEmpty())
   {
     tagMergerClass = ConfigOptions().getPoiPolygonTagMerger().trimmed().toStdString();
   }
+  // Otherwise, let's try the global tag merger.
   else if (!ConfigOptions().getTagMergerDefault().trimmed().isEmpty())
   {
     tagMergerClass = ConfigOptions().getTagMergerDefault().trimmed().toStdString();

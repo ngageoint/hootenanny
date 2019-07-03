@@ -264,8 +264,10 @@ public:
 
     // building=mosque is a more specific instance of building=yes, so only the building=mosque type
     // tag should be kept. This should work when merging in either direction. Note that this
-    // ancestral relationship doesn't currently work as part of the schema and was added as a custom
-    // behavior to PreserveTypesTagMerger.
+    // ancestral relationship between generic (building=yes) and non-generic features
+    // (building=mosque) doesn't currently work as part of the schema and was added as a custom
+    // behavior to PreserveTypesTagMerger. We may want to look into why it doesn't work by default
+    // when calling OsmSchema::isAncestor at some point.
 
     Tags t1;
     t1["building"] = "yes";
