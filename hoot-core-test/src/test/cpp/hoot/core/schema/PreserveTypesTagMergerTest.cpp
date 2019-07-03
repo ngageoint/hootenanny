@@ -51,9 +51,8 @@ class PreserveTypesTagMergerTest : public HootTestFixture
   CPPUNIT_TEST(overwrite1Test);
   CPPUNIT_TEST(overwrite1OverlappingKeysTest);
   CPPUNIT_TEST(skipTagsTest);
-  // TODO:
-  //CPPUNIT_TEST(ancestorTest);
-  //CPPUNIT_TEST(ancestorGenericTest);
+  CPPUNIT_TEST(ancestorTest);
+  CPPUNIT_TEST(ancestorGenericTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -221,15 +220,78 @@ public:
     CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
 
-//  void ancestorTest()
-//  {
+  void ancestorTest()
+  {
+    PreserveTypesTagMerger uut;
+    Tags expected;
+    Tags merged;
 
-//  }
+    // amenity=church_hall is a more specific instance of amenity=hall, so only the
+    // amenity=church_hall type tag should be kept. This should work when merging in either
+    // direction.
 
-//  void ancestorGenericTest()
-//  {
+    Tags t1;
+    t1["amenity"] = "hall";
+    t1["name"] = "Hall 1";
 
-//  }
+    Tags t2;
+    t2["amenity"] = "church_hall";
+    t2["name"] = "Hall 2";
+
+    expected["amenity"] = "church_hall";
+    expected["name"] = "Hall 1";
+    expected["alt_name"] = "Hall 2";
+
+    uut.setOverwrite1(false);
+    merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+
+    expected.clear();
+    expected["amenity"] = "church_hall";
+    expected["name"] = "Hall 2";
+    expected["alt_name"] = "Hall 1";
+
+    uut.setOverwrite1(true);
+    merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+  }
+
+  void ancestorGenericTest()
+  {
+    PreserveTypesTagMerger uut;
+    Tags expected;
+    Tags merged;
+
+    // building=mosque is a more specific instance of building=yes, so only the building=mosque type
+    // tag should be kept. This should work when merging in either direction. Note that this
+    // ancestral relationship doesn't currently work as part of the schema and was added as a custom
+    // behavior to PreserveTypesTagMerger.
+
+    Tags t1;
+    t1["building"] = "yes";
+    t1["name"] = "Building 1";
+
+    Tags t2;
+    t2["building"] = "mosque";
+    t2["name"] = "Building 2";
+
+    expected["building"] = "mosque";
+    expected["name"] = "Building 1";
+    expected["alt_name"] = "Building 2";
+
+    uut.setOverwrite1(false);
+    merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+
+    expected.clear();
+    expected["building"] = "mosque";
+    expected["name"] = "Building 2";
+    expected["alt_name"] = "Building 1";
+
+    uut.setOverwrite1(true);
+    merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PreserveTypesTagMergerTest, "quick");
