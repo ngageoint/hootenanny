@@ -39,6 +39,7 @@ class OsmXmlWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmXmlWriterTest);
   CPPUNIT_TEST(runEncodeCharsTest);
+  CPPUNIT_TEST(runChangesetIdTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -71,6 +72,34 @@ public:
     const QString output = _outputPath + "runEncodeCharsTest-out.osm";
     uut.write(map, output);
     HOOT_FILE_EQUALS(_inputPath + "runEncodeCharsTest.osm", output);
+  }
+
+  void runChangesetIdTest()
+  {
+    OsmXmlWriter uut;
+
+    OsmMapPtr map(new OsmMap());
+    Tags tags1;
+    tags1.set("Note", "Node1");
+    NodePtr node1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags1);
+    node1->setChangeset(10);
+
+    Tags tags2;
+    tags2.set("Note", "Node2");
+    NodePtr node2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags2);
+    node2->setId(10);
+    node2->setChangeset(10);
+
+    //  The values of the IDs and Changeset IDs shouldn't change here
+    CPPUNIT_ASSERT_EQUAL(-1L, node1->getId());
+    CPPUNIT_ASSERT_EQUAL(10L, node1->getChangeset());
+    CPPUNIT_ASSERT_EQUAL(10L, node2->getId());
+    CPPUNIT_ASSERT_EQUAL(10L, node2->getChangeset());
+    //  But when written out Node1 shouldn't have a changeset ID because it has a negative Node ID
+
+    const QString output = _outputPath + "runChangesetIdTest-out.osm";
+    uut.write(map, output);
+    HOOT_FILE_EQUALS(_inputPath + "runChangesetIdTest.osm", output);
   }
 };
 
