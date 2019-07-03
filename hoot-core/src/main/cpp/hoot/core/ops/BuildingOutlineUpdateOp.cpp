@@ -310,7 +310,8 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     {
       Tags buildingTags = pBuilding->getTags();
 
-      // to preserve naming of relation buildings in JOSM we copy the building's "building" and "name" tags
+      // to preserve naming of relation buildings in JOSM we copy the building's "building" and
+      // "name" tags
       if (buildingTags.contains("name") && buildingTags.contains("building") )
       {
         pOutlineElement->setTag( "name", buildingTags["name"] );
@@ -329,7 +330,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pBuilding);
     }
     else if (pOutlineElement->getElementType() == ElementType::Relation)
-    {  
+    {
       const RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(pOutlineElement);
 
       foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
