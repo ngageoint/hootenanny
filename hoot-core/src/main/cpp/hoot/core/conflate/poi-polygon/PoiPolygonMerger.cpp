@@ -360,8 +360,12 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   // appropriate unconflated status, if we can determine it. This logic could possibly be combined
   // with the invalid status related logic above.
   ElementPtr poi = map->getElement(poiId);
+  LOG_VART(poi);
   ElementPtr poly = map->getElement(polyId);
+  LOG_VART(poly);
   // pois always get merged into polys
+  LOG_VART(poi->getStatus());
+  LOG_VART(poly->getStatus());
   if (poi->getStatus() == Status::Conflated)
   {
     // don't think this should ever occur
@@ -385,7 +389,7 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
 ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 {
   // Trying to merge more than one POI into the polygon has proven problematic due to the building
-  // merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
+  // merging logic. Merging more than one POI isn't a requirement, so only supporting 1:1 merging
   // at this time.
 
   LOG_INFO("Merging one POI and one polygon...");
