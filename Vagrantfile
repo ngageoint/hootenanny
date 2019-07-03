@@ -148,6 +148,15 @@ Vagrant.configure(2) do |config|
     set_provisioners(hoot_centos7_prov)
     aws_provider(hoot_centos7_prov, 'CentOS7')
   end
+  
+  config.vm.define "release", primary: true do |hoot_centos7_prov|
+    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
+    hoot_centos7_prov.vm.hostname = "centos7-hoot"
+
+    mount_shares(hoot_centos7_prov)
+    set_provisioners(hoot_centos7_prov)
+    aws_provider(hoot_centos7_prov, 'release')
+  end
 
   # Centos7 box - not preprovisioned
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
