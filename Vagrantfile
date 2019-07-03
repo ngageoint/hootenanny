@@ -66,7 +66,7 @@ Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 8096, host: mergePort
   end
 
-  def aws_provider(config, os)
+  def aws_provider(config, os, instance_name)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
@@ -83,7 +83,7 @@ Vagrant.configure(2) do |config|
       end
 
       aws.tags = {
-        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
+        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{instance_name.downcase}"),
         'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
       }
 
@@ -146,16 +146,21 @@ Vagrant.configure(2) do |config|
 
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'CentOS7')
+    aws_provider(hoot_centos7_prov, 'CentOS7', 'CentOS7')
   end
   
-  config.vm.define "release", primary: true do |hoot_centos7_prov|
-    hoot_centos7_prov.vm.box = "hoot/centos7-hoot"
-    hoot_centos7_prov.vm.hostname = "centos7-hoot"
+  # To lower aws expenses, a daily cleanup of hootenanny lingering instances 
+  # are terminated. Although the hootenanny release at times needs to persist, 
+  # so the release box shall be setup the same way as the 'default' box,
+  # but configured with a different name to prevent the VM from being terminated 
+  # during the manual cleanup process
+  config.vm.define "release", autostart: false  do |hoot_centos7_release|
+    hoot_centos7_release.vm.box = "hoot/centos7-hoot"
+    hoot_centos7_release.vm.hostname = "centos7-hoot-release"
 
-    mount_shares(hoot_centos7_prov)
-    set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'release')
+    mount_shares(hoot_centos7_release)
+    set_provisioners(hoot_centos7_release)
+    aws_provider(hoot_centos7_release, 'CentOS7', 'release')
   end
 
   # Centos7 box - not preprovisioned
@@ -169,7 +174,7 @@ Vagrant.configure(2) do |config|
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
-    aws_provider(hoot_centos7, 'CentOS7')
+    aws_provider(hoot_centos7, 'CentOS7', 'CentOS7')
   end
 
   # Centos7 - Hoot core ONLY. No UI
