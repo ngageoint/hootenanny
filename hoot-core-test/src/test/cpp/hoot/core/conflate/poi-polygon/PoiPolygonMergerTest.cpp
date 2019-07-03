@@ -46,6 +46,8 @@ namespace hoot
 
 /**
  * See "Hootenanny - POI to Building" power point for a description of the tests.
+ *
+ * PoiPolygonMerger also gets a lot of testing in case tests.
  */
 class PoiPolygonMergerTest : public HootTestFixture
 {
@@ -57,8 +59,6 @@ class PoiPolygonMergerTest : public HootTestFixture
   CPPUNIT_TEST(toyScenario4Test);
   CPPUNIT_TEST(toyScenario5Test);
   CPPUNIT_TEST(toyScenario6Test);
-  // TODO:
-  //CPPUNIT_TEST(manyPoiToOnePolyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -437,11 +437,6 @@ public:
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
-
-//  void manyPoiToOnePolyTest()
-//  {
-
-//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMergerTest, "quick");
