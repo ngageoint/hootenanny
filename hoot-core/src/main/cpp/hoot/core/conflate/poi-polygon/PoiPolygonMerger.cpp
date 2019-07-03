@@ -52,15 +52,52 @@ HOOT_FACTORY_REGISTER(Merger, PoiPolygonMerger)
 int PoiPolygonMerger::logWarnCount = 0;
 
 PoiPolygonMerger::PoiPolygonMerger() :
-MergerBase()
+MergerBase(),
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
+_tagMergerClass("")
 {
 }
 
 PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
-_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
+_tagMergerClass("")
 {
   assert(_pairs.size() >= 1);
+}
+
+std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
+{
+  std::shared_ptr<const TagMerger> tagMerger;
+  std::string tagMergerClass;
+  // Always preserve types when merging many POIs in. This can go away if we stay with defaulting
+  // poi/poly merging to use PreserveTypesTagMerger.
+  if (_autoMergeManyPoiToOnePolyMatches)
+  {
+    tagMergerClass = PreserveTypesTagMerger::className();
+  }
+  // Otherwise, allow for calling class to specify the tag merger outside of Configurable.
+  else if (!_tagMergerClass.trimmed().isEmpty())
+  {
+    tagMergerClass = _tagMergerClass.toStdString();
+  }
+  // Otherwise, let's see if the tag merger was set specifically for poi/poly.
+  else if (!ConfigOptions().getPoiPolygonTagMerger().trimmed().isEmpty())
+  {
+    tagMergerClass = ConfigOptions().getPoiPolygonTagMerger().trimmed().toStdString();
+  }
+  // Otherwise, let's try the global tag merger.
+  else if (!ConfigOptions().getTagMergerDefault().trimmed().isEmpty())
+  {
+    tagMergerClass = ConfigOptions().getTagMergerDefault().trimmed().toStdString();
+  }
+  else
+  {
+    throw IllegalArgumentException("No tag merger specified for POI/Polygon conflation.");
+  }
+  LOG_VART(tagMergerClass);
+  tagMerger.reset(Factory::getInstance().constructObject<TagMerger>(tagMergerClass));
+  return tagMerger;
 }
 
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
@@ -105,18 +142,11 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   }
   assert(finalBuilding.get());
 
+  // select a tag merging strategy
+  std::shared_ptr<const TagMerger> tagMerger = _getTagMerger();
+
+  // merge the tags
   Tags finalBuildingTags = finalBuilding->getTags();
-  std::shared_ptr<const TagMerger> tagMerger;
-  if (_autoMergeManyPoiToOnePolyMatches)
-  {
-    LOG_TRACE("PreserveTypesTagMerger");
-    tagMerger.reset(new PreserveTypesTagMerger());
-  }
-  else
-  {
-    LOG_VART(ConfigOptions().getTagMergerDefault());
-    tagMerger = TagMergerFactory::getInstance().getDefaultPtr();
-  }
   if (poiTags1.size())
   {
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown1...");
@@ -164,6 +194,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   if (poisMerged > 0)
   {
+    // If the poly merge target was previously conflated, let's add to the total number of POIs that
+    // have been merged.
     if (finalBuildingTags.contains(MetadataTags::HootPoiPolygonPoisMerged()))
     {
       poisMerged += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged()].toLong();
@@ -333,8 +365,12 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   // appropriate unconflated status, if we can determine it. This logic could possibly be combined
   // with the invalid status related logic above.
   ElementPtr poi = map->getElement(poiId);
+  LOG_VART(poi);
   ElementPtr poly = map->getElement(polyId);
+  LOG_VART(poly);
   // pois always get merged into polys
+  LOG_VART(poi->getStatus());
+  LOG_VART(poly->getStatus());
   if (poi->getStatus() == Status::Conflated)
   {
     // don't think this should ever occur
@@ -358,7 +394,7 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
 ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
 {
   // Trying to merge more than one POI into the polygon has proven problematic due to the building
-  // merging logic.  Merging more than one POI isn't a requirement, so only supporting 1:1 merging
+  // merging logic. Merging more than one POI isn't a requirement, so only supporting 1:1 merging
   // at this time.
 
   LOG_INFO("Merging one POI and one polygon...");

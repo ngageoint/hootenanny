@@ -2996,7 +2996,7 @@ the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
 === poi.polygon.address.match.enabled
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, POI/Polygon conflation will compare addresses as one of the criteria for matching features.
 If the data being conflated is known to have poor address data, disabling this option may speed up
@@ -3256,6 +3256,15 @@ The threshold at which a review is called a review for PoiPolygon. See
 * Default Value: `source`
 
 The source tag key to be used in conjunction with poi.polygon.disable.same.source.conflation.
+
+=== poi.polygon.tag.merger
+
+* Data Type: string
+* Default Value: `hoot::PreserveTypesTagMerger`
+
+The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If
+'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger'
+is always used.
 
 === poi.polygon.type.score.threshold
 
