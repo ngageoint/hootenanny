@@ -52,15 +52,47 @@ HOOT_FACTORY_REGISTER(Merger, PoiPolygonMerger)
 int PoiPolygonMerger::logWarnCount = 0;
 
 PoiPolygonMerger::PoiPolygonMerger() :
-MergerBase()
+MergerBase(),
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
+_tagMergerClass("")
 {
 }
 
 PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
-_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches())
+_autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
+_tagMergerClass("")
 {
   assert(_pairs.size() >= 1);
+}
+
+std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
+{
+  std::shared_ptr<const TagMerger> tagMerger;
+  std::string tagMergerClass;
+  if (_autoMergeManyPoiToOnePolyMatches)
+  {
+    tagMergerClass = PreserveTypesTagMerger::className();
+  }
+  else if (!_tagMergerClass.trimmed().isEmpty())
+  {
+    tagMergerClass = _tagMergerClass.toStdString();
+  }
+  else if (!ConfigOptions().getPoiPolygonTagMerger().trimmed().isEmpty())
+  {
+    tagMergerClass = ConfigOptions().getPoiPolygonTagMerger().trimmed().toStdString();
+  }
+  else if (!ConfigOptions().getTagMergerDefault().trimmed().isEmpty())
+  {
+    tagMergerClass = ConfigOptions().getTagMergerDefault().trimmed().toStdString();
+  }
+  else
+  {
+    throw IllegalArgumentException("No tag merger specified for POI/Polygon conflation.");
+  }
+  LOG_VART(tagMergerClass);
+  tagMerger.reset(Factory::getInstance().constructObject<TagMerger>(tagMergerClass));
+  return tagMerger;
 }
 
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
@@ -105,18 +137,11 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   }
   assert(finalBuilding.get());
 
+  // select a tag merging strategy
+  std::shared_ptr<const TagMerger> tagMerger = _getTagMerger();
+
+  // merge the tags
   Tags finalBuildingTags = finalBuilding->getTags();
-  std::shared_ptr<const TagMerger> tagMerger;
-  if (_autoMergeManyPoiToOnePolyMatches)
-  {
-    LOG_TRACE("PreserveTypesTagMerger");
-    tagMerger.reset(new PreserveTypesTagMerger());
-  }
-  else
-  {
-    LOG_VART(ConfigOptions().getTagMergerDefault());
-    tagMerger = TagMergerFactory::getInstance().getDefaultPtr();
-  }
   if (poiTags1.size())
   {
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown1...");

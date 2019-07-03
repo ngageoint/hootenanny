@@ -51,7 +51,9 @@ class PreserveTypesTagMergerTest : public HootTestFixture
   CPPUNIT_TEST(overwrite1Test);
   CPPUNIT_TEST(overwrite1OverlappingKeysTest);
   CPPUNIT_TEST(skipTagsTest);
-  // TODO: need better ancestor tests
+  // TODO:
+  //CPPUNIT_TEST(ancestorTest);
+  //CPPUNIT_TEST(ancestorGenericTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -218,6 +220,16 @@ public:
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
+
+//  void ancestorTest()
+//  {
+
+//  }
+
+//  void ancestorGenericTest()
+//  {
+
+//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PreserveTypesTagMergerTest, "quick");

@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -56,6 +57,8 @@ class PoiPolygonMergerTest : public HootTestFixture
   CPPUNIT_TEST(toyScenario4Test);
   CPPUNIT_TEST(toyScenario5Test);
   CPPUNIT_TEST(toyScenario6Test);
+  // TODO:
+  //CPPUNIT_TEST(manyPoiToOnePolyTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -89,6 +92,7 @@ public:
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
+      uut.setTagMergerClass(QString::fromStdString(OverwriteTag2Merger::className()));
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
@@ -111,6 +115,7 @@ public:
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
+      uut.setTagMergerClass(QString::fromStdString(OverwriteTag2Merger::className()));
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
@@ -432,6 +437,11 @@ public:
                     "}\n",
       OsmJsonWriter(4).toString(map));
   }
+
+//  void manyPoiToOnePolyTest()
+//  {
+
+//  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonMergerTest, "quick");
