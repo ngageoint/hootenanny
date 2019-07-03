@@ -170,7 +170,8 @@ void BuildingOutlineUpdateOp::_deleteBuildingRelations()
   }
 }
 
-void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding, const ElementPtr& pElement, std::shared_ptr<Geometry>& pOutline)
+void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding, const ElementPtr& pElement,
+                                            std::shared_ptr<Geometry>& pOutline)
 {
   ElementConverter elementConverter = ElementConverter(_map);
   std::shared_ptr<Geometry> pGeometry;
@@ -242,8 +243,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       pBuilding->removeElement(entries[i].role, entries[i].getElementId());
     }
     else if (entries[i].role == MetadataTags::RolePart() ||
-             (considerOuterRoleAsPart && entries[i].role == MetadataTags::RoleOuter())
-            )
+             (considerOuterRoleAsPart && entries[i].role == MetadataTags::RoleOuter()))
     {
       if (entries[i].getElementId().getType() == ElementType::Way)
       {
@@ -358,11 +358,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
   LOG_TRACE("Output building: " << pBuilding);
 }
 
-void BuildingOutlineUpdateOp::_findOutlineDuplicate( ConstWayPtr& pOutlineWay,
-                                                     QHash<RelationData::Entry,WayPtr>& buildingWayLookup,
-                                                     vector<long>& removeWayIds,
-                                                     const RelationPtr& pOutlineHost
-                                                   )
+void BuildingOutlineUpdateOp::_findOutlineDuplicate(ConstWayPtr& pOutlineWay,
+  QHash<RelationData::Entry,WayPtr>& buildingWayLookup, vector<long>& removeWayIds,
+  const RelationPtr& pOutlineHost)
 {
   // see if it's a duplicate of any building
   foreach (WayPtr pBuildingWay, buildingWayLookup)
@@ -381,7 +379,6 @@ void BuildingOutlineUpdateOp::_findOutlineDuplicate( ConstWayPtr& pOutlineWay,
     }
   }
 }
-
 
 void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed,
   const RelationPtr& reference)
