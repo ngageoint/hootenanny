@@ -34,6 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -80,11 +81,15 @@ public:
 
   PoiPolygonMatchCreatorTest()
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void basicTest()
   {
+    // Poi/poly test output is based on this config for now, despite it being different than the
+    // default config.
+    conf().set(ConfigOptions::getPoiPolygonAddressMatchEnabledKey(), "false");
+
     OsmMapPtr map = getTestMap1();
 
     {
@@ -104,6 +109,9 @@ public:
 
   void runIsCandidateTest()
   {
+    // see corresponding note in basicTest
+    conf().set(ConfigOptions::getPoiPolygonAddressMatchEnabledKey(), "false");
+
     PoiPolygonMatchCreator uut;
 
     OsmMapPtr map = getTestMap1();
