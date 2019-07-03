@@ -321,6 +321,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
     }
 
+    // TODO: removing this duplicate removal section fixes the JOSM repeated roles validation error
+    // but breaks building height tag preservation - #3323
+
     // find outline ways that are exact duplicates of the original building ways
     vector<long> removeWayIds;
 
