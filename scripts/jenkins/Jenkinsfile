@@ -41,7 +41,7 @@ pipeline {
         stage("Setup") {
             steps {
                 script {
-                    if (env.BRANCH_NAME == "3327") {
+                    if (env.BRANCH_NAME.startsWith("release")) {
                         sh '''
                         PREV_EC2_NAME="hoot_centos7_prov, 'CentOS7', 'CentOS7'"
                         NEW_EC2_NAME="hoot_centos7_prov, 'CentOS7', 'release'"
@@ -181,7 +181,7 @@ pipeline {
     post {
         always {
             script {
-                if (!env.BRANCH_NAME.startsWith("3327")) {
+                if (!env.BRANCH_NAME.startsWith("release")) {
                     // Always halt the VM to save resources, but don't destroy so devs can troubleshoot on failures
                     sh "vagrant halt ${params.Box}"
                 }
