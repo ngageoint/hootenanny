@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Removes any elements where that satisfy a criterion
  */
-class RemoveElementsVisitor : public ConstElementVisitor, public OsmMapConsumer,
+class RemoveElementsVisitor : public ElementVisitor, public OsmMapConsumer,
     public ElementCriterionConsumer, public Configurable, public OperationStatusInfo
 {
 public:
@@ -51,12 +51,11 @@ public:
 
   virtual void addCriterion(const ElementCriterionPtr& crit);
 
-  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const ElementPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(OsmMap* map);
-
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   void setRecursive(bool recursive) { _recursive = recursive; }

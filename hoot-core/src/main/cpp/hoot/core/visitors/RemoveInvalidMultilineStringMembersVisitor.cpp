@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
@@ -30,7 +30,7 @@
 //  hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 
 using namespace geos::geom;
@@ -45,7 +45,7 @@ RemoveInvalidMultilineStringMembersVisitor::RemoveInvalidMultilineStringMembersV
 {
 }
 
-void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
+void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 {
   //  Only look for relations
   if (e->getElementType() == ElementType::Relation)
@@ -121,7 +121,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr &e)
         element->setTags(merged);
         r->removeElement(id);
       }
-      RemoveRelationOp::removeRelation(map, r->getId());
+      RemoveRelationByEid::removeRelation(map, r->getId());
     }
   }
 }

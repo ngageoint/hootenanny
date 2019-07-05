@@ -97,13 +97,7 @@ missing
 Output.osm
 /output.osm
 /output.pgm
-translations/ggdm30_schema.js
-translations/tds40_full_schema.js
-translations/tds61_full_schema.js
-translations/ggdm30_full_schema.js
-translations/mgcp_schema.js
-translations/tds40_schema.js
-translations/tds61_schema.js
+translations/*_schema.js
 translations/etds*_rules.js
 translations/emgcp*_rules.js
 translations/eggdm*_rules.js

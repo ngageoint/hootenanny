@@ -46,13 +46,13 @@ hoot.require('translate')
 // we don't need to expose it to the main Hoot program
 function getDbSchema()
 {
-     return tds.getDbSchema();
+     return tds40.getDbSchema();
 }
 
 // Get raw schema directly from translations/schema
 function getRawDbSchema()
 {
-     return tds.schema.getDbSchema();
+     return tds40.schema.getDbSchema();
 }
 
 
@@ -80,7 +80,7 @@ function initialize()
 //    converts OSM+ tags to NFDD "English" Attributes
 //
 // This can be called via the following for testing:
-// hoot convert -D "convert.ops=hoot::TranslationOp"  \
+// hoot convert -D "convert.ops=hoot::SchemaTranslationVisitor"  \
 //      -D schema.translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
 function translateAttributes(attrs, layerName, geometryType)

@@ -31,6 +31,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementId.h>
@@ -38,8 +39,8 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMapListener.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveElementOp.h>
-#include <hoot/core/ops/RemoveNodeOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -59,6 +60,7 @@ namespace hoot
 std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap()
+  : _idSwap(new IdSwap())
 {
   if (!_wgs84)
   {
@@ -81,6 +83,7 @@ OsmMap::OsmMap(const OsmMapPtr& map)
 }
 
 OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs)
+  : _idSwap(new IdSwap())
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
@@ -256,6 +259,9 @@ void OsmMap::clear()
 
   _index->reset();
   _listeners.clear();
+
+  _roundabouts.clear();
+  _idSwap.reset();
 }
 
 bool OsmMap::containsElement(const ElementId& eid) const
@@ -290,6 +296,7 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   _index.reset(new OsmMapIndex(*this));
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();
+  _idSwap = from->getIdSwap();
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();
@@ -402,8 +409,8 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
   {
     if (n2w->getWaysByNode(from->getId()).size() != 0)
     {
-      throw HootException("Trying to replace a node with a non-node when the node is part of a "
-        "way.");
+      throw HootException(
+        "Trying to replace a node with a non-node when the node is part of a way.");
     }
   }
 
@@ -426,7 +433,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
       r->replaceElement(from, to);
     }
 
-    RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+    RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -472,7 +479,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 
     //  Don't remove the element if it is being replaced by itself
     if (!elem.contains(from->getId()))
-      RemoveElementOp::removeElementNoCheck(shared_from_this(), from->getElementId());
+      RemoveElementByEid::removeElementNoCheck(shared_from_this(), from->getElementId());
   }
 }
 
@@ -515,7 +522,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   if (containsNode(oldId))
   {
-    RemoveNodeOp::removeNodeNoCheck(shared_from_this(), oldId);
+    RemoveNodeByEid::removeNodeNoCheck(shared_from_this(), oldId);
   }
 
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
@@ -761,6 +768,25 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   }
 }
 
+void OsmMap::visitWaysRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const WayMap allWays = getWays();
+  for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
+  {
+    if (containsWay(it->first))
+    {
+      visitor.visit(std::dynamic_pointer_cast<Way>(it->second));
+    }
+  }
+}
+
 void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 {
   OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
@@ -776,6 +802,25 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
     if (containsRelation(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+    }
+  }
+}
+
+void OsmMap::visitRelationsRw(ElementVisitor& visitor)
+{
+  OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(&visitor);
+  if (consumer != 0)
+  {
+    consumer->setOsmMap(this);
+  }
+
+  // make a copy so we can iterate through even if there are changes.
+  const RelationMap allRs = getRelations();
+  for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
+  {
+    if (containsRelation(it->first))
+    {
+      visitor.visit(std::dynamic_pointer_cast<Relation>(it->second));
     }
   }
 }

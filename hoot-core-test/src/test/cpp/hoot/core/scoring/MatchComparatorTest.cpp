@@ -37,7 +37,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -78,11 +78,12 @@ public:
     reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
 
     // introduce a false positive in the test data.
-    vector<long> wids = FindWaysVisitor::findWaysByTag(map, "name", "Cheddar's Casual Cafe");
+    vector<long> wids =
+      ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Cheddar's Casual Cafe");
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Bad " + MetadataTags::Ref1();
 
     // introduce a false negative in the test data.
-    wids = FindWaysVisitor::findWaysByTag(map, "name", "Freddy's");
+    wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "name", "Freddy's");
     map->getWay(wids[0])->getTags()[MetadataTags::Ref1()] = "Biondi";
 
     // add a uuid to all buildings.

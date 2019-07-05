@@ -639,6 +639,8 @@ public:
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
+    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
+
     reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
     reader.read(map);
 

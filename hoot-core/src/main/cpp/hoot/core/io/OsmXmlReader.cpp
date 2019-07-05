@@ -43,6 +43,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -62,22 +64,29 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
-_defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
-_keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
-_useFileStatus(ConfigOptions().getReaderUseFileStatus()),
 _useDataSourceId(false),
-_addSourceDateTime(ConfigOptions().getReaderAddSourceDatetime()),
 _inputCompressed(false),
-_preserveAllTags(ConfigOptions().getReaderPreserveAllTags()),
-_addChildRefsWhenMissing(ConfigOptions().getOsmMapReaderXmlAddChildRefsWhenMissing()),
-_numRead(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+_numRead(0)
 {
+  setConfiguration(conf());
 }
 
 OsmXmlReader::~OsmXmlReader()
 {
   close();
+}
+
+void OsmXmlReader::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
+  setKeepStatusTag(configOptions.getReaderKeepStatusTag());
+  setUseFileStatus(configOptions.getReaderUseFileStatus()),
+  setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
+  setPreserveAllTags(configOptions.getReaderPreserveAllTags());
+  setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
+  setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
+  setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -343,6 +352,25 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   }
   file.close();
 
+  // We don't support cropping during streaming, and there is a check in
+  // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
+  // a bounds has been set.
+  LOG_VARD(_bounds.isNull());
+  if (!_bounds.isNull())
+  {
+    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
+    MapCropper cropper(_bounds);
+    LOG_INFO(cropper.getInitStatusMessage());
+    // We don't reuse MapCropper's version of these options, since we want the freedom to have
+    // different default values than what MapCropper uses.
+    cropper.setKeepEntireFeaturesCrossingBounds(
+      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+    cropper.setKeepOnlyFeaturesInsideBounds(
+      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+    cropper.apply(_map);
+    LOG_INFO(cropper.getCompletedStatusMessage());
+  }
+
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -394,10 +422,8 @@ const QString& OsmXmlReader::_saveMemory(const QString& s)
   return _strings[s];
 }
 
-bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
-                                const QString & /* localName */,
-                                const QString &qName,
-                                const QXmlAttributes &attributes)
+bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/,
+                                const QString& qName, const QXmlAttributes& attributes)
 {
   try
   {
@@ -482,7 +508,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       else
       {
         long newRef = _nodeIdMap.value(ref);
-        //LOG_TRACE("Adding way node: " << newRef << "...");
+        LOG_TRACE("Adding way node: " << newRef << "...");
         WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
         w->addNode(newRef);
       }
@@ -522,7 +548,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         else
         {
           long newRef = _nodeIdMap.value(ref);
-          //LOG_TRACE("Adding relation node member: " << newRef << "...");
+          LOG_TRACE("Adding relation node member: " << newRef << "...");
           r->addElement(role, ElementType::Node, newRef);
         }
       }
@@ -553,7 +579,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         else
         {
           long newRef = _wayIdMap.value(ref);
-          //LOG_TRACE("Adding relation way member: " << newRef << "...");
+          LOG_TRACE("Adding relation way member: " << newRef << "...");
           r->addElement(role, ElementType::Way, newRef);
         }
       }
@@ -561,7 +587,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
       {
         // relations may be out of order so we don't check for consistency at this stage.
         long newRef = _getRelationId(ref);
-        //LOG_TRACE("Adding relation relation member: " << newRef << "...");
+        LOG_TRACE("Adding relation relation member: " << newRef << "...");
         r->addElement(role, ElementType::Relation, newRef);
       }
       else
@@ -582,8 +608,8 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
     {
       const QString& key = _saveMemory(attributes.value("k").trimmed());
       const QString& value = _saveMemory(attributes.value("v").trimmed());
-      //LOG_VART(key);
-      //LOG_VART(value);
+      LOG_VART(key);
+      LOG_VART(value);
       if (!key.isEmpty() && !value.isEmpty())
       {
         if (_useFileStatus && key == MetadataTags::HootStatus())
@@ -648,7 +674,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
           }
           if (_preserveAllTags)
           {
-            //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
+            LOG_TRACE("setting tag with key: " << key << " and value: " << value);
             _element->setTag(key, value);
           }
         }
@@ -656,7 +682,7 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
         {
           if (key != MetadataTags::HootId() && !value.isEmpty())
           {
-            //LOG_TRACE("setting tag with key: " << key << " and value: " << value);
+            LOG_TRACE("setting tag with key: " << key << " and value: " << value);
             _element->setTag(key, value);
           }
         }
@@ -672,9 +698,9 @@ bool OsmXmlReader::startElement(const QString & /* namespaceURI */,
   return true;
 }
 
-bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
-                              const QString & /* localName */,
-                              const QString &qName)
+bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
+                              const QString& /* localName */,
+                              const QString& qName)
 {
   if (_element)
   {
@@ -682,21 +708,21 @@ bool OsmXmlReader::endElement(const QString & /* namespaceURI */,
     {
       NodePtr n = std::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
-      //LOG_VART(n);
+      LOG_VART(n);
       _numRead++;
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
-      //LOG_VART(w);
+      LOG_VART(w);
       _numRead++;
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
-      //LOG_VART(r);
+      LOG_VART(r);
       _numRead++;
     }
 

@@ -19,14 +19,14 @@
         <nd ref="-47645"/>
         <nd ref="-47646"/>
         <nd ref="-47643"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="Cheddar's Casual Cafe"/>
+        <tag k="alt_name" v="Cheddar's"/>
+        <tag k="hoot:building:match" v="true"/>
+        <tag k="building" v="yes"/>
         <tag k="REF1" v="Cheddar's"/>
         <tag k="REF2" v="Cheddar's"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:building:match" v="true"/>
-        <tag k="alt_name" v="Cheddar's"/>
-        <tag k="building" v="yes"/>
-        <tag k="name" v="Cheddar's Casual Cafe"/>
-        <tag k="amenity" v="restaurant"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

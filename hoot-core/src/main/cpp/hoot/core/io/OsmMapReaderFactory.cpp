@@ -131,7 +131,8 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(const QString& u
 }
 
 std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSourceIds,
-                                                                bool useFileStatus, const QString& url)
+                                                                bool useFileStatus,
+                                                                const QString& url)
 {
   LOG_VART(url);
   LOG_VART(useDataSourceIds);

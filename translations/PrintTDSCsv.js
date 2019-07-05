@@ -36,7 +36,7 @@
 tds61 = {}
 hoot.require('tds61_schema')
 
-// tds = {}
+// tds40 = {}
 // hoot.require('tds40.schema')
 
 hoot.require('config')
@@ -49,7 +49,7 @@ function initialize()
     var tagList = {} // Final list of tags
 
     // Change the Schema as well
-    // var schema = tds.schema.getDbSchema();
+    // var schema = tds40.schema.getDbSchema();
     var schema = tds61.schema.getDbSchema();
     
     // Print the tagList

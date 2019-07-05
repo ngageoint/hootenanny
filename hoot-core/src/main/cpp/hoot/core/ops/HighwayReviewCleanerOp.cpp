@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/ops/RemoveRelationOp.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/elements/OsmMap.h>
 
 using namespace std;
@@ -62,7 +62,7 @@ void HighwayReviewCleanerOp::apply(OsmMapPtr& map)
         // this relation shouldn't be part of any other relations so removing is safe. If by chance
         // it is in another relation it will simply be removed from that relation before being
         // removed from the map.
-        RemoveRelationOp::removeRelation(map, r.getId());
+        RemoveRelationByEid::removeRelation(map, r.getId());
       }
     }
   }

@@ -1,44 +1,38 @@
 [
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": ["poi"],
         "dataType": "enumeration",
-        "geometries": [
-            "area"
-        ],
+        "geometries": ["area"],
         "influence": 1,
         "isA": "poi",
         "name": "natural",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "natural",
         "name": "natural=*",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "natural",
         "name": "natural=beach",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "aliases":[
         "natural=land_water_boundary"
         ],
         "isA": "natural",
         "name": "natural=coastline",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=hedgerow",
         "objectType": "tag"
     },
     {
@@ -60,10 +54,7 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "natural",
         "name": "natural=glacier",
         "objectType": "tag"
@@ -74,25 +65,19 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "natural",
         "name": "natural=hill",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "natural",
         "name": "natural=mountain",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "natural",
         "name": "natural=peak",
         "objectType": "tag",
@@ -102,22 +87,14 @@
         ]
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "natural",
         "name": "natural=scrub",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
-        "categories": [
-            "multiuse"
-        ],
+        "geometries": ["node", "area"],
+        "categories": ["multiuse"],
         "isA": "natural",
         "name": "natural=water",
         "objectType": "tag",
@@ -133,9 +110,7 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": ["multiuse"],
         "isA": "natural",
         "name": "natural=wood",
         "objectType": "tag"

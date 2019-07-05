@@ -31,7 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 
 using namespace std;
 
@@ -92,7 +92,7 @@ void SuperfluousWayRemover::removeWays()
     if ((same || w->getTags().size() == 0) && !inRelation)
     {  
       LOG_TRACE("Removing superflous way: " << w->getElementId() << "...");
-      RemoveWayOp::removeWayFully(_inputMap, w->getId());
+      RemoveWayByEid::removeWayFully(_inputMap, w->getId());
       _numAffected++;
     }
   }

@@ -29,7 +29,6 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/NeedsReviewCriterion.h>
@@ -52,7 +51,7 @@
 #include <hoot/core/visitors/LongestTagVisitor.h>
 #include <hoot/core/visitors/MatchCandidateCountVisitor.h>
 #include <hoot/core/visitors/SumNumericTagsVisitor.h>
-#include <hoot/core/visitors/TranslatedTagCountVisitor.h>
+#include <hoot/core/visitors/SchemaTranslatedTagCountVisitor.h>
 
 #include <math.h>
 
@@ -378,7 +377,7 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         ScriptSchemaTranslatorFactory::getInstance().createTranslator(
           ConfigOptions().getStatsTranslateScript()));
       st->setErrorTreatment(StrictOff);
-      TranslatedTagCountVisitor tcv(st);
+      SchemaTranslatedTagCountVisitor tcv(st);
       _applyVisitor(&tcv);
       _addStat("Translated Populated Tag Percent", tcv.getStat());
       _addStat("Translated Populated Tags", tcv.getPopulatedCount());
@@ -386,17 +385,17 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _addStat("Translated Null Tags", tcv.getNullCount());
 
       _addStat("Building Translated Populated Tag Percent",
-        _applyVisitor(new BuildingCriterion(map), new TranslatedTagCountVisitor(st)));
+        _applyVisitor(new BuildingCriterion(map), new SchemaTranslatedTagCountVisitor(st)));
       _addStat("Road Translated Populated Tag Percent",
-        _applyVisitor(new HighwayCriterion(map), new TranslatedTagCountVisitor(st)));
+        _applyVisitor(new HighwayCriterion(map), new SchemaTranslatedTagCountVisitor(st)));
       _addStat("POI Translated Populated Tag Percent",
-        _applyVisitor(new PoiCriterion(), new TranslatedTagCountVisitor(st)));
+        _applyVisitor(new PoiCriterion(), new SchemaTranslatedTagCountVisitor(st)));
       _addStat("Waterway Translated Populated Tag Percent",
-        _applyVisitor(new LinearWaterwayCriterion(), new TranslatedTagCountVisitor(st)));
+        _applyVisitor(new LinearWaterwayCriterion(), new SchemaTranslatedTagCountVisitor(st)));
       _addStat("Polygon Conflatable POI Translated Populated Tag Percent",
-        _applyVisitor(new PoiPolygonPoiCriterion(), new TranslatedTagCountVisitor(st)));
+        _applyVisitor(new PoiPolygonPoiCriterion(), new SchemaTranslatedTagCountVisitor(st)));
       _addStat("Polygon Translated Populated Tag Percent",
-        _applyVisitor(new PoiPolygonPolyCriterion(), new TranslatedTagCountVisitor(st)));
+        _applyVisitor(new PoiPolygonPolyCriterion(), new SchemaTranslatedTagCountVisitor(st)));
     }
     else
     {
@@ -444,7 +443,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
 
         // make sure the map is set before we use it
         ConstOsmMapConsumer* pMapConsumer = dynamic_cast<ConstOsmMapConsumer*>(pCrit.get());
-        if(pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
+        if (pMapConsumer) pMapConsumer->setOsmMap(constMap.get());
       }
       catch (...)
       {
@@ -513,7 +512,7 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
   }
 }
 
-double CalculateStatsOp::GetRequestedStatValue(const ConstElementVisitor* pVisitor, StatCall call)
+double CalculateStatsOp::GetRequestedStatValue(const ElementVisitor* pVisitor, StatCall call)
 {
   if (call == Stat)
   {
@@ -568,7 +567,7 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& vis
     fv = critFv.get();
   }
 
-  ConstElementVisitor& childVisitor = v.getChildVisitor();
+  ElementVisitor& childVisitor = v.getChildVisitor();
 
   _constMap->visitRo(*fv);
 

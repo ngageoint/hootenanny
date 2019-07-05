@@ -60,32 +60,33 @@ def printJavascript(schema):
         print '          fcode:"%s",' % (schema[f]['fcode'])
         print '          desc:"%s",' % (schema[f]['desc'])
         print '          geom:"%s",' % (schema[f]['geom'])
-        print '          columns:[ '
+        print '          columns:['
 
         num_attrib = len(schema[f]['columns'].keys()) # How many attributes does the feature have?
         for k in sorted(schema[f]['columns'].keys()):
             print '                     { name:"%s",' % (k)
-            print '                       desc:"%s" ,' % (schema[f]['columns'][k]['desc'])
-            print '                       optional:"%s" ,' % (schema[f]['columns'][k]['optional'])
+            print '                       desc:"%s",' % (schema[f]['columns'][k]['desc'])
+            print '                       optional:"%s",' % (schema[f]['columns'][k]['optional'])
 
             #if schema[f]['columns'][k]['length'] != '':
             if 'length' in schema[f]['columns'][k]:
-                print '                       length:"%s", ' % (schema[f]['columns'][k]['length'])
+                print '                       length:"%s",' % (schema[f]['columns'][k]['length'])
 
             #if schema[f]['columns'][k]['type'].find('numeration') != -1:
             if 'func' in schema[f]['columns'][k]:
                 print '                       type:"enumeration",'
-                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations: %s' % (schema[f]['columns'][k]['func'])
 
             elif schema[f]['columns'][k]['type'] == 'enumeration':
                 #print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
                 print '                       type:"enumeration",'
-                print '                       defValue:"%s", ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s",' % (schema[f]['columns'][k]['defValue'])
                 print '                       enumerations:['
                 for l in schema[f]['columns'][k]['enum']:
-                    print '                           { name:"%s", value:"%s" }, ' % (l['name'],l['value'])
-                print '                        ] // End of Enumerations '
+                    print '                           { name:"%s", value:"%s" },' % (l['name'],l['value'])
+                # print '                        ] // End of Enumerations '
+                print '                        ]'
 
             #elif schema[f]['columns'][k]['type'] == 'textEnumeration':
                 #print '                       type:"Xenumeration",'
@@ -94,37 +95,30 @@ def printJavascript(schema):
 
             else:
                 print '                       type:"%s",' % (schema[f]['columns'][k]['type'])
-                print '                       defValue:"%s" ' % (schema[f]['columns'][k]['defValue'])
+                print '                       defValue:"%s"' % (schema[f]['columns'][k]['defValue'])
 
             if num_attrib == 1:  # Are we at the last attribute? yes = no trailing comma
-                print '                     } // End of %s' % (k)
+                # print '                     } // End of %s' % (k)
+                print '                     }'
             else:
-                print '                     }, // End of %s' % (k)
+                # print '                     }, // End of %s' % (k)
+                print '                     },'
                 num_attrib -= 1
 
-        print '                    ] // End of Columns'
+        # print '                    ] // End of Columns'
+        print '                    ]'
 
         if num_feat == 1: # Are we at the last feature? yes = no trailing comma
-            print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            # print '          } // End of feature %s\n' % (schema[f]['fcode'])
+            print '          }'
         else:
-            print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            # print '          }, // End of feature %s\n' % (schema[f]['fcode'])
+            print '          },'
             num_feat -= 1
 
-    print '    ]; // End of schema\n' # End of schema
-
+    # print '    ]; // End of schema\n'
+    print '    ];'
 # End printJavascript
-
-
-# Drop all of the text enumerations and replace them with strings
-def dropTextEnumerations(tschema):
-    for i in tschema:
-        for j in tschema[i]['columns']:
-            if tschema[i]['columns'][j]['type'] == 'textEnumeration':
-                del tschema[i]['columns'][j]['func']
-                tschema[i]['columns'][j]['type'] = 'String'
-
-    return tschema
-# End dropTextEnumerations
 
 
 # Data & Lists
@@ -1427,7 +1421,7 @@ elif args.attributecsv:
 
 elif args.fullschema:
     printCopyright()
-    printJSHeader('tds')
+    printJSHeader('tds40')
     printVariableBody('building_FFN',building_FFN)
     printVariableBody('facility_FFN',facility_FFN)
     printVariableBody('fortified_FFN',fortified_FFN)
@@ -1443,20 +1437,20 @@ elif args.fullschema:
     printVariableBody('text_VSC',text_VSC)
     printVariableBody('text_ZSAX_RS0',text_ZSAX_RS0)
     printJavascript(schema)
-    printJSFooter('tds')
+    printJSFooter('tds40')
 
 elif args.dumpenum:
     dumpEnumerations(schema,'enumTDSv40')
 
 
 else:
-    dropTextEnumerations(schema)
+    convertTextEnumerations(schema)
     printCopyright()
-    printJSHeader('tds')
+    printJSHeader('tds40')
     printVariableBody('building_FFN',building_FFN)
     printVariableBody('facility_FFN',facility_FFN)
     printVariableBody('fortified_FFN',fortified_FFN)
     printJavascript(schema)
-    printJSFooter('tds')
+    printJSFooter('tds40')
 # End
 

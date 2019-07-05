@@ -13,23 +13,42 @@ _hoot ()   #  By convention, the function name
   prev=${COMP_WORDS[COMP_CWORD-1]}
 
   if [ $COMP_CWORD -eq 1 ]; then
-    OPTIONS=`hoot --help | sed '1,/For detailed/d'`
+    # sed commands
+    # /^$/d - deletes empty lines
+    # /^\S/d - deletes lines that begin with a non-whitespace character
+    # s/^\s+(\S+)\s+.+$/\1/ - removes everything from the help command except the actual command
+    OPTIONS=`hoot --help | sed -E '/^$/d;/^\S/d;s/^\s+(\S+)\s+.+$/\1/'`
     COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) )
-#   Generate the completion matches and load them into $COMPREPLY array.
-#   xx) May add more cases here.
-#   yy)
-#   zz)
   fi
 
   if [ $COMP_CWORD -gt 1 ]; then
     case "$cur" in
         -*)
-            OPTIONS='--debug --define -D --conf -C --info --warn --error'
+            OPTIONS='--define -D --conf -C --trace --debug --info --status --warn --error --fatal'
             COMPREPLY=( $(compgen -W '$OPTIONS' -- $cur ) )
             ;;
         *)
             COMPREPLY=( $(compgen -f -- ${cur}) )
             ;;
+    esac
+
+    case "$prev" in
+         -C|--conf)
+             # OPTIONS will contain all algorithm and conflation config files, including the Testing.conf file
+             OPTIONS=`pushd $HOOT_HOME/conf/core/ > /dev/null; ls *Algorithm.conf; popd > /dev/null`
+             OPTIONS+=' Testing.conf '
+             OPTIONS+=`pushd $HOOT_HOME/conf/core/ > /dev/null; ls *Conflation.conf; popd > /dev/null`
+             COMPREPLY=( $(compgen -W '$OPTIONS' -- $cur ) )
+             # Include all directories
+             COMPREPLY+=( $(compgen -d -- $cur ) )
+             # Include all .conf files in the $cur directory
+             COMPREPLY+=( $(compgen -f -X '!*.conf' -- $cur ) )
+             ;;
+         -D|--define)
+             # Use hoot info to list all of the options from ConfigOptions.asciidoc
+             OPTIONS=`hoot info --config-options`
+             COMPREPLY=( $(compgen -W '$OPTIONS' -- $cur ) )
+             ;;
     esac
   fi
 
@@ -48,20 +67,18 @@ _HootTest()
   cur=${COMP_WORDS[COMP_CWORD]}
   prev=${COMP_WORDS[COMP_CWORD-1]}
 
-  OPTIONS='--current --quick --slow --glacial --all --quiet --core --single --names --all-names --warn --info --debug'
+  OPTIONS='--current --quick --slow --glacial --all --quick-only --slow-only --glacial-only --case-only --single --names --all-names --fatal --error --status --warn --info --verbose --debug --trace --diff --include --exclude --parallel'
   case "$cur" in
-    --*)
-    COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) );;
-#   Generate the completion matches and load them into $COMPREPLY array.
-#   xx) May add more cases here.
-#   yy)
-#   zz)
+    *)
+        COMPREPLY=( $( compgen -W '$OPTIONS' -- $cur ) )
+        ;;
   esac
 
   case "$prev" in
     --single)
-    TESTS=`HootTest --all-names`
-    COMPREPLY=( $( compgen -W '$TESTS' -- $cur ) );;
+        TESTS=`HootTest --all-names`
+        COMPREPLY=( $( compgen -W '$TESTS' -- $cur ) )
+        ;;
   esac
 
   return 0

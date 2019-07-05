@@ -38,7 +38,6 @@
 #include <tgs/StreamUtils.h>
 #include <tgs/TgsException.h>
 #include <tgs/Heap/JHeap.h>
-#include <tgs/Statistics/Random.h>
 
 using namespace std;
 
@@ -76,10 +75,21 @@ namespace Tgs
 
   const static float sqrt2 = sqrt(2.0f);
   ProbablePathCalculator::ProbablePathCalculator()
+    : _rows(-1),
+      _cols(-1),
+      _variation(0.0),
+      _verbose(Warning),
+      _randomGenerator(Random::instance())
   {
-    _rows = _cols = -1;
-    _variation = 0.0;
-    _verbose = Warning;
+  }
+
+  ProbablePathCalculator::ProbablePathCalculator(const RandomPtr& random)
+    : _rows(-1),
+      _cols(-1),
+      _variation(0.0),
+      _verbose(Warning),
+      _randomGenerator(random)
+  {
   }
 
   ProbablePathCalculator::~ProbablePathCalculator()
@@ -407,8 +417,8 @@ namespace Tgs
     map<int, float> patch;
     for (int i = 0; i < _patchCount; i++)
     {
-      float r = 1.0f + ((float)Tgs::Random::instance()->generateInt() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
-      patch[Tgs::Random::instance()->generateInt(_rows * _cols)] = r;
+      float r = 1.0f + ((float)_randomGenerator->generateInt() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
+      patch[_randomGenerator->generateInt(_rows * _cols)] = r;
     }
 
     float maxValue = -1e10f;
@@ -467,7 +477,7 @@ namespace Tgs
       }
       else
       {
-        float r = 1.0f + ((float)Tgs::Random::instance()->generateInt() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
+        float r = 1.0f + ((float)_randomGenerator->generateInt() / (float)RAND_MAX * 2.0f - 1.0f) * _variation;
         _currentValues[i] = r * _baseValues[i];
         if (_currentValues[i] < 1e-6)
         {

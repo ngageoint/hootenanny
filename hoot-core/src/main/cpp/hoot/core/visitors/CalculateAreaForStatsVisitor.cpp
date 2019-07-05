@@ -30,9 +30,9 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 

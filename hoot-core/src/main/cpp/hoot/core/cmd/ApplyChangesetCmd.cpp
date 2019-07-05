@@ -87,12 +87,18 @@ public:
     if (args[0].endsWith(".osc") || args[0].endsWith(".osm"))
     {
       //  Get the endpoint URL
+      const QString urlStr = args[args.size() - 1];
+      if (!urlStr.toLower().startsWith("http://"))
+      {
+        throw IllegalArgumentException(
+          QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
+          QString("Tried to write to: " + urlStr));
+      }
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
 
       //  Create a URL without user info for logging
-      QUrl printableUrl = osm;
-      printableUrl.setUserInfo("");
+      QString printableUrl = osm.toString(QUrl::RemoveUserInfo);
 
       const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
 
@@ -102,8 +108,8 @@ public:
       {
         progress.set(
           0.0,
-          "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for application to: ..." +
-          printableUrl.toString().right(maxFilePrintLength) + "...", true);
+          "Adding changeset: ..." + args[i].right(maxFilePrintLength) + " for application to: " +
+          printableUrl.left(maxFilePrintLength) + "...", true);
         changesets.append(args[i]);
       }
 
@@ -120,7 +126,7 @@ public:
 
       progress.set(
         1.0, writer.containsFailed() ? Progress::JobState::Failed : Progress::JobState::Successful,
-        "Changeset(s) applied to: ..." + printableUrl.toString().right(maxFilePrintLength));
+        "Changeset(s) applied to: " + printableUrl.left(maxFilePrintLength) + "...");
 
       //  Write out the failed changeset if there is one
       if (writer.containsFailed())

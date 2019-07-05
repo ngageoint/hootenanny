@@ -65,6 +65,7 @@ class OsmMapIndex;
 class OsmMapListener;
 class ElementId;
 class Roundabout;
+class IdSwap;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
@@ -79,9 +80,9 @@ class Roundabout;
 class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider
 {
   // Friend classes that need to modify private elements
-  friend class RemoveNodeOp;
-  friend class RemoveWayOp;
-  friend class RemoveRelationOp;
+  friend class RemoveNodeByEid;
+  friend class RemoveWayByEid;
+  friend class RemoveRelationByEid;
 
 public:
 
@@ -285,7 +286,9 @@ public:
   void visitRw(ElementVisitor& visitor);
   void visitRw(ConstElementVisitor& visitor);
   void visitWaysRw(ConstElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
   void visitRelationsRw(ConstElementVisitor& visitor);
+  void visitRelationsRw(ElementVisitor& visitor);
 
   long getNodeCount() const { return _nodes.size(); }
   long getWayCount() const { return _ways.size(); }
@@ -294,6 +297,10 @@ public:
   // Helps us handle roundabouts
   void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
   std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
+
+  //  Handle ID preservation swaps
+  void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
+  std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
 
 protected:
 
@@ -322,6 +329,8 @@ protected:
   std::vector<std::shared_ptr<Element>> _replaceTmpArray;
 
   std::vector<std::shared_ptr<Roundabout>> _roundabouts;
+
+  std::shared_ptr<IdSwap> _idSwap;
 
   void _copy(const std::shared_ptr<const OsmMap>& from);
 

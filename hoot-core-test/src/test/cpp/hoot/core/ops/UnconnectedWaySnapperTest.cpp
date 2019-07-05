@@ -34,7 +34,7 @@
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // CPP Unit
@@ -60,7 +60,7 @@ public:
     : HootTestFixture("test-files/ops/UnconnectedWaySnapper/",
                       "test-output/ops/UnconnectedWaySnapper/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runSnapTest()
@@ -172,9 +172,12 @@ public:
 
     MapProjector::projectToPlanar(map);
 
-    WayPtr way1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "way1")[0]);
-    WayPtr way2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "way2")[0]);
-    WayPtr way3 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "way3")[0]);
+    WayPtr way1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way1")[0]);
+    WayPtr way2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way2")[0]);
+    WayPtr way3 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "way3")[0]);
 
     UnconnectedWaySnapper::snapClosestEndpointToWay(map, way2, way1);
     UnconnectedWaySnapper::snapClosestEndpointToWay(map, way3, way1);

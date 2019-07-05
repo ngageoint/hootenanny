@@ -35,7 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -316,7 +316,7 @@ public:
   vector<ConstWayPtr> toWayVector(OsmMapPtr map, QString note)
   {
     vector<ConstWayPtr> result;
-    vector<long> wids = FindWaysVisitor::findWaysByTag(map, "note", note);
+    vector<long> wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", note);
     for (size_t i = 0; i < wids.size(); i++)
     {
       result.push_back(map->getWay(wids[i]));
@@ -326,7 +326,7 @@ public:
 
   ConstWayPtr toWay(OsmMapPtr map, QString note)
   {
-    vector<long> wids = FindWaysVisitor::findWaysByTag(map, "note", note);
+    vector<long> wids = ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", note);
     for (size_t i = 0; i < wids.size(); i++)
     {
       return map->getWay(wids[i]);

@@ -95,7 +95,7 @@ public:
   /**
    * See the associated configuration options text for details.
    */
-  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference *srs);
+  std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs);
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
 
@@ -871,32 +871,21 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
 {
   ConfigOptions co(s);
   std::shared_ptr<Envelope> result;
-  QString bboxStrRaw = co.getOgrReaderBoundingBox();
-  QString bboxStrLatLng = co.getOgrReaderBoundingBoxLatlng();
+  const QString bboxStrRaw = co.getConvertBoundingBox();
+  const bool asWgs84 = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
   QString key;
 
-  if (bboxStrRaw.isEmpty() == false && bboxStrLatLng.isEmpty() == false)
-  {
-    throw HootException(QString("Only one of %1 or %2 may be specified at a time.").
-      arg(bboxStr).arg(bboxStrLatLng));
-  }
-  else if (bboxStrRaw.isEmpty() && bboxStrLatLng.isEmpty())
+  if (bboxStrRaw.isEmpty())
   {
     return result;
   }
   else if (bboxStrRaw.isEmpty() == false)
   {
     bboxStr = bboxStrRaw;
-    key = ConfigOptions::getOgrReaderBoundingBoxKey();
-  }
-  else
-  {
-    bboxStr = bboxStrLatLng;
-    key = ConfigOptions::getOgrReaderBoundingBoxLatlngKey();
   }
 
-  if (bboxStrRaw.isEmpty() == false)
+  if (!asWgs84)
   {
     result.reset(new Envelope(GeometryUtils::envelopeFromConfigString(bboxStr)));
   }
@@ -912,7 +901,8 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
 
     if (bbox.size() != 4)
     {
-      throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+      throw HootException(
+        QString("Error parsing %1 (%2)").arg(co.getConvertBoundingBoxKey()).arg(bboxStr));
     }
 
     bool ok;
@@ -922,7 +912,8 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
       bboxValues[i] = bbox[i].toDouble(&ok);
       if (!ok)
       {
-        throw HootException(QString("Error parsing %1 (%2)").arg(key).arg(bboxStr));
+        throw HootException(
+          QString("Error parsing %1 (%2)").arg(co.getConvertBoundingBoxKey()).arg(bboxStr));
       }
     }
 

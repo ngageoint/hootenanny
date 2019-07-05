@@ -94,8 +94,7 @@ class PullApiCommand implements InternalCommand {
                         ") is too large. It must be less than " + maxBboxArea + " degrees");
             }
 
-            url = replaceSensitiveData(params.getPullUrl()) +
-                    "/mapfull?bbox=" + boundingBox.toServicesString();
+            url = replaceSensitiveData(params.getPullUrl()) + "?bbox=" + boundingBox.toServicesString();
             URL requestUrl = new URL(url);
 
             File outputFile = new File(params.getOutput());

@@ -31,24 +31,28 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/stats/ConflateStatsHelper.h>
+#include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/io/MapStatsWriter.h>
-#include <hoot/core/ops/CalculateStatsOp.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/info/IoSingleStat.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/ops/CalculateStatsOp.h>
+#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/IoUtils.h>
-#include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/criterion/ReviewScoreCriterion.h>
+#include <hoot/core/criterion/ReviewRelationCriterion.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 // Standard
 #include <fstream>
@@ -174,6 +178,8 @@ int ConflateCmd::runSimple(QStringList args)
   {
     _numTotalTasks++;
   }
+  // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
+  // each op internally.
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     _numTotalTasks++;
@@ -184,32 +190,60 @@ int ConflateCmd::runSimple(QStringList args)
   }
   int currentTask = 1;
 
-  // read input 1
-  progress.set(
-    _getJobPercentComplete(currentTask - 1),
-    "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
   OsmMapPtr map(new OsmMap());
-  IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
-                   Status::Unknown1);
-  currentTask++;
-
   ChangesetProviderPtr pTagChanges;
-  if (isDiffConflate)
+
+  //  Loading order is important if datasource IDs 2 is true but 1 is not
+  if (!ConfigOptions().getReaderConflateUseDataSourceIds1() &&
+       ConfigOptions().getReaderConflateUseDataSourceIds2() &&
+      !isDiffConflate)
   {
-    // Store original IDs for tag diff
+    //  For Attribute conflation, the secondary IDs are the ones that we want
+    //  to preserve.  So loading them first allows for all of them to be loaded
+    //  without conflict, even if they are negative.  Then the reference dataset
+    //  is loaded with negative IDs
     progress.set(
-      _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
-    diffConflator.storeOriginalMap(map);
-    diffConflator.markInputElements(map);
+      _getJobPercentComplete(currentTask - 1),
+      "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    currentTask++;
+
+    // read input 1
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+                     Status::Unknown1);
     currentTask++;
   }
+  else
+  {
+    // read input 1
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(map, input1, ConfigOptions().getReaderConflateUseDataSourceIds1(),
+                     Status::Unknown1);
+    currentTask++;
 
-  progress.set(
-    _getJobPercentComplete(currentTask - 1),
-    "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
-  IoUtils::loadMap(
-    map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
-  currentTask++;
+    if (isDiffConflate)
+    {
+      // Store original IDs for tag diff
+      progress.set(
+        _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
+      diffConflator.storeOriginalMap(map);
+      diffConflator.markInputElements(map);
+      currentTask++;
+    }
+
+    progress.set(
+      _getJobPercentComplete(currentTask - 1),
+      "Loading secondary map: ..." + input2.right(maxFilePrintLength) + "...");
+    IoUtils::loadMap(
+      map, input2, ConfigOptions().getReaderConflateUseDataSourceIds2(), Status::Unknown2);
+    currentTask++;
+  }
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -440,23 +474,30 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
     // after the review relations have been removed or some building relations may still remain that
     // are involved in reviews.
 
+    const QString buildingOutlineUpdateOpName =
+      QString::fromStdString(BuildingOutlineUpdateOp::className());
+    const QString removeElementsVisitorName =
+      QString::fromStdString(RemoveElementsVisitor::className());
+    const QString reviewRelationCritName =
+      QString::fromStdString(ReviewRelationCriterion::className());
+
     QStringList postConflateOps = ConfigOptions().getConflatePostOps();
     LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
     // Currently, all these things will be true if we're running Attribute Conflation, but I'm
     // specifying them anyway to harden this a bit.
     if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
-        postConflateOps.contains("hoot::RemoveElementsVisitor") &&
+        postConflateOps.contains(removeElementsVisitorName) &&
         ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
-          "hoot::ReviewRelationCriterion") &&
-        postConflateOps.contains("hoot::BuildingOutlineUpdateOp"))
+          reviewRelationCritName) &&
+        postConflateOps.contains(buildingOutlineUpdateOpName))
     {
-      const int removeElementsVisIndex = postConflateOps.indexOf("hoot::RemoveElementsVisitor");
-      const int buildingOutlineOpIndex = postConflateOps.indexOf("hoot::BuildingOutlineUpdateOp");
+      const int removeElementsVisIndex = postConflateOps.indexOf(removeElementsVisitorName);
+      const int buildingOutlineOpIndex = postConflateOps.indexOf(buildingOutlineUpdateOpName);
       if (removeElementsVisIndex > buildingOutlineOpIndex)
       {
-        postConflateOps.removeAll("hoot::BuildingOutlineUpdateOp");
-        postConflateOps.append("hoot::BuildingOutlineUpdateOp");
-        conf().set("conflate.post.ops", postConflateOps);
+        postConflateOps.removeAll(buildingOutlineUpdateOpName);
+        postConflateOps.append(buildingOutlineUpdateOpName);
+        conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
       }
     }
 
@@ -467,7 +508,7 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
       QStringList removeElementsCriteria =
         conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
       removeElementsCriteria.replaceInStrings(
-        "hoot::ReviewRelationCriterion", "hoot::ReviewScoreCriterion");
+        reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
       conf().set(
         ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
     }

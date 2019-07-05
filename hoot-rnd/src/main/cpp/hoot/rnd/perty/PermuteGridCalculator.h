@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PERMUTE_GRID_CALCULATOR_H
 #define PERMUTE_GRID_CALCULATOR_H
@@ -71,21 +71,11 @@ public:
 
   void setCsmParameters(double D) { _D = D; }
 
-  /**
-   * Sets the random error. This is the sigma value for Rx and Ry. The same sigma value is used
-   * for all values in each matrix. See [1] for more information.
-   * @note There were problems with taking the sqrtm when sigma is zero. Now I make sigma a small
-   * value (1e-6) when sigma is zero.
-   */
-  void setRandomError(Meters sigmaX, Meters sigmaY) { _sigmaRx = sigmaX; _sigmaRy = sigmaY; }
-
   void setGridSpacing(Meters gridSpacing) { _gridSpacing = gridSpacing; }
 
   virtual QString toString();
 
 protected:
-
-  Meters _sigmaRx, _sigmaRy;
 
   Meters _D;
   Meters _gridSpacing;

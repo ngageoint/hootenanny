@@ -34,6 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -97,10 +98,6 @@ bool OsmGeoJsonReader::isSupported(const QString& url)
   return false;
 }
 
-/**
- * Reads the specified map. When this method is complete
- * the input will likely be closed.
- */
 void OsmGeoJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
@@ -287,6 +284,12 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
   _addTags(properties, pNode);
   //  Add node to map
   _map->addNode(pNode);
+
+  _numRead++;
+  if (_numRead % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+  }
 }
 
 void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& properties,
@@ -341,6 +344,12 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   _addTags(properties, way);
   //  Add way to map
   _map->addWay(way);
+
+  _numRead++;
+  if (_numRead % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+  }
 }
 
 void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& properties,
@@ -505,6 +514,12 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   _addTags(properties, relation);
   //  Add relation to map
   _map->addRelation(relation);
+
+  _numRead++;
+  if (_numRead % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
+  }
 }
 
 void OsmGeoJsonReader::_parseMultiPointGeometry(const boost::property_tree::ptree& geometry,

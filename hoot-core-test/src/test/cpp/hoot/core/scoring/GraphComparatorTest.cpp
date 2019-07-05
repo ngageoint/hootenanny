@@ -92,6 +92,7 @@ public:
 
       GraphComparator uut(map, map2);
       uut.setIterations(3);
+      uut.setMaxThreads(2);
       uut.setPixelSize(10);
       uut.compareMaps();
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973744272810634, uut.getMeanScore(), 0.00001);

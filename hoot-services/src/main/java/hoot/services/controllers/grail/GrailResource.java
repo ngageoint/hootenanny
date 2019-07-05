@@ -26,18 +26,22 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -209,7 +213,7 @@ public class GrailResource {
         try {
             workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
         } catch (UnavailableException ex) {
-            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
 
         // Pull secondary data from the Public Overpass API
@@ -623,12 +627,24 @@ public class GrailResource {
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
-        String url = "'"
-                + PUBLIC_OVERPASS_URL
-                + "/api/interpreter?data=[out:json];(node("
-                + new BoundingBox(bbox).toOverpassString()
-                + ");<;>;);out%20meta%20qt;"
-                + "'";
+
+        // Get grail overpass query from the file and store it in a string
+        String overpassQuery;
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            logger.error("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getAbsolutePath());
+            return Response.status(Response.Status.BAD_REQUEST).entity("Could not find grail overpass query file").build();
+        }
+
+        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+        try {
+            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
+
+        String url = "'" + PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery + "'";
         params.setInput1(url);
         params.setOutput(mapName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
@@ -692,14 +708,14 @@ public class GrailResource {
         try {
             workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
         } catch (UnavailableException ex) {
-            Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
 
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
 //        String url = RAILSPORT_PULL_URL +
-//                "/mapfull?bbox=" + new BoundingBox(bbox).toServicesString();
+//                "?bbox=" + new BoundingBox(bbox).toServicesString();
 //        params.setInput1(url);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setWorkDir(workDir);
@@ -710,6 +726,7 @@ public class GrailResource {
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
         tags.put("source", "rails");
+        tags.put("bbox", bbox);
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 

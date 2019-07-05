@@ -21,12 +21,12 @@ convert (input) (output)
 convert "(input1[;layer]) [input2[;layer]]" (output)
 --------------------------------------
 
-=== Configuration Options
+=== Conversion Operations
 
-If the `convert.ops` configuration option is included, then all the specified operations are applied to the map, in order, before writing the 
-result to the output. If a schema translation script is specified in schema.translation.script a TranslationVisitor is automatically added
-to the convert operations, so explicitly specifying it is unnecessary but will not cause problems. The +convert+ command will always attempt
-to use a TranslationVisitor instead of TranslationOp to support streaming I/O.
+If the `convert.ops` configuration option is included, then all the specified operations are applied
+to the map, in order, before writing the result to the output. If a schema translation script is
+specified in schema.translation.script a SchemaTranslationVisitor is automatically added to the
+convert operations, so explicitly specifying it is unnecessary but will not cause problems.
 
 example:
 --------------------------------------
@@ -34,6 +34,11 @@ example:
 hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \ 
   -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
 --------------------------------------
+
+=== Bounded Conversions
+
+If a configuration option matching, `convert.bounding.box.*` is set to a valid bounding box, supporting readers will read data only from 
+the specified bounds.
 
 ==== Schema Translation
 
@@ -48,7 +53,7 @@ examples:
 # All of these do the same thing:
 
 # every option specified
-hoot convert -D convert.ops=hoot::TranslationOp -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
+hoot convert -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
 # translation onvert op not specified; gets automatically added
 hoot convert -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb

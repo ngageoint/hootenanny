@@ -12,7 +12,7 @@ var stringify = require('json-stable-stringify');
 
 
 const output = 'validation_mappings.json';
-const objs = [fcodeCommon, tds.rules, tds61.rules, mgcp.rules, ggdm30.rules];
+const objs = [fcodeCommon, tds40.rules, tds61.rules, mgcp.rules, ggdm30.rules];
 const mapping = {};
 
 objs.forEach(f => {

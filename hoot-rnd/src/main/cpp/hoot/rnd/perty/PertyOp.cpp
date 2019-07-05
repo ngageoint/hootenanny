@@ -184,7 +184,6 @@ _settings(conf())
 void PertyOp::_configure()
 {
   ConfigOptions configOptions(_settings);
-  setRandomError(configOptions.getPertyRandomErrorX(), configOptions.getPertyRandomErrorY());
   setSystematicError(
     configOptions.getPertySystematicErrorX(), configOptions.getPertySystematicErrorY());
   setGridSpacing(configOptions.getPertyGridSpacing());
@@ -213,13 +212,6 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
   namedOps.apply(map);
 }
 
-void PertyOp::setRandomError(Meters sigmaX, Meters sigmaY)
-{
-  double epsilon = 1e-6;
-  _sigmaRx = max(epsilon, sigmaX);
-  _sigmaRy = max(epsilon, sigmaY);
-}
-
 Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& cols)
 {
   LOG_DEBUG("Using permute algorithm: " + _permuteAlgorithm);
@@ -227,7 +219,6 @@ Mat PertyOp::_calculatePermuteGrid(geos::geom::Envelope env, int& rows, int& col
     Factory::getInstance().constructObject<PermuteGridCalculator>(_permuteAlgorithm));
   _gridCalculator->setCsmParameters(_D);
   _gridCalculator->setGridSpacing(_gridSpacing);
-  _gridCalculator->setRandomError(_sigmaRx, _sigmaRy);
   _gridCalculator->setSeed(_seed);
   _gridCalculator->setSystematicError(_sigmaSx, _sigmaSy);
 

@@ -34,7 +34,7 @@
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -75,8 +75,10 @@ public:
     reader.read(_inputPath + "LongestCommonNodeStringTest.osm", map);
 
     {
-      WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "1")[0]);
-      WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "2")[0]);
+      WayPtr w1 =
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "1")[0]);
+      WayPtr w2 =
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "2")[0]);
 
       LongestCommonNodeString uut(w1, w2);
       CPPUNIT_ASSERT_EQUAL(2, uut.apply());
@@ -85,8 +87,10 @@ public:
     }
 
     {
-      WayPtr w1 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "3")[0]);
-      WayPtr w2 = map->getWay(FindWaysVisitor::findWaysByTag(map, "note", "4")[0]);
+      WayPtr w1 =
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "3")[0]);
+      WayPtr w2 =
+        map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "4")[0]);
 
       LongestCommonNodeString uut(w1, w2);
       CPPUNIT_ASSERT_EQUAL(4, uut.apply());

@@ -33,7 +33,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/FindWaysVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 
@@ -114,7 +114,7 @@ std::shared_ptr<OsmMap> ImpliedDividedMarker::markDivided()
   std::shared_ptr<TagCriterion> tunnelCrit(new TagCriterion("tunnel", "yes"));
   std::shared_ptr<TagCriterion> bridgeCrit(new TagCriterion("bridge", "yes"));
   ChainCriterion chain(tunnelCrit, bridgeCrit);
-  vector<long> wayIds = FindWaysVisitor::findWays(_result, &chain);
+  vector<long> wayIds = ElementIdsVisitor::findElements(_result, ElementType::Way, &chain);
 
   // go through each way
   for (size_t i = 0; i < wayIds.size(); i++)

@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/NodeCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
@@ -52,8 +52,6 @@ class RemoveTagsVisitorTest : public HootTestFixture
 
 public:
 
-
-
   RemoveTagsVisitorTest()
     : HootTestFixture("test-files/visitors/RemoveTagsVisitorTest/",
                       "test-output/visitors/RemoveTagsVisitorTest/")
@@ -67,7 +65,10 @@ public:
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
-    RemoveTagsVisitor visitor("key1", "key2");
+    QStringList keys;
+    keys.append("key1");
+    keys.append("key2");
+    RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(false);
     map->visitRw(visitor);
 
@@ -83,7 +84,10 @@ public:
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
-    RemoveTagsVisitor visitor("key1", "key2");
+    QStringList keys;
+    keys.append("key1");
+    keys.append("key2");
+    RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(false);
     visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);
@@ -100,7 +104,10 @@ public:
     OsmMapReaderFactory::read(
       map, _inputPath + "RemoveTagsVisitorTest.osm", false, Status::Unknown1);
 
-    RemoveTagsVisitor visitor("key1", "key2");
+    QStringList keys;
+    keys.append("key1");
+    keys.append("key2");
+    RemoveTagsVisitor visitor(keys);
     visitor.setNegateCriterion(true);
     visitor.addCriterion(std::shared_ptr<NodeCriterion>(new NodeCriterion()));
     map->visitRw(visitor);

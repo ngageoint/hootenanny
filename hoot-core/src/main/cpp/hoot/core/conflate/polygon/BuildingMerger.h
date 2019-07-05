@@ -116,8 +116,8 @@ private:
   std::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
-
   void _removeRedundantAltTypeTags(Tags& tags);
+  static void _fixStatuses(OsmMapPtr map);
 };
 
 }

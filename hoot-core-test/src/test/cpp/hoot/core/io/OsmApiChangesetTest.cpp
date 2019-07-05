@@ -44,6 +44,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
   CPPUNIT_TEST(runXmlChangesetErrorFixTest);
   CPPUNIT_TEST(runXmlChangesetFailureMatchesTest);
+  CPPUNIT_TEST(runXmlChangesetSplitDeleteTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -288,6 +289,60 @@ public:
     CPPUNIT_ASSERT_EQUAL(0L, id);
     CPPUNIT_ASSERT_EQUAL(0L, id2);
     CPPUNIT_ASSERT_EQUAL(ElementType::Unknown, type);
+  }
+
+  void runXmlChangesetSplitDeleteTest()
+  {
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "DeleteSplit.osc");
+
+    //  8 elements max will divide the changeset into 4 changesets
+    changeset.setMaxSize(8);
+
+    QStringList expectedFiles;
+    expectedFiles.append(_inputPath + "DeleteSplit1.osc");
+    expectedFiles.append(_inputPath + "DeleteSplit2.osc");
+    expectedFiles.append(_inputPath + "DeleteSplit3.osc");
+    expectedFiles.append(_inputPath + "DeleteSplit4.osc");
+
+    QStringList updatedFiles;
+    updatedFiles.append(_inputPath + "DeleteSplit1.response.xml");
+    updatedFiles.append(_inputPath + "DeleteSplit2.response.xml");
+    updatedFiles.append(_inputPath + "DeleteSplit3.response.xml");
+    updatedFiles.append(_inputPath + "DeleteSplit4.response.xml");
+
+    long processed[] = { 8, 8, 16, 24 };
+
+    int index = 0;
+    while (!changeset.isDone())
+    {
+      ChangesetInfoPtr info1(new ChangesetInfo());
+      changeset.calculateChangeset(info1);
+      QString expectedText1 = FileUtils::readFully(expectedFiles[index]);
+      HOOT_STR_EQUALS(expectedText1, changeset.getChangesetString(info1, index + 1));
+
+      ChangesetInfoPtr info2(new ChangesetInfo());
+      changeset.calculateChangeset(info2);
+      QString expectedText2 = FileUtils::readFully(expectedFiles[index + 1]);
+      HOOT_STR_EQUALS(expectedText2, changeset.getChangesetString(info2, index + 2));
+
+      QString updatedText1 = FileUtils::readFully(updatedFiles[index]);
+      changeset.updateChangeset(updatedText1);
+      CPPUNIT_ASSERT_EQUAL(processed[index], changeset.getProcessedCount());
+
+      QString updatedText2 = FileUtils::readFully(updatedFiles[index + 1]);
+      changeset.updateChangeset(updatedText2);
+      CPPUNIT_ASSERT_EQUAL(processed[index + 1], changeset.getProcessedCount());
+
+      index += 2;
+    }
+    CPPUNIT_ASSERT_EQUAL(24L, changeset.getTotalElementCount());
+    CPPUNIT_ASSERT_EQUAL(23L, changeset.getTotalNodeCount());
+    CPPUNIT_ASSERT_EQUAL(1L, changeset.getTotalWayCount());
+    CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalRelationCount());
+    CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalCreateCount());
+    CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalModifyCount());
+    CPPUNIT_ASSERT_EQUAL(24L, changeset.getTotalDeleteCount());
   }
 };
 

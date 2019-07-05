@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/ops/RemoveElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
 
@@ -84,8 +84,8 @@ public:
     RelationPtr relation2 = map->getRelation(r2Id.getId());
 
     //remove all of one of the review relation's members
-    RemoveElementOp::removeElement(map, n3->getElementId());
-    RemoveElementOp::removeElement(map, n4->getElementId());
+    RemoveElementByEid::removeElement(map, n3->getElementId());
+    RemoveElementByEid::removeElement(map, n4->getElementId());
     relation2->removeElement(n3->getElementId());
     relation2->removeElement(n4->getElementId());
 
@@ -135,8 +135,8 @@ public:
     relation2->getTags().remove(MetadataTags::HootReviewMembers());
 
     //remove all of one of the review relation's members
-    RemoveElementOp::removeElement(map, n3->getElementId());
-    RemoveElementOp::removeElement(map, n4->getElementId());
+    RemoveElementByEid::removeElement(map, n3->getElementId());
+    RemoveElementByEid::removeElement(map, n4->getElementId());
     relation2->removeElement(n3->getElementId());
     relation2->removeElement(n4->getElementId());
 

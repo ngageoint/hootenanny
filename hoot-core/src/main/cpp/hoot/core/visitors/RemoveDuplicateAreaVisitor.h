@@ -61,8 +61,7 @@ public:
 
   RemoveDuplicateAreaVisitor();
 
-  virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const std::shared_ptr<Element>& e1) override;
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
   virtual QString getInitStatusMessage() const { return "Removing duplicate areas..."; }
 

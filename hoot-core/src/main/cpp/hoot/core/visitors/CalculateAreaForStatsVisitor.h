@@ -57,8 +57,8 @@ public:
 
   virtual void visit(const ConstElementPtr& e) override;
 
-  virtual QString getDescription() const
-  { return "Calculates feature area totals for map statistics"; }
+  // We don't use this outside of stats, so hide it from the info API.
+  virtual QString getDescription() const { return ""; }
 
 private:
 

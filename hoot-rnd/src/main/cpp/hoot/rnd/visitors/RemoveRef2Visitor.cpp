@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
 
 namespace hoot
 {
@@ -187,24 +188,21 @@ void RemoveRef2Visitor::setOsmMap(OsmMap* map)
   _ref1ToEid = v.getRef1ToEid();
 }
 
-void RemoveRef2Visitor::visit(const ConstElementPtr& e)
+void RemoveRef2Visitor::visit(const ElementPtr& e)
 {
   if (!_criterion)
   {
     throw IllegalArgumentException("You must specify a criterion before calling "
                                    "RemoveRef2Visitor.");
   }
-  ElementType type = e->getElementType();
-  long id = e->getId();
-  ElementPtr ee = _map->getElement(ElementId(type, id));
 
   // if e has a REF2 and meets the criterion
-  if (_hasRef2Tag(ee) && ref2CriterionSatisfied(ee))
+  if (_hasRef2Tag(e) && ref2CriterionSatisfied(e))
   {
     // go through each REF2 and evaluate for deletion
     for (int i = 0; i < _ref2Keys.size(); i++)
     {
-      _checkAndDeleteRef2(ee, _ref2Keys[i]);
+      _checkAndDeleteRef2(e, _ref2Keys[i]);
     }
   }
 }

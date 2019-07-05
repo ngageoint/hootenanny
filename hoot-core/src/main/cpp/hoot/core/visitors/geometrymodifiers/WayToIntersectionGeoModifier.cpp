@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayOp.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
 
 #include <algorithm>
@@ -130,7 +130,7 @@ void WayToIntersectionGeoModifier::processIntersections(OsmMap* pMap, const WayP
   // remove original way
   if (attached)
   {
-    RemoveWayOp removeOp(pWay->getId());
+    RemoveWayByEid removeOp(pWay->getId());
     OsmMapPtr mapPtr = pMap->shared_from_this();
     removeOp.apply(mapPtr);
   }

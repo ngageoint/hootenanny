@@ -67,7 +67,7 @@ _osmSchema(ConfigOptions().getOsmMapWriterSchema()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
 _numWritten(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
 }
 
@@ -280,7 +280,8 @@ void OsmXmlWriter::_writeMetadata(const Element *e)
       _writer->writeAttribute("version", QString::number(e->getVersion()));
     }
   }
-  if (e->getChangeset() != ElementData::CHANGESET_EMPTY)
+  if (e->getChangeset() != ElementData::CHANGESET_EMPTY &&
+      e->getId() > 0) //  Negative IDs are considered "new" elements and shouldn't have a changeset
   {
     _writer->writeAttribute("changeset", QString::number(e->getChangeset()));
   }
@@ -435,7 +436,7 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
   _bounds.expandToInclude(n->getX(), n->getY());
 
   _numWritten++;
-  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  if (_numWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
@@ -510,7 +511,7 @@ void OsmXmlWriter::writePartial(const ConstWayPtr& w)
   _writer->writeEndElement();
 
   _numWritten++;
-  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  if (_numWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
@@ -542,7 +543,7 @@ void OsmXmlWriter::writePartial(const ConstRelationPtr& r)
   _writer->writeEndElement();
 
   _numWritten++;
-  if (_numWritten % (_statusUpdateInterval * 10) == 0)
+  if (_numWritten % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
   }
