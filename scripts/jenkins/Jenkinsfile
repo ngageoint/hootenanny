@@ -9,7 +9,6 @@ pipeline {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
-        BOX_NAME = 'UNKNOWN'
     }
 
     triggers {
@@ -32,24 +31,11 @@ pipeline {
     }
 
     stages {
-        stage("Box Name") {
-            steps {
-                script {
-                    if (env.BRANCH_NAME.startsWith("release")) {
-                        BOX_NAME = "release"
-                    }
-                    else {
-                        BOX_NAME = "${params.Box}" 
-                    }
-                    echo "Box Name: '${BOX_NAME}'"
-                }
-            }
-        }
         stage("Destroy VM") {
             when { expression { return params.Destroy_VM } }
             steps {
                 // Existing VM may or may not exist depending on previous runs
-                sh "vagrant destroy -f ${BOX_NAME} || true"
+                sh "vagrant destroy -f ${params.Box} || true"
             }
         }
         stage("Setup") {
@@ -58,6 +44,12 @@ pipeline {
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 // Remove any screenshots from previous runs
                 sh '''
+                    export BRANCH_NAME=`git branch | cut -d ' ' -f 2`
+                    if echo "$BRANCH_NAME" | grep -q "3327"; then
+                        PREV_EC2_NAME="hoot_centos7_prov, 'CentOS7'"
+                        NEW_EC2_NAME="hoot_centos7_prov, 'release'"
+                        sed -i "s/${PREV_EC2_NAME}/${NEW_EC2_NAME}/g" Vagrantfile
+                    fi
                     git fetch --tags
                     git submodule update --init
                     cp -R ../software.ubuntu1404 software
@@ -69,10 +61,10 @@ pipeline {
             when { expression { return params.Hoot_provision } }
             steps {
                 // NOTE: Only installs hoot build dependencies
-                sh "vagrant up ${BOX_NAME} --provision-with software,hoot --provider aws"
+                sh "vagrant up ${params.Box} --provision-with software,hoot --provider aws"
                 script {
-                    SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${BOX_NAME} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
-                    SYS_URL = sh(returnStdout: true, script: "vagrant ssh-config ${BOX_NAME} | grep HostName | awk '{print \$2}'")
+                    SYS_VER = sh(returnStdout: true, script: "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/git/GitVersion.sh'")
+                    SYS_URL = sh(returnStdout: true, script: "vagrant ssh-config ${params.Box} | grep HostName | awk '{print \$2}'")
                     SYS_URL = SYS_URL.trim()
                     echo "System under test version ${SYS_VER}  http://${SYS_URL}:8080/hootenanny-id/"
                 }
@@ -86,7 +78,7 @@ pipeline {
                 }
             }
             steps {
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; ./scripts/TestConfigure.sh &> Hoot_Config_Test || { cat Hoot_Config_Test; false; }'"
             }
         }
         stage("Sonar Config") {
@@ -102,7 +94,7 @@ pipeline {
                 }
             }
             steps{
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 script {
@@ -117,37 +109,37 @@ pipeline {
             when { expression { return params.Build } }
             steps {
                 // Set build verbosity
-                sh "vagrant ssh ${BOX_NAME} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
+                sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
                 // Perform remainder of provisioning
-                sh "vagrant provision ${BOX_NAME} --provision-with build,EGD,tomcat"
+                sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
                 // Configure authentication and reboot tomcat
-                sh "vagrant ssh ${BOX_NAME} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
-                sh "vagrant provision ${BOX_NAME} --provision-with tomcat"
+                sh "vagrant ssh ${params.Box} -c 'sed -i 's,oauthRedirectURL=http://localhost:8080/,oauthRedirectURL=http://${SYS_URL}:8080/hootenanny-id/,' /var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf'"
+                sh "vagrant provision ${params.Box} --provision-with tomcat"
             }
         }
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel'"
             }
         }
         stage("Services Tests") {
             when { expression { return params.Services_tests } }
             steps {
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; make -sj`nproc` translations-test'"
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; make -sj`nproc` services-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
             }
         }
         stage("UI Hoot 1 Tests") {
             when { expression { return params.UI_hoot1_tests } }
             steps {
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; make -s ui-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui-test'"
             }
         }
         stage("UI Hoot 2 Tests") {
             when { expression { return params.UI_hoot2_tests } }
             steps {
-                sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; make -s ui2x-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -s ui2x-test'"
             }
         }
         stage("Sonar") {
@@ -162,7 +154,7 @@ pipeline {
                 }
             }
             steps{
-                    sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
                         -Dsonar.host.url=https://sonarcloud.io \
                         -Dsonar.organization=hootenanny \
                         -Dsonar.login=${env.SONAR_CLOUD_KEY} \
@@ -172,19 +164,26 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME.startsWith("PR-")) {
                         // PR scan will use github plugin
-                        sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
                     }
                     else {
                         if (env.BRANCH_NAME == "develop") {
-                            sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
+                            sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                         }
-                        sh "vagrant ssh ${BOX_NAME} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
+                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
                 }
             }
         }
     }
     post {
+        always {
+            script {
+                if (!env.BRANCH_NAME.startsWith("3327")) {
+                    // Always halt the VM to save resources, but don't destroy so devs can troubleshoot on failures
+                    sh "vagrant halt ${params.Box}"
+                }
+        }
         aborted {
             script {
                 notifySlack("ABORTED", "#builds_hoot")
@@ -198,7 +197,7 @@ pipeline {
                     slackSend channel: "#builds_hoot", message: "Release candidate version ${SYS_VER} ready for testing http://${SYS_URL}:8080/hootenanny-id/"
                 } else {
                     // If all tests passed, clean everything up
-                    sh "vagrant destroy -f ${BOX_NAME}"
+                    sh "vagrant destroy -f ${params.Box}"
                     cleanWs()
                 }
             }
@@ -207,7 +206,7 @@ pipeline {
             script {
                 notifySlack("FAILURE", "#builds_hoot")
                 // Copy over any UI failure screenshots and send to slack
-                sh "vagrant scp ${BOX_NAME}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
             }
         }

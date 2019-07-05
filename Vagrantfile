@@ -66,7 +66,7 @@ Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 8096, host: mergePort
   end
 
-  def aws_provider(config, os, instance_name)
+  def aws_provider(config, os)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
@@ -78,8 +78,8 @@ Vagrant.configure(2) do |config|
         aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
       end
 
-      $security_grp = ENV['AWS_SECURITY_GROUP']
       if ENV.key?('AWS_SECURITY_GROUP')
+        $security_grp = ENV['AWS_SECURITY_GROUP']
         if $security_grp.is_a?(String) and $security_grp.include? ',' and $security_grp.split(',').length > 0
             aws.security_groups = $security_grp.split(',')
         else
@@ -151,23 +151,9 @@ Vagrant.configure(2) do |config|
 
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'CentOS7', 'CentOS7')
+    aws_provider(hoot_centos7_prov, 'CentOS7')
   end
   
-  # To lower aws expenses, a daily cleanup of hootenanny lingering instances 
-  # are terminated. Although the hootenanny release at times needs to persist, 
-  # so the release box shall be setup the same way as the 'default' box,
-  # but configured with a different name to prevent the VM from being terminated 
-  # during the manual cleanup process
-  config.vm.define "release", autostart: false  do |hoot_centos7_release|
-    hoot_centos7_release.vm.box = "hoot/centos7-hoot"
-    hoot_centos7_release.vm.hostname = "centos7-hoot-release"
-
-    mount_shares(hoot_centos7_release)
-    set_provisioners(hoot_centos7_release)
-    aws_provider(hoot_centos7_release, 'CentOS7', 'release')
-  end
-
   # Centos7 box - not preprovisioned
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
@@ -179,7 +165,7 @@ Vagrant.configure(2) do |config|
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
-    aws_provider(hoot_centos7, 'CentOS7', 'CentOS7')
+    aws_provider(hoot_centos7, 'CentOS7')
   end
 
   # Centos7 - Hoot core ONLY. No UI
