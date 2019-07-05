@@ -40,16 +40,18 @@ pipeline {
         }
         stage("Setup") {
             steps {
-
-                // Make sure we have the tags info because figuring out the version is required in the build process
-                // Remove any screenshots from previous runs
-                sh '''
-                    export BRANCH_NAME=`git branch | cut -d ' ' -f 2`
-                    if echo "$BRANCH_NAME" | grep -q "3327"; then
+                script {
+                    if (env.BRANCH_NAME == "3327") {
+                        sh '''
                         PREV_EC2_NAME="hoot_centos7_prov, 'CentOS7'"
                         NEW_EC2_NAME="hoot_centos7_prov, 'release'"
                         sed -i "s/${PREV_EC2_NAME}/${NEW_EC2_NAME}/g" Vagrantfile
-                    fi
+                        '''
+                     }
+                }
+                // Make sure we have the tags info because figuring out the version is required in the build process
+                // Remove any screenshots from previous runs
+                sh '''
                     git fetch --tags
                     git submodule update --init
                     cp -R ../software.ubuntu1404 software
