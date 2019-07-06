@@ -66,7 +66,7 @@ Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 8096, host: mergePort
   end
 
-  def aws_provider(config, os, instance_name)
+  def aws_provider(config, os)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
@@ -88,7 +88,7 @@ Vagrant.configure(2) do |config|
       end
 
       aws.tags = {
-        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{instance_name.downcase}"),
+        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
         'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
       }
 
@@ -151,7 +151,7 @@ Vagrant.configure(2) do |config|
 
     mount_shares(hoot_centos7_prov)
     set_provisioners(hoot_centos7_prov)
-    aws_provider(hoot_centos7_prov, 'CentOS7', 'CentOS7')
+    aws_provider(hoot_centos7_prov, 'CentOS7')
   end
   
   # Centos7 box - not preprovisioned
@@ -165,7 +165,7 @@ Vagrant.configure(2) do |config|
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
-    aws_provider(hoot_centos7, 'CentOS7', 'CentOS7')
+    aws_provider(hoot_centos7, 'CentOS7')
   end
 
   # Centos7 - Hoot core ONLY. No UI

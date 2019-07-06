@@ -43,8 +43,8 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME.startsWith("release")) {
                         sh '''
-                        PREV_EC2_NAME="hoot_centos7_prov, 'CentOS7', 'CentOS7'"
-                        NEW_EC2_NAME="hoot_centos7_prov, 'CentOS7', 'release'"
+                        PREV_EC2_NAME="jenkins-hootenanny-#{os.downcase}"
+                        NEW_EC2_NAME="jenkins-hootenanny-#{os.downcase}-release"
                         sed -i "s/${PREV_EC2_NAME}/${NEW_EC2_NAME}/g" Vagrantfile
                         '''
                      }
