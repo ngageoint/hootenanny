@@ -81,7 +81,6 @@ _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0)
 {
-  setConfiguration(conf());
 }
 
 MapCropper::MapCropper(const Envelope& envelope) :
