@@ -72,12 +72,5 @@ if ! grep -iw --quiet $DB_NAME <<< $DBLIST; then
     # TODO: Add the liquibase commands to configure the database.
 fi
 
-if ! grep -iw --quiet $WFS_DB_NAME <<< $DBLIST; then
-    echo "  # Creating WFS Services Database called $WFS_DB_NAME on $DB_HOST"
-    createdb $AUTH $WFS_DB_NAME --owner=$DB_USER
-    psql $AUTH -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='$WFS_DB_NAME'" > /dev/null
-    psql $AUTH -d $WFS_DB_NAME -c 'create extension postgis;' > /dev/null
-fi
-
 popd >/dev/null
 exit
