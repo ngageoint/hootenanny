@@ -413,7 +413,7 @@ public:
     //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
-    Log::WarningLevel loglLevel = Log::getInstance().getLevel();
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
     Log::getInstance().setLevel(Log::Error);
 
     int ctr = 0;
@@ -434,7 +434,7 @@ public:
       ctr++;
       CPPUNIT_ASSERT(ctr < 5);  //to prevent an infinite loop if hasMoreElements fails
     }
-    Log::getInstance().setLevel(loglLevel);
+    Log::getInstance().setLevel(logLevel);
     reader.finalizePartial();
 
     CPPUNIT_ASSERT_EQUAL(4, ctr);
@@ -454,7 +454,7 @@ public:
     //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
-    Log::WarningLevel loglLevel = Log::getInstance().getLevel();
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
     Log::getInstance().setLevel(Log::Error);
 
     int ctr = 0;
@@ -478,14 +478,13 @@ public:
       ctr++;
       CPPUNIT_ASSERT(ctr < 5);  //to prevent an infinite loop if hasMoreElements fails
     }
-    Log::getInstance().setLevel(loglLevel);
+    Log::getInstance().setLevel(logLevel);
     reader.finalizePartial();
 
     CPPUNIT_ASSERT_EQUAL(4, ctr);
   }
 
-  void runHasMoreElementsTest(
-      void )
+  void runHasMoreElementsTest()
   {
     OsmPbfReader reader1;
 
@@ -505,8 +504,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(reader3.hasMoreElements(), false);
   }
 
-  void runReadNextElementTest(
-      void )
+  void runReadNextElementTest()
   {
     OsmPbfReader reader(QString("test-files/ToyTestA.osm.pbf"));
 
@@ -548,7 +546,7 @@ public:
     //Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
-    Log::WarningLevel loglLevel = Log::getInstance().getLevel();
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
     Log::getInstance().setLevel(Log::Error);
     reader1.read(map1);
 
@@ -567,7 +565,7 @@ public:
     reader2.setPermissive(false);
 
     reader2.read(map2);
-    Log::getInstance().setLevel(loglLevel);
+    Log::getInstance().setLevel(logLevel);
 
     CPPUNIT_ASSERT_EQUAL(false, reader2.getSortedTypeThenId());
     CPPUNIT_ASSERT_EQUAL(6, (int)map2->getNodes().size());

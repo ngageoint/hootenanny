@@ -75,10 +75,10 @@ public:
   {
     //  Suppress the warning from the OsmXmlReader about missing nodes for ways by temporarily changing
     //  the log level.  We expect the nodes to be missing since the Boston data has issues
-    Log::WarningLevel loglLevel = Log::getInstance().getLevel();
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
     Log::getInstance().setLevel(Log::Error);
     runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson");
-    Log::getInstance().setLevel(loglLevel);
+    Log::getInstance().setLevel(logLevel);
   }
 
   void runObjectGeoJsonTest()
