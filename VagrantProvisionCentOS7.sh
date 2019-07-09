@@ -157,7 +157,6 @@ sudo yum -y install \
     osmosis \
     java-1.8.0-openjdk \
     perl-XML-LibXML \
-    hoot-postgis24_95 \
     libpostal-data \
     libpostal-devel \
     postgresql95 \

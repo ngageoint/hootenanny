@@ -40,7 +40,15 @@ pipeline {
         }
         stage("Setup") {
             steps {
-
+                script {
+                    if (env.BRANCH_NAME.startsWith("release")) {
+                        sh '''
+                        PREV_EC2_NAME="jenkins-hootenanny-#{os.downcase}"
+                        NEW_EC2_NAME="jenkins-hootenanny-#{os.downcase}-release"
+                        sed -i "s/${PREV_EC2_NAME}/${NEW_EC2_NAME}/g" Vagrantfile
+                        '''
+                     }
+                }
                 // Make sure we have the tags info because figuring out the version is required in the build process
                 // Remove any screenshots from previous runs
                 sh '''
@@ -172,8 +180,12 @@ pipeline {
     }
     post {
         always {
-            // Always halt the VM to save resources, but don't destroy so devs can troubleshoot on failures
-            sh "vagrant halt ${params.Box}"
+            script {
+                if (!env.BRANCH_NAME.startsWith("release")) {
+                    // Always halt the VM to save resources, but don't destroy so devs can troubleshoot on failures
+                    sh "vagrant halt ${params.Box}"
+                }
+            }
         }
         aborted {
             script {
