@@ -320,26 +320,23 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
     }
 
-    // find outline ways that are exact duplicates of the original building ways
-    vector<long> removeWayIds;
-
+    // Find outline ways that are exact duplicates of the original building ways and update their
+    // tags.
     if (pOutlineElement->getElementType() == ElementType::Way)
     {
       WayPtr pOutlineWay = std::dynamic_pointer_cast<Way>(pOutlineElement);
-      _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pBuilding);
+      _updateMultipolyWayMembers(pOutlineWay, buildingWayLookup);
     }
     else if (pOutlineElement->getElementType() == ElementType::Relation)
     {
       const RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(pOutlineElement);
-
       foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
       {
         ElementPtr pOutlineMember = _map->getElement(outlineEntry.getElementId());
-
         if (pOutlineMember->getElementType() == ElementType::Way)
         {
           WayPtr pOutlineWay = std::dynamic_pointer_cast<Way>(pOutlineMember);
-          _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pOutlineRelation);
+          _updateMultipolyWayMembers(pOutlineWay, buildingWayLookup);
         }
       }
     }
@@ -352,9 +349,8 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
   LOG_TRACE("Output building: " << pBuilding);
 }
 
-void BuildingOutlineUpdateOp::_findOutlineDuplicate(
-  WayPtr& pOutlineWay, QHash<RelationData::Entry,WayPtr>& buildingWayLookup,
-  vector<long>& /*removeWayIds*/, const RelationPtr& /*pOutlineHost*/)
+void BuildingOutlineUpdateOp::_updateMultipolyWayMembers(
+  WayPtr& pOutlineWay, QHash<RelationData::Entry,WayPtr>& buildingWayLookup)
 {
   // see if it's a duplicate of any building
   foreach (WayPtr pBuildingWay, buildingWayLookup)
@@ -366,9 +362,8 @@ void BuildingOutlineUpdateOp::_findOutlineDuplicate(
 
       if (sourceNodes == wayNodes)
       {
-        // replace the outline way with the building way and mark the outline way for removal
-        //removeWayIds.push_back(pOutlineWay->getId());
-        //pOutlineHost->replaceElement(pOutlineWay, pBuildingWay);
+        // Copy all the tags from the building part ways we already updated to the multipoly way
+        // members except the building part tag.
         pOutlineWay->setTags(pBuildingWay->getTags());
         pOutlineWay->getTags().remove(MetadataTags::BuildingPart());
       }

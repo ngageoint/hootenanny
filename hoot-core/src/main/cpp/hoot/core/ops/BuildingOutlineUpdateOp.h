@@ -95,9 +95,8 @@ private:
    */
   void _mergeNodes(const std::shared_ptr<Element>& changed,
                    const RelationPtr& reference);
-  void _findOutlineDuplicate(
-    WayPtr& pOutlineWay, QHash<RelationData::Entry,WayPtr>& buildingWayLookup,
-    std::vector<long>& removeWayIds, const RelationPtr& pOutlineHost);
+  void _updateMultipolyWayMembers(
+    WayPtr& pOutlineWay, QHash<RelationData::Entry,WayPtr>& buildingWayLookup);
 
   void _deleteBuildingRelations();
 };
