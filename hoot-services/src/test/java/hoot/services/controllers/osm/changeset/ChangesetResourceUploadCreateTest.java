@@ -1178,36 +1178,33 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-
-    @Test()
+    @Test
     @Category(UnitTest.class)
     public void testUploadModifyRelationWithNegativeIdReference() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
+        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
+        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
+        Set<Long> relationIds = OSMTestUtils.createTestRelationsNegative(changesetId, nodeIds, wayIds);
+        Long[] relationIdsArr = relationIds.toArray(new Long[relationIds.size()]);
 
         // Do a modify upload where a member is referencing a relation with a negative id.
         // Should pass since we allow negative ids in the hoot database now
         Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
-            .queryParam("mapId", String.valueOf(mapId))
-            .request(MediaType.TEXT_XML)
-            .post(Entity.entity(
-                "<osmChange generator=\"iD\" version=\"0.6\">" +
-                    "<create/>" +
-                    "<modify>" +
-                        "<relation changeset=\"934\" id=\"-1\" version=\"1\">" +
-                            "<member ref=\"6096477029\" role=\"reviewee\" type=\"node\"/>"+
-                            "<member ref=\"-6\" role=\"reviewee\" type=\"relation\"/>" +
-                            "<tag k=\"hoot:review:members\" v=\"2\"/>" +
-                            "<tag k=\"hoot:review:needs\" v=\"no\"/>"+
-                            "<tag k=\"hoot:review:note\" v=\"Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m.\"/>" +
-                            "<tag k=\"hoot:review:score\" v=\"1\"/>" +
-                            "<tag k=\"hoot:review:sort_order\" v=\"2\"/>" +
-                            "<tag k=\"hoot:review:type\" v=\"POI to Polygon\"/>" +
-                            "<tag k=\"type\" v=\"review\"/>" +
-                        "</relation>" +
-                    "</modify>" +
-                    "<delete if-unused=\"true\"/>" +
-                "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+                .queryParam("mapId", String.valueOf(mapId))
+                .request(MediaType.TEXT_XML)
+                .post(Entity.entity(
+                    "<osmChange version=\"0.3\" generator=\"iD\">" +
+                        "<create>" +
+                            "<relation id=\"-1\" version=\"0\" changeset=\"" + changesetId + "\" >" +
+                                "<member ref=\"" + nodeIdsArr[0] + "\" role=\"role1\" type=\"node\"/>"+
+                                "<member ref=\"" + relationIdsArr[0] + "\" role=\"role1\" type=\"relation\"/>" +
+                            "</relation>" +
+                        "</create>" +
+                        "<modify/>" +
+                        "<delete if-unused=\"true\"/>" +
+                    "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
 
         assertNotNull(responseData);
     }

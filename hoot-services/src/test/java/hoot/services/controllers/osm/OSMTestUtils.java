@@ -253,6 +253,27 @@ public class OSMTestUtils {
 		return relationIds;
 	}
 
+	public static Set<Long> createTestRelationsNegative(long changesetId, Set<Long> nodeIds, Set<Long> wayIds) throws Exception {
+		Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+		Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
+		List<RelationMember> members = new ArrayList<>();
+
+		members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+		members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role3"));
+		members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
+		members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
+		Map<String, String> tags = new HashMap<>();
+		tags.put("key 1", "val 1");
+		insertNewRelation(-6, changesetId, mapId, members, tags);
+		long firstRelationId = -6;
+		Set<Long> relationIds = new LinkedHashSet<>();
+		relationIds.add(firstRelationId);
+		tags.clear();
+		members.clear();
+
+		return relationIds;
+	}
+
 	// This is similar to createTestRelations but without any ways involved to
 	// support certain tests.
 	public static Set<Long> createTestRelationsNoWays(long changesetId, Set<Long> nodeIds) throws Exception {
