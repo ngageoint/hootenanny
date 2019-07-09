@@ -298,7 +298,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     if (_removeBuildingRelations)
     {      
       // only copy tags to the outline element if we are removing the building relations
-      pOutlineElement->setTags(pBuilding->getTags());;
+      pOutlineElement->setTags(pBuilding->getTags());
 
       // We don't need the relation "type" tag.
       pOutlineElement->getTags().remove("type");
@@ -314,8 +314,8 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       // "name" tags
       if (buildingTags.contains("name") && buildingTags.contains("building") )
       {
-        pOutlineElement->setTag( "name", buildingTags["name"] );
-        pOutlineElement->setTag( "building", buildingTags["building"] );
+        pOutlineElement->setTag("name", buildingTags["name"]);
+        pOutlineElement->setTag("building", buildingTags["building"]);
       }
 
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
@@ -335,11 +335,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     else if (pOutlineElement->getElementType() == ElementType::Relation)
     {
       const RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(pOutlineElement);
-
       foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
       {
         ElementPtr pOutlineMember = _map->getElement(outlineEntry.getElementId());
-
         if (pOutlineMember->getElementType() == ElementType::Way)
         {
           ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineMember);

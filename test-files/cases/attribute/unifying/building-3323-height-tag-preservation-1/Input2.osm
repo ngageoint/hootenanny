@@ -56,6 +56,7 @@
     <nd ref='2737351996' />
     <nd ref='2737352000' />
     <nd ref='2737352005' />
+    <tag k='name' v='Building 7' />
     <tag k='building' v='residential' />
   </way>
 </osm>

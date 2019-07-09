@@ -58,27 +58,10 @@
     <tag k='error:circular' v='15' />
     <tag k='source:datetime' v='2017-03-28T20:30:03Z' />
   </way>
-  <relation id='-1960707' action='modify' visible='true'>
-    <tag k='error:circular' v='15' />
-    <tag k='source:datetime' v='2017-03-28T20:30:03Z' />
-    <tag k='type' v='multilinestring' />
-  </relation>
-  <relation id='-1960708' action='modify' visible='true'>
-    <tag k='building' v='yes' />
-    <tag k='error:circular' v='15' />
-    <tag k='source:datetime' v='2017-03-28T20:30:03Z' />
-    <tag k='type' v='multipolygon' />
-  </relation>
-  <relation id='7116723' action='modify' timestamp='2017-03-28T20:30:10Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746'>
-    <member type='relation' ref='-1960707' role='outer' />
-    <tag k='building' v='yes' />
-    <tag k='error:circular' v='15' />
-    <tag k='source:datetime' v='2017-03-28T20:30:10Z' />
-    <tag k='type' v='multipolygon' />
-  </relation>
   <relation id='7116726' timestamp='2017-03-28T20:30:10Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746'>
     <member type='way' ref='483303750' role='inner' />
     <member type='way' ref='483303751' role='outer' />
+    <tag k='name' v='Building 1' />
     <tag k='building' v='yes' />
     <tag k='error:circular' v='15' />
     <tag k='source:datetime' v='2017-03-28T20:30:10Z' />

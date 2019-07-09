@@ -49,6 +49,7 @@
     <nd ref='-1031809' />
     <nd ref='-1031807' />
     <nd ref='-1031831' />
+    <tag k='name' v='Building 1' />
     <tag k='building' v='yes' />
     <tag k='ele' v='169' />
   </way>
@@ -58,6 +59,7 @@
     <nd ref='-1031837' />
     <nd ref='-1031835' />
     <nd ref='-1031841' />
+    <tag k='name' v='Building 2' />
     <tag k='building' v='yes' />
     <tag k='ele' v='171' />
   </way>
@@ -67,6 +69,7 @@
     <nd ref='-1031845' />
     <nd ref='-1031843' />
     <nd ref='-1031849' />
+    <tag k='name' v='Building 3' />
     <tag k='building' v='yes' />
     <tag k='ele' v='169' />
   </way>
@@ -76,6 +79,7 @@
     <nd ref='-1031853' />
     <nd ref='-1031851' />
     <nd ref='-1031857' />
+    <tag k='name' v='Building 4' />
     <tag k='building' v='yes' />
     <tag k='ele' v='170' />
   </way>
@@ -85,6 +89,7 @@
     <nd ref='-1031861' />
     <nd ref='-1031859' />
     <nd ref='-1031865' />
+    <tag k='name' v='Building 5' />
     <tag k='building' v='yes' />
     <tag k='ele' v='172' />
   </way>
@@ -94,6 +99,7 @@
     <nd ref='-1031869' />
     <nd ref='-1031867' />
     <nd ref='-1031873' />
+    <tag k='name' v='Building 6' />
     <tag k='building' v='yes' />
     <tag k='ele' v='171' />
   </way>
