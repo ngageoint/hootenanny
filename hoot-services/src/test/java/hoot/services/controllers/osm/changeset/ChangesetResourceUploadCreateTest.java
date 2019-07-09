@@ -1178,49 +1178,38 @@ public class ChangesetResourceUploadCreateTest extends OSMResourceTestAbstract {
         }
     }
 
-    // haven't been able to find any good way to handle this yet, so I'm
-    // choosing not to for now
-    @Test(expected = ClientErrorException.class)
+
+    @Test()
     @Category(UnitTest.class)
-    public void testUploadCreateRelationWhereRelationReferencesAnotherRelationThatComesAfterIt() throws Exception {
+    public void testUploadModifyRelationWithNegativeIdReference() throws Exception {
         BoundingBox originalBounds = OSMTestUtils.createStartingTestBounds();
         long changesetId = OSMTestUtils.createTestChangeset(originalBounds);
-        Set<Long> nodeIds = OSMTestUtils.createTestNodes(changesetId, originalBounds);
-        Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
-        Set<Long> wayIds = OSMTestUtils.createTestWays(changesetId, nodeIds);
-        Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
-        Set<Long> relationIds = OSMTestUtils.createTestRelations(changesetId, nodeIds, wayIds);
 
-        // Try to create a relation that references a relation that is
-        // referenced after it in the request.  This isn't supported by the server, so the request should fail and no
-        // data in the system should be modified.
-        try {
-            target("api/0.6/changeset/" + changesetId + "/upload")
-                .queryParam("mapId", String.valueOf(mapId))
-                .request(MediaType.TEXT_XML)
-                .post(Entity.entity(
-                     "<osmChange version=\"0.3\" generator=\"iD\">" +
-                         "<create>" +
-                             "<relation id=\"-1\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                 "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                 "<member type=\"relation\" role=\"role1\" ref=\"-2\"></member>" +
-                             "</relation>" +
-                             "<relation id=\"-2\" version=\"0\" changeset=\"" + changesetId + "\" >" +
-                                 "<member type=\"way\" role=\"role1\" ref=\"" + wayIdsArr[0] + "\"></member>" +
-                                 "<member type=\"node\" role=\"role1\" ref=\"" + nodeIdsArr[0] + "\"></member>" +
-                             "</relation>" +
-                         "</create>" +
-                         "<modify/>" +
-                         "<delete if-unused=\"true\"/>" +
-                     "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
-        }
-        catch (ClientErrorException e) {
-            Response r = e.getResponse();
-            assertEquals(Response.Status.PRECONDITION_FAILED, Response.Status.fromStatusCode(r.getStatus()));
-            assertTrue(r.readEntity(String.class).contains("does not exist for relation"));
-            OSMTestUtils.verifyTestDataUnmodified(originalBounds, changesetId, nodeIds, wayIds, relationIds);
-            throw e;
-        }
+        // Do a modify upload where a member is referencing a relation with a negative id.
+        // Should pass since we allow negative ids in the hoot database now
+        Document responseData = target("api/0.6/changeset/" + changesetId + "/upload")
+            .queryParam("mapId", String.valueOf(mapId))
+            .request(MediaType.TEXT_XML)
+            .post(Entity.entity(
+                "<osmChange generator=\"iD\" version=\"0.6\">" +
+                    "<create/>" +
+                    "<modify>" +
+                        "<relation changeset=\"934\" id=\"-1\" version=\"1\">" +
+                            "<member ref=\"6096477029\" role=\"reviewee\" type=\"node\"/>"+
+                            "<member ref=\"-6\" role=\"reviewee\" type=\"relation\"/>" +
+                            "<tag k=\"hoot:review:members\" v=\"2\"/>" +
+                            "<tag k=\"hoot:review:needs\" v=\"no\"/>"+
+                            "<tag k=\"hoot:review:note\" v=\"Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m.\"/>" +
+                            "<tag k=\"hoot:review:score\" v=\"1\"/>" +
+                            "<tag k=\"hoot:review:sort_order\" v=\"2\"/>" +
+                            "<tag k=\"hoot:review:type\" v=\"POI to Polygon\"/>" +
+                            "<tag k=\"type\" v=\"review\"/>" +
+                        "</relation>" +
+                    "</modify>" +
+                    "<delete if-unused=\"true\"/>" +
+                "</osmChange>", MediaType.TEXT_XML_TYPE), Document.class);
+
+        assertNotNull(responseData);
     }
 
     @Test(expected = BadRequestException.class)
