@@ -129,10 +129,10 @@ _removeBuildingRelations(false)
 {
 }
 
-void BuildingOutlineUpdateOp::setConfiguration(const Settings& conf)
+void BuildingOutlineUpdateOp::setConfiguration(const Settings& /*conf*/)
 {
   _removeBuildingRelations =
-    ConfigOptions(conf).getBuildingOutlineUpdateOpRemoveBuildingRelations();
+    /*ConfigOptions(conf).getBuildingOutlineUpdateOpRemoveBuildingRelations()*/false;
 }
 
 void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
@@ -319,37 +319,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       }
 
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
-    }
-
-    // TODO: removing this duplicate removal section fixes the JOSM repeated roles validation error
-    // but breaks building height tag preservation - #3323
-
-    // find outline ways that are exact duplicates of the original building ways
-    vector<long> removeWayIds;
-
-    if (pOutlineElement->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineElement);
-      _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pBuilding);
-    }
-    else if (pOutlineElement->getElementType() == ElementType::Relation)
-    {
-      const RelationPtr pOutlineRelation = std::dynamic_pointer_cast<Relation>(pOutlineElement);
-      foreach (RelationData::Entry outlineEntry, pOutlineRelation->getMembers())
-      {
-        ElementPtr pOutlineMember = _map->getElement(outlineEntry.getElementId());
-        if (pOutlineMember->getElementType() == ElementType::Way)
-        {
-          ConstWayPtr pOutlineWay = std::dynamic_pointer_cast<const Way>(pOutlineMember);
-          _findOutlineDuplicate(pOutlineWay, buildingWayLookup, removeWayIds, pOutlineRelation);
-        }
-      }
-    }
-
-    // remove replaced outline ways
-    foreach (long id, removeWayIds)
-    {
-      RemoveWayByEid::removeWayFully(_map, id);
     }
   }
   else
