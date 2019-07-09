@@ -79,7 +79,12 @@ Vagrant.configure(2) do |config|
       end
 
       if ENV.key?('AWS_SECURITY_GROUP')
-        aws.security_groups = ENV['AWS_SECURITY_GROUP']
+        $security_grp = ENV['AWS_SECURITY_GROUP']
+        if $security_grp.is_a?(String) and $security_grp.include? ',' and $security_grp.split(',').length > 0
+            aws.security_groups = $security_grp.split(',')
+        else
+            aws.security_groups = $security_grp
+        end
       end
 
       aws.tags = {
@@ -148,7 +153,7 @@ Vagrant.configure(2) do |config|
     set_provisioners(hoot_centos7_prov)
     aws_provider(hoot_centos7_prov, 'CentOS7')
   end
-
+  
   # Centos7 box - not preprovisioned
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     hoot_centos7.vm.box = "hoot/centos7-minimal"
