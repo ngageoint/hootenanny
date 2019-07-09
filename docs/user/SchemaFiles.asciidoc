@@ -131,7 +131,7 @@ The actual highway relationships can be viewed in the image below. Blue lines
 represent `isA` relationships and green lines represent `similarTo`
 relationships:
 
-image::user/images/HighwaySchema.jpg[]
+image::images/HighwaySchema.jpg[]
 
 There are many more intricacies to the schema file format and how the internal
 structure is built. If you would like more information please post to the GitHub
