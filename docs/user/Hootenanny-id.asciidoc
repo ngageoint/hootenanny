@@ -240,6 +240,8 @@ box region by either drawing the bounding box or using the visual extent as your
 you can submit the job for running. After the job has completed you should see a folder with the name of
 grail_*coordinates for your bounding box* which should contain a filed named "reference" (the Rails Port data)
 and a file named "secondary" (the OSM Overpass data).
+These datasets can be used to run conflation jobs, step through review in the merged layer, then derive a changeset
+and upload it to the remote rails port.
 
 [[Hoot_grailPull_Map]]
 .Grail Pull directory contains pulled files in a directory labeled grail_*coordinate for bounding box*.
@@ -249,12 +251,14 @@ image::images/id/GrailPull.png[scaledwidth="75%"]
 
 Under the tools section in the Hootenanny UI there will be a section labeled "Grail Tools". Under that
 you should see the option for "Derive Differential Changeset". This tool is used for gathering only the data
-in OSM Overpass that isn't already in the Rails Port and pushing it to the Rails Port so it will only consist of adds.
-There will not be any files generated that you can view in the UI because this service will take the OSM Overpass and
-the Rails Port data from the database and calculate the differential on the server without saving the datasets.
+in OSM Overpass that isn't already in the Rails Port and pushing it to the Rails Port so it will only consist of adds. There will not
+be any files generated that you can view in the UI because this service will take the OSM Overpass and the Rails Port data from
+the database and calculate the differential on the server without saving the datasets. While the datasets will not
+be saved, an osm file will be generated on the server.
 In the jobs panel you can find the Derive Changeset job and under the actions there will be a cloud icon with an up arrow.
-This is what you use to upload the differential results to the Rails Port, but before doing that you can view stats on
-the differential upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations.
+This is what you use to upload the differential results to the Rails Port, but before doing that you can view stats on the differential
+upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations.
+The differential will not contain any secondary features involved in a review.
 
 [[Hoot_grailDifferential_Map]]
 .After Derive Differential Changeset it shows up in the jobs panel with a cloud icon in the actions.
