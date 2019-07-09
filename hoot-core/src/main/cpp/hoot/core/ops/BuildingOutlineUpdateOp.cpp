@@ -307,10 +307,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       LOG_TRACE("Marking building: " << pBuilding->getElementId() << " for deletion...");
       _buildingRelationIds.insert(pBuilding->getElementId());
     }
-    else
+    else if (pBuilding->getType() != MetadataTags::RelationMultiPolygon())
     {
       Tags buildingTags = pBuilding->getTags();
-
       // to preserve naming of relation buildings in JOSM we copy the building's "building" and
       // "name" tags
       if (buildingTags.contains("name") && buildingTags.contains("building") )
@@ -318,7 +317,6 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
         pOutlineElement->setTag("name", buildingTags["name"]);
         pOutlineElement->setTag("building", buildingTags["building"]);
       }
-
       pBuilding->addElement(MetadataTags::RoleOutline(), pOutlineElement);
     }
 
