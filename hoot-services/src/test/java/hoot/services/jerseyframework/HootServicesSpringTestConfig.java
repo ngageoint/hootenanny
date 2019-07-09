@@ -60,7 +60,7 @@ import hoot.services.job.JobProcessorImplStub;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"hoot.services"},
 excludeFilters = @ComponentScan.Filter(value = HootServicesSpringConfig.class, type = FilterType.ASSIGNABLE_TYPE))
-@PropertySource("classpath:db/db.properties")
+@PropertySource("file:${HOOT_DB_PROPERTIES}")
 @ActiveProfiles("test")
 public class HootServicesSpringTestConfig {
 

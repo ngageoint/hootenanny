@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"hoot.services"})
-@PropertySource("classpath:db/db.properties")
+@PropertySource("file:${HOOT_DB_PROPERTIES}")
 @Profile("production")
 public class HootServicesSpringConfig {
 

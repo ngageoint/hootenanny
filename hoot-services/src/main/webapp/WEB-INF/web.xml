@@ -10,7 +10,7 @@
 	<param-name>contextConfigLocation</param-name>
 	<param-value>
 		classpath:applicationContext.xml
-		classpath:security-applicationContext.xml
+                file:${HOOT_SECURITY_APPCONTEXT}
 		/WEB-INF/spring/*.xml
     </param-value>
     </context-param>

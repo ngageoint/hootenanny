@@ -14,11 +14,11 @@ endif
 
 default: build
 
-src/main/resources/db/db.properties: src/main/resources/db/db.properties.in ../conf/database/DatabaseConfig.sh
-	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/db/db.properties.in src/main/resources/db/db.properties
+../conf/database/db.properties: src/main/resources/db/db.properties.in ../conf/database/DatabaseConfig.sh
+	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/db/db.properties.in ../conf/database/db.properties
 
-src/main/resources/conf/hoot-services.conf: src/main/resources/conf/hoot-services.conf.in ../conf/database/DatabaseConfig.sh
-	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/conf/hoot-services.conf.in src/main/resources/conf/hoot-services.conf
+../conf/services/hoot-services.conf: src/main/resources/conf/hoot-services.conf.in ../conf/database/DatabaseConfig.sh
+	../scripts/ReplaceEnvironmentVariables.sh src/main/resources/conf/hoot-services.conf.in ../conf/services/hoot-services.conf
 
 src/main/webapp/META-INF/context.xml: src/main/webapp/META-INF/context.xml.in
 	../scripts/ReplaceEnvironmentVariables.sh src/main/webapp/META-INF/context.xml.in src/main/webapp/META-INF/context.xml
@@ -26,7 +26,7 @@ src/main/webapp/META-INF/context.xml: src/main/webapp/META-INF/context.xml.in
 build-info:
 	../scripts/GenerateBuildInfoFiles.sh
 
-config: src/main/resources/db/db.properties src/main/resources/conf/hoot-services.conf src/main/webapp/META-INF/context.xml
+config: ../conf/database/db.properties ../conf/services/hoot-services.conf src/main/webapp/META-INF/context.xml
 
 run-liquibase:
 	rm -f ./src/main/resources/db/liquibase.properties
@@ -46,10 +46,10 @@ docs: config
 
 clean: config clean-coverage
 	../scripts/maven/mvn-build $(MVN_QUIET) clean
-	rm -rf ./db.properties
+	rm -rf ../conf/database/db.properties
 	rm -rf ./src/main/java/hoot/services/db2
 	rm -rf ./src/main/resources/db/liquibase.properties
-	rm -rf ./src/main/resources/conf/hoot-services.conf
+	rm -rf ../conf/services/hoot-services.conf
 	rm -rf ./src/main/resources/db/db.properties
 	rm -rf ./src/main/webapp/META-INF/context.xml
 	rm -rf ./target/site/apidocs

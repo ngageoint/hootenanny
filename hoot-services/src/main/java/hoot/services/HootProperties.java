@@ -27,6 +27,7 @@
 package hoot.services;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -150,13 +151,14 @@ public final class HootProperties {
     static {
         try {
             Properties appProperties = new Properties();
-            try (InputStream propsStrm = HootProperties.class.getClassLoader()
-                    .getResourceAsStream("conf/hoot-services.conf")) {
-                appProperties.load(propsStrm);
+            File hootServicesFile = new File(System.getenv("HOOT_SERVICES_CONF"));
+            try (InputStream propStrm = new FileInputStream(hootServicesFile)) {
+                appProperties.load(propStrm);
             }
 
             // Load DB properties
-            try (InputStream in = HootProperties.class.getClassLoader().getResourceAsStream("db/db.properties")) {
+            File dbPropertiesFile = new File(System.getenv("HOOT_DB_PROPERTIES"));
+            try (InputStream in = new FileInputStream(dbPropertiesFile)) {
                 Properties dbProperties = new Properties();
                 dbProperties.load(in);
                 Enumeration<?> enumeration = dbProperties.propertyNames();

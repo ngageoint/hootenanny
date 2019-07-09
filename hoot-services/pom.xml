@@ -308,7 +308,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>src/main/resources/db/db.properties</file>
+                                <file>../conf/database/db.properties</file>
                             </files>
                         </configuration>
                     </execution>
