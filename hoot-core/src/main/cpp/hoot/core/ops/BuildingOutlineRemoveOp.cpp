@@ -61,7 +61,7 @@ void BuildingOutlineRemoveOp::apply(std::shared_ptr<OsmMap>& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     const std::shared_ptr<Relation>& r = it->second;
-    // add the relation to a building group if appropriate
+    // remove the outline
     if (r->getType() == MetadataTags::RelationBuilding())
     {
       _removeOutline(r);

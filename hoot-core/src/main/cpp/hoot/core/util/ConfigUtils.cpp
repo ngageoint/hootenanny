@@ -22,13 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConfigUtils.h"
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
@@ -39,6 +43,28 @@ bool ConfigUtils::boundsOptionEnabled()
     !conf().get(ConfigOptions::getConvertBoundingBoxKey()).toString().trimmed().isEmpty() ||
     !conf().get(ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
     !conf().get(ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+}
+
+void ConfigUtils::checkForTagValueTruncationOverride()
+{
+  // Disable tag truncation if the override option is in place.
+  if (ConfigOptions().getConflateTagDisableValueTruncation())
+  {
+    QStringList conflatePreOps = ConfigOptions().getConflatePreOps();
+    int numFound =
+      conflatePreOps.removeAll(QString::fromStdString(ApiTagTruncateVisitor::className()));
+    if (numFound > 0)
+    {
+      conf().set("conflate.pre.ops", conflatePreOps);
+    }
+    QStringList conflatePostOps = ConfigOptions().getConflatePostOps();
+    numFound =
+      conflatePostOps.removeAll(QString::fromStdString(ApiTagTruncateVisitor::className()));
+    if (numFound > 0)
+    {
+      conf().set("conflate.post.ops", conflatePostOps);
+    }
+  }
 }
 
 }

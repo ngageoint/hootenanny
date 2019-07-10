@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='15.5868' minlon='32.5187' maxlat='15.5882' maxlon='32.5209' origin='hootenanny' />
+  <node id='4760611528' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5868359' lon='32.5195324' />
+  <node id='4760611530' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5868674' lon='32.5192218' />
+  <node id='4760611531' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5869119' lon='32.5195195' />
+  <node id='4760611534' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5868181' lon='32.5189305' />
+  <node id='4760611535' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5870561' lon='32.5203722' />
+  <node id='4760611536' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5870706' lon='32.5206982' />
+  <node id='4760611537' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5870537' lon='32.5206093' />
+  <node id='4760611538' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5869958' lon='32.5207124' />
+  <node id='4760611539' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5869912' lon='32.5206211' />
+  <node id='4760611540' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5869339' lon='32.520632' />
+  <node id='4760611541' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5869651' lon='32.5207969' />
+  <node id='4760611542' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5870102' lon='32.5207883' />
+  <node id='4760611543' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5871384' lon='32.5208976' />
+  <node id='4760611546' action='delete' timestamp='2017-03-28T20:29:54Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5870735' lon='32.5204654' />
+  <node id='4760611567' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5877338' lon='32.5204064' />
+  <node id='4760611568' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5874719' lon='32.5204611' />
+  <node id='4760611569' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.58744' lon='32.5203426' />
+  <node id='4760611570' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5873101' lon='32.5203532' />
+  <node id='4760611571' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.587121' lon='32.5189705' />
+  <node id='4760611572' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5876815' lon='32.518887' />
+  <node id='4760611573' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.587866' lon='32.5202219' />
+  <node id='4760611574' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5872913' lon='32.5208397' />
+  <node id='4760611575' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.587002' lon='32.518876' />
+  <node id='4760611576' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5877794' lon='32.5187526' />
+  <node id='4760611577' timestamp='2017-03-28T20:29:55Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5880687' lon='32.5207162' />
+  <node id='4760611744' action='delete' timestamp='2017-03-28T20:29:56Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5868148' lon='32.5187895' />
+  <node id='4760611745' action='delete' timestamp='2017-03-28T20:29:56Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5869352' lon='32.518769' />
+  <node id='4760611748' action='delete' timestamp='2017-03-28T20:29:56Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5873165' lon='32.5187092' />
+  <node id='4760612011' action='delete' timestamp='2017-03-28T20:29:58Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746' lat='15.5881115' lon='32.5208458' />
+  <node id='4760612151' action='delete' timestamp='2018-11-02T15:57:15Z' uid='8710033' user='geodesserts' visible='true' version='2' changeset='64117911' lat='15.5881303' lon='32.5196103' />
+  <node id='4760612152' action='delete' timestamp='2018-11-02T15:57:15Z' uid='8710033' user='geodesserts' visible='true' version='2' changeset='64117911' lat='15.588005' lon='32.5187105' />
+  <node id='4760612156' action='delete' timestamp='2018-11-02T15:57:15Z' uid='8710033' user='geodesserts' visible='true' version='2' changeset='64117911' lat='15.5881634' lon='32.5197409' />
+  <way id='483303739' action='delete' timestamp='2017-03-28T20:30:03Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746'>
+    <tag k='error:circular' v='15' />
+    <tag k='source:datetime' v='2017-03-28T20:30:03Z' />
+  </way>
+  <way id='483303750' timestamp='2017-03-28T20:30:03Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746'>
+    <nd ref='4760611573' />
+    <nd ref='4760611567' />
+    <nd ref='4760611568' />
+    <nd ref='4760611569' />
+    <nd ref='4760611570' />
+    <nd ref='4760611571' />
+    <nd ref='4760611572' />
+    <nd ref='4760611573' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:datetime' v='2017-03-28T20:30:03Z' />
+  </way>
+  <way id='483303751' timestamp='2017-03-28T20:30:03Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746'>
+    <nd ref='4760611577' />
+    <nd ref='4760611574' />
+    <nd ref='4760611575' />
+    <nd ref='4760611576' />
+    <nd ref='4760611577' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:datetime' v='2017-03-28T20:30:03Z' />
+  </way>
+  <relation id='7116726' timestamp='2017-03-28T20:30:10Z' uid='2055835' user='mustafakamil' visible='true' version='1' changeset='47241746'>
+    <member type='way' ref='483303750' role='inner' />
+    <member type='way' ref='483303751' role='outer' />
+    <tag k='name' v='Building 1' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source:datetime' v='2017-03-28T20:30:10Z' />
+    <tag k='type' v='multipolygon' />
+  </relation>
+</osm>
