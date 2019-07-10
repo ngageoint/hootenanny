@@ -374,7 +374,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
-  LOG_INFO("\t" << visitor.getCompletedStatusMessage());
+  LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
 
   _map.reset();
 }
