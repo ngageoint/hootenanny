@@ -47,7 +47,8 @@ public:
   static bool boundsOptionEnabled();
 
   /**
-   * TODO
+   * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is
+   * activated
    */
   static void checkForTagValueTruncationOverride();
 };
