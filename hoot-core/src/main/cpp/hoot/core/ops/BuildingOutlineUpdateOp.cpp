@@ -363,9 +363,11 @@ void BuildingOutlineUpdateOp::_updateMultipolyWayMembers(
       if (sourceNodes == wayNodes)
       {
         // Copy all the tags from the building part ways we already updated to the multipoly way
-        // members except the building part tag.
+        // members.
         pOutlineWay->setTags(pBuildingWay->getTags());
-        pOutlineWay->getTags().remove(MetadataTags::BuildingPart());
+        // Not certain whether the building part tag should get copied here or not...copying it
+        // for now.
+        //pOutlineWay->getTags().remove(MetadataTags::BuildingPart());
       }
     }
   }

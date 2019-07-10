@@ -117,6 +117,7 @@
         <nd ref="-13"/>
         <tag k="hoot:status" v="3"/>
         <tag k="ele" v="169"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
@@ -126,6 +127,7 @@
         <nd ref="-17"/>
         <tag k="hoot:status" v="3"/>
         <tag k="ele" v="171"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
@@ -135,6 +137,7 @@
         <nd ref="-21"/>
         <tag k="hoot:status" v="3"/>
         <tag k="ele" v="169"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
@@ -144,6 +147,7 @@
         <nd ref="-25"/>
         <tag k="hoot:status" v="3"/>
         <tag k="ele" v="170"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29"/>
@@ -153,6 +157,7 @@
         <nd ref="-29"/>
         <tag k="hoot:status" v="3"/>
         <tag k="ele" v="172"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
@@ -162,6 +167,7 @@
         <nd ref="-33"/>
         <tag k="hoot:status" v="3"/>
         <tag k="ele" v="171"/>
+        <tag k="building:part" v="yes"/>
     </way>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-7" role="outer"/>
