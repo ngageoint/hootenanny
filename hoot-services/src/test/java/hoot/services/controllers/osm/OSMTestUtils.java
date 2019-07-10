@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm;
 
@@ -248,6 +248,27 @@ public class OSMTestUtils {
 
 		members.add(new RelationMember(nodeIdsArr[2], ElementType.Node, "role1"));
 		relationIds.add(insertNewRelation(changesetId, getMapId(), members, null));
+		members.clear();
+
+		return relationIds;
+	}
+
+	public static Set<Long> createTestRelationsNegative(long changesetId, Set<Long> nodeIds, Set<Long> wayIds) throws Exception {
+		Long[] nodeIdsArr = nodeIds.toArray(new Long[nodeIds.size()]);
+		Long[] wayIdsArr = wayIds.toArray(new Long[wayIds.size()]);
+		List<RelationMember> members = new ArrayList<>();
+
+		members.add(new RelationMember(nodeIdsArr[0], ElementType.Node, "role1"));
+		members.add(new RelationMember(wayIdsArr[1], ElementType.Way, "role3"));
+		members.add(new RelationMember(wayIdsArr[0], ElementType.Way, "role2"));
+		members.add(new RelationMember(nodeIdsArr[2], ElementType.Node));
+		Map<String, String> tags = new HashMap<>();
+		tags.put("key 1", "val 1");
+		insertNewRelation(-6, changesetId, mapId, members, tags);
+		long firstRelationId = -6;
+		Set<Long> relationIds = new LinkedHashSet<>();
+		relationIds.add(firstRelationId);
+		tags.clear();
 		members.clear();
 
 		return relationIds;

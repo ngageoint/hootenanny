@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -426,18 +426,6 @@ public class Relation extends Element {
         }
 
         Map<Long, Element> parsedElements = parsedElementIdsToElementsByType.get(elementType);
-
-        // if this is an element created within the same request that is
-        // referencing this relation, it won't exist in the database, but it will be in the element cache
-        // created when parsing the element from the request
-        if (parsedMemberId < 0) {
-            if (elementType == ElementType.Relation) {
-                if (!parsedElements.containsKey(parsedMemberId)) {
-                    throw new IllegalStateException("Relation with ID: " + parsedMemberId + " does not exist for "
-                            + "relation with ID: " + getId());
-                }
-            }
-        }
 
         Element memberElement;
 
