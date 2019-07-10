@@ -78,7 +78,7 @@ public:
     // an idea to clean this up (need to port issue to github).
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "SelfIntersectingRelationsOut.osm");
-    HOOT_FILE_EQUALS( _inputPath + "SelfIntersectingRelationsOut.osm",
+    HOOT_FILE_EQUALS(_inputPath + "SelfIntersectingRelationsOut.osm",
                      _outputPath + "SelfIntersectingRelationsOut.osm");
   }
 
@@ -103,13 +103,12 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "UncleanableTopologiesOut.osm");
-    HOOT_FILE_EQUALS( _inputPath + "UncleanableTopologiesOut.osm",
+    HOOT_FILE_EQUALS(_inputPath + "UncleanableTopologiesOut.osm",
                      _outputPath + "UncleanableTopologiesOut.osm");
   }
 
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineUpdateOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BuildingOutlineUpdateOpTest, "current");
 
 }

@@ -30,6 +30,7 @@
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <map>
@@ -100,11 +101,12 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
     if (eidToMatchCount % 100 == 0)
     {
       PROGRESS_INFO(
-        "Processed matches for " << eidToMatchCount << " / " << eidToMatches.size() <<
-        " elements. Found " << conflicts.size() << " match conflicts.");
+        "Processed matches for " << StringUtils::formatLargeNumber(eidToMatchCount) << " / " <<
+        StringUtils::formatLargeNumber(eidToMatches.size()) << " elements. Found " <<
+        StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
     }
   }
-  LOG_INFO("Found " << conflicts.size() << " match conflicts.");
+  LOG_DEBUG("Found " << StringUtils::formatLargeNumber(conflicts.size()) << " match conflicts.");
 
   calculateSubsetConflicts(matches, conflicts, matchSet);
 }

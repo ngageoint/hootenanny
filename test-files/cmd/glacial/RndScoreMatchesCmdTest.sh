@@ -9,6 +9,6 @@ map2=$HOOT_HOME/test-files/ScoreMatchRef2.osm
 outputfile=$HOOT_HOME/test-output/cmd/glacial/RndScoreMatchesCmdTest/output.osm
 
 # Run the command. Note that we sanitize output to remove timestamps
-hoot score-matches --confusion --optimize $map1 $map2 $outputfile 
+hoot score-matches -C Testing.conf --confusion --optimize $map1 $map2 $outputfile 
 
 

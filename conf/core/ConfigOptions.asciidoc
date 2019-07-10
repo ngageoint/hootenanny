@@ -576,6 +576,7 @@ See also:
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
+** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
 List of operations to run in the conflate command after data is conflated, but before exporting.
@@ -614,6 +615,16 @@ See also:
 
 The string that lists the types of conflation used in the user interface.  The possible values
 are: reference, cookieCutter, average, and advancedConflation.
+
+=== conflate.tag.disable.value.truncation
+
+* Data Type: bool
+* Default Value: `false`
+
+This will disable use of the ApiTagTruncateVisitor, which truncates tag values down to size limit
+acceptable by the OpenStreetMap API, if found in either conflate.pre.ops or conflate.post.ops by
+either the conflate or score-matches commands. Setting this option to true is generally intended for
+testing purposes only.
 
 === conflate.tag.filter
 

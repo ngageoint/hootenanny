@@ -85,7 +85,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   mapWithOnlyUnknown1And2->visitRw(elementRemover2);
   if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
   {
-    LOG_INFO(
+    LOG_DEBUG(
       "Filtered out: " <<
       StringUtils::formatLargeNumber(elementCountTemp - mapWithOnlyUnknown1And2->getElementCount()) <<
       " invalid or conflated elements.");
@@ -98,7 +98,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   // isMatchCandidate function. - see #3048
   if (!_elementCriterion.isEmpty())
   {
-    LOG_INFO(
+    LOG_DEBUG(
       "Removing elements not satisfying: " << _elementCriterion <<
       " for search radius calculation...");
     std::shared_ptr<ElementCriterion> candidateCriterion(
@@ -112,10 +112,10 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
   LOG_VARD(map->getElementCount());
   if (mapWithOnlyUnknown1And2->getElementCount() < elementCountTemp)
   {
-    LOG_INFO(
+    LOG_DEBUG(
       "Filtered out: " <<
       StringUtils::formatLargeNumber(elementCountTemp - mapWithOnlyUnknown1And2->getElementCount()) <<
-      " elements not satisfying candidate criterion.");
+      " elements not satisfying " << _elementCriterion << ".");
   }
 
   if (map->getElementCount() > mapWithOnlyUnknown1And2->getElementCount())

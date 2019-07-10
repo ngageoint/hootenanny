@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGUTILS_H
@@ -45,6 +45,12 @@ public:
    * @return true if any of the bounds options are enabled
    */
   static bool boundsOptionEnabled();
+
+  /**
+   * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is
+   * activated
+   */
+  static void checkForTagValueTruncationOverride();
 };
 
 }

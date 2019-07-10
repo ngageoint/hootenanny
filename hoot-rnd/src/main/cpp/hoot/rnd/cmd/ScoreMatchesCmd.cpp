@@ -42,6 +42,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/rnd/visitors/CountManualMatchesVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -129,6 +130,7 @@ public:
   class ScoreFunction : public Tgs::NelderMead::Function
   {
   public:
+
     virtual double f(Tgs::Vector v)
     {
       double score;
@@ -197,6 +199,8 @@ public:
           .arg(getName()));
     }
 
+    ConfigUtils::checkForTagValueTruncationOverride();
+
     vector<OsmMapPtr> maps;
     QString output = args.last();
     for (int i = 0; i < args.size() - 1; i += 2)
@@ -214,20 +218,10 @@ public:
               .arg(MetadataTags::Ref2()));
       }
 
-      //for debugging
-//      OsmMapPtr mapCopy(map);
-//      MapProjector::projectToWgs84(mapCopy);
-//      IoUtils::saveMap(mapCopy, "/tmp/score-matches-before-prep.osm");
-
       MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
       maps.push_back(map);
     }
     LOG_VARD(maps.size());
-
-    //for debugging
-//    OsmMapPtr mapCopy(maps[0]);
-//    MapProjector::projectToWgs84(mapCopy);
-//    IoUtils::saveMap(mapCopy, "/tmp/score-matches-after-prep.osm");
 
     if (optimizeThresholds)
     {

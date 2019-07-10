@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTTEST_H
 #define SCRIPTTEST_H
@@ -43,6 +43,7 @@ namespace hoot
 class ScriptTest : public CppUnit::TestCase
 {
 public:
+
   ScriptTest(QString script, bool printDiff, int waitToFinishTime = 30000);
 
   virtual void runTest();
