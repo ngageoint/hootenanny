@@ -56,17 +56,19 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   {
     if (_removeMissing)
     {
-      LOG_INFO("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_DEBUG("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
     }
     else
     {
-      LOG_INFO("Missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_DEBUG("Missing " << missing.toString() << " in " << referer.toString() << ".");
     }
   }
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_INFO("Reached maximum number of missing reports. No longer reporting.");
+    LOG_INFO(
+      "Reached maximum number of missing element reports (" << _maxReport <<
+      "). No longer reporting.");
   }
 }
 

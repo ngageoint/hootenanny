@@ -277,7 +277,6 @@ int ConflateCmd::runSimple(QStringList args)
 
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
-  LOG_INFO("Total elements read: " << StringUtils::formatLargeNumber(initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   if (ConfigOptions().getConflatePreOps().size() > 0)

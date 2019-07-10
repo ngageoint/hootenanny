@@ -368,7 +368,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     cropper.setKeepOnlyFeaturesInsideBounds(
       ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
     cropper.apply(_map);
-    LOG_INFO(cropper.getCompletedStatusMessage());
+    LOG_DEBUG(cropper.getCompletedStatusMessage());
   }
 
   ReportMissingElementsVisitor visitor;

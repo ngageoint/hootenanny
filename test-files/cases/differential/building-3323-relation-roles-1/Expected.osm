@@ -41,7 +41,7 @@
         <nd ref="-10"/>
         <nd ref="-11"/>
         <tag k="hoot:status" v="2"/>
-        <tag k="source:datetime" v="2017-03-28T20:30:03Z"/>
+        <tag k="area" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="2017-03-28T20:30:03Z" version="1" user="mustafakamil" uid="2055835">

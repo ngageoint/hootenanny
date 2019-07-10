@@ -45,6 +45,9 @@ class OsmMap;
 /**
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
+ *
+ * This class has gone through a few iterations based on user feedback and its complexity may have
+ * increased unnecessarily as a result...maybe needs some refactoring to simplify.
  */
 class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
   public OperationStatusInfo, public Configurable
