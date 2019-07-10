@@ -90,6 +90,7 @@ public:
     IoUtils::loadMap(map, in, true);
 
     MapCropper cropper(env);
+    cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
     SuperfluousWayRemover::removeWays(map);
     SuperfluousNodeRemover().apply(map);

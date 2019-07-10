@@ -59,8 +59,8 @@ Techniques that were experimented with but proved to add no benefit to the model
 [[PoiToPolygonMerging]]
 === Merging
 
-The first layer selected is the reference layer and the second, the secondary layer, same as in all other hoot conflation types.  The 
-reference layer gets priority on the tags that are kept.  Geometry merging is a little more complex as later described.
+The first layer selected is the reference layer and the second, the secondary layer, same as in all other hoot conflation types.  Which tags
+are kept is dependent on the selected tag merging strategy as described later.  Geometry merging is a little more complex as later described.
   
 Once a relationship has been established between elements a graph is created to determine any interdependencies. If a single element is 
 involved in multiple matches then all the elements involved in that set of matches are marked as needing review. This avoids complex 
@@ -70,8 +70,10 @@ However, if a review relationship is found and a match relationship is found, th
 interdependence calculation. So, you may have a POI merged with one building, but marked as needing review with another building. 
 Modifying this business logic will require some user input on the desired functionality as well as some not so insignificant internal changes.
 
-If a merge is warranted, the geometry of the building is used and the tags are merged using the default tag merging mechanism 
-(+tag.merger.default+ configuration key).
+If a merge is warranted, the geometry of the building is used and the tags are merged using the tag merging mechanism defined in the
++poi.polygon.tag.merger+ configuration key. If that option is not defined, then the value from the +tag.merger.default+ configuration option
+is used. If the +poi.polygon.auto.merge.many.poi.to.one.poly.matches+ option is enabled, then all many POI to single polygon matches are always
+merged with hoot::PreserveTypesTagMerger, which retains type tags for merge features.
 
 Detailed Merging Workflow:
 

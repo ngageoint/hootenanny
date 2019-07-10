@@ -47,7 +47,7 @@ namespace hoot
  * Types of tests:
  *
  * 1) standard - tests successful merging
- * 2) w/o constituent - See notes in ElementMergerJs about features passed in without constituent
+ * 2) w/o constituents - See notes in ElementMergerJs about features passed in without constituent
  * elements.  For those tests, we're setting the log at error, so as not to see the missing element
  * warnings.
  * 3) missing feature inputs - all merging requires at least two features
@@ -59,6 +59,10 @@ namespace hoot
  * 7) invalid feature combinations - merging doesn't allow input with more than one mergeable
  * feature type associated with different types of conflation; e.g. an input with both buildings
  * and POIs in it
+ * 8) input features with a conflated status - A conflated status only causes problems with POI to
+ * Poly and Building to Building conflation generally, however tests have been added for it for all
+ * conflation types to be safe. The aforementioned types of conflation both use building merging,
+ * which expects all inputs to have a status of either Unknown1 or Unknown2.
  *
  * Many, but not all, possible combinations of inputs are covered here.  The main functionality
  * we're not testing here in the merging of features through the js bindings workflow is the
@@ -68,6 +72,8 @@ namespace hoot
 class ElementMergerJsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementMergerJsTest);
+
+  // POI TO POLYGON
   CPPUNIT_TEST(poiToPolyMergeWayAsPolyTest);
   CPPUNIT_TEST(poiToPolyMergeWayAsPolyNoConstituentsTest);
   CPPUNIT_TEST(poiToPolyMergeRelationAsPolyTest);
@@ -79,12 +85,20 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(poiToPolyMergeExtraNonPolyWayTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPolyRelationTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPoiNodeTest);
+  CPPUNIT_TEST(poiToPolyPolyInputWithConflatedStatusTest);
+  // TODO: fix
+  //CPPUNIT_TEST(poiToPolyPoiInputWithConflatedStatusTest);
+
+  // POI TO POI
   CPPUNIT_TEST(poiToPoiMergeTwoPoisTest);
   CPPUNIT_TEST(poiToPoiMergeMoreThanTwoPoisTest);
   CPPUNIT_TEST(poiToPoiMergeTooFewPoisTest);
   CPPUNIT_TEST(poiToPoiMergeMissingTargetTagTest);
   CPPUNIT_TEST(poiToPoiMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(poiToPoiMergeExtraNonPoiNodeTest);
+  CPPUNIT_TEST(poiToPoiInputWithConflatedStatusTest);
+
+  // AREA TO AREA
   CPPUNIT_TEST(areaToAreaMergeTwoWaysTest);
   CPPUNIT_TEST(areaToAreaMergeTwoWaysNoConstituentsTest);
   CPPUNIT_TEST(areaToAreaMergeTwoRelationsTest);
@@ -100,6 +114,9 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(areaToAreaMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaWayTest);
   CPPUNIT_TEST(areaToAreaMergeExtraNonAreaRelationTest);
+  CPPUNIT_TEST(areaToAreaInputWithConflatedStatusTest);
+
+  // BUILDING TO BUILDING
   CPPUNIT_TEST(buildingToBuildingMergeTwoWaysTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoWaysNoConstituentsTest);
   CPPUNIT_TEST(buildingToBuildingMergeTwoRelationsTest);
@@ -115,10 +132,14 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(buildingToBuildingMergeDuplicateTargetTagTest);
   CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingWayTest);
   CPPUNIT_TEST(buildingToBuildingMergeExtraNonBuildingRelationTest);
+  CPPUNIT_TEST(buildingToBuildingInputWithConflatedStatusTest);
+
+  // INVALID FEATURE COMBOS
   CPPUNIT_TEST(invalidFeatureCombinationTest1);
   CPPUNIT_TEST(invalidFeatureCombinationTest2);
   CPPUNIT_TEST(invalidFeatureCombinationTest3);
   CPPUNIT_TEST(invalidFeatureCombinationTest4);
+
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -127,16 +148,20 @@ public:
     : HootTestFixture("test-files/js/conflate/ElementMergerJsTest/",
                       "test-output/js/conflate/ElementMergerJsTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void testMerge(const QString& inFileName, const QString& outFileName,
                  const QString& expectedExceptionMsgContains = "")
   {
+    // Poi/poly test output is based on this config for now, despite it being different than the
+    // default config.
+    conf().set(ConfigOptions::getPoiPolygonAddressMatchEnabledKey(), "false");
+    conf().set(ConfigOptions::getPoiPolygonTagMergerKey(), "hoot::OverwriteTag2Merger");
+
     LOG_VART(inFileName);
     LOG_VART(outFileName);
     LOG_VART(expectedExceptionMsgContains);
-    LOG_VART(expectedExceptionMsgContains.isEmpty());
     QString exceptionMsg("");
     try
     {
@@ -152,6 +177,7 @@ public:
     {
       exceptionMsg = e.what();
     }
+    LOG_VART(exceptionMsg);
 
     if (expectedExceptionMsgContains.isEmpty())
     {
@@ -233,6 +259,18 @@ public:
     testMerge("poi-poly-extra-non-poi-node-in.osm", "poi-poly-extra-non-poi-node-out.osm");
   }
 
+  void poiToPolyPolyInputWithConflatedStatusTest()
+  {
+    testMerge("poi-poly-way-poly-conflated-1-in.osm", "poi-poly-way-poly-out.osm");
+  }
+
+  void poiToPolyPoiInputWithConflatedStatusTest()
+  {
+    testMerge(
+      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-way-poly-out.osm",
+      "POI being merged with polygon cannot must have an Unknown1 or Unknown2 status");
+  }
+
   //POI TO POI
 
   void poiToPoiMergeTwoPoisTest()
@@ -268,6 +306,11 @@ public:
   void poiToPoiMergeExtraNonPoiNodeTest()
   {
     testMerge("poi-extra-non-poi-node-in.osm", "poi-extra-non-poi-node-out.osm");
+  }
+
+  void poiToPoiInputWithConflatedStatusTest()
+  {
+    testMerge("poi-two-conflated-in.osm", "poi-two-out.osm");
   }
 
   //AREA TO AREA
@@ -365,6 +408,11 @@ public:
   void areaToAreaMergeExtraNonAreaRelationTest()
   {
     testMerge("area-extra-non-area-relation-in.osm", "area-extra-non-area-relation-out.osm");
+  }
+
+  void areaToAreaInputWithConflatedStatusTest()
+  {
+    testMerge("area-two-ways-conflated-in.osm", "area-two-ways-out.osm");
   }
 
   //BUILDING TO BUILDING
@@ -468,6 +516,11 @@ public:
     testMerge(
       "building-extra-non-building-relation-in.osm",
       "building-extra-non-building-relation-out.osm");
+  }
+
+  void buildingToBuildingInputWithConflatedStatusTest()
+  {
+    testMerge("building-two-ways-conflated-in.osm", "building-two-ways-out.osm");
   }
 
   //MISC

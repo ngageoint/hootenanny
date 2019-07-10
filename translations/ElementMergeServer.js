@@ -111,7 +111,7 @@ function ElementMergeserver(request, response) {
 
 var postHandler = function(data)
 {
-  //can't seem to get this to work
+  // can't seem to get this to work
   //hoot.Log.setLogLevel('trace');
 
   var map = new hoot.OsmMap();

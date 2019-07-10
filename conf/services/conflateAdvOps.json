@@ -1145,6 +1145,16 @@
         	"hoot_key":"poi.polygon.source.tag.key",
         	"onchange":"true"
     	    },
+            {
+        	"id":"poipolygon_tag_merger",
+        	"elem_type":"string",
+        	"description":"The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger' is always used.",
+        	"name":"Review If Types Match",
+        	"defaultvalue":"hoot::PreserveTypesTagMerger",
+		"required": "true",
+        	"hoot_key":"poi.polygon.tag.merger",
+        	"onchange":"true"
+    	    },
     	    {
         	"id":"poipolygon_type_score_threshold",
         	"elem_type":"double",
