@@ -53,7 +53,6 @@ public:
 protected:
 
   void _runConflateCmd();
-
   void _runMultiaryConflateCmd();
 };
 

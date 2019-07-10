@@ -45,6 +45,11 @@ public:
    * @return true if any of the bounds options are enabled
    */
   static bool boundsOptionEnabled();
+
+  /**
+   * TODO
+   */
+  static void checkForTagValueTruncationOverride();
 };
 
 }

@@ -43,6 +43,7 @@ namespace hoot
 class ScriptTest : public CppUnit::TestCase
 {
 public:
+
   ScriptTest(QString script, bool printDiff, int waitToFinishTime = 30000);
 
   virtual void runTest();

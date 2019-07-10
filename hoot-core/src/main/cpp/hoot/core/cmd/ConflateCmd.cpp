@@ -53,6 +53,7 @@
 #include <hoot/core/criterion/ReviewRelationCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Standard
 #include <fstream>
@@ -116,6 +117,8 @@ int ConflateCmd::runSimple(QStringList args)
   }
   LOG_VARD(displayStats);
   LOG_VARD(outputStatsFile);
+
+  ConfigUtils::checkForTagValueTruncationOverride();
 
   DiffConflator diffConflator;
 
