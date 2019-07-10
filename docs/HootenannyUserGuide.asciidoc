@@ -2,15 +2,18 @@
 = Hootenanny - User Guide
 
 include::user/History.asciidoc[]
+:imagesdir: ./user
 include::user/Introduction.asciidoc[]
 include::user/Limitations.asciidoc[]
 include::user/OldDocs.asciidoc[]
-include::JavascriptOverview.asciidoc[]                                          
+:imagesdir: ./
+include::JavascriptOverview.asciidoc[]
 :leveloffset: 1
-include::tmp/RulesLib.asciidoc[]                                                
-include::tmp/RulesTemplate.asciidoc[]                                           
+include::tmp/RulesLib.asciidoc[]
+include::tmp/RulesTemplate.asciidoc[]
 :leveloffset: 0
 include::user/HootAPIexamples.asciidoc[]
+:imagesdir: ./user
 include::user/SchemaFiles.asciidoc[]
 include::user/OsmApiDb.asciidoc[]
 include::user/ImplicitTypeTagging.asciidoc[]
