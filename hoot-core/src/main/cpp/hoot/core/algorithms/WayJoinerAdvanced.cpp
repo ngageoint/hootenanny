@@ -602,50 +602,47 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
       {
         const set<long>& connectedWaysIds = nodeToWayMap->getWaysByNode(*endpointItr);
         LOG_VART(connectedWaysIds);
-        //if (connectedWaysIds.size() < 3) // This is too restrictive.
-        //{
-          for (set<long>::const_iterator connectedItr = connectedWaysIds.begin();
-               connectedItr != connectedWaysIds.end(); ++connectedItr)
+        for (set<long>::const_iterator connectedItr = connectedWaysIds.begin();
+             connectedItr != connectedWaysIds.end(); ++connectedItr)
+        {
+          WayPtr connectedWay = _map->getWay(*connectedItr);
+          // Not sure how the connected way could be empty...
+          if (connectedWay && highwayCrit.isSatisfied(connectedWay))
           {
-            WayPtr connectedWay = _map->getWay(*connectedItr);
-            // Not sure how the connected way could be empty...
-            if (connectedWay && highwayCrit.isSatisfied(connectedWay))
+            LOG_TRACE("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
+            LOG_TRACE("_joinUnsplitWaysAtNode connected way: " << connectedWay);
+            const QString roadVal = connectedWay->getTags().get("highway").trimmed();
+
+            // Since this is basically an unmarked, non-oneway road, let's check both the regular
+            // and reversed versions of the way we want to join.
+            WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
+            reversedWayToJoinCopy->reverseOrder();
+
+            if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
+                (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
+                 DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
             {
-              LOG_TRACE("_joinUnsplitWaysAtNode wayToJoin: " << wayToJoin);
-              LOG_TRACE("_joinUnsplitWaysAtNode connected way: " << connectedWay);
-              const QString roadVal = connectedWay->getTags().get("highway").trimmed();
-
-              // Since this is basically an unmarked, non-oneway road, let's check both the regular
-              // and reversed versions of the way we want to join.
-              WayPtr reversedWayToJoinCopy(new Way(*wayToJoin));
-              reversedWayToJoinCopy->reverseOrder();
-
-              if (!roadVal.isEmpty() && roadVal != "road" && connectedWay->getTags().hasName() &&
-                  (DirectionFinder::isSimilarDirection2(_map, wayToJoin, connectedWay) ||
-                   DirectionFinder::isSimilarDirection2(_map, reversedWayToJoinCopy, connectedWay)))
+              LOG_TRACE(
+                "Attempting unsplit join on unsplit way: " << wayToJoin->getElementId() <<
+                " and connected way: " << connectedWay->getElementId() << "...");
+              joinAttempts++;
+              if (_joinWays(connectedWay, wayToJoin))
+              {
+                successfulJoins++;
+                LOG_TRACE(
+                  "Successfully joined unsplit way: " << wayToJoin->getElementId() <<
+                  " and connected way: " << connectedWay->getElementId());
+                break;
+              }
+              else
               {
                 LOG_TRACE(
-                  "Attempting unsplit join on unsplit way: " << wayToJoin->getElementId() <<
-                  " and connected way: " << connectedWay->getElementId() << "...");
-                joinAttempts++;
-                if (_joinWays(connectedWay, wayToJoin))
-                {
-                  successfulJoins++;
-                  LOG_TRACE(
-                    "Successfully joined unsplit way: " << wayToJoin->getElementId() <<
-                    " and connected way: " << connectedWay->getElementId());
-                  break;
-                }
-                else
-                {
-                  LOG_TRACE(
-                    "Unable to join unsplit way: " << wayToJoin->getElementId() <<
-                    " and connected way: " << connectedWay->getElementId());
-                }
+                  "Unable to join unsplit way: " << wayToJoin->getElementId() <<
+                  " and connected way: " << connectedWay->getElementId());
               }
             }
           }
-        //}
+        }
       }
     }
   }

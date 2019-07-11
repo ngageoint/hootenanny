@@ -54,9 +54,8 @@ bool CookieCutConflateWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2
          (w2->getStatus() == Status::Unknown1 && w1->getStatus() == Status::Unknown2);
 }
 
-void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(WayPtr parent, WayPtr child,
-                                                                WayPtr& keeper,
-                                                                WayPtr& toRemove) const
+void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(
+  WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
 {
   // We always want to keep unknown2, which is the dough ways being joined up with the cookie cut
   // replacement ways.

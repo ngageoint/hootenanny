@@ -36,9 +36,6 @@ namespace hoot
 
 /**
  * TODO
- *
- * TODO: using this conflator ends up with less joining than what we expect and get with
- * WayJoinerAdvanced
  */
 class CookieCutConflateWayJoiner : public WayJoinerAdvanced
 {

@@ -572,7 +572,15 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
     if (wayNodeToSnapToId != nodeToSnap->getId())
     {
       NodePtr wayNodeToSnapTo = _map->getNode(wayNodeToSnapToId);
-      LOG_VART(wayNodeToSnapTo->getId())
+      // not exactly sure what could cause this, but it has happened
+      if (!wayNodeToSnapTo)
+      {
+        LOG_TRACE(
+          "Way node to snap to with ID: " << wayNodeToSnapToId <<
+          " does not exist in the map. Skipping snap...");
+        continue;
+      }
+      LOG_VART(wayNodeToSnapTo->getId());
 
       // Compare all the ways that a contain the neighbor and all the ways that contain our input
       // node.  If there's overlap, then we pass b/c we don't want to try to snap the input way
