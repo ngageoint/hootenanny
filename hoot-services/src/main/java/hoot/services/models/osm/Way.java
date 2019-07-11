@@ -300,25 +300,14 @@ public class Way extends Element {
 
         if (addChildren) {
             List<Long> nodeIds = getNodeIds();
-            Set<Long> elementIds = new HashSet<>();
 
             // way nodes are output in sequence order; list should already be sorted by the query
             for (long nodeId : nodeIds) {
                 org.w3c.dom.Element nodeElement = doc.createElement("nd");
                 nodeElement.setAttribute("ref", String.valueOf(nodeId));
                 element.appendChild(nodeElement);
-                elementIds.add(nodeId);
             }
 
-            List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
-                    ElementType.Node, elementIds);
-
-            for (Tuple elementRecord : elementRecords) {
-                Element nodeFullElement = ElementFactory.create(ElementType.Node, elementRecord, getMapId());
-                org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
-                        modifyingUserDisplayName, false, false);
-                parentXml.appendChild(nodeXml);
-            }
         }
 
         org.w3c.dom.Element elementWithTags = addTagsXml(element);
