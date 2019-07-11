@@ -45,6 +45,9 @@ class OsmMap;
 /**
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
+ *
+ * This class has gone through a few iterations based on user feedback and its complexity may have
+ * increased unnecessarily as a result...maybe needs some refactoring to simplify.
  */
 class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
   public OperationStatusInfo, public Configurable
@@ -89,18 +92,14 @@ private:
   void _unionOutline(const RelationPtr& building, const ElementPtr& element,
                      std::shared_ptr<geos::geom::Geometry>& outline);
 
-  void _extractUsedNodes(const RelationPtr& r, std::set<long>& nodes);
-  void _findOutlineDuplicate( ConstWayPtr& pOutlineWay, QHash<RelationData::Entry,
-                              WayPtr>& buildingWayLookup,
-                              std::vector<long>& removeWayIds,
-                              const RelationPtr& pOutlineHost );
-
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change
    * "changed" by replacing the nodes with the equivalent nodes in reference.
    */
   void _mergeNodes(const std::shared_ptr<Element>& changed,
                    const RelationPtr& reference);
+  void _updateMultipolyWayMembers(
+    WayPtr& pOutlineWay, QHash<RelationData::Entry,WayPtr>& buildingWayLookup);
 
   void _deleteBuildingRelations();
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
@@ -56,17 +56,19 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   {
     if (_removeMissing)
     {
-      LOG_INFO("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_DEBUG("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
     }
     else
     {
-      LOG_INFO("Missing " << missing.toString() << " in " << referer.toString() << ".");
+      LOG_DEBUG("Missing " << missing.toString() << " in " << referer.toString() << ".");
     }
   }
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_INFO("Reached maximum number of missing reports. No longer reporting.");
+    LOG_INFO(
+      "Reached maximum number of missing element reports (" << _maxReport <<
+      "). No longer reporting.");
   }
 }
 

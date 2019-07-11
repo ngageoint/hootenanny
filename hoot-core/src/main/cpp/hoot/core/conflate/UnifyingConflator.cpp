@@ -246,7 +246,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
   // TODO: this stat isn't right for Network
-  LOG_INFO("Post constraining match count: " << _matches.size());
+  LOG_DEBUG("Post constraining match count: " << _matches.size());
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {
@@ -361,7 +361,7 @@ QString UnifyingConflator::_matchSetToString(const MatchSet& matchSet) const
 void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
   MatchSetVector& matchSets, const OsmMapPtr& map)
 {
-  LOG_INFO("Removing whole group matches...");
+  LOG_DEBUG("Removing whole group matches...");
 
   // search the matches for groups (subgraphs) of matches. In other words, groups where all the
   // matches are interrelated by element id
