@@ -18,7 +18,7 @@ This description is for quick overview of conflation advanced option meta data r
 	i. defaultvalue: the default value set in UI
 	j. onchange: js which gets executed when the field value changes
 	k. required: This field forces value to be set all time when the group is enabled. On UI if required=true then the field is hidden
-	
+
 4. Service rest endpoint http://localhost:8080/hoot-services/info/advancedopts/getoptions?conftype=custom exposes modified conf/conflateAdvOps.json where the Service does following
 	a. read conf/core/configOptions.asciidoc
 	b. read conf/services/conflateAdvOps.json

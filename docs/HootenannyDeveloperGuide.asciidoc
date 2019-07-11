@@ -1,3 +1,4 @@
+:imagesdir: ./developer
 
 = Hootenanny Developer Guide
 DigitalGlobe, Inc.

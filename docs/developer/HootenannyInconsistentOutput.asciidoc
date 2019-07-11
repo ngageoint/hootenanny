@@ -34,16 +34,16 @@ Don't use Qt's UUID generation directly. See UuidHelper::createUuid() and the as
 
 ==== Uninitialized Variables
 
-Sometimes GCC doesn't warn about uninitialized variables. There are some link:$$http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals$$[tools in valgrind] that will identify uninitialized variables. 
+Sometimes GCC doesn't warn about uninitialized variables. There are some link:$$http://valgrind.org/docs/manual/mc-manual.html#mc-manual.uninitvals$$[tools in valgrind] that will identify uninitialized variables.
 
 Adding these lines into your `LocalConfig.pri` may also help to flag issues while compiling:
 
 -----
-# Warn about uninitialized variables and set all variables to their default     
-# values.                                                                       
-QMAKE_CXXFLAGS+=-Wuninitialized -fno-common                                     
-# Initialize values in BSS to zero -- dunno if this will help                   
-QMAKE_CXXFLAGS+=-fzero-initialized-in-bss                                       
+# Warn about uninitialized variables and set all variables to their default
+# values.
+QMAKE_CXXFLAGS+=-Wuninitialized -fno-common
+# Initialize values in BSS to zero -- dunno if this will help
+QMAKE_CXXFLAGS+=-fzero-initialized-in-bss
 -----
 
 ==== Using Pointer Locations to Determine Program Flow

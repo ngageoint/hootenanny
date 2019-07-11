@@ -5,29 +5,29 @@ This document discusses in detail some of the processes involved with using gene
 conflate a new type of feature with Hootenanny.  Hootenanny's generic conflation framework allows for
 more quickly creating the capability to conflate additional feature types by exposing, via a Javascript
 API, only the pieces needed to customize the conflation.  Also, the Javascript API is more accessible
-to a wider range of individuals than Hootenanny's more complex native C++ API.  The generic 
+to a wider range of individuals than Hootenanny's more complex native C++ API.  The generic
 conflation framework is described in detail in both the Hootenanny Algorithms and User Guides.
 
-This document was derived from the work done to conflate river data using the generic conflation 
-routines and will not necessarily translate directly to setting up generic conflation for every feature 
-type.  It also is not a strict guide on how to complete such a task and is meant more to be a reference 
-guide with ideas that may help you in the process of adding a new feature to conflate with generic conflation.  
+This document was derived from the work done to conflate river data using the generic conflation
+routines and will not necessarily translate directly to setting up generic conflation for every feature
+type.  It also is not a strict guide on how to complete such a task and is meant more to be a reference
+guide with ideas that may help you in the process of adding a new feature to conflate with generic conflation.
 Relevant sections in the Hootenanny code are referenced throughout.  The codebase can change quite
 rapidly causing this documentation's accuracy to lag.  So, when in doubt about certain parts of this
-documentation, pose questions to members of the Hootenanny development team.  For more information on 
-Hootenanny's Javascript API, see the User Guide.  
+documentation, pose questions to members of the Hootenanny development team.  For more information on
+Hootenanny's Javascript API, see the User Guide.
 
 === Test Data
 
-This document assumes you are testing with data that had matches made in test data manually by a human.  If more than 200 matches were made 
-in the test data, you may want to crop your data down to a smaller size so that test runs complete in five minutes or less, if possible.  
-Since you will be running many tests as you tweak the model, this will prevent testing from taking an unreasonable amount of time.  
+This document assumes you are testing with data that had matches made in test data manually by a human.  If more than 200 matches were made
+in the test data, you may want to crop your data down to a smaller size so that test runs complete in five minutes or less, if possible.
+Since you will be running many tests as you tweak the model, this will prevent testing from taking an unreasonable amount of time.
 See the "Hootenanny Manual Conflation" section in this document for more details on this process.
 
 === Initial Setup
 
 First, you will want to set up a Hootenanny JSON configuration file.  An example shown here
-is similar to the file provided with Hootenanny for conflating rivers, 
+is similar to the file provided with Hootenanny for conflating rivers,
 `$HOOT_HOME/conf/LinearWaterway.conf`:
 
 ----------------
@@ -36,14 +36,14 @@ is similar to the file provided with Hootenanny for conflating rivers,
   "match.creators" : "hoot::ScriptMatchCreator,LinearWaterway.js",
   "merger.creators" : "hoot::ScriptMergerCreator",
 }
----------------
+----------------
 
-Creating a configuration file will save you time typing in the same settings over and over when 
-invoking commands while experimenting with different settings as you develop your conflation model 
-for the new feature type.  Of note from this example are: +match.creators+ and +merger.creators+.  
-+match.creators+ uses the ScriptMatchCreator, taking advantage of the generic conflation framework 
-and also specifies a conflation rules file, "LinearWaterway.js", which will be discussed in a later 
-section.  +merger.creators+ specifies the ScriptMergerCreator, which is also part of the generic 
+Creating a configuration file will save you time typing in the same settings over and over when
+invoking commands while experimenting with different settings as you develop your conflation model
+for the new feature type.  Of note from this example are: +match.creators+ and +merger.creators+.
++match.creators+ uses the ScriptMatchCreator, taking advantage of the generic conflation framework
+and also specifies a conflation rules file, "LinearWaterway.js", which will be discussed in a later
+section.  +merger.creators+ specifies the ScriptMergerCreator, which is also part of the generic
 conflation framework.  "log.identical.message.limit" is included here only, so you can see all of the script match
 log messages for debugging purposes.
 
@@ -51,26 +51,26 @@ As you build your model, you may need to add new configuration options which can
 runtime.  To do this, see `$HOOT_HOME/conf/core/ConfigOptions.asciidoc`.
 
 To be able to go ahead and do an initial match scoring, copy one of the existing *.js rules files in
-`$HOOT_HOME/rules` to a new file and make sure its referenced from your configuration file. 
+`$HOOT_HOME/rules` to a new file and make sure its referenced from your configuration file.
 
 === Scoring Matches
 
 The Hootenanny +score-matches+ command can be used to determine how well Hootenanny conflates the
-test data by comparing its matches to the manually made matches.  Here is an example of using the 
+test data by comparing its matches to the manually made matches.  Here is an example of using the
 command:
 
 --------
 time hoot score-matches -C conf/LinearWaterway.conf --confusion Haiti_CNIGS_Rivers_REF1-cropped.osm Haiti_osm_waterway_ss_REF2-cropped.osm tmp/Test1.osm
 --------
 
-Data sources: 
+Data sources:
 
 * link:$$http://www.haitidata.org/layers/cnigs.spatialdata:hti_inlandwaters_rivers_cnigs_line_062006$$[HAITI INLANDWATERS RIVER NETWORK, CNIGS]
 * link:$$http://market.weogeo.com/datasets/osm-openstreetmap-planet.html$$[Haiti OSM Waterways Data]
 
-The configuration file is specified, which ties in the generic conflation framework and other settings 
-and the confusion matrix output is specified.  At this point, your scores will be very low since 
-you haven't done any custom model setup work for you data, so ignore their values.  Here is an 
+The configuration file is specified, which ties in the generic conflation framework and other settings
+and the confusion matrix output is specified.  At this point, your scores will be very low since
+you haven't done any custom model setup work for you data, so ignore their values.  Here is an
 example of what the output looks like:
 
 ------------------
@@ -88,11 +88,11 @@ Score: -0.827586
 -1,0.829615,0.1643,0.00608519
 
 real    4m34.759s
-----------------
+------------------
 
 The confusion matrix displays what the expected results were and what the actual results were.  The
 expected results are based on the human manually conflated data, and the actual results are based
-on Hootenanny's conflation output.  
+on Hootenanny's conflation output.
 
 In this example, 409 features were expected to match and did match,
 23 features were expected to match but were not matched by the conflation, 58 items were expected to
@@ -101,9 +101,9 @@ to have been matched together by the conflation.
 
 The overall goal is to have the incorrect conflation ("wrong" count) be as low as possible.  The
 higher the "correct" conflation the better, but within a certain point of reason, raising the
-"unnecessary reviews" count is acceptable and also decreases the incorrect count (more on this in a 
-later section).  "unnecessary reviews" result in features being flagged for inspection by a 
-human, to be resolved as matching or non-matching.  The maximum number of manual reviews that is 
+"unnecessary reviews" count is acceptable and also decreases the incorrect count (more on this in a
+later section).  "unnecessary reviews" result in features being flagged for inspection by a
+human, to be resolved as matching or non-matching.  The maximum number of manual reviews that is
 acceptable for a conflation run is dependent on the use case of the conflator.
 
 === Creating a Schema
@@ -120,19 +120,19 @@ Here you can see an example of the schema used for waterways:
         "type": "enumeration",
         "geometries": ["node","linestring","area"]
     },
-    
+
     "tag": { "name": "waterway=dock", "isA": "waterway", "categories": ["poi"] },
     "tag": { "name": "waterway=boatyard", "isA": "waterway", "categories": ["poi"] },
     "tag": { "name": "waterway=watercourse",  "isA": "waterway", "categories": ["poi"] },
     "tag": { "name": "waterway=river", "isA": "waterway=watercourse", "categories": ["poi"] },
     "tag": { "name": "waterway=stream", "isA": "waterway=watercourse", "categories": ["poi"] },
     "tag": { "name": "waterway=anabranch", "isA": "waterway=watercourse", "categories": ["poi"] },
-    
+
     "tag": { "name": "waterway=canal", "isA": "waterway" },
     "tag": { "name": "river_flow=*", "isA": "waterway" },
     "tag": { "name": "river_type=*", "isA": "waterway" },
     "tag": { "name": "waterway=riverbank", "isA": "waterway" },
-    
+
     "tag": { "name": "type=stream", "isA": "waterway" },
     "tag": { "name": "type=river", "isA": "waterway" },
     "tag": { "name": "FlowDir=*", "isA": "waterway" },
@@ -140,7 +140,7 @@ Here you can see an example of the schema used for waterways:
     "tag": { "name": "waterway=dam", "isA": "waterway" },
 
     "#" : "end"
-------------
+--------------
 
 The goal is to make sure the conflation routines correctly identify every feature with the correct
 type.  In this example, the type is "waterway".
@@ -150,7 +150,7 @@ type.  In this example, the type is "waterway".
 The following code C++ code changes are required to add a new schema for a feature type:
 
 * You will need to create a class that implemented ElementCriterion for your feature type, if it does not already exist.
-Doing so helps the conflation to uniquely recognize the feature type you want conflate.  This primarily involves deriving the 
+Doing so helps the conflation to uniquely recognize the feature type you want conflate.  This primarily involves deriving the
 feature's type given the attributes (tags) it possesses.  Here is an example from the river conflation:
 ----------------
 bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -174,7 +174,7 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 * OsmSchemaJs - You will need to wrap the method entry made in OsmSchema in the classes that expose
 the Javascript interface.  River example:
 -----------------
-Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args) 
+Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args)
 {
   HandleScope scope;
 
@@ -183,7 +183,7 @@ Handle<Value> OsmSchemaJs::isLinearWaterway(const Arguments& args)
   return scope.Close(Boolean::New(LinearWaterwayCriterion().isSatisfied(e)));
 }
 -----------------
-* NodeMatcher::calculateAngles - To make map cleaning work for your feature type, you may have to 
+* NodeMatcher::calculateAngles - To make map cleaning work for your feature type, you may have to
 include your new feature type here.  example:
 -------------
 ...
@@ -212,7 +212,7 @@ function isLinearWaterway(e)
 {
   return hoot.OsmSchema.isLinearWaterway(e);
 }
-------------
+-------------
 * rules file - Finally, reference your schema related method from your rules file so that the generic
 conflation can identify the correct features to conflate.  Example from rules/LinearWaterway.js:
 ------------
@@ -237,7 +237,7 @@ exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
 -------------
-If you wish to change these threshold settings, when conflating from the command line, the best way 
+If you wish to change these threshold settings, when conflating from the command line, the best way
 to do it is by passing a new value in for each setting.  e.g.:
 
 ------------
@@ -249,10 +249,10 @@ to do it is by passing a new value in for each setting.  e.g.:
 Generic conflation can be set up to automatically calculate the search radius of the input data with
 a modification to the associated Javascript rules file.  It can be done by adding a single line making
 a call to the calculateSearchRadius function inside the rules file init method.  Here is an example
-from the linear waterways rules file:  
+from the linear waterways rules file:
 
 ------
-exports.init = function(map) 
+exports.init = function(map)
 {
   if (Boolean(hoot.get("waterway.auto.calc.search.radius")))
   {
@@ -271,14 +271,14 @@ exports.init = function(map)
   }
 }
 ------
-The above example automatically calculates the search radius when "waterway.auto.calc.search.radius" 
-is set to true.  Otherwise, it uses the default search radius setting for conflating waterways.  
-With automatic search radius calculation enabled, the input data cannot be rubber sheeted since 
-the automatic calculation makes use of tie points derived from the rubber sheeting algorithm.  
-If your input data does not have circular error specified on its features (or it is inaccurate), and 
-for some reason you choose not to automatically calculate the search radius (or you wish to use 
-rubber sheeting, thus precluding use of the feature), you can manually specify the circular error 
-to be used during conflation.  This manually specified value will then be used as the search radius.  
+The above example automatically calculates the search radius when "waterway.auto.calc.search.radius"
+is set to true.  Otherwise, it uses the default search radius setting for conflating waterways.
+With automatic search radius calculation enabled, the input data cannot be rubber sheeted since
+the automatic calculation makes use of tie points derived from the rubber sheeting algorithm.
+If your input data does not have circular error specified on its features (or it is inaccurate), and
+for some reason you choose not to automatically calculate the search radius (or you wish to use
+rubber sheeting, thus precluding use of the feature), you can manually specify the circular error
+to be used during conflation.  This manually specified value will then be used as the search radius.
 Here is an example of the related settings to add to your configuration file if you are conflating
 river data:
 
@@ -286,20 +286,20 @@ river data:
 {
   "waterway.search.radius": "20.0"
 }
---------
+---------
 
 === Rubber Sheeting
 
-Using the Hootenanny rubber sheeting operation before conflating data, which is described in detail 
-in the User Guide, can also lead to improvements in the quality of your conflation model.  You may 
-have to configure the minimum number of ties allowed to perform rubber sheeting in order to make 
+Using the Hootenanny rubber sheeting operation before conflating data, which is described in detail
+in the User Guide, can also lead to improvements in the quality of your conflation model.  You may
+have to configure the minimum number of ties allowed to perform rubber sheeting in order to make
 rubber sheeting occur.  Also, remember that you cannot use rubber sheeting when using the automatic
 search radius calculation.
 
 === Extracting Features
 
 You can use Hootenanny to extract features that describe the data you wish to conflate.  These extracted
-features can yield more insight into the behavior of the data and can be used to build a model 
+features can yield more insight into the behavior of the data and can be used to build a model
 which effectively conflates the data.
 
 ==== Existing Feature Extractors
@@ -310,21 +310,21 @@ hoot::FeatureExtractor interface.
 
 ==== Creating a New Feature Extractor
 
-If you need to create a new feature extractor, simply create a class which implements 
+If you need to create a new feature extractor, simply create a class which implements
 hoot::FeatureExtractor.
 
 ==== Extracting a Feature
 
 To use a feature extractor to extract features in the generic conflation framework, you can implement
 the getMatchFeatureDetails method in your rules file and extract the feature there.  Here is an
-example which extracts the weighted shape distance feature for each of the extracted sublines for a 
+example which extracts the weighted shape distance feature for each of the extracted sublines for a
 way feature:
 
 -------------
 exports.getMatchFeatureDetails = function(map, e1, e2)
 {
   var featureDetails = [];
-  
+
   // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   if (sublines)
@@ -335,7 +335,7 @@ exports.getMatchFeatureDetails = function(map, e1, e2)
 
     featureDetails["weightedShapeDistanceValue"] = weightedShapeDistanceExtractor.extract(m, m1, m2);
   }
-  
+
   return featureDetails;
 };
 -------------
@@ -345,13 +345,13 @@ in Weka described <<Weka,here>>.
 === Building a Model
 
 Building a model to conflate your new feature type involves several steps.  This section suggests
-one way to go about building the model, but the exact steps will always be closely tied to the 
+one way to go about building the model, but the exact steps will always be closely tied to the
 specific data being tested against.  These steps start out by having you export a model file for
-use within Weka.  [[Weka]] Weka is a collection of machine learning algorithms for data mining tasks 
-available in a desktop application.  Using Weka is optional and may not be needed or even useful when 
-deriving a model for conflation in certain situations.  The most authoritative guide for using 
-Weka is the Weka manual itself, but this section contains some condensed steps to give you a 
-quick start. 
+use within Weka.  [[Weka]] Weka is a collection of machine learning algorithms for data mining tasks
+available in a desktop application.  Using Weka is optional and may not be needed or even useful when
+deriving a model for conflation in certain situations.  The most authoritative guide for using
+Weka is the Weka manual itself, but this section contains some condensed steps to give you a
+quick start.
 
 ==== Install Weka
 
@@ -364,22 +364,22 @@ nohup java -Xmx1000M -jar /usr/local/weka-3-6-12/weka.jar &
 
 ==== Creating the Weka Model File Output
 
-After you have implemented the getMatchFeatureDetails method in your Javascript rules file, a Weka 
+After you have implemented the getMatchFeatureDetails method in your Javascript rules file, a Weka
 model file can be output from Hootenanny using the build-model command.  An example:
 
 ----------------
 hoot build-model -C conf/LinearWaterway.conf dataset-1.osm dataset-2.osm model-file
----------------
+----------------
 
 ==== Examining the Model in Weka
 
 1. Launch the Weka Explorer application.
-2. From the Preprocess tab, select the Open File button and open the file you exported with the 
+2. From the Preprocess tab, select the Open File button and open the file you exported with the
 build-model command.
 
 ===== Visualizing Relationships
 
-From the Preprocess tab mentioned in the previous step, you can quickly visualize the match/miss 
+From the Preprocess tab mentioned in the previous step, you can quickly visualize the match/miss
 classifications for each of your extracted features by clicking the Visualize All button.
 
 For a more detailed visualization, click the Visualize tab.  From this tab you can see pairwise plots
@@ -387,7 +387,7 @@ of the classifications between all of the imported features.
 
 ===== Selecting Features
 
-Weka has the capability to tell you which features (attributes) it thinks are important for building 
+Weka has the capability to tell you which features (attributes) it thinks are important for building
 a classification model and which are not.  There are two ways to come up with an attribute set.
 
 One quick way to come up with an attribute set is:
@@ -399,7 +399,7 @@ Weka will select reduce the feature list down to what it deems will be effective
 
 Here is another method for selecting features within Weka that has more flexibility:
 1. Click the Select Attributes tab.
-2. Under the Attribute Evaluator section, click the Choose button.  From here there are a variety of 
+2. Under the Attribute Evaluator section, click the Choose button.  From here there are a variety of
 evaluators to choose from, and you may want to experiment with them.
 3. After selecting an evaluator, click the Close button.
 4. In a similar fashion, you can select a search method from the Search Method tab.
@@ -410,7 +410,7 @@ by importance for you.
 8. Manually filter the list of features in the Attributes section to match the derived list.
 
 Weka will do a good job in selecting the features for you.  However, in addition, you may want to
-use the visualization interface to further help you reduce the list of features to use in your 
+use the visualization interface to further help you reduce the list of features to use in your
 model.  Look for pairs of features that exhibit a clear relationship between match and miss
 classifications to help you to decide which ones to keep.
 
@@ -420,13 +420,13 @@ Now, a classifier can be built which can be ported to the Javascript rules file 
 generic conflation process.
 
 1. Click the Classify tab.
-2. In the Classifier section, click the Choose button.  There are many choices here, but for 
+2. In the Classifier section, click the Choose button.  There are many choices here, but for
 purposes here, one that exports a set of rules in a tree text format is going to be the most useful.  A
-few of the classifiers do this (tree based classifiers, for example).  Select a classifier and click the Close button.  
-3. There are multiple options for testing against the data in the Test Options section.   
-4. Click the Start button.  
+few of the classifiers do this (tree based classifiers, for example).  Select a classifier and click the Close button.
+3. There are multiple options for testing against the data in the Test Options section.
+4. Click the Start button.
 
-NOTE: The J48 tree classifier was shown to be most effective for the generic river implementation.  
+NOTE: The J48 tree classifier was shown to be most effective for the generic river implementation.
 
 In the Classifier output section you will see a entry with logic for the output classifier as well as a
 predicted score.  An example of the output logic:
@@ -452,10 +452,10 @@ exports.matchScore = function(map, e1, e2)
         var m = sublines.map;
         var m1 = sublines.match1;
         var m2 = sublines.match2;
-        
+
         var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
         var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-       
+
         if (sampledAngleHistogramValue <= 0)
         {
           if (weightedShapeDistanceValue > 0.861844)
@@ -473,12 +473,12 @@ exports.matchScore = function(map, e1, e2)
 
     return result;
 };
-----------
+-----------
 Note that only the match section of the logic was ported to the Javascript, as in this example
 extracted sublines were classified as miss by default.
 
 It is also important to note that the Correct Classified Instances percentage predicted by Weka does
-not necessarily translate to a Hootenanny conflation model with the same correct conflation 
+not necessarily translate to a Hootenanny conflation model with the same correct conflation
 percentage, due to many factors encountered during the conflation process.
 
 ==== Tweaking Feature Extractors
@@ -487,7 +487,7 @@ Feature extractors themselves may be tweaked to tune the model.
 
 ===== Value Aggregators
 
-Value aggregators determine how calculated feature values are combined.  There are several types of value 
+Value aggregators determine how calculated feature values are combined.  There are several types of value
 aggregators.  For a list, in the code, look for all classes implementing hoot::ValueAggregator.  In
 this example, an attribute score feature extractor is configured with an RMSE value aggregator:
 
@@ -498,8 +498,8 @@ var attributeScoreExtractor = new hoot.AttributeScoreExtractor(new hoot.RmseAggr
 ===== Custom Configuration
 
 Feature extractors have some custom configuration options which, when tweaked, may have a positive outcome
-on the generic conflation model.  Many extractors allow for passing in Hootenanny configuration 
-settings directly from the Javascript rule file.  From the previous example, this attribute score 
+on the generic conflation model.  Many extractors allow for passing in Hootenanny configuration
+settings directly from the Javascript rule file.  From the previous example, this attribute score
 extractor is configured with a weighting option:
 
 ---------
@@ -510,20 +510,20 @@ var attributeScoreExtractor = new hoot.AttributeScoreExtractor(new hoot.RmseAggr
 
 The overall goal for your derived conflation model is to correctly conflate as much of the data as
 possible (highest correct percentage; see the confusion matrix in the Scoring Matches section).  If
-your model hits a "brick wall" as far as increasing its correctness count, an alternative approach is to 
-attempt to raise the number of unnecessary matches in order to decrease your incorrect count.  
-Unnecessary matches translate to manual reviews by a human Hootenanny user.  While you want to 
-limit these so that you do not overload users with a high number of reviewable features ("high" is 
-relative to the relevant conflation use case for the new feature type you're working with), 
-returning a review is more desirable than incorrectly conflating a feature since in the case of the 
-review, a user has a chance to correctly manually conflate the feature, whereas they do not have 
+your model hits a "brick wall" as far as increasing its correctness count, an alternative approach is to
+attempt to raise the number of unnecessary matches in order to decrease your incorrect count.
+Unnecessary matches translate to manual reviews by a human Hootenanny user.  While you want to
+limit these so that you do not overload users with a high number of reviewable features ("high" is
+relative to the relevant conflation use case for the new feature type you're working with),
+returning a review is more desirable than incorrectly conflating a feature since in the case of the
+review, a user has a chance to correctly manually conflate the feature, whereas they do not have
 the chance when it is automatically incorrectly conflated.
 
 Visualizing your data in Weka can help accomplish this.  From the Visualize Data tab, find two
-features whose plots have some even overlap between match and miss classifications in regions that 
-don't contain a majority of the classifications.  If the distribution of match/miss is fairly equal 
-in the overlap area and it is not too large, you can flag that region in your model to automatically 
-return unnecessary reviews.  This technique can be attempted with more than two features, but gets 
+features whose plots have some even overlap between match and miss classifications in regions that
+don't contain a majority of the classifications.  If the distribution of match/miss is fairly equal
+in the overlap area and it is not too large, you can flag that region in your model to automatically
+return unnecessary reviews.  This technique can be attempted with more than two features, but gets
 significantly more complex as the number of features involved increases.
 
 Here, the previous conflation logic ported to the rules file is modified to return reviews in certain
@@ -541,10 +541,10 @@ exports.matchScore = function(map, e1, e2)
         var m = sublines.map;
         var m1 = sublines.match1;
         var m2 = sublines.match2;
-        
+
         var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
         var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-       
+
         if (sampledAngleHistogramValue <= 0)
         {
           if (weightedShapeDistanceValue > 0.861844)
@@ -573,11 +573,11 @@ issue within Hootenanny scheduled to be resolved.
 
 ==== Distance Weighting
 
-You may discover that after having specified or automatically calculated the optimum search 
-radius for a dataset that Hootenanny is failing to conflate features for that dataset where the 
-distance between the features is just larger than the search radius.  If the difference in distance 
-is very large, then the quality of the dataset should first be questioned.  Otherwise, you may be 
-able to use distance weighting to favor classifying features that are closer together in distance 
+You may discover that after having specified or automatically calculated the optimum search
+radius for a dataset that Hootenanny is failing to conflate features for that dataset where the
+distance between the features is just larger than the search radius.  If the difference in distance
+is very large, then the quality of the dataset should first be questioned.  Otherwise, you may be
+able to use distance weighting to favor classifying features that are closer together in distance
 as matches over those that are further apart to increase the correct score.
 
 Here is an example using the distance score feature extractor to compute the distance value:
@@ -594,10 +594,10 @@ exports.matchScore = function(map, e1, e2)
         var m = sublines.map;
         var m1 = sublines.match1;
         var m2 = sublines.match2;
-        
+
         var sampledAngleHistogramValue = sampledAngleHistogramExtractor.extract(m, m1, m2);
         var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
-       
+
         var deltaCoeff = -0.4;
         if (sampledAngleHistogramValue <= 0)
         {
@@ -628,25 +628,25 @@ exports.matchScore = function(map, e1, e2)
 
 You will end up with the best classification model when you test your model against multiple datasets containing your
 new feature type.  How many datasets you need to test against will be dependent on the type of data
-being tested or the requirements of those who will be ultimately doing the conflation against the 
+being tested or the requirements of those who will be ultimately doing the conflation against the
 feature type in question.  Therefore, you will need to end up with a model that performs well against
-all of the datasets you test against.  This may mean reducing performance when testing against one dataset to 
-increase performance when testing against another.  
+all of the datasets you test against.  This may mean reducing performance when testing against one dataset to
+increase performance when testing against another.
 
 It can be distracting and time consuming to continually test against all of your datasets all of the time, so it's  recommended that as you add new datasets to test against and tweak their models that you only  periodically go back and look at how your current model performs against previously tested datasets.   Also, as you add new datasets, you can use the model derived from testing against previous datasets  as your starting point.  However, if the reused model immediately performs very poorly against the new dataset,  then you may need to start from scratch and build a brand new model for the new dataset.  Only after you've tested initially against all your datasets will you then need to combine models to come up with a single model that performs acceptably for all the datasets.
 
 === Exposing Generic Conflation for the Feature Type to the User Interface
 
-Currently, accessing the generic conflation routine for the new model can be done via the Advanced 
-Settings dialog in the Hootenanny User Interface.  To expose the generic conflation rules file to the 
-user interface, add a description string to your rules file and turn the "experimental" descriptor 
+Currently, accessing the generic conflation routine for the new model can be done via the Advanced
+Settings dialog in the Hootenanny User Interface.  To expose the generic conflation rules file to the
+user interface, add a description string to your rules file and turn the "experimental" descriptor
 off.  An example:
 
 -----------------
 exports.description = "Linear Waterway";
 exports.experimental = false;
---------------------
+-----------------
 
-These settings must be made manually in the .conf file to be exposed in the Advanced Settings 
+These settings must be made manually in the .conf file to be exposed in the Advanced Settings
 dialog. This behavior will likely evolve as the User Interface for advanced conflation matures.
 

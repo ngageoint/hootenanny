@@ -6,7 +6,7 @@
 The +write-name-counts+ writes tokenized name counts to a database file.  This data can be used as input to conflation routines to aid in
 matching features.
 
-* +inputs+ - One or more supported data inputs; specify multiple inputs by separating them with a semicolon and surrounding them 
+* +inputs+ - One or more supported data inputs; specify multiple inputs by separating them with a semicolon and surrounding them
              with quotes
 * +output+ - A Sqlite database file
 

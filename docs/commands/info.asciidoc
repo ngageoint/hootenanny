@@ -1,7 +1,7 @@
 [[info]]
 == info
 
-The +info+ command displays information about Hootenanny capabilities.  
+The +info+ command displays information about Hootenanny capabilities.
 
 For further detail on how to use this information see both the Hootenanny User and Developer Guides.
 
@@ -57,9 +57,9 @@ The +--config-options+ option prints out available Hootenanny configuration opti
 One of the following input parameters must be specified:
 
 * +name+             - name or partial name of a configuration option to list and/or print a description for
-* +--option-names+   - if no name is specified, lists all configuration option names; if a name is specified, lists only 
+* +--option-names+   - if no name is specified, lists all configuration option names; if a name is specified, lists only
                        configuration option names that have a full or partial match with the input name
-* +--option-details+ - if no name is specified, lists all configuration option names and descriptions; if a name is specified, 
+* +--option-details+ - if no name is specified, lists all configuration option names and descriptions; if a name is specified,
                        lists only configuration option names and descriptions that have a full or partial match with the input name
 
 ==== Usage
@@ -126,8 +126,8 @@ hoot info --conflate-pre-operations
 
 === Feature Extractors
 
-The +--feature-extractors+ option prints out available feature extractors that can be used when building a conflation model with 
-manually matched map training data. 
+The +--feature-extractors+ option prints out available feature extractors that can be used when building a conflation model with
+manually matched map training data.
 
 ==== Usage
 
@@ -166,12 +166,12 @@ hoot info --format --output
 
 The +languages+ option displays information about Hootenanny language translation/detection capabilities.
 
-All uses of the +languages+ command require the following configuration options to be populated: 
+All uses of the +languages+ command require the following configuration options to be populated:
 * hoot.services.auth.user.name
 * hoot.services.auth.access.token
 * hoot.services.auth.access.token.secret
 
-For more information on logging into the web services, see the 'login' command documentation.  Those options are omitted from the 
+For more information on logging into the web services, see the 'login' command documentation.  Those options are omitted from the
 following command examples.
 
 Only one of the following options can be passed to the command:
@@ -223,7 +223,7 @@ info --languages --detectable
 hoot info --languages --detectable
 --------------------------------------
 
-The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using the Hootenanny web 
+The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using the Hootenanny web
 services.
 
 ==== Usage
@@ -309,10 +309,10 @@ hoot info --merger-creators
 === Operators
 
 The +--operators+ option prints out available inline operators that can be applied to map data in a Hootenanny command.  Map operators
-can be criterion, operations, or visitors.  
+can be criterion, operations, or visitors.
 
-* An example of an operation is DuplicateWayRemover, which removes all duplicate ways from a map.  
-* An example of a criterion is NodeCriterion, which acts as a filter to return all nodes in a map.  
+* An example of an operation is DuplicateWayRemover, which removes all duplicate ways from a map.
+* An example of a criterion is NodeCriterion, which acts as a filter to return all nodes in a map.
 * An example of a visitor is RemoveTagsVisitor, which removes selected tags from features in a map.
 
 ==== Usage
@@ -328,7 +328,7 @@ info --operators
 hoot info --operators
 
 # criterion example - filters only nodes from the map to the output
-hoot convert -D convert.ops="hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::NodeCriterion" \ 
+hoot convert -D convert.ops="hoot::RemoveElementsVisitor" -D remove.elements.visitor.element.criteria="hoot::NodeCriterion" \
 input1.osm input2.osm output.osm
 
 # operation example - writes a map based on the input data with all duplicate ways removed
@@ -340,7 +340,7 @@ hoot convert -D convert.ops="hoot::RemoveTagsVisitor" -D remove.tags.visitor.ele
 
 === Subline Matchers
 
-The +--subline-matchers+ option prints out available subline matchers that determine which method of line matching is used during conflation. 
+The +--subline-matchers+ option prints out available subline matchers that determine which method of line matching is used during conflation.
 
 ==== Usage
 
@@ -356,8 +356,8 @@ hoot info --subline-matchers
 
 === Subline String Matchers
 
-The +--subline-string-matchers+ option prints out available subline string matchers that determine which method of multilinestring matching 
-is used during conflation. 
+The +--subline-string-matchers+ option prints out available subline string matchers that determine which method of multilinestring matching
+is used during conflation.
 
 ==== Usage
 
@@ -373,7 +373,7 @@ hoot info --subline-string-matchers
 
 === String Comparators
 
-The +--string-comparators+ option prints out available string comparators that can be used during conflation when comparing tag string values. 
+The +--string-comparators+ option prints out available string comparators that can be used during conflation when comparing tag string values.
 
 ==== Usage
 
@@ -411,8 +411,8 @@ hoot info --tag-mergers
 
 === Value Aggregators
 
-The +--value-aggregators+ option prints out available tag value aggregation methods that can be used when building a conflation model with 
-manually matched map training data. 
+The +--value-aggregators+ option prints out available tag value aggregation methods that can be used when building a conflation model with
+manually matched map training data.
 
 ==== Usage
 

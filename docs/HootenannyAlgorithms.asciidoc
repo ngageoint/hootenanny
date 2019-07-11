@@ -1,3 +1,4 @@
+:imagesdir: ./algorithms
 
 = Hootenanny Algorithms
 DigitalGlobe, Inc.

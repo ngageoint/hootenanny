@@ -92,7 +92,7 @@ tail -f /usr/share/tomcat8/logs/catalina.out | grep -i -e ERROR -e SEVERE
 	**  +$HOOT_HOME/conf/database/DatabaseConfigLocal.sh+
 	**  +$HOOT_HOME/conf/database/DatabaseConfigDefault.sh+
 	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/db/db.properties+
-	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+ 
+	**  +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/conf/hoot-services.conf+
 	** Also, verify +$HOOT_HOME/hoot-services/src/main/webapps/hoot-services/WEB-INF/classes/db/db.properties+
 		. +HOOTAPI_CONNECTION_POOL_MAX_ACTIVE=90+
 		. +HOOTAPI_CONNECTION_POOL_MAX_IDLE=30+

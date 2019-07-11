@@ -1,14 +1,14 @@
 
 == Using Hootenanny
 
-Hootenanny can be accessed from both command line and via a simple web user interface (Hootenanny-iD) built on top of the link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap iD] Editor.  At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide. 
+Hootenanny can be accessed from both command line and via a simple web user interface (Hootenanny-iD) built on top of the link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap iD] Editor.  At its core, Hootenanny  provides a set of tools for manipulating and conflating vector data as well as translating data between various out of the box supported reference tag schemas such as OSM, TDS, UTP, MGCP.  As an extension to the existing translation capabilities within Hootenanny, the Hootenanny-iD web interface provides a simple translation tool known as the _Translation Assistant_ that will walk users through a custom translation of any customer data format into a supported tag schema.  Additional background on the Hootenanny-iD interface and Translation Assistant can be found in the Hootenanny User Interface Guide.
 
 This document provides background on how to use Hootenanny in a number of common use cases and work flows with a strong emphasis on the command line interface. Note that there are a number of undocumented features in Hootenanny that are referenced from the command line help. If you need more detailed information on that functionality please contact the developers at https://github.com/ngageoint/hootenanny.
 
 [[Installation]]
 == Installation
 
-See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information. 
+See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny Developer>> Guides for additional information.
 
 [[OldDocsConflation]]
 == Conflation Supported Feature Types
@@ -16,8 +16,8 @@ See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny 
 [[PoiToPoi]]
 === POI Conflation
 
-Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>> 
-to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI 
+Hootenanny provides the ability to perform point to point, i.e. POI to POI, conflation to merge input dataset geometry and attribution using the Unify approach. The _Unify_ POI to POI conflation code uses the Hootenanny JavaScript interface described in <<HootJavaScriptOverview>>
+to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI
 datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
 <<hootUI>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootalgo>>, _Unifying
 POI Conflation_.
@@ -62,35 +62,35 @@ The approach described above generally provides good results. There is no gettin
 
 [[PoiToPolygonConflation]]
 === POI to Polygon Conflation
- 
-Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between 
-the two features, name similarity, type similarity, address similarity, and phone number similarity.  See 
+
+Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
+the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
 <<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options
-  
+
 See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
 
 [[PoiToPolygonStatistics]]
 ==== Statistics
 
 Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a
-different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section 
+different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section
 <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
 
 [[AreaToAreaConflation]]
 === Area to Area Conflation
 
-Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny 
-defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.  
+Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny
+defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.
 To read more information on Area to Area Conflation, see the "Area to Area Conflation" section in the Hootenanny Algorithm Guide.
 
 [[River-Conflation]]
 === River Conflation
 
-Rivers may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the 
-related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in 
+Rivers may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the
+related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
 this conflation.
 
 ==== Configurable Files
@@ -105,23 +105,23 @@ this conflation.
 
 ==== Usage
 
-River conflation can be done from the command line or the web user interface.  This section describes how to conflate river data 
-from the command line.  For details on how to do it in the web user interface, see the associated section in the Hootenanny User 
+River conflation can be done from the command line or the web user interface.  This section describes how to conflate river data
+from the command line.  For details on how to do it in the web user interface, see the associated section in the Hootenanny User
 Interface guide.  To conflate river data, a command similar to the following may be issued:
 
 ------
 hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
-All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc+.  Tweaking the settings can 
-result in better conflation performance depending on the datasets being conflated.  See the configuration options for details on the 
+All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc+.  Tweaking the settings can
+result in better conflation performance depending on the datasets being conflated.  See the configuration options for details on the
 settings that may be modified (search for "waterway").
 
 [[Power-Line-Conflation]]
 === Power Line Conflation
 
-Power lines may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the 
-related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in 
+Power lines may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the
+related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
 this conflation.
 
 ==== Configurable Files
@@ -137,13 +137,13 @@ this conflation.
 ==== Usage
 
 Power line conflation can be done from the command line or the web user interface.  Conflating in both environments is similar as described
-in the above River Conflation section.  Power line conflation settings start with "power.line" and exist in 
+in the above River Conflation section.  Power line conflation settings start with "power.line" and exist in
 +conf/core/ConfigOptions.asciidoc+.
 
 [[Feature-Review]]
 === Feature Review
 
-During the conflation process if Hootenanny cannot determine with confidence the best way to 
+During the conflation process if Hootenanny cannot determine with confidence the best way to
 conflate features, it will mark one or more features as needing a manual review by the user.  Below
 are listed the possible solutions where Hootenanny may request a manual review from a user.
 
@@ -175,15 +175,15 @@ are listed the possible solutions where Hootenanny may request a manual review f
 Translation is the process of both converting tabular GIS data, such as
 Shapefiles, to the OSM format and schema. There are two main supported formats
 for OSM data, +.osm+ , an XML format, and +.osm.pbf+ , a compressed binary
-format. Discussions of OSM format reference either of these two data formats. 
+format. Discussions of OSM format reference either of these two data formats.
 
 By far the most complex portion of the translation process is the converting the
 Shapefile's schema to the OSM schema. In many cases a one to one mapping can be
-found due to the richness of the OSM schema, but finding the most appropriate mapping 
+found due to the richness of the OSM schema, but finding the most appropriate mapping
 can be quite time consuming.  For example, one can spend days translating an obscure
-local language to determine the column headings and values in the context of OSM or 
-depending on their knowledge of Python/Javascript, create a custom translation value that 
-provides a mapping between the two schemas in a significantly shorter duration of time.  
+local language to determine the column headings and values in the context of OSM or
+depending on their knowledge of Python/Javascript, create a custom translation value that
+provides a mapping between the two schemas in a significantly shorter duration of time.
 
 The following sections discuss high level issues associated with translating
 files. For a more nuts and bolts discussion see the +convert+ section.
@@ -240,11 +240,11 @@ There are several functions that may be called by Hootenanny:
 
 [[Simple-Example]]
 ===== Simple Example
-  
+
 
 Below is about the simplest useful example that supports both +convert+. The following sections go into details on how these function are used.
 ------
-// an optional initialize function that gets called once before any 
+// an optional initialize function that gets called once before any
 // translateAttribute calls.
 function initialize() {
     // The print method simply prints the string representation to stdout
@@ -312,7 +312,7 @@ function getDbSchema()
                      { name:"Unknown", value:"0" },
                      { name:"Road", value:"1" },
                      { name:"Motorway", value:"41" }
-                  ] // End of Enumerations 
+                  ] // End of Enumerations
                  } // End of TYP
             ]
         }
@@ -324,7 +324,7 @@ function getDbSchema()
 
 [[JavaScript-to-OSM-Translation]]
 ==== JavaScript to OSM Translation
-  
+
 
 The +translateToOsm+ method takes two parameters:
 
@@ -341,13 +341,13 @@ hoot convert -D schema.translation.script=tmp/SimpleExample.js "myinput1.shp myi
 
 The functions will be called in the following order:
 
-.  +initialize+ 
+.  +initialize+
 
 .  +translateToOsm+ - This will be called once for every feature in myinput1.shp
 
 .  +translateToOsm+ - This will be called once for every feature in myinput2.shp
 
-.  +finalize+ 
+.  +finalize+
 
 
 [[Table-Based-Translation]]
@@ -376,9 +376,9 @@ for (var r in one2one) {
     }
     lookup[row[0]][row[1]] = [row[2], row[3]];
 }
-// A translateAttributes method that is very similar to the python translate 
+// A translateAttributes method that is very similar to the python translate
 // attributes
-function translateToOsm(attrs, layerName) { 
+function translateToOsm(attrs, layerName) {
     var tags = {};
     for (var col in attrs) {
         var value = attrs[col];
@@ -447,7 +447,7 @@ attributes:
 In my notional example there are three columns with the following definitions:
 
 * +STNAME+ - The name of the street.
-* +STTYPE+ - The type of the street. 
+* +STTYPE+ - The type of the street.
 * +DIR+ - The flow of traffic, either 1 for one way traffic, or 2 for
   bidirectional traffic.
 
@@ -557,7 +557,7 @@ function translateToOsm(attrs, layerName) {
 The translation scripts above will give the values found in the _Inputs/Outputs
 Table_.
 
-===== Example Python Translation File 
+===== Example Python Translation File
 
 The following script provides a more thorough example for translating
 http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road data]:
@@ -650,7 +650,7 @@ function translateToOsm(attrs, layerName) {
 
 [[OSM-to-OGR-Translation]]
 ==== OSM to OGR Translation
-  
+
 
 Using JavaScript translation files it is now possible to convert from OSM to more typical tabular geospatial formats such as Shapefile or FileGDB. In order to convert to these formats some information will likely be lost and these translation files define which attributes will be carried across and how they'll be put into tables/layers.
 
@@ -680,20 +680,20 @@ hoot convert -D schema.translation.script=tmp/SimpleExample.js myinput.osm myout
 
 The functions will be called in the following order:
 
-.  +initialize+ 
+.  +initialize+
 
-.  +getDbSchema+ 
+.  +getDbSchema+
 
-.  +translateToOgr+ - This will be called once for every element in myinput.osm that has at least one non-metadata tag. The metadata tags are defined in +$HOOT_HOME/conf/MetadataSchema.json+ 
+.  +translateToOgr+ - This will be called once for every element in myinput.osm that has at least one non-metadata tag. The metadata tags are defined in +$HOOT_HOME/conf/MetadataSchema.json+
 
-.  +finalize+ 
+.  +finalize+
 
 This is most commonly accessed through the +convert+ command.
 
 
 [[DB-Schema]]
 ===== DB Schema
-  
+
 
 Hootenanny supports converting OSM data into multiple layers where each layer has its own output schema including data types and column names.
 
@@ -713,7 +713,7 @@ schema = [
       {
         // required name of the column
         name: "NAM",
-        // required type of the column. 
+        // required type of the column.
         // Options are listed in "Supported output data types" below.
         type: "string",
         // Optional defValue field. If the column isn't populated in attrs then
@@ -721,7 +721,7 @@ schema = [
         // must always be specified in attrs.
         defValue: '',
         // Optional length field. If the column isn't populated then the default
-        // field size is used as defined by OGR. If it is populated then the 
+        // field size is used as defined by OGR. If it is populated then the
         // value will be used as the field width.
         length: 255
       },
@@ -729,7 +729,7 @@ schema = [
       { name: "TYP", type: "enumeration",
         // enumerated values
         enumerations: [
-          { value: 0 }, 
+          { value: 0 },
           { value: 1 }
         ]
       }
@@ -755,7 +755,7 @@ The numeric data types support +minimum+ and +maximum+ . By default +minimum+ an
 
 [[File-Formats]]
 ==== File Formats
-  
+
 For the translation operations (and several others) Hootenanny utilizes the well known GDAL/OGR libraries. These libraries support a number of file formats including Shapefile, FileGDB, GeoJSON, PostGIS, etc. While not every format has been tested, many will work with Hootenanny without any modification. Others, such as FileGDB, may require a specially compiled version of GDAL. Please see the GDAL documentation and talk to your administrator for details.
 
 Below are a discussion of some special handling situations when reading and writing to specific formats.
@@ -763,7 +763,7 @@ Below are a discussion of some special handling situations when reading and writ
 
 [[Shapefile]]
 ===== Shapefile
-  
+
 When writing shapefiles a new directory will be created with the basename of the specified path and the new layers will be created within that directory. For example:
 
 ------
@@ -775,7 +775,7 @@ The above command will create a new directory called +output+ and the layers spe
 
 [[CSV]]
 ===== CSV
-  
+
 
 CSV files are created using the OGR CSV driver and will contain an associated +.csvt+ file that contains the column types. If you're exporting points then you will get an X/Y column prepended onto your data. If you're exporting any other geometry type then you will get a WKT column prepended that contains the Well Known Text representation of your data. If you would like to read from a CSV you must first create a VRT file as described in the OGR CSV documentation. E.g.
 
@@ -807,14 +807,14 @@ hoot convert -D schema.translation.script=translations/Poi.js foo.vrt ConvertedB
 
 [[Buildings-Translation]]
 === Buildings Translation
-  
+
 
 In the simplest case a building is a way tagged with +building=yes+ . However, when it comes to 3D features buildings can get dramatically more complex. For a thorough discussion of Buildings and how they're mapped see the link:$$http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings$$[OSM wiki page on Simple 3D Buildings] .
 
 
 [[Translating-Building-Parts]]
 ==== Translating Building Parts
-  
+
 
 Some Shapefiles contain buildings that are mapped out as independent parts. Where each part refers to the roof type and height of a portion of the building. E.g. The Capital building might be mapped out as one large, low flat roof record and a second tall domed roof record. This provides for very rich data, but also a complex representation in OSM. Fortunately Hootenanny handles most of the heavy lifting for you.
 
@@ -823,7 +823,7 @@ To translate complex building parts simply translate them in the same way you wo
 
 [[Complex-Building-Example]]
 ===== Complex Building Example
-  
+
 .Example of a Complex Building
 
 image::images/image1348.png[]
@@ -831,11 +831,11 @@ image::images/image1348.png[]
 In the above image there are three buildings; 123, 124, and 125. Building 123 is broken into two parts, a long rectangular section that is marked as a gabled roof and a squarish section that is marked with a flat roof. In a Shapefile that may look like the following:
 
 |======
-| name | roof_type 
-| 123 | gabled 
-| 123 | flat 
-| 124 | gabled 
-| 125 | gabled 
+| name | roof_type
+| 123 | gabled
+| 123 | flat
+| 124 | gabled
+| 125 | gabled
 |======
 
 Using an abbreviated OSM JSON representation the resulting OSM data would be:
@@ -860,8 +860,8 @@ If these two questions answer yes, then the building parts are grouped together.
 { "type": "way", "id": 3, "tags": { "building": "yes", "addr:housenumber": "124", "building:roof:shape": "gabled" } }
 { "type": "way", "id": 4, "tags": { "building": "yes", "addr:housenumber": "125", "building:roof:shape": "gabled" } }
 { "type": "way", "id": 5, "tags": { "building": "yes", "addr:housenumber": "125" } }
-{ "type": "relation", "id": 1, "tags": { "type": "building", "building": "yes", "addr:housenumber": "123" }, 
-    "members": [ 
+{ "type": "relation", "id": 1, "tags": { "type": "building", "building": "yes", "addr:housenumber": "123" },
+    "members": [
         { "type": "way", "ref": 1, "role": "part" }
         { "type": "way", "ref": 2, "role": "part" }
         { "type": "way", "ref": 5, "role": "outline" } ] }
@@ -872,10 +872,10 @@ The astute reader may notice that a new way was created during this process. The
 
 [[Disabling-Complex-Buildings]]
 ===== Disabling Complex Buildings
-  
 
-By default the when using the convert command to convert an OGR format to OSM +ogr2osm.simplify.complex.buildings+ is enabled.  If you 
-would like to disable the automatic construction of complex buildings from the individual parts then simply set 
+
+By default the when using the convert command to convert an OGR format to OSM +ogr2osm.simplify.complex.buildings+ is enabled.  If you
+would like to disable the automatic construction of complex buildings from the individual parts then simply set
 +ogr2osm.simplify.complex.buildings+ to false.  For example:
 
 ------
@@ -884,14 +884,14 @@ hoot convert -D schema.translation.script=MyTranslation -D ogr2osm.simplify.comp
 
 [[Common-Use-Cases]]
 == Common Conflation Use Cases
-  
+
 
 The following sections describe some common use cases and how to approach them using Hootenanny.
 
 
 [[Conflate-Two-Shapefiles]]
 === Conflate Two Shapefiles
-  
+
 
 The following subsections describe how to do the following steps:
 
@@ -903,15 +903,15 @@ The following subsections describe how to do the following steps:
 
 . Convert the conflated .osm data back to Shapefile
 
-We'll be using files from the http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[US Census Tiger] data and http://dcgis.dc.gov[DC GIS] 
+We'll be using files from the http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[US Census Tiger] data and http://dcgis.dc.gov[DC GIS]
 
-* Tiger Roads - link:$$ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip$$[ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip] 
-* DC GIS Roads - http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI[http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI] 
+* Tiger Roads - link:$$ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip$$[ftp://ftp2.census.gov/geo/tiger/TIGER2012/ROADS/tl_2012_11001_roads.zip]
+* DC GIS Roads - http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI[http://dcatlas.dcgis.dc.gov/catalog/download.asp?downloadID=88&downloadTYPE=ESRI]
 
 
 [[Prepare-the-Shapefiles]]
 ==== Prepare the Shapefiles
-  
+
 
 First validate that your input shapefiles are both Line String (AKA Polyline) shapefiles. This is easily done with +ogrinfo+:
 
@@ -941,14 +941,14 @@ MTFCC: String (5.0)
 
 [[Translate-the-Shapefiles]]
 ==== Translate the Shapefiles
-  
+
 
 Hootenanny provides a link:$$User_-_convert.html$$[convert] operation to translate and convert shapefiles into OSM files. If the projection is available for the Shapefile the input will be automatically reprojected to WGS84 during the process. If you do a good job of translating the input data into the OSM schema then Hootenanny will conflate the attributes on your features as well as the geometries. If you do not translate the data properly then you'll still get a result, but it may not be desirable.
 
 
 [[Crummy-Translation]]
 ===== Crummy Translation
-  
+
 
 The following translation code will always work for roads, but drops all the attribution on the input file.
 
@@ -963,7 +963,7 @@ def translateAttributes(attrs, layerName):
 
 [[Better-Translation]]
 ===== Better Translation
-  
+
 
 The following translation will work well with the tiger data.
 
@@ -1044,7 +1044,7 @@ def translateAttributes(attrs, layerName):
             tags['highway'] = 'motorway'
         else:
             tags['highway'] = 'road'
-    # There is also a one way attribute in the data, but given the difficulty 
+    # There is also a one way attribute in the data, but given the difficulty
     # in determining which way it is often left out of the mapping.
     return tags
 ------
@@ -1058,13 +1058,13 @@ hoot convert -D schema.translation.script=DcRoads tmp/dc-roads/Streets4326.shp t
 
 [[Conflate-the-Data]]
 ==== Conflate the Data
-  
+
 
 If you're just doing this for fun, then you probably want to crop your data down to something that runs quickly before conflating.
 
 ------
-hoot crop tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
-hoot crop tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop tmp/dc-roads/dcgis.osm tmp/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
+hoot crop tmp/dc-roads/tiger.osm tmp/dc-roads/tiger-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
 ------
 
 All the hard work is done. Now we let the computer do the work. If you're using the whole DC data set, go get a cup of coffee.
@@ -1076,7 +1076,7 @@ hoot conflate tmp/dc-roads/dcgis-cropped.osm tmp/dc-roads/tiger-cropped.osm tmp/
 
 [[Convert-Back-to-Shapefile]]
 ==== Convert Back to Shapefile
-  
+
 
 Now we can convert the final result back into a Shapefile.
 
@@ -1087,9 +1087,9 @@ hoot convert -D shape.file.writer.cols="name;highway;surface;foot;horse;bicycle"
 
 [[Snap-GPS-Tracks-to-Roads]]
 === Snap GPS Tracks to Roads
-  
 
-. Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. +accuracy=5+ 
+
+. Create a translation file for "translating" your GPS tracks. This typically just adds the accuracy field. E.g. +accuracy=5+
 
 . Convert your GPX file into an OSM file where each track is now a way.
 +
@@ -1107,7 +1107,7 @@ hoot convert -D shape.file.writer.cols "hoot:max:movement;hoot:mean:movement;hoo
 
 [[Maintaining-per-node-attributes]]
 ==== Maintaining per node attributes
-  
+
 
 If you have node attributes that you want to keep you can use the +hoot::PointsToTracksOp+ operation to join the nodes after translation. This requires two fields on each node:
 

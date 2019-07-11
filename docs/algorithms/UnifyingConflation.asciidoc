@@ -3,7 +3,7 @@
 [[UnifyingConflation]]
 == Unifying Conflation
 
-There have been two conflation designs built into Hootenanny over the course of its development for all feature types and three for road features. The original design, from the initial software design stage (circa 2012) uses a custom approach built upon a greedy optimization method.  
+There have been two conflation designs built into Hootenanny over the course of its development for all feature types and three for road features. The original design, from the initial software design stage (circa 2012) uses a custom approach built upon a greedy optimization method.
 However, this legacy approach only dealt with roads and did not flag questionable situations as reviews.  This approach is no longer available.
 
 Unifying conflation is the newer conflation approach for all feature types initially developed under
@@ -161,7 +161,7 @@ The data selected for the more aggressive optimization goes through the
 following steps:
 
 . Determine the set of conflicts within the matches
-. Use linear programming to determine a good set of matches. 
+. Use linear programming to determine a good set of matches.
 . Use greedy search to determine a good set of matches.
 . Select the best result from the methods above.
 
@@ -193,7 +193,7 @@ operation is applied in turn to create the final conflated map.
 
 During this process the status of features that are conflated is changed from
 either _Unknown1_ or _Unknown2_ (representing the source data set) to
-_Conflated_. Features marked for review maintain the _Unknown*_ status. 
+_Conflated_. Features marked for review maintain the _Unknown*_ status.
 
 * `merger.creators` configuration option, <<hootuser>>
 

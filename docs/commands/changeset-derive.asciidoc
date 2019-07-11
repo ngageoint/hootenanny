@@ -3,19 +3,19 @@
 
 === Description
 
-The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input 
-OSM datasets.  Alternatively, when only one dataset is input it generates a changeset file representing all 
-the data in the input dataset. The output changeset file can later be applied to an OSM API database with 
-the +changeset-apply+ command.  
+The +changeset-derive+ command creates an OSM changeset file that represents the difference between two input
+OSM datasets.  Alternatively, when only one dataset is input it generates a changeset file representing all
+the data in the input dataset. The output changeset file can later be applied to an OSM API database with
+the +changeset-apply+ command.
 
-If deriving a changeset between two inputs from different dates, the first input should be the older 
-dataset and the second should be the newer dataset.  
+If deriving a changeset between two inputs from different dates, the first input should be the older
+dataset and the second should be the newer dataset.
 
 * +input1+            - OSM data input 1 (e.g. .osm file).
 * +input2+            - OSM data input 2 (e.g. .osm file or empty string ("") to derive changeset from one input only).
 * +output+            - Output location (e.g. .osc or .osc.sql file.
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain 
-                        element ID continuity with a particular database instance when generating SQL 
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
+                        element ID continuity with a particular database instance when generating SQL
                         changesets only.  Required only if the changeset output format is .osc.sql.
 * +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
                         node, way, relation (only valid for .osc output files)
@@ -47,11 +47,11 @@ of the `convert` command documentation for details.
 
 === Sorting
 
-Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To 
-perform sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value 
+Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To
+perform sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value
 greater than zero.
 
-Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an 
+Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an
 OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
 
 === See Also
