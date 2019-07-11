@@ -66,6 +66,7 @@ private:
   double _alpha;
   double _alphaShapeBuffer;
   bool _crop;
+  // TODO: remove this?
   bool _swapInputs;
 };
 

@@ -4353,10 +4353,10 @@ SampledAngleHistogramExtractor
 
 The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
 
-This operation can take on the following two options:
-* `hoot::WayJoinerBasic`
-* `hoot::WayJoinerAdvanced`
+This operation can take on the following options:
 * `hoot::CookieCutConflateWayJoiner`
+* `hoot::WayJoinerAdvanced`
+* `hoot::WayJoinerBasic`
 
 === way.matcher.heading.delta
 

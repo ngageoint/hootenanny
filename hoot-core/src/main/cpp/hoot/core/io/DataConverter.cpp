@@ -399,7 +399,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
       // multithreaded code doesn't support conversion ops. could it?
       // TODO: if we have a single convert op that is a SchemaTranslationOp or
       // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
-      // translation...seems like we should
+      // translation?...seems like we should
       _convertOps.size() == 0 &&
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())

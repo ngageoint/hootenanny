@@ -44,8 +44,7 @@ WayJoinerAdvanced::WayJoinerAdvanced()
 
 void CookieCutConflateWayJoiner::joinWays(const OsmMapPtr& map)
 {
-  CookieCutConflateWayJoiner wayJoiner;
-  wayJoiner.join(map);
+  CookieCutConflateWayJoiner().join(map);
 }
 
 bool CookieCutConflateWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
@@ -78,8 +77,8 @@ void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(WayPtr parent, W
   }
 }
 
-void CookieCutConflateWayJoiner::_determineKeeperFeatureForId(WayPtr parent, WayPtr child,
-                                                              WayPtr& keeper, WayPtr& toRemove) const
+void CookieCutConflateWayJoiner::_determineKeeperFeatureForId(
+  WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
 {
   _determineKeeperFeatureForTags(parent, child, keeper, toRemove);
 }
