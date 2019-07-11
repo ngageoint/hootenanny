@@ -71,13 +71,9 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
         assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
         assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
-        assertEquals(userId + "@hootenanny.test", xpath.evaluate("//osm/user/@email", responseData));
         assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-        assertEquals("provider_access_key", xpath.evaluate("//osm/user/@provider_access_key", responseData));
-        assertEquals("provider_access_token", xpath.evaluate("//osm/user/@provider_access_token", responseData));
-        assertNotNull(xpath.evaluate("//osm/user/@hootservices_last_authorize", responseData));
-        assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
-        assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
+        assertNotNull(xpath.evaluate("//osm/user/@account_last_authorized", responseData));
+        assertNotNull(xpath.evaluate("//osm/user/@account_created", responseData));
     }
 
     @Test
@@ -96,13 +92,9 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
         assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
         assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
-        assertEquals(userId + "@hootenanny.test", xpath.evaluate("//osm/user/@email", responseData));
         assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-        assertEquals("provider_access_key", xpath.evaluate("//osm/user/@provider_access_key", responseData));
-        assertEquals("provider_access_token", xpath.evaluate("//osm/user/@provider_access_token", responseData));
-        assertNotNull(xpath.evaluate("//osm/user/@hootservices_last_authorize", responseData));
-        assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
-        assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
+        assertNotNull(xpath.evaluate("//osm/user/@account_last_authorized", responseData));
+        assertNotNull(xpath.evaluate("//osm/user/@account_created", responseData));
 
     }
 
@@ -160,7 +152,6 @@ public class UserResourceTest extends OSMResourceTestAbstract {
         assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
         assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
         assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
-        assertEquals(userId + "@hootenanny.test", xpath.evaluate("//osm/user/@email", responseData));
         assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
     }
 
