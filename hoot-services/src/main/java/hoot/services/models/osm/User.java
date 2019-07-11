@@ -64,17 +64,17 @@ public class User extends Users {
         Element userElement = doc.createElement("user");
         userElement.setAttribute("id", String.valueOf(getId()));
         userElement.setAttribute("display_name", getDisplayName());
-        userElement.setAttribute("email", getEmail());
-
-        userElement.setAttribute("provider_access_token", getProviderAccessToken());
-        userElement.setAttribute("provider_access_key", getProviderAccessKey());
-        userElement.setAttribute("provider_created_at_epoch", Long.toString(getProviderCreatedAt().getTime()));
-        userElement.setAttribute("provider_created_at", UserManagerImpl.DATE_FORMAT.format(new Date(getProviderCreatedAt().getTime())));
-
-        userElement.setAttribute("hootservices_created_at_epoch", Long.toString(getHootservicesCreatedAt().getTime()));
-        userElement.setAttribute("hootservices_created_at", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesCreatedAt().getTime())));
-        userElement.setAttribute("hootservices_last_authorize_epoch", Long.toString(getHootservicesLastAuthorize().getTime()));
-        userElement.setAttribute("hootservices_last_authorize", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesLastAuthorize().getTime())));
+//        userElement.setAttribute("email", getEmail());
+//
+//        userElement.setAttribute("provider_access_token", getProviderAccessToken());
+//        userElement.setAttribute("provider_access_key", getProviderAccessKey());
+//        userElement.setAttribute("provider_created_at_epoch", Long.toString(getProviderCreatedAt().getTime()));
+        userElement.setAttribute("account_created", UserManagerImpl.DATE_FORMAT.format(new Date(getProviderCreatedAt().getTime())));
+//
+//        userElement.setAttribute("hootservices_created_at_epoch", Long.toString(getHootservicesCreatedAt().getTime()));
+//        userElement.setAttribute("account_created", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesCreatedAt().getTime())));
+//        userElement.setAttribute("hootservices_last_authorize_epoch", Long.toString(getHootservicesLastAuthorize().getTime()));
+        userElement.setAttribute("account_last_authorized", UserManagerImpl.DATE_FORMAT.format(new Date(getHootservicesLastAuthorize().getTime())));
 
         // img element not supported
         // roles element not supported
