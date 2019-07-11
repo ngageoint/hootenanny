@@ -77,7 +77,7 @@ hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.u
 # TODO: CookieCutConflateWayJoiner doesn't work yet
 echo "snap"
 # -D way.joiner=hoot::CookieCutConflateWayJoiner hoot::WayJoinerAdvanced
-hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedWaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.way.criterion=hoot::HighwayCriterion -D snap.unconnected.ways.snap.to.way.node.criterion=hoot::HighwayNodeCriterion -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
+hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
 
 #-D reader.use.file.status=true
 #-D changeset.allow.deleting.reference.features=false -D changeset.buffer=0.0002

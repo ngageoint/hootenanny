@@ -124,13 +124,16 @@ public:
   static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
                                        const WayPtr& connectTo);
 
-private:
-
-  friend class UnconnectedWaySnapperTest;
+protected:
 
   // if true, will attempt to snap nodes to existing way nodes instead of adding them to the way as
   // a new way node
   bool _snapToExistingWayNodes;
+
+private:
+
+  friend class UnconnectedWaySnapperTest;
+
   // furthest away a way node can be from a unconnected node for us to consider snapping to it
   double _maxNodeReuseDistance;
   // furthest away a way can be from a unconnected node for us to consider snapping to it
