@@ -192,5 +192,6 @@ bool ElementComparer::_compareRelation(const std::shared_ptr<const Element>& re,
   }
 
     return true;
-  }
+}
+
 }

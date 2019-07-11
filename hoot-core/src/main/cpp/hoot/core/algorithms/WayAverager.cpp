@@ -38,7 +38,6 @@ using namespace geos::operation::distance;
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>

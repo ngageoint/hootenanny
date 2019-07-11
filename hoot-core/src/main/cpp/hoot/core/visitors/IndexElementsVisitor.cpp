@@ -33,6 +33,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/algorithms/Distance.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -88,10 +89,10 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
-                                                   const std::shared_ptr<Tgs::HilbertRTree>& index,
-                                                   const deque<ElementId>& indexToEid,
-                                                   ConstOsmMapPtr pMap)
+set<ElementId> IndexElementsVisitor::findNeighbors(
+  const Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
+  const deque<ElementId>& indexToEid, ConstOsmMapPtr pMap, const ElementType& elementType,
+  const bool includeContainingRelations)
 {
   LOG_TRACE("Finding neighbors within env: " << env << "...");
   LOG_VART(indexToEid.size());
@@ -100,7 +101,6 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
   LOG_VART(e2r.size());
 
-  set<ElementId> result;
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
   min[1] = env.getMinY();
@@ -108,23 +108,68 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   max[1] = env.getMaxY();
   IntersectionIterator it(index.get(), min, max);
 
+  set<ElementId> neighbors;
   while (it.next())
   {
     ElementId eid = indexToEid[it.getId()];
-
-    // Map the tree id to an element id and push into result.
-    result.insert(eid);
-
-    // Check for relations that contain this element
-    const set<long>& relations = e2r.getRelationByElement(eid);
-    for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+    if (elementType == ElementType::Unknown || eid.getType() == elementType)
     {
-      result.insert(ElementId(ElementType::Relation, *it));
+      // Map the tree id to an element id and push into result.
+      neighbors.insert(eid);
+
+      if (includeContainingRelations)
+      {
+        // Check for relations that contain this element
+        const set<long>& relations = e2r.getRelationByElement(eid);
+        for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+        {
+          neighbors.insert(ElementId(ElementType::Relation, *it));
+        }
+      }
     }
   }
 
-  LOG_VART(result.size());
-  return result;
+  LOG_VART(neighbors);
+  return neighbors;
+}
+
+std::set<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
+  const ConstNodePtr& node, const geos::geom::Envelope& env,
+  const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
+  ConstOsmMapPtr pMap)
+{
+  set<ElementId> neighborIds =
+    findNeighbors(env, index, indexToEid, pMap, ElementType::Node, false);
+
+  // sort by increasing neighbor distance from the input node
+
+  // use the distance as the key...we don't care if there are duplicate distances, as we'll take
+  QMultiMap<double, ElementId> neighborNodeDistances;
+  for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIds.begin();
+       neighborIdsItr != neighborIds.end(); ++neighborIdsItr)
+  {
+    ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
+    assert(neighborNode.get());
+    neighborNodeDistances.insertMulti(
+      Distance::euclidean(*node, *neighborNode), node->getElementId());
+  }
+
+  const QList<double> sortedDistances = neighborNodeDistances.keys();
+  set<ElementId> sortedNeighborIds;
+  for (QList<double>::const_iterator distancesItr = sortedDistances.begin();
+       distancesItr != sortedDistances.end(); ++distancesItr)
+  {
+    QMultiMap<double, ElementId>::const_iterator elementIdsItr =
+      neighborNodeDistances.find(*distancesItr);
+    while (elementIdsItr != neighborNodeDistances.end())
+    {
+      sortedNeighborIds.insert(elementIdsItr.value());
+      ++elementIdsItr;
+    }
+  }
+
+  LOG_VART(sortedNeighborIds);
+  return sortedNeighborIds;
 }
 
 }

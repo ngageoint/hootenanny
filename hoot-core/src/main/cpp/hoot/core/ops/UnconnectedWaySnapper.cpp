@@ -455,23 +455,23 @@ std::set<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
 {
   LOG_TRACE("Retrieving nearby features to snap to for: " << node->getElementId() << "...");
 
-  // The neighbors do not seem to be returned sorted by distance...hasn't seemed to matter in the
-  // output quality so far but may need some attention later.
-
   std::set<ElementId> neighborIds;
   std::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
   if (elementType == ElementType::Node)
   {
     env->expandBy(_getWayNodeSearchRadius(node));
+    // The node neighbors must be sorted by distance to get the best way node snapping results. Not
+    // sure yet if they need to be when snapping to ways.
     neighborIds =
-      IndexElementsVisitor::findNeighbors(
-        *env, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, _map);
+      IndexElementsVisitor::findSortedNodeNeighbors(
+        node, *env, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, _map);
   }
   else
   {
     env->expandBy(_getWaySearchRadius(node));
     neighborIds =
-      IndexElementsVisitor::findNeighbors(*env, _snapToWayIndex, _snapToWayIndexToEid, _map);
+      IndexElementsVisitor::findNeighbors(
+        *env, _snapToWayIndex, _snapToWayIndexToEid, _map, elementType, false);
   }
   LOG_VART(neighborIds);
   return neighborIds;

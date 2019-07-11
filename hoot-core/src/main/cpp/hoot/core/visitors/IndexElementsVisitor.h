@@ -71,10 +71,37 @@ public:
 
   void finalizeIndex();
 
-  static std::set<ElementId> findNeighbors(const geos::geom::Envelope& env,
-                                           const std::shared_ptr<Tgs::HilbertRTree>& index,
-                                           const std::deque<ElementId>& indexToEid,
-                                           ConstOsmMapPtr pMap);
+  /**
+   * TODO - also may be able to make sortByIncreasingDistance always set to true
+   *
+   * @param env
+   * @param index
+   * @param indexToEid
+   * @param pMap
+   * @param elementType
+   * @param includeContainingRelations
+   * @return
+   */
+  static std::set<ElementId> findNeighbors(
+    const geos::geom::Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
+    const std::deque<ElementId>& indexToEid, ConstOsmMapPtr pMap,
+    const ElementType& elementType = ElementType::Unknown,
+    const bool includeContainingRelations = true);
+
+  /**
+   * TODO
+   *
+   * @param node
+   * @param env
+   * @param index
+   * @param indexToEid
+   * @param pMap
+   * @return
+   */
+  static std::set<ElementId> findSortedNodeNeighbors(
+    const ConstNodePtr& node, const geos::geom::Envelope& env,
+    const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
+    ConstOsmMapPtr pMap);
 
   virtual QString getDescription() const { return "Build an index of input elements"; }
 
