@@ -29,7 +29,6 @@ package hoot.services.controllers.osm.user;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +62,7 @@ import hoot.services.utils.XmlDocumentBuilder;
  * Service endpoint for OSM user information
  */
 @Controller
-@Path("/user")
+@Path("/api/0.6/user")
 @Transactional
 public class UserResource {
     public UserResource() {
@@ -77,14 +76,9 @@ public class UserResource {
     }
 
     /**
-     * Service method endpoint for retrieving OSM user information
-     * <p>
-     * This is currently implemented as a dummy method to appease iD. It always
-     * retrieves information for the first user record in the services database.
-     * It cannot properly be implemented until user authentication is first
-     * implemented.
-     * <p>
-     * GET hoot-services/osm/api/0.6/user/details
+     * Service method endpoint for retrieving Hoot user information by id
+     *
+     * GET hoot-services/osm/api/0.6/user/{userId}
      *
      * @param userId ID of the user to retrieve information for
      * @return Response with the requested user's information
@@ -101,6 +95,27 @@ public class UserResource {
         if (user == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
+        String contentType = null;
+        if(request != null) { contentType = request.getHeader("Content-Type"); }
+        if(contentType == null || contentType.trim().equalsIgnoreCase("application/xml")) {
+            Document responseDoc = writeResponse(new User(user));
+            return Response.ok().entity(new DOMSource(responseDoc)).type(MediaType.APPLICATION_XML).build();
+        } else {
+            return Response.ok().entity(user).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
+    /**
+     * Service method endpoint for retrieving Hoot user
+     *
+     * GET hoot-services/osm/api/0.6/user/details
+     *
+     * @return Response with the user's information
+     */
+    @GET
+    @Path("/details")
+    public Response getDetails(@Context HttpServletRequest request) throws ParserConfigurationException {
+        Users user = Users.fromRequest(request);
         String contentType = null;
         if(request != null) { contentType = request.getHeader("Content-Type"); }
         if(contentType == null || contentType.trim().equalsIgnoreCase("application/xml")) {
