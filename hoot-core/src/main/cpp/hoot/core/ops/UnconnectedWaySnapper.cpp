@@ -450,12 +450,12 @@ Meters UnconnectedWaySnapper::_getWayNodeSearchRadius(const ConstElementPtr& e) 
     _addCeToSearchDistance ? _maxNodeReuseDistance + e->getCircularError() : _maxNodeReuseDistance;
 }
 
-std::set<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
+QList<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   const ConstNodePtr& node, const ElementType& elementType) const
 {
   LOG_TRACE("Retrieving nearby features to snap to for: " << node->getElementId() << "...");
 
-  std::set<ElementId> neighborIds;
+  QList<ElementId> neighborIds;
   std::shared_ptr<geos::geom::Envelope> env(node->getEnvelope(_map));
   if (elementType == ElementType::Node)
   {
@@ -469,9 +469,14 @@ std::set<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   else
   {
     env->expandBy(_getWaySearchRadius(node));
-    neighborIds =
+    const std::set<ElementId> neighborIdsSet =
       IndexElementsVisitor::findNeighbors(
         *env, _snapToWayIndex, _snapToWayIndexToEid, _map, elementType, false);
+    for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
+         neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
+    {
+      neighborIds.append(*neighborIdsItr);
+    }
   }
   LOG_VART(neighborIds);
   return neighborIds;
@@ -552,7 +557,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
 
   // Find all way nodes near the input way node that don't belong to the same way the input way
   // node belongs to.
-  const std::set<ElementId> wayNodesToSnapTo =
+  const QList<ElementId> wayNodesToSnapTo =
     _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Node);
   if (wayNodesToSnapTo.size() == 0)
   {
@@ -562,7 +567,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
   }
 
   // For each way node neighbor, let's try snapping to the first one that we can.
-  for (std::set<ElementId>::const_iterator wayNodesToSnapToItr = wayNodesToSnapTo.begin();
+  for (QList<ElementId>::const_iterator wayNodesToSnapToItr = wayNodesToSnapTo.begin();
        wayNodesToSnapToItr != wayNodesToSnapTo.end(); ++wayNodesToSnapToItr)
   {
     const long wayNodeToSnapToId = (*wayNodesToSnapToItr).getId();
@@ -647,9 +652,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap)
   LOG_TRACE("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way...");
 
   // get nearby ways
-  const std::set<ElementId> waysToSnapTo =
+  const QList<ElementId> waysToSnapTo =
     _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Way);
-  for (std::set<ElementId>::const_iterator waysToSnapToItr = waysToSnapTo.begin();
+  for (QList<ElementId>::const_iterator waysToSnapToItr = waysToSnapTo.begin();
        waysToSnapToItr != waysToSnapTo.end(); ++waysToSnapToItr)
   {
     // for each neighboring way

@@ -29,7 +29,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 # CONFIG OPTS
 
 # -D log.class.filter=WayJoinerAdvanced;NamedOp;UnconnectedWaySnapper;CookieCutConflateWayJoiner
-GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;UnconnectedWaySnapper -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
+GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;UnconnectedWaySnapper;IndexElementsVisitor -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
 
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 

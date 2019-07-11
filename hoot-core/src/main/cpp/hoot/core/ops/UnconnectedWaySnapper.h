@@ -224,8 +224,8 @@ private:
    * @param elementType the element type of the feature being snapped to; either Way or Node
    * @return a collection of element IDs
    */
-  std::set<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
-                                                 const ElementType& elementType) const;
+  QList<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
+                                              const ElementType& elementType) const;
   /*
    * Determines where in a way to snap an unconnected end node
    *

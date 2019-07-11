@@ -108,14 +108,14 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
   max[1] = env.getMaxY();
   IntersectionIterator it(index.get(), min, max);
 
-  set<ElementId> neighbors;
+  set<ElementId> neighborIds;
   while (it.next())
   {
     ElementId eid = indexToEid[it.getId()];
     if (elementType == ElementType::Unknown || eid.getType() == elementType)
     {
       // Map the tree id to an element id and push into result.
-      neighbors.insert(eid);
+      neighborIds.insert(eid);
 
       if (includeContainingRelations)
       {
@@ -123,27 +123,26 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
         const set<long>& relations = e2r.getRelationByElement(eid);
         for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
         {
-          neighbors.insert(ElementId(ElementType::Relation, *it));
+          neighborIds.insert(ElementId(ElementType::Relation, *it));
         }
       }
     }
   }
 
-  LOG_VART(neighbors);
-  return neighbors;
+  LOG_VART(neighborIds);
+  return neighborIds;
 }
 
-std::set<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
+QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
   const ConstNodePtr& node, const geos::geom::Envelope& env,
   const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
   ConstOsmMapPtr pMap)
 {
-  set<ElementId> neighborIds =
+  const set<ElementId> neighborIds =
     findNeighbors(env, index, indexToEid, pMap, ElementType::Node, false);
 
   // sort by increasing neighbor distance from the input node
 
-  // use the distance as the key...we don't care if there are duplicate distances, as we'll take
   QMultiMap<double, ElementId> neighborNodeDistances;
   for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIds.begin();
        neighborIdsItr != neighborIds.end(); ++neighborIdsItr)
@@ -151,20 +150,21 @@ std::set<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
     ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
     assert(neighborNode.get());
     neighborNodeDistances.insertMulti(
-      Distance::euclidean(*node, *neighborNode), node->getElementId());
+      Distance::euclidean(*node, *neighborNode), neighborNode->getElementId());
   }
+  LOG_VART(neighborNodeDistances);
 
   const QList<double> sortedDistances = neighborNodeDistances.keys();
-  set<ElementId> sortedNeighborIds;
+  LOG_VART(sortedDistances);
+  QList<ElementId> sortedNeighborIds;
   for (QList<double>::const_iterator distancesItr = sortedDistances.begin();
        distancesItr != sortedDistances.end(); ++distancesItr)
   {
-    QMultiMap<double, ElementId>::const_iterator elementIdsItr =
-      neighborNodeDistances.find(*distancesItr);
-    while (elementIdsItr != neighborNodeDistances.end())
+    const QList<ElementId> ids = neighborNodeDistances.values(*distancesItr);
+    for (int i = 0; i < ids.size(); i++)
     {
-      sortedNeighborIds.insert(elementIdsItr.value());
-      ++elementIdsItr;
+      LOG_VART(ids.at(i));
+      sortedNeighborIds.append(ids.at(i));
     }
   }
 

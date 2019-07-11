@@ -98,7 +98,7 @@ public:
    * @param pMap
    * @return
    */
-  static std::set<ElementId> findSortedNodeNeighbors(
+  static QList<ElementId> findSortedNodeNeighbors(
     const ConstNodePtr& node, const geos::geom::Envelope& env,
     const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
     ConstOsmMapPtr pMap);
