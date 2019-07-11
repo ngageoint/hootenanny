@@ -61,16 +61,12 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=-71.4698,4
 
 # DATA PREP
 
-# First distort one layer with perturbation and loads it into an OSM API DB as ref data. Perturbation was done only b/c I couldn't find readily
-# available two similar but not identical test building datasets. The perturbed features are uglier, so the idea is we'd want to get them
-# replaced by something better (what we have in the original, unperturbed data). 
+# First distort one layer with perturbation and loads it into an OSM API DB as ref data. Perturbation is being done only b/c I couldn't find 
+# readily available two similar, but not identical, test building datasets. The perturbed features are uglier, so the idea is we'd want to get 
+# them replaced by something better (what we have in the original, unperturbed data). 
 #
-# Preserving the source data IDs (reader.use.data.source.ids=true in the second convert step) is important here for changeset derivation since 
-# we're loading ref data that we don't own (like MapEdit) and need to stay in sync with. 
-
-# The reason we're loading the perturbed data into a file before loading it into the osm apidb, vs peturbing it straight to the osm api db is
-# that the test data has negative IDs and we want to simulate a realistic scenario with postive IDs in the ref (hence, 
-# hoot::PositiveIdGenerator).
+# We're ignoring the original source IDs in order to avoid conflict with the secondary data loaded in the next step, which is loaded from the
+# same source file. We're converting the IDs from negative to positive to simulate the fact that ref data would always start with positive IDs.
 echo ""
 echo "Writing the reference dataset to an osm api db (contains features to be replaced)..."
 echo ""
@@ -80,14 +76,13 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D changeset.user.id=1 -D reader.use.data.so
 # Uncomment to see what the ref layer looks like in file form:
 #hoot convert $GENERAL_OPTS $REF_LAYER $OUT_DIR/ref.osm
 
-# Next, read the original unperturbed data from a file into a Hoot API DB as secondary data. The unperturbed features looks good, so we'll want 
+# Next, read the original unperturbed data from a file into a Hoot API DB as secondary data. The unperturbed features look good, so we'll want 
 # to keep them). 
 
-# Since the perturbed data (ref) was derived directly from this secondary layer, there will overlapping element IDs. Changeset 
-# derivation with cookie cutting (or any map consuming op) cannot work when there are overlapping element IDs in the two input datasets...we 
-# simply can't support that scenario. TODO: This does get a little confusing as I think we should be able to use either 
-# reader.use.data.source.ids equal to true or false here (with false making more sense), however errors are occurring when its set to false, 
-# so leaving it at true for now. We do, however, want positive IDs put into the hoot api db since negative IDs in the db make no sense. 
+# Since the ref data was derived from the same file we're using for this secondary layer, we keep the original IDs (all ints larger than the 
+# largest int already loaded into the ref data) so we don't end up with any overlapping element IDs. We also convert them to positive, since 
+# negative IDs in the hoot db make no sense (TODO: This isn't actually true...). Changeset derivation with cookie cutting (or any map 
+# consuming op) cannot work when there are overlapping element IDs in the two input datasets...we simply can't support that scenario. 
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""

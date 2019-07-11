@@ -28,7 +28,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 
 # CONFIG OPTS
 
-GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;NamedOp;UnconnectedWaySnapper;CookieCutConflateWayJoiner -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/alpha-shape-debug.osm"
+GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;NamedOp;UnconnectedWaySnapper;CookieCutConflateWayJoiner -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
 
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 
@@ -56,28 +56,28 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D id.gen
 
 #-D reader.preserve.all.tags=true -D reader.keep.status.tag=true
 echo "read ref"
-hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $REF_LAYER $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm
+hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D debug.maps.filename=$OUT_DIR/ref-read.osm $REF_LAYER $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm
 
 echo "read sec"
-hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true $SEC_LAYER $OUT_DIR/02-$TEST_DESCRIPTION-$TEST_NAME-sec-cropped.osm
+hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D debug.maps.filename=$OUT_DIR/sec-read.osm $SEC_LAYER $OUT_DIR/02-$TEST_DESCRIPTION-$TEST_NAME-sec-cropped.osm
 
 echo "gen alpha shape"
-hoot generate-alpha-shape $GENERAL_OPTS -D reader.use.data.source.ids=true $OUT_DIR/02-$TEST_DESCRIPTION-$TEST_NAME-sec-cropped.osm 1000 0 $OUT_DIR/03-$TEST_DESCRIPTION-$TEST_NAME-cutter-shape.osm
+hoot generate-alpha-shape $GENERAL_OPTS -D reader.use.data.source.ids=true -D debug.maps.filename=$OUT_DIR/alpha-shape.osm $OUT_DIR/02-$TEST_DESCRIPTION-$TEST_NAME-sec-cropped.osm 1000 0 $OUT_DIR/03-$TEST_DESCRIPTION-$TEST_NAME-cutter-shape.osm
 
 echo "cookie cut"
 #-D cookie.cutter.alpha.shape.buffer=-15.0 -D cookie.cutter.alpha=1000
-hoot cookie-cut $GENERAL_OPTS -D reader.use.data.source.ids=true $OUT_DIR/03-$TEST_DESCRIPTION-$TEST_NAME-cutter-shape.osm $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/04-$TEST_DESCRIPTION-$TEST_NAME-cookie-cut.osm 0.0
+hoot cookie-cut $GENERAL_OPTS -D reader.use.data.source.ids=true -D debug.maps.filename=$OUT_DIR/cookie-cut.osm $OUT_DIR/03-$TEST_DESCRIPTION-$TEST_NAME-cutter-shape.osm $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/04-$TEST_DESCRIPTION-$TEST_NAME-cookie-cut.osm 0.0
 
 # TODO: do we want -D tag.merger.default=hoot::AverageTagMerger here, hoot::OverwriteTag1Merger, or something else completely?
 
 echo "conflate"
 # -D way.joiner=hoot::CookieCutConflateWayJoiner hoot::WayJoinerAdvanced
-hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D way.joiner=hoot::WayJoinerAdvanced -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/02-$TEST_DESCRIPTION-$TEST_NAME-sec-cropped.osm $OUT_DIR/04-$TEST_DESCRIPTION-$TEST_NAME-cookie-cut.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm
+hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D way.joiner=hoot::WayJoinerAdvanced -D tag.merger.default=hoot::OverwriteTag2Merger -D debug.maps.filename=$OUT_DIR/conflate.osm $OUT_DIR/02-$TEST_DESCRIPTION-$TEST_NAME-sec-cropped.osm $OUT_DIR/04-$TEST_DESCRIPTION-$TEST_NAME-cookie-cut.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm
 
 # TODO: CookieCutConflateWayJoiner doesn't work yet
 echo "snap"
 # -D way.joiner=hoot::CookieCutConflateWayJoiner hoot::WayJoinerAdvanced
-hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
+hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
 
 #-D reader.use.file.status=true
 #-D changeset.allow.deleting.reference.features=false -D changeset.buffer=0.0002
@@ -86,7 +86,7 @@ echo "derive xml changeset"
 hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/07-$TEST_DESCRIPTION-$TEST_NAME-changeset-1.osc
 
 echo "derive sql changeset"
-hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
+hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/derive-changeset.osm $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
 
 # CHANGESET APPLICATION
 
