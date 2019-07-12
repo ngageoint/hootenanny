@@ -551,16 +551,14 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
     wayWithIdToKeep->addNodes(parent_nodes);
   }
 
-  // TODO: this causes some problems in CookieCutConflateWayJoiner
-
   //  Keep the conflated status in the parent if the child being merged is conflated
-//  if ((wayWithIdToKeep->getStatus() == Status::Conflated ||
-//       wayWithIdToLose->getStatus() == Status::Conflated) ||
-//      (wayWithIdToKeep->getStatus() == Status::Unknown1 &&
-//       wayWithIdToLose->getStatus() == Status::Unknown2) ||
-//      (wayWithIdToKeep->getStatus() == Status::Unknown2 &&
-//       wayWithIdToLose->getStatus() == Status::Unknown1))
-//    wayWithIdToKeep->setStatus(Status::Conflated);
+  if ((wayWithIdToKeep->getStatus() == Status::Conflated ||
+       wayWithIdToLose->getStatus() == Status::Conflated) ||
+      (wayWithIdToKeep->getStatus() == Status::Unknown1 &&
+       wayWithIdToLose->getStatus() == Status::Unknown2) ||
+      (wayWithIdToKeep->getStatus() == Status::Unknown2 &&
+       wayWithIdToLose->getStatus() == Status::Unknown1))
+    wayWithIdToKeep->setStatus(Status::Conflated);
 
   //  Update any relations that contain the child to use the parent and remove the child.
   ReplaceElementOp(wayWithIdToLose->getElementId(), wayWithIdToKeep->getElementId()).apply(_map);

@@ -29,7 +29,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 # CONFIG OPTS
 
 # -D log.class.filter=
-GENERAL_OPTS="--trace -D log.class.filter=ChangesetDeriver;ElementComparer;WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner;IndexElementsVisitor;OsmUtils;HighwayCriterion -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
+GENERAL_OPTS="--trace -D log.class.filter=ChangesetDeriver;ElementComparer;WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
 
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 
@@ -86,7 +86,9 @@ hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.u
 # TODO: CookieCutConflateWayJoiner doesn't work yet
 echo "snap"
 # -D way.joiner=hoot::CookieCutConflateWayJoiner hoot::WayJoinerAdvanced
-hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1 -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
+# Allow both Input1 (associated with secondary layer in this case) and Conflated features to be snapped, since some features will have already
+# been conflated.
+hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status="Input1;Conflated" -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
 
 #-D reader.use.file.status=true
 #-D changeset.allow.deleting.reference.features=false -D changeset.buffer=0.0002

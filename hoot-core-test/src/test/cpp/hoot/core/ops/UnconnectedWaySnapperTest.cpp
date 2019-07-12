@@ -52,6 +52,8 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runSnapTest);
   CPPUNIT_TEST(runConfigOptionsValidationTest);
   CPPUNIT_TEST(runStaticSnapTest);
+  // TODO: add multiple status test
+  // TODO: add element crit test
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -81,8 +83,8 @@ public:
     uut.setMarkSnappedNodes(true);
     uut.setSnapToExistingWayNodes(true);
     uut.setWayDiscretizationSpacing(1.0);
-    uut.setSnapToWayStatus(Status::Unknown1);
-    uut.setSnapWayStatus(Status::Unknown2);
+    uut.setSnapToWayStatus(Status(Status::Unknown1).toString());
+    uut.setSnapWayStatus(Status(Status::Unknown2).toString());
     uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
     uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
     uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");

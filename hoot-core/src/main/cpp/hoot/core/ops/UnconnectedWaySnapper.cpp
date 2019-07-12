@@ -43,6 +43,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/OrCriterion.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -99,8 +100,8 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setWayDiscretizationSpacing(confOpts.getSnapUnconnectedWaysDiscretizationSpacing());
   setMarkSnappedNodes(confOpts.getSnapUnconnectedWaysMarkSnappedNodes());
 
-  setSnapWayStatus(Status::fromString(confOpts.getSnapUnconnectedWaysSnapWayStatus()));
-  setSnapToWayStatus(Status::fromString(confOpts.getSnapUnconnectedWaysSnapToWayStatus()));
+  setSnapWayStatus(confOpts.getSnapUnconnectedWaysSnapWayStatus().trimmed());
+  setSnapToWayStatus(confOpts.getSnapUnconnectedWaysSnapToWayStatus().trimmed());
 
   setWayToSnapCriterionClassName(confOpts.getSnapUnconnectedWaysSnapWayCriterion().trimmed());
   setWayToSnapToCriterionClassName(confOpts.getSnapUnconnectedWaysSnapToWayCriterion().trimmed());
@@ -361,14 +362,16 @@ long UnconnectedWaySnapper::_getPid(const ConstWayPtr& way) const
 }
 
 ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString& criterionClassName,
-                                                                   const Status& status)
+                                                                   const QString& status)
 {
   const QString critClass = criterionClassName.trimmed();
   if (!critClass.isEmpty())
   {
     LOG_TRACE(
       "Creating feature filtering criterion: " << criterionClassName << ", status: " <<
-      status.toString() << "...");
+      status << "...");
+
+    // configure our element criterion, in case it needs it
     ElementCriterionPtr critTemp(
       Factory::getInstance().constructObject<ElementCriterion>(critClass));
     std::shared_ptr<Configurable> configurable =
@@ -383,8 +386,33 @@ ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString
     {
       mapConsumer->setOsmMap(_map.get());
     }
-    return
-      std::shared_ptr<ChainCriterion>(new ChainCriterion(new StatusCriterion(status), critTemp));
+
+    // create our criterion for the feature status
+    ElementCriterionPtr statusCrit;
+    if (!status.contains(";"))
+    {
+      statusCrit.reset(new StatusCriterion(Status::fromString(status)));
+    }
+    else
+    {
+      const QStringList statuses = status.split(";");
+      QList<std::shared_ptr<StatusCriterion>> statusCrits;
+      for (int i = 0; i < statuses.size(); i++)
+      {
+        statusCrits.append(
+          std::shared_ptr<StatusCriterion>(
+            new StatusCriterion(Status::fromString(statuses.at(i)))));
+      }
+      std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
+      for (int i = 0; i < statusCrits.size(); i++)
+      {
+        orCrit->addCriterion(statusCrits.at(i));
+      }
+      statusCrit = orCrit;
+    }
+
+    // combine our element type and status crits into a single crit
+    return std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, critTemp));
   }
   return ElementCriterionPtr();
 }

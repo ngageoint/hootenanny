@@ -110,8 +110,8 @@ public:
   void setWayToSnapToCriterionClassName(const QString& name);
   void setWayToSnapCriterionClassName(const QString& name);
   void setWayNodeToSnapToCriterionClassName(const QString& name);
-  void setSnapWayStatus(const Status& status) { _snapWayStatus = status; }
-  void setSnapToWayStatus(const Status& status) { _snapToWayStatus = status; }
+  void setSnapWayStatus(const QString& status) { _snapWayStatus = status; }
+  void setSnapToWayStatus(const QString& status) { _snapToWayStatus = status; }
 
   /**
    * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
@@ -153,9 +153,9 @@ private:
   // the feature criterion to be used for way snap target candidates
   QString _wayNodeToSnapToCriterionClassName;
   // the status criterion to be used for the snap source way
-  Status _snapWayStatus;
+  QString _snapWayStatus;
   // the status criterion to be used for the snap target way or way node
-  Status _snapToWayStatus;
+  QString _snapToWayStatus;
 
   // feature indexes used for way nodes being snapped to
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
@@ -189,11 +189,11 @@ private:
    * Creates the criterion used to determine via filtering which features we want to snap or snap to
    *
    * @param criterionClassName the name of a hoot ElementCriterion class
-   * @param status a hoot status; either Unknown1 or Unknown2
+   * @param status one or more hoot status strings
    * @return an element criterion
    */
   ElementCriterionPtr _createFeatureCriterion(const QString& criterionClassName,
-                                              const Status& status);
+                                              const QString& status);
   /*
    * Creates an index needed when searching for features to snap to
    *

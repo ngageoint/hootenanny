@@ -221,7 +221,7 @@ bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1, 
 }
 
 set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
-                                                     const ElementCriterionPtr& wayCriterion)
+                                                const ElementCriterionPtr& wayCriterion)
 {
   set<long> containingWayIds;
 
@@ -245,6 +245,7 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
       }
       LOG_VART(wayCriterion->isSatisfied(map->getWay(containingWayId)));
     }
+
     if (!wayCriterion || wayCriterion->isSatisfied(map->getWay(containingWayId)))
     {
       containingWayIds.insert(containingWayId);

@@ -98,36 +98,18 @@ long CookieCutConflateWayJoiner::_getPid(const ConstWayPtr& way) const
   return pid;
 }
 
-//bool CookieCutConflateWayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
-//{
-//  const bool joined = WayJoinerAdvanced::_joinWays(parent, child);
-//  // TODO: hack
-//  const long pid = _getPid(_wayKeptAfterJoin);
-//  if (joined && pid != WayData::PID_EMPTY)
-//  {
-//    // TODO: probably slow
-//    WayPtr newWay(new Way(*_wayKeptAfterJoin));
-//    newWay->setId(pid);
-//    newWay->setStatus(Status::Unknown1);
-//    ReplaceElementOp wayReplacer(
-//      _wayKeptAfterJoin->getElementId(), newWay->getElementId(), true);
-//    wayReplacer.apply(_map);
-//  }
-//  return joined;
-//}
-
 void CookieCutConflateWayJoiner::join(const OsmMapPtr& map)
 {
   WayJoinerAdvanced::join(map);
 
-  // TODO: this drops ways...why?
-
+  // If anything left has a PID on it, let's make that PID its ID. TODO: This doesn't seem right...
   WayMap ways = _map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     const long pid = _getPid(way);
-    if (pid != WayData::PID_EMPTY && pid > 0)
+    if (pid != WayData::PID_EMPTY &&
+        pid > 0)    // TODO: is this necessary?
     {
       LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());
       ElementPtr newWay(way->clone());
