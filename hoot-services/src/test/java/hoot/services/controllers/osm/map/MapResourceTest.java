@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -48,6 +49,11 @@ import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.crypto.dsig.TransformException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 
 import org.apache.xpath.XPathAPI;
@@ -149,7 +155,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         XPath xpath = XmlUtils.createXPath();
 
         boolean multiLayerUniqueElementIds = multiLayerUniqueElementIdsStr.toLowerCase().equals("true");
-        assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(6, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
         if (!multiLayerUniqueElementIds || !useMultiLayerUniqueElementIdsParameter) {
             OSMTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
                     originalBounds.getMinLat(), originalBounds.getMinLon(), false);
@@ -179,7 +185,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                     queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, true);
         }
 
-        assertEquals(11, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
         assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
         assertEquals("val 1",
@@ -542,7 +548,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
 
         XPath xpath = XmlUtils.createXPath();
 
-        assertEquals(15, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(6, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
         OSMTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
                 originalBounds.getMinLat(), originalBounds.getMinLon(), false);
         OSMTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
@@ -556,7 +562,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyNode(responseData, 6, String.valueOf(oobNodeIdsArr[0]), changesetId,
                 queryBounds.getMinLat() - 5, queryBounds.getMinLon() - 5, false);
 
-        assertEquals(11, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
         assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
         assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
@@ -766,7 +772,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         OSMTestUtils.verifyOsmHeader(responseData);
         OSMTestUtils.verifyBounds(responseData, queryBounds);
 
-        assertEquals(8, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
         OSMTestUtils.verifyNode(responseData, 1, String.valueOf(nodeIdsArr[0]), changesetId,
                 originalBounds.getMinLat(), originalBounds.getMinLon(), false);
         OSMTestUtils.verifyNode(responseData, 2, String.valueOf(nodeIdsArr[1]), changesetId,
@@ -777,7 +783,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
                 originalBounds.getMinLat(), originalBounds.getMinLon(), false);
 
         XPath xpath = XmlUtils.createXPath();
-        assertEquals(5, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
+        assertEquals(3, XPathAPI.selectNodeList(responseData, "//osm/node/tag").getLength());
         assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/node[1]/tag").getLength());
         assertEquals("key 1", xpath.evaluate("//osm/node[1]/tag[1]/@k", responseData));
         assertEquals("val 1", URLDecoder.decode(xpath.evaluate("//osm/node[1]/tag[1]/@v", responseData), "UTF-8"));
