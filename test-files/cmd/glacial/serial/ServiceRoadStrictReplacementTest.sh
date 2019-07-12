@@ -29,7 +29,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 # CONFIG OPTS
 
 # -D log.class.filter=
-GENERAL_OPTS="--trace -D log.class.filter=ChangesetDeriver;ElementComparer;WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
+GENERAL_OPTS="--warn -D log.class.filter=ChangesetDeriver;ElementComparer;WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
 
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 
@@ -91,13 +91,13 @@ echo "snap"
 hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status="Input1;Conflated" -D snap.unconnected.ways.existing.way.node.tolerance=10.0 -D snap.unconnected.ways.snap.tolerance=10.0 -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm
 
 #-D reader.use.file.status=true
-#-D changeset.allow.deleting.reference.features=false -D changeset.buffer=0.0002
+# -D changeset.allow.deleting.reference.features=false -D changeset.buffer=0.0002 -D convert.bounding.box=$AOI
 
 echo "derive xml changeset"
-hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/07-$TEST_DESCRIPTION-$TEST_NAME-changeset-1.osc
+hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/07-$TEST_DESCRIPTION-$TEST_NAME-changeset-1.osc
 
 echo "derive sql changeset"
-hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/derive-changeset.osm $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
+hoot changeset-derive $GENERAL_OPTS -D changeset.user.id=1 -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/derive-changeset.osm $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
 
 # CHANGESET APPLICATION
 
