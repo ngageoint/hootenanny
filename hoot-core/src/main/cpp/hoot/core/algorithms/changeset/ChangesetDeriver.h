@@ -75,6 +75,8 @@ public:
   int getNumChanges() const
   { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
+  void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }
+
 private:
 
   Change _nextChange();
@@ -87,6 +89,8 @@ private:
 
   long _numFromElementsParsed;
   long _numToElementsParsed;
+  // Prevents any reference features from being deleted. This is useful for Differential Conflation
+  // and can be used as a safety feature for other conflation workflows.
   bool _allowDeletingReferenceFeatures;
   QMap<Change::ChangeType, int> _changesByType;
 

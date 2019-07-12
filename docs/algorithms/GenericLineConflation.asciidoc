@@ -87,7 +87,7 @@ See also:
 
 [[coastlines]]
 .Coastlines
-image::algorithms/images/Coastlines.png[Coastlines at two scales,scalewidth="50%"]
+image::images/Coastlines.png[Coastlines at two scales,scalewidth="50%"]
 
 In <<coastlines>> is an example of two coastlines extracted at two different
 scales. While there are obvious similarities there are also significant
@@ -276,7 +276,7 @@ are merged.
 
 [[GenericConflationQuality]]
 .Conflation Quality
-image::algorithms/images/GenericLineTestGraph.png[Random Forest vs. Generic Line Road Conflation Performance,scalewidth="50%"]
+image::images/GenericLineTestGraph.png[Random Forest vs. Generic Line Road Conflation Performance,scalewidth="50%"]
 ////
 #TODO: replace with MPL - #267
 #[gnuplot, algorithms/GenericLineTestGraph.png]
@@ -322,7 +322,7 @@ for this requires more investigation.
 
 [[Conflation Speed]]
 .Conflation Speed
-image::algorithms/images/GenericLineTestTimingGraph.png[Random Forest vs. Generic Line Road Conflation Timing,scalewidth="50%"]
+image::images/GenericLineTestTimingGraph.png[Random Forest vs. Generic Line Road Conflation Timing,scalewidth="50%"]
 ////
 #TODO: replace with MPL - #267
 #[gnuplot, algorithms/GenericLineTestTimingGraph.png]

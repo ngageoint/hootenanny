@@ -380,9 +380,9 @@ See also:
 * Data Type: bool
 * Default Value: `true`
 
-If true, changesets derived can issue delete statements for the reference dataset (first dataset
-passed to the changeset deriver).  If false, no delete statements will be issued for the reference
-dataset.
+If true, changesets derived are allowed to issue delete statements for the reference dataset (first
+dataset passed to the changeset deriver) if calculated.  If false, any delete statements calculated
+for the reference dataset will be ignored and not added to changeset output.
 
 === changeset.apidb.size.max
 

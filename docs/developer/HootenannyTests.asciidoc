@@ -525,7 +525,7 @@ in a local development environment.
 When run, the tests output an image with graph metrics on Hootenanny scalability for increasing
 levels of simulated users.  Here is an example set of test metrics:
 
-image::developer/images/LoadLatest.png[]
+image::images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
