@@ -498,7 +498,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
   }
 
   if (from->getElementType() == ElementType::Node && to.size() == 1 &&
-    to[0]->getElementType() == ElementType::Node)
+      to[0]->getElementType() == ElementType::Node)
   {
     replaceNode(from->getId(), to[0]->getId());
   }

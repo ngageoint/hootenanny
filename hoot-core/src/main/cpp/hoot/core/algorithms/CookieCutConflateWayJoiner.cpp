@@ -49,16 +49,17 @@ void CookieCutConflateWayJoiner::joinWays(const OsmMapPtr& map)
 
 bool CookieCutConflateWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
 {
-  //return w1->getStatus() != Status::Invalid && w2->getStatus() != Status::Invalid;
-  return (w1->getStatus() == Status::Unknown1 && w2->getStatus() == Status::Unknown2) ||
-         (w2->getStatus() == Status::Unknown1 && w1->getStatus() == Status::Unknown2);
+  // We'll join up anything, as long as its not invalid. TODO: is this right?
+  return w1->getStatus() != Status::Invalid && w2->getStatus() != Status::Invalid;
+  //return (w1->getStatus() == Status::Unknown1 && w2->getStatus() == Status::Unknown2) ||
+         //(w2->getStatus() == Status::Unknown1 && w1->getStatus() == Status::Unknown2);
 }
 
 void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(
   WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
 {
   // We always want to keep unknown2, which is the dough ways being joined up with the cookie cut
-  // replacement ways.
+  // replacement ways. TODO: is this right?
   if (parent->getStatus() == Status::Unknown2)
   {
     keeper = parent;
@@ -117,22 +118,23 @@ long CookieCutConflateWayJoiner::_getPid(const ConstWayPtr& way) const
 
 void CookieCutConflateWayJoiner::join(const OsmMapPtr& map)
 {
-  //  Call base class implementation
   WayJoinerAdvanced::join(map);
 
-  // TODO: this drops ways
-//  WayMap ways = _map->getWays();
-//  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
-//  {
-//    WayPtr way = it->second;
-//    const long pid = _getPid(way);
-//    if (pid != WayData::PID_EMPTY)
-//    {
-//      ElementPtr newWay(way->clone());
-//      newWay->setId(pid);
-//      _map->replace(way, newWay);
-//    }
-//  }
+  // TODO: this drops ways...why?
+
+  WayMap ways = _map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    const long pid = _getPid(way);
+    if (pid != WayData::PID_EMPTY && pid > 0)
+    {
+      LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());
+      ElementPtr newWay(way->clone());
+      newWay->setId(pid);
+      _map->replace(way, newWay);
+    }
+  }
 }
 
 }

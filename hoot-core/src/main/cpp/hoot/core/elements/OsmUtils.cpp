@@ -40,6 +40,7 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 // Qt
 #include <QDateTime>
@@ -229,7 +230,21 @@ set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOs
   for (set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
        containingWaysItr != idsOfWaysContainingNode.end(); ++containingWaysItr)
   {
-    const long containingWayId = *containingWaysItr;;
+    const long containingWayId = *containingWaysItr;
+    LOG_VART(containingWayId);
+    LOG_VART(map->getWay(containingWayId));
+
+    if (wayCriterion)
+    {
+      LOG_VART(typeid(*wayCriterion).name());
+      std::shared_ptr<ChainCriterion> chainCrit =
+        std::dynamic_pointer_cast<ChainCriterion>(wayCriterion);
+      if (chainCrit)
+      {
+        LOG_VART(chainCrit->toString());
+      }
+      LOG_VART(wayCriterion->isSatisfied(map->getWay(containingWayId)));
+    }
     if (!wayCriterion || wayCriterion->isSatisfied(map->getWay(containingWayId)))
     {
       containingWayIds.insert(containingWayId);

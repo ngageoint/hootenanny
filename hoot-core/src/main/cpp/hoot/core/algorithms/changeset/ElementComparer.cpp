@@ -43,6 +43,8 @@ _threshold(threshold)
 
 void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 {
+  // TODO: remove hoot:* tags here instead?
+
   tags.remove(MetadataTags::HootStatus());
   // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
   tags.remove("status");

@@ -42,6 +42,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -201,6 +202,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   _numSnappedToWayNodes = 0;
   _snappedWayNodeIds.clear();
 
+  OsmMapWriterFactory::writeDebugMap(map, "UnconnectedWaySnapper-before-snapping");
+
   // need to be in planar for all of this
   MapProjector::projectToPlanar(_map);
 
@@ -241,6 +244,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
          unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
     {
+      bool snapOccurred = false;
+
       // for each unconnected endpoint
       const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
       // don't snap the same node more than once
@@ -252,7 +257,6 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         // is within the max reuse distance (if one was specified) and snap the unconnected way
         // node.  This reuse of existing way nodes on way being snapped to is done in order to cut
         // back on the number of new way nodes being added.
-        bool snapOccurred = false;
         if (_snapToExistingWayNodes)
         {
           snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
@@ -297,16 +301,35 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
           // TODO: if used, this prevents correct id/tag transfer during way joining; if not used,
           // the we don't get enough way joining...need to make changes to get all the way
           // joining we want as well as the correct tag/id transfers
-//          // retain the status of the snapped to way
-//          wayToSnap->setStatus(_snappedToWay->getStatus());
-//          LOG_TRACE(
-//            "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
-//            _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
+
+          // retain the status of the snapped to way
+          wayToSnap->setStatus(_snappedToWay->getStatus());
+          LOG_TRACE(
+            "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
+            _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
 
           LOG_VART(wayToSnap);
           LOG_VART(_snappedToWay);
+
+          // This could be very expensive, so leave disabled by default.
+          OsmMapWriterFactory::writeDebugMap(
+            _map,
+            "UnconnectedWaySnapper-after-snap-#" +
+            QString::number(_numSnappedToWays + _numSnappedToWayNodes));
         }
       }
+
+      if (!snapOccurred)
+      {
+        LOG_TRACE(
+          "No snap occurred for " << wayToSnap->getElementId() << " with unconnected end node " <<
+          ElementId(ElementType::Node, unconnectedEndNodeId));
+      }
+    }
+
+    if (unconnectedEndNodeIds.size() == 0)
+    {
+      LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
     }
 
     waysProcessed++;
@@ -423,6 +446,8 @@ std::set<long> UnconnectedWaySnapper::_getUnconnectedEndNodeIds(
     OsmUtils::getContainingWayIdsByNodeId(firstEndNodeId, _map, wayCrit);
   const std::set<long> filteredWaysContainingSecondEndNode =
     OsmUtils::getContainingWayIdsByNodeId(secondEndNodeId, _map, wayCrit);
+  LOG_VART(filteredWaysContainingFirstEndNode);
+  LOG_VART(filteredWaysContainingSecondEndNode);
 
   // If only one way is connected to the end node, then we'll call that node an unconnected end
   // way node.
