@@ -1282,13 +1282,13 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
   return split;
 }
 
-void XmlChangeset::updateFailedChangeset(ChangesetInfoPtr changeset)
+void XmlChangeset::updateFailedChangeset(ChangesetInfoPtr changeset, bool forceFailure)
 {
   //  Only set the failed status on single element changesets
-  if (changeset->size() != 1)
+  if (changeset->size() != 1 && !forceFailure)
     return;
   //  Don't set the elements to failed yet, until after they are tried
-  if (!changeset->getChangesetIssuesResolved())
+  if (!changeset->getAttemptedResolveChangesetIssues())
     return;
   //  Iterate the three changeset type arrays looking for elements to mark
   for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
@@ -1587,5 +1587,97 @@ void XmlChangeset::getRelations(const ChangesetInfoPtr& changeset, QTextStream& 
   }
 }
 
+ChangesetInfo::ChangesetInfo()
+  : _attemptedResolveChangesetIssues(false),
+    _numRetries(0)
+{
+}
+
+void ChangesetInfo::add(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+{
+  _changeset[element_type][changeset_type].insert(id);
+  //  Changes in the changeset cause the retries to start over
+  _numRetries = 0;
+}
+
+void ChangesetInfo::remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+{
+  container& selectedSet = _changeset[element_type][changeset_type];
+  if (selectedSet.find(id) != selectedSet.end())
+    selectedSet.erase(id);
+  //  Changes in the changeset cause the retries to start over
+  _numRetries = 0;
+}
+
+long ChangesetInfo::getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+{
+  return *(_changeset[element_type][changeset_type].begin());
+}
+
+void ChangesetInfo::clear()
+{
+  for (int i = 0; i < (int)ElementType::Unknown; ++i)
+  {
+    for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
+      _changeset[i][j].clear();
+  }
+  _numRetries = 0;
+}
+
+bool ChangesetInfo::contains(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
+{
+  return _changeset[element_type][changeset_type].find(id) != end(element_type, changeset_type);
+}
+
+ChangesetInfo::iterator ChangesetInfo::begin(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+{
+  return _changeset[element_type][changeset_type].begin();
+}
+
+ChangesetInfo::iterator ChangesetInfo::end(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
+{
+  return _changeset[element_type][changeset_type].end();
+}
+
+size_t ChangesetInfo::size(ElementType::Type elementType, XmlChangeset::ChangesetType changesetType)
+{
+  return _changeset[(int)elementType][(int)changesetType].size();
+}
+
+size_t ChangesetInfo::size()
+{
+  size_t s = 0;
+  //  Iterate element types
+  for (int i = 0; i < (int)ElementType::Unknown; ++i)
+  {
+    //  Sum up all counts for each changeset type
+    for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
+      s += _changeset[i][j].size();
+  }
+  return s;
+}
+
+bool ChangesetInfo::getAttemptedResolveChangesetIssues()
+{
+  return _attemptedResolveChangesetIssues;
+}
+
+void ChangesetInfo::setAttemptedResolveChangesetIssues(bool attempted)
+{
+  _attemptedResolveChangesetIssues = attempted;
+}
+
+bool ChangesetInfo::canRetry()
+{
+  return _numRetries < MAX_RETRIES;
+}
+
+void ChangesetInfo::retry()
+{
+  //  Increment the retry count
+  _numRetries++;
+  //  Once the retry count reaches MAX_RETRIES set the attempted resolved flag
+  _attemptedResolveChangesetIssues = true;
+}
 
 }

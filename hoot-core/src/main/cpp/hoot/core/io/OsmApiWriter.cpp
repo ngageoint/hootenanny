@@ -48,6 +48,13 @@ using namespace Tgs;
 namespace hoot
 {
 
+const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities/";
+const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions/";
+const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
+const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
+const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
+const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
+
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
@@ -271,10 +278,10 @@ void OsmApiWriter::_changesetThreadFunc()
             }
             else
             {
-              if (!workInfo->getChangesetIssuesResolved())
+              if (!workInfo->getAttemptedResolveChangesetIssues())
               {
-                //  Set the issues resolved flag
-                workInfo->setChangesetIssuesResolved(true);
+                //  Set the attempt issues resolved flag
+                workInfo->setAttemptedResolveChangesetIssues(true);
                 //  Try to automatically resolve certain issues, like out of date version
                 if (_resolveIssues(request, workInfo))
                 {
@@ -291,17 +298,20 @@ void OsmApiWriter::_changesetThreadFunc()
             }
           }
           break;
-        case 405:   //  This shouldn't ever happen, push back on the queue
-          _workQueueMutex.lock();
-          _workQueue.push(workInfo);
-          _workQueueMutex.unlock();
-          break;
         default:
           //  This is a big problem, report it and try again
           LOG_ERROR("Changeset upload responded with HTTP status response: " << request->getHttpStatus());
-          _workQueueMutex.lock();
-          _workQueue.push(workInfo);
-          _workQueueMutex.unlock();
+        case 405:
+          //  This shouldn't ever happen, push back on the queue, only process a certain amount of times
+          workInfo->retry();
+          if (workInfo->canRetry())
+          {
+            _workQueueMutex.lock();
+            _workQueue.push(workInfo);
+            _workQueueMutex.unlock();
+          }
+          else
+            _changeset.updateFailedChangeset(workInfo, true);
           break;
         }
       }
@@ -491,7 +501,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
   try
   {
     QUrl changeset = _url;
-    changeset.setPath(API_PATH_CLOSE_CHANGESET.arg(id));
+    changeset.setPath(QString(API_PATH_CLOSE_CHANGESET).arg(id));
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
@@ -547,7 +557,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
   try
   {
     QUrl change = _url;
-    change.setPath(API_PATH_UPLOAD_CHANGESET.arg(id));
+    change.setPath(QString(API_PATH_UPLOAD_CHANGESET).arg(id));
 
     QMap<QNetworkRequest::KnownHeaders, QVariant> headers;
     headers[QNetworkRequest::ContentTypeHeader] = "text/xml";

@@ -132,7 +132,7 @@ public:
    * @brief updateFailedChangeset Update the changeset to mark elements as failed if the ChangesetInfo object has been "fixed"
    * @param changeset - Pointer to changeset info object with one element that has failed
    */
-  void updateFailedChangeset(ChangesetInfoPtr changeset);
+  void updateFailedChangeset(ChangesetInfoPtr changeset, bool forceFailure = false);
   /**
    * @brief getChangesetString Get the .OSC formatted string for this subset of the changeset with the changeset ID in it
    * @param changeset - Subset of the changeset to render
@@ -427,41 +427,32 @@ public:
   typedef typename container::iterator iterator;
   typedef typename container::const_iterator const_iterator;
   /** Constructor */
-  ChangesetInfo() : _changesetIssuesResolved(false) { }
+  ChangesetInfo();
   /**
    * @brief add Add an element ID of a certain type to the changeset type
    * @param element_type Describes the 'id' argument as a node, way, or relation
    * @param changeset_type Describes the changeset method as create, modify, or delete
    * @param id Element ID of the element to add
    */
-  void add(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
-  { _changeset[element_type][changeset_type].insert(id); }
+  void add(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id);
   /**
    * @brief remove Remove an element ID of a certain type from the changeset type
    * @param element_type Describes the 'id' argument as a node, way, or relation
    * @param changeset_type Describes the changeset method as create, modify, or delete
    * @param id Element ID of the element to remove
    */
-  void remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
-  {
-    container& selectedSet = _changeset[element_type][changeset_type];
-    if (selectedSet.find(id) != selectedSet.end())
-      selectedSet.erase(id);
-  }
-
-  long getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
-  { return *(_changeset[element_type][changeset_type].begin()); }
+  void remove(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id);
+  /**
+   * @brief getFirst Get the first element of the types
+   * @param element_type Describes the element type: node, way, or relation
+   * @param changeset_type Describes the type: create, modify, delete
+   * @return
+   */
+  long getFirst(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type);
   /**
    * @brief clear Clear out this entire changeset subset
    */
-  void clear()
-  {
-    for (int i = 0; i < (int)ElementType::Unknown; ++i)
-    {
-      for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
-        _changeset[i][j].clear();
-    }
-  }
+  void clear();
   /**
    * @brief contains Check if this subset contains an element described by types and ID
    * @param element_type Describes the 'id' argument as a node, way, or relation
@@ -469,28 +460,21 @@ public:
    * @param id Element ID that is being searched for
    * @return true if it is found
    */
-  bool contains(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id)
-  {
-    return _changeset[element_type][changeset_type].find(id) != end(element_type, changeset_type);
-  }
+  bool contains(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type, long id);
   /**
    * @brief begin Begin iterator
    * @param element_type Describes the type (node/way/relation) to iterate
    * @param changeset_type Describes the type (create/modify/delete) to iterate
    * @return iterator pointing to the beginning of the set
    */
-  iterator begin(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
-  {
-    return _changeset[element_type][changeset_type].begin();
-  }
+  iterator begin(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type);
   /**
    * @brief end End iterator
    * @param element_type Describes the type (node/way/relation) to iterate
    * @param changeset_type Describes the type (create/modify/delete) to iterate
    * @return iterator pointing off of the end of the set
    */
-  iterator end(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type)
-  { return _changeset[element_type][changeset_type].end(); }
+  iterator end(ElementType::Type element_type, XmlChangeset::ChangesetType changeset_type);
   /**
    * @brief size Total number of ElementType::Type elements (node/way/relation) of a specific changeset
    *  type (create/modify/delete) within this subset
@@ -498,35 +482,26 @@ public:
    * @param changesetType Describes the type (create/modify/delete) to count
    * @return count based on types
    */
-  size_t size(ElementType::Type elementType, XmlChangeset::ChangesetType changesetType)
-  {
-    return _changeset[(int)elementType][(int)changesetType].size();
-  }
+  size_t size(ElementType::Type elementType, XmlChangeset::ChangesetType changesetType);
   /**
    * @brief size Total number of elements in the subset
    * @return total count
    */
-  size_t size()
-  {
-    size_t s = 0;
-    //  Iterate element types
-    for (int i = 0; i < (int)ElementType::Unknown; ++i)
-    {
-      //  Sum up all counts for each changeset type
-      for (int j = 0; j < (int)XmlChangeset::TypeMax; ++j)
-        s += _changeset[i][j].size();
-    }
-    return s;
-  }
-
-  bool getChangesetIssuesResolved() { return _changesetIssuesResolved; }
-  void setChangesetIssuesResolved(bool resolved) { _changesetIssuesResolved = resolved; }
-
+  size_t size();
+  /** Set/get _attemptedResolveChangesetIssues member */
+  bool getAttemptedResolveChangesetIssues();
+  void setAttemptedResolveChangesetIssues(bool attempted);
+  /** Set/get _numRetries member */
+  bool canRetry();
+  void retry();
 private:
   /** 3x3 array of containers for elements in this subset */
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
   /** Flag set after attempt to resolve changeset issues has completed. */
-  bool _changesetIssuesResolved;
+  bool _attemptedResolveChangesetIssues;
+  /** Number of times this exact changeset has been retried unsuccessfully */
+  int _numRetries;
+  const int MAX_RETRIES = 5;
 };
 
 }
