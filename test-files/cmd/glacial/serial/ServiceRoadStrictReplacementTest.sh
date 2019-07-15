@@ -30,7 +30,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 
 # -D log.class.filter=ChangesetDeriver;ElementComparer;WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner;OsmUtils;IndexElementsVisitor
 GENERAL_OPTS="--warn -D log.class.filter= -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
-DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
+DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 # We are deriving the changeset by looking at all parts of the reference features, regardless of whether they cross the AOI bounds, and 
 # we are looking at the secondary features in the same way. Its counterintuitive that we wouldn't only look at the secondary features inside
@@ -43,10 +43,11 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.reference.keep.entire
 echo ""
 echo "Writing the reference dataset to an osm api db (contains features to be replaced)..."
 echo ""
-hoot convert $GENERAL_OPTS $PERTY_OPTS -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=hoot::PertyOp $SEC_LAYER_FILE $REF_LAYER_FILE 
 scripts/database/CleanAndInitializeOsmApiDb.sh 
-hoot convert $GENERAL_OPTS $DB_OPTS -D changeset.user.id=1 -D reader.use.data.source.ids=true $REF_LAYER_FILE $REF_LAYER
-# Uncomment to see what the ref layer looks like in file form:
+# Don't use the source IDs, b/c they're negative. Let's write unique positive IDs to the OSM API DB to reflect what they'll look like coming
+# back from production.
+hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=hoot::PertyOp $SEC_LAYER_FILE $REF_LAYER 
+# Uncomment this to see what the ref layer looks like in file form:
 #hoot convert $GENERAL_OPTS $REF_LAYER $OUT_DIR/ref.osm
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
@@ -54,7 +55,7 @@ echo ""
 # Add a custom tag to the secondary roads, so we can verify it gets merged into the final output.
 # replacement tests.
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::HighwayCriterion -D set.tag.value.visitor.key=replacement_test -D set.tag.value.visitor.value=yes $SEC_LAYER_FILE $SEC_LAYER
-# Uncomment to see what the sec layer looks like in file form:
+# Uncomment this to see what the sec layer looks like in file form:
 #hoot convert $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUT_DIR/sec.osm
 
 # CHANGESET DERIVATION
