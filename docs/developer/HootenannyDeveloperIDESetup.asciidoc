@@ -39,13 +39,13 @@ sudo apt-get install ccache
 CONFIG += debug
 CONFIG -= release
 
-# Warn about uninitialized variables and set all variables to their default     
-# values.                                                                       
-QMAKE_CXXFLAGS+=-Wuninitialized -fno-common                                     
-# Initialize values in BSS to zero -- dunno if this will help                   
-QMAKE_CXXFALGS+=-fzero-initialized-in-bss                                       
-                                                                                
-QMAKE_CXX=ccache g++                      
+# Warn about uninitialized variables and set all variables to their default
+# values.
+QMAKE_CXXFLAGS+=-Wuninitialized -fno-common
+# Initialize values in BSS to zero -- dunno if this will help
+QMAKE_CXXFALGS+=-fzero-initialized-in-bss
+
+QMAKE_CXX=ccache g++
 ------
 * (optional) Create a symbolic link from your home dir (if slower magnetic drive) to /tmp (a faster SSD):
 ------
@@ -151,7 +151,7 @@ The advantage to this method is that you're using the package manager to keep th
  ** Remove the following strings:
 ------
 <item value="0" key="AvailableVersionColumnWidth"/>
-<item value="0" key="AvailableNameColumnWidth"/> 
+<item value="0" key="AvailableNameColumnWidth"/>
 ------
  ** Save the file and launch Eclipse.
 
@@ -177,7 +177,7 @@ The advantage to this method is that you're using the package manager to keep th
 ** Select "Tomcat v8.0 Server".  Click "Next".
 ** Browse to the installation directory at /usr/share/tomcat8 Click "Next".
 ** Add the hoot-services project to the configuration.  Click "Finish".
-* *TODO: This isn't working. (#4630)* To serve up the Density Raster tile images, the Tomcat server has to be configured with a static image directory.  From the Navigator or Project Explorer tab, open the "Servers" -> "Tomcat v6.0 Server at localhost-config" -> server.xml Then, under the <Host> section add: 
+* *TODO: This isn't working. (#4630)* To serve up the Density Raster tile images, the Tomcat server has to be configured with a static image directory.  From the Navigator or Project Explorer tab, open the "Servers" -> "Tomcat v6.0 Server at localhost-config" -> server.xml Then, under the <Host> section add:
 ------
 <Context docBase="/your/path/to/hoot/ingest/processed" path="/static" />
 ------
@@ -186,17 +186,17 @@ The advantage to this method is that you're using the package manager to keep th
 
 These are the steps to load projects into Eclipse.
 
-Hoot Services (hoot-services) - Web services that expose OSM data editing and core Hootenanny 
+Hoot Services (hoot-services) - Web services that expose OSM data editing and core Hootenanny
 functionality via REST, as well as Hootenanny data via WFS.
 
 * cd to $HOOT_HOME and +make eclipse+.  This will create the hoot-services Eclipse .project file(s). Verify in $HOOT_HOME/hoot-service a .project dir.
 * In Eclipse, import the hoot-services project:
-** From _File->import->General->Existing Projects into Workspace_ 
+** From _File->import->General->Existing Projects into Workspace_
 ** In "Select root directory", Browse to the top directory of the project and import it.
 
 Hoot UI (hoot-ui) - Hootenanny customized version of the iD OSM editor.  No .project file is automatically created for the hoot-ui project.  It is a Javascript project, so you only need to create a .project file for it if you wish to view the iD Javascript code inside Eclipse alongside the services Java code (optional).
 
-* Load hoot-ui 
+* Load hoot-ui
 ** In Project Explorer pane, right click: New -> Dynamic Web Project
 ** Create a project in any location you desire and use the project name "hoot-ui"
 ** Select all the default to create the project

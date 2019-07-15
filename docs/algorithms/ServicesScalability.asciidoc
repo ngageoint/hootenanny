@@ -239,7 +239,7 @@ forward fixes:
   times as many sockets to use. Unfortunately the client may see
   "http://hootenanny.com:8123/" in the URL.
 * Listen on multiple IP addresses. This is similar to the solution above, but
-  the client would connect to a more pleasant. 
+  the client would connect to a more pleasant.
   "http://hoot23.hootenanny.com/"
 
 For load testing purposes we may exploit either of the above scenarios with the

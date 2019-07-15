@@ -1,12 +1,12 @@
 [[stat]]
-== stat 
+== stat
 
 === Description
 
 The +stat+ command displays a statistic calculated from the features in a map.
 
 * +input+  -  An OSM data input
-* +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the 
+* +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the
               SingleStatistic interface.  Use the +info --operators+ command to obtain a list of available Hootenanny visitors.
 
 === Usage

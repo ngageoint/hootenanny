@@ -2,11 +2,11 @@
 [[HootJavaScriptOverview]]
 == JavaScript Overview
 
-The Hootenanny <<JS,JavaScript>> Interfaces provide ways to both call Hootenanny       
-programmatically using <<Node.js,Node.js>> and also embed routines within Hootenanny to     
-change the way that Hootenanny conflates data. This documentation both explains 
-how to use JavaScript in both ways as well as provides reference documentation  
-for some of the commonly used JavaScript interfaces.                            
+The Hootenanny <<JS,JavaScript>> Interfaces provide ways to both call Hootenanny
+programmatically using <<Node.js,Node.js>> and also embed routines within Hootenanny to
+change the way that Hootenanny conflates data. This documentation both explains
+how to use JavaScript in both ways as well as provides reference documentation
+for some of the commonly used JavaScript interfaces.
 
 At this point there are two different implementations of JavaScript within Hootenanny. The older interface uses QtScript for the implementation within the translation scripts. There are plans to replace the QtScript interface with the newer V8 implementation (used by node.js and described below). Until that happens the JavaScript functions described below are not accessible to translation files.
 
@@ -14,7 +14,7 @@ At this point there are two different implementations of JavaScript within Hoote
 
 Hoot creates a file called +HootJs.node+ that can be used as part of a node.js
 require statement to include Hootenanny functionality. This file is place in
-the +lib+ directory in +$HOOT_HOME+. 
+the +lib+ directory in +$HOOT_HOME+.
 
 ==== Simple Example
 
@@ -22,11 +22,11 @@ For this script to work you must have the +HOOT_HOME+ environment variable set
 properly.
 
 ----
-var HOOT_HOME = process.env.HOOT_HOME                                           
-var hoot = require(HOOT_HOME + '/lib/HootJs');                                  
-                                                                                
-// print hello world to show we can talk to hoot                                        
-console.log(hoot.hello());                                                      
+var HOOT_HOME = process.env.HOOT_HOME
+var hoot = require(HOOT_HOME + '/lib/HootJs');
+
+// print hello world to show we can talk to hoot
+console.log(hoot.hello());
 ----
 
 To run the example above save a file called MyExample.js and call:
@@ -42,43 +42,43 @@ and writes the result out to ../tmp/Conflated.osm. The associated file can
 be found in +$HOOT_HOME/scripts/ConflateExample.js+.
 
 ----
-/**                                                                             
- * This is a small example that loads, cleans and conflates two files. There    
- * is also a little bonus ways splitting on just one of the input files.        
- *                                                                              
- * This doesn't address a specific use case, but demonstrates some of the       
- * functionality exposed to node.js via hootenanny.                             
- */                                                                             
-var HOOT_HOME = process.env.HOOT_HOME                                           
-var hoot = require(HOOT_HOME + '/lib/HootJs');                                  
-                                                                                
-// print hello world to gain confidence                                         
-console.log(hoot.hello());                                                      
-                                                                                                                          
-                                                                                
-// create a new map and populate it with two input files                        
-var map = new hoot.OsmMap();                                                    
-hoot.loadMap(map, "test-files/ToyTestA.osm", false, 1);                         
-                                                                                
-// clean the data                                                               
-new hoot.MapCleaner().apply(map);                                               
-                                                                                
-// artificially make the ways short in the first input                          
-new hoot.WaySplitterOp({'way.splitter.max.length' : 20}).apply(map);            
-                                                                                
-// load the second input, its ways aren't shortened.                            
-hoot.loadMap(map, "test-files/ToyTestB.osm", false, 2);                         
-                                                                                
-// conflate                                                                     
-new hoot.UnifyingConflator().apply(map)                                         
-                                                                                
-// write the map once w/ debug info                                             
-hoot.set({'writer.include.debug': true});                                       
-hoot.saveMap(map, "../tmp/ConflatedDebug.osm");                                 
-                                                                                
-// write the map a second time without debug info                               
-hoot.set({'writer.include.debug': false});                                      
-hoot.saveMap(map, "../tmp/Conflated.osm");                   
+/**
+ * This is a small example that loads, cleans and conflates two files. There
+ * is also a little bonus ways splitting on just one of the input files.
+ *
+ * This doesn't address a specific use case, but demonstrates some of the
+ * functionality exposed to node.js via hootenanny.
+ */
+var HOOT_HOME = process.env.HOOT_HOME
+var hoot = require(HOOT_HOME + '/lib/HootJs');
+
+// print hello world to gain confidence
+console.log(hoot.hello());
+
+
+// create a new map and populate it with two input files
+var map = new hoot.OsmMap();
+hoot.loadMap(map, "test-files/ToyTestA.osm", false, 1);
+
+// clean the data
+new hoot.MapCleaner().apply(map);
+
+// artificially make the ways short in the first input
+new hoot.WaySplitterOp({'way.splitter.max.length' : 20}).apply(map);
+
+// load the second input, its ways aren't shortened.
+hoot.loadMap(map, "test-files/ToyTestB.osm", false, 2);
+
+// conflate
+new hoot.UnifyingConflator().apply(map)
+
+// write the map once w/ debug info
+hoot.set({'writer.include.debug': true});
+hoot.saveMap(map, "../tmp/ConflatedDebug.osm");
+
+// write the map a second time without debug info
+hoot.set({'writer.include.debug': false});
+hoot.saveMap(map, "../tmp/Conflated.osm");
 ----
 
 To run the example above use:
@@ -102,7 +102,7 @@ merging operations through Javascript.
 
 ==== Extending Conflation
 
-In +$HOOT_HOME/rules+ there is an example Javascript file for conflating 
+In +$HOOT_HOME/rules+ there is an example Javascript file for conflating
 buildings. The specifics of the API are discussed in _Javascript Conflation
 Reference_ section. These rules are loaded at runtime by Hootenanny if they
 are enabled through the following defines:
@@ -133,10 +133,10 @@ the top of the file (in the southern Denver region).
 ////
 // NOTE: Needs to be flushed out.
 ////
-If `isWholeGroup` returns true, then you can simply implement `mergePairs` - 
+If `isWholeGroup` returns true, then you can simply implement `mergePairs` -
 this gives a fair amount of flexibility, but will only handle simple 1:1 merge
 situations. Complex situations like 1:n, m:1, m:n will be marked as needing
-review. You could implement 
+review. You could implement
 
 If `isWholeGroup` returns false, then you must implement `mergeSets` or risk
 getting an error. This can handle complex merge situations, but generally uses

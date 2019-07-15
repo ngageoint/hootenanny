@@ -2,11 +2,11 @@
 [[LocatePhoneNumbers]]
 == Locate Phone Numbers
 
-Hootenanny can attempt to determine the geographic location of a phone number using 
+Hootenanny can attempt to determine the geographic location of a phone number using
 link:$$https://github.com/googlei18n/libphonenumber$$[libphonenumber].
 
 Example:
-    
+
 === Add admin boundary level location tags associated with element phone numbers:
 
 -----

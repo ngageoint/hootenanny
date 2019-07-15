@@ -44,7 +44,7 @@
   a dynamic index structure for spatial searching]. Vol. 14, no. 2. ACM, 1984.
 - [[[hall2009]]] Hall, Mark, et al. "The WEKA data mining software: an update."
   ACM SIGKDD explorations newsletter 11.1 (2009): 10-18.
-- [[[kamel1993]]] I Kamel, C. F. (1993). _Hilbert R-tree: An improved R-tree using fractals._ 
+- [[[kamel1993]]] I Kamel, C. F. (1993). _Hilbert R-tree: An improved R-tree using fractals._
 - [[[leutenegger1997]]] Leutenegger, Scott T., Mario A. Lopez, and Jeffrey
   Edgington. "STR: A simple and efficient algorithm for R-tree packing." In Data
   Engineering, 1997. Proceedings. 13th International Conference on, pp. 497-506.
@@ -55,7 +55,7 @@
 - [[[li2011]]] Linna Li, M. F. (2011). An optimisation model for linear feature matching in geographical data conflation. _International Journal of Image and Data Fusion_ , 2:4, 309-328.
 - [[[brinkhoff1993]]] Brinkhoff, Thomas, Hans-Peter Kriegel, and Bernhard Seeger.
   "Efficient processing of spatial joins using R-trees." (1993): 237-246.
-- [[[nta2009]]] National Technology Alliance. (2009). _Conflation Services in an R&D Fusion Environment._ 
+- [[[nta2009]]] National Technology Alliance. (2009). _Conflation Services in an R&D Fusion Environment._
 - [[[doucette2004]]] P Doucette, P. A. (2004). Automated Road Extraction from High Resolution Multispectral Imagery. _Photogrammetric Engineering and Remote Sensing_ .
 - [[[smart2010]]] Philip D. Smart, C. B. (2010). Multi-Source Toponym Data Integration and Mediation for a Meta-Gazetteer Service. _Geographic Information Science_ .
 - [[[saalfeld1985]]] Saalfeld, M. P. (1985). Conflation: Automated Map Compilation - A Video Game Approach. _American Society of Photogrammetry_ .
@@ -96,9 +96,9 @@
   http://en.wikipedia.org/wiki/Application_programming_interface[Application
   Programming Interface]
 [[Conflation]]Conflation::
-  http://wiki.gis.com/wiki/index.php/Conflation[In GIS], conflation is defined 
+  http://wiki.gis.com/wiki/index.php/Conflation[In GIS], conflation is defined
   as the process of combining geographic information from overlapping sources so
-  as to retain accurate data, minimize redundancy, and reconcile data 
+  as to retain accurate data, minimize redundancy, and reconcile data
   conflicts.
 [[ConnectedComponent]]Connected component::
   In graph theory, a
@@ -117,7 +117,7 @@
   applications. Node.js applications are written in JavaScript.
 [[OpenStreetMap]]OpenStreetMap::
   OpenStreetMap (OSM) is a collaborative project to create a free editable map
-  of the world. http://www.openstreetmap.org/ 
+  of the world. http://www.openstreetmap.org/
 [[RMSE]]RMSE::
   http://en.wikipedia.org/wiki/Root-mean-square_deviation[Root Mean Squared
   Error] - is a frequently used measure of the differences between value (Sample

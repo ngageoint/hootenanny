@@ -46,7 +46,7 @@ To build the R&D extension with the Hootenanny Core command line only code:
 
 ---------------------
 ./configure --with-rnd && make -sj$(nproc)
---------------------
+---------------------
 
 To build the Hootenanny API database, OSM API database, and Hootenanny Web Services capabilities along with Hootenanny Core:
 
@@ -58,7 +58,7 @@ To build just the Hootenanny Web Services Java code:
 
 ---------------------
 ./configure --with-services && make -sj$(nproc) services-build
---------------------
+---------------------
 
 The Hootenanny User Interface Javascript code requires no compilation and may be accessed directly from the +hoot-ui+ directory.
 

@@ -14,36 +14,36 @@ of the component source maps." (<<saalfeld1987,Saalfeld 1985>>) A conflated
 dataset is critical to making a better map and is also the foundation to more
 effective geospatial analytics (i.e., geocoding, routing).
 
-The task of selecting which dataset(s) to use and merge becomes a daunting process 
-often requiring a case-by-case evaluation where analysts are forced to resort to 
-multiple ad-hoc conflation techniques (automated and manual) which quickly becomes 
-labor intensive and stove-piped. As such, multiple conflation efforts occur in 
-isolated projects by numerous users for specific purposes with varying workflows, 
-rules, schemas, formats, and data quality. This type of approach creates inefficiencies 
-and lacks standardization which is required for large scale organizational use, 
+The task of selecting which dataset(s) to use and merge becomes a daunting process
+often requiring a case-by-case evaluation where analysts are forced to resort to
+multiple ad-hoc conflation techniques (automated and manual) which quickly becomes
+labor intensive and stove-piped. As such, multiple conflation efforts occur in
+isolated projects by numerous users for specific purposes with varying workflows,
+rules, schemas, formats, and data quality. This type of approach creates inefficiencies
+and lacks standardization which is required for large scale organizational use,
 maintenance, and development activities.
 
-To this end, Hootenanny was developed to provide an open source standards based 
-approach to geospatial vector-data conflation. Hootenanny is designed to facilitate 
-automated and semi-automated conflation of critical Foundation GEOINT features in 
-the topographic domain, namely roads (polylines), buildings (polygons), and 
-points-of-interest (POIs) (points). Conflation happens at the dataset level, 
-where the user’s workflow determines the best reference dataset and source content, 
-geometry and attributes, to transfer to the output map. The input data must be 
-normalized to allow processing and matching of features and attributes from different 
-schemas. Hootenanny internal processing leverages the key value pair structure of 
-OpenStreetMap (OSM) for improved utility and applicability to broader user groups, 
-e.g. normalized attributes can be used to aid in feature matching and OSM’s free 
-tagging system allows the map to include an unlimited number of attributes describing 
+To this end, Hootenanny was developed to provide an open source standards based
+approach to geospatial vector-data conflation. Hootenanny is designed to facilitate
+automated and semi-automated conflation of critical Foundation GEOINT features in
+the topographic domain, namely roads (polylines), buildings (polygons), and
+points-of-interest (POIs) (points). Conflation happens at the dataset level,
+where the user’s workflow determines the best reference dataset and source content,
+geometry and attributes, to transfer to the output map. The input data must be
+normalized to allow processing and matching of features and attributes from different
+schemas. Hootenanny internal processing leverages the key value pair structure of
+OpenStreetMap (OSM) for improved utility and applicability to broader user groups,
+e.g. normalized attributes can be used to aid in feature matching and OSM’s free
+tagging system allows the map to include an unlimited number of attributes describing
 each feature (OpenStreetMap/Map Features, 2015).
 
-Historically, conflation applications have been specialized desktop tools which 
-required a niche expertise with reoccurring licensing requirements and difficult 
-to customize or add functionality. However, open source software provides an 
-attractive business model where the user community can contribute, customize, 
-share, and help maintain the software in an interactive environment. For this 
-reason, Hootenanny is being developed under the open source General Public License 
-(GPL) and will be hosted on the National Geospatial-Intelligence Agency’s (NGA) 
+Historically, conflation applications have been specialized desktop tools which
+required a niche expertise with reoccurring licensing requirements and difficult
+to customize or add functionality. However, open source software provides an
+attractive business model where the user community can contribute, customize,
+share, and help maintain the software in an interactive environment. For this
+reason, Hootenanny is being developed under the open source General Public License
+(GPL) and will be hosted on the National Geospatial-Intelligence Agency’s (NGA)
 link:$$https://github.com/ngageoint/hootenanny$$[GitHub website] (NGA GitHub, 2015).
 
 === History
@@ -79,9 +79,9 @@ because the two datasets are not integrated into one.
 
 The purpose of this research is developing a fully automated conflation
 capability that scales to support big geographic datasets. The rationale is that
-such a conflation capability could create a consolidated data set that leverages 
-feature content from diverse inputs without involving expensive manual conflation. 
-While the quality of the output will not be the same as manually conflated data, 
+such a conflation capability could create a consolidated data set that leverages
+feature content from diverse inputs without involving expensive manual conflation.
+While the quality of the output will not be the same as manually conflated data,
 the cost should be much lower and the quality good enough for many uses.
 
 === Use Cases

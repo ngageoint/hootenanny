@@ -18,7 +18,7 @@ These two command depend on the `configure.ac` file as well as all the files inc
 
 If you take a peek at `configure.ac` most people will think it is some form of gibberish with a few familiar terms mixed in. I won't try and explain what the gibberish means, but you can likely get the gist. There are a number of tutorials on autoconf that should be useful. We can start by looking at a simple example (as of 2013-08-14). At about line 81 is the following snippet:
 
-----------------
+--------
 # CPPUnit
 m4_include([m4/cppunit.m4])
 CPPUNIT_INIT()

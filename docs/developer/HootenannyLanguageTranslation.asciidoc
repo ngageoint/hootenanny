@@ -5,40 +5,40 @@ This document describes some of the design decisions made when adding the to Eng
 
 === Service
 
-Hootenanny to English language translation makes use of multiple open source tools which can translate spoken languages to English and 
+Hootenanny to English language translation makes use of multiple open source tools which can translate spoken languages to English and
 also detect them.  The decision was made to only support translations to English as their is no current use case for translations to any
-other language.  
+other language.
 
-The translation capabilities are hosted as a web service running within the Hootenanny Java web services tier.  The decision to run 
-translation as a service was made because 1) language translation/detection tool initialization can be expensive (model loading), 
-2) all the open source tools were written in Java, which made for easier integration directly with Hootenanny web services than 
-Hootenanny core C++ code, and 3) combining language translation with language detection is useful when the source language is not 
+The translation capabilities are hosted as a web service running within the Hootenanny Java web services tier.  The decision to run
+translation as a service was made because 1) language translation/detection tool initialization can be expensive (model loading),
+2) all the open source tools were written in Java, which made for easier integration directly with Hootenanny web services than
+Hootenanny core C++ code, and 3) combining language translation with language detection is useful when the source language is not
 known and running both tools in the same service prevents unnecessary web requests that would occur if the two were separated.
 
 The service provides separate endpoints for translation and detection, for those who need to use it in that fashion.  It also provides a
 capability to translate large multi-line texts, however, language detection is not integrated with that capability.  Clients to the
-service can specify multiple detector implementations to use (executed in order) or a single translation implementation.  New 
+service can specify multiple detector implementations to use (executed in order) or a single translation implementation.  New
 detector/translation implementations can be created on an as needed basis.
 
 Currently, the translation service runs in the hoot-services servlet.  This means that any time a language needs to be added (see Joshua
-section below), the entire set of services must be restarted.  Eventually, the translation service should run within its own servlet 
-separate from the rest of the Hootenanny web services.  This would allows it to be updated with new languages without the need to restart 
+section below), the entire set of services must be restarted.  Eventually, the translation service should run within its own servlet
+separate from the rest of the Hootenanny web services.  This would allows it to be updated with new languages without the need to restart
 all of the web services.
 
 Note that the language translation client (described in the next section) is implemented as a prototype in hoot-rnd.  However, the
-aforementioned service runs regardless of hoot-rnd being enabled and therefore is not actually a prototype.  There is no simple way 
+aforementioned service runs regardless of hoot-rnd being enabled and therefore is not actually a prototype.  There is no simple way
 currently to restrict code in hoot-services running based on hoot-rnd enablement.  Therefore, due to the effort that would be involved
 this situation will persist for now and can be rectified at later time if needed.
 
 === Client
 
-Access to language translation from Hootenanny core occurs as a visitor which acts as a web client to the translation web service.  It 
-is currently implemented as a prototype within the hoot-rnd library.  The client verifies that the requested source languages are 
-available and then performs the translation.  
+Access to language translation from Hootenanny core occurs as a visitor which acts as a web client to the translation web service.  It
+is currently implemented as a prototype within the hoot-rnd library.  The client verifies that the requested source languages are
+available and then performs the translation.
 
-The service side translator implementation used by the client is configurable and defaults to a translator that has language detection 
-built in.  Because of that, requests can be made that specify no source language and ask that the service detect the language that 
-needs to be translated from.  If a C\++ translation technology is ever implemented, the hoot-services translation service may be bypassed 
+The service side translator implementation used by the client is configurable and defaults to a translator that has language detection
+built in.  Because of that, requests can be made that specify no source language and ask that the service detect the language that
+needs to be translated from.  If a C\++ translation technology is ever implemented, the hoot-services translation service may be bypassed
 and a translator implemented in C\++ for that technology may be used instead by changing a configuration option.
 
 Furthermore, a hoot core command exists, 'hoot languages', that will list currently supported languages hosted in the translation web service.
@@ -53,21 +53,21 @@ consequence for now.  However, future efforts to multi-thread the 'hoot convert'
 
 The only translation technology in use at the time of this writing is Joshua (https://cwiki.apache.org/confluence/display/JOSHUA).  Joshua
 was chosen as the initial translation app, since it is the only one found so far that provides language packs as a part of its distribution.
-So far, it supports translation to English for nearly 60 languages.  The language packs contain pre-trained models for many different 
-languages.  The option still exists to train your own model, but since that can be very time consuming, the language packs give a nice 
-headstart.  It is possible that training our own language models within Hootenanny against certain data could yield better translation 
+So far, it supports translation to English for nearly 60 languages.  The language packs contain pre-trained models for many different
+languages.  The option still exists to train your own model, but since that can be very time consuming, the language packs give a nice
+headstart.  It is possible that training our own language models within Hootenanny against certain data could yield better translation
 results, and that should be dealt with on a case by case basis.
- 
+
 Access to Joshua occurs via one or more externally launched server processes, one for each language, that are launched automatically by
-the Hootenanny web services when configured from the joshuaServices configuration file.  Each Joshua language translation service must 
-run as a separate process due to the fact that Joshua has internal global configuration variables which cannot be shared among multiple 
-languages.  Otherwise, it would have been much simpler and more efficient to call the Joshua library directly from within the 
+the Hootenanny web services when configured from the joshuaServices configuration file.  Each Joshua language translation service must
+run as a separate process due to the fact that Joshua has internal global configuration variables which cannot be shared among multiple
+languages.  Otherwise, it would have been much simpler and more efficient to call the Joshua library directly from within the
 translation service.  Joshua services listen on a TCP socket and can handle a configurable number of concurrent threads.  TCP socket pooling
 occurs per Joshua service.
 
-Joshua services are disabled by default because they each require a very large language pack that must be downloaded and they consume 
-quite a bit of memory when launched.  For more details on installing a language pack, see the Installation Guide.  The list of languages 
-supported by Joshua are manually maintained in the joshuaLanguages configuration file and correspond directly with the avilable language 
+Joshua services are disabled by default because they each require a very large language pack that must be downloaded and they consume
+quite a bit of memory when launched.  For more details on installing a language pack, see the Installation Guide.  The list of languages
+supported by Joshua are manually maintained in the joshuaLanguages configuration file and correspond directly with the avilable language
 packs.  The Hootenanny translation service only works with Joshua language packs version 2.
 
 No real metrics have obtained yet on the accuracy of Joshua translation run from Hootenanny.
@@ -76,17 +76,17 @@ No real metrics have obtained yet on the accuracy of Joshua translation run from
 
 ==== OpenNLP
 
-OpenNLP (https://opennlp.apache.org) provides language detection capabilities.  
+OpenNLP (https://opennlp.apache.org) provides language detection capabilities.
 
-It loads a model into memory that must be downloaded separately from the Hootenanny repository as part of the build process.  If the model 
+It loads a model into memory that must be downloaded separately from the Hootenanny repository as part of the build process.  If the model
 file is not present, OpenNLP language detection will throw an error.
 
-OpenNLP supports many languages (over 100 at the time of this writing), but its accuracy is a little suspect as observed so far.  See the 
+OpenNLP supports many languages (over 100 at the time of this writing), but its accuracy is a little suspect as observed so far.  See the
 openNlpLanguages configuration file for the list of supported languages.
 
 ==== Tika
 
-Tika (https://tika.apache.org) provides language detection capabilities.  
+Tika (https://tika.apache.org) provides language detection capabilities.
 
 It requires no additional model file.
 

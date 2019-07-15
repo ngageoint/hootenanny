@@ -74,7 +74,7 @@ When the levels are less than both rDepth and fqDepth the two tree types
 alternate between levels.
 
 This is a large number of tunable parameters and while the structure appears to
-be resilient to a wide range of parameters a little tweaking can go a long way. 
+be resilient to a wide range of parameters a little tweaking can go a long way.
 To determine the most efficient structure we employed simulated annealing and
 benchmarking to determine a structure that performs well using node only data
 set with 95k nodes and about 800k names (multiple names per node). The following
