@@ -48,13 +48,13 @@ translation_assistant = {
                 for (var tagKey in m) {
                     var tagValue = m[tagKey];
                     if (tagKey == "note" || tagKey == "Note : Memorandum") { //tag is list of extra attributes to be concatenated, att1=val1;att2=val2;att3=val3
-                        if (tags[tagKey]) { //append values to existing tags
+                        if (tags[tagKey] && (tags[tagKey] !== attrs[key])) { //append values to existing tags
                             tags[tagKey] = tags[tagKey] + ";" + k + "=" + attrs[key];
                         } else {
                             tags[tagKey] = k + "=" + attrs[key];
                         }
                     } else if (tagValue == k) { //tag is set to attribute value
-                        if (tags[tagKey]) { //append values to existing tags
+                        if (tags[tagKey] && (tags[tagKey] !== attrs[key])) { //append values to existing tags
                             tags[tagKey] = tags[tagKey] + ";" + attrs[key];
                         } else {
                             tags[tagKey] = attrs[key];
@@ -63,7 +63,7 @@ translation_assistant = {
                         tags[tagKey] = tagValue;
                     } else { //attribute value is mapped to a tag value (if tag key and value is not empty string)
                         if (attrs[key].length > 0 && tagValue[attrs[key]].length > 0) {
-                            if (tags[tagKey]) { //append values to existing tags
+                            if (tags[tagKey] && (tags[tagKey] !== tagValue[attrs[key]])) { //append values to existing tags
                                 tags[tagKey] = tags[tagKey] + ";" + tagValue[attrs[key]];
                             } else {
                                 tags[tagKey] = tagValue[attrs[key]];
