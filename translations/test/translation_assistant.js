@@ -298,13 +298,13 @@ var tags = {
 
 var tagsWithDuplicateKeys = {
     highway: "secondary;motorway_link",
-    name: "CL 10A;CL 10A",
+    name: "CL 10A",
     maxspeed: "56"
 };
 
 var tagsWithEmptyValues = {
     highway: "primary",
-    name: "CL 10A;CL 10A",
+    name: "CL 10A",
     maxspeed: "56"
 };
 
