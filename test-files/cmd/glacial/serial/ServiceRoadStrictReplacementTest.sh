@@ -29,15 +29,16 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 # CONFIG OPTS
 
 # -D log.class.filter=ChangesetDeriver;ElementComparer;
-GENERAL_OPTS="--warn -D log.class.filter=WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner;OsmUtils;IndexElementsVisitor -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
+GENERAL_OPTS="--warn -D log.class.filter=WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner;OsmUtils;IndexElementsVisitor -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
 
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 
-# Here we are deriving the changeset by looking at all parts of the reference features, regardless of whether they cross the AOI bounds, and 
+# We are deriving the changeset by looking at all parts of the reference features, regardless of whether they cross the AOI bounds, and 
 # we are looking at the secondary features in the same way. Its counterintuitive that we wouldn't only look at the secondary features inside
-# of the AOI bounds to calculate the changeset, but the changeset won't be created properly if we do it that way (TODO: need to explain why).
+# of the AOI bounds to calculate the changeset, but the changeset won't be created properly if we do it in that manner (TODO: need to explain 
+# why).
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false"
 
 # DATA PREP
@@ -52,15 +53,21 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D changeset.user.id=1 -D reader.use.data.so
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
-# Add a custom tag to the secondary roads, so we can verify it gets merged into the final output. TODO: add this to the other replacement tests.
+# Add a custom tag to the secondary roads, so we can verify it gets merged into the final output. TODO: add this feature to the other 
+# replacement tests.
 # TODO: change other replacement tests to handle secondary IDs in the same way this test does
 # -D reader.use.data.source.ids=true -D id.generator=hoot::PositiveIdGenerator
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::HighwayCriterion -D set.tag.value.visitor.key=replacement_test -D set.tag.value.visitor.value=yes $SEC_LAYER_FILE $SEC_LAYER
 # Uncomment to see what the sec layer looks like in file form:
 #hoot convert $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUT_DIR/sec.osm
 
+# problem areas that will be encountered when converting changeset derivation to a single command:
+# reader.use.data.source.ids
+# convert.bounding.box.keep.entire.features.crossing.bounds - the changeset crop options *should* make this not a problem
+# way.joiner
+# conflate.use.data.source.ids.2
+
 # CHANGESET DERIVATION
-# TODO: rework this whole part with inline map ops, rather than separate commands dumping data out to disk each time
 
 echo "crop ref"
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D debug.maps.filename=$OUT_DIR/ref-read.osm $REF_LAYER $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm
@@ -85,9 +92,16 @@ echo "snap"
 # been conflated.
 hoot convert $GENERAL_OPTS -D reader.use.data.source.ids=true -D way.joiner=hoot::CookieCutConflateWayJoiner -D tag.merger.default=hoot::OverwriteTag2Merger -D convert.ops="hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp" -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status="Input1;Conflated" -D snap.unconnected.ways.existing.way.node.tolerance=50.0 -D snap.unconnected.ways.snap.tolerance=50.0 -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/05-$TEST_DESCRIPTION-$TEST_NAME-conflated.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm 
 
-echo "derive xml changeset"
+CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
+
+echo ""
+echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
+echo ""
 hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D convert.bounding.box=$AOI $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/07-$TEST_DESCRIPTION-$TEST_NAME-changeset-1.osc
 
+echo ""
+echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; sql changeset out)..."
+echo ""
 echo "derive sql changeset"
 hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D convert.bounding.box=$AOI -D debug.maps.filename=$OUT_DIR/derive-changeset.osm $OUT_DIR/01-$TEST_DESCRIPTION-$TEST_NAME-ref-cropped.osm $OUT_DIR/06-$TEST_DESCRIPTION-$TEST_NAME-snapped.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
 
@@ -101,6 +115,7 @@ echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true $OSM_API_DB_URL $OUT_DIR/08-$TEST_DESCRIPTION-$TEST_NAME-replaced.osm
+hoot diff $GENERAL_OPTS $IN_DIR/output.osm $OUT_DIR/08-$TEST_DESCRIPTION-$TEST_NAME-replaced.osm
 
 # cleanup 
 hoot delete-db-map $HOOT_OPTS $DB_OPTS $SEC_LAYER

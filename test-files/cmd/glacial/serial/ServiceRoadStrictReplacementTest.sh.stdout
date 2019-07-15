@@ -1,0 +1,41 @@
+
+Writing the reference dataset to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the secondary dataset to a hoot api db (contains features to replace with)...
+
+crop ref
+crop sec
+gen alpha shape
+cookie cut
+conflate
+snap
+
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source; xml changeset out)...
+
+
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source; sql changeset out)...
+
+derive sql changeset
+
+Applying the changeset to the reference data...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.4818197, max_lat=42.4915906, min_lon=-71.47331339999999, max_lon=-71.4604496, num_changes=311
+Node(s) Created: 156
+Node(s) Modified: 0
+Node(s) Deleted: 143
+Way(s) Created: 5
+Way(s) Modified: 6
+Way(s) Deleted: 1
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+Reading the entire reference dataset out for verification...
+
