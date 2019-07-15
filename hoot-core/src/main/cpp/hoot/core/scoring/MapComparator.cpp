@@ -82,9 +82,9 @@ public:
    * Defaults to 5cm threshold
    */
   CompareVisitor(
-    std::shared_ptr<OsmMap> ref, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
   {
-    _ref = ref;
+    _refMap = refMap;
     _threshold = threshold;
     _matches = true;
     _errorCount = 0;
@@ -98,17 +98,19 @@ public:
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {
-    CHECK_MSG(_ref->containsElement(e->getElementId()), "Did not find element: " <<
-              e->getElementId());
-    const std::shared_ptr<const Element>& re = _ref->getElement(e->getElementId());
+    // e is the test element
 
-    Tags in1 = re->getTags();
-    Tags in2 = e->getTags();
+    CHECK_MSG(_refMap->containsElement(e->getElementId()), "Did not find element: " <<
+              e->getElementId());
+    const std::shared_ptr<const Element>& refElement = _refMap->getElement(e->getElementId());
+
+    Tags refTags = refElement->getTags();
+    Tags testTags = e->getTags();
 
     if (_ignoreUUID)
     {
-      in1.set("uuid", "None");  // Wipe out the UUID's
-      in2.set("uuid", "None");
+      refTags.set("uuid", "None");  // Wipe out the UUID's
+      testTags.set("uuid", "None");
     }
 
     // By default, hoot will usually set these tags when ingesting a file
@@ -116,22 +118,22 @@ public:
     // have the option to ignore it here.
     if (!_useDateTime)
     {
-      in1.set(MetadataTags::SourceIngestDateTime(), "None");  // Wipe out the ingest datetime
-      in2.set(MetadataTags::SourceIngestDateTime(), "None");
+      refTags.set(MetadataTags::SourceIngestDateTime(), "None");  // Wipe out the ingest datetime
+      testTags.set(MetadataTags::SourceIngestDateTime(), "None");
 
-      in1.set(MetadataTags::SourceDateTime(), "None");  // Wipe out the ingest datetime
-      in2.set(MetadataTags::SourceDateTime(), "None");
+      refTags.set(MetadataTags::SourceDateTime(), "None");  // Wipe out the ingest datetime
+      testTags.set(MetadataTags::SourceDateTime(), "None");
     }
 
-    if (in1 != in2)
+    if (refTags != testTags)
     {
       _matches = false;
       _errorCount++;
       if (_errorCount <= 10)
       {
         LOG_WARN("Tags do not match:");
-        QStringList keys = in1.keys();
-        keys.append(in2.keys());
+        QStringList keys = refTags.keys();
+        keys.append(testTags.keys());
         keys.removeDuplicates();
         keys.sort();
 
@@ -140,93 +142,103 @@ public:
           for (int i = 0; i < keys.size(); i++)
           {
             QString k = keys[i];
-            if (in1[k] != in2[k])
+            if (refTags[k] != testTags[k])
             {
-              LOG_WARN("< " + k + " = " + in1[k]);
-              LOG_WARN("> " + k + " = " + in2[k]);
+              LOG_WARN("< " + k + " = " + refTags[k]);
+              LOG_WARN("> " + k + " = " + testTags[k]);
             }
           }
         }
       }
       return;
     }
-    //CHECK_MSG(in1 == in2, "Tags do not match: " << in1.toString() << " vs. " << in2.toString());
+    //CHECK_MSG(refTags == testTags, "Tags do not match: " << refTags.toString() << " vs. " << testTags.toString());
 
-    CHECK_DOUBLE(re->getCircularError(), e->getCircularError(), _threshold);
-    CHECK_MSG(re->getStatus() == e->getStatus(),
-          "Status does not match: " << re->getStatusString() << " vs. " << e->getStatusString());
-    switch(e->getElementType().getEnum())
+    CHECK_DOUBLE(refElement->getCircularError(), e->getCircularError(), _threshold);
+    CHECK_MSG(refElement->getStatus() == e->getStatus(),
+          "Status does not match: " << refElement->getStatusString() << " vs. " <<
+          e->getStatusString());
+    switch (e->getElementType().getEnum())
     {
     case ElementType::Unknown:
       _matches = false;
       LOG_WARN("Encountered an unexpected element type.");
       break;
     case ElementType::Node:
-      compareNode(re, e);
+      compareNode(refElement, e);
       break;
     case ElementType::Way:
-      compareWay(re, e);
+      compareWay(refElement, e);
       break;
     case ElementType::Relation:
-      compareRelation(re, e);
+      compareRelation(refElement, e);
       break;
     }
   }
 
-  void compareNode(const std::shared_ptr<const Element>& re, const std::shared_ptr<const Element>& e)
+  void compareNode(const std::shared_ptr<const Element>& refElement,
+                   const std::shared_ptr<const Element>& testElement)
   {
-    ConstNodePtr rn = std::dynamic_pointer_cast<const Node>(re);
-    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
+    ConstNodePtr refNode = std::dynamic_pointer_cast<const Node>(refElement);
+    ConstNodePtr testNode = std::dynamic_pointer_cast<const Node>(testElement);
 
-    if (GeometryUtils::haversine(rn->toCoordinate(), n->toCoordinate()) > _threshold)
+    if (GeometryUtils::haversine(refNode->toCoordinate(), testNode->toCoordinate()) > _threshold)
     {
       if (_errorCount <= 10)
       {
-        LOG_WARN("rn: " << std::fixed << std::setprecision(15) << rn->getX() << ", " << rn->getY() <<
-                 " n: " << n->getX() << ", " << n->getY());
+        LOG_WARN(
+          "refNode: " << std::fixed << std::setprecision(15) << refNode->getX() << ", " <<
+          refNode->getY() << " testNode: " << testNode->getX() << ", " << testNode->getY());
       }
       _matches = false;
       _errorCount++;
     }
   }
 
-  void compareWay(const std::shared_ptr<const Element>& re, const std::shared_ptr<const Element>& e)
+  void compareWay(const std::shared_ptr<const Element>& refElement,
+                  const std::shared_ptr<const Element>& testElement)
   {
-    ConstWayPtr rw = std::dynamic_pointer_cast<const Way>(re);
-    ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
+    ConstWayPtr refWay = std::dynamic_pointer_cast<const Way>(refElement);
+    ConstWayPtr testWay = std::dynamic_pointer_cast<const Way>(testElement);
 
-    CHECK_MSG(rw->getNodeIds().size() == w->getNodeIds().size(),
+    CHECK_MSG(refWay->getNodeIds().size() == testWay->getNodeIds().size(),
               "Node count does not match.");
-    for (size_t i = 0; i < rw->getNodeIds().size(); ++i)
+    for (size_t i = 0; i < refWay->getNodeIds().size(); ++i)
     {
-      CHECK_MSG(rw->getNodeIds()[i] == w->getNodeIds()[i],
+      CHECK_MSG(refWay->getNodeIds()[i] == testWay->getNodeIds()[i],
         QString("Node IDs don't match. (%1 vs. %2)").
-        arg(hoot::toString(rw)).
-        arg(hoot::toString(w)));
+        arg(hoot::toString(refWay)).
+        arg(hoot::toString(testWay)));
     }
   }
 
-  void compareRelation(const std::shared_ptr<const Element>& re, const std::shared_ptr<const Element>& e)
+  void compareRelation(const std::shared_ptr<const Element>& refElement,
+                       const std::shared_ptr<const Element>& testElement)
   {
-    ConstRelationPtr rr = std::dynamic_pointer_cast<const Relation>(re);
-    ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
+    ConstRelationPtr refRelation = std::dynamic_pointer_cast<const Relation>(refElement);
+    ConstRelationPtr testRelation = std::dynamic_pointer_cast<const Relation>(testElement);
 
-    QString relationStr = QString("%1 vs. %2").arg(hoot::toString(rr)).arg(hoot::toString(r));
+    QString relationStr =
+      QString("%1 vs. %2").arg(hoot::toString(refRelation)).arg(hoot::toString(testRelation));
 
-    CHECK_MSG(rr->getType() == r->getType(), "Types do not match. " + relationStr);
-    CHECK_MSG(rr->getMembers().size() == r->getMembers().size(),
+    CHECK_MSG(
+      refRelation->getType() == testRelation->getType(), "Types do not match. " + relationStr);
+    CHECK_MSG(refRelation->getMembers().size() == testRelation->getMembers().size(),
       "Member count does not match. " + relationStr);
-    for (size_t i = 0; i < rr->getMembers().size(); i++)
+    for (size_t i = 0; i < refRelation->getMembers().size(); i++)
     {
-      CHECK_MSG(rr->getMembers()[i].role == r->getMembers()[i].role,
+      CHECK_MSG(
+        refRelation->getMembers()[i].role == testRelation->getMembers()[i].role,
         "Member role does not match. " + relationStr);
-      CHECK_MSG(rr->getMembers()[i].getElementId() == r->getMembers()[i].getElementId(),
+      CHECK_MSG(
+        refRelation->getMembers()[i].getElementId() == testRelation->getMembers()[i].getElementId(),
         "Member element ID does not match. " + relationStr);
     }
   }
 
 private:
-  std::shared_ptr<OsmMap> _ref;
+
+  std::shared_ptr<OsmMap> _refMap;
   Meters _threshold;
   Degrees _thresholdDeg;
   bool _matches;
@@ -239,31 +251,31 @@ MapComparator::MapComparator():
   _ignoreUUID(false),
   _useDateTime(false)
 {
-  // blank
 }
 
-bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& ref, const std::shared_ptr<OsmMap>& test)
+bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
+                            const std::shared_ptr<OsmMap>& testMap)
 {
   bool mismatch = false;
-  if (ref->getNodes().size() != test->getNodes().size())
+  if (refMap->getNodes().size() != testMap->getNodes().size())
   {
     LOG_WARN(
-      "Number of nodes does not match (1: " << ref->getNodes().size() << "; 2: " <<
-      test->getNodes().size() << ")");
+      "Number of nodes does not match (1: " << refMap->getNodes().size() << "; 2: " <<
+      testMap->getNodes().size() << ")");
     mismatch = true;
   }
-  else if (ref->getWays().size() != test->getWays().size())
+  else if (refMap->getWays().size() != testMap->getWays().size())
   {
     LOG_WARN(
-      "Number of ways does not match (1: " << ref->getWays().size() << "; 2: " <<
-      test->getWays().size() << ")");
+      "Number of ways does not match (1: " << refMap->getWays().size() << "; 2: " <<
+      testMap->getWays().size() << ")");
     mismatch = true;
   }
-  else if (ref->getRelations().size() != test->getRelations().size())
+  else if (refMap->getRelations().size() != testMap->getRelations().size())
   {
     LOG_WARN(
-      "Number of relations does not match (1: " << ref->getRelations().size() << "; 2: " <<
-      test->getRelations().size() << ")");
+      "Number of relations does not match (1: " << refMap->getRelations().size() << "; 2: " <<
+      testMap->getRelations().size() << ")");
     mismatch = true;
   }
   if (mismatch)
@@ -271,11 +283,9 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& ref, const std::share
     return false;
   }
 
-  CompareVisitor v(ref, _ignoreUUID, _useDateTime);
-  test->visitRo(v);
-  bool r = v.isMatch();
-
-  return r;
+  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime);
+  testMap->visitRo(compareVis);
+  return compareVis.isMatch();
 }
 
 }
