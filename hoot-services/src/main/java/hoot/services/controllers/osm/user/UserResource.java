@@ -75,6 +75,22 @@ public class UserResource {
          return Response.ok().entity(user).build();
     }
 
+    private Response userResponse(HttpServletRequest request, Users user) throws ParserConfigurationException {
+
+        if (user == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+        String contentType = null;
+        if(request != null) { contentType = request.getHeader("Content-Type"); }
+        if(contentType == null || contentType.trim().equalsIgnoreCase("application/xml")) {
+            Document responseDoc = writeResponse(new User(user));
+            return Response.ok().entity(new DOMSource(responseDoc)).type(MediaType.APPLICATION_XML).build();
+        } else {
+            return Response.ok().entity(user).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
     /**
      * Service method endpoint for retrieving Hoot user information by id
      *
@@ -92,17 +108,7 @@ public class UserResource {
                 .where(users.id.eq(userId))
                 .fetchOne();
 
-        if (user == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-        String contentType = null;
-        if(request != null) { contentType = request.getHeader("Content-Type"); }
-        if(contentType == null || contentType.trim().equalsIgnoreCase("application/xml")) {
-            Document responseDoc = writeResponse(new User(user));
-            return Response.ok().entity(new DOMSource(responseDoc)).type(MediaType.APPLICATION_XML).build();
-        } else {
-            return Response.ok().entity(user).type(MediaType.APPLICATION_JSON).build();
-        }
+        return userResponse(request, user);
     }
 
     /**
@@ -116,14 +122,8 @@ public class UserResource {
     @Path("/details")
     public Response getDetails(@Context HttpServletRequest request) throws ParserConfigurationException {
         Users user = Users.fromRequest(request);
-        String contentType = null;
-        if(request != null) { contentType = request.getHeader("Content-Type"); }
-        if(contentType == null || contentType.trim().equalsIgnoreCase("application/xml")) {
-            Document responseDoc = writeResponse(new User(user));
-            return Response.ok().entity(new DOMSource(responseDoc)).type(MediaType.APPLICATION_XML).build();
-        } else {
-            return Response.ok().entity(user).type(MediaType.APPLICATION_JSON).build();
-        }
+
+        return userResponse(request, user);
     }
 
     @GET
@@ -135,17 +135,7 @@ public class UserResource {
                 .where(users.displayName.equalsIgnoreCase(displayName))
                 .fetchOne();
 
-        if (user == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        }
-        String contentType = null;
-        if(request != null) { contentType = request.getHeader("Content-Type"); }
-        if(contentType == null || contentType.trim().equalsIgnoreCase("application/xml")) {
-            Document responseDoc = writeResponse(new User(user));
-            return Response.ok().entity(new DOMSource(responseDoc)).type(MediaType.APPLICATION_XML).build();
-        } else {
-            return Response.ok().entity(user).type(MediaType.APPLICATION_JSON).build();
-        }
+        return userResponse(request, user);
     }
 
     /**
