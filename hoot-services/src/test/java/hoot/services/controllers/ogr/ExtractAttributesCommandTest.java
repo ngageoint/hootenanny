@@ -28,7 +28,9 @@ package hoot.services.controllers.ogr;
 
 
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -66,7 +68,7 @@ public class ExtractAttributesCommandTest {
         assertNotNull(extractAttributesCommand.getWorkDir());
         assertNotNull(extractAttributesCommand.getCommand());
 
-        String expectedCommand = "hoot tag-info --${DEBUG_LEVEL} ${INPUT_FILES}";
+        String expectedCommand = "hoot tag-info --${DEBUG_LEVEL} --tag-values-limit 30 ${INPUT_FILES}";
         assertEquals(expectedCommand, extractAttributesCommand.getCommand());
 
         assertTrue(extractAttributesCommand.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
