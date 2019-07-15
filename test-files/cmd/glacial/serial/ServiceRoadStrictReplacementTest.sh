@@ -52,8 +52,9 @@ hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D reader.use.data.source.ids=fa
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
-# Add a custom tag to the secondary roads, so we can verify it gets merged into the final output.
-# replacement tests.
+# It doesn't matter here if we use the secondary data source IDs or not, since they're guaranteed to be unique when compared to the reference
+# IDs due to the way we loaded them. To stay consistent with ID management across the test, we'll use the secondary IDs. Add a custom tag to 
+# the secondary roads, so we can verify it gets merged into the final output.
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::HighwayCriterion -D set.tag.value.visitor.key=replacement_test -D set.tag.value.visitor.value=yes $SEC_LAYER_FILE $SEC_LAYER
 # Uncomment this to see what the sec layer looks like in file form:
 #hoot convert $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUT_DIR/sec.osm
