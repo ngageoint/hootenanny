@@ -3,7 +3,7 @@
 
 === Description
 
-The +sort+ command sorts a file first by element type, then by increasing element ID.  The element type sorting order 
+The +sort+ command sorts a file first by element type, then by increasing element ID.  The element type sorting order
 is: 1) nodes, 2) ways, and then 3) relations.
 
 * +input+  - Input (e.g. .osm file).
@@ -23,6 +23,6 @@ hoot sort unsorted.osm sorted.osm
 
 === Notes
 
-* Element sorting is performed in memory by default.  To perform sorting in a non-memory bound fashion, set 
+* Element sorting is performed in memory by default.  To perform sorting in a non-memory bound fashion, set
 the configuration option element.sorter.element.buffer.size to a value greater than zero
 

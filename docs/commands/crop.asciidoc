@@ -3,7 +3,7 @@
 
 === Description
 
-The +crop+ command crops a map to the given bounds. Individual features on the border are modified to make sure nothing 
+The +crop+ command crops a map to the given bounds. Individual features on the border are modified to make sure nothing
 is outside the given bounds.
 
 * +input+  - The input OSM data path.
@@ -24,14 +24,14 @@ The configuration options `crop.*` control the behavior of map cropping. See the
 
 --------------------------------------
 # regular crop
-hoot crop data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 # don't split feature that cross the bounds
-hoot crop -D crop.keep.entire.features.crossing.bounds=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop -D crop.keep.entire.features.crossing.bounds=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 # only keep features completely within the bounds
-hoot crop -D crop.keep.only.features.inside.bounds=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop -D crop.keep.only.features.inside.bounds=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
 
 # reverse the crop; keep only features outside of the bounds
-hoot crop -D crop.invert=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031" 
+hoot crop -D crop.invert=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,-77.0281,38.9031"
 --------------------------------------

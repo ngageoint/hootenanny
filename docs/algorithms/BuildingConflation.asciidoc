@@ -1,7 +1,7 @@
 
 [[BuildingConflation]]
 == Building Conflation
-  
+
 
 Building conflation supports multiple forms:
 

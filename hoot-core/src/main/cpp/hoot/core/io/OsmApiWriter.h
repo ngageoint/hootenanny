@@ -54,20 +54,20 @@ class OsmApiWriterTest;
 
 class OsmApiWriter : public Configurable, public ProgressReporter
 {
+public:
   /** OSM API URL paths */
-  const QString API_PATH_CAPABILITIES = "/api/capabilities/";
-  const QString API_PATH_PERMISSIONS = "/api/0.6/permissions/";
-  const QString API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
-  const QString API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
-  const QString API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
-  const QString API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
+  const static char* API_PATH_CAPABILITIES;
+  const static char* API_PATH_PERMISSIONS;
+  const static char* API_PATH_CREATE_CHANGESET;
+  const static char* API_PATH_CLOSE_CHANGESET;
+  const static char* API_PATH_UPLOAD_CHANGESET;
+  const static char* API_PATH_GET_ELEMENT;
   /**
    *  Max number of jobs waiting in the work queue = multiplier * number of threads,
    *  this keeps the producer thread from creating too many sub-changesets too early
    *  that only consist of nodes after ways are blocked.
    */
   const int QUEUE_SIZE_MULTIPLIER = 2;
-public:
   /** Constructors with one or multiple files consisting of one large changeset */
   OsmApiWriter(const QUrl& url, const QString& changeset);
   OsmApiWriter(const QUrl& url, const QList<QString>& changesets);

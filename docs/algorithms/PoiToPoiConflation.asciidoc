@@ -120,7 +120,7 @@ Some examples of evidence include:
 * Strong Evidence
  * POI types are similar (e.g. `amenity=bus_station` is similar to
    `transport=station`)
- * Additional attributes are similar (e.g. `cuisine`, `power`, `sport`, or 
+ * Additional attributes are similar (e.g. `cuisine`, `power`, `sport`, or
    `art_type`)
  * Very similar names
 * Weak Evidence
@@ -231,7 +231,7 @@ Approximate Area (km^2^)
 All test results presented were run with Hootenanny v0.2.17-76-g140396e. An
 iterative approach was used to improve performance against the data sets
 provided. As the tests were run areas that caused errors were identified and
-improved. 
+improved.
 
 [[PoiTestFlow]]
 .POI Test Flow

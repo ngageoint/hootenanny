@@ -3,8 +3,8 @@
 
 === Description
 
-The +type-tagger-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type 
-tags to features based on their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User Guide for 
+The +type-tagger-rules+ command allows for creating an implicit tag rules database that can be used to implicitly add type
+tags to features based on their names.  See the "Implicit Element Type Tagging Based On Name" section in the Hootenanny User Guide for
 more information.
 
 === Creating the Raw Implicit Type Tagging Rules File
@@ -12,7 +12,7 @@ more information.
 A raw rules file must be created before generating a rules database.  Use the --create-raw option to generate it:
 
 * +inputs+       - semicolon delimited list of input paths to supported Hootenanny input data formats
-* +translations+ - semicolon delimited list of translation scripts used to translate each input dataset; specify 'none' to skip 
+* +translations+ - semicolon delimited list of translation scripts used to translate each input dataset; specify 'none' to skip
                    translation for an input (e.g. OSM data)
 * +output+       - an *.implicitTagRules tab delimited implicit tag rules file
 
@@ -38,7 +38,7 @@ Once a raw rules file has been generated, an implicit type tag rules database ma
 * +input+       - an .implicitTagRules tab delimited rules for input
 * +output+      - a .sqlite database file for output
 
-Relevant configuration options are those beginning with implicit.tagging.database.deriver.* and in some cases those beginning with 
+Relevant configuration options are those beginning with implicit.tagging.database.deriver.* and in some cases those beginning with
 implicit.tagging.*, in conf/core/ConfigOptions.asciidoc.
 
 ==== Usage

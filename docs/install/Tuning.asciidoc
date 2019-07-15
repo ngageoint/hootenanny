@@ -2,7 +2,7 @@
 [[HootInstallTuning]]
 == Tuning
 
-The following sections are optional sections to tune the performance of Hootenanny.  
+The following sections are optional sections to tune the performance of Hootenanny.
 
 === Database
 

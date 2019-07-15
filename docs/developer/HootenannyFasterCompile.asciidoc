@@ -30,7 +30,7 @@ echo 'DISTCC_TCP_CORK=0' >> /etc/environment
 QMAKE_CXX=ccache distcc g++
 --------
 6. When you build now use `make -j#` where # is the number of processes * 2. In the example above it would be (4 + 8) * 2 or `make -j24`.
-7. You'll want to update the make arguments in Qt Creator as well if you use Creator. 
+7. You'll want to update the make arguments in Qt Creator as well if you use Creator.
 ** Click on _Projects_
 ** Click _Build & Run_
 ** Click _Details_ in the _Make_ section

@@ -2,9 +2,9 @@
 == Configuration Options
 
 Configuration settings can dramatically change the operation of Hootenanny. The
-configuration options can be set in a configuration file 
-(+$HOOT_HOME/conf/hoot.json+), environment variables or specified on the 
-command line. Most of the configuration values are documented in more 
+configuration options can be set in a configuration file
+(+$HOOT_HOME/conf/hoot.json+), environment variables or specified on the
+command line. Most of the configuration values are documented in more
 detail in the following sections.
 
 These configuration options are advanced manipulations of the Hootenanny engine and may result in unexpected results. Please create an issue at https://github.com/ngageoint/hootenanny if you have specific questions.
@@ -53,7 +53,7 @@ If this file is placed in +$HOOT_HOME/conf/+ then it will be found with a relati
 hoot convert \
   -C Example.json \
   test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 ------
 
 The +$HOOT_HOME/conf/hoot.json+ configuration file is used with all commands without specifying the configuration on the command line.
@@ -101,7 +101,7 @@ Configuration parameters:
 
 [[Map-Writer-Configuration]]
 === Map Writer Configuration
-  
+
 
 [[OGR-Writer]]
 ==== OGR Writer
@@ -122,13 +122,13 @@ This driver will likely work with most supported OGR formats, but is only active
 Examples:
 
 ------
-# Convert example .osm file and write the resulting layers to a PostGIS database. 
+# Convert example .osm file and write the resulting layers to a PostGIS database.
 # The PostGIS database must be initialized first (using instructions found with the PostGIS documentation).
 hoot convert \
   -D ogr.writer.script=test-files/io/SampleTranslation.js \
   -D ogr.writer.pre.layer.name=bar \
   test-files/io/SampleTranslation.osm \
-  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'" 
+  PG:"dbname='osm_gis2' host='localhost' port='5432' user='hoot' password='hoottest'"
 
 # Same as above.
 hoot convert \
@@ -147,11 +147,11 @@ hoot convert \
 
 [[Map-Operation-Configuration]]
 === Map Operation Configuration
- 
+
 
 [[Rubber-Sheeting]]
 ==== Rubber Sheeting
-  
+
 
 The +hoot::RubberSheet+ operation will find common high confidence intersection matches and rubber sheet the two data sets to bring them into alignment.
 
@@ -164,7 +164,7 @@ hoot conflate -D map.cleaner.transforms=hoot::RubberSheet test-files/ToyTestA.os
 
 [[Splitting-Ways]]
 ==== Splitting Ways
-  
+
 
 The +hoot::WaySplitterOp+ will split ways greater than a specified max length into ways that are less than or equal to max length. All distance calculations are performed in a projected plane.
 
@@ -179,11 +179,11 @@ hoot clean -D map.cleaner.transforms=hoot::WaySplitterOp -D way.splitter.max.len
 
 [[Perty-Duplicate-POI]]
 ==== Perty Duplicate POI
-  
+
 
 Randomly duplicates POIs in the given map.
 
-Hoot proper name: +hoot::PertyDuplicatePoiOp+ 
+Hoot proper name: +hoot::PertyDuplicatePoiOp+
 
 Configuration parameters:
 
@@ -194,7 +194,7 @@ Configuration parameters:
 
 [[PertyDuplPOI-Example-Use]]
 ===== Perty Duplicate POI Example Use:
-  
+
 
 ------
 hoot perty -D perty.ops=hoot::PertyDuplicatePoiOp -D perty.duplicate.poi.p=0.5 TigerDc.osm Pertified.osm
@@ -203,18 +203,18 @@ hoot perty -D perty.ops=hoot::PertyDuplicatePoiOp -D perty.duplicate.poi.p=0.5 T
 
 [[Map-Visitor-Configuration]]
 === Map Visitor Configuration
-  
+
 
 Map visitors perform operations on individual elements in a map. For example, reprojection is a simple visitor operation where each element can be changed without direct knowledge of any other element.
 
 
 [[Perty-Way-Split]]
 ==== Perty Way Split
-  
+
 
 Randomly split ways on the given map.
 
-Hoot proper name: +hoot::PertyWaySplitVisitor+ 
+Hoot proper name: +hoot::PertyWaySplitVisitor+
 
 Configuration parameters:
 
@@ -224,7 +224,7 @@ Configuration parameters:
 
 [[Perty-Way-Split-Example-Use]]
 ===== Perty Way Split Example Use:
-  
+
 
 ------
 hoot perty -D perty.ops=hoot::PertyWaySplitVisitor -D perty.way.split.probability=0.5 TigerDc.osm Pertified.osm
@@ -233,11 +233,11 @@ hoot perty -D perty.ops=hoot::PertyWaySplitVisitor -D perty.way.split.probabilit
 
 [[Perty-Way-Generalize]]
 ==== Perty Way Generalize
-  
+
 
 Randomly generalize (simplify) ways on the given map by removing nodes from them.
 
-Hoot proper name: +hoot::PertyWayGeneralizeVisitor+ 
+Hoot proper name: +hoot::PertyWayGeneralizeVisitor+
 
 Configuration parameters:
 
@@ -247,7 +247,7 @@ Configuration parameters:
 
 [[Perty-Way-Generalize-Example-Use]]
 ===== Perty Way Generalize Example Use:
-  
+
 
 ------
 hoot perty -D perty.ops=hoot::PertyWayGeneralizeVisitor -D perty.way.generalize.probability=0.5 -D perty.way.generalize.epsilon=5.0 TigerDc.osm Pertified.osm
@@ -256,11 +256,11 @@ hoot perty -D perty.ops=hoot::PertyWayGeneralizeVisitor -D perty.way.generalize.
 
 [[Perty-Remove-Element]]
 ==== Perty Remove Element
-  
+
 
 Randomly remove elements from the given map.
 
-Hoot proper name: +hoot::PertyRemoveRandomElementVisitor+ 
+Hoot proper name: +hoot::PertyRemoveRandomElementVisitor+
 
 Configuration parameters:
 
@@ -269,7 +269,7 @@ Configuration parameters:
 
 [[Perty-Remove-Element-Example-Use]]
 ===== Perty Remove Element Example Use:
-  
+
 
 ------
 hoot perty -D perty.ops=hoot::PertyRemoveRandomElementVisitor -D perty.remove.random.p=0.5 TigerDc.osm Pertified.osm
@@ -278,11 +278,11 @@ hoot perty -D perty.ops=hoot::PertyRemoveRandomElementVisitor -D perty.remove.ra
 
 [[Perty-Remove-Tag]]
 ==== Perty Remove Tag
-  
+
 
 Randomly remove tags from the given map.
 
-Hoot proper name: +hoot::PertyRemoveTagVisitor+ 
+Hoot proper name: +hoot::PertyRemoveTagVisitor+
 
 Configuration parameters:
 
@@ -294,7 +294,7 @@ Configuration parameters:
 
 [[Perty-Remove-Tag-Example-Use]]
 ===== Perty Remove Tag Example Use:
-  
+
 
 ------
 hoot perty -D perty.ops=hoot::PertyRemoveTagVisitor -D perty.remove.tag.p=0.5 -D perty.remove.tag.visitor.exempt.tag.keys="REF1;REF2" -D perty.remove.tag.visitor.substitution.keys=highway -D perty.remove.tag.visitor.substitution.values=road TigerDc.osm Pertified.osm
@@ -303,13 +303,13 @@ hoot perty -D perty.ops=hoot::PertyRemoveTagVisitor -D perty.remove.tag.p=0.5 -D
 
 [[Perty-Name-Visitor]]
 ==== Perty Name Visitor
-  
+
 
 Randomly changes names by replacing characters with random characters or randomly swapping characters.
 
 If a character is marked for change then there are even odds that it will be swapped or replaced. If the character is swapped it can be swapped with any character in the name (uniformly distributed). If the character is replaced it will be randomly replaced by a-z or space (uniformly distributed). Any script will be handled properly, but the random characters used for replacement do not change.
 
-Hoot proper name: +hoot::PertyNameVisitor+ 
+Hoot proper name: +hoot::PertyNameVisitor+
 
 Configuration parameters:
 
@@ -319,7 +319,7 @@ Configuration parameters:
 
 [[Perty-Name-Visitor-Example-Use]]
 ===== Perty Name Visitor Example Use:
-  
+
 
 ------
 hoot perty -D perty.ops=hoot::PertyNameVisitor -D perty.name.change.p=0.5 TigerDc.osm Pertified.osm
@@ -328,14 +328,14 @@ hoot perty -D perty.ops=hoot::PertyNameVisitor -D perty.name.change.p=0.5 TigerD
 
 [[Tag-Merging-Configuration]]
 === Tag Merging Configuration
-  
+
 
 When two features/elements are merged into a single feature/element the tags must be merged into a single set of tags. Depending on the use case there may be many different desirable ways to merge tags. Below are the options exposed to the user for merging tags. The default way to set this configuration for many functions is through the +tag.merger.default+ configuration key. Some older operations may not support configurable merging techniques. The default value is +hoot::AverageTagMerger+ .
 
 
 [[Overwrite-Tag-1]]
 ==== Overwrite Tag 1
-  
+
 
 Use the value +hoot::OverwriteTag1Merger+ . For example:
 
@@ -345,49 +345,49 @@ hoot conflate -D tag.merger.default=hoot::OverwriteTag1Merger input1.osm input2.
 
 Overwrite the values in the first input with the values in the second input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
 
-*Tags on First Input* 
+*Tags on First Input*
 |======
-| key | value 
-| name | Simonovsky Val Expressway 
-| name:en | Simonovsky Val Expressway 
-| highway | trunk 
-| ref | RU 24 
-| oneway | yes 
-| lanes | 2 
-| uuid | foo 
+| key | value
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
 |======
 
-*Tags on Second Input* 
+*Tags on Second Input*
 |======
-| key | value 
-| highway | secondary 
-| name | Simonovsky Val Expy 
-| name:en | Simonovsky Val Expressway 
+| key | value
+| highway | secondary
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
 | name:ru | *улица Симоновский Вал*
-| ref | 24 
-| oneway | true 
-| bridge | yes 
-| uuid | bar 
+| ref | 24
+| oneway | true
+| bridge | yes
+| uuid | bar
 |======
 
-*Result* 
+*Result*
 |======
-| key | value 
-| name | Simonovsky Val Expy 
-| name:en | Simonovsky Val Expressway 
-| name:ru | *улица Симоновский Вал* 
-| alt_name | Simonovsky Val Expressway;RU 24 
-| bridge | yes 
-| highway | secondary 
-| ref | 24 
-| oneway | true 
-| lanes | 2 
-| uuid | bar 
+| key | value
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| alt_name | Simonovsky Val Expressway;RU 24
+| bridge | yes
+| highway | secondary
+| ref | 24
+| oneway | true
+| lanes | 2
+| uuid | bar
 |======
 
 [[Overwrite-Tag-2]]
 ==== Overwrite Tag 2
-  
+
 
 Use the value +hoot::OverwriteTag2Merger+ . For example:
 
@@ -397,50 +397,50 @@ hoot conflate -D tag.merger.default=hoot::OverwriteTag2Merger input1.osm input2.
 
 Overwrite the values in the second input with the values in the first input. This will still keep all unique names, but all other tags will simply be overwritten. For example:
 
-*Tags on Input 1* 
+*Tags on Input 1*
 |======
-| key | value 
-| name | Simonovsky Val Expressway 
-| name:en | Simonovsky Val Expressway 
-| highway | trunk 
-| ref | RU 24 
-| oneway | yes 
-| lanes | 2 
-| uuid | foo 
-|======
-
-*Tags on Input 2* 
-|======
-| key | value 
-| highway | secondary 
-| name | Simonovsky Val Expy 
-| name:en | Simonovsky Val Expressway 
-| name:ru | *улица Симоновский Вал* 
-| ref | 24 
-| oneway | true 
-| bridge | yes 
-| uuid | bar 
+| key | value
+| name | Simonovsky Val Expressway
+| name:en | Simonovsky Val Expressway
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
 |======
 
-*Result* 
+*Tags on Input 2*
 |======
-| key | value 
-| name | Midland Expressway 
-| name:en | Midland Expressway 
-| name:ru | *улица Симоновский Вал* 
-| alt_name | 24;Simonovsky Val Expy  
-| bridge | yes 
-| highway | trunk 
-| ref | RU 24 
-| oneway | yes 
-| lanes | 2 
-| uuid | foo 
+| key | value
+| highway | secondary
+| name | Simonovsky Val Expy
+| name:en | Simonovsky Val Expressway
+| name:ru | *улица Симоновский Вал*
+| ref | 24
+| oneway | true
+| bridge | yes
+| uuid | bar
+|======
+
+*Result*
+|======
+| key | value
+| name | Midland Expressway
+| name:en | Midland Expressway
+| name:ru | *улица Симоновский Вал*
+| alt_name | 24;Simonovsky Val Expy
+| bridge | yes
+| highway | trunk
+| ref | RU 24
+| oneway | yes
+| lanes | 2
+| uuid | foo
 |======
 [[Average-Tags]]
 ===== Average Tags
-  
 
-Use an internal method to average the tags between two features. 
+
+Use an internal method to average the tags between two features.
 
 Use the value +hoot::AverageTagMerger+ . For example:
 
@@ -451,7 +451,7 @@ hoot conflate -D tag.merger.default=hoot::AverageTagMerger input1.osm input2.osm
 
 [[Generalize-Tag-Merger]]
 ===== Generalize Tag Merger
-  
+
 
 Use an internal method to generalize the tags between two features. For instance, generalizing between +highway=primary+ and +highway=secondary+ results in +highway=road+ since road is the least general form that represents both primary and secondary.
 
@@ -464,8 +464,8 @@ hoot conflate -D tag.merger.default=hoot::GeneralizeTagMerger input1.osm input2.
 [[Provenance-Aware-Overwrite-Tag-Merger]]
 ===== Provenance Aware Overwrite Tag Merger
 
-This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.  
-This tag merger will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both 
+This tag merger assumes features in different input files have their provenance tracked with a tag with the key `hoot:source`.
+This tag merger will ensure that tag value is not overwritten for either feature being merged.  Instead, the values from both
 features are concatenated together.
 
 Use the value +hoot::ProvenanceAwareOverwriteTagMerger+ . For example:
@@ -489,7 +489,7 @@ hoot conflate -D tag.merger.default=hoot::PreserveTypesTagMerger input1.osm inpu
 
 [[Road-Conflation-Configuration]]
 === Road Conflation Configuration
-  
+
 
 _This will be replaced with new documentation in the not-so-distant future as our conflation routines evolve._
 
@@ -498,7 +498,7 @@ For road conflation only you can specify manipulators that determine how the con
 
 [[Standard-Way-Manipulator]]
 ==== Standard Way Manipulator
-  
+
 
 Matches and merges a partial or full way to a partial or full way. The result is a new, averaged, conflated way as well as one or more partial "left-overs". This is the default configuration option and can be run with:
 
@@ -515,7 +515,7 @@ hoot conflate -D conflator.manipulators=hoot::WayMerger input1.osm input2.osm ou
 
 [[Snap-Way-Manipulator]]
 ==== Snap Way Manipulator
-  
+
 
 This is most useful if you have one input data set that clearly has superior geometry.
 

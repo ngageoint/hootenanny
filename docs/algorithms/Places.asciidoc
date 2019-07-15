@@ -15,7 +15,7 @@ PLACES conflation as closely as is reasonable. PLACES provides a lot of
 functionality that is not available through Hootenanny such as user workflows
 and a convenient web interface for editing and distributing point data. PLACES
 also maintains a database of all the conflated results with links to the source
-data. These sections are only concerned with the POI conflation and do not 
+data. These sections are only concerned with the POI conflation and do not
 address the database, web interface or persisting source data.
 
 === PLACES Conflation Process
@@ -188,7 +188,7 @@ image::images/places/image011.jpg[scale="75"]
 .Conflated Result
 image::images/places/image012.jpg[scale="75"]
 
-_The Starbucks Problem_ 
+_The Starbucks Problem_
 
 On the right hand side are a string of Starbucks coffee shops along Powers Blvd.
 These are real world coffee shops that are spaced from about 150m apart at the

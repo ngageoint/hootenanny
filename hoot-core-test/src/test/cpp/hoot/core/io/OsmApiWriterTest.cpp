@@ -30,6 +30,9 @@
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/FileUtils.h>
+
+#include "OsmApiWriterTestServer.h"
 
 //  Qt
 #include <QNetworkReply>
@@ -44,6 +47,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runParseCapabilitiesTest);
   CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
+  CPPUNIT_TEST(runRetryConflictsTest);
   /* These tests are for local testing and require additional resources to complete */
 //  CPPUNIT_TEST(runPermissionsTest);
 //  CPPUNIT_TEST(runChangesetTest);
@@ -74,27 +78,7 @@ public:
   void runParseCapabilitiesTest()
   {
     OsmApiWriter writer;
-    QString xml =
-      "<?xml version='1.0' encoding='UTF-8'?>"
-      "<osm version='0.6' generator='OpenStreetMap server' copyright='OpenStreetMap and contributors' attribution='https://www.openstreetmap.org/copyright' license='http://opendatacommons.org/licenses/odbl/1-0/'>"
-      "  <api>"
-      "    <version minimum='0.6' maximum='0.6'/>"
-      "    <area maximum='0.25'/>"
-      "    <note_area maximum='25'/>"
-      "    <tracepoints per_page='5000'/>"
-      "    <waynodes maximum='2000'/>"
-      "    <changesets maximum_elements='10000'/>"
-      "    <timeout seconds='300'/>"
-      "    <status database='online' api='online' gpx='online'/>"
-      "  </api>"
-      "  <policy>"
-      "    <imagery>"
-      "      <blacklist regex='http://xdworld\\.vworld\\.kr:8080/.*'/>"
-      "      <blacklist regex='.*\\.here\\.com[/:].*'/>"
-      "    </imagery>"
-      "  </policy>"
-      "</osm>";
-    OsmApiCapabilites capabilities = writer._parseCapabilities(xml);
+    OsmApiCapabilites capabilities = writer._parseCapabilities(OsmApiSampleResponses::SAMPLE_CAPABILITIES);
     HOOT_STR_EQUALS(capabilities.getVersion(), QString("0.6"));
     CPPUNIT_ASSERT_EQUAL(capabilities.getTracepoints(), static_cast<long>(5000));
     CPPUNIT_ASSERT_EQUAL(capabilities.getWayNodes(), static_cast<long>(2000));
@@ -128,17 +112,7 @@ public:
   void runParsePermissionsTest()
   {
     OsmApiWriter writer;
-    QString xml =
-      "<?xml version='1.0' encoding='UTF-8'?>"
-      "<osm version='0.6' generator='OpenStreetMap server'>"
-      "  <permissions>"
-      "    <permission name='allow_read_prefs'/>"
-      "    <permission name='allow_read_gpx'/>"
-      "    <permission name='allow_write_api'/>"
-      "    <permission name='allow_write_gpx'/>"
-      "  </permissions>"
-      "</osm>";
-    CPPUNIT_ASSERT(writer._parsePermissions(xml));
+    CPPUNIT_ASSERT(writer._parsePermissions(OsmApiSampleResponses::SAMPLE_PERMISSIONS));
   }
 
   void runPermissionsTest()
@@ -246,6 +220,47 @@ public:
     }
   }
 
+  void runRetryConflictsTest()
+  {
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level.
+    //  We expect the all of the errors
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(QString("http://localhost:%1").arg(HttpTestServer::TEST_SERVER_PORT));
+    osm.setUserInfo("test01:hoottest");
+
+    //  Kick off the test server
+    std::shared_ptr<std::thread> t = HttpTestServer::start();
+
+    QList<QString> changesets;
+    changesets.append(_inputPath + "ToyTestAConflicts.osc");
+
+    OsmApiWriter writer(osm, changesets);
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 100);
+    writer.setConfiguration(s);
+
+    writer.apply();
+
+    //  Wait for the test server to finish
+    t->join();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that some of the changes failed
+    CPPUNIT_ASSERT(writer.containsFailed());
+    HOOT_STR_EQUALS(
+          FileUtils::readFully(_inputPath + "ToyTestAConflicts.osc")
+            .replace("timestamp=\"\"", "timestamp=\"\" changeset=\"0\"")
+            .replace("    ", "\t"),
+      writer.getFailedChangeset());
+  }
+
   void oauthTest()
   {
     QUrl osm;
@@ -271,6 +286,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
 
 }

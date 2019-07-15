@@ -3,9 +3,9 @@
 
 === Description
 
-The +is-sorted+ command determines whether data has been sorted by element type and ID.  
+The +is-sorted+ command determines whether data has been sorted by element type and ID.
 
-This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted.  For all other formats, the 
+This operation is fast for OSM PBF file, since their headers can simply be checked to see if the file is sorted.  For all other formats, the
 data is read in one feature at a time and negative result is returned as soon as an unsorted element is found.  If the data is sorted, but
 entire contents of the input will be read through.
 
