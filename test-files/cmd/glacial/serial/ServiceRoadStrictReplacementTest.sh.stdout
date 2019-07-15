@@ -9,19 +9,12 @@ Writing the reference dataset to an osm api db (contains features to be replaced
 
 Writing the secondary dataset to a hoot api db (contains features to replace with)...
 
-crop ref
-crop sec
-gen alpha shape
-cookie cut
-conflate
-snap
 
 Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source; xml changeset out)...
 
 
 Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source; sql changeset out)...
 
-derive sql changeset
 
 Applying the changeset to the reference data...
 

@@ -104,11 +104,11 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D id.gen
 # Unknown1. In changeset derivation, however, we always want our data being kept to have status Unknown2. BUT somehow this is working the way we
 # want...need to understand why.
 CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
-echo ""
-echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
-echo ""
-hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-1.osc
-diff $IN_DIR/$TEST_NAME-changeset-1.osc $OUT_DIR/$TEST_NAME-changeset-1.osc
+#echo ""
+#echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
+#echo ""
+#hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER_FILE $OUT_DIR/$TEST_NAME-changeset-1.osc
+#diff $IN_DIR/$TEST_NAME-changeset-1.osc $OUT_DIR/$TEST_NAME-changeset-1.osc
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; xml changeset out)..."
 echo ""
