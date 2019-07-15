@@ -90,6 +90,7 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QString ChainCriterion::toString() const
 {
+  LOG_VART(_criteria.size());
   QString txt = "ChainCriterion members: ";
   for (size_t i = 0; i < _criteria.size(); i++)
   {

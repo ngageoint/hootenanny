@@ -223,10 +223,12 @@ bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1, 
 set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
                                                 const ElementCriterionPtr& wayCriterion)
 {
+  LOG_VART(nodeId);
   set<long> containingWayIds;
 
   const set<long>& idsOfWaysContainingNode =
     map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
+  LOG_VART(idsOfWaysContainingNode);
   for (set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
        containingWaysItr != idsOfWaysContainingNode.end(); ++containingWaysItr)
   {

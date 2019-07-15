@@ -220,8 +220,11 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
     wayNodeToSnapToCrit =
       _createFeatureCriterion(_wayNodeToSnapToCriterionClassName, _snapToWayStatus);
   }
+  // The status of what contains an unconnected node doesn't matter, so we don't filter by status.
+  ElementCriterionPtr unnconnectedWayNodeCrit =
+    _createFeatureCriterion(_wayToSnapCriterionClassName, "");
 
-  // create needed geospatial indexes for surrounding feature searches; if the way node reuse option
+  // create needed geospatial indexes for surrounding feature searches; If the way node reuse option
   // was turned off, then no need to index way nodes.
   if (wayNodeToSnapToCrit)
   {
@@ -238,99 +241,100 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   {
     WayPtr wayToSnap = wayItr->second;
     LOG_VART(wayToSnap->getElementId());
-
-    // find unconnected endpoints on the way, if the way satisfies the specified crit
-    const std::set<long> unconnectedEndNodeIds =
-      _getUnconnectedEndNodeIds(wayToSnap, wayToSnapCrit);
-    for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
-         unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
+    // ensure the way has the status we require for snapping
+    if (wayToSnapCrit->isSatisfied(wayToSnap))
     {
-      bool snapOccurred = false;
-
-      // for each unconnected endpoint
-      const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
-      // don't snap the same node more than once
-      if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
+      // find unconnected endpoints on the way, if the way satisfies the specified crit
+      const std::set<long> unconnectedEndNodeIds =
+        _getUnconnectedEndNodeIds(wayToSnap, unnconnectedWayNodeCrit);
+      for (std::set<long>::const_iterator unconnectedEndNodeIdItr = unconnectedEndNodeIds.begin();
+           unconnectedEndNodeIdItr != unconnectedEndNodeIds.end(); ++unconnectedEndNodeIdItr)
       {
-        NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
+        bool snapOccurred = false;
 
-        // Try to find the nearest way node satisifying the specifying way node criteria that
-        // is within the max reuse distance (if one was specified) and snap the unconnected way
-        // node.  This reuse of existing way nodes on way being snapped to is done in order to cut
-        // back on the number of new way nodes being added.
-        if (_snapToExistingWayNodes)
+        // for each unconnected endpoint
+        const long unconnectedEndNodeId = *unconnectedEndNodeIdItr;
+        // don't snap the same node more than once
+        if (!_snappedWayNodeIds.contains(unconnectedEndNodeId))
         {
-          snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
+          NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
+
+          // Try to find the nearest way node satisifying the specifying way node criteria that
+          // is within the max reuse distance (if one was specified) and snap the unconnected way
+          // node.  This reuse of existing way nodes on way being snapped to is done in order to cut
+          // back on the number of new way nodes being added.
+          if (_snapToExistingWayNodes)
+          {
+            snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
+          }
+
+          if (!snapOccurred)
+          {
+            // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
+            // option was turned off, we're going to try to find a nearby way and snap onto the
+            // closest location on it.
+            snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode);
+          }
+
+          if (snapOccurred)
+          {
+            assert(_snappedToWay);
+
+            // TODO: still need to verify _snappedToWay is always going to be the way actually
+            // snapped to
+            LOG_TRACE(
+              "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
+
+
+            // retain the parent id of the snapped to way
+            // TODO: The call to this _getPid method is a hack until I can get the cookie cut
+            // replacement workflow right. The problem is that we've called the way joiner after
+            // conflation but before snapping, so there are no pids left. In the workflow we call
+            // the way joiner a second time after snapping, and trying to run it only after snapping
+            // hasn't yielded desirable results yet for unknown reasons.
+            const long pid = _getPid(_snappedToWay);
+            if (pid != WayData::PID_EMPTY)
+            {
+              wayToSnap->setPid(pid);
+              wayToSnap->getTags()[MetadataTags::HootSplitParentId()] = QString::number(pid);
+              LOG_TRACE(
+                "Set pid: " <<  pid << " of snapped to way: " << _snappedToWay->getElementId() <<
+                " on snapped way: " << wayToSnap->getElementId());
+            }
+
+            // retain the status of the snapped to way
+            wayToSnap->setStatus(_snappedToWay->getStatus());
+            LOG_TRACE(
+              "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
+              _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
+
+            LOG_VART(wayToSnap);
+            LOG_VART(_snappedToWay);
+
+            // It seems like the geospatial indices should have to be updated after every snap, but
+            // haven't any direct evidence of that being necessary for proper snapping yet. If it
+            // is needed, that would likely slow things down a lot.
+
+            // This could be very expensive, so leave disabled by default.
+            OsmMapWriterFactory::writeDebugMap(
+              _map,
+              "UnconnectedWaySnapper-after-snap-#" +
+              QString::number(_numSnappedToWays + _numSnappedToWayNodes));
+          }
         }
 
         if (!snapOccurred)
         {
-          // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
-          // option was turned off, we're going to try to find a nearby way and snap onto the
-          // closest location on it.
-          snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode);
-        }
-        LOG_VART(snapOccurred);
-
-        if (snapOccurred)
-        {
-          assert(_snappedToWay);
-
-          // TODO: still need to verify _snappedToWay is always going to be the way actually
-          // snapped to
           LOG_TRACE(
-            "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
-
-          // TODO: use setLeavePid(true) in WayJoiner
-
-          // retain the parent id of the snapped to way
-          // TODO: The call to this _getPid method is a hack until I can get the cookie cut
-          // replacement workflow right. The problem is that we've called the way joiner after
-          // conflation but before snapping, so there are no pids left. In the workflow we call
-          // the way joiner a second time after snapping, and trying to run it only after snapping
-          // hasn't yielded desirable results yet for unknown reasons.
-          const long pid = _getPid(_snappedToWay);
-          if (pid != WayData::PID_EMPTY)
-          {
-            wayToSnap->setPid(pid);
-            wayToSnap->getTags()[MetadataTags::HootSplitParentId()] = QString::number(pid);
-            LOG_TRACE(
-              "Set pid: " <<  pid << " of snapped to way: " << _snappedToWay->getElementId() <<
-              " on snapped way: " << wayToSnap->getElementId());
-          }
-
-          // TODO: if used, this prevents correct id/tag transfer during way joining; if not used,
-          // the we don't get enough way joining...need to make changes to get all the way
-          // joining we want as well as the correct tag/id transfers
-
-          // retain the status of the snapped to way
-          wayToSnap->setStatus(_snappedToWay->getStatus());
-          LOG_TRACE(
-            "Set status: " <<  _snappedToWay->getStatus() << " of snapped to way: " <<
-            _snappedToWay->getElementId() << " on snapped way: " << wayToSnap->getElementId());
-
-          LOG_VART(wayToSnap);
-          LOG_VART(_snappedToWay);
-
-          // This could be very expensive, so leave disabled by default.
-          OsmMapWriterFactory::writeDebugMap(
-            _map,
-            "UnconnectedWaySnapper-after-snap-#" +
-            QString::number(_numSnappedToWays + _numSnappedToWayNodes));
+            "No snap occurred for " << wayToSnap->getElementId() << " with unconnected end node " <<
+            ElementId(ElementType::Node, unconnectedEndNodeId));
         }
       }
 
-      if (!snapOccurred)
+      if (unconnectedEndNodeIds.size() == 0)
       {
-        LOG_TRACE(
-          "No snap occurred for " << wayToSnap->getElementId() << " with unconnected end node " <<
-          ElementId(ElementType::Node, unconnectedEndNodeId));
+        LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
       }
-    }
-
-    if (unconnectedEndNodeIds.size() == 0)
-    {
-      LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
     }
 
     waysProcessed++;
@@ -372,47 +376,54 @@ ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString
       status << "...");
 
     // configure our element criterion, in case it needs it
-    ElementCriterionPtr critTemp(
+    ElementCriterionPtr typeCrit(
       Factory::getInstance().constructObject<ElementCriterion>(critClass));
     std::shared_ptr<Configurable> configurable =
-      std::dynamic_pointer_cast<Configurable>(critTemp);
+      std::dynamic_pointer_cast<Configurable>(typeCrit);
     if (configurable)
     {
       configurable->setConfiguration(_conf);
     }
     std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(critTemp);
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(typeCrit);
     if (mapConsumer)
     {
       mapConsumer->setOsmMap(_map.get());
     }
 
-    // create our criterion for the feature status
-    ElementCriterionPtr statusCrit;
-    if (!status.contains(";"))
+    if (!status.trimmed().isEmpty())
     {
-      statusCrit.reset(new StatusCriterion(Status::fromString(status)));
+      // create our criterion for the feature status
+      ElementCriterionPtr statusCrit;
+      if (!status.contains(";"))
+      {
+        statusCrit.reset(new StatusCriterion(Status::fromString(status)));
+      }
+      else
+      {
+        const QStringList statuses = status.split(";");
+        QList<std::shared_ptr<StatusCriterion>> statusCrits;
+        for (int i = 0; i < statuses.size(); i++)
+        {
+          statusCrits.append(
+            std::shared_ptr<StatusCriterion>(
+              new StatusCriterion(Status::fromString(statuses.at(i)))));
+        }
+        std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
+        for (int i = 0; i < statusCrits.size(); i++)
+        {
+          orCrit->addCriterion(statusCrits.at(i));
+        }
+        statusCrit = orCrit;
+      }
+
+      // combine our element type and status crits into a single crit
+      return std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, typeCrit));
     }
     else
     {
-      const QStringList statuses = status.split(";");
-      QList<std::shared_ptr<StatusCriterion>> statusCrits;
-      for (int i = 0; i < statuses.size(); i++)
-      {
-        statusCrits.append(
-          std::shared_ptr<StatusCriterion>(
-            new StatusCriterion(Status::fromString(statuses.at(i)))));
-      }
-      std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
-      for (int i = 0; i < statusCrits.size(); i++)
-      {
-        orCrit->addCriterion(statusCrits.at(i));
-      }
-      statusCrit = orCrit;
+      return typeCrit;
     }
-
-    // combine our element type and status crits into a single crit
-    return std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, critTemp));
   }
   return ElementCriterionPtr();
 }

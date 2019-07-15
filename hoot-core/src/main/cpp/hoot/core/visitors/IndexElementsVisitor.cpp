@@ -148,9 +148,19 @@ QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
        neighborIdsItr != neighborIds.end(); ++neighborIdsItr)
   {
     ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
-    assert(neighborNode.get());
-    neighborNodeDistances.insertMulti(
-      Distance::euclidean(*node, *neighborNode), neighborNode->getElementId());
+    if (!neighborNode)
+    {
+      // This shouldn't happen unless the geospatial indices were set up improperly for the query
+      // node.
+      throw HootException(
+        QString("Map does not contain neighbor node: %1. Skipping neighbor...")
+          .arg((*neighborIdsItr).toString()));
+    }
+    else
+    {
+      neighborNodeDistances.insertMulti(
+        Distance::euclidean(*node, *neighborNode), neighborNode->getElementId());
+    }
   }
   LOG_VART(neighborNodeDistances);
 
