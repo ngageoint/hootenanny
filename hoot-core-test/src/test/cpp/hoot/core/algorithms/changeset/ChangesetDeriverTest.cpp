@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
-#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
@@ -41,34 +40,38 @@ class ChangesetDeriverTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetDeriverTest);
   CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(disableRefDeleteTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ChangesetDeriverTest()
-    : HootTestFixture("test-files/algorithms/changeset/ChangesetDeriverTest/",
-                      UNUSED_PATH)
+  ChangesetDeriverTest() :
+  HootTestFixture("test-files/algorithms/changeset/ChangesetDeriverTest/", UNUSED_PATH)
   {
   }
 
-  void runTest()
+  QMap<Change::ChangeType, QList<long>> _getChangeset(
+    const QString& input1, const QString& input2, const bool allowRefDelete = true)
   {
     CalculateHashVisitor2 hashVis;
 
     OsmMapPtr map1(new OsmMap());
-    OsmMapReaderFactory::read(map1, _inputPath + "Map1.osm", true);
+    // each dataset needs to have a different input status
+    OsmMapReaderFactory::read(map1, input1, true, Status::Unknown1);
+    // nodes have to have hash values for sorting
     map1->visitRw(hashVis);
 
     OsmMapPtr map2(new OsmMap());
-    OsmMapReaderFactory::read(map2, _inputPath + "Map2.osm", true);
+    OsmMapReaderFactory::read(map2, input2, true, Status::Unknown2);
     map2->visitRw(hashVis);
 
+    // input has to be sorted
     InMemoryElementSorterPtr map1SortedElements(new InMemoryElementSorter(map1));
     InMemoryElementSorterPtr map2SortedElements(new InMemoryElementSorter(map2));
 
-    ChangesetDeriverPtr changesetDiff(
-      new ChangesetDeriver(map1SortedElements, map2SortedElements));
-
+    // stream out the changeset results grouped by change type
+    ChangesetDeriverPtr changesetDiff(new ChangesetDeriver(map1SortedElements, map2SortedElements));
+    changesetDiff->setAllowDeletingReferenceFeatures(allowRefDelete);
     QMap<Change::ChangeType, QList<long>> changeTypeToIds;
     while (changesetDiff->hasMoreChanges())
     {
@@ -77,9 +80,31 @@ public:
       changeTypeToIds[change.getType()].append(change.getElement()->getElementId().getId());
     }
 
+    return changeTypeToIds;
+  }
+
+  void runTest()
+  { 
+    const QMap<Change::ChangeType, QList<long>> changeTypeToIds =
+      _getChangeset(_inputPath + "Map1.osm", _inputPath + "Map2.osm");
+
     HOOT_STR_EQUALS("[2]{-7, -2}", changeTypeToIds[Change::Create]);
     HOOT_STR_EQUALS("[1]{-4}", changeTypeToIds[Change::Modify]);
     HOOT_STR_EQUALS("[2]{-6, -1}", changeTypeToIds[Change::Delete]);
+  }
+
+  void disableRefDeleteTest()
+  {
+    const QMap<Change::ChangeType, QList<long>> changeTypeToIds =
+      _getChangeset(
+        _inputPath + "disableRefDeleteTest-in-1.osm", _inputPath + "disableRefDeleteTest-in-2.osm",
+        false);
+
+    // These checks could be a bit more granular but good enough for now while we're still
+    // experimenting with this feature.
+    HOOT_STR_EQUALS(99, changeTypeToIds[Change::Create].size());
+    HOOT_STR_EQUALS(0, changeTypeToIds[Change::Modify].size());
+    HOOT_STR_EQUALS(0, changeTypeToIds[Change::Delete].size());
   }
 };
 

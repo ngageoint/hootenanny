@@ -53,6 +53,8 @@ _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferen
   _changesByType[Change::ChangeType::Create] = 0;
   _changesByType[Change::ChangeType::Modify] = 0;
   _changesByType[Change::ChangeType::Delete] = 0;
+
+  LOG_VARD(_allowDeletingReferenceFeatures);
 }
 
 ChangesetDeriver::~ChangesetDeriver()
@@ -82,6 +84,8 @@ bool ChangesetDeriver::hasMoreChanges()
 
 Change ChangesetDeriver::_nextChange()
 {
+  // TODO: this method is a bit of mess...refactor into smaller chunks
+
   const long debugId = 6633775;
 
   Change result;
@@ -104,7 +108,7 @@ Change ChangesetDeriver::_nextChange()
   }
   if (!_toE.get() && _to->hasMoreElements())
   {
-    LOG_TRACE("'to' element null and 'to'' has more elements; reading next 'to'' element...");
+    LOG_TRACE("'to' element null and 'to' has more elements; reading next 'to' element...");
     if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
     {
       LOG_TRACE("Last to element: " << _toE->getElementId());
@@ -149,10 +153,6 @@ Change ChangesetDeriver::_nextChange()
   // if we've run out of "to" elements, delete all the remaining elements in "from"
   else if (_fromE.get() && !_toE.get())
   { 
-    LOG_TRACE(
-      "run out of 'to' elements; to' element null; 'from' element not null: " <<
-      _fromE->getElementId() << "; deleting 'from' element...");
-
     if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
     {
       LOG_TRACE("Last from element: " << _fromE->getElementId());
@@ -162,7 +162,22 @@ Change ChangesetDeriver::_nextChange()
       LOG_VART(_fromE);
     }
 
-    result = Change(Change::Delete, _fromE);
+    if (_allowDeletingReferenceFeatures)
+    {
+      LOG_TRACE(
+        "run out of 'to' elements; to' element null; 'from' element not null: " <<
+        _fromE->getElementId() << "; deleting 'from' element...");
+      result = Change(Change::Delete, _fromE);
+    }
+    else
+    {
+      // See similar note below where the 'from' element ID is less than the 'to' element ID.
+      LOG_TRACE(
+        "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
+        " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
+        "=false...");
+      result = Change(Change::Unknown, _fromE);
+    }
 
     if (_from->hasMoreElements())
     {
@@ -273,10 +288,6 @@ Change ChangesetDeriver::_nextChange()
     // if we've run out of "to" elements, delete all the remaining elements in "from"
     else if (_fromE.get() && !_toE.get())
     {
-      LOG_TRACE(
-        "run out of 'to' elements; to' element null; 'from' element not null: " <<
-        _fromE->getElementId() << "; deleting 'from' element...");
-
       if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
       {
         LOG_TRACE("Last from element: " << _fromE->getElementId());
@@ -286,7 +297,22 @@ Change ChangesetDeriver::_nextChange()
         LOG_VART(_fromE);
       }
 
-      result = Change(Change::Delete, _fromE);
+      if (_allowDeletingReferenceFeatures)
+      {
+        LOG_TRACE(
+          "run out of 'to' elements; to' element null; 'from' element not null: " <<
+          _fromE->getElementId() << "; deleting 'from' element...");
+        result = Change(Change::Delete, _fromE);
+      }
+      else
+      {
+        // See similar note below where the 'from' element ID is less than the 'to' element ID.
+        LOG_TRACE(
+          "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
+          " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
+          "=false...");
+        result = Change(Change::Unknown, _fromE);
+      }
 
       if (_from->hasMoreElements())
       {
@@ -355,13 +381,6 @@ Change ChangesetDeriver::_nextChange()
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {
-      //I don't believe hoot conflation is going to delete reference features (could be wrong)...
-      //only modify them.  So, this is a safety feature.  We need to prove this by conflating a lot
-      //more data.
-      // This logic may need to ref the bounds to be more granular; i.e.  Only prevent deleting
-      // ref features crossing the changeset bounds or split features created from former ref
-      // features crossing the changeset bounds
-
       if (Log::getInstance().getLevel() <= Log::Trace &&
           (_fromE->getElementId().getId() == debugId || _toE->getElementId().getId() == debugId))
       {
@@ -371,6 +390,7 @@ Change ChangesetDeriver::_nextChange()
 
       if (_allowDeletingReferenceFeatures ||
           //this assumes the 'from' dataset was loaded as unknown1
+          // TODO: I don't understand the use case for this...need to define and add a test
           (!_allowDeletingReferenceFeatures && _fromE->getStatus() != Status::Unknown1))
       {
         LOG_TRACE(
@@ -381,10 +401,10 @@ Change ChangesetDeriver::_nextChange()
       }
       else
       {
-        //The changeset provider will return no more changes if a null change is returned here.  We
-        //want to force no changes for this particular element, so we're going to use the unknown
-        //change type, which ends up being a no-op.  Skipping an element delete in this situation
-        //minimizes the changeset impact on reference datasets in certain situations.
+        // The changeset provider will return no more changes if a null change is returned here.  We
+        // want to force no changes for this particular element, so we're going to use the unknown
+        // change type, which ends up being a no-op.  Skipping an element delete in this situation
+        // minimizes the changeset impact on reference datasets in certain situations.
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
@@ -444,6 +464,8 @@ Change ChangesetDeriver::_nextChange()
 
 Change ChangesetDeriver::readNextChange()
 {
+  //LOG_VART(_allowDeletingReferenceFeatures);
+
   if (!_next.getElement())
   {
     _next = _nextChange();
