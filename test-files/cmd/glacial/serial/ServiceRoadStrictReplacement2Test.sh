@@ -7,8 +7,8 @@ set -e
 # workflow could work for other linear data types but only roads have been attempted so far. See related notes in 
 # ServiceBuildingReplacementTest.sh
 
-TEST_NAME=ServiceRoadStrictReplacementTest
-IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
+TEST_NAME=ServiceRoadStrictReplacement2Test
+IN_DIR=test-files/cmd/glacial/serial/ServiceRoadStrictReplacementTest
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
@@ -27,10 +27,10 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 
 # CONFIG OPTS
 
-# IMPORTANT: log.class.filter needs to be empty and the log level set to --warn to verify the final output with the diff command. Use 
+# IMPORTANT: log.class.filter needs to be empty and the log level set to --warn to for this test to be able to verify the final output. Use 
 # log.class.filter with --trace for debugging only.
 # -D log.class.filter=ChangesetDeriver;ElementComparer;WayJoinerAdvanced;UnconnectedWaySnapper;CookieCutConflateWayJoiner;OsmUtils;IndexElementsVisitor
-GENERAL_OPTS="--warn -D log.class.filter= -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm"
+GENERAL_OPTS="--trace -D log.class.filter=ChangesetDeriver -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm"
 # OSM API DB writing uses changesets, so we need the changeset user ID in the db opts as well as the changeset opts.
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
@@ -38,8 +38,9 @@ PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.e
 # we are looking at the secondary features in the same way. Its counterintuitive that we wouldn't only look at the secondary features inside
 # of the AOI bounds to calculate the changeset, but the changeset won't be created properly if we do it in that manner (TODO: need to explain 
 # why).
-# problem areas that will be encountered when converting changeset derivation to a single command:
-# -D reader.use.data.source.ids=true/false -D way.joiner=hoot::WayJoinerAdvanced
+# TODO: problem areas that will be encountered when converting changeset derivation to a single command:
+# -D way.joiner=hoot::WayJoinerAdvanced; secondary keep crossing features needs to be set to false on initial read and set to true when deriving
+# the changeset
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp;hoot::UnifyingConflator;hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D tag.merger.default=hoot::OverwriteTag2Merger -D way.joiner=hoot::CookieCutConflateWayJoiner -D snap.unconnected.ways.snap.to.way.status=Input2 -D snap.unconnected.ways.snap.way.status=Input1;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=50.0 -D snap.unconnected.ways.snap.tolerance=50.0 -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false"
 
 # DATA PREP
@@ -59,9 +60,8 @@ echo ""
 # It doesn't matter here if we use the secondary data source IDs or not, since they're guaranteed to be unique when compared to the reference
 # IDs due to the way we loaded them. To stay consistent with ID management across the test, we'll use the secondary IDs. Add a custom tag to 
 # the secondary roads, so we can verify it gets merged into the final output.
-# TODO: change other replacement tests to handle secondary IDs in the same way this test does
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::HighwayCriterion -D set.tag.value.visitor.key=replacement_test -D set.tag.value.visitor.value=yes $SEC_LAYER_FILE $SEC_LAYER
-# Uncomment to see what the sec layer looks like in file form:
+# Uncomment this to see what the sec layer looks like in file form:
 #hoot convert $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUT_DIR/sec.osm
 
 # CHANGESET DERIVATION

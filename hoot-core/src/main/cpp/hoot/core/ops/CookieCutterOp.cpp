@@ -64,8 +64,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // This assumes that the incoming map has status Unknown1 for the replacement data and status
   // Unknown2 for the data being replaced. For inline changeset derivation with this op, this order
-  // is reversed: use Unknown2 for the replacement data and Unknown1 for the data being replace
-  // (TODO: that you have to reverse it for changeset derivation is weird).
+  // is reversed: use Unknown2 for the replacement data and Unknown1 for the data being replaced.
 
   Status removeFromCutterMapStatus;
   Status removeFromDoughMapStatus;

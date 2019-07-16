@@ -517,10 +517,10 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
   // The default behavior of the db bounded read is to return the entirety of features found
   // within the bounds, even if sections of those features exist outside the bounds. Only run the
-  // crop operation if the crop related option are different than the default behavior. Clearly, it
-  // would be more efficient to run a different query to pull the features back the way we want
-  // them from the start and skip this step completely. That's possibly something to look into
-  // doing in the future.
+  // crop operation if the crop related options are different than the default behavior. Clearly, it
+  // would be more efficient to run a different query to pull the features back already cropped the
+  // way we want them from the start and skip this step completely. That's possibly an optimization
+  // to look into doing in the future.
   ConfigOptions conf;
   if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())

@@ -82,25 +82,25 @@ public:
       }
       else
       {
-        throw HootException(QString("Expected --crop as the last argument, but got %1.").
-          arg(args[i - 1]));
+        throw HootException(
+          QString("Expected --crop as the last argument, but got %1.").
+            arg(args[i - 1]));
       }
     }
 
+    // load up the shape being cut out
     OsmMapPtr cutterShapeMap(new OsmMap());
     IoUtils::loadMap(cutterShapeMap, cutterShapePath, true, Status::Unknown1);
 
-    // load up the "dough"
+    // load up the dough
     OsmMapPtr doughMap(new OsmMap());
     IoUtils::loadMap(doughMap, doughPath, true, Status::Unknown1);
 
+    // cut the cutter shape out of the dough
     CookieCutter(crop, buffer).cut(cutterShapeMap, doughMap);
     OsmMapPtr result = doughMap;
 
-    // reproject back into lat/lng
     MapProjector::projectToWgs84(result);
-
-    // save out the result.
     IoUtils::saveMap(result, outputPath);
 
     return 0;
