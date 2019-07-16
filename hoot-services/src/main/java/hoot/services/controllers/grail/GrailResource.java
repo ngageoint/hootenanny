@@ -480,14 +480,15 @@ public class GrailResource {
         params.setUser(user);
 
         try {
-            // Run changeset-derive
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
             params.setInput2(HOOTAPI_DB_URL + "/" + input2);
+            params.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
 
             File changeSet = new File(workDir, "diff.osc");
             if (changeSet.exists()) { changeSet.delete(); }
 
             params.setOutput(changeSet.getAbsolutePath());
+            // Run changeset-derive
             ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
 
