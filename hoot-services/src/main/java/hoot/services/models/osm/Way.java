@@ -313,23 +313,31 @@ public class Way extends Element {
             List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
                     ElementType.Node, elementIds);
 
+            // It is too slow to do an XPathApi call for every single node to check if it
+            // already exists so its better to just get all nodes and store the ids in list
+            // and check against the list instead.
+            NodeList allNodesList;
+            try {
+                allNodesList = XPathAPI.selectNodeList(doc, "/osm/node");
+            }
+            catch (TransformerException e) {
+                throw new RuntimeException("Error invoking XPathAPI!", e);
+            }
+
+            ArrayList<String> allNodeIds = new ArrayList<>();
+            for(int i = 0; i< allNodesList.getLength(); i++) {
+                allNodeIds.add(allNodesList.item(i).getAttributes().getNamedItem("id").getNodeValue());
+            }
+
             for (Tuple elementRecord : elementRecords) {
                 String nodeId = elementRecord.get(currentNodes).getId() + ""; // convert to string for cases of multiLayerUniqueElementIds
-                NodeList elementXmlNodes;
 
                 if (multiLayerUniqueElementIds) {
                     nodeId = getMapId() + "_n_" + nodeId; // hoot custom id unique across map layers
                 }
 
-                try {
-                    elementXmlNodes = XPathAPI.selectNodeList(doc, "//osm/node[@id='" + nodeId + "']");
-                }
-                catch (TransformerException e) {
-                    throw new RuntimeException("Error invoking XPathAPI!", e);
-                }
-
                 // If the node element doesnt exist then add it
-                if(elementXmlNodes != null && elementXmlNodes.getLength() == 0) {
+                if(!allNodeIds.contains(nodeId)) {
                     Element nodeFullElement = ElementFactory.create(ElementType.Node, elementRecord, getMapId());
                     org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
                             modifyingUserDisplayName, false, false);
