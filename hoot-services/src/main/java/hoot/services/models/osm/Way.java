@@ -300,14 +300,42 @@ public class Way extends Element {
 
         if (addChildren) {
             List<Long> nodeIds = getNodeIds();
+            Set<Long> elementIds = new HashSet<>();
 
             // way nodes are output in sequence order; list should already be sorted by the query
             for (long nodeId : nodeIds) {
                 org.w3c.dom.Element nodeElement = doc.createElement("nd");
                 nodeElement.setAttribute("ref", String.valueOf(nodeId));
                 element.appendChild(nodeElement);
+                elementIds.add(nodeId);
             }
 
+            List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
+                    ElementType.Node, elementIds);
+
+            for (Tuple elementRecord : elementRecords) {
+                String nodeId = elementRecord.get(currentNodes).getId() + ""; // convert to string for cases of multiLayerUniqueElementIds
+                NodeList elementXmlNodes;
+
+                if (multiLayerUniqueElementIds) {
+                    nodeId = getMapId() + "_n_" + nodeId; // hoot custom id unique across map layers
+                }
+
+                try {
+                    elementXmlNodes = XPathAPI.selectNodeList(doc, "//osm/node[@id='" + nodeId + "']");
+                }
+                catch (TransformerException e) {
+                    throw new RuntimeException("Error invoking XPathAPI!", e);
+                }
+
+                // If the node element doesnt exist then add it
+                if(elementXmlNodes != null && elementXmlNodes.getLength() == 0) {
+                    Element nodeFullElement = ElementFactory.create(ElementType.Node, elementRecord, getMapId());
+                    org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
+                            modifyingUserDisplayName, false, false);
+                    parentXml.appendChild(nodeXml);
+                }
+            }
         }
 
         org.w3c.dom.Element elementWithTags = addTagsXml(element);
