@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
@@ -33,7 +34,6 @@ import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
@@ -122,9 +122,6 @@ public class GrailResource {
 
     @Autowired
     private PullApiCommandFactory apiCommandFactory;
-
-    @Autowired
-    private UpdateDbCommandFactory updateDbCommandFactory;
 
     @Autowired
     private OAuthRestTemplate oauthRestTemplate;
@@ -266,8 +263,7 @@ public class GrailResource {
     @GET
     @Path("/differentialstats")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response differentialStats(@Context HttpServletRequest request,
-            @QueryParam("jobId") String jobDir,
+    public Response differentialStats(@QueryParam("jobId") String jobDir,
             @QueryParam("includeTags") Boolean includeTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
