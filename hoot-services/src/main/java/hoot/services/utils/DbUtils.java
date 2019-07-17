@@ -50,6 +50,9 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -322,6 +325,29 @@ public class DbUtils {
         String sourceInfo = tags.get("source");
 
         return sourceInfo != null && sourceInfo.equals("rails");
+    }
+
+    public static String getConflationType(long inputId) {
+        String conflationType = null;
+        Map<String, String> tags = getMapsTableTags(inputId);
+        String sourceInfo = tags.get("params");
+
+        if(sourceInfo != null) {
+            JSONParser parser = new JSONParser();
+            JSONObject expectedObj;
+
+            try {
+                sourceInfo = sourceInfo.replace("\\", ""); // have to unescape
+                expectedObj = (JSONObject) parser.parse(sourceInfo);
+            }
+            catch (ParseException e) {
+                throw new RuntimeException("Error parsing params json string.  mapId = " + inputId, e);
+            }
+
+            conflationType = expectedObj.get("CONFLATION_TYPE").toString();
+        }
+
+        return conflationType;
     }
 
     /**

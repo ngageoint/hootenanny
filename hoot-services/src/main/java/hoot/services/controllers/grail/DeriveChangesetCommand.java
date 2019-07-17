@@ -46,6 +46,10 @@ class DeriveChangesetCommand extends GrailCommand {
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("api.db.email=" + params.getUser().getEmail());
 
+        if(params.getConflationType() != null && params.getConflationType().contains("Differential")) {
+            options.add("changeset.allow.deleting.reference.features=false");
+        }
+
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
