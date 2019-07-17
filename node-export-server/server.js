@@ -274,13 +274,13 @@ function doExport(req, res, hash, input) {
 	    if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
-                    command += ' -D convert.ops=hoot::TranslationOp';
+                    command += ' -D convert.ops=hoot::SchemaTranslationOp';
                     command += ' -D translation.script=translations/OSM_Ingest.js';
                 }
                 command += ' -D schema.translation.override=' + overrideTags;
             }
             if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
-                command += ' -D convert.ops=hoot::TranslationOp';
+                command += ' -D convert.ops=hoot::SchemaTranslationOp';
                 command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
                 command += ' -D schema.translation.direction=toogr';
                 // Set per schema config options
@@ -289,7 +289,7 @@ function doExport(req, res, hash, input) {
         } else {
             command += ' convert';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
-            command += ' -D convert.ops=hoot::TranslationOp';
+            command += ' -D convert.ops=hoot::SchemaTranslationOp';
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
             if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
