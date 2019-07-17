@@ -318,7 +318,7 @@ public class Way extends Element {
             // and check against the list instead.
             NodeList allNodesList;
             try {
-                allNodesList = XPathAPI.selectNodeList(doc, "/osm/node");
+                allNodesList = XPathAPI.selectNodeList(doc, "/osm/node/@id");
             }
             catch (TransformerException e) {
                 throw new RuntimeException("Error invoking XPathAPI!", e);
@@ -326,7 +326,7 @@ public class Way extends Element {
 
             ArrayList<String> allNodeIds = new ArrayList<>();
             for(int i = 0; i< allNodesList.getLength(); i++) {
-                allNodeIds.add(allNodesList.item(i).getAttributes().getNamedItem("id").getNodeValue());
+                allNodeIds.add(allNodesList.item(i).getNodeValue());
             }
 
             for (Tuple elementRecord : elementRecords) {
