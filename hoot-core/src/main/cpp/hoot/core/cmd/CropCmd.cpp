@@ -33,6 +33,9 @@
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QStringList>
@@ -57,15 +60,21 @@ public:
 
   int runSimple(QStringList args)
   {
-    if (args.size() != 3)
+    if (args.size() < 3 || args.size() > 4)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes three parameters.").arg(getName()));
+      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
     QString in = args[0];
     QString out = args[1];
     QString bounds = args[2];
+    bool writeBoundsFile = false;
+    if (args.contains("--write-bounds"))
+    {
+      writeBoundsFile = true;
+      args.removeAll("--write-bounds");
+    }
 
     bool allOk = true;
     bool ok;
@@ -96,6 +105,12 @@ public:
     SuperfluousNodeRemover().apply(map);
 
     IoUtils::saveMap(map, out);
+
+    if (writeBoundsFile)
+    {
+      OsmMapWriterFactory::write(
+        GeometryUtils::createMapFromBounds(env), ConfigOptions().getBoundsOutputFile());
+    }
 
     return 0;
   }

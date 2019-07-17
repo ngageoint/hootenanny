@@ -63,12 +63,12 @@ echo ""
 echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; xml changeset out)..."
 echo ""
 hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc
-diff $IN_DIR/$TEST_NAME-changeset-2.osc $OUT_DIR/$TEST_NAME-changeset-2.osc
+#diff $IN_DIR/$TEST_NAME-changeset-2.osc $OUT_DIR/$TEST_NAME-changeset-2.osc
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (hoot api db secondary source; sql changeset out)..."
 echo ""
 hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
-diff $IN_DIR/$TEST_NAME-changeset-2.osc.sql $OUT_DIR/$TEST_NAME-changeset-2.osc.sql
+#diff $IN_DIR/$TEST_NAME-changeset-2.osc.sql $OUT_DIR/$TEST_NAME-changeset-2.osc.sql
 
 # CHANGESET APPLICATION
 

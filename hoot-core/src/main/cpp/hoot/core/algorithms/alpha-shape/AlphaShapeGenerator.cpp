@@ -53,8 +53,8 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
   if (cutterShape->getArea() == 0.0)
   {
-    //would rather this be thrown than a warning logged, as the warning may go unoticed by web
-    //clients who are expecting the alpha shape to be generated
+    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    // clients who are expecting the alpha shape to be generated
     throw HootException("Alpha Shape area is zero. Try increasing the buffer size and/or alpha.");
   }
 

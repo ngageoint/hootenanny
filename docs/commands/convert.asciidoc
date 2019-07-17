@@ -7,10 +7,12 @@ The +convert+ command converts map data from one input format to another.  Optio
 conversion.  The process may be memory bound depending upon the input or output formats selected.  See the Hootenanny User Guide Supported
 Data Formats section for more information.
 
-* +input(s)+ - Input path(s) to convert from; Multiple inputs are supported unless converting to an OGR format, and path wildcards may be used
-               for inputs within the same directory. For OGR inputs, layer names may also optionally be specified.  Use a single space to
-               separate each input and a ';' between inputs and layer (<filename>;<layer name>).
-* +output+   - Output path to convert to (e.g. .osm file, etc.).
+* +input(s)+       - Input path(s) to convert from; Multiple inputs are supported unless converting to an OGR format, and path wildcards may 
+                     be used for inputs within the same directory. For OGR inputs, layer names may also optionally be specified.  Use a single 
+                     space to separate each input and a ';' between inputs and layer (<filename>;<layer name>).
+* +output+         - Output path to convert to (e.g. .osm file, etc.).
+* +--write-bounds+ - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
+                     The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
@@ -18,7 +20,7 @@ Data Formats section for more information.
 convert (input) (output)
 
 # This syntax is upported for OGR inputs only.
-convert "(input1[;layer]) [input2[;layer]]" (output)
+convert "(input1[;layer]) [input2[;layer]]" (output) [--write-bounds]
 --------------------------------------
 
 === Conversion Operations

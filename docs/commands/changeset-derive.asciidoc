@@ -19,11 +19,13 @@ dataset and the second should be the newer dataset.
                         changesets only.  Required only if the changeset output format is .osc.sql.
 * +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
                         node, way, relation (only valid for .osc output files)
+* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
+                        The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats]
+changeset-derive (input1) [input2] (output) [osmApiDatabaseUrl] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples

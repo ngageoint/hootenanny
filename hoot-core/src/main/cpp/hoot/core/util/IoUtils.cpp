@@ -106,7 +106,8 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus)
+void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
+                      Status defaultStatus)
 {
   QStringList pathLayer = path.split(";");
   QString justPath = pathLayer[0];

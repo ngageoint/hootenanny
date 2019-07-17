@@ -259,6 +259,14 @@ Determines whether the AttributeScoreExtractor uses weighting when extracting sc
 Temporary setting that addresses some Hootenanny iD Editor UI bugs.  See
 MatchFactory::_tempFixDefaults() for more info.
 
+=== bounds.output.file
+
+* Data Type: string
+* Default Value: `tmp/bounds.osm`
+
+Output location for a bounds file when the `--write-bounds` option is selected for either the
+`changeset-derive`, `convert`, or `crop` commands.
+
 === buffered.overlap.extractor.portion
 
 * Data Type: double
@@ -746,6 +754,14 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
+=== cookie.cutter.op.swap.inputs
+
+* Data Type: bool
+* Default Value: `false`
+
+If false, elements with status=Unknown1 are cut out of the elements with status=Unknown2. If true,
+the opposite occurs.
+
 === cookie.cutter.output.crop
 
 * Data Type: bool
@@ -768,7 +784,8 @@ are required.  The lower the number, the less accurate it will be.
 * Data Type: bool
 * Default Value: `false`
 
-Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate
+Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not
+conflate.
 
 === corner.splitter.rounded.threshold
 

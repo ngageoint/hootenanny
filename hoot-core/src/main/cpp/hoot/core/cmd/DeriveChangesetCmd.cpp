@@ -29,6 +29,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/ChangesetWriter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -56,6 +59,12 @@ public:
       printStats = true;
       args.removeAll("--stats");
     }
+    bool writeBoundsFile = false;
+    if (args.contains("--write-bounds"))
+    {
+      writeBoundsFile = true;
+      args.removeAll("--write-bounds");
+    }
 
     if (args.size() < 3 || args.size() > 4)
     {
@@ -78,6 +87,18 @@ public:
     }
 
     ChangesetWriter(printStats, osmApiDbUrl).write(output, input1, input2);
+
+    if (writeBoundsFile)
+    {
+      ConfigOptions opts;
+      const QString boundsStr = opts.getConvertBoundingBox().trimmed();
+      if (!boundsStr.isEmpty())
+      {
+        OsmMapWriterFactory::write(
+          GeometryUtils::createMapFromBounds(GeometryUtils::envelopeFromConfigString(boundsStr)),
+          opts.getBoundsOutputFile());
+      }
+    }
 
     return 0;
   }

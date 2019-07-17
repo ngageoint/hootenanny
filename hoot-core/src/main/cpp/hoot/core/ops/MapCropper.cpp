@@ -128,7 +128,7 @@ void MapCropper::setInvert(bool invert)
 void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
 {
   if (_invert || _keepOnlyFeaturesInsideBounds)
-  {
+ {
     _keepEntireFeaturesCrossingBounds = false;
   }
   else
@@ -163,6 +163,7 @@ void MapCropper::setConfiguration(const Settings& conf)
     LOG_VARD(_envelope);
     _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
   }
+  // invert must be set before the two options following it
   setInvert(confOpts.getCropInvert());
   setKeepEntireFeaturesCrossingBounds(confOpts.getCropKeepEntireFeaturesCrossingBounds());
   setKeepOnlyFeaturesInsideBounds(confOpts.getCropKeepOnlyFeaturesInsideBounds());

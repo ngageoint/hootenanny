@@ -55,6 +55,7 @@ public:
 
 private:
 
+  // If crop is true, then the cookie cutter portion is kept and the dough is dropped instead.
   bool _crop;
   double _outputBuffer;
 };

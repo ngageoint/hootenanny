@@ -52,12 +52,16 @@ _outputBuffer(outputBuffer)
 
 void CookieCutter::cut(OsmMapPtr cutterShapeOutlineMap, OsmMapPtr doughMap)
 {
+  LOG_VARD(cutterShapeOutlineMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
     cutterShapeOutlineMap, "cookie-cutter-cutter-shape-outline-map");
+  LOG_VARD(doughMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-map");
 
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeOutlineMap);
-  LOG_VARD(GeometryUtils::toEnvelope(env));
+  LOG_VARD(GeometryUtils::toEnvelope(env)->toString());
   env.Merge(CalculateMapBoundsVisitor::getBounds(doughMap));
 
   // reproject the dough and cutter into the same planar projection.
@@ -68,29 +72,34 @@ void CookieCutter::cut(OsmMapPtr cutterShapeOutlineMap, OsmMapPtr doughMap)
   UnionPolygonsVisitor v;
   cutterShapeOutlineMap->visitRo(v);
   std::shared_ptr<Geometry> cutterShape = v.getUnion();
-
   if (_outputBuffer != 0.0)
   {
     cutterShape.reset(cutterShape->buffer(_outputBuffer));
   }
-
   if (cutterShape->getArea() == 0.0)
   {
-    //would rather this be thrown than a warning logged, as the warning may go unoticed by web
-    //clients who are expecting the cookie cutting to occur
+    // would rather this be thrown than a warning logged, as the warning may go unoticed by web
+    // clients who are expecting the cookie cutting to occur
     throw HootException("Cutter area is zero. Try increasing the buffer size or check the input.");
   }
+  LOG_VARD(cutterShape->toString());
 
   // free up a little RAM
   cutterShapeOutlineMap.reset();
-  // remove the cookie cutter portion from the "dough"
-  // if crop is true, then the cookie cutter portion is kept and the "dough" is dropped.
+
+  // remove the cookie cutter portion from the dough
   MapCropper cropper(cutterShape, !_crop);
   cropper.apply(doughMap);
+
+  OsmMapPtr cookieCutMap = doughMap;
+
   // clean up any ugly bits left over
-  SuperfluousWayRemover::removeWays(doughMap);
-  SuperfluousNodeRemover::removeNodes(doughMap);
-  OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-cookie-cut-map");
+  SuperfluousWayRemover::removeWays(cookieCutMap);
+  SuperfluousNodeRemover::removeNodes(cookieCutMap);
+
+  LOG_VARD(cookieCutMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");
 }
 
 }
