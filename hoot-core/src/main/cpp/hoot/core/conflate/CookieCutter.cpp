@@ -88,7 +88,9 @@ void CookieCutter::cut(OsmMapPtr cutterShapeOutlineMap, OsmMapPtr doughMap)
   cutterShapeOutlineMap.reset();
 
   // remove the cookie cutter portion from the dough
-  MapCropper cropper(cutterShape, !_crop);
+  MapCropper cropper(cutterShape);
+  cropper.setConfiguration(conf());
+  cropper.setInvert(!_crop);
   cropper.apply(doughMap);
 
   OsmMapPtr cookieCutMap = doughMap;

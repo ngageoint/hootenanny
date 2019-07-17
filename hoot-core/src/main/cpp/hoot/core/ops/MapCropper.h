@@ -67,7 +67,7 @@ public:
 
   MapCropper();
   MapCropper(const geos::geom::Envelope& envelope);
-  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g, bool invert);
+  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
@@ -99,6 +99,8 @@ public:
 
 private:
 
+  friend class MapCropperTest;
+
   geos::geom::Envelope _envelope;
   std::shared_ptr<const geos::geom::Geometry> _envelopeG;
   bool _invert;
@@ -123,28 +125,18 @@ private:
    * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
    * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
    */
-  long _findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w, const geos::geom::Coordinate& c);
+  long _findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w,
+                   const geos::geom::Coordinate& c);
 
   /**
-   * Returns true if the specified envelope is wholly inside the region that will be kept. If
-   * it is not known exactly then false will be returned.
-   *
-   * The operation is very quick.
+   * Returns true if the specified envelope is wholly inside the region that will be kept.
    */
   bool _isWhollyInside(const geos::geom::Envelope& e);
 
   /**
-   * Returns true if the specified envelope is wholly outside the region that will be kept. If
-   * it is not known exactly then false will be returned.
-   *
-   * The operation is very quick.
+   * Returns true if the specified envelope is wholly outside the region that will be kept.
    */
   bool _isWhollyOutside(const geos::geom::Envelope& e);
-
-  std::shared_ptr<Way> _reintroduceWay(std::shared_ptr<OsmMap> map, std::shared_ptr<const Way> w,
-    const geos::geom::LineString* ls);
-
-  friend class MapCropperTest;
 };
 
 }

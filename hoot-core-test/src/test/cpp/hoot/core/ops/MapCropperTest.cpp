@@ -117,7 +117,8 @@ public:
     }
 
     {
-      MapCropper uut(g, false);
+      MapCropper uut(g);
+      uut.setInvert(false);
       uut.apply(map);
 
       CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
@@ -126,7 +127,8 @@ public:
     {
       OsmMapPtr map = genPoints(0);
 
-      MapCropper uut(g, true);
+      MapCropper uut(g);
+      uut.setInvert(true);
       uut.apply(map);
       CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }
@@ -137,7 +139,8 @@ public:
     std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
-    MapCropper pre(g, false);
+    MapCropper pre(g);
+    pre.setInvert(false);
     OsmMapPtr mapPre = genPoints(0);
     pre.apply(mapPre);
 
