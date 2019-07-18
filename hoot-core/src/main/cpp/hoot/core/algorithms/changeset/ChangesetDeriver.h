@@ -93,7 +93,6 @@ private:
   // and can be used as a safety feature for other conflation workflows.
   bool _allowDeletingReferenceFeatures;
   QMap<Change::ChangeType, int> _changesByType;
-
 };
 
 typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;

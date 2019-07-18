@@ -392,6 +392,13 @@ If true, changesets derived are allowed to issue delete statements for the refer
 dataset passed to the changeset deriver) if calculated.  If false, any delete statements calculated
 for the reference dataset will be ignored and not added to changeset output.
 
+=== changeset.allow.deleting.reference.features.outside.bounds
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === changeset.apidb.size.max
 
 * Data Type: long

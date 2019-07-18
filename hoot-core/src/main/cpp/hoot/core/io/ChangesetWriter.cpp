@@ -53,6 +53,10 @@
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/RecursiveSetTagValueOp.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -99,6 +103,10 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
     // the larger number of steps. With streaming I/O that isn't possible since all the data
     // conversion operations are executed inline at the same time the data is read in.
     _numTotalTasks += 4;
+    if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
+    {
+      _numTotalTasks++;
+    }
     if (ConfigOptions().getConvertOps().size() > 0)
     {
       // Convert ops get a single task, which NamedOp will break down into sub-tasks during
@@ -552,7 +560,7 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   OsmMapWriterFactory::writeDebugMap(map2, "after-remove-reviews-map-2");
   _currentTaskNum++;
 
-  //  Truncate tags over 255 characters to push into OSM API.
+  // Truncate tags over 255 characters to push into OSM API.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Preparing tags for changeset...");
   ApiTagTruncateVisitor truncateTags;
@@ -565,7 +573,7 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   OsmMapWriterFactory::writeDebugMap(map2, "after-truncate-tags-map-2");
   _currentTaskNum++;
 
-  // Node comparisons require hashes be present on the elementss
+  // Node comparisons require hashes be present on the elements.
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
   CalculateHashVisitor2 hashVis;
@@ -577,6 +585,27 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   OsmMapWriterFactory::writeDebugMap(map1, "after-adding-hashes-map-1");
   OsmMapWriterFactory::writeDebugMap(map2, "after-adding-hashes-map-2");
   _currentTaskNum++;
+
+  if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
+  {
+    progress.set(
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
+      "Adding changeset ref delete exclude tags...");
+
+    std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(true));
+    boundsCrit->setBounds(
+      GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox()));
+    boundsCrit->setOsmMap(map1.get());
+    std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
+    std::shared_ptr<ChainCriterion> elementCrit(
+      new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
+
+    RecursiveSetTagValueOp tagSetter(elementCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
+    tagSetter.apply(map1);
+
+    OsmMapWriterFactory::writeDebugMap(map1, "after-adding-ref-delete-exclude-tags-map-1");
+    _currentTaskNum++;
+  }
 }
 
 ElementInputStreamPtr ChangesetWriter::_getExternallySortedElements(const QString& input,
@@ -628,6 +657,8 @@ ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& in
   visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
   // Tags need to be truncated if they are over 255 characters.
   visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
+  // TODO: don't know any way we can support this yet
+  //if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
 
   // open a stream to the input data
   std::shared_ptr<PartialOsmMapReader> reader =

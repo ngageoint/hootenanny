@@ -162,7 +162,8 @@ Change ChangesetDeriver::_nextChange()
       LOG_VART(_fromE);
     }
 
-    if (_allowDeletingReferenceFeatures)
+    if (_allowDeletingReferenceFeatures &&
+        !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
     {
       LOG_TRACE(
         "run out of 'to' elements; to' element null; 'from' element not null: " <<
@@ -175,7 +176,7 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE(
         "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
         " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
-        "=false...");
+        "=false or inclusion of " << MetadataTags::HootChangeExcludeDelete() << " tag...");
       result = Change(Change::Unknown, _fromE);
     }
 
@@ -297,7 +298,8 @@ Change ChangesetDeriver::_nextChange()
         LOG_VART(_fromE);
       }
 
-      if (_allowDeletingReferenceFeatures)
+      if (_allowDeletingReferenceFeatures &&
+          !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
       {
         LOG_TRACE(
           "run out of 'to' elements; to' element null; 'from' element not null: " <<
@@ -310,7 +312,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
-          "=false...");
+          "=false or inclusion of " << MetadataTags::HootChangeExcludeDelete() << " tag...");
         result = Change(Change::Unknown, _fromE);
       }
 
@@ -388,10 +390,11 @@ Change ChangesetDeriver::_nextChange()
         LOG_VART(_toE);
       }
 
-      if (_allowDeletingReferenceFeatures ||
-          //this assumes the 'from' dataset was loaded as unknown1
+      if ((_allowDeletingReferenceFeatures ||
+          // this assumes the 'from' dataset was loaded as unknown1
           // TODO: I don't understand the use case for this...need to define and add a test
-          (!_allowDeletingReferenceFeatures && _fromE->getStatus() != Status::Unknown1))
+          (!_allowDeletingReferenceFeatures && _fromE->getStatus() != Status::Unknown1)) &&
+          !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
       {
         LOG_TRACE(
           "'from' element id: " << _fromE->getElementId() << " less than 'to' element id: " <<
@@ -408,7 +411,7 @@ Change ChangesetDeriver::_nextChange()
         LOG_TRACE(
           "Skipping delete on unknown1 'from' element " << _fromE->getElementId() <<
           " due to " << ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey() <<
-          "=false...");
+          "=false or inclusion of " << MetadataTags::HootChangeExcludeDelete() << " tag...");
         result = Change(Change::Unknown, _fromE);
       }
 
