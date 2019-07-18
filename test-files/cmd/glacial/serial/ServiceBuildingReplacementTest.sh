@@ -78,7 +78,8 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true -D conver
 
 echo "crop and prune"
 hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm $REF_LAYER $OUT_DIR/$TEST_NAME-ref-cropped.osm --write-bounds
-hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D reader.use.data.source.ids=false -D convert.bounding.box.keep.entire.features.crossing.bounds=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
+# -D reader.use.data.source.ids=true
+hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
 
 # COOKIE CUTTING
 
@@ -89,7 +90,8 @@ hoot cookie-cut $GENERAL_OPTS -D reader.use.data.source.ids=true -D crop.keep.en
 # CONFLATION
 
 echo "conflate"
-hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-conflated.osm
+# -D conflate.use.data.source.ids.2=false
+hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-conflated.osm
 
 # CHANGESET DERIVATION
 
