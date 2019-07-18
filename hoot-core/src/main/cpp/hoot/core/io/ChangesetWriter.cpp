@@ -52,6 +52,7 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -200,6 +201,7 @@ void ChangesetWriter::_parseBuffer()
   LOG_DEBUG("Parsing changeset buffer...");
 
   const double changesetBuffer = ConfigOptions().getChangesetBuffer();
+  LOG_VARD(changesetBuffer);
   if (changesetBuffer > 0.0)
   {
     //allow for calculating the changeset with a slightly different AOI than the default specified
@@ -281,6 +283,8 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
                                                             OsmMapPtr& map1, OsmMapPtr& map2,
                                                             Progress progress)
 {
+  LOG_DEBUG("Handling unstreamable convert ops in memory...");
+
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input ...");
   OsmMapPtr fullMap(new OsmMap());
@@ -301,8 +305,10 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
         ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
     }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
+    OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-ref-map");
 
     // append the second map onto the first one
+
     OsmMapPtr tmpMap(new OsmMap());
     // same as above but for the secondary features
     if (ConfigUtils::boundsOptionEnabled())
@@ -315,6 +321,15 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
         ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
     }
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
+    OsmMapWriterFactory::writeDebugMap(tmpMap, "after-initial-read-unstreamable-sec-map");
+
+    // appending maps requires they have node hashes
+    CalculateHashVisitor2 hashVis;
+    fullMap->visitRw(hashVis);
+    LOG_VARD(fullMap->getElementCount());
+    tmpMap->visitRw(hashVis);
+    LOG_VARD(tmpMap->getElementCount());
+
     try
     {
       fullMap->append(tmpMap);
@@ -348,12 +363,14 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
     }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
   }
+  LOG_VARD(fullMap->getElementCount());
   OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-full-map");
   _currentTaskNum++;
 
   // Apply our convert ops to the entire map. If any of these are map consumers (OsmMapOperation)
   // then they some will exhibit undefined behavior if you try to exec them on the inputs
   // separately.
+  LOG_DEBUG("Applying convert ops...");
   NamedOp convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
@@ -365,6 +382,7 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   _currentTaskNum++;
 
   // We need the two inputs separated for changeset derivation, so split them back out by status.
+  LOG_DEBUG("Separating maps by status...");
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Separating out input maps...");
   RemoveUnknown1Visitor remove1Vis;
@@ -381,7 +399,9 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   {
     map1->visitRw(remove1Vis);
   }
+  LOG_VARD(map1->getElementCount());
   OsmMapWriterFactory::writeDebugMap(map1, "unstreamable-separated-map-1");
+  LOG_VARD(map2->getElementCount());
   OsmMapWriterFactory::writeDebugMap(map2, "unstreamable-separated-map-2");
   _currentTaskNum++;
 }
@@ -390,6 +410,8 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
                                                           const QString& input2, OsmMapPtr& map1,
                                                           OsmMapPtr& map2, Progress progress)
 {
+  LOG_DEBUG("Handling streamable convert ops in memory...");
+
   // Preserving source IDs is important here.
 
   // There's no need to check for the crop related config opts here, as we do in
@@ -416,6 +438,7 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
   _currentTaskNum++;
 
   // Apply our convert ops to each map separately.
+  LOG_DEBUG("Applying convert ops...");
   NamedOp convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
@@ -434,6 +457,7 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
 void ChangesetWriter::_readInputsFully(const QString& input1, const QString& input2,
                                        OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
+  LOG_VARD(ConfigOptions().getConvertOps().size());
   if (ConfigOptions().getConvertOps().size() > 0)
   {
     if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
@@ -456,6 +480,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   }
   else
   {
+    LOG_DEBUG("Processing inputs without convert ops...");
+
     // We didn't have any convert ops, so just load everything up.
     progress.set(
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Reading entire input...");
@@ -474,6 +500,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
           ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
       }
       IoUtils::loadMap(map1, input1, true, Status::Unknown1);
+      // TODO: hack
+      SuperfluousNodeRemover::removeNodes(map1);
       if (ConfigUtils::boundsOptionEnabled())
       {
         conf().set(
@@ -484,6 +512,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
           ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
       }
       IoUtils::loadMap(map2, input2, true, Status::Unknown2);
+      // TODO: hack
+      SuperfluousNodeRemover::removeNodes(map2);
     }
     else
     {
@@ -636,8 +666,8 @@ void ChangesetWriter::_streamChangesetOutput(ElementInputStreamPtr input1,
   QString stats;
   LOG_VARD(output);
 
-  // Could this eventually this could be cleaned up to use OsmChangeWriterFactory and the
-  // OsmChange interface instead?
+  // Could this eventually be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
+  // instead?
   ChangesetDeriverPtr changesetDeriver(new ChangesetDeriver(input1, input2));
   if (output.endsWith(".osc"))
   {

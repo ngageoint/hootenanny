@@ -80,7 +80,7 @@ public:
 
   bool getMultipleChangesetsWritten() const { return _multipleChangesetsWritten; }
 
-  QString getStatsTable() { return _stats.toTableString(); }
+  QString getStatsTable() const { return _stats.toTableString(); }
 
 private:
 

@@ -120,18 +120,23 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
       "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
       "\nMap being appended from has projection:\n" + proj2);
   }
+
+  LOG_DEBUG("Appending maps...");
+
   _srs = appendFromMap->getProjection();
 
   ElementComparer elementComparer;
 
+  int numRelationsAppended = 0;
   const RelationMap& allRelations = appendFromMap->getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
+    bool appendElement = true;
     RelationPtr relation = it->second;
     if (containsElement(ElementId(relation->getElementId())))
     {
-      // if they aren't the same, throw error; otherwise we just skip adding it since we already
-      // have it
+      // If they have the same ID but aren't the same, throw an error. Otherwise we'll just skip
+      // adding it since we already have it.
       ElementPtr existingElement = getElement(relation->getElementId());
       if (!elementComparer.isSame(relation, existingElement))
       {
@@ -144,16 +149,24 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
       }
       else
       {
-        break;
+        LOG_TRACE("Skipping appending same element: " << relation->getElementId());
+        appendElement = false;
       }
     }
-    RelationPtr r = RelationPtr(new Relation(*relation));
-    addRelation(r);
+
+    if (appendElement)
+    {
+      RelationPtr r = RelationPtr(new Relation(*relation));
+      addRelation(r);
+      numRelationsAppended++;
+    }
   }
 
+  int numWaysAppended = 0;
   WayMap::const_iterator it = appendFromMap->_ways.begin();
   while (it != appendFromMap->_ways.end())
   {
+    bool appendElement = true;
     WayPtr way = it->second;
     if (containsElement(ElementId(way->getElementId())))
     {
@@ -169,17 +182,26 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
       }
       else
       {
-        break;
+        LOG_TRACE("Skipping appending same element: " << way->getElementId());
+        appendElement = false;
       }
     }
-    WayPtr w = WayPtr(new Way(*way));
-    addWay(w);
+
+    if (appendElement)
+    {
+      WayPtr w = WayPtr(new Way(*way));
+      addWay(w);
+      numWaysAppended++;
+    }
+
     ++it;
   }
 
+  int numNodesAppended = 0;
   NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
   while (itn != appendFromMap->_nodes.end())
   {
+    bool appendElement = true;
     NodePtr node = itn->second;
     if (containsElement(ElementId(node->getElementId())))
     {
@@ -195,11 +217,18 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
       }
       else
       {
-        break;
+        LOG_TRACE("Skipping appending same element: " << node->getElementId());
+        appendElement = false;
       }
     }
-    NodePtr n = NodePtr(new Node(*node));
-    addNode(n);
+
+    if (appendElement)
+    {
+      NodePtr n = NodePtr(new Node(*node));
+      addNode(n);
+      numNodesAppended++;
+    }
+
     ++itn;
   }
 
@@ -208,6 +237,10 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     std::shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
     _listeners.push_back(l->clone());
   }
+
+  LOG_VARD(numNodesAppended);
+  LOG_VARD(numWaysAppended);
+  LOG_VARD(numRelationsAppended);
 }
 
 void OsmMap::addElement(const std::shared_ptr<Element>& e)

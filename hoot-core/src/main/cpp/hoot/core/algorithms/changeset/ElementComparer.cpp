@@ -121,13 +121,15 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
                                    const std::shared_ptr<const Element>& e) const
 {
-  // TODO: set the hoot hash tag here if it doesn't exist?
+  // TODO: set the hoot hash tag here if it doesn't exist or just calc it?
   if (!re->getTags().contains(MetadataTags::HootHash()) ||
       !e->getTags().contains(MetadataTags::HootHash()))
   {
     throw HootException(
-      "ElementComparer requires the " + MetadataTags::HootHash() +
-      " tag be set for node comparison.");
+      QString("ElementComparer requires the %1 tag be set for node comparison. Nodes: %2, %3")
+      .arg(MetadataTags::HootHash())
+      .arg(re->getElementId().toString())
+      .arg(e->getElementId().toString()));
   }
 
   if (re->getElementId().getId() == DEBUG_ID || e->getElementId().getId() == DEBUG_ID)

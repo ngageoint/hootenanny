@@ -91,7 +91,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
     const Node* n = it->second.get();
-    LOG_VART(n->getElementId());
+    //LOG_VART(n->getElementId());
     const long nodeId = n->getId();
     if (_usedNodes.find(nodeId) == _usedNodes.end())
     {
