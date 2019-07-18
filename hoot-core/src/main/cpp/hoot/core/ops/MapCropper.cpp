@@ -80,7 +80,8 @@ _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
-_numCrossingWaysRemoved(0)
+_numCrossingWaysRemoved(0),
+_numNodesRemoved(0)
 {
 }
 
@@ -95,7 +96,8 @@ _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
-_numCrossingWaysRemoved(0)
+_numCrossingWaysRemoved(0),
+_numNodesRemoved(0)
 {
 }
 
@@ -109,7 +111,8 @@ _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
 _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
-_numCrossingWaysRemoved(0)
+_numCrossingWaysRemoved(0),
+_numNodesRemoved(0)
 {
 }
 
@@ -177,6 +180,13 @@ void MapCropper::setConfiguration(const Settings& conf)
 void MapCropper::apply(OsmMapPtr& map)
 {
   _numAffected = 0;
+  _numWaysInBounds = 0;
+  _numWaysOutOfBounds = 0;
+  _numWaysCrossingThreshold = 0;
+  _numCrossingWaysKept = 0;
+  _numCrossingWaysRemoved = 0;
+  _numNodesRemoved = 0;
+
   OsmMapPtr result = map;
 
   LOG_VARD(_invert);
@@ -192,6 +202,8 @@ void MapCropper::apply(OsmMapPtr& map)
   {
     throw HootException("If the node bounds is set the projection must be geographic.");
   }
+
+  LOG_DEBUG("Cropping ways...");
 
   // go through all the ways
   long wayCtr = 0;
@@ -253,7 +265,7 @@ void MapCropper::apply(OsmMapPtr& map)
   std::shared_ptr<NodeToWayMap> n2wp = result->getIndex().getNodeToWayMap();
   NodeToWayMap& n2w = *n2wp;
 
-  LOG_INFO("Removing nodes...");
+  LOG_DEBUG("Removing nodes...");
 
   // go through all the nodes
   long nodeCtr = 0;
@@ -261,17 +273,24 @@ void MapCropper::apply(OsmMapPtr& map)
   const NodeMap nodes = result->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
+    LOG_VART(it->second->getElementId());
     const Coordinate& c = it->second->toCoordinate();
+    LOG_VART(c.toString());
     bool nodeInside = false;
     if (_envelope.isNull() == false)
     {
       if (_invert == false)
       {
         nodeInside = _envelope.covers(c);
+        LOG_TRACE(
+          "Node inside check: non-inverted crop and the envelope covers the element=" <<
+          nodeInside);
       }
       else
       {
         nodeInside = !_envelope.covers(c);
+        LOG_TRACE(
+          "Node inside check: inverted crop and the envelope covers the element=" << !nodeInside);
       }
     }
     else
@@ -280,17 +299,29 @@ void MapCropper::apply(OsmMapPtr& map)
       if (_invert == false)
       {
         nodeInside = _envelopeG->intersects(p.get());
+        LOG_TRACE(
+          "Node inside check: non-inverted crop and the envelope intersects the element=" <<
+          nodeInside);
       }
       else
       {
         nodeInside = !_envelopeG->intersects(p.get());
+        LOG_TRACE(
+          "Node inside check: inverted crop and the envelope intersects the element=" <<
+          !nodeInside);
       }
     }
+    LOG_VART(nodeInside);
 
     // if the node is outside
     if (!nodeInside)
     {
       // if the node is within the limiting bounds.
+      LOG_VART(_nodeBounds.isNull());
+      if (!_nodeBounds.isNull())
+      {
+        LOG_VART(_nodeBounds.contains(c));
+      }
       if (_nodeBounds.isNull() == true || _nodeBounds.contains(c))
       {
         // if the node is not part of a way
@@ -311,7 +342,6 @@ void MapCropper::apply(OsmMapPtr& map)
       PROGRESS_INFO("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
     }
   }
-  LOG_DEBUG("Nodes removed: " + QString::number(nodesRemoved));
 
   RemoveEmptyRelationsOp().apply(map);
 
@@ -320,6 +350,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_numWaysCrossingThreshold);
   LOG_VARD(_numCrossingWaysKept);
   LOG_VARD(_numCrossingWaysRemoved);
+  LOG_VARD(_numNodesRemoved);
 }
 
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
@@ -447,7 +478,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
     {
       result = !_envelopeG->getEnvelopeInternal()->intersects(e);
       LOG_TRACE(
-        "Wholly inside check: inverted crop and the envelope intersects with the element=" <<
+        "Wholly inside way check: inverted crop and the envelope intersects with the element=" <<
         !result);
     }
     else
@@ -456,10 +487,10 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
       //LOG_TRACE("Wholly inside check: non-inverted crop; avoiding expensive check.");
       result = _envelopeG->getEnvelopeInternal()->covers(e);
       LOG_TRACE(
-        "Wholly inside check: inverted crop and the envelope covers the element=" << result);
+        "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
     }
   }
-  LOG_TRACE("Wholly inside check result: " << result);
+  LOG_TRACE("Wholly inside way check result: " << result);
   return result;
 }
 
@@ -479,7 +510,7 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
     {
       result = !_envelope.intersects(e);
       LOG_TRACE(
-        "Wholly outside check: non-inverted crop and the envelope intersects with the element=" <<
+        "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
         !result);
     }
   }
@@ -489,12 +520,12 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
     {
       result = !_envelopeG->getEnvelopeInternal()->intersects(e);
       LOG_TRACE(
-        "Wholly outside check: non-inverted crop and the envelope intersects with the element=" <<
+        "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
         !result);
     }
     else
     {
-      //LOG_TRACE("Wholly outside check: inverted crop; avoiding expensive check.");
+      //LOG_TRACE("Wholly outside way check: inverted crop; avoiding expensive check.");
 
 //      LOG_VART(_envelopeG->getEnvelopeInternal()->contains(e));
 //      LOG_VART(_envelopeG->getEnvelopeInternal()->intersects(e));
@@ -513,10 +544,10 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
 
       result = _envelopeG->getEnvelopeInternal()->covers(e);
       LOG_TRACE(
-        "Wholly outside check: inverted crop and the envelope covers the element=" << result);
+        "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
     }
   }
-  LOG_TRACE("Wholly outside check result: " << result);
+  LOG_TRACE("Wholly outside way check result: " << result);
   return result;
 }
 

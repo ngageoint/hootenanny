@@ -63,7 +63,6 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   {
     const ConstWayPtr& w = it->second;
     const vector<long>& nodeIds = w->getNodeIds();
-
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
   }
 
@@ -89,16 +88,17 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     nodesWgs84 = &reprojected->getNodes();
   }
 
-  for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end();
-       ++it)
+  for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
     const Node* n = it->second.get();
-    if (_usedNodes.find(n->getId()) == _usedNodes.end())
+    LOG_VART(n->getElementId());
+    const long nodeId = n->getId();
+    if (_usedNodes.find(nodeId) == _usedNodes.end())
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
-        LOG_TRACE("Removing node. " << n->getElementId());
-        RemoveNodeByEid::removeNodeNoCheck(map, n->getId());
+        LOG_TRACE("Removing node: " << n->getElementId() << "...");
+        RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
         _numAffected++;
       }
       else
@@ -122,11 +122,9 @@ void SuperfluousNodeRemover::readObject(QDataStream& is)
   }
 }
 
-std::shared_ptr<OsmMap> SuperfluousNodeRemover::removeNodes(const std::shared_ptr<const OsmMap>& map)
+void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map)
 {
-  std::shared_ptr<OsmMap> result(new OsmMap(map));
-  SuperfluousNodeRemover().apply(result);
-  return result;
+  SuperfluousNodeRemover().apply(map);
 }
 
 void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map, const Envelope& e)
@@ -138,7 +136,6 @@ void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map, const Env
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)
 {
-  LOG_INFO("Setting bounds.");
   _bounds = bounds;
 }
 

@@ -50,7 +50,7 @@ _outputBuffer(outputBuffer)
 {
 }
 
-void CookieCutter::cut(OsmMapPtr cutterShapeOutlineMap, OsmMapPtr doughMap)
+void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
 {
   LOG_VARD(cutterShapeOutlineMap->getNodes().size());
   LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));

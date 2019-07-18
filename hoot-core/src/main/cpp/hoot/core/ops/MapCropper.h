@@ -118,6 +118,7 @@ private:
   int _numWaysCrossingThreshold;
   int _numCrossingWaysKept;
   int _numCrossingWaysRemoved;
+  int _numNodesRemoved;
 
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 
