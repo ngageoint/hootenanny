@@ -91,7 +91,7 @@ hoot cookie-cut $GENERAL_OPTS -D reader.use.data.source.ids=true -D crop.keep.en
 
 echo "conflate"
 # -D conflate.use.data.source.ids.2=false
-hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-conflated.osm
+hoot conflate $GENERAL_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
 
 # CHANGESET DERIVATION
 
