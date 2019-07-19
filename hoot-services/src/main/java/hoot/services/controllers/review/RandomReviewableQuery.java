@@ -77,6 +77,7 @@ class RandomReviewableQuery extends ReviewableQueryAbstract {
             String sortOrder = result.get(1, String.class);
             reviewableItem.setSortOrder((sortOrder != null) ? Long.parseLong(sortOrder) : -1L);
             reviewableItem.setResultCount(1L);
+            reviewableItem.setBounds(reviewableItem.getRelationId());
         }
 
         return reviewableItem;

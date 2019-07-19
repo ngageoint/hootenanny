@@ -58,6 +58,7 @@ class ReviewableQuery extends ReviewableQueryAbstract {
         if (result != null) {
             reviewableItem.setRelationId(result);
             reviewableItem.setResultCount(1);
+            reviewableItem.setBounds(result);
         }
 
         return reviewableItem;
