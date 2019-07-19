@@ -197,7 +197,7 @@ public class Relation extends Element {
             element.appendChild(memberElement);
 
             ElementType type = Element.elementTypeForElementEnum(member.getMemberType());
-            //populate map of types and ids
+            //populate map of element types and ids
             if (elementIds.get(type) == null) {
                 elementIds.put(type, new HashSet<Long>());
             }
@@ -206,31 +206,16 @@ public class Relation extends Element {
 
         if (addChildren) {
 
-            //loop through members
-            //putting them in node, way and relation lists
-
-            //recursively hydrate ways and relations
-            //while avoiding duplicates
-
             for (ElementType type : Element.elementTypesOrdered(elementIds.keySet())) {
 
                 List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(getMapId(),
                         type, elementIds.get(type));
 
                 for (Tuple elementRecord : elementRecords) {
-//                    String nodeId = elementRecord.get(currentNodes).getId() + ""; // convert to string for cases of multiLayerUniqueElementIds
-//
-//                    if (multiLayerUniqueElementIds) {
-//                        nodeId = getMapId() + "_n_" + nodeId; // hoot custom id unique across map layers
-//                    }
-//
-//                    // If the node element doesnt exist then add it
-//                    if(!allNodeIds.contains(nodeId)) {
-                        Element nodeFullElement = ElementFactory.create(type, elementRecord, getMapId());
-                        org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
-                                modifyingUserDisplayName, false, true);
-                        parentXml.appendChild(nodeXml);
-//                    }
+                    Element nodeFullElement = ElementFactory.create(type, elementRecord, getMapId());
+                    org.w3c.dom.Element nodeXml = nodeFullElement.toXml(parentXml, modifyingUserId,
+                            modifyingUserDisplayName, false, true);
+                    parentXml.appendChild(nodeXml);
                 }
             }
 
