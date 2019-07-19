@@ -42,13 +42,13 @@ using namespace std;
 namespace hoot
 {
 
-class ApplyChangesetCmd : public BaseCommand
+class ChangesetApplyCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::ApplyChangesetCmd"; }
+  static string className() { return "hoot::ChangesetApplyCmd"; }
 
-  ApplyChangesetCmd() { }
+  ChangesetApplyCmd() { }
 
   virtual QString getName() const { return "changeset-apply"; }
 
@@ -198,7 +198,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, ApplyChangesetCmd)
+HOOT_FACTORY_REGISTER(Command, ChangesetApplyCmd)
 
 }
 

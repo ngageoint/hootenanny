@@ -39,13 +39,13 @@ namespace hoot
 /**
  * Derives a set of changes given one or two map inputs
  */
-class DeriveChangesetCmd : public BaseCommand
+class ChangesetDeriveCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DeriveChangesetCmd"; }
+  static std::string className() { return "hoot::ChangesetDeriveCmd"; }
 
-  DeriveChangesetCmd() {}
+  ChangesetDeriveCmd() {}
 
   virtual QString getName() const { return "changeset-derive"; }
 
@@ -104,7 +104,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeriveChangesetCmd)
+HOOT_FACTORY_REGISTER(Command, ChangesetDeriveCmd)
 
 }
 
