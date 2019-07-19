@@ -106,14 +106,14 @@ hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filenam
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; sql changeset out)..."
 echo ""
-hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-sql.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $REF_LAYER
+hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-sql.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER
 
 # CHANGESET APPLICATION
 
 echo ""
 echo "Applying the changeset to the reference data..."
 echo ""
-hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-apply.osm $OUT_DIR/$TEST_NAME-changeset-2.osc.sql $OSM_API_DB_URL
+hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-apply.osm $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $OSM_API_DB_URL
 echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""
