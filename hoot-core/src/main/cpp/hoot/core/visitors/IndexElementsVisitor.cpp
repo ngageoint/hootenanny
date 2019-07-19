@@ -152,9 +152,12 @@ QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
     {
       // This shouldn't happen unless the geospatial indices were set up improperly for the query
       // node.
-      throw HootException(
+      const QString errorMsg =
         QString("Map does not contain neighbor node: %1. Skipping neighbor...")
-          .arg((*neighborIdsItr).toString()));
+          .arg((*neighborIdsItr).toString());
+      throw HootException(errorMsg);
+//      LOG_TRACE(errorMsg);
+//      continue;
     }
     else
     {

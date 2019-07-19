@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
@@ -104,19 +105,21 @@ void CookieCutConflateWayJoiner::join(const OsmMapPtr& map)
 
   // If anything left has a PID on it, let's make that PID its ID. TODO: This doesn't seem right...
   WayMap ways = _map->getWays();
+  QSet<long> pidsUsed;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
     const long pid = _getPid(way);
-    if (pid != WayData::PID_EMPTY &&
-        pid > 0)    // TODO: is this necessary?
+    if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid))
     {
       LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());
       ElementPtr newWay(way->clone());
       newWay->setId(pid);
       _map->replace(way, newWay);
+      pidsUsed.insert(pid);
     }
   }
+  OsmMapWriterFactory::writeDebugMap(map, "after-cookie-cut-way-joiner-pid-set");
 }
 
 }

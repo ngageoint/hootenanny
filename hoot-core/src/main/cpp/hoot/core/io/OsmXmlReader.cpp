@@ -708,21 +708,24 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       NodePtr n = std::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
-      LOG_VART(n);
+      LOG_TRACE("Added: " << n->getElementId());
+      //LOG_TRACE("Added: " << n);
       _numRead++;
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
-      LOG_VART(w);
+      LOG_TRACE("Added: " << w->getElementId());
+      //LOG_TRACE("Added: " << w);
       _numRead++;
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
-      LOG_VART(r);
+      LOG_TRACE("Added: " << r->getElementId());
+      //LOG_TRACE("Added: " << r);
       _numRead++;
     }
 

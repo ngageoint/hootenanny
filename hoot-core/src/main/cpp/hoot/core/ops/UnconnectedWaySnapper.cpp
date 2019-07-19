@@ -259,7 +259,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         {
           NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
 
-          // Try to find the nearest way node satisifying the specifying way node criteria that
+          // Try to find the nearest way node satisfying the specifying way node criteria that
           // is within the max reuse distance (if one was specified) and snap the unconnected way
           // node.  This reuse of existing way nodes on way being snapped to is done in order to cut
           // back on the number of new way nodes being added.
@@ -284,7 +284,6 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
             // snapped to
             LOG_TRACE(
               "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
-
 
             // retain the parent id of the snapped to way
             // TODO: The call to this _getPid method is a hack until I can get the cookie cut
@@ -315,7 +314,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
             // haven't any direct evidence of that being necessary for proper snapping yet. If it
             // is needed, that would likely slow things down a lot.
 
-            // This could be very expensive, so leave disabled by default.
+            // This could be very expensive, so leave it disabled by default.
+            // TODO: turn off
             OsmMapWriterFactory::writeDebugMap(
               _map,
               "UnconnectedWaySnapper-after-snap-#" +

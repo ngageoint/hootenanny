@@ -230,8 +230,7 @@ int ConflateCmd::runSimple(QStringList args)
     progress.set(
       _getJobPercentComplete(currentTask - 1),
       "Loading reference map: ..." + input1.right(maxFilePrintLength) + "...");
-    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(),
-                     Status::Unknown1);
+    IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
     currentTask++;
 
     if (isDiffConflate)
