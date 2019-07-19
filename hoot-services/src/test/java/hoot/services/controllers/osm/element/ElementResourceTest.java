@@ -22,11 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.element;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -113,8 +115,8 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
 
         OSMTestUtils.verifyOsmHeader(responseData);
 
-        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
-        assertEquals(0, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
+        assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
+        assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
         assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
 
         OSMTestUtils.verifyRelation(responseData, 1, id, changesetId, relationMembers, id.contains("_"));
