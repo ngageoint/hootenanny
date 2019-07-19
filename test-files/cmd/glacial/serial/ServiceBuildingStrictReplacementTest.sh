@@ -26,7 +26,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-71.4698,42.4866,-71.4657,42.4902"
 
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
-DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true"
+DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 PRUNE_AND_CROP_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
 # -D convert.ops=hoot::SuperfluousNodeRemover
@@ -34,12 +34,11 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D ch
 
 # DATA PREP
 
+scripts/database/CleanAndInitializeOsmApiDb.sh
 echo ""
 echo "Writing the reference dataset to an osm api db (contains features to be replaced)..."
 echo ""
-hoot convert $GENERAL_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops="hoot::SetTagValueVisitor;hoot::PertyOp" -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.key=name -D set.tag.value.visitor.value="Building 1" $SEC_LAYER_FILE $REF_LAYER_FILE 
-scripts/database/CleanAndInitializeOsmApiDb.sh 
-hoot convert $GENERAL_OPTS $DB_OPTS -D changeset.user.id=1 -D reader.use.data.source.ids=true $REF_LAYER_FILE $REF_LAYER
+hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops="hoot::SetTagValueVisitor;hoot::PertyOp" -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.key=name -D set.tag.value.visitor.value="Building 1" $SEC_LAYER_FILE $REF_LAYER  
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
