@@ -592,9 +592,10 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
       (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
       "Adding changeset ref delete exclude tags...");
 
-    std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(true));
-    boundsCrit->setBounds(
-      GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox()));
+    // The strictness of the bounds check is governed by a config option. Generally, would use
+    // not strict for linear features and strict for point or poly features.
+    conf().set("in.bounds.criterion.bounds", ConfigOptions().getConvertBoundingBox());
+    std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
     boundsCrit->setOsmMap(map1.get());
     std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
     std::shared_ptr<ChainCriterion> elementCrit(

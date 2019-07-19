@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef COOKIE_CUT_CONFLATE_WAY_JOINER_H
-#define COOKIE_CUT_CONFLATE_WAY_JOINER_H
+#ifndef REPLACEMENT_SNAPPED_WAY_JOINER_H
+#define REPLACEMENT_SNAPPED_WAY_JOINER_H
 
 // Hoot
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
@@ -37,18 +37,13 @@ namespace hoot
 /**
  * TODO
  */
-class CookieCutConflateWayJoiner : public WayJoinerAdvanced
+class ReplacementSnappedWayJoiner : public WayJoinerAdvanced
 {
 public:
 
-  static std::string className() { return "hoot::CookieCutConflateWayJoiner"; }
+  static std::string className() { return "hoot::ReplacementSnappedWayJoiner"; }
 
-  CookieCutConflateWayJoiner();
-
-  /**
-   * Static method to join all joinable ways using CookieCutConflateWayJoiner
-   */
-  static void joinWays(const OsmMapPtr& map);
+  ReplacementSnappedWayJoiner();
 
   /**
    * @see WayJoiner
@@ -56,11 +51,6 @@ public:
   virtual void join(const OsmMapPtr& map) override;
 
 protected:
-
-  /**
-   * TODO
-   */
-  //virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
   /**
    * TODO
@@ -93,11 +83,12 @@ protected:
   virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
                                             WayPtr& toRemove) const override;
 
-private:
+protected:
 
-  long _getPid(const ConstWayPtr& way) const;
+  virtual bool _hasPid(const ConstWayPtr& way) const;
+  virtual long _getPid(const ConstWayPtr& way) const;
 };
 
 }
 
-#endif  //  COOKIE_CUT_CONFLATE_WAY_JOINER_H
+#endif  //  REPLACEMENT_SNAPPED_WAY_JOINER_H

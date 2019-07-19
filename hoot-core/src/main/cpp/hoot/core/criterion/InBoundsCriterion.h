@@ -8,6 +8,7 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -15,17 +16,21 @@ namespace hoot
 /**
  * TODO
  */
-class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer
+class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer,
+  public Configurable
 {
 public:
 
   static std::string className() { return "hoot::InBoundsCriterion"; }
 
-  InBoundsCriterion(const bool mustCompletelyContain = false);
+  InBoundsCriterion();
+  InBoundsCriterion(const bool mustCompletelyContain);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(const OsmMap* map);
 

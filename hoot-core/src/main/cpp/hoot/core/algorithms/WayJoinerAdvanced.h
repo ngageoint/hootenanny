@@ -118,6 +118,9 @@ protected:
   virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
                                             WayPtr& toRemove) const;
 
+  virtual bool _hasPid(const ConstWayPtr& way) const;
+  virtual long _getPid(const ConstWayPtr& way) const;
+
 private:
 
   QString _callingMethod;

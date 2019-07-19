@@ -25,13 +25,15 @@ SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-71.4698,42.4866,-71.4657,42.4902"
 
-GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;CookieCutConflateWayJoiner;UnconnectedWaySnapper -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
+GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 PRUNE_AND_CROP_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
+# -D way.joiner=hoot::ReplacementConflatedWayJoiner
+CONFLATE_OPTS="-D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false"
 # Allow both Input1 and Conflated features to be snapped, since some features will have already been conflated.
-SNAP_OPTS="-D way.joiner=hoot::CookieCutConflateWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp;hoot::SuperfluousNodeRemover -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0"
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D changeset.allow.deleting.reference.features.outside.bounds=false"
+SNAP_OPTS="-D way.joiner=hoot::ReplacementSnappedWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0" 
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D changeset.allow.deleting.reference.features.outside.bounds=false -D in.bounds.criterion.strict=false"
 
 # DATA PREP
 
@@ -71,7 +73,7 @@ echo "conflate"
 echo ""
 # If the secondary IDs aren't dropped here, then we can lose multilinestring relations created during cookie cutting that have overlapping 
 # IDs with the ref dataset.
-hoot conflate $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
+hoot conflate $GENERAL_OPTS $CONFLATE_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
 hoot convert $GENERAL_OPTS $SNAP_OPTS -D reader.use.data.source.ids=true -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-snapped.osm 
 
 # CHANGESET DERIVATION

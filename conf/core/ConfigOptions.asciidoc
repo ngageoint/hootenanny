@@ -1576,6 +1576,20 @@ corresponding implicit tag rules database.
 
 A list of paths to include in the javascript translator search path.
 
+=== in.bounds.criterion.bounds
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
+=== in.bounds.criterion.strict
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === job.id
 
 * Data Type: string

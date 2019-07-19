@@ -4,15 +4,33 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, InBoundsCriterion)
 
+InBoundsCriterion::InBoundsCriterion()
+{
+  setConfiguration(conf());
+}
+
 InBoundsCriterion::InBoundsCriterion(const bool mustCompletelyContain) :
 _mustCompletelyContain(mustCompletelyContain)
 {
+}
+
+void InBoundsCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  _mustCompletelyContain = config.getInBoundsCriterionStrict();
+  _bounds = GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
+  if (_bounds.isNull())
+  {
+    throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
+  }
 }
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)

@@ -88,8 +88,15 @@ void WayJoinerAdvanced::_joinParentChild()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
-    if (way->hasPid())
+//    if (way->hasPid())
+//      ids.push_back(way->getId());
+    // TODO: hack
+    if (_hasPid(way))
+    {
+      LOG_TRACE(
+        "Adding " << way->getElementId() << " with split parent id: " << _getPid(way) << "...");
       ids.push_back(way->getId());
+    }
   }
   //  Sort the ids so that the smallest is first (i.e. largest negative id is the last one allocated)
   sort(ids.begin(), ids.end());
@@ -138,6 +145,16 @@ void WayJoinerAdvanced::_joinParentChild()
   }
 }
 
+bool WayJoinerAdvanced::_hasPid(const ConstWayPtr& way) const
+{
+  return way->hasPid();
+}
+
+long WayJoinerAdvanced::_getPid(const ConstWayPtr& way) const
+{
+  return way->getPid();
+}
+
 void WayJoinerAdvanced::_joinAtNode()
 {
   LOG_TRACE("Joining ways at node...");
@@ -157,9 +174,26 @@ void WayJoinerAdvanced::_joinAtNode()
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       WayPtr way = it->second;
-      if (way->hasPid())
+//      if (way->hasPid())
+//      {
+//        LOG_TRACE(
+//          "Adding " << way->getElementId() << " with split parent id: " << way->getPid() << "...");
+//        ids.insert(way->getId());
+//      }
+      // TODO: hack
+      if (_hasPid(way))
+      {
+        LOG_TRACE(
+          "Adding " << way->getElementId() << " with split parent id: " << _getPid(way) << "...");
         ids.insert(way->getId());
+      }
+//      else
+//      {
+//        LOG_TRACE("No split parent ID on " << way->getElementId());
+//        //LOG_TRACE(way);
+//      }
     }
+    LOG_VART(ids.size());
 
     LOG_VART(currentNumSplitParentIds);
     // If we didn't reduce the number of ways from the previous iteration, or there are none left

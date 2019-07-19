@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "CookieCutConflateWayJoiner.h"
+#include "ReplacementSnappedWayJoiner.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -35,32 +35,25 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(WayJoiner, CookieCutConflateWayJoiner)
+HOOT_FACTORY_REGISTER(WayJoiner, ReplacementSnappedWayJoiner)
 
-CookieCutConflateWayJoiner::CookieCutConflateWayJoiner() :
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner() :
 WayJoinerAdvanced::WayJoinerAdvanced()
 {
   _leavePid = true;
 }
 
-void CookieCutConflateWayJoiner::joinWays(const OsmMapPtr& map)
+bool ReplacementSnappedWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
 {
-  CookieCutConflateWayJoiner().join(map);
-}
-
-bool CookieCutConflateWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
-{
-  // We'll join up anything, as long as its not invalid. TODO: is this right?
+  // We'll join up anything, as long as its not invalid.
   return w1->getStatus() != Status::Invalid && w2->getStatus() != Status::Invalid;
-  //return (w1->getStatus() == Status::Unknown1 && w2->getStatus() == Status::Unknown2) ||
-         //(w2->getStatus() == Status::Unknown1 && w1->getStatus() == Status::Unknown2);
 }
 
-void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(
+void ReplacementSnappedWayJoiner::_determineKeeperFeatureForTags(
   WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
 {
   // We always want to keep unknown2, which is the dough ways being joined up with the cookie cut
-  // replacement ways. TODO: is this right?
+  // replacement ways.
   if (parent->getStatus() == Status::Unknown2)
   {
     keeper = parent;
@@ -78,15 +71,19 @@ void CookieCutConflateWayJoiner::_determineKeeperFeatureForTags(
   }
 }
 
-void CookieCutConflateWayJoiner::_determineKeeperFeatureForId(
+void ReplacementSnappedWayJoiner::_determineKeeperFeatureForId(
   WayPtr parent, WayPtr child, WayPtr& keeper, WayPtr& toRemove) const
 {
   _determineKeeperFeatureForTags(parent, child, keeper, toRemove);
 }
 
-long CookieCutConflateWayJoiner::_getPid(const ConstWayPtr& way) const
+bool ReplacementSnappedWayJoiner::_hasPid(const ConstWayPtr& way) const
 {
-  LOG_VART(way->hasPid());
+  return way->hasPid() || way->getTags().contains(MetadataTags::HootSplitParentId());
+}
+
+long ReplacementSnappedWayJoiner::_getPid(const ConstWayPtr& way) const
+{
   long pid = WayData::PID_EMPTY;
   if (way->hasPid())
   {
@@ -99,11 +96,11 @@ long CookieCutConflateWayJoiner::_getPid(const ConstWayPtr& way) const
   return pid;
 }
 
-void CookieCutConflateWayJoiner::join(const OsmMapPtr& map)
+void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
 {
   WayJoinerAdvanced::join(map);
 
-  // If anything left has a PID on it, let's make that PID its ID. TODO: This doesn't seem right...
+  // If anything left has a PID on it, let's make that PID its ID.
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -119,7 +116,7 @@ void CookieCutConflateWayJoiner::join(const OsmMapPtr& map)
       pidsUsed.insert(pid);
     }
   }
-  OsmMapWriterFactory::writeDebugMap(map, "after-cookie-cut-way-joiner-pid-set");
+  OsmMapWriterFactory::writeDebugMap(map, "after-replacement-snapped-way-joiner-pid-set");
 }
 
 }
