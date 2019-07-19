@@ -34,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -644,6 +646,19 @@ public abstract class Element implements XmlSerializable, DbSerializable {
         }
 
         return null;
+    }
+
+    /**
+     * Returns the element types in sorted order
+     *
+     * @param Set<ElementType> types
+     *            a database relation member types to sort
+     * @return a list of element types
+     */
+    public static List<ElementType> elementTypesOrdered(Set<ElementType> types) {
+        return Arrays.asList( ElementType.Node, ElementType.Way, ElementType.Relation )
+                .stream().filter(type -> types.contains(type))
+                .collect(Collectors.toList());
     }
 
     /*
