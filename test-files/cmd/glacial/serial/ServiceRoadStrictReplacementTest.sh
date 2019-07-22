@@ -5,7 +5,7 @@ set -e
 #
 # This test is not lenient regarding the AOI, in that it will not modify any parts of features in the ref data that are outside of it.
 # Secondary features within the AOI will be conflated with corresponding reference features within the AOI only. This workflow could work 
-# for other linear data types but only roads have been tested so far. See related notes in ServiceBuildingReplacementTest.sh.
+# for other linear data types but only roads have been tested so far.
 
 TEST_NAME=ServiceRoadStrictReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -28,10 +28,11 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
-PRUNE_AND_CROP_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
-CONFLATE_OPTS="-D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false"
+PRUNE_AND_CROP_OPTS="-D convert.bounding.box.keep.only.features.inside.bounds=false -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
+COOKIE_CUT_OPTS="-D reader.use.data.source.ids=true -D crop.keep.entire.features.crossing.bounds=false -D crop.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/cookie-cut.osm"
+CONFLATE_OPTS="-D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D debug.maps.filename=$OUT_DIR/conflate.osm"
 # Allow both Input1 and Conflated features to be snapped, since some features will have already been conflated.
-SNAP_OPTS="-D way.joiner=hoot::ReplacementSnappedWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0" 
+SNAP_OPTS="-D reader.use.data.source.ids=true -D way.joiner=hoot::ReplacementSnappedWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0 -D debug.maps.filename=$OUT_DIR/snap.osm" 
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D changeset.allow.deleting.reference.features.outside.bounds=false -D in.bounds.criterion.strict=false"
 
 # DATA PREP
@@ -54,8 +55,8 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-se
 echo ""
 echo "crop and prune"
 echo ""
-hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-ref.osm -D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm $REF_LAYER $OUT_DIR/$TEST_NAME-ref-cropped.osm --write-bounds
-hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-sec.osm -D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D convert.bounding.box.keep.only.features.inside.bounds=false $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
+hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-ref.osm -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm $REF_LAYER $OUT_DIR/$TEST_NAME-ref-cropped.osm --write-bounds
+hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-sec.osm -D convert.bounding.box.keep.entire.features.crossing.bounds=false $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
 
 # COOKIE CUTTING
 
@@ -63,7 +64,7 @@ echo ""
 echo "cookie cut"
 echo ""
 hoot generate-alpha-shape $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/alpha-shape.osm -D reader.use.data.source.ids=true $OUT_DIR/$TEST_NAME-sec-cropped.osm 1000 0 $OUT_DIR/$TEST_NAME-cutter-shape.osm
-hoot cookie-cut $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/cookie-cut.osm -D reader.use.data.source.ids=true -D crop.keep.entire.features.crossing.bounds=false $OUT_DIR/$TEST_NAME-cutter-shape.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm
+hoot cookie-cut $GENERAL_OPTS $COOKIE_CUT_OPTS $OUT_DIR/$TEST_NAME-cutter-shape.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm
 
 # CONFLATION
 
@@ -72,8 +73,8 @@ echo "conflate"
 echo ""
 # If the secondary IDs aren't dropped here, then we can lose multilinestring relations created during cookie cutting that have overlapping 
 # IDs with the ref dataset.
-hoot conflate $GENERAL_OPTS $CONFLATE_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
-hoot convert $GENERAL_OPTS $SNAP_OPTS -D reader.use.data.source.ids=true -D debug.maps.filename=$OUT_DIR/snap.osm $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-snapped.osm 
+hoot conflate $GENERAL_OPTS $CONFLATE_OPTS $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
+hoot convert $GENERAL_OPTS $SNAP_OPTS $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-snapped.osm 
 
 # CHANGESET DERIVATION
 
@@ -99,5 +100,6 @@ echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write.osm $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced.osm
 hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
-# cleanup
+# CLEANUP
+
 hoot delete-db-map $HOOT_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/cleanup.osm $SEC_LAYER

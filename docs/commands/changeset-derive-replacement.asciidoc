@@ -5,7 +5,7 @@
 
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets with a 
 given bounds. The data from the second input dataset completely replaces data in the first dataset within the bounds. The output changeset 
-file can later be applied to an OSM API database with the +changeset-apply+ command.
+file can later be applied directly to an OSM API database or via the Rails Port with the +changeset-apply+ command.
 
 * +input1+             - OSM data input 1 (e.g. .osm file)
 * +input2+             - OSM data input 2 (e.g. .osm file)
@@ -80,3 +80,4 @@ N/A - Point bounds relationships are only handled in a strict fashion.
 
 * `changeset-derive` command
 * `changeset.*` configuration options
+* `snap.unconnected.ways.*` configuration options

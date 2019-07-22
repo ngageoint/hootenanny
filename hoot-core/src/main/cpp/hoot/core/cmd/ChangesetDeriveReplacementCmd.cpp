@@ -205,6 +205,10 @@ public:
      * changeset.secondary.keep.only.features.inside.bounds=false
      * changeset.allow.deleting.reference.features.outside.bounds=false
      * in.bounds.criterion.strict=false
+     *
+     * POI STRICT
+     *
+     *
      */
 
     // crop
