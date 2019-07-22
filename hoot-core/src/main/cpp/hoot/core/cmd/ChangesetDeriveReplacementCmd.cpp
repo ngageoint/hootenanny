@@ -108,6 +108,8 @@ public:
     }
 
     /*
+     * ALL
+     *
      * general opts
      *
      * changeset.xml.writer.add.timestamp=false
@@ -118,29 +120,40 @@ public:
      *
      * changeset.user.id=1
      *
+     * crop and prune opts
+     *
+     * reader.use.data.source.ids=true
+     * convert.ops=hoot::RemoveElementsVisitor
+     * convert.bounding.box=$AOI
+     * remove.elements.visitor.recursive=true
+     * element.criterion.negate=true
+     *
+     * cookie cut opts
+     *
+     * reader.use.data.source.ids=true
+     *
      * conflate opts
      *
      * conflate.use.data.source.ids.1=true
      * conflate.use.data.source.ids.2=false
      *
-     * snap opts (road strict only)
+     * changeset opts
      *
-     * way.joiner=hoot::ReplacementSnappedWayJoiner
-     * convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp
-     * snap.unconnected.ways.snap.to.way.status=Input1
-     * snap.unconnected.ways.snap.way.status=Input2;Conflated
-     * snap.unconnected.ways.existing.way.node.tolerance=45.0
-     * snap.unconnected.ways.snap.tolerance=45.0
+     * changeset.user.id=1
+     * convert.bounding.box=$AOI
      *
      * BUILDING
      *
-     * crop and prune
+     * crop and prune opts
      *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=true (both)
+     * convert.bounding.box.keep.entire.features.crossing.bounds=true
+     * convert.bounding.box.keep.only.features.inside.bounds=false
+     * remove.elements.visitor.element.criteria=hoot::BuildingCriterion
      *
      * cookie cut opts
      *
      * crop.keep.entire.features.crossing.bounds=true
+     * crop.keep.only.features.inside.bounds=false
      *
      * changeset opts
      *
@@ -148,17 +161,23 @@ public:
      * changeset.secondary.keep.entire.features.crossing.bounds=true
      * changeset.reference.keep.only.features.inside.bounds=false
      * changeset.secondary.keep.only.features.inside.bounds=false
+     * changeset.allow.deleting.reference.features.outside.bounds=true
+     * in.bounds.criterion.strict=false
      *
      * BUILDING STRICT
      *
-     * crop and prune
+     * crop and prune opts
      *
      * convert.bounding.box.keep.entire.features.crossing.bounds=true (ref)
-     * convert.bounding.box.keep.entire.features.crossing.bounds=false (sec)
+     * convert.bounding.box.keep.only.features.inside.bounds=false (ref)
+     * convert.bounding.box.keep.entire.features.crossing.bounds=false  (sec)
+     * convert.bounding.box.keep.only.features.inside.bounds=true (sec)
+     * remove.elements.visitor.element.criteria=hoot::BuildingCriterion
      *
      * cookie cut opts
      *
      * crop.keep.entire.features.crossing.bounds=true
+     * crop.keep.only.features.inside.bounds=false
      *
      * changeset opts
      *
@@ -171,13 +190,16 @@ public:
      *
      * ROAD
      *
-     * crop and prune
+     * crop and prune opts
      *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=true (both)
+     * convert.bounding.box.keep.entire.features.crossing.bounds=true
+     * convert.bounding.box.keep.only.features.inside.bounds=false
+     * remove.elements.visitor.element.criteria=hoot::HighwayCriterion
      *
      * cookie cut opts
      *
      * crop.keep.entire.features.crossing.bounds=false
+     * crop.keep.only.features.inside.bounds=false
      *
      * changeset opts
      *
@@ -185,17 +207,31 @@ public:
      * changeset.secondary.keep.entire.features.crossing.bounds=true
      * changeset.reference.keep.only.features.inside.bounds=false
      * changeset.secondary.keep.only.features.inside.bounds=false
+     * changeset.allow.deleting.reference.features.outside.bounds=true
+     * in.bounds.criterion.strict=false
      *
      * ROAD STRICT
      *
-     * crop and prune
+     * crop and prune opts
      *
      * convert.bounding.box.keep.entire.features.crossing.bounds=true (ref)
      * convert.bounding.box.keep.entire.features.crossing.bounds=false (sec)
+     * convert.bounding.box.keep.only.features.inside.bounds=false
+     * remove.elements.visitor.element.criteria=hoot::HighwayCriterion
      *
      * cookie cut opts
      *
      * crop.keep.entire.features.crossing.bounds=false
+     * crop.keep.only.features.inside.bounds=false
+     *
+     * snap opts (road strict only)
+     *
+     * way.joiner=hoot::ReplacementSnappedWayJoiner
+     * convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp
+     * snap.unconnected.ways.snap.to.way.status=Input1
+     * snap.unconnected.ways.snap.way.status=Input2;Conflated
+     * snap.unconnected.ways.existing.way.node.tolerance=45.0
+     * snap.unconnected.ways.snap.tolerance=45.0
      *
      * changeset opts
      *
@@ -208,7 +244,25 @@ public:
      *
      * POI STRICT
      *
+     * crop and prune opts
      *
+     * convert.bounding.box.keep.entire.features.crossing.bounds=false
+     * crop.keep.only.features.inside.bounds=false
+     * remove.elements.visitor.element.criteria=hoot::PoiCriterion
+     *
+     * cookie cut opts
+     *
+     * crop.keep.entire.features.crossing.bounds=false
+     * crop.keep.only.features.inside.bounds=false
+     *
+     * changeset opts
+     *
+     * changeset.reference.keep.entire.features.crossing.bounds=false
+     * changeset.secondary.keep.entire.features.crossing.bounds=false
+     * changeset.reference.keep.only.features.inside.bounds=false
+     * changeset.secondary.keep.only.features.inside.bounds=true
+     * changeset.allow.deleting.reference.features.outside.bounds=true
+     * in.bounds.criterion.strict=false
      */
 
     // crop
