@@ -3,61 +3,80 @@
 
 === Description
 
-TODO: update
+The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets with a 
+given bounds. The data from the second input dataset completely replaces data in the first dataset within the bounds. The output changeset 
+file can later be applied to an OSM API database with the +changeset-apply+ command.
 
-The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input
-OSM datasets.  Alternatively, when only one dataset is input it generates a changeset file representing all
-the data in the input dataset. The output changeset file can later be applied to an OSM API database with
-the +changeset-apply+ command.
-
-If deriving a changeset between two inputs from different dates, the first input should be the older
-dataset and the second should be the newer dataset.
-
-* +input1+            - OSM data input 1 (e.g. .osm file).
-* +input2+            - OSM data input 2 (e.g. .osm file or empty string ("") to derive changeset from one input only).
-* +output+            - Output location (e.g. .osc or .osc.sql file.
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
-                        element ID continuity with a particular database instance when generating SQL
-                        changesets only.  Required only if the changeset output format is .osc.sql.
-* +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
-                        node, way, relation (only valid for .osc output files)
-* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
-                        The location of the file is controlled via the `bounds.output.file` configuration option.
+* +input1+             - OSM data input 1 (e.g. .osm file)
+* +input2+             - OSM data input 2 (e.g. .osm file)
+* +bounds+             - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
+* +featureFilter+      - A single ConflatableElementCriterion class name used to determine which type of features are replaced in the reference 
+                         dataset (currently only one criterion may be specified in a filter). e.g. "hoot::BuildingCriterion"
+* +output+             - Output location (e.g. .osc or .osc.sql file)
+* +osmApiDatabaseUrl+  - Target OSM API database the changeset is to be applied to.  Used to maintain
+                         element ID continuity with a particular database instance when generating SQL
+                         changesets only (.osc.sql).
+* +--lenient-bounds--+ - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
+                         makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
+                         for more detail.
+* +--stats+            - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only valid for 
+                         .osc output files only)
+* +--write-bounds+     - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
+                         The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) [input2] (output) [osmApiDatabaseUrl] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (featureFilter) (output) [osmApiDatabaseUrl] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples
 
 --------------------------------------
-hoot changeset-derive-replacement inputData1.osm inputData2.osm outputChangeset.osc
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc 
 
-hoot changeset-derive-replacement -D convert.ops="op1;op2" inputData1.osm inputData2.osm outputChangeset.osc
+hoot changeset-derive-replacement -D convert.ops="op1;op2" input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc --lenient-bounds
 
-hoot changeset-derive-replacement inputData1.osm inputData2.osm outputChangeset.osc --stats
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc --stats
 
-hoot changeset-derive inputData.osm "" outputChangeset.osc
-
-hoot changeset-derive-replacement inputData.osm "" outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
 --------------------------------------
 
-=== Configuration Options
+=== Bounds Handling
 
-Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the "Configuration Options" section
-of the `convert` command documentation for details.
+==== Strict Bounds Handling
 
-=== Sorting
+===== Points
 
-Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To
-perform sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value
-greater than zero.
+- Only reference features completely inside the bounds will be replaced.
+- No secondary feature on or outside the boundary will be included in the output.
 
-Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an
-OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
+===== Lines
+
+* No reference feature crossing the bounds will be modified outside of the bounds. Reference features may be split.
+* No parts of secondary features crossing the bounds will be included in the output
+
+===== Polygons
+
+* No reference features crossing the bounds will be modified
+* No secondary features crossing the bounds will be included in the output
+
+==== Lenient Bounds Handling
+
+===== Points
+
+N/A - Point bounds relationships are only handled in a strict fashion.
+
+===== Lines
+
+* Reference features crossing the bounds will be completely replaced by secondary features
+
+===== Polygons
+
+* Reference features crossing the bounds may be modified. They will not be split, and will only be conflated with secondary features.
+* Secondary features crossing the bounds may be included unmodified in the output or conflated with reference features.
 
 === See Also
 
+* `changeset-derive` command
 * `changeset.*` configuration options

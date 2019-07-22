@@ -3,9 +3,9 @@ set -e
 
 # Wholesale Building Replacement Workflow with Strict AOI Handling
 #
-# This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie outside of it. This 
-# workflow could work for other polygon or point data types but only buildings have been attempted so far. See related notes in 
-# ServiceBuildingReplacementTest.sh
+# This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie outside of it. No secondary 
+# features outside the AOI or crossing it will be included in the output or conflated with anything in the ref layer.  This workflow could 
+# work for other polygon data types but only buildings have been attempted so far. See related notes in ServiceBuildingReplacementTest.sh.
 
 TEST_NAME=ServiceBuildingStrictReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -69,7 +69,7 @@ hoot cookie-cut $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/cookie-cut.osm -D 
 echo ""
 echo "conflate"
 echo ""
-hoot conflate $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
+hoot conflate $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
 
 # CHANGESET DERIVATION
 

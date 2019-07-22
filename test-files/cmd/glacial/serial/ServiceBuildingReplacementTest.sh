@@ -3,39 +3,9 @@ set -e
 
 # Wholesale Building Replacement Workflow
 #
-# This test is lenient regarding the AOI, in that it may modify some features in the ref data that lie just outside of the AOI. This workflow 
-# should work for any polygon or point datasets, but only buildings have been tested with it so far.
-#
-# REPLACEMENT AOI STRICTNESS DEFINITIONS
-# 
-# POLYS
-#
-# Strict: 
-# - no ref feature crossing the bounds will be modified
-# - no sec feature crossing the bounds will be included in the output
-#
-# Non-strict:
-# - ref features crossing the bounds may be modified (shouldn’t be split, only conflated)
-# - sec features crossing the bounds may be included in the output (or conflated with ref features)
-#
-# LINES
-#
-# Strict: 
-# - no ref feature crossing the bounds will be modified outside of the bounds (ref features may be split)
-# - no parts of sec feature crossing the bounds will be included in the output
-#
-# Non-strict:
-# - ref features crossing the bounds will be completely replaced by sec features
-#
-# POINTS
-# 
-# Strict: 
-# - no ref feature on the boundary will be modified (?)
-# - no sec feature on the boundary will be included in the output
-#
-# Non-strict:
-# - ref features on the boundary may be modified
-# - sec features on the boundary may be included in the output (or conflated with ref features)
+# This test is lenient regarding the AOI, in that it may modify some features in the ref data that lie just outside of the AOI. Secondary 
+# features crossing the AOI may be included in the output or conflated with reference features. This workflow should work other polygon 
+# data types, but only buildings have been tested with it so far.
 
 TEST_NAME=ServiceBuildingReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -81,7 +51,6 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-se
 
 echo "crop and prune"
 hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-ref.osm -D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm $REF_LAYER $OUT_DIR/$TEST_NAME-ref-cropped.osm --write-bounds
-# -D reader.use.data.source.ids=true
 hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-sec.osm -D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
 
 # COOKIE CUTTING
@@ -94,7 +63,7 @@ hoot cookie-cut $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/cookie-cut.osm -D 
 # CONFLATION
 
 echo "conflate"
-hoot conflate $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D tag.merger.default=hoot::OverwriteTag2Merger $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
+hoot conflate $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
 
 # CHANGESET DERIVATION
 

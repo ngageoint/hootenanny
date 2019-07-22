@@ -3,9 +3,9 @@ set -e
 
 # Wholesale Road Replacement Workflow with Strict AOI Handling
 #
-# This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that extend outside of it. This 
-# workflow could work for other linear data types but only roads have been attempted so far. See related notes in 
-# ServiceBuildingReplacementTest.sh
+# This test is not lenient regarding the AOI, in that it will not modify any parts of features in the ref data that are outside of it.
+# Secondary features within the AOI will be conflated with corresponding reference features within the AOI only. This workflow could work 
+# for other linear data types but only roads have been tested so far. See related notes in ServiceBuildingReplacementTest.sh.
 
 TEST_NAME=ServiceRoadStrictReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -29,7 +29,6 @@ GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writ
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 PRUNE_AND_CROP_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
-# -D way.joiner=hoot::ReplacementConflatedWayJoiner
 CONFLATE_OPTS="-D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false"
 # Allow both Input1 and Conflated features to be snapped, since some features will have already been conflated.
 SNAP_OPTS="-D way.joiner=hoot::ReplacementSnappedWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp -D snap.unconnected.ways.snap.to.way.status=Input1 -D snap.unconnected.ways.snap.way.status=Input2;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0" 
