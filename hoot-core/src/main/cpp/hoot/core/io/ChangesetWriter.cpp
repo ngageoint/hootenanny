@@ -204,6 +204,33 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
     "Changeset written to: ..." + output.right(maxFilePrintLength));
 }
 
+void ChangesetWriter::write(const QString& output, OsmMapPtr& map1, OsmMapPtr& map2)
+{
+  // TODO: implement progress
+
+  //sortedElements1 is the former state of the data
+  ElementInputStreamPtr sortedElements1;
+  //sortedElements2 is the newer state of the data
+  ElementInputStreamPtr sortedElements2;
+
+  // no need to implement application of ops for this logic path
+
+  if (map2)
+  {
+    sortedElements1 = _sortElementsInMemory(map1);
+    sortedElements2 = _sortElementsInMemory(map2);
+  }
+  else
+  {
+    sortedElements1 = _getEmptyInputStream();
+    sortedElements2 = _sortElementsInMemory(map1);
+  }
+
+  // write out the changeset file
+  assert(sortedElements1.get() && sortedElements2.get());;
+  _streamChangesetOutput(sortedElements1, sortedElements2, output);
+}
+
 void ChangesetWriter::_parseBuffer()
 {
   // TODO: get rid of changeset buffer

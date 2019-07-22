@@ -38,6 +38,7 @@ namespace hoot
 class IdGenerator
 {
 public:
+
   static std::string className() { return "hoot::IdGenerator"; }
 
   IdGenerator() {}

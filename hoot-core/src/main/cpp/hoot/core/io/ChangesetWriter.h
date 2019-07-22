@@ -79,6 +79,15 @@ public:
    */
   void write(const QString& output, const QString& input1, const QString& input2 = "");
 
+  /**
+   * TODO
+   *
+   * @param output
+   * @param input1
+   * @param input2
+   */
+  void write(const QString& output, OsmMapPtr& input1, OsmMapPtr& input2);
+
 private:
 
   QString _osmApiDbUrl;

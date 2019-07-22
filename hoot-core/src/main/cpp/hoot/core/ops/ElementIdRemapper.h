@@ -25,61 +25,48 @@
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef IDSWAP_H
-#define IDSWAP_H
+#ifndef ELEMENT_ID_REMAPPER_H
+#define ELEMENT_ID_REMAPPER_H
 
-#include <array>
-#include <map>
-
-//  Hoot
-#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
 
-class IdSwap
+class ElementIdRemapper : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
-  /** Helpful typedefs for container and iterators */
-  typedef std::map<ElementId, ElementId> container;
-  typedef typename container::iterator iterator;
-  typedef typename container::const_iterator const_iterator;
+  static std::string className() { return "hoot::ElementIdRemapper"; }
 
-  IdSwap();
+  ElementIdRemapper();
 
-  /**
-   * @brief add
-   * @param type
-   * @param id_1
-   * @param id_2
-   */
-  void add(ElementId id_1, ElementId id_2);
-  /**
-   * @brief begin Begin iterator
-   * @return iterator pointing to the beginning of the set
-   */
-  iterator begin();
-  /**
-   * @brief end End iterator
-   * @return iterator pointing off of the end of the set
-   */
-  iterator end();
-  /**
-   * @brief size Total number of elements to swap
-   * @return count
-   */
-  size_t size();
+  virtual void apply(OsmMapPtr& map) override;
+
+  void setRemapNodes(bool remap) { _remapNodes = remap; }
+  void setRemapWays(bool remap) { _remapWays = remap; }
+  void setRemapRelations(bool remap) { _remapRelations = remap; }
+  void setIdGen(const std::shared_ptr<IdGenerator>& idGen) { _idGen = idGen; }
+
+  virtual QString getDescription() const override
+  { return "TODO"; }
+
+  virtual QString getInitStatusMessage() const override
+  { return "TODO."; }
+
+  virtual QString getCompletedStatusMessage() const override
+  { return "TODO"; }
 
 private:
 
-  /** Containers to hold ID swap information, forward and backward mappings */
-  container _idMap;
-  container _idMapReversed;
+  bool _remapNodes;
+  bool _remapWays;
+  bool _remapRelations;
+  std::shared_ptr<IdGenerator> _idGen;
 };
-
-typedef std::shared_ptr<IdSwap> IdSwapPtr;
 
 }
 
-#endif  //  IDSWAP_H
+#endif  //  ELEMENT_ID_REMAPPER_H

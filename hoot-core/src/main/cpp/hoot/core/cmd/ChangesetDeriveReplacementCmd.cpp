@@ -39,6 +39,8 @@
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
+#include <hoot/core/ops/ElementIdRemapper.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 namespace hoot
 {
@@ -120,8 +122,7 @@ public:
 
     // load each dataset separately and crop to the aoi
 
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -162,13 +163,26 @@ public:
     CookieCutter(false, 0.0).cut(cutterShapeMap, refMap);
     OsmMapPtr cookieCutMap = refMap;
 
+    // Renumber the relations in the sec map, as they could have ID overlap with those in the cookie
+    // cut ref map at this point. This is due to the fact that they have been modified independently
+    // of each other with cropping, which may create new relations.
+
+    ElementIdRemapper relationIdRemapper;
+    relationIdRemapper.setIdGen(cookieCutMap->getIdGeneratorSp());
+    relationIdRemapper.setRemapNodes(false);
+    relationIdRemapper.setRemapRelations(true);
+    relationIdRemapper.setRemapWays(false);
+    relationIdRemapper.apply(secMap);
+
+    // add node hashes so we can append the cookie cut and sec maps together (needed for element
+    // comparison)
+
+    CalculateHashVisitor2 hashVis;
+    cookieCutMap->visitRw(hashVis);
+    secMap->visitRw(hashVis);
+
     // conflate the cookie cut ref map with the cropped sec map
 
-    // TODO: this won't work
-    //conf().set(ConfigOptions::getConflateUseDataSourceIds1Key(), "true");
-    //conf().set(ConfigOptions::getConflateUseDataSourceIds2Key(), "false");
-    //IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
-    // TODO: need to add node hashes
     cookieCutMap->append(secMap);
     OsmMapPtr conflateMap = cookieCutMap;
     // TODO: restrict conflate matchers to only those relevant based on the filter?
@@ -179,6 +193,7 @@ public:
 
     if (!lenientBounds && _isLinearCrit(critClassName))
     {
+      // TODO: -D way.joiner=hoot::ReplacementSnappedWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp
       UnconnectedWaySnapper snapper;
       snapper.setConfiguration(conf());
       snapper.setSnapToWayStatus("Input1");
@@ -189,8 +204,10 @@ public:
       snapper.apply(conflateMap);
     }
 
-    // derive a changeset that replaces ref features with secondary features
+    OsmMapPtr refChangesetMap;
+    OsmMapPtr secChangesetMap;
 
+    // TODO: these won't work
     conf().set(
       ConfigOptions::getChangesetReferenceKeepEntireFeaturesCrossingBoundsKey(),
       _changesetRefKeepEntireCrossingBounds);
@@ -209,9 +226,26 @@ public:
     conf().set(
       ConfigOptions::getInBoundsCriterionStrictKey(),
       _inBoundsStrict);
-    LOG_VART(printStats);
-    // TODO: this won't work
-    //ChangesetWriter(printStats, osmApiDbUrl).write(output, input1, input2);
+
+    // break the ref map data back out of the conflated map
+
+    // TODO
+
+    // break the sec map data back out of the conflated map
+
+    // TODO
+
+    // crop the ref map appropriate for changeset derivation
+
+    // TODO
+
+    // crop the sec map appropriate for changeset derivation
+
+    // TODO
+
+    // derive a changeset that replaces ref features with secondary features within the bounds
+
+    ChangesetWriter(printStats, osmApiDbUrl).write(output, refChangesetMap, secChangesetMap);
 
     if (writeBoundsFile)
     {

@@ -91,11 +91,8 @@ public:
   OsmMap();
 
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);
-
   explicit OsmMap(const std::shared_ptr<OsmMap>&);
-
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
-
   OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
 
   ~OsmMap();
@@ -116,7 +113,6 @@ public:
   void addElements(T it, T end);
 
   void addNode(const NodePtr& n);
-
   /**
    * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
    * times.
@@ -141,15 +137,11 @@ public:
    * Returns true if the node is in this map.
    */
   virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
-
   virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
-
   virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
   long createNextNodeId() const { return _idGen->createNodeId(); }
-
   long createNextRelationId() const { return _idGen->createRelationId(); }
-
   long createNextWayId() const { return _idGen->createWayId(); }
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
@@ -161,8 +153,6 @@ public:
 
   const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
 
-  const IdGenerator& getIdGenerator() const { return *_idGen; }
-
   /**
    * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
    * out of date and will require calling getIndex again.
@@ -170,13 +160,9 @@ public:
   const OsmMapIndex& getIndex() const { return *_index; }
 
   virtual const ConstNodePtr getNode(long id) const;
-
   virtual const NodePtr getNode(long id);
-
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
-
   const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
-
   const NodeMap& getNodes() const { return _nodes; }
 
   std::set<ElementId> getParents(ElementId eid) const;
@@ -187,9 +173,7 @@ public:
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
   virtual const ConstRelationPtr getRelation(long id) const;
-
   virtual const RelationPtr getRelation(long id);
-
   const RelationMap& getRelations() const { return _relations; }
 
   /**
@@ -197,7 +181,6 @@ public:
    */
   virtual const WayPtr getWay(long id);
   const WayPtr getWay(ElementId eid);
-
   /**
    * Similar to above but const'd.
    *
@@ -207,7 +190,6 @@ public:
    */
   const ConstWayPtr getWay(long id) const;
   const ConstWayPtr getWay(ElementId eid) const;
-
   const WayMap& getWays() const { return _ways; }
 
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
@@ -220,14 +202,12 @@ public:
    * is part of another way.
    */
   void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to);
-
   /**
    * Similar to above, but from is replaced with a collection of elements. This makes sense in the
    * context of a relation, but may not make sense in other cases (e.g. replace a single node
    * that is part of a way with multiple nodes).
    */
   void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
-
   /**
    * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
    * for references to oldNode and replaces those references with newNode. Finally, oldNode is
@@ -240,7 +220,10 @@ public:
    */
   static void resetCounters() { IdGenerator::getInstance()->reset(); }
 
-  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen) { _idGenSp = gen; _idGen = gen.get(); }
+  const IdGenerator& getIdGenerator() const { return *_idGen; }
+  std::shared_ptr<IdGenerator> getIdGeneratorSp() const { return _idGenSp; }
+  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen)
+  { _idGenSp = gen; _idGen = gen.get(); }
 
   void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
