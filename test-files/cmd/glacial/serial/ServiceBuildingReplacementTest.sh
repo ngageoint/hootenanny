@@ -30,7 +30,10 @@ DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
 PRUNE_AND_CROP_OPTS="-D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
 COOKIE_CUT_OPTS="-D reader.use.data.source.ids=true -D crop.keep.entire.features.crossing.bounds=true -D crop.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/cookie-cut.osm"
-CONFLATE_OPTS="-D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true"
+# The reason we can't use the secondary element IDs here is that relations may have been added during cookie cut conflation that will be 
+# overlapping between the two datasets. Its ok to drop the secondary IDs because they all represent new features to be inserted into the
+# database anyway, which always start out as negative.
+CONFLATE_OPTS="-D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false"
 # If any ref features cross the bounds, we want to keep them intact unless they conflate with something in the secondary. Secondary features
 # crossing the bounds are ok to be in the output.
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false"

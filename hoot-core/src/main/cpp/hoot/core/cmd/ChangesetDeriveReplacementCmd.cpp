@@ -121,7 +121,7 @@ public:
      * conflate opts
      *
      * conflate.use.data.source.ids.1=true
-     * conflate.use.data.source.ids.2=false (make sure this can work for the first three tests)
+     * conflate.use.data.source.ids.2=false
      *
      * snap opts (road strict only)
      *
