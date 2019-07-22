@@ -206,6 +206,7 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
 
 void ChangesetWriter::_parseBuffer()
 {
+  // TODO: get rid of changeset buffer
   LOG_DEBUG("Parsing changeset buffer...");
 
   const double changesetBuffer = ConfigOptions().getChangesetBuffer();

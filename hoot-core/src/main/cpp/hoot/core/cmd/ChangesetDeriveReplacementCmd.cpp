@@ -110,14 +110,15 @@ public:
       if (args.size() != 6)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(QString("%1 with SQL output takes five parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with SQL output takes six parameters.").arg(getName()));
       }
       osmApiDbUrl = args[5].trimmed();
     }
 
     _setConfigOpts(lenientBounds, critClassName);
 
-    // load each dataset separately and crop to aoi
+    // load each dataset separately and crop to the aoi
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
@@ -148,7 +149,7 @@ public:
     refMap->visitRw(elementsRemover);
     secMap->visitRw(elementsRemover);
 
-    // generate an alpha shape based on the cropped secondary map
+    // generate a cutter shape based on the cropped secondary map
 
     OsmMapPtr cutterShapeMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
 
@@ -161,19 +162,19 @@ public:
     CookieCutter(false, 0.0).cut(cutterShapeMap, refMap);
     OsmMapPtr cookieCutMap = refMap;
 
-    // conflate the cookie cut map with the cropped sec map
+    // conflate the cookie cut ref map with the cropped sec map
 
     // TODO: this won't work
     //conf().set(ConfigOptions::getConflateUseDataSourceIds1Key(), "true");
     //conf().set(ConfigOptions::getConflateUseDataSourceIds2Key(), "false");
     //IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
+    // TODO: need to add node hashes
     cookieCutMap->append(secMap);
     OsmMapPtr conflateMap = cookieCutMap;
-    UnifyingConflator conflator;
-    conflator.apply(conflateMap);
+    UnifyingConflator().apply(conflateMap);
 
-    // Snap secondary features back to reference features if we're dealing with linear features and
-    // not a lenient bounds requirement.
+    // dnap secondary features back to reference features if dealing with linear features and a
+    // non-lenient bounds
 
     if (!lenientBounds && _isLinearCrit(critClassName))
     {
@@ -207,7 +208,9 @@ public:
     conf().set(
       ConfigOptions::getInBoundsCriterionStrictKey(),
       _inBoundsStrict);
-    ChangesetWriter(printStats, osmApiDbUrl).write(output, input1, input2);
+    LOG_VART(printStats);
+    // TODO: this won't work
+    //ChangesetWriter(printStats, osmApiDbUrl).write(output, input1, input2);
 
     if (writeBoundsFile)
     {
@@ -256,8 +259,7 @@ private:
       critClassName.contains("BuildingCriterion");
   }
 
-  void _setConfigOpts(const bool lenientBounds, const QString& critClassName/*,
-                      const QString& boundsStr*/)
+  void _setConfigOpts(const bool lenientBounds, const QString& critClassName)
   {
     // changeset and db opts should have been set when calling this command
 
