@@ -47,15 +47,11 @@ public:
   virtual std::shared_ptr<IdGenerator> clone() const = 0;
 
   virtual long createNodeId() = 0;
-
   virtual long createRelationId() = 0;
-
   virtual long createWayId() = 0;
 
   virtual void ensureNodeBounds(long nid) = 0;
-
   virtual void ensureRelationBounds(long rid) = 0;
-
   virtual void ensureWayBounds(long wid) = 0;
 
   static std::shared_ptr<IdGenerator> getInstance();

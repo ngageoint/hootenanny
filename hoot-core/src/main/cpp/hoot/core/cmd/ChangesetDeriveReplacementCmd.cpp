@@ -171,10 +171,11 @@ public:
     // TODO: need to add node hashes
     cookieCutMap->append(secMap);
     OsmMapPtr conflateMap = cookieCutMap;
+    // TODO: restrict conflate matchers to only those relevant based on the filter?
     UnifyingConflator().apply(conflateMap);
 
-    // dnap secondary features back to reference features if dealing with linear features and a
-    // non-lenient bounds
+    // snap secondary features back to reference features if dealing with linear features and a
+    // non-lenient bounds where ref features may have been cut along it
 
     if (!lenientBounds && _isLinearCrit(critClassName))
     {

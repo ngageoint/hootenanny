@@ -46,15 +46,11 @@ public:
   virtual IdGeneratorPtr clone() const;
 
   virtual long createNodeId() { return --_nodeId; }
-
   virtual long createRelationId() { return --_relationId; }
-
   virtual long createWayId() { return --_wayId; }
 
   void ensureNodeBounds(long nid) { _nodeId = std::min(nid, _nodeId); }
-
   void ensureRelationBounds(long rid) { _relationId = std::min(rid, _relationId); }
-
   void ensureWayBounds(long wid) { _wayId = std::min(wid, _wayId); }
 
   void reset();
