@@ -125,8 +125,8 @@ public class ElementResourceTest extends OSMResourceTestAbstract {
         if (isFull) {
             assertEquals(4, XPathAPI.selectNodeList(responseData, "//osm/node").getLength());
             assertEquals(2, XPathAPI.selectNodeList(responseData, "//osm/way").getLength());
-            assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
         }
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/relation").getLength());
 
         OSMTestUtils.verifyRelation(responseData, 1, id, changesetId, relationMembers, id.contains("_"));
 
