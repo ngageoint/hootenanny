@@ -33,6 +33,12 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
+#include <hoot/core/conflate/CookieCutter.h>
+#include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
 
 namespace hoot
 {
@@ -83,18 +89,20 @@ public:
       throw HootException(QString("%1 takes five or six parameters.").arg(getName()));
     }
 
-    const QString input1 = args[0];
-    const QString input2 = args[1];
-    const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(args[2]);
+    const QString input1 = args[0].trimmed();
+    const QString input2 = args[1].trimmed();
+    const QString boundsStr = args[2].trimmed();
+    const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
+    const QString critClassName = args[3].trimmed();
     std::shared_ptr<ConflatableElementCriterion> featureCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(
         std::shared_ptr<ElementCriterion>(
-          Factory::getInstance().constructObject<ElementCriterion>(args[3].trimmed())));
+          Factory::getInstance().constructObject<ElementCriterion>(critClassName)));
     if (!featureCrit)
     {
       throw IllegalArgumentException("TODO");
     }
-    const QString output = args[4];
+    const QString output = args[4].trimmed();
     // TODO: Is there any way to get rid of this param?
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
@@ -104,193 +112,102 @@ public:
         std::cout << getHelp() << std::endl << std::endl;
         throw HootException(QString("%1 with SQL output takes five parameters.").arg(getName()));
       }
-      osmApiDbUrl = args[5];
+      osmApiDbUrl = args[5].trimmed();
     }
 
-    /*
-     * ALL
-     *
-     * general opts
-     *
-     * changeset.xml.writer.add.timestamp=false
-     * reader.add.source.datetime=false
-     * writer.include.circular.error.tags=false
-     *
-     * db opts
-     *
-     * changeset.user.id=1
-     *
-     * crop and prune opts
-     *
-     * reader.use.data.source.ids=true
-     * convert.ops=hoot::RemoveElementsVisitor
-     * convert.bounding.box=$AOI
-     * remove.elements.visitor.recursive=true
-     * element.criterion.negate=true
-     *
-     * cookie cut opts
-     *
-     * reader.use.data.source.ids=true
-     *
-     * conflate opts
-     *
-     * conflate.use.data.source.ids.1=true
-     * conflate.use.data.source.ids.2=false
-     *
-     * changeset opts
-     *
-     * changeset.user.id=1
-     * convert.bounding.box=$AOI
-     *
-     * BUILDING
-     *
-     * crop and prune opts
-     *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=true
-     * convert.bounding.box.keep.only.features.inside.bounds=false
-     * remove.elements.visitor.element.criteria=hoot::BuildingCriterion
-     *
-     * cookie cut opts
-     *
-     * crop.keep.entire.features.crossing.bounds=true
-     * crop.keep.only.features.inside.bounds=false
-     *
-     * changeset opts
-     *
-     * changeset.reference.keep.entire.features.crossing.bounds=true
-     * changeset.secondary.keep.entire.features.crossing.bounds=true
-     * changeset.reference.keep.only.features.inside.bounds=false
-     * changeset.secondary.keep.only.features.inside.bounds=false
-     * changeset.allow.deleting.reference.features.outside.bounds=true
-     * in.bounds.criterion.strict=false
-     *
-     * BUILDING STRICT
-     *
-     * crop and prune opts
-     *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=true (ref)
-     * convert.bounding.box.keep.only.features.inside.bounds=false (ref)
-     * convert.bounding.box.keep.entire.features.crossing.bounds=false  (sec)
-     * convert.bounding.box.keep.only.features.inside.bounds=true (sec)
-     * remove.elements.visitor.element.criteria=hoot::BuildingCriterion
-     *
-     * cookie cut opts
-     *
-     * crop.keep.entire.features.crossing.bounds=true
-     * crop.keep.only.features.inside.bounds=false
-     *
-     * changeset opts
-     *
-     * changeset.reference.keep.entire.features.crossing.bounds=true
-     * changeset.secondary.keep.entire.features.crossing.bounds=false
-     * changeset.reference.keep.only.features.inside.bounds=false
-     * changeset.secondary.keep.only.features.inside.bounds=true
-     * changeset.allow.deleting.reference.features.outside.bounds=false
-     * in.bounds.criterion.strict=true
-     *
-     * ROAD
-     *
-     * crop and prune opts
-     *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=true
-     * convert.bounding.box.keep.only.features.inside.bounds=false
-     * remove.elements.visitor.element.criteria=hoot::HighwayCriterion
-     *
-     * cookie cut opts
-     *
-     * crop.keep.entire.features.crossing.bounds=false
-     * crop.keep.only.features.inside.bounds=false
-     *
-     * changeset opts
-     *
-     * changeset.reference.keep.entire.features.crossing.bounds=true
-     * changeset.secondary.keep.entire.features.crossing.bounds=true
-     * changeset.reference.keep.only.features.inside.bounds=false
-     * changeset.secondary.keep.only.features.inside.bounds=false
-     * changeset.allow.deleting.reference.features.outside.bounds=true
-     * in.bounds.criterion.strict=false
-     *
-     * ROAD STRICT
-     *
-     * crop and prune opts
-     *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=true (ref)
-     * convert.bounding.box.keep.entire.features.crossing.bounds=false (sec)
-     * convert.bounding.box.keep.only.features.inside.bounds=false
-     * remove.elements.visitor.element.criteria=hoot::HighwayCriterion
-     *
-     * cookie cut opts
-     *
-     * crop.keep.entire.features.crossing.bounds=false
-     * crop.keep.only.features.inside.bounds=false
-     *
-     * snap opts (road strict only)
-     *
-     * way.joiner=hoot::ReplacementSnappedWayJoiner
-     * convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp
-     * snap.unconnected.ways.snap.to.way.status=Input1
-     * snap.unconnected.ways.snap.way.status=Input2;Conflated
-     * snap.unconnected.ways.existing.way.node.tolerance=45.0
-     * snap.unconnected.ways.snap.tolerance=45.0
-     *
-     * changeset opts
-     *
-     * changeset.reference.keep.entire.features.crossing.bounds=true
-     * changeset.secondary.keep.entire.features.crossing.bounds=true
-     * changeset.reference.keep.only.features.inside.bounds=false
-     * changeset.secondary.keep.only.features.inside.bounds=false
-     * changeset.allow.deleting.reference.features.outside.bounds=false
-     * in.bounds.criterion.strict=false
-     *
-     * POI STRICT
-     *
-     * crop and prune opts
-     *
-     * convert.bounding.box.keep.entire.features.crossing.bounds=false
-     * crop.keep.only.features.inside.bounds=false
-     * remove.elements.visitor.element.criteria=hoot::PoiCriterion
-     *
-     * cookie cut opts
-     *
-     * crop.keep.entire.features.crossing.bounds=false
-     * crop.keep.only.features.inside.bounds=false
-     *
-     * changeset opts
-     *
-     * changeset.reference.keep.entire.features.crossing.bounds=false
-     * changeset.secondary.keep.entire.features.crossing.bounds=false
-     * changeset.reference.keep.only.features.inside.bounds=false
-     * changeset.secondary.keep.only.features.inside.bounds=true
-     * changeset.allow.deleting.reference.features.outside.bounds=true
-     * in.bounds.criterion.strict=false
-     */
+    _setConfigOpts(lenientBounds, critClassName);
 
-    // crop
+    // load each dataset separately and crop to aoi
 
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
 
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+      _convertRefKeepEntireCrossingBounds);
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+      _convertRefKeepOnlyInsideBounds);
+    OsmMapPtr refMap(new OsmMap());
+    IoUtils::loadMap(refMap, input1, true, Status::Unknown1);
 
-    // prune
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+      _convertSecKeepEntireCrossingBounds);
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+      _convertSecKeepOnlyInsideBounds);
+    OsmMapPtr secMap(new OsmMap());
+    IoUtils::loadMap(secMap, input2, true, Status::Unknown2);
 
+    // prune down to just the feature types specified by the filter
 
+    RemoveElementsVisitor elementsRemover(true);
+    elementsRemover.addCriterion(featureCrit);
+    elementsRemover.setRecursive(true);
+    refMap->visitRw(elementsRemover);
+    secMap->visitRw(elementsRemover);
 
-    // cookie cut
+    // generate an alpha shape based on the cropped secondary map
 
+    OsmMapPtr cutterShapeMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
 
+    // cookie cut the shape of the cutter shape map out of the cropped ref map
 
-    // conflate
+    conf().set(
+      ConfigOptions::getCropKeepEntireFeaturesCrossingBoundsKey(), _cropKeepEntireCrossingBounds);
+    conf().set(
+      ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cropKeepOnlyInsideBounds);
+    CookieCutter(false, 0.0).cut(cutterShapeMap, refMap);
+    OsmMapPtr cookieCutMap = refMap;
 
+    // conflate the cookie cut map with the cropped sec map
 
+    // TODO: this won't work
+    //conf().set(ConfigOptions::getConflateUseDataSourceIds1Key(), "true");
+    //conf().set(ConfigOptions::getConflateUseDataSourceIds2Key(), "false");
+    //IoUtils::loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
+    cookieCutMap->append(secMap);
+    OsmMapPtr conflateMap = cookieCutMap;
+    UnifyingConflator conflator;
+    conflator.apply(conflateMap);
 
-    // snap (if necessary)
+    // Snap secondary features back to reference features if we're dealing with linear features and
+    // not a lenient bounds requirement.
 
+    if (!lenientBounds && _isLinearCrit(critClassName))
+    {
+      UnconnectedWaySnapper snapper;
+      snapper.setConfiguration(conf());
+      snapper.setSnapToWayStatus("Input1");
+      snapper.setSnapWayStatus("Input2;Conflated");
+      snapper.setWayNodeToSnapToCriterionClassName(critClassName);
+      snapper.setWayToSnapCriterionClassName(critClassName);
+      snapper.setWayToSnapToCriterionClassName(critClassName);
+      snapper.apply(conflateMap);
+    }
 
+    // derive a changeset that replaces ref features with secondary features
 
-    // derive changeset
-
-    LOG_VART(lenientBounds);
+    conf().set(
+      ConfigOptions::getChangesetReferenceKeepEntireFeaturesCrossingBoundsKey(),
+      _changesetRefKeepEntireCrossingBounds);
+    conf().set(
+      ConfigOptions::getChangesetReferenceKeepOnlyFeaturesInsideBoundsKey(),
+      _changesetRefKeepOnlyInsideBounds);
+    conf().set(
+      ConfigOptions::getChangesetSecondaryKeepEntireFeaturesCrossingBoundsKey(),
+      _changesetSecKeepEntireCrossingBounds);
+    conf().set(
+      ConfigOptions::getChangesetSecondaryKeepOnlyFeaturesInsideBoundsKey(),
+      _changesetSecKeepOnlyInsideBounds);
+    conf().set(
+      ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+      _changesetAllowDeletingRefOutsideBounds);
+    conf().set(
+      ConfigOptions::getInBoundsCriterionStrictKey(),
+      _inBoundsStrict);
     ChangesetWriter(printStats, osmApiDbUrl).write(output, input1, input2);
-
-
 
     if (writeBoundsFile)
     {
@@ -303,14 +220,27 @@ public:
 
 private:
 
-  // hardcode these for now
+  bool _convertRefKeepEntireCrossingBounds;
+  bool _convertRefKeepOnlyInsideBounds;
+  bool _convertSecKeepEntireCrossingBounds;
+  bool _convertSecKeepOnlyInsideBounds;
+  bool _cropKeepEntireCrossingBounds;
+  bool _cropKeepOnlyInsideBounds;
+  bool _changesetRefKeepEntireCrossingBounds;
+  bool _changesetSecKeepEntireCrossingBounds;
+  bool _changesetRefKeepOnlyInsideBounds;
+  bool _changesetSecKeepOnlyInsideBounds;
+  bool _changesetAllowDeletingRefOutsideBounds;
+  bool _inBoundsStrict;
 
-  bool isPointCrit(const QString& critClassName) const
+  // hardcode these for now; only one of the following should return true for any input
+
+  bool _isPointCrit(const QString& critClassName) const
   {
     return critClassName.contains("PoiCriterion");
   }
 
-  bool isLinearCrit(const QString& critClassName) const
+  bool _isLinearCrit(const QString& critClassName) const
   {
     return
       critClassName.contains("HighwayCriterion") ||
@@ -319,11 +249,113 @@ private:
       critClassName.contains("RailwayCriterion");
   }
 
-  bool isPolyCrit(const QString& critClassName) const
+  bool _isPolyCrit(const QString& critClassName) const
   {
     return
       critClassName.contains("AreaCriterion") ||
       critClassName.contains("BuildingCriterion");
+  }
+
+  void _setConfigOpts(const bool lenientBounds, const QString& critClassName/*,
+                      const QString& boundsStr*/)
+  {
+    // changeset and db opts should have been set when calling this command
+
+    // global opts
+
+    conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), "false");
+    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), "false");
+    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), "false");
+
+    // dataset specific opts
+
+    // only one of these should ever be true
+    const bool replacingPoints = _isPointCrit(critClassName);
+    const bool replacingLines = _isLinearCrit(critClassName);
+    const bool replacingPolys = _isPolyCrit(critClassName);
+
+    // TODO: Hopefully, these three sets of bounds options can be collapsed (??).
+
+    _convertRefKeepOnlyInsideBounds = false;
+    _cropKeepOnlyInsideBounds = false;
+    _changesetRefKeepOnlyInsideBounds = false;
+
+    if (replacingPoints)
+    {
+      if (lenientBounds)
+      {
+        LOG_WARN("--lenient-bounds option ignored with point datasets.");
+      }
+
+      _convertRefKeepEntireCrossingBounds = false;
+      _convertSecKeepEntireCrossingBounds = false;
+      _convertSecKeepOnlyInsideBounds = false;
+      _cropKeepEntireCrossingBounds = false;
+      _changesetRefKeepEntireCrossingBounds = false;
+      _changesetSecKeepEntireCrossingBounds = false;
+      _changesetSecKeepOnlyInsideBounds = true;
+      _changesetAllowDeletingRefOutsideBounds = true;
+      _inBoundsStrict = false;
+    }
+    else if (replacingLines)
+    {
+      if (lenientBounds)
+      {
+        _convertRefKeepEntireCrossingBounds = true;
+        _convertSecKeepEntireCrossingBounds = true;
+        _convertSecKeepOnlyInsideBounds = false;
+        _cropKeepEntireCrossingBounds = false;
+        _changesetRefKeepEntireCrossingBounds = true;
+        _changesetSecKeepEntireCrossingBounds = true;
+        _changesetSecKeepOnlyInsideBounds = false;
+        _changesetAllowDeletingRefOutsideBounds = true;
+        _inBoundsStrict = false;
+      }
+      else
+      {
+        _convertRefKeepEntireCrossingBounds = true;
+        _convertSecKeepEntireCrossingBounds = false;
+        _convertSecKeepOnlyInsideBounds = false;
+        _cropKeepEntireCrossingBounds = false;
+        _changesetRefKeepEntireCrossingBounds = true;
+        _changesetSecKeepEntireCrossingBounds = true;
+        _changesetSecKeepOnlyInsideBounds = false;
+        _changesetAllowDeletingRefOutsideBounds = false;
+        _inBoundsStrict = false;
+      }
+    }
+    else if (replacingPolys)
+    {
+      if (lenientBounds)
+      {
+        _convertRefKeepEntireCrossingBounds = true;
+        _convertSecKeepEntireCrossingBounds = true;
+        _convertSecKeepOnlyInsideBounds = false;
+        _cropKeepEntireCrossingBounds = true;
+        _changesetRefKeepEntireCrossingBounds = true;
+        _changesetSecKeepEntireCrossingBounds = true;
+        _changesetSecKeepOnlyInsideBounds = false;
+        _changesetAllowDeletingRefOutsideBounds = true;
+        _inBoundsStrict = false;
+      }
+      else
+      {
+        _convertRefKeepEntireCrossingBounds = true;
+        _convertSecKeepEntireCrossingBounds = false;
+        _convertSecKeepOnlyInsideBounds = true;
+        _cropKeepEntireCrossingBounds = true;
+        _changesetRefKeepEntireCrossingBounds = true;
+        _changesetSecKeepEntireCrossingBounds = false;
+        _changesetSecKeepOnlyInsideBounds = true;
+        _changesetAllowDeletingRefOutsideBounds = false;
+        _inBoundsStrict = true;
+      }
+    }
+    else
+    {
+      // shouldn't ever get here
+      throw IllegalArgumentException("TODO");
+    }
   }
 };
 
