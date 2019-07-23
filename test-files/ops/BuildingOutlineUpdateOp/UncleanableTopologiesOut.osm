@@ -474,8 +474,6 @@
         <nd ref="-12"/>
         <nd ref="-2"/>
         <tag k="area" v="yes"/>
-        <tag k="name" v="Patamea Primary School"/>
-        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1777,7 +1775,6 @@
         <member type="way" ref="-3" role="outer"/>
         <member type="way" ref="-2" role="outer"/>
         <member type="way" ref="-1" role="outer"/>
-        <member type="way" ref="-119" role="outline"/>
         <tag k="source:name" v="quickbird"/>
         <tag k="source" v="mgcp:sw_pacific_building_polygons"/>
         <tag k="amenity" v="school"/>

@@ -121,8 +121,6 @@ sudo apt-get -q -y install \
  postgresql-9.5 \
  postgresql-client-9.5 \
  postgresql-contrib-9.5 \
- postgresql-9.5-postgis-2.3 \
- postgresql-9.5-postgis-scripts \
  postgresql-client-9.5 \
  protobuf-compiler \
  python \
@@ -365,10 +363,7 @@ if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
     sudo -u postgres createuser --superuser hoot
     sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
     sudo -u postgres createdb hoot --owner=hoot
-    sudo -u postgres createdb wfsstoredb --owner=hoot
     sudo -u postgres psql -d hoot -c 'create extension hstore;'
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
 fi
 
 if ! grep -i --quiet HOOT /etc/postgresql/9.5/main/postgresql.conf; then

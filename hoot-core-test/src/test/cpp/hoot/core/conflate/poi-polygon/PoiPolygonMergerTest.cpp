@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -45,6 +46,8 @@ namespace hoot
 
 /**
  * See "Hootenanny - POI to Building" power point for a description of the tests.
+ *
+ * PoiPolygonMerger also gets a lot of testing in case tests.
  */
 class PoiPolygonMergerTest : public HootTestFixture
 {
@@ -89,6 +92,7 @@ public:
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
+      uut.setTagMergerClass(QString::fromStdString(OverwriteTag2Merger::className()));
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
@@ -111,6 +115,7 @@ public:
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
+      uut.setTagMergerClass(QString::fromStdString(OverwriteTag2Merger::className()));
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 

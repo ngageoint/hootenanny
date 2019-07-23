@@ -68,6 +68,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     tagsToBeOverwritten = t2;
   }
 
+  // handle name and text tags in the standard fashion
   TagComparator::getInstance().mergeNames(tagsToOverwriteWith, tagsToBeOverwritten, result);
   TagComparator::getInstance().mergeText(tagsToOverwriteWith, tagsToBeOverwritten, result);
   LOG_TRACE("Tags after name/text merging: " << result);
@@ -83,8 +84,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   }
   LOG_TRACE("Tags after alt_types handling: " << result);
 
-  //combine the rest of the tags together; if two tags with the same key are found, use the most
-  //specific one or use both if they aren't related in any way
+  // Combine the rest of the tags together. If two tags with the same key are found, use the most
+  // specific one. Keep both if they aren't related in any way.
   OsmSchema& schema = OsmSchema::getInstance();
   for (Tags::ConstIterator it = tagsToOverwriteWith.constBegin();
        it != tagsToOverwriteWith.constEnd(); ++it)
@@ -93,12 +94,14 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     LOG_VART(it.value());
 
     bool skippingTagPreservation = false;
+    // ignore tags that we're specified to be explicitly skipped
     if (_skipTagKeys.find(it.key()) != _skipTagKeys.end())
     {
       LOG_TRACE(
         "Explicitly skipping type handling for tag: " << it.key() << "=" <<  it.value() << "...");
       skippingTagPreservation = true;
     }
+    // ignore metadata tags
     else if (schema.isMetaData(it.key(), it.value()))
     {
       LOG_TRACE(
@@ -119,18 +122,20 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
     if (!skippingTagPreservation && !tagsToBeOverwritten[it.key()].trimmed().isEmpty())
     {
       LOG_VART(tagsToBeOverwritten[it.key()]);
-      //if one is more specific than the other, add it, but then remove both tags so we don't
-      //try to add them again
-      if (schema.isAncestor(
-            it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
+      // If one is more specific than the other, add it, but then remove both tags so we don't
+      // try to add them again.
+      //if (schema.isAncestor(
+            //it.key() % "=" % tagsToBeOverwritten[it.key()], it.key() % "=" % it.value()))
+      if (_isAncestor(it.key(), tagsToBeOverwritten[it.key()], it.key(), it.value()))
       {
         LOG_TRACE(
           it.key() % "=" % tagsToBeOverwritten[it.key()] << " is more specific than " <<
           it.key() % "=" % it.value() << ".  Using more specific tag.");
         result[it.key()] = tagsToBeOverwritten[it.key()];
       }
-      else if (schema.isAncestor(
-                 it.key() % "=" % it.key(), it.key() % "=" % tagsToBeOverwritten[it.value()]))
+      //else if (schema.isAncestor(
+                 //it.key() % "=" % it.value(), it.key() % "=" % tagsToBeOverwritten[it.key()]))
+      else if (_isAncestor(it.key(), it.value(), it.key(), tagsToBeOverwritten[it.key()]))
       {
         LOG_TRACE(
           it.key() % "=" % it.value() << " is more specific than " <<
@@ -139,10 +144,17 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
       }
       else if (it.key() != ALT_TYPES_TAG_KEY)
       {
-        //arbitrarily use first one and add second to an alt_types field
-        LOG_TRACE(
-          "Both tag sets contain same type: " << it.key() <<
-          " but neither is more specific.  Keeping both...");
+        if (tagsToBeOverwritten[it.key()] == tagsToOverwriteWith[it.key()])
+        {
+          LOG_TRACE("Merging duplicate tag: " << it.key() << "=" << it.value() << "...");
+        }
+        else
+        {
+          // arbitrarily use first tag and add the second to an alt_types field
+          LOG_TRACE(
+            "Both tag sets contain same type: " << it.key() <<
+            " but neither is more specific.  Keeping both...");
+        }
         result[it.key()] = it.value();
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
         if (!result[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
@@ -161,6 +173,8 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
         LOG_VART(result[ALT_TYPES_TAG_KEY]);
       }
     }
+    // None of the special cases for skipping or type merging apply to this tag, so let's just add
+    // it as is.
     else if (!it.value().isEmpty())
     {
       LOG_TRACE("Adding tag: " << it.key() << "=" << it.value() << "...");
@@ -169,6 +183,7 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   }
   LOG_TRACE("Tags after type handling: " << result);
 
+  // handle all the remaining tags that don't conflict
   for (Tags::ConstIterator it = tagsToBeOverwritten.constBegin();
        it != tagsToBeOverwritten.constEnd(); ++it)
   {
@@ -187,6 +202,26 @@ Tags PreserveTypesTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementTy
   LOG_TRACE("Tags after removing redundant (final): " << result);
 
   return result;
+}
+
+bool PreserveTypesTagMerger::_isAncestor(const QString& childKey, const QString& childVal,
+                                         const QString& parentKey, const QString& parentVal) const
+{
+  // It seems like OsmSchema::isAncestor doesn't handle generic type tags correctly, e.g.
+  // building=yes. Its also possible that it does handle them correctly and our schema is not
+  // correct somehow. Until that's determined, I'm adding this custom logic to make sure that if,
+  // for example, building=yes is compared to building=mosque we always end up with the more
+  // specific building=mosque in the output.
+
+  // If the tags have the same key, the parent is generic, and the child is not, the parent is
+  // an ancestor of the child. not completely sure this is covering all possible cases yet...
+  if (childKey == parentKey && (parentVal == "yes" || parentVal == "true") && childVal != "yes" &&
+      childVal != "true")
+  {
+    return true;
+  }
+  return
+    OsmSchema::getInstance().isAncestor(childKey % "=" % childVal, parentKey % "=" % parentVal);
 }
 
 void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const

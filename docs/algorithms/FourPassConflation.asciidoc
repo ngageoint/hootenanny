@@ -2,7 +2,7 @@
 [[ExplFourPassConflation]]
 == Four Pass Conflation
 
-NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been 
+NOTE: This documents Hootenanny conflation using Hadoop, which is no longer supported (supported up to v0.2.38), and has been
 left here for references purposes only.
 
 All Hootenanny desktop conflation operations assume that the operation can be completed within RAM. Even if all the data can be loaded into RAM, the desktop version of Hootenanny runs in a single thread. With this constraint, we estimate it would take approximately 2 months to conflate the global road network, or 19GB of compressed input data. To alleviate these issues, we have implemented the conflation operations to execute within the Hadoop environment. This approach works on a single desktop running in pseudo-distributed mode to roughly a 1000 core cluster. We have tested it with clusters as large as 160 cores.
@@ -18,7 +18,7 @@ Before processing can begin, both inputs must be translated and encoded as +.osm
 [[DataProcesingSteps]]
 .Data Processing Steps
 
-image::algorithms/images/image047.png[]
+image::images/image047.png[]
 
 === File Format
 
@@ -27,7 +27,7 @@ The +.osm.pbf+ file format (OpenStreetMap) is a binary format based on Google Pr
 [[AnatomyOSM-PBF]]
 .Anatomy of an OSM.pbf File
 
-image::algorithms/images/image048.png[]
+image::images/image048.png[]
 
 Hadoop generally breaks large files into blocks of 64MB for storage. Each of these blocks is stored on multiple nodes within the cluster. While the ~16MB blobs don't fall precisely on the 64MB block boundary, it is close enough to help improve node locality. The independent nature of the blobs allows a custom input format to be defined for Hadoop that enables easy splitting of the job around block boundaries. While this efficiency is convenient, CPU is by far the largest bottleneck, not IO.
 
@@ -70,7 +70,7 @@ Four-pass conflation is a process to create seamless conflated data over arbitra
 [[NotionalTiling]]
 .Notional Tiling Example
 
-image::algorithms/images/image049.png[]
+image::images/image049.png[]
 
 There are several steps involved in four pass conflation:
 
@@ -102,9 +102,9 @@ The following table gives rough benchmarks for conflation:
 .Conflation Benchmarks
 [options="header"]
 |======
-| *Test Name* | *Local Conflation* | *Hadoop Conflation* | *Input Size (+.osm.pbf+)* | *Cluster* 
-| Local Test | 220min | 45min | 46MB | Pseudo-distributed 8 core (circa 2012 hardware) 
-| Global Test | - | 15hrs | 19GB | 20 node X 8 cores (circa 2010 hardware) 
+| *Test Name* | *Local Conflation* | *Hadoop Conflation* | *Input Size (+.osm.pbf+)* | *Cluster*
+| Local Test | 220min | 45min | 46MB | Pseudo-distributed 8 core (circa 2012 hardware)
+| Global Test | - | 15hrs | 19GB | 20 node X 8 cores (circa 2010 hardware)
 |======
 
 The _Local Test_ was run between internal data and OSM data for Iraq. While the Four Pass Conflation technique (<<ExplFourPassConflation>>) increases I/O and overall work performed, a substantial speed improvement is visible just by running on eight cores instead of a single thread.

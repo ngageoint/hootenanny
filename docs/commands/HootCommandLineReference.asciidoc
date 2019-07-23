@@ -15,7 +15,7 @@ parenthesis around +operation+ show that the argument is required.
 
 +[args...]+ shows that there are zero or more arguments to the operation. The
 brackets around +args...+ show that it is optional. This standard will be used
-in the documentation when referring to each 
+in the documentation when referring to each
 
 If at any time you need simple command line help just run +hoot+ without any
 arguments and a short help screen will be displayed.

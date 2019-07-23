@@ -104,7 +104,7 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
         " elements. Found " << conflicts.size() << " match conflicts.");
     }
   }
-  LOG_INFO("Found " << conflicts.size() << " match conflicts.");
+  LOG_DEBUG("Found " << conflicts.size() << " match conflicts.");
 
   calculateSubsetConflicts(matches, conflicts, matchSet);
 }

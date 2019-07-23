@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateCaseTest.h"
 
@@ -46,8 +46,6 @@ AbstractTest(d, confs)
 
 void ConflateCaseTest::_runConflateCmd()
 {
-  ConflateCmd cmd;
-
   if (QFileInfo(_d, "README.txt").exists() == false)
   {
     LOG_WARN("Please create a meaningful README.txt in " + _d.path());
@@ -65,6 +63,9 @@ void ConflateCaseTest::_runConflateCmd()
       "Unable to find Input2.osm in conflate case: " + _d.absolutePath());
   }
 
+  // This is also set in Testing.conf.
+  conf().set("conflate.tag.disable.value.truncation", "true");
+
   QString testOutput = _d.absoluteFilePath("Output.osm");
 
   QStringList args;
@@ -74,7 +75,7 @@ void ConflateCaseTest::_runConflateCmd()
   int result = -1;
   try
   {
-    result = cmd.runSimple(args);
+    result = ConflateCmd().runSimple(args);
   }
   catch (const HootException& e)
   {

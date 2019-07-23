@@ -37,8 +37,9 @@
 namespace hoot
 {
 
-ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec, bool hideDisableTests)
-  : TestSuite(dir.toStdString())
+ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec,
+                                 bool hideDisableTests) :
+TestSuite(dir.toStdString())
 {
   QDir d(dir);
   QStringList files = d.entryList(QDir::Files);

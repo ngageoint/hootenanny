@@ -12,10 +12,10 @@ The following sections describe how we evaluate the results using three differen
 
 The location and completeness score determines how closely two sets of geometries match. It is a combined score that drops if one data set is more complete than the other or if the geometries have significant differences in location or shape. We refer to the method as the _Shuey Method,_ as it was inspired by DigitalGlobe Senior Geospatial Scientist Chad Shuey. The routine is fairly resilient to minor perturbations but does not detect more complex problems such as missing intersections or one-way streets.  The images in <<ExplLocationCompletenessScore>> show some of the intermediate results for a simple example.
 
-[[ExplLocationCompletenessScore]]  
+[[ExplLocationCompletenessScore]]
 .Intermediate Steps of Location & Completeness Score
 
-image::algorithms/images/image001a.png[]
+image::images/image001a.png[]
 
 The steps involved are as follows:
 
@@ -47,7 +47,7 @@ The routing score takes the following complexities into consideration:
 [[IntRoutingScore]]
 .Intermediate steps of the Routing Score
 
-image::algorithms/images/image004a.png[]
+image::images/image004a.png[]
 
 As shown in <<IntRoutingScore>>, the cost surfaces (Time Surface 1 & Time Surface 2) are calculated by doing the following:
 
@@ -93,7 +93,7 @@ The _Easy Roads_ test scenario was picked for its good geometry and straightforw
 [[EasyRoads]]
 .Easy Roads Rendering
 
-image::algorithms/images/image007.png[]
+image::images/image007.png[]
 
 The scores in the graph (<<EasyRoadsResults>>) reflect the simplicity of the data, with the UFD data scores effectively the same as the Conflated data. The OSM data is strikingly low in this case due to missing road data. Overall, the Conflated data is moderately higher than all the manual scores.
 
@@ -102,7 +102,7 @@ The conflation runtime for this test was approximately 2 seconds. This runtime i
 [[EasyRoadsResults]]
 .Easy Roads Results
 
-image::algorithms/images/image009.png[]
+image::images/image009.png[]
 
 ==== Spaghetti Bowl
 
@@ -110,14 +110,14 @@ The _Spaghetti Bowl_ test scenario is from a city with left hand driving rules a
 
 .OSM Rendering of the Spaghetti Bowl Region
 
-image::algorithms/images/image010.jpg[scale="75"]
+image::images/image010.jpg[scale="75"]
 
 One region toward the middle of the map contains eight roads occupying a 20 meter radius. This includes two one-way overpasses, two one-way tunnels and four surface roads. The data also includes many residential roads, bridges, complex intersections and foot paths.
 
 [[SpaghettiResults]]
 .Spaghetti Bowl Results
 
-image::algorithms/images/image012.png[]
+image::images/image012.png[]
 
 <<SpaghettiResults>> shows the scores for Attribute, Route, Location and Overall when comparing the two Manual data sets to each other and then to the source data sets (OSM & UFD), and ultimately to the conflated results from Hootenanny.
  +
@@ -152,13 +152,13 @@ Hootenanny only supports pairwise conflation. To accommodate this three-way test
 [[CityEdgeRender]]
 .City Edge Rendering
 
-image::algorithms/images/image013.png[]
+image::images/image013.png[]
 
 
 [[CityEdgeResults]]
 .City Edge Results
 
-image::algorithms/images/image015.png[]
+image::images/image015.png[]
 
 <<CityEdgeResults>> shows the manually conflated data compared to the inputs, the intermediate step of FFD + UFD, and the final result.
  +
@@ -190,17 +190,17 @@ However, the performance improvement in terms of time and cost is dramatic. All 
 
 [[BadConflateResult]]
 .Example of aesthetically unpleasing conflation. Bing aerial imagery basemap service shown in background.
-image::algorithms/images/image016.png[]
+image::images/image016.png[]
 
 [[ConflTimeComparison]]
 .*Conflation Time Comparisons*
 [width="75%"]
 |======
-| *Data set* | *Manual 1* | *Manual 2* | *Hootenanny* | *Speedup* 
-| *Roads Easy* | 6hrs | 6.5hrs | 2sec | 11250x 
-| *Spaghetti* | - | 29hrs | 9sec | 5800x 
-| *City Edge* | 10hrs | 9hrs | 11sec | 3109x 
-| *Iraq All* | - | - | 3hrs 40min | - 
+| *Data set* | *Manual 1* | *Manual 2* | *Hootenanny* | *Speedup*
+| *Roads Easy* | 6hrs | 6.5hrs | 2sec | 11250x
+| *Spaghetti* | - | 29hrs | 9sec | 5800x
+| *City Edge* | 10hrs | 9hrs | 11sec | 3109x
+| *Iraq All* | - | - | 3hrs 40min | -
 |======
 
 While the artifacts sometimes introduced by automated conflation can be very noticeable to the human eye, we feel that the high scores on objective metrics and the dramatic reduction in cost makes automated conflation well suited to problems that are constrained by time or money. Post-processing and semi-automated tools could be developed to enable analysts to correct these issues.  Over time the conflation logic could be refined to capture some of these cases to reduce the post-processing level of effort.  

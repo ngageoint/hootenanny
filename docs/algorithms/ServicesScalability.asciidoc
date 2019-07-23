@@ -109,7 +109,7 @@ outstanding operations after 15 minutes are terminated and are not reported.
 
 [[LoadBenchmark]]
 .Load Benchmark on 3/16/2015
-image::algorithms/images/load.png[]
+image::images/load.png[]
 
 The above graphs display the elapsed time for various operations under different
 simulated user loads. The specific tests and files used are described in
@@ -239,7 +239,7 @@ forward fixes:
   times as many sockets to use. Unfortunately the client may see
   "http://hootenanny.com:8123/" in the URL.
 * Listen on multiple IP addresses. This is similar to the solution above, but
-  the client would connect to a more pleasant. 
+  the client would connect to a more pleasant.
   "http://hoot23.hootenanny.com/"
 
 For load testing purposes we may exploit either of the above scenarios with the

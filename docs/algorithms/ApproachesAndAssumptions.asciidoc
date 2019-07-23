@@ -2,20 +2,20 @@
 
 == Approach & Assumptions
 
-Hootenanny is designed to facilitate automated and semi-automated conflation of 
-critical Foundation GEOINT features in the topographic domain, namely roads (polylines), 
-buildings (polygons), and points-of-interest (POIs) (points). While a number of 
-small tools are built into the suite for file conversion and evaluation, the main 
-function of Hootenanny is to take two input files and produce a single conflated 
-output file. 
+Hootenanny is designed to facilitate automated and semi-automated conflation of
+critical Foundation GEOINT features in the topographic domain, namely roads (polylines),
+buildings (polygons), and points-of-interest (POIs) (points). While a number of
+small tools are built into the suite for file conversion and evaluation, the main
+function of Hootenanny is to take two input files and produce a single conflated
+output file.
 
-Conflation happens at the dataset level, where the user’s workflow determines the 
-best reference dataset and source content, geometry and attributes, to transfer to 
-the output map. The input data must be normalized to allow processing and matching 
-of features and attributes from different schemas. Hootenanny internal processing 
-leverages the key value pair structure of OpenStreetMap (OSM) for improved utility 
-and applicability to broader user groups, e.g. normalized attributes can be used 
-to aid in feature matching and OSM’s free tagging system allows the map to include 
+Conflation happens at the dataset level, where the user’s workflow determines the
+best reference dataset and source content, geometry and attributes, to transfer to
+the output map. The input data must be normalized to allow processing and matching
+of features and attributes from different schemas. Hootenanny internal processing
+leverages the key value pair structure of OpenStreetMap (OSM) for improved utility
+and applicability to broader user groups, e.g. normalized attributes can be used
+to aid in feature matching and OSM’s free tagging system allows the map to include
 an unlimited number of attributes describing each feature (OpenStreetMap/Map Features, 2015).
 
 Hootenanny is designed from the ground up to properly handle topology as well as
@@ -38,16 +38,16 @@ anti-meridian problem is proposed in <<HootExplFutureWork>>.
 [[HootConflationWorkflow]]
 === Conflation Workflow
 
-The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflowDiagram>> 
-and depicts the high-level steps necessary to conflate data and generate an output 
-map in Hootenanny. It is important for the user to understand these functions as 
-each have implications on the conflated results. The squares represent a specific 
-conflation task, while the oval canisters represent a database function. The 
+The general case of the Hootenanny conflation workflow is shown in <<HootConflationWorkflowDiagram>>
+and depicts the high-level steps necessary to conflate data and generate an output
+map in Hootenanny. It is important for the user to understand these functions as
+each have implications on the conflated results. The squares represent a specific
+conflation task, while the oval canisters represent a database function. The
 workflow is described as follows:
 
 [[HootConflationWorkflowDiagram]]
 .Hootenanny Conflation Workflow.
-image::algorithms/images/hoot_general_workflow.png[]
+image::images/hoot_general_workflow.png[]
 
 [[HootExplFileConversion]]
 === File Conversion
@@ -82,13 +82,13 @@ matching of nodes that are at nearly the same location.
 When conflation is complete, a similar process can be performed to export the
 data to other formats such as File Geodatabase with the FACC or NFDD schema.
 
-NOTE: Hootenanny allows users to append new non-standard tags to OSM schema in 
+NOTE: Hootenanny allows users to append new non-standard tags to OSM schema in
 order to retain unique values from input data sets.
 
 === Conflation
 
-Hootenanny provides both a web based User Interface and command line interface 
-for performing data manipulations and conflation. While there are tunable 
+Hootenanny provides both a web based User Interface and command line interface
+for performing data manipulations and conflation. While there are tunable
 parameters that can be set, all the conflation steps are fully automated.
 
 [[ExplDataCurrency]]

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.user;
 
@@ -57,151 +57,142 @@ import hoot.services.utils.XmlUtils;
 
 public class UserResourceTest extends OSMResourceTestAbstract {
 
-	@Test
-	@Category(UnitTest.class)
-	public void testGetById() throws Exception {
-		Document responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
+    @Test
+    @Category(UnitTest.class)
+    public void testGetById() throws Exception {
+        Document responseData = target("api/0.6/user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
 
-		assertNotNull(responseData);
+        assertNotNull(responseData);
 
-		XPath xpath = XmlUtils.createXPath();
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-		assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-		assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-		assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-		assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
-		assertEquals(userId + "@hootenanny.test", xpath.evaluate("//osm/user/@email", responseData));
-		assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-		assertEquals("provider_access_key", xpath.evaluate("//osm/user/@provider_access_key", responseData));
-		assertEquals("provider_access_token", xpath.evaluate("//osm/user/@provider_access_token", responseData));
-		assertNotNull(xpath.evaluate("//osm/user/@hootservices_last_authorize", responseData));
-		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
-		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
-	}
+        XPath xpath = XmlUtils.createXPath();
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+        assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+        assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
+        assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        assertNotNull(xpath.evaluate("//osm/user/@account_last_authorized", responseData));
+        assertNotNull(xpath.evaluate("//osm/user/@account_created", responseData));
+    }
 
-	@Test
-	@Category(UnitTest.class)
-	public void testGetByName() throws Exception {
-		final String display_name = userId + "::MapUtils::insertUser()";
-		Document responseData = target("user/name/" + display_name).request(MediaType.TEXT_XML).get(Document.class);
+    @Test
+    @Category(UnitTest.class)
+    public void testGetByName() throws Exception {
+        final String display_name = userId + "::MapUtils::insertUser()";
+        Document responseData = target("api/0.6/user/name/" + display_name).request(MediaType.TEXT_XML).get(Document.class);
 
-		assertNotNull(responseData);
+        assertNotNull(responseData);
 
-		XPath xpath = XmlUtils.createXPath();
+        XPath xpath = XmlUtils.createXPath();
 
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-		assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-		assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-		assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-		assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
-		assertEquals(userId + "@hootenanny.test", xpath.evaluate("//osm/user/@email", responseData));
-		assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-		assertEquals("provider_access_key", xpath.evaluate("//osm/user/@provider_access_key", responseData));
-		assertEquals("provider_access_token", xpath.evaluate("//osm/user/@provider_access_token", responseData));
-		assertNotNull(xpath.evaluate("//osm/user/@hootservices_last_authorize", responseData));
-		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
-		assertNotNull(xpath.evaluate("//osm/user/@provider_created_at", responseData));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+        assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+        assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
+        assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+        assertNotNull(xpath.evaluate("//osm/user/@account_last_authorized", responseData));
+        assertNotNull(xpath.evaluate("//osm/user/@account_created", responseData));
 
-	}
+    }
 
-	@Test
-	@Category(UnitTest.class)
-	public void testGetWithChangesetsModified() throws Exception {
-		double originalMinLon = -78.02265434416296;
-		double originalMinLat = 38.90089748801109;
-		double originalMaxLon = -77.9224564416296;
-		double originalMaxLat = 39.00085678801109;
+    @Test
+    @Category(UnitTest.class)
+    public void testGetWithChangesetsModified() throws Exception {
+        double originalMinLon = -78.02265434416296;
+        double originalMinLat = 38.90089748801109;
+        double originalMaxLon = -77.9224564416296;
+        double originalMaxLat = 39.00085678801109;
 
-		BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon, originalMaxLat);
+        BoundingBox originalBounds = new BoundingBox(originalMinLon, originalMinLat, originalMaxLon, originalMaxLat);
 
-		// link some changesets to the user
-		Set<Long> changesetIds = new LinkedHashSet<>();
+        // link some changesets to the user
+        Set<Long> changesetIds = new LinkedHashSet<>();
 
-		long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
-		changesetIds.add(changesetId);
+        long changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
+        changesetIds.add(changesetId);
 
-		(new Changeset(mapId, changesetId)).setBounds(originalBounds);
+        (new Changeset(mapId, changesetId)).setBounds(originalBounds);
 
-		QChangesets changesets = QChangesets.changesets;
+        QChangesets changesets = QChangesets.changesets;
 
-		Changesets changeset = createQuery(mapId)
-				.select(changesets)
-				.from(changesets)
-				.where(changesets.id.eq(changesetId))
-				.fetchOne();
+        Changesets changeset = createQuery(mapId)
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
 
-		assertNotNull(changeset);
-		assertEquals(userId, (long) changeset.getUserId());
+        assertNotNull(changeset);
+        assertEquals(userId, (long) changeset.getUserId());
 
-		changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
-		changesetIds.add(changesetId);
+        changesetId = Changeset.insertNew(mapId, userId, new HashMap<String, String>());
+        changesetIds.add(changesetId);
 
-		(new Changeset(mapId, changesetId)).setBounds(originalBounds);
+        (new Changeset(mapId, changesetId)).setBounds(originalBounds);
 
-		changeset = createQuery(mapId)
-				.select(changesets)
-				.from(changesets)
-				.where(changesets.id.eq(changesetId))
-				.fetchOne();
+        changeset = createQuery(mapId)
+                .select(changesets)
+                .from(changesets)
+                .where(changesets.id.eq(changesetId))
+                .fetchOne();
 
-		assertNotNull(changeset);
-		assertEquals(userId, (long) changeset.getUserId());
+        assertNotNull(changeset);
+        assertEquals(userId, (long) changeset.getUserId());
 
-		Document responseData = target("user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
-		assertNotNull(responseData);
+        Document responseData = target("api/0.6/user/" + userId).request(MediaType.TEXT_XML).get(Document.class);
+        assertNotNull(responseData);
 
-		XPath xpath = XmlUtils.createXPath();
+        XPath xpath = XmlUtils.createXPath();
 
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
-		assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
-		assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
-		assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
-		assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
-		assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
-		assertEquals(userId + "@hootenanny.test", xpath.evaluate("//osm/user/@email", responseData));
-		assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
-	}
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm").getLength());
+        assertEquals("0.6", xpath.evaluate("//osm[1]/@version", responseData));
+        assertNotNull(xpath.evaluate("//osm[1]/@generator", responseData));
+        assertEquals(1, XPathAPI.selectNodeList(responseData, "//osm/user").getLength());
+        assertEquals(userId, Long.parseLong(xpath.evaluate("//osm/user/@id", responseData)));
+        assertEquals(userId + "::MapUtils::insertUser()", xpath.evaluate("//osm/user/@display_name", responseData));
+        assertEquals(-1, Long.parseLong(xpath.evaluate("//osm/user/changesets/@count", responseData)));
+    }
 
-	@Test(expected = NotFoundException.class)
-	@Category(UnitTest.class)
-	public void testGetInvalidUserId() throws Exception {
-		// TODO: change this to something randomly generated and very large
-		try {
-			long invalidUserId = 999999;
-			target("user/" + invalidUserId).request(MediaType.TEXT_XML).get(Document.class);
-		}
-		catch (NotFoundException e) {
-			Response r = e.getResponse();
-			assertEquals(404, r.getStatus());
-			throw e;
-		}
-	}
+    @Test(expected = NotFoundException.class)
+    @Category(UnitTest.class)
+    public void testGetInvalidUserId() throws Exception {
+        // TODO: change this to something randomly generated and very large
+        try {
+            long invalidUserId = 999999;
+            target("api/0.6/user/" + invalidUserId).request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (NotFoundException e) {
+            Response r = e.getResponse();
+            assertEquals(404, r.getStatus());
+            throw e;
+        }
+    }
 
-	@Test(expected = NotAcceptableException.class)
-	@Category(UnitTest.class)
-	public void testGetEmptyUserId() throws Exception {
-		try {
-			target("user/").request(MediaType.TEXT_XML).get(Document.class);
-		}
-		catch (NotAcceptableException e) {
-			Response r = e.getResponse();
-			assertEquals(Status.NOT_ACCEPTABLE.getStatusCode(), r.getStatus());
-			throw e;
-		}
-	}
+    @Test(expected = NotAcceptableException.class)
+    @Category(UnitTest.class)
+    public void testGetEmptyUserId() throws Exception {
+        try {
+            target("api/0.6/user/").request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (NotAcceptableException e) {
+            Response r = e.getResponse();
+            assertEquals(Status.NOT_ACCEPTABLE.getStatusCode(), r.getStatus());
+            throw e;
+        }
+    }
 
-	@Test(expected = NotAcceptableException.class)
-	@Category(UnitTest.class)
-	public void testGetMissingUserId() throws Exception {
-		try {
-			target("user").request(MediaType.TEXT_XML).get(Document.class);
-		}
-		catch (NotAcceptableException e) {
-			Response r = e.getResponse();
-			assertEquals(Status.NOT_ACCEPTABLE.getStatusCode(), r.getStatus());
-			throw e;
-		}
-	}
+    @Test(expected = NotAcceptableException.class)
+    @Category(UnitTest.class)
+    public void testGetMissingUserId() throws Exception {
+        try {
+            target("api/0.6/user").request(MediaType.TEXT_XML).get(Document.class);
+        }
+        catch (NotAcceptableException e) {
+            Response r = e.getResponse();
+            assertEquals(Status.NOT_ACCEPTABLE.getStatusCode(), r.getStatus());
+            throw e;
+        }
+    }
 }

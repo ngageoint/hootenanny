@@ -42,7 +42,7 @@ The OSM data model is composed of three different elements. Each element may con
 [[IntersectAurora]]
 .Intersection in Aurora, Colorado
 
-image::algorithms/images/image019.png[]
+image::images/image019.png[]
 
 The example in <<IntersectAurora>> shows a road found in Aurora, CO. The tags
 for the way are:
@@ -86,7 +86,7 @@ will be a red way and green way.
 [[DuplicateWay]]
 .Example Duplicate Way
 
-image::algorithms/images/image021.png[]
+image::images/image021.png[]
 
 ==== Unlikely Intersections
 
@@ -102,10 +102,10 @@ specified threshold, then the intersection is split:
 * The intersecting node is not an endpoint on the way
 * The difference in heading of the way at the point of the intersection is less than 45 degrees.
 
-[[Intersect]]	
+[[Intersect]]
 .Example Intersection
 
-image::algorithms/images/image023.png[]
+image::images/image023.png[]
 
 Given the example in <<Intersect>>, if both roads are residential, and there are
 no tunnels/bridges, then it will be maintained as an intersection. However, if
@@ -125,7 +125,7 @@ to be divided, and we introduce the +divider=yes+ tag to the green way.
 [[UndividedOverpass]]
 .Undivided Overpass
 
-image::algorithms/images/image025.png[]
+image::images/image025.png[]
 
 ==== Superfluous Ways
 
@@ -143,7 +143,7 @@ and removes all others.
 If a name is recorded multiple times within the attributes, then the duplicate
 names are removed.  For instance, the attributes +name=Foo Street, alt_name=Foo
 Street;Bar Street+ will be converted to: +name=Foo Street, alt_name=Bar Street+.
-You can control whether Hootenanny is sensitive to name case with the 
+You can control whether Hootenanny is sensitive to name case with the
 duplicate.name.case.sensitive configuration parameter.
 
 ==== Dual Way Splitter
@@ -173,7 +173,7 @@ The conflation process adopted by Hootenanny is to first identify all possible f
 [[ExConflInputData]]
 .Example conflation input data
 
-image::algorithms/images/image027.png[]
+image::images/image027.png[]
 
 In the example shown in <<ExConflInputData>>, there are three potential feature matches. The matches have been assigned notional scores for demonstration purposes:
 
@@ -188,7 +188,7 @@ Using a greedy search we will first apply the highest scoring manipulation, ways
 [[GreedySearch]]
 .Example 2 conflated data
 
-image::algorithms/images/image028.png[]
+image::images/image028.png[]
 
 Now that ways c-d and v-x have been replaced by way m-n, all manipulations involving either ways c-d or v-x are no longer relevant and can be dropped from the conflation list. The remaining red and green lines are considered to be unique to their respective datasets and are carried through to the final result.
 
@@ -204,9 +204,9 @@ By far the most frequently used manipulation with roads is merging two ways. The
 1. Calculate the maximal nearest subline
 2. Assign a weight to each way based on accuracy
 3. Return the weighted average of the two geometries
-	
 
- 
+
+
 *_Maximal Nearest Subline_*
 
 The Maximal Nearest Subline (MNS) algorithm (VividSolutions, 2005) performs the following operation described below:
@@ -331,7 +331,7 @@ The parallel score assigns high scores to ways that are generally parallel, and 
 [[parallelscores]]
 .Example low and high scoring parallel scores
 
-image::algorithms/images/image041.png[]
+image::images/image041.png[]
 
 [[ExplAttributeScore]]
 ===== Attribute Score
@@ -399,7 +399,7 @@ Now that we have a function for normalizing the names, we can calculate the dist
  n2 = normalizeToEnglish(name2)
  maxLen = max(name1.length, name2.length)
  d = levenshteinDistance(name1, name2)
- return 1.0 – (d / maxLen) 
+ return 1.0 – (d / maxLen)
 ----
 
 ____________________________________________________________________
@@ -410,12 +410,12 @@ ____________________________________________________________________
 .Example Levenshtein distance Scores:
 [width="75%"]
 |======
-| *Name 1* | *Name 2* | *Levenshtein Distance* | *Name Score* 
-| Cat | Hat | 1 | 0.67 
-| Cut | Hat | 2 | 0.33 
-| Thomas | Tom | 3 | 0.5 
-| Fish | Dog | 4 | 0.0 
-| *улица Симоновский Вал* | Simonovsky Val Street | 2 | 0.91 
+| *Name 1* | *Name 2* | *Levenshtein Distance* | *Name Score*
+| Cat | Hat | 1 | 0.67
+| Cut | Hat | 2 | 0.33
+| Thomas | Tom | 3 | 0.5
+| Fish | Dog | 4 | 0.0
+| *улица Симоновский Вал* | Simonovsky Val Street | 2 | 0.91
 | JALAN TOL JAKARTA-CIKAMPEK | JAKARTA CIKAMPEK TOLLROAD | 19 | 0.27 footnote:[This comparison could benefit from treating the name as a "bag" of words rather than an ordered list]
 |======
 
@@ -425,16 +425,16 @@ ____________________________________________________________________
 
 When two features have multiple names, there are multiple ways the names can be compared and the score aggregated. For example:
 
-	* Feature 1: +name=O'Neill Street, alt_name=Pub Alley;Route 128+ 
-	* Feature 2: +name=O'NEILL ST, local_name=Pub Alley, alt_name=OLD MILL ST+ 
+	* Feature 1: +name=O'Neill Street, alt_name=Pub Alley;Route 128+
+	* Feature 2: +name=O'NEILL ST, local_name=Pub Alley, alt_name=OLD MILL ST+
 
 In this scenario we can generate the following scores:
 [width="50%"]
 |======
-|  | O'Neill Street | Pub Alley | Route 128 
-| O'NEILL ST | .71 | .2 | .1 
-| Pub Alley | .21 | 1 | 0 
-| OLD MILL ST | .43 | .27 | 0 
+|  | O'Neill Street | Pub Alley | Route 128
+| O'NEILL ST | .71 | .2 | .1
+| Pub Alley | .21 | 1 | 0
+| OLD MILL ST | .43 | .27 | 0
 |======
 
 After some experimentation we average the top half of the scores using each name at most once:
@@ -451,10 +451,10 @@ In this case, the average is 0.86. Using this approach, we can generate a score 
 To merge names from two features into one new set of names, we treat the names as a set, where overlapping name values get appended to the +alt_name+ tag. For fear of losing an important differentiation, we do not remove names unless there is an exact match. For example:
 
 		* Pre-Merge
-			- Feature 1: +name=O'Neill Street, alt_name=Pub Alley;Route 128+ 
-			- Feature 2: +name=O'NEILL ST, local_name=Pub Alley+ 
-		*  Post-Merge 
-			- +name=O'Neill Street, local_name=Pub Alley, alt_name=O'NEILL ST;Route 128+ 
+			- Feature 1: +name=O'Neill Street, alt_name=Pub Alley;Route 128+
+			- Feature 2: +name=O'NEILL ST, local_name=Pub Alley+
+		*  Post-Merge
+			- +name=O'Neill Street, local_name=Pub Alley, alt_name=O'NEILL ST;Route 128+
  +
  +
  +
@@ -466,11 +466,11 @@ Enumerated tags are tags with predefined nominal values. This includes +surface=
 [[HighwayTagRelate]]
 .Highway Tag Relationship
 
-image::algorithms/images/image044.png[]
+image::images/image044.png[]
 
 To address this, we have created a configuration file that defines a directed graph of relationships between tags and supports the following relations:
 
-*  _isA_ - Defines a "is a" relationship. Such as +highway=primary+  _is a_  +highway=road+ 
+*  _isA_ - Defines a "is a" relationship. Such as +highway=primary+  _is a_  +highway=road+
 
 * _similarTo_ – Defines a "is similar to" relationship such as +highway=primary+ is similar to +highway=secondary+. A _similarTo_ relationships also include a weight from 0 to 1, where 0 is completely dissimilar and 1 is exactly the same.
 
@@ -483,24 +483,24 @@ Using the graph <<HighwayTagDistanceVal>>, we can calculate the "distance" betwe
 [options="header"]
 |======
 |  | +highway = road+ | +highway = motorway+ | +highway = trunk+ | +highway = motorway_link+
-| +highway=road+ |  1 |  1 |  1 |  1 
-| +highway = motorway+ |  1 |  1 |  0.8 |  1 
-| +highway=trunk+ |  1 |  0.8 |  1 |  0.8 
-| +highway = motorway_link+ |  1 |  1 |  0.8 |  1 
-| +highway=primary+ |  1 |  0.64 |  0.8 |  0.64 
-| +highway = trunk_link+ |  1 |  0.8 |  1 |  0.72 
-| +highway = secondary+ |  1 |  0.512 |  0.64 |  0.512 
-| +highway = primary_link+ |  1 |  0.64 |  0.8 |  0.576 
-| +highway = tertiary+ |  1 |  0.4096 |  0.512 |  0.4096 
+| +highway=road+ |  1 |  1 |  1 |  1
+| +highway = motorway+ |  1 |  1 |  0.8 |  1
+| +highway=trunk+ |  1 |  0.8 |  1 |  0.8
+| +highway = motorway_link+ |  1 |  1 |  0.8 |  1
+| +highway=primary+ |  1 |  0.64 |  0.8 |  0.64
+| +highway = trunk_link+ |  1 |  0.8 |  1 |  0.72
+| +highway = secondary+ |  1 |  0.512 |  0.64 |  0.512
+| +highway = primary_link+ |  1 |  0.64 |  0.8 |  0.576
+| +highway = tertiary+ |  1 |  0.4096 |  0.512 |  0.4096
 |======
 
 We have defined over 140 relationships within OSM tags and can use that to compare enumerated values between two features and generate a score from 0 to 1. From this graph, we can generate an _n_ x _m_ matrix of scores, where _n_ is the number of enumerated tags in feature 1, and _m_ is the number of enumerated tags in feature 2. For example:
 
 |======
 |  | +highway=primary+ | +surface=paved+
-| +highway=secondary+ | 0.8 | 0.0 
-| +surface=asphault+ | 0.0 | 1.0 
-| +tunnel=yes+ | 0.0 | 0.0 
+| +highway=secondary+ | 0.8 | 0.0
+| +surface=asphault+ | 0.0 | 1.0
+| +tunnel=yes+ | 0.0 | 0.0
 |======
 
 We then take the product of the highest non-zero scores using each tag at most once. In this case, it is 0.8 * 1.0 or 0.8 for our final score. Using this approach, we can generate a score from 0 to 1 for a set of enumerated tags.

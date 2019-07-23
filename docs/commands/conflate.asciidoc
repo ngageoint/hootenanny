@@ -3,13 +3,13 @@
 
 === Description
 
-The +conflate+ command conflates two maps into a single map.  If the specified output file name ends with the extension .osc, an OSM 
+The +conflate+ command conflates two maps into a single map.  If the specified output file name ends with the extension .osc, an OSM
 changeset will be written, instead of an OSM map.
 
 * +input1+         - First input (e.g. OSM file).
 * +input2+         - Second input (e.g. OSM file, XML changeset file (.osc)).
 * +output+         - The output path.
-* +--differential+ - Calculates the the differential between two conflation inputs.  The output will be all elements in input2 that do 
+* +--differential+ - Calculates the the differential between two conflation inputs.  The output will be all elements in input2 that do
                      not conflict with any elements in input1.
 * +--include-tags+ - Include a check for modified tags when doing differential conflation.  The output will include unmodified geometries
                      from Input1, with new/updated tags from Input2 applied, using an overwrite-merge.
@@ -18,8 +18,8 @@ changeset will be written, instead of an OSM map.
 
 === Feature Filtering
 
-A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration option.  The option allows for JSON 
-feature tag filtering by specifying either inline JSON or the path to a JSON file.  For more information, see the "Feature Filtering" 
+A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration option.  The option allows for JSON
+feature tag filtering by specifying either inline JSON or the path to a JSON file.  For more information, see the "Feature Filtering"
 section of the Hootenanny User Guide.
 
 === Usage
@@ -47,34 +47,34 @@ hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaur
 # Conflate specifying a JSON feature filter as a file (see the User Guide for more filter examples)
 hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 
-# Conflate, adding geometry data from the second map to output that does not conflict 
+# Conflate, adding geometry data from the second map to output that does not conflict
 # with data in the first map (tags may be overwritten)
 hoot conflate --differential --include-tags input1.osm input2.osm output.osm
 
 # Conflate only buildings
 hoot conflate -D match.creators="hoot::BuildingMatchCreator" \
   -D merger.creators="hoot::BuildingMergerCreator" input1.osm input2.osm output.osm
-  
+
 # Filter maps down to POIs only before conflating them
-hoot conflate -D conflate.pre.ops="hoot::RemoveElementsVisitor" \ 
+hoot conflate -D conflate.pre.ops="hoot::RemoveElementsVisitor" \
   -D remove.elements.visitor.element.criteria="hoot::PoiCriterion" input1.osm input2.osm \
   output.osm
 
 # Translate features to a schema before conflating them
 hoot conflate -D conflate.pre.ops="hoot::SchemaTranslationVisitor" \
   -D schema.translation.script=myTranslation.js input1.osm input2.osm output.osm
-  
+
 # Align a second map towards a first map before conflating them
 hoot conflate -D conflate.pre.ops="hoot::RubberSheet" -D rubber.sheet.ref=true input1.osm \
   input2.osm output.osm
 
-# Assuming a first map is superior to a second, cut out the shape of the first map out from 
-# the area being conflated so that only data from the second map is stitched in around the 
+# Assuming a first map is superior to a second, cut out the shape of the first map out from
+# the area being conflated so that only data from the second map is stitched in around the
 # first map
 hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 \
   -D cookie.cutter.alpha.shape.buffer=0 -D cookie.cutter.output.crop=false \
   input1.osm input2.osm output.osm
--------------------------------------
+--------------------------------------
 
 ==== See Also
 

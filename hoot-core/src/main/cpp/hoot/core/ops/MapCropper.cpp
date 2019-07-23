@@ -54,6 +54,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <limits>
@@ -81,7 +82,6 @@ _numWaysCrossingThreshold(0),
 _numCrossingWaysKept(0),
 _numCrossingWaysRemoved(0)
 {
-  setConfiguration(conf());
 }
 
 MapCropper::MapCropper(const Envelope& envelope) :
@@ -233,7 +233,9 @@ void MapCropper::apply(OsmMapPtr& map)
     wayCtr++;
     if (wayCtr % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Cropped " << wayCtr << " / " << ways.size() << " ways.");
+      PROGRESS_INFO(
+        "Cropped " << StringUtils::formatLargeNumber(wayCtr) << " / " <<
+        StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
 

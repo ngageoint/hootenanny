@@ -67,7 +67,7 @@ HootTest --glacial '--include=.*Big.*'
 
 # Runs a single test
 HootTest --single hoot::AlphaShapeTest
---------------
+---------------
 
 ==== Core Unit Tests
 
@@ -80,7 +80,7 @@ the following is placed at the end of the test class:
 
 -----------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AlphaShapeTest, "quick");
-------------------
+-----------------
 
 ==== Core Command Line Tests
 
@@ -143,7 +143,7 @@ hoot convert test-files/jakarta_raya_coastline.shp test-output/cmd/example/jakar
 # Write the output to stdout. When this run in the future it'll compare the old output
 # to the new input to verify the test is consistent
 cat jakarta.osm
-------------------
+------------
 
 Running HootTest will give an error similar to the one below:
 
@@ -179,19 +179,19 @@ As the error message suggests you need to verify the output and then create a ne
 #  verify. Don't skip this!
 less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout.first
 less /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first
----------------
+-------------
 
 In this case we goofed in the script and revealed this error in the Example.sh.stderr.first file:
 
 -------------
 cat: jakarta.osm: No such file or directory
---------------
+-------------
 
 Fix the script by changing the last line to:
 
 ------------
 cat test-output/cmd/example/jakarta.osm
---------------
+------------
 
 When you rerun +HootTest --current+ you'll see the .osm file in the .stdout.first file. If
 everything looks good create the new baseline.
@@ -202,11 +202,11 @@ mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Exa
 /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stdout
 mv /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr.first \
 /home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh.stderr
--------------
+------------
 
 Now run the test again and you should get something like:
 
----------------
+-------------
 [hoot2] yubyub:~/dg/src/hoot2$ HootTest --current
 ./home/jason.surratt/dg/src/hoot2/hoot-core/src/test/resources/cmd/current/Example.sh - 0.146189
 
@@ -302,7 +302,7 @@ their respective test suite based on complexity and time (i.e. `quick`, `slow` o
 -----------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlacialUnitTestThatMustBeRunSeriallyTest, "serial");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GlaicalUnitTestThatMustBeRunSeriallyTest, "glacial");
-------------------
+-----------------
 
 Core command line tests, or script-based tests, that can be run in parallel are located in
 `$HOOT_HOME/tests-files/cmd/slow/` and `$HOOT_HOME/test-files/cmd/glacial/`.  Those command line tests
@@ -359,7 +359,7 @@ To run web services unit tests:
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure  --with-services
 make -sj$(nproc) test
------------
+---------
 
 To run both web services unit and integration tests:
 
@@ -367,7 +367,7 @@ To run both web services unit and integration tests:
 # configure step required once per configuration only
 aclocal && autoconf && autoheader && automake && ./configure  --with-services
 make -sj$(nproc) test-all
------------
+---------
 
 The above commands will run the corresponding Core Tests immediately after the web services test
 complete.  There currently is no means to separate the two.
@@ -383,7 +383,7 @@ See hoot-services/src/test/java for test examples.
 To mark a web service test method as a Unit Test, place the following annotation in front of the
 method declaration:
 
--------------
+-----------
 @Test
 @Category(UnitTest.class)
 -----------
@@ -402,7 +402,7 @@ boundaries, such as HTTP, Postgres, OGC, etc.  See hoot-services/src/test/java f
 To mark a web service test method as a Integration Test, place the following annotation in front
 of the method declaration:
 
--------------
+-----------
 @Test
 @Category(IntegrationTest.class)
 -----------
@@ -525,7 +525,7 @@ in a local development environment.
 When run, the tests output an image with graph metrics on Hootenanny scalability for increasing
 levels of simulated users.  Here is an example set of test metrics:
 
-image::developer/images/LoadLatest.png[]
+image::images/LoadLatest.png[]
 
 === Test Coverage Reporting
 
@@ -548,7 +548,7 @@ To generate a report for just the Hootenanny Java web services code:
 
 To generate a report for all Hootenanny Core code and the Hootenanny Java Web Services code together:
 
-----------
+-----------
 ./configure --with-rnd --with-services --with-coverage && make clean-coverage && make -j$(nproc) && make -j$(nproc) test-all && make -j$(nproc) coverage
 -----------
 

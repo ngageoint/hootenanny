@@ -34,9 +34,10 @@ namespace hoot
 {
 
 /**
- * This is used to preserve types when merging multiple elements into one.
- *
- * e.g. merging multiple POIs into a multi-use building
+ * This is used to preserve types when merging multiple elements into one. e.g. merging multiple
+ * POIs into a multi-use building It keeps the most specific type when multiple types with the same
+ * key are encountered. In the case where duplicated types have the same level of specificity, the
+ * duplicated types are arbitrarily placed in an "alt_types" tag.
  */
 class PreserveTypesTagMerger : public TagMerger
 {
@@ -77,6 +78,9 @@ private:
   // can probably eventually get rid of this by correcting logic that's duplicating tags in
   // mergeTags
   void _removeRedundantAltTypeTags(Tags& tags) const;
+
+  bool _isAncestor(const QString& childKey, const QString& childVal, const QString& parentKey,
+                   const QString& parentVal) const;
 };
 
 }

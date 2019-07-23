@@ -43,7 +43,7 @@ public:
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const override;
 
   virtual QString getDescription() const
-  { return "Keeps tags from features; overlapping tags are generalized to a common parent"; }
+  { return "Keeps tags from both features; overlapping tags are generalized to a common parent"; }
 };
 
 }

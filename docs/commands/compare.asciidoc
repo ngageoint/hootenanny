@@ -3,9 +3,9 @@
 
 === Description
 
-The +compare+ command compares a map (uut, Unit Under Test) to one or two test maps (base1 & base2) and prints out three 
-score metrics. This operation is most commonly used to compare manually conflated data to the automatically conflated data. 
-The scores provided give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of 
+The +compare+ command compares a map (uut, Unit Under Test) to one or two test maps (base1 & base2) and prints out three
+score metrics. This operation is most commonly used to compare manually conflated data to the automatically conflated data.
+The scores provided give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of
 0 means the maps are very different.
 
 * +base1+ - The first base file to compare against.

@@ -129,7 +129,6 @@ sudo yum -y install \
     opencv-devel \
     opencv-python \
     perl-XML-LibXML \
-    postgis23_95 \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
@@ -494,10 +493,7 @@ fi
 if ! sudo -u postgres psql -lqt | grep -iw --quiet $DB_NAME; then
     echo "### Creating Services Database..."
     sudo -u postgres createdb $DB_NAME --owner=$DB_USER
-    sudo -u postgres createdb wfsstoredb --owner=$DB_USER
     sudo -u postgres psql -d $DB_NAME -c 'create extension hstore;'
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
 fi
 
 # configure Postgres settings

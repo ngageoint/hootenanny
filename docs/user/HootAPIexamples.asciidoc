@@ -1,5 +1,5 @@
 
-== Hootenanny API Database 
+== Hootenanny API Database
 
 It is possible within Hootenanny to leverage the HootAPI database in postgres as a datastore for common operations such as data ingest, file conversion, generating statistics, and conflation, etc.  The following section provides basic examples of hoot commands using a postgres instance running on your local hootenanny server.  In all of the provided examples the postgres URL will appear as shown below.
 

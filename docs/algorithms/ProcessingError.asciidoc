@@ -1,10 +1,10 @@
 
 == Sources of Processing Error
 
-This document explores some of the sources of errors while processing geospatial 
-data in Hootenanny and quantifies those errors in specific test cases. Any large 
-and intentional changes that may occur as a result of destructive operations, such 
-as snapping nodes together to create  intersections, averaging ways, or rubber 
+This document explores some of the sources of errors while processing geospatial
+data in Hootenanny and quantifies those errors in specific test cases. Any large
+and intentional changes that may occur as a result of destructive operations, such
+as snapping nodes together to create  intersections, averaging ways, or rubber
 sheeting data together are considered outside of the scope of this current effort.
 
 === Sources of Small Geometry Changes
@@ -91,11 +91,11 @@ The following transformations were tested:
 ==== Results
 
 The graph and tables below show a number of operations that can impact
-processing error in Hootenanny. 
+processing error in Hootenanny.
 
 [[processingerrorgraph]]
 .Graph of mean and max distance errors in log scale.
-image::algorithms/images/ProcessingErrorGraph.png[Graph of mean and max distance errors in log scale,scalewidth="50%"]
+image::images/ProcessingErrorGraph.png[Graph of mean and max distance errors in log scale,scalewidth="50%"]
 
 .Table of movement errors and distance errors in nanodegrees.
 [options="header"]
@@ -127,13 +127,13 @@ image::algorithms/images/ProcessingErrorGraph.png[Graph of mean and max distance
 |Save to .gml|553|0|0.00076|0.00326|0.00082
 |======
 
-Over the course of testing the largest error found was approximately 15mm. 
-While compared to the other errors introduced this is large, but it is quite 
-small in the context of 15m accuracy road data. This error was also easy to 
+Over the course of testing the largest error found was approximately 15mm.
+While compared to the other errors introduced this is large, but it is quite
+small in the context of 15m accuracy road data. This error was also easy to
 reduce to 155um by simply changing the default setting in the file format.
 
-Outside of the .osm.pbf file format the errors are down in the nanometer range, 
-although there are still unintentional changes occurring in the data. 
+Outside of the .osm.pbf file format the errors are down in the nanometer range,
+although there are still unintentional changes occurring in the data.
 
 ==== Conclusions
 
@@ -164,8 +164,8 @@ services such as Google and Bing.
 
 [[ui-interactions]]
 .User Interface Interactions
-[graphviz, tmp/UiInteractions.png, fdp]
----------------------------------------------------------------------
+[graphviz, images/UiInteractions.png, fdp]
+--------------------------------------------------------------------
 digraph G
 {
 dpi=96;
@@ -184,7 +184,7 @@ core -> db;
 services -> db;
 ui -> services [label="RESTful XML\n(WGS84 as Text)"];
 }
----------------------------------------------------------------------
+--------------------------------------------------------------------
 
 In the above you can see that the _Hoot Core_ (where all algorithmic code
 resides) communicates directly with the database for reading and writing of
@@ -194,15 +194,15 @@ The _Web Services_ communicate directly with the database for serving data out
 via web service calls. The _Web Browser_ (Hootenanny User Interface) communicates with the _Web
 Services_ over HTTP to request data and post changes.
 
-The latitude/longitude data is stored in the database as 64 bit double precision floating point 
+The latitude/longitude data is stored in the database as 64 bit double precision floating point
 values. All values are stored in the Database in the WGS84/EPSG:4326 projection and have an accuracy
-of 0.01 nanodegrees.  Of note, is the fact that OpenStreetMap's default accuracy is 100 nanodegrees, 
+of 0.01 nanodegrees.  Of note, is the fact that OpenStreetMap's default accuracy is 100 nanodegrees,
 and it stores coordinates as 64 bit integers.
 
-When _Hoot Core_ writes data to the DB, no significant error should be introduced.  This has not 
-been tested experimentally, but some informal testing with Washington, D.C. streets data has 
-revealed no measurable error in QGIS between data imported into the database and then exported and 
-data read straight from an OSM file.  Please see <<SelectingAProjection>> for more details on 
+When _Hoot Core_ writes data to the DB, no significant error should be introduced.  This has not
+been tested experimentally, but some informal testing with Washington, D.C. streets data has
+revealed no measurable error in QGIS between data imported into the database and then exported and
+data read straight from an OSM file.  Please see <<SelectingAProjection>> for more details on
 how projections are utilized within the core.
 
 To serve data out over web services the services read the data from the
@@ -226,6 +226,6 @@ exhaustively explored, but the initial indication is that enough significant
 digits are represented to prevent additional error from being introduced during
 the process of posting changesets.
 
-The posted changeset is processed by the web services and the values are stored as 64 bit double 
-precision floating point values in the database as WGS84/EPSG:4326. The changeset is already in 
+The posted changeset is processed by the web services and the values are stored as 64 bit double
+precision floating point values in the database as WGS84/EPSG:4326. The changeset is already in
 WGS84/EPSG:4326 so no addition change in projection is necessary.

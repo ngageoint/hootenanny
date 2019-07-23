@@ -79,6 +79,16 @@ public class GrailParams {
 
     private File workDir;
 
+    private String conflationType;
+
+    public String getConflationType() {
+        return conflationType;
+    }
+
+    public void setConflationType(String conflationType) {
+        this.conflationType = conflationType;
+    }
+
     public File getWorkDir() {
         return workDir;
     }

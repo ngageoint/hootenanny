@@ -33,18 +33,19 @@
 namespace hoot
 {
 
+class ElementCriterion;
+class TagMerger;
+
 /**
  * Merges POIs with polygons
  *
  * A note about a tag merging inconsistency when auto-merging poi matches:
  *
  * The default tag merging behavior is to keep all poly type tags over poi type tags when there are
- * conflicts (OverwriteTagMerger), so if merging with _autoMergeManyPoiToOnePolyMatches=false,
- * poi type tags may be dropped.  When _autoMergeManyPoiToOnePolyMatches=true tag merging uses the
- * PreserveTypesTagMerger, which will put all poi type tags that are unrelated to the poly type tag
- * into an alt_tags field, so none of the types are lost.  This inconsistency may need to be dealt
- * with, but at a later time when more feedback has been received on poi/polygon conflation with
- * _autoMergeManyPoiToOnePolyMatches=true (poi.polygon.auto.merge.many.poi.to.one.poly.matches=true).
+ * conflicts (OverwriteTagMerger), so by default poi type tags may be dropped.  When
+ * _autoMergeManyPoiToOnePolyMatches is set to true tag merging uses the PreserveTypesTagMerger,
+ * which will put all poi type tags that are unrelated to the poly type tag into an alt_tags field,
+ * so none of the types are lost.
  */
 class PoiPolygonMerger : public MergerBase
 {
@@ -62,7 +63,8 @@ public:
    */
   explicit PoiPolygonMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   virtual QString toString() const override;
 
@@ -74,9 +76,11 @@ public:
    * @param map a map containing the two features to merge
    * @return the ID of the element that was merged into
    */
-  static ElementId mergePoiAndPolygon(OsmMapPtr map);
+  static ElementId mergeOnePoiAndOnePolygon(OsmMapPtr map);
 
   virtual QString getDescription() const { return "Merges POIs into polygons"; }
+
+  void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
 protected:
 
@@ -87,16 +91,28 @@ private:
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
-  //This will cause multiple poi matches to get auto-merged vs being reviewed against the poly.
+  // This will cause multiple poi matches to get auto-merged vs being reviewed against the poly.
   bool _autoMergeManyPoiToOnePolyMatches;
+  // Allows for setting the tag merger from unit tests. Mergers are set up to support Configurable,
+  // so easier to specify the tag merge this way for now.
+  QString _tagMergerClass;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
                             std::vector<std::pair<ElementId, ElementId>>& replaced) const;
 
   Tags _mergePoiTags(const OsmMapPtr& map, Status s) const;
+  std::shared_ptr<const TagMerger> _getTagMerger();
 
   std::vector<ElementId> _getBuildingParts(const OsmMapPtr& map, Status s) const;
+
+  static ElementId _getElementIdByType(OsmMapPtr map, const ElementCriterion& typeCrit);
+
+  /*
+   * This attempts to get replace Invalid and Conflated statuses with Unknown statuses as those are
+   * the only types of statuses that can be merged by anything that calls the BuildingMerger.
+   */
+  static void _fixStatuses(OsmMapPtr map, const ElementId& poiId, const ElementId& polyId);
 };
 
 }

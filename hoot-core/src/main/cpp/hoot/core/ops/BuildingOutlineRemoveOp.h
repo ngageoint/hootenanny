@@ -41,8 +41,7 @@ class OsmMap;
 class Relation;
 
 /**
- * Goes through all building relations and updates the outline of the building by taking the union
- * of all the building parts.
+ * Goes through all building relations and removes features with the outline role.
  */
 class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable,
   public OperationStatusInfo

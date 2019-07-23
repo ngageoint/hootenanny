@@ -3,12 +3,12 @@
 
 === Description
 
-The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be performed during the 
-conversion.  The process may be memory bound depending upon the input or output formats selected.  See the Hootenanny User Guide Supported 
+The +convert+ command converts map data from one input format to another.  Optionally, a schema translation may be performed during the
+conversion.  The process may be memory bound depending upon the input or output formats selected.  See the Hootenanny User Guide Supported
 Data Formats section for more information.
 
 * +input(s)+ - Input path(s) to convert from; Multiple inputs are supported unless converting to an OGR format, and path wildcards may be used
-               for inputs within the same directory. For OGR inputs, layer names may also optionally be specified.  Use a single space to 
+               for inputs within the same directory. For OGR inputs, layer names may also optionally be specified.  Use a single space to
                separate each input and a ';' between inputs and layer (<filename>;<layer name>).
 * +output+   - Output path to convert to (e.g. .osm file, etc.).
 
@@ -31,13 +31,13 @@ convert operations, so explicitly specifying it is unnecessary but will not caus
 example:
 --------------------------------------
 # Remove relations from a map
-hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \ 
+hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
   -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
 --------------------------------------
 
 === Bounded Conversions
 
-If a configuration option matching, `convert.bounding.box.*` is set to a valid bounding box, supporting readers will read data only from 
+If a configuration option matching, `convert.bounding.box.*` is set to a valid bounding box, supporting readers will read data only from
 the specified bounds.
 
 ==== Schema Translation
@@ -58,7 +58,7 @@ hoot convert -D convert.ops=hoot::SchemaTranslationVisitor -D schema.translation
 # translation onvert op not specified; gets automatically added
 hoot convert -D schema.translation.direction=toogr -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 
-# neither translation convert op nor translation direction specified; op gets automatically added and the direction is assumed to be to 
+# neither translation convert op nor translation direction specified; op gets automatically added and the direction is assumed to be to
 # OGR due an OGR output format having been specified
 hoot convert -D schema.translation.script=translations/MGCP_TRD4.js test-files/ToyTestA.osm $OUTPUT_DIR/translation-check-out.gdb
 --------------------------------------
@@ -136,7 +136,7 @@ Convert multiple shape files to an OSM file with translation:
 hoot convert -D schema.translation.script=MyTranslation.js -D schema.translation.direction=toosm input1.shp input2.shp output.osm
 ------------------------------
 
-Convert multiple tiger road data sets using a tiger translation file found in _translations/TigerRoads.py_. by converting multiple files 
+Convert multiple tiger road data sets using a tiger translation file found in _translations/TigerRoads.py_. by converting multiple files
 at one time.  Hootenanny will make sure that road end points that fall within 1 meter will be merged into intersections:
 
 --------------------------------------
@@ -171,15 +171,15 @@ hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.
 * The format for OSM database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>
 * The format for OGR database URLs is: PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"
 * Writing to OSM API databases (osmapidb://) is intended to be a bulk operation for new data only (no updates on existing data).
-* When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm databases to 
-Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and SQLite will likely work, 
+* When converting from OSM to an OGR format, the +convert+ command provides conversion from .osm files or POSTGIS osm databases to
+Shapefile, FileGDB, etc. The OGR libraries are used on the back end so other formats such as PostGIS and SQLite will likely work,
 but are not tested.
-* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile.  The OSM XML 
-format is a richer format than Shapefile and supports such things as multiple geometry types within one file, inherit topology and 
+* The conversion from OSM file to shape file is a lossy process that generates a point, line and polygon shapefile.  The OSM XML
+format is a richer format than Shapefile and supports such things as multiple geometry types within one file, inherit topology and
 arbitrary tagging. For these reasons the conversion to Shapefile is a lossy conversion.
-* To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See 
+* To use file geodatabases, the File Geodatabase module must be compiled into your version of GDAL to work. See
 http://trac.osgeo.org/gdal/wiki/FileGDB for details.
-* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>.  The "/" are 
+* The format for specifying zip file data is: "/vsizip/<path to Zip file>/<path to the shape file INSIDE the Zip file>.  The "/" are
 field separators. If you get errors using absolute paths, check that you have the right number of "/".
 ** a Zip file located at /gis-data/test_data.zip
 *** The path to the shapefile inside the Zip file: "dir/LAP010.shp

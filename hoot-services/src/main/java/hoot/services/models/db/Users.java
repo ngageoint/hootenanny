@@ -49,7 +49,8 @@ public class Users {
     public static final Users TEST_USER = Users.generateTestUser();
 
     public Users() {
-        this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
+        //The db column default should handle this
+//        this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
     }
 
     private String displayName;

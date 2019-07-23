@@ -21,7 +21,7 @@ This command does not work with the --stats option.
 
 --------------------------------------
 conflate-cumulative (input1) (input2) (input3) [inputN] (output)
----------------------------------
+--------------------------------------
 
 ==== Example
 

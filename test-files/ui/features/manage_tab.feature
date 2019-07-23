@@ -25,7 +25,6 @@ Feature: Manage Tab
         And I should see "Tag Schema"
         Then I click on the "Translations" option in the "settingsSidebar"
         And I should see "Add New Translation"
-        #Then I click on the "WFS Exports" option in the "settingsSidebar"
         Then I click on the "Basemaps" option in the "settingsSidebar"
         And I should see "New Basemap"
         Then I click on the "About" option in the "settingsSidebar"

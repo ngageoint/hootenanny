@@ -69,6 +69,7 @@ cat > "$PGDG_REPO" <<EOF
 name=PostgreSQL $PG_MAJOR_VERSION \$releasever - \$basearch
 baseurl=https://download.postgresql.org/pub/repos/yum/$PG_MAJOR_VERSION/redhat/rhel-\$releasever-\$basearch
 enabled=1
+exclude=CGAL* geos* gdal* ogdi* ogr* osm* postgis* proj* SFCGAL*
 gpgcheck=1
 gpgkey=file://$PGDG_KEY
 

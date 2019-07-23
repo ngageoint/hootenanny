@@ -96,7 +96,7 @@ details of determining a subline match will be addressed in another section.
 
 At a high level the subline matching routines use the distance between the lines
 and the difference in angle between the lines to determine what portion of the
-subline match. 
+subline match.
 
 See also:
 
@@ -167,7 +167,7 @@ approaches were evaluated. Many of those were simply parameterized versions of
 ** Treat name as a bag of words
 ** Translate/transliterate the names before comparison
 ** Exact string match
-** http://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance] 
+** http://en.wikipedia.org/wiki/Levenshtein_distance[Levenshtein distance]
    <<levenshtein1966>>
 ** http://en.wikipedia.org/wiki/Soundex[Soundex]
 * Hausdorff distance

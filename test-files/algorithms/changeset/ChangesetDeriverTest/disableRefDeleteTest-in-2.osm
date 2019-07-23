@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="12.0508968885617" minlon="8.4718" maxlat="12.0533851885601" maxlon="8.4763965"/>
+    <node visible="true" id="-186" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0528611885603993" lon="8.4757698000000001"/>
+    <node visible="true" id="-185" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0527772885605007" lon="8.4756275999999993"/>
+    <node visible="true" id="-141" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0514714885612992" lon="8.4734017000000001"/>
+    <node visible="true" id="-140" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0517413885610996" lon="8.4739074999999993"/>
+    <node visible="true" id="-117" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0525146885605992" lon="8.4728293000000008"/>
+    <node visible="true" id="-116" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0526874885604993" lon="8.4727616999999995"/>
+    <node visible="true" id="-115" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0528753885604001" lon="8.4726946000000005"/>
+    <node visible="true" id="-114" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523670885607004" lon="8.4728703000000003"/>
+    <node visible="true" id="-113" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0526690885604992" lon="8.4723009000000005"/>
+    <node visible="true" id="-112" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0521702885608999" lon="8.4730398999999998"/>
+    <node visible="true" id="-111" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0530588885602992" lon="8.4726262999999999"/>
+    <node visible="true" id="-110" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0528712885604001" lon="8.4722179000000004"/>
+    <node visible="true" id="-105" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0508968885617005" lon="8.4718000000000000"/>
+    <node visible="true" id="-104" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0510072885615998" lon="8.4721019000000002"/>
+    <node visible="true" id="-103" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0510920885615000" lon="8.4723868000000007"/>
+    <node visible="true" id="-102" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0511371885614995" lon="8.4725964999999999"/>
+    <node visible="true" id="-101" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0512373885614004" lon="8.4728397999999991"/>
+    <node visible="true" id="-100" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0513896885614002" lon="8.4732362000000006"/>
+    <node visible="true" id="-95" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0527817885605000" lon="8.4763964999999999"/>
+    <node visible="true" id="-94" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0527658885605007" lon="8.4763629999999992"/>
+    <node visible="true" id="-93" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522189885607993" lon="8.4753960999999993"/>
+    <node visible="true" id="-92" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0519264885609996" lon="8.4749119999999998"/>
+    <node visible="true" id="-91" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522228885608005" lon="8.4746880000000004"/>
+    <node visible="true" id="-90" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0531015885603008" lon="8.4761936999999996"/>
+    <node visible="true" id="-89" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0533851885600996" lon="8.4760027000000004"/>
+    <node visible="true" id="-88" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0529836885602997" lon="8.4753893999999992"/>
+    <node visible="true" id="-87" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0527186885604998" lon="8.4755596999999998"/>
+    <node visible="true" id="-86" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524248885607008" lon="8.4757314000000008"/>
+    <node visible="true" id="-85" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522477885608001" lon="8.4758367000000003"/>
+    <node visible="true" id="-84" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0519435885610005" lon="8.4760244000000000"/>
+    <node visible="true" id="-83" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0516864885612005" lon="8.4761746000000002"/>
+    <node visible="true" id="-67" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523810885607006" lon="8.4730512000000004"/>
+    <node visible="true" id="-66" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523457885607002" lon="8.4730682999999996"/>
+    <node visible="true" id="-65" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523725885607007" lon="8.4731258999999994"/>
+    <node visible="true" id="-64" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524078885606993" lon="8.4731088000000003"/>
+    <node visible="true" id="-49" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523029885608004" lon="8.4730916000000001"/>
+    <node visible="true" id="-48" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522599885608006" lon="8.4731117000000005"/>
+    <node visible="true" id="-47" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522849885607997" lon="8.4731675000000006"/>
+    <node visible="true" id="-46" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522364885607995" lon="8.4731901999999995"/>
+    <node visible="true" id="-45" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0521943885607996" lon="8.4730960999999994"/>
+    <node visible="true" id="-44" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522857885608001" lon="8.4730533000000001"/>
+    <node visible="true" id="-43" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523960885607000" lon="8.4730830000000008"/>
+    <node visible="true" id="-42" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523787885607998" lon="8.4730445999999997"/>
+    <node visible="true" id="-41" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523406885606992" lon="8.4730626000000004"/>
+    <node visible="true" id="-40" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523246885608000" lon="8.4730272000000006"/>
+    <node visible="true" id="-39" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523886885607006" lon="8.4729969000000001"/>
+    <node visible="true" id="-38" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524220885607001" lon="8.4730708000000003"/>
+    <node visible="true" id="-37" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524420885606993" lon="8.4731058000000008"/>
+    <node visible="true" id="-36" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523792885607008" lon="8.4731366000000001"/>
+    <node visible="true" id="-35" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523944885607008" lon="8.4731688999999992"/>
+    <node visible="true" id="-34" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524549885607009" lon="8.4729799999999997"/>
+    <node visible="true" id="-33" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0523969885606999" lon="8.4730103999999997"/>
+    <node visible="true" id="-32" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524279885606997" lon="8.4730723000000001"/>
+    <node visible="true" id="-31" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524474885607003" lon="8.4730620999999999"/>
+    <node visible="true" id="-30" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524360885607003" lon="8.4730395000000005"/>
+    <node visible="true" id="-29" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524746885607001" lon="8.4730193000000007"/>
+    <node visible="true" id="-28" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524571885606999" lon="8.4731380999999999"/>
+    <node visible="true" id="-27" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524302885607000" lon="8.4730779999999992"/>
+    <node visible="true" id="-26" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524882885606992" lon="8.4730495999999995"/>
+    <node visible="true" id="-25" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0525166885605994" lon="8.4731103000000001"/>
+    <node visible="true" id="-24" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0521526885609003" lon="8.4730053999999999"/>
+    <node visible="true" id="-23" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0520655885609003" lon="8.4728147000000007"/>
+    <node visible="true" id="-22" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0521437885608993" lon="8.4727773000000006"/>
+    <node visible="true" id="-21" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522309885607992" lon="8.4729679999999998"/>
+    <node visible="true" id="-20" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0520484885608994" lon="8.4725596000000003"/>
+    <node visible="true" id="-19" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0521293885608998" lon="8.4727569999999996"/>
+    <node visible="true" id="-18" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0520227885608993" lon="8.4725366999999991"/>
+    <node visible="true" id="-17" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522112885607999" lon="8.4724704000000006"/>
+    <node visible="true" id="-16" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522391885607991" lon="8.4724477999999994"/>
+    <node visible="true" id="-15" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524244885606997" lon="8.4723807000000004"/>
+    <node visible="true" id="-14" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524728885607004" lon="8.4723661999999997"/>
+    <node visible="true" id="-13" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0526337885606001" lon="8.4723064000000008"/>
+    <node visible="true" id="-12" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0528618885604004" lon="8.4722220000000004"/>
+    <node visible="true" id="-11" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0530389885602993" lon="8.4726321999999996"/>
+    <node visible="true" id="-10" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0528621885604004" lon="8.4726969000000008"/>
+    <node visible="true" id="-9" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0525449885605997" lon="8.4729148999999992"/>
+    <node visible="true" id="-8" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0526756885605000" lon="8.4727697000000006"/>
+    <node visible="true" id="-7" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0527059885605006" lon="8.4728553000000009"/>
+    <node visible="true" id="-6" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0524909885607006" lon="8.4728218999999996"/>
+    <node visible="true" id="-5" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522531885607993" lon="8.4729174000000000"/>
+    <node visible="true" id="-4" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0522791885607994" lon="8.4729852000000001"/>
+    <node visible="true" id="-3" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0525169885605994" lon="8.4728896999999996"/>
+    <node visible="true" id="-2" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0529626885604007" lon="8.4725599999999996"/>
+    <node visible="true" id="-1" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986" lat="12.0530430885602993" lon="8.4725376000000008"/>
+    <way visible="true" id="-65" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-86"/>
+        <nd ref="-94"/>
+        <nd ref="-95"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="-27" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-105"/>
+        <nd ref="-104"/>
+        <nd ref="-103"/>
+        <nd ref="-102"/>
+        <nd ref="-101"/>
+        <nd ref="-100"/>
+        <nd ref="-141"/>
+        <nd ref="-140"/>
+        <nd ref="-91"/>
+        <nd ref="-92"/>
+        <nd ref="-93"/>
+        <nd ref="-86"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="-19" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-117"/>
+        <nd ref="-6"/>
+        <nd ref="-114"/>
+        <nd ref="-5"/>
+        <nd ref="-4"/>
+        <nd ref="-112"/>
+        <nd ref="-24"/>
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-18"/>
+        <nd ref="-17"/>
+        <nd ref="-16"/>
+        <nd ref="-15"/>
+        <nd ref="-14"/>
+        <nd ref="-13"/>
+        <nd ref="-113"/>
+        <nd ref="-12"/>
+        <nd ref="-110"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-111"/>
+        <nd ref="-11"/>
+        <nd ref="-115"/>
+        <nd ref="-10"/>
+        <nd ref="-116"/>
+        <nd ref="-8"/>
+        <nd ref="-117"/>
+        <tag k="amenity" v="school"/>
+    </way>
+    <way visible="true" id="-18" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-87"/>
+        <nd ref="-91"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="-17" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-87"/>
+        <nd ref="-185"/>
+        <nd ref="-186"/>
+        <nd ref="-90"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="-16" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-83"/>
+        <nd ref="-84"/>
+        <nd ref="-85"/>
+        <nd ref="-86"/>
+        <nd ref="-87"/>
+        <nd ref="-88"/>
+        <nd ref="-89"/>
+        <tag k="highway" v="residential"/>
+    </way>
+    <way visible="true" id="-13" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-64"/>
+        <nd ref="-65"/>
+        <nd ref="-66"/>
+        <nd ref="-67"/>
+        <nd ref="-64"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-8" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-44"/>
+        <nd ref="-45"/>
+        <nd ref="-46"/>
+        <nd ref="-47"/>
+        <nd ref="-48"/>
+        <nd ref="-49"/>
+        <nd ref="-44"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-7" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-38"/>
+        <nd ref="-39"/>
+        <nd ref="-40"/>
+        <nd ref="-41"/>
+        <nd ref="-42"/>
+        <nd ref="-67"/>
+        <nd ref="-43"/>
+        <nd ref="-38"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-6" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-28"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <nd ref="-37"/>
+        <nd ref="-28"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-5" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-29"/>
+        <nd ref="-30"/>
+        <nd ref="-31"/>
+        <nd ref="-32"/>
+        <nd ref="-33"/>
+        <nd ref="-34"/>
+        <nd ref="-29"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-4" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-25"/>
+        <nd ref="-26"/>
+        <nd ref="-27"/>
+        <nd ref="-37"/>
+        <nd ref="-28"/>
+        <nd ref="-25"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-3" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="-23"/>
+        <nd ref="-24"/>
+        <nd ref="-21"/>
+        <tag k="building" v="school"/>
+    </way>
+    <way visible="true" id="-2" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-117"/>
+        <nd ref="-9"/>
+        <nd ref="-7"/>
+        <tag k="building" v="school"/>
+    </way>
+    <way visible="true" id="-1" timestamp="2019-07-12T16:07:43Z" version="1" changeset="986">
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-114"/>
+        <nd ref="-6"/>
+        <nd ref="-3"/>
+        <tag k="building" v="school"/>
+    </way>
+</osm>

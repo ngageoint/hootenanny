@@ -3,8 +3,8 @@
 
 === Description
 
-The +score-matches+ command scores how well conflation performs using manually matched data as a reference.  It reads from inputs, 
-adds UUIDs, conflates using unify, and scores the matches. The command will return  an error if the first input file contains any 
+The +score-matches+ command scores how well conflation performs using manually matched data as a reference.  It reads from inputs,
+adds UUIDs, conflates using unify, and scores the matches. The command will return  an error if the first input file contains any
 REF2 tags or the second input file contains any REF1 tags.
 
 * +input1+      - Input 1 (e.g. .osm file).

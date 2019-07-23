@@ -10,11 +10,11 @@ Hootenanny uses the
 link:$$https://github.com/ngageoint/hootenanny/wiki/files/2010-B-01-AlphaShapes.pdf$$[alpha
 shape] algorithm to define the shape of a finite set of points. In this case we
 treat the vertexes of the input shapefile as the set of points when calculating
-the alpha shape. 
+the alpha shape.
 
 [[alphashape]]
 .Simple Alpha Shape
-image::algorithms/images/AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
+image::images/AlphaShape.png[A simple example of an alpha shape,scalewidth="50%"]
 
 By tuning the _alpha_ value the alpha shape can be made to generalize the set of
 points, or tightly fit the points. If a large enough alpha value is specified
