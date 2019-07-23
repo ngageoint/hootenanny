@@ -5,8 +5,9 @@ set -e
 #
 # See description in ServiceBuildingStrictReplacementTest.sh.
 
-TEST_NAME=ServiceBuildingStrictReplacementSingleCommandTest
-IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
+TEST_NAME=ServiceBuildingStrictcReplacementSingleCommandTest
+#IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
+IN_DIR=test-files/cmd/glacial/serial/ServiceBuildingStrictReplacementTest
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
@@ -25,8 +26,8 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
-PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
-CHANGESET_DERIVE_OPTS="changeset.user.id=1"
+PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1"
 
 # DATA PREP
 
@@ -64,7 +65,8 @@ echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write.osm $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced.osm
-hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
+#hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
+hoot diff $GENERAL_OPTS $IN_DIR/ServiceBuildingStrictReplacementTest-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
 # CLEANUP
 
