@@ -208,6 +208,20 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
 {
   // TODO: implement progress
 
+  // don't want to include review relations
+  std::shared_ptr<TagKeyCriterion> elementCriterion(
+    new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+  RemoveElementsVisitor removeElementsVisitor;
+  removeElementsVisitor.setRecursive(false);
+  removeElementsVisitor.addCriterion(elementCriterion);
+  map1->visitRw(removeElementsVisitor);
+  map2->visitRw(removeElementsVisitor);
+
+  // Truncate tags over 255 characters to push into OSM API.
+  ApiTagTruncateVisitor truncateTags;
+  map1->visitRw(truncateTags);
+  map2->visitRw(truncateTags);
+
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
   //sortedElements2 is the newer state of the data
@@ -526,6 +540,8 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     {
       // Load each input into a separate map; see related comments in
       // _handleUnstreamableConvertOpsInMemory
+      // TODO: can this separate bounds handling be removed after the addition of
+      // ChangesetReplacementCreator?
       if (ConfigUtils::boundsOptionEnabled())
       {
         conf().set(
@@ -614,6 +630,7 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
   OsmMapWriterFactory::writeDebugMap(map2, "after-adding-hashes-map-2");
   _currentTaskNum++;
 
+  // TODO: can this be removed after the addition of ChangesetReplacementCreator?
   if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
   {
     progress.set(

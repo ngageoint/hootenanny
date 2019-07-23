@@ -45,6 +45,12 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/ops/RecursiveSetTagValueOp.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+
 
 namespace hoot
 {
@@ -128,7 +134,7 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
 
     LOG_DEBUG("Generating cutter shape map from secondary input...");
     OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
-    MapProjector::projectToWgs84(cutterShapeOutlineMap);
+    MapProjector::projectToWgs84(cutterShapeOutlineMap); // not exactly sure why this needs to be done
     OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
     // cookie cut the shape of the cutter shape map out of the cropped ref map
@@ -140,7 +146,7 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cropKeepOnlyInsideBounds);
     CookieCutter(false, 0.0).cut(cutterShapeOutlineMap, refMap);
     OsmMapPtr cookieCutMap = refMap;
-    MapProjector::projectToWgs84(cookieCutMap);
+    MapProjector::projectToWgs84(cookieCutMap); // not exactly sure why this needs to be done
     OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
     // Renumber the relations in the sec map, as they could have ID overlap with those in the cookie
@@ -166,13 +172,17 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     OsmMapWriterFactory::writeDebugMap(secMap, "cookie-cut-after-node-hashes");
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-node-hashes");
 
-    // conflate the cookie cut ref map with the cropped sec map
+    // combine the cookie cut map back with the secondary map, so we can conflate
 
-    LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
-    MapProjector::projectToWgs84(secMap);
+    MapProjector::projectToWgs84(secMap);   // not exactly sure why this needs to be done
     cookieCutMap->append(secMap);
     OsmMapPtr conflateMap = cookieCutMap;
     secMap.reset();
+    OsmMapWriterFactory::writeDebugMap(conflateMap, "combined-before-conflation");
+
+    // conflate the cookie cut ref map with the cropped sec map
+
+    LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.apply(conflateMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
@@ -180,7 +190,6 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     UnifyingConflator().apply(conflateMap);
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.apply(conflateMap);
-    MapProjector::projectToWgs84(conflateMap);
     OsmMapWriterFactory::writeDebugMap(conflateMap, "conflated");
 
     if (!lenientBounds && _isLinearCrit(featureTypeFilterClassName))
@@ -188,42 +197,41 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       // Snap secondary features back to reference features if dealing with linear features and a
       // non-lenient bounds where ref features may have been cut along it.
 
-      LOG_DEBUG("Snapping linear secondary features back to reference features...");
-      UnconnectedWaySnapper snapper;
-      snapper.setConfiguration(conf());
-      snapper.setSnapToWayStatus("Input1");
-      snapper.setSnapWayStatus("Input2;Conflated");
-      snapper.setWayNodeToSnapToCriterionClassName(featureTypeFilterClassName);
-      snapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
-      snapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
-      snapper.apply(conflateMap);
-      MapProjector::projectToWgs84(conflateMap);
+      LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
+      UnconnectedWaySnapper lineSnapper;
+      lineSnapper.setConfiguration(conf());
+      lineSnapper.setSnapToWayStatus("Input1");
+      lineSnapper.setSnapWayStatus("Input2;Conflated");
+      lineSnapper.setWayNodeToSnapToCriterionClassName(featureTypeFilterClassName);
+      lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
+      lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
+      lineSnapper.apply(conflateMap);
       OsmMapWriterFactory::writeDebugMap(conflateMap, "snapped");
 
       // After snapping, perform way joining to prevent unnecessary create/delete statements for the
       // ref data in the resulting changeset and generate modify statements instead.
 
-      LOG_DEBUG("Rejoining features after snapping...");
+      LOG_DEBUG("Rejoining features after unconnected linear feature snapping...");
       ReplacementSnappedWayJoiner().join(conflateMap);
       OsmMapWriterFactory::writeDebugMap(conflateMap, "joined");
     }
 
-    OsmMapPtr refChangesetMap;
-    OsmMapPtr secChangesetMap;
+    MapProjector::projectToWgs84(conflateMap);  // conflation and snapping work in planar
 
-    // break the ref and sec data out into separate maps from the conflated map
+    // break the ref and sec data out into separate maps from the conflated map for changeset
+    // derivation
 
     // TODO: could there be any conflated data still in here as well, or did way joining change
     // ways with conflated status back to an input status?
 
     LOG_DEBUG("Separating reference data out of conflated map...");
-    refChangesetMap.reset(new OsmMap(conflateMap));
+    OsmMapPtr refChangesetMap(new OsmMap(conflateMap));
     RemoveUnknown2Visitor removeSecVis;
     refChangesetMap->visitRw(removeSecVis);
     OsmMapWriterFactory::writeDebugMap(refChangesetMap, "ref-separated");
 
     LOG_DEBUG("Separating secondary data out of conflated map...");
-    secChangesetMap.reset(new OsmMap(conflateMap));
+    OsmMapPtr secChangesetMap(new OsmMap(conflateMap));
     RemoveUnknown1Visitor removeRefVis;
     secChangesetMap->visitRw(removeRefVis);
     OsmMapWriterFactory::writeDebugMap(secChangesetMap, "sec-separated");
@@ -245,6 +253,27 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetSecKeepOnlyInsideBounds);
     cropper.apply(secChangesetMap);
     OsmMapWriterFactory::writeDebugMap(secChangesetMap, "sec-cropped-for-changeset");
+
+    if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
+    {
+      // If we're not allowing the changeset deriver to generate delete statements for reference
+      // features outside of the bounds, we need to mark all corresponding ref ways with a custom
+      // tag that will cause the deriver to skip deleting them.
+
+      // The strictness of the bounds check is governed by a config option. Generally, would use
+      // not strict for linear features and strict for point or poly features.
+      conf().set("in.bounds.criterion.bounds", boundsStr);
+      std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
+      boundsCrit->setOsmMap(refChangesetMap.get());
+      std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
+      std::shared_ptr<ChainCriterion> elementCrit(
+        new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
+
+      RecursiveSetTagValueOp tagSetter(elementCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
+      tagSetter.apply(refChangesetMap);
+
+      OsmMapWriterFactory::writeDebugMap(refChangesetMap, "after-adding-ref-delete-exclude-tags");
+    }
 
     // derive a changeset that replaces ref features with secondary features within the bounds
 

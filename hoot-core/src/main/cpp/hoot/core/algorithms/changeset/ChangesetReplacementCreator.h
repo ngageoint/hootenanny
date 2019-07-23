@@ -48,6 +48,16 @@ public:
 
   ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
+  /**
+   * TODO
+   *
+   * @param input1
+   * @param input2
+   * @param bounds
+   * @param featureTypeFilterClassName
+   * @param lenientBounds
+   * @param output
+   */
   void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
               const QString& featureTypeFilterClassName, const bool lenientBounds,
               const QString& output);
