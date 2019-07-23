@@ -74,6 +74,8 @@ void ChangesetReplacementCreator::create(
       throw IllegalArgumentException("TODO");
     }
 
+    // TODO: fail if the reader that supports either input doesn't implement Boundable
+
     const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
 
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
@@ -95,6 +97,9 @@ void ChangesetReplacementCreator::create(
     _parseConfigOpts(lenientBounds, featureTypeFilterClassName);
 
     // load each dataset separately and crop to the specified aoi
+
+    // TODO: the config options here could be removed by passing a bounds into IoUtils::loadMap
+    // instead.
 
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
 
@@ -139,6 +144,8 @@ void ChangesetReplacementCreator::create(
     // cookie cut the shape of the cutter shape map out of the cropped ref map
 
     LOG_DEBUG("Cookie cutting cutter shape out of reference map...");
+    // TODO: the config options here could be removed by passing in a pre-configured MapCropper to
+    // CookieCutter.
     conf().set(
       ConfigOptions::getCropKeepEntireFeaturesCrossingBoundsKey(), _cropKeepEntireCrossingBounds);
     conf().set(
@@ -200,6 +207,7 @@ void ChangesetReplacementCreator::create(
       LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
       UnconnectedWaySnapper lineSnapper;
       lineSnapper.setConfiguration(conf());
+      // override some of the default config
       lineSnapper.setSnapToWayStatus("Input1");
       lineSnapper.setSnapWayStatus("Input2;Conflated");
       lineSnapper.setWayNodeToSnapToCriterionClassName(featureTypeFilterClassName);
@@ -208,8 +216,8 @@ void ChangesetReplacementCreator::create(
       lineSnapper.apply(conflatedMap);
       OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped");
 
-      // After snapping, perform way joining to prevent unnecessary create/delete statements for the
-      // ref data in the resulting changeset and generate modify statements instead.
+      // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
+      // data in the resulting changeset and generate modify statements instead.
 
       LOG_DEBUG("Rejoining features after unconnected linear feature snapping...");
       ReplacementSnappedWayJoiner().join(conflatedMap);
@@ -242,6 +250,8 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-fter-orphaned-node-removal");
 
+    // TODO: setting this config options won't be necessary once the old multiple command tests
+    // are deactivated
     conf().set(
       ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
       _changesetAllowDeletingRefOutsideBounds);
@@ -254,6 +264,7 @@ void ChangesetReplacementCreator::create(
 
       // The strictness of the bounds check is governed by a config option. Generally, would use
       // not strict for linear features and strict for point or poly features.
+      // TODO: let's pass the bounds in the constructor instead
       conf().set("in.bounds.criterion.bounds", boundsStr);
       std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
       boundsCrit->setOsmMap(refMap.get());
