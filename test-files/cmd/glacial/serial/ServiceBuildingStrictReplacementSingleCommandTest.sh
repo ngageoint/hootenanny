@@ -5,9 +5,8 @@ set -e
 #
 # See description in ServiceBuildingStrictReplacementTest.sh.
 
-TEST_NAME=ServiceBuildingStrictcReplacementSingleCommandTest
-#IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
-IN_DIR=test-files/cmd/glacial/serial/ServiceBuildingStrictReplacementTest
+TEST_NAME=ServiceBuildingStrictReplacementSingleCommandTest
+IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
@@ -41,7 +40,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-re
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
-hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.key=name -D set.tag.value.visitor.value="Building 2" $SEC_LAYER_FILE $SEC_LAYER
+hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.key=name -D set.tag.value.visitor.value="Building 2" $SEC_LAYER_FILE $SEC_LAYER
 
 # CHANGESET DERIVATION
 
@@ -65,8 +64,7 @@ echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write.osm $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced.osm
-#hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
-hoot diff $GENERAL_OPTS $IN_DIR/ServiceBuildingStrictReplacementTest-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
+hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
 # CLEANUP
 

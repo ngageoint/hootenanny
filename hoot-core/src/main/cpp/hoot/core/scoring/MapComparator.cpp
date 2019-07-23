@@ -131,7 +131,9 @@ public:
       _errorCount++;
       if (_errorCount <= 10)
       {
-        LOG_WARN("Tags do not match:");
+        LOG_WARN(
+          "Tags do not match (ref: " << refElement->getElementId() << ", test: " <<
+          e->getElementId() << ":");
         QStringList keys = refTags.keys();
         keys.append(testTags.keys());
         keys.removeDuplicates();

@@ -6,8 +6,7 @@ set -e
 # See description in ServiceBuildingReplacementTest.sh
 
 TEST_NAME=ServiceBuildingReplacementSingleCommandTest
-#IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
-IN_DIR=test-files/cmd/glacial/serial/ServiceBuildingReplacementTest
+IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
@@ -25,7 +24,7 @@ SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-71.4698,42.4866,-71.4657,42.4902"
 
 #ChangesetReplacementCreator;MapCropper;OsmMap;OsmMapWriterFactory
-GENERAL_OPTS="--debug -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm"
+GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1"
@@ -42,7 +41,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-re
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
-hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.key=name -D set.tag.value.visitor.value="Building 2" $SEC_LAYER_FILE $SEC_LAYER
+hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.key=name -D set.tag.value.visitor.value="Building 2" $SEC_LAYER_FILE $SEC_LAYER
 # for output debugging convenience only
 cp $SEC_LAYER_FILE $OUT_DIR
 
@@ -68,8 +67,7 @@ echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write.osm $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced.osm
-#hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
-hoot diff $GENERAL_OPTS $IN_DIR/ServiceBuildingReplacementTest-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
+hoot diff $GENERAL_OPTS $IN_DIR/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
 # CLEANUP
 

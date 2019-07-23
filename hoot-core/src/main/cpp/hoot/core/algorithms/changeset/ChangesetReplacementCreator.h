@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Progress.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 
 //GEOS
@@ -83,7 +82,7 @@ private:
   bool _isLinearCrit(const QString& critClassName) const;
   bool _isPolyCrit(const QString& critClassName) const;
 
-  void _setConfigOpts(const bool lenientBounds, const QString& critClassName);
+  void _parseConfigOpts(const bool lenientBounds, const QString& critClassName);
 };
 
 }

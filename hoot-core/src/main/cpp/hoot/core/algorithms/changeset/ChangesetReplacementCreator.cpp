@@ -92,7 +92,7 @@ void ChangesetReplacementCreator::create(
       " from inputs: ..." << input1.right(maxFilePrintLength) + " and ..." <<
       input2.right(maxFilePrintLength) << " at bounds: " << boundsStr << ". " << lenientStr);
 
-    _setConfigOpts(lenientBounds, featureTypeFilterClassName);
+    _parseConfigOpts(lenientBounds, featureTypeFilterClassName);
 
     // load each dataset separately and crop to the specified aoi
 
@@ -115,7 +115,7 @@ void ChangesetReplacementCreator::create(
       ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
       _convertSecKeepOnlyInsideBounds);
     OsmMapPtr secMap(new OsmMap());
-    IoUtils::loadMap(secMap, input2, true, Status::Unknown2);
+    IoUtils::loadMap(secMap, input2, false, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
 
     // prune down to just the feature types specified by the filter
@@ -150,7 +150,7 @@ void ChangesetReplacementCreator::create(
 
     // Renumber the relations in the sec map, as they could have ID overlap with those in the cookie
     // cut ref map at this point. This is due to the fact that they have been modified independently
-    // of each other with cropping, which may create new relations.
+    // of each other during cropping, which can create new relations.
 
     LOG_DEBUG("Remapping secondary map relation IDs...");
     ElementIdRemapper relationIdRemapper;
@@ -186,6 +186,7 @@ void ChangesetReplacementCreator::create(
     preOps.apply(conflatedMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
     // TODO: set configuration on UnifyingConflator?
+    // TODO: support network for roads?
     UnifyingConflator().apply(conflatedMap);
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.apply(conflatedMap);
@@ -264,7 +265,7 @@ void ChangesetReplacementCreator::create(
     }
 
     // derive a changeset between the ref and conflated maps that replaces ref features with
-    // secondary features within the bounds
+    // secondary features within the bounds and write it out
 
     LOG_DEBUG("Deriving replacement changeset...");
     conf().set(
@@ -298,8 +299,8 @@ bool ChangesetReplacementCreator::_isPolyCrit(const QString& critClassName) cons
     critClassName.contains("BuildingCriterion");
 }
 
-void ChangesetReplacementCreator::_setConfigOpts(const bool lenientBounds,
-                                                 const QString& critClassName)
+void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
+                                                   const QString& critClassName)
 {
   // changeset and db opts should have already been set when calling this command
 
@@ -311,18 +312,15 @@ void ChangesetReplacementCreator::_setConfigOpts(const bool lenientBounds,
 
   // dataset specific opts
 
-  // only one of these should ever be true
-  const bool replacingPoints = _isPointCrit(critClassName);
-  const bool replacingLines = _isLinearCrit(critClassName);
-  const bool replacingPolys = _isPolyCrit(critClassName);
-
   // TODO: Hopefully, these three sets of bounds options can be collapsed down to at least two.
 
   _convertRefKeepOnlyInsideBounds = false;
   _cropKeepOnlyInsideBounds = false;
   _changesetRefKeepOnlyInsideBounds = false;
 
-  if (replacingPoints)
+  // only one of these should ever be true
+
+  if (_isPointCrit(critClassName))
   {
     if (lenientBounds)
     {
@@ -339,7 +337,7 @@ void ChangesetReplacementCreator::_setConfigOpts(const bool lenientBounds,
     _changesetAllowDeletingRefOutsideBounds = true;
     _inBoundsStrict = false;
   }
-  else if (replacingLines)
+  else if (_isLinearCrit(critClassName))
   {
     if (lenientBounds)
     {
@@ -366,7 +364,7 @@ void ChangesetReplacementCreator::_setConfigOpts(const bool lenientBounds,
       _inBoundsStrict = false;
     }
   }
-  else if (replacingPolys)
+  else if (_isPolyCrit(critClassName))
   {
     if (lenientBounds)
     {

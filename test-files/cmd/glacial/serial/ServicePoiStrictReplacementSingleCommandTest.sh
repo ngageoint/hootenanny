@@ -7,8 +7,7 @@ set -e
 
 TEST_NAME=ServicePoiStrictReplacementSingleCommandTest
 IN_DIR=test-files/cmd/glacial/PoiPolygonConflateStandaloneTest
-#IN_DIR_2=test-files/cmd/glacial/serial/$TEST_NAME
-IN_DIR_2=test-files/cmd/glacial/serial/ServicePoiStrictReplacementTest
+IN_DIR_2=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
@@ -39,7 +38,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-re
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
-hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_LAYER_FILE $SEC_LAYER
+hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=false $SEC_LAYER_FILE $SEC_LAYER
 
 # CHANGESET DERIVATION
 
@@ -63,8 +62,7 @@ echo ""
 echo "Reading the entire reference dataset out for verification..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write.osm $OSM_API_DB_URL $OUT_DIR/$TEST_NAME-replaced.osm
-#hoot diff $GENERAL_OPTS $IN_DIR_2/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
-hoot diff $GENERAL_OPTS $IN_DIR_2/ServicePoiStrictReplacementTest-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
+hoot diff $GENERAL_OPTS $IN_DIR_2/$TEST_NAME-replaced.osm $OUT_DIR/$TEST_NAME-replaced.osm
 
 # CLEANUP
 
