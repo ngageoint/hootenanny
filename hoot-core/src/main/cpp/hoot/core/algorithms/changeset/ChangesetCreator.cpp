@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ChangesetWriter.h"
+#include "ChangesetCreator.h"
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
@@ -64,9 +64,9 @@
 namespace hoot
 {
 
-const QString ChangesetWriter::JOB_SOURCE = "Derive Changeset";
+const QString ChangesetCreator::JOB_SOURCE = "Derive Changeset";
 
-ChangesetWriter::ChangesetWriter(const bool printStats, const QString osmApiDbUrl) :
+ChangesetCreator::ChangesetCreator(const bool printStats, const QString osmApiDbUrl) :
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
@@ -75,7 +75,7 @@ _singleInput(false)
 {
 }
 
-void ChangesetWriter::write(const QString& output, const QString& input1, const QString& input2)
+void ChangesetCreator::create(const QString& output, const QString& input1, const QString& input2)
 {
   if (!_isSupportedOutputFormat(output))
   {
@@ -204,7 +204,7 @@ void ChangesetWriter::write(const QString& output, const QString& input1, const 
     "Changeset written to: ..." + output.right(maxFilePrintLength));
 }
 
-void ChangesetWriter::write(const QString& output, OsmMapPtr& map1, OsmMapPtr& map2)
+void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
 {
   // TODO: implement progress
 
@@ -231,7 +231,7 @@ void ChangesetWriter::write(const QString& output, OsmMapPtr& map1, OsmMapPtr& m
   _streamChangesetOutput(sortedElements1, sortedElements2, output);
 }
 
-void ChangesetWriter::_parseBuffer()
+void ChangesetCreator::_parseBuffer()
 {
   // TODO: get rid of changeset buffer
   LOG_DEBUG("Parsing changeset buffer...");
@@ -275,12 +275,12 @@ void ChangesetWriter::_parseBuffer()
   }
 }
 
-bool ChangesetWriter::_isSupportedOutputFormat(const QString& format) const
+bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 {
   return format.endsWith(".osc") || format.endsWith(".osc.sql");
 }
 
-bool ChangesetWriter::_inputIsSorted(const QString& input) const
+bool ChangesetCreator::_inputIsSorted(const QString& input) const
 {
   // ops could change the ordering
   if (ConfigOptions().getConvertOps().size() > 0)
@@ -299,7 +299,7 @@ bool ChangesetWriter::_inputIsSorted(const QString& input) const
   return false;
 }
 
-bool ChangesetWriter::_inputIsStreamable(const QString& input) const
+bool ChangesetCreator::_inputIsStreamable(const QString& input) const
 {
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
   LOG_VARD(ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()));
@@ -314,10 +314,10 @@ bool ChangesetWriter::_inputIsStreamable(const QString& input) const
     ConfigOptions().getElementSorterElementBufferSize() != -1;
 }
 
-void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input1,
-                                                            const QString& input2,
-                                                            OsmMapPtr& map1, OsmMapPtr& map2,
-                                                            Progress progress)
+void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& input1,
+                                                             const QString& input2,
+                                                             OsmMapPtr& map1, OsmMapPtr& map2,
+                                                             Progress progress)
 {
   LOG_DEBUG("Handling unstreamable convert ops in memory...");
 
@@ -442,9 +442,9 @@ void ChangesetWriter::_handleUnstreamableConvertOpsInMemory(const QString& input
   _currentTaskNum++;
 }
 
-void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
-                                                          const QString& input2, OsmMapPtr& map1,
-                                                          OsmMapPtr& map2, Progress progress)
+void ChangesetCreator::_handleStreamableConvertOpsInMemory(const QString& input1,
+                                                           const QString& input2, OsmMapPtr& map1,
+                                                           OsmMapPtr& map2, Progress progress)
 {
   LOG_DEBUG("Handling streamable convert ops in memory...");
 
@@ -490,8 +490,8 @@ void ChangesetWriter::_handleStreamableConvertOpsInMemory(const QString& input1,
   _currentTaskNum++;
 }
 
-void ChangesetWriter::_readInputsFully(const QString& input1, const QString& input2,
-                                       OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
+void ChangesetCreator::_readInputsFully(const QString& input1, const QString& input2,
+                                        OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
   LOG_VARD(ConfigOptions().getConvertOps().size());
   if (ConfigOptions().getConvertOps().size() > 0)
@@ -637,8 +637,8 @@ void ChangesetWriter::_readInputsFully(const QString& input1, const QString& inp
   }
 }
 
-ElementInputStreamPtr ChangesetWriter::_getExternallySortedElements(const QString& input,
-                                                                    Progress progress)
+ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QString& input,
+                                                                     Progress progress)
 {
   progress.set(
     (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
@@ -665,14 +665,14 @@ ElementInputStreamPtr ChangesetWriter::_getExternallySortedElements(const QStrin
   return sortedElements;
 }
 
-ElementInputStreamPtr ChangesetWriter::_getEmptyInputStream()
+ElementInputStreamPtr ChangesetCreator::_getEmptyInputStream()
 {
   // a no-op here since InMemoryElementSorter taking in an empty map will just return an empty
   // element stream
   return InMemoryElementSorterPtr(new InMemoryElementSorter(OsmMapPtr(new OsmMap())));
 }
 
-ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& input)
 {
   LOG_DEBUG("Retrieving filtered input stream for: " << input.right(25) << "...");
 
@@ -706,20 +706,20 @@ ElementInputStreamPtr ChangesetWriter::_getFilteredInputStream(const QString& in
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
 
-ElementInputStreamPtr ChangesetWriter::_sortElementsInMemory(OsmMapPtr map)
+ElementInputStreamPtr ChangesetCreator::_sortElementsInMemory(OsmMapPtr map)
 {
   return InMemoryElementSorterPtr(new InMemoryElementSorter(map));
 }
 
-ElementInputStreamPtr ChangesetWriter::_sortElementsExternally(const QString& input)
+ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& input)
 {
   std::shared_ptr<ExternalMergeElementSorter> sorted(new ExternalMergeElementSorter());
   sorted->sort(_getFilteredInputStream(input));
   return sorted;
 }
 
-void ChangesetWriter::_streamChangesetOutput(ElementInputStreamPtr input1,
-                                             ElementInputStreamPtr input2, const QString& output)
+void ChangesetCreator::_streamChangesetOutput(ElementInputStreamPtr input1,
+                                              ElementInputStreamPtr input2, const QString& output)
 {
   LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
 

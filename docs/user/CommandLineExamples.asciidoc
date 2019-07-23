@@ -318,32 +318,6 @@ See the User Guide for more details on command usage.
       input2.osm output.osm
 -----
 
-===== Completely replace a set of buildings in one dataset with those in another over an AOI via Rails Port:
-
------
-    # Allow modifying buildings in the reference dataset that cross the AOI:
-    hoot changeset-derive -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 \
-      -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp \
-      -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
-      -D remove.elements.visitor.recursive=true -D element.criterion.negate=true \
-      -D changeset.reference.keep.entire.features.crossing.bounds=true
-      -D changeset.secondary.keep.entire.features.crossing.bounds=true
-      -D changeset.reference.keep.only.features.inside.bounds=false
-      -D changeset.secondary.keep.only.features.inside.bounds=false ref.osm sec.osm changeset.osc
-    hoot changeset-apply changeset.osc <OSM API URL>
-
-    # Do not allow modifying buildings in the reference dataset that cross the AOI:
-    hoot changeset-derive -D convert.bounding.box=-71.4698,42.4866,-71.4657,42.4902 \
-      -D convert.ops=hoot::RemoveElementsVisitor;hoot::CookieCutterOp \
-      -D remove.elements.visitor.element.criteria=hoot::BuildingCriterion \
-      -D remove.elements.visitor.recursive=true -D element.criterion.negate=true \
-      -D changeset.reference.keep.entire.features.crossing.bounds=true
-      -D changeset.secondary.keep.entire.features.crossing.bounds=false
-      -D changeset.reference.keep.only.features.inside.bounds=false
-      -D changeset.secondary.keep.only.features.inside.bounds=true ref.osm sec.osm changeset.osc
-    hoot changeset-apply changeset.osc <OSM API URL>
------
-
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result directly to an OSM API database:
@@ -351,6 +325,13 @@ See the User Guide for more details on command usage.
 -----
     hoot changeset-derive inputData1.osm inputData2.osm changeset.osc.sql
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
+-----
+
+===== Create a changeset that completely replaces a set of buildings in one dataset with those in another over an AOI:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      hoot::BuildingCriterion output.osc
 -----
 
 ==== Data Transformation

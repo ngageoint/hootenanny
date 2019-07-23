@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGESET_WRITER_H
-#define CHANGESET_WRITER_H
+#ifndef CHANGESET_CREATOR_H
+#define CHANGESET_CREATOR_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -60,14 +60,14 @@ namespace hoot
  * also could, at some point, make loading source IDs for datasets optional and could only be used
  * on one of the datasets if writing a changeset back to authoritative store (e.g. OpenStreetMap).
  */
-class ChangesetWriter
+class ChangesetCreator
 {
 
 public:
 
   static const QString JOB_SOURCE;
 
-  ChangesetWriter(const bool printStats = false, const QString osmApiDbUrl = "");
+  ChangesetCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**
    * Writes the changeset between one or two inputs to an output file. If only one input is
@@ -77,16 +77,12 @@ public:
    * @param input1 the first input source
    * @param input2 the optional second input source
    */
-  void write(const QString& output, const QString& input1, const QString& input2 = "");
+  void create(const QString& output, const QString& input1, const QString& input2 = "");
 
   /**
    * TODO
-   *
-   * @param output
-   * @param input1
-   * @param input2
    */
-  void write(const QString& output, OsmMapPtr& input1, OsmMapPtr& input2);
+  void create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output);
 
 private:
 
@@ -143,4 +139,4 @@ private:
 
 }
 
-#endif // CHANGESET_WRITER_H
+#endif // CHANGESET_CREATOR_H

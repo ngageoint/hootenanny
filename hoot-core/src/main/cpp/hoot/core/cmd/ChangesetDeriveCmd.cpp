@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ChangesetWriter.h>
+#include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -86,7 +86,7 @@ public:
       osmApiDbUrl = args[3];
     }
 
-    ChangesetWriter(printStats, osmApiDbUrl).write(output, input1, input2);
+    ChangesetCreator(printStats, osmApiDbUrl).create(output, input1, input2);
 
     if (writeBoundsFile)
     {
