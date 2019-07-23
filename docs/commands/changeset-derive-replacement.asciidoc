@@ -3,9 +3,12 @@
 
 === Description
 
-The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets with a 
+The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets within a 
 given bounds. The data from the second input dataset completely replaces data in the first dataset within the bounds. The output changeset 
-file can later be applied directly to an OSM API database or via the Rails Port with the +changeset-apply+ command.
+file can be applied directly to an OSM API database or via the Rails Port with the +changeset-apply+ command.
+
+Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
+the second input (secondary dataset) are not retained and treated as completely new data. 
 
 * +input1+             - OSM data input 1 (e.g. .osm file)
 * +input2+             - OSM data input 2 (e.g. .osm file)

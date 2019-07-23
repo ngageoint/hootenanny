@@ -242,6 +242,10 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-fter-orphaned-node-removal");
 
+    conf().set(
+      ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+      _changesetAllowDeletingRefOutsideBounds);
+    conf().set(ConfigOptions::getInBoundsCriterionStrictKey(), _inBoundsStrict);
     if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
     {
       // If we're not allowing the changeset deriver to generate delete statements for reference
@@ -268,10 +272,6 @@ void ChangesetReplacementCreator::create(
     // secondary features within the bounds and write it out
 
     LOG_DEBUG("Deriving replacement changeset...");
-    conf().set(
-      ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-      _changesetAllowDeletingRefOutsideBounds);
-    conf().set(ConfigOptions::getInBoundsCriterionStrictKey(), _inBoundsStrict);
     _changesetCreator->create(refMap, conflatedMap, output);
 }
 
