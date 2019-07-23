@@ -41,6 +41,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/visitors/RemoveUnknownVisitor.h>
+#include <hoot/core/ops/MapCropper.h>
 
 namespace hoot
 {
@@ -133,9 +135,11 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
 
     cookieCutMap->append(secMap);
     OsmMapPtr conflateMap = cookieCutMap;
+    secMap.reset();
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.apply(conflateMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
+    // TODO: set configuration on UnifyingConflator?
     UnifyingConflator().apply(conflateMap);
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.apply(conflateMap);
@@ -163,35 +167,38 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     OsmMapPtr refChangesetMap;
     OsmMapPtr secChangesetMap;
 
-//    conf().set(
-//      ConfigOptions::getChangesetReferenceKeepEntireFeaturesCrossingBoundsKey(),
-//      _changesetRefKeepEntireCrossingBounds);
-//    conf().set(
-//      ConfigOptions::getChangesetReferenceKeepOnlyFeaturesInsideBoundsKey(),
-//      _changesetRefKeepOnlyInsideBounds);
-//    conf().set(
-//      ConfigOptions::getChangesetSecondaryKeepEntireFeaturesCrossingBoundsKey(),
-//      _changesetSecKeepEntireCrossingBounds);
-//    conf().set(
-//      ConfigOptions::getChangesetSecondaryKeepOnlyFeaturesInsideBoundsKey(),
-//      _changesetSecKeepOnlyInsideBounds);
-//    conf().set(
-//      ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-//      _changesetAllowDeletingRefOutsideBounds);
-//    conf().set(
-//      ConfigOptions::getInBoundsCriterionStrictKey(),
-//      _inBoundsStrict);
+    // break the ref and sec data out into separate maps from the conflated map
 
-    // TODO: break the ref and sec data out into separate maps from the conflated map
+    refChangesetMap.reset(new OsmMap(conflateMap));
+    RemoveUnknown2Visitor removeSecVis;
+    refChangesetMap->visitRw(removeSecVis);
 
+    secChangesetMap.reset(new OsmMap(conflateMap));
+    RemoveUnknown2Visitor removeRefVis;
+    secChangesetMap->visitRw(removeRefVis);
 
+    conflateMap.reset();
 
-    // TODO: crop the ref/sec maps appropriately for changeset derivation
+    // crop the ref/sec maps appropriately for changeset derivation
 
+    MapCropper cropper;
 
+    cropper.setKeepEntireFeaturesCrossingBounds(_changesetRefKeepEntireCrossingBounds);
+    cropper.setKeepOnlyFeaturesInsideBounds(_changesetRefKeepOnlyInsideBounds);
+    cropper.apply(refChangesetMap);
+
+    cropper.setKeepEntireFeaturesCrossingBounds(_changesetSecKeepEntireCrossingBounds);
+    cropper.setKeepOnlyFeaturesInsideBounds(_changesetSecKeepOnlyInsideBounds);
+    cropper.apply(secChangesetMap);
 
     // derive a changeset that replaces ref features with secondary features within the bounds
 
+    conf().set(
+      ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+      _changesetAllowDeletingRefOutsideBounds);
+    conf().set(
+      ConfigOptions::getInBoundsCriterionStrictKey(),
+      _inBoundsStrict);
     _changesetCreator->create(refChangesetMap, secChangesetMap, output);
 }
 

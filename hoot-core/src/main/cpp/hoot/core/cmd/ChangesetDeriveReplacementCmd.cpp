@@ -76,13 +76,21 @@ public:
       args.removeAll("--write-bounds");
     }
 
-    // process non-optional params
+    // param error checking
+
+    if (ConfigOptions().getConflatePreOps().size() > 0 ||
+        ConfigOptions().getConflatePostOps().size() > 0)
+    {
+      throw IllegalArgumentException(getName() + " command does not support convert operations.");
+    }
 
     if (args.size() < 5 || args.size() > 6)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes five or six parameters.").arg(getName()));
     }
+
+    // process non-optional params
 
     const QString input1 = args[0].trimmed();
     const QString input2 = args[1].trimmed();
