@@ -23,10 +23,10 @@ SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-71.4698,42.4866,-71.4657,42.4902"
 
-GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
+GENERAL_OPTS="--trace -D log.class.filter=ChangesetReplacementCreator -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D debug.maps.write=true -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
-PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops="
-CHANGESET_DERIVE_OPTS="changeset.user.id=1"
+PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1"
 
 # DATA PREP
 

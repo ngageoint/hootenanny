@@ -80,6 +80,8 @@ public:
   /**
    * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
    * This value will not be serialized.
+   *
+   * TODO: this is confusing when compared with the constructor that also takes in a bounds
    */
   virtual void setBounds(const geos::geom::Envelope& bounds) override { _nodeBounds = bounds; }
 

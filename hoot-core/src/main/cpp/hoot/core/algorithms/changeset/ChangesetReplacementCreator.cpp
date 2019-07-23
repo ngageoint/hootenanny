@@ -43,6 +43,8 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
@@ -67,12 +69,29 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       throw IllegalArgumentException("TODO");
     }
 
+    const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
+
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+    QString lenientStr = "Bounds calculation ";
+    if (lenientBounds)
+    {
+      lenientStr += "is ";
+    }
+    else
+    {
+      lenientStr += "is not ";
+    }
+    lenientStr += "lenient.";
+    LOG_INFO(
+      "Deriving replacement output changeset: ..." << output.right(maxFilePrintLength) <<
+      " from inputs: ..." << input1.right(maxFilePrintLength) + " and ..." <<
+      input2.right(maxFilePrintLength) << " at bounds: " << boundsStr << ". " << lenientStr);
+
     _setConfigOpts(lenientBounds, featureTypeFilterClassName);
 
     // load each dataset separately and crop to the specified aoi
 
-    conf().set(
-      ConfigOptions::getConvertBoundingBoxKey(), GeometryUtils::envelopeToConfigString(bounds));
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -82,6 +101,7 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       _convertRefKeepOnlyInsideBounds);
     OsmMapPtr refMap(new OsmMap());
     IoUtils::loadMap(refMap, input1, true, Status::Unknown1);
+    OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -91,48 +111,65 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       _convertSecKeepOnlyInsideBounds);
     OsmMapPtr secMap(new OsmMap());
     IoUtils::loadMap(secMap, input2, true, Status::Unknown2);
+    OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
 
     // prune down to just the feature types specified by the filter
 
+    LOG_DEBUG("Filtering features based on input filter: " << featureTypeFilterClassName << "...");
     RemoveElementsVisitor elementsRemover(true);
     elementsRemover.addCriterion(featureCrit);
     elementsRemover.setRecursive(true);
     refMap->visitRw(elementsRemover);
     secMap->visitRw(elementsRemover);
+    OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-type-pruning");
+    OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-type-pruning");
 
     // generate a cutter shape based on the cropped secondary map
 
-    OsmMapPtr cutterShapeMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
+    LOG_DEBUG("Generating cutter shape map from secondary input...");
+    OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
+    MapProjector::projectToWgs84(cutterShapeOutlineMap);
+    OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
     // cookie cut the shape of the cutter shape map out of the cropped ref map
 
+    LOG_DEBUG("Cookie cutting cutter shape out of reference map...");
     conf().set(
       ConfigOptions::getCropKeepEntireFeaturesCrossingBoundsKey(), _cropKeepEntireCrossingBounds);
     conf().set(
       ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cropKeepOnlyInsideBounds);
-    CookieCutter(false, 0.0).cut(cutterShapeMap, refMap);
+    CookieCutter(false, 0.0).cut(cutterShapeOutlineMap, refMap);
     OsmMapPtr cookieCutMap = refMap;
+    MapProjector::projectToWgs84(cookieCutMap);
+    OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
     // Renumber the relations in the sec map, as they could have ID overlap with those in the cookie
     // cut ref map at this point. This is due to the fact that they have been modified independently
     // of each other with cropping, which may create new relations.
 
+    LOG_DEBUG("Remapping secondary map relation IDs...");
     ElementIdRemapper relationIdRemapper;
     relationIdRemapper.setIdGen(cookieCutMap->getIdGeneratorSp());
     relationIdRemapper.setRemapNodes(false);
     relationIdRemapper.setRemapRelations(true);
     relationIdRemapper.setRemapWays(false);
     relationIdRemapper.apply(secMap);
+    OsmMapWriterFactory::writeDebugMap(secMap, "sec-relation-ids-remapped");
 
     // add node hashes so we can append the cookie cut and sec maps together (needed for element
     // comparison)
 
+    LOG_DEBUG("Adding hashes for node comparisons...");
     CalculateHashVisitor2 hashVis;
     cookieCutMap->visitRw(hashVis);
     secMap->visitRw(hashVis);
+    OsmMapWriterFactory::writeDebugMap(secMap, "cookie-cut-after-node-hashes");
+    OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-node-hashes");
 
     // conflate the cookie cut ref map with the cropped sec map
 
+    LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
+    MapProjector::projectToWgs84(secMap);
     cookieCutMap->append(secMap);
     OsmMapPtr conflateMap = cookieCutMap;
     secMap.reset();
@@ -143,12 +180,15 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     UnifyingConflator().apply(conflateMap);
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.apply(conflateMap);
+    MapProjector::projectToWgs84(conflateMap);
+    OsmMapWriterFactory::writeDebugMap(conflateMap, "conflated");
 
     if (!lenientBounds && _isLinearCrit(featureTypeFilterClassName))
     {
       // Snap secondary features back to reference features if dealing with linear features and a
       // non-lenient bounds where ref features may have been cut along it.
 
+      LOG_DEBUG("Snapping linear secondary features back to reference features...");
       UnconnectedWaySnapper snapper;
       snapper.setConfiguration(conf());
       snapper.setSnapToWayStatus("Input1");
@@ -157,11 +197,15 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       snapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
       snapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       snapper.apply(conflateMap);
+      MapProjector::projectToWgs84(conflateMap);
+      OsmMapWriterFactory::writeDebugMap(conflateMap, "snapped");
 
       // After snapping, perform way joining to prevent unnecessary create/delete statements for the
       // ref data in the resulting changeset and generate modify statements instead.
 
+      LOG_DEBUG("Rejoining features after snapping...");
       ReplacementSnappedWayJoiner().join(conflateMap);
+      OsmMapWriterFactory::writeDebugMap(conflateMap, "joined");
     }
 
     OsmMapPtr refChangesetMap;
@@ -169,30 +213,42 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
 
     // break the ref and sec data out into separate maps from the conflated map
 
+    // TODO: could there be any conflated data still in here as well, or did way joining change
+    // ways with conflated status back to an input status?
+
+    LOG_DEBUG("Separating reference data out of conflated map...");
     refChangesetMap.reset(new OsmMap(conflateMap));
     RemoveUnknown2Visitor removeSecVis;
     refChangesetMap->visitRw(removeSecVis);
+    OsmMapWriterFactory::writeDebugMap(refChangesetMap, "ref-separated");
 
+    LOG_DEBUG("Separating secondary data out of conflated map...");
     secChangesetMap.reset(new OsmMap(conflateMap));
-    RemoveUnknown2Visitor removeRefVis;
+    RemoveUnknown1Visitor removeRefVis;
     secChangesetMap->visitRw(removeRefVis);
+    OsmMapWriterFactory::writeDebugMap(secChangesetMap, "sec-separated");
 
     conflateMap.reset();
 
     // crop the ref/sec maps appropriately for changeset derivation
 
-    MapCropper cropper;
+    MapCropper cropper(bounds);
 
+    LOG_DEBUG("Cropping reference map for changeset derivation...");
     cropper.setKeepEntireFeaturesCrossingBounds(_changesetRefKeepEntireCrossingBounds);
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetRefKeepOnlyInsideBounds);
     cropper.apply(refChangesetMap);
+    OsmMapWriterFactory::writeDebugMap(refChangesetMap, "ref-cropped-for-changeset");
 
+    LOG_DEBUG("Cropping secondary map for changeset derivation...");
     cropper.setKeepEntireFeaturesCrossingBounds(_changesetSecKeepEntireCrossingBounds);
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetSecKeepOnlyInsideBounds);
     cropper.apply(secChangesetMap);
+    OsmMapWriterFactory::writeDebugMap(secChangesetMap, "sec-cropped-for-changeset");
 
     // derive a changeset that replaces ref features with secondary features within the bounds
 
+    LOG_DEBUG("Deriving replacement changeset...");
     conf().set(
       ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
       _changesetAllowDeletingRefOutsideBounds);
@@ -202,7 +258,8 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     _changesetCreator->create(refChangesetMap, secChangesetMap, output);
 }
 
-// hardcode these for now; only one of the following should return true for any input
+// hardcode these geometry type identification methods for now; only one of the following should
+// return true for any input; later can come up with a more extensible solution
 
 bool ChangesetReplacementCreator::_isPointCrit(const QString& critClassName) const
 {

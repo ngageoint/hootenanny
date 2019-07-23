@@ -121,7 +121,7 @@ void MapCropper::setInvert(bool invert)
   _invert = invert;
   // I don't think these options make sense when we're doing inverted cropping (maybe they do?),
   // so let's leave them turned off if inverting is selected.
-  // TODO: remove
+  // TODO: remove?
 //  if (!_invert)
 //  {
 //    _keepOnlyFeaturesInsideBounds = false;
@@ -131,7 +131,7 @@ void MapCropper::setInvert(bool invert)
 
 void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
 {
-  // TODO: remove
+  // TODO: remove?
   if (/*_invert ||*/ _keepOnlyFeaturesInsideBounds)
   {
     _keepEntireFeaturesCrossingBounds = false;
@@ -144,7 +144,7 @@ void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
 
 void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
 {
-  // TODO: remove
+  // TODO: remove?
   /*if (_invert)
   {
     _keepOnlyFeaturesInsideBounds = false;

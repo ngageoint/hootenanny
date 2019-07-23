@@ -49,6 +49,8 @@ public:
   HelpCmd()
   {
     _forceToRndList.append("build-model");
+    // eventually this can be moved to the main list
+    _forceToRndList.append("changeset-derive-replacement");
   }
 
   static bool commandCompare(const std::string& n1, const std::string& n2)

@@ -78,8 +78,7 @@ public:
 
     // param error checking
 
-    if (ConfigOptions().getConflatePreOps().size() > 0 ||
-        ConfigOptions().getConflatePostOps().size() > 0)
+    if (ConfigOptions().getConvertOps().size())
     {
       throw IllegalArgumentException(getName() + " command does not support convert operations.");
     }

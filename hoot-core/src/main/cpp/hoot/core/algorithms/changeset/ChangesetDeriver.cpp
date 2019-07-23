@@ -30,6 +30,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
@@ -46,7 +47,10 @@ _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferen
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
-    throw IllegalArgumentException("The projections must both be geographic.");
+    throw IllegalArgumentException(
+      "The projections must both be geographic. Input 1: " +
+      MapProjector::toWkt(_from->getProjection()) + ", Input 2: " +
+      MapProjector::toWkt(_to->getProjection()));
   }
 
   _changesByType.clear();
