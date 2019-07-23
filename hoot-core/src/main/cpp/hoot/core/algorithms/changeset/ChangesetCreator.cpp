@@ -551,6 +551,8 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
           ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
           ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
       }
+      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
       IoUtils::loadMap(map1, input1, true, Status::Unknown1);
       // TODO: hack
       SuperfluousNodeRemover::removeNodes(map1);
@@ -563,6 +565,8 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
           ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
           ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
       }
+      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
       IoUtils::loadMap(map2, input2, true, Status::Unknown2);
       // TODO: hack
       SuperfluousNodeRemover::removeNodes(map2);

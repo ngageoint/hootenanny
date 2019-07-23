@@ -58,9 +58,9 @@ public:
    * @param lenientBounds
    * @param output
    */
-  void create(const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-              const QString& featureTypeFilterClassName, const bool lenientBounds,
-              const QString& output);
+  void create(
+    const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+    const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output);
 
 private:
 
@@ -84,8 +84,6 @@ private:
   bool _isPolyCrit(const QString& critClassName) const;
 
   void _setConfigOpts(const bool lenientBounds, const QString& critClassName);
-
-  void _writeChangeset(const QString& output, OsmMapPtr& input1, OsmMapPtr& input2);
 };
 
 }

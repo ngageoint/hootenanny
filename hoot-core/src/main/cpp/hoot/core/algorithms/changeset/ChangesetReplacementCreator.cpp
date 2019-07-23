@@ -50,7 +50,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
-
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 namespace hoot
 {
@@ -61,10 +61,9 @@ ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
 }
 
-void ChangesetReplacementCreator::create(const QString& input1, const QString& input2,
-                                         const geos::geom::Envelope& bounds,
-                                         const QString& featureTypeFilterClassName,
-                                         const bool lenientBounds, const QString& output)
+void ChangesetReplacementCreator::create(
+  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output)
 {
     std::shared_ptr<ConflatableElementCriterion> featureCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(
@@ -218,6 +217,8 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
 
     MapProjector::projectToWgs84(conflateMap);  // conflation and snapping work in planar
 
+    // TODO: So far (7/23/19 13:24), we're good up until this step.
+
     // break the ref and sec data out into separate maps from the conflated map for changeset
     // derivation
 
@@ -254,6 +255,12 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
     cropper.apply(secChangesetMap);
     OsmMapWriterFactory::writeDebugMap(secChangesetMap, "sec-cropped-for-changeset");
 
+    // clean up straggling nodes (need to figure out how to prevent this from occurring earlier on)
+
+    LOG_DEBUG("Removing orphaned nodes...");
+    SuperfluousNodeRemover::removeNodes(refChangesetMap);
+    SuperfluousNodeRemover::removeNodes(secChangesetMap);
+
     if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
     {
       // If we're not allowing the changeset deriver to generate delete statements for reference
@@ -269,6 +276,7 @@ void ChangesetReplacementCreator::create(const QString& input1, const QString& i
       std::shared_ptr<ChainCriterion> elementCrit(
         new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
 
+      LOG_DEBUG("Marking reference features for exclusion from deletion...");
       RecursiveSetTagValueOp tagSetter(elementCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
       tagSetter.apply(refChangesetMap);
 
@@ -329,7 +337,7 @@ void ChangesetReplacementCreator::_setConfigOpts(const bool lenientBounds,
   const bool replacingLines = _isLinearCrit(critClassName);
   const bool replacingPolys = _isPolyCrit(critClassName);
 
-  // TODO: Hopefully, these three sets of bounds options can be collapsed (??).
+  // TODO: Hopefully, these three sets of bounds options can be collapsed down to at least two.
 
   _convertRefKeepOnlyInsideBounds = false;
   _cropKeepOnlyInsideBounds = false;
@@ -411,6 +419,19 @@ void ChangesetReplacementCreator::_setConfigOpts(const bool lenientBounds,
     // shouldn't ever get here
     throw IllegalArgumentException("TODO");
   }
+
+  LOG_VARD(_convertRefKeepEntireCrossingBounds);
+  LOG_VARD(_convertRefKeepOnlyInsideBounds);
+  LOG_VARD(_convertSecKeepEntireCrossingBounds);
+  LOG_VARD(_convertSecKeepOnlyInsideBounds);
+  LOG_VARD(_cropKeepEntireCrossingBounds);
+  LOG_VARD(_cropKeepOnlyInsideBounds);
+  LOG_VARD(_changesetRefKeepEntireCrossingBounds);
+  LOG_VARD(_changesetRefKeepOnlyInsideBounds);
+  LOG_VARD(_changesetSecKeepEntireCrossingBounds);
+  LOG_VARD(_changesetSecKeepOnlyInsideBounds);
+  LOG_VARD(_changesetAllowDeletingRefOutsideBounds);
+  LOG_VARD(_inBoundsStrict);
 }
 
 }

@@ -245,7 +245,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
 
 void OsmMap::addElement(const std::shared_ptr<Element>& e)
 {
-  switch(e->getElementType().getEnum())
+  switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
     addNode(std::dynamic_pointer_cast<Node>(e));
