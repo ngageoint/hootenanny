@@ -208,6 +208,11 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
 {
   // TODO: implement progress
 
+  // appending maps requires they have node hashes
+  CalculateHashVisitor2 hashVis;
+  map1->visitRw(hashVis);
+  map2->visitRw(hashVis);
+
   // don't want to include review relations
   std::shared_ptr<TagKeyCriterion> elementCriterion(
     new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
