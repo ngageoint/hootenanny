@@ -51,6 +51,9 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/io/OsmMapReader.h>
 
 namespace hoot
 {
@@ -74,7 +77,19 @@ void ChangesetReplacementCreator::create(
       throw IllegalArgumentException("TODO");
     }
 
-    // TODO: fail if the reader that supports either input doesn't implement Boundable
+    // fail if the reader that supports either input doesn't implement Boundable
+
+    std::shared_ptr<Boundable> boundable =
+      std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input1));
+    if (!boundable)
+    {
+      throw IllegalArgumentException("TODO");
+    }
+    boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input2));
+    if (!boundable)
+    {
+      throw IllegalArgumentException("TODO");
+    }
 
     const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
 
@@ -193,7 +208,7 @@ void ChangesetReplacementCreator::create(
     preOps.apply(conflatedMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
     // TODO: set configuration on UnifyingConflator?
-    // TODO: support network for roads?
+    // TODO: support network alg for roads?
     UnifyingConflator().apply(conflatedMap);
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.apply(conflatedMap);
@@ -250,7 +265,7 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-fter-orphaned-node-removal");
 
-    // TODO: setting this config options won't be necessary once the old multiple command tests
+    // TODO: setting these two config options won't be necessary once the old multiple command tests
     // are deactivated
     conf().set(
       ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
