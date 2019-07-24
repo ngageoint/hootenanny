@@ -817,9 +817,11 @@ public class MapResource {
                             // the query that sent this in should have
                             // already handled filtering out invisible elements
 
+                            boolean addChildren = elementType == ElementType.Way;
+
                             Users usersTable = record.get(QUsers.users);
                             Element elementXml = element.toXml(elementRootXml, usersTable.getId(),
-                                    usersTable.getDisplayName(), multiLayerUniqueElementIds, true);
+                                    usersTable.getDisplayName(), multiLayerUniqueElementIds, addChildren);
                             elementRootXml.appendChild(elementXml);
                         }
                     }
