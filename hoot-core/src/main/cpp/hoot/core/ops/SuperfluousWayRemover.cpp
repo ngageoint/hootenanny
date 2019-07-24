@@ -60,13 +60,15 @@ void SuperfluousWayRemover::removeWays()
 {
   _numAffected = 0;
   std::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
+  LOG_VART(e2r->size());
 
   // make a copy of the ways to avoid issues when removing.
   const WayMap ways = _inputMap->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
-    LOG_VART(w->getElementId());
+    //LOG_VART(w->getElementId());
+    LOG_VART(w);
 
     bool same = true;
     const vector<long>& nodeIds = w->getNodeIds();
@@ -84,6 +86,7 @@ void SuperfluousWayRemover::removeWays()
     }
     LOG_VART(same);
 
+    // TODO: This doesn't seem to be picking up multilinestring relations added during cropping.
     const bool inRelation = e2r->getRelationByElement(w).size() > 0;
     LOG_VART(inRelation);
     LOG_VART(w->getTags().size());

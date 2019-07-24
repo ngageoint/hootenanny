@@ -239,7 +239,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
     else if (!_keepEntireFeaturesCrossingBounds)
     {
-      // Way crosses the boundary and we're not x=configured to keep ways that cross the bounds, so
+      // Way crosses the boundary and we're not configured to keep ways that cross the bounds, so
       // do an expensive operation to decide how much to keep, if any.
       LOG_TRACE(
         "Cropping due to _keepEntireFeaturesCrossingBounds=false: " << w->getElementId() << "...");

@@ -113,7 +113,7 @@ void ChangesetReplacementCreator::create(
 
     // load each dataset separately and crop to the specified aoi
 
-    // TODO: the config options here could be removed by passing a bounds into IoUtils::loadMap
+    // TODO: the crop config options here could be removed by passing a bounds into IoUtils::loadMap
     // instead.
 
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);

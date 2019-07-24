@@ -124,8 +124,85 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
   LOG_DEBUG("Appending maps...");
 
   _srs = appendFromMap->getProjection();
+  _index->getNodeToWayMap();    //TODO: why does this have to be done?
+  _index->getElementToRelationMap(); //TODO: why does this have to be done?
 
   ElementComparer elementComparer;
+
+  // The append order must be nodes, ways, and then relations. If not, the map indexes won't update
+  // properly.
+
+  int numNodesAppended = 0;
+  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
+  while (itn != appendFromMap->_nodes.end())
+  {
+    bool appendElement = true;
+    NodePtr node = itn->second;
+    if (containsElement(ElementId(node->getElementId())))
+    {
+      ElementPtr existingElement = getElement(node->getElementId());
+      if (!elementComparer.isSame(node, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+            .arg(node->getElementId().toString())
+            .arg(getElement(node->getElementId())->toString())
+            .arg(node->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        LOG_TRACE("Skipping appending same element: " << node->getElementId());
+        appendElement = false;
+      }
+    }
+
+    if (appendElement)
+    {
+      NodePtr n = NodePtr(new Node(*node));
+      LOG_TRACE("Appending: " << n->getElementId() << "...");
+      addNode(n);
+      numNodesAppended++;
+    }
+
+    ++itn;
+  }
+
+  int numWaysAppended = 0;
+  WayMap::const_iterator it = appendFromMap->_ways.begin();
+  while (it != appendFromMap->_ways.end())
+  {
+    bool appendElement = true;
+    WayPtr way = it->second;
+    if (containsElement(ElementId(way->getElementId())))
+    {
+      ElementPtr existingElement = getElement(way->getElementId());
+      if (!elementComparer.isSame(way, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+          .arg(way->getElementId().toString())
+          .arg(getElement(way->getElementId())->toString())
+          .arg(way->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        LOG_TRACE("Skipping appending same element: " << way->getElementId());
+        appendElement = false;
+      }
+    }
+
+    if (appendElement)
+    {
+      WayPtr w = WayPtr(new Way(*way));
+      LOG_TRACE("Appending: " << w->getElementId() << "...");
+      addWay(w);
+      numWaysAppended++;
+    }
+
+    ++it;
+  }
 
   int numRelationsAppended = 0;
   const RelationMap& allRelations = appendFromMap->getRelations();
@@ -157,79 +234,10 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     if (appendElement)
     {
       RelationPtr r = RelationPtr(new Relation(*relation));
+      LOG_TRACE("Appending: " << r->getElementId() << "...");
       addRelation(r);
       numRelationsAppended++;
     }
-  }
-
-  int numWaysAppended = 0;
-  WayMap::const_iterator it = appendFromMap->_ways.begin();
-  while (it != appendFromMap->_ways.end())
-  {
-    bool appendElement = true;
-    WayPtr way = it->second;
-    if (containsElement(ElementId(way->getElementId())))
-    {
-      ElementPtr existingElement = getElement(way->getElementId());
-      if (!elementComparer.isSame(way, existingElement))
-      {
-        const QString msg =
-          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
-          .arg(way->getElementId().toString())
-          .arg(getElement(way->getElementId())->toString())
-          .arg(way->toString());
-        throw HootException(msg);
-      }
-      else
-      {
-        LOG_TRACE("Skipping appending same element: " << way->getElementId());
-        appendElement = false;
-      }
-    }
-
-    if (appendElement)
-    {
-      WayPtr w = WayPtr(new Way(*way));
-      addWay(w);
-      numWaysAppended++;
-    }
-
-    ++it;
-  }
-
-  int numNodesAppended = 0;
-  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
-  while (itn != appendFromMap->_nodes.end())
-  {
-    bool appendElement = true;
-    NodePtr node = itn->second;
-    if (containsElement(ElementId(node->getElementId())))
-    {
-      ElementPtr existingElement = getElement(node->getElementId());
-      if (!elementComparer.isSame(node, existingElement))
-      {
-        const QString msg =
-          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
-            .arg(node->getElementId().toString())
-            .arg(getElement(node->getElementId())->toString())
-            .arg(node->toString());
-        throw HootException(msg);
-      }
-      else
-      {
-        LOG_TRACE("Skipping appending same element: " << node->getElementId());
-        appendElement = false;
-      }
-    }
-
-    if (appendElement)
-    {
-      NodePtr n = NodePtr(new Node(*node));
-      addNode(n);
-      numNodesAppended++;
-    }
-
-    ++itn;
   }
 
   for (size_t i = 0; i < appendFromMap->getListeners().size(); i++)
@@ -279,6 +287,7 @@ void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
     // this seemed like a clever optimization. However, this impacts the BigPertyCmd.sh test b/c
     // it modifies the order in which the elements are written to the output. Which presumably (?)
     // impacts the ID when reading the file with re-numbering. Sad.
+    // TODO: The BigPertyCmd.sh test no longer exists, so maybe try it again.
 //    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
 //    if (_nodes.bucket_count() < minBuckets)
 //    {
@@ -316,15 +325,6 @@ void OsmMap::addWay(const WayPtr& w)
   _ways[w->getId()] = w;
   w->registerListener(_index.get());
   _index->addWay(w);
-  //_wayCounter = std::min(w->getId() - 1, _wayCounter);
-
-  // this is a bit too strict, especially when dealing with MapReduce
-//# ifdef DEBUG
-//    for (int i = 0; i < w->getNodeCount(); i++)
-//    {
-//      assert(_nodes.contains(w->getNodeId(i)));
-//    }
-//# endif
 }
 
 void OsmMap::clear()
