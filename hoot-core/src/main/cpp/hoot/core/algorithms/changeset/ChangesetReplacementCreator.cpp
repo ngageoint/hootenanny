@@ -264,13 +264,14 @@ void ChangesetReplacementCreator::create(
     cropper.apply(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-cropped-for-changeset");
 
-    // clean up straggling nodes (need to figure out how to prevent this from occurring earlier on)
+    // clean up straggling nodes (maybe need to figure out how to prevent this from occurring
+    // earlier on)
 
     LOG_DEBUG("Removing orphaned nodes...");
     SuperfluousNodeRemover::removeNodes(refMap);
     SuperfluousNodeRemover::removeNodes(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
-    OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-fter-orphaned-node-removal");
+    OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-after-orphaned-node-removal");
 
     // TODO: setting these two config options won't be necessary once the old multiple command tests
     // are deactivated

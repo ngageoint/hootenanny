@@ -471,8 +471,6 @@ Change ChangesetDeriver::_nextChange()
 
 Change ChangesetDeriver::readNextChange()
 {
-  //LOG_VART(_allowDeletingReferenceFeatures);
-
   if (!_next.getElement())
   {
     _next = _nextChange();
