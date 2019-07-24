@@ -223,7 +223,7 @@ void ChangesetReplacementCreator::create(
       UnconnectedWaySnapper lineSnapper;
       lineSnapper.setConfiguration(conf());
       // override some of the default config
-      lineSnapper.setSnapToWayStatus("Input1");
+      lineSnapper.setSnapToWayStatus("Input1;Conflated");
       lineSnapper.setSnapWayStatus("Input2;Conflated");
       lineSnapper.setWayNodeToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
