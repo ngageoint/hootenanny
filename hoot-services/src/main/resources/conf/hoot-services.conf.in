@@ -76,7 +76,7 @@ defaultFOUOTranslationsConfig=$(homeFolder)/translations-local/DefaultTranslatio
 documentName=Hootenanny - User Interface Guide.pdf
 
 # The size of thread pool used during job processing
-internalJobThreadSize=10
+internalJobThreadSize=90
 
 # Translation Node Server port
 translationServerPort=8094
