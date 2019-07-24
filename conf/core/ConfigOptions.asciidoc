@@ -585,12 +585,12 @@ See also:
 ** `hoot::RemoveInvalidReviewRelationsVisitor`
 ** `hoot::RemoveDuplicateReviewsOp`
 ** `hoot::BuildingOutlineUpdateOp`
-** `hoot::WayJoinerOp`
 ** `hoot::RemoveInvalidRelationVisitor`
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::SuperfluousWayRemover`
 ** `hoot::RemoveDuplicateWayNodesVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
+** `hoot::WayJoinerOp`
 ** `hoot::ApiTagTruncateVisitor`
 ** `hoot::AddHilbertReviewSortOrderOp`
 
