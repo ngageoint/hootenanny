@@ -54,6 +54,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -204,6 +205,10 @@ void ChangesetReplacementCreator::create(
     // conflate the cookie cut ref map with the cropped sec map
 
     LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
+    // TODO: could possibly get rid of this config option setter by passing in a WayJoiner (?)
+    // TODO: Should we drop the default post conflate way joining here, since we're doing it later
+    // again if the source is linear and the bounds isn't lenient?
+    conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), "true");
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.apply(conflatedMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
@@ -225,7 +230,9 @@ void ChangesetReplacementCreator::create(
       // override some of the default config
       lineSnapper.setSnapToWayStatus("Input1;Conflated");
       lineSnapper.setSnapWayStatus("Input2;Conflated");
-      lineSnapper.setWayNodeToSnapToCriterionClassName(featureTypeFilterClassName);
+      // TODO: hack - need a way to derive the way node crit from the input feature filter crit
+      lineSnapper.setWayNodeToSnapToCriterionClassName(
+        QString::fromStdString(WayNodeCriterion::className()));
       lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
       lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.apply(conflatedMap);

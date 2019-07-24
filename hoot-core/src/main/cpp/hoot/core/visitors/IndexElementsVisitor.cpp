@@ -34,6 +34,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -55,6 +56,12 @@ _index(index),
 _indexToEid(indexToEid)
 {
   _map = pMap.get();
+
+  std::shared_ptr<ChainCriterion> chainCrit = std::dynamic_pointer_cast<ChainCriterion>(_criterion);
+  if (chainCrit)
+  {
+    LOG_VARD(chainCrit->toString());
+  }
 }
 
 void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -66,6 +73,9 @@ void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 void IndexElementsVisitor::finalizeIndex()
 {
   LOG_DEBUG("Finalizing index...");
+  LOG_VARD(_indexToEid.size());
+  LOG_VARD(_boxes.size());
+  LOG_VARD(_fids.size());
   _index->bulkInsert(_boxes, _fids);
 }
 
@@ -73,6 +83,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
   if (!_criterion || _criterion->isSatisfied(e))
   {
+    LOG_VART(e->getElementId());
     _fids.push_back((int)_indexToEid.size());
     _indexToEid.push_back(e->getElementId());
 

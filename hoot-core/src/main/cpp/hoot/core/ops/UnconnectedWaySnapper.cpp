@@ -286,11 +286,8 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
               "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
 
             // retain the parent id of the snapped to way
-            // TODO: The call to this _getPid method is a hack until I can get the cookie cut
-            // replacement workflow right. The problem is that we've called the way joiner after
-            // conflation but before snapping, so there are no pids left. In the workflow we call
-            // the way joiner a second time after snapping, and trying to run it only after snapping
-            // hasn't yielded desirable results yet for unknown reasons.
+            // TODO: I believe we can get rid of this custom _getPid method now that the replacement
+            // workflow sets up the way joiner to retain them after conflation.
             const long pid = _getPid(_snappedToWay);
             if (pid != WayData::PID_EMPTY)
             {
@@ -818,7 +815,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
             closestWayToSnapToCoord, _map->getProjection(),
             MapProjector::createWgs84Projection());
         LOG_TRACE(
-          "Snapping way node: " << nodeToSnap->getId() << " to coord: " <<
+          "Snapping way node: " << nodeToSnap->getElementId() << " to coord: " <<
           closestWayToSnapToCoord.toString() << " (wgs84: " << wgs84Coord.toString() <<
           ") and inserting at index: " << nodeToSnapInsertIndex);
       }
