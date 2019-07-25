@@ -70,6 +70,8 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output)
 {
+    // Fail if a filter with an unconflatable feature type was specified.
+
     std::shared_ptr<ConflatableElementCriterion> featureCrit =
       std::dynamic_pointer_cast<ConflatableElementCriterion>(
         std::shared_ptr<ElementCriterion>(
@@ -79,7 +81,7 @@ void ChangesetReplacementCreator::create(
       throw IllegalArgumentException("TODO");
     }
 
-    // fail if the reader that supports either input doesn't implement Boundable
+    // Fail if the reader that supports either input doesn't implement Boundable.
 
     std::shared_ptr<Boundable> boundable =
       std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input1));
@@ -94,7 +96,6 @@ void ChangesetReplacementCreator::create(
     }
 
     const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
-
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
     QString lenientStr = "Bounds calculation ";
     if (lenientBounds)
@@ -116,7 +117,7 @@ void ChangesetReplacementCreator::create(
     // TODO: the crop config options here could be removed by passing a bounds into IoUtils::loadMap
     // instead.
 
-    // load the ref dataset and crop to the specified aoi
+    // Load the ref dataset and crop to the specified aoi.
 
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
     conf().set(
@@ -129,7 +130,8 @@ void ChangesetReplacementCreator::create(
     IoUtils::loadMap(refMap, input1, true, Status::Unknown1);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
 
-    // keep a mapping of the ref element ids to version, as we'll need the versions later
+    // Keep a mapping of the original ref element ids to versions, as we'll need the original
+    // versions later.
 
     LOG_DEBUG("Recoding ref ID to version mappings...");
     ElementIdToVersionMapper refIdToVersionMapper;
@@ -137,7 +139,7 @@ void ChangesetReplacementCreator::create(
     const QMap<ElementId, long> refIdToVersionMappings = refIdToVersionMapper.getMappings();
     LOG_VARD(refIdToVersionMappings);
 
-    // load the sec dataset and crop to the specified aoi
+    // Load the sec dataset and crop to the specified aoi.
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -149,7 +151,7 @@ void ChangesetReplacementCreator::create(
     IoUtils::loadMap(secMap, input2, false, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
 
-    // prune down to just the feature types specified by the filter
+    // Prune down the elements to just the feature types specified by the filter.
 
     LOG_DEBUG("Filtering features based on input filter: " << featureTypeFilterClassName << "...");
     RemoveElementsVisitor elementsRemover(true);
@@ -160,7 +162,7 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-type-pruning");
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-type-pruning");
 
-    // generate a cutter shape based on the cropped secondary map
+    // Generate a cutter shape based on the cropped secondary map.
 
     LOG_DEBUG("Generating cutter shape map from secondary input...");
     OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
@@ -168,7 +170,7 @@ void ChangesetReplacementCreator::create(
     MapProjector::projectToWgs84(cutterShapeOutlineMap);
     OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
-    // cookie cut the shape of the cutter shape map out of the cropped ref map
+    // Cookie cut the shape of the cutter shape map out of the cropped ref map.
 
     LOG_DEBUG("Cookie cutting cutter shape out of reference map...");
     // TODO: the config options here could be removed by passing in a pre-configured MapCropper to
@@ -195,8 +197,8 @@ void ChangesetReplacementCreator::create(
     relationIdRemapper.apply(secMap);
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-relation-ids-remapped");
 
-    // add node hashes so we can append the cookie cut and sec maps together (needed for element
-    // comparison during map appending)
+    // Add node hashes so we can append the cookie cut and sec maps together (needed for element
+    // comparison during map appending).
 
     LOG_DEBUG("Adding hashes for node comparisons...");
     CalculateHashVisitor2 hashVis;
@@ -205,7 +207,8 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut-after-node-hashes");
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-node-hashes");
 
-    // combine the cookie cut map back with the secondary map, so we can conflate
+    // Combine the cookie cut map back with the secondary map, so we can conflate it with the ref
+    // map.
 
     MapProjector::projectToWgs84(secMap);   // not exactly sure yet why this needs to be done
     cookieCutMap->append(secMap);
@@ -213,7 +216,7 @@ void ChangesetReplacementCreator::create(
     secMap.reset();
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "combined-before-conflation");
 
-    // conflate the cookie cut ref map with the cropped sec map
+    // Conflate the cookie cut ref map with the cropped sec map.
 
     LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
     // TODO: Should we drop the default post conflate way joining here, since we're doing it later
@@ -278,7 +281,7 @@ void ChangesetReplacementCreator::create(
     SuperfluousNodeRemover::removeNodes(refMap);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
 
-    // same type of cropping for the conflated map
+    // same type of cropping as previously done, but for the conflated map
 
     LOG_DEBUG("Cropping conflated map for changeset derivation...");
     cropper.setKeepEntireFeaturesCrossingBounds(_changesetSecKeepEntireCrossingBounds);
@@ -317,8 +320,8 @@ void ChangesetReplacementCreator::create(
       OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-delete-exclude-tags");
     }
 
-    // derive a changeset between the ref and conflated maps that replaces ref features with
-    // secondary features within the bounds and write it out
+    // Derive a changeset between the ref and conflated maps that replaces ref features with
+    // secondary features within the bounds and write it out.
 
     LOG_DEBUG("Deriving replacement changeset...");
     _changesetCreator->create(refMap, conflatedMap, output);
