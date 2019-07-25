@@ -26,7 +26,7 @@ AOI="-122.43204,37.7628,-122.4303457,37.76437"
 
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm"
 
 # DATA PREP
 
