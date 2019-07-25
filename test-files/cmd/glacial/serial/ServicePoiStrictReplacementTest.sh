@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Wholesale POI Replacement Workflow
+# Wholesale POI Replacement Workflow (single changeset derive command).
 #
 # This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie on or outside of it. No 
 # secondary features lying outside the AOI will be included in the output.
@@ -25,12 +25,9 @@ SEC_LAYER_FILE=$IN_DIR/PoiPolygon2.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-122.43204,37.7628,-122.4303457,37.76437"
 
-GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
+GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
-PRUNE_AND_CROP_OPTS="-D reader.use.data.source.ids=true -D convert.bounding.box.keep.entire.features.crossing.bounds=false -D convert.bounding.box.keep.only.features.inside.bounds=false -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::PoiCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
-COOKIE_CUT_OPTS="-D reader.use.data.source.ids=true -D crop.keep.entire.features.crossing.bounds=false -D crop.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/cookie-cut.osm"
-CONFLATE_OPTS="-D debug.maps.filename=$OUT_DIR/conflate.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D debug.maps.filename=$OUT_DIR/conflated.osm"
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=false -D changeset.secondary.keep.entire.features.crossing.bounds=false -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=true"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm"
 
 # DATA PREP
 
@@ -39,39 +36,26 @@ echo ""
 echo "Writing the reference dataset to an osm api db (contains features to be replaced)..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $REF_LAYER_FILE $REF_LAYER 
+# needed for debugging only:
+hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_LAYER $REF_LAYER_FILE
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=false $SEC_LAYER_FILE $SEC_LAYER
-
-# PRUNING AND CROPPING
-
-echo "crop and prune"
-hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-ref.osm -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm $REF_LAYER $OUT_DIR/$TEST_NAME-ref-cropped.osm --write-bounds
-hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=$OUT_DIR/prune-and-crop-sec.osm $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-cropped.osm
-
-# COOKIE CUTTING
-
-echo "cookie cut"
-hoot generate-alpha-shape $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/alpha-shape.osm -D reader.use.data.source.ids=true $OUT_DIR/$TEST_NAME-sec-cropped.osm 1000 0 $OUT_DIR/$TEST_NAME-cutter-shape.osm
-hoot cookie-cut $GENERAL_OPTS $COOKIE_CUT_OPTS $OUT_DIR/$TEST_NAME-cutter-shape.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm
-
-# CONFLATION
-
-echo "conflate"
-hoot conflate $GENERAL_OPTS $CONFLATE_OPTS $OUT_DIR/$TEST_NAME-cookie-cut.osm $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm
+# needed for debugging only:
+hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-layer-original-from-db.osm
 
 # CHANGESET DERIVATION
 
 CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
 echo ""
-echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; xml changeset out)..."
+echo $CHANGESET_DERIVATION_MSG " (xml changeset out)..."
 echo ""
-hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-xml.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-changeset-1.osc
+hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::PoiCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc --write-bounds
 echo ""
-echo $CHANGESET_DERIVATION_MSG " (osm xml file secondary source; sql changeset out)..."
+echo $CHANGESET_DERIVATION_MSG " (sql changeset out)..."
 echo ""
-hoot changeset-derive $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-sql.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-conflated.osm $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER
+hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::PoiCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER
 
 # CHANGESET APPLICATION
 

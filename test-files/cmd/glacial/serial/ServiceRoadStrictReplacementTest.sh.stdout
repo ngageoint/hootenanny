@@ -6,31 +6,14 @@
 
 Writing the reference dataset to an osm api db (contains features to be replaced)...
 
-19:53:24.511 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73301713) in way (9514937).
-19:53:24.511 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73191975) in way (9514937).
-19:53:24.511 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73238746) in way (9514937).
-19:53:24.511 WARN   .../hoot/core/io/OsmXmlReader.cpp( 503) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Writing the secondary dataset to a hoot api db (contains features to replace with)...
 
-19:53:34.235 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73301713) in way (9514937).
-19:53:34.235 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73191975) in way (9514937).
-19:53:34.235 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73238746) in way (9514937).
-19:53:34.236 WARN   .../hoot/core/io/OsmXmlReader.cpp( 503) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
-crop and prune
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (xml changeset out)...
 
 
-cookie cut
-
-
-conflate
-
-
-Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source; xml changeset out)...
-
-
-Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (osm xml file secondary source; sql changeset out)...
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (sql changeset out)...
 
 
 Applying the changeset to the reference data...
