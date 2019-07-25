@@ -209,6 +209,7 @@ void ChangesetReplacementCreator::create(
     // TODO: Should we drop the default post conflate way joining here, since we're doing it later
     // again if the source is linear and the bounds isn't lenient?
     conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), "true");
+    conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerAdvanced");
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.apply(conflatedMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
