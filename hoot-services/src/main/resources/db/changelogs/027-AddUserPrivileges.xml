@@ -12,7 +12,7 @@
             <column name="privileges" type="hstore" />
         </addColumn>
 
-        <addDefaultValue tableName="users" columnName="privileges" defaultValueComputed="''" />
+        <addNotNullConstraint tableName="users" columnName="privileges" defaultNullValue="" />
 
     </changeSet>
 </databaseChangeLog>
