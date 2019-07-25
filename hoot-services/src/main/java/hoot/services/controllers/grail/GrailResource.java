@@ -89,6 +89,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.geo.BoundingBox;
@@ -128,6 +129,9 @@ public class GrailResource {
 
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
+
+    @Autowired
+    private UserManager userManager;
 
     public GrailResource() {}
 
@@ -186,6 +190,12 @@ public class GrailResource {
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
+        Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
+
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
@@ -197,7 +207,6 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
-        Users user = Users.fromRequest(request);
         List<Command> workflow = new LinkedList<>();
         String bbox = reqParams.getBounds();
 
@@ -263,9 +272,16 @@ public class GrailResource {
     @GET
     @Path("/differentialstats")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response differentialStats(@QueryParam("jobId") String jobDir,
+    public Response differentialStats(@Context HttpServletRequest request,
+            @QueryParam("jobId") String jobDir,
             @QueryParam("includeTags") Boolean includeTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
 
         JSONObject jobInfo = new JSONObject();
 
@@ -351,6 +367,10 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
 
         GrailParams params = new GrailParams();
         params.setUser(user);
@@ -453,6 +473,10 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
 
         String input1 = reqParams.getInput1();
         String input2 = reqParams.getInput2();
@@ -531,14 +555,18 @@ public class GrailResource {
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
+        Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
+
         String jobDir = reqParams.getFolder();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
         if (!workDir.exists()) {
             logger.error("conflatePush: jobDir {} does not exist.", workDir.getAbsolutePath());
             return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
         }
-
-        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
@@ -605,6 +633,10 @@ public class GrailResource {
             @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         String mapSuffix = jobId.substring(0, 7);
@@ -684,6 +716,10 @@ public class GrailResource {
             @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
+        }
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
