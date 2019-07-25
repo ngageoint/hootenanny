@@ -31,8 +31,8 @@ DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 PRUNE_AND_CROP_OPTS="-D convert.bounding.box.keep.only.features.inside.bounds=false -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"
 COOKIE_CUT_OPTS="-D reader.use.data.source.ids=true -D crop.keep.entire.features.crossing.bounds=false -D crop.keep.only.features.inside.bounds=false -D debug.maps.filename=$OUT_DIR/cookie-cut.osm"
-# -D way.joiner=hoot::WayJoinerBasic
-CONFLATE_OPTS="-D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D way.joiner=hoot::WayJoinerAdvanced -D debug.maps.filename=$OUT_DIR/conflated.osm"
+# -D way.joiner=hoot::WayJoinerAdvanced -D way.joiner.leave.parent.id=true
+CONFLATE_OPTS="-D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=false -D debug.maps.filename=$OUT_DIR/conflated.osm"
 # Allow both Input1 and Conflated features to be snapped, since some features will have already been conflated.
 SNAP_OPTS="-D reader.use.data.source.ids=true -D way.joiner=hoot::ReplacementSnappedWayJoiner -D convert.ops=hoot::UnconnectedHighwaySnapper;hoot::WayJoinerOp -D snap.unconnected.ways.snap.to.way.status=Input1;Conflated -D snap.unconnected.ways.snap.way.status=Input2;Conflated -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0 -D debug.maps.filename=$OUT_DIR/snap.osm" 
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D convert.bounding.box=$AOI -D changeset.reference.keep.entire.features.crossing.bounds=true -D changeset.secondary.keep.entire.features.crossing.bounds=true -D changeset.reference.keep.only.features.inside.bounds=false -D changeset.secondary.keep.only.features.inside.bounds=false -D changeset.allow.deleting.reference.features.outside.bounds=false -D in.bounds.criterion.strict=false"

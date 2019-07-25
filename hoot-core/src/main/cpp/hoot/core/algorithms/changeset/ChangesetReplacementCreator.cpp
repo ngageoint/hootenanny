@@ -154,7 +154,8 @@ void ChangesetReplacementCreator::create(
 
     LOG_DEBUG("Generating cutter shape map from secondary input...");
     OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(secMap);
-    MapProjector::projectToWgs84(cutterShapeOutlineMap); // not exactly sure why this needs to be done
+    // not exactly sure yet why this needs to be done
+    MapProjector::projectToWgs84(cutterShapeOutlineMap);
     OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
     // cookie cut the shape of the cutter shape map out of the cropped ref map
@@ -168,7 +169,7 @@ void ChangesetReplacementCreator::create(
       ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cropKeepOnlyInsideBounds);
     OsmMapPtr cookieCutMap(new OsmMap(refMap));
     CookieCutter(false, 0.0).cut(cutterShapeOutlineMap, cookieCutMap);
-    MapProjector::projectToWgs84(cookieCutMap); // not exactly sure why this needs to be done
+    MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
     OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
     // Renumber the relations in the sec map, as they could have ID overlap with those in the cookie
@@ -196,7 +197,7 @@ void ChangesetReplacementCreator::create(
 
     // combine the cookie cut map back with the secondary map, so we can conflate
 
-    MapProjector::projectToWgs84(secMap);   // not exactly sure why this needs to be done
+    MapProjector::projectToWgs84(secMap);   // not exactly sure yet why this needs to be done
     cookieCutMap->append(secMap);
     OsmMapPtr conflatedMap = cookieCutMap;
     secMap.reset();
@@ -205,11 +206,17 @@ void ChangesetReplacementCreator::create(
     // conflate the cookie cut ref map with the cropped sec map
 
     LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
-    // TODO: could possibly get rid of this config option setter by passing in a WayJoiner (?)
     // TODO: Should we drop the default post conflate way joining here, since we're doing it later
     // again if the source is linear and the bounds isn't lenient?
     conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), "true");
-    conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerAdvanced");
+    if (!lenientBounds) // not exactly sure yet why this needs to be done
+    {
+      conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerAdvanced");
+    }
+    else
+    {
+      conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerBasic");
+    }
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.apply(conflatedMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
