@@ -294,6 +294,11 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   //if another parsed change previously modified the element with this id, we want to get the
   //modified version
   const long currentVersion = changeElement->getVersion();
+  if (currentVersion < 1)
+  {
+    throw HootException(
+      "Elements being modified in an .osc.sql changeset must always have a version greater than one.");
+  }
   const long newVersion = currentVersion + 1;
 
   changeElement->setVersion(newVersion);
@@ -346,6 +351,11 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   ElementPtr changeElement = _getChangeElement(element);
 
   const long currentVersion = changeElement->getVersion();
+  if (currentVersion < 1)
+  {
+    throw HootException(
+      "Elements being deleted in an .osc.sql changeset must always have a version greater than one.");
+  }
   const long newVersion = currentVersion + 1;
 
   changeElement->setVersion(newVersion);
