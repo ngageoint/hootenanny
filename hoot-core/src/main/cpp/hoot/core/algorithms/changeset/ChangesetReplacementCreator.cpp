@@ -113,13 +113,12 @@ void ChangesetReplacementCreator::create(
 
     _parseConfigOpts(lenientBounds, featureTypeFilterClassName);
 
-    // load each dataset separately and crop to the specified aoi
-
     // TODO: the crop config options here could be removed by passing a bounds into IoUtils::loadMap
     // instead.
 
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+    // load the ref dataset and crop to the specified aoi
 
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
       _convertRefKeepEntireCrossingBounds);
@@ -132,10 +131,13 @@ void ChangesetReplacementCreator::create(
 
     // keep a mapping of the ref element ids to version, as we'll need the versions later
 
+    LOG_DEBUG("Recoding ref ID to version mappings...");
     ElementIdToVersionMapper refIdToVersionMapper;
     refIdToVersionMapper.apply(refMap);
     const QMap<ElementId, long> refIdToVersionMappings = refIdToVersionMapper.getMappings();
     LOG_VARD(refIdToVersionMappings);
+
+    // load the sec dataset and crop to the specified aoi
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -264,29 +266,26 @@ void ChangesetReplacementCreator::create(
 
     MapProjector::projectToWgs84(conflatedMap);  // conflation and snapping work in planar
 
-    // crop the original ref and conflated maps appropriately for changeset derivation
+    // Crop the original ref map appropriately for changeset derivation. Also, clean up straggling
+    // nodes (maybe need to figure out how to prevent this from occurring during cropping).
 
     MapCropper cropper(bounds);
-
     LOG_DEBUG("Cropping reference map for changeset derivation...");
     cropper.setKeepEntireFeaturesCrossingBounds(_changesetRefKeepEntireCrossingBounds);
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetRefKeepOnlyInsideBounds);
     cropper.apply(refMap);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-cropped-for-changeset");
+    SuperfluousNodeRemover::removeNodes(refMap);
+    OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
+
+    // same type of cropping for the conflated map
 
     LOG_DEBUG("Cropping conflated map for changeset derivation...");
     cropper.setKeepEntireFeaturesCrossingBounds(_changesetSecKeepEntireCrossingBounds);
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetSecKeepOnlyInsideBounds);
     cropper.apply(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-cropped-for-changeset");
-
-    // clean up straggling nodes (maybe need to figure out how to prevent this from occurring
-    // earlier on)
-
-    LOG_DEBUG("Removing orphaned nodes...");
-    SuperfluousNodeRemover::removeNodes(refMap);
     SuperfluousNodeRemover::removeNodes(conflatedMap);
-    OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-after-orphaned-node-removal");
 
     // TODO: setting these two config options won't be necessary once the old multiple command tests
