@@ -55,6 +55,7 @@
 #include <hoot/core/ops/Boundable.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/ops/ElementIdToVersionMapper.h>
 
 namespace hoot
 {
@@ -128,6 +129,13 @@ void ChangesetReplacementCreator::create(
     OsmMapPtr refMap(new OsmMap());
     IoUtils::loadMap(refMap, input1, true, Status::Unknown1);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
+
+    // keep a mapping of the ref element ids to version, as we'll need the versions later
+
+    ElementIdToVersionMapper refIdToVersionMapper;
+    refIdToVersionMapper.apply(refMap);
+    const QMap<ElementId, long> refIdToVersionMappings = refIdToVersionMapper.getMappings();
+    LOG_VARD(refIdToVersionMappings);
 
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -250,7 +258,7 @@ void ChangesetReplacementCreator::create(
       // data in the resulting changeset and generate modify statements instead.
 
       LOG_DEBUG("Rejoining features after unconnected linear feature snapping...");
-      ReplacementSnappedWayJoiner().join(conflatedMap);
+      ReplacementSnappedWayJoiner(refIdToVersionMappings).join(conflatedMap);
       OsmMapWriterFactory::writeDebugMap(conflatedMap, "joined");
     }
 

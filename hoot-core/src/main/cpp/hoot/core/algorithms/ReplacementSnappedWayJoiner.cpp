@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ReplacementSnappedWayJoiner.h"
@@ -37,8 +37,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, ReplacementSnappedWayJoiner)
 
-ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner() :
-WayJoinerAdvanced::WayJoinerAdvanced()
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner()
+{
+}
+
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner(
+  const QMap<ElementId, long>& refIdToVersionMappings) :
+WayJoinerAdvanced::WayJoinerAdvanced(),
+_refIdToVersionMappings(refIdToVersionMappings)
 {
   _leavePid = true;
   _callingClass = QString::fromStdString(className());
@@ -101,7 +107,13 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
 {
   WayJoinerAdvanced::join(map);
 
+  if (_refIdToVersionMappings.isEmpty())
+  {
+    LOG_WARN("No version mappings exist for ref ways.");
+  }
+
   // If anything left has a PID on it, let's make that PID its ID.
+  // TODO: still don't like this...
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
@@ -113,6 +125,17 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
       LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());
       ElementPtr newWay(way->clone());
       newWay->setId(pid);
+      const ElementId parentElementId = ElementId(ElementType::Way, pid);
+      if (!_refIdToVersionMappings.contains(parentElementId))
+      {
+        LOG_WARN("No version mapping for ref way: " << parentElementId);
+      }
+      else
+      {
+        newWay->setVersion(_refIdToVersionMappings[parentElementId]);
+      }
+      LOG_VART(newWay->getVersion());
+      LOG_VART(newWay->getStatus());
       _map->replace(way, newWay);
       pidsUsed.insert(pid);
     }

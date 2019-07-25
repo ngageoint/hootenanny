@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEMENT_SNAPPED_WAY_JOINER_H
@@ -43,7 +43,9 @@ public:
 
   static std::string className() { return "hoot::ReplacementSnappedWayJoiner"; }
 
+  // TODO: can probably get rid of the default constructor at some point
   ReplacementSnappedWayJoiner();
+  ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
 
   /**
    * @see WayJoiner
@@ -87,6 +89,10 @@ protected:
 
   virtual bool _hasPid(const ConstWayPtr& way) const;
   virtual long _getPid(const ConstWayPtr& way) const;
+
+private:
+
+  QMap<ElementId, long> _refIdToVersionMappings;
 };
 
 }
