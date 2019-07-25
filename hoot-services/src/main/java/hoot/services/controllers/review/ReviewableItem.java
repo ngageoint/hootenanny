@@ -22,11 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.review;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.json.simple.JSONObject;
+
+import com.querydsl.core.Tuple;
+
+import hoot.services.models.osm.Element;
+import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.ElementFactory;
+import hoot.services.models.osm.Relation;
 
 
 public class ReviewableItem implements ReviewQueryMapper {
@@ -34,6 +45,7 @@ public class ReviewableItem implements ReviewQueryMapper {
     private long mapId;
     private long relationId;
     private long resultCount;
+    private String bounds;
 
     public ReviewableItem(long sortOrder, long mapid, long relationid) {
         this.sortOrder = sortOrder;
@@ -79,7 +91,30 @@ public class ReviewableItem implements ReviewQueryMapper {
         o.put("sortorder", sortOrder);
         o.put("mapid", mapId);
         o.put("relationid", relationId);
+        o.put("bounds", bounds);
 
         return o.toJSONString();
+    }
+
+    public String getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(String bounds) {
+        this.bounds = bounds;
+    }
+
+    public void setBounds(Long id) {
+        //Get the relation bounds and set it on reviewable item
+        Set<Long> elementIds = new HashSet<>();
+        elementIds.add(id);
+
+        List<Tuple> elementRecords = (List<Tuple>) Element.getElementRecordsWithUserInfo(this.mapId,
+                ElementType.Relation, elementIds);
+
+        Relation relationElement = (Relation) ElementFactory.create(ElementType.Relation, elementRecords.get(0), getMapId());
+
+        setBounds(relationElement.getBounds().toServicesString());
+
     }
 }
