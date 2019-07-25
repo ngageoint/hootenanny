@@ -41,6 +41,7 @@ ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner() :
 WayJoinerAdvanced::WayJoinerAdvanced()
 {
   _leavePid = true;
+  _callingClass = QString::fromStdString(className());
 }
 
 bool ReplacementSnappedWayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const

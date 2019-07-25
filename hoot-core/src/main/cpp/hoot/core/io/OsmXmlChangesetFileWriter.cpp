@@ -210,6 +210,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
     version = 0;
   else
     version = n->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
 
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
@@ -252,6 +253,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
     version = 0;
   else
     version = w->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
@@ -306,6 +308,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
     version = 0;
   else
     version = r->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {

@@ -25,7 +25,8 @@ SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-71.4698,42.4866,-71.4657,42.4902"
 
-GENERAL_OPTS="--trace -D log.class.filter=WayJoiner;WayJoinerAdvanced;ReplacementSnappedWayJoiner;UnconnectedWaySnapper;IndexElementsVisitor -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
+# OsmApiDbSqlChangesetFileWriter;OsmXmlChangesetFileWriter;ChangesetDeriver;UnconnectedWaySnapper
+GENERAL_OPTS="--trace -D log.class.filter=WayJoinerAdvanced;ReplacementSnappedWayJoiner -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D changeset.xml.writer.add.timestamp=false -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 PRUNE_AND_CROP_OPTS="-D convert.bounding.box.keep.only.features.inside.bounds=false -D reader.use.data.source.ids=true -D convert.ops=hoot::RemoveElementsVisitor -D convert.bounding.box=$AOI -D remove.elements.visitor.element.criteria=hoot::HighwayCriterion -D remove.elements.visitor.recursive=true -D element.criterion.negate=true"

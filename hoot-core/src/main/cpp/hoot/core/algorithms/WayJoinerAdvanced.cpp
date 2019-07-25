@@ -54,7 +54,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerAdvanced)
 
-WayJoinerAdvanced::WayJoinerAdvanced()
+WayJoinerAdvanced::WayJoinerAdvanced() :
+_callingClass(QString::fromStdString(className()))
 {
 }
 
@@ -431,6 +432,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   if (!parent || !child)
     return false;
 
+  LOG_VART(_callingClass);
   LOG_VART(_callingMethod);
   LOG_VART(parent->getId());
   LOG_VART(child->getId());

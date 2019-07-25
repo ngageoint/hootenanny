@@ -68,6 +68,7 @@ public:
 protected:
 
   WayPtr _wayKeptAfterJoin;
+  QString _callingClass;
 
   /**
    * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that
