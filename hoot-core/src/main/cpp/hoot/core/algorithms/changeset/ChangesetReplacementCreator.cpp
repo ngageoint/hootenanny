@@ -279,10 +279,10 @@ void ChangesetReplacementCreator::create(
     postOps.apply(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated");
 
-    if (/*!lenientBounds &&*/ _isLinearCrit(featureTypeFilterClassName))
+    if (_isLinearCrit(featureTypeFilterClassName))
     {
-      // Snap secondary features back to reference features if dealing with linear features and a
-      // non-lenient bounds where ref features may have been cut along it.
+      // Snap secondary features back to reference features if dealing with linear features where
+      // ref features may have been cut along the bounds.
 
       LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
       UnconnectedWaySnapper lineSnapper;
@@ -334,8 +334,9 @@ void ChangesetReplacementCreator::create(
 
     if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
     {
-      // Snap secondary features back to reference features if dealing with linear features and a
-      // non-lenient bounds where ref features may have been cut along it.
+      // The non-strict way replacement workflow benefits from a second snapping run right before
+      // changeset derivation due to there being ways connected to replacement ways that fall
+      // completely outside of the bounds.
 
       LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
       UnconnectedWaySnapper lineSnapper;
@@ -349,18 +350,11 @@ void ChangesetReplacementCreator::create(
       lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
       lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.apply(conflatedMap);
+      MapProjector::projectToWgs84(conflatedMap);   //snapping works in planar
       OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped-2");
 
-      // TODO: joining here causes changeset errors
-
-      // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
-      // data in the resulting changeset and generate modify statements instead.
-
-//      LOG_DEBUG("Rejoining features after unconnected linear feature snapping...");
-//      ReplacementSnappedWayJoiner(refIdToVersionMappings).join(conflatedMap);
-//      OsmMapWriterFactory::writeDebugMap(conflatedMap, "joined");
-
-      MapProjector::projectToWgs84(conflatedMap);
+      // Not joining after snapping here, because it causes changeset errors...also don't think we
+      // need to.
     }
 
     // TODO: setting these two config options won't be necessary once the old multiple command tests
