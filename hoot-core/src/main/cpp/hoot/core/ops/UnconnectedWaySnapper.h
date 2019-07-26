@@ -56,9 +56,8 @@ namespace hoot
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
- * them may not make sense.  I've only seen bad snapped roads like this in cropped data so far so
- * may not end up being relevant. This may not be an easy change to make, since the snapped node in
- * question may belong to multiple ways.
+ * them may not make sense.  I've seen this in a couple of datasets so far. This may not be an easy
+ * change to make, since the snapped node in question may belong to multiple ways.
  * - If there ends up being a way node fairly close to the selected snap point on the way and that
  * way node was skipped over due to being outside of the way snap threshold, it still might make
  * sense to snap to it instead.  Have only seen one instance of this so far...
