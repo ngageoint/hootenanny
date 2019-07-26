@@ -717,6 +717,13 @@ If true, will not break apart features crossing the convert bounds. This is anal
 crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
 command only and kept as a separate option with a different default value.
 
+=== convert.bounding.box.keep.immediate.connected.ways.outside.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === convert.bounding.box.keep.only.features.inside.bounds
 
 * Data Type: bool

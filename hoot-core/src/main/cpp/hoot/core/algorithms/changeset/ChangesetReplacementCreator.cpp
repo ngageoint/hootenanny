@@ -115,8 +115,8 @@ void ChangesetReplacementCreator::create(
 
     _parseConfigOpts(lenientBounds, featureTypeFilterClassName);
 
-    // TODO: the crop config options here could be removed by passing a bounds into IoUtils::loadMap
-    // instead.
+    // TODO: the crop config options use here for the data loading could be removed by passing
+    // bounds options into IoUtils::loadMap instead (?)
 
     // Load the ref dataset and crop to the specified aoi.
 
@@ -127,6 +127,9 @@ void ChangesetReplacementCreator::create(
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
       _convertRefKeepOnlyInsideBounds);
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepImmediateConnectedWaysOutsideBoundsKey(),
+      _convertRefKeepImmediateConnectedWaysOutsideBounds);
     OsmMapPtr refMap(new OsmMap());
     IoUtils::loadMap(refMap, input1, true, Status::Unknown1);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
@@ -134,7 +137,7 @@ void ChangesetReplacementCreator::create(
     // Keep a mapping of the original ref element ids to versions, as we'll need the original
     // versions later.
 
-    LOG_DEBUG("Recoding ref ID to version mappings...");
+    LOG_DEBUG("Recording ref ID to version mappings...");
     ElementIdToVersionMapper refIdToVersionMapper;
     refIdToVersionMapper.apply(refMap);
     const QMap<ElementId, long> refIdToVersionMappings = refIdToVersionMapper.getMappings();
@@ -148,6 +151,8 @@ void ChangesetReplacementCreator::create(
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
       _convertSecKeepOnlyInsideBounds);
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepImmediateConnectedWaysOutsideBoundsKey(), false);
     OsmMapPtr secMap(new OsmMap());
     IoUtils::loadMap(secMap, input2, false, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
@@ -305,7 +310,7 @@ void ChangesetReplacementCreator::create(
       // tag that will cause the deriver to skip deleting them.
 
       // TODO: let's pass the bounds in the constructor instead
-      conf().set("in.bounds.criterion.bounds", boundsStr);
+      conf().set(ConfigOptions::getInBoundsCriterionBoundsKey(), boundsStr);
       std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
       boundsCrit->setOsmMap(refMap.get());
       std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
@@ -387,6 +392,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     }
 
     _convertRefKeepEntireCrossingBounds = false;
+    _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
     _convertSecKeepEntireCrossingBounds = false;
     _convertSecKeepOnlyInsideBounds = false;
     _cropKeepEntireCrossingBounds = false;
@@ -401,6 +407,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     if (lenientBounds)
     {
       _convertRefKeepEntireCrossingBounds = true;
+      _convertRefKeepImmediateConnectedWaysOutsideBounds = true;
       _convertSecKeepEntireCrossingBounds = true;
       _convertSecKeepOnlyInsideBounds = false;
       _cropKeepEntireCrossingBounds = false;
@@ -413,6 +420,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     else
     {
       _convertRefKeepEntireCrossingBounds = true;
+      _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
       _convertSecKeepEntireCrossingBounds = false;
       _convertSecKeepOnlyInsideBounds = false;
       _cropKeepEntireCrossingBounds = false;
@@ -428,6 +436,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     if (lenientBounds)
     {
       _convertRefKeepEntireCrossingBounds = true;
+      _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
       _convertSecKeepEntireCrossingBounds = true;
       _convertSecKeepOnlyInsideBounds = false;
       _cropKeepEntireCrossingBounds = true;
@@ -440,6 +449,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     else
     {
       _convertRefKeepEntireCrossingBounds = true;
+      _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
       _convertSecKeepEntireCrossingBounds = false;
       _convertSecKeepOnlyInsideBounds = true;
       _cropKeepEntireCrossingBounds = true;
@@ -448,6 +458,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
       _changesetSecKeepOnlyInsideBounds = true;
       _changesetAllowDeletingRefOutsideBounds = false;
       _inBoundsStrict = true;
+
     }
   }
   else
@@ -458,6 +469,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
 
   LOG_VARD(_convertRefKeepEntireCrossingBounds);
   LOG_VARD(_convertRefKeepOnlyInsideBounds);
+  LOG_VARD(_convertRefKeepImmediateConnectedWaysOutsideBounds);
   LOG_VARD(_convertSecKeepEntireCrossingBounds);
   LOG_VARD(_convertSecKeepOnlyInsideBounds);
   LOG_VARD(_cropKeepEntireCrossingBounds);

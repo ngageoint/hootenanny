@@ -437,6 +437,14 @@ public:
    */
   bool userExists(const QString& userName);
 
+  /**
+   * TODO
+   *
+   * @param wayIds
+   * @return
+   */
+  QSet<QString> selectConnectedWayIds(const QSet<QString>& wayIds);
+
 protected:
 
   //osm api db stores coords as integers and hoot api db as floating point

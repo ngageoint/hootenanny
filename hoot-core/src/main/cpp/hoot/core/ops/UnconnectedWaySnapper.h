@@ -56,8 +56,11 @@ namespace hoot
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping
- * them may not make sense.  I've seen this in a couple of datasets so far. This may not be an easy
- * change to make, since the snapped node in question may belong to multiple ways.
+ * them may not make sense.  I've seen bad snaps like that in a couple of datasets so far. This may
+ * not be an easy change to make, since the snapped node in question may belong to multiple ways.
+ * One way to go about it could be to use CopyMapSubsetOp to make a temp copy of the snap and snap
+ * to ways, perform the snap, do the parallel/overlap checks, and back out of the actual snap if
+ * needed.
  * - If there ends up being a way node fairly close to the selected snap point on the way and that
  * way node was skipped over due to being outside of the way snap threshold, it still might make
  * sense to snap to it instead.  Have only seen one instance of this so far...

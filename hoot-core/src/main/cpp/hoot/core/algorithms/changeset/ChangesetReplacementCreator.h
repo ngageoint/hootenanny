@@ -56,6 +56,7 @@ public:
    * @param featureTypeFilterClassName
    * @param lenientBounds
    * @param output
+   * @todo support empty feature filters and filter with multiple types
    */
   void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
@@ -67,6 +68,7 @@ private:
 
   bool _convertRefKeepEntireCrossingBounds;
   bool _convertRefKeepOnlyInsideBounds;
+  bool _convertRefKeepImmediateConnectedWaysOutsideBounds;
   bool _convertSecKeepEntireCrossingBounds;
   bool _convertSecKeepOnlyInsideBounds;
   bool _cropKeepEntireCrossingBounds;

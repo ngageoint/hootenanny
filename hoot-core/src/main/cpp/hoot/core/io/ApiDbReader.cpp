@@ -302,6 +302,17 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
 
   if (wayIds.size() > 0)
   {
+    if (ConfigOptions().getConvertBoundingBoxKeepImmediateConnectedWaysOutsideBounds())
+    {
+      LOG_DEBUG("Retrieving way IDs immediately connected to the current ways...");
+      const QSet<QString> connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);
+      LOG_VARD(connectedWayIds);
+      LOG_VARD(connectedWayIds.size());
+      wayIds.unite(connectedWayIds);
+      LOG_VARD(wayIds);
+      LOG_VARD(wayIds.size());
+    }
+
     LOG_DEBUG("Retrieving ways by way ID...");
     std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
@@ -354,6 +365,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
   LOG_DEBUG("Retrieving nodes within the query bounds...");
   std::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
+  // Element IDs are stored as strings to allow inserting them directly into the select query
+  // strings.
   QSet<QString> nodeIds;
   while (nodeItr->next())
   {
@@ -366,7 +379,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     // with any queries, because mapped ids may not exist yet.
     const long nodeId = resultIterator.value(0).toLongLong();
     LOG_VART(ElementId(ElementType::Node, nodeId));
-    nodeIds.insert( QString::number(nodeId));
+    nodeIds.insert(QString::number(nodeId));
   }
   LOG_VARD(nodeIds.size());
 
@@ -379,6 +392,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
       _readWaysByNodeIds(
         map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
       nodeIds.unite(additionalWayNodeIds);
+      LOG_VARD(nodeIds.size());
+      LOG_VARD(wayIds);
+      LOG_VARD(wayIds.size());
 
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
       QSet<QString> relationIds;
