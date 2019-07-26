@@ -49,7 +49,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
-SuperfluousNodeRemover::SuperfluousNodeRemover()
+SuperfluousNodeRemover::SuperfluousNodeRemover() :
+_ignoreInformationTags(false)
 {
 }
 
@@ -63,6 +64,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   {
     const ConstWayPtr& w = it->second;
     const vector<long>& nodeIds = w->getNodeIds();
+    LOG_VART(nodeIds);
     _usedNodes.insert(nodeIds.begin(), nodeIds.end());
   }
 
@@ -70,11 +72,14 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Node* n = it->second.get();
-    if (n->getTags().getNonDebugCount() != 0)
+    LOG_VART(n->getElementId());
+    LOG_VART(n->getTags().getNonDebugCount());
+    if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
       _usedNodes.insert(n->getId());
     }
   }
+  LOG_VART(_usedNodes.size());
 
   std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
@@ -91,7 +96,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
     const Node* n = it->second.get();
-    //LOG_VART(n->getElementId());
+    LOG_VART(n->getElementId());
     const long nodeId = n->getId();
     if (_usedNodes.find(nodeId) == _usedNodes.end())
     {
@@ -122,15 +127,16 @@ void SuperfluousNodeRemover::readObject(QDataStream& is)
   }
 }
 
-void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map)
-{
-  SuperfluousNodeRemover().apply(map);
-}
-
-void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map, const Envelope& e)
+void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
+                                         const bool ignoreInformationTags,
+                                         const geos::geom::Envelope& e)
 {
   SuperfluousNodeRemover s;
-  s.setBounds(e);
+  s.setIgnoreInformationTags(ignoreInformationTags);
+  if (!e.isNull())
+  {
+    s.setBounds(e);
+  }
   s.apply(map);
 }
 

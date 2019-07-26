@@ -47,7 +47,7 @@ namespace hoot
 class OsmMap;
 
 /**
- * Removes all the nodes from a map that aren't part of a way.
+ * Removes all the nodes from a map that aren't part of a way and have no information in them.
  *
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
@@ -68,11 +68,19 @@ public:
 
   virtual void readObject(QDataStream& is);
 
-  static void removeNodes(std::shared_ptr<OsmMap>& map);
-
-  static void removeNodes(std::shared_ptr<OsmMap>& map, const geos::geom::Envelope& e);
+  /**
+   * TODO
+   *
+   * @param map
+   * @param ignoreInformationTags
+   * @param e
+   */
+  static void removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+                          const geos::geom::Envelope& e = geos::geom::Envelope());
 
   virtual void setBounds(const geos::geom::Envelope &bounds);
+
+  void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
 
   virtual void writeObject(QDataStream& os) const;
 
@@ -87,6 +95,7 @@ protected:
 
   geos::geom::Envelope _bounds;
   std::set<long> _usedNodes;
+  bool _ignoreInformationTags;
 };
 
 }

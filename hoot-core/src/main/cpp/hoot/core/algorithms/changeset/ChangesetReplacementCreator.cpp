@@ -308,8 +308,7 @@ void ChangesetReplacementCreator::create(
 
     MapProjector::projectToWgs84(conflatedMap);  // conflation and snapping work in planar
 
-    // Crop the original ref map appropriately for changeset derivation. Also, clean up straggling
-    // nodes (maybe need to figure out how to prevent this from occurring during cropping).
+    // Crop the original ref map appropriately for changeset derivation.
 
     MapCropper cropper(bounds);
     LOG_DEBUG("Cropping reference map for changeset derivation...");
@@ -317,8 +316,6 @@ void ChangesetReplacementCreator::create(
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetRefKeepOnlyInsideBounds);
     cropper.apply(refMap);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-cropped-for-changeset");
-    SuperfluousNodeRemover::removeNodes(refMap);
-    OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
 
     // same type of cropping as previously done, but for the conflated map
 
@@ -327,7 +324,15 @@ void ChangesetReplacementCreator::create(
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetSecKeepOnlyInsideBounds);
     cropper.apply(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-cropped-for-changeset");
-    SuperfluousNodeRemover::removeNodes(conflatedMap);
+
+    // Clean up straggling nodes in both maps.
+
+    // Its ok to ignore info tags when dealing with only linear features, as all nodes in the data
+    // being conflated should be way nodes with no information.
+    const bool ignoreInfoTags = _isLinearCrit(featureTypeFilterClassName);
+    SuperfluousNodeRemover::removeNodes(refMap, ignoreInfoTags);
+    OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-orphaned-node-removal");
+    SuperfluousNodeRemover::removeNodes(conflatedMap, ignoreInfoTags);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-after-orphaned-node-removal");
 
     if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
