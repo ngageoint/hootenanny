@@ -254,6 +254,8 @@ void WayJoinerAdvanced::_joinAtNode()
             const bool parentHasName = pTags.hasName();
             const bool childHasName = cTags.hasName();
             // TODO: use OsmUtils::nameConflictExists here instead
+            // TODO: does it make sense to add a strict name matching option that only explicitly
+            // matches if the name tags have the same key (name vs name and not alt_name)?
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
                 Tags::haveMatchingName(pTags, cTags))
             {

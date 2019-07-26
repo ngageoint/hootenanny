@@ -130,7 +130,8 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation,
+                                            const ConstOsmMapPtr& map)
 {
   return relation->toString() + getRelationMembersDetailedString(relation, map);
 }
@@ -187,7 +188,8 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
   }
 }
 
-bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
+bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1,
+                                    const ConstElementPtr& element2)
 {
   // Technically, this should also take into account reverse one ways and check direction.  Since
   // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
@@ -211,7 +213,8 @@ bool OsmUtils::nameConflictExists(const ConstElementPtr& element1, const ConstEl
       !Tags::haveMatchingName(element1->getTags(), element2->getTags());
 }
 
-bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
+bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1,
+                                               const ConstElementPtr& element2)
 {
   const QString element1HighwayVal = element1->getTags().get("highway");
   const QString element2HighwayVal = element2->getTags().get("highway");
