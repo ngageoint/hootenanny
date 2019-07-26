@@ -59,6 +59,9 @@
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 
 namespace hoot
 {
@@ -142,6 +145,36 @@ void ChangesetReplacementCreator::create(
     refIdToVersionMapper.apply(refMap);
     const QMap<ElementId, long> refIdToVersionMappings = refIdToVersionMapper.getMappings();
     LOG_VARD(refIdToVersionMappings);
+
+    if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
+    {
+      // If we have a lenient bounds requirement and linear features, we need to exclude all ways
+      // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
+
+      LOG_DEBUG(
+        "Setting ref connected way features outside of bounds to be excluded from deletion...");
+
+      // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
+
+      SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
+      ChainCriterion addTagCrit(
+        std::shared_ptr<WayCriterion>(new WayCriterion()),
+        std::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
+      FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
+      refMap->visitRw(deleteExcludeTagVis);
+
+      // Add the changeset deletion tag to all children of the connected ways.
+
+      std::shared_ptr<ChainCriterion> childAddTagCrit(
+        new ChainCriterion(
+          std::shared_ptr<WayCriterion>(new WayCriterion()),
+          std::shared_ptr<TagKeyCriterion>(
+            new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
+      RecursiveSetTagValueOp childDeletionExcludeTagOp(
+        childAddTagCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
+      childDeletionExcludeTagOp.apply(refMap);
+    }
 
     // Load the sec dataset and crop to the specified aoi.
 

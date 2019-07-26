@@ -1,14 +1,22 @@
+
+Writing the reference dataset to an osm api db (contains features to be replaced)...
+
  setval 
 --------
       1
 (1 row)
 
-
-Writing the reference dataset to an osm api db (contains features to be replaced)...
-
+18:30:33.915 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73301713) in way (9514937).
+18:30:33.915 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73191975) in way (9514937).
+18:30:33.915 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73238746) in way (9514937).
+18:30:33.915 WARN   .../hoot/core/io/OsmXmlReader.cpp( 503) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Writing the secondary dataset to a hoot api db (contains features to replace with)...
 
+18:30:44.114 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73301713) in way (9514937).
+18:30:44.115 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73191975) in way (9514937).
+18:30:44.115 WARN   .../hoot/core/io/OsmXmlReader.cpp( 499) Missing node (73238746) in way (9514937).
+18:30:44.115 WARN   .../hoot/core/io/OsmXmlReader.cpp( 503) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (xml changeset out)...
 
@@ -19,11 +27,11 @@ Deriving a changeset that completely replaces features in the reference dataset 
 Applying the changeset to the reference data...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.4866, max_lat=42.490255, min_lon=-71.4697999, max_lon=-71.46569650000001, num_changes=88
+Changeset Details: min_lat=42.4866, max_lat=42.490255, min_lon=-71.4697999, max_lon=-71.46569650000001, num_changes=89
 Node(s) Created: 45
 Node(s) Modified: 0
 Node(s) Deleted: 34
-Way(s) Created: 2
+Way(s) Created: 3
 Way(s) Modified: 5
 Way(s) Deleted: 2
 Relation(s) Created: 0

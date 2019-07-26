@@ -279,6 +279,14 @@ public:
   bool hasAnyKvp(const QStringList& kvps) const;
 
   /**
+   * TODO
+   *
+   * @param keys
+   * @return
+   */
+  bool hasAnyKey(const QStringList& keys);
+
+  /**
    * Converts a list of KVPs into tags
    *
    * @param kvps kvps to convert

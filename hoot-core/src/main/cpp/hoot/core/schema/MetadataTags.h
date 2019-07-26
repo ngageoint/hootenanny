@@ -158,7 +158,15 @@ public:
 
   inline static const QString Length()                  { return "length"; }
 
+  /**
+   * TODO
+   */
   inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
+
+  /**
+   * TODO
+   */
+  inline static const QString HootConnectedWayOutsideBounds() { return "hoot:connected_way"; }
 
   /**
    * identifies multilinestring relations hoot adds during conflation

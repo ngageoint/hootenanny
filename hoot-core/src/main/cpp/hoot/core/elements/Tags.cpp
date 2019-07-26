@@ -785,6 +785,18 @@ bool Tags::hasAnyKvp(const QStringList& kvps) const
   return false;
 }
 
+bool Tags::hasAnyKey(const QStringList& keys)
+{
+  for (int i = 0; i < keys.size(); i++)
+  {
+    if (contains(keys.at(i)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 Tags Tags::kvpListToTags(const QStringList& kvps)
 {
   Tags tagsToReturn;

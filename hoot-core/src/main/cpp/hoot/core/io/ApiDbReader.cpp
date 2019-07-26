@@ -302,10 +302,11 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
 
   if (wayIds.size() > 0)
   {
+    QSet<QString> connectedWayIds;
     if (ConfigOptions().getConvertBoundingBoxKeepImmediateConnectedWaysOutsideBounds())
     {
       LOG_DEBUG("Retrieving way IDs immediately connected to the current ways...");
-      const QSet<QString> connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);
+      connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);
       LOG_VARD(connectedWayIds);
       LOG_VARD(connectedWayIds.size());
       wayIds.unite(connectedWayIds);
@@ -319,6 +320,10 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
     while (wayItr->next())
     {
       WayPtr way = _resultToWay(*wayItr, *map);
+      if (connectedWayIds.contains(QString::number(way->getId())))
+      {
+        way->getTags().set(MetadataTags::HootConnectedWayOutsideBounds(), "yes");
+      }
       map->addElement(way);
       LOG_VART(way);
       wayCount++;
