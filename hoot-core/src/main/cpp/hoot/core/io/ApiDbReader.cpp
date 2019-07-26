@@ -320,6 +320,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
     while (wayItr->next())
     {
       WayPtr way = _resultToWay(*wayItr, *map);
+      // TODO: need to tie this to a config opt
       if (connectedWayIds.contains(QString::number(way->getId())))
       {
         way->getTags().set(MetadataTags::HootConnectedWayOutsideBounds(), "yes");

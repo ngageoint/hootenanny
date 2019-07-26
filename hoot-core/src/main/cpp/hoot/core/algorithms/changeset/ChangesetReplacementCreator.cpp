@@ -164,7 +164,7 @@ void ChangesetReplacementCreator::create(
       FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
       refMap->visitRw(deleteExcludeTagVis);
 
-      // Add the changeset deletion tag to all children of the connected ways.
+      // Add the changeset deletion exclusion tag to all children of the connected ways.
 
       std::shared_ptr<ChainCriterion> childAddTagCrit(
         new ChainCriterion(
@@ -279,7 +279,7 @@ void ChangesetReplacementCreator::create(
     postOps.apply(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated");
 
-    if (!lenientBounds && _isLinearCrit(featureTypeFilterClassName))
+    if (/*!lenientBounds &&*/ _isLinearCrit(featureTypeFilterClassName))
     {
       // Snap secondary features back to reference features if dealing with linear features and a
       // non-lenient bounds where ref features may have been cut along it.
@@ -296,14 +296,14 @@ void ChangesetReplacementCreator::create(
       lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
       lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.apply(conflatedMap);
-      OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped");
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped-1");
 
       // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
       // data in the resulting changeset and generate modify statements instead.
 
       LOG_DEBUG("Rejoining features after unconnected linear feature snapping...");
       ReplacementSnappedWayJoiner(refIdToVersionMappings).join(conflatedMap);
-      OsmMapWriterFactory::writeDebugMap(conflatedMap, "joined");
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "joined-after-snap");
     }
 
     MapProjector::projectToWgs84(conflatedMap);  // conflation and snapping work in planar
@@ -329,6 +329,37 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-cropped-for-changeset");
     SuperfluousNodeRemover::removeNodes(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-after-orphaned-node-removal");
+
+    if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
+    {
+      // Snap secondary features back to reference features if dealing with linear features and a
+      // non-lenient bounds where ref features may have been cut along it.
+
+      LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
+      UnconnectedWaySnapper lineSnapper;
+      lineSnapper.setConfiguration(conf());
+      // override some of the default config
+      lineSnapper.setSnapToWayStatus("Input1;Conflated;Input2");
+      lineSnapper.setSnapWayStatus("Input2;Conflated;Input1");
+      // TODO: hack - need a way to derive the way node crit from the input feature filter crit
+      lineSnapper.setWayNodeToSnapToCriterionClassName(
+        QString::fromStdString(WayNodeCriterion::className()));
+      lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
+      lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
+      lineSnapper.apply(conflatedMap);
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped-2");
+
+      // TODO: joining here causes changeset errors
+
+      // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
+      // data in the resulting changeset and generate modify statements instead.
+
+//      LOG_DEBUG("Rejoining features after unconnected linear feature snapping...");
+//      ReplacementSnappedWayJoiner(refIdToVersionMappings).join(conflatedMap);
+//      OsmMapWriterFactory::writeDebugMap(conflatedMap, "joined");
+
+      MapProjector::projectToWgs84(conflatedMap);
+    }
 
     // TODO: setting these two config options won't be necessary once the old multiple command tests
     // are deactivated

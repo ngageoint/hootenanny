@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Wholesale Road Replacement Workflow (single changeset derive command)
+# Wholesale Road Replacement Workflow
 #
 # This test is lenient regarding the AOI, in that it will modify some features in the ref data that extend outside of it. Secondary features
 # crossing the AOI will completely replace corresponding reference features crossing the AOI. This workflow could work for other linear 
@@ -28,7 +28,7 @@ AOI="-71.4698,42.4866,-71.4657,42.4902"
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=20.0 -D snap.unconnected.ways.snap.tolerance=20.0"
 
 # DATA PREP
 

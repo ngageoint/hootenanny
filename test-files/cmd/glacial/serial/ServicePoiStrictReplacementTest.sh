@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Wholesale POI Replacement Workflow (single changeset derive command).
+# Wholesale POI Replacement Workflow
 #
 # This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie on or outside of it. No 
 # secondary features lying outside the AOI will be included in the output.

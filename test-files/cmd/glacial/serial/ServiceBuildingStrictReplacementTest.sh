@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Wholesale Building Replacement Workflow with Strict AOI Handling (single changeset derive command)
+# Wholesale Building Replacement Workflow with Strict AOI Handling
 #
 # This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie outside of it. No secondary 
 # features outside the AOI or crossing it will be included in the output or conflated with anything in the ref layer.  This workflow could 

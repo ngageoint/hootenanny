@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Wholesale Road Replacement Workflow with Strict AOI Handling (single changeset derive command)
+# Wholesale Road Replacement Workflow with Strict AOI Handling
 #
 # This test is not lenient regarding the AOI, in that it will not modify any parts of features in the ref data that are outside of it.
 # Secondary features within the AOI will be conflated with corresponding reference features within the AOI only. This workflow could work 
@@ -25,12 +25,10 @@ SEC_LAYER_FILE=test-files/BostonSubsetRoadBuilding_FromOsm.osm
 SEC_LAYER="$HOOT_DB_URL/$TEST_NAME-sec"
 AOI="-71.4698,42.4866,-71.4657,42.4902"
 
-#UnconnectedWaySnapper
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D debug.maps.filename=$OUT_DIR/debug.osm"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm"
-SNAP_OPTS="-D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0" 
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=45.0 -D snap.unconnected.ways.snap.tolerance=45.0" 
 
 # DATA PREP
 
@@ -56,11 +54,11 @@ echo ""
 echo $CHANGESET_DERIVATION_MSG " (xml changeset out)..."
 echo ""
 #-C NetworkAlgorithm.conf
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $SNAP_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::HighwayCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc --write-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::HighwayCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc --write-bounds
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (sql changeset out)..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $SNAP_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::HighwayCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::HighwayCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER
 
 # CHANGESET APPLICATION
 

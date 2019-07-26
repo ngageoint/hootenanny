@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Wholesale Building Replacement Workflow (single changeset derive command)
+# Wholesale Building Replacement Workflow
 #
 # This test is lenient regarding the AOI, in that it may modify some features in the ref data that lie just outside of the AOI. Secondary 
 # features crossing the AOI may be included in the output or conflated with reference features. This workflow should work other polygon 
