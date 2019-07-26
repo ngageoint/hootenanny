@@ -670,16 +670,17 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         {
           wayNodeToSnapTo->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way_node");
         }
-        // get the snapped to way so we can retain the parent id; size should be equal to 1??;
+        // get the snapped to way so we can retain the parent id; size should be equal to 1;
         // this could be optimized, since we're doing way containing way node checks already above
         const std::set<long>& waysContainingWayNodeToSnapTo =
           _map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeToSnapToId);
         LOG_TRACE(waysContainingWayNodeToSnapTo.size());
         assert(waysContainingWayNodeToSnapTo.size() > 0);
-        //assert(waysContainingWayNodeToSnapTo.size() == 1);
-        // TODO: this may not be right
         _snappedToWay = _map->getWay(*waysContainingWayNodeToSnapTo.begin());
         LOG_VART(_snappedToWay);
+
+        // TODO: Should we also set the status of the snapped node to that of the way it was snapped
+        // to?
 
         // Replace the snapped node with the node we snapped it to.
         LOG_TRACE(
@@ -799,6 +800,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     // This check of the calculated distance being less than the allowed snap distance should not
     // be necessary, but it is for now.  For some reason, neighbors are occasionally being
     // returned at longer distances away than expected.
+    // TODO: This may have been fixed with the addition of distance sorting in
+    // IndexElementsVisitor...check.
     if (/*shortestDistance != DBL_MAX &&*/
         shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
     {
