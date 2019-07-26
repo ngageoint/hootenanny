@@ -308,7 +308,7 @@ void ChangesetReplacementCreator::create(
 
     MapProjector::projectToWgs84(conflatedMap);  // conflation and snapping work in planar
 
-    // Crop the original ref map appropriately for changeset derivation.
+    // Crop the original ref and conflated maps appropriately for changeset derivation.
 
     MapCropper cropper(bounds);
     LOG_DEBUG("Cropping reference map for changeset derivation...");
@@ -316,16 +316,13 @@ void ChangesetReplacementCreator::create(
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetRefKeepOnlyInsideBounds);
     cropper.apply(refMap);
     OsmMapWriterFactory::writeDebugMap(refMap, "ref-cropped-for-changeset");
-
-    // same type of cropping as previously done, but for the conflated map
-
     LOG_DEBUG("Cropping conflated map for changeset derivation...");
     cropper.setKeepEntireFeaturesCrossingBounds(_changesetSecKeepEntireCrossingBounds);
     cropper.setKeepOnlyFeaturesInsideBounds(_changesetSecKeepOnlyInsideBounds);
     cropper.apply(conflatedMap);
     OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-cropped-for-changeset");
 
-    // Clean up straggling nodes in both maps.
+    // Clean up straggling nodes in both maps that are the result of cropping.
 
     // Its ok to ignore info tags when dealing with only linear features, as all nodes in the data
     // being conflated should be way nodes with no information.
