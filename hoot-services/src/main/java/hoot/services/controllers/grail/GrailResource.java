@@ -52,6 +52,7 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -191,10 +192,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
@@ -278,10 +276,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         JSONObject jobInfo = new JSONObject();
 
@@ -367,10 +362,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         GrailParams params = new GrailParams();
         params.setUser(user);
@@ -473,10 +465,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         String input1 = reqParams.getInput1();
         String input2 = reqParams.getInput2();
@@ -556,10 +545,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         String jobDir = reqParams.getFolder();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
@@ -633,10 +619,7 @@ public class GrailResource {
             @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         String mapSuffix = jobId.substring(0, 7);
@@ -716,10 +699,7 @@ public class GrailResource {
             @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
-        HashMap privileges = ((HashMap) user.getPrivileges());
-        if(privileges == null || privileges.get("advanced") != "true") {
-            return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build();
-        }
+        advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
@@ -747,9 +727,6 @@ public class GrailResource {
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
-//        String url = RAILSPORT_PULL_URL +
-//                "?bbox=" + new BoundingBox(bbox).toServicesString();
-//        params.setInput1(url);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setWorkDir(workDir);
         params.setOutput(mapName);
@@ -776,6 +753,14 @@ public class GrailResource {
         response = responseBuilder.build();
 
         return response;
+    }
+
+    // throws forbidden exception is user does not have advanced privileges
+    private static void advancedUserCheck(Users user) {
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || privileges.get("advanced") != "true") {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build());
+        }
     }
 
     // Get Capabilities from an OSM API Db
