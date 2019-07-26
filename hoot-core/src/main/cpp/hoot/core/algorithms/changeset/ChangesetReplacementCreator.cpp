@@ -57,6 +57,8 @@
 #include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
+#include <hoot/core/algorithms/WayJoinerAdvanced.h>
+#include <hoot/core/algorithms/WayJoinerBasic.h>
 
 namespace hoot
 {
@@ -187,6 +189,7 @@ void ChangesetReplacementCreator::create(
     // cut ref map at this point. This is due to the fact that they have been modified independently
     // of each other during cropping, which can create new relations.
 
+    // TODO: Is this actually needed?
     LOG_DEBUG("Remapping secondary map relation IDs...");
     ElementIdRemapper relationIdRemapper;
     relationIdRemapper.setIdGen(cookieCutMap->getIdGeneratorSp());
@@ -220,14 +223,14 @@ void ChangesetReplacementCreator::create(
     LOG_DEBUG("Conflating the cookie cut reference map with the secondary map...");
     // TODO: Should we drop the default post conflate way joining here, since we're doing it later
     // again if the source is linear and the bounds isn't lenient?
-    conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), "true");
+    conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
     if (!lenientBounds) // not exactly sure yet why this needs to be done
     {
-      conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerAdvanced");
+      conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
     }
     else
     {
-      conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerBasic");
+      conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerBasic::className());
     }
     conf().set(ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(), !_isNetworkConflate());
     NamedOp preOps(ConfigOptions().getConflatePreOps());
@@ -301,8 +304,6 @@ void ChangesetReplacementCreator::create(
       // features outside of the bounds, we need to mark all corresponding ref ways with a custom
       // tag that will cause the deriver to skip deleting them.
 
-      // The strictness of the bounds check is governed by a config option. Generally, would use
-      // not strict for linear features and strict for point or poly features.
       // TODO: let's pass the bounds in the constructor instead
       conf().set("in.bounds.criterion.bounds", boundsStr);
       std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
@@ -363,14 +364,15 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
 
   // global opts
 
-  conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), "false");
-  conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), "false");
-  conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), "false");
+  conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
+  conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
+  conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
   // dataset specific opts
 
   // TODO: Hopefully, these three sets of bounds options can be collapsed down to at least two.
 
+  // These don't change between scenarios.
   _convertRefKeepOnlyInsideBounds = false;
   _cropKeepOnlyInsideBounds = false;
   _changesetRefKeepOnlyInsideBounds = false;

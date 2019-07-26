@@ -285,8 +285,10 @@ bool ApiDbReader::_isValidBounds(const Envelope& bounds)
   return true;
 }
 
-void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
-                                     QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount)
+void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
+                                     const QSet<QString>& nodeIds, QSet<QString>& wayIds,
+                                     QSet<QString>& additionalNodeIds, long& nodeCount,
+                                     long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
   std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
@@ -297,6 +299,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     wayIds.insert(QString::number(wayId));
   }
   LOG_VARD(wayIds.size());
+
   if (wayIds.size() > 0)
   {
     LOG_DEBUG("Retrieving ways by way ID...");
@@ -320,7 +323,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
       additionalNodeIds.insert(QString::number(nodeId));
     }
 
-    //subtract nodeIds from additionalWayNodeIds so no dupes get added
+    //subtract nodeIds from additionalNodeIds, so no dupes get added
     LOG_VARD(nodeIds.size());
     LOG_VARD(additionalNodeIds.size());
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
@@ -349,7 +352,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   long boundedWayCount = 0;
   long boundedRelationCount = 0;
 
-  LOG_DEBUG("Retrieving node records within the query bounds...");
+  LOG_DEBUG("Retrieving nodes within the query bounds...");
   std::shared_ptr<QSqlQuery> nodeItr = _getDatabase()->selectNodesByBounds(bounds);
   QSet<QString> nodeIds;
   while (nodeItr->next())
@@ -359,8 +362,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     LOG_VART(node);
     map->addElement(node);
     boundedNodeCount++;
-    //Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
-    //with any queries.  Mapped ids may not exist yet.
+    // Don't use the mapped id from the node object here, b/c we want don't want to use mapped ids
+    // with any queries, because mapped ids may not exist yet.
     const long nodeId = resultIterator.value(0).toLongLong();
     LOG_VART(ElementId(ElementType::Node, nodeId));
     nodeIds.insert( QString::number(nodeId));
@@ -376,6 +379,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
       _readWaysByNodeIds(
         map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
       nodeIds.unite(additionalWayNodeIds);
+
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
       QSet<QString> relationIds;
       assert(nodeIds.size() > 0);
@@ -398,6 +402,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         }
       }
       LOG_VARD(relationIds.size());
+
       //  Iterate all relations (and sub-relations) that are "within" the bounds
       QSet<QString> completedRelationIds;
       while (relationIds.size() > 0)
@@ -405,6 +410,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         QSet<QString> newNodes;
         QSet<QString> newWays;
         QSet<QString> newRelations;
+
         LOG_DEBUG("Retrieving relations by relation ID...");
         std::shared_ptr<QSqlQuery> relationItr =
           _getDatabase()->selectElementsByElementIdList(relationIds, TableType::Relation);
@@ -435,8 +441,10 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           //  Keep track of all relations that have been added to the map so we don't try them again
           completedRelationIds.insert(QString::number(relation->getId()));
         }
+
         //  Clear the relations that we are iterating on, it is then filled with new relations later
         relationIds.clear();
+
         //  Iterate any new nodes that are members of relations that need to be queried
         newNodes = newNodes.subtract(nodeIds);
         if (newNodes.size() > 0)
@@ -455,11 +463,13 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             nodeIds.insert(QString::number(nodeId));
           }
         }
+
         //  Iterate any new ways that are members of relations that need to be queried
         newWays = newWays.subtract(wayIds);
         if (newWays.size() > 0)
         {
           QSet<QString> additionalNodeIds;
+
           LOG_DEBUG("Retrieving ways by way ID...");
           std::shared_ptr<QSqlQuery> wayItr =
             _getDatabase()->selectElementsByElementIdList(newWays, TableType::Way);
@@ -481,7 +491,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             additionalNodeIds.insert(QString::number(nodeId));
           }
 
-          //subtract nodeIds from additionalWayNodeIds so no dupes get added
+          //subtract nodeIds from additionalWayNodeIds, so no dupes get added
           LOG_VARD(nodeIds.size());
           LOG_VARD(additionalNodeIds.size());
           additionalNodeIds = additionalNodeIds.subtract(nodeIds);
@@ -490,7 +500,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           if (additionalNodeIds.size() > 0)
           {
             LOG_DEBUG(
-              "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
+              "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<
+              "way...");
             std::shared_ptr<QSqlQuery> additionalWayNodeItr =
               _getDatabase()->selectElementsByElementIdList(additionalNodeIds, TableType::Node);
             while (additionalWayNodeItr->next())
@@ -502,6 +513,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             }
           }
         }
+
         //  Get the set of new relations found minus anything that has already been completed
         relationIds = newRelations.subtract(completedRelationIds);
       }
@@ -518,9 +530,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   // The default behavior of the db bounded read is to return the entirety of features found
   // within the bounds, even if sections of those features exist outside the bounds. Only run the
   // crop operation if the crop related options are different than the default behavior. Clearly, it
-  // would be more efficient to run a different query to pull the features back already cropped the
-  // way we want them from the start and skip this step completely. That's possibly an optimization
-  // to look into doing in the future.
+  // would be more efficient to run a different set of initial queries to pull the features back
+  // already cropped the way we want them from the start and skip this step completely. That's
+  // possibly an optimization to look into doing in the future.
   ConfigOptions conf;
   if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
