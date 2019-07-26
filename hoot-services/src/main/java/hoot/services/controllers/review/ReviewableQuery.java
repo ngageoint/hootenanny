@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.review;
 
@@ -58,6 +58,7 @@ class ReviewableQuery extends ReviewableQueryAbstract {
         if (result != null) {
             reviewableItem.setRelationId(result);
             reviewableItem.setResultCount(1);
+            reviewableItem.setBounds(result);
         }
 
         return reviewableItem;
