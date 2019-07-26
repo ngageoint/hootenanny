@@ -4399,6 +4399,13 @@ This operation can take on the following options:
 * `hoot::WayJoinerAdvanced`
 * `hoot::WayJoinerBasic`
 
+=== way.joiner.advanced.strict.name.match
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === way.joiner.leave.parent.id
 
 * Data Type: bool

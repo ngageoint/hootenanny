@@ -39,6 +39,8 @@ namespace hoot
 /**
  * An experimental way joiner implemented to work with Attribute Conflation and a possible
  * replacement for WayJoinerBasic.
+ *
+ * TODO: move conf option setters into WayJoinerOp::setConfiguration
  */
 class WayJoinerAdvanced : public WayJoiner
 {

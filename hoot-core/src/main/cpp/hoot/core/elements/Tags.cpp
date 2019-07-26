@@ -395,10 +395,10 @@ bool Tags::hasName() const
   return !getName().isEmpty();
 }
 
-bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2)
+bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2, const bool strictNameMatch)
 {
-  const QStringList tag1Names = tags1.getNames();
-  const QStringList tag2Names = tags2.getNames();
+  const QStringList tag1Names = tags1.getNames(!strictNameMatch);
+  const QStringList tag2Names = tags2.getNames(!strictNameMatch);
   for (int i = 0; i < tag1Names.size(); i++)
   {
     const QString tag1Name = tag1Names[i];
@@ -414,7 +414,7 @@ bool Tags::haveMatchingName(const Tags& tags1, const Tags& tags2)
   return false;
 }
 
-QStringList Tags::getNames() const
+QStringList Tags::getNames(const bool includeAltName) const
 {
   QStringList result;
 
@@ -428,7 +428,10 @@ QStringList Tags::getNames() const
 
   for (int i = 0; i < _nameKeys.size(); i++)
   {
-    readValues(_nameKeys[i], result);
+    if (includeAltName || (!includeAltName && _nameKeys[i].toLower() != "alt_name"))
+    {
+      readValues(_nameKeys[i], result);
+    }
   }
 
   return result;
@@ -459,12 +462,11 @@ QString Tags::getName() const
 
 const QStringList& Tags::getNameKeys()
 {
-  // getting the name tags can be a bit expensive so we'll just do it once.
+  // Getting the name tags can be a bit expensive, so we'll just do it once.
   if (_nameKeys.size() == 0)
   {
     const vector<SchemaVertex>& tags =
       OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
-
     for (size_t i = 0; i < tags.size(); i++)
     {
       //LOG_TRACE("key : " << (tags[i].key.toStdString()));

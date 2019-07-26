@@ -56,6 +56,7 @@
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 
 namespace hoot
 {
@@ -70,6 +71,8 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output)
 {
+    // TODO: break this up into smaller methods
+
     // Fail if a filter with an unconflatable feature type was specified.
 
     std::shared_ptr<ConflatableElementCriterion> featureCrit =
@@ -97,14 +100,10 @@ void ChangesetReplacementCreator::create(
 
     const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
     const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-    QString lenientStr = "Bounds calculation ";
-    if (lenientBounds)
+    QString lenientStr = "Bounds calculation is ";
+    if (! lenientBounds)
     {
-      lenientStr += "is ";
-    }
-    else
-    {
-      lenientStr += "is not ";
+      lenientStr += "not ";
     }
     lenientStr += "lenient.";
     LOG_INFO(
@@ -230,11 +229,10 @@ void ChangesetReplacementCreator::create(
     {
       conf().set(ConfigOptions::getWayJoinerKey(), "hoot::WayJoinerBasic");
     }
+    conf().set(ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(), !_isNetworkConflate());
     NamedOp preOps(ConfigOptions().getConflatePreOps());
     preOps.apply(conflatedMap);
     // TODO: restrict conflate matchers to only those relevant based on the filter?
-    // TODO: set configuration on UnifyingConflator?
-    // TODO: support network alg for roads?
     UnifyingConflator().apply(conflatedMap);
     NamedOp postOps(ConfigOptions().getConflatePostOps());
     postOps.apply(conflatedMap);
@@ -325,6 +323,13 @@ void ChangesetReplacementCreator::create(
 
     LOG_DEBUG("Deriving replacement changeset...");
     _changesetCreator->create(refMap, conflatedMap, output);
+}
+
+bool ChangesetReplacementCreator::_isNetworkConflate() const
+{
+  return
+    ConfigOptions().getMatchCreators().contains(
+      QString::fromStdString(NetworkMatchCreator::className()));
 }
 
 // hardcode these geometry type identification methods for now; only one of the following should

@@ -128,8 +128,10 @@ void WayJoinerAdvanced::_joinParentChild()
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
     Tags wayTags = way->getTags();
+    // TODO: use OsmUtils::nameConflictExists here instead
+    const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
     if (parent && parentTags.hasName() && wayTags.hasName() &&
-        !Tags::haveMatchingName(parentTags, wayTags))
+        !Tags::haveMatchingName(parentTags, wayTags, strictNameMatch))
     {
       // TODO: move this check down to _joinWays?
       LOG_TRACE(
@@ -254,10 +256,9 @@ void WayJoinerAdvanced::_joinAtNode()
             const bool parentHasName = pTags.hasName();
             const bool childHasName = cTags.hasName();
             // TODO: use OsmUtils::nameConflictExists here instead
-            // TODO: does it make sense to add a strict name matching option that only explicitly
-            // matches if the name tags have the same key (name vs name and not alt_name)?
+            const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
             if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
-                Tags::haveMatchingName(pTags, cTags))
+                Tags::haveMatchingName(pTags, cTags, strictNameMatch))
             {
               _callingMethod = "_joinAtNode";
               _joinWays(way, child);
@@ -408,8 +409,9 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       const Tags parentTags = parent->getTags();
       const bool parentHasName = parentTags.hasName();
       // TODO: use OsmUtils::nameConflictExists here instead
+      const bool strictNameMatch = ConfigOptions().getWayJoinerAdvancedStrictNameMatch();
       if ((!parentHasName && childHasName) || (!childHasName && parentHasName) ||
-          Tags::haveMatchingName(parentTags, childTags))
+          Tags::haveMatchingName(parentTags, childTags, strictNameMatch))
       {
         _callingMethod = "_rejoinSiblings";
         _joinWays(parent, child);

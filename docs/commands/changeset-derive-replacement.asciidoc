@@ -4,14 +4,14 @@
 === Description
 
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets within a 
-given bounds. The data from the second input dataset completely replaces data in the first dataset within the bounds. The output changeset 
-file can be applied directly to an OSM API database or via the Rails Port with the +changeset-apply+ command.
+given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. The output 
+changeset file can be applied directly to an OSM API database or via the Rails Port with the +changeset-apply+ command.
 
 Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
 the second input (secondary dataset) are not retained and treated as completely new data. 
 
-* +input1+             - OSM data input 1 (e.g. .osm file)
-* +input2+             - OSM data input 2 (e.g. .osm file)
+* +input1+             - OSM data reference input (e.g. .osm file); must support bounded queries
+* +input2+             - OSM data secondary input (e.g. .osm file); must support bounded queries
 * +bounds+             - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
 * +featureFilter+      - A single ConflatableElementCriterion class name used to determine which type of features are replaced in the reference 
                          dataset (currently only one criterion may be specified in a filter). e.g. "hoot::BuildingCriterion"
@@ -46,6 +46,8 @@ hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::
 --------------------------------------
 
 === Bounds Handling
+
+All inputs must support bounded queries and be readable by a Hootenanny reader implementing the Boundable interface.
 
 ==== Strict Bounds Handling
 

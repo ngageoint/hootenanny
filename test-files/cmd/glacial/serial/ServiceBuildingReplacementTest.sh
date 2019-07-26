@@ -53,11 +53,11 @@ CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (xml changeset out)..."
 echo ""
-hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::BuildingCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc --lenient-bounds --write-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::BuildingCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc --lenient-bounds --write-bounds
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (sql changeset out)..."
 echo ""
-hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::BuildingCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --lenient-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI hoot::BuildingCriterion $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --lenient-bounds
 
 # CHANGESET APPLICATION
 

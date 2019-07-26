@@ -82,6 +82,8 @@ private:
   bool _isLinearCrit(const QString& critClassName) const;
   bool _isPolyCrit(const QString& critClassName) const;
 
+  bool _isNetworkConflate() const;
+
   void _parseConfigOpts(const bool lenientBounds, const QString& critClassName);
 };
 

@@ -51,6 +51,7 @@ namespace hoot
  * TODO:
  * add the capability to list WayJoiner implementations
    add ConflatableElementCriterion list option
+   allow listing readers that implement Boundable
  */
 class InfoCmd : public BaseCommand
 {

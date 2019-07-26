@@ -139,8 +139,10 @@ public:
 
   /**
    * Return all the names for the current feature.
+   *
+   * @param includeAltName TODO
    */
-  QStringList getNames() const;
+  QStringList getNames(const bool includeAltName = true) const;
 
   /**
    * Returns a name given tags
@@ -297,9 +299,11 @@ public:
    *
    * @param tags1 first set of tags to examine
    * @param tags2 second set of tags to examine
+   * @parm strictNameMatch TODO
    * @return true if the tags have at least one matching name; false otherwise
    */
-  static bool haveMatchingName(const Tags& tags1, const Tags& tags2);
+  static bool haveMatchingName(const Tags& tags1, const Tags& tags2,
+                               const bool strictNameMatch = false);
 
   /**
    * Determines whether a name exists in the set of tag
