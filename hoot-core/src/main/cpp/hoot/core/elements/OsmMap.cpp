@@ -102,7 +102,7 @@ OsmMap::~OsmMap()
 {
 }
 
-void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
+void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupes)
 {
   if (this == appendFromMap.get())
   {
@@ -141,7 +141,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     if (containsElement(ElementId(node->getElementId())))
     {
       ElementPtr existingElement = getElement(node->getElementId());
-      if (!elementComparer.isSame(node, existingElement))
+      if (!throwOutDupes && !elementComparer.isSame(node, existingElement))
       {
         const QString msg =
           QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
@@ -177,7 +177,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     if (containsElement(ElementId(way->getElementId())))
     {
       ElementPtr existingElement = getElement(way->getElementId());
-      if (!elementComparer.isSame(way, existingElement))
+      if (!throwOutDupes && !elementComparer.isSame(way, existingElement))
       {
         const QString msg =
           QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
@@ -215,7 +215,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
       // If they have the same ID but aren't the same, throw an error. Otherwise we'll just skip
       // adding it since we already have it.
       ElementPtr existingElement = getElement(relation->getElementId());
-      if (!elementComparer.isSame(relation, existingElement))
+      if (!throwOutDupes && !elementComparer.isSame(relation, existingElement))
       {
         const QString msg =
           QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")

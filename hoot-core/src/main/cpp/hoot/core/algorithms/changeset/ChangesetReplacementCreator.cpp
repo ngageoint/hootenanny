@@ -62,6 +62,7 @@
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 namespace hoot
 {
@@ -164,7 +165,7 @@ void ChangesetReplacementCreator::create(
       FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
       refMap->visitRw(deleteExcludeTagVis);
 
-      // Add the changeset deletion exclusion tag to all children of the connected ways.
+      // Add the changeset deletion exclusion tag to all children of those connected ways.
 
       std::shared_ptr<ChainCriterion> childAddTagCrit(
         new ChainCriterion(
@@ -174,6 +175,8 @@ void ChangesetReplacementCreator::create(
       RecursiveSetTagValueOp childDeletionExcludeTagOp(
         childAddTagCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
       childDeletionExcludeTagOp.apply(refMap);
+
+      OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-delete-exclusion-tagging");
     }
 
     // Load the sec dataset and crop to the specified aoi.
@@ -296,7 +299,7 @@ void ChangesetReplacementCreator::create(
       lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
       lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.apply(conflatedMap);
-      OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped-1");
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-snapped-1");
 
       // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
       // data in the resulting changeset and generate modify statements instead.
@@ -307,6 +310,26 @@ void ChangesetReplacementCreator::create(
     }
 
     MapProjector::projectToWgs84(conflatedMap);  // conflation and snapping work in planar
+
+    // TODO: This doesn't work.
+//    OsmMapPtr connectedWays;
+//    if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
+//    {
+//      // If we're conflating linear features with the lenient bounds requirement, copy the
+//      // immediately connected out of bounds ways to a new map. We'll lose those ways once we crop
+//      // in preparation for changeset derivation.
+
+//      LOG_DEBUG("Copying immediately connected out of bounds ways to new map...");
+//      std::shared_ptr<ChainCriterion> copyCrit(
+//        new ChainCriterion(
+//          std::shared_ptr<WayCriterion>(new WayCriterion()),
+//          std::shared_ptr<TagKeyCriterion>(
+//            new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+//      CopyMapSubsetOp wayCopier(refMap, copyCrit);
+//      connectedWays.reset(new OsmMap());
+//      wayCopier.apply(connectedWays);
+//      OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");;
+//    }
 
     // Crop the original ref and conflated maps appropriately for changeset derivation.
 
@@ -338,9 +361,10 @@ void ChangesetReplacementCreator::create(
       // changeset derivation due to there being ways connected to replacement ways that fall
       // completely outside of the bounds.
 
-      LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
       UnconnectedWaySnapper lineSnapper;
       lineSnapper.setConfiguration(conf());
+
+      LOG_DEBUG("Snapping unconnected linear secondary features back to reference features...");
       // override some of the default config
       lineSnapper.setSnapToWayStatus("Input1;Conflated;Input2");
       lineSnapper.setSnapWayStatus("Input2;Conflated;Input1");
@@ -351,10 +375,30 @@ void ChangesetReplacementCreator::create(
       lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.apply(conflatedMap);
       MapProjector::projectToWgs84(conflatedMap);   //snapping works in planar
-      OsmMapWriterFactory::writeDebugMap(conflatedMap, "snapped-2");
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-snapped-2");
 
-      // Not joining after snapping here, because it causes changeset errors...also don't think we
-      // need to.
+      // Not joining after snapping at this point, because it causes changeset errors...also don't
+      // think we need to anyway.
+
+      // TODO: This doesn't work.
+//      LOG_DEBUG("Adding hashes for node comparisons...");
+//      CalculateHashVisitor2 hashVis;
+//      assert(connectedWays);
+//      connectedWays->visitRw(hashVis);;
+//      OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways-after-node-hashes");
+
+//      // Snap only the unconnected ways from the original ref map to ways in the conflated map
+//      // (snapping ref status to ref status).
+
+//      LOG_DEBUG("Snapping immediately connected out of bounds ways to ways in conflated map...");
+//      conflatedMap->append(connectedWays, true);
+//      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-connected-combined");
+//      lineSnapper.setSnapToWayStatus("Input1");
+//      lineSnapper.setSnapWayStatus("Input1");
+//      lineSnapper.apply(conflatedMap);
+//      MapProjector::projectToWgs84(conflatedMap);   //snapping works in planar
+//      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-snapped-3");
+//      connectedWays.reset();
     }
 
     // TODO: setting these two config options won't be necessary once the old multiple command tests
@@ -369,7 +413,7 @@ void ChangesetReplacementCreator::create(
       // features outside of the bounds, we need to mark all corresponding ref ways with a custom
       // tag that will cause the deriver to skip deleting them.
 
-      // TODO: let's pass the bounds in the constructor instead
+      // TODO: let's pass the bounds into the constructor instead
       conf().set(ConfigOptions::getInBoundsCriterionBoundsKey(), boundsStr);
       std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
       boundsCrit->setOsmMap(refMap.get());
@@ -388,6 +432,8 @@ void ChangesetReplacementCreator::create(
     // secondary features within the bounds and write it out.
 
     LOG_DEBUG("Deriving replacement changeset...");
+    OsmMapWriterFactory::writeDebugMap(refMap, "ref-before-changeset-derivation");
+    OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-before-changeset-derivation");
     _changesetCreator->create(refMap, conflatedMap, output);
 }
 

@@ -101,12 +101,13 @@ public:
    * Append all the elements in input map to this map.
    *
    * @param map
+   * @param throwOutDupes TODO
    * @throws If there is element ID overlap.
    * @throws If the map being appended to is the same as the map being appended from.
    * @throws If the map being appended to does not have the same projection as the map being
    * appended from
    */
-  void append(const std::shared_ptr<const OsmMap>& map);
+  void append(const std::shared_ptr<const OsmMap>& map, const bool throwOutDupes = false);
 
   void addElement(const std::shared_ptr<Element>& e);
   template<class T>
