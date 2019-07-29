@@ -65,6 +65,7 @@ public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
         conflateParams.setConflationType("Reference");
         conflateParams.setCollectStats(false);
         conflateParams.setBounds("20,30,40,50");
+        conflateParams.setReferenceLayer("1");
         conflateParams.setAdvancedOptions("-D \"convert.bounding.box=0,0,0,0\"");
 
         Response response = target("conflation/execute")
