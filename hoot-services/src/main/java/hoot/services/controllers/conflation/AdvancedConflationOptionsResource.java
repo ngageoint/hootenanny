@@ -131,6 +131,18 @@ public class AdvancedConflationOptionsResource {
         return conflationOptions;
     }
 
+    public static List<String> getConflationTypes() {
+        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
+        conflationTypes.addAll(confMap.keySet().stream().map(type -> {
+                return WordUtils.capitalizeFully(type);
+            }).collect(Collectors.toList())
+        );
+
+        conflationTypes.sort((p1, p2) -> p1.compareTo(p2));
+        conflationTypes.add(0, "Reference");
+        return conflationTypes;
+    }
+
     public AdvancedConflationOptionsResource() {
         if (confOptionsMap == null) {
             confOptionsMap = buildConfOptionsMap();
@@ -141,17 +153,8 @@ public class AdvancedConflationOptionsResource {
     @Path("/conflationtypes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response conflationTypes() {
-        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
-        conflationTypes.addAll(confMap.keySet().stream().map(type -> {
-                return WordUtils.capitalizeFully(type);
-            }).collect(Collectors.toList())
-        );
-
-        conflationTypes.sort((p1, p2) -> p1.compareTo(p2));
-        conflationTypes.add(0, "Reference");
-
         JSONArray responseJSON = new JSONArray();
-        responseJSON.addAll(conflationTypes);
+        responseJSON.addAll(getConflationTypes());
         return Response.ok(responseJSON.toJSONString()).build();
     }
 
