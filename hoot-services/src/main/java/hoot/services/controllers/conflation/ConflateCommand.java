@@ -175,6 +175,11 @@ class ConflateCommand extends ExternalCommand {
             });
         }
 
+        //Attribute Reference Layer is not default
+        if ("2".equals(params.getReferenceLayer())) {
+            options.add("tag.merger.default=hoot::OverwriteTag1Merger");
+        }
+
         if (params.getHoot2() != null) { // hoot 2
             conflationType = params.getConflationType();
             conflationAlgorithm = params.getConflateAlgorithm();
