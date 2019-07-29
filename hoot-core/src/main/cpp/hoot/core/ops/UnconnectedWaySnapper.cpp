@@ -68,6 +68,7 @@ _maxSnapDistance(5.0),
 _snapToWayDiscretizationSpacing(1.0),
 _addCeToSearchDistance(false),
 _markSnappedNodes(false),
+_markSnappedWays(false),
 _wayToSnapToCriterionClassName("hoot::WayCriterion"),
 _wayToSnapCriterionClassName("hoot::WayCriterion"),
 _wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
@@ -670,6 +671,15 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         {
           wayNodeToSnapTo->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way_node");
         }
+        if (_markSnappedWays)
+        {
+          std::set<long> owningWayIds =
+            OsmUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
+          // assert(wayIds.size() == 1);
+          const long owningWayId = *owningWayIds.begin();
+          _map->getWay(owningWayId)->getTags().set(
+            MetadataTags::HootSnappedWayNode(), "snapped_way");
+        }
         // get the snapped to way so we can retain the parent id; size should be equal to 1;
         // this could be optimized, since we're doing way containing way node checks already above
         const std::set<long>& waysContainingWayNodeToSnapTo =
@@ -831,6 +841,15 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       if (_markSnappedNodes)
       {
         nodeToSnap->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way");
+      }
+      if (_markSnappedWays)
+      {
+        std::set<long> owningWayIds =
+          OsmUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
+        // assert(wayIds.size() == 1);
+        const long owningWayId = *owningWayIds.begin();
+        _map->getWay(owningWayId)->getTags().set(
+          MetadataTags::HootSnappedWayNode(), "snapped_way");
       }
 
       // add the snapped node as a way node on the target way

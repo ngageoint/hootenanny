@@ -63,6 +63,8 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 namespace hoot
 {
@@ -311,25 +313,25 @@ void ChangesetReplacementCreator::create(
 
     MapProjector::projectToWgs84(conflatedMap);  // conflation and snapping work in planar
 
-    // TODO: This doesn't work.
-//    OsmMapPtr connectedWays;
-//    if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
-//    {
-//      // If we're conflating linear features with the lenient bounds requirement, copy the
-//      // immediately connected out of bounds ways to a new map. We'll lose those ways once we crop
-//      // in preparation for changeset derivation.
+    OsmMapPtr connectedWays;
+    if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
+    {
+      // If we're conflating linear features with the lenient bounds requirement, copy the
+      // immediately connected out of bounds ways to a new temp map. We'll lose those ways once we
+      // crop in preparation for changeset derivation. If we don't introduce them back during
+      // changeset derivation, they may not end up being snapped back to the replacement data.
 
-//      LOG_DEBUG("Copying immediately connected out of bounds ways to new map...");
-//      std::shared_ptr<ChainCriterion> copyCrit(
-//        new ChainCriterion(
-//          std::shared_ptr<WayCriterion>(new WayCriterion()),
-//          std::shared_ptr<TagKeyCriterion>(
-//            new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
-//      CopyMapSubsetOp wayCopier(refMap, copyCrit);
-//      connectedWays.reset(new OsmMap());
-//      wayCopier.apply(connectedWays);
-//      OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");;
-//    }
+      LOG_DEBUG("Copying immediately connected out of bounds ways to new map...");
+      std::shared_ptr<ChainCriterion> copyCrit(
+        new ChainCriterion(
+          std::shared_ptr<WayCriterion>(new WayCriterion()),
+          std::shared_ptr<TagKeyCriterion>(
+            new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+      CopyMapSubsetOp wayCopier(refMap, copyCrit);
+      connectedWays.reset(new OsmMap());
+      wayCopier.apply(connectedWays);
+      OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");;
+    }
 
     // Crop the original ref and conflated maps appropriately for changeset derivation.
 
@@ -374,31 +376,60 @@ void ChangesetReplacementCreator::create(
       lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
       lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
       lineSnapper.apply(conflatedMap);
-      MapProjector::projectToWgs84(conflatedMap);   //snapping works in planar
+      MapProjector::projectToWgs84(conflatedMap);   // snapping works in planar
       OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-snapped-2");
+
+      // Extra logic is needed to deal with the immediately connected out of bounds ways in the
+      // lenient bounds/linear workflow. The next several steps reflect that. See note above where
+      // CopyMapSubsetOp is used with connectedWays.
 
       // Not joining after snapping at this point, because it causes changeset errors...also don't
       // think we need to anyway.
 
-      // TODO: This doesn't work.
-//      LOG_DEBUG("Adding hashes for node comparisons...");
-//      CalculateHashVisitor2 hashVis;
-//      assert(connectedWays);
-//      connectedWays->visitRw(hashVis);;
-//      OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways-after-node-hashes");
+      LOG_DEBUG("Adding hashes for node comparisons...");
+      CalculateHashVisitor2 hashVis;
+      assert(connectedWays);
+      connectedWays->visitRw(hashVis);;
+      OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways-after-node-hashes");
 
-//      // Snap only the unconnected ways from the original ref map to ways in the conflated map
-//      // (snapping ref status to ref status).
+      // Snap only the unconnected ways from the original ref map to ways in the conflated map
+      // (snapping ref status to ref status).
 
-//      LOG_DEBUG("Snapping immediately connected out of bounds ways to ways in conflated map...");
-//      conflatedMap->append(connectedWays, true);
-//      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-connected-combined");
-//      lineSnapper.setSnapToWayStatus("Input1");
-//      lineSnapper.setSnapWayStatus("Input1");
-//      lineSnapper.apply(conflatedMap);
-//      MapProjector::projectToWgs84(conflatedMap);   //snapping works in planar
-//      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-snapped-3");
-//      connectedWays.reset();
+      LOG_DEBUG("Snapping immediately connected out of bounds ways to ways in conflated map...");
+      conflatedMap->append(connectedWays, true);
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-connected-combined");
+      lineSnapper.setSnapToWayStatus("Input1");
+      lineSnapper.setSnapWayStatus("Input1");
+      lineSnapper.setMarkSnappedWays(true);
+      lineSnapper.apply(conflatedMap);
+      MapProjector::projectToWgs84(conflatedMap);   // snapping works in planar
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-snapped-3");
+
+      // Remove any ways that weren't snapped.
+
+      LOG_DEBUG("Removing any immediately connected ways that weren't snapped...");
+      RemoveElementsVisitor removeVis;
+      removeVis.addCriterion(ElementCriterionPtr(new WayCriterion()));
+      removeVis.addCriterion(
+        ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
+      removeVis.addCriterion(
+        ElementCriterionPtr(
+          new NotCriterion(
+            std::shared_ptr<TagCriterion>(
+              new TagCriterion(MetadataTags::HootSnappedWayNode(), "snapped_way")))));
+      removeVis.setChainCriteria(true);
+      removeVis.setRecursive(true);
+      conflatedMap->visitRw(removeVis);
+      OsmMapWriterFactory::writeDebugMap(conflatedMap, "conflated-removed");
+
+      // Copy the connected ways back into the ref map as well, so the changeset will derive
+      // properly.
+
+      LOG_DEBUG("Adding immediately connected ways back into ref map...");
+      refMap->append(connectedWays, true);
+      OsmMapWriterFactory::writeDebugMap(refMap, "ref-connected-combined");
+
+      connectedWays.reset();
     }
 
     // TODO: setting these two config options won't be necessary once the old multiple command tests

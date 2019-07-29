@@ -116,6 +116,7 @@ public:
   void setWayNodeToSnapToCriterionClassName(const QString& name);
   void setSnapWayStatus(const QString& status) { _snapWayStatus = status; }
   void setSnapToWayStatus(const QString& status) { _snapToWayStatus = status; }
+  void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
 
   /**
    * @brief snapClosestEndpointToWay Finds the closest endpont on 'disconnected' and snaps it to
@@ -149,6 +150,8 @@ private:
 
   // allow for optionally tagging the snapped node; useful for debugging
   bool _markSnappedNodes;
+  // TODO
+  bool _markSnappedWays;
 
   // the feature criterion to be used for way snap target candidates
   QString _wayToSnapToCriterionClassName;
