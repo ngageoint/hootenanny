@@ -61,7 +61,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
 
         List<String> advancedOptions = new LinkedList<>();
         advancedOptions.add("\"map.cleaner.transforms=hoot::ReprojectToPlanarOp;" +
@@ -125,7 +124,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflationType("Attribute");
 
@@ -159,7 +157,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflateAlgorithm("Network");
         String debugLevel = "error";
@@ -185,7 +182,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflationType("Network");
         String debugLevel = "error";
@@ -211,7 +207,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflateAlgorithm("Network");
         conflateParams.setDisabledFeatures(Arrays.asList("Roads", "Pois"));
@@ -256,7 +251,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(true);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflationType("Differential");
         String debugLevel = "error";
@@ -282,7 +276,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflationType("Differential w/Tags");
         String debugLevel = "error";
@@ -308,7 +301,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(true);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflationType("Reference");
         String debugLevel = "error";
@@ -358,7 +350,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(true);
-        conflateParams.setReferenceLayer("2");
         conflateParams.setHoot2(true);
         String debugLevel = "info";
         ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
@@ -384,7 +375,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflationType("Foo");
 
@@ -409,7 +399,6 @@ public class ConflateCommandTest {
         conflateParams.setInput2("DcTigerRoads");
         conflateParams.setOutputName("Merged_Roads_e0d");
         conflateParams.setCollectStats(false);
-        conflateParams.setReferenceLayer("1");
         conflateParams.setHoot2(true);
         conflateParams.setConflateAlgorithm("Attribute");
 

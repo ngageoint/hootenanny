@@ -102,10 +102,12 @@ public class ConflateParams {
         this.inputType2 = inputType2;
     }
 
+    @Deprecated
     public String getReferenceLayer() {
         return referenceLayer;
     }
 
+    @Deprecated
     public void setReferenceLayer(String referenceLayer) {
         this.referenceLayer = referenceLayer;
     }
