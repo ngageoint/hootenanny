@@ -87,6 +87,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
       "Output to SQL changeset requires an OSM API database URL be specified.");
   }
 
+  LOG_DEBUG(
+    "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
+    output << "...");
+
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
@@ -207,6 +211,12 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
 void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
 {
   // TODO: implement progress
+
+  LOG_DEBUG(
+    "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
+    " to output: " << output << "...");
+  OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
+  OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
 
   // appending maps requires they have node hashes
   CalculateHashVisitor2 hashVis;

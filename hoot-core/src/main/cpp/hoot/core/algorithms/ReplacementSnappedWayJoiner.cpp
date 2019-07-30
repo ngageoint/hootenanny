@@ -105,6 +105,8 @@ long ReplacementSnappedWayJoiner::_getPid(const ConstWayPtr& way) const
 
 void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
 {
+  LOG_DEBUG("Joining ways...");
+
   WayJoinerAdvanced::join(map);
 
   if (_refIdToVersionMappings.isEmpty())

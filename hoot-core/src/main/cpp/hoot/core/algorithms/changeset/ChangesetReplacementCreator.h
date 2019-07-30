@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -64,21 +65,34 @@ public:
 
 private:
 
-  std::shared_ptr<ChangesetCreator> _changesetCreator;
-
+  // TODO
   bool _convertRefKeepEntireCrossingBounds;
+  // TODO
   bool _convertRefKeepOnlyInsideBounds;
+  // TODO
   bool _convertRefKeepImmediateConnectedWaysOutsideBounds;
+  // TODO
   bool _convertSecKeepEntireCrossingBounds;
+  // TODO
   bool _convertSecKeepOnlyInsideBounds;
+  // TODO
   bool _cropKeepEntireCrossingBounds;
+  // TODO
   bool _cropKeepOnlyInsideBounds;
+  // TODO
   bool _changesetRefKeepEntireCrossingBounds;
+  // TODO
   bool _changesetSecKeepEntireCrossingBounds;
+  // TODO
   bool _changesetRefKeepOnlyInsideBounds;
+  // TODO
   bool _changesetSecKeepOnlyInsideBounds;
+  // TODO
   bool _changesetAllowDeletingRefOutsideBounds;
+  // TODO
   bool _inBoundsStrict;
+
+  std::shared_ptr<ChangesetCreator> _changesetCreator;
 
   bool _isPointCrit(const QString& critClassName) const;
   bool _isLinearCrit(const QString& critClassName) const;
@@ -86,7 +100,58 @@ private:
 
   bool _isNetworkConflate() const;
 
-  void _parseConfigOpts(const bool lenientBounds, const QString& critClassName);
+  void _validateInputs(const QString& input1, const QString& input2);
+  std::shared_ptr<ConflatableElementCriterion> _validateFilter(
+    const QString& featureTypeFilterClassName);
+  void _filterFeatures(
+    OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureCrit,
+    const QString& debugFileName);
+  void _parseConfigOpts(const bool lenientBounds, const QString& critClassName,
+                        const QString& boundsStr);
+
+  OsmMapPtr _loadRefMap(const QString& input);
+  OsmMapPtr _loadSecMap(const QString& input);
+
+  /*
+   * TODO
+   */
+  QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map);
+  void _addDeleteExclusionTags(OsmMapPtr& map);
+  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
+  /*
+   * TODO
+   */
+  OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map);
+  /*
+   * TODO
+   */
+  void _excludeFeaturesFromDeletion(OsmMapPtr& map, const QString& boundsStr);
+  /*
+   * TODO
+   */
+  void _remapRelationIds(OsmMapPtr& map,  const std::shared_ptr<IdGenerator>& idGenerator);
+  /*
+   * TODO
+   */
+  void _addNodeHashes(OsmMapPtr& map);
+  void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
+                    const QString& debugFileName);
+  /*
+   * TODO
+   */
+  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
+
+  void _conflate(OsmMapPtr& map, const bool lenientBounds);
+  void _snapUnconnectedWays(OsmMapPtr& map, const QString& snapWayStatus,
+                            const QString& snapToWayStatus,
+                            const QString& featureTypeFilterClassName, const bool markSnappedWays,
+                            const QString& debugFileName);
+  /*
+   * TODO
+   */
+  void _cropMapForChangesetDerivation(
+    OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
+    const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName);
 };
 
 }

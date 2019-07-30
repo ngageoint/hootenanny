@@ -37,6 +37,8 @@ namespace hoot
 
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
+ *
+ * TODO: implement OperationStatusInfo
  */
 class CopyMapSubsetOp : public OsmMapOperation
 {

@@ -375,6 +375,7 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();
   _idSwap = from->getIdSwap();
+  _name = from->getName();
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();

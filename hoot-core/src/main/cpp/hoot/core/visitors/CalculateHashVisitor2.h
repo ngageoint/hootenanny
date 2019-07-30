@@ -36,6 +36,8 @@ namespace hoot
 /**
  * Wrapper around CalculateHashVisitor for use with MultiaryIngestCmd - This very well could be
  * replaced by CalculateHashVisitor...but just haven't figured out how to make that work yet.
+ *
+ * TODO: implement OperationStatusInfo
  */
 class CalculateHashVisitor2 : public ElementVisitor
 {

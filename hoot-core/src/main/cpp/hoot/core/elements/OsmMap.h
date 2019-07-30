@@ -286,6 +286,9 @@ public:
   void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
   std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
 
+  QString getName() const { return _name; }
+  void setName(const QString& name) { _name = name; }
+
 protected:
 
   mutable IdGenerator* _idGen;
@@ -315,6 +318,9 @@ protected:
   std::vector<std::shared_ptr<Roundabout>> _roundabouts;
 
   std::shared_ptr<IdSwap> _idSwap;
+
+  // useful during debugging
+  QString _name;
 
   void _copy(const std::shared_ptr<const OsmMap>& from);
 
