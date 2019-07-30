@@ -551,10 +551,8 @@ void ChangesetReplacementCreator::_excludeFeaturesFromDeletion(OsmMapPtr& map,
   LOG_DEBUG(
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
 
-  conf().set(ConfigOptions::getInBoundsCriterionStrictKey(), _inBoundsStrict);
-  // TODO: let's pass the bounds into the constructor instead
-  conf().set(ConfigOptions::getInBoundsCriterionBoundsKey(), boundsStr);
-  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
+  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_inBoundsStrict));
+  boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(boundsStr));
   boundsCrit->setOsmMap(map.get());
   std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
   std::shared_ptr<ChainCriterion> elementCrit(

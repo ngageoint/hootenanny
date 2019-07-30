@@ -12,7 +12,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, InBoundsCriterion)
 
-InBoundsCriterion::InBoundsCriterion()
+InBoundsCriterion::InBoundsCriterion() :
+_mustCompletelyContain(true)
 {
   setConfiguration(conf());
 }
@@ -26,10 +27,11 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
-  _bounds = GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
-  if (_bounds.isNull())
+  geos::geom::Envelope bounds =
+    GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
+  if (!bounds.isNull())
   {
-    throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
+    _bounds = bounds;
   }
 }
 
@@ -41,6 +43,11 @@ void InBoundsCriterion::setOsmMap(const OsmMap* map)
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (_bounds.isNull())
+  {
+    throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
+  }
+
   LOG_VART(e->getElementId());
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
   LOG_VART(geom.get());
