@@ -740,7 +740,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
 
   if (isStreamable)
   {
-    //Shape file output currently isn't streamable, so we know we won't see export cols here.  If
+    //Shape file output currently isn't streamable, so we know we won't see export cols here. If
     //it is ever made streamable, then we'd have to refactor this.
     assert(!_shapeFileColumnsSpecified());
 

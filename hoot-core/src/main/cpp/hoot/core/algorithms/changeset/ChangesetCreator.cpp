@@ -531,6 +531,10 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
        * If any op in the convert ops is a map consumer, then it must go through this logic, which
        * requires combining both map inputs into one. If there are any overlapping element IDs
        * between the two datasets, an error will occur.
+       *
+       * It is possible there could be situations where we may be ok with applying a non-streamable
+       * op separately to each map, in which case we overlapping element IDs wouldn't be an issue.
+       * If that situation arises, we will need to refactor here.
        */
       _handleUnstreamableConvertOpsInMemory(input1, input2, map1, map2, progress);
     }

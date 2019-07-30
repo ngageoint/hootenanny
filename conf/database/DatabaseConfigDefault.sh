@@ -20,7 +20,6 @@ export OSM_API_VERSION=0.6
 # The main internet Overpas URL
 export OVERPASS_API_URL=https://overpass-api.de
 
-
 # Setup access to an OSM API Rails Port.
 # Override this in the Local config
 # NOTE: Put "XXX" for port if you dont need to specify one
