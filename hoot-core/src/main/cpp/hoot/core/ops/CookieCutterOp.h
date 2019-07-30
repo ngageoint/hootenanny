@@ -55,7 +55,6 @@ public:
   void setAlpha(double alpha) { _alpha = alpha; }
   void setAlphaShapeBuffer(double buffer) { _alphaShapeBuffer = buffer; }
   void setCrop(bool crop) { _crop = crop; }
-  void setSwapInputs(bool swap) { _swapInputs = swap; }
 
   virtual QString getDescription() const override
   { return "Cookie cuts one dataset out of another"; }
@@ -68,9 +67,6 @@ private:
 
   // see CookieCutter
   bool _crop;
-
-  // controls which status determines the features being cut out and those being replaced
-  bool _swapInputs;
 };
 
 }

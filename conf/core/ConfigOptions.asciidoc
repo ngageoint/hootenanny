@@ -768,14 +768,6 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
-=== cookie.cutter.op.swap.inputs
-
-* Data Type: bool
-* Default Value: `false`
-
-If false, elements with status=Unknown1 are cut out of the elements with status=Unknown2. If true,
-the opposite occurs.
-
 === cookie.cutter.output.crop
 
 * Data Type: bool

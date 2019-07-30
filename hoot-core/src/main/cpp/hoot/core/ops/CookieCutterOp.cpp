@@ -46,8 +46,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, CookieCutterOp)
 CookieCutterOp::CookieCutterOp() :
 _alpha(1000.0),
 _alphaShapeBuffer(0.0),
-_crop(false),
-_swapInputs(false)
+_crop(false)
 {
   setConfiguration(conf());
 }
@@ -58,7 +57,6 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
   setAlpha(config.getCookieCutterAlpha());
   setAlphaShapeBuffer(config.getCookieCutterAlphaShapeBuffer());
   setCrop(config.getCookieCutterOutputCrop());
-  setSwapInputs(config.getCookieCutterOpSwapInputs());
 }
 
 void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
@@ -67,29 +65,22 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, "cookie-cutter-op-input-map");
 
-  // If the inputs aren't being swapped, this assumes that the incoming map has status Unknown1 for
-  // the replacement data and status Unknown2 for the data being replaced. If the inputs are being
-  // swapped, the expected statuses are reversed.
+  // This assumes that the incoming map has status Unknown1 for the replacement data and status
+  // Unknown2 for the data being replaced.
 
-  Status cutterMapStatus;
-  Status doughMapStatus;
-  if (!_swapInputs)
-  {
-    cutterMapStatus = Status::Unknown1;
-    doughMapStatus = Status::Unknown2;
-  }
-  else
-  {
-    cutterMapStatus = Status::Unknown2;
-    doughMapStatus = Status::Unknown1;
-  }
+  const Status cutterMapStatus = Status::Unknown1;
+  const Status doughMapStatus = Status::Unknown2;
 
-  // TODO: clean up the reprojections in here
+  // When working on the changeset-derive-replacement command, it seemed like there were several
+  // places in here where data was being projected properly. This class didn't end up being used
+  // to support that command, so I've commented out the reprojection code that was temporarily
+  // needed. It may be worth taking another look at CookieCutterOp to make sure its behaving
+  // correctly regarding the input/output data projections
 
   // Remove elements with the dough status out of the full input map and create a new map, which
   // will be our cutter shape map.
   std::shared_ptr<OsmMap> cutterShapeMap(new OsmMap(map));
-  MapProjector::projectToWgs84(cutterShapeMap);
+  //MapProjector::projectToWgs84(cutterShapeMap);
   RemoveElementsVisitor doughRemover;
   doughRemover.setRecursive(true);
   doughRemover.addCriterion(ElementCriterionPtr(new StatusCriterion(doughMapStatus)));
@@ -102,8 +93,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // shape outline.
   std::shared_ptr<OsmMap> cutterShapeOutlineMap =
     AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
-  //cutterShapeOutlineMap->setProjection(cutterShapeMap->getProjection());
-  MapProjector::projectToWgs84(cutterShapeOutlineMap);
+  //MapProjector::projectToWgs84(cutterShapeOutlineMap);
 
   // Remove elements with the cutter shape status create a new map, which will be our dough map.
   std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
@@ -116,7 +106,7 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   // a hole in it (or if _crop=false, drop what's around the outline shape instead).
   CookieCutter(_crop, 0.0).cut(cutterShapeOutlineMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
-  MapProjector::projectToWgs84(cookieCutMap);
+  //MapProjector::projectToWgs84(cookieCutMap);
 
   // Combine the cutter shape map with the dough map by adding the cutter shape data back into the
   // hole created by cookie cutting the dough map.
