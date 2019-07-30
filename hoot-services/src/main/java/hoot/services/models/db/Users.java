@@ -50,20 +50,28 @@ public class Users {
 
     public Users() {
         //The db column default should handle this
-//        this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
+        //this.hootservices_created_at = new Timestamp(System.currentTimeMillis());
     }
 
     private String displayName;
-    // @JsonIgnore
+
     private String email;
+
     private Long id;
+
     @JsonIgnore
     private String provider_access_key;
+
     @JsonIgnore
     private String provider_access_token;
+
     private Timestamp hootservices_last_authorize;
+
     private Timestamp hootservices_created_at;
+
     private Timestamp provider_created_at;
+
+    private Object privileges;
 
     @JsonProperty(value = "display_name")
     public String getDisplayName() {
@@ -144,6 +152,15 @@ public class Users {
     public void setProviderAccessToken(OAuthConsumerToken token) {
         this.setProviderAccessKey(token.getValue());
         this.setProviderAccessToken(token.getSecret());
+    }
+
+    @JsonProperty(value = "privileges")
+    public Object getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(Object privileges) {
+        this.privileges = privileges;
     }
 
     @Override

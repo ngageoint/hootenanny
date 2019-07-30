@@ -52,6 +52,7 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -89,6 +90,7 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
+import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.geo.BoundingBox;
@@ -128,6 +130,9 @@ public class GrailResource {
 
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
+
+    @Autowired
+    private UserManager userManager;
 
     public GrailResource() {}
 
@@ -186,6 +191,9 @@ public class GrailResource {
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
+
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
         File workDir = new File(TEMP_OUTPUT_PATH, jobId);
@@ -197,7 +205,6 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
-        Users user = Users.fromRequest(request);
         List<Command> workflow = new LinkedList<>();
         String bbox = reqParams.getBounds();
 
@@ -263,9 +270,13 @@ public class GrailResource {
     @GET
     @Path("/differentialstats")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response differentialStats(@QueryParam("jobId") String jobDir,
+    public Response differentialStats(@Context HttpServletRequest request,
+            @QueryParam("jobId") String jobDir,
             @QueryParam("includeTags") Boolean includeTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
 
         JSONObject jobInfo = new JSONObject();
 
@@ -351,6 +362,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
 
         GrailParams params = new GrailParams();
         params.setUser(user);
@@ -453,6 +465,7 @@ public class GrailResource {
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
 
         String input1 = reqParams.getInput1();
         String input2 = reqParams.getInput2();
@@ -531,14 +544,15 @@ public class GrailResource {
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
+
         String jobDir = reqParams.getFolder();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
         if (!workDir.exists()) {
             logger.error("conflatePush: jobDir {} does not exist.", workDir.getAbsolutePath());
             return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
         }
-
-        Users user = Users.fromRequest(request);
 
         JSONObject json = new JSONObject();
         String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
@@ -605,6 +619,7 @@ public class GrailResource {
             @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         String mapSuffix = jobId.substring(0, 7);
@@ -684,6 +699,7 @@ public class GrailResource {
             @QueryParam("bbox") String bbox) {
 
         Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
@@ -711,9 +727,6 @@ public class GrailResource {
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
-//        String url = RAILSPORT_PULL_URL +
-//                "?bbox=" + new BoundingBox(bbox).toServicesString();
-//        params.setInput1(url);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setWorkDir(workDir);
         params.setOutput(mapName);
@@ -740,6 +753,14 @@ public class GrailResource {
         response = responseBuilder.build();
 
         return response;
+    }
+
+    // throws forbidden exception is user does not have advanced privileges
+    private static void advancedUserCheck(Users user) {
+        HashMap privileges = ((HashMap) user.getPrivileges());
+        if(privileges == null || !privileges.get("advanced").equals("true")) {
+            throw new ForbiddenException(Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this operation.").build());
+        }
     }
 
     // Get Capabilities from an OSM API Db

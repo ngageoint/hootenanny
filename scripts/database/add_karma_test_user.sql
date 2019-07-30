@@ -1,5 +1,5 @@
 -- Add a test user for tests
-INSERT INTO users(email,id,display_name,provider_access_key,provider_access_token,hootservices_last_authorize,hootservices_created_at,provider_created_at) VALUES ('karma@test.com',-1541432234,'Karma','H0xC4KbUNRIUBJ8HrJIpdGz4WfouNiS0Lh1Yd50z','miYcdFFakicoYH7Xkw6Sop0mSM1fCzlRWK8eaHoL',now(),now(),now());
+INSERT INTO users(email,id,display_name,provider_access_key,provider_access_token,hootservices_last_authorize,hootservices_created_at,provider_created_at,privileges) VALUES ('karma@test.com',-1541432234,'Karma','H0xC4KbUNRIUBJ8HrJIpdGz4WfouNiS0Lh1Yd50z','miYcdFFakicoYH7Xkw6Sop0mSM1fCzlRWK8eaHoL',now(),now(),now(),'"advanced"=>"true"');
 
 
 -- Add a spring session for our test user
