@@ -420,6 +420,25 @@ public class GrailResource {
                 }
             }
 
+            // Setup workflow to refresh rails data after the push
+            Long mapId = Long.parseLong(jobDir.split("_")[2]);
+            Map<String, String> mapTags = DbUtils.getMapsTableTags(mapId);
+
+            GrailParams refreshParams = new GrailParams();
+            refreshParams.setUser(user);
+            refreshParams.setWorkDir(workDir);
+            refreshParams.setOutput(DbUtils.getDisplayNameById(mapId));
+            refreshParams.setBounds(mapTags.get("bbox"));
+            refreshParams.setFolder("grail_" + mapTags.get("bbox").replace(",", "_"));
+
+            try {
+                List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
+                workflow.addAll(refreshWorkflow);
+            }
+            catch(UnavailableException exc) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+            }
+
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
         }
         catch (WebApplicationException wae) {
@@ -471,7 +490,8 @@ public class GrailResource {
         String input2 = reqParams.getInput2();
 
         JSONObject json = new JSONObject();
-        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        //We store the mapid here because it was the best solution to getting the referenceId during differential push
+        String mainJobId = "grail_mapId_" + input1 + "_" + UUID.randomUUID().toString().replace("-", "");
         json.put("jobid", mainJobId);
 
         List<Command> workflow = new LinkedList<>();
@@ -512,82 +532,6 @@ public class GrailResource {
         }
         catch (Exception e) {
             String msg = "Error during conflate differential! Params: " + params;
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-
-        return Response.ok(json.toJSONString()).build();
-    }
-
-    /**
-     * Pushes the conflation result back to the reference dataset API
-     *
-     * Takes in a json object
-     * POST hoot-services/grail/conflatepush
-     *
-     * {
-     *   "folder" : // jobId name
-     * }
-     *
-     * @param reqParams
-     *      JSON input params; see description above
-     *
-     * @param debugLevel
-     *      debug level
-     *
-     * @return Job ID. Can be used to check status of the conflate push
-     */
-    @POST
-    @Path("/conflatepush")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response conflatePush(@Context HttpServletRequest request,
-            GrailParams reqParams,
-            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
-
-        Users user = Users.fromRequest(request);
-        advancedUserCheck(user);
-
-        String jobDir = reqParams.getFolder();
-        File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
-        if (!workDir.exists()) {
-            logger.error("conflatePush: jobDir {} does not exist.", workDir.getAbsolutePath());
-            return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
-        }
-
-        JSONObject json = new JSONObject();
-        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
-        json.put("jobid", mainJobId);
-
-        List<Command> workflow = new LinkedList<>();
-        GrailParams params = new GrailParams();
-        params.setUser(user);
-
-        try {
-            ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
-            params.setConsumerKey(oauthInfo.getConsumerKey());
-            params.setConsumerSecret(((SharedConsumerSecret) oauthInfo.getSharedSecret()).getConsumerSecret());
-
-            File geomDiffFile = new File(workDir, "diff.osc");
-            if (geomDiffFile.exists()) {
-                params.setOutput(geomDiffFile.getAbsolutePath());
-
-                // Apply changeset
-                params.setPushUrl(RAILSPORT_PUSH_URL);
-                ExternalCommand applyChange = grailCommandFactory.build(mainJobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
-                workflow.add(applyChange);
-
-                jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
-            }
-            else {
-                String msg = "Error during conflate push! Could not find osc file ";
-                throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
-            }
-        }
-        catch (IllegalArgumentException iae) {
-            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
-        }
-        catch (Exception e) {
-            String msg = "Error during conflate push! Could not find osc file ";
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -711,40 +655,25 @@ public class GrailResource {
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
 
-        List<Command> workflow = new LinkedList<>();
-
-        // Pull data from the reference OSM API
-        // Until hoot can read API url directly, download to file first
-        File referenceOSMFile = new File(workDir, REFERENCE +".osm");
-        if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
-
-        try {
-            workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
-        } catch (UnavailableException ex) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
-        }
-
-        // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
-        params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setWorkDir(workDir);
         params.setOutput(mapName);
-        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
-        workflow.add(importRailsPort);
+        params.setBounds(bbox);
 
-        // Set map tags marking dataset as eligible for derive changeset
-        Map<String, String> tags = new HashMap<>();
-        tags.put("source", "rails");
-        tags.put("bbox", bbox);
-        InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
-        workflow.add(setMapTags);
+        List<Command> workflow;
+        try {
+            workflow = setupRailsPull(jobId, params);
+        }
+        catch(UnavailableException exc) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+        }
 
         // Create the folder if it doesn't exist
         Long folderId = DbUtils.createFolder(folderName, 0L, user.getId(), false);
 
         // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, mapName, user, this.getClass());
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, params.getOutput(), user, this.getClass());
         workflow.add(setFolder);
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
@@ -753,6 +682,38 @@ public class GrailResource {
         response = responseBuilder.build();
 
         return response;
+    }
+
+    private List<Command> setupRailsPull(String jobId, GrailParams params) throws UnavailableException {
+        List<Command> workflow = new LinkedList<>();
+
+        Users user = params.getUser();
+
+        // Pull data from the reference OSM API
+        // Until hoot can read API url directly, download to file first
+        File referenceOSMFile = new File(params.getWorkDir(), REFERENCE +".osm");
+        if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
+
+        params.setInput1(referenceOSMFile.getAbsolutePath());
+
+        try {
+            workflow.add(getRailsPortApiCommand(jobId, user, params.getBounds(), referenceOSMFile.getAbsolutePath()));
+        } catch (UnavailableException exc) {
+            throw new UnavailableException("The Rails port API is offline.");
+        }
+
+        // Write the data to the hoot db
+        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
+        workflow.add(importRailsPort);
+
+        // Set map tags marking dataset as eligible for derive changeset
+        Map<String, String> tags = new HashMap<>();
+        tags.put("source", "rails");
+        tags.put("bbox", params.getBounds());
+        InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
+        workflow.add(setMapTags);
+
+        return workflow;
     }
 
     // throws forbidden exception is user does not have advanced privileges
