@@ -420,23 +420,27 @@ public class GrailResource {
                 }
             }
 
-            // Setup workflow to refresh rails data after the push
-            Long mapId = Long.parseLong(jobDir.split("_")[2]);
-            Map<String, String> mapTags = DbUtils.getMapsTableTags(mapId);
+            // In the derivechangeset endpoint we format the jobId as "grail_mapId_{id}_uuid" as an indicator to trigger as rails port refresh
+            String[] jobIdInfo = jobDir.split("_");
+            if(jobIdInfo.length > 2) {
+                // Setup workflow to refresh rails data after the push
+                long mapId = Long.parseLong(jobDir.split("_")[2]);
+                Map<String, String> mapTags = DbUtils.getMapsTableTags(mapId);
 
-            GrailParams refreshParams = new GrailParams();
-            refreshParams.setUser(user);
-            refreshParams.setWorkDir(workDir);
-            refreshParams.setOutput(DbUtils.getDisplayNameById(mapId));
-            refreshParams.setBounds(mapTags.get("bbox"));
-            refreshParams.setFolder("grail_" + mapTags.get("bbox").replace(",", "_"));
+                GrailParams refreshParams = new GrailParams();
+                refreshParams.setUser(user);
+                refreshParams.setWorkDir(workDir);
+                refreshParams.setOutput(DbUtils.getDisplayNameById(mapId));
+                refreshParams.setBounds(mapTags.get("bbox"));
+                refreshParams.setFolder("grail_" + mapTags.get("bbox").replace(",", "_"));
 
-            try {
-                List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
-                workflow.addAll(refreshWorkflow);
-            }
-            catch(UnavailableException exc) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+                try {
+                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
+                    workflow.addAll(refreshWorkflow);
+                }
+                catch(UnavailableException exc) {
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+                }
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
@@ -491,6 +495,7 @@ public class GrailResource {
 
         JSONObject json = new JSONObject();
         //We store the mapid here because it was the best solution to getting the referenceId during differential push
+        //This acts as a trigger to tell the differentialpush endpoint if we will do a rails port data refresh
         String mainJobId = "grail_mapId_" + input1 + "_" + UUID.randomUUID().toString().replace("-", "");
         json.put("jobid", mainJobId);
 
