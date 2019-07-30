@@ -100,6 +100,7 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setAddCeToSearchDistance(confOpts.getSnapUnconnectedWaysAddCircularErrorToSearchRadius());
   setWayDiscretizationSpacing(confOpts.getSnapUnconnectedWaysDiscretizationSpacing());
   setMarkSnappedNodes(confOpts.getSnapUnconnectedWaysMarkSnappedNodes());
+  setMarkSnappedWays(confOpts.getSnapUnconnectedWaysMarkSnappedWays());
 
   setSnapWayStatus(confOpts.getSnapUnconnectedWaysSnapWayStatus().trimmed());
   setSnapToWayStatus(confOpts.getSnapUnconnectedWaysSnapToWayStatus().trimmed());

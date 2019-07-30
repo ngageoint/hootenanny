@@ -3929,6 +3929,13 @@ the existing way node instead of adding the way endpoint node as a new way node 
 If true, all way nodes snapped by the Unconnected Way Snapper to another way or way node will be
 marked with a 'hoot:snapped' tag.  Useful for debugging purposes.
 
+=== snap.unconnected.ways.mark.snapped.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === snap.unconnected.ways.snap.to.way.criterion
 
 * Data Type: string
