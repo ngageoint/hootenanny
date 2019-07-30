@@ -660,6 +660,7 @@ public class GrailResource {
         params.setWorkDir(workDir);
         params.setOutput(mapName);
         params.setBounds(bbox);
+        params.setFolder(folderName);
 
         List<Command> workflow;
         try {
@@ -668,13 +669,6 @@ public class GrailResource {
         catch(UnavailableException exc) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
         }
-
-        // Create the folder if it doesn't exist
-        Long folderId = DbUtils.createFolder(folderName, 0L, user.getId(), false);
-
-        // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, params.getOutput(), user, this.getClass());
-        workflow.add(setFolder);
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
 
@@ -712,6 +706,13 @@ public class GrailResource {
         tags.put("bbox", params.getBounds());
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
+
+        // Create the folder if it doesn't exist
+        Long folderId = DbUtils.createFolder(params.getFolder(), 0L, user.getId(), false);
+
+        // Move the data to the folder
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, params.getOutput(), user, this.getClass());
+        workflow.add(setFolder);
 
         return workflow;
     }
