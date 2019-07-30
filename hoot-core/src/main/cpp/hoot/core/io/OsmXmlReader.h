@@ -196,6 +196,8 @@ private:
   QXmlAttributes _streamAttributesToAttributes(const QXmlStreamAttributes& streamAttributes);
 
   void _uncompressInput();
+
+  void _cropToBounds();
 };
 
 }

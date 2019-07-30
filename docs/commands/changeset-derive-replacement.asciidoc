@@ -4,8 +4,9 @@
 === Description
 
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets within a 
-given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. The output 
-changeset file can be applied directly to an OSM API database or via the Rails Port with the +changeset-apply+ command.
+given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. Generally, the
+reference data is sourced from an OSM API database. The output changeset file can be applied directly to an OSM API database or via the 
+Rails Port with the +changeset-apply+ command.
 
 Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
 the second input (secondary dataset) are not retained and treated as completely new data. 
@@ -47,7 +48,8 @@ hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::
 
 === Bounds Handling
 
-All inputs must support bounded queries and be readable by a Hootenanny reader implementing the Boundable interface.
+All inputs must support bounded queries and be readable by a Hootenanny reader implementing the Boundable interface. To list the Hootenanny input
+formats that support bounded queries: TODO
 
 ==== Strict Bounds Handling
 
@@ -80,6 +82,11 @@ N/A - Point bounds relationships are only handled in a strict fashion.
 
 * Reference features crossing the bounds may be modified. They will not be split, and will only be conflated with secondary features.
 * Secondary features crossing the bounds may be included unmodified in the output or conflated with reference features.
+
+=== Versioning
+
+All input features from the reference dataset must be populated with the correct versions or application of the resulting changeset will fail. 
+For Overpass API queries, add "out meta" to the query retrieving the reference data.
 
 === See Also
 

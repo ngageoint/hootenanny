@@ -85,6 +85,9 @@ void ChangesetReplacementCreator::create(
     _validateFilter(featureTypeFilterClassName);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _parseConfigOpts(lenientBounds, featureTypeFilterClassName, boundsStr);
+  // TODO: add error checking for OsmApiDbReader ref input that throws if any of the feature
+  // versions are less than one (this would eventually also be applied to OsmApiReader and
+  // OverpassReader as well)
 
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString lenientStr = "Bounds calculation is ";
@@ -218,12 +221,12 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
     std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input1));
   if (!boundable)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Reader for " + input1 + " must implement Boundable.");
   }
   boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input2));
   if (!boundable)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Reader for " + input2 + " must implement Boundable.");
   }
 }
 
@@ -237,7 +240,7 @@ std::shared_ptr<ConflatableElementCriterion> ChangesetReplacementCreator::_valid
         Factory::getInstance().constructObject<ElementCriterion>(featureTypeFilterClassName)));
   if (!featureCrit)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Invalid feature type filter: " + featureTypeFilterClassName);
   }
   return featureCrit;
 }

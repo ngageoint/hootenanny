@@ -33,7 +33,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/util/IoUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -558,18 +558,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   ConfigOptions conf;
   if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
-  {
-    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
-    MapCropper cropper(_bounds);
-    LOG_INFO(cropper.getInitStatusMessage());
-    // We don't reuse MapCropper's version of these options, since we want the freedom to have
-    // different default values than what MapCropper uses.
-    cropper.setKeepEntireFeaturesCrossingBounds(
-      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-    cropper.setKeepOnlyFeaturesInsideBounds(
-      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
-    cropper.apply(map);
-    LOG_INFO(cropper.getCompletedStatusMessage());
+  { 
+    IoUtils::cropInputToBounds(map, _bounds);
   }
 
   LOG_DEBUG("Current map:");

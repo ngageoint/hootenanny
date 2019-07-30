@@ -83,6 +83,14 @@ public:
     @param path the file path to save the map to
     */
   static void saveMap(const OsmMapPtr& map, const QString& path);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @param bounds
+   */
+  static void cropInputToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds);
 };
 
 }
