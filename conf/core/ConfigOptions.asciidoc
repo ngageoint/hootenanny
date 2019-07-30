@@ -3949,7 +3949,7 @@ for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.n
 === snap.unconnected.ways.snap.to.way.status
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `Input1`
 
 Status of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
@@ -3977,7 +3977,7 @@ way snapping.
 === snap.unconnected.ways.snap.way.status
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `Input2`
 
 Status of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference

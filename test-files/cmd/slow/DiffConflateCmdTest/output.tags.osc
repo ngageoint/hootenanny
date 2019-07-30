@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
     <modify>
-        <way id="-39773" version="0" timestamp="">
+        <way id="-39773" version="1" timestamp="">
             <nd ref="-39771"/>
             <nd ref="-39772"/>
             <nd ref="-39774"/>

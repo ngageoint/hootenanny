@@ -212,7 +212,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   {
     throw HootException(
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
-      QString("version greater than zero."));
+      QString("version greater than zero: ") + n->getElementId().toString());
   }
   else
     version = n->getVersion();
@@ -261,7 +261,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   {
     throw HootException(
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
-      QString("version greater than zero."));
+      QString("version greater than zero: ")  + w->getElementId().toString());
   }
   else
     version = w->getVersion();
@@ -322,7 +322,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   {
     throw HootException(
       QString("Elements being modified or deleted in an .osc changeset must always have a ") +
-      QString("version greater than zero."));
+      QString("version greater than zero: ") + r->getElementId().toString());
   }
   else
     version = r->getVersion();

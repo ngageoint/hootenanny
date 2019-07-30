@@ -297,7 +297,8 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   if (currentVersion < 1)
   {
     throw HootException(
-      "Elements being modified in an .osc.sql changeset must always have a version greater than one.");
+      "Elements being modified in an .osc.sql changeset must always have a version greater than one: " +
+      element->getElementId().toString());
   }
   const long newVersion = currentVersion + 1;
 
@@ -354,7 +355,8 @@ void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr elem
   if (currentVersion < 1)
   {
     throw HootException(
-      "Elements being deleted in an .osc.sql changeset must always have a version greater than one.");
+      "Elements being deleted in an .osc.sql changeset must always have a version greater than one: " +
+      element->getElementId().toString());
   }
   const long newVersion = currentVersion + 1;
 

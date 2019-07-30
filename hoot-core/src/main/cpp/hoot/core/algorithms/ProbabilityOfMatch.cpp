@@ -107,7 +107,7 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
   for (size_t i = 0; i < v.size(); i++)
   {
     Point* point(GeometryFactory::getDefaultInstance()->createPoint(v[i]));
-    LOG_DEBUG("distance " << ls2->distance(point));
+    LOG_VART(ls2->distance(point));
     double d = ls2->distance(point);
     distanceSum += d;
     _dMax = max(d, _dMax);
