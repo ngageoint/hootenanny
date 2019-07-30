@@ -56,8 +56,7 @@ public:
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter().write(_outputPath + "changeset.osc", changesetProvider);
 
-    HOOT_FILE_EQUALS( _inputPath + "changeset.osc",
-                     _outputPath + "changeset.osc");
+    HOOT_FILE_EQUALS(_inputPath + "changeset.osc", _outputPath + "changeset.osc");
   }
 
   void runSplitTest()
@@ -70,9 +69,9 @@ public:
     writer.write(
       _outputPath + "changeset.split.osc", changesetProvider);
 
-    HOOT_FILE_EQUALS( _inputPath + "changeset.split.osc",
+    HOOT_FILE_EQUALS(_inputPath + "changeset.split.osc",
                      _outputPath + "changeset.split.osc");
-    HOOT_FILE_EQUALS( _inputPath + "changeset-001.split.osc",
+    HOOT_FILE_EQUALS(_inputPath + "changeset-001.split.osc",
                      _outputPath + "changeset-001.split.osc");
   }
 };
