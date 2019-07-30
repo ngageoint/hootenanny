@@ -183,7 +183,6 @@ class ConflateCommand extends ExternalCommand {
         if (params.getHoot2() != null) { // hoot 2
             conflationType = params.getConflationType();
             conflationAlgorithm = params.getConflateAlgorithm();
-            debugLevel = "--" + debugLevel;
             List<String> disabledFeatures = params.getDisabledFeatures();
 
             if (disabledFeatures != null && !disabledFeatures.isEmpty()) {
@@ -263,7 +262,7 @@ class ConflateCommand extends ExternalCommand {
                     conflationType = null;
 
                 } else {
-                    substitutionMap.put("CONFLATION_TYPE", "-C " + conflationType + "Conflation.conf");
+                    substitutionMap.put("CONFLATION_TYPE", conflationType + "Conflation.conf");
                 }
             }
 
@@ -271,10 +270,13 @@ class ConflateCommand extends ExternalCommand {
                 if (conflationAlgorithms.stream().noneMatch(a -> a.equals(conflationAlgorithm))) {
                     throw new IllegalArgumentException(String.format("Conflation Algorithm \"%s\" is not valid.", conflationAlgorithm));
                 }
-                substitutionMap.put("CONFLATION_ALGORITHM", "-C " + conflationAlgorithm + "Algorithm.conf");
+                substitutionMap.put("CONFLATION_ALGORITHM", conflationAlgorithm + "Algorithm.conf");
             }
 
-            command = "hoot ${CONFLATION_COMMAND} ${DEBUG_LEVEL} ${CONFLATION_TYPE} ${CONFLATION_ALGORITHM} ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
+            command = "hoot ${CONFLATION_COMMAND} --${DEBUG_LEVEL}"
+                    + (conflationType != null ? " -C ${CONFLATION_TYPE}" : "")
+                    + (conflationAlgorithm != null ? " -C ${CONFLATION_ALGORITHM}" : "")
+                    + " ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} ${DIFFERENTIAL} ${DIFF_TAGS} ${STATS}";
         }
 
         super.configureCommand(command, substitutionMap, caller);
