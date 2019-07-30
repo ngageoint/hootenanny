@@ -70,8 +70,7 @@ public:
     QString outputPath = args[i++];
 
     OsmMapPtr pointsMap(new OsmMap());
-    IoUtils::loadMap(
-      pointsMap, pointsPath, ConfigOptions().getReaderUseDataSourceIds(), Status::Unknown1);
+    IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);
 
     OsmMapPtr result = AlphaShapeGenerator(alpha, buffer).generateMap(pointsMap);
 
