@@ -160,9 +160,12 @@ private:
    * @param geometry Tree of multi-geometry in JSON format
    * @param relation OSM relation to represent the multi-geometry that all elements are added to
    */
-  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
-  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
-  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry, const RelationPtr& relation);
+  void _parseMultiPointGeometry(const boost::property_tree::ptree& geometry,
+                                const RelationPtr& relation);
+  void _parseMultiLineGeometry(const boost::property_tree::ptree& geometry,
+                               const RelationPtr& relation);
+  void _parseMultiPolygonGeometry(const boost::property_tree::ptree& geometry,
+                                  const RelationPtr& relation);
 
   /**
    * @brief _parseMultiGeometry Parse "Multi" geometry object into a vector of vectors of coordiantes

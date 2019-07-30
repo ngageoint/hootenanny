@@ -64,6 +64,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/io/OsmGeoJsonReader.h>
 
 namespace hoot
 {
@@ -227,6 +228,15 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
   if (!boundable)
   {
     throw IllegalArgumentException("Reader for " + input2 + " must implement Boundable.");
+  }
+
+  // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
+  // are lost when new way nodes are added to existing ways. For that reason, we can't support it
+  // (or at least not sure how to yet).
+  OsmGeoJsonReader geoJsonReader;
+  if (geoJsonReader.isSupported(input1) || geoJsonReader.isSupported(input2))
+  {
+    throw IllegalArgumentException("GeoJSON inputs are not supported.");
   }
 }
 

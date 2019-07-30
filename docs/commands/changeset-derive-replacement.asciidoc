@@ -88,6 +88,10 @@ N/A - Point bounds relationships are only handled in a strict fashion.
 All input features from the reference dataset must be populated with the correct versions or application of the resulting changeset will fail. 
 For Overpass API queries, add "out meta" to the query retrieving the reference data.
 
+=== Unsupported Formats
+
+GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
+
 === See Also
 
 * `changeset-derive` command
