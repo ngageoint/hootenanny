@@ -173,6 +173,32 @@ public class ConflateCommandTest {
 
     @Test
     @Category(UnitTest.class)
+    public void testHorizontal() {
+        String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
+
+        // handles case for network...
+        ConflateParams conflateParams = new ConflateParams();
+        conflateParams.setConflationCommand("conflate");
+        conflateParams.setInputType1("DB");
+        conflateParams.setInput1("DcGisRoads");
+        conflateParams.setInputType2("DB");
+        conflateParams.setInput2("DcTigerRoads");
+        conflateParams.setOutputName("Merged_Roads_e0d");
+        conflateParams.setCollectStats(false);
+        conflateParams.setReferenceLayer("1");
+        conflateParams.setHoot2(true);
+        conflateParams.setConflationType("Horizontal");
+        String debugLevel = "trace";
+        ConflateCommand conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
+
+        String expectedCommand = "hoot conflate --trace -C HorizontalConflation.conf -D convert.ops=hoot::DecomposeBuildingRelationsVisitor -D writer.include.conflate.score.tags=false -D hootapi.db.writer.overwrite.map=true -D writer.text.status=true -D job.id=38c74757-d444-49aa-b746-3ee29fc49cf7 -D api.db.email=test@test.com hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcGisRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/DcTigerRoads hootapidb://${HOOTAPI_DB_USER}:${HOOTAPI_DB_PASSWORD}@${HOOTAPI_DB_HOST}:${HOOTAPI_DB_PORT}/${HOOTAPI_DB_NAME}/Merged_Roads_e0d";
+        CommandLine actualCommand = ExternalCommandRunnerImpl.parse(conflateCommand.getCommand(), conflateCommand.getSubstitutionMap());
+        assertEquals(expectedCommand, actualCommand.getExecutable() + " " + StringUtils.join(actualCommand.getArguments(), " "));
+
+    }
+
+    @Test
+    @Category(UnitTest.class)
     public void testNetwork() {
         String jobId = "38c74757-d444-49aa-b746-3ee29fc49cf7";
 
