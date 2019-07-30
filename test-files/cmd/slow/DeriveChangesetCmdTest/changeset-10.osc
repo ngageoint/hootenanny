@@ -11,171 +11,171 @@
         </node>
     </create>
     <delete>
-        <node id="-21130746" version="0" lat="39.5918538057342388" lon="-104.8049653120718006" timestamp="">
+        <node id="-21130746" version="1" lat="39.5918538057342388" lon="-104.8049653120718006" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130734" version="0" lat="39.5918839666917890" lon="-104.8049694320074394" timestamp="">
+        <node id="-21130734" version="1" lat="39.5918839666917890" lon="-104.8049694320074394" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130724" version="0" lat="39.5918855541102559" lon="-104.8048623136804309" timestamp="">
+        <node id="-21130724" version="1" lat="39.5918855541102559" lon="-104.8048623136804309" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130716" version="0" lat="39.5918712673428601" lon="-104.8048664336160698" timestamp="">
+        <node id="-21130716" version="1" lat="39.5918712673428601" lon="-104.8048664336160698" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130706" version="0" lat="39.5918744421802984" lon="-104.8047263558038367" timestamp="">
+        <node id="-21130706" version="1" lat="39.5918744421802984" lon="-104.8047263558038367" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130694" version="0" lat="39.5918601554105933" lon="-104.8047366556429552" timestamp="">
+        <node id="-21130694" version="1" lat="39.5918601554105933" lon="-104.8047366556429552" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130682" version="0" lat="39.5918617428296216" lon="-104.8047634352247144" timestamp="">
+        <node id="-21130682" version="1" lat="39.5918617428296216" lon="-104.8047634352247144" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130674" version="0" lat="39.5918268196031988" lon="-104.8047613752569163" timestamp="">
+        <node id="-21130674" version="1" lat="39.5918268196031988" lon="-104.8047613752569163" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130600" version="0" lat="39.5910470002864514" lon="-104.8048703722634372" timestamp="">
+        <node id="-21130600" version="1" lat="39.5910470002864514" lon="-104.8048703722634372" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130589" version="0" lat="39.5910402653585791" lon="-104.8049927281098803" timestamp="">
+        <node id="-21130589" version="1" lat="39.5910402653585791" lon="-104.8049927281098803" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130329" version="0" lat="39.5918132861614396" lon="-104.8045340418683224" timestamp="">
+        <node id="-21130329" version="1" lat="39.5918132861614396" lon="-104.8045340418683224" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130320" version="0" lat="39.5918282304716129" lon="-104.8044494796687758" timestamp="">
+        <node id="-21130320" version="1" lat="39.5918282304716129" lon="-104.8044494796687758" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130313" version="0" lat="39.5918267091370168" lon="-104.8043483519689971" timestamp="">
+        <node id="-21130313" version="1" lat="39.5918267091370168" lon="-104.8043483519689971" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130302" version="0" lat="39.5918141225920408" lon="-104.8041645223572687" timestamp="">
+        <node id="-21130302" version="1" lat="39.5918141225920408" lon="-104.8041645223572687" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21130288" version="0" lat="39.5918253473461093" lon="-104.8042606517369109" timestamp="">
+        <node id="-21130288" version="1" lat="39.5918253473461093" lon="-104.8042606517369109" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21129803" version="0" lat="39.5918227535863068" lon="-104.8041632446121127" timestamp="">
+        <node id="-21129803" version="1" lat="39.5918227535863068" lon="-104.8041632446121127" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21129795" version="0" lat="39.5918139002840164" lon="-104.8042640972780504" timestamp="">
+        <node id="-21129795" version="1" lat="39.5918139002840164" lon="-104.8042640972780504" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21129787" version="0" lat="39.5918147640879994" lon="-104.8043460390379522" timestamp="">
+        <node id="-21129787" version="1" lat="39.5918147640879994" lon="-104.8043460390379522" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21129776" version="0" lat="39.5918175070261000" lon="-104.8044472273774375" timestamp="">
+        <node id="-21129776" version="1" lat="39.5918175070261000" lon="-104.8044472273774375" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21129767" version="0" lat="39.5918275295324804" lon="-104.8045322894089963" timestamp="">
+        <node id="-21129767" version="1" lat="39.5918275295324804" lon="-104.8045322894089963" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127863" version="0" lat="39.5910792485870715" lon="-104.8052266791553677" timestamp="">
+        <node id="-21127863" version="1" lat="39.5910792485870715" lon="-104.8052266791553677" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127861" version="0" lat="39.5910882284857166" lon="-104.8049954826725241" timestamp="">
+        <node id="-21127861" version="1" lat="39.5910882284857166" lon="-104.8049954826725241" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127859" version="0" lat="39.5909358810389094" lon="-104.8048575559457305" timestamp="">
+        <node id="-21127859" version="1" lat="39.5909358810389094" lon="-104.8048575559457305" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127857" version="0" lat="39.5909370229654272" lon="-104.8037828099171946" timestamp="">
+        <node id="-21127857" version="1" lat="39.5909370229654272" lon="-104.8037828099171946" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127855" version="0" lat="39.5917973193579158" lon="-104.8037828099171946" timestamp="">
+        <node id="-21127855" version="1" lat="39.5917973193579158" lon="-104.8037828099171946" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127853" version="0" lat="39.5918025834933829" lon="-104.8038622197304051" timestamp="">
+        <node id="-21127853" version="1" lat="39.5918025834933829" lon="-104.8038622197304051" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127851" version="0" lat="39.5918623451759117" lon="-104.8038646558332658" timestamp="">
+        <node id="-21127851" version="1" lat="39.5918623451759117" lon="-104.8038646558332658" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127849" version="0" lat="39.5918593259945553" lon="-104.8040583838280213" timestamp="">
+        <node id="-21127849" version="1" lat="39.5918593259945553" lon="-104.8040583838280213" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127847" version="0" lat="39.5918184557514508" lon="-104.8040643213816736" timestamp="">
+        <node id="-21127847" version="1" lat="39.5918184557514508" lon="-104.8040643213816736" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127845" version="0" lat="39.5918284296655827" lon="-104.8046324666495792" timestamp="">
+        <node id="-21127845" version="1" lat="39.5918284296655827" lon="-104.8046324666495792" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127843" version="0" lat="39.5918168975692382" lon="-104.8046309493925747" timestamp="">
+        <node id="-21127843" version="1" lat="39.5918168975692382" lon="-104.8046309493925747" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-21127842" version="0" lat="39.5918538712206569" lon="-104.8052113027000161" timestamp="">
+        <node id="-21127842" version="1" lat="39.5918538712206569" lon="-104.8052113027000161" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968486" version="0" lat="39.5934971733042431" lon="-104.8050061945212263" timestamp="">
+        <node id="-18968486" version="1" lat="39.5934971733042431" lon="-104.8050061945212263" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968484" version="0" lat="39.5934971733042431" lon="-104.8048403015620806" timestamp="">
+        <node id="-18968484" version="1" lat="39.5934971733042431" lon="-104.8048403015620806" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968482" version="0" lat="39.5937003389047391" lon="-104.8048343768135453" timestamp="">
+        <node id="-18968482" version="1" lat="39.5937003389047391" lon="-104.8048343768135453" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968480" version="0" lat="39.5937026216609027" lon="-104.8049113985445473" timestamp="">
+        <node id="-18968480" version="1" lat="39.5937026216609027" lon="-104.8049113985445473" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968478" version="0" lat="39.5937665388031519" lon="-104.8049143609188434" timestamp="">
+        <node id="-18968478" version="1" lat="39.5937665388031519" lon="-104.8049143609188434" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968477" version="0" lat="39.5937642560490914" lon="-104.8050032321469587" timestamp="">
+        <node id="-18968477" version="1" lat="39.5937642560490914" lon="-104.8050032321469587" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968468" version="0" lat="39.5935816354801773" lon="-104.8043811335501374" timestamp="">
+        <node id="-18968468" version="1" lat="39.5935816354801773" lon="-104.8043811335501374" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968466" version="0" lat="39.5935793527200275" lon="-104.8041352564856936" timestamp="">
+        <node id="-18968466" version="1" lat="39.5935793527200275" lon="-104.8041352564856936" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968464" version="0" lat="39.5938121938686507" lon="-104.8041234069886087" timestamp="">
+        <node id="-18968464" version="1" lat="39.5938121938686507" lon="-104.8041234069886087" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
-        <node id="-18968463" version="0" lat="39.5938099111160895" lon="-104.8043722464273344" timestamp="">
+        <node id="-18968463" version="1" lat="39.5938099111160895" lon="-104.8043722464273344" timestamp="">
             <tag k="test_key" v="test_val"/>
             <tag k="error:circular" v="15"/>
         </node>
@@ -254,7 +254,7 @@
         </way>
     </create>
     <delete>
-        <way id="-21127844" version="0" timestamp="">
+        <way id="-21127844" version="1" timestamp="">
             <nd ref="-21127842"/>
             <nd ref="-21130746"/>
             <nd ref="-21130734"/>
@@ -294,7 +294,7 @@
             <tag k="REF1" v="Target"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-18968479" version="0" timestamp="">
+        <way id="-18968479" version="1" timestamp="">
             <nd ref="-18968477"/>
             <nd ref="-18968478"/>
             <nd ref="-18968480"/>
@@ -308,7 +308,7 @@
             <tag k="REF1" v="Freddy's"/>
             <tag k="error:circular" v="15"/>
         </way>
-        <way id="-18968465" version="0" timestamp="">
+        <way id="-18968465" version="1" timestamp="">
             <nd ref="-18968463"/>
             <nd ref="-18968464"/>
             <nd ref="-18968466"/>
