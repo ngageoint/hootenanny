@@ -129,10 +129,6 @@ private:
   /*
    * TODO
    */
-  void _remapRelationIds(OsmMapPtr& map,  const std::shared_ptr<IdGenerator>& idGenerator);
-  /*
-   * TODO
-   */
   void _addNodeHashes(OsmMapPtr& map);
   void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
                     const QString& debugFileName);

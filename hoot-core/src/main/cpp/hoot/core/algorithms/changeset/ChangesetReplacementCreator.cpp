@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/ops/ElementIdRemapper.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
@@ -130,11 +129,14 @@ void ChangesetReplacementCreator::create(
 
   // Cut the secondary data out of the reference data.
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap);
-  // Renumber the relations in the sec map, as they could have ID overlap with those in the cookie
-  // cut ref map at this point. This is due to the fact that they have been modified independently
-  // of each other during cropping, which can create new relations.
-  // TODO: Is this actually needed?
-  _remapRelationIds(secMap, cookieCutRefMap->getIdGeneratorSp());
+
+  // At one point it was necessary to renumber the relations in the sec map, as they could have ID
+  // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
+  // fact that relations in the two maps had been added independently of each other during cropping.
+  // However, after some refactoring this doesn't seem to be the case anymore. If we run into this
+  // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
+  // for relations here, which has since been removed from the codebase.
+
   // Combine the cookie cut map back with the secondary map, so we can conflate it with the ref map.
   _combineMaps(cookieCutRefMap, secMap, false, "combined-before-conflation");
   secMap.reset();
@@ -380,21 +382,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
   return cookieCutMap;
-}
-
-void ChangesetReplacementCreator::_remapRelationIds(
-  OsmMapPtr& map, const std::shared_ptr<IdGenerator>& idGenerator)
-{
-  LOG_DEBUG("Remapping secondary map relation IDs for: " << map->getName() << "...");
-  ElementIdRemapper relationIdRemapper;
-  relationIdRemapper.setIdGen(idGenerator);
-  relationIdRemapper.setRemapNodes(false);
-  relationIdRemapper.setRemapRelations(true);
-  relationIdRemapper.setRemapWays(false);
-  LOG_DEBUG(relationIdRemapper.getInitStatusMessage());
-  relationIdRemapper.apply(map);
-  LOG_DEBUG(relationIdRemapper.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-relation-ids-remapped");
 }
 
 void ChangesetReplacementCreator::_addNodeHashes(OsmMapPtr& map)
