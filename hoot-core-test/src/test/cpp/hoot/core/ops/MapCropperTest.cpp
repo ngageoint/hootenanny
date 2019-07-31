@@ -303,9 +303,6 @@ public:
     }
   }
 
-  // getting into id ordering issues with these tests, so using an element count check instead
-  // of a map diff
-
   void runKeepFeaturesOnlyCompletelyInBoundsTest()
   {
     const QString testFileNameBase = "runKeepFeaturesOnlyCompletelyInBoundsTest";
@@ -340,6 +337,20 @@ public:
     testFileName = testFileNameBase + "-2.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+
+    // illegal configuration
+    uut.setInvert(false);
+    uut.setKeepEntireFeaturesCrossingBounds(true);
+    QString exceptionMsg("");
+    try
+    {
+       uut.setKeepOnlyFeaturesInsideBounds(true);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Incompatible crop options"));
 
     // setting invert to true negates the keep only features inside bounds setting;
     // so output looks like regular inverted crop output
@@ -390,18 +401,19 @@ public:
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
-    // setting keep only features inside bounds to true overrides the keep entire features
-    // crossing bounds setting and de-activates it; so should end up with a single way
-    map.reset(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
+    // illegal configuration
     uut.setInvert(false);
     uut.setKeepOnlyFeaturesInsideBounds(true);
-    uut.setKeepEntireFeaturesCrossingBounds(true);
-    uut.apply(map);
-    MapProjector::projectToWgs84(map);
-    testFileName = testFileNameBase + "-3.osm";
-    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+    QString exceptionMsg("");
+    try
+    {
+       uut.setKeepEntireFeaturesCrossingBounds(true);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Incompatible crop options"));
 
     // setting invert to true negates the keep entire features crossing bounds setting; so output
     // looks like regular inverted crop output

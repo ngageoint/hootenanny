@@ -130,9 +130,17 @@ void MapCropper::setInvert(bool invert)
 
 void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
 {
-  if (_invert || _keepOnlyFeaturesInsideBounds)
+  // this option is ignored when set to invert
+  if (_invert)
   {
     _keepEntireFeaturesCrossingBounds = false;
+  }
+  // this option is incomptible with the option to keep only features inside the bounds
+  else if (keep && _keepOnlyFeaturesInsideBounds)
+  {
+    throw IllegalArgumentException(
+      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and ") +
+      QString("_keepEntireFeaturesCrossingBounds cannot both be enabled."));
   }
   else
   {
@@ -142,17 +150,21 @@ void MapCropper::setKeepEntireFeaturesCrossingBounds(bool keep)
 
 void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
 {
+  // this option is ignored when set to invert
   if (_invert)
   {
     _keepOnlyFeaturesInsideBounds = false;
   }
+  // this option is incomptible with the option to keep features crossing the bounds
+  else if (keep && _keepEntireFeaturesCrossingBounds)
+  {
+    throw IllegalArgumentException(
+      QString("Incompatible crop options: _keepOnlyFeaturesInsideBounds and ") +
+      QString("_keepEntireFeaturesCrossingBounds cannot both be enabled."));
+  }
   else
   {
     _keepOnlyFeaturesInsideBounds = keep;
-    if (_keepOnlyFeaturesInsideBounds)
-    {
-      _keepEntireFeaturesCrossingBounds = false;
-    }
   }
 }
 
