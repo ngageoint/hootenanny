@@ -87,7 +87,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   // HootStatus
   if (addStatus)
   {
-    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString( status );
+    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString(status);
   }
 
   // HootId
@@ -106,12 +106,12 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
 void AddExportTagsVisitor::overrideDebugSettings()
 {
   _includeIds = true;
-  _textStatus = true;
+  _textStatus = false;
   _includeCircularError= true;
   _includeDebug = true;
 }
 
-QString AddExportTagsVisitor::toCompatString( Status status ) const
+QString AddExportTagsVisitor::toCompatString(Status status) const
 {
   if (status.getEnum() <= Status::EnumEnd)
   {

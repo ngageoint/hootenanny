@@ -69,13 +69,9 @@ _encodingErrorCount(0),
 _numWritten(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
-  // TODO: This type of behavior should be implemented in the other writers or consolidated into
-  // AddExportTagsVisitor somehow.
-  //_addExportTagsVisitor.setIncludeIds(_includeDebug);
   // TODO: not certain about this; this is kludgy
   if (_includeDebug)
   {
-    //_includePid = true;
     _overrideDebugSettings();
   }
 }
