@@ -102,10 +102,6 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // the larger number of steps. With streaming I/O that isn't possible since all the data
     // conversion operations are executed inline at the same time the data is read in.
     _numTotalTasks += 4;
-    if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
-    {
-      _numTotalTasks++;
-    }
     if (ConfigOptions().getConvertOps().size() > 0)
     {
       // Convert ops get a single task, which NamedOp will break down into sub-tasks during

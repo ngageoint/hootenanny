@@ -383,6 +383,13 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== changeset.allow.deleting.reference.features.outside.bounds
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === changeset.apidb.size.max
 
 * Data Type: long
