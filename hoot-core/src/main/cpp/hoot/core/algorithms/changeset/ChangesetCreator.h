@@ -97,8 +97,6 @@ private:
   // provided.
   bool _singleInput;
 
-  void _parseBuffer();
-
   bool _isSupportedOutputFormat(const QString& format) const;
   bool _inputIsSorted(const QString& input) const;
   bool _inputIsStreamable(const QString& input) const;

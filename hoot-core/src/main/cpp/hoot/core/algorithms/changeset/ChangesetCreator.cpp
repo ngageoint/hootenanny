@@ -52,11 +52,6 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/RecursiveSetTagValueOp.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -136,7 +131,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
 
   // Allow for a buffer around the AOI where the changeset derivation is to occur, if there is an
   // AOI.
-  _parseBuffer();
+  //_parseBuffer();
 
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
@@ -223,7 +218,8 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
   map1->visitRw(hashVis);
   map2->visitRw(hashVis);
 
-  // don't want to include review relations
+  // don't want to include review relations - may need to remove this depending on what happens
+  // with #3361
   std::shared_ptr<TagKeyCriterion> elementCriterion(
     new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
   RemoveElementsVisitor removeElementsVisitor;
@@ -260,50 +256,6 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
   _streamChangesetOutput(sortedElements1, sortedElements2, output);
 }
 
-void ChangesetCreator::_parseBuffer()
-{
-  // TODO: get rid of changeset buffer
-  LOG_DEBUG("Parsing changeset buffer...");
-
-  const double changesetBuffer = ConfigOptions().getChangesetBuffer();
-  LOG_VARD(changesetBuffer);
-  if (changesetBuffer > 0.0)
-  {
-    //allow for calculating the changeset with a slightly different AOI than the default specified
-    //bounding box
-
-    QString bboxStr;
-    QString convertBoundsParamName;
-    //only one of these three should be specified (why?)
-    if (!ConfigOptions().getConvertBoundingBox().isEmpty())
-    {
-      bboxStr = ConfigOptions().getConvertBoundingBox();
-      convertBoundsParamName = ConfigOptions::getConvertBoundingBoxKey();
-    }
-    else if (!ConfigOptions().getConvertBoundingBoxHootApiDatabase().isEmpty())
-    {
-      bboxStr = ConfigOptions().getConvertBoundingBoxHootApiDatabase();
-      convertBoundsParamName = ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey();
-    }
-    else if (!ConfigOptions().getConvertBoundingBoxOsmApiDatabase().isEmpty())
-    {
-      bboxStr = ConfigOptions().getConvertBoundingBoxOsmApiDatabase();
-      convertBoundsParamName = ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey();
-    }
-    else
-    {
-      throw IllegalArgumentException(
-        QString("A changeset buffer was specified but no convert bounding box was specified ") +
-        QString("with the convert.bounding.box configuration option."));
-    }
-    geos::geom::Envelope convertBounds = GeometryUtils::envelopeFromConfigString(bboxStr);
-    // shrink the bbox by the specified distance to give us a small buffer for reconnecting split
-    // features
-    convertBounds.expandBy(-1 * changesetBuffer, -1 * changesetBuffer);
-    conf().set(convertBoundsParamName, GeometryUtils::envelopeToConfigString(convertBounds));
-  }
-}
-
 bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 {
   return format.endsWith(".osc") || format.endsWith(".osc.sql");
@@ -318,7 +270,7 @@ bool ChangesetCreator::_inputIsSorted(const QString& input) const
   }
 
   //Streaming db inputs actually do not come back sorted, despite the order by id clause
-  //in the query (see ApiDb::selectElements).  Otherwise, we'd skip sorting them too.
+  //in the query (see ApiDb::selectElements). Otherwise, we'd skip sorting them too.
 
   //pbf sets a sort flag
   if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
@@ -559,36 +511,8 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     {
       // Load each input into a separate map; see related comments in
       // _handleUnstreamableConvertOpsInMemory
-      // TODO: can this separate bounds handling be removed after the addition of
-      // ChangesetReplacementCreator?
-      if (ConfigUtils::boundsOptionEnabled())
-      {
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-          ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-          ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
-      }
-      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
       IoUtils::loadMap(map1, input1, true, Status::Unknown1);
-      // TODO: hack
-      SuperfluousNodeRemover::removeNodes(map1);
-      if (ConfigUtils::boundsOptionEnabled())
-      {
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-          ConfigOptions().getChangesetSecondaryKeepEntireFeaturesCrossingBounds());
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-          ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
-      }
-      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-      LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
       IoUtils::loadMap(map2, input2, true, Status::Unknown2);
-      // TODO: hack
-      SuperfluousNodeRemover::removeNodes(map2);
     }
     else
     {
@@ -652,29 +576,6 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
   OsmMapWriterFactory::writeDebugMap(map1, "after-adding-hashes-map-1");
   OsmMapWriterFactory::writeDebugMap(map2, "after-adding-hashes-map-2");
   _currentTaskNum++;
-
-  // TODO: can this be removed after the addition of ChangesetReplacementCreator?
-  if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
-  {
-    progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-      "Adding changeset ref delete exclude tags...");
-
-    // The strictness of the bounds check is governed by a config option. Generally, would use
-    // not strict for linear features and strict for point or poly features.
-    conf().set("in.bounds.criterion.bounds", ConfigOptions().getConvertBoundingBox());
-    std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion());
-    boundsCrit->setOsmMap(map1.get());
-    std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
-    std::shared_ptr<ChainCriterion> elementCrit(
-      new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
-
-    RecursiveSetTagValueOp tagSetter(elementCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
-    tagSetter.apply(map1);
-
-    OsmMapWriterFactory::writeDebugMap(map1, "after-adding-ref-delete-exclude-tags-map-1");
-    _currentTaskNum++;
-  }
 }
 
 ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QString& input,

@@ -383,22 +383,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== changeset.allow.deleting.reference.features
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, changesets derived are allowed to issue delete statements for the reference dataset (first
-dataset passed to the changeset deriver) if calculated.  If false, any delete statements calculated
-for the reference dataset will be ignored and not added to changeset output.
-
-=== changeset.allow.deleting.reference.features.outside.bounds
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
-
 === changeset.apidb.size.max
 
 * Data Type: long
@@ -432,15 +416,6 @@ another changeset to the OSM API.
 * Default Value: `30`
 
 The number of seconds after a successful write before submitting another changeset to the OSM API.
-
-=== changeset.buffer
-
-* Data Type: double
-* Default Value: `0.0`
-
-Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
-changesets.  Setting this too large with some datasets may greatly increase the changeset
-derivation time.
 
 === changeset.description
 
