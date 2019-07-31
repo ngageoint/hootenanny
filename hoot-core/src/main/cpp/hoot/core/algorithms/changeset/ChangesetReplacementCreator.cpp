@@ -65,6 +65,8 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
+#include <hoot/core/ops/WayJoinerOp.h>
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 
 namespace hoot
 {
@@ -665,6 +667,21 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
       _changesetSecKeepOnlyInsideBounds = false;
       _changesetAllowDeletingRefOutsideBounds = false;
       _inBoundsStrict = false;
+
+      // Conflate way joining needs to happen later in the post ops for strict linear replacements.
+      // Changing the default ordering of the post ops to accomodate this had detrimental effects
+      // on other conflation. The best location seems to be at the end just before tag truncation.
+      // would like to get rid of this...isn't a foolproof fix by any means if the conflate post
+      // ops end up getting reordered for some reason
+      LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
+      QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+      conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
+      const int indexOfTagTruncater =
+        conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
+      conflatePostOps.insert(
+        indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
+      conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
+      LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
     }
   }
   else if (_isPolyCrit(critClassName))
