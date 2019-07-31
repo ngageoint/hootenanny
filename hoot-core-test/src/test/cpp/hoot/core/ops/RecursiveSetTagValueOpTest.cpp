@@ -53,7 +53,7 @@ public:
     : HootTestFixture("test-files/ops/",
                       "test-output/ops/")
   {
-    setResetType(Basic);
+    //setResetType(Basic);
   }
 
   void runBasicTest()
@@ -62,6 +62,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveSetTagValueOpTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveSetTagValueOpTest, "quick");
 
 }

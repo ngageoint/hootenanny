@@ -43,7 +43,7 @@ namespace hoot
 
 class ElementIdToVersionMapperTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(RecursiveSetTagValueOpTest);
+  CPPUNIT_TEST_SUITE(ElementIdToVersionMapperTest);
   //CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -53,7 +53,7 @@ public:
     : HootTestFixture("test-files/ops/",
                       "test-output/ops/")
   {
-    setResetType(Basic);
+    //setResetType(Basic);
   }
 
   void runBasicTest()
@@ -62,6 +62,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdToVersionMapperTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdToVersionMapperTest, "quick");
 
 }
