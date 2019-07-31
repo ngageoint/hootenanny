@@ -492,8 +492,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
     }
     else
     {
-      // If it isn't inverted, we'd need to do a complex and expensive check so just return false.
-      //LOG_TRACE("Wholly inside check: non-inverted crop; avoiding expensive check.");
+      // If it isn't inverted, we need to do an expensive check.
       result = _envelopeG->getEnvelopeInternal()->covers(e);
       LOG_TRACE(
         "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
@@ -534,23 +533,6 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
     }
     else
     {
-      //LOG_TRACE("Wholly outside way check: inverted crop; avoiding expensive check.");
-
-//      LOG_VART(_envelopeG->getEnvelopeInternal()->contains(e));
-//      LOG_VART(_envelopeG->getEnvelopeInternal()->intersects(e));
-//      LOG_VART(_envelopeG->getEnvelopeInternal()->covers(e));
-
-//      //std::shared_ptr<geos::geom::Envelope> env(new Envelope(e));
-//      //Geometry* elementGeometry = GeometryFactory::getDefaultInstance()->toGeometry(env.get());
-//      LOG_VART(_envelopeG->contains(ls.get()));
-//      LOG_VART(_envelopeG->intersects(ls.get()));
-//      LOG_VART(_envelopeG->covers(ls.get()));
-//      LOG_VART(_envelopeG->touches(ls.get()));
-//      LOG_VART(_envelopeG->crosses(ls.get()));
-//      LOG_VART(_envelopeG->within(ls.get()));
-//      LOG_VART(_envelopeG->overlaps(ls.get()));
-//      LOG_VART(_envelopeG->coveredBy(ls.get()));
-
       result = _envelopeG->getEnvelopeInternal()->covers(e);
       LOG_TRACE(
         "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
