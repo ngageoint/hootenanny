@@ -289,6 +289,13 @@ public:
   QString getName() const { return _name; }
   void setName(const QString& name) { _name = name; }
 
+  int numNodesAppended() const { return _numNodesAppended; }
+  int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
+  int numWaysAppended() const { return _numWaysAppended; }
+  int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
+  int numRelationsAppended() const { return _numRelationsAppended; }
+  int numRelationsSkippedForAppending() const { return _numRelationsSkippedForAppending; }
+
 protected:
 
   mutable IdGenerator* _idGen;
@@ -322,6 +329,13 @@ protected:
   // useful during debugging
   QString _name;
 
+  int _numNodesAppended;
+  int _numWaysAppended;
+  int _numRelationsAppended;
+  int _numNodesSkippedForAppending;
+  int _numWaysSkippedForAppending;
+  int _numRelationsSkippedForAppending;
+
   void _copy(const std::shared_ptr<const OsmMap>& from);
 
   /**
@@ -330,6 +344,8 @@ protected:
   bool _listContainsNode(const QList<ElementPtr> l) const;
 
   void _replaceNodeInRelations(long oldId, long newId);
+
+  void _initCounters();
 };
 
 typedef std::shared_ptr<OsmMap> OsmMapPtr;

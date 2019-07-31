@@ -61,8 +61,8 @@ namespace hoot
 
 std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
-OsmMap::OsmMap()
-  : _idSwap(new IdSwap())
+OsmMap::OsmMap() :
+_idSwap(new IdSwap())
 {
   if (!_wgs84)
   {
@@ -72,34 +72,49 @@ OsmMap::OsmMap()
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = _wgs84;
+  _initCounters();
 }
 
 OsmMap::OsmMap(const ConstOsmMapPtr& map)
 {
   _copy(map);
+  _initCounters();
 }
 
 OsmMap::OsmMap(const OsmMapPtr& map)
 {
   _copy(map);
+  _initCounters();
 }
 
-OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs)
-  : _idSwap(new IdSwap())
+OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs) :
+_idSwap(new IdSwap())
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = srs;
+  _initCounters();
 }
 
 OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialReference>& srs)
 {
   _copy(map);
   _srs = srs;
+  _initCounters();
 }
 
 OsmMap::~OsmMap()
 {
+}
+
+void OsmMap::_initCounters()
+{
+  _numNodesAppended = 0;
+  _numWaysAppended = 0;
+  _numRelationsAppended = 0;
+  _numNodesSkippedForAppending = 0;
+  _numWaysSkippedForAppending = 0;
+  _numRelationsSkippedForAppending = 0;
 }
 
 void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupes)
@@ -123,6 +138,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
 
   LOG_DEBUG("Appending maps...");
 
+  _initCounters();
   _srs = appendFromMap->getProjection();
   _index->getNodeToWayMap();    //TODO: why does this have to be done?
   _index->getElementToRelationMap(); //TODO: why does this have to be done?
@@ -132,7 +148,6 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
   // The append order must be nodes, ways, and then relations. If not, the map indexes won't update
   // properly.
 
-  int numNodesAppended = 0;
   NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
   while (itn != appendFromMap->_nodes.end())
   {
@@ -162,13 +177,16 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
       NodePtr n = NodePtr(new Node(*node));
       LOG_TRACE("Appending: " << n->getElementId() << "...");
       addNode(n);
-      numNodesAppended++;
+      _numNodesAppended++;
+    }
+    else
+    {
+      _numNodesSkippedForAppending++;
     }
 
     ++itn;
   }
 
-  int numWaysAppended = 0;
   WayMap::const_iterator it = appendFromMap->_ways.begin();
   while (it != appendFromMap->_ways.end())
   {
@@ -198,13 +216,16 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
       WayPtr w = WayPtr(new Way(*way));
       LOG_TRACE("Appending: " << w->getElementId() << "...");
       addWay(w);
-      numWaysAppended++;
+      _numWaysAppended++;
+    }
+    else
+    {
+      _numWaysSkippedForAppending++;
     }
 
     ++it;
   }
 
-  int numRelationsAppended = 0;
   const RelationMap& allRelations = appendFromMap->getRelations();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
@@ -236,7 +257,11 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
       RelationPtr r = RelationPtr(new Relation(*relation));
       LOG_TRACE("Appending: " << r->getElementId() << "...");
       addRelation(r);
-      numRelationsAppended++;
+      _numRelationsAppended++;
+    }
+    else
+    {
+      _numRelationsSkippedForAppending++;
     }
   }
 
@@ -246,9 +271,12 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     _listeners.push_back(l->clone());
   }
 
-  LOG_VARD(numNodesAppended);
-  LOG_VARD(numWaysAppended);
-  LOG_VARD(numRelationsAppended);
+  LOG_VARD(_numNodesAppended);
+  LOG_VARD(_numNodesSkippedForAppending);
+  LOG_VARD(_numWaysAppended);
+  LOG_VARD(_numWaysSkippedForAppending);
+  LOG_VARD(_numRelationsAppended);
+  LOG_VARD(_numRelationsSkippedForAppending);
 }
 
 void OsmMap::addElement(const std::shared_ptr<Element>& e)
