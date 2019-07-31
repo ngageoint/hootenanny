@@ -25,35 +25,27 @@
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "UnconnectedHighwaySnapper.h"
-
-// hoot
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/HighwayNodeCriterion.h>
+// Hoot
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, UnconnectedHighwaySnapper)
-
-UnconnectedHighwaySnapper::UnconnectedHighwaySnapper() :
-UnconnectedWaySnapper()
+class InBoundsCriterionTest : public HootTestFixture
 {
-}
+  CPPUNIT_TEST_SUITE(InBoundsCriterionTest);
+  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE_END();
 
-void UnconnectedHighwaySnapper::setConfiguration(const Settings& conf)
-{
-  UnconnectedWaySnapper::setConfiguration(conf);
+public:
 
-  // override to snap roads
-  setWayToSnapCriterionClassName(QString::fromStdString(HighwayCriterion::className()));
-  setWayToSnapToCriterionClassName(QString::fromStdString(HighwayCriterion::className()));
-  if (_snapToExistingWayNodes)
+  void runTest()
   {
-    setWayNodeToSnapToCriterionClassName(QString::fromStdString(HighwayNodeCriterion::className()));
+
   }
-}
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(InBoundsCriterionTest, "quick");
 
 }

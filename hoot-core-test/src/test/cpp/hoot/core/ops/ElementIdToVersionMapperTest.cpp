@@ -25,50 +25,43 @@
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef UNCONNECTED_HIGHWAY_SNAPPER
-#define UNCONNECTED_HIGHWAY_SNAPPER
-
 // Hoot
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/ops/ElementIdToVersionMapper.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
 
 namespace hoot
 {
 
-/**
- * Convenience class that configures UnconnectedWaySnapper to snap roads
- */
-class UnconnectedHighwaySnapper : public UnconnectedWaySnapper
+class ElementIdToVersionMapperTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(RecursiveSetTagValueOpTest);
+  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static std::string className() { return "hoot::UnconnectedHighwaySnapper"; }
+  ElementIdToVersionMapperTest()
+    : HootTestFixture("test-files/ops/",
+                      "test-output/ops/")
+  {
+    setResetType(Basic);
+  }
 
-  UnconnectedHighwaySnapper();
+  void runBasicTest()
+  {
+  }
 
-  /**
-   * @see OperationStatusInfo
-   */
-  virtual QString getInitStatusMessage() const
-  { return "Snapping unconnected roads to the nearest road..."; }
-
-  /**
-   * @see OperationStatusInfo
-   */
-  virtual QString getCompletedStatusMessage() const
-  { return "Snapped " + QString::number(_numAffected) + " unconnected roads."; }
-
-  /**
-   * @see OperationStatusInfo
-   */
-  virtual QString getDescription() const
-  { return "Snaps unconnected roads to the nearest road."; }
-
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
 };
 
-}
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdToVersionMapperTest, "slow");
 
-#endif // UNCONNECTED_HIGHWAY_SNAPPER
+}
