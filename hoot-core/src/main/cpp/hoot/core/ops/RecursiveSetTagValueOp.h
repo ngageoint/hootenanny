@@ -31,7 +31,8 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
 {
@@ -39,29 +40,55 @@ namespace hoot
 /**
  * TODO
  */
-class RecursiveSetTagValueOp : public OsmMapOperation, public OperationStatusInfo
+class RecursiveSetTagValueOp : public OsmMapOperation, public OperationStatusInfo,
+  public ElementCriterionConsumer, public Configurable
 {
 public:
 
   static std::string className() { return "hoot::RecursiveSetTagValueOp"; }
 
   RecursiveSetTagValueOp();
-  RecursiveSetTagValueOp(ElementCriterionPtr elementCriterion, const QString& key,
-                         const QString& val);
+  // We have the constructor signatures from SetTagValueVisitor here, as well as a signature that
+  // allows passing in an already configured, possibly complex, criterion. We may want to extend
+  // that capability to SetTagValueVisitor at some point.
+  RecursiveSetTagValueOp(
+    const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
+    bool appendToExistingValue = false, const bool overwriteExistingTag = true);
+  RecursiveSetTagValueOp(
+    const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
+    bool appendToExistingValue = false, const bool overwriteExistingTag = true);
+  RecursiveSetTagValueOp(
+    const QStringList& keys, const QStringList& values, const QString& criterionName,
+    bool appendToExistingValue = false, const bool overwriteExistingTag = true,
+    const bool negateCriterion = false);
+  RecursiveSetTagValueOp(
+    const QString& key, const QString& value, const QString& criterionName,
+    bool appendToExistingValue = false, const bool overwriteExistingTag = true,
+    const bool negateCriterion = false);
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
+  virtual void addCriterion(const ElementCriterionPtr& e);
+
+  virtual void setConfiguration(const Settings& conf);
+
+  void setNegateCriterion(bool negate) { _negateCriterion = negate; }
+
   virtual QString getDescription() const override { return "TODO"; }
 
-  virtual QString getInitStatusMessage() const { return "TODO"; }
+  virtual QString getInitStatusMessage() const { return _tagger->getInitStatusMessage(); }
 
-  virtual QString getCompletedStatusMessage() const { return "TODO"; }
+  virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
 
 private:
 
   ElementCriterionPtr _crit;
-  QString _key;
-  QString _val;
+  bool _negateCriterion;
+  // Wrap SetTagValueVisitor for tagging purposes only and handle the criterion filter separately
+  // in this class.
+  std::shared_ptr<SetTagValueVisitor> _tagger;
+
+  void _setCriterion(const QString& criterionName);
 };
 
 }

@@ -242,6 +242,13 @@ See the User Guide for more details on command usage.
     hoot count "input1.osm;input2.osm" hoot::PoiCriterion
 -----
 
+===== Count all features within a bounding box:
+
+-----
+    hoot count -D in.bounds.criterion.bounds="-77.0551,38.8845,-77.0281,38.9031" -D in.bounds.criterion.strict=true \
+      input.osm hoot::InBoundsCriterion
+-----
+
 ===== Show a summary of building conflation reviews by type and frequency:
 
 -----
@@ -426,8 +433,16 @@ See the User Guide for more details on command usage.
 ===== Add the tag "error:circular=5.0" to all elements:
 
 -----
-    hoot convert -D convert.ops=hoot::SetTagVisitor -D set.tag.visitor.key=error:circular \
-      -D set.tag.visitor.value=5.0 input.osm output.osm
+    hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.keys=error:circular \
+      -D set.tag.value.visitor.values=5.0 input.osm output.osm
+-----
+
+===== Add the tag "error:circular=5.0" to all relations and their members: 
+
+-----
+    hoot convert -D convert.ops=hoot::RecursiveSetTagValueOp -D set.tag.value.visitor.keys=error:circular \
+      -D set.tag.value.visitor.values=5.0 -D set.tag.value.visitor.criterion=hoot::RelationCriterion \ 
+      input.osm output.osm
 -----
 
 ===== Remove all "source" and "error:circular" tags from ways:
@@ -456,8 +471,8 @@ See the User Guide for more details on command usage.
 ===== For all features with a "voltage" tag between 1 and 45k volts, set the tag "power=minor_line":
 
 -----
-    hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.key=power \
-      -D set.tag.value.visitor.value=minor_line \
+    hoot convert -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.keys=power \
+      -D set.tag.value.visitor.values=minor_line \
       -D set.tag.value.visitor.element.criterion=hoot::TagValueNumericRangeCriterion \
       -D tag.value.numeric.range.criterion.keys=voltage \
       -D tag.value.numeric.range.criterion.min=1 -D tag.value.numeric.range.criterion.max=45000 \
@@ -597,6 +612,18 @@ See the User Guide for more details on command usage.
 -----
     hoot count -D distance.node.criterion.center=-77.3453,38.3456 \
       -D distance.node.criterion.distance=25.0 input.osm hoot::DistanceNodeCriterion
+-----
+
+===== Count the number of elements with a version greater than or equal to one TODO:
+
+-----
+    hoot count input.osm hoot::AttributeValueCriterion
+-----
+
+===== Count the number of elements authored by "username" TODO:
+
+-----
+    hoot count input.osm hoot::AttributeValueCriterion
 -----
 
 ===== Calculate the numerical average of all "accuracy" tags:

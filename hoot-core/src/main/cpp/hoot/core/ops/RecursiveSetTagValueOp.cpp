@@ -31,6 +31,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 // geos
 #include <geos/geom/Geometry.h>
@@ -44,12 +46,81 @@ RecursiveSetTagValueOp::RecursiveSetTagValueOp()
 {
 }
 
-RecursiveSetTagValueOp::RecursiveSetTagValueOp(ElementCriterionPtr elementCriterion,
-                                               const QString& key, const QString& val) :
+RecursiveSetTagValueOp::RecursiveSetTagValueOp(
+  const QStringList& keys, const QStringList& values, ElementCriterionPtr elementCriterion,
+  bool appendToExistingValue, const bool overwriteExistingTag) :
 _crit(elementCriterion),
-_key(key),
-_val(val)
+_negateCriterion(false)
 {
+  _tagger.reset(
+    new SetTagValueVisitor(keys, values, appendToExistingValue, "", overwriteExistingTag));
+}
+
+RecursiveSetTagValueOp::RecursiveSetTagValueOp(
+  const QString& key, const QString& value, ElementCriterionPtr elementCriterion,
+  bool appendToExistingValue, const bool overwriteExistingTag) :
+_crit(elementCriterion),
+_negateCriterion(false)
+{
+  _tagger.reset(
+    new SetTagValueVisitor(key, value, appendToExistingValue, "", overwriteExistingTag));
+}
+
+RecursiveSetTagValueOp::RecursiveSetTagValueOp(
+  const QStringList& keys, const QStringList& values, const QString& criterionName,
+  bool appendToExistingValue, const bool overwriteExistingTag,
+  const bool negateCriterion) :
+_negateCriterion(negateCriterion)
+{
+  _tagger.reset(
+    new SetTagValueVisitor(keys, values, appendToExistingValue, "", overwriteExistingTag));
+  _setCriterion(criterionName);
+}
+
+RecursiveSetTagValueOp::RecursiveSetTagValueOp(
+  const QString& key, const QString& value, const QString& criterionName,
+  bool appendToExistingValue, const bool overwriteExistingTag,
+  const bool negateCriterion) :
+_negateCriterion(negateCriterion)
+{
+  _tagger.reset(
+    new SetTagValueVisitor(key, value, appendToExistingValue, "", overwriteExistingTag));
+  _setCriterion(criterionName);
+}
+
+void RecursiveSetTagValueOp::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  _tagger.reset(
+    new SetTagValueVisitor(
+      configOptions.getSetTagValueVisitorKeys(), configOptions.getSetTagValueVisitorValues(),
+      configOptions.getSetTagValueVisitorAppendToExistingValue(), "",
+      configOptions.getSetTagValueVisitorOverwrite()));
+  _negateCriterion = configOptions.getElementCriterionNegate();
+  _setCriterion(configOptions.getSetTagValueVisitorElementCriterion());
+}
+
+void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)
+{
+  if (!_negateCriterion)
+  {
+    _crit = e;
+  }
+  else
+  {
+    _crit.reset(new NotCriterion(e));
+  }
+}
+
+void RecursiveSetTagValueOp::_setCriterion(const QString& criterionName)
+{
+  if (!criterionName.trimmed().isEmpty())
+  {
+    LOG_VART(criterionName);
+    addCriterion(
+      std::shared_ptr<ElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+  }
 }
 
 void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
@@ -61,14 +132,11 @@ void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(relation->getElementId());
     if (_crit->isSatisfied(relation))
     {
-      LOG_TRACE("Setting " << _key << "=" << _val << " on " << relation->getElementId() << "...");
-      relation->getTags().set(_key, _val);
+      _tagger->visit(relation);
 
       for (size_t i = 0; i < relation->getMembers().size(); i++)
       {
-        ElementPtr member = map->getElement(relation->getMembers()[i].getElementId());
-        LOG_TRACE("Setting " << _key << "=" << _val << " on " << member->getElementId() << "...");
-        member->getTags().set(_key, _val);
+        _tagger->visit(map->getElement(relation->getMembers()[i].getElementId()));
       }
     }
   }
@@ -80,15 +148,12 @@ void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(way->getElementId());
     if (_crit->isSatisfied(way))
     {
-      LOG_TRACE("Setting " << _key << "=" << _val << " on " << way->getElementId() << "...");
-      way->getTags().set(_key, _val);
+      _tagger->visit(way);
 
       const std::vector<long>& nodeIds = way->getNodeIds();
       for (std::vector<long>::const_iterator it2 = nodeIds.begin(); it2 != nodeIds.end(); ++it2)
       {
-        NodePtr node = map->getNode(*it2);
-        LOG_TRACE("Setting " << _key << "=" << _val << " on " << node->getElementId() << "...");
-        node->getTags().set(_key, _val);
+        _tagger->visit(map->getNode(*it2));
       }
     }
   }
@@ -100,8 +165,7 @@ void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(node->getElementId());
     if (_crit->isSatisfied(node))
     {
-      LOG_TRACE("Setting " << _key << "=" << _val << " on " << node->getElementId() << "...");
-      node->getTags().set(_key, _val);
+      _tagger->visit(node);
     }
   }
 }

@@ -339,7 +339,7 @@ void ChangesetReplacementCreator::_addDeleteExclusionTags(OsmMapPtr& map)
       std::shared_ptr<TagKeyCriterion>(
         new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
   RecursiveSetTagValueOp childDeletionExcludeTagOp(
-    childAddTagCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
+    MetadataTags::HootChangeExcludeDelete(), "yes", childAddTagCrit);
   LOG_DEBUG(childDeletionExcludeTagOp.getInitStatusMessage());
   childDeletionExcludeTagOp.apply(map);
   LOG_DEBUG(childDeletionExcludeTagOp.getCompletedStatusMessage());
@@ -569,7 +569,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromDeletion(OsmMapPtr& map,
   std::shared_ptr<ChainCriterion> elementCrit(
     new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
 
-  RecursiveSetTagValueOp tagSetter(elementCrit, MetadataTags::HootChangeExcludeDelete(), "yes");
+  RecursiveSetTagValueOp tagSetter(MetadataTags::HootChangeExcludeDelete(), "yes", elementCrit);
   LOG_DEBUG(tagSetter.getInitStatusMessage());
   tagSetter.apply(map);
   LOG_DEBUG(tagSetter.getCompletedStatusMessage());

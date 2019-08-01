@@ -48,15 +48,22 @@ public:
   static std::string className() { return "hoot::SetTagValueVisitor"; }
 
   SetTagValueVisitor();
-  SetTagValueVisitor(const QString& key, const QString& value, bool appendToExistingValue = false,
-                     const QString& criterionName = "", bool overwriteExistingTag = true,
-                     bool negateCriterion = false);
+  SetTagValueVisitor(
+    const QStringList& keys, const QStringList& values, bool appendToExistingValue = false,
+    const QString& criterionName = "", const bool overwriteExistingTag = true,
+    const bool negateCriterion = false);
+  SetTagValueVisitor(
+    const QString& key, const QString& value, bool appendToExistingValue = false,
+    const QString& criterionName = "", const bool overwriteExistingTag = true,
+    const bool negateCriterion = false);
 
   virtual void addCriterion(const ElementCriterionPtr& e);
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void visit(const std::shared_ptr<Element>& e);
+
+  void setTag(const ElementPtr& e, const QString& k, const QString& v);
 
   virtual QString getDescription() const
   { return "Adds or updates one or more tags with a specified key/value combination"; }
@@ -70,7 +77,7 @@ public:
 
 private:
 
-  QStringList _k, _v;
+  QStringList _keys, _vals;
   //if true; will not overwrite existing keys and will append values to them
   bool _appendToExistingValue;
   //a customizable filter
@@ -80,7 +87,6 @@ private:
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriterion;
 
-  void _setTag(const ElementPtr& e, const QString& k, const QString& v);
   void _setCriterion(const QString& criterionName);
 };
 

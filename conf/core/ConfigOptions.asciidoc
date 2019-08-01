@@ -390,6 +390,15 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== changeset.allow.deleting.reference.features
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, changesets derived are allowed to issue delete statements for the reference dataset (first
+dataset passed to the changeset deriver) if calculated.  If false, any delete statements calculated
+for the reference dataset will be ignored and not added to changeset output.
+
 === changeset.allow.deleting.reference.features.outside.bounds
 
 * Data Type: bool
@@ -3812,7 +3821,7 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 * Data Type: bool
 * Default Value: `false`
 
-If true, any element with a value populated for the key defined by the set.tag.value.visitor.key
+If true, any element with a value populated for the key defined by the set.tag.value.visitor.keys
 option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
 === set.tag.value.visitor.element.criterion
@@ -3820,17 +3829,17 @@ option will have the value specified in the set.tag.value.visitor.value option a
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select elements to add or modify tags on.  To pass
-in complex nested criteria, use the Hootenanny Javascript interface instead.
+The plugin name of an element criterion used to select elements to add or modify tags on used by the
+SetTagValueVisitor and RecursiveSetTagValueOp classes.  To pass in complex nested criteria, use the
+Hootenanny Javascript interface instead.
 
-=== set.tag.value.visitor.key
+=== set.tag.value.visitor.keys
 
 * Data Type: list
 * Default Value: ``
 
-Set the key member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying one or more tags on all elements in a map. The number of keys in
-`set.tag.value.visitor.key` should match the number of keys in `set.tag.value.visitor.value`.
+Sets the key member in the SetTagValueVisitor and RecursiveSetTagValueOp classes. The number of keys
+in `set.tag.value.visitor.keys` should match the number of keys in `set.tag.value.visitor.values`.
 Separate list items with a semicolon.
 
 === set.tag.value.visitor.overwrite
@@ -3838,16 +3847,17 @@ Separate list items with a semicolon.
 * Data Type: bool
 * Default Value: `true`
 
-If true, the SetTagValueVisitor class will overwrite any existing tag it finds with
-key=set.tag.value.visitor.key, otherwise it will skip updating the tag.
+If true, the SetTagValueVisitor and RecursiveSetTagValueOp classes will overwrite any existing tag
+it finds with key=set.tag.value.visitor.keys, otherwise it will skip updating the tag.
 
-=== set.tag.value.visitor.value
+=== set.tag.value.visitor.values
 
 * Data Type: list
 * Default Value: ``
 
-Set the value member in the SetTagValueVisitor class.  SetTagValueVisitor allows for
-adding/modifying one or more tags on all elements in a map.  Separate list items with a semicolon.
+Set the value member in the SetTagValueVisitor and RecursiveSetTagValueOp classes. The number of
+keys in `set.tag.value.visitor.values` should match the number of keys in
+`set.tag.value.visitor.keys`. Separate list items with a semicolon.
 
 === shape.file.writer.cols
 
