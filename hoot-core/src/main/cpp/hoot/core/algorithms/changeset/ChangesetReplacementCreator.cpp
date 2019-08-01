@@ -213,7 +213,7 @@ void ChangesetReplacementCreator::create(
 
     immediatelyConnectedOutOfBoundsWays.reset();
   }
-  if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
+  if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {
     // If we're not allowing the changeset deriver to generate delete statements for reference
     // features outside of the bounds, we need to mark all corresponding ref ways with a custom
@@ -279,7 +279,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
     _convertRefKeepOnlyInsideBounds);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediateConnectedWaysOutsideBoundsKey(),
+    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     _convertRefKeepImmediateConnectedWaysOutsideBounds);
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
@@ -354,7 +354,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
     _convertSecKeepOnlyInsideBounds);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediateConnectedWaysOutsideBoundsKey(), false);
+    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   OsmMapPtr secMap(new OsmMap());
   secMap->setName("sec");
   IoUtils::loadMap(secMap, input, false, Status::Unknown2);
@@ -607,7 +607,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
   conf().set(
-    ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
     _changesetAllowDeletingRefOutsideBounds);
   conf().set(ConfigOptions::getApidbReaderTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
@@ -645,6 +645,9 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     if (lenientBounds)
     {
       _convertRefKeepEntireCrossingBounds = true;
+      // TODO: This is a problem b/c the only reader supporting this being true right now is
+      // OsmApiDbReader. All other readers may contribute to corrupting replacement changesets for
+      // linear features with a lenient AOI.
       _convertRefKeepImmediateConnectedWaysOutsideBounds = true;
       _convertSecKeepEntireCrossingBounds = true;
       _convertSecKeepOnlyInsideBounds = false;

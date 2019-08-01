@@ -161,6 +161,8 @@ void OsmJsonReader::close()
     _file.close();
 }
 
+// TODO: implement support for immediately connected outside of bounds ways
+
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;

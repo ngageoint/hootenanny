@@ -352,6 +352,8 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   }
   file.close();
 
+  // TODO: implement support for immediately connected outside of bounds ways
+
   // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
   // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
