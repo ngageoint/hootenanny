@@ -130,10 +130,6 @@ private:
    * TODO
    */
   void _excludeFeaturesFromDeletion(OsmMapPtr& map, const QString& boundsStr);
-  /*
-   * TODO
-   */
-  void _addNodeHashes(OsmMapPtr& map);
   void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
                     const QString& debugFileName);
   /*

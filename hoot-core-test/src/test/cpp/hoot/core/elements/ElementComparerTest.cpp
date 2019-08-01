@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/ElementComparer.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 namespace hoot
 {
@@ -63,11 +62,9 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node1);
 
     NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 15.0));
     node2->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(ElementComparer().isSame(node1, node2));
   }
@@ -76,11 +73,9 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node1);
 
     NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.01, 15.0));
     node2->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }
@@ -89,11 +84,9 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node1);
 
     NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 15.0));
     node2->setTag("key1", "value2");
-    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }
@@ -102,11 +95,9 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node1);
 
     NodePtr node2(new Node(Status::Unknown2, 1, 0.0, 0.00000001, 15.0));
     node2->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }
@@ -115,11 +106,9 @@ public:
   {
     NodePtr node1(new Node(Status::Unknown1, 1, 0.0, 0.0, 15.0));
     node1->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node1);
 
     NodePtr node2(new Node(Status::Unknown1, 1, 0.0, 0.00000001, 16.0));
     node2->setTag("key1", "value1");
-    CalculateHashVisitor2().visit(node2);
 
     CPPUNIT_ASSERT(!ElementComparer().isSame(node1, node2));
   }

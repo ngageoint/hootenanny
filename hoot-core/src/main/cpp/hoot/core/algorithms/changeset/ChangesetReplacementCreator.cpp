@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -405,13 +404,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   return cookieCutMap;
 }
 
-void ChangesetReplacementCreator::_addNodeHashes(OsmMapPtr& map)
-{
-  LOG_DEBUG("Adding hashes for node comparisons to: " << map->getName() << "...");
-  CalculateHashVisitor2 hashVis;
-  map->visitRw(hashVis);
-}
-
 void ChangesetReplacementCreator::_combineMaps(OsmMapPtr& map1, OsmMapPtr& map2,
                                                const bool throwOutDupes,
                                                const QString& debugFileName)
@@ -419,11 +411,6 @@ void ChangesetReplacementCreator::_combineMaps(OsmMapPtr& map1, OsmMapPtr& map2,
   LOG_VART(map1.get());
   LOG_VART(map2.get());
   LOG_DEBUG("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
-
-  // Add node hashes so we can append the maps together (needed for element comparison during map
-  // appending).
-  _addNodeHashes(map1);
-  _addNodeHashes(map2);
 
   MapProjector::projectToWgs84(map1);
   MapProjector::projectToWgs84(map2);   // not exactly sure yet why this needs to be done

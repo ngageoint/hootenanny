@@ -32,6 +32,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 namespace hoot
 {
@@ -64,8 +65,21 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
     return false;
   }
 
+  if (e1->getElementType() == ElementType::Node)
+  {
+    // Set the hoot hash tag here if it doesn't exist, since its required for node comparisons.
+    CalculateHashVisitor2 hashVis;
+    if (!e1->getTags().contains(MetadataTags::HootHash()))
+    {
+      hashVis.visit(e1);
+    }
+    if (!e2->getTags().contains(MetadataTags::HootHash()))
+    {
+      hashVis.visit(e2);
+    }
+  }
   //only nodes have been converted over to use hash comparisons so far
-  if (e1->getElementType() != ElementType::Node)
+  else
   {
     //create modified copies of the tags for comparing, as we don't care if some tags are identical
     Tags tags1 = e1->getTags();
@@ -121,7 +135,6 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 bool ElementComparer::_compareNode(const std::shared_ptr<const Element>& re,
                                    const std::shared_ptr<const Element>& e) const
 {
-  // TODO: set the hoot hash tag here if it doesn't exist or just calc it?
   if (!re->getTags().contains(MetadataTags::HootHash()) ||
       !e->getTags().contains(MetadataTags::HootHash()))
   {

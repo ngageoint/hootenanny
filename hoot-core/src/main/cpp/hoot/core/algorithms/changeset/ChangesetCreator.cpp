@@ -48,7 +48,6 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
@@ -101,7 +100,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // For non-streaming I/O we can divide each data conversion task into a separate step, hence
     // the larger number of steps. With streaming I/O that isn't possible since all the data
     // conversion operations are executed inline at the same time the data is read in.
-    _numTotalTasks += 4;
+    _numTotalTasks += 3;
     if (ConfigOptions().getConvertOps().size() > 0)
     {
       // Convert ops get a single task, which NamedOp will break down into sub-tasks during
@@ -208,11 +207,6 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
     " to output: " << output << "...");
   OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
   OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
-
-  // appending maps requires they have node hashes
-  CalculateHashVisitor2 hashVis;
-  map1->visitRw(hashVis);
-  map2->visitRw(hashVis);
 
   // don't want to include review relations - may need to remove this depending on what happens
   // with #3361
@@ -335,13 +329,6 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
     }
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(tmpMap, "after-initial-read-unstreamable-sec-map");
-
-    // appending maps requires they have node hashes
-    CalculateHashVisitor2 hashVis;
-    fullMap->visitRw(hashVis);
-    LOG_VARD(fullMap->getElementCount());
-    tmpMap->visitRw(hashVis);
-    LOG_VARD(tmpMap->getElementCount());
 
     try
     {
@@ -559,19 +546,6 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
   OsmMapWriterFactory::writeDebugMap(map1, "after-truncate-tags-map-1");
   OsmMapWriterFactory::writeDebugMap(map2, "after-truncate-tags-map-2");
   _currentTaskNum++;
-
-  // Node comparisons require hashes be present on the elements.
-  progress.set(
-    (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Adding element hashes...");
-  CalculateHashVisitor2 hashVis;
-  map1->visitRw(hashVis);
-  if (!_singleInput)
-  {
-    map2->visitRw(hashVis);
-  }
-  OsmMapWriterFactory::writeDebugMap(map1, "after-adding-hashes-map-1");
-  OsmMapWriterFactory::writeDebugMap(map2, "after-adding-hashes-map-2");
-  _currentTaskNum++;
 }
 
 ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QString& input,
@@ -619,12 +593,8 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
     new NotCriterion(
       std::shared_ptr<TagKeyCriterion>(
         new TagKeyCriterion(MetadataTags::HootReviewNeeds()))));
-  // Node comparisons require hashes be present on the elements.
-  visitors.append(std::shared_ptr<CalculateHashVisitor2>(new CalculateHashVisitor2()));
   // Tags need to be truncated if they are over 255 characters.
   visitors.append(std::shared_ptr<ApiTagTruncateVisitor>(new ApiTagTruncateVisitor()));
-  // TODO: don't know any way we can support this yet
-  //if (!ConfigOptions().getChangesetAllowDeletingReferenceFeaturesOutsideBounds())
 
   // open a stream to the input data
   std::shared_ptr<PartialOsmMapReader> reader =

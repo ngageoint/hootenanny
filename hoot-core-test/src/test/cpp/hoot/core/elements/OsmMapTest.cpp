@@ -46,7 +46,6 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 // Qt
 #include <QTime>
@@ -87,9 +86,7 @@ class OsmMapTest : public HootTestFixture
 
 public:
 
-  OsmMapTest()
-    : HootTestFixture("test-files/elements/",
-                      "test-output/elements/")
+  OsmMapTest() : HootTestFixture("test-files/elements/", "test-output/elements/")
   {
     setResetType(ResetBasic);
   }
@@ -202,17 +199,14 @@ public:
   {
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
-    CalculateHashVisitor2 hashVis;
 
     reader.setDefaultStatus(Status::Unknown1);
     OsmMapPtr mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
-    mapA->visitRw(hashVis);
 
     reader.setDefaultStatus(Status::Unknown2);
     OsmMapPtr mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
-    mapB->visitRw(hashVis);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
@@ -229,17 +223,14 @@ public:
   {
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
-    CalculateHashVisitor2 hashVis;
 
     reader.setDefaultStatus(Status::Unknown1);
     OsmMapPtr mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
-    mapA->visitRw(hashVis);
 
     reader.setDefaultStatus(Status::Unknown2);
     OsmMapPtr mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
-    mapB->visitRw(hashVis);
 
     const size_t sizeMapAPlusMapBBefore = mapA->getElementCount() + mapB->getElementCount();
 
@@ -256,17 +247,14 @@ public:
   {
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
-    CalculateHashVisitor2 hashVis;
 
     reader.setDefaultStatus(Status::Unknown1);
     OsmMapPtr mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
-    mapA->visitRw(hashVis);
 
     reader.setDefaultStatus(Status::Unknown2);
     OsmMapPtr mapB(new OsmMap());
     reader.read("test-files/ToyTestB.osm", mapB);
-    mapB->visitRw(hashVis);
 
     RelationPtr relation(new Relation(Status::Unknown1, -1, 15.0));
     relation->addElement(
