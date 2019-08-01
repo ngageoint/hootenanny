@@ -22,47 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/ElementIdToVersionMapper.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+#include <hoot/core/criterion/AttributeValueCriterion.h>
 
 namespace hoot
 {
 
-class ElementIdToVersionMapperTest : public HootTestFixture
+class AttributeValueCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ElementIdToVersionMapperTest);
+  CPPUNIT_TEST_SUITE(AttributeValueCriterionTest);
   // TODO
   //CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ElementIdToVersionMapperTest()
-    : HootTestFixture("test-files/ops/",
-                      "test-output/ops/")
-  {
-    //setResetType(Basic);
-  }
-
   void runBasicTest()
   {
-  }
+    AttributeValueCriterion uut;
 
+
+  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdToVersionMapperTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AttributeValueCriterionTest, "quick");
 
 }

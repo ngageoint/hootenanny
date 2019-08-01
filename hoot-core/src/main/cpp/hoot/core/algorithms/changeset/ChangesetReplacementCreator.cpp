@@ -274,11 +274,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
 
-  // TODO: add error checking to verify every feature in the dataset has versions if the source is
-  // a file
-
-  // TODO: add error checking for ref input that throws if any of the feature
-  // versions are less than one
+  // TODO: log warning for ref input that throws if any of the feature versions are less than one
 
   return refMap;
 }
@@ -343,10 +339,6 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
   secMap->setName("sec");
   IoUtils::loadMap(secMap, input, false, Status::Unknown2);
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
-
-  // TODO: add error checking to verify every feature in the dataset has versions if the source is
-  // a files
-
   return secMap;
 }
 

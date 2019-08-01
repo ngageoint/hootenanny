@@ -35,6 +35,7 @@ namespace hoot
 class InBoundsCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(InBoundsCriterionTest);
+  // TODO
   //CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 

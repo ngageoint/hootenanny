@@ -44,6 +44,7 @@ namespace hoot
 class RecursiveSetTagValueOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RecursiveSetTagValueOpTest);
+  // TODO
   //CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 

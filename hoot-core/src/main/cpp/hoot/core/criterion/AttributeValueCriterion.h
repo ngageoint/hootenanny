@@ -22,47 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef ATTRIBUTE_VALUE_CRITERION_H
+#define ATTRIBUTE_VALUE_CRITERION_H
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/TestUtils.h>
-#include <hoot/core/ops/ElementIdToVersionMapper.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
-
-// CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class ElementIdToVersionMapperTest : public HootTestFixture
+/**
+ * TODO
+ */
+class AttributeValueCriterion : public ElementCriterion
 {
-  CPPUNIT_TEST_SUITE(ElementIdToVersionMapperTest);
-  // TODO
-  //CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST_SUITE_END();
-
 public:
 
-  ElementIdToVersionMapperTest()
-    : HootTestFixture("test-files/ops/",
-                      "test-output/ops/")
-  {
-    //setResetType(Basic);
-  }
+  static std::string className() { return "hoot::AttributeValueCriterion"; }
 
-  void runBasicTest()
-  {
-  }
+  AttributeValueCriterion();
 
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
+
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AttributeValueCriterion()); }
+
+  virtual QString getDescription() const { return "TODO"; }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdToVersionMapperTest, "quick");
-
 }
+
+#endif // ATTRIBUTE_VALUE_CRITERION_H
