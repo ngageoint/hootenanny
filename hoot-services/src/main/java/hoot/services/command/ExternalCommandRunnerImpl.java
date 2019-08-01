@@ -239,7 +239,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         return commandResult;
     }
 
-    private static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {
+    public static CommandLine parse(String commandTemplate, Map<String, ?> substitutionMap) {
         String[] tokens = commandTemplate.split(" ");
 
         CommandLine cl = new CommandLine((String) expandToken(tokens[0].trim(), substitutionMap));
