@@ -119,13 +119,13 @@ private:
   /*
    * TODO
    */
-  QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map);
+  QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map) const;
   void _addDeleteExclusionTags(OsmMapPtr& map);
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
   /*
    * TODO
    */
-  OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map);
+  OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
   /*
    * TODO
    */

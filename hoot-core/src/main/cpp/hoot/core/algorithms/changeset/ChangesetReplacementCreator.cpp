@@ -300,7 +300,8 @@ int ChangesetReplacementCreator::_versionLessThanOneCount(const OsmMapPtr& map) 
       attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
 }
 
-QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(const OsmMapPtr& map)
+QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
+  const OsmMapPtr& map) const
 {
   LOG_DEBUG("Recording ID to version mappings for: " << map->getName() << "...");
   ElementIdToVersionMapper idToVersionMapper;
@@ -491,7 +492,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(OsmMapPtr& map, const QSt
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
-  const ConstOsmMapPtr& map)
+  const ConstOsmMapPtr& map) const
 {
   const QString outputMapName = "connected-ways";
   LOG_DEBUG(
