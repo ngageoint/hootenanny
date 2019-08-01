@@ -45,33 +45,33 @@ _isNumericComparison(false)
 
 AttributeValueCriterion::AttributeValueCriterion(const ElementAttributeType& attributeType,
                                                  const QString& comparisonVal,
-                                                 const TextualRelationship& comparisonType) :
+                                                 const TextComparisonType& comparisonType) :
 _attributeType(attributeType),
 _comparisonVal(comparisonVal),
-_comparisonType(comparisonType),
+_comparisonType(comparisonType.getEnum()),
 _isNumericComparison(false)
 {
   if (_attributeType.getEnum() == ElementAttributeType::Uid ||
       _attributeType.getEnum() == ElementAttributeType::Version)
   {
     throw IllegalArgumentException(
-      "Invalid comparison type: textual with attribute: " + _attributeType.toString());
+      "Invalid comparison type: textual, with attribute: " + _attributeType.toString());
   }
 }
 
 AttributeValueCriterion::AttributeValueCriterion(const ElementAttributeType& attributeType,
                                                  const double comparisonVal,
-                                                 const NumericRelationship& comparisonType) :
+                                                 const NumericComparisonType& comparisonType) :
 _attributeType(attributeType),
 _comparisonVal(comparisonVal),
-_comparisonType(comparisonType),
+_comparisonType(comparisonType.getEnum()),
 _isNumericComparison(true)
 {
   if (_attributeType.getEnum() == ElementAttributeType::Timestamp ||
       _attributeType.getEnum() == ElementAttributeType::User)
   {
     throw IllegalArgumentException(
-      "Invalid comparison type: numeric with attribute: " + _attributeType.toString());
+      "Invalid comparison type: numeric, with attribute: " + _attributeType.toString());
   }
 
   bool ok = false;
@@ -81,6 +81,28 @@ _isNumericComparison(true)
     throw IllegalArgumentException(
       "Unable to convert " + _comparisonVal.toString() + " to a numeric value.");
   }
+}
+
+void AttributeValueCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions configOptions(conf);
+  _attributeType = ElementAttributeType::fromString(configOptions.getAttributeValueCriterionType());
+  QString comparisonTypeStr = configOptions.getAttributeValueCriterionComparisonType();
+  if (comparisonTypeStr.toLower().startsWith("text"))
+  {
+    _comparisonType =
+       TextComparisonType(
+         TextComparisonType::fromString(comparisonTypeStr.remove("text"))).getEnum();
+    _isNumericComparison = false;
+  }
+  else
+  {
+    _comparisonType =
+      NumericComparisonType(
+        NumericComparisonType::fromString(comparisonTypeStr.remove("numeric"))).getEnum();
+    _isNumericComparison = true;
+  }
+  _comparisonVal = configOptions.getAttributeValueCriterionComparisonValue();
 }
 
 bool AttributeValueCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -127,15 +149,15 @@ bool AttributeValueCriterion::_satisfiesComparison(const QVariant& val) const
 
     switch (_comparisonType)
     {
-      case NumericRelationship::Equals:
+      case NumericComparisonType::EqualTo:
         return numericVal == _comparisonVal.toDouble();
-      case NumericRelationship::LessThan:
+      case NumericComparisonType::LessThan:
         return numericVal < _comparisonVal.toDouble();
-      case NumericRelationship::LessThanOrEqualTo:
+      case NumericComparisonType::LessThanOrEqualTo:
         return numericVal <= _comparisonVal.toDouble();
-      case NumericRelationship::GreaterThan:
+      case NumericComparisonType::GreaterThan:
         return numericVal > _comparisonVal.toDouble();
-      case NumericRelationship::GreaterThanOrEqualTo:
+      case NumericComparisonType::GreaterThanOrEqualTo:
         return numericVal >= _comparisonVal.toDouble();
       default:
         throw IllegalArgumentException("Invalid comparison type: " + _comparisonType);
@@ -146,13 +168,13 @@ bool AttributeValueCriterion::_satisfiesComparison(const QVariant& val) const
     const QString textVal = val.toString();
     switch (_comparisonType)
     {
-      case TextualRelationship::EquivalentTo:
+      case TextComparisonType::EqualTo:
         return textVal == _comparisonVal.toString();
-      case TextualRelationship::Contains:
+      case TextComparisonType::Contains:
         return textVal.contains(_comparisonVal.toString());
-      case TextualRelationship::StartsWith:
+      case TextComparisonType::StartsWith:
         return textVal.startsWith(_comparisonVal.toString());
-      case TextualRelationship::EndsWith:
+      case TextComparisonType::EndsWith:
         return textVal.endsWith(_comparisonVal.toString());
       default:
         throw IllegalArgumentException("Invalid comparison type: " + _comparisonType);

@@ -614,16 +614,20 @@ See the User Guide for more details on command usage.
       -D distance.node.criterion.distance=25.0 input.osm hoot::DistanceNodeCriterion
 -----
 
-===== Count the number of elements with a version greater than or equal to one TODO:
+===== Count the number of elements with a version greater than or equal to one:
 
 -----
-    hoot count input.osm hoot::AttributeValueCriterion
+    hoot count -D attribute.value.criterion.type=version \
+      -D attribute.value.criterion.comparison.type=NumericGreaterThanOrEqualTo \
+      -D attribute.value.criterion.comparison.value=1 input.osm hoot::AttributeValueCriterion
 -----
 
-===== Count the number of elements authored by "username" TODO:
+===== Count the number of elements authored by "username":
 
 -----
-    hoot count input.osm hoot::AttributeValueCriterion
+    hoot count -D attribute.value.criterion.type=user \
+      -D attribute.value.criterion.comparison.type=TextEqualTo \
+      -D attribute.value.criterion.comparison.value="username" input.osm hoot::AttributeValueCriterion
 -----
 
 ===== Calculate the numerical average of all "accuracy" tags:

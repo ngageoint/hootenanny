@@ -258,6 +258,27 @@ review.score.criterion.max/min.threshold will be removed.
 
 Determines whether the AttributeScoreExtractor uses weighting when extracting scores.
 
+=== attribute.value.criterion.comparison.type
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
+=== attribute.value.criterion.comparison.value
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
+=== attribute.value.criterion.type
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
 === autocorrect.options
 
 * Data Type: bool

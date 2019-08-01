@@ -30,6 +30,9 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/NumericComparisonType.h>
+#include <hoot/core/util/TextComparisonType.h>
 
 namespace hoot
 {
@@ -37,40 +40,25 @@ namespace hoot
 /**
  * TODO
  */
-class AttributeValueCriterion : public ElementCriterion
+class AttributeValueCriterion : public ElementCriterion, public Configurable
 {
 public:
 
   static int logWarnCount;
-
-  enum TextualRelationship
-  {
-    EquivalentTo = 0,
-    Contains,
-    StartsWith,
-    EndsWith
-  };
-
-  enum NumericRelationship
-  {
-    Equals = 0,
-    LessThan,
-    LessThanOrEqualTo,
-    GreaterThan,
-    GreaterThanOrEqualTo
-  };
 
   static std::string className() { return "hoot::AttributeValueCriterion"; }
 
   AttributeValueCriterion();
   AttributeValueCriterion(const ElementAttributeType& attributeType,
                           const QString& comparisonVal,
-                          const TextualRelationship& comparisonType);
+                          const TextComparisonType& comparisonType);
   AttributeValueCriterion(const ElementAttributeType& attributeType,
                           const double comparisonVal,
-                          const NumericRelationship& comparisonType);
+                          const NumericComparisonType& comparisonType);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AttributeValueCriterion()); }
 
