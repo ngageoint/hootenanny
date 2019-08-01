@@ -269,8 +269,6 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
         logWarnCount++;
       }
     }
-    //I don't think OSM non-hoot metadata tags should be removed here...
-    //tags.remove(MetadataTags::Accuracy());
   }
 }
 
@@ -285,10 +283,9 @@ bool ApiDbReader::_isValidBounds(const Envelope& bounds)
   return true;
 }
 
-void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
-                                     const QSet<QString>& nodeIds, QSet<QString>& wayIds,
-                                     QSet<QString>& additionalNodeIds, long& nodeCount,
-                                     long& wayCount)
+void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds,
+                                     QSet<QString>& wayIds, QSet<QString>& additionalNodeIds,
+                                     long& nodeCount, long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
   std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
@@ -317,11 +314,12 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map,
     LOG_DEBUG("Retrieving ways by way ID...");
     std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
+    const bool tagConnectedWays =
+      ConfigOptions().getApidbReaderTagImmediatelyConnectedOutOfBoundsWays();
     while (wayItr->next())
     {
       WayPtr way = _resultToWay(*wayItr, *map);
-      // TODO: need to tie this to a config opt
-      if (connectedWayIds.contains(QString::number(way->getId())))
+      if (tagConnectedWays && connectedWayIds.contains(QString::number(way->getId())))
       {
         way->getTags().set(MetadataTags::HootConnectedWayOutsideBounds(), "yes");
       }

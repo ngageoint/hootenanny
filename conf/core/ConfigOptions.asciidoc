@@ -211,6 +211,13 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== apidb.reader.tag.immediately.connected.out.of.bounds.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === arff.writer.precision
 
 * Data Type: int

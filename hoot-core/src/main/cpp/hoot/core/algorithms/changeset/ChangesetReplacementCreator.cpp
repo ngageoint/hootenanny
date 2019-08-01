@@ -80,16 +80,13 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output)
 {
-  // INPUT VALIDATION
+  // INPUT VALIDATION AND SETUP
 
   _validateInputs(input1, input2);
   std::shared_ptr<ConflatableElementCriterion> featureCrit =
     _validateFilter(featureTypeFilterClassName);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _parseConfigOpts(lenientBounds, featureTypeFilterClassName, boundsStr);
-  // TODO: add error checking for OsmApiDbReader ref input that throws if any of the feature
-  // versions are less than one (this would eventually also be applied to OsmApiReader and
-  // OverpassReader as well)
 
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString lenientStr = "Bounds calculation is ";
@@ -276,6 +273,13 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
+
+  // TODO: add error checking to verify every feature in the dataset has versions if the source is
+  // a file
+
+  // TODO: add error checking for ref input that throws if any of the feature
+  // versions are less than one
+
   return refMap;
 }
 
@@ -339,6 +343,10 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
   secMap->setName("sec");
   IoUtils::loadMap(secMap, input, false, Status::Unknown2);
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
+
+  // TODO: add error checking to verify every feature in the dataset has versions if the source is
+  // a files
+
   return secMap;
 }
 
@@ -597,10 +605,15 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+  conf().set(
+    ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+    _changesetAllowDeletingRefOutsideBounds);
+  conf().set(ConfigOptions::getApidbReaderTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // dataset specific opts
 
-  // TODO: Hopefully, these three sets of bounds options can be collapsed down to at least two.
+  // TODO: change _convert* to _load*, _crop* to _cookieCut*
 
   // These don't change between scenarios.
   _convertRefKeepOnlyInsideBounds = false;
@@ -706,11 +719,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     // shouldn't ever get here
     throw IllegalArgumentException("TODO");
   }
-
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
-  conf().set(
-    ConfigOptions::getChangesetAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-    _changesetAllowDeletingRefOutsideBounds);
 
   LOG_VARD(_convertRefKeepEntireCrossingBounds);
   LOG_VARD(_convertRefKeepOnlyInsideBounds);
