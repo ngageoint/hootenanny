@@ -47,8 +47,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
-// TODO: move this to elements namespace
-#include <hoot/core/algorithms/changeset/ElementComparer.h>
+#include <hoot/core/elements/ElementComparer.h>
 using namespace hoot::elements;
 
 // Qt

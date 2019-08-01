@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/changeset/ElementComparer.h>
+#include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/visitors/CalculateHashVisitor2.h>
 
 namespace hoot

@@ -29,7 +29,7 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/algorithms/changeset/ElementComparer.h>
+#include <hoot/core/elements/ElementComparer.h>
 
 namespace hoot
 {
