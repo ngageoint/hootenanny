@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ElementAttributeType.h>
 
 namespace hoot
 {
@@ -40,17 +41,49 @@ class AttributeValueCriterion : public ElementCriterion
 {
 public:
 
+  static int logWarnCount;
+
+  enum TextualRelationship
+  {
+    EquivalentTo = 0,
+    Contains,
+    StartsWith,
+    EndsWith
+  };
+
+  enum NumericRelationship
+  {
+    Equals = 0,
+    LessThan,
+    LessThanOrEqualTo,
+    GreaterThan,
+    GreaterThanOrEqualTo
+  };
+
   static std::string className() { return "hoot::AttributeValueCriterion"; }
 
   AttributeValueCriterion();
+  AttributeValueCriterion(const ElementAttributeType& attributeType,
+                          const QString& comparisonVal,
+                          const TextualRelationship& comparisonType);
+  AttributeValueCriterion(const ElementAttributeType& attributeType,
+                          const double comparisonVal,
+                          const NumericRelationship& comparisonType);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AttributeValueCriterion()); }
 
   virtual QString getDescription() const { return "TODO"; }
+
+private:
+
+  ElementAttributeType _attributeType;
+  QVariant _comparisonVal;
+  int _comparisonType;
+  bool _isNumericComparison;
+
+  bool _satisfiesComparison(const QVariant& val) const;
 };
 
 }

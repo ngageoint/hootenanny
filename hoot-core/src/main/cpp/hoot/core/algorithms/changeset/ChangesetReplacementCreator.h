@@ -115,6 +115,10 @@ private:
   /*
    * TODO
    */
+  int _versionLessThanOneCount(const OsmMapPtr& map) const;
+  /*
+   * TODO
+   */
   QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map);
   void _addDeleteExclusionTags(OsmMapPtr& map);
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
