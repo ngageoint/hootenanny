@@ -58,14 +58,7 @@ public:
   OsmXmlChangesetFileWriter();
 
   /**
-   * Write the changeset out to the specified file and any changes over changeset.max.size
-   * will be written to another file with a path like this:
-   *  <filepath>/<filename>.<ext>
-   *  <filepath>/<filename>-001.<ext>
-   *  <filepath>/<filename>-002.<ext>
-   *  ...
-   *  <filepath>/<filename>-00n.<ext>
-   *
+   * Write the changeset out to the specified file
    * @param path Pathname for the output file(s)
    * @param cs Changeset provider to stream the changes from
    */
@@ -86,7 +79,6 @@ private:
 
   /** Settings from the config file */
   int _precision;
-  long _changesetMaxSize;
 
   Change _change;
 

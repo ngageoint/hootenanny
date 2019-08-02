@@ -278,6 +278,17 @@ private:
   bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
   bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
   /**
+   * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
+   *   able to be moved, the element is removed from the subset and returned to the `available` state
+   * @param source Subset containing the element
+   * @param destination Subset to move to
+   * @param type Type of operation (create/modify/delete)
+   * @param node/way/relation Pointer to the element to be moved
+   */
+  void moveOrRemoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
+  void moveOrRemoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
+  void moveOrRemoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  /**
    * @brief canMoveNode/Way/Relation Query if a node/way/relation can be moved.  This checks downstream relations, ways,
    *  and nodes to see if they can also be moved.
    * @param source Subset containing the element

@@ -97,6 +97,10 @@ bool OsmApiWriter::apply()
     return false;
   }
   _stats.append(SingleStat("API Capabilites Query Time (sec)", timer.getElapsedAndRestart()));
+  //  Limit the max changeset size to the max from the API, testing found that smaller (1k to 2k elements)
+  //  pushed across multiple processing threads out performed larger (50k element) datasets
+  if (_maxChangesetSize > _capabilities.getChangesets())
+    _maxChangesetSize = _capabilities.getChangesets();
   //  Setup the network request object with OAuth or with username/password authentication
   request = createNetworkRequest(true);
   //  Validate API permissions
