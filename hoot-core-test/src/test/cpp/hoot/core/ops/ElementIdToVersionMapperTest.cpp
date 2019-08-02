@@ -30,7 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -44,23 +44,56 @@ namespace hoot
 class ElementIdToVersionMapperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementIdToVersionMapperTest);
-  // TODO
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runNoVerionsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  ElementIdToVersionMapperTest()
-    : HootTestFixture("test-files/ops/",
-                      "test-output/ops/")
+  ElementIdToVersionMapperTest() :
+  HootTestFixture(
+    "test-files/ops/ElementIdToVersionMapper", "test-output/ops/ElementIdToVersionMapper")
   {
-    //setResetType(Basic);
   }
 
   void runBasicTest()
   {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, true, true, _inputPath + "/runBasicTest-in.osm");
+
+    ElementIdToVersionMapper uut;
+    uut.apply(map);
+    const QMap<ElementId, long> mappings = uut.getMappings();
+
+    CPPUNIT_ASSERT_EQUAL(40, mappings.size());
+    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Node, -1669793)]);
+    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Node, -1669781)]);
+    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Way, -1669801)]);
+    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Way, -1669799)]);
   }
 
+  void runNoVerionsTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, true, true, "test-files/ToyTestA.osm");
+
+    ElementIdToVersionMapper uut;
+    uut.apply(map);
+    const QList<long> mappings = uut.getMappings().values();
+
+    CPPUNIT_ASSERT_EQUAL(40, mappings.size());
+    // If the elements in the input have no versions, all mapped versions will equal zero.
+    int zeroVersionCtr = 0;
+    for (QList<long>::const_iterator mappingItr = mappings.constBegin();
+         mappingItr != mappings.constEnd(); ++mappingItr)
+    {
+      if (*mappingItr == 0)
+      {
+        zeroVersionCtr++;
+      }
+    }
+    CPPUNIT_ASSERT_EQUAL(40, zeroVersionCtr);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementIdToVersionMapperTest, "quick");

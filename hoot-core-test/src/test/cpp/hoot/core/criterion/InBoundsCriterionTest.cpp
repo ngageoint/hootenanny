@@ -35,13 +35,30 @@ namespace hoot
 class InBoundsCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(InBoundsCriterionTest);
-  // TODO
-  //CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST(runInBoundsStrictTest);
+  CPPUNIT_TEST(runInBoundsLenientTest);
+  CPPUNIT_TEST(runOutOfBoundsStrictTest);
+  CPPUNIT_TEST(runOutOfBoundsLenientTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runInBoundsStrictTest()
+  {
+
+  }
+
+  void runInBoundsLenientTest()
+  {
+
+  }
+
+  void runOutOfBoundsStrictTest()
+  {
+
+  }
+
+  void runOutOfBoundsLenientTest()
   {
 
   }

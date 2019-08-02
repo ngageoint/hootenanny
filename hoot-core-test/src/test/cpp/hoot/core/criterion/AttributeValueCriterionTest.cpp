@@ -35,13 +35,20 @@ namespace hoot
 class AttributeValueCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AttributeValueCriterionTest);
-  // TODO
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runNumericTest);
+  CPPUNIT_TEST(runTextTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBasicTest()
+  void runNumericTest()
+  {
+    AttributeValueCriterion uut;
+
+
+  }
+
+  void runTextTest()
   {
     AttributeValueCriterion uut;
 

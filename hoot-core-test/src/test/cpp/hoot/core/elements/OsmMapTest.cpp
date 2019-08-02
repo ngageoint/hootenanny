@@ -72,9 +72,12 @@ class OsmMapTest : public HootTestFixture
   CPPUNIT_TEST(runAppendDuplicateNodeTest);
   CPPUNIT_TEST(runAppendDuplicateWayTest);
   CPPUNIT_TEST(runAppendDuplicateRelationTest);
-  // TODO: add runAppendDifferent*SameIdTest
-  // TODO: add runAppendDifferent*SameIdTest
-  // TODO: add runAppendSkipDuplicatesTest
+  CPPUNIT_TEST(runAppendDifferentNodeSameIdTest);
+  CPPUNIT_TEST(runAppendDifferentWaySameIdTest);
+  CPPUNIT_TEST(runAppendDifferentRelationSameIdTest);
+  CPPUNIT_TEST(runAppendDifferentNodeSameIdSkipDupesTest);
+  CPPUNIT_TEST(runAppendDifferentWaySameIdSkipDupesTest);
+  CPPUNIT_TEST(runAppendDifferentRelationSameIdSkipDupesTest);
   CPPUNIT_TEST(runAppendSameMapTest);
   CPPUNIT_TEST(runAppendDifferentCoordinateSystemsTest);
   CPPUNIT_TEST(runRemoveTest);
@@ -269,6 +272,36 @@ public:
     mapA->append(mapB);
     CPPUNIT_ASSERT_EQUAL(1, mapA->numRelationsSkippedForAppending());
     CPPUNIT_ASSERT_EQUAL(sizeMapAPlusMapBBefore, mapA->getElementCount());
+  }
+
+  void runAppendDifferentNodeSameIdTest()
+  {
+
+  }
+
+  void runAppendDifferentWaySameIdTest()
+  {
+
+  }
+
+  void runAppendDifferentRelationSameIdTest()
+  {
+
+  }
+
+  void runAppendDifferentNodeSameIdSkipDupesTest()
+  {
+
+  }
+
+  void runAppendDifferentWaySameIdSkipDupesTest()
+  {
+
+  }
+
+  void runAppendDifferentRelationSameIdSkipDupesTest()
+  {
+
   }
 
   void runAppendSameMapTest()
