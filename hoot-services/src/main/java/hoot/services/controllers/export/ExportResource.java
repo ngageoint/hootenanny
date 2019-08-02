@@ -189,8 +189,7 @@ public class ExportResource {
                 workflow.add(zipCommand);
             }
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT,
-                    null /*don't need mapid for export because job is not writing output to db*/));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.EXPORT));
         }
         catch (WebApplicationException wae) {
             logger.error(wae.getMessage(), wae);

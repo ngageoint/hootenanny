@@ -36,17 +36,27 @@ public class Job {
     private Long mapId;
     private Command[] commands;
     private JobType jobType;
+    private String parentId;
 
-    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId, String parentId) {
         this.jobId = jobId;
         this.userId = userId;
         this.commands = commands;
         this.jobType = jobType;
         this.mapId = mapId;
+        this.parentId = parentId;
     }
 
     public Job(String jobId, Long userId, Command[] commands, JobType jobType) {
-        this(jobId, userId, commands, jobType, null);
+        this(jobId, userId, commands, jobType, null, null);
+    }
+
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
+        this(jobId, userId, commands, jobType, mapId, null);
+    }
+
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, String parentId) {
+        this(jobId, userId, commands, jobType, null, parentId);
     }
 
     public Job(String jobId) {
@@ -91,5 +101,13 @@ public class Job {
 
     public void setMapId(Long mapId) {
         this.mapId = mapId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentId() {
+        return parentId;
     }
 }

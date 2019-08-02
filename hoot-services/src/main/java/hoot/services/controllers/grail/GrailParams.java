@@ -61,8 +61,8 @@ public class GrailParams {
     @JsonProperty("output")
     private String output;
 
-    @JsonProperty("folder")
-    private String folder;
+    @JsonProperty("parentId")
+    private String parentId;
 
     @JsonProperty("pullUrl")
     private String pullUrl;
@@ -145,12 +145,12 @@ public class GrailParams {
         this.output = output;
     }
 
-    public String getFolder() {
-        return folder;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setFolder(String folder) {
-        this.folder = folder;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public String getPushUrl() {
@@ -201,7 +201,7 @@ public class GrailParams {
                 ", input1='" + input1 + '\'' +
                 ", input2='" + input2 + '\'' +
                 ", output='" + output + '\'' +
-                ", folder='" + folder + '\'' +
+                ", folder='" + parentId + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
                 ", maxBBoxSize='" + maxSize + '\'' +

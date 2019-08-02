@@ -376,7 +376,7 @@ public class GrailResource {
 
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
-        String jobDir = reqParams.getFolder();
+        String jobDir = reqParams.getParentId();
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
 
         if (!workDir.exists()) {
@@ -432,7 +432,7 @@ public class GrailResource {
                 refreshParams.setWorkDir(workDir);
                 refreshParams.setOutput(DbUtils.getDisplayNameById(mapId));
                 refreshParams.setBounds(mapTags.get("bbox"));
-                refreshParams.setFolder("grail_" + mapTags.get("bbox").replace(",", "_"));
+                refreshParams.setParentId("grail_" + mapTags.get("bbox").replace(",", "_"));
 
                 try {
                     List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
@@ -443,7 +443,7 @@ public class GrailResource {
                 }
             }
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET));
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, reqParams.getParentId()));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -527,7 +527,7 @@ public class GrailResource {
             workflow.add(makeChangeset);
 
             // Now roll the dice and run everything.....
-            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET));
+            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, reqParams.getParentId()));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -665,7 +665,7 @@ public class GrailResource {
         params.setWorkDir(workDir);
         params.setOutput(mapName);
         params.setBounds(bbox);
-        params.setFolder(folderName);
+        params.setParentId(folderName);
 
         List<Command> workflow;
         try {
@@ -713,7 +713,7 @@ public class GrailResource {
         workflow.add(setMapTags);
 
         // Create the folder if it doesn't exist
-        Long folderId = DbUtils.createFolder(params.getFolder(), 0L, user.getId(), false);
+        Long folderId = DbUtils.createFolder(params.getParentId(), 0L, user.getId(), false);
 
         // Move the data to the folder
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, params.getOutput(), user, this.getClass());
