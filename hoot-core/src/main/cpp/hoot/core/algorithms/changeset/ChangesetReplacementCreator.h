@@ -39,7 +39,14 @@ namespace hoot
 {
 
 /**
- * TODO
+ * High level class for prepping data for replacement changeset generation (changesets which
+ * completely replace features inside of a specified bounds) and then calls on appropriate
+ * changeset file writers.
+ *
+ * This class uses a customized workflow that depends upon the feature type the changeset is being
+ * generated for and how strict the AOI is to be interpreted. ChangesetCreator is used for the
+ * actual changeset generation and file output. This class handles the cookie cutting, conflation,
+ * and a host of other things that need to happen before the changeset generation.
  */
 class ChangesetReplacementCreator
 {
@@ -49,15 +56,17 @@ public:
   ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**
-   * TODO
+   * Creates a changeset that completely replaces features in the first input with features from
+   * the second input.
    *
-   * @param input1
-   * @param input2
-   * @param bounds
-   * @param featureTypeFilterClassName
-   * @param lenientBounds
-   * @param output
-   * @todo support empty feature filters and filter with multiple types
+   * @param input1 the changeset target in which to replace features; must support Boundable
+   * @param input2 the changeset source to get replacement features from; must support Boundable
+   * @param bounds the bounds over which features are to be replaced
+   * @param featureTypeFilterClassName the type of feature to replace; must be a class name
+   * inheriting from ConflatableElementCriterion
+   * @param lenientBounds determines how strict the handling of the bounds is during replacement
+   * @param output the changeset file output location
+   * @todo support empty feature filters and filter with multiple types - #3360
    */
   void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
@@ -65,34 +74,50 @@ public:
 
 private:
 
-  // TODO
-  bool _convertRefKeepEntireCrossingBounds;
-  // TODO
-  bool _convertRefKeepOnlyInsideBounds;
-  // TODO
-  bool _convertRefKeepImmediateConnectedWaysOutsideBounds;
-  // TODO
-  bool _convertSecKeepEntireCrossingBounds;
-  // TODO
-  bool _convertSecKeepOnlyInsideBounds;
-  // TODO
-  bool _cropKeepEntireCrossingBounds;
-  // TODO
-  bool _cropKeepOnlyInsideBounds;
-  // TODO
+  // Determines whether features crossing the bounds should be kept when loading reference data.
+  bool _loadRefKeepEntireCrossingBounds;
+  // Determines whether only features completely inside the bounds should be kept when loading
+  // reference data.
+  bool _loadRefKeepOnlyInsideBounds;
+  // Determines whether ways immediately connected to other ways being kept but completely outside
+  // of the bounds should also be kept
+  bool _loadRefKeepImmediateConnectedWaysOutsideBounds;
+  // Determines whether features crossing the bounds should be kept when loading secondary data.
+  bool _loadSecKeepEntireCrossingBounds;
+  // Determines whether only features completely inside the bounds should be kept when loading
+  // secondary data.
+  bool _loadSecKeepOnlyInsideBounds;
+
+  // Determines whether features crossing the bounds should be kept when cookie cutting reference
+  // data.
+  bool _cookieCutKeepEntireCrossingBounds;
+  // Determines whether only features completely inside the bounds should be kept when cookie
+  // cutting reference data.
+  bool _cookieCutKeepOnlyInsideBounds;
+
+  // Determines whether reference features crossing the bounds should be kept when deriving a
+  // changeset.
   bool _changesetRefKeepEntireCrossingBounds;
-  // TODO
+  // Determines whether secondary features crossing the bounds should be kept when deriving a
+  // changeset.
   bool _changesetSecKeepEntireCrossingBounds;
-  // TODO
+  // Determines whether only reference features completely inside the bounds should be kept when
+  // deriving a changeset.
   bool _changesetRefKeepOnlyInsideBounds;
-  // TODO
+  // Determines whether only secondary features completely inside the bounds should be kept when
+  // deriving a changeset.
   bool _changesetSecKeepOnlyInsideBounds;
-  // TODO
+  // Determines whether deleting reference features existing either partially of completely outside
+  // of the bounds is allowed during changeset generation
   bool _changesetAllowDeletingRefOutsideBounds;
-  // TODO
+  // the strictness of the bounds calculation used in conjunction with
+  // _changesetAllowDeletingRefOutsideBounds
   bool _inBoundsStrict;
 
+  // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
+
+  // determine geometry type based on hoot criterion class; may need something better for these
 
   bool _isPointCrit(const QString& critClassName) const;
   bool _isLinearCrit(const QString& critClassName) const;
@@ -101,11 +126,14 @@ private:
   bool _isNetworkConflate() const;
 
   void _validateInputs(const QString& input1, const QString& input2);
+
   std::shared_ptr<ConflatableElementCriterion> _validateFilter(
     const QString& featureTypeFilterClassName);
+
   void _filterFeatures(
     OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureCrit,
     const QString& debugFileName);
+
   void _parseConfigOpts(const bool lenientBounds, const QString& critClassName,
                         const QString& boundsStr);
 
@@ -113,37 +141,53 @@ private:
   OsmMapPtr _loadSecMap(const QString& input);
 
   /*
-   * TODO
+   * Returns the number of features with a changeset version less than one
    */
   int _versionLessThanOneCount(const OsmMapPtr& map) const;
+
   /*
-   * TODO
+   * Keeps track of the changeset versions for features
    */
   QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map) const;
-  void _addDeleteExclusionTags(OsmMapPtr& map);
-  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
+
   /*
-   * TODO
+   * Adds tags to a feature that will prevent ChangesetDeriver from ever creating a delete
+   * statement for it
+   */
+  void _addChangesetDeleteExclusionTags(OsmMapPtr& map);
+
+  OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap);
+
+  /*
+   * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
    */
   OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
+
   /*
-   * TODO
+   * Excludes all features within the specified bounds from deletion during changeset derivation
    */
-  void _excludeFeaturesFromDeletion(OsmMapPtr& map, const QString& boundsStr);
+  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map, const QString& boundsStr);
+
+  /*
+   * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
+   * as an element in the first map
+   */
   void _combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes,
                     const QString& debugFileName);
   /*
-   * TODO
+   * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
+   * MetadataTags::HootSnappedWayNode()=snapped_way tags
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
+
   void _snapUnconnectedWays(OsmMapPtr& map, const QString& snapWayStatus,
                             const QString& snapToWayStatus,
                             const QString& featureTypeFilterClassName, const bool markSnappedWays,
                             const QString& debugFileName);
   /*
-   * TODO
+   * Performs cropping to prepare a map for changeset derivation
    */
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,

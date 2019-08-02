@@ -59,7 +59,6 @@
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
@@ -67,6 +66,7 @@
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 #include <hoot/core/criterion/AttributeValueCriterion.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
 {
@@ -124,7 +124,7 @@ void ChangesetReplacementCreator::create(
   {
     // If we have a lenient bounds requirement and linear features, we need to exclude all ways
     // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
-    _addDeleteExclusionTags(refMap);
+    _addChangesetDeleteExclusionTags(refMap);
   }
   // Prune down the elements to just the feature types specified by the filter.
   _filterFeatures(refMap, featureCrit, "ref-after-type-pruning");
@@ -218,7 +218,7 @@ void ChangesetReplacementCreator::create(
     // If we're not allowing the changeset deriver to generate delete statements for reference
     // features outside of the bounds, we need to mark all corresponding ref ways with a custom
     // tag that will cause the deriver to skip deleting them.
-    _excludeFeaturesFromDeletion(refMap, boundsStr);
+    _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
 
   // CHANGESET DERIVATION
@@ -274,13 +274,13 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   // bounds options into IoUtils::loadMap instead (?)
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _convertRefKeepEntireCrossingBounds);
+    _loadRefKeepEntireCrossingBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _convertRefKeepOnlyInsideBounds);
+    _loadRefKeepOnlyInsideBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
-    _convertRefKeepImmediateConnectedWaysOutsideBounds);
+    _loadRefKeepImmediateConnectedWaysOutsideBounds);
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
@@ -311,7 +311,7 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   return idToVersionMappings;
 }
 
-void ChangesetReplacementCreator::_addDeleteExclusionTags(OsmMapPtr& map)
+void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& map)
 {
   LOG_DEBUG(
     "Setting connected way features outside of bounds to be excluded from deletion for: " <<
@@ -349,10 +349,10 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 {
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _convertSecKeepEntireCrossingBounds);
+    _loadSecKeepEntireCrossingBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _convertSecKeepOnlyInsideBounds);
+    _loadSecKeepOnlyInsideBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   OsmMapPtr secMap(new OsmMap());
@@ -392,9 +392,10 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   // TODO: the config options here could be removed by passing in a pre-configured MapCropper to
   // CookieCutter.
   conf().set(
-    ConfigOptions::getCropKeepEntireFeaturesCrossingBoundsKey(), _cropKeepEntireCrossingBounds);
+    ConfigOptions::getCropKeepEntireFeaturesCrossingBoundsKey(),
+    _cookieCutKeepEntireCrossingBounds);
   conf().set(
-    ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cropKeepOnlyInsideBounds);
+    ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cookieCutKeepOnlyInsideBounds);
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
   cookieCutMap->setName("cookie-cut");
   CookieCutter(false, 0.0).cut(cutterShapeOutlineMap, cookieCutMap);
@@ -490,10 +491,8 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
       std::shared_ptr<WayCriterion>(new WayCriterion()),
       std::shared_ptr<TagKeyCriterion>(
         new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
-  CopyMapSubsetOp wayCopier(map, copyCrit);
-  OsmMapPtr connectedWays(new OsmMap());
+  OsmMapPtr connectedWays = OsmUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
-  wayCopier.apply(connectedWays);
   OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
   return connectedWays;
 }
@@ -542,8 +541,8 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
 }
 
-void ChangesetReplacementCreator::_excludeFeaturesFromDeletion(OsmMapPtr& map,
-                                                               const QString& boundsStr)
+void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map,
+                                                                        const QString& boundsStr)
 {
   LOG_DEBUG(
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
@@ -610,11 +609,9 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
 
   // dataset specific opts
 
-  // TODO: change _convert* to _load*, _crop* to _cookieCut*
-
-  // These don't change between scenarios.
-  _convertRefKeepOnlyInsideBounds = false;
-  _cropKeepOnlyInsideBounds = false;
+  // These don't change between scenarios (or at least haven't needed to yet).
+  _loadRefKeepOnlyInsideBounds = false;
+  _cookieCutKeepOnlyInsideBounds = false;
   _changesetRefKeepOnlyInsideBounds = false;
 
   // only one of these should ever be true
@@ -626,11 +623,11 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
       LOG_WARN("--lenient-bounds option ignored with point datasets.");
     }
 
-    _convertRefKeepEntireCrossingBounds = false;
-    _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
-    _convertSecKeepEntireCrossingBounds = false;
-    _convertSecKeepOnlyInsideBounds = false;
-    _cropKeepEntireCrossingBounds = false;
+    _loadRefKeepEntireCrossingBounds = false;
+    _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+    _loadSecKeepEntireCrossingBounds = false;
+    _loadSecKeepOnlyInsideBounds = false;
+    _cookieCutKeepEntireCrossingBounds = false;
     _changesetRefKeepEntireCrossingBounds = false;
     _changesetSecKeepEntireCrossingBounds = false;
     _changesetSecKeepOnlyInsideBounds = true;
@@ -641,14 +638,14 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   {
     if (lenientBounds)
     {
-      _convertRefKeepEntireCrossingBounds = true;
+      _loadRefKeepEntireCrossingBounds = true;
       // TODO: This is a problem b/c the only reader supporting this being true right now is
       // OsmApiDbReader. All other readers may contribute to corrupting replacement changesets for
       // linear features with a lenient AOI.
-      _convertRefKeepImmediateConnectedWaysOutsideBounds = true;
-      _convertSecKeepEntireCrossingBounds = true;
-      _convertSecKeepOnlyInsideBounds = false;
-      _cropKeepEntireCrossingBounds = false;
+      _loadRefKeepImmediateConnectedWaysOutsideBounds = true;
+      _loadSecKeepEntireCrossingBounds = true;
+      _loadSecKeepOnlyInsideBounds = false;
+      _cookieCutKeepEntireCrossingBounds = false;
       _changesetRefKeepEntireCrossingBounds = true;
       _changesetSecKeepEntireCrossingBounds = true;
       _changesetSecKeepOnlyInsideBounds = false;
@@ -657,11 +654,11 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     }
     else
     {
-      _convertRefKeepEntireCrossingBounds = true;
-      _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
-      _convertSecKeepEntireCrossingBounds = false;
-      _convertSecKeepOnlyInsideBounds = false;
-      _cropKeepEntireCrossingBounds = false;
+      _loadRefKeepEntireCrossingBounds = true;
+      _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+      _loadSecKeepEntireCrossingBounds = false;
+      _loadSecKeepOnlyInsideBounds = false;
+      _cookieCutKeepEntireCrossingBounds = false;
       _changesetRefKeepEntireCrossingBounds = true;
       _changesetSecKeepEntireCrossingBounds = true;
       _changesetSecKeepOnlyInsideBounds = false;
@@ -688,11 +685,11 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   {
     if (lenientBounds)
     {
-      _convertRefKeepEntireCrossingBounds = true;
-      _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
-      _convertSecKeepEntireCrossingBounds = true;
-      _convertSecKeepOnlyInsideBounds = false;
-      _cropKeepEntireCrossingBounds = true;
+      _loadRefKeepEntireCrossingBounds = true;
+      _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+      _loadSecKeepEntireCrossingBounds = true;
+      _loadSecKeepOnlyInsideBounds = false;
+      _cookieCutKeepEntireCrossingBounds = true;
       _changesetRefKeepEntireCrossingBounds = true;
       _changesetSecKeepEntireCrossingBounds = true;
       _changesetSecKeepOnlyInsideBounds = false;
@@ -701,11 +698,11 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     }
     else
     {
-      _convertRefKeepEntireCrossingBounds = true;
-      _convertRefKeepImmediateConnectedWaysOutsideBounds = false;
-      _convertSecKeepEntireCrossingBounds = false;
-      _convertSecKeepOnlyInsideBounds = true;
-      _cropKeepEntireCrossingBounds = true;
+      _loadRefKeepEntireCrossingBounds = true;
+      _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+      _loadSecKeepEntireCrossingBounds = false;
+      _loadSecKeepOnlyInsideBounds = true;
+      _cookieCutKeepEntireCrossingBounds = true;
       _changesetRefKeepEntireCrossingBounds = true;
       _changesetSecKeepEntireCrossingBounds = false;
       _changesetSecKeepOnlyInsideBounds = true;
@@ -724,13 +721,13 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
     _changesetAllowDeletingRefOutsideBounds);
 
-  LOG_VARD(_convertRefKeepEntireCrossingBounds);
-  LOG_VARD(_convertRefKeepOnlyInsideBounds);
-  LOG_VARD(_convertRefKeepImmediateConnectedWaysOutsideBounds);
-  LOG_VARD(_convertSecKeepEntireCrossingBounds);
-  LOG_VARD(_convertSecKeepOnlyInsideBounds);
-  LOG_VARD(_cropKeepEntireCrossingBounds);
-  LOG_VARD(_cropKeepOnlyInsideBounds);
+  LOG_VARD(_loadRefKeepEntireCrossingBounds);
+  LOG_VARD(_loadRefKeepOnlyInsideBounds);
+  LOG_VARD(_loadRefKeepImmediateConnectedWaysOutsideBounds);
+  LOG_VARD(_loadSecKeepEntireCrossingBounds);
+  LOG_VARD(_loadSecKeepOnlyInsideBounds);
+  LOG_VARD(_cookieCutKeepEntireCrossingBounds);
+  LOG_VARD(_cookieCutKeepOnlyInsideBounds);
   LOG_VARD(_changesetRefKeepEntireCrossingBounds);
   LOG_VARD(_changesetRefKeepOnlyInsideBounds);
   LOG_VARD(_changesetSecKeepEntireCrossingBounds);

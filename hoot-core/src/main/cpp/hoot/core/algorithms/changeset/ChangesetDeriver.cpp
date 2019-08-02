@@ -88,7 +88,7 @@ bool ChangesetDeriver::hasMoreChanges()
 
 Change ChangesetDeriver::_nextChange()
 {
-  // TODO: this method is a bit of mess...refactor into smaller chunks
+  // TODO: this method is a bit of mess now...refactor into smaller chunks
 
   LOG_DEBUG("Reading next change...");
 
@@ -446,7 +446,8 @@ Change ChangesetDeriver::_nextChange()
       LOG_VART(_toE->getStatus());
       if ((_allowDeletingReferenceFeatures ||
           // this assumes the 'from' dataset was loaded as unknown1
-          // TODO: I don't understand the use case for this...need to define and add a test
+          // TODO: Don't understand the use case for this and its been around for awhile now...need
+          // to define and add a test
           (!_allowDeletingReferenceFeatures && _fromE->getStatus() != Status::Unknown1)) &&
           !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
       {

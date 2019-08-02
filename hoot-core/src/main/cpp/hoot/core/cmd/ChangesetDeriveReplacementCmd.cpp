@@ -51,7 +51,7 @@ public:
 
   virtual QString getName() const { return "changeset-derive-replacement"; }
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const { return "Creates an OSM replacement changeset"; }
 
   virtual int runSimple(QStringList args)
   {

@@ -39,8 +39,6 @@ namespace hoot
 /**
  * An experimental way joiner implemented to work with Attribute Conflation and a possible
  * replacement for WayJoinerBasic.
- *
- * TODO: move conf option setters into WayJoinerOp::setConfiguration
  */
 class WayJoinerAdvanced : public WayJoiner
 {
@@ -67,59 +65,32 @@ public:
    */
   virtual void join(const OsmMapPtr& map) override;
 
+  /**
+   * @see ApiEntityInfo
+   */
   virtual QString getDescription() const override
   { return "Extends WayJoinerBasic with additional join pre-conditions."; }
 
 protected:
 
+  // identifies the way in the join pair whose ID was kep after the join
   WayPtr _wayKeptAfterJoin;
+  // the name of the class implementation being executed
   QString _callingClass;
 
-  /**
-   * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that
-   * parent
-   */
   virtual void _joinParentChild() override;
-
-  /**
-   * @brief joinAtNode Joining algorithm that searches all ways that have a parent id and tries
-   *    to join them with adjacent ways that have the same tags
-   */
   virtual void _joinAtNode() override;
-
-  /**
-   * @brief rejoinSiblings Function that rejoins ways that all have the same parent id
-   *    but that parent way doesn't exist
-   * @param way_ids Deque of sorted ways to join
-   */
   virtual void _rejoinSiblings(std::deque<long>& way_ids) override;
-
-  /**
-   * @brief joinWays Function to rejoin two ways
-   * @param parent Way that is modified to include the child way
-   * @param child Way that will be merged into the parent and then deleted
-   * @return true if the two ways were joined; false otherwise
-   */
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child) override;
 
-  /**
-   * TODO
-   *
-   * @param parent
-   * @param child
-   * @param keeper
-   * @param toRemove
+  /*
+   * Determines which feature's tags are kept during a way join
    */
   virtual void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
                                               WayPtr& toRemove) const;
 
-  /**
-   * TODO
-   *
-   * @param parent
-   * @param child
-   * @param keeper
-   * @param toRemove
+  /*
+   * Determine which feature's ID is kept during a way join
    */
   virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
                                             WayPtr& toRemove) const;
@@ -129,6 +100,7 @@ protected:
 
 private:
 
+  // name of the method calling into _jointAtNode
   QString _callingMethod;
 
   /**

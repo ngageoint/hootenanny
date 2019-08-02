@@ -39,6 +39,8 @@ HOOT_FACTORY_REGISTER(WayJoiner, ReplacementSnappedWayJoiner)
 
 ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner()
 {
+  _leavePid = true;
+  _callingClass = QString::fromStdString(className());
 }
 
 ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner(
@@ -114,8 +116,9 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
     LOG_WARN("No version mappings exist for ref ways.");
   }
 
-  // If anything left has a PID on it, let's make that PID its ID.
-  // TODO: still don't like this...
+  // If anything left has a PID on it, let's make that PID its ID. This doesn't seem like a great
+  // way to do it and problems could be encountered in the future where more than one split way inside
+  // of the bounds had the same parent...haven't seen that happen yet, so will go with this for now.
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)

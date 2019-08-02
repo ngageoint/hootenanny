@@ -80,7 +80,12 @@ public:
   void create(const QString& output, const QString& input1, const QString& input2 = "");
 
   /**
-   * TODO
+   * Writes the changeset between one or two maps to an output file. If only one input is
+   * specified, the resulting changeset will be made entirely of the elements from the input.
+   *
+   * @param map1 the first input source
+   * @param map2 the optional second input source
+   * @param output the changeset output file target
    */
   void create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output);
 

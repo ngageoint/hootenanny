@@ -35,7 +35,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * A way joiner to be used in the changeset replacement generation workflow to join up ways
+ * snapped with UnconnectedWaySnapper.
  */
 class ReplacementSnappedWayJoiner : public WayJoinerAdvanced
 {
@@ -43,7 +44,6 @@ public:
 
   static std::string className() { return "hoot::ReplacementSnappedWayJoiner"; }
 
-  // TODO: can probably get rid of the default constructor at some point
   ReplacementSnappedWayJoiner();
   ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
 
@@ -52,38 +52,27 @@ public:
    */
   virtual void join(const OsmMapPtr& map) override;
 
+  /**
+   * @see ApiEntityInfo
+   */
   virtual QString getDescription() const override
   { return "Way joiner for use after way snapping when generating replacement changesets."; }
 
 protected:
 
-  /**
-   * TODO
-   *
-   * @param w1
-   * @param w2
-   * @return
+  /*
+   * @see WayJoiner
    */
   virtual bool _areJoinable(const WayPtr& w1, const WayPtr& w2) const override;
 
-  /**
-   * TODO
-   *
-   * @param parent
-   * @param child
-   * @param keeper
-   * @param toRemove
+  /*
+   * @see WayJoinerAdvanced
    */
   virtual void _determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
                                               WayPtr& toRemove) const override;
 
-  /**
-   * TODO
-   *
-   * @param parent
-   * @param child
-   * @param keeper
-   * @param toRemove
+  /*
+   * @see WayJoinerAdvanced
    */
   virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
                                             WayPtr& toRemove) const override;
@@ -95,6 +84,7 @@ protected:
 
 private:
 
+  // keeps track of element changeset versions
   QMap<ElementId, long> _refIdToVersionMappings;
 };
 

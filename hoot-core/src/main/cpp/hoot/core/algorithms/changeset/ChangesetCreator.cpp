@@ -302,31 +302,12 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
 
     // Load the first map. If we have a bounded query, let's check for the crop related option
     // overrides.
-    if (ConfigUtils::boundsOptionEnabled())
-    {
-      conf().set(
-        ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-        ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
-      conf().set(
-        ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-        ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
-    }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown1);
     OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-ref-map");
 
     // append the second map onto the first one
 
     OsmMapPtr tmpMap(new OsmMap());
-    // same as above but for the secondary features
-    if (ConfigUtils::boundsOptionEnabled())
-    {
-      conf().set(
-        ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-        ConfigOptions().getChangesetSecondaryKeepEntireFeaturesCrossingBounds());
-      conf().set(
-        ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-        ConfigOptions().getChangesetSecondaryKeepOnlyFeaturesInsideBounds());
-    }
     IoUtils::loadMap(tmpMap, input2, true, Status::Unknown2);
     OsmMapWriterFactory::writeDebugMap(tmpMap, "after-initial-read-unstreamable-sec-map");
 
@@ -352,15 +333,6 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
   {
     // Just load the first map, but as unknown2 to end up with a changeset made up of just this
     // input.
-    if (ConfigUtils::boundsOptionEnabled())
-    {
-      conf().set(
-        ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-        ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
-      conf().set(
-        ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-        ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
-    }
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
   }
   LOG_VARD(fullMap->getElementCount());
@@ -501,15 +473,6 @@ void ChangesetCreator::_readInputsFully(const QString& input1, const QString& in
     {
       // Just load the first map, but as unknown2 to end up with a changeset made up of just this
       // input.
-      if (ConfigUtils::boundsOptionEnabled())
-      {
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-          ConfigOptions().getChangesetReferenceKeepEntireFeaturesCrossingBounds());
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-          ConfigOptions().getChangesetReferenceKeepOnlyFeaturesInsideBounds());
-      }
       IoUtils::loadMap(map1, input1, true, Status::Unknown2);
     }
     OsmMapWriterFactory::writeDebugMap(map1, "after-initial-read-no-ops-map-1");

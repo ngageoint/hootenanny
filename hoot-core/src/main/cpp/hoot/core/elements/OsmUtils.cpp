@@ -41,6 +41,7 @@
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 // Qt
 #include <QDateTime>
@@ -82,8 +83,8 @@ const QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Nod
   return nodeIds;
 }
 
-QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
-                                                            const std::shared_ptr<const OsmMap>& map)
+QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(
+  const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map)
 {
   QList<std::shared_ptr<const Node>> nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
@@ -367,6 +368,14 @@ bool OsmUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
   LOG_VART(commonNodesBetweenWayGroups);
 
   return commonNodesBetweenWayGroups.size() != 0;
+}
+
+OsmMapPtr OsmUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter)
+{
+  CopyMapSubsetOp wayCopier(map, filter);
+  OsmMapPtr output(new OsmMap());
+  wayCopier.apply(output);
+  return output;
 }
 
 }
