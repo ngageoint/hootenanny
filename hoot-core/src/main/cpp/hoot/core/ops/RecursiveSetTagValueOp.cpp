@@ -130,7 +130,7 @@ void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
   {
     RelationPtr relation = it->second;
     LOG_VART(relation->getElementId());
-    if (_crit->isSatisfied(relation))
+    if (!_crit || _crit->isSatisfied(relation))
     {
       _tagger->visit(relation);
 
@@ -146,7 +146,7 @@ void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
   {
     WayPtr way = it->second;
     LOG_VART(way->getElementId());
-    if (_crit->isSatisfied(way))
+    if (!_crit || _crit->isSatisfied(way))
     {
       _tagger->visit(way);
 
@@ -163,7 +163,7 @@ void RecursiveSetTagValueOp::apply(std::shared_ptr<OsmMap>& map)
   {
     NodePtr node = it->second;
     LOG_VART(node->getElementId());
-    if (_crit->isSatisfied(node))
+    if (!_crit || _crit->isSatisfied(node))
     {
       _tagger->visit(node);
     }

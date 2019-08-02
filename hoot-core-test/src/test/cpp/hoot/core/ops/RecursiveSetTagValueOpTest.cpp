@@ -31,6 +31,9 @@
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -44,23 +47,67 @@ namespace hoot
 class RecursiveSetTagValueOpTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RecursiveSetTagValueOpTest);
-  // TODO
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runRelationTest);
+  CPPUNIT_TEST(runNoCritTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  RecursiveSetTagValueOpTest()
-    : HootTestFixture("test-files/ops/",
-                      "test-output/ops/")
-  {
-    //setResetType(Basic);
-  }
-
-  void runBasicTest()
+  RecursiveSetTagValueOpTest() :
+  HootTestFixture(
+    "test-files/ops/RecursiveSetTagValueOp", "test-output/ops/RecursiveSetTagValueOp")
   {
   }
 
+  // Since // Since this wraps SetTagValueVisitor for tag writing, SetTagValueVisitorTest covers
+  // more testing than what we're doing here.
+
+  void runRelationTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
+
+    QStringList keys;
+    keys.append("test_key");
+    keys.append("highway");
+    QStringList values;
+    values.append("test_val");
+    values.append("secondary");
+
+    // Write two tags to the relation and its members only.
+
+    RecursiveSetTagValueOp uut(keys, values, ElementCriterionPtr(new RelationCriterion()));
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "/runRelationTest-out.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "/runRelationTest-out.osm", _outputPath + "/runRelationTest-out.osm");
+  }
+
+  void runNoCritTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
+
+    QStringList keys;
+    keys.append("test_key");
+    keys.append("highway");
+    QStringList values;
+    values.append("test_val");
+    values.append("secondary");
+
+    // With no crit specified, we end up writing two tags to all elements.
+
+    RecursiveSetTagValueOp uut(keys, values, ElementCriterionPtr());
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmMapWriterFactory::write(map, _outputPath + "/runNoCritTest-out.osm");
+    HOOT_FILE_EQUALS(_inputPath + "/runNoCritTest-out.osm", _outputPath + "/runNoCritTest-out.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RecursiveSetTagValueOpTest, "quick");

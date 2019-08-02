@@ -65,11 +65,13 @@ public:
     uut.apply(map);
     const QMap<ElementId, long> mappings = uut.getMappings();
 
-    CPPUNIT_ASSERT_EQUAL(40, mappings.size());
-    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Node, -1669793)]);
-    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Node, -1669781)]);
-    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Way, -1669801)]);
-    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Way, -1669799)]);
+    CPPUNIT_ASSERT_EQUAL(42, mappings.size());
+    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Node, -5144884)]);
+    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Node, -5144896)]);
+    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Way, -5144955)]);
+    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Way, -5144956)]);
+    CPPUNIT_ASSERT_EQUAL(1L, mappings[ElementId(ElementType::Relation, -5144964)]);
+    CPPUNIT_ASSERT_EQUAL(2L, mappings[ElementId(ElementType::Relation, -5144965)]);
   }
 
   void runNoVerionsTest()
