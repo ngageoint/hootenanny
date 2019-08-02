@@ -281,9 +281,6 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
           if (snapOccurred)
           {
             assert(_snappedToWay);
-
-            // TODO: still need to verify _snappedToWay is always going to be the way actually
-            // snapped to
             LOG_TRACE(
               "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
 
@@ -314,11 +311,10 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
             // is needed, that would likely slow things down a lot.
 
             // This could be very expensive, so leave it disabled by default.
-            // TODO: turn off
-            OsmMapWriterFactory::writeDebugMap(
+/*            OsmMapWriterFactory::writeDebugMap(
               _map,
               "UnconnectedWaySnapper-after-snap-#" +
-              QString::number(_numSnappedToWays + _numSnappedToWayNodes));
+                QString::number(_numSnappedToWays + _numSnappedToWayNodes))*/;
           }
         }
 
@@ -690,10 +686,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         _snappedToWay = _map->getWay(*waysContainingWayNodeToSnapTo.begin());
         LOG_VART(_snappedToWay);
 
+        // Replace the snapped node with the node we snapped it to.
         // TODO: Should we also set the status of the snapped node to that of the way it was snapped
         // to?
-
-        // Replace the snapped node with the node we snapped it to.
         LOG_TRACE(
           "Replacing " << nodeToSnap->getElementId() << " with " <<
           wayNodeToSnapTo->getElementId());

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/util/Log.h>

@@ -37,9 +37,6 @@
 namespace hoot
 {
 
-/**
- * TODO
- */
 class AttributeValueCriterion : public ElementCriterion, public Configurable
 {
 public:
@@ -56,19 +53,32 @@ public:
                           const double comparisonVal,
                           const NumericComparisonType& comparisonType);
 
+  /**
+   * @see ElementCriterion
+   */
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AttributeValueCriterion()); }
 
-  virtual QString getDescription() const { return "TODO"; }
+  /**
+   * @see ApiEntityInfo
+   */
+  virtual QString getDescription() const { return "Identifies element attributes by value"; }
 
 private:
 
+  // attribute to examine
   ElementAttributeType _attributeType;
+  // attribute value being compared
   QVariant _comparisonVal;
+  // comparison relationship used between read attribute values and _comparisonVal
   int _comparisonType;
+  // comparison types are numeric or text
   bool _isNumericComparison;
 
   bool _satisfiesComparison(const QVariant& val) const;

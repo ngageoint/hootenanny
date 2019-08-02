@@ -86,7 +86,6 @@ void SuperfluousWayRemover::removeWays()
     }
     LOG_VART(same);
 
-    // TODO: This doesn't seem to be picking up multilinestring relations added during cropping.
     const bool inRelation = e2r->getRelationByElement(w).size() > 0;
     LOG_VART(inRelation);
     LOG_VART(w->getTags().size());

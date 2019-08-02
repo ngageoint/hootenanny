@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Enumeration dealing with comparisons between text values
  */
 class TextComparisonType
 {

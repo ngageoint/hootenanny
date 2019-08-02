@@ -200,8 +200,6 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
 
 void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
 {
-  // TODO: implement progress
-
   LOG_DEBUG(
     "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
     " to output: " << output << "...");

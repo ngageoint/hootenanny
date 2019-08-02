@@ -65,8 +65,7 @@ public:
 
   void setTag(const ElementPtr& e, const QString& k, const QString& v);
 
-  virtual QString getDescription() const
-  { return "Adds or updates one or more tags with a specified key/value combination"; }
+  virtual QString getDescription() const { return "Adds or updates specific tags on elements"; }
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 

@@ -253,7 +253,6 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "):";
     msg.prepend("Conflatable Criteria");
     ts << msg << endl;
-    // TODO: fix
     ts << _getApiEntities<ElementCriterion, ConflatableElementCriterion>(
       ElementCriterion::className(), "conflatable criteria", false, MAX_NAME_SIZE - 10);
   }

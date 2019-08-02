@@ -37,9 +37,6 @@
 namespace hoot
 {
 
-/**
- * TODO
- */
 class RecursiveSetTagValueOp : public OsmMapOperation, public OperationStatusInfo,
   public ElementCriterionConsumer, public Configurable
 {
@@ -66,18 +63,37 @@ public:
     bool appendToExistingValue = false, const bool overwriteExistingTag = true,
     const bool negateCriterion = false);
 
+  /**
+   * @see OsmMapOperation
+   */
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
+  /**
+   * @see ElementCriterionConsumer
+   */
   virtual void addCriterion(const ElementCriterionPtr& e);
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
   void setNegateCriterion(bool negate) { _negateCriterion = negate; }
 
-  virtual QString getDescription() const override { return "TODO"; }
+  /**
+   * @see ApiEntityInfo
+   */
+  virtual QString getDescription() const override
+  { return "Adds or updates specific tags on elements and their children"; }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getInitStatusMessage() const { return _tagger->getInitStatusMessage(); }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
 
 private:

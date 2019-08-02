@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Configurable.h>
@@ -39,9 +39,6 @@
 namespace hoot
 {
 
-/**
- * TODO
- */
 class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer,
   public Configurable
 {
@@ -52,23 +49,40 @@ public:
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
 
+  /**
+   * @see ElementCriterion
+   */
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
+  /**
+   * @see Boundable
+   */
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * @see ConstOsmMapConsumer
+   */
   virtual void setOsmMap(const OsmMap* map);
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new InBoundsCriterion()); }
 
-  virtual QString getDescription() const { return "TODO"; }
+  /**
+   * @see ApiEntityInfo
+   */
+  virtual QString getDescription() const
+  { return "Determines whether an element is within a specified geospatial bounds"; }
 
 private:
 
   geos::geom::Envelope _bounds;
   ConstOsmMapPtr _map;
   std::shared_ptr<ElementConverter> _elementConverter;
+  // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
 };
 

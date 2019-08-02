@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Derives a set of replacement changes given one or two map inputs
  *
  * TODO: implement progress
  */
@@ -97,7 +97,7 @@ public:
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
     const QString critClassName = args[3].trimmed();
     const QString output = args[4].trimmed();
-    // TODO: Is there any way to get rid of this param?
+
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
     {

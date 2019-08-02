@@ -49,7 +49,7 @@
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>

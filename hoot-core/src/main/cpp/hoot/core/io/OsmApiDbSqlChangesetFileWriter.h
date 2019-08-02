@@ -120,7 +120,7 @@ private:
 
   bool _includeDebugTags;
 
-  // TODO:
+  // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;

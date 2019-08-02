@@ -148,9 +148,9 @@ private:
   // adds the CE of each individual way node snap candidate to the nearby feature search radius
   bool _addCeToSearchDistance;
 
-  // allow for optionally tagging the snapped node; useful for debugging
+  // allow for optionally tagging snapped nodes; useful for debugging
   bool _markSnappedNodes;
-  // TODO
+  // allow for optionally tagging snapped ways; useful for debugging
   bool _markSnappedWays;
 
   // the feature criterion to be used for way snap target candidates

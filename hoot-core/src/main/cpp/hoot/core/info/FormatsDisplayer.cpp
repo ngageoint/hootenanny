@@ -34,7 +34,7 @@
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapWriter.h>
 // TODO: move this to util namespace
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 
 // Qt
