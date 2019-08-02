@@ -140,7 +140,7 @@ public:
   /**
    * Return all the names for the current feature.
    *
-   * @param includeAltName TODO
+   * @param includeAltName if true, returns names with the alt_name tag key
    */
   QStringList getNames(const bool includeAltName = true) const;
 
@@ -279,10 +279,10 @@ public:
   bool hasAnyKvp(const QStringList& kvps) const;
 
   /**
-   * TODO
+   * Returns true if the tags have any key in the input list
    *
-   * @param keys
-   * @return
+   * @param keys tag keys to search for
+   * @return true if the tags contain at least one of the keys; false otherwise
    */
   bool hasAnyKey(const QStringList& keys);
 
@@ -307,7 +307,7 @@ public:
    *
    * @param tags1 first set of tags to examine
    * @param tags2 second set of tags to examine
-   * @parm strictNameMatch TODO
+   * @parm strictNameMatch if true, will not consider names with the alt_name tag key
    * @return true if the tags have at least one matching name; false otherwise
    */
   static bool haveMatchingName(const Tags& tags1, const Tags& tags2,

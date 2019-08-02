@@ -176,7 +176,7 @@ private:
                     const QString& debugFileName);
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
-   * MetadataTags::HootSnappedWayNode()=snapped_way tags
+   * MetadataTags::HootSnapped()=snapped_way tags
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 

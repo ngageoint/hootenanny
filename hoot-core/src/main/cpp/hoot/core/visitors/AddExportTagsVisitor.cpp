@@ -51,7 +51,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   bool hasStatus = tags.find(MetadataTags::HootStatus()) != tags.end();
   bool hasMappingTags = tags.getNonDebugCount() > 0;
 
-  // todo in 3076 branch:
+  // TODO: in 3076 branch:
   // - decide on universal status include rules:
   //    - as discussed, we are considering these options:
   //      - removal of TextStatus config altogether

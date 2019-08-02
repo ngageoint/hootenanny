@@ -46,7 +46,8 @@ public:
    *
    * @param displayInputs if true, displays input formats
    * @param displayOutputs if true, displays output formats
-   * @param displayInputsSupportingBounds TODO
+   * @param displayInputsSupportingBounds if true, displays input formats that supported bounded
+   * reading
    */
   static QString display(const bool displayInputs, const bool displayOutputs,
                          const bool displayInputsSupportingBounds);

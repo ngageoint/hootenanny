@@ -149,10 +149,11 @@ QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
   const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
   ConstOsmMapPtr pMap)
 {
+  // find the neighboring nodes
   const set<ElementId> neighborIds =
     findNeighbors(env, index, indexToEid, pMap, ElementType::Node, false);
 
-  // sort by increasing neighbor distance from the input node
+  // map neighbors to their distance from the input node
 
   QMultiMap<double, ElementId> neighborNodeDistances;
   for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIds.begin();
@@ -177,6 +178,8 @@ QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
     }
   }
   LOG_VART(neighborNodeDistances);
+
+  // sort neighbors by increasing distance from the input node
 
   const QList<double> sortedDistances = neighborNodeDistances.keys();
   LOG_VART(sortedDistances);

@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -48,13 +49,13 @@ public:
   QMap<ElementId, long> getMappings() const { return _idToVersionMappings; }
 
   virtual QString getInitStatusMessage() const
-  { return "TODO"; }
+  { return "Mapping element IDs to changeset versions..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "TODO"; }
+  { return "Mapped " +  StringUtils::formatLargeNumber(_numAffected) + " IDs to versions."; }
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Maintains a mapping of element IDs to changeset versions"; }
 
 private:
 

@@ -72,15 +72,16 @@ public:
   void finalizeIndex();
 
   /**
-   * TODO - also may be able to make sortByIncreasingDistance always set to true
+   * Find nearby elements given a bounds
    *
-   * @param env
-   * @param index
-   * @param indexToEid
-   * @param pMap
-   * @param elementType
-   * @param includeContainingRelations
-   * @return
+   * @param env the bounds within the map to search
+   * @param index a geospatial index for the input map
+   * @param indexToEid a set of element IDs belonging to the input geospatial index
+   * @param pMap the map to search
+   * @param elementType the type of element to search for
+   * @param includeContainingRelations if true, also returns relations containing the nearby
+   * elements found
+   * @return element IDs of the neighbors
    */
   static std::set<ElementId> findNeighbors(
     const geos::geom::Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
@@ -89,14 +90,14 @@ public:
     const bool includeContainingRelations = true);
 
   /**
-   * TODO
+   * Find nodes nearby a specified node sorted by increasing distance given a bounds
    *
-   * @param node
-   * @param env
-   * @param index
-   * @param indexToEid
-   * @param pMap
-   * @return
+   * @param node node to search neighbors for
+   * @param env the bounds within the map to search
+   * @param index a geospatial index for the input map
+   * @param indexToEid a set of element IDs belonging to the input geospatial index
+   * @param pMap the map to search
+   * @return element IDs of the neighbors
    */
   static QList<ElementId> findSortedNodeNeighbors(
     const ConstNodePtr& node, const geos::geom::Envelope& env,

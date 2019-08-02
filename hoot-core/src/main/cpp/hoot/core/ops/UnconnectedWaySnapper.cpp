@@ -666,7 +666,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         // Add the optional custom tag for tracking purposes.
         if (_markSnappedNodes)
         {
-          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way_node");
+          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way_node");
         }
         if (_markSnappedWays)
         {
@@ -674,8 +674,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
             OsmUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
           // assert(wayIds.size() == 1);
           const long owningWayId = *owningWayIds.begin();
-          _map->getWay(owningWayId)->getTags().set(
-            MetadataTags::HootSnappedWayNode(), "snapped_way");
+          _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
         }
         // get the snapped to way so we can retain the parent id; size should be equal to 1;
         // this could be optimized, since we're doing way containing way node checks already above
@@ -836,7 +835,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       // Add the optional custom tag for tracking purposes.
       if (_markSnappedNodes)
       {
-        nodeToSnap->getTags().set(MetadataTags::HootSnappedWayNode(), "snapped_to_way");
+        nodeToSnap->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way");
       }
       if (_markSnappedWays)
       {
@@ -844,8 +843,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
           OsmUtils::getContainingWayIdsByNodeId(nodeToSnap->getId(), _map);
         // assert(wayIds.size() == 1);
         const long owningWayId = *owningWayIds.begin();
-        _map->getWay(owningWayId)->getTags().set(
-          MetadataTags::HootSnappedWayNode(), "snapped_way");
+        _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
       }
 
       // add the snapped node as a way node on the target way

@@ -438,10 +438,10 @@ public:
   bool userExists(const QString& userName);
 
   /**
-   * TODO
+   * Returns IDs for all ways connected to ways with the input IDs
    *
-   * @param wayIds
-   * @return
+   * @param wayIds IDs of ways to search
+   * @return a collection of connected way IDs
    */
   QSet<QString> selectConnectedWayIds(const QSet<QString>& wayIds);
 

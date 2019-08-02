@@ -139,9 +139,9 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
 
   _initCounters();
   _srs = appendFromMap->getProjection();
-  _index->getNodeToWayMap();    //TODO: why does this have to be done?
-  _index->getElementToRelationMap(); //TODO: why does this have to be done?
-
+  // These indexes need to be force initialized before appending.
+  _index->getNodeToWayMap();
+  _index->getElementToRelationMap();
   ElementComparer elementComparer;
 
   // The append order must be nodes, ways, and then relations. If not, the map indexes won't update
@@ -154,6 +154,9 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     NodePtr node = itn->second;
     if (containsElement(ElementId(node->getElementId())))
     {
+      // If they have the same ID but aren't considerd to be identical elements, throw an error.
+      // Otherwise we'll just skip adding the identical element, since we already have it.
+      // throwOutDupes being enabled lets us skip it whether the two are identical or not.
       ElementPtr existingElement = getElement(node->getElementId());
       if (!throwOutDupes && !elementComparer.isSame(node, existingElement))
       {
@@ -232,8 +235,6 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     RelationPtr relation = it->second;
     if (containsElement(ElementId(relation->getElementId())))
     {
-      // If they have the same ID but aren't the same, throw an error. Otherwise we'll just skip
-      // adding it since we already have it.
       ElementPtr existingElement = getElement(relation->getElementId());
       if (!throwOutDupes && !elementComparer.isSame(relation, existingElement))
       {

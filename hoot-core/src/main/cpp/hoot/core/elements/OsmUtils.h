@@ -337,11 +337,11 @@ public:
                                             const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Returns a subset of elements from a map filtered by a criterion
    *
-   * @param map
-   * @param filter
-   * @return
+   * @param map map to copy elements from
+   * @param filter filter to apply to the map
+   * @return a copied subset map
    */
   static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
 };

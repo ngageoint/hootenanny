@@ -33,7 +33,6 @@
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapWriter.h>
-// TODO: move this to util namespace
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 

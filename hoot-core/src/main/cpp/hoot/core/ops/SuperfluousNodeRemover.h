@@ -69,11 +69,11 @@ public:
   virtual void readObject(QDataStream& is);
 
   /**
-   * TODO
+   * Removes superfluous nodes from a map
    *
-   * @param map
-   * @param ignoreInformationTags
-   * @param e
+   * @param map map from which to remove the nodes
+   * @param ignoreInformationTags if true, will remove nodes even if they have an info tag
+   * @param e bounds within which to remove nodes
    */
   static void removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
                           const geos::geom::Envelope& e = geos::geom::Envelope());

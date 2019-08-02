@@ -100,8 +100,14 @@ public:
   /**
    * Append all the elements in input map to this map.
    *
+   * The default behavior is to skip an element from the map being appended from if it has the same
+   * ID as an element in this map and the elements are considered identical. If the elements are
+   * considered to be identical, an error occurs. Alternatively, the throwOutDupes parameter will
+   * allow for overriding that behavior at the expense of not appending the elements.
+   *
    * @param map
-   * @param throwOutDupes TODO
+   * @param throwOutDupes if true, and elements in the map being appended from have the same IDs as
+   * elements in this map, those elements are ignored
    * @throws If there is element ID overlap.
    * @throws If the map being appended to is the same as the map being appended from.
    * @throws If the map being appended to does not have the same projection as the map being

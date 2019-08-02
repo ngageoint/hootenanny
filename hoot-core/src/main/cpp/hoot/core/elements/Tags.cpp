@@ -618,7 +618,7 @@ bool Tags::dataOnlyEqual(const Tags& other) const
 Meters Tags::readMeters(const QString& key) const
 {
   bool ok;
-  // todo add support for ft suffix too.
+  // TODO: add support for ft suffix too.
   Meters result = value(key).toDouble(&ok);
   if (ok == false)
   {

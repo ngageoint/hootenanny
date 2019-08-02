@@ -37,6 +37,9 @@
 namespace hoot
 {
 
+/**
+ * Allows for setting tags on elements and their children (way nodes, relation members)
+ */
 class RecursiveSetTagValueOp : public OsmMapOperation, public OperationStatusInfo,
   public ElementCriterionConsumer, public Configurable
 {
