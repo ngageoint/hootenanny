@@ -606,9 +606,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
-  conf().set(
-    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-    _changesetAllowDeletingRefOutsideBounds);
   conf().set(ConfigOptions::getApidbReaderTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // dataset specific opts
@@ -722,6 +719,10 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     // shouldn't ever get here
     throw IllegalArgumentException("TODO");
   }
+
+  conf().set(
+    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+    _changesetAllowDeletingRefOutsideBounds);
 
   LOG_VARD(_convertRefKeepEntireCrossingBounds);
   LOG_VARD(_convertRefKeepOnlyInsideBounds);
