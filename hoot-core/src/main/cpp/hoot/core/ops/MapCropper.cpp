@@ -116,6 +116,18 @@ _numNodesRemoved(0)
 {
 }
 
+void MapCropper::setBounds(const geos::geom::Envelope& bounds)
+{
+  _nodeBounds = bounds;
+  _envelope = bounds,
+  _envelopeG.reset(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope));
+}
+
+void MapCropper::setBounds(const std::shared_ptr<const geos::geom::Geometry>& g)
+{
+  _envelopeG = g;
+}
+
 void MapCropper::setInvert(bool invert)
 {
   _invert = invert;

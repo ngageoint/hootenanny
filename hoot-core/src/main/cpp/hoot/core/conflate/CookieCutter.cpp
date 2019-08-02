@@ -32,21 +32,24 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/MapCropper.h>
 
 using namespace geos::geom;
 
 namespace hoot
 {
 
-CookieCutter::CookieCutter(bool crop, double outputBuffer) :
+CookieCutter::CookieCutter(bool crop, double outputBuffer, bool keepEntireFeaturesCrossingBounds,
+                           bool keepOnlyFeaturesInsideBounds) :
 _crop(crop),
-_outputBuffer(outputBuffer)
+_outputBuffer(outputBuffer),
+_keepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds),
+_keepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds)
 {
 }
 
@@ -90,6 +93,8 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   // remove the cookie cutter portion from the dough
   MapCropper cropper(cutterShape);
   cropper.setConfiguration(conf());
+  cropper.setKeepEntireFeaturesCrossingBounds(_keepEntireFeaturesCrossingBounds);
+  cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);
   cropper.setInvert(!_crop);
   cropper.apply(doughMap);
 

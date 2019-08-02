@@ -78,12 +78,10 @@ public:
   virtual void readObject(QDataStream& is) override;
 
   /**
-   * Sets the bounds on the nodes that will be removed. This is only useful in fourpass.
-   * This value will not be serialized.
-   *
-   * TODO: this is confusing when compared with the constructor that also takes in a bounds
+   * Sets the bounds on the nodes that will be removed.
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) override { _nodeBounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds) override;
+  virtual void setBounds(const std::shared_ptr<const geos::geom::Geometry>& g);
 
   virtual void writeObject(QDataStream& os) const override;
 

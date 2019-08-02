@@ -154,7 +154,7 @@ void ChangesetReplacementCreator::create(
 
   // Conflate the cookie cut ref map with the cropped sec map.
   OsmMapPtr conflatedMap = cookieCutRefMap;
-  // TODO: do something with reviews
+  // TODO: do something with reviews - #3361
   _conflate(conflatedMap, lenientBounds);
   if (_isLinearCrit(featureTypeFilterClassName))
   {
@@ -270,8 +270,6 @@ std::shared_ptr<ConflatableElementCriterion> ChangesetReplacementCreator::_valid
 
 OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
 {
-  // TODO: the crop config options use here for the data loading could be removed by passing
-  // bounds options into IoUtils::loadMap instead (?)
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
     _loadRefKeepEntireCrossingBounds);
@@ -389,16 +387,10 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
 
   LOG_DEBUG("Cookie cutting cutter shape out of: " << doughMap->getName() << "...");
-  // TODO: the config options here could be removed by passing in a pre-configured MapCropper to
-  // CookieCutter.
-  conf().set(
-    ConfigOptions::getCropKeepEntireFeaturesCrossingBoundsKey(),
-    _cookieCutKeepEntireCrossingBounds);
-  conf().set(
-    ConfigOptions::getCropKeepOnlyFeaturesInsideBoundsKey(), _cookieCutKeepOnlyInsideBounds);
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
   cookieCutMap->setName("cookie-cut");
-  CookieCutter(false, 0.0).cut(cutterShapeOutlineMap, cookieCutMap);
+  CookieCutter(false, 0.0, _cookieCutKeepEntireCrossingBounds, _cookieCutKeepOnlyInsideBounds)
+    .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
@@ -428,8 +420,6 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
     "Conflating the cookie cut reference map with the secondary map into " << map->getName() <<
     "...");
 
-  // TODO: Should we drop the default post conflate way joining here, since we're doing it later
-  // again if the source is linear and the bounds isn't lenient?
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
   if (!lenientBounds) // not exactly sure yet why this needs to be done
   {
@@ -714,7 +704,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   else
   {
     // shouldn't ever get here
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Invalid geometry type.");
   }
 
   conf().set(
