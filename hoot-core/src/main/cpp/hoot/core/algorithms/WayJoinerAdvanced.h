@@ -67,6 +67,9 @@ public:
    */
   virtual void join(const OsmMapPtr& map) override;
 
+  virtual QString getDescription() const override
+  { return "Extends WayJoinerBasic with additional join pre-conditions."; }
+
 protected:
 
   WayPtr _wayKeptAfterJoin;

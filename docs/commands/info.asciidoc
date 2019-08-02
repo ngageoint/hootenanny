@@ -11,6 +11,7 @@ Only one of the following options can be passed to the command:
 
 * +--cleaning-operations+      - Displays operations configured for cleaning map data
 * +--config-options+           - Displays available configuration options
+* +--conflatable-criteria+     - Displays criteria that identify conflatable elements
 * +--conflate-post-operations+ - Displays operations configured by default to run after a conflation job (can be customized via the
                                  `conflate.post.ops` configuration option)
 * +--conflate-pre-operations+  - Displays operations configured by default to run before a conflation job (can be customized via the
@@ -28,6 +29,7 @@ Only one of the following options can be passed to the command:
 * +--subline-string-matchers+  - Displays available subline string matchers
 * +--tag-mergers+              - Displays available feature tag mergers used during conflation
 * +--value-aggregators+        - Displays available feature tag value aggregators used in conflation model building
+* +--way-joiners+              - Displays available way joiners
 
 Each of the following sections describes an option that may be used with this command and its input parameters.
 
@@ -90,6 +92,22 @@ hoot info --config-options poi.polygon --option-names
 hoot info --config-options poi.polygon --option-details
 --------------------------------------
 
+=== Conflatable Criteria
+
+The +--conflatable-crieria++ option prints out all element criteria classes that can be used to identify conflatable elements.
+
+==== Usage
+
+--------------------------------------
+info --conflatable-crieria
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --conflatable-crieria
+--------------------------------------
+
 === Conflate Post Operations
 
 The +--conflate-post-operations+ option prints out the currently configured operations to run immediately after a conflation job with the
@@ -143,12 +161,13 @@ hoot info --feature-extractors
 
 === Formats
 
-The +--formats+ option prints out supported data formats.
+The +--formats+ option prints out supported data formats. The --input-bounded sub-option prints out input formats that support bounded reads
+with the `convert.bounding.box` configuration option.
 
 ==== Usage
 
 --------------------------------------
-info --formats [--input] [--output]
+info --formats [--input] [--output] [--input-bounded]
 --------------------------------------
 
 ==== Example
@@ -157,9 +176,11 @@ info --formats [--input] [--output]
 # prints all
 hoot info --formats
 
-hoot info --format --input
+hoot info --formats --input
 
-hoot info --format --output
+hoot info --formats --output
+
+hoot info --formats --input-bounded
 --------------------------------------
 
 === Languages
@@ -424,5 +445,22 @@ info --value-aggregators
 
 --------------------------------------
 hoot info --value-aggregators
+--------------------------------------
+
+=== Way Joiners
+
+The +--way-joiners++ option prints out all way joiner class implementations that may either be used independently or in conjunction with
+the OsmMapOperation, `hoot::WayJoinerOp`.
+
+==== Usage
+
+--------------------------------------
+info --way-joiners
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --way-joiners
 --------------------------------------
 

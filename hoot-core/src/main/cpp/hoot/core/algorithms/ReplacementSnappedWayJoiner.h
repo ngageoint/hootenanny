@@ -52,6 +52,9 @@ public:
    */
   virtual void join(const OsmMapPtr& map) override;
 
+  virtual QString getDescription() const override
+  { return "Way joiner for use after way snapping when generating replacement changesets."; }
+
 protected:
 
   /**

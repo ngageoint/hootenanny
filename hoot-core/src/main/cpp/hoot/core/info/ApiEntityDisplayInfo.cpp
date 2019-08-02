@@ -46,7 +46,8 @@
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/merging/Merger.h>
-
+#include <hoot/core/algorithms/WayJoiner.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 //  Qt
 #include <QTextStream>
 
@@ -72,11 +73,12 @@ static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
 template<typename ApiEntity>
-QString getApiEntities(const std::string& apiEntityBaseClassName, const QString& apiEntityType,
-                       const bool displayType,
-                       //the size of the longest names plus a 3 space buffer; the value passed in
-                       //here by callers may have to be adjusted over time for some entity types
-                       const int maxNameSize)
+QString ApiEntityDisplayInfo::_getApiEntities(
+  const std::string& apiEntityBaseClassName, const QString& apiEntityType,
+  const bool displayType,
+  //the size of the longest names plus a 3 space buffer; the value passed in
+  //here by callers may have to be adjusted over time for some entity types
+  const int maxNameSize)
 {
   LOG_VARD(apiEntityBaseClassName);
   std::vector<std::string> classNames =
@@ -99,7 +101,7 @@ QString getApiEntities(const std::string& apiEntityBaseClassName, const QString&
       std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
     if (!apiEntityInfo.get())
     {
-      throw HootException(
+      throw IllegalArgumentException(
         "Calls to printApiEntities must be made with classes that implement ApiEntityInfo.");
     }
 
@@ -140,7 +142,7 @@ QString getApiEntities(const std::string& apiEntityBaseClassName, const QString&
 // match/merger creators have a more roundabout way to get at the description, so we'll create a new
 // display method for them
 template<typename ApiEntity>
-QString getApiEntities2(const std::string& apiEntityClassName)
+QString ApiEntityDisplayInfo::_getApiEntities2(const std::string& apiEntityClassName)
 {
   //the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
@@ -287,19 +289,20 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "; * = implements SingleStatistic):";
     msg.prepend("Operators");
     ts << msg << endl;
-    ts << getApiEntities<ElementCriterion>(
+    ts << _getApiEntities<ElementCriterion>(
       ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
-    ts << getApiEntities<OsmMapOperation>(
+    ts << _getApiEntities<OsmMapOperation>(
       OsmMapOperation::className(), "operation", true, MAX_NAME_SIZE);
-    ts << getApiEntities<ElementVisitor>(ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
+    ts << _getApiEntities<ElementVisitor>(
+      ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
   }
-  // this is pretty repetitive :-(
+  // All of this from here on down is pretty repetitive :-(
   else if (apiEntityType == "feature-extractors")
   {
     msg += "):";
     msg.prepend("Feature Extractors");
     ts << msg << endl;
-    ts << getApiEntities<FeatureExtractor>(
+    ts << _getApiEntities<FeatureExtractor>(
       FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "matchers")
@@ -307,15 +310,14 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "):";
     msg.prepend("Matchers");
     ts << msg << endl;
-    ts << getApiEntities<Match>(
-      Match::className(), "matcher", false, MAX_NAME_SIZE);
+    ts << _getApiEntities<Match>(Match::className(), "matcher", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "mergers")
   {
     msg += "):";
     msg.prepend("Mergers");
     ts << msg << endl;
-    ts << getApiEntities<Merger>(
+    ts << _getApiEntities<Merger>(
       Merger::className(), "merger", false, MAX_NAME_SIZE);
   }
   else if (apiEntityType == "match-creators")
@@ -323,28 +325,29 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "):";
     msg.prepend("Conflate Match Creators");
     ts << msg << endl;
-    ts << getApiEntities2<MatchCreator>(MatchCreator::className());
+    ts << _getApiEntities2<MatchCreator>(MatchCreator::className());
   }
   else if (apiEntityType == "merger-creators")
   {
     msg += "):";
     msg.prepend("Conflate Merger Creators");
     ts << msg << endl;
-    ts << getApiEntities2<MergerCreator>(MergerCreator::className());
+    ts << _getApiEntities2<MergerCreator>(MergerCreator::className());
   }
   else if (apiEntityType == "tag-mergers")
   {
     msg += "):";
     msg.prepend("Tag Mergers");
     ts << msg << endl;
-    ts << getApiEntities<TagMerger>(TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
+    ts << _getApiEntities<TagMerger>(
+      TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
   }
   else if (apiEntityType == "string-comparators")
   {
     msg += "):";
     msg.prepend("String Comparators");
     ts << msg << endl;
-    ts << getApiEntities<StringDistance>(
+    ts << _getApiEntities<StringDistance>(
       StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "subline-matchers")
@@ -352,7 +355,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "):";
     msg.prepend("Subline Matchers");
     ts << msg << endl;
-    ts << getApiEntities<SublineMatcher>(
+    ts << _getApiEntities<SublineMatcher>(
       SublineMatcher::className(), "subline matcher", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "subline-string-matchers")
@@ -360,7 +363,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "):";
     msg.prepend("Subline Matchers");
     ts << msg << endl;
-    ts << getApiEntities<SublineStringMatcher>(
+    ts << _getApiEntities<SublineStringMatcher>(
       SublineStringMatcher::className(), "subline string matcher", false, MAX_NAME_SIZE - 15);
   }
   else if (apiEntityType == "value-aggregators")
@@ -368,8 +371,25 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     msg += "):";
     msg.prepend("Value Aggregators");
     ts << msg << endl;
-    ts << getApiEntities<ValueAggregator>(
+    ts << _getApiEntities<ValueAggregator>(
       ValueAggregator::className(), "value aggregator", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "way-joiners")
+  {
+    msg += "):";
+    msg.prepend("Way Joiners");
+    ts << msg << endl;
+    ts << _getApiEntities<WayJoiner>(
+      WayJoiner::className(), "way joiner", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "conflatable-criteria")
+  {
+    msg += "):";
+    msg.prepend("Conflatable Criteria");
+    ts << msg << endl;
+    // TODO: fix
+    ts << _getApiEntities<ConflatableElementCriterion>(
+      ConflatableElementCriterion::className(), "conflatable criteria", false, MAX_NAME_SIZE - 10);
   }
   return ts.readAll();
 }

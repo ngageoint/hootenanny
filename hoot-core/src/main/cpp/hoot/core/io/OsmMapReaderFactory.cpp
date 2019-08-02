@@ -156,6 +156,8 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
     const std::string name = names[i];
     LOG_VART(name);
     writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    LOG_VART(url);
+    LOG_VART(writer->isSupported(url));
     if (writer->isSupported(url))
     {
       return QString::fromStdString(name);

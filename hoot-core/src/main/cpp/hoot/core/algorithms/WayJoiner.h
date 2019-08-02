@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -38,7 +39,7 @@ namespace hoot
 /**
  * Interface for way joiners
  */
-class WayJoiner
+class WayJoiner : public ApiEntityInfo
 {
 public:
 

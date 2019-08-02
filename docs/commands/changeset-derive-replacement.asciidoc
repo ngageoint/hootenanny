@@ -12,22 +12,22 @@ database or the Rails Port with the +changeset-apply+ command.
 Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
 the second input (secondary dataset) are not retained and treated as completely new data. 
 
-* +input1+             - OSM data reference input (e.g. .osm file); must support bounded queries
-* +input2+             - OSM data secondary input (e.g. .osm file); must support bounded queries
-* +bounds+             - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
-* +featureFilter+      - A single ConflatableElementCriterion class name used to determine which type of features are replaced in the reference 
-                         dataset (currently only one criterion may be specified in a filter). e.g. "hoot::BuildingCriterion"
-* +output+             - Output location (e.g. .osc or .osc.sql file)
-* +osmApiDatabaseUrl+  - Target OSM API database the changeset is to be applied to.  Used to maintain
-                         element ID continuity with a particular database instance when generating SQL
-                         changesets only (.osc.sql).
-* +--lenient-bounds--+ - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
-                         makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
-                         for more detail.
-* +--stats+            - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only valid for 
-                         .osc output files only)
-* +--write-bounds+     - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
-                         The location of the file is controlled via the `bounds.output.file` configuration option.
+* +input1+            - OSM data reference input (e.g. .osm file); must support bounded queries
+* +input2+            - OSM data secondary input (e.g. .osm file); must support bounded queries
+* +bounds+            - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
+* +featureFilter+     - A single criterion class name used to determine which type of features are replaced in the 
+                        reference dataset. Must be a conflatable criterion (see "Type Filtering" section below). e.g. "hoot::BuildingCriterion"
+* +output+            - Output location (e.g. .osc or .osc.sql file)
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
+                        element ID continuity with a particular database instance when generating SQL
+                        changesets only (.osc.sql).
+* +--lenient-bounds+  - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
+                        makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
+                        for more detail.
+* +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only valid 
+                        for .osc output files)
+* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input 
+                        bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
@@ -47,10 +47,20 @@ hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::
 hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
 --------------------------------------
 
+=== Type Filtering
+
+Currently, only one criterion may be specified per feature filter and at least one must always be specified. Future work may allow for 
+specifying no filter or multiple criteria per filter. To see a list of valid conflatable element criteria for use as a feature filter:
+-----
+hoot info --conflatable-criteria
+-----
+
 === Bounds Handling
 
-All inputs must support bounded queries and be readable by a Hootenanny reader implementing the Boundable interface. To list the Hootenanny input
-formats that support bounded queries: TODO
+All inputs must support bounded reading. To list the Hootenanny input formats that support bounded readings:
+-----
+hoot info --formats --input-bounded
+-----
 
 ==== Strict Bounds Handling
 

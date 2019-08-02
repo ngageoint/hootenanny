@@ -46,8 +46,24 @@ public:
    *
    * @param displayInputs if true, displays input formats
    * @param displayOutputs if true, displays output formats
+   * @param displayInputsSupportingBounds TODO
    */
-  static QString display(const bool displayInputs, const bool displayOutputs);
+  static QString display(const bool displayInputs, const bool displayOutputs,
+                         const bool displayInputsSupportingBounds);
+
+private:
+
+  template<typename IoClass>
+  static QString _getFormatsString(
+    const std::string& className, const QStringList extraFormats = QStringList());
+
+  template<typename IoClass>
+  static QStringList _getFormats(
+    const std::string& className, const QStringList extraFormats = QStringList());
+
+  static QString _getFormatsSupportingBoundsString();
+
+  static  QString _getPrintableString(const QStringList& items);
 };
 
 }

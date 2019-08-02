@@ -68,7 +68,7 @@ public:
 
   virtual int runSimple(QStringList args) override
   {
-    //only allowing one option per command
+    // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();
     QStringList specifiedOpts;
     for (int i = 0; i < args.size(); i++)
@@ -142,10 +142,14 @@ public:
             .arg(getName()));
       }
 
+      QStringList formatSubOptions;
+      formatSubOptions.append("--input");
+      formatSubOptions.append("--output");
+      formatSubOptions.append("--input-bounded");
       for (int i = 0; i < args.size(); i++)
       {
         const QString arg = args.at(i);
-        if (arg != "--input" && arg != "--output")
+        if (!formatSubOptions.contains(arg))
         {
           std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException("Invalid parameter: " + arg + " passed to " + getName());
@@ -166,13 +170,23 @@ public:
         args.removeAt(args.indexOf("--output"));
       }
 
-      if (!displayInputs && !displayOutputs && args.size() == 0)
+      bool displayInputsSupportingBounds = false;
+      if (args.contains("--input-bounded"))
+      {
+        displayInputsSupportingBounds = true;
+        args.removeAt(args.indexOf("--input-bounded"));
+      }
+
+      if (!displayInputs && !displayOutputs && !displayInputsSupportingBounds && args.size() == 0)
       {
         displayInputs = true;
         displayOutputs = true;
+        displayInputsSupportingBounds = true;
       }
 
-      std::cout << FormatsDisplayer::display(displayInputs, displayOutputs).toStdString();
+      std::cout <<
+        FormatsDisplayer::display(displayInputs, displayOutputs, displayInputsSupportingBounds)
+          .toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
     {
@@ -184,7 +198,7 @@ public:
           QString("%1 with the --languages option takes one parameter.").arg(getName()));
       }
 
-      //only allowing one option per command
+      // only allowing one option per command
       const QStringList supportedOpts = _getSupportedLanguageOptions();
       QStringList specifiedOpts;
       for (int i = 0; i < args.size(); i++)
@@ -257,7 +271,7 @@ public:
     {
       std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.pre.ops").toStdString();
     }
-    //everything else
+    // everything else
     else if (specifiedOpts.size() == 1)
     {
       QString apiEntityType;
@@ -306,6 +320,7 @@ private:
     QStringList options;
     options.append("--cleaning-operations");
     options.append("--config-options");
+    options.append("--conflatable-criteria");
     options.append("--conflate-post-operations");
     options.append("--conflate-pre-operations");
     options.append("--feature-extractors");
@@ -321,6 +336,7 @@ private:
     options.append("--subline-string-matchers");
     options.append("--tag-mergers");
     options.append("--value-aggregators");
+    options.append("--way-joiners");
     return options;
   }
 };
