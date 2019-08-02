@@ -3601,10 +3601,15 @@ Listing a format that is both input and output...
 
 hootapidb://
 hootapidb://
+hootapidb://
 
 Listing an input format...
 
 .osm.bz2
+
+Listing an input format supporting bounded reads...
+
+hootapidb://
 
 Listing an output format...
 
@@ -3737,4 +3742,12 @@ Listing pre-conflation operations...
 Listing post-conflation operations...
 
   SuperfluousNodeRemover                       operation         Removes all nodes not part of a way
+
+Listing way joiners...
+
+  WayJoinerAdvanced                  Extends WayJoinerBasic with additional join pre-conditions.
+
+Listing conflatable criteria...
+
+  BuildingCriterion                  Identifies buildings
 

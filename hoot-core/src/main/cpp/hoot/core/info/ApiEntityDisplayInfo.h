@@ -62,13 +62,13 @@ private:
 
   static QString _apiEntityTypeForBaseClass(const QString& baseClassName);
 
-  template<typename ApiEntity>
+  template<typename ApiEntity, typename ApiEntityChild>
   static QString _getApiEntities(
     const std::string& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
     const int maxNameSize);
 
   template<typename ApiEntity>
-  static QString _getApiEntities2(const std::string& apiEntityClassName);
+  static QString _getApiEntitiesForMatchMergerCreators(const std::string& apiEntityClassName);
 };
 
 }

@@ -72,7 +72,195 @@ public:
 static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
-template<typename ApiEntity>
+
+QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
+{
+  LOG_TRACE("getDisplayInfoOps: " << optName);
+
+  const QString errorMsg = "Invalid config option name: " + optName;
+  if (!conf().hasKey(optName))
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  const QStringList listOpt = conf().get(optName).toStringList();
+  LOG_VART(listOpt.size());
+  if (listOpt.isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  const QStringList operations = listOpt[0].split(";");
+
+  QString buffer;
+  QTextStream ts(&buffer);
+  for (int i = 0; i < operations.size(); i++)
+  {
+    QString className = operations[i];
+    LOG_VARD(className);
+
+    // There's a lot of duplicated code in here when compared with printApiEntities.  Haven't
+    // figured out a good way to combine the two yet.
+
+    std::shared_ptr<ApiEntityInfo> apiEntityInfo;
+    const QString apiEntityType = _apiEntityTypeForBaseClass(className);
+    std::shared_ptr<SingleStatistic> singleStat;
+    // :-( this is messy...
+    if (Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
+    {
+      std::shared_ptr<OsmMapOperation> apiEntity(
+        Factory::getInstance().constructObject<OsmMapOperation>(className.toStdString()));
+      apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+    }
+    else if (Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
+    {
+      std::shared_ptr<ElementVisitor> apiEntity(
+        Factory::getInstance().constructObject<ElementVisitor>(className.toStdString()));
+      apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
+      singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
+    }
+
+    if (!apiEntityInfo.get())
+    {
+      throw HootException(
+        "Calls to getDisplayInfoOps must return a list of classes, all that implement ApiEntityInfo.");
+    }
+    const bool supportsSingleStat = singleStat.get();
+
+    QString name = className.replace("hoot::", "");
+    //append '*' to the names of visitors that support the SingleStatistic interface
+    if (supportsSingleStat)
+    {
+      name += "*";
+    }
+    const int indentAfterName = MAX_NAME_SIZE - name.size();
+    const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
+    QString line = "  " + name + QString(indentAfterName, ' ');
+    line += apiEntityType + QString(indentAfterType, ' ');
+    line += apiEntityInfo->getDescription();
+    ts << line << endl;
+  }
+  return ts.readAll();
+}
+
+QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
+{
+  DisableLog dl;
+  QString msg = " (prepend 'hoot::' before using";
+  QString buffer;
+  QTextStream ts(&buffer);
+  if (apiEntityType == "operators")
+  {
+    msg += "; * = implements SingleStatistic):";
+    msg.prepend("Operators");
+    ts << msg << endl;
+    ts << _getApiEntities<ElementCriterion, ElementCriterion>(
+      ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
+    ts << _getApiEntities<OsmMapOperation, OsmMapOperation>(
+      OsmMapOperation::className(), "operation", true, MAX_NAME_SIZE);
+    ts << _getApiEntities<ElementVisitor, ElementVisitor>(
+      ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
+  }
+  // All of this from here on down is pretty repetitive :-(
+  else if (apiEntityType == "feature-extractors")
+  {
+    msg += "):";
+    msg.prepend("Feature Extractors");
+    ts << msg << endl;
+    ts << _getApiEntities<FeatureExtractor, FeatureExtractor>(
+      FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
+  }
+  else if (apiEntityType == "matchers")
+  {
+    msg += "):";
+    msg.prepend("Matchers");
+    ts << msg << endl;
+    ts << _getApiEntities<Match, Match>(Match::className(), "matcher", false, MAX_NAME_SIZE);
+  }
+  else if (apiEntityType == "mergers")
+  {
+    msg += "):";
+    msg.prepend("Mergers");
+    ts << msg << endl;
+    ts << _getApiEntities<Merger, Merger>(
+      Merger::className(), "merger", false, MAX_NAME_SIZE);
+  }
+  else if (apiEntityType == "match-creators")
+  {
+    msg += "):";
+    msg.prepend("Conflate Match Creators");
+    ts << msg << endl;
+    ts << _getApiEntitiesForMatchMergerCreators<MatchCreator>(MatchCreator::className());
+  }
+  else if (apiEntityType == "merger-creators")
+  {
+    msg += "):";
+    msg.prepend("Conflate Merger Creators");
+    ts << msg << endl;
+    ts << _getApiEntitiesForMatchMergerCreators<MergerCreator>(MergerCreator::className());
+  }
+  else if (apiEntityType == "tag-mergers")
+  {
+    msg += "):";
+    msg.prepend("Tag Mergers");
+    ts << msg << endl;
+    ts << _getApiEntities<TagMerger, TagMerger>(
+      TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "string-comparators")
+  {
+    msg += "):";
+    msg.prepend("String Comparators");
+    ts << msg << endl;
+    ts << _getApiEntities<StringDistance, StringDistance>(
+      StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "subline-matchers")
+  {
+    msg += "):";
+    msg.prepend("Subline Matchers");
+    ts << msg << endl;
+    ts << _getApiEntities<SublineMatcher, SublineMatcher>(
+      SublineMatcher::className(), "subline matcher", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "subline-string-matchers")
+  {
+    msg += "):";
+    msg.prepend("Subline Matchers");
+    ts << msg << endl;
+    ts << _getApiEntities<SublineStringMatcher, SublineStringMatcher>(
+      SublineStringMatcher::className(), "subline string matcher", false, MAX_NAME_SIZE - 15);
+  }
+  else if (apiEntityType == "value-aggregators")
+  {
+    msg += "):";
+    msg.prepend("Value Aggregators");
+    ts << msg << endl;
+    ts << _getApiEntities<ValueAggregator, ValueAggregator>(
+      ValueAggregator::className(), "value aggregator", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "way-joiners")
+  {
+    msg += "):";
+    msg.prepend("Way Joiners");
+    ts << msg << endl;
+    ts << _getApiEntities<WayJoiner, WayJoiner>(
+      WayJoiner::className(), "way joiner", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "conflatable-criteria")
+  {
+    msg += "):";
+    msg.prepend("Conflatable Criteria");
+    ts << msg << endl;
+    // TODO: fix
+    ts << _getApiEntities<ElementCriterion, ConflatableElementCriterion>(
+      ElementCriterion::className(), "conflatable criteria", false, MAX_NAME_SIZE - 10);
+  }
+  return ts.readAll();
+}
+
+template<typename ApiEntity, typename ApiEntityChild>
 QString ApiEntityDisplayInfo::_getApiEntities(
   const std::string& apiEntityBaseClassName, const QString& apiEntityType,
   const bool displayType,
@@ -103,6 +291,15 @@ QString ApiEntityDisplayInfo::_getApiEntities(
     {
       throw IllegalArgumentException(
         "Calls to printApiEntities must be made with classes that implement ApiEntityInfo.");
+    }
+
+    if (ApiEntity::className() != ApiEntityChild::className())
+    {
+      std::shared_ptr<ApiEntityChild> child = std::dynamic_pointer_cast<ApiEntityChild>(apiEntity);
+      if (!child)
+      {
+        continue;
+      }
     }
 
     LOG_VARD(apiEntityInfo->getDescription());
@@ -142,7 +339,8 @@ QString ApiEntityDisplayInfo::_getApiEntities(
 // match/merger creators have a more roundabout way to get at the description, so we'll create a new
 // display method for them
 template<typename ApiEntity>
-QString ApiEntityDisplayInfo::_getApiEntities2(const std::string& apiEntityClassName)
+QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
+  const std::string& apiEntityClassName)
 {
   //the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
@@ -205,193 +403,6 @@ QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& classNam
     return "visitor";
   }
   return "";
-}
-
-QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
-{
-  LOG_TRACE("getDisplayInfoOps: " << optName);
-
-  const QString errorMsg = "Invalid config option name: " + optName;
-  if (!conf().hasKey(optName))
-  {
-    throw IllegalArgumentException(errorMsg);
-  }
-
-  const QStringList listOpt = conf().get(optName).toStringList();
-  LOG_VART(listOpt.size());
-  if (listOpt.isEmpty())
-  {
-    throw IllegalArgumentException(errorMsg);
-  }
-
-  const QStringList operations = listOpt[0].split(";");
-
-  QString buffer;
-  QTextStream ts(&buffer);
-  for (int i = 0; i < operations.size(); i++)
-  {   
-    QString className = operations[i];
-    LOG_VARD(className);
-
-    // There's a lot of duplicated code in here when compared with printApiEntities.  Haven't
-    // figured out a good way to combine the two yet.
-
-    std::shared_ptr<ApiEntityInfo> apiEntityInfo;
-    const QString apiEntityType = _apiEntityTypeForBaseClass(className);
-    std::shared_ptr<SingleStatistic> singleStat;
-    // :-( this is messy...
-    if (Factory::getInstance().hasBase<OsmMapOperation>(className.toStdString()))
-    {
-      std::shared_ptr<OsmMapOperation> apiEntity(
-        Factory::getInstance().constructObject<OsmMapOperation>(className.toStdString()));
-      apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
-      singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
-    }
-    else if (Factory::getInstance().hasBase<ElementVisitor>(className.toStdString()))
-    {
-      std::shared_ptr<ElementVisitor> apiEntity(
-        Factory::getInstance().constructObject<ElementVisitor>(className.toStdString()));
-      apiEntityInfo = std::dynamic_pointer_cast<ApiEntityInfo>(apiEntity);
-      singleStat = std::dynamic_pointer_cast<SingleStatistic>(apiEntity);
-    }
-
-    if (!apiEntityInfo.get())
-    {
-      throw HootException(
-        "Calls to getDisplayInfoOps must return a list of classes, all that implement ApiEntityInfo.");
-    }
-    const bool supportsSingleStat = singleStat.get();
-
-    QString name = className.replace("hoot::", "");
-    //append '*' to the names of visitors that support the SingleStatistic interface
-    if (supportsSingleStat)
-    {
-      name += "*";
-    }
-    const int indentAfterName = MAX_NAME_SIZE - name.size();
-    const int indentAfterType = MAX_TYPE_SIZE - apiEntityType.size();
-    QString line = "  " + name + QString(indentAfterName, ' ');
-    line += apiEntityType + QString(indentAfterType, ' ');
-    line += apiEntityInfo->getDescription();
-    ts << line << endl;
-  }
-  return ts.readAll();
-}
-
-QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
-{
-  DisableLog dl;
-  QString msg = " (prepend 'hoot::' before using";
-  QString buffer;
-  QTextStream ts(&buffer);
-  if (apiEntityType == "operators")
-  {
-    msg += "; * = implements SingleStatistic):";
-    msg.prepend("Operators");
-    ts << msg << endl;
-    ts << _getApiEntities<ElementCriterion>(
-      ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
-    ts << _getApiEntities<OsmMapOperation>(
-      OsmMapOperation::className(), "operation", true, MAX_NAME_SIZE);
-    ts << _getApiEntities<ElementVisitor>(
-      ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
-  }
-  // All of this from here on down is pretty repetitive :-(
-  else if (apiEntityType == "feature-extractors")
-  {
-    msg += "):";
-    msg.prepend("Feature Extractors");
-    ts << msg << endl;
-    ts << _getApiEntities<FeatureExtractor>(
-      FeatureExtractor::className(), "feature extractor", false, MAX_NAME_SIZE);
-  }
-  else if (apiEntityType == "matchers")
-  {
-    msg += "):";
-    msg.prepend("Matchers");
-    ts << msg << endl;
-    ts << _getApiEntities<Match>(Match::className(), "matcher", false, MAX_NAME_SIZE);
-  }
-  else if (apiEntityType == "mergers")
-  {
-    msg += "):";
-    msg.prepend("Mergers");
-    ts << msg << endl;
-    ts << _getApiEntities<Merger>(
-      Merger::className(), "merger", false, MAX_NAME_SIZE);
-  }
-  else if (apiEntityType == "match-creators")
-  {
-    msg += "):";
-    msg.prepend("Conflate Match Creators");
-    ts << msg << endl;
-    ts << _getApiEntities2<MatchCreator>(MatchCreator::className());
-  }
-  else if (apiEntityType == "merger-creators")
-  {
-    msg += "):";
-    msg.prepend("Conflate Merger Creators");
-    ts << msg << endl;
-    ts << _getApiEntities2<MergerCreator>(MergerCreator::className());
-  }
-  else if (apiEntityType == "tag-mergers")
-  {
-    msg += "):";
-    msg.prepend("Tag Mergers");
-    ts << msg << endl;
-    ts << _getApiEntities<TagMerger>(
-      TagMerger::className(), "tag merger", false, MAX_NAME_SIZE - 10);
-  }
-  else if (apiEntityType == "string-comparators")
-  {
-    msg += "):";
-    msg.prepend("String Comparators");
-    ts << msg << endl;
-    ts << _getApiEntities<StringDistance>(
-      StringDistance::className(), "string comparator", false, MAX_NAME_SIZE - 15);
-  }
-  else if (apiEntityType == "subline-matchers")
-  {
-    msg += "):";
-    msg.prepend("Subline Matchers");
-    ts << msg << endl;
-    ts << _getApiEntities<SublineMatcher>(
-      SublineMatcher::className(), "subline matcher", false, MAX_NAME_SIZE - 15);
-  }
-  else if (apiEntityType == "subline-string-matchers")
-  {
-    msg += "):";
-    msg.prepend("Subline Matchers");
-    ts << msg << endl;
-    ts << _getApiEntities<SublineStringMatcher>(
-      SublineStringMatcher::className(), "subline string matcher", false, MAX_NAME_SIZE - 15);
-  }
-  else if (apiEntityType == "value-aggregators")
-  {
-    msg += "):";
-    msg.prepend("Value Aggregators");
-    ts << msg << endl;
-    ts << _getApiEntities<ValueAggregator>(
-      ValueAggregator::className(), "value aggregator", false, MAX_NAME_SIZE - 10);
-  }
-  else if (apiEntityType == "way-joiners")
-  {
-    msg += "):";
-    msg.prepend("Way Joiners");
-    ts << msg << endl;
-    ts << _getApiEntities<WayJoiner>(
-      WayJoiner::className(), "way joiner", false, MAX_NAME_SIZE - 10);
-  }
-  else if (apiEntityType == "conflatable-criteria")
-  {
-    msg += "):";
-    msg.prepend("Conflatable Criteria");
-    ts << msg << endl;
-    // TODO: fix
-    ts << _getApiEntities<ConflatableElementCriterion>(
-      ConflatableElementCriterion::className(), "conflatable criteria", false, MAX_NAME_SIZE - 10);
-  }
-  return ts.readAll();
 }
 
 }
