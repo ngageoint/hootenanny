@@ -35,24 +35,185 @@ namespace hoot
 class AttributeValueCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AttributeValueCriterionTest);
-  CPPUNIT_TEST(runNumericTest);
-  CPPUNIT_TEST(runTextTest);
+  CPPUNIT_TEST(runNumericEqualToTest);
+  CPPUNIT_TEST(runNumericLessThanTest);
+  CPPUNIT_TEST(runNumericLessThanOrEqualToTest);
+  CPPUNIT_TEST(runNumericGreaterThanTest);
+  CPPUNIT_TEST(runNumericGreaterThanOrEqualToTest);
+  CPPUNIT_TEST(runTextEqualToTest);
+  CPPUNIT_TEST(runTextContainsTest);
+  CPPUNIT_TEST(runTextStartsWithTest);
+  CPPUNIT_TEST(runTextEndsWithTest);
+  CPPUNIT_TEST(runInvalidNumericAttributeTypeTest);
+  CPPUNIT_TEST(runInvalidTextAttributeTypeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runNumericTest()
+  void runNumericEqualToTest()
   {
-    AttributeValueCriterion uut;
+    AttributeValueCriterion uut(ElementAttributeType::Version, "1", NumericComparisonType::EqualTo);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
+    node->setVersion(1);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
+    node->setVersion(2);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 
-  void runTextTest()
+  void runNumericLessThanTest()
   {
-    AttributeValueCriterion uut;
+    AttributeValueCriterion uut(ElementAttributeType::Version, "1", NumericComparisonType::LessThan);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
+    node->setVersion(0);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
+    node->setVersion(1);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runNumericLessThanOrEqualToTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::Version, "1", NumericComparisonType::LessThanOrEqualTo);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setVersion(1);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setVersion(2);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runNumericGreaterThanTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::Version, "1", NumericComparisonType::GreaterThan);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setVersion(2);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setVersion(1);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runNumericGreaterThanOrEqualToTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::Version, "1", NumericComparisonType::GreaterThan);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setVersion(1);
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setVersion(0);
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runTextEqualToTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::User, "test1", TextComparisonType::EqualTo);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setUser("test1");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setUser("test2");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runTextContainsTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::User, "test", TextComparisonType::Contains);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setUser("test1");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setUser("blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runTextStartsWithTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::User, "test", TextComparisonType::StartsWith);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setUser("test1");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setUser("1test");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runTextEndsWithTest()
+  {
+    AttributeValueCriterion uut(
+      ElementAttributeType::User, "test", TextComparisonType::EndsWith);
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+
+    node->setUser("1test");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->setUser("test1");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runInvalidNumericAttributeTypeTest()
+  {
+    QString exceptionMsg("");
+
+    try
+    {
+      AttributeValueCriterion uut(ElementAttributeType::Uid, "1", TextComparisonType::EqualTo);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid comparison type"));
+
+    try
+    {
+      AttributeValueCriterion uut(ElementAttributeType::Version, "1", TextComparisonType::EqualTo);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid comparison type"));
+  }
+
+  void runInvalidTextAttributeTypeTest()
+  {
+    QString exceptionMsg("");
+
+    try
+    {
+      AttributeValueCriterion uut(
+        ElementAttributeType::Timestamp, "1", NumericComparisonType::EqualTo);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid comparison type"));
+
+    try
+    {
+      AttributeValueCriterion uut(ElementAttributeType::User, "1", NumericComparisonType::EqualTo);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid comparison type"));
   }
 };
 
