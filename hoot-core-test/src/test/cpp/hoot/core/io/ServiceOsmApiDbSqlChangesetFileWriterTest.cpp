@@ -38,7 +38,6 @@ class ServiceOsmApiDbSqlChangesetFileWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceOsmApiDbSqlChangesetFileWriterTest);
   CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST(runSplitTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -74,26 +73,6 @@ public:
     writer.write(_outputPath + "changeset.osc.sql", changesetProvider);
     HOOT_FILE_EQUALS(_inputPath + "changeset.osc.sql",
                     _outputPath + "changeset.osc.sql");
-  }
-
-  void runSplitTest()
-  {
-    std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(true));
-
-    //clear out the db so we get consistent next id results
-    database.open(ServicesDbTestUtils::getOsmApiDbUrl());
-    database.deleteData();
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-
-    OsmApiDbSqlChangesetFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
-    //  Set the changeset max size to 5 (half of the changes) for this test only
-    Settings testSettings = conf();
-    testSettings.set("changeset.max.size", "5");
-    writer.setConfiguration(testSettings);
-    writer.setChangesetUserId(1);
-    writer.write(_outputPath + "changeset.split.osc.sql", changesetProvider);
-    HOOT_FILE_EQUALS(_inputPath + "changeset.split.osc.sql",
-                    _outputPath + "changeset.split.osc.sql");
   }
 };
 

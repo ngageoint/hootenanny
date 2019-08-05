@@ -465,6 +465,23 @@ bool XmlChangeset::addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlN
   return false;
 }
 
+void XmlChangeset::moveOrRemoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node)
+{
+  //  Move the node from source to destination if possible, or remove it from the source
+  if (canMoveNode(source, destination, type, node))
+  {
+    //  Move the node
+    moveNode(source, destination, type, node);
+  }
+  else
+  {
+    //  Remove only the node
+    source->remove(ElementType::Node, type, node->id());
+    //  Set the node to available
+    node->setStatus(XmlElement::ElementStatus::Available);
+  }
+}
+
 bool XmlChangeset::moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node)
 {
   //  Add the node to the destination and remove from the source
@@ -571,6 +588,22 @@ bool XmlChangeset::addParentWays(ChangesetInfoPtr& changeset, const std::set<lon
     }
   }
   return sendable;
+}
+
+void XmlChangeset::moveOrRemoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way)
+{
+  if (canMoveWay(source, destination, type, way))
+  {
+    //  Move the way and anything associated
+    moveWay(source, destination, type, way);
+  }
+  else
+  {
+    //  Remove only the way from the changeset, not its nodes
+    source->remove(ElementType::Way, type, way->id());
+    //  Set the way to available
+    way->setStatus(XmlElement::ElementStatus::Available);
+  }
 }
 
 bool XmlChangeset::moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way)
@@ -727,6 +760,22 @@ bool XmlChangeset::addParentRelations(ChangesetInfoPtr& changeset, const std::se
   }
   return sendable;
 
+}
+
+void XmlChangeset::moveOrRemoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation)
+{
+  if (canMoveRelation(source, destination, type, relation))
+  {
+    //  Move the relation and anything associated
+    moveRelation(source, destination, type, relation);
+  }
+  else
+  {
+    //  Remove only the relation from the changeset, not its members
+    source->remove(ElementType::Relation, type, relation->id());
+    //  Set the relation to available
+    relation->setStatus(XmlElement::ElementStatus::Available);
+  }
 }
 
 bool XmlChangeset::moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation)
@@ -1210,19 +1259,8 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
     {
       long id = changeset->getFirst(ElementType::Relation, (ChangesetType)current_type);
       XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[id].get());
-
-      if (canMoveRelation(changeset, split, (ChangesetType)current_type, relation))
-      {
-        //  Move the relation and anything associated
-        moveRelation(changeset, split, (ChangesetType)current_type, relation);
-      }
-      else
-      {
-        //  Remove only the relation from the changeset, not its members
-        changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
-        //  Set the relation to available
-        relation->setStatus(XmlElement::ElementStatus::Available);
-      }
+      //  Move the relation to the new changeset if possible or remove it and make it available again
+      moveOrRemoveRelation(changeset, split, (ChangesetType)current_type, relation);
       //  If the split is big enough, end the operation
       if (split->size() >= splitSize)
         return split;
@@ -1236,18 +1274,8 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
     {
       long id = changeset->getFirst(ElementType::Way, (ChangesetType)current_type);
       XmlWay* way = dynamic_cast<XmlWay*>(_allWays[id].get());
-      if (canMoveWay(changeset, split, (ChangesetType)current_type, way))
-      {
-        //  Move the way and anything associated
-        moveWay(changeset, split, (ChangesetType)current_type, way);
-      }
-      else
-      {
-        //  Remove only the way from the changeset, not its nodes
-        changeset->remove(ElementType::Way, (ChangesetType)current_type, way->id());
-        //  Set the way to available
-        way->setStatus(XmlElement::ElementStatus::Available);
-      }
+      //  Move the way to the new changeset if possible or remove it and make it available again
+      moveOrRemoveWay(changeset, split, (ChangesetType)current_type, way);
       //  If the split is big enough, end the operation
       if (split->size() >= splitSize)
         return split;
@@ -1261,18 +1289,8 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
     {
       long id = changeset->getFirst(ElementType::Node, (ChangesetType)current_type);
       XmlNode* node = dynamic_cast<XmlNode*>(_allNodes[id].get());
-      if (canMoveNode(changeset, split, (ChangesetType)current_type, node))
-      {
-        //  Move the node
-        moveNode(changeset, split, (ChangesetType)current_type, node);
-      }
-      else
-      {
-        //  Remove only the node
-        changeset->remove(ElementType::Node, (ChangesetType)current_type, node->id());
-        //  Set the node to available
-        node->setStatus(XmlElement::ElementStatus::Available);
-      }
+      //  Move the node to the new changeset if possible or remove it and make it available again
+      moveOrRemoveNode(changeset, split, (ChangesetType)current_type, node);
       //  If the split is big enough, end the operation
       if (split->size() >= splitSize)
         return split;

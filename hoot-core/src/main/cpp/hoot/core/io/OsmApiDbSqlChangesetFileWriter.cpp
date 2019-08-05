@@ -43,7 +43,6 @@ namespace hoot
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
-_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
 {
@@ -106,13 +105,6 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
         _changesetBounds.expandToInclude(node->getX(), node->getY());
       }
       changes++;
-    }
-
-    if (changes > _changesetMaxSize)
-    {
-      _updateChangeset(changes);
-      _createChangeSet();
-      changes = 0;
     }
   }
 
@@ -634,7 +626,8 @@ void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString& tableName, const 
 void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
-  _changesetMaxSize = co.getChangesetMaxSize();
+  _changesetUserId = co.getChangesetUserId();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
 }
 
 }

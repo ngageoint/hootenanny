@@ -45,7 +45,6 @@ namespace hoot
 
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
-_changesetMaxSize(ConfigOptions().getChangesetMaxSize()),
 _multipleChangesetsWritten(false),
 _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
@@ -74,116 +73,97 @@ void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProvid
   LOG_VARD(path);
   LOG_VARD(cs->hasMoreChanges());
 
-  QFileInfo info(path);
-  info.setCaching(false);
-  QString file = info.baseName();
-  QString dir = info.path();
-  QString ext = info.completeSuffix();
-  int fileCount = 0;
   QString filepath = path;
 
   _initIdCounters();
 
+  long changesetProgress = 1;
+
+  LOG_INFO("Writing changeset to " << filepath);
+
+  QFile f;
+  f.setFileName(filepath);
+  if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
+  }
+
+  QXmlStreamWriter writer(&f);
+  writer.setCodec("UTF-8");
+  writer.setAutoFormatting(true);
+  writer.writeStartDocument();
+
+  writer.writeStartElement("osmChange");
+  writer.writeAttribute("version", "0.6");
+  writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
+
+  Change::ChangeType last = Change::Unknown;
+
   while (cs->hasMoreChanges())
   {
-    long changesetProgress = 1;
-    //  Create a new filepath if the file is split in multiple files because of the
-    //  changeset.max.size setting
-    //   i.e. <filepath>/<filename>-001.<ext>
-    if (fileCount > 0)
+    LOG_TRACE("Reading next XML change...");
+    _change = cs->readNextChange();
+    LOG_VART(_change.toString());
+    if (_change.getType() != last)
     {
-      filepath =
-        QString("%1/%2-%3.%4").arg(dir).arg(file).arg(fileCount, 3, 10, QChar('0')).arg(ext);
-      _multipleChangesetsWritten = true;
-    }
-    LOG_INFO("Writing changeset to " << filepath);
-
-    QFile f;
-    f.setFileName(filepath);
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-      throw HootException(QObject::tr("Error opening %1 for writing").arg(path));
-    }
-
-    QXmlStreamWriter writer(&f);
-    writer.setCodec("UTF-8");
-    writer.setAutoFormatting(true);
-    writer.writeStartDocument();
-
-    writer.writeStartElement("osmChange");
-    writer.writeAttribute("version", "0.6");
-    writer.writeAttribute("generator", HOOT_PACKAGE_NAME);
-
-    Change::ChangeType last = Change::Unknown;
-
-    while (cs->hasMoreChanges() && changesetProgress <= _changesetMaxSize)
-    {
-      LOG_TRACE("Reading next XML change...");
-      _change = cs->readNextChange();
-      LOG_VART(_change.toString());
-      if (_change.getType() != last)
+      if (last != Change::Unknown)
       {
-        if (last != Change::Unknown)
-        {
-          writer.writeEndElement();
-        }
-        switch (_change.getType())
-        {
-          case Change::Create:
-            writer.writeStartElement("create");
-            break;
-          case Change::Delete:
-            writer.writeStartElement("delete");
-            break;
-          case Change::Modify:
-            writer.writeStartElement("modify");
-            break;
-          case Change::Unknown:
-            //see comment in ChangesetDeriver::_nextChange() when
-            //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
-            break;
-          default:
-            throw IllegalArgumentException("Unexpected change type.");
-        }
-        last = _change.getType();
-        LOG_VART(last);
+        writer.writeEndElement();
       }
-
-      if (_change.getType() != Change::Unknown)
+      switch (_change.getType())
       {
-        ElementType::Type type = _change.getElement()->getElementType().getEnum();
-        switch (type)
-        {
-          case ElementType::Node:
-            _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
-            break;
-          case ElementType::Way:
-            _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
-            break;
-          case ElementType::Relation:
-            _writeRelation(
-              writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
-            break;
-          default:
-            throw IllegalArgumentException("Unexpected element type.");
-        }
-        changesetProgress++;
-        //  Update the stats
-        _stats(last, type)++;
+        case Change::Create:
+          writer.writeStartElement("create");
+          break;
+        case Change::Delete:
+          writer.writeStartElement("delete");
+          break;
+        case Change::Modify:
+          writer.writeStartElement("modify");
+          break;
+        case Change::Unknown:
+          //see comment in ChangesetDeriver::_nextChange() when
+          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+          break;
+        default:
+          throw IllegalArgumentException("Unexpected change type.");
       }
+      last = _change.getType();
+      LOG_VART(last);
     }
 
-    if (last != Change::Unknown)
+    if (_change.getType() != Change::Unknown)
     {
-      writer.writeEndElement();
+      ElementType::Type type = _change.getElement()->getElementType().getEnum();
+      switch (type)
+      {
+        case ElementType::Node:
+          _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
+          break;
+        case ElementType::Way:
+          _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
+          break;
+        case ElementType::Relation:
+          _writeRelation(
+            writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
+          break;
+        default:
+          throw IllegalArgumentException("Unexpected element type.");
+      }
+      changesetProgress++;
+      //  Update the stats
+      _stats(last, type)++;
     }
-    writer.writeEndElement();
-    writer.writeEndDocument();
-
-    f.close();
-    //  Increment the file number if needed for split files
-    fileCount++;
   }
+
+  if (last != Change::Unknown)
+  {
+    writer.writeEndElement();
+  }
+  writer.writeEndElement();
+  writer.writeEndDocument();
+
+  f.close();
 }
 
 void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
@@ -379,7 +359,6 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();
-  _changesetMaxSize = co.getChangesetMaxSize();
 }
 
 void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
