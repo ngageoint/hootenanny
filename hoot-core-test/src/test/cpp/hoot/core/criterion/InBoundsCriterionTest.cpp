@@ -28,6 +28,9 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 namespace hoot
 {
@@ -43,24 +46,84 @@ class InBoundsCriterionTest : public HootTestFixture
 
 public:
 
+  InBoundsCriterionTest() :
+  HootTestFixture(
+    "test-files/criterion/InBoundsCriterion", "test-output/criterion/InBoundsCriterion")
+  {
+  }
+
   void runInBoundsStrictTest()
   {
+    geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/runInBoundsStrictTest-bounds.osm");
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
+    InBoundsCriterion uut(true);
+    uut.setBounds(bounds);
+    uut.setOsmMap(map.get());
+
+    // both elements completely within the bounding box
+    CPPUNIT_ASSERT(uut.isSatisfied(map->getNode(-1669781)));
+    CPPUNIT_ASSERT(uut.isSatisfied(map->getWay(-1669799)));
   }
 
   void runInBoundsLenientTest()
-  {
+  {   
+    geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/runInBoundsLenientTest-bounds.osm");
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
+    InBoundsCriterion uut(false);
+    uut.setBounds(bounds);
+    uut.setOsmMap(map.get());
+
+    // node within the bounding box
+    CPPUNIT_ASSERT(uut.isSatisfied(map->getNode(-1669781)));
+    // way crosses the bounding box
+    CPPUNIT_ASSERT(uut.isSatisfied(map->getWay(-1669797)));
   }
 
   void runOutOfBoundsStrictTest()
-  {
+  {    
+    geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/runOutOfBoundsStrictTest-bounds.osm");
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
+    InBoundsCriterion uut(true);
+    uut.setBounds(bounds);
+    uut.setOsmMap(map.get());
+
+    // node completely outside the bounding box
+    CPPUNIT_ASSERT(!uut.isSatisfied(map->getNode(-1669783)));
+    // way crosses the bounding box
+    CPPUNIT_ASSERT(!uut.isSatisfied(map->getWay(-1669797)));
   }
 
   void runOutOfBoundsLenientTest()
-  {
+  { 
+    geos::geom::Envelope bounds(-104.90002, -104.89934, 38.85413, 38.85523);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/runOutOfBoundsLenientTest-bounds.osm");
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
+    InBoundsCriterion uut(false);
+    uut.setBounds(bounds);
+    uut.setOsmMap(map.get());
+
+    // both elements completely outside the bounding box
+    CPPUNIT_ASSERT(!uut.isSatisfied(map->getNode(-1669783)));
+    CPPUNIT_ASSERT(!uut.isSatisfied(map->getWay(-1669799)));
   }
 };
 
