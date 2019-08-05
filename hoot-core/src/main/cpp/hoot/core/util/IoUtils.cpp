@@ -36,6 +36,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 
 // Qt
 #include <QFileInfo>
@@ -135,12 +138,20 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   MapCropper cropper(bounds);
   LOG_INFO(cropper.getInitStatusMessage());
-  // We don't reuse MapCropper's version of these options, since we want the freedom to have
-  // different default values than what MapCropper uses.
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
   cropper.setKeepOnlyFeaturesInsideBounds(
     ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+  ElementCriterionPtr inclusionCrit;
+  if (ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
+  {
+    inclusionCrit.reset(
+      new ChainCriterion(
+        std::shared_ptr<WayCriterion>(new WayCriterion()),
+        std::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+  }
+  cropper.setInclusionCriterion(inclusionCrit);
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 }

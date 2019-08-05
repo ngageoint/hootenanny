@@ -224,6 +224,9 @@ void MapCropper::apply(OsmMapPtr& map)
     throw HootException("If the node bounds is set the projection must be geographic.");
   }
 
+  // TODO:
+  //_inclusionCrit
+
   LOG_DEBUG("Cropping ways...");
 
   // go through all the ways

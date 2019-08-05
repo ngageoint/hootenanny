@@ -106,8 +106,10 @@ void ChangesetReplacementCreator::create(
 
   // Load the ref dataset and crop to the specified aoi.
   OsmMapPtr refMap = _loadRefMap(input1);
-  // want to alert the user to the fact their ref versions *could* be being populated incorectly
-  // to avoid difficulties during changeset application down the line
+  // We want to alert the user to the fact their ref versions *could* be being populated incorectly
+  // to avoid difficulties during changeset application at the end. Its likely if they are
+  // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
+  // now to give the chance to back out earlier.
   const int numberOfRefElementsWithVersionLessThan1 = _versionLessThanOneCount(refMap);
   if (numberOfRefElementsWithVersionLessThan1 > 0)
   {
@@ -159,7 +161,8 @@ void ChangesetReplacementCreator::create(
   if (_isLinearCrit(featureTypeFilterClassName))
   {
     // Snap secondary features back to reference features if dealing with linear features where
-    // ref features may have been cut along the bounds.
+    // ref features may have been cut along the bounds. We're being lenient here by snapping
+    // secondary to reference *and* allowing conflated data to be snapped to either dataset.
     _snapUnconnectedWays(
       conflatedMap, "Input2;Conflated", "Input1;Conflated", featureTypeFilterClassName, false,
       "conflated-snapped-sec-to-ref-1");
@@ -191,8 +194,10 @@ void ChangesetReplacementCreator::create(
   {
     // The non-strict way replacement workflow benefits from a second snapping run right before
     // changeset derivation due to there being ways connected to replacement ways that fall
-    // completely outside of the bounds. Joining after this snapping caused changeset errors with
-    // some datasets and hasn't seem to be needed for now...so skipping it.
+    // completely outside of the bounds. However, joining after this snapping caused changeset
+    // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
+    // we're being as lenient as possible with the snapping here, allowing basically anything to
+    // join to anything else...could end up causing problems...but we'll go with it for now.
     _snapUnconnectedWays(
       conflatedMap, "Input2;Conflated;Input1", "Input1;Conflated;Input2",
       featureTypeFilterClassName, false, "conflated-snapped-sec-to-ref-2");
@@ -587,14 +592,14 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
                                                    const QString& critClassName,
                                                    const QString& boundsStr)
 {
-  // changeset and db opts should have already been set when calling this command
-
   // global opts
 
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+  // For this being enabled to have any effect,
+  // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
   conf().set(ConfigOptions::getApidbReaderTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // dataset specific opts

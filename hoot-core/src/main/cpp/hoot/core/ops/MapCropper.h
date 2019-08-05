@@ -39,6 +39,7 @@
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -96,6 +97,7 @@ public:
   void setInvert(bool invert);
   void setKeepEntireFeaturesCrossingBounds(bool keep);
   void setKeepOnlyFeaturesInsideBounds(bool keep);
+  void setInclusionCriterion(const ElementCriterionPtr& crit) { _inclusionCrit = crit; }
 
 private:
 
@@ -110,6 +112,8 @@ private:
   // If true, will only keep features falling completely inside the specified bounds. This overrides
   // _keepEntireFeaturesCrossingBounds and sets it to false;
   bool _keepOnlyFeaturesInsideBounds;
+  // TODO
+  ElementCriterionPtr _inclusionCrit;
 
   int _statusUpdateInterval;
 

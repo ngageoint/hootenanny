@@ -564,6 +564,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
   { 
+    // We've already handled keeping immediately connected oob ways during the query, so don't need
+    // to worry about it here.
     IoUtils::cropToBounds(map, _bounds);
   }
 
