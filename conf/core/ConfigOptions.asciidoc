@@ -220,6 +220,8 @@ If enabled, all ways that are outside of the bounds specified by convert.boundin
 performing a bounded API database query but are immediately connected to a way that falls within or
 crosses the bounds are tagged with a custom tag.
 
+TODO: remove "apidb." from the front of this when implementing it for #3376
+
 === arff.writer.precision
 
 * Data Type: int

@@ -124,10 +124,6 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
     input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength) + "...");
 
-  // Allow for a buffer around the AOI where the changeset derivation is to occur, if there is an
-  // AOI.
-  //_parseBuffer();
-
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
   //sortedElements2 is the newer state of the data
