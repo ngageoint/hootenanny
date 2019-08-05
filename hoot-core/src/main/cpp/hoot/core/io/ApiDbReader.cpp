@@ -564,7 +564,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
   { 
-    IoUtils::cropInputToBounds(map, _bounds);
+    IoUtils::cropToBounds(map, _bounds);
   }
 
   LOG_DEBUG("Current map:");

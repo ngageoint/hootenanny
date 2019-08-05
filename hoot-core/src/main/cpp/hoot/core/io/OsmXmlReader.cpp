@@ -362,7 +362,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
-    IoUtils::cropInputToBounds(_map, _bounds);
+    IoUtils::cropToBounds(_map, _bounds);
   }
 
   ReportMissingElementsVisitor visitor;

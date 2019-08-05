@@ -130,7 +130,7 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropInputToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
+void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   MapCropper cropper(bounds);

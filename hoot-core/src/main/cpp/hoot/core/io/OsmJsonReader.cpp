@@ -185,7 +185,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   // See related note in OsmXmlReader::read.
   if (!_bounds.isNull())
   {
-    IoUtils::cropInputToBounds(_map, _bounds);
+    IoUtils::cropToBounds(_map, _bounds);
   }
 }
 
@@ -240,7 +240,7 @@ OsmMapPtr OsmJsonReader::loadFromString(const QString& jsonStr)
   _parseOverpassJson();
   if (!_bounds.isNull())
   {
-    IoUtils::cropInputToBounds(_map, _bounds);
+    IoUtils::cropToBounds(_map, _bounds);
   }
   return _map;
 }
@@ -252,7 +252,7 @@ OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
   _parseOverpassJson();
   if (!_bounds.isNull())
   {
-    IoUtils::cropInputToBounds(_map, _bounds);
+    IoUtils::cropToBounds(_map, _bounds);
   }
   return _map;
 }
@@ -272,7 +272,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   _parseOverpassJson();
   if (!_bounds.isNull())
   {
-    IoUtils::cropInputToBounds(_map, _bounds);
+    IoUtils::cropToBounds(_map, _bounds);
   }
   return _map;
 }

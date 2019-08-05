@@ -85,12 +85,12 @@ public:
   static void saveMap(const OsmMapPtr& map, const QString& path);
 
   /**
-   * TODO
+   * Crops a map to a given bounds
    *
-   * @param map
-   * @param bounds
+   * @param map the map to crop
+   * @param bounds the bounds to crop to
    */
-  static void cropInputToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds);
+  static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds);
 };
 
 }
