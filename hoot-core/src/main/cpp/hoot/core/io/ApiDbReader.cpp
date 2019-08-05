@@ -299,6 +299,9 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
 
   if (wayIds.size() > 0)
   {
+    // If the appropriate option is enabled, here we'll add the IDs of all ways that fall outside
+    // of the requested bounds but are directly connected to a way that is being returned by the
+    // query.
     QSet<QString> connectedWayIds;
     LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
     if (ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
@@ -321,6 +324,8 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     while (wayItr->next())
     {
       WayPtr way = _resultToWay(*wayItr, *map);
+      // If the appropriate option is enabled, we'll tag the connected out of bounds ways that we
+      // just identified. This may be helpful later when creating replacement changesets.
       if (tagConnectedWays && connectedWayIds.contains(QString::number(way->getId())))
       {
         way->getTags().set(MetadataTags::HootConnectedWayOutsideBounds(), "yes");
