@@ -4,8 +4,10 @@ set -e
 # Wholesale Road Replacement Workflow
 #
 # This test is lenient regarding the AOI, in that it will modify some features in the ref data that extend outside of it. Secondary features
-# crossing the AOI will completely replace corresponding reference features crossing the AOI. This workflow could work for other linear 
-# data types but only roads have been tested so far.
+# crossing the AOI will completely replace corresponding reference features crossing the AOI. 
+
+# Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and 
+# re-created when they should have been modified. This workflow could work for other linear data types but only roads have been tested so far.
 
 TEST_NAME=ServiceRoadReplacementTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
