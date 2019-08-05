@@ -51,7 +51,8 @@ mgcp.rules = {
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
     ['F_CODE','AA050','man_made','water_well'], // Well - NFDD BH230 or AA054
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
-    ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
+    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
+    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
@@ -65,7 +66,6 @@ mgcp.rules = {
     ['F_CODE','BB230','wall','seawall'], // Seawall - NFDD BB081
     ['F_CODE','BB240','leisure','slipway'], // Slipway - NFDD BB082
     ['F_CODE','BD110','man_made','offshore_construction'], // Offshore Platform - NFDD BD115
-    ['F_CODE','BH050','place','marine_farm'], // Mariculture Site - NFDD BH051
     ['F_CODE','BH060','water:race','flume'], // Flume - NFDD BH065
     ['F_CODE','BH080','water','lake'], // Lake - NFDD BH082
     ['F_CODE','BH130','man_made','reservoir'], // Reservoir - NFDD BH082
@@ -83,7 +83,7 @@ mgcp.rules = {
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
-    ['F_CODE','AH050','historic','castle'], // Fortification
+    ['F_CODE','AH050','historic','castle'], // Fortification - Not great
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
     ['F_CODE','AK040','sport','soccer'], // From OSM
@@ -93,6 +93,7 @@ mgcp.rules = {
     ['F_CODE','AK120','leisure','playground'], // Park
     ['F_CODE','AK170','amenity','swimming_pool'], // Pool
     ['F_CODE','AL015','building','yes'], // To fix amenity etc
+    ['F_CODE','AL015','information','office'], // Tourism Office
     ['F_CODE','AL015','man_made','depot'],
     ['F_CODE','AL015','tourism','hotel'], // To fix amenity etc
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
@@ -101,6 +102,7 @@ mgcp.rules = {
     // ['F_CODE','AL105','place','village'], // From OSM
     // ['F_CODE','AL105','place','hamlet'], // From OSM
     // ['F_CODE','AL105','place','isolated_dwelling'], // From OSM
+    ['F_CODE','AL130','historic','memorial'],
     ['F_CODE','AL130','tourism','attraction'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // MGCP does not have AT011 (Aerial)
@@ -190,10 +192,10 @@ mgcp.rules = {
     'HGT':'height',  // Height Above Surface Level
     'KVA':'voltage',  // Power Line Maximum Voltage
     'LBV':'waterway:bank2:cover', // Left Bank Vegetation Cover
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LEN':'length', // Length or Diameter
     'LNU':'length:interior_useable',  // Usable Length
     'LTN':'lanes', // Track or Lane Count
@@ -381,14 +383,14 @@ mgcp.rules = {
     ['CSP','999','crop','other'], // Other 
 
     // EET - Engineered Earthwork Type 
-    // ['EET','0','earthwork:type','unknown'], // Unknown
+    // ['EET','0','trench','unknown'], // Unknown
     ['EET','0',undefined,undefined], // Unknown
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3','military','trench'], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // FAC - Solid Maritime Construction 
     // ['FAC','0','raw:FAC','unknown'], // Unknown 
@@ -2358,9 +2360,23 @@ mgcp.rules = {
     ['FFN','919','building','stable'],
     ['FFN','811','amenity','public_building'], // Not good - Government
     ['FFN','481','amenity','bus_station'], // Not good - terminal
-    ['FFN','440','shop','butcher'], // Could do a custom rule to handle shop=*
-    ['FFN','440','shop','clothes'],
     ['FFN','999','amenity','arts_centre'], // Nothing close to this, going with Other
+
+    // Office: Things that are not "commerce"
+    ['FFN','720','office','research'], // Scientific R&D
+    ['FFN','810','office','association'], // Administrative
+    ['FFN','810','office','educational_institution'], // Administrative
+    ['FFN','810','office','religion'], // Administrative
+    ['FFN','810','office','foundation'], // Administrative
+    ['FFN','825','office','diplomatic'], // Diplomacy
+    ['FFN','841','office','police'], // Law Enforcement
+    ['FFN','859','office','ngo'], // Institution
+    ['FFN','859','office','charity'], // Institution
+    ['FFN','860','office','physician'], // Human Health 
+    ['FFN','860','office','therapist'], // Human Health 
+    ['FFN','860','office','medical'], // Human Health 
+
+    ['FFN','440','information','office'], // Commerce - Tourist information as a "service" 
 
     // UFD
     ['FFN','192','industrial','oil_gas_facility'],
@@ -2381,8 +2397,8 @@ mgcp.rules = {
     ['FFN','850','use','education'],
     ['FFN','850','amenity','school'],
     ['FFN','850','amenity','kindergarten'],
-    ['FFN','855','amenity','college'],
-    ['FFN','855','amenity','university'],
+    ['FFN','850','amenity','college'],
+    ['FFN','850','amenity','university'],
 
       ], // End one2oneOut
 

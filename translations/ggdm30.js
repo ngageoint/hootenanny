@@ -503,8 +503,8 @@ ggdm30 = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], ggdm30.rules.numBiased, 'backward',ggdm30.rules.intList);
-            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], ggdm30.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], ggdm30.rules.numBiased,'backward',ggdm30.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], ggdm30.rules.txtBiased,'backward');
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], ggdm30.lookup, ggdm30.fcodeLookup);
@@ -548,7 +548,7 @@ ggdm30 = {
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
         // List of data values to drop/ignore
-        var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
+        var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
         // List of attributes that can't have '0' as a value
         var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
@@ -558,7 +558,7 @@ ggdm30 = {
         // 2) Convert all of the Attrs to uppercase - if needed
        for (var col in attrs)
         {
-            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // slightly ugly but we would like to account for: 'No Information','noInformation' etc
             // First, push to lowercase
             var attrValue = attrs[col].toString().toLowerCase();
 
@@ -1291,31 +1291,12 @@ ggdm30 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // // Some tags imply that they are buildings but don't actually say so
-        // // Most of these are taken from raw OSM and the OSM Wiki
-        // // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // // are not buildings
-        // // Taking "place_of_worship" out of this and making it a building
-        // // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
-        // var notBuildingList = [
-        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-        //     'trailer_park','game_feeding','fuel', 'ferry_terminal'
-        //     ]; // End notBuildingList
-
-        // if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
-
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
         // - Amenity == The area around a thing
         // Note: amenity=place_of_worship is a special case. It _should_ have an associated building tag
         var facilityList = {
-            'school':'850', 'university':'855', 'college':'857', 'hospital':'860'
+            'school':'850','university':'855','college':'857','hospital':'860'
             };
 
         if (tags.amenity in facilityList)
@@ -1560,14 +1541,13 @@ ggdm30 = {
         // Taking "place_of_worship" out of this and making it a building
         // NOTE: fuel is it's own FCODE so it is not on the AL013 (Building) list
         var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','fuel', 'ferry_terminal'
+            'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+            'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+            'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+            'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+            'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+            'waste_basket','waste_disposal','water','water_point','watering_place','yes',
+            'fuel' // NOTE: Fuel goes to a different F_CODE
             ]; // End notBuildingList
 
         if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
@@ -1576,10 +1556,12 @@ ggdm30 = {
         if (!attrs.F_CODE)
         {
             var fcodeMap = {
-                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
-                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
-                'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
-                'mine:access':'AA010', 'tomb':'AL036'
+                'highway':'AP030','railway':'AN010','building':'AL013','ford':'BH070',
+                'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
+                'barrier':'AP040','tourism':'AL013','junction':'AP020',
+                'mine:access':'AA010','tomb':'AL036',
+                'shop':'AL015','office':'AL015'
+
                            };
 
             for (var i in fcodeMap)
@@ -1591,11 +1573,11 @@ ggdm30 = {
         // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly
         var pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];
 
-        var vcmList = [ 'AA040', 'AC020', 'AD010', 'AD025', 'AD030', 'AD041', 'AD050', 'AF010',
-                        'AF020', 'AF021', 'AF030', 'AF040', 'AF070', 'AH055', 'AJ050', 'AJ051',
-                        'AJ080', 'AJ085', 'AL010', 'AL013', 'AL019', 'AL080', 'AM011', 'AM020',
-                        'AM030', 'AM070', 'AN076', 'AQ040', 'AQ045', 'AQ060', 'AQ116', 'BC050',
-                        'BD115', 'BI010', 'BI050', 'GB230' ];
+        var vcmList = [ 'AA040','AC020','AD010','AD025','AD030','AD041','AD050','AF010',
+                        'AF020','AF021','AF030','AF040','AF070','AH055','AJ050','AJ051',
+                        'AJ080','AJ085','AL010','AL013','AL019','AL080','AM011','AM020',
+                        'AM030','AM070','AN076','AQ040','AQ045','AQ060','AQ116','BC050',
+                        'BD115','BI010','BI050','GB230' ];
 
         if (tags.material)
         {
@@ -1766,6 +1748,15 @@ ggdm30 = {
             }
         } // End if religion & denomination
 
+        // Names. Sometimes we don't have a name but we do have language ones 
+        if (!tags.name)
+        {
+            if (tags['name:en']) 
+            {
+                tags.name = tags['name:en'];
+                delete tags['name:en'];
+            }
+        }
     }, // End applyToOgrPreProcessing
 
 // #####################################################################################################
@@ -2149,8 +2140,8 @@ ggdm30 = {
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-        translate.applySimpleNumBiased(notUsedAttrs, tags, ggdm30.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(notUsedAttrs, tags, ggdm30.rules.txtBiased, 'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, ggdm30.rules.numBiased,'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags, ggdm30.rules.txtBiased,'forward');
 
         // one 2 one
         //translate.applyOne2One(notUsedAttrs, tags, ggdm30.lookup, {'k':'v'});
@@ -2297,8 +2288,8 @@ ggdm30 = {
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
         // NOTE: These delete tags as they are used
-        translate.applySimpleNumBiased(attrs, notUsedTags, ggdm30.rules.numBiased, 'backward',ggdm30.rules.intList);
-        translate.applySimpleTxtBiased(attrs, notUsedTags, ggdm30.rules.txtBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, notUsedTags, ggdm30.rules.numBiased,'backward',ggdm30.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags, ggdm30.rules.txtBiased,'backward');
 
         // Apply the fuzzy rules
         // NOTE: This deletes tags as they are used

@@ -249,10 +249,10 @@ tds61.rules = {
     'HGT':'height', // Height Above Surface Level
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'KVA':'voltage', // Power Line Maximum Voltage
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LCA':'crane:lifting_capacity', // Lifting Capacity
     'LDC':'length:crest', // Dam Crest Length
     'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
@@ -1104,12 +1104,12 @@ tds61.rules = {
 
     // EET - Engineered Earthwork Type
     // ['EET','-999999',undefined,undefined], // No Information
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3',undefined,undefined], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // EQC - Equivalent Scale Category
     // ['EQC','noInformation',undefined,undefined], // No Information
@@ -1628,13 +1628,13 @@ tds61.rules = {
 
     // FZR - Fortified Building Type
     // ['FZR','-999999',undefined,undefined], // No Information
-    ['FZR','1','fortified:type','blockhouse'], // Blockhouse
-    ['FZR','2','fortified:type','casement'], // Casement
-    ['FZR','3','fortified:type','keep'], // Keep
-    ['FZR','4','fortified:type','martello_tower'], // Martello Tower
-    ['FZR','5','fortified:type','non-specific_fortified'], // Non-specific Fortified
-    ['FZR','6','fortified:type','pillbox'], // Pillbox
-    ['FZR','999','fortified:type','other'], // Other
+    ['FZR','1','bunker_type','blockhouse'], // Blockhouse
+    ['FZR','2','bunker_type','casement'], // Casement
+    ['FZR','3','bunker_type','keep'], // Keep
+    ['FZR','4','bunker_type','martello_tower'], // Martello Tower
+    ['FZR','5','bunker_type','non-specific_fortified'], // Non-specific Fortified
+    ['FZR','6','bunker_type','pillbox'], // Pillbox
+    ['FZR','999','bunker_type','other'], // Other
 
     // GFT - Geologic Fault Trace Visible
     // ['GFT','-999999',undefined,undefined], // No Information
@@ -3973,8 +3973,6 @@ tds61.rules = {
     ['ZI014_PPO','2','product','aluminum'], // Aluminum
     ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
 
-    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
-
     // Extra road stuff - see similarTable
     // ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
     // ['ZI016_ROC','3','surface','unpaved'], // Stabilized earth
@@ -4220,7 +4218,6 @@ tds61.rules = {
     ],
     // ##### End of fCodeMap #####
 
-
     // ##### Start of closureList #####
     closureList : {
     'AQTC':['AQTL','AQTU'],
@@ -4314,7 +4311,6 @@ tds61.rules = {
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'},
     'ZI026':{'ZI026_SUR':'SUR'}
     },
-
     // ##### End of swapListOut #####
 
     // ##### Start of txtLength #####

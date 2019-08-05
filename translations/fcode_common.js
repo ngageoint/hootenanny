@@ -79,8 +79,8 @@ fcodeCommon = {
       ['F_CODE','AG030','shop','mall'], // Shopping Complex
       ['F_CODE','AG040','landuse','commercial'], // Office Park
       ['F_CODE','AG050','advertising','billboard'], // Billboard
-      ['F_CODE','AH025','earthwork','yes'], // Engineered Earthwork
-      ['F_CODE','AH055','fortified','yes'], // Fortified Building
+      ['F_CODE','AH025','military','trench'], // Engineered Earthwork
+      ['F_CODE','AH055','military','bunker'], // Fortified Building
       ['F_CODE','AH060','building','underground_shelter'], // Underground Bunker
       ['F_CODE','AH070','barrier','check_point'], // Checkpoint
       ['F_CODE','AI020','tourism','caravan_site'], // Caravan Park
@@ -225,7 +225,7 @@ fcodeCommon = {
       ['F_CODE','AQ180','man_made','weigh_station'], // Weigh Station
       ['F_CODE','AT005','cable','yes'], // Cable
       ['F_CODE','AT010','landmark','dish_aerial'], // Dish Aerial
-      ['F_CODE','AT011','man_made','mast'], // Aerial
+      ['F_CODE','AT011','man_made','antenna'], // Aerial
       ['F_CODE','AT012','landuse','aerial_farm'], // Aerial Farm
       ['F_CODE','AT041','cableway','yes'], // Cableway
       ['F_CODE','AT042','pylon','yes'], // Pylon
@@ -237,7 +237,7 @@ fcodeCommon = {
       ['F_CODE','BA040','water','tidal'], // Tidal Water
       ['F_CODE','BA050','natural','beach'], // GGDM3/NAS7 Beach
       ['F_CODE','BB005','landuse','harbour'], // Harbor, Harbour
-      ['F_CODE','BB008','harbour','yes'], // GGDM3/NAS7 HARBOUR_WATERS
+      ['F_CODE','BB008','harbour:waters','yes'], // GGDM3/NAS7 HARBOUR_WATERS
       ['F_CODE','BB009','landuse','port'], // Port
       ['F_CODE','BB010','seamark:type','anchorage'], // GGDM3/NAS7 Anchorage
       ['F_CODE','BB019','man_made','anchor'], // GGDM3/NAS7 ANCHOR
@@ -360,7 +360,7 @@ fcodeCommon = {
       ['F_CODE','DB190','natural','volcanic_dyke'], // Volcanic Dyke
       ['F_CODE','DB211','natural','slide'], // Landslide Mass
       ['F_CODE','EA010','landuse','farmland'], // Crop Land
-      ['F_CODE','EA020','natural','hedgerow'], // Hedgerow
+      ['F_CODE','EA020','barrier','hedge'], // Hedgerow
       ['F_CODE','EA030','landuse','plant_nursery'], // Plant Nursery
       ['F_CODE','EA031','garden:type','botanical'], // Botanical Garden
       ['F_CODE','EA040','landuse','orchard'], // Orchard/Plantation
@@ -407,7 +407,7 @@ fcodeCommon = {
       ['F_CODE','GB035','aeroway','heliport'], // Heliport
       ['F_CODE','GB040','aeroway','launchpad'], // Launch Pad
       ['F_CODE','GB045','aeroway','stopway'], // Overrun/Stopway
-      ['F_CODE','GB050','military:revetment','yes'], // Aircraft/Defensive Revetment
+      ['F_CODE','GB050','military','revetment'], // Aircraft/Defensive Revetment
       ['F_CODE','GB055','aeroway','runway'], // Runway
       ['F_CODE','GB056','aeroway','runway_endpoint'], // Runway Endpoint - Valid NFDD Not in TDS
       ['F_CODE','GB065','amenity','seaplane_terminal'], // Seaplane Base, Water Aerodrome
