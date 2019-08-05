@@ -276,6 +276,9 @@ private:
    */
   bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
 
+  /*
+   * @see WayJoinerAdvanced
+   */
   long _getPid(const ConstWayPtr& way) const;
 };
 

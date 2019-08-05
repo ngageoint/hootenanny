@@ -89,9 +89,6 @@ void WayJoinerAdvanced::_joinParentChild()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
-//    if (way->hasPid())
-//      ids.push_back(way->getId());
-    // TODO: hack
     if (_hasPid(way))
     {
       LOG_TRACE(
@@ -177,13 +174,6 @@ void WayJoinerAdvanced::_joinAtNode()
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       WayPtr way = it->second;
-//      if (way->hasPid())
-//      {
-//        LOG_TRACE(
-//          "Adding " << way->getElementId() << " with split parent id: " << way->getPid() << "...");
-//        ids.insert(way->getId());
-//      }
-      // TODO: hack
       if (_hasPid(way))
       {
         LOG_TRACE(

@@ -95,6 +95,12 @@ protected:
   virtual void _determineKeeperFeatureForId(WayPtr parent, WayPtr child, WayPtr& keeper,
                                             WayPtr& toRemove) const;
 
+  /*
+   * These accessors have been added to appease the ReplacementSnappedWayJoiner used by
+   * ChangesetReplacementCreator. Without them there is difficulty in tracking provenance of
+   * modified ways. I believe with some further work they eventually can go away (see related
+   * method in UnconnectedWaySnapper as well.
+   */
   virtual bool _hasPid(const ConstWayPtr& way) const;
   virtual long _getPid(const ConstWayPtr& way) const;
 

@@ -284,9 +284,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
             LOG_TRACE(
               "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
 
-            // retain the parent id of the snapped to way
-            // TODO: I believe we can get rid of this custom _getPid method now that the replacement
-            // workflow sets up the way joiner to retain them after conflation.
+            // retain the parent id of the snapped to way; See related notes in WayJoinerAdvanced
             const long pid = _getPid(_snappedToWay);
             if (pid != WayData::PID_EMPTY)
             {
