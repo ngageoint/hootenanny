@@ -4,10 +4,12 @@
 === Description
 
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets within 
-a given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. Generally, the
-reference data is sourced from an authoritative data store, like an OSM API database. The changeset derivation algorithm avoids unnecessary
-clipping of features and stitches up areas where features must be clipped. The output changeset file can be applied directly to an OSM API 
-database or the Rails Port with the +changeset-apply+ command.
+a given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. 
+
+Generally, the reference data is sourced from an authoritative data store, like an OSM API database and ideally is slightly larger than the
+replacement AOI, so as not to drop features from the output. The changeset derivation algorithm avoids unnecessary clipping of features and 
+stitches up areas where features must be clipped. The output changeset file can be applied directly to an OSM API database or the Rails Port 
+with the +changeset-apply+ command.
 
 Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
 the second input (secondary dataset) are not retained and treated as completely new data. 

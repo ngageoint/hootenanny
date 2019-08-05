@@ -318,7 +318,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  // clear node id maps in case the reader is used for mulitple files
+  // clear node id maps in case the reader is used for multiple files
   _nodeIdMap.clear();
   _relationIdMap.clear();
   _wayIdMap.clear();
