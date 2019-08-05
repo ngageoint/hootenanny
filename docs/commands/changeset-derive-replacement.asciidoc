@@ -50,8 +50,9 @@ hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::
 
 === Type Filtering
 
-Currently, only one criterion may be specified per feature filter and at least one must always be specified. Future work may allow for 
-specifying no filter or multiple criteria per filter. To see a list of valid conflatable element criteria for use as a feature filter:
+Currently, only one criterion may be specified per feature filter and at least one must always be specified. Future work will allow for 
+specifying no filter or multiple criteria per filter (https://github.com/ngageoint/hootenanny/issues/3360). To see a list of valid 
+conflatable element criteria for use as a feature filter:
 -----
 hoot info --conflatable-criteria
 -----
@@ -107,6 +108,11 @@ For Overpass API queries, add "out meta" to the query retrieving the reference d
 === Unsupported Formats
 
 GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
+
+=== Caveats
+
+The lenient AOI linear replacement workflow does not completely work at this time with OSM XML or JSON inputs, as some features outside of the
+AOI may be dropped. https://github.com/ngageoint/hootenanny/issues/3376 will fix this.
 
 === See Also
 
