@@ -420,9 +420,8 @@ public class GrailResource {
                 }
             }
 
-            // In the derivechangeset endpoint we format the jobId as "grail_mapId_{id}_uuid" as an indicator to trigger as rails port refresh
-            String[] jobIdInfo = jobDir.split("_");
-            if(jobIdInfo.length > 2) {
+            // In the derivechangeset endpoint we format the jobId as "grail_mapId_{id}_uuid" as an indicator to trigger a rails port refresh
+            if(jobDir.split("_").length > 2) {
                 // Setup workflow to refresh rails data after the push
                 long mapId = Long.parseLong(jobDir.split("_")[2]);
                 Map<String, String> mapTags = DbUtils.getMapsTableTags(mapId);
