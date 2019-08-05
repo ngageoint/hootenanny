@@ -52,7 +52,7 @@ public:
 
   void runNumericEqualToTest()
   {
-    AttributeValueCriterion uut(ElementAttributeType::Version, "1", NumericComparisonType::EqualTo);
+    AttributeValueCriterion uut(ElementAttributeType::Version, 1.0, NumericComparisonType::EqualTo);
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->setVersion(1);
@@ -64,7 +64,7 @@ public:
 
   void runNumericLessThanTest()
   {
-    AttributeValueCriterion uut(ElementAttributeType::Version, "1", NumericComparisonType::LessThan);
+    AttributeValueCriterion uut(ElementAttributeType::Version, 1.0, NumericComparisonType::LessThan);
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->setVersion(0);
@@ -77,7 +77,7 @@ public:
   void runNumericLessThanOrEqualToTest()
   {
     AttributeValueCriterion uut(
-      ElementAttributeType::Version, "1", NumericComparisonType::LessThanOrEqualTo);
+      ElementAttributeType::Version, 1.0, NumericComparisonType::LessThanOrEqualTo);
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->setVersion(1);
@@ -90,7 +90,7 @@ public:
   void runNumericGreaterThanTest()
   {
     AttributeValueCriterion uut(
-      ElementAttributeType::Version, "1", NumericComparisonType::GreaterThan);
+      ElementAttributeType::Version, 1.0, NumericComparisonType::GreaterThan);
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
     node->setVersion(2);
@@ -103,10 +103,10 @@ public:
   void runNumericGreaterThanOrEqualToTest()
   {
     AttributeValueCriterion uut(
-      ElementAttributeType::Version, "1", NumericComparisonType::GreaterThan);
+      ElementAttributeType::Version, 1.0, NumericComparisonType::GreaterThan);
     NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
 
-    node->setVersion(1);
+    node->setVersion(2);
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
     node->setVersion(0);
@@ -197,7 +197,7 @@ public:
     try
     {
       AttributeValueCriterion uut(
-        ElementAttributeType::Timestamp, "1", NumericComparisonType::EqualTo);
+        ElementAttributeType::Timestamp, 1.0, NumericComparisonType::EqualTo);
     }
     catch (const HootException& e)
     {
@@ -207,7 +207,7 @@ public:
 
     try
     {
-      AttributeValueCriterion uut(ElementAttributeType::User, "1", NumericComparisonType::EqualTo);
+      AttributeValueCriterion uut(ElementAttributeType::User, 1.0, NumericComparisonType::EqualTo);
     }
     catch (const HootException& e)
     {
