@@ -59,8 +59,8 @@ public:
   {
   }
 
-  // Since // Since this wraps SetTagValueVisitor for tag writing, SetTagValueVisitorTest covers
-  // more testing than what we're doing here.
+  // Since this wraps SetTagValueVisitor for tag writing, SetTagValueVisitorTest covers more
+  // testing than what we're doing here.
 
   void runRelationTest()
   {

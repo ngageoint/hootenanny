@@ -187,7 +187,8 @@ private:
                             const QString& featureTypeFilterClassName, const bool markSnappedWays,
                             const QString& debugFileName);
   /*
-   * Performs cropping to prepare a map for changeset derivation
+   * Performs cropping to prepare a map for changeset derivation. This is potentially different
+   * cropping than done during initial load and cookie cutting.
    */
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,

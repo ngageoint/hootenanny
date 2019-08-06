@@ -130,10 +130,10 @@ public:
   static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 
   /**
-   * TODO
+   * Creates a rectangular map representing a bounding box; useful for debugging
    *
-   * @param bounds
-   * @return
+   * @param bounds bounding box
+   * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
 };
