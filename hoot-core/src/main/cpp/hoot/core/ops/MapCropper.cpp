@@ -201,6 +201,15 @@ void MapCropper::setConfiguration(const Settings& conf)
 
 void MapCropper::apply(OsmMapPtr& map)
 {
+  //OsmMapPtr result = map;
+
+  if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
+  {
+    throw HootException("If the node bounds is set the projection must be geographic.");
+  }
+
+  LOG_DEBUG("Cropping ways...");
+
   _numAffected = 0;
   _numWaysInBounds = 0;
   _numWaysOutOfBounds = 0;
@@ -210,8 +219,6 @@ void MapCropper::apply(OsmMapPtr& map)
   _numNodesRemoved = 0;
   _explicitlyIncludedWayIds.clear();
 
-  //OsmMapPtr result = map;
-
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
@@ -220,16 +227,6 @@ void MapCropper::apply(OsmMapPtr& map)
   {
     LOG_VARD(_envelopeG->toString());
   }
-
-  if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
-  {
-    throw HootException("If the node bounds is set the projection must be geographic.");
-  }
-
-  // TODO:
-  //_inclusionCrit
-
-  LOG_DEBUG("Cropping ways...");
 
   // go through all the ways
   long wayCtr = 0;

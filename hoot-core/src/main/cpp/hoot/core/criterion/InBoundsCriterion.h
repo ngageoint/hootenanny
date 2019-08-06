@@ -77,9 +77,12 @@ public:
   virtual QString getDescription() const
   { return "Determines whether an element is within a specified geospatial bounds"; }
 
+<<<<<<< HEAD
   void setMustCompletelyContain(bool mustCompletelyContain)
   { _mustCompletelyContain = mustCompletelyContain; }
 
+=======
+>>>>>>> develop
 private:
 
   geos::geom::Envelope _bounds;

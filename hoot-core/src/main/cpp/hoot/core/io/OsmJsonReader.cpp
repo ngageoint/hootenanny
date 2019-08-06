@@ -36,7 +36,10 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/IoUtils.h>
+<<<<<<< HEAD
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
+=======
+>>>>>>> develop
 
 // Boost
 #include <boost/foreach.hpp>
@@ -160,6 +163,10 @@ void OsmJsonReader::close()
   if (_isFile)
     _file.close();
 }
+
+// TODO: implement support for immediately connected outside of bounds ways; without it, the
+// lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
+// TODO: consolidate read code
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
