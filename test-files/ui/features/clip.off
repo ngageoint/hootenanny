@@ -1,3 +1,5 @@
+# Disabled temporarily; see: https://github.com/ngageoint/hootenanny-ui/issues/1541
+
 Feature: Clip Dataset
 
     Scenario: Start Hootenanny
