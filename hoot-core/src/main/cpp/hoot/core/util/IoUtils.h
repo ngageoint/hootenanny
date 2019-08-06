@@ -90,10 +90,10 @@ public:
    *
    * @param map the map to crop
    * @param bounds the bounds to crop to
-   * @param includeConnectedOobWays TODO
+   * @param keepConnectedOobWays TODO
    */
   static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool includeConnectedOobWays = false);
+                           const bool keepConnectedOobWays = false);
 };
 
 }

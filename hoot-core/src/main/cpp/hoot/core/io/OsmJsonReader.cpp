@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -160,10 +161,6 @@ void OsmJsonReader::close()
     _file.close();
 }
 
-// TODO: implement support for immediately connected outside of bounds ways; without it, the
-// lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
-// TODO: consolidate read code
-
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
@@ -185,11 +182,25 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   // See related note in OsmXmlReader::read.
   if (!_bounds.isNull())
   {
-    IoUtils::cropToBounds(_map, _bounds);
+    IoUtils::cropToBounds(
+      _map, _bounds,
+      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   }
 }
 
-// Throws HootException on error
+void OsmJsonReader::_readToMap()
+{
+  _map.reset(new OsmMap());
+  _parseOverpassJson();
+
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(
+      _map, _bounds,
+      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+  }
+}
+
 void OsmJsonReader::_loadJSON(const QString& jsonStr)
 {
   QString json(jsonStr);
@@ -236,24 +247,14 @@ void OsmJsonReader::_loadJSON(const QString& jsonStr)
 OsmMapPtr OsmJsonReader::loadFromString(const QString& jsonStr)
 {
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
-  _parseOverpassJson();
-  if (!_bounds.isNull())
-  {
-    IoUtils::cropToBounds(_map, _bounds);
-  }
+  _readToMap();
   return _map;
 }
 
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
 {
   _propTree = tree;
-  _map.reset(new OsmMap());
-  _parseOverpassJson();
-  if (!_bounds.isNull())
-  {
-    IoUtils::cropToBounds(_map, _bounds);
-  }
+  _readToMap();
   return _map;
 }
 
@@ -268,12 +269,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
-  _parseOverpassJson();
-  if (!_bounds.isNull())
-  {
-    IoUtils::cropToBounds(_map, _bounds);
-  }
+  _readToMap();
   return _map;
 }
 

@@ -39,6 +39,7 @@
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 
 // Qt
 #include <QFileInfo>
@@ -134,18 +135,26 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 }
 
 void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
-                           const bool includeConnectedOobWays)
+                           const bool keepConnectedOobWays)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   MapCropper cropper(bounds);
-  LOG_INFO(cropper.getInitStatusMessage());
+
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
   cropper.setKeepOnlyFeaturesInsideBounds(
     ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+
+  // If we want to keep ways that are outside of the crop bounds but connected to a way that's
+  // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
+  // them alone.
   ElementCriterionPtr inclusionCrit;
-  if (includeConnectedOobWays)
+  if (keepConnectedOobWays)
   {
+    ImmediatelyConnectedOutOfBoundsWayTagger tagger(bounds, false);
+    LOG_INFO(tagger.getInitStatusMessage());
+    tagger.apply(map);
+    LOG_DEBUG(tagger.getCompletedStatusMessage());
     inclusionCrit.reset(
       new ChainCriterion(
         std::shared_ptr<WayCriterion>(new WayCriterion()),
@@ -153,6 +162,8 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
           new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
   }
   cropper.setInclusionCriterion(inclusionCrit);
+
+  LOG_INFO(cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 }

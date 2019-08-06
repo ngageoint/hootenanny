@@ -330,6 +330,8 @@ protected:
    *   list until the queue is empty.
    */
   void _doHttpRequestFunc();
+
+  void _readToMap();
 };
 
 }

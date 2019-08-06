@@ -40,6 +40,9 @@
 namespace hoot
 {
 
+/**
+ * TODO
+ */
 class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public OperationStatusInfo,
   public Boundable
 {
@@ -48,7 +51,8 @@ public:
   static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
-  ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds);
+  ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds,
+                                           const bool strictBounds);
 
   virtual void apply(OsmMapPtr& map);
 
@@ -68,6 +72,7 @@ public:
 
 private:
 
+  bool _strictBounds;
   InBoundsCriterion _boundsChecker;
 };
 

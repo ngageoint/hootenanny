@@ -29,31 +29,80 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ImmediatelyConnectedOutOfBoundsWayTagger)
 
-ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger()
+ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger() :
+_strictBounds(true)
 {
+  _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
 
 ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(
-  const geos::geom::Envelope& bounds)
+  const geos::geom::Envelope& bounds, const bool strictBounds) :
+_strictBounds(strictBounds)
 {
   setBounds(bounds);
+  _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
 
 void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
 {  
+  _numAffected = 0;
+  std::set<long> directlyConnectedWayIds;
   const WayMap& ways = map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
+  for (WayMap::iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
-    WayPtr way = it->second;
+    WayPtr way = wayItr->second;
     LOG_VART(way->getElementId());
 
+    // if the way hasn't already been tagged and falls within the bounds
+    LOG_VART(directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end());
+    LOG_VART(_boundsChecker.isSatisfied(way));
+    if (directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end() &&
+        _boundsChecker.isSatisfied(way))
+    {
+      // find all ways directly connected it
+      const std::vector<long> wayNodeIds = way->getNodeIds();
+      LOG_VART(wayNodeIds.size());
+      for (std::vector<long>::const_iterator wayNodeIdItr = wayNodeIds.begin();
+           wayNodeIdItr != wayNodeIds.end(); ++wayNodeIdItr)
+      {
+        LOG_VART(*wayNodeIdItr);
+        std::set<long> waysContainingWayNode = nodeToWayMap->getWaysByNode(*wayNodeIdItr);
+        LOG_VART(waysContainingWayNode.size());
+        for (std::vector<long>::const_iterator connectedWayIdItr = waysContainingWayNode.begin();
+             connectedWayIdItr != waysContainingWayNode.end(); ++connectedWayIdItr)
+        {
+          const long connectedWayId = *connectedWayIdItr;
+          LOG_VART(connectedWayId);
+          // if we haven't already tagged the connected way
+          LOG_VART(directlyConnectedWayIds.find(connectedWayId) == directlyConnectedWayIds.end());
+          if (directlyConnectedWayIds.find(connectedWayId) == directlyConnectedWayIds.end())
+          {
+            WayPtr connectedWay = map->getWay(connectedWayId);
+            // and its not within the bounds
+            LOG_VART(_boundsChecker.satisfied(connectedWay));
+            if (!_boundsChecker.satisfied(connectedWay))
+            {
+              // tag it
+              LOG_TRACE("Tagging OOB connected way: " << connectedWay->getElementId());
+              connectedWay->getTags().set(MetadataTags::HootConnectedWayOutsideBounds(), "yes");
+              directlyConnectedWayIds.insert(connectedWayId);
+              _numAffected++;
+            }
+          }
+        }
+      }
+    }
   }
+
+  LOG_VARD(directlyConnectedWayIds.size());
 }
 
 }

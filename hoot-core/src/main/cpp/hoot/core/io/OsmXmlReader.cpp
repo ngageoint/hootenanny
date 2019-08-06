@@ -45,7 +45,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/IoUtils.h>
-#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 
 // Qt
 #include <QBuffer>
@@ -353,22 +352,16 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   }
   file.close();
 
-  // TODO: implement support for immediately connected outside of bounds ways; without it, the
-  // lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
-
   // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
   // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
   // sure nothing tries to stream with this reader when a bounds has been set.
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
-  { const bool keepConnectedOobWays =
-      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds();
-    if (keepConnectedOobWays)
-    {
-      ImmediatelyConnectedOutOfBoundsWayTagger(_bounds).apply(_map);
-    }
-    IoUtils::cropToBounds(_map, _bounds, keepConnectedOobWays);
+  {
+    IoUtils::cropToBounds(
+      _map, _bounds,
+      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
   }
 
   ReportMissingElementsVisitor visitor;

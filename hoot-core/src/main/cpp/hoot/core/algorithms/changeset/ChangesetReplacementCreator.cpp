@@ -729,7 +729,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
       _changesetSecKeepOnlyInsideBounds = true;
       _changesetAllowDeletingRefOutsideBounds = false;
       _inBoundsStrict = true;
-
     }
   }
   else
@@ -741,6 +740,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   conf().set(
     ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
     _changesetAllowDeletingRefOutsideBounds);
+  //conf().set(ConfigOptions::getInBoundsCriterionStrictKey(), _inBoundsStrict);
 
   LOG_VARD(_loadRefKeepEntireCrossingBounds);
   LOG_VARD(_loadRefKeepOnlyInsideBounds);
