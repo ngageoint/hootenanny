@@ -51,25 +51,19 @@ public:
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const = 0;
 
   virtual bool containsElement(const ElementId& eid) const = 0;
-
   virtual ConstElementPtr getElement(const ElementId& id) const = 0;
 
   virtual const ConstNodePtr getNode(long id) const = 0;
-
   virtual const NodePtr getNode(long id) = 0;
 
   virtual const ConstRelationPtr getRelation(long id) const = 0;
-
   virtual const RelationPtr getRelation(long id) = 0;
 
   virtual const ConstWayPtr getWay(long id) const = 0;
-
   virtual const WayPtr getWay(long id) = 0;
 
   virtual bool containsNode(long id) const = 0;
-
   virtual bool containsRelation(long id) const = 0;
-
   virtual bool containsWay(long id) const = 0;
 };
 

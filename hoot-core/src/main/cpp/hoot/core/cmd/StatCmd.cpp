@@ -53,12 +53,12 @@ public:
   {
   }
 
-  virtual QString getName() const { return "stat"; }
+  virtual QString getName() const override { return "stat"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates a specified statistic for a map"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 2)
     {

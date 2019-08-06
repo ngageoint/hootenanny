@@ -49,11 +49,11 @@ public:
 
   CleanCmd() { }
 
-  virtual QString getName() const { return "clean"; }
+  virtual QString getName() const override { return "clean"; }
 
-  virtual QString getDescription() const { return "Corrects erroneous map data"; }
+  virtual QString getDescription() const override { return "Corrects erroneous map data"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 2)
     {

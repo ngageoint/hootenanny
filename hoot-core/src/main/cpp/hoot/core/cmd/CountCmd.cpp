@@ -56,12 +56,12 @@ public:
   {
   }
 
-  virtual QString getName() const { return "count"; }
+  virtual QString getName() const override { return "count"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Counts the number of features in a map that meet specified criteria"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 1 || args.size() > 3)
     {

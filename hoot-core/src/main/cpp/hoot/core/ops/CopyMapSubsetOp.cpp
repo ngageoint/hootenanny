@@ -28,6 +28,8 @@
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 using namespace std;
 
@@ -63,7 +65,7 @@ public:
       // if this is not a node then we need to worry about dependencies.
       else
       {
-        // add all of this element's children to the map (we're expempting eid).
+        // add all of this element's children to the map (we're exempting eid).
         AddAllVisitor v(_from, _to, eid);
         _from->getElement(eid)->visitRo(*_from, v);
         // finally, add this element to the map.
@@ -105,6 +107,18 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, Ele
 {
   _eids.insert(eid1);
   _eids.insert(eid2);
+}
+
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit) :
+_from(from),
+_crit(crit)
+{
+  std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
+  FilteredVisitor idVis(crit, getIdVis);
+  _from->visitRo(idVis);
+  _eids = getIdVis->getElementSet();
+  LOG_VARD(_eids.size());
+  LOG_VARD(_eids);
 }
 
 void CopyMapSubsetOp::apply(OsmMapPtr &map)

@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
-  //LOG_VART(element->getElementId());
+  LOG_VART(element->getElementId());
   bool result = false;
   const Tags& tags = element->getTags();
   const ElementType type = element->getElementType();
@@ -51,12 +51,14 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
       it != tags.end() && it.value() != "")
   {
     result = true;
+    LOG_VART(result);
   }
   //  Make sure it isn't a building or a part of a building
   else if (_map && (BuildingCriterion(_map).isSatisfied(element) ||
                     BuildingCriterion(_map).isParentABuilding(element->getElementId())))
   {
     result = false;
+    LOG_VART(result);
   }
   else
   {
@@ -66,14 +68,17 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     {
       // We can treat it like a highway
       result = true;
+      LOG_VART(result);
     }
   }
   // Make sure this isn't an area highway section!
   if (result)
   {
     result = !AreaCriterion().isSatisfied(element);
+    LOG_VART(result);
   }
 
+  LOG_VART(result);
   return result;
 }
 

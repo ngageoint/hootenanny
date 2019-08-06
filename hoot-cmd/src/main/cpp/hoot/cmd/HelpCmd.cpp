@@ -64,11 +64,11 @@ public:
     return c1->getName() < c2->getName();
   }
 
-  virtual QString getName() const { return "help"; }
+  virtual QString getName() const override { return "help"; }
 
-  virtual QString getDescription() const { return "Displays help documentation"; }
+  virtual QString getDescription() const override { return "Displays help documentation"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() == 0 || args.size() > 1)
     {

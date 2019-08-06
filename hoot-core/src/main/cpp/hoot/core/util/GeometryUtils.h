@@ -72,7 +72,8 @@ public:
    *
    * Taken from http://www.movable-type.co.uk/scripts/latlong.html
    */
-  static geos::geom::Coordinate calculateDestination(const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
+  static geos::geom::Coordinate calculateDestination(
+    const geos::geom::Coordinate& start, Degrees bearing, Meters distance);
 
   /**
    * Returns the distance between two coordinates using the haversine formula and a mean earth
@@ -128,6 +129,13 @@ public:
    */
   static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 
+  /**
+   * Creates a rectangular map representing a bounding box; useful for debugging
+   *
+   * @param bounds bounding box
+   * @return a bounding box map
+   */
+  static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
 };
 
 }

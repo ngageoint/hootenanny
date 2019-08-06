@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POSITIVEIDGENERATOR_H
 #define POSITIVEIDGENERATOR_H
@@ -40,6 +40,7 @@ namespace hoot
 class PositiveIdGenerator : public IdGenerator
 {
 public:
+
   static std::string className() { return "hoot::PositiveIdGenerator"; }
 
   PositiveIdGenerator() { reset(); }
@@ -49,15 +50,11 @@ public:
   virtual IdGeneratorPtr clone() const;
 
   virtual long createNodeId() { return ++_nodeId; }
-
   virtual long createRelationId() { return ++_relationId; }
-
   virtual long createWayId() { return ++_wayId; }
 
   void ensureNodeBounds(long nid) { _nodeId = std::max(nid, _nodeId); }
-
   void ensureRelationBounds(long rid) { _relationId = std::max(rid, _relationId); }
-
   void ensureWayBounds(long wid) { _wayId = std::max(wid, _wayId); }
 
   void reset()
@@ -68,6 +65,7 @@ public:
   }
 
 private:
+
   long _nodeId;
   long _relationId;
   long _wayId;

@@ -33,7 +33,7 @@
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Validate.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -156,6 +156,8 @@ QString OsmMapReaderFactory::getReaderName(const QString& url)
     const std::string name = names[i];
     LOG_VART(name);
     writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
+    LOG_VART(url);
+    LOG_VART(writer->isSupported(url));
     if (writer->isSupported(url))
     {
       return QString::fromStdString(name);

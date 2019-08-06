@@ -324,4 +324,44 @@ QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
     QString::number(bounds.getMaxY());
 }
 
+OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
+{
+  OsmMapPtr boundaryMap(new OsmMap());
+
+  NodePtr lowerLeft(
+    new Node(
+      Status::Unknown1,
+      boundaryMap->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMinX(), bounds.getMinY())));
+  boundaryMap->addNode(lowerLeft);
+  NodePtr upperRight(
+    new Node(
+      Status::Unknown1,
+      boundaryMap->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMaxY())));
+  boundaryMap->addNode(upperRight);
+  NodePtr upperLeft(
+    new Node(
+      Status::Unknown1,
+      boundaryMap->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMinX(), bounds.getMaxY())));
+  boundaryMap->addNode(upperLeft);
+  NodePtr lowerRight(
+    new Node(
+      Status::Unknown1,
+      boundaryMap->createNextNodeId(),
+      geos::geom::Coordinate(bounds.getMaxX(), bounds.getMinY())));
+  boundaryMap->addNode(lowerRight);
+
+  WayPtr bbox(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
+  bbox->addNode(lowerLeft->getId());
+  bbox->addNode(upperLeft->getId());
+  bbox->addNode(upperRight->getId());
+  bbox->addNode(lowerRight->getId());
+  bbox->addNode(lowerLeft->getId());
+  boundaryMap->addWay(bbox);
+
+  return boundaryMap;
+}
+
 }

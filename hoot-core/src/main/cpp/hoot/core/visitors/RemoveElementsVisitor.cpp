@@ -55,7 +55,6 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 
   _negateCriteria = configOptions.getElementCriterionNegate();
 
-
   const QStringList critNames = configOptions.getRemoveElementsVisitorElementCriteria();
   LOG_VART(critNames);
   if (critNames.size() > 0)
@@ -111,6 +110,7 @@ void RemoveElementsVisitor::addCriterion(const ElementCriterionPtr& crit)
   {
     _criteria.push_back(ElementCriterionPtr(crit));
   }
+  LOG_VART(_criteria.size());
 }
 
 bool RemoveElementsVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
@@ -149,7 +149,6 @@ bool RemoveElementsVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
 
 void RemoveElementsVisitor::visit(const ElementPtr& e)
 {
-  LOG_VART(_criteria.size());
   if (_criteria.size() == 0)
   {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -48,14 +48,13 @@ public:
 
   DiffCmd() { }
 
-  virtual QString getName() const { return "diff"; }
+  virtual QString getName() const override { return "diff"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the difference between two maps"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
-
     MapComparator mapCompare;
 
     if (args.contains("--ignore-uuid"))

@@ -139,8 +139,10 @@ public:
 
   /**
    * Return all the names for the current feature.
+   *
+   * @param includeAltName if true, returns names with the alt_name tag key
    */
-  QStringList getNames() const;
+  QStringList getNames(const bool includeAltName = true) const;
 
   /**
    * Returns a name given tags
@@ -277,6 +279,14 @@ public:
   bool hasAnyKvp(const QStringList& kvps) const;
 
   /**
+   * Returns true if the tags have any key in the input list
+   *
+   * @param keys tag keys to search for
+   * @return true if the tags contain at least one of the keys; false otherwise
+   */
+  bool hasAnyKey(const QStringList& keys);
+
+  /**
    * Converts a list of KVPs into tags
    *
    * @param kvps kvps to convert
@@ -297,9 +307,11 @@ public:
    *
    * @param tags1 first set of tags to examine
    * @param tags2 second set of tags to examine
+   * @parm strictNameMatch if true, will not consider names with the alt_name tag key
    * @return true if the tags have at least one matching name; false otherwise
    */
-  static bool haveMatchingName(const Tags& tags1, const Tags& tags2);
+  static bool haveMatchingName(const Tags& tags1, const Tags& tags2,
+                               const bool strictNameMatch = false);
 
   /**
    * Determines whether a name exists in the set of tag

@@ -88,4 +88,15 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
   return true;
 }
 
+QString ChainCriterion::toString() const
+{
+  LOG_VART(_criteria.size());
+  QString txt = "ChainCriterion members: ";
+  for (size_t i = 0; i < _criteria.size(); i++)
+  {
+    txt += typeid(*_criteria.at(i)).name();
+  }
+  return txt;
+}
+
 }

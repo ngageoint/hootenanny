@@ -188,8 +188,15 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePt
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
+  else if (n->getVersion() < 1)
+  {
+    throw HootException(
+      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
+      QString("version greater than zero: ") + n->getElementId().toString());
+  }
   else
     version = n->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
 
   writer.writeAttribute("lat", QString::number(n->getY(), 'f', _precision));
@@ -230,8 +237,15 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstWayPtr 
   // for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
+  else if (w->getVersion() < 1)
+  {
+    throw HootException(
+      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
+      QString("version greater than zero: ")  + w->getElementId().toString());
+  }
   else
     version = w->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
@@ -284,8 +298,15 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstRe
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
+  else if (r->getVersion() < 1)
+  {
+    throw HootException(
+      QString("Elements being modified or deleted in an .osc changeset must always have a ") +
+      QString("version greater than zero: ") + r->getElementId().toString());
+  }
   else
     version = r->getVersion();
+  LOG_VART(version);
   writer.writeAttribute("version", QString::number(version));
   if (_addTimestamp)
   {
@@ -340,11 +361,16 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
   _precision = co.getWriterPrecision();
 }
 
-void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element)
+void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
+                                           const Element* element)
 {
   if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
+    tags.set(MetadataTags::HootId(), QString::number(element->getId()));
+    // This just makes sifting through the xml elements a little bit easier during debugging vs
+    // having to scroll around looking for the change type for each element.
+    tags.set(MetadataTags::HootChangeType(), Change::changeTypeToString(_change.getType()));
   }
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {

@@ -120,12 +120,12 @@ public:
     return result;
   }
 
-  virtual QString getName() const { return "score-matches"; }
+  virtual QString getName() const override { return "score-matches"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Scores conflation performance against a manually matched map"; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
   class ScoreFunction : public Tgs::NelderMead::Function
   {
@@ -174,7 +174,7 @@ public:
     }
   }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     bool optimizeThresholds = false;
     bool showConfusion = false;

@@ -66,7 +66,10 @@ void RemoveNodeByEid::_removeNode(OsmMapPtr& map, long nId)
   if (ways.size() > 0)
   {
     if (_removeOnlyUnused)
+    {
+      LOG_TRACE("Skipping removal of node: " << nId << " owned by way.");
       return;
+    }
     else
       throw HootException("Removing a node, but it is still part of one or more ways.");
   }

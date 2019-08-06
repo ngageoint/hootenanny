@@ -75,8 +75,10 @@ ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
 Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
-  // TODO: turn this into an exception
-  assert(MapProjector::isPlanar(_constProvider));
+  if (!MapProjector::isPlanar(_constProvider))
+  {
+    throw IllegalArgumentException("Map must be in planar coordinate system.");
+  }
 
   // if the element is not a point and is not an area.
   // NOTE: Originally I was using isLinear. This was a bit too strict in that it wants evidence of

@@ -55,7 +55,8 @@ public:
 
   void setIncludeHootInfo(bool includeInfo) { _includeDebug = includeInfo; }
   void setIncludeIds(bool includeIds) { _includeIds = includeIds; }
-  void setIncludeCircularError(bool includeCircularError) { _includeCircularError = includeCircularError; }
+  void setIncludeCircularError(bool includeCircularError)
+  { _includeCircularError = includeCircularError; }
   void overrideDebugSettings();
 
 private:

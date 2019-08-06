@@ -83,6 +83,8 @@ public:
   static const QString HOOT_ID;
   inline static const QString& HootId()                 { return HOOT_ID; }
   inline static const QString HootHash()                { return "hoot:hash"; }
+  inline static const QString HootChangeType()          { return "hoot:change:type"; }
+  inline static const QString HootChangeExcludeDelete() { return "hoot:change:exclude:delete"; }
 
   inline static const QString HootLayername()           { return "hoot:layername"; }
 
@@ -156,15 +158,24 @@ public:
 
   inline static const QString Length()                  { return "length"; }
 
-  inline static const QString HootSnappedWayNode()      { return "hoot:snapped"; }
+  /**
+   * Identifies features snapped with UnconnectedWaySnapper
+   */
+  inline static const QString HootSnapped()      { return "hoot:snapped"; }
 
   /**
-   * identifies multilinestring relations hoot adds during conflation
+   * Identifies ways outside of convert.bounding.box that are immediately connected to other ways
+   * within the bounds
+   */
+  inline static const QString HootConnectedWayOutsideBounds() { return "hoot:connected_way"; }
+
+  /**
+   * Identifies multilinestring relations hoot adds during conflation
    */
   inline static const QString HootMultilineString()     { return "hoot:multilinestring"; }
 
   /**
-   * identifies ElementConflatableCriteria that consider an element conflatable
+   * Identifies ElementConflatableCriteria that consider an element conflatable
    */
   inline static const QString HootConflatableCriteria() { return "hoot:conflatable:criteria"; }
 

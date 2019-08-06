@@ -47,6 +47,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
+#include <hoot/core/elements/ElementComparer.h>
 using namespace hoot::elements;
 
 // Qt
@@ -59,8 +60,8 @@ namespace hoot
 
 std::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
-OsmMap::OsmMap()
-  : _idSwap(new IdSwap())
+OsmMap::OsmMap() :
+_idSwap(new IdSwap())
 {
   if (!_wgs84)
   {
@@ -70,37 +71,52 @@ OsmMap::OsmMap()
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = _wgs84;
+  _initCounters();
 }
 
 OsmMap::OsmMap(const ConstOsmMapPtr& map)
 {
   _copy(map);
+  _initCounters();
 }
 
 OsmMap::OsmMap(const OsmMapPtr& map)
 {
   _copy(map);
+  _initCounters();
 }
 
-OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs)
-  : _idSwap(new IdSwap())
+OsmMap::OsmMap(const std::shared_ptr<OGRSpatialReference>& srs) :
+_idSwap(new IdSwap())
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = srs;
+  _initCounters();
 }
 
 OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialReference>& srs)
 {
   _copy(map);
   _srs = srs;
+  _initCounters();
 }
 
 OsmMap::~OsmMap()
 {
 }
 
-void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
+void OsmMap::_initCounters()
+{
+  _numNodesAppended = 0;
+  _numWaysAppended = 0;
+  _numRelationsAppended = 0;
+  _numNodesSkippedForAppending = 0;
+  _numWaysSkippedForAppending = 0;
+  _numRelationsSkippedForAppending = 0;
+}
+
+void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupes)
 {
   if (this == appendFromMap.get())
   {
@@ -118,44 +134,135 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
       "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
       "\nMap being appended from has projection:\n" + proj2);
   }
-  _srs = appendFromMap->getProjection();
 
-  const RelationMap& allRelations = appendFromMap->getRelations();
-  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  LOG_DEBUG("Appending maps...");
+
+  _initCounters();
+  _srs = appendFromMap->getProjection();
+  // These indexes need to be force initialized before appending.
+  _index->getNodeToWayMap();
+  _index->getElementToRelationMap();
+  ElementComparer elementComparer;
+
+  // The append order must be nodes, ways, and then relations. If not, the map indexes won't update
+  // properly.
+
+  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
+  while (itn != appendFromMap->_nodes.end())
   {
-    RelationPtr relation = it->second;
-    if (containsElement(ElementId(relation->getElementId())))
+    bool appendElement = true;
+    NodePtr node = itn->second;
+    if (containsElement(ElementId(node->getElementId())))
     {
-      throw HootException("Map already contains this relation: " + relation->toString());
+      // If they have the same ID but aren't considerd to be identical elements, throw an error.
+      // Otherwise we'll just skip adding the identical element, since we already have it.
+      // throwOutDupes being enabled lets us skip it whether the two are identical or not.
+      ElementPtr existingElement = getElement(node->getElementId());
+      if (!throwOutDupes && !elementComparer.isSame(node, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+            .arg(node->getElementId().toString())
+            .arg(getElement(node->getElementId())->toString())
+            .arg(node->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        LOG_TRACE("Skipping appending same element: " << node->getElementId());
+        appendElement = false;
+      }
     }
-    RelationPtr r = RelationPtr(new Relation(*relation));
-    addRelation(r);
+
+    if (appendElement)
+    {
+      NodePtr n = NodePtr(new Node(*node));
+      LOG_TRACE("Appending: " << n->getElementId() << "...");
+      addNode(n);
+      _numNodesAppended++;
+    }
+    else
+    {
+      _numNodesSkippedForAppending++;
+    }
+
+    ++itn;
   }
 
   WayMap::const_iterator it = appendFromMap->_ways.begin();
   while (it != appendFromMap->_ways.end())
   {
+    bool appendElement = true;
     WayPtr way = it->second;
     if (containsElement(ElementId(way->getElementId())))
     {
-      throw HootException("Map already contains this way: " + way->toString());
+      ElementPtr existingElement = getElement(way->getElementId());
+      if (!throwOutDupes && !elementComparer.isSame(way, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+          .arg(way->getElementId().toString())
+          .arg(getElement(way->getElementId())->toString())
+          .arg(way->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        LOG_TRACE("Skipping appending same element: " << way->getElementId());
+        appendElement = false;
+      }
     }
-    WayPtr w = WayPtr(new Way(*way));
-    addWay(w);
+
+    if (appendElement)
+    {
+      WayPtr w = WayPtr(new Way(*way));
+      LOG_TRACE("Appending: " << w->getElementId() << "...");
+      addWay(w);
+      _numWaysAppended++;
+    }
+    else
+    {
+      _numWaysSkippedForAppending++;
+    }
+
     ++it;
   }
 
-  NodeMap::const_iterator itn = appendFromMap->_nodes.begin();
-  while (itn != appendFromMap->_nodes.end())
+  const RelationMap& allRelations = appendFromMap->getRelations();
+  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
-    NodePtr node = itn->second;
-    if (containsElement(ElementId(node->getElementId())))
+    bool appendElement = true;
+    RelationPtr relation = it->second;
+    if (containsElement(ElementId(relation->getElementId())))
     {
-      throw HootException("Map already contains this node: " + node->toString());
+      ElementPtr existingElement = getElement(relation->getElementId());
+      if (!throwOutDupes && !elementComparer.isSame(relation, existingElement))
+      {
+        const QString msg =
+          QString("Map already contains %1; existing element: %2; attempting to replace with element: %3")
+          .arg(relation->getElementId().toString())
+          .arg(getElement(relation->getElementId())->toString())
+          .arg(relation->toString());
+        throw HootException(msg);
+      }
+      else
+      {
+        LOG_TRACE("Skipping appending same element: " << relation->getElementId());
+        appendElement = false;
+      }
     }
-    NodePtr n = NodePtr(new Node(*node));
-    addNode(n);
-    ++itn;
+
+    if (appendElement)
+    {
+      RelationPtr r = RelationPtr(new Relation(*relation));
+      LOG_TRACE("Appending: " << r->getElementId() << "...");
+      addRelation(r);
+      _numRelationsAppended++;
+    }
+    else
+    {
+      _numRelationsSkippedForAppending++;
+    }
   }
 
   for (size_t i = 0; i < appendFromMap->getListeners().size(); i++)
@@ -163,11 +270,18 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap)
     std::shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
     _listeners.push_back(l->clone());
   }
+
+  LOG_VARD(_numNodesAppended);
+  LOG_VARD(_numNodesSkippedForAppending);
+  LOG_VARD(_numWaysAppended);
+  LOG_VARD(_numWaysSkippedForAppending);
+  LOG_VARD(_numRelationsAppended);
+  LOG_VARD(_numRelationsSkippedForAppending);
 }
 
 void OsmMap::addElement(const std::shared_ptr<Element>& e)
 {
-  switch(e->getElementType().getEnum())
+  switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
     addNode(std::dynamic_pointer_cast<Node>(e));
@@ -201,6 +315,7 @@ void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
     // this seemed like a clever optimization. However, this impacts the BigPertyCmd.sh test b/c
     // it modifies the order in which the elements are written to the output. Which presumably (?)
     // impacts the ID when reading the file with re-numbering. Sad.
+    // TODO: The BigPertyCmd.sh test no longer exists, so maybe try it again.
 //    size_t minBuckets = _nodes.size() + nodes.size() * 1.1;
 //    if (_nodes.bucket_count() < minBuckets)
 //    {
@@ -238,15 +353,6 @@ void OsmMap::addWay(const WayPtr& w)
   _ways[w->getId()] = w;
   w->registerListener(_index.get());
   _index->addWay(w);
-  //_wayCounter = std::min(w->getId() - 1, _wayCounter);
-
-  // this is a bit too strict, especially when dealing with MapReduce
-//# ifdef DEBUG
-//    for (int i = 0; i < w->getNodeCount(); i++)
-//    {
-//      assert(_nodes.contains(w->getNodeId(i)));
-//    }
-//# endif
 }
 
 void OsmMap::clear()
@@ -297,6 +403,7 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();
   _idSwap = from->getIdSwap();
+  _name = from->getName();
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();
@@ -453,7 +560,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
   }
 
   if (from->getElementType() == ElementType::Node && to.size() == 1 &&
-    to[0]->getElementType() == ElementType::Node)
+      to[0]->getElementType() == ElementType::Node)
   {
     replaceNode(from->getId(), to[0]->getId());
   }

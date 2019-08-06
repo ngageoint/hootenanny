@@ -43,8 +43,8 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -156,46 +156,6 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   }
 }
 
-void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
-{
-  _relationId = _parseLong(attributes.value("id"));
-  long newId = _getRelationId(_relationId);
-
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
-  // not officially required by the DTD
-  long version = ElementData::VERSION_EMPTY;
-  if (attributes.value("version") != "")
-  {
-    version = _parseDouble(attributes.value("version"));
-  }
-  long changeset = ElementData::CHANGESET_EMPTY;
-  if (attributes.value("changeset") != "")
-  {
-    changeset = _parseDouble(attributes.value("changeset"));
-  }
-  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
-  if (attributes.value("timestamp") != "")
-  {
-    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
-  }
-  QString user = ElementData::USER_EMPTY;
-  if (attributes.value("user") != "")
-  {
-    user = attributes.value("user");
-  }
-  long uid = ElementData::UID_EMPTY;
-  if (attributes.value("uid") != "")
-  {
-    uid = _parseDouble(attributes.value("uid"));
-  }
-
-  _element.reset(
-    new Relation(
-      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
-
-  _parseTimeStamp(attributes);
-}
-
 void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 {
   _wayId = _parseLong(attributes.value("id"));
@@ -246,6 +206,46 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 
   _element.reset(
     new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
+
+  _parseTimeStamp(attributes);
+}
+
+void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
+{
+  _relationId = _parseLong(attributes.value("id"));
+  long newId = _getRelationId(_relationId);
+
+  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
+  // not officially required by the DTD
+  long version = ElementData::VERSION_EMPTY;
+  if (attributes.value("version") != "")
+  {
+    version = _parseDouble(attributes.value("version"));
+  }
+  long changeset = ElementData::CHANGESET_EMPTY;
+  if (attributes.value("changeset") != "")
+  {
+    changeset = _parseDouble(attributes.value("changeset"));
+  }
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  if (attributes.value("timestamp") != "")
+  {
+    timestamp = OsmUtils::fromTimeString(attributes.value("timestamp"));
+  }
+  QString user = ElementData::USER_EMPTY;
+  if (attributes.value("user") != "")
+  {
+    user = attributes.value("user");
+  }
+  long uid = ElementData::UID_EMPTY;
+  if (attributes.value("uid") != "")
+  {
+    uid = _parseDouble(attributes.value("uid"));
+  }
+
+  _element.reset(
+    new Relation(
+      _status, newId, _defaultCircularError, "", changeset, version, timestamp, user, uid));
 
   _parseTimeStamp(attributes);
 }
@@ -318,7 +318,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  // clear node id maps in case the reader is used for mulitple files
+  // clear node id maps in case the reader is used for multiple files
   _nodeIdMap.clear();
   _relationIdMap.clear();
   _wayIdMap.clear();
@@ -352,23 +352,17 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   }
   file.close();
 
-  // We don't support cropping during streaming, and there is a check in
-  // ElementStreamer::isStreamableIo to make sure nothing tries to stream with this reader when
-  // a bounds has been set.
+  // TODO: implement support for immediately connected outside of bounds ways; without it, the
+  // lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
+
+  // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
+  // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
+  // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
+  // sure nothing tries to stream with this reader when a bounds has been set.
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
-    LOG_INFO("Applying bounds filtering to ingested data: " << _bounds << "...");
-    MapCropper cropper(_bounds);
-    LOG_INFO(cropper.getInitStatusMessage());
-    // We don't reuse MapCropper's version of these options, since we want the freedom to have
-    // different default values than what MapCropper uses.
-    cropper.setKeepEntireFeaturesCrossingBounds(
-      ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-    cropper.setKeepOnlyFeaturesInsideBounds(
-      ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
-    cropper.apply(_map);
-    LOG_DEBUG(cropper.getCompletedStatusMessage());
+    IoUtils::cropToBounds(_map, _bounds);
   }
 
   ReportMissingElementsVisitor visitor;
@@ -708,21 +702,24 @@ bool OsmXmlReader::endElement(const QString& /* namespaceURI */,
     {
       NodePtr n = std::dynamic_pointer_cast<Node, Element>(_element);
       _map->addNode(n);
-      LOG_VART(n);
+      LOG_TRACE("Added: " << n->getElementId());
+      //LOG_TRACE("Added: " << n);
       _numRead++;
     }
     else if (qName == QLatin1String("way"))
     {
       WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
       _map->addWay(w);
-      LOG_VART(w);
+      LOG_TRACE("Added: " << w->getElementId());
+      //LOG_TRACE("Added: " << w);
       _numRead++;
     }
     else if (qName == QLatin1String("relation"))
     {
       RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
       _map->addRelation(r);
-      LOG_VART(r);
+      LOG_TRACE("Added: " << r->getElementId());
+      //LOG_TRACE("Added: " << r);
       _numRead++;
     }
 

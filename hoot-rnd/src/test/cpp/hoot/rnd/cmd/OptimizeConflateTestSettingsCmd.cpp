@@ -53,7 +53,7 @@ public:
 
   virtual QString getType() const { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args)
   {
     if (args.size() < 6 || args.size() > 7)
     {

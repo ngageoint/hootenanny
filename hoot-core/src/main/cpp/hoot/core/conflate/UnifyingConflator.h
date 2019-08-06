@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
@@ -67,7 +67,7 @@ class ElementId;
  * works fine for now.
  */
 class UnifyingConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable, public ProgressReporter
+  public Configurable, public ProgressReporter
 {
 public:
 

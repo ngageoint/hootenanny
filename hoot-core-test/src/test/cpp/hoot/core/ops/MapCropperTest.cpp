@@ -37,6 +37,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 // CPP Unit
@@ -78,6 +79,7 @@ public:
   MapCropperTest() :
   HootTestFixture("test-files/ops/MapCropper", "test-output/ops/MapCropper")
   {
+    setResetType(ResetBasic);
   }
 
   OsmMapPtr genPoints(int seed)
@@ -117,7 +119,8 @@ public:
     }
 
     {
-      MapCropper uut(g, false);
+      MapCropper uut(g);
+      uut.setInvert(false);
       uut.apply(map);
 
       CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
@@ -126,7 +129,8 @@ public:
     {
       OsmMapPtr map = genPoints(0);
 
-      MapCropper uut(g, true);
+      MapCropper uut(g);
+      uut.setInvert(true);
       uut.apply(map);
       CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }
@@ -137,7 +141,8 @@ public:
     std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
       "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
 
-    MapCropper pre(g, false);
+    MapCropper pre(g);
+    pre.setInvert(false);
     OsmMapPtr mapPre = genPoints(0);
     pre.apply(mapPre);
 
@@ -298,15 +303,16 @@ public:
     }
   }
 
-  // getting into id ordering issues with these tests, so using an element count check instead
-  // of a map diff
-
   void runKeepFeaturesOnlyCompletelyInBoundsTest()
   {
+    const QString testFileNameBase = "runKeepFeaturesOnlyCompletelyInBoundsTest";
+    QString testFileName;
     OsmMapPtr map;
-    geos::geom::Envelope bounds(-104.9007,-104.8994,38.8540,38.8994);
+    geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/" + testFileNameBase + "-bounds.osm");
     MapCropper uut(bounds);
-    //QString testFileName;
 
     // regular crop output
     map.reset(new OsmMap());
@@ -315,14 +321,10 @@ public:
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.setKeepOnlyFeaturesInsideBounds(false);
     uut.apply(map);
-//    LOG_WARN("runKeepFeaturesOnlyCompletelyInBoundsTest-1");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runKeepFeaturesOnlyCompletelyInBoundsTest-1.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName)
-    CPPUNIT_ASSERT_EQUAL(11, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());;
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-1.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
     // only one way remains since it was the only one completely inside the bounds
     map.reset(new OsmMap());
@@ -331,16 +333,26 @@ public:
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.setKeepOnlyFeaturesInsideBounds(true);
     uut.apply(map);
-//    LOG_WARN("runKeepFeaturesOnlyCompletelyInBoundsTest-2");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runKeepFeaturesOnlyCompletelyInBoundsTest-2.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(7, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-2.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
-    // setting invert to true negates the keep the keep only features inside bounds setting;
+    // illegal configuration
+    uut.setInvert(false);
+    uut.setKeepEntireFeaturesCrossingBounds(true);
+    QString exceptionMsg("");
+    try
+    {
+       uut.setKeepOnlyFeaturesInsideBounds(true);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Incompatible crop options"));
+
+    // setting invert to true negates the keep only features inside bounds setting;
     // so output looks like regular inverted crop output
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
@@ -348,22 +360,22 @@ public:
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.setKeepOnlyFeaturesInsideBounds(true);
     uut.apply(map);
-//    LOG_WARN("runKeepFeaturesOnlyCompletelyInBoundsTest-3");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runKeepFeaturesOnlyCompletelyInBoundsTest-3.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(33, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-3.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 
   void runDontSplitCrossingFeaturesTest()
   {
+    const QString testFileNameBase = "runDontSplitCrossingFeaturesTest";
+    QString testFileName;
     OsmMapPtr map;
-    geos::geom::Envelope bounds(-104.9007,-104.8994,38.8540,38.8994);
+    geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/" + testFileNameBase + "-bounds.osm");
     MapCropper uut(bounds);
-    //QString testFileName;
 
     // regular crop output
     map.reset(new OsmMap());
@@ -372,14 +384,10 @@ public:
     uut.setKeepOnlyFeaturesInsideBounds(false);
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.apply(map);
-//    LOG_WARN("runDontSplitCrossingFeaturesTest-1");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runDontSplitCrossingFeaturesTest-1.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(11, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-1.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
     // should end up with all features
     map.reset(new OsmMap());
@@ -388,31 +396,24 @@ public:
     uut.setKeepOnlyFeaturesInsideBounds(false);
     uut.setKeepEntireFeaturesCrossingBounds(true);
     uut.apply(map);
-//    LOG_WARN("runDontSplitCrossingFeaturesTest-2");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runDontSplitCrossingFeaturesTest-2.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(36, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-2.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
-    // setting keep only features inside bounds to true overrides the keep entire features
-    // crossing bounds setting and de-activates it; so should end up with a single way
-    map.reset(new OsmMap());
-    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
+    // illegal configuration
     uut.setInvert(false);
     uut.setKeepOnlyFeaturesInsideBounds(true);
-    uut.setKeepEntireFeaturesCrossingBounds(true);
-    uut.apply(map);
-//    LOG_WARN("runDontSplitCrossingFeaturesTest-3");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runDontSplitCrossingFeaturesTest-3.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(7, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(1, (int)map->getWays().size());
+    QString exceptionMsg("");
+    try
+    {
+       uut.setKeepEntireFeaturesCrossingBounds(true);
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Incompatible crop options"));
 
     // setting invert to true negates the keep entire features crossing bounds setting; so output
     // looks like regular inverted crop output
@@ -422,22 +423,22 @@ public:
     uut.setKeepOnlyFeaturesInsideBounds(false);
     uut.setKeepEntireFeaturesCrossingBounds(true);
     uut.apply(map);
-//    LOG_WARN("runDontSplitCrossingFeaturesTest-4");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runDontSplitCrossingFeaturesTest-4.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(33, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-4.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 
   void runInvertTest()
   {
+    const QString testFileNameBase = "runInvertTest";
+    QString testFileName;
     OsmMapPtr map;
-    geos::geom::Envelope bounds(-104.9007,-104.8994,38.8540,38.8994);
+    geos::geom::Envelope bounds(-104.9007, -104.8994, 38.8540, 38.8552);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/" + testFileNameBase + "-bounds.osm");
     MapCropper uut(bounds);
-    //QString testFileName;
 
     // should end up with everything inside of the bounds
     map.reset(new OsmMap());
@@ -446,14 +447,10 @@ public:
     uut.setKeepOnlyFeaturesInsideBounds(false);
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.apply(map);
-//    LOG_WARN("runInvertTest-1");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runInvertTest-1.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(11, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-1.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
 
     // should end up with everything outside of the bounds
     map.reset(new OsmMap());
@@ -462,14 +459,10 @@ public:
     uut.setKeepOnlyFeaturesInsideBounds(false);
     uut.setKeepEntireFeaturesCrossingBounds(false);
     uut.apply(map);
-//    LOG_WARN("runInvertTest-2");
-//    LOG_VARW(map->getNodes().size());
-//    LOG_VARW(map->getWays().size());
-//    MapProjector::projectToWgs84(map);
-//    testFileName = "runInvertTest-2.osm";
-//    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
-    CPPUNIT_ASSERT_EQUAL(33, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + "-2.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 };
 

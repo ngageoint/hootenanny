@@ -150,8 +150,8 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   {
     node->setStatus(_status);
   }
-  LOG_VART(node->getStatus());
 
+  LOG_VART(node->getStatus());
   LOG_VART(node->getVersion());
 
   return node;
@@ -192,7 +192,9 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   {
     way->setStatus(_status);
   }
+
   LOG_VART(way->getStatus());
+  LOG_VART(way->getVersion());
 
   return way;
 }
@@ -233,7 +235,9 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   {
     relation->setStatus(_status);
   }
+
   LOG_VART(relation->getStatus());
+  LOG_VART(relation->getVersion());
 
   return relation;
 }

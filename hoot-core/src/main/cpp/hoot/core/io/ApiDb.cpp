@@ -670,8 +670,43 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
   return _selectWayIdsByWayNodeIds;
 }
 
+QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
+{
+  if (wayIds.size() == 0)
+  {
+    throw IllegalArgumentException("Empty way ID list.");
+  }
+
+  // There may be a more clever way to get this into a single query via a join, etc...going with
+  // this method for now.
+
+  // select all the way nodes contained in all of the input way ids
+  std::shared_ptr<QSqlQuery> wayNodeIdItr = selectWayNodeIdsByWayIds(wayIds);
+  QSet<QString> wayNodeIds;
+  while (wayNodeIdItr->next())
+  {
+    wayNodeIds.insert((*wayNodeIdItr).value(0).toString());
+  }
+  LOG_VART(wayNodeIds);
+
+  // select all ways that contain any of the way nodes
+  std::shared_ptr<QSqlQuery> wayIdItr = selectWayIdsByWayNodeIds(wayNodeIds);
+  QSet<QString> allWayIds;
+  while (wayIdItr->next())
+  {
+    allWayIds.insert((*wayIdItr).value(0).toString());
+  }
+  LOG_VART(allWayIds);
+
+  // subtract out any way ids in the input list
+  const QSet<QString> connectedWayIds = allWayIds.subtract(wayIds);
+  LOG_VART(connectedWayIds);
+
+  return connectedWayIds;
+}
+
 std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
-                                                                  const TableType& tableType)
+                                                                const TableType& tableType)
 {
   if (elementIds.size() == 0)
   {

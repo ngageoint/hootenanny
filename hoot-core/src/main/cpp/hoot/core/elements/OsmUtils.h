@@ -79,8 +79,8 @@ public:
     @param map the map owning the nodes with the given ID's
     @return a collection of nodes
     */
-  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(const QList<long>& nodeIds,
-                                                           const std::shared_ptr<const OsmMap>& map);
+  static QList<std::shared_ptr<const Node>> nodeIdsToNodes(
+    const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
 
   /**
     Converts a OSM node to a coordinate
@@ -129,7 +129,8 @@ public:
   /**
     Converts a utc zulu timestamp to time since the epoch in seconds.
 
-    @param timestamp in utc zulu string to be convered to seconds from the epoch (1970-01-01 00:00:00)
+    @param timestamp in utc zulu string to be convered to seconds from the epoch
+           (1970-01-01 00:00:00)
     */
   static quint64 fromTimeString(QString timestamp);
 
@@ -201,7 +202,8 @@ public:
    * @param map map owning the relation
    * @return a detailed relation string
    */
-  static QString getRelationDetailedString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+  static QString getRelationDetailedString(const ConstRelationPtr& relation,
+                                           const ConstOsmMapPtr& map);
 
   /**
    * Get a detailed string representing a relation's members
@@ -269,7 +271,8 @@ public:
    * @return true if both have specific highway tags (other than highway=road) and they disagree;
    * false otherwise
    */
-  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2);
+  static bool nonGenericHighwayConflictExists(const ConstElementPtr& element1,
+                                              const ConstElementPtr& element2);
 
   /**
    * Returns the IDs of all ways containing an input node
@@ -330,8 +333,17 @@ public:
    * @param map the map containing the nodes
    * @return true if there is at least one way that contains both nodes; false otherwise
    */
-  static bool nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+  static bool nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                             const ConstOsmMapPtr& map);
+
+  /**
+   * Returns a subset of elements from a map filtered by a criterion
+   *
+   * @param map map to copy elements from
+   * @param filter filter to apply to the map
+   * @return a copied subset map
+   */
+  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
 };
 
 }

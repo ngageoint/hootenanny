@@ -116,7 +116,8 @@ private:
     point for the imaginary line drawn directly from start to end point on the line to be reduced
     */
   double _getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-    const std::shared_ptr<const Node> splitPoint, const std::shared_ptr<const Node> lineToBeReducedStartPoint,
+    const std::shared_ptr<const Node> splitPoint,
+    const std::shared_ptr<const Node> lineToBeReducedStartPoint,
     const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
 
 };

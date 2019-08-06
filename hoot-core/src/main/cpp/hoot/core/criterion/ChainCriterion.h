@@ -57,6 +57,8 @@ public:
   virtual QString getDescription() const
   { return "Allows for chaining criteria together (logical AND)"; }
 
+  QString toString() const;
+
 protected:
 
   ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria);

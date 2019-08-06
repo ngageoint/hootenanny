@@ -54,14 +54,14 @@ public:
 
   ConflateCmd();
 
-  virtual QString getName() const { return "conflate"; }
+  virtual QString getName() const override { return "conflate"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Conflates two maps into a single map"; }
 
   void printStats(const QList<SingleStat>& stats);
 
-  virtual int runSimple(QStringList args) override;
+  virtual int runSimple(QStringList& args) override;
 
 private:
 

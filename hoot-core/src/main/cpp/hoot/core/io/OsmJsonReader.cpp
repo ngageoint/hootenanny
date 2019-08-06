@@ -35,6 +35,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/IoUtils.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -97,8 +98,7 @@ bool OsmJsonReader::isSupported(const QString& url)
   // Is it a file?
   if (isRelativeUrl || isLocalFile)
   {
-    const QString filename = isRelativeUrl ? myUrl.toString() : myUrl.toLocalFile();
-    if (QFile::exists(filename) && url.endsWith(".json", Qt::CaseInsensitive))
+    if (url.endsWith(".json", Qt::CaseInsensitive) && !url.startsWith("http", Qt::CaseInsensitive))
     {
       return true;
     }
@@ -160,6 +160,10 @@ void OsmJsonReader::close()
     _file.close();
 }
 
+// TODO: implement support for immediately connected outside of bounds ways; without it, the
+// lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
+// TODO: consolidate read code
+
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
@@ -176,6 +180,12 @@ void OsmJsonReader::read(const OsmMapPtr& map)
     // This will throw a hoot exception if JSON is invalid
     _loadJSON(_results[i]);
     _parseOverpassJson();
+  }
+
+  // See related note in OsmXmlReader::read.
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds);
   }
 }
 
@@ -228,6 +238,10 @@ OsmMapPtr OsmJsonReader::loadFromString(const QString& jsonStr)
   _loadJSON(jsonStr);
   _map.reset(new OsmMap());
   _parseOverpassJson();
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds);
+  }
   return _map;
 }
 
@@ -236,6 +250,10 @@ OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
   _propTree = tree;
   _map.reset(new OsmMap());
   _parseOverpassJson();
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds);
+  }
   return _map;
 }
 
@@ -252,14 +270,20 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   _loadJSON(jsonStr);
   _map.reset(new OsmMap());
   _parseOverpassJson();
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds);
+  }
   return _map;
 }
 
 void OsmJsonReader::setConfiguration(const Settings& conf)
 {
-  _runParallel = ConfigOptions(conf).getJsonReaderHttpBboxParallel();
-  _coordGridSize = ConfigOptions(conf).getJsonReaderHttpBboxMaxSize();
-  _threadCount = ConfigOptions(conf).getJsonReaderHttpBboxThreadCount();
+  ConfigOptions opts(conf);
+  _runParallel = opts.getJsonReaderHttpBboxParallel();
+  _coordGridSize = opts.getJsonReaderHttpBboxMaxSize();
+  _threadCount = opts.getJsonReaderHttpBboxThreadCount();
+  setBounds(GeometryUtils::envelopeFromConfigString(opts.getConvertBoundingBox()));
 }
 
 void OsmJsonReader::_parseOverpassJson()
@@ -304,7 +328,7 @@ void OsmJsonReader::_parseOverpassJson()
   }
 }
 
-void OsmJsonReader::_parseOverpassNode(const pt::ptree &item)
+void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 {
   // Get info we need to construct our node
   long id = -1;
@@ -316,8 +340,22 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree &item)
   double lat = item.get("lat", 0.0);
   double lon = item.get("lon", 0.0);
 
+  long version = ElementData::VERSION_EMPTY;
+  version = item.get("version", version);
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = item.get("changeset", changeset);
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  timestamp = item.get("timestamp", timestamp);
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = item.get("user", user);
+  long uid = ElementData::UID_EMPTY;
+  uid = item.get("uid", uid);
+
   // Construct node
-  NodePtr pNode(new Node(_defaultStatus, id, lon, lat, _defaultCircErr));
+  NodePtr pNode(
+    new Node(
+      _defaultStatus, id, lon, lat, _defaultCircErr, changeset, version, timestamp,
+      QString::fromStdString(user), uid));
 
   // Add tags
   _addTags(item, pNode);
@@ -332,7 +370,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree &item)
   }
 }
 
-void OsmJsonReader::_parseOverpassWay(const pt::ptree &item)
+void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
 {
   // Get info we need to construct our way
   long id = -1;
@@ -341,8 +379,22 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree &item)
   else
     id = _map->createNextWayId();
 
+  long version = ElementData::VERSION_EMPTY;
+  version = item.get("version", version);
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = item.get("changeset", changeset);
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  timestamp = item.get("timestamp", timestamp);
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = item.get("user", user);
+  long uid = ElementData::UID_EMPTY;
+  uid = item.get("uid", uid);
+
   // Construct Way
-  WayPtr pWay(new Way(_defaultStatus, id, _defaultCircErr));
+  WayPtr pWay(
+    new Way(
+      _defaultStatus, id, _defaultCircErr, changeset, version, timestamp,
+      QString::fromStdString(user), uid));
 
   // Add nodes
   if (item.not_found() != item.find("nodes"))
@@ -370,7 +422,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree &item)
   }
 }
 
-void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item)
+void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
 {
   // Get info we need to construct our relation
   long id = -1;
@@ -379,8 +431,22 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item)
   else
     id = _map->createNextRelationId();
 
+  long version = ElementData::VERSION_EMPTY;
+  version = item.get("version", version);
+  long changeset = ElementData::CHANGESET_EMPTY;
+  changeset = item.get("changeset", changeset);
+  unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
+  timestamp = item.get("timestamp", timestamp);
+  std::string user = ElementData::USER_EMPTY.toStdString();
+  user = item.get("user", user);
+  long uid = ElementData::UID_EMPTY;
+  uid = item.get("uid", uid);
+
   // Construct Relation
-  RelationPtr pRelation(new Relation(_defaultStatus, id, _defaultCircErr));
+  RelationPtr pRelation(
+    new Relation(
+      _defaultStatus, id, _defaultCircErr, "", changeset, version, timestamp,
+      QString::fromStdString(user), uid));
 
   // Add members
   if (item.not_found() != item.find("members"))
@@ -413,7 +479,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree &item)
   }
 }
 
-void OsmJsonReader::_addTags(const boost::property_tree::ptree &item, hoot::ElementPtr pElement)
+void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement)
 {
   // Find tags and add them
   if (item.not_found() != item.find("tags"))

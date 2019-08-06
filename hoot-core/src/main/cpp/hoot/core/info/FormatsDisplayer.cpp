@@ -33,6 +33,8 @@
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapWriter.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 // Qt
 #include <QTextStream>
@@ -40,17 +42,61 @@
 namespace hoot
 {
 
+QString FormatsDisplayer::display(const bool displayInputs, const bool displayOutputs,
+                                  const bool displayInputsSupportingBounds)
+{
+  DisableLog dl;
+
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
+  if (displayInputs)
+  {
+    ts << "Input formats:" << endl << endl;
+    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className()) << endl;
+  }
+
+  if (displayOutputs)
+  {
+    ts << "Output formats:" << endl << endl;
+    QStringList formatsList;
+    // These are supported by the changeset writers, who aren't map readers/writers.  Possibly,
+    // a lightweight interface could be used on all the readers writers instead of modifying
+    // OsmMapReader/OsmMapwriter with the supportedFormats method to make this better.
+    formatsList.append(".osc");
+    formatsList.append(".osc.sql");
+    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), formatsList) << endl;
+  }
+
+  if (displayInputsSupportingBounds)
+  {
+    ts << "Input formats supporting bounded reading:" << endl << endl;
+
+    ts << _getFormatsSupportingBoundsString() << endl;
+  }
+
+  return ts.readAll();
+}
+
 template<typename IoClass>
-QString getFormats(const std::string& className, const QStringList extraFormats = QStringList())
+QString FormatsDisplayer::_getFormatsString(
+  const std::string& className, const QStringList extraFormats)
+{
+  return _getPrintableString(_getFormats<IoClass>(className, extraFormats));
+}
+
+template<typename IoClass>
+QStringList FormatsDisplayer::_getFormats(
+  const std::string& className, const QStringList extraFormats)
 {
   std::vector<std::string> readerNames =
     Factory::getInstance().getObjectNamesByBase(className);
   QSet<QString> formats;
   for (size_t i = 0; i < readerNames.size(); i++)
   {
-    std::shared_ptr<IoClass> c(
+    std::shared_ptr<IoClass> ioClass(
       Factory::getInstance().constructObject<IoClass>(readerNames[i]));
-    const QString supportedFormats = c->supportedFormats();
+    const QString supportedFormats = ioClass->supportedFormats();
     if (!supportedFormats.isEmpty())
     {
       QStringList supportedFormatsList = supportedFormats.split(";");
@@ -64,42 +110,53 @@ QString getFormats(const std::string& className, const QStringList extraFormats 
   QStringList formatsList = formats.toList();
   formatsList.append(extraFormats);
   formatsList.sort();
+  return formatsList;
+}
 
+QString FormatsDisplayer::_getPrintableString(const QStringList& items)
+{
   QString buffer;
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
-  for (int i = 0; i < formatsList.size(); i++)
-    ts << formatsList.at(i) << endl;
+  for (int i = 0; i < items.size(); i++)
+    ts << items.at(i) << endl;
   ts << endl;
-
   return ts.readAll();
 }
 
-QString FormatsDisplayer::display(const bool displayInputs, const bool displayOutputs)
+QString FormatsDisplayer::_getFormatsSupportingBoundsString()
 {
-  DisableLog dl;
-
-  QString buffer;
-  QTextStream ts(&buffer);
-  ts.setCodec("UTF-8");
-  if (displayInputs)
+  const QStringList formats = _getFormats<OsmMapReader>(OsmMapReader::className());
+  LOG_VART(formats);
+  QStringList boundableFormats;
+  for (int i = 0; i < formats.size(); i++)
   {
-    ts << "Input formats:" << endl << endl;
-    ts << getFormats<OsmMapReader>(OsmMapReader::className()) << endl;
+    QString format = formats[i];
+    QString formatTemp = format;
+    if (formatTemp.startsWith("hootapidb://"))
+    {
+      formatTemp += "myhost:5432/mydb/mylayer";
+    }
+    else if (formatTemp.startsWith("osmapidb://"))
+    {
+      formatTemp += "myhost:5432/osmapi_test";
+    }
+    const QString supportedReaderName = OsmMapReaderFactory::getReaderName(formatTemp);
+    LOG_VART(supportedReaderName);
+    if (!supportedReaderName.trimmed().isEmpty())
+    {
+      std::shared_ptr<OsmMapReader> reader(
+        Factory::getInstance().constructObject<OsmMapReader>(supportedReaderName));
+      LOG_VART(reader.get());
+      std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
+      LOG_VART(boundable.get());
+      if (boundable)
+      {
+        boundableFormats.append(format);
+      }
+    }
   }
-
-  if (displayOutputs)
-  {
-    ts << "Output formats:" << endl << endl;
-    QStringList formatsList;
-    //These are supported by the changeset writers, who aren't map readers/writers.  Possibly,
-    //a lightweight interface could be used on all the readers writers instead of modifying
-    //OsmMapReader/OsmMapwriter with the supportedFormats method to make this better.
-    formatsList.append(".osc");
-    formatsList.append(".osc.sql");
-    ts << getFormats<OsmMapWriter>(OsmMapWriter::className(), formatsList) << endl;
-  }
-  return ts.readAll();
+  return _getPrintableString(boundableFormats);
 }
 
 }

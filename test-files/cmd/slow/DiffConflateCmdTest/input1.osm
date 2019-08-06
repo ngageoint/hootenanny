@@ -254,7 +254,7 @@
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </way>
-  <way id='-39773' action='modify'>
+  <way id='-39773' action='modify' version='1'>
     <nd ref='-39771' />
     <nd ref='-39772' />
     <nd ref='-39774' />

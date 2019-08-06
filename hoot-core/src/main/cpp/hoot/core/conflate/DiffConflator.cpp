@@ -199,6 +199,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 void DiffConflator::_snapSecondaryRoadsBackToRef()
 {
   UnconnectedWaySnapper roadSnapper;
+  roadSnapper.setConfiguration(conf());
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());

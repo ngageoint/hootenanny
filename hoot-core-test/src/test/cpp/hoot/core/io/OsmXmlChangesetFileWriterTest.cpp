@@ -55,8 +55,7 @@ public:
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter().write(_outputPath + "changeset.osc", changesetProvider);
 
-    HOOT_FILE_EQUALS( _inputPath + "changeset.osc",
-                     _outputPath + "changeset.osc");
+    HOOT_FILE_EQUALS(_inputPath + "changeset.osc", _outputPath + "changeset.osc");
   }
 };
 

@@ -82,6 +82,7 @@ public:
   bool getIsDebugMap() { return _debug; }
 
 private:
+
   bool _debug;
 };
 

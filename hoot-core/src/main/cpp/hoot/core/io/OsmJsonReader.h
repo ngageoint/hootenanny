@@ -45,6 +45,7 @@
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Boundable.h>
 
 namespace hoot
 {
@@ -105,7 +106,7 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader, Configurable
+class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable
 {
 public:
 
@@ -158,7 +159,8 @@ public:
    *        from the data being read, or self-generate unique IDs
    * @param useDataSourceIds true to use source IDs
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  { _useDataSourceIds = useDataSourceIds; }
 
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
@@ -229,6 +231,8 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) override;
 
+  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -271,6 +275,8 @@ protected:
   double _coordGridSize;
   /** Number of threads to process the HTTP requests */
   int _threadCount;
+
+  geos::geom::Envelope _bounds;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
