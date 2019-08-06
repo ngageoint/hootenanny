@@ -45,6 +45,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 
 // Qt
 #include <QBuffer>
@@ -361,8 +362,13 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   // sure nothing tries to stream with this reader when a bounds has been set.
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
-  {
-    IoUtils::cropToBounds(_map, _bounds);
+  { const bool keepConnectedOobWays =
+      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds();
+    if (keepConnectedOobWays)
+    {
+      ImmediatelyConnectedOutOfBoundsWayTagger(_bounds).apply(_map);
+    }
+    IoUtils::cropToBounds(_map, _bounds, keepConnectedOobWays);
   }
 
   ReportMissingElementsVisitor visitor;

@@ -133,7 +133,8 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
+void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
+                           const bool includeConnectedOobWays)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   MapCropper cropper(bounds);
@@ -143,7 +144,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
   cropper.setKeepOnlyFeaturesInsideBounds(
     ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
   ElementCriterionPtr inclusionCrit;
-  if (ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
+  if (includeConnectedOobWays)
   {
     inclusionCrit.reset(
       new ChainCriterion(

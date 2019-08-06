@@ -55,6 +55,7 @@
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Standard
 #include <limits>
@@ -207,8 +208,9 @@ void MapCropper::apply(OsmMapPtr& map)
   _numCrossingWaysKept = 0;
   _numCrossingWaysRemoved = 0;
   _numNodesRemoved = 0;
+  _explicitlyIncludedWayIds.clear();
 
-  OsmMapPtr result = map;
+  //OsmMapPtr result = map;
 
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
@@ -231,20 +233,28 @@ void MapCropper::apply(OsmMapPtr& map)
 
   // go through all the ways
   long wayCtr = 0;
-  const WayMap ways = result->getWays();
+  const WayMap ways = /*result*/map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
+
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& wayEnv = *(ls->getEnvelopeInternal());
     LOG_VART(wayEnv);
 
-    if (_isWhollyOutside(wayEnv))
+    if (_inclusionCrit && _inclusionCrit->isSatisfied(w))
+    {
+      // keep the way
+      LOG_TRACE("Keeping explicitly included way: " << w->getElementId() << "...");
+      _explicitlyIncludedWayIds.insert(w->getId());
+      _numWaysInBounds++;
+    }
+    else if (_isWhollyOutside(wayEnv))
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(result, w->getId());
+      RemoveWayByEid::removeWayFully(/*result*/map, w->getId());
       _numWaysOutOfBounds++;
     }
     else if (_isWhollyInside(wayEnv))
@@ -258,7 +268,7 @@ void MapCropper::apply(OsmMapPtr& map)
       // Way isn't wholly inside and the configuration requires it to be, so remove the way.
       LOG_TRACE(
         "Dropping due to _keepOnlyFeaturesInsideBounds=true: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(result, w->getId());
+      RemoveWayByEid::removeWayFully(/*result*/map, w->getId());
       _numWaysOutOfBounds++;
     }
     else if (!_keepEntireFeaturesCrossingBounds)
@@ -267,7 +277,7 @@ void MapCropper::apply(OsmMapPtr& map)
       // do an expensive operation to decide how much to keep, if any.
       LOG_TRACE(
         "Cropping due to _keepEntireFeaturesCrossingBounds=false: " << w->getElementId() << "...");
-      _cropWay(result, w->getId());
+      _cropWay(/*result*/map, w->getId());
       _numWaysCrossingThreshold++;
     }
     else
@@ -286,18 +296,29 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
 
-  std::shared_ptr<NodeToWayMap> n2wp = result->getIndex().getNodeToWayMap();
-  NodeToWayMap& n2w = *n2wp;
+  std::shared_ptr<NodeToWayMap> n2w = /*result*/map->getIndex().getNodeToWayMap();
+  //NodeToWayMap& n2w = *n2wp;
 
   LOG_DEBUG("Removing nodes...");
 
   // go through all the nodes
   long nodeCtr = 0;
   long nodesRemoved = 0;
-  const NodeMap nodes = result->getNodes();
+  const NodeMap nodes = /*result*/map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    LOG_VART(it->second->getElementId());
+    NodePtr node = it->second;
+    LOG_VART(node->getElementId());
+
+    if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
+        OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
+    {
+      LOG_TRACE(
+        "Skipping delete for: " << node->getElementId() <<
+        " belonging to explicitly included way(s)...");
+      continue;
+    }
+
     const Coordinate& c = it->second->toCoordinate();
     LOG_VART(c.toString());
     bool nodeInside = false;
@@ -349,12 +370,12 @@ void MapCropper::apply(OsmMapPtr& map)
       if (_nodeBounds.isNull() == true || _nodeBounds.contains(c))
       {
         // if the node is not part of a way
-        if (n2w.find(it->first) == n2w.end())
+        if (n2w->find(it->first) == n2w->end())
         {
           // remove the node
           LOG_TRACE(
             "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-          RemoveNodeByEid::removeNodeNoCheck(result, it->second->getId());
+          RemoveNodeByEid::removeNodeNoCheck(/*result*/map, it->second->getId());
           nodesRemoved++;
         }
       }

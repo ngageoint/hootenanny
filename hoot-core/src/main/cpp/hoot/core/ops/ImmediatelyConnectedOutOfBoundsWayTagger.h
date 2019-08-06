@@ -1,0 +1,76 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+#ifndef IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
+#define IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
+
+// GEOS
+#include <geos/geom/Envelope.h>
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+
+namespace hoot
+{
+
+class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public OperationStatusInfo,
+  public Boundable
+{
+public:
+
+  static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
+
+  ImmediatelyConnectedOutOfBoundsWayTagger();
+  ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds);
+
+  virtual void apply(OsmMapPtr& map);
+
+  /**
+   * @see Boundable
+   */
+  virtual void setBounds(const geos::geom::Envelope& bounds) { _boundsChecker.setBounds(bounds); }
+
+  virtual QString getInitStatusMessage() const
+  { return "Adding tags to immediately connected out of bounds ways..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Added " + QString::number(_numAffected) + " tags"; }
+
+  virtual QString getDescription() const
+  { return "Identifies ways outside of the query bounds but immediately connected to ways crossing it"; }
+
+private:
+
+  InBoundsCriterion _boundsChecker;
+};
+
+}
+
+#endif // IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H

@@ -344,6 +344,17 @@ public:
    * @return a copied subset map
    */
   static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
+
+  /**
+   * TODO
+   *
+   * @param nodeId
+   * @param wayIds
+   * @param map
+   * @return
+   */
+  static bool nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+                                    const ConstOsmMapPtr& map);
 };
 
 }

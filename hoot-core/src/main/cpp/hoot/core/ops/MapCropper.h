@@ -114,6 +114,8 @@ private:
   bool _keepOnlyFeaturesInsideBounds;
   // TODO
   ElementCriterionPtr _inclusionCrit;
+  // TODO
+  std::set<long> _explicitlyIncludedWayIds;
 
   int _statusUpdateInterval;
 
