@@ -100,14 +100,14 @@ public:
     return result;
   }
 
-  virtual QString getName() const { return "multiary-score-poi-matches"; }
+  virtual QString getName() const override { return "multiary-score-poi-matches"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Scores the performance of multiary-conflate (experimental) "; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     bool showConfusion = false;
     if (args.contains("--confusion"))

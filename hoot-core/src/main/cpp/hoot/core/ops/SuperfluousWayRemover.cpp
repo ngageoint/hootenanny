@@ -60,13 +60,15 @@ void SuperfluousWayRemover::removeWays()
 {
   _numAffected = 0;
   std::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
+  LOG_VART(e2r->size());
 
   // make a copy of the ways to avoid issues when removing.
   const WayMap ways = _inputMap->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
-    LOG_VART(w->getElementId());
+    //LOG_VART(w->getElementId());
+    LOG_VART(w);
 
     bool same = true;
     const vector<long>& nodeIds = w->getNodeIds();

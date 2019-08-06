@@ -36,13 +36,17 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, CookieCutterOp)
 
-CookieCutterOp::CookieCutterOp()
+CookieCutterOp::CookieCutterOp() :
+_alpha(1000.0),
+_alphaShapeBuffer(0.0),
+_crop(false)
 {
   setConfiguration(conf());
 }
@@ -57,43 +61,61 @@ void CookieCutterOp::setConfiguration(const Settings& conf)
 
 void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
 {
-  // remove unknown2 out of the input map and create a new map, which will be our ref map (unknown1
-  // map; cutter shape map)
-  std::shared_ptr<OsmMap> refMap(new OsmMap(map));
-  RemoveElementsVisitor unknown2Remover;
-  unknown2Remover.setRecursive(true);
-  unknown2Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
-  refMap->visitRw(unknown2Remover);
-  LOG_VARD(refMap->getNodes().size());
+  LOG_VARD(map->getNodeCount());
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, "cookie-cutter-op-input-map");
 
-  // create an alpha shape based on the ref map (unknown1)
-  std::shared_ptr<OsmMap> cutShapeMap =
-    AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(refMap);
-  LOG_VARD(cutShapeMap->getNodes().size());
+  // This assumes that the incoming map has status Unknown1 for the replacement data and status
+  // Unknown2 for the data being replaced.
 
-  // remove unknown1 out of the input and create a new map, which will be our source map
-  // (unknown2 map; dough map)
+  const Status cutterMapStatus = Status::Unknown1;
+  const Status doughMapStatus = Status::Unknown2;
+
+  // When working on the changeset-derive-replacement command, it seemed like there were several
+  // places in here where data was being projected properly. This class didn't end up being used
+  // to support that command, so I've commented out the reprojection code that was temporarily
+  // needed. It may be worth taking another look at CookieCutterOp to make sure its behaving
+  // correctly regarding the input/output data projections
+
+  // Remove elements with the dough status out of the full input map and create a new map, which
+  // will be our cutter shape map.
+  std::shared_ptr<OsmMap> cutterShapeMap(new OsmMap(map));
+  //MapProjector::projectToWgs84(cutterShapeMap);
+  RemoveElementsVisitor doughRemover;
+  doughRemover.setRecursive(true);
+  doughRemover.addCriterion(ElementCriterionPtr(new StatusCriterion(doughMapStatus)));
+  cutterShapeMap->visitRw(doughRemover);
+  LOG_VARD(cutterShapeMap->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(cutterShapeMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(cutterShapeMap, "cookie-cutter-op-cutter-shape-map");
+
+  // Create an alpha shape based on the map with the cutter shape data to get our cookie cutter
+  // shape outline.
+  std::shared_ptr<OsmMap> cutterShapeOutlineMap =
+    AlphaShapeGenerator(_alpha, _alphaShapeBuffer).generateMap(cutterShapeMap);
+  //MapProjector::projectToWgs84(cutterShapeOutlineMap);
+
+  // Remove elements with the cutter shape status create a new map, which will be our dough map.
   std::shared_ptr<OsmMap> doughMap(new OsmMap(map));
-  RemoveElementsVisitor unknown1Remover;
-  unknown1Remover.setRecursive(true);
-  unknown1Remover.addCriterion(ElementCriterionPtr(new StatusCriterion(Status::Unknown1)));
-  doughMap->visitRw(unknown1Remover);
-  LOG_VARD(doughMap->getNodes().size());
+  RemoveElementsVisitor cutterShapeRemover;
+  cutterShapeRemover.setRecursive(true);
+  cutterShapeRemover.addCriterion(ElementCriterionPtr(new StatusCriterion(cutterMapStatus)));
+  doughMap->visitRw(cutterShapeRemover);
 
-  // cookie cut the alpha shape obtained from the ref map (cutter map) out of the source map
-  // (dough map)
-  CookieCutter(_crop, 0.0).cut(cutShapeMap, doughMap);
+  // Cut the outline cutter shape obtained from the cutter shape map out of the dough map, leaving
+  // a hole in it (or if _crop=false, drop what's around the outline shape instead).
+  CookieCutter(_crop, 0.0).cut(cutterShapeOutlineMap, doughMap);
   std::shared_ptr<OsmMap> cookieCutMap = doughMap;
-  LOG_VARD(cookieCutMap->getNodes().size());
+  //MapProjector::projectToWgs84(cookieCutMap);
 
-  // combine the ref map (cutter map) back with the source map (dough map); Effectively, we've
-  // replaced all of the data in the dough map whose AOI coincides with the ref map (cutter map)
-  // with the ref map's (cutter map's) data.
-  refMap->setProjection(cookieCutMap->getProjection());
-  refMap->append(cookieCutMap);
-  std::shared_ptr<OsmMap> result = refMap;
-  LOG_VARD(result->getNodes().size());
+  // Combine the cutter shape map with the dough map by adding the cutter shape data back into the
+  // hole created by cookie cutting the dough map.
+  cutterShapeMap->append(cookieCutMap);
+  std::shared_ptr<OsmMap> result = cutterShapeMap;
   map.reset(new OsmMap(result));
+  LOG_VARD(map->getNodes().size());
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, "cookie-cutter-op-final-combined-map");
 }
 
 }

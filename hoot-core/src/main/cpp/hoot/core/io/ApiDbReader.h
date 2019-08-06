@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
 
 // Qt

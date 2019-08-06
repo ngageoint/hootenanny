@@ -33,6 +33,8 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -54,6 +56,12 @@ _index(index),
 _indexToEid(indexToEid)
 {
   _map = pMap.get();
+
+  std::shared_ptr<ChainCriterion> chainCrit = std::dynamic_pointer_cast<ChainCriterion>(_criterion);
+  if (chainCrit)
+  {
+    LOG_VARD(chainCrit->toString());
+  }
 }
 
 void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -65,6 +73,9 @@ void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
 void IndexElementsVisitor::finalizeIndex()
 {
   LOG_DEBUG("Finalizing index...");
+  LOG_VARD(_indexToEid.size());
+  LOG_VARD(_boxes.size());
+  LOG_VARD(_fids.size());
   _index->bulkInsert(_boxes, _fids);
 }
 
@@ -72,6 +83,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
   if (!_criterion || _criterion->isSatisfied(e))
   {
+    LOG_VART(e->getElementId());
     _fids.push_back((int)_indexToEid.size());
     _indexToEid.push_back(e->getElementId());
 
@@ -88,10 +100,10 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
-                                                   const std::shared_ptr<Tgs::HilbertRTree>& index,
-                                                   const deque<ElementId>& indexToEid,
-                                                   ConstOsmMapPtr pMap)
+set<ElementId> IndexElementsVisitor::findNeighbors(
+  const Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
+  const deque<ElementId>& indexToEid, ConstOsmMapPtr pMap, const ElementType& elementType,
+  const bool includeContainingRelations)
 {
   LOG_TRACE("Finding neighbors within env: " << env << "...");
   LOG_VART(indexToEid.size());
@@ -100,7 +112,6 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
   LOG_VART(e2r.size());
 
-  set<ElementId> result;
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
   min[1] = env.getMinY();
@@ -108,23 +119,84 @@ set<ElementId> IndexElementsVisitor::findNeighbors(const Envelope& env,
   max[1] = env.getMaxY();
   IntersectionIterator it(index.get(), min, max);
 
+  set<ElementId> neighborIds;
   while (it.next())
   {
     ElementId eid = indexToEid[it.getId()];
-
-    // Map the tree id to an element id and push into result.
-    result.insert(eid);
-
-    // Check for relations that contain this element
-    const set<long>& relations = e2r.getRelationByElement(eid);
-    for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+    if (elementType == ElementType::Unknown || eid.getType() == elementType)
     {
-      result.insert(ElementId(ElementType::Relation, *it));
+      // Map the tree id to an element id and push into result.
+      neighborIds.insert(eid);
+
+      if (includeContainingRelations)
+      {
+        // Check for relations that contain this element
+        const set<long>& relations = e2r.getRelationByElement(eid);
+        for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+        {
+          neighborIds.insert(ElementId(ElementType::Relation, *it));
+        }
+      }
     }
   }
 
-  LOG_VART(result.size());
-  return result;
+  LOG_VART(neighborIds);
+  return neighborIds;
+}
+
+QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
+  const ConstNodePtr& node, const geos::geom::Envelope& env,
+  const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
+  ConstOsmMapPtr pMap)
+{
+  // find the neighboring nodes
+  const set<ElementId> neighborIds =
+    findNeighbors(env, index, indexToEid, pMap, ElementType::Node, false);
+
+  // map neighbors to their distance from the input node
+
+  QMultiMap<double, ElementId> neighborNodeDistances;
+  for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIds.begin();
+       neighborIdsItr != neighborIds.end(); ++neighborIdsItr)
+  {
+    ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
+    if (!neighborNode)
+    {
+      // This shouldn't happen unless the geospatial indices were set up improperly for the query
+      // node.
+      const QString errorMsg =
+        QString("Map does not contain neighbor node: %1. Skipping neighbor...")
+          .arg((*neighborIdsItr).toString());
+      throw HootException(errorMsg);
+//      LOG_TRACE(errorMsg);
+//      continue;
+    }
+    else
+    {
+      neighborNodeDistances.insertMulti(
+        Distance::euclidean(*node, *neighborNode), neighborNode->getElementId());
+    }
+  }
+  LOG_VART(neighborNodeDistances);
+
+  // sort neighbors by increasing distance from the input node
+
+  const QList<double> sortedDistances = neighborNodeDistances.keys();
+  LOG_VART(sortedDistances);
+  QList<ElementId> sortedNeighborIds;
+  for (QList<double>::const_iterator distancesItr = sortedDistances.begin();
+       distancesItr != sortedDistances.end(); ++distancesItr)
+  {
+    const QList<ElementId> ids = neighborNodeDistances.values(*distancesItr);
+    for (int i = 0; i < ids.size(); i++)
+    {
+      LOG_VART(ids.at(i));
+      sortedNeighborIds.append(ids.at(i));
+    }
+  }
+
+  LOG_VART(sortedNeighborIds);
+  return sortedNeighborIds;
 }
 
 }

@@ -32,7 +32,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/GmlWriter.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -64,12 +63,12 @@ public:
 
   EvalPointMovesCmd() { }
 
-  virtual QString getName() const { return "evaluate-point-moves"; }
+  virtual QString getName() const override { return "evaluate-point-moves"; }
 
   virtual QString getDescription() const
   { return "Calculates the error introduced by various operations on random map points"; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
   struct Comparison
   {
@@ -190,25 +189,7 @@ public:
     return result;
   }
 
-  OsmMapPtr gmlTransform(OsmMapPtr map, QString workingDir)
-  {
-    OsmMapPtr result(new OsmMap());
-
-    GmlWriter writer;
-    QStringList columns;
-    columns << "note1";
-    columns << "note2";
-    writer.setColumns(columns);
-    writer.writePoints(map, workingDir + "/EvalMove.gml");
-
-    OgrReader reader;
-    reader.setSchemaTranslationScript("LowerCase");
-    reader.read(workingDir + "/EvalMove.gml", "", result);
-
-    return result;
-  }
-
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 3)
     {
@@ -289,10 +270,6 @@ public:
 
     cout << "Save to .shp\t";
     compareMaps(map, shpTransform(map, workingDir), pointCount).print();
-    cout << endl;
-
-    cout << "Save to .gml\t";
-    compareMaps(map, gmlTransform(map, workingDir), pointCount).print();
     cout << endl;
 
     return 0;

@@ -40,6 +40,7 @@ namespace hoot
 class IdSwap
 {
 public:
+
   /** Helpful typedefs for container and iterators */
   typedef std::map<ElementId, ElementId> container;
   typedef typename container::iterator iterator;
@@ -71,6 +72,7 @@ public:
   size_t size();
 
 private:
+
   /** Containers to hold ID swap information, forward and backward mappings */
   container _idMap;
   container _idMapReversed;

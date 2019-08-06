@@ -29,6 +29,10 @@
 namespace hoot
 {
 
+UniqueElementIdVisitor::UniqueElementIdVisitor()
+{
+}
+
 void UniqueElementIdVisitor::visit(const ConstElementPtr& e)
 {
   _elements.insert(ElementId(e->getElementType(), e->getId()));

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -39,14 +39,14 @@ public:
 
   static std::string className() { return "hoot::MultiaryPoiIngestCmd"; }
 
-  virtual QString getName() const { return "multiary-poi-ingest"; }
+  virtual QString getName() const override { return "multiary-poi-ingest"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Ingests POIs for use by the multiary-conflate command (experimental) "; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 4)
     {

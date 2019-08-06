@@ -91,11 +91,8 @@ public:
   OsmMap();
 
   explicit OsmMap(const std::shared_ptr<const OsmMap>&);
-
   explicit OsmMap(const std::shared_ptr<OsmMap>&);
-
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
-
   OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
 
   ~OsmMap();
@@ -103,20 +100,26 @@ public:
   /**
    * Append all the elements in input map to this map.
    *
+   * The default behavior is to skip an element from the map being appended from if it has the same
+   * ID as an element in this map and the elements are considered identical. If the elements are
+   * considered to be identical, an error occurs. Alternatively, the throwOutDupes parameter will
+   * allow for overriding that behavior at the expense of not appending the elements.
+   *
    * @param map
+   * @param throwOutDupes if true, and elements in the map being appended from have the same IDs as
+   * elements in this map, those elements are ignored
    * @throws If there is element ID overlap.
    * @throws If the map being appended to is the same as the map being appended from.
    * @throws If the map being appended to does not have the same projection as the map being
    * appended from
    */
-  void append(const std::shared_ptr<const OsmMap>& map);
+  void append(const std::shared_ptr<const OsmMap>& map, const bool throwOutDupes = false);
 
   void addElement(const std::shared_ptr<Element>& e);
   template<class T>
   void addElements(T it, T end);
 
   void addNode(const NodePtr& n);
-
   /**
    * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
    * times.
@@ -141,15 +144,11 @@ public:
    * Returns true if the node is in this map.
    */
   virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
-
   virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
-
   virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
 
   long createNextNodeId() const { return _idGen->createNodeId(); }
-
   long createNextRelationId() const { return _idGen->createRelationId(); }
-
   long createNextWayId() const { return _idGen->createWayId(); }
 
   virtual ConstElementPtr getElement(const ElementId& id) const;
@@ -161,8 +160,6 @@ public:
 
   const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
 
-  const IdGenerator& getIdGenerator() const { return *_idGen; }
-
   /**
    * This returns an index of the OsmMap. Adding or removing ways from the map will make the index
    * out of date and will require calling getIndex again.
@@ -170,13 +167,9 @@ public:
   const OsmMapIndex& getIndex() const { return *_index; }
 
   virtual const ConstNodePtr getNode(long id) const;
-
   virtual const NodePtr getNode(long id);
-
   ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
-
   const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
-
   const NodeMap& getNodes() const { return _nodes; }
 
   std::set<ElementId> getParents(ElementId eid) const;
@@ -187,9 +180,7 @@ public:
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
   virtual const ConstRelationPtr getRelation(long id) const;
-
   virtual const RelationPtr getRelation(long id);
-
   const RelationMap& getRelations() const { return _relations; }
 
   /**
@@ -197,7 +188,6 @@ public:
    */
   virtual const WayPtr getWay(long id);
   const WayPtr getWay(ElementId eid);
-
   /**
    * Similar to above but const'd.
    *
@@ -207,7 +197,6 @@ public:
    */
   const ConstWayPtr getWay(long id) const;
   const ConstWayPtr getWay(ElementId eid) const;
-
   const WayMap& getWays() const { return _ways; }
 
   bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
@@ -220,14 +209,12 @@ public:
    * is part of another way.
    */
   void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to);
-
   /**
    * Similar to above, but from is replaced with a collection of elements. This makes sense in the
    * context of a relation, but may not make sense in other cases (e.g. replace a single node
    * that is part of a way with multiple nodes).
    */
   void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
-
   /**
    * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
    * for references to oldNode and replaces those references with newNode. Finally, oldNode is
@@ -240,7 +227,10 @@ public:
    */
   static void resetCounters() { IdGenerator::getInstance()->reset(); }
 
-  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen) { _idGenSp = gen; _idGen = gen.get(); }
+  const IdGenerator& getIdGenerator() const { return *_idGen; }
+  std::shared_ptr<IdGenerator> getIdGeneratorSp() const { return _idGenSp; }
+  void setIdGenerator(const std::shared_ptr<IdGenerator>& gen)
+  { _idGenSp = gen; _idGen = gen.get(); }
 
   void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
@@ -302,6 +292,16 @@ public:
   void setIdSwap(const std::shared_ptr<IdSwap>& swap) { _idSwap = swap; }
   std::shared_ptr<IdSwap> getIdSwap() const { return _idSwap; }
 
+  QString getName() const { return _name; }
+  void setName(const QString& name) { _name = name; }
+
+  int numNodesAppended() const { return _numNodesAppended; }
+  int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
+  int numWaysAppended() const { return _numWaysAppended; }
+  int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
+  int numRelationsAppended() const { return _numRelationsAppended; }
+  int numRelationsSkippedForAppending() const { return _numRelationsSkippedForAppending; }
+
 protected:
 
   mutable IdGenerator* _idGen;
@@ -332,6 +332,16 @@ protected:
 
   std::shared_ptr<IdSwap> _idSwap;
 
+  // useful during debugging
+  QString _name;
+
+  int _numNodesAppended;
+  int _numWaysAppended;
+  int _numRelationsAppended;
+  int _numNodesSkippedForAppending;
+  int _numWaysSkippedForAppending;
+  int _numRelationsSkippedForAppending;
+
   void _copy(const std::shared_ptr<const OsmMap>& from);
 
   /**
@@ -340,6 +350,8 @@ protected:
   bool _listContainsNode(const QList<ElementPtr> l) const;
 
   void _replaceNodeInRelations(long oldId, long newId);
+
+  void _initCounters();
 };
 
 typedef std::shared_ptr<OsmMap> OsmMapPtr;

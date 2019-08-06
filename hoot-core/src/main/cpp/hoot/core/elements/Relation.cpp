@@ -312,6 +312,8 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry& m = members[i];
+    LOG_VART(m.getElementId());
+    LOG_VART(map.containsElement(m.getElementId()));
     if (map.containsElement(m.getElementId()))
     {
       if (m.getElementId().getType() == ElementType::Node)

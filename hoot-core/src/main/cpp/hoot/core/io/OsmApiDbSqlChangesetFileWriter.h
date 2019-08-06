@@ -48,6 +48,9 @@ namespace hoot
 /**
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
+ *
+ * TODO: add a method that tells you whether sql output from this is equivalent to that in an xml
+ * changeset
  */
 class OsmApiDbSqlChangesetFileWriter : public Configurable
 {
@@ -115,6 +118,9 @@ private:
   double _changesetUserId;
 
   bool _includeDebugTags;
+
+  // id mappings for created elements
+  QMap<ElementId, ElementId> _remappedIds;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };

@@ -96,7 +96,8 @@ public:
    * useful in conjunction with Four Pass operations, but should generally be avoided unless there
    * are some other external guarantees.
    */
-  const geos::geom::Envelope& getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
+  const geos::geom::Envelope& getApproximateEnvelope(
+    const std::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Way); }
 
@@ -110,7 +111,8 @@ public:
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const geos::geom::Envelope& getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const;
+  const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node

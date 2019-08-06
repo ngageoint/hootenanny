@@ -125,6 +125,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
     node->setStatus(_status);
   }
 
+  LOG_VART(node->getStatus());
   LOG_VART(node->getVersion());
 
   return node;
@@ -157,7 +158,9 @@ WayPtr HootApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& ma
   {
     way->setStatus(_status);
   }
+
   LOG_VART(way->getStatus());
+  LOG_VART(way->getVersion());
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
@@ -197,6 +200,9 @@ RelationPtr HootApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, 
   {
     relation->setStatus(_status);
   }
+
+  LOG_VART(relation->getStatus());
+  LOG_VART(relation->getVersion());
 
   // these maybe could be read out in batch at the same time the element results are read...
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);

@@ -52,9 +52,8 @@ class CookieCutterOpTest : public HootTestFixture
 
 public:
 
-  CookieCutterOpTest()
-    : HootTestFixture("test-files/ops/CookieCutterOp/",
-                      "test-output/ops/CookieCutterOp/")
+  CookieCutterOpTest() :
+  HootTestFixture("test-files/ops/CookieCutterOp/", "test-output/ops/CookieCutterOp/")
   {
     setResetType(ResetAll);
   }
@@ -81,7 +80,7 @@ public:
 
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "CookieCutterOpTest.osm");
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterOpTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterOpTest.osm",
                      _outputPath + "CookieCutterOpTest.osm");
   }
 

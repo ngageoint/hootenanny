@@ -82,8 +82,10 @@ public:
     IdSwapOp op;
     op.apply(map);
 
-    WayPtr find1 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "find", "way1")[0]);
-    WayPtr find2 = map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "find", "way2")[0]);
+    WayPtr find1 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "find", "way1")[0]);
+    WayPtr find2 =
+      map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "find", "way2")[0]);
 
     CPPUNIT_ASSERT_EQUAL(1L, op.getNumAffected());
 

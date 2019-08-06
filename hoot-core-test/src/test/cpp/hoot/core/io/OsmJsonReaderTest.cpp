@@ -562,10 +562,8 @@ public:
     OsmJsonReader uut;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
 
-    // The files passed in must actually exist in order for a postive match.
     CPPUNIT_ASSERT(uut.isSupported("test-files/nodes.json"));
     CPPUNIT_ASSERT(!uut.isSupported("test-files/io/GeoJson/AllDataTypes.geojson"));
-    CPPUNIT_ASSERT(!uut.isSupported("blah.json"));
     // If the url is of the correct scheme and matches the host, we use it.
     CPPUNIT_ASSERT(uut.isSupported("http://" + overpassHost));
     CPPUNIT_ASSERT(uut.isSupported("https://" + overpassHost));

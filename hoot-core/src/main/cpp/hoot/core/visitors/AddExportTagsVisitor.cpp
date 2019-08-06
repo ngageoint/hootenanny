@@ -51,7 +51,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   bool hasStatus = tags.find(MetadataTags::HootStatus()) != tags.end();
   bool hasMappingTags = tags.getNonDebugCount() > 0;
 
-  // todo in 3076 branch:
+  // TODO: in 3076 branch:
   // - decide on universal status include rules:
   //    - as discussed, we are considering these options:
   //      - removal of TextStatus config altogether
@@ -87,7 +87,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   // HootStatus
   if (addStatus)
   {
-    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString( status );
+    tags[MetadataTags::HootStatus()] = _textStatus ? status.toTextStatus() : toCompatString(status);
   }
 
   // HootId
@@ -111,7 +111,7 @@ void AddExportTagsVisitor::overrideDebugSettings()
   _includeDebug = true;
 }
 
-QString AddExportTagsVisitor::toCompatString( Status status ) const
+QString AddExportTagsVisitor::toCompatString(Status status) const
 {
   if (status.getEnum() <= Status::EnumEnd)
   {

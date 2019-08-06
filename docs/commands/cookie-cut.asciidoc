@@ -16,7 +16,7 @@ The dough input is limited by the available RAM.
 * +buffer+       - Optional buffer value, if the buffer value is provided then the
                    shape is buffered by this many meters before cutting. The buffer may be
                    positive or negative.
-* +--crop+       - Optional crops based on the polygon rather than doing a cookie cut.
+* +--crop+       - Optionally crops based on the polygon rather than doing a cookie cut.
 
 === Usage
 

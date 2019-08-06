@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DEFAULTIDGENERATOR_H
@@ -46,15 +46,11 @@ public:
   virtual IdGeneratorPtr clone() const;
 
   virtual long createNodeId() { return --_nodeId; }
-
   virtual long createRelationId() { return --_relationId; }
-
   virtual long createWayId() { return --_wayId; }
 
   void ensureNodeBounds(long nid) { _nodeId = std::min(nid, _nodeId); }
-
   void ensureRelationBounds(long rid) { _relationId = std::min(rid, _relationId); }
-
   void ensureWayBounds(long wid) { _wayId = std::min(wid, _wayId); }
 
   void reset();

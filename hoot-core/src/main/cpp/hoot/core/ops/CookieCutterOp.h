@@ -37,8 +37,8 @@ namespace hoot
 class OsmMap;
 
 /**
- * Splits the map into ref/source (unknown1/unknown2), cuts the ref's shape out of the source, then
- * combines the the entire ref map back with the source map with the hole cut in it.
+ * Splits the map into ref/source, cuts the ref's shape out of the source, then combines the the
+ * entire ref map back with the source map with the hole cut in it.
  */
 class CookieCutterOp : public OsmMapOperation, public Configurable
 {
@@ -50,20 +50,22 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual std::string getClassName() const { return className(); }
-
   virtual void setConfiguration(const Settings& conf);
 
   void setAlpha(double alpha) { _alpha = alpha; }
-  void setAlphaShapeBuffer(double alphaShapeBuffer) { _alphaShapeBuffer = alphaShapeBuffer; }
+  void setAlphaShapeBuffer(double buffer) { _alphaShapeBuffer = buffer; }
   void setCrop(bool crop) { _crop = crop; }
 
-  virtual QString getDescription() const override { return "Applies the cookie cut operation"; }
+  virtual QString getDescription() const override
+  { return "Cookie cuts one dataset out of another"; }
 
 private:
 
+  // see AlphaShapeGenerator
   double _alpha;
   double _alphaShapeBuffer;
+
+  // see CookieCutter
   bool _crop;
 };
 

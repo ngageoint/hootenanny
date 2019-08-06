@@ -40,6 +40,8 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/Distance.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 // Qt
 #include <QDateTime>
@@ -81,8 +83,8 @@ const QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Nod
   return nodeIds;
 }
 
-QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(const QList<long>& nodeIds,
-                                                            const std::shared_ptr<const OsmMap>& map)
+QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(
+  const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map)
 {
   QList<std::shared_ptr<const Node>> nodes;
   for (QList<long>::const_iterator it = nodeIds.constBegin(); it != nodeIds.constEnd(); ++it)
@@ -129,7 +131,8 @@ QString OsmUtils::currentTimeAsString()
   return QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ssZ");
 }
 
-QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+QString OsmUtils::getRelationDetailedString(const ConstRelationPtr& relation,
+                                            const ConstOsmMapPtr& map)
 {
   return relation->toString() + getRelationMembersDetailedString(relation, map);
 }
@@ -186,7 +189,8 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
   }
 }
 
-bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
+bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1,
+                                    const ConstElementPtr& element2)
 {
   // Technically, this should also take into account reverse one ways and check direction.  Since
   // we have a map pre-op standardizing all the ways to not be reversed, not worrying about it for
@@ -210,7 +214,8 @@ bool OsmUtils::nameConflictExists(const ConstElementPtr& element1, const ConstEl
       !Tags::haveMatchingName(element1->getTags(), element2->getTags());
 }
 
-bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1, const ConstElementPtr& element2)
+bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1,
+                                               const ConstElementPtr& element2)
 {
   const QString element1HighwayVal = element1->getTags().get("highway");
   const QString element2HighwayVal = element2->getTags().get("highway");
@@ -220,16 +225,33 @@ bool OsmUtils::nonGenericHighwayConflictExists(const ConstElementPtr& element1, 
 }
 
 set<long> OsmUtils::getContainingWayIdsByNodeId(const long nodeId, const ConstOsmMapPtr& map,
-                                                     const ElementCriterionPtr& wayCriterion)
+                                                const ElementCriterionPtr& wayCriterion)
 {
+  LOG_VART(nodeId);
   set<long> containingWayIds;
 
   const set<long>& idsOfWaysContainingNode =
     map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
+  LOG_VART(idsOfWaysContainingNode);
   for (set<long>::const_iterator containingWaysItr = idsOfWaysContainingNode.begin();
        containingWaysItr != idsOfWaysContainingNode.end(); ++containingWaysItr)
   {
-    const long containingWayId = *containingWaysItr;;
+    const long containingWayId = *containingWaysItr;
+    LOG_VART(containingWayId);
+    LOG_VART(map->getWay(containingWayId));
+
+    if (wayCriterion)
+    {
+      LOG_VART(typeid(*wayCriterion).name());
+      std::shared_ptr<ChainCriterion> chainCrit =
+        std::dynamic_pointer_cast<ChainCriterion>(wayCriterion);
+      if (chainCrit)
+      {
+        LOG_VART(chainCrit->toString());
+      }
+      LOG_VART(wayCriterion->isSatisfied(map->getWay(containingWayId)));
+    }
+
     if (!wayCriterion || wayCriterion->isSatisfied(map->getWay(containingWayId)))
     {
       containingWayIds.insert(containingWayId);
@@ -327,7 +349,7 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   return closestWayNodeId;
 }
 
-bool OsmUtils::nodesAreContainedByTheSameWay(const long nodeId1, const long nodeId2,
+bool OsmUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                              const ConstOsmMapPtr& map)
 {
   const std::set<long>& waysContainingNode1 =
@@ -346,6 +368,14 @@ bool OsmUtils::nodesAreContainedByTheSameWay(const long nodeId1, const long node
   LOG_VART(commonNodesBetweenWayGroups);
 
   return commonNodesBetweenWayGroups.size() != 0;
+}
+
+OsmMapPtr OsmUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter)
+{
+  CopyMapSubsetOp wayCopier(map, filter);
+  OsmMapPtr output(new OsmMap());
+  wayCopier.apply(output);
+  return output;
 }
 
 }

@@ -36,6 +36,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 #include <unordered_set>
 #include <vector>
@@ -45,9 +46,9 @@ using namespace std;
 namespace hoot
 {
 
-WayJoiner::WayJoiner()
-    : _leavePid(false),
-      _numJoined(0)
+WayJoiner::WayJoiner() :
+_leavePid(false),
+_numJoined(0)
 {
 }
 
@@ -168,7 +169,7 @@ void WayJoiner::_joinAtNode()
   }
 }
 
-bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2)
+bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
 {
   return
     //  Same status => Joinable
@@ -182,6 +183,7 @@ bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2)
 
 void WayJoiner::_resetParents()
 {
+  LOG_VARD(_leavePid);
   if (_leavePid)
     return;
   WayMap ways = _map->getWays();

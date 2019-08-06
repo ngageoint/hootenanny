@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEHASHVISITOR2_H
 #define CALCULATEHASHVISITOR2_H
@@ -36,6 +36,8 @@ namespace hoot
 /**
  * Wrapper around CalculateHashVisitor for use with MultiaryIngestCmd - This very well could be
  * replaced by CalculateHashVisitor...but just haven't figured out how to make that work yet.
+ *
+ * TODO: implement OperationStatusInfo
  */
 class CalculateHashVisitor2 : public ElementVisitor
 {

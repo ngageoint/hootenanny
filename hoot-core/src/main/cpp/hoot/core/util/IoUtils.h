@@ -83,6 +83,14 @@ public:
     @param path the file path to save the map to
     */
   static void saveMap(const OsmMapPtr& map, const QString& path);
+
+  /**
+   * Crops a map to a given bounds
+   *
+   * @param map the map to crop
+   * @param bounds the bounds to crop to
+   */
+  static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds);
 };
 
 }

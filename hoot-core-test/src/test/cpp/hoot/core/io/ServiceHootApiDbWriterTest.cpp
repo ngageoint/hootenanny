@@ -429,13 +429,13 @@ public:
     writer2.close();
 
     //the second map should get appended to the first
-    ServicesDbTestUtils::compareRecords( "SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                                         HootApiDb::getCurrentNodesTableName(mapId) +
-                                         " ORDER BY longitude",
-                                         "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
-                                         "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
-                                         _testName,
-                                         (qlonglong)mapId);
+    ServicesDbTestUtils::compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                        HootApiDb::getCurrentNodesTableName(mapId) +
+                                        " ORDER BY longitude",
+                                        "0;0;true;3221225472;1;\"note\"=>\"n1\", \"" + MetadataTags::HootId() + "\"=>\"1\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"\n"
+                                        "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                                        _testName,
+                                        (qlonglong)mapId);
   }
 
   void twoMapsSameNameSameUserOverwriteEnabledTest()
@@ -476,12 +476,12 @@ public:
     writer2.close();
 
     // the second map should replace the first
-    ServicesDbTestUtils::compareRecords( "SELECT latitude, longitude, visible, tile, version, tags FROM " +
-                                         HootApiDb::getCurrentNodesTableName(secondMapId) +
-                                         " ORDER BY longitude",
-                                         "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
-                                         _testName,
-                                         (qlonglong)secondMapId);
+    ServicesDbTestUtils::compareRecords("SELECT latitude, longitude, visible, tile, version, tags FROM " +
+                                        HootApiDb::getCurrentNodesTableName(secondMapId) +
+                                        " ORDER BY longitude",
+                                        "0;0;true;3221225472;1;\"note\"=>\"n2\", \"" + MetadataTags::HootId() + "\"=>\"2\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"10\"",
+                                        _testName,
+                                        (qlonglong)secondMapId);
 
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());

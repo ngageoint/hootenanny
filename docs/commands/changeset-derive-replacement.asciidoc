@@ -1,0 +1,121 @@
+[[changeset-derive-replacement]]
+== changeset-derive-replacement
+
+=== Description
+
+The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets within 
+a given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. 
+
+Generally, the reference data is sourced from an authoritative data store, like an OSM API database. The changeset derivation algorithm 
+avoids unnecessary clipping of features and stitches up areas where features must be clipped. The output changeset file can be applied 
+directly to an OSM API database or the Rails Port with the +changeset-apply+ command.
+
+Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
+the second input (secondary dataset) are not retained and treated as completely new data. 
+
+* +input1+            - OSM data reference input (e.g. .osm file); must support bounded queries
+* +input2+            - OSM data secondary input (e.g. .osm file); must support bounded queries
+* +bounds+            - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
+* +featureFilter+     - A single criterion class name used to determine which type of features are replaced in the 
+                        reference dataset. Must be a conflatable criterion (see "Type Filtering" section below). e.g. "hoot::BuildingCriterion"
+* +output+            - Output location (e.g. .osc or .osc.sql file)
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
+                        element ID continuity with a particular database instance when generating SQL
+                        changesets only (.osc.sql).
+* +--lenient-bounds+  - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
+                        makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
+                        for more detail.
+* +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only valid 
+                        for .osc output files)
+* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input 
+                        bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
+
+=== Usage
+
+--------------------------------------
+changeset-derive-replacement (input1) (input2) (bounds) (featureFilter) (output) [osmApiDatabaseUrl] [--stats] [--write-bounds]
+--------------------------------------
+
+=== Examples
+
+--------------------------------------
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc 
+
+hoot changeset-derive-replacement -D convert.ops="op1;op2" input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc --lenient-bounds
+
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc --stats
+
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+--------------------------------------
+
+=== Type Filtering
+
+Currently, only one criterion may be specified per feature filter and at least one must always be specified. Future work will allow for 
+specifying no filter or multiple criteria per filter (https://github.com/ngageoint/hootenanny/issues/3360). To see a list of valid 
+conflatable element criteria for use as a feature filter:
+-----
+hoot info --conflatable-criteria
+-----
+
+=== Bounds Handling
+
+All inputs must support bounded reading. To list the Hootenanny input formats that support bounded readings:
+-----
+hoot info --formats --input-bounded
+-----
+
+Unless the reference data is being read directly from a direction connection to an OSM API database (with OsmApiDbReader), reference input 
+datasets containing linear data should be slightly larger than the replacement AOI, so as not to drop linear features in the changeset output 
+(OsmApiDbReader handles this issue automatically).
+
+==== Strict Bounds Handling
+
+===== Points
+
+- Only reference features completely inside the bounds will be replaced.
+- No secondary feature on or outside the boundary will be included in the output.
+
+===== Lines
+
+* No reference feature crossing the bounds will be modified outside of the bounds. Reference features may be split.
+* No parts of secondary features crossing the bounds will be included in the output
+
+===== Polygons
+
+* No reference features crossing the bounds will be modified
+* No secondary features crossing the bounds will be included in the output
+
+==== Lenient Bounds Handling
+
+===== Points
+
+N/A - Point bounds relationships are only handled in a strict fashion.
+
+===== Lines
+
+* Reference features crossing the bounds will be completely replaced by secondary features
+
+===== Polygons
+
+* Reference features crossing the bounds may be modified. They will not be split, and will only be conflated with secondary features.
+* Secondary features crossing the bounds may be included unmodified in the output or conflated with reference features.
+
+=== Versioning
+
+All input features from the reference dataset must be populated with the correct versions or application of the resulting changeset will fail. 
+For Overpass API queries, add "out meta" to the query retrieving the reference data.
+
+=== Unsupported Formats
+
+GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
+
+=== Caveats
+
+The lenient AOI linear replacement workflow does not completely work at this time with OSM XML or JSON inputs, as some features outside of the
+AOI may be dropped. https://github.com/ngageoint/hootenanny/issues/3376 will fix this.
+
+=== See Also
+
+* `changeset-derive` command
+* `changeset.*` configuration options
+* `snap.unconnected.ways.*` configuration options

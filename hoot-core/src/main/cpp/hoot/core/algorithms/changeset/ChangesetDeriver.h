@@ -29,7 +29,7 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
-#include <hoot/core/algorithms/changeset/ElementComparer.h>
+#include <hoot/core/elements/ElementComparer.h>
 
 namespace hoot
 {
@@ -93,7 +93,6 @@ private:
   // and can be used as a safety feature for other conflation workflows.
   bool _allowDeletingReferenceFeatures;
   QMap<Change::ChangeType, int> _changesByType;
-
 };
 
 typedef std::shared_ptr<ChangesetDeriver> ChangesetDeriverPtr;

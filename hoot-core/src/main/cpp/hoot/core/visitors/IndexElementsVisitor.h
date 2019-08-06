@@ -71,10 +71,38 @@ public:
 
   void finalizeIndex();
 
-  static std::set<ElementId> findNeighbors(const geos::geom::Envelope& env,
-                                           const std::shared_ptr<Tgs::HilbertRTree>& index,
-                                           const std::deque<ElementId>& indexToEid,
-                                           ConstOsmMapPtr pMap);
+  /**
+   * Find nearby elements given a bounds
+   *
+   * @param env the bounds within the map to search
+   * @param index a geospatial index for the input map
+   * @param indexToEid a set of element IDs belonging to the input geospatial index
+   * @param pMap the map to search
+   * @param elementType the type of element to search for
+   * @param includeContainingRelations if true, also returns relations containing the nearby
+   * elements found
+   * @return element IDs of the neighbors
+   */
+  static std::set<ElementId> findNeighbors(
+    const geos::geom::Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
+    const std::deque<ElementId>& indexToEid, ConstOsmMapPtr pMap,
+    const ElementType& elementType = ElementType::Unknown,
+    const bool includeContainingRelations = true);
+
+  /**
+   * Find nodes nearby a specified node sorted by increasing distance given a bounds
+   *
+   * @param node node to search neighbors for
+   * @param env the bounds within the map to search
+   * @param index a geospatial index for the input map
+   * @param indexToEid a set of element IDs belonging to the input geospatial index
+   * @param pMap the map to search
+   * @return element IDs of the neighbors
+   */
+  static QList<ElementId> findSortedNodeNeighbors(
+    const ConstNodePtr& node, const geos::geom::Envelope& env,
+    const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
+    ConstOsmMapPtr pMap);
 
   virtual QString getDescription() const { return "Build an index of input elements"; }
 

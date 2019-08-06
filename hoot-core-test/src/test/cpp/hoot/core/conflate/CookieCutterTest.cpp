@@ -72,7 +72,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -93,7 +94,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -114,7 +116,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -135,7 +138,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(false, -100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;
@@ -156,7 +160,8 @@ public:
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcTigerRoads.osm", doughMap);
     OsmMapPtr cutShapeMap(new OsmMap());
-    reader.read("test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
+    reader.read(
+      "test-files/algorithms/alpha-shape/AlphaShapeGeneratorNegativeBufferTest.osm", cutShapeMap);
 
     CookieCutter(true, 100.0).cut(cutShapeMap, doughMap);
     OsmMapPtr cookieCutMap = doughMap;

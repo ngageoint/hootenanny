@@ -69,6 +69,10 @@ _encodingErrorCount(0),
 _numWritten(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
+//  if (_includeDebug)
+//  {
+//    _overrideDebugSettings();
+//  }
 }
 
 OsmXmlWriter::~OsmXmlWriter()

@@ -67,9 +67,10 @@ OsmMapIndex::OsmMapIndex(const OsmMap& map) : _map(map)
 }
 
 void OsmMapIndex::addWay(ConstWayPtr w)
-{
+{ 
   if (_nodeToWayMap != 0)
   {
+    LOG_TRACE("Adding way to index: " << w->getElementId());
     _nodeToWayMap->addWay(w);
     VALIDATE(_nodeToWayMap->validate(_map));
   }
@@ -83,6 +84,7 @@ void OsmMapIndex::addRelation(const ConstRelationPtr& r)
 {
   if (_elementToRelationMap != 0)
   {
+    LOG_TRACE("Adding relation to index: " << r->getElementId());
     _elementToRelationMap->addRelation(_map, r);
     VALIDATE(validate());
   }
@@ -588,7 +590,7 @@ void OsmMapIndex::postGeometryChange(Element* e)
   {
     // add all the relations that were impacted back into the index.
     for (set<long>::iterator it = _pendingRelationChange.begin();
-      it != _pendingRelationChange.end(); ++it)
+         it != _pendingRelationChange.end(); ++it)
     {
       _elementToRelationMap->addRelation(_map, _map.getRelation(*it));
     }

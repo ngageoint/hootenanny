@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/io/Serializable.h>
-#include <hoot/core/ops/Boundable.h>
+#include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot

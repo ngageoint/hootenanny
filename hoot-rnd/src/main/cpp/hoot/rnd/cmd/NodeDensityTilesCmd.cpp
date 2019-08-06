@@ -58,14 +58,14 @@ public:
 
   NodeDensityTilesCmd() { }
 
-  virtual QString getName() const { return "node-density-tiles"; }
+  virtual QString getName() const override { return "node-density-tiles"; }
 
-  virtual QString getDescription() const
-  { return "Calculates geospatial bounding box partitions based on map's node density (experimental) "; }
+  virtual QString getDescription() const override
+  { return "Calculates geospatial bounding box partitions based on a map's node density (experimental) "; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 2)
     {
@@ -269,6 +269,7 @@ private:
     {
       for (size_t ty = 0; ty < tiles[tx].size(); ty++)
       {
+        // TODO: This code could possibly be replaced by GeometryUtils::createMapFromBounds.
         const geos::geom::Envelope env = tiles[tx][ty];
         const double circularError = ConfigOptions().getCircularErrorDefaultValue();
 
@@ -304,11 +305,8 @@ private:
         WayPtr bbox(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
         bbox->addNode(lowerLeft->getId());
         bbox->addNode(upperLeft->getId());
-        //bbox->addNode(upperLeft->getId());
         bbox->addNode(upperRight->getId());
-        //bbox->addNode(upperRight->getId());
         bbox->addNode(lowerRight->getId());
-        //bbox->addNode(lowerRight->getId());
         bbox->addNode(lowerLeft->getId());
         //gdal will recognize any closed way with the boundary tag as a polygon (tags
         //for features recognized as polys configurable in osmconf.ini), which is the type of

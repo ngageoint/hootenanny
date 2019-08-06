@@ -35,6 +35,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/ops/MapCropper.h>
 
 // Qt
 #include <QFileInfo>
@@ -106,7 +107,8 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
-void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId, Status defaultStatus)
+void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
+                      Status defaultStatus)
 {
   QStringList pathLayer = path.split(";");
   QString justPath = pathLayer[0];
@@ -126,6 +128,21 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
   // We could pass a progress in here to get more granular write status feedback.
   OsmMapWriterFactory::write(map, path);
+}
+
+void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
+{
+  LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
+  MapCropper cropper(bounds);
+  LOG_INFO(cropper.getInitStatusMessage());
+  // We don't reuse MapCropper's version of these options, since we want the freedom to have
+  // different default values than what MapCropper uses.
+  cropper.setKeepEntireFeaturesCrossingBounds(
+    ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+  cropper.setKeepOnlyFeaturesInsideBounds(
+    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+  cropper.apply(map);
+  LOG_DEBUG(cropper.getCompletedStatusMessage());
 }
 
 }
