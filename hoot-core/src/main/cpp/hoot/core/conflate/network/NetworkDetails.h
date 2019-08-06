@@ -74,6 +74,9 @@ public:
 
   Radians calculateHeading(ConstEdgeLocationPtr el) const;
 
+  /**
+   * Callers to this method are responsible for filtering out invalid edges.
+   */
   Radians calculateHeadingAtVertex(ConstNetworkEdgePtr e, ConstNetworkVertexPtr v) const;
 
   QList<EdgeSublineMatchPtr> calculateMatchingSublines(ConstNetworkEdgePtr e1,
