@@ -105,11 +105,14 @@ void ChangesetReplacementCreator::create(
   // DATA LOAD AND INITIAL PREP
 
   // Load the ref dataset and crop to the specified aoi.
+
   OsmMapPtr refMap = _loadRefMap(input1);
+
   // We want to alert the user to the fact their ref versions *could* be being populated incorectly
   // to avoid difficulties during changeset application at the end. Its likely if they are
   // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
   // now to give the chance to back out earlier.
+
   const int numberOfRefElementsWithVersionLessThan1 = _versionLessThanOneCount(refMap);
   if (numberOfRefElementsWithVersionLessThan1 > 0)
   {
@@ -119,8 +122,10 @@ void ChangesetReplacementCreator::create(
       "back to an authoritative data store. Are the versions on the features being populated " <<
       "correctly?")
   }
+
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
+
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
   if (lenientBounds && _isLinearCrit(featureTypeFilterClassName))
   {
@@ -128,17 +133,23 @@ void ChangesetReplacementCreator::create(
     // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
     _addChangesetDeleteExclusionTags(refMap);
   }
+
   // Prune down the elements to just the feature types specified by the filter.
+
   _filterFeatures(refMap, featureCrit, "ref-after-type-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
+
   OsmMapPtr secMap = _loadSecMap(input2);
+
   // Prune down the elements to just the feature types specified by the filter.
+
   _filterFeatures(secMap, featureCrit, "sec-after-type-pruning");
 
   // COOKIE CUT
 
   // Cut the secondary data out of the reference data.
+
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap);
 
   // At one point it was necessary to renumber the relations in the sec map, as they could have ID
@@ -149,26 +160,31 @@ void ChangesetReplacementCreator::create(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut map back with the secondary map, so we can conflate it with the ref map.
+
   _combineMaps(cookieCutRefMap, secMap, false, "combined-before-conflation");
   secMap.reset();
 
   // CONFLATE
 
   // Conflate the cookie cut ref map with the cropped sec map.
+
   OsmMapPtr conflatedMap = cookieCutRefMap;
   // TODO: do something with reviews - #3361
   _conflate(conflatedMap, lenientBounds);
+
   if (_isLinearCrit(featureTypeFilterClassName))
   {
     // Snap secondary features back to reference features if dealing with linear features where
     // ref features may have been cut along the bounds. We're being lenient here by snapping
     // secondary to reference *and* allowing conflated data to be snapped to either dataset.
+
     _snapUnconnectedWays(
       conflatedMap, "Input2;Conflated", "Input1;Conflated", featureTypeFilterClassName, false,
       "conflated-snapped-sec-to-ref-1");
 
     // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
     // data in the resulting changeset and generate modify statements instead.
+
     ReplacementSnappedWayJoiner(refIdToVersionMappings).join(conflatedMap);
   }
 
@@ -181,9 +197,11 @@ void ChangesetReplacementCreator::create(
     // immediately connected out of bounds ways to a new temp map. We'll lose those ways once we
     // crop in preparation for changeset derivation. If we don't introduce them back during
     // changeset derivation, they may not end up being snapped back to the replacement data.
+
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
   }
   // Crop the ref and conflated maps appropriately for changeset derivation.
+
   _cropMapForChangesetDerivation(
     refMap, bounds, _changesetRefKeepEntireCrossingBounds, _changesetRefKeepOnlyInsideBounds,
     _isLinearCrit(featureTypeFilterClassName), "ref-cropped-for-changeset");
@@ -198,22 +216,30 @@ void ChangesetReplacementCreator::create(
     // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
     // we're being as lenient as possible with the snapping here, allowing basically anything to
     // join to anything else...could end up causing problems...but we'll go with it for now.
+
     _snapUnconnectedWays(
       conflatedMap, "Input2;Conflated;Input1", "Input1;Conflated;Input2",
       featureTypeFilterClassName, false, "conflated-snapped-sec-to-ref-2");
+
     // Combine the conflated map with the immediately connected out of bounds ways.
+
     _combineMaps(
       conflatedMap, immediatelyConnectedOutOfBoundsWays, true, "conflated-connected-combined");
+
     // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
+
     _snapUnconnectedWays(
       conflatedMap, "Input1", "Input1", featureTypeFilterClassName, true,
       "conflated-snapped-immediately-connected-out-of-bounds");
+
     // Remove any ways that weren't snapped.
+
     _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(conflatedMap);
 
     // Copy the connected ways back into the ref map as well, so the changeset will derive
     // properly.
+
     _combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true, "ref-connected-combined");
 
     immediatelyConnectedOutOfBoundsWays.reset();
@@ -223,6 +249,7 @@ void ChangesetReplacementCreator::create(
     // If we're not allowing the changeset deriver to generate delete statements for reference
     // features outside of the bounds, we need to mark all corresponding ref ways with a custom
     // tag that will cause the deriver to skip deleting them.
+
     _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
 
@@ -230,6 +257,7 @@ void ChangesetReplacementCreator::create(
 
   // Derive a changeset between the ref and conflated maps that completely replaces ref features
   // with secondary features within the bounds and write it out.
+
   _changesetCreator->create(refMap, conflatedMap, output);
 }
 
@@ -634,9 +662,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
     if (lenientBounds)
     {
       _loadRefKeepEntireCrossingBounds = true;
-      // TODO: This is a problem b/c the only reader supporting this being true right now is
-      // OsmApiDbReader. All other readers may contribute to corrupting replacement changesets for
-      // linear features with a lenient AOI.
       _loadRefKeepImmediateConnectedWaysOutsideBounds = true;
       _loadSecKeepEntireCrossingBounds = true;
       _loadSecKeepOnlyInsideBounds = false;
@@ -664,7 +689,8 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
       // Changing the default ordering of the post ops to accomodate this had detrimental effects
       // on other conflation. The best location seems to be at the end just before tag truncation.
       // would like to get rid of this...isn't a foolproof fix by any means if the conflate post
-      // ops end up getting reordered for some reason
+      // ops end up getting reordered for some reason.
+
       LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
       QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
       conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));

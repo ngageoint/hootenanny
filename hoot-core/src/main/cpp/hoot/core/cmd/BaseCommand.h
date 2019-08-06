@@ -62,7 +62,7 @@ public:
   /**
    * This is the preferred method to override.
    */
-  virtual int runSimple(QStringList args) = 0;
+  virtual int runSimple(QStringList& args) = 0;
 
   QStringList toQStringList(char* argv[], int argc);
 

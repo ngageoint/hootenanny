@@ -26,7 +26,7 @@
  */
 
 // Hoot
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/DataConverter.h>
@@ -43,7 +43,7 @@ using namespace std;
 namespace hoot
 {
 
-class ConvertCmd : public BaseCommand
+class ConvertCmd : public BoundedCommand
 {
 public:
 
@@ -51,12 +51,17 @@ public:
 
   ConvertCmd() {}
 
-  virtual QString getName() const { return "convert"; }
+  virtual QString getName() const override { return "convert"; }
 
-  virtual QString getDescription() const { return "Converts between map formats"; }
+  virtual QString getDescription() const override { return "Converts between map formats"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
+    LOG_VART(args.size());
+    LOG_VART(args);
+
+    BoundedCommand::runSimple(args);
+
     if (args.size() < 2)
     {
       cout << getHelp() << endl << endl;
@@ -65,16 +70,6 @@ public:
 
     QElapsedTimer timer;
     timer.start();
-
-    LOG_VART(args.size());
-    LOG_VART(args);
-
-    bool writeBoundsFile = false;
-    if (args.contains("--write-bounds"))
-    {
-      writeBoundsFile = true;
-      args.removeAll("--write-bounds");
-    }
 
     QStringList inputs;
     QString output;
@@ -109,18 +104,6 @@ public:
     DataConverter converter;
     converter.setConfiguration(conf());
     converter.convert(inputs, output);
-
-    if (writeBoundsFile)
-    {
-      ConfigOptions opts;
-      const QString boundsStr = opts.getConvertBoundingBox().trimmed();
-      if (!boundsStr.isEmpty())
-      {
-        OsmMapWriterFactory::write(
-          GeometryUtils::createMapFromBounds(GeometryUtils::envelopeFromConfigString(boundsStr)),
-          opts.getBoundsOutputFile());
-      }
-    }
 
     QString msg = "Convert operation completed in ";
     const qint64 timeElapsed = timer.elapsed();

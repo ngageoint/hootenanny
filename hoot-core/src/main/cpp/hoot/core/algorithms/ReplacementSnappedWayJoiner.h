@@ -80,11 +80,11 @@ protected:
   /*
    * @see WayJoinerAdvanced
    */
-  virtual bool _hasPid(const ConstWayPtr& way) const;
+  virtual bool _hasPid(const ConstWayPtr& way) const override;
   /*
    * @see WayJoinerAdvanced
    */
-  virtual long _getPid(const ConstWayPtr& way) const;
+  virtual long _getPid(const ConstWayPtr& way) const override;
 
 private:
 

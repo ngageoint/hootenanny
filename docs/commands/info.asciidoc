@@ -449,7 +449,7 @@ hoot info --value-aggregators
 
 === Way Joiners
 
-The +--way-joiners++ option prints out all way joiner class implementations that may either be used independently or in conjunction with
+The +--way-joiners+ option prints out all way joiner class implementations that may either be used independently or in conjunction with
 the OsmMapOperation, `hoot::WayJoinerOp`.
 
 ==== Usage

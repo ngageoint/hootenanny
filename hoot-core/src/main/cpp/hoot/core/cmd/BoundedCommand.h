@@ -25,56 +25,36 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/util/IoUtils.h>
+#ifndef BOUNDED_COMMAND_H
+#define BOUNDED_COMMAND_H
 
-using namespace std;
+// geos
+#include <geos/geom/Envelope.h>
+
+// Hoot
+#include <hoot/core/cmd/BaseCommand.h>
 
 namespace hoot
 {
 
-class CleanCmd : public BaseCommand
+/**
+ * A command that operates within a bounds
+ */
+class BoundedCommand : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CleanCmd"; }
+  BoundedCommand();
 
-  CleanCmd() { }
+  virtual ~BoundedCommand() {}
 
-  virtual QString getName() const override { return "clean"; }
+  virtual int runSimple(QStringList& args) override;
 
-  virtual QString getDescription() const override { return "Corrects erroneous map data"; }
+protected:
 
-  virtual int runSimple(QStringList& args) override
-  {
-    if (args.size() != 2)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
-    }
-
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], true, Status::Unknown1);
-
-    MapCleaner().apply(map);
-
-    MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, args[1]);
-
-    return 0;
-  }
+  virtual void _writeBoundsFile();
 };
-
-HOOT_FACTORY_REGISTER(Command, CleanCmd)
-
 
 }
 
+#endif // BOUNDED_COMMAND_H

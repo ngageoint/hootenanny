@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -43,12 +43,12 @@ public:
 
   DeleteDbMapCmd() {}
 
-  virtual QString getName() const { return "delete-db-map"; }
+  virtual QString getName() const override { return "delete-db-map"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 1)
     {

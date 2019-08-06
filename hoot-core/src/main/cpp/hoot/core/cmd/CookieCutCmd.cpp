@@ -48,11 +48,11 @@ public:
 
   CookieCutCmd() {}
 
-  virtual QString getName() const { return "cookie-cut"; }
+  virtual QString getName() const override { return "cookie-cut"; }
 
-  virtual QString getDescription() const { return "Cuts out a portion from a map"; }
+  virtual QString getDescription() const override { return "Cuts out a portion from a map"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 3 || args.size() > 5)
     {

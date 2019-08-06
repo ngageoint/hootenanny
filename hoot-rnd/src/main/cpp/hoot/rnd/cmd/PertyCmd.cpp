@@ -51,13 +51,13 @@ public:
 
   PertyCmd() { }
 
-  virtual QString getName() const { return "perty"; }
+  virtual QString getName() const override { return "perty"; }
 
-  virtual QString getDescription() const { return "Perturbs a map using PERTY"; }
+  virtual QString getDescription() const override { return "Perturbs a map using PERTY"; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     LOG_VARD(args.size());
     if (args.size() < 2 || args.size() > 3)

@@ -58,14 +58,14 @@ public:
 
   NodeDensityTilesCmd() { }
 
-  virtual QString getName() const { return "node-density-tiles"; }
+  virtual QString getName() const override { return "node-density-tiles"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates geospatial bounding box partitions based on a map's node density (experimental) "; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 2)
     {

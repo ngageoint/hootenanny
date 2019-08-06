@@ -56,12 +56,12 @@ public:
 
   InfoCmd() { }
 
-  virtual QString getName() const { return "info"; }
+  virtual QString getName() const override { return "info"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Displays information about Hootenanny capabilities"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     // only allowing one option per command
     const QStringList supportedOpts = _getSupportedOptions();

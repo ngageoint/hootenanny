@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -41,7 +41,7 @@ namespace hoot
  *
  * TODO: implement progress
  */
-class ChangesetDeriveReplacementCmd : public BaseCommand
+class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
 public:
 
@@ -54,8 +54,10 @@ public:
   virtual QString getDescription() const
   { return "Creates an OSM replacement changeset (experimental)"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
+    BoundedCommand::runSimple(args);
+
     // process optional params
 
     bool lenientBounds = false;
@@ -69,12 +71,6 @@ public:
     {
       printStats = true;
       args.removeAll("--stats");
-    }
-    bool writeBoundsFile = false;
-    if (args.contains("--write-bounds"))
-    {
-      writeBoundsFile = true;
-      args.removeAll("--write-bounds");
     }
 
     // param error checking
@@ -113,12 +109,6 @@ public:
 
     ChangesetReplacementCreator(printStats, osmApiDbUrl)
       .create(input1, input2, bounds, critClassName, lenientBounds, output);
-
-    if (writeBoundsFile)
-    {
-      OsmMapWriterFactory::write(
-        GeometryUtils::createMapFromBounds(bounds), ConfigOptions().getBoundsOutputFile());
-    }
 
     return 0;
   }
