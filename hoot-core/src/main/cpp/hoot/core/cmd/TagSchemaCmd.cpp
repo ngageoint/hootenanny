@@ -45,11 +45,12 @@ public:
 
   TagSchemaCmd() {}
 
-  virtual QString getName() const { return "schema"; }
+  virtual QString getName() const override { return "schema"; }
 
-  virtual QString getDescription() const { return "Displays the tag schema that Hootenanny uses"; }
+  virtual QString getDescription() const override
+  { return "Displays the tag schema that Hootenanny uses"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     QString printScript(ConfigOptions().getTagPrintingScript());
 

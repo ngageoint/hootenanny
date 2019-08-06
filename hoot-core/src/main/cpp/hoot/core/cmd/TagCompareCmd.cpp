@@ -44,12 +44,12 @@ public:
 
   TagCompareCmd() { }
 
-  virtual QString getName() const { return "tag-compare"; }
+  virtual QString getName() const override { return "tag-compare"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Compares tags between two maps"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     bool tableFormat = true;
     AttributeCoOccurrence cooccurrence;

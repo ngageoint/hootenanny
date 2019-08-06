@@ -22,44 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
+#include "BoundedCommand.h"
+
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/io/MultiaryIngester.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
 {
 
-class MultiaryPoiIngestCmd : public BaseCommand
+BoundedCommand::BoundedCommand()
 {
-public:
+}
 
-  static std::string className() { return "hoot::MultiaryPoiIngestCmd"; }
-
-  virtual QString getName() const override { return "multiary-poi-ingest"; }
-
-  virtual QString getDescription() const override
-  { return "Ingests POIs for use by the multiary-conflate command (experimental) "; }
-
-  virtual QString getType() const override { return "rnd"; }
-
-  virtual int runSimple(QStringList& args) override
+int BoundedCommand::runSimple(QStringList& args)
+{
+  if (args.contains("--write-bounds"))
   {
-    if (args.size() != 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
-    }
-
-    MultiaryIngester().ingest(args[0], args[1], args[2], args[3]);
-
-    return 0;
+    args.removeAll("--write-bounds");
+    _writeBoundsFile();
   }
-};
 
-HOOT_FACTORY_REGISTER(Command, MultiaryPoiIngestCmd)
+  return 0;
+}
+
+void BoundedCommand::_writeBoundsFile()
+{
+  ConfigOptions opts;
+  // We could rename convert.bounding.box to something more generic now that we use it in so many
+  // places.
+  const QString boundsStr = opts.getConvertBoundingBox().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(GeometryUtils::envelopeFromConfigString(boundsStr)),
+      opts.getBoundsOutputFile());
+  }
+}
 
 }

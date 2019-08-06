@@ -50,11 +50,11 @@ public:
 
   ChangesetApplyCmd() { }
 
-  virtual QString getName() const { return "changeset-apply"; }
+  virtual QString getName() const override { return "changeset-apply"; }
 
-  virtual QString getDescription() const { return "Writes an OSM changeset"; }
+  virtual QString getDescription() const override { return "Writes an OSM changeset"; }
 
-  virtual int runSimple(QStringList args) override
+  virtual int runSimple(QStringList& args) override
   {
     bool showStats = false;
     bool showProgress = false;

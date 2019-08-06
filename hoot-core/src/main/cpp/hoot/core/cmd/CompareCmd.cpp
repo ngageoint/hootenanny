@@ -53,9 +53,9 @@ public:
 
   CompareCmd() { }
 
-  virtual QString getName() const { return "compare"; }
+  virtual QString getName() const override { return "compare"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Compares maps using score metrics"; }
 
   void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,
@@ -197,7 +197,7 @@ public:
     return result;
   }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 2 || args.size() > 3)
     {

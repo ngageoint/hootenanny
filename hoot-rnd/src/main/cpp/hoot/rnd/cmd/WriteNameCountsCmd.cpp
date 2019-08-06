@@ -54,13 +54,14 @@ public:
 
   WriteNameCountsCmd() {}
 
-  virtual QString getName() const { return "write-name-counts"; }
+  virtual QString getName() const override { return "write-name-counts"; }
 
-  virtual QString getDescription() const { return "Writes name tag counts to a database file"; }
+  virtual QString getDescription() const override
+  { return "Writes name tag counts to a database file"; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 2)
     {

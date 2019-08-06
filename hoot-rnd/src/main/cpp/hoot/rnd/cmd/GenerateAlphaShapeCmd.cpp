@@ -49,14 +49,14 @@ public:
 
   GenerateAlphaShapeCmd() {}
 
-  virtual QString getName() const { return "generate-alpha-shape"; }
+  virtual QString getName() const override { return "generate-alpha-shape"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Generates a concave hull for a set of points; useful in cookie cutting"; }
 
   virtual QString getType() const { return "rnd"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 4)
     {

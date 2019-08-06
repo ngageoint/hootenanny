@@ -47,12 +47,12 @@ public:
 
   IsSortedCmd() {}
 
-  virtual QString getName() const { return "is-sorted"; }
+  virtual QString getName() const override { return "is-sorted"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Determines if a map is sorted to the OSM standard"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 1)
     {

@@ -43,12 +43,12 @@ public:
 
   DeleteDbMapCmd() {}
 
-  virtual QString getName() const { return "delete-db-map"; }
+  virtual QString getName() const override { return "delete-db-map"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 1)
     {

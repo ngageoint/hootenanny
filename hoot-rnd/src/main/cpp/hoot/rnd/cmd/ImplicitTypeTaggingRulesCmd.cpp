@@ -41,14 +41,14 @@ public:
 
   static std::string className() { return "hoot::ImplicitTypeTaggingRulesCmd"; }
 
-  virtual QString getName() const { return "type-tagger-rules"; }
+  virtual QString getName() const override { return "type-tagger-rules"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Creates rules for adding missing type tags to a map"; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.contains("--create-raw"))
     {

@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Derives a set of changes given one or two map inputs
  */
-class ChangesetDeriveCmd : public BaseCommand
+class ChangesetDeriveCmd : public BoundedCommand
 {
 public:
 
@@ -47,23 +47,19 @@ public:
 
   ChangesetDeriveCmd() {}
 
-  virtual QString getName() const { return "changeset-derive"; }
+  virtual QString getName() const override { return "changeset-derive"; }
 
-  virtual QString getDescription() const { return "Creates an OSM changeset"; }
+  virtual QString getDescription() const override { return "Creates an OSM changeset"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
+    BoundedCommand::runSimple(args);
+
     bool printStats = false;
     if (args.contains("--stats"))
     {
       printStats = true;
       args.removeAll("--stats");
-    }
-    bool writeBoundsFile = false;
-    if (args.contains("--write-bounds"))
-    {
-      writeBoundsFile = true;
-      args.removeAll("--write-bounds");
     }
 
     if (args.size() < 3 || args.size() > 4)
@@ -87,18 +83,6 @@ public:
     }
 
     ChangesetCreator(printStats, osmApiDbUrl).create(output, input1, input2);
-
-    if (writeBoundsFile)
-    {
-      ConfigOptions opts;
-      const QString boundsStr = opts.getConvertBoundingBox().trimmed();
-      if (!boundsStr.isEmpty())
-      {
-        OsmMapWriterFactory::write(
-          GeometryUtils::createMapFromBounds(GeometryUtils::envelopeFromConfigString(boundsStr)),
-          opts.getBoundsOutputFile());
-      }
-    }
 
     return 0;
   }

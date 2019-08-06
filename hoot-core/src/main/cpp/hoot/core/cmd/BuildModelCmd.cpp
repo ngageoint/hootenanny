@@ -43,12 +43,12 @@ public:
 
   BuildModelCmd() { }
 
-  virtual QString getName() const { return "build-model"; }
+  virtual QString getName() const override { return "build-model"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Creates a random forest model for conflation"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     // This argument is only valid when converting to .rf from training data.
     bool exportArffOnly = false;

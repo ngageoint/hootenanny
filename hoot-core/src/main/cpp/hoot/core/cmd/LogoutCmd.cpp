@@ -44,12 +44,12 @@ public:
 
   LogoutCmd() { }
 
-  virtual QString getName() const { return "logout"; }
+  virtual QString getName() const override { return "logout"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Logs a user out of the Hootenanny Web Services"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 0)
     {

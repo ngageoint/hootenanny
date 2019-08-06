@@ -41,12 +41,12 @@ public:
 
   TagDistributionCmd() {}
 
-  virtual QString getName() const { return "tag-distribution"; }
+  virtual QString getName() const override { return "tag-distribution"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the distribution of values for specified tags in a map"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     bool nameKeysOnly = false;
     if (args.contains("--names"))

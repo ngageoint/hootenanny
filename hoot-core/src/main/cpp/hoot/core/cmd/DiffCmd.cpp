@@ -48,14 +48,13 @@ public:
 
   DiffCmd() { }
 
-  virtual QString getName() const { return "diff"; }
+  virtual QString getName() const override { return "diff"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the difference between two maps"; }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
-
     MapComparator mapCompare;
 
     if (args.contains("--ignore-uuid"))

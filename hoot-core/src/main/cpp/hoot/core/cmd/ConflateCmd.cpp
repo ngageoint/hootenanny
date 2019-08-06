@@ -88,7 +88,7 @@ void ConflateCmd::printStats(const QList<SingleStat>& stats)
   }
 }
 
-int ConflateCmd::runSimple(QStringList args)
+int ConflateCmd::runSimple(QStringList& args)
 {
   Timer totalTime;
   Timer t;

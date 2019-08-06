@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
@@ -46,7 +46,7 @@ using namespace std;
 namespace hoot
 {
 
-class CropCmd : public BaseCommand
+class CropCmd : public BoundedCommand
 {
 public:
 
@@ -54,11 +54,11 @@ public:
 
   CropCmd() {}
 
-  virtual QString getName() const { return "crop"; }
+  virtual QString getName() const override { return "crop"; }
 
-  virtual QString getDescription() const { return "Crops a map to a geospatial bounds"; }
+  virtual QString getDescription() const override { return "Crops a map to a geospatial bounds"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 3 || args.size() > 4)
     {
@@ -68,37 +68,14 @@ public:
 
     QString in = args[0];
     QString out = args[1];
-    QString bounds = args[2];
-    bool writeBoundsFile = false;
-    if (args.contains("--write-bounds"))
-    {
-      writeBoundsFile = true;
-      args.removeAll("--write-bounds");
-    }
+    _env.reset(new Envelope(GeometryUtils::envelopeFromConfigString(args[2])));
 
-    bool allOk = true;
-    bool ok;
-    QStringList boundsArr = bounds.split(",");
-    double left = boundsArr[0].toDouble(&ok);
-    allOk &= ok;
-    double bottom = boundsArr[1].toDouble(&ok);
-    allOk &= ok;
-    double right = boundsArr[2].toDouble(&ok);
-    allOk &= ok;
-    double top = boundsArr[3].toDouble(&ok);
-    allOk &= ok;
-
-    if (allOk == false)
-    {
-      throw HootException("Invalid bounds format.");
-    }
-
-    Envelope env(left, right, bottom, top);
+    BoundedCommand::runSimple(args);
 
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);
 
-    MapCropper cropper(env);
+    MapCropper cropper(*_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
     SuperfluousWayRemover::removeWays(map);
@@ -106,13 +83,17 @@ public:
 
     IoUtils::saveMap(map, out);
 
-    if (writeBoundsFile)
-    {
-      OsmMapWriterFactory::write(
-        GeometryUtils::createMapFromBounds(env), ConfigOptions().getBoundsOutputFile());
-    }
-
     return 0;
+  }
+
+protected:
+
+  std::shared_ptr<Envelope> _env;
+
+  virtual void _writeBoundsFile() override
+  {
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(*_env), ConfigOptions().getBoundsOutputFile());
   }
 };
 

@@ -63,12 +63,12 @@ public:
 
   EvalPointMovesCmd() { }
 
-  virtual QString getName() const { return "evaluate-point-moves"; }
+  virtual QString getName() const override { return "evaluate-point-moves"; }
 
   virtual QString getDescription() const
   { return "Calculates the error introduced by various operations on random map points"; }
 
-  virtual QString getType() const { return "rnd"; }
+  virtual QString getType() const override { return "rnd"; }
 
   struct Comparison
   {
@@ -189,7 +189,7 @@ public:
     return result;
   }
 
-  virtual int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 3)
     {

@@ -47,12 +47,12 @@ public:
 
   ExtentCmd() {}
 
-  virtual QString getName() const { return "extent"; }
+  virtual QString getName() const override { return "extent"; }
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Calculates the geospatial bounds of a map"; }
 
-  int runSimple(QStringList args)
+  virtual int runSimple(QStringList& args) override
   {
     if (args.size() < 1 || args.size() > 2)
     {
