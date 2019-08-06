@@ -36,6 +36,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -54,6 +55,9 @@ public:
   ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds,
                                            const bool strictBounds);
 
+  /**
+   * @see OsmMapOperation
+   */
   virtual void apply(OsmMapPtr& map);
 
   /**
@@ -61,12 +65,25 @@ public:
    */
   virtual void setBounds(const geos::geom::Envelope& bounds) { _boundsChecker.setBounds(bounds); }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getInitStatusMessage() const
   { return "Adding tags to immediately connected out of bounds ways..."; }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getCompletedStatusMessage() const
-  { return "Added " + QString::number(_numAffected) + " tags"; }
+  {
+    return
+      "Added " + StringUtils::formatLargeNumber(_numAffected) + " tags out of " +
+      StringUtils::formatLargeNumber(_numProcessed) + " total ways.";
+  }
 
+  /**
+   * @see ApiEntityInfo
+   */
   virtual QString getDescription() const
   { return "Identifies ways outside of the query bounds but immediately connected to ways crossing it"; }
 

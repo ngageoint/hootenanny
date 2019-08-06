@@ -36,10 +36,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/IoUtils.h>
-<<<<<<< HEAD
-#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
-=======
->>>>>>> develop
 
 // Boost
 #include <boost/foreach.hpp>

@@ -718,7 +718,8 @@ command only and kept as a separate option with a different default value.
 * Default Value: `false`
 
 If enabled, bounded queries will also return ways that are outside of `convert.bounding.box` but
-immediately connected to ways crossing or within the bounds.
+immediately connected to ways crossing or within the bounds. Can be used in conjunction with
+`convert.bounding.box.tag.immediately.connected.out.of.bounds.ways`. Not supported by all readers.
 
 === convert.bounding.box.keep.only.features.inside.bounds
 
@@ -745,7 +746,8 @@ the convert.bounding.box setting for OSM API database data sources only.
 
 If enabled, all ways that are outside of the bounds specified by convert.bounding.box when
 performing a bounded API database query but are immediately connected to a way that falls within or
-crosses the bounds are tagged with a custom tag.
+crosses the bounds are tagged with a custom tag. Must be used in conjunction with
+`convert.bounding.box.keep.immediately.connected.ways.outside.bounds`. Not supported by all readers.
 
 === convert.ops
 

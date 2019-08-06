@@ -319,11 +319,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     const bool tagConnectedWays =
-<<<<<<< HEAD
       ConfigOptions().getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWays();
-=======
-      ConfigOptions().getApidbReaderTagImmediatelyConnectedOutOfBoundsWays();
->>>>>>> develop
     LOG_VARD(tagConnectedWays);
     while (wayItr->next())
     {

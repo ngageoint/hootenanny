@@ -729,6 +729,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
       _changesetSecKeepOnlyInsideBounds = true;
       _changesetAllowDeletingRefOutsideBounds = false;
       _inBoundsStrict = true;
+    }
   }
   else
   {
