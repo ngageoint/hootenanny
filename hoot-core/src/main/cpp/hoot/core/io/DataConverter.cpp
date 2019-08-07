@@ -186,6 +186,11 @@ void DataConverter::setConfiguration(const Settings& conf)
   LOG_VARD(_convertOps);
 }
 
+void DataConverter::convert(const QString& input, const QString& output)
+{
+  convert(QStringList(input), output);
+}
+
 void DataConverter::convert(const QStringList& inputs, const QString& output)
 {
   _validateInput(inputs, output);

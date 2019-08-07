@@ -74,6 +74,8 @@ public:
 
 private:
 
+  friend class ChangesetReplacementCreatorTest;
+
   // Determines whether features crossing the bounds should be kept when loading reference data.
   bool _loadRefKeepEntireCrossingBounds;
   // Determines whether only features completely inside the bounds should be kept when loading

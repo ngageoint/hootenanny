@@ -95,7 +95,14 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * TODO
+   *
+   * @param inputs
+   * @param output
+   */
   void convert(const QStringList& inputs, const QString& output);
+  void convert(const QString& input, const QString& output);
 
   void setTranslation(const QString& translation) { _translation = translation; }
   void setShapeFileColumns(const QStringList& columns) { _shapeFileColumns = columns; }

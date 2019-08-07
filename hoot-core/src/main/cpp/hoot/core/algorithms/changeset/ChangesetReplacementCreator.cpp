@@ -117,10 +117,10 @@ void ChangesetReplacementCreator::create(
   if (numberOfRefElementsWithVersionLessThan1 > 0)
   {
     LOG_WARN(
-      numberOfRefElementsWithVersionLessThan1 << " features in the reference map have a version " <<
-      "less than one. This could lead to difficulties when applying the resulting changeset " <<
-      "back to an authoritative data store. Are the versions on the features being populated " <<
-      "correctly?")
+      StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
+      "the reference map have a version less than one. This could lead to difficulties when " <<
+      "applying the resulting changeset back to an authoritative data store. Are the versions " <<
+      "on the features being populated correctly?")
   }
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
@@ -740,7 +740,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
   conf().set(
     ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
     _changesetAllowDeletingRefOutsideBounds);
-  //conf().set(ConfigOptions::getInBoundsCriterionStrictKey(), _inBoundsStrict);
 
   LOG_VARD(_loadRefKeepEntireCrossingBounds);
   LOG_VARD(_loadRefKeepOnlyInsideBounds);

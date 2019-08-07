@@ -69,6 +69,7 @@ public:
 
   long getNumFromElementsParsed() const { return _numFromElementsParsed; }
   long getNumToElementsParsed() const { return _numToElementsParsed; }
+
   int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
   int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
   int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
@@ -78,6 +79,8 @@ public:
   void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }
 
 private:
+
+  friend class ChangesetReplacementCreatorTest;
 
   Change _nextChange();
 
