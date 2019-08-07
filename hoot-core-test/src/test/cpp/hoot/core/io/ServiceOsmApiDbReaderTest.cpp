@@ -95,7 +95,9 @@ public:
   void insertDataForBoundTest()
   {
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
-    ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "postgresql_forbounding_test.sql");
+    ApiDb::execSqlFile(
+      ServicesDbTestUtils::getOsmApiDbUrl().toString(),
+      _scriptDir + "postgresql_forbounding_test.sql");
   }
 
   void populatePartialMap()
@@ -202,7 +204,6 @@ public:
     WayPtr pWay = map->getWays().begin()->second;
     CPPUNIT_ASSERT(0 != pWay->getTimestamp());
 
-
     //Need to remove timestamps, otherwise they cause issues with the compare
     QList<ElementAttributeType> types;
     types.append(ElementAttributeType(ElementAttributeType::Timestamp));
@@ -212,7 +213,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmMapWriterFactory::write(map, _outputPath + "runReadByBoundsTest.osm");
     HOOT_FILE_EQUALS(_inputPath + "runReadByBoundsTest.osm",
-                    _outputPath + "runReadByBoundsTest.osm");
+                     _outputPath + "runReadByBoundsTest.osm");
 
     //just want to make sure I can read against the same data twice in a row w/o crashing and also
     //make sure I don't get the same result again for a different bounds

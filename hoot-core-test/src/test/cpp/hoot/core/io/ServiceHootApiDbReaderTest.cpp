@@ -72,8 +72,7 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPublicTest);
   // TODO: fix
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
-  // TODO
-  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -654,7 +653,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getRelations().size());
 
-    //We need to drop to set all the element changeset tags here to empty, which will cause them
+    //We need to set all the element changeset tags here to empty, which will cause them
     //to be dropped from the file output.  If they aren't dropped, they will increment with each
     //test and cause the output comparison to fail.
     QList<ElementAttributeType> types;
@@ -957,7 +956,59 @@ public:
     // This will leave any ways in the output which are outside of the bounds but are directly
     // connected to ways which cross the bounds.
 
+    setUpTest("readByBoundsLeaveConnectedOobWaysTest");
+    _mapId = insertDataForBoundTest();
 
+    HootApiDbReader reader;
+    reader.setUserEmail(userEmail());
+    reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+    OsmMapPtr map(new OsmMap());
+    reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
+
+    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
+
+    reader.setBoundingBox("-88.1,28.89,-88.0,28.91");
+    reader.read(map);
+
+    //quick check to see if the element counts are off...consult the test output for more detail
+
+    //See explanations for these assertions in ServiceOsmApiDbReaderTest::runReadByBoundsTest
+    //(exact same input data)
+    //OsmMapWriterFactory::write(
+      //map, _outputPath + "/readByBoundsLeaveConnectedOobWaysTest.osm", false, true);
+    CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
+
+    //We need to set all the element changeset tags here to empty, which will cause them
+    //to be dropped from the file output.  If they aren't dropped, they will increment with each
+    //test and cause the output comparison to fail.
+    QList<ElementAttributeType> types;
+    types.append(ElementAttributeType(ElementAttributeType::Changeset));
+    types.append(ElementAttributeType(ElementAttributeType::Timestamp));
+    RemoveAttributesVisitor attrVis(types);
+    map->visitRw(attrVis);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, _outputPath + "readByBoundsLeaveConnectedOobWaysTestOutput.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "readByBoundsLeaveConnectedOobWaysTestOutput.osm",
+      _outputPath + "readByBoundsLeaveConnectedOobWaysTestOutput.osm");
+
+    //just want to make sure I can read against the same data twice in a row w/o crashing and also
+    //make sure I don't get the same result again for a different bounds
+    reader.setBoundingBox("-1,-1,1,1");
+    map.reset(new OsmMap());
+    reader.read(map);
+
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getWays().size());
+    CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
+
+    reader.close();
   }
 
 private:
