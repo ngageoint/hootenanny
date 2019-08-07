@@ -50,8 +50,8 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(scrubBigIntsTest);
   CPPUNIT_TEST(isSupportedTest);
   // TODO
-  //CPPUNIT_TEST(cropTest);
-  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
+  //CPPUNIT_TEST(readByBoundsTest);
+  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

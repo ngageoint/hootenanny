@@ -22,45 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
- 
-#ifndef ELEMENTINIDLISTCRITERION_H
-#define ELEMENTINIDLISTCRITERION_H
 
+#ifndef ELEMENT_ID_CRITERION_H
+#define ELEMENT_ID_CRITERION_H
+
+// hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-
-// Std
-#include <set>
 
 namespace hoot
 {
 
 /**
- * Identifies elements in a list of IDs
- *
- * TODO: We could probably replace this with ElementIdCriterion.
+ * Identifies elements by type and ID
  */
-class ElementInIdListCriterion : public ElementCriterion
+class ElementIdCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ElementInIdListCriterion"; }
+  static std::string className() { return "hoot::ElementIdCriterion"; }
 
-  ElementInIdListCriterion() {}
-  explicit ElementInIdListCriterion(const std::vector<long>& ids);
+  ElementIdCriterion();
+  ElementIdCriterion(const ElementId& id);
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  virtual bool isSatisfied(const ConstElementPtr& e) const;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new ElementInIdListCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ElementIdCriterion()); }
 
-  virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
+  virtual QString getDescription() const { return "Identifies elements by type and ID"; }
 
 private:
 
-  std::set<long> _ids;
+  ElementId _id;
 };
 
 }
-#endif // ELEMENTINIDLISTCRITERION_H
+
+#endif // ELEMENT_ID_CRITERION_H

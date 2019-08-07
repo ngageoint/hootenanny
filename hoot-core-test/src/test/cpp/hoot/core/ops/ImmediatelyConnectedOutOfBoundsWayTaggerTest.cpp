@@ -74,15 +74,16 @@ public:
 
     const QString outFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + outFileName, false, true);
+
+    // The way we're considering as the source way is completely within the bounds and we are
+    // strictly interpreting the bounds. Both of the two ways connected to it are completely outside
+    // of the bounds. So, those two should get tagged.
     CPPUNIT_ASSERT_EQUAL(2L, uut.getNumTagged());
     HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
   }
 
   void runLenientBoundsTest()
   {
-    // TODO: remove
-    //conf().set("log.class.filter", "ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
-
     const QString testName = "runLenientBoundsTest";
     geos::geom::Envelope bounds(38.91404, 38.91506, 15.3740, 15.37513);
     OsmMapWriterFactory::write(
@@ -96,6 +97,10 @@ public:
 
     const QString outFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + outFileName, false, true);
+
+    // The way we're considering as the source way is crosses the bounds and we are interpreting the
+    // bounds in a lenient fashion. Both of the two ways connected to it are completely outside of
+    // the bounds. So, those two should get tagged.
     CPPUNIT_ASSERT_EQUAL(2L, uut.getNumTagged());
     HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
   }

@@ -45,8 +45,7 @@ class OsmXmlReaderTest : public HootTestFixture
   CPPUNIT_TEST(runDecodeCharsTest);
   CPPUNIT_TEST(runBoundsTest);
   // TODO
-  //CPPUNIT_TEST(cropTest);
-  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
+  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -159,10 +158,11 @@ public:
     CPPUNIT_ASSERT(f.remove());
   }
 
-  //This test ensures that characters not allowed in well-formed XML get decoded as read in.
-  //Qt's XML reading does this for us automatically.
   void runDecodeCharsTest()
   {
+    //This test ensures that characters not allowed in well-formed XML get decoded as read in.
+    //Qt's XML reading does this for us automatically.
+
     OsmXmlReader uut;
 
     OsmMapPtr map(new OsmMap());

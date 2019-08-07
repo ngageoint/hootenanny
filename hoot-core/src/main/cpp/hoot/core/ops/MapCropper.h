@@ -129,13 +129,6 @@ private:
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 
   /**
-   * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
-   * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
-   */
-  long _findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w,
-                   const geos::geom::Coordinate& c);
-
-  /**
    * Returns true if the specified envelope is wholly inside the region that will be kept.
    */
   bool _isWhollyInside(const geos::geom::Envelope& e);

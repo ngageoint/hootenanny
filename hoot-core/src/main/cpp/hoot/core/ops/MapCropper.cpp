@@ -233,11 +233,16 @@ void MapCropper::apply(OsmMapPtr& map)
   {
     const std::shared_ptr<Way>& w = it->second;
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
+    //LOG_VART(w->getNodeIds());
 
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     const Envelope& wayEnv = *(ls->getEnvelopeInternal());
     LOG_VART(wayEnv);
 
+    if (_inclusionCrit)
+    {
+      LOG_VART(_inclusionCrit->isSatisfied(w));
+    }
     if (_inclusionCrit && _inclusionCrit->isSatisfied(w))
     {
       // keep the way
@@ -304,73 +309,81 @@ void MapCropper::apply(OsmMapPtr& map)
     NodePtr node = it->second;
     LOG_VART(node->getElementId());
 
+    bool nodeInside = false;
+
+    LOG_VART(_explicitlyIncludedWayIds.size());
+    if (_explicitlyIncludedWayIds.size() > 0)
+    {
+      LOG_VART(OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
+    }
     if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
         OsmUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
         " belonging to explicitly included way(s)...");
-      continue;
-    }
-
-    const Coordinate& c = it->second->toCoordinate();
-    LOG_VART(c.toString());
-    bool nodeInside = false;
-    if (_envelope.isNull() == false)
-    {
-      if (_invert == false)
-      {
-        nodeInside = _envelope.covers(c);
-        LOG_TRACE(
-          "Node inside check: non-inverted crop and the envelope covers the element=" <<
-          nodeInside);
-      }
-      else
-      {
-        nodeInside = !_envelope.covers(c);
-        LOG_TRACE(
-          "Node inside check: inverted crop and the envelope covers the element=" << !nodeInside);
-      }
+      nodeInside = true;
     }
     else
     {
-      std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
-      if (_invert == false)
+      const Coordinate& c = it->second->toCoordinate();
+      LOG_VART(c.toString());
+      if (_envelope.isNull() == false)
       {
-        nodeInside = _envelopeG->intersects(p.get());
-        LOG_TRACE(
-          "Node inside check: non-inverted crop and the envelope intersects the element=" <<
-          nodeInside);
+        if (_invert == false)
+        {
+          nodeInside = _envelope.covers(c);
+          LOG_TRACE(
+            "Node inside check: non-inverted crop and the envelope covers the element=" <<
+            nodeInside);
+        }
+        else
+        {
+          nodeInside = !_envelope.covers(c);
+          LOG_TRACE(
+            "Node inside check: inverted crop and the envelope covers the element=" << !nodeInside);
+        }
       }
       else
       {
-        nodeInside = !_envelopeG->intersects(p.get());
-        LOG_TRACE(
-          "Node inside check: inverted crop and the envelope intersects the element=" <<
-          !nodeInside);
-      }
-    }
-    LOG_VART(nodeInside);
-
-    // if the node is outside
-    if (!nodeInside)
-    {
-      // if the node is within the limiting bounds.
-      LOG_VART(_nodeBounds.isNull());
-      if (!_nodeBounds.isNull())
-      {
-        LOG_VART(_nodeBounds.contains(c));
-      }
-      if (_nodeBounds.isNull() == true || _nodeBounds.contains(c))
-      {
-        // if the node is not part of a way
-        if (n2w->find(it->first) == n2w->end())
+        std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
+        if (_invert == false)
         {
-          // remove the node
+          nodeInside = _envelopeG->intersects(p.get());
           LOG_TRACE(
-            "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-          RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
-          nodesRemoved++;
+            "Node inside check: non-inverted crop and the envelope intersects the element=" <<
+            nodeInside);
+        }
+        else
+        {
+          nodeInside = !_envelopeG->intersects(p.get());
+          LOG_TRACE(
+            "Node inside check: inverted crop and the envelope intersects the element=" <<
+            !nodeInside);
+        }
+      }
+      LOG_VART(nodeInside);
+
+      // if the node is outside
+      if (!nodeInside)
+      {
+        // if the node is within the limiting bounds.
+        LOG_VART(_nodeBounds.isNull());
+        if (!_nodeBounds.isNull())
+        {
+          LOG_VART(_nodeBounds.contains(c));
+        }
+        if (_nodeBounds.isNull() == true || _nodeBounds.contains(c))
+        {
+          // if the node is not part of a way
+          if (n2w->find(it->first) == n2w->end())
+          {
+            // remove the node
+            LOG_TRACE(
+              "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
+            RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
+            nodesRemoved++;
+          }
         }
       }
     }
@@ -464,31 +477,6 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
 
     _numCrossingWaysKept++;
   }
-}
-
-long MapCropper::_findNodeId(const std::shared_ptr<const OsmMap>& map,
-                             const std::shared_ptr<const Way>& w, const Coordinate& c)
-{
-  long result = std::numeric_limits<long>::max();
-  const std::vector<long>& nodeIds = w->getNodeIds();
-
-  for (size_t i = 0; i < nodeIds.size(); i++)
-  {
-    ConstNodePtr n = map->getNode(nodeIds[i]);
-    if (n->toCoordinate() == c)
-    {
-      // We used to throw an exception here.
-      if (result != std::numeric_limits<long>::max() && result != nodeIds[i])
-      {
-        LOG_ERROR(
-          "" << "Internal Error: Two nodes were found with the same coordinate. way: " <<
-          w->getId());
-      }
-      result = nodeIds[i];
-    }
-  }
-
-  return result;
 }
 
 bool MapCropper::_isWhollyInside(const Envelope& e)

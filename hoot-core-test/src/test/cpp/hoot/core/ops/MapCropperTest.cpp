@@ -39,6 +39,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -72,8 +73,7 @@ class MapCropperTest : public HootTestFixture
   CPPUNIT_TEST(runKeepFeaturesOnlyCompletelyInBoundsTest);
   CPPUNIT_TEST(runDontSplitCrossingFeaturesTest);
   CPPUNIT_TEST(runInvertTest);
-  // TODO
-  //CPPUNIT_TEST(runInclusionTest);
+  CPPUNIT_TEST(runInclusionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -464,6 +464,35 @@ public:
     MapProjector::projectToWgs84(map);
     testFileName = testFileNameBase + "-2.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void runInclusionTest()
+  {
+    const QString testFileNameBase = "runInclusionTest";
+    QString testFileName;
+    OsmMapPtr map;
+    geos::geom::Envelope bounds(38.91362, 38.915478, 15.37365, 15.37506);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/" + testFileNameBase + "-bounds.osm");
+
+    MapCropper uut(bounds);
+    map.reset(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);
+    uut.setInvert(false);
+    uut.setKeepEntireFeaturesCrossingBounds(false);
+    uut.setKeepOnlyFeaturesInsideBounds(false);
+    // Exclude one way outside of the bounds from being cropped out of the map. The whole way and
+    // its nodes should be retained.
+    uut.setInclusionCriterion(
+      ElementCriterionPtr(new ElementIdCriterion(ElementId(ElementType::Way, 1687))));
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + ".osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 };

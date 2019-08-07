@@ -22,45 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
- 
-#ifndef ELEMENTINIDLISTCRITERION_H
-#define ELEMENTINIDLISTCRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include "ElementIdCriterion.h"
 
-// Std
-#include <set>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-/**
- * Identifies elements in a list of IDs
- *
- * TODO: We could probably replace this with ElementIdCriterion.
- */
-class ElementInIdListCriterion : public ElementCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, ElementIdCriterion)
+
+ElementIdCriterion::ElementIdCriterion()
 {
-public:
+}
 
-  static std::string className() { return "hoot::ElementInIdListCriterion"; }
+ElementIdCriterion::ElementIdCriterion(const ElementId& id) :
+_id(id)
+{
+}
 
-  ElementInIdListCriterion() {}
-  explicit ElementInIdListCriterion(const std::vector<long>& ids);
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new ElementInIdListCriterion()); }
-
-  virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
-
-private:
-
-  std::set<long> _ids;
-};
+bool ElementIdCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  return e->getElementId() == _id;
+}
 
 }
-#endif // ELEMENTINIDLISTCRITERION_H
