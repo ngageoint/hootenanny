@@ -73,8 +73,7 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   // TODO: fix
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
   // TODO
-  //CPPUNIT_TEST(cropTest);
-  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
+  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -951,6 +950,14 @@ public:
     }
     LOG_VARD(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("already has map with name"));
+  }
+
+  void readByBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+
   }
 
 private:

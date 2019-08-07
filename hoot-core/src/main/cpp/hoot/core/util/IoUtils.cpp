@@ -151,7 +151,8 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   ElementCriterionPtr inclusionCrit;
   if (keepConnectedOobWays)
   {
-    ImmediatelyConnectedOutOfBoundsWayTagger tagger(bounds, false);
+    ImmediatelyConnectedOutOfBoundsWayTagger tagger(
+      bounds, ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());

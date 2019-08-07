@@ -60,8 +60,7 @@ class ServiceOsmApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST(runPartialReadTest);
   // TODO
-  //CPPUNIT_TEST(cropTest);
-  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
+  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -368,6 +367,14 @@ public:
     reader.finalizePartial();
 
     CPPUNIT_ASSERT_EQUAL(4, ctr);
+  }
+
+  void readByBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+
   }
 };
 

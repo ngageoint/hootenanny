@@ -114,6 +114,9 @@ public:
    */
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
 protected:
 
   bool _useDataSourceIds;
@@ -179,6 +182,9 @@ private:
   long _numNodesRead;
   long _numWaysRead;
   long _numRelationsRead;
+
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
 
   void _read(OsmMapPtr map, const ElementType& elementType);
 

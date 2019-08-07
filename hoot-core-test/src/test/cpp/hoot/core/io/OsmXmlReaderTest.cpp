@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -44,8 +45,7 @@ class OsmXmlReaderTest : public HootTestFixture
   CPPUNIT_TEST(runUncompressTest);
   CPPUNIT_TEST(runDecodeCharsTest);
   CPPUNIT_TEST(runBoundsTest);
-  // TODO
-  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -54,7 +54,7 @@ public:
     : HootTestFixture("test-files/io/OsmXmlReaderTest/",
                       "test-output/io/OsmXmlReaderTest/")
   {
-    setResetType(ResetBasic);
+    setResetType(ResetAll);
   }
 
   void runTest()
@@ -207,6 +207,28 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+  }
+
+  void runBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+    OsmXmlReader uut;
+    uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
+    uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+
+    // set cropping up for strict bounds handling
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+
+    OsmMapPtr map(new OsmMap());
+    uut.read("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", map);
+    OsmMapWriterFactory::write(
+      map, _outputPath + "/runBoundsLeaveConnectedOobWaysTest.osm", false, true);
+
+    CPPUNIT_ASSERT_EQUAL(17, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
   }
 };
 

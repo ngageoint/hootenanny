@@ -233,6 +233,9 @@ public:
 
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -277,6 +280,8 @@ protected:
   int _threadCount;
 
   geos::geom::Envelope _bounds;
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree

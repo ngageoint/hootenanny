@@ -62,7 +62,9 @@ _totalNumMapWays(0),
 _totalNumMapRelations(0),
 _numNodesRead(0),
 _numWaysRead(0),
-_numRelationsRead(0)
+_numRelationsRead(0),
+_keepImmediatelyConnectedWaysOutsideBounds(
+  ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
 {
 }
 
@@ -303,8 +305,8 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     // of the requested bounds but are directly connected to a way that is being returned by the
     // query.
     QSet<QString> connectedWayIds;
-    LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
-    if (ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
+    LOG_VARD(_keepImmediatelyConnectedWaysOutsideBounds);
+    if (_keepImmediatelyConnectedWaysOutsideBounds)
     {
       LOG_DEBUG("Retrieving way IDs immediately connected to the current ways...");
       connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);

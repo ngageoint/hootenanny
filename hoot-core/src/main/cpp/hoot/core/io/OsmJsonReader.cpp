@@ -79,7 +79,9 @@ OsmJsonReader::OsmJsonReader()
     _bboxContinue(true),
     _runParallel(ConfigOptions().getJsonReaderHttpBboxParallel()),
     _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
-    _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount())
+    _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount()),
+    _keepImmediatelyConnectedWaysOutsideBounds(
+      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
 {
 }
 
@@ -185,9 +187,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   // See related note in OsmXmlReader::read.
   if (!_bounds.isNull())
   {
-    IoUtils::cropToBounds(
-      _map, _bounds,
-      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
   }
 }
 
@@ -198,9 +198,7 @@ void OsmJsonReader::_readToMap()
 
   if (!_bounds.isNull())
   {
-    IoUtils::cropToBounds(
-      _map, _bounds,
-      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
   }
 }
 

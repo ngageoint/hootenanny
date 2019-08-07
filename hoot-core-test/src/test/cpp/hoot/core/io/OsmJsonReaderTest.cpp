@@ -50,8 +50,8 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(scrubBigIntsTest);
   CPPUNIT_TEST(isSupportedTest);
   // TODO
-  //CPPUNIT_TEST(readByBoundsTest);
-  //CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
+  //CPPUNIT_TEST(runBoundsTest);
+  //CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -575,6 +575,19 @@ public:
     // If the url doesn't match with our configured Overpass host, skip it.
     CPPUNIT_ASSERT(!uut.isSupported("http://blah"));
     CPPUNIT_ASSERT(!uut.isSupported("https://blah"));
+  }
+
+  void runBoundsTest()
+  {
+
+  }
+
+  void runBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+
   }
 };
 }

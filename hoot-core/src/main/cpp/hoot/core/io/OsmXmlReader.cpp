@@ -66,7 +66,8 @@ OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
 _useDataSourceId(false),
 _inputCompressed(false),
-_numRead(0)
+_numRead(0),
+_keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());
 }
@@ -87,6 +88,8 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  setKeepImmediatelyConnectedWaysOutsideBounds(
+    ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -359,9 +362,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
-    IoUtils::cropToBounds(
-      _map, _bounds,
-      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
   }
 
   ReportMissingElementsVisitor visitor;
