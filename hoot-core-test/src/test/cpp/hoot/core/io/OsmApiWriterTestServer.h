@@ -28,16 +28,7 @@
 #ifndef OSM_API_WRITER_TEST_SERVER_H
 #define OSM_API_WRITER_TEST_SERVER_H
 
-//  Hootenanny
-#include <hoot/core/io/OsmApiWriter.h>
-#include <hoot/core/util/Log.h>
-
-//  Standard
-#include <memory>
-
-//  Boost
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
+#include <hoot/core/util/HttpTestServer.h>
 
 namespace hoot
 {
@@ -49,44 +40,31 @@ public:
   static const char* SAMPLE_PERMISSIONS;
 };
 
-
-class HttpConnection : public std::enable_shared_from_this<HttpConnection>
+class CapabilitiesTestServer : public HttpTestServer
 {
 public:
-  typedef std::shared_ptr<HttpConnection> HttpConnectionPtr;
+  CapabilitiesTestServer(int port) : HttpTestServer(port) { }
 
-  boost::asio::ip::tcp::socket& socket();
-
-  static HttpConnectionPtr create(boost::asio::io_service& io_service);
-
-  bool start();
-
-private:
-  HttpConnection(boost::asio::io_service& io_service);
-  void handle_write(const boost::system::error_code& error, size_t bytes_transferred);
-
-  boost::asio::ip::tcp::socket _socket;
+protected:
+  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
-class HttpTestServer
+class PermissionsTestServer : public HttpTestServer
 {
 public:
+  PermissionsTestServer(int port) : HttpTestServer(port) { }
 
-  static const int TEST_SERVER_PORT;
+protected:
+  virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
 
-  static std::shared_ptr<std::thread> start();
+class RetryConflictsTestServer : public HttpTestServer
+{
+public:
+  RetryConflictsTestServer(int port) : HttpTestServer(port) { }
 
-  HttpTestServer(boost::asio::io_service& io_service);
-
-private:
-
-  static void run_server();
-
-  void start_accept();
-
-  void handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error);
-
-  boost::asio::ip::tcp::acceptor _acceptor;
+protected:
+  virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
 }

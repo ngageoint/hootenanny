@@ -31,13 +31,6 @@
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/Log.h>
 
-//  Standard
-#include <memory>
-
-//  Boost
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-
 namespace hoot
 {
 
@@ -72,99 +65,75 @@ const char* OsmApiSampleResponses::SAMPLE_PERMISSIONS =
     "  </permissions>"
     "</osm>";
 
-HttpConnection::HttpConnection(boost::asio::io_service& io_service)
-  : _socket(io_service)
+bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
+  //  Read the HTTP request
+  boost::asio::streambuf buf;
+  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
+  std::string input = boost::asio::buffer_cast<const char*>(buf.data());
+  //  Make sure that the capabilities were requested
+  std::string message;
+  if (input.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
+  else
+    message = HTTP_404_NOT_FOUND;
+  //  Write out the response
+  write_response(connection, message);
+  //  Only respond once to the client
+  return false;
 }
 
-void HttpConnection::handle_write(const boost::system::error_code& /*error*/, size_t /*bytes_transferred*/)
+bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
+  //  Read the HTTP request
+  boost::asio::streambuf buf;
+  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
+  std::string input = boost::asio::buffer_cast<const char*>(buf.data());
+  //  Make sure that the permissions were requested
+  std::string message;
+  if (input.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
+  else
+    message = HTTP_404_NOT_FOUND;
+  //  Write out the response
+  write_response(connection, message);
+  //  Only respond once to the client
+  return false;
 }
 
-HttpConnection::HttpConnectionPtr HttpConnection::create(boost::asio::io_service& io_service)
-{
-  //  Create the connection object
-  return HttpConnectionPtr(new HttpConnection(io_service));
-}
-
-boost::asio::ip::tcp::socket& HttpConnection::socket()
-{
-  return _socket;
-}
-
-bool HttpConnection::start()
+bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
   //  Read the HTTP request
   boost::asio::streambuf buf;
-  boost::asio::read_until(_socket, buf, "\r\n\r\n");
+  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
   std::string input = boost::asio::buffer_cast<const char*>(buf.data());
   //  Determine the response message's HTTP header
   std::string message;
   if (input.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n") + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
   else if (input.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n") + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
   else if (input.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n1\r\n");
+    message = HTTP_200_OK + "1\r\n";
   else if (input.find("POST") != std::string::npos)
     message = std::string("HTTP/1.1 405 Method Not Allowed\r\nAllow: GET\r\n\r\n");
   else if (input.find("/close/"))
   {
-    message = std::string("HTTP/1.1 200 OK\r\n\r\n");
+    message = HTTP_200_OK;
     continue_processing = false;
   }
-  //  Write out the response async
-  boost::asio::async_write(_socket, boost::asio::buffer(message),
-                           boost::bind(&HttpConnection::handle_write, shared_from_this(),
-                                       boost::asio::placeholders::error,
-                                       boost::asio::placeholders::bytes_transferred));
+  else
+  {
+    //  Error out here
+    message = HTTP_404_NOT_FOUND;
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, message);
+  //  Return true if we should continue listening and processing requests
   return continue_processing;
-}
-
-const int HttpTestServer::TEST_SERVER_PORT = 8910;
-
-std::shared_ptr<std::thread> HttpTestServer::start()
-{
-  return std::shared_ptr<std::thread>(new std::thread(&HttpTestServer::run_server));
-}
-
-HttpTestServer::HttpTestServer(boost::asio::io_service& io_service)
-  : _acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), TEST_SERVER_PORT))
-{
-  start_accept();
-}
-
-void HttpTestServer::run_server()
-{
-  try
-  {
-    boost::asio::io_service io_service;
-    HttpTestServer server(io_service);
-    io_service.run();
-  }
-  catch (std::exception& e)
-  {
-    LOG_ERROR(e.what());
-  }
-}
-
-void HttpTestServer::start_accept()
-{
-  HttpConnection::HttpConnectionPtr new_connection = HttpConnection::create(_acceptor.get_io_service());
-  _acceptor.async_accept(new_connection->socket(),
-                         boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));
-}
-
-void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error)
-{
-  bool continue_processing = true;
-  if (!error)
-    continue_processing = new_connection->start();
-
-  if (continue_processing)
-    start_accept();
 }
 
 }
