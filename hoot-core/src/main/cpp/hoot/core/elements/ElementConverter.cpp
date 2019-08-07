@@ -99,7 +99,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
-  switch(e->getElementType().getEnum())
+  switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
     return convertToGeometry(std::dynamic_pointer_cast<const Node>(e));
@@ -126,8 +126,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) c
 }
 
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
-                                                         bool throwError,
-                                                         const bool statsFlag) const
+                                                              bool throwError,
+                                                              const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
@@ -147,8 +147,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
 }
 
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
-                                                                bool throwError,
-                                                                const bool statsFlag) const
+                                                              bool throwError,
+                                                              const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 
@@ -256,8 +256,8 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   return result;
 }
 
-geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementPtr& e,
-  bool throwError, const bool statsFlag)
+geos::geom::GeometryTypeId ElementConverter::getGeometryType(
+  const ConstElementPtr& e, bool throwError, const bool statsFlag)
 {
   // This is used to pass the relation type back to the exception handler
   QString relationType = "";

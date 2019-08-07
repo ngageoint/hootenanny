@@ -90,7 +90,8 @@ public:
    *
    * @param map the map to crop
    * @param bounds the bounds to crop to
-   * @param keepConnectedOobWays TODO
+   * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
+   * connected to a way within the bounds will be kept
    */
   static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
                            const bool keepConnectedOobWays = false);

@@ -59,6 +59,9 @@ class ServiceOsmApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runReadOsmApiTest);
   CPPUNIT_TEST(runReadByBoundsTest);
   CPPUNIT_TEST(runPartialReadTest);
+  // TODO
+  //CPPUNIT_TEST(cropTest);
+  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

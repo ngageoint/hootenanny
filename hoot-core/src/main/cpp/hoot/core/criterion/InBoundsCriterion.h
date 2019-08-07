@@ -36,6 +36,10 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Configurable.h>
 
+// GEOS
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -57,7 +61,7 @@ public:
   /**
    * @see Boundable
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+  virtual void setBounds(const geos::geom::Envelope& bounds);
 
   /**
    * @see Configurable
@@ -82,7 +86,7 @@ public:
 
 private:
 
-  geos::geom::Envelope _bounds;
+  std::shared_ptr<const geos::geom::Geometry> _boundsGeom;
   ConstOsmMapPtr _map;
   std::shared_ptr<ElementConverter> _elementConverter;
   // If false, the element can cross the bounds and still be considered within bounds.

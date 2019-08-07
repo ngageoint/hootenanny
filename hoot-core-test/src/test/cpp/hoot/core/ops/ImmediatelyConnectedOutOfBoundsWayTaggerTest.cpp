@@ -30,9 +30,9 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -46,32 +46,58 @@ namespace hoot
 class ImmediatelyConnectedOutOfBoundsWayTaggerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImmediatelyConnectedOutOfBoundsWayTaggerTest);
-  // TODO
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runStrictBoundsTest);
+  CPPUNIT_TEST(runLenientBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   ImmediatelyConnectedOutOfBoundsWayTaggerTest() :
   HootTestFixture(
-    "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger",
-    "test-output/ops/ImmediatelyConnectedOutOfBoundsWayTagger")
+    "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/",
+    "test-output/ops/ImmediatelyConnectedOutOfBoundsWayTagger/")
   {
   }
 
-  void runBasicTest()
+  void runStrictBoundsTest()
   {
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(
-      map, true, true, "test-files/ops/ElementIdToVersionMapper/runBasicTest-in.osm");
+    const QString testName = "runStrictBoundsTest";
+    geos::geom::Envelope bounds(38.91362, 38.915478, 15.37365, 15.37506);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
 
-    ImmediatelyConnectedOutOfBoundsWayTagger uut(geos::geom::Envelope(0, 0, 0, 0), true);
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
+
+    ImmediatelyConnectedOutOfBoundsWayTagger uut(bounds, true);
     uut.apply(map);
 
-    MapProjector::projectToWgs84(map);
-    OsmMapWriterFactory::write(map, _outputPath + "/runBasicTest-out.osm");
-    HOOT_FILE_EQUALS(
-      _inputPath + "/runBasicTest-out.osm", _outputPath + "/runBasicTest-out.osm");
+    const QString outFileName = testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + outFileName, false, true);
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumTagged());
+    HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
+  }
+
+  void runLenientBoundsTest()
+  {
+    // TODO: remove
+    //conf().set("log.class.filter", "ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
+
+    const QString testName = "runLenientBoundsTest";
+    geos::geom::Envelope bounds(38.91404, 38.91506, 15.3740, 15.37513);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds), _outputPath + testName + "-bounds.osm");
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
+
+    ImmediatelyConnectedOutOfBoundsWayTagger uut(bounds, false);
+    uut.apply(map);
+
+    const QString outFileName = testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + outFileName, false, true);
+    CPPUNIT_ASSERT_EQUAL(2L, uut.getNumTagged());
+    HOOT_FILE_EQUALS(_inputPath + outFileName, _outputPath + outFileName);
   }
 };
 

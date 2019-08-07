@@ -19,9 +19,8 @@ the second input (secondary dataset) are not retained and treated as completely 
 * +featureFilter+     - A single criterion class name used to determine which type of features are replaced in the 
                         reference dataset. Must be a conflatable criterion (see "Type Filtering" section below). e.g. "hoot::BuildingCriterion"
 * +output+            - Output location (e.g. .osc or .osc.sql file)
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
-                        element ID continuity with a particular database instance when generating SQL
-                        changesets only (.osc.sql).
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a particular 
+                        database instance when generating SQL changesets only (.osc.sql).
 * +--lenient-bounds+  - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
                         makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
                         for more detail.
@@ -108,11 +107,6 @@ For Overpass API queries, add "out meta" to the query retrieving the reference d
 === Unsupported Formats
 
 GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
-
-=== Caveats
-
-The lenient AOI linear replacement workflow does not completely work at this time with OSM XML or JSON inputs, as some features outside of the
-AOI may be dropped. https://github.com/ngageoint/hootenanny/issues/3376 will fix this.
 
 === See Also
 

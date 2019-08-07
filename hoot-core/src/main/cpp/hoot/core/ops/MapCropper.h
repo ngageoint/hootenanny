@@ -112,9 +112,9 @@ private:
   // If true, will only keep features falling completely inside the specified bounds. This overrides
   // _keepEntireFeaturesCrossingBounds and sets it to false;
   bool _keepOnlyFeaturesInsideBounds;
-  // TODO
+  // Any way meeting this criterion and all of its way nodes will not be cropped out of the map
   ElementCriterionPtr _inclusionCrit;
-  // TODO
+  // tracks all ways satisfying _inclusionCrit
   std::set<long> _explicitlyIncludedWayIds;
 
   int _statusUpdateInterval;

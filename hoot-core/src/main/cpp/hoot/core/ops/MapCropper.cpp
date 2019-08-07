@@ -201,8 +201,6 @@ void MapCropper::setConfiguration(const Settings& conf)
 
 void MapCropper::apply(OsmMapPtr& map)
 {
-  //OsmMapPtr result = map;
-
   if (MapProjector::isGeographic(map) == false && _nodeBounds.isNull() == false)
   {
     throw HootException("If the node bounds is set the projection must be geographic.");
@@ -230,7 +228,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   // go through all the ways
   long wayCtr = 0;
-  const WayMap ways = /*result*/map->getWays();
+  const WayMap ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const std::shared_ptr<Way>& w = it->second;
@@ -251,7 +249,7 @@ void MapCropper::apply(OsmMapPtr& map)
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(/*result*/map, w->getId());
+      RemoveWayByEid::removeWayFully(map, w->getId());
       _numWaysOutOfBounds++;
     }
     else if (_isWhollyInside(wayEnv))
@@ -265,7 +263,7 @@ void MapCropper::apply(OsmMapPtr& map)
       // Way isn't wholly inside and the configuration requires it to be, so remove the way.
       LOG_TRACE(
         "Dropping due to _keepOnlyFeaturesInsideBounds=true: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(/*result*/map, w->getId());
+      RemoveWayByEid::removeWayFully(map, w->getId());
       _numWaysOutOfBounds++;
     }
     else if (!_keepEntireFeaturesCrossingBounds)
@@ -274,7 +272,7 @@ void MapCropper::apply(OsmMapPtr& map)
       // do an expensive operation to decide how much to keep, if any.
       LOG_TRACE(
         "Cropping due to _keepEntireFeaturesCrossingBounds=false: " << w->getElementId() << "...");
-      _cropWay(/*result*/map, w->getId());
+      _cropWay(map, w->getId());
       _numWaysCrossingThreshold++;
     }
     else
@@ -293,15 +291,14 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
 
-  std::shared_ptr<NodeToWayMap> n2w = /*result*/map->getIndex().getNodeToWayMap();
-  //NodeToWayMap& n2w = *n2wp;
+  std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
   LOG_DEBUG("Removing nodes...");
 
   // go through all the nodes
   long nodeCtr = 0;
   long nodesRemoved = 0;
-  const NodeMap nodes = /*result*/map->getNodes();
+  const NodeMap nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     NodePtr node = it->second;
@@ -372,7 +369,7 @@ void MapCropper::apply(OsmMapPtr& map)
           // remove the node
           LOG_TRACE(
             "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-          RemoveNodeByEid::removeNodeNoCheck(/*result*/map, it->second->getId());
+          RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
           nodesRemoved++;
         }
       }

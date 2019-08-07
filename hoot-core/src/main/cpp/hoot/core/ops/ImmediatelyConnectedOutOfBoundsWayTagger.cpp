@@ -51,20 +51,19 @@ _strictBounds(strictBounds)
   _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
 
-// TODO: replace this with a ImmediatelyConnectedOutOfBoundsWayCriterion and SetTagValueVisitor?
-
 void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
 {  
   _numAffected = 0;
   _numProcessed = 0;
   std::set<long> directlyConnectedWayIds;
+  _boundsChecker.setOsmMap(map.get());
 
   WayMap ways = map->getWays();
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   for (WayMap::iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr way = wayItr->second;
-    LOG_VART(way->getElementId());
+    LOG_TRACE("Examining source: " << way->getElementId() << "...");
 
     // if the way hasn't already been tagged and falls within the bounds
     LOG_VART(directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end());

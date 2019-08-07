@@ -72,6 +72,9 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST(runMultipleMapsSameNameDifferentUsersPublicTest);
   // TODO: fix
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
+  // TODO
+  //CPPUNIT_TEST(cropTest);
+  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

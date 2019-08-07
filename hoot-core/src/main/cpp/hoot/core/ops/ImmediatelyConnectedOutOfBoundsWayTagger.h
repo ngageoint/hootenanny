@@ -42,7 +42,9 @@ namespace hoot
 {
 
 /**
- * TODO
+ * This will custom tag any way that falls completely outside of a given bounds but is directly
+ * connected to some way that cross over the bounds. This is useful in generating replacement
+ * changesets.
  */
 class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public OperationStatusInfo,
   public Boundable
@@ -85,10 +87,13 @@ public:
    * @see ApiEntityInfo
    */
   virtual QString getDescription() const
-  { return "Identifies ways outside of the query bounds but immediately connected to ways crossing it"; }
+  { return "Tags ways outside of a query bounds but immediately connected to ways that cross the bounds"; }
+
+  long getNumTagged() const { return _numAffected; }
 
 private:
 
+  // passed in directly to InBoundsCriterion
   bool _strictBounds;
   InBoundsCriterion _boundsChecker;
 };

@@ -69,10 +69,6 @@ _encodingErrorCount(0),
 _numWritten(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
-//  if (_includeDebug)
-//  {
-//    _overrideDebugSettings();
-//  }
 }
 
 OsmXmlWriter::~OsmXmlWriter()
@@ -224,6 +220,7 @@ void OsmXmlWriter::write(const ConstOsmMapPtr& map)
   }
 
   //  Debug maps get a bunch of debug settings setup here
+  LOG_VARD(getIsDebugMap());
   if (getIsDebugMap())
     _overrideDebugSettings();
 
