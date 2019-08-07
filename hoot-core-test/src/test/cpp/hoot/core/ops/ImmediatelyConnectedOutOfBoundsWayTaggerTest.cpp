@@ -46,6 +46,7 @@ namespace hoot
 class ImmediatelyConnectedOutOfBoundsWayTaggerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ImmediatelyConnectedOutOfBoundsWayTaggerTest);
+  // TODO
   //CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 

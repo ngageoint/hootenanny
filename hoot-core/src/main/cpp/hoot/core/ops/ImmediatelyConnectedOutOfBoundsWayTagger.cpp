@@ -51,6 +51,8 @@ _strictBounds(strictBounds)
   _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
 
+// TODO: replace this with a ImmediatelyConnectedOutOfBoundsWayCriterion and SetTagValueVisitor?
+
 void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
 {  
   _numAffected = 0;

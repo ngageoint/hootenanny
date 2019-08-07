@@ -72,6 +72,8 @@ class MapCropperTest : public HootTestFixture
   CPPUNIT_TEST(runKeepFeaturesOnlyCompletelyInBoundsTest);
   CPPUNIT_TEST(runDontSplitCrossingFeaturesTest);
   CPPUNIT_TEST(runInvertTest);
+  // TODO
+  //CPPUNIT_TEST(runInclusionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

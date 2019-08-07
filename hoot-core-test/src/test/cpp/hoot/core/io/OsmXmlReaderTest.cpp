@@ -44,6 +44,9 @@ class OsmXmlReaderTest : public HootTestFixture
   CPPUNIT_TEST(runUncompressTest);
   CPPUNIT_TEST(runDecodeCharsTest);
   CPPUNIT_TEST(runBoundsTest);
+  // TODO
+  //CPPUNIT_TEST(cropTest);
+  //CPPUNIT_TEST(cropLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
