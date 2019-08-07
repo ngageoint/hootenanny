@@ -27,6 +27,9 @@
 
 #include "HttpTestServer.h"
 
+//  Hootenanny
+#include <hoot/core/util/Log.h>
+
 namespace hoot
 {
 

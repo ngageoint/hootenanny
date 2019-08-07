@@ -34,37 +34,6 @@
 namespace hoot
 {
 
-const char* OsmApiSampleResponses::SAMPLE_CAPABILITIES =
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<osm version='0.6' generator='OpenStreetMap server' copyright='OpenStreetMap and contributors' attribution='https://www.openstreetmap.org/copyright' license='http://opendatacommons.org/licenses/odbl/1-0/'>"
-    "  <api>"
-    "    <version minimum='0.6' maximum='0.6'/>"
-    "    <area maximum='0.25'/>"
-    "    <note_area maximum='25'/>"
-    "    <tracepoints per_page='5000'/>"
-    "    <waynodes maximum='2000'/>"
-    "    <changesets maximum_elements='10000'/>"
-    "    <timeout seconds='300'/>"
-    "    <status database='online' api='online' gpx='online'/>"
-    "  </api>"
-    "  <policy>"
-    "    <imagery>"
-    "      <blacklist regex='http://xdworld\\.vworld\\.kr:8080/.*'/>"
-    "      <blacklist regex='.*\\.here\\.com[/:].*'/>"
-    "    </imagery>"
-    "  </policy>"
-    "</osm>";
-const char* OsmApiSampleResponses::SAMPLE_PERMISSIONS =
-    "<?xml version='1.0' encoding='UTF-8'?>"
-    "<osm version='0.6' generator='OpenStreetMap server'>"
-    "  <permissions>"
-    "    <permission name='allow_read_prefs'/>"
-    "    <permission name='allow_read_gpx'/>"
-    "    <permission name='allow_write_api'/>"
-    "    <permission name='allow_write_gpx'/>"
-    "  </permissions>"
-    "</osm>";
-
 bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
   //  Read the HTTP request headers
@@ -129,5 +98,36 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
   //  Return true if we should continue listening and processing requests
   return continue_processing;
 }
+
+const char* OsmApiSampleResponses::SAMPLE_CAPABILITIES =
+    "<?xml version='1.0' encoding='UTF-8'?>"
+    "<osm version='0.6' generator='OpenStreetMap server' copyright='OpenStreetMap and contributors' attribution='https://www.openstreetmap.org/copyright' license='http://opendatacommons.org/licenses/odbl/1-0/'>"
+    "  <api>"
+    "    <version minimum='0.6' maximum='0.6'/>"
+    "    <area maximum='0.25'/>"
+    "    <note_area maximum='25'/>"
+    "    <tracepoints per_page='5000'/>"
+    "    <waynodes maximum='2000'/>"
+    "    <changesets maximum_elements='10000'/>"
+    "    <timeout seconds='300'/>"
+    "    <status database='online' api='online' gpx='online'/>"
+    "  </api>"
+    "  <policy>"
+    "    <imagery>"
+    "      <blacklist regex='http://xdworld\\.vworld\\.kr:8080/.*'/>"
+    "      <blacklist regex='.*\\.here\\.com[/:].*'/>"
+    "    </imagery>"
+    "  </policy>"
+    "</osm>";
+const char* OsmApiSampleResponses::SAMPLE_PERMISSIONS =
+    "<?xml version='1.0' encoding='UTF-8'?>"
+    "<osm version='0.6' generator='OpenStreetMap server'>"
+    "  <permissions>"
+    "    <permission name='allow_read_prefs'/>"
+    "    <permission name='allow_read_gpx'/>"
+    "    <permission name='allow_write_api'/>"
+    "    <permission name='allow_write_gpx'/>"
+    "  </permissions>"
+    "</osm>";
 
 }

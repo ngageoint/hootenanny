@@ -76,7 +76,13 @@ protected:
 class OsmApiSampleResponses
 {
 public:
+  /** Sample Capabilities response body from '/api/0.6/capabilities'
+   *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
+   */
   static const char* SAMPLE_CAPABILITIES;
+  /** Sample Permissions response body from '/api/0.6/permissions'
+   *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
+   */
   static const char* SAMPLE_PERMISSIONS;
 };
 
