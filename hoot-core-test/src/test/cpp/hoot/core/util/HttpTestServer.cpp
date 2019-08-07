@@ -30,8 +30,8 @@
 namespace hoot
 {
 
-std::string HttpTestServer::HTTP_200_OK = "HTTP/1.1 200 OK\r\n\r\n";
-std::string HttpTestServer::HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n\r\n";
+const std::string HttpTestServer::HTTP_200_OK = "HTTP/1.1 200 OK\r\n\r\n";
+const std::string HttpTestServer::HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n\r\n";
 
 HttpTestServer::HttpTestServer(int port)
   : _port(port)
@@ -40,11 +40,13 @@ HttpTestServer::HttpTestServer(int port)
 
 void HttpTestServer::start()
 {
+  //  Kick off the run_server thread
   _thread.reset(new std::thread(std::bind(&HttpTestServer::run_server, this, _port)));
 }
 
 void HttpTestServer::wait()
 {
+  //  Wait for the thread to end
   _thread->join();
 }
 
@@ -59,8 +61,12 @@ void HttpTestServer::run_server(int port)
 {
   try
   {
-    _acceptor.reset(new boost::asio::ip::tcp::acceptor(_io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)));
+    //  Create the acceptor
+    _acceptor.reset(new boost::asio::ip::tcp::acceptor(_io_service,
+      boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)));
+    //  Start accepting connections
     start_accept();
+    //  Run the IO service
     _io_service.run();
   }
   catch (std::exception& e)
@@ -71,17 +77,20 @@ void HttpTestServer::run_server(int port)
 
 void HttpTestServer::start_accept()
 {
+  //  Creat the connection
   HttpConnection::HttpConnectionPtr new_connection(new HttpConnection(_acceptor->get_io_service()));
+  //  Accept connections async
   _acceptor->async_accept(new_connection->socket(),
-                         boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));
+    boost::bind(&HttpTestServer::handle_accept, this, new_connection, boost::asio::placeholders::error));
 }
 
 void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error)
 {
+  //  Call the overridden respond() function
   bool continue_processing = true;
   if (!error)
     continue_processing = respond(new_connection);
-
+  //  Continue processing connections
   if (continue_processing)
     start_accept();
 }
@@ -90,9 +99,8 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
-  //  Read the HTTP request
-  boost::asio::streambuf buf;
-  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
+  //  Read the HTTP request, and ignore them
+  read_request_headers(connection);
   //  Respond with HTTP 200 OK
   std::string message;
   message = std::string(HTTP_200_OK);
@@ -100,6 +108,14 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
   write_response(connection, message);
   //  Return true if we should continue listening and processing requests
   return continue_processing;
+}
+
+std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr &connection)
+{
+  //  Read the HTTP request headers
+  boost::asio::streambuf buf;
+  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
+  return boost::asio::buffer_cast<const char*>(buf.data());
 }
 
 void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)

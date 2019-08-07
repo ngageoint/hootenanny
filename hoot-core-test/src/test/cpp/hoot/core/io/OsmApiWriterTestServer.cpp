@@ -67,13 +67,11 @@ const char* OsmApiSampleResponses::SAMPLE_PERMISSIONS =
 
 bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
-  //  Read the HTTP request
-  boost::asio::streambuf buf;
-  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
-  std::string input = boost::asio::buffer_cast<const char*>(buf.data());
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
   //  Make sure that the capabilities were requested
   std::string message;
-  if (input.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
     message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
   else
     message = HTTP_404_NOT_FOUND;
@@ -85,13 +83,11 @@ bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
 
 bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
 {
-  //  Read the HTTP request
-  boost::asio::streambuf buf;
-  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
-  std::string input = boost::asio::buffer_cast<const char*>(buf.data());
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
   //  Make sure that the permissions were requested
   std::string message;
-  if (input.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+  if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
     message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
   else
     message = HTTP_404_NOT_FOUND;
@@ -105,21 +101,19 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
-  //  Read the HTTP request
-  boost::asio::streambuf buf;
-  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
-  std::string input = boost::asio::buffer_cast<const char*>(buf.data());
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
   //  Determine the response message's HTTP header
   std::string message;
-  if (input.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
     message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
-  else if (input.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+  else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
     message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
-  else if (input.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
+  else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
     message = HTTP_200_OK + "1\r\n";
-  else if (input.find("POST") != std::string::npos)
+  else if (headers.find("POST") != std::string::npos)
     message = std::string("HTTP/1.1 405 Method Not Allowed\r\nAllow: GET\r\n\r\n");
-  else if (input.find("/close/"))
+  else if (headers.find("/close/"))
   {
     message = HTTP_200_OK;
     continue_processing = false;

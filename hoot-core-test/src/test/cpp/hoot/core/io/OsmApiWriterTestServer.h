@@ -33,38 +33,51 @@
 namespace hoot
 {
 
-class OsmApiSampleResponses
-{
-public:
-  static const char* SAMPLE_CAPABILITIES;
-  static const char* SAMPLE_PERMISSIONS;
-};
-
 class CapabilitiesTestServer : public HttpTestServer
 {
 public:
+  /** Constructor */
   CapabilitiesTestServer(int port) : HttpTestServer(port) { }
 
 protected:
+  /** respond() function that responds once to the OSM API Capabilities request */
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
 class PermissionsTestServer : public HttpTestServer
 {
 public:
+  /** Constructor */
   PermissionsTestServer(int port) : HttpTestServer(port) { }
 
 protected:
+  /** respond() function that responds once to the OSM API Permissions request */
   virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
 class RetryConflictsTestServer : public HttpTestServer
 {
 public:
+  /** Constructor */
   RetryConflictsTestServer(int port) : HttpTestServer(port) { }
 
 protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload - responding with an HTTP 405 error for the test
+   *   - Changeset Close
+   */
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+};
+
+class OsmApiSampleResponses
+{
+public:
+  static const char* SAMPLE_CAPABILITIES;
+  static const char* SAMPLE_PERMISSIONS;
 };
 
 }

@@ -80,10 +80,12 @@ protected:
 
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection);
 
+  std::string read_request_headers(HttpConnection::HttpConnectionPtr& connection);
+
   void write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response);
 
-  static std::string HTTP_200_OK;
-  static std::string HTTP_404_NOT_FOUND;
+  static const std::string HTTP_200_OK;
+  static const std::string HTTP_404_NOT_FOUND;
 
 private:
 
