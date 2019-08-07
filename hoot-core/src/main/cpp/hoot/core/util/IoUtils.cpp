@@ -142,8 +142,9 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
 
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-  cropper.setKeepOnlyFeaturesInsideBounds(
-    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+  const bool strictBoundsHandling =
+    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds();
+  cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
@@ -151,8 +152,9 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   ElementCriterionPtr inclusionCrit;
   if (keepConnectedOobWays)
   {
-    ImmediatelyConnectedOutOfBoundsWayTagger tagger(
-      bounds, ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+    // The two cropper config opts above will always be opposite of one another, so we'll just
+    // determine bounds strictness off of one of them.
+    ImmediatelyConnectedOutOfBoundsWayTagger tagger(bounds, strictBoundsHandling);
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());

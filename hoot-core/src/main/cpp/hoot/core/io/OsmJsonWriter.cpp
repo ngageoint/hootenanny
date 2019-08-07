@@ -276,6 +276,7 @@ void OsmJsonWriter::_writeWays()
     _write("]");
     if (_hasTags(w)) _write(",");
     _writeTags(w);
+    _write("}", false);
 
     _numWritten++;
     if (_numWritten % (_statusUpdateInterval) == 0)
@@ -323,6 +324,7 @@ void OsmJsonWriter::_writeRelations()
     _write("]");
     if (_hasTags(r)) _write(",");
     _writeTags(r);
+    _write("}", false);
 
     _numWritten++;
     if (_numWritten % (_statusUpdateInterval) == 0)
