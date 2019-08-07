@@ -37,6 +37,9 @@
 //  Qt
 #include <QNetworkReply>
 
+//  Run tests locally or against a remote server
+#define RUN_LOCAL_TESTS
+
 namespace hoot
 {
 
@@ -47,9 +50,9 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runParseCapabilitiesTest);
   CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
+  CPPUNIT_TEST(runPermissionsTest);
   CPPUNIT_TEST(runRetryConflictsTest);
   /* These tests are for local testing and require additional resources to complete */
-//  CPPUNIT_TEST(runPermissionsTest);
 //  CPPUNIT_TEST(runChangesetTest);
 //  CPPUNIT_TEST(runChangesetTrottleTest);
 //  CPPUNIT_TEST(runChangesetConflictTest);
@@ -60,6 +63,11 @@ public:
 
   const QString OSM_API_URL = "https://www.openstreetmap.org";
   const QString ME_API_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
+  const QString LOCAL_API_URL = "http://localhost:%1";
+
+  const int PORT_CAPABILITIES = 9800;
+  const int PORT_PERMISSIONS = 9801;
+  const int PORT_CONFLICTS = 9802;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -92,7 +100,13 @@ public:
   void runCapabilitesTest()
   {
     QUrl osm;
+#ifdef RUN_LOCAL_TESTS
+    osm.setUrl(LOCAL_API_URL.arg(PORT_CAPABILITIES));
+    CapabilitiesTestServer server(PORT_CAPABILITIES);
+    server.start();
+#else
     osm.setUrl(OSM_API_URL);
+#endif
 
     QList<QString> changesets;
     HootNetworkRequestPtr request(new HootNetworkRequest());
@@ -107,6 +121,9 @@ public:
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getDatabaseStatus(), OsmApiStatus::ONLINE);
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getApiStatus(), OsmApiStatus::ONLINE);
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getGpxStatus(), OsmApiStatus::ONLINE);
+#ifdef RUN_LOCAL_TESTS
+    server.wait();
+#endif
   }
 
   void runParsePermissionsTest()
@@ -118,14 +135,23 @@ public:
   void runPermissionsTest()
   {
     QUrl osm;
-    osm.setUrl(ME_API_URL);
     osm.setUserInfo("test01:hoottest");
+#ifdef RUN_LOCAL_TESTS
+    osm.setUrl(LOCAL_API_URL.arg(PORT_PERMISSIONS));
+    PermissionsTestServer server(PORT_PERMISSIONS);
+    server.start();
+#else
+    osm.setUrl(ME_API_URL);
+#endif
 
     QList<QString> changesets;
     HootNetworkRequestPtr request(new HootNetworkRequest());
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
+#ifdef RUN_LOCAL_TESTS
+    server.shutdown();
+#endif
   }
 
   void runChangesetTest()
@@ -229,11 +255,12 @@ public:
 
     //  Setup the test
     QUrl osm;
-    osm.setUrl(QString("http://localhost:%1").arg(HttpTestServer::TEST_SERVER_PORT));
+    osm.setUrl(LOCAL_API_URL.arg(PORT_CONFLICTS));
     osm.setUserInfo("test01:hoottest");
 
-    //  Kick off the test server
-    std::shared_ptr<std::thread> t = HttpTestServer::start();
+    //  Kick off the conflict test server
+    RetryConflictsTestServer server(PORT_CONFLICTS);
+    server.start();
 
     QList<QString> changesets;
     changesets.append(_inputPath + "ToyTestAConflicts.osc");
@@ -248,7 +275,7 @@ public:
     writer.apply();
 
     //  Wait for the test server to finish
-    t->join();
+    server.wait();
 
     Log::getInstance().setLevel(logLevel);
 
