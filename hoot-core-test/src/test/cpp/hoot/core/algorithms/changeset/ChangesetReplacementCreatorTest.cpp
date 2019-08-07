@@ -41,7 +41,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   // We're already testing API DB inputs with command tests, so skipping those here.
-//  CPPUNIT_TEST(runPolyLenientOsmTest);
+  CPPUNIT_TEST(runPolyLenientOsmTest);
 //  CPPUNIT_TEST(runPolyStrictOsmTest);
 //  CPPUNIT_TEST(runPoiStrictOsmTest);
 //  CPPUNIT_TEST(runLinearLenientOsmTest);
@@ -64,148 +64,99 @@ public:
   }
 
   void runPolyLenientOsmTest()
-  { 
-    const QString testName = "runPolyLenientOsmTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.osm", inFileNameBase + "-in-sec.osm", _bounds,
-      QString::fromStdString(BuildingCriterion::className()), true, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+  {   
+    _runTest("runPolyLenientOsmTest", "osm", GeometryType::Polygon, true);
   }
 
   void runPolyStrictOsmTest()
   {
-    const QString testName = "runPolyStrictOsmTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.osm", inFileNameBase + "-in-sec.osm", _bounds,
-      QString::fromStdString(BuildingCriterion::className()), false, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runPolyStrictOsmTest", "osm", GeometryType::Polygon, false);
   }
 
   void runPoiStrictOsmTest()
   {
-    const QString testName = "runPoiStrictOsmTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.osm", inFileNameBase + "-in-sec.osm", _bounds,
-      QString::fromStdString(PoiCriterion::className()), false, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runPoiStrictOsmTest", "osm", GeometryType::Point, false);
   }
 
   void runLinearLenientOsmTest()
   {
-    const QString testName = "runLinearLenientOsmTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.osm", inFileNameBase + "-in-sec.osm", _bounds,
-      QString::fromStdString(HighwayCriterion::className()), true, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runLinearLenientOsmTest", "osm", GeometryType::Line, true);
   }
 
   void runLinearStrictOsmTest()
   {
-    const QString testName = "runLinearStrictOsmTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.osm", inFileNameBase + "-in-sec.osm", _bounds,
-      QString::fromStdString(HighwayCriterion::className()), false, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runLinearStrictOsmTest", "osm", GeometryType::Line, false);
   }
 
   void runPolyLenientJsonTest()
   {
-    const QString testName = "runPolyLenientJsonTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.json", inFileNameBase + "-in-sec.json", _bounds,
-      QString::fromStdString(BuildingCriterion::className()), true, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runPolyLenientJsonTest", "json", GeometryType::Polygon, true);
   }
 
   void runPolyStrictJsonTest()
   {
-    const QString testName = "runPolyStrictJsonTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.json", inFileNameBase + "-in-sec.json", _bounds,
-      QString::fromStdString(BuildingCriterion::className()), false, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runPolyStrictJsonTest", "json", GeometryType::Polygon, false);
   }
 
   void runPoiStrictJsonTest()
   {
-    const QString testName = "runPoiStrictJsonTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.json", inFileNameBase + "-in-sec.json", _bounds,
-      QString::fromStdString(PoiCriterion::className()), false, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runPoiStrictJsonTest", "json", GeometryType::Point, false);
   }
 
   void runLinearLenientJsonTest()
   {
-    const QString testName = "runLinearLenientJsonTest";
-    const QString inFileNameBase = _inputPath + testName;
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.json", inFileNameBase + "-in-sec.json", _bounds,
-      QString::fromStdString(HighwayCriterion::className()), true, outFile);
-
-    HOOT_STR_EQUALS(
-      FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
+    _runTest("runLinearLenientJsonTest", "json", GeometryType::Line, true);
   }
 
   void runLinearStrictJsonTest()
   {
-    const QString testName = "runLinearStrictJsonTest";
+    _runTest("runLinearStrictJsonTest", "json", GeometryType::Line, false);
+  }
+
+private:
+
+  enum GeometryType
+  {
+    Point = 0,
+    Line,
+    Polygon
+  };
+
+  geos::geom::Envelope _bounds;
+
+  void _runTest(const QString& testName, const QString& fileExtension,
+                const GeometryType& geometryType, const bool lenientBounds)
+  {
     const QString inFileNameBase = _inputPath + testName;
     const QString outFile = _outputPath + testName + "-out.osc";
 
     ChangesetReplacementCreator().create(
-      inFileNameBase + "-in-ref.json", inFileNameBase + "-in-sec.json", _bounds,
-      QString::fromStdString(HighwayCriterion::className()), false, outFile);
+      inFileNameBase + "-in-ref." + fileExtension, inFileNameBase + "-in-sec." + fileExtension,
+      _bounds, _getFilterCrit(geometryType), lenientBounds, outFile);
 
     HOOT_STR_EQUALS(
       FileUtils::readFully(inFileNameBase + "-out.osc"), FileUtils::readFully(outFile));
   }
 
-private:
-
-  geos::geom::Envelope _bounds;
+  QString _getFilterCrit(const GeometryType& geometryType) const
+  {
+    std::string className;
+    switch (geometryType)
+    {
+      case GeometryType::Point:
+        className = PoiCriterion::className();
+        break;
+      case GeometryType::Line:
+        className = HighwayCriterion::className();
+        break;
+      case GeometryType::Polygon:
+        className = BuildingCriterion::className();
+        break;
+      default:
+        throw IllegalArgumentException("Invalid geometry type.");
+    }
+    return QString::fromStdString(className);
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetReplacementCreatorTest, "slow");
