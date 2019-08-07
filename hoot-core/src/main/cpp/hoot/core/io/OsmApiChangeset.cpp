@@ -692,8 +692,10 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
             //  Make sure that the ID is negative (create) in the ID map
             if (_idMap.getNewId(ElementType::Relation, member.getRef()) < 0)
             {
-              XmlRelation* relation = dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get());
-              addRelation(changeset, type, relation);
+              XmlRelation* relation_member = dynamic_cast<XmlRelation*>(_allRelations[member.getRef()].get());
+              //  Don't re-add self referencing relations
+              if (relation->id() != relation_member->id())
+                addRelation(changeset, type, relation_member);
             }
           }
         }
@@ -808,10 +810,14 @@ bool XmlChangeset::moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& dest
       }
       else if (member.isRelation())
       {
-        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        //  Don't attempt to move circular relation references
+        if (id != relation->id())
         {
-          if (source->contains(ElementType::Relation, (ChangesetType)current_type, id))
-            moveRelation(source, destination, (ChangesetType)current_type, dynamic_cast<XmlRelation*>(_allRelations[id].get()));
+          for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+          {
+            if (source->contains(ElementType::Relation, (ChangesetType)current_type, id))
+              moveRelation(source, destination, (ChangesetType)current_type, dynamic_cast<XmlRelation*>(_allRelations[id].get()));
+          }
         }
       }
     }
@@ -888,10 +894,14 @@ size_t XmlChangeset::getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* re
     }
     else if (member.isRelation())
     {
-      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+      //  Don't recount circular referenced relations
+      if (id != relation->id())
       {
-        if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
-          count += getObjectCount(changeset, dynamic_cast<XmlRelation*>(_allRelations[id].get()));
+        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+        {
+          if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
+            count += getObjectCount(changeset, dynamic_cast<XmlRelation*>(_allRelations[id].get()));
+        }
       }
     }
   }
@@ -988,6 +998,9 @@ bool XmlChangeset::canSend(XmlRelation* relation)
       {
         //  Special case, relation doesn't exist in changeset, it may in database, send it
         if (member.getRef() > 0 && _allRelations.find(member.getRef()) == _allRelations.end())
+          return true;
+        //  Special case, relation has a member relation that is itself, send it
+        else if (member.getRef() == relation->id())
           return true;
         //  Check if the relation exists and can't be sent
         else if (_allRelations.find(member.getRef()) != _allWays.end() &&
