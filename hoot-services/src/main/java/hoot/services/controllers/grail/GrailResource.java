@@ -420,26 +420,27 @@ public class GrailResource {
                 }
             }
 
-            // In the derivechangeset endpoint we format the jobId as "grail_mapId_{id}_uuid" as an indicator to trigger a rails port refresh
-            if(jobDir.split("_").length > 2) {
-                // Setup workflow to refresh rails data after the push
-                long mapId = Long.parseLong(jobDir.split("_")[2]);
-                Map<String, String> mapTags = DbUtils.getMapsTableTags(mapId);
+            // The parents parents of the current job is the conflate job which contains the resource id of the merged layer
+            String grandparentJobId = DbUtils.getParentId(reqParams.getParentId());
+            Long resourceId = DbUtils.getMapIdByJobId(grandparentJobId); // the merged layer
 
-                GrailParams refreshParams = new GrailParams();
-                refreshParams.setUser(user);
-                refreshParams.setWorkDir(workDir);
-                refreshParams.setOutput(DbUtils.getDisplayNameById(mapId));
-                refreshParams.setBounds(mapTags.get("bbox"));
-                refreshParams.setParentId("grail_" + mapTags.get("bbox").replace(",", "_"));
+            // Setup workflow to refresh rails data after the push
+            long referenceId = DbUtils.getMergedReference(resourceId);
+            Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
 
-                try {
-                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
-                    workflow.addAll(refreshWorkflow);
-                }
-                catch(UnavailableException exc) {
-                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
-                }
+            GrailParams refreshParams = new GrailParams();
+            refreshParams.setUser(user);
+            refreshParams.setWorkDir(workDir);
+            refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
+            refreshParams.setBounds(mapTags.get("bbox"));
+            refreshParams.setParentId("grail_" + mapTags.get("bbox").replace(",", "_"));
+
+            try {
+                List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
+                workflow.addAll(refreshWorkflow);
+            }
+            catch(UnavailableException exc) {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, reqParams.getParentId()));
@@ -495,7 +496,7 @@ public class GrailResource {
         JSONObject json = new JSONObject();
         //We store the mapid here because it was the best solution to getting the referenceId during differential push
         //This acts as a trigger to tell the differentialpush endpoint if we will do a rails port data refresh
-        String mainJobId = "grail_mapId_" + input1 + "_" + UUID.randomUUID().toString().replace("-", "");
+        String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         json.put("jobid", mainJobId);
 
         List<Command> workflow = new LinkedList<>();

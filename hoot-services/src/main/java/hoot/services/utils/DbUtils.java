@@ -364,6 +364,18 @@ public class DbUtils {
     }
 
     /**
+     * Retrieves the maps reference layer id
+     * @param mapId
+     * @return reference layer id
+     */
+    public static Long getMergedReference(long mapId) {
+        Map<String, String> tags = getMapsTableTags(mapId);
+        String referenceId = tags.get("input1");
+
+        return Long.parseLong(referenceId);
+    }
+
+    /**
      * Inserts a mapid to the folder mapping table if it doesn't exist
      * Updates mapid's parent if it does exist
      *
