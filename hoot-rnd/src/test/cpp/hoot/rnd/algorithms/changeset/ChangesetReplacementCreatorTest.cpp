@@ -87,6 +87,9 @@ public:
 //    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
+  // Simply checking changeset statement type counts isn't super robust, but given the detailed
+  // output checking in Service*ReplacementTest.sh for database sources we'll go with it for now.
+
   void runPolyLenientOsmTest()
   {     
     const QString testName = "runPolyLenientOsmTest";
@@ -262,8 +265,9 @@ private:
     {
       modifiedCustomTagVal = customTagVal + " 1";
     }
+    const bool perturbRef = geometryType != GeometryType::Point;
     _generateXml(
-      "hoot::PositiveIdGenerator", customTagKey, modifiedCustomTagVal, true, Status::Unknown1,
+      "hoot::PositiveIdGenerator", customTagKey, modifiedCustomTagVal, perturbRef, Status::Unknown1,
       refInXml);
 
     const QString refInJson = _outputPath + testName + "-ref-in.json";
@@ -285,14 +289,14 @@ private:
   }
 
   void _generateXml(const QString& idGen, const QString& customTagKey, const QString& customTagVal,
-                    const bool perturb, const Status& status, const QString& outFile)
+                    const bool perturb, const Status& /*status*/, const QString& outFile)
   {
     conf().set(ConfigOptions::getIdGeneratorKey(), idGen);
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
 
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, "test-files/BostonSubsetRoadBuilding_FromOsm.osm", false, status);
-    MapProjector::projectToWgs84(map);
+    IoUtils::loadMap(map, "test-files/BostonSubsetRoadBuilding_FromOsm.osm", false/*, status*/);
+    //MapProjector::projectToWgs84(map);
 
     if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
     {
@@ -319,7 +323,7 @@ private:
     }
 
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-    MapProjector::projectToWgs84(map);
+    MapProjector::projectToWgs84(map);  // perty works in planar
     IoUtils::saveMap(map, outFile);
   }
 
