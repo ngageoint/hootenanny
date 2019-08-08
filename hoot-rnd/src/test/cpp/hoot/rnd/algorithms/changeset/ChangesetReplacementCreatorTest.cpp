@@ -55,7 +55,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   // We're already testing API DB inputs with command tests, so skipping those here.
   CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
   CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
-  CPPUNIT_TEST(runPoiStrictOsmTest);
+  CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
   CPPUNIT_TEST(runLinearLenientOsmTest);
   CPPUNIT_TEST(runLinearStrictOsmTest);
 //  CPPUNIT_TEST(runPolyLenientJsonTest);
@@ -70,8 +70,7 @@ public:
   ChangesetReplacementCreatorTest() :
   HootTestFixture(
     "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/"),
-  _bounds(geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902))
+    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/")
   {
     setResetType(ResetAll);
 
@@ -80,11 +79,11 @@ public:
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
-    // TODO: remove
-//    conf().set(
-//      ConfigOptions::getLogClassFilterKey(),
-//      "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
-//    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+/*    conf().set(
+      ConfigOptions::getLogClassFilterKey(),
+      "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
+    // TODO: disable
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true)*/;
   }
 
   // Simply checking changeset statement type counts isn't super robust, but given the detailed
@@ -229,7 +228,6 @@ private:
     Polygon
   };
 
-  geos::geom::Envelope _bounds;
   ChangesetReplacementCreator _changesetReplacementCreator;
 
   ChangesetDeriverPtr _getChangesetDeriver() const
@@ -243,9 +241,13 @@ private:
 
     QString customTagKey = "";
     QString customTagVal = "";
+    QString refSourceFile = "test-files/BostonSubsetRoadBuilding_FromOsm.osm";
+    QString secSourceFile = refSourceFile;
     switch (geometryType)
     {
       case GeometryType::Point:
+        refSourceFile = "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm";
+        secSourceFile = "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm";
         break;
       case GeometryType::Line:
         customTagKey = "note";
@@ -259,6 +261,9 @@ private:
         throw IllegalArgumentException("Invalid geometry type.");
     }
 
+    // TODO: Do we need to suppress crop warning somewhere in here? Or does it need to be done in
+    // the readers?
+
     const QString refInXml = _outputPath + testName + "-ref-in.osm";
     QString modifiedCustomTagVal = "";
     if (!customTagVal.isEmpty())
@@ -267,8 +272,8 @@ private:
     }
     const bool perturbRef = geometryType != GeometryType::Point;
     _generateXml(
-      "hoot::PositiveIdGenerator", customTagKey, modifiedCustomTagVal, perturbRef, Status::Unknown1,
-      refInXml);
+      refSourceFile, "hoot::PositiveIdGenerator", customTagKey, modifiedCustomTagVal, perturbRef,
+      Status::Unknown1, refInXml);
 
     const QString refInJson = _outputPath + testName + "-ref-in.json";
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
@@ -280,23 +285,23 @@ private:
       modifiedCustomTagVal = customTagVal + " 2";
     }
     _generateXml(
-      "hoot::DefaultIdGenerator", customTagKey, modifiedCustomTagVal, false, Status::Unknown2,
-      secInXml);
+      secSourceFile, "hoot::DefaultIdGenerator", customTagKey, modifiedCustomTagVal, false,
+      Status::Unknown2, secInXml);
 
     const QString secInJson = _outputPath + testName + "-sec-in.json";
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
     DataConverter().convert(secInXml, secInJson);
   }
 
-  void _generateXml(const QString& idGen, const QString& customTagKey, const QString& customTagVal,
-                    const bool perturb, const Status& /*status*/, const QString& outFile)
+  void _generateXml(const QString& sourceFile, const QString& idGen, const QString& customTagKey,
+                    const QString& customTagVal, const bool perturb, const Status& /*status*/,
+                    const QString& outFile)
   {
     conf().set(ConfigOptions::getIdGeneratorKey(), idGen);
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
 
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, "test-files/BostonSubsetRoadBuilding_FromOsm.osm", false/*, status*/);
-    //MapProjector::projectToWgs84(map);
+    IoUtils::loadMap(map, sourceFile, false/*, status*/);
 
     if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
     {
@@ -320,10 +325,10 @@ private:
       perturber.setSeed(1);
       perturber.setNamedOps(QStringList());
       perturber.apply(map);
+      MapProjector::projectToWgs84(map);  // perty works in planar
     }
 
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-    MapProjector::projectToWgs84(map);  // perty works in planar
     IoUtils::saveMap(map, outFile);
   }
 
@@ -349,8 +354,8 @@ private:
 
     _changesetReplacementCreator.create(
       _outputPath + testName + "-ref-in." + fileExtension,
-      _outputPath + testName + "-sec-in." + fileExtension, _bounds, _getFilterCrit(geometryType),
-      lenientBounds, outFile);
+      _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType),
+      _getFilterCrit(geometryType), lenientBounds, outFile);
 
     //HOOT_STR_EQUALS(
       //FileUtils::readFully(_inputPath + testName + "-out.osc"), FileUtils::readFully(outFile));
@@ -374,6 +379,22 @@ private:
         throw IllegalArgumentException("Invalid geometry type.");
     }
     return QString::fromStdString(className);
+  }
+
+  geos::geom::Envelope _getBounds(const GeometryType& geometryType) const
+  {
+    switch (geometryType)
+    {
+      case GeometryType::Point:
+        return geos::geom::Envelope(-122.43204, -122.4303457, 37.7628, 37.76437);
+      case GeometryType::Line:
+        return geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902);
+      case GeometryType::Polygon:
+        return geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902);
+      default:
+        throw IllegalArgumentException("Invalid geometry type.");
+    }
+    return geos::geom::Envelope();
   }
 };
 
