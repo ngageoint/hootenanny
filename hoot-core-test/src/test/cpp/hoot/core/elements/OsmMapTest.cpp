@@ -46,6 +46,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 // Qt
 #include <QTime>
@@ -645,17 +646,19 @@ public:
 
     map->replace(w1, newWays);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
       "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   /**
@@ -679,12 +682,14 @@ public:
 
     map->replace(w1, newNodes);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":3,\"lat\":0,\"lon\":0},\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0},\n"
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   /**
@@ -722,10 +727,12 @@ public:
 
     map->replace(n1, newNode);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   void runReplaceNodeTest()

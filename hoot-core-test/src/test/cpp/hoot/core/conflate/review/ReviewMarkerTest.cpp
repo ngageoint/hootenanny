@@ -32,6 +32,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 namespace hoot
 {
@@ -109,9 +110,10 @@ public:
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"-1\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"-1\"}}]\n"
       "}\n",
       result);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(result));
   }
 
   /**
@@ -145,12 +147,13 @@ public:
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
       "{\"type\":\"relation\",\"id\":-2,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note 2\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.5\"},\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note 2\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.5\"}},\n"
       "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
       "{\"type\":\"node\",\"ref\":1,\"role\":\"reviewee\"},\n"
-      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.15\"}]\n"
+      "{\"type\":\"node\",\"ref\":2,\"role\":\"reviewee\"}],\"tags\":{\"" + MetadataTags::HootReviewType() + "\":\"test\",\"" + MetadataTags::HootReviewNote() + "\":\"a note\",\"" + MetadataTags::HootReviewMembers() + "\":\"2\",\"" + MetadataTags::HootReviewNeeds() + "\":\"yes\",\"" + MetadataTags::HootReviewScore() + "\":\"0.15\"}}]\n"
       "}\n",
       result);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(result));
   }
 
   void runAddReviewTagsToFeaturesTest()

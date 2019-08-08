@@ -236,6 +236,8 @@ public:
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
 
+  bool isValidJson(const QString& jsonStr);
+
 protected:
 
   // Items to conform to OsmMapReader ifc

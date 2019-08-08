@@ -49,6 +49,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -316,19 +317,19 @@ public:
         "{'type':'node','id':-11,'lat':5,'lon':100},\n"
         "{'type':'node','id':-12,'lat':0,'lon':20},\n"
         "{'type':'node','id':-13,'lat':0,'lon':60},\n"
-        "{'type':'way','id':-17,'nodes':[-5,-1],'tags':{'highway':'path','uuid':'w3','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'way','id':-14,'nodes':[-11,-4],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'way','id':-13,'nodes':[-3,-11],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-        "{'type':'way','id':-12,'nodes':[-1,-2],'tags':{'uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+        "{'type':'way','id':-17,'nodes':[-5,-1],'tags':{'highway':'path','uuid':'w3','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
+        "{'type':'way','id':-14,'nodes':[-11,-4],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
+        "{'type':'way','id':-13,'nodes':[-3,-11],'tags':{'barrier':'wall','uuid':'wall','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
+        "{'type':'way','id':-12,'nodes':[-1,-2],'tags':{'uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
         "{'type':'relation','id':-2,'members':[\n"
-        "{'type':'way','ref':-14,'role':''}],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+        "{'type':'way','ref':-14,'role':''}],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
         "{'type':'relation','id':-1,'members':[\n"
         "{'type':'way','ref':-12,'role':''},\n"
-        "{'type':'way','ref':-13,'role':''}],'tags':{'highway':'footway','uuid':'r;w3','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
+        "{'type':'way','ref':-13,'role':''}],'tags':{'highway':'footway','uuid':'r;w3','" + MetadataTags::ErrorCircular() + "':'15'}}]\n"
         "}\n"
         "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
-
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(json));
   }
 
   /**
@@ -380,16 +381,16 @@ public:
       "{'type':'node','id':-4,'lat':0,'lon':60},\n"
       "{'type':'node','id':-7,'lat':5,'lon':40},\n"
       "{'type':'node','id':-8,'lat':5,'lon':60},\n"
-      "{'type':'way','id':-6,'nodes':[-8,-2],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-5,'nodes':[-1,-7],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-4,'nodes':[-7,-8],'tags':{'highway':'road','uuid':'w1;w2','" + MetadataTags::ErrorCircular() + "':'15'},\n"
+      "{'type':'way','id':-6,'nodes':[-8,-2],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'}},\n"
+      "{'type':'way','id':-5,'nodes':[-1,-7],'tags':{'" + MetadataTags::ErrorCircular() + "':'15'}},\n"
+      "{'type':'way','id':-4,'nodes':[-7,-8],'tags':{'highway':'road','uuid':'w1;w2','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
       "{'type':'relation','id':-1,'members':[\n"
       "{'type':'way','ref':-5,'role':''},\n"
-      "{'type':'way','ref':-6,'role':''}],'tags':{'highway':'road','uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
+      "{'type':'way','ref':-6,'role':''}],'tags':{'highway':'road','uuid':'w1','" + MetadataTags::ErrorCircular() + "':'15'}}]\n"
       "}\n"
       "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
-
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(json));
   }
 
   /**
@@ -446,11 +447,12 @@ public:
       "{'type':'node','id':-3,'lat':0,'lon':0},\n"
       "{'type':'node','id':-4,'lat':0,'lon':100},\n"
       "{'type':'node','id':-5,'lat':0,'lon':50},\n"
-      "{'type':'way','id':-6,'nodes':[-2,-4],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'},\n"
-      "{'type':'way','id':-4,'nodes':[-1,-2],'tags':{'highway':'road','uuid':'w1;r','" + MetadataTags::ErrorCircular() + "':'15'}]\n"
+      "{'type':'way','id':-6,'nodes':[-2,-4],'tags':{'highway':'footway','uuid':'r','" + MetadataTags::ErrorCircular() + "':'15'}},\n"
+      "{'type':'way','id':-4,'nodes':[-1,-2],'tags':{'highway':'road','uuid':'w1;r','" + MetadataTags::ErrorCircular() + "':'15'}}]\n"
       "}\n"
       "").replace("'", "\"");
     HOOT_STR_EQUALS(expected, json);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(json));
   }
 
   //simple test to make sure review note/type strings don't get interchanged

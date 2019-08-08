@@ -33,6 +33,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 namespace hoot
 {
@@ -149,15 +150,17 @@ public:
 
     r1->replaceElement(w1, newWays);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
       "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"foo\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"foo\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   /**
@@ -186,18 +189,20 @@ public:
 
     r1->replaceElement(w1, newWays);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
       "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
       "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
       "}\n",
-      OsmJsonWriter().toString(map));
+      actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 };
 

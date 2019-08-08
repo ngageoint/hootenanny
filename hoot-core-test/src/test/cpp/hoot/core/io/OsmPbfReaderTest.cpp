@@ -34,6 +34,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/io/OsmJsonReader.h>
 using namespace hoot::pb;
 
 // CPP Unit
@@ -230,15 +231,17 @@ public:
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"relation\",\"id\":42,\"members\":[\n"
                     "{\"type\":\"node\",\"ref\":1,\"role\":\"s\"},\n"
                     "{\"type\":\"node\",\"ref\":2,\"role\":\"t\"},\n"
                     "{\"type\":\"node\",\"ref\":3,\"role\":\"u\"},\n"
                     "{\"type\":\"way\",\"ref\":1,\"role\":\"f\"},\n"
-                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"highway\":\"road\",\"note\":\"test tag\",\"hello\":\"world\",\"" + MetadataTags::ErrorCircular() + "\":\"1.7\"}]\n"
+                    "{\"type\":\"relation\",\"ref\":1,\"role\":\"f\"}],\"tags\":{\"highway\":\"road\",\"note\":\"test tag\",\"hello\":\"world\",\"" + MetadataTags::ErrorCircular() + "\":\"1.7\"}}]\n"
                     "}\n",
-                    OsmJsonWriter().toString(map))
+                    actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   void runReadWayTest()
@@ -298,6 +301,7 @@ public:
     OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
+    const QString actual = OsmJsonWriter().toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-1,\"lat\":39.5918365,\"lon\":-104.8046341},\n"
                     "{\"type\":\"node\",\"id\":-2,\"lat\":39.5918286,\"lon\":-104.8037526},\n"
@@ -310,15 +314,16 @@ public:
                     "{\"type\":\"node\",\"id\":-9,\"lat\":39.5910657,\"lon\":-104.8048206},\n"
                     "{\"type\":\"node\",\"id\":-10,\"lat\":39.5910631,\"lon\":-104.8051528},\n"
                     "{\"type\":\"node\",\"id\":-11,\"lat\":39.5909403,\"lon\":-104.8037425},\n"
-                    "{\"type\":\"way\",\"id\":-3,\"nodes\":[-1,-2,-3,-4,-5,-1],\"tags\":{\"name\":\"Target - Aurora South\",\"building\":\"yes\",\"" + MetadataTags::Ref2() + "\":\"Target\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-2,\"nodes\":[-6,-1,-5,-7,-8,-9,-10,-6],\"tags\":{\"name\":\"Target Grocery\",\"building\":\"yes\",\"" + MetadataTags::Ref2() + "\":\"Target\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-1,\"nodes\":[-5,-4,-11,-7,-5],\"tags\":{\"name\":\"Target Pharmacy\",\"building\":\"yes\",\"" + MetadataTags::Ref2() + "\":\"Target\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-3,\"nodes\":[-1,-2,-3,-4,-5,-1],\"tags\":{\"name\":\"Target - Aurora South\",\"building\":\"yes\",\"" + MetadataTags::Ref2() + "\":\"Target\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-2,\"nodes\":[-6,-1,-5,-7,-8,-9,-10,-6],\"tags\":{\"name\":\"Target Grocery\",\"building\":\"yes\",\"" + MetadataTags::Ref2() + "\":\"Target\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-1,\"nodes\":[-5,-4,-11,-7,-5],\"tags\":{\"name\":\"Target Pharmacy\",\"building\":\"yes\",\"" + MetadataTags::Ref2() + "\":\"Target\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-567,\"role\":\"role1\"},\n"
                     "{\"type\":\"way\",\"ref\":-569,\"role\":\"role2\"},\n"
-                    "{\"type\":\"way\",\"ref\":-568,\"role\":\"role3\"}],\"tags\":{\"foo\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-568,\"role\":\"role3\"}],\"tags\":{\"foo\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
                     "}\n",
-                    OsmJsonWriter().toString(map));
+                    actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   void runIsSupportedUrlExistsTest()

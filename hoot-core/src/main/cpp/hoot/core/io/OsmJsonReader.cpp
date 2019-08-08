@@ -245,6 +245,19 @@ void OsmJsonReader::_loadJSON(const QString& jsonStr)
   }
 }
 
+bool OsmJsonReader::isValidJson(const QString& jsonStr)
+{
+  try
+  {
+    _loadJSON(jsonStr);
+  }
+  catch (const HootException&)
+  {
+    return false;
+  }
+  return true;
+}
+
 OsmMapPtr OsmJsonReader::loadFromString(const QString& jsonStr)
 {
   _loadJSON(jsonStr);
@@ -293,7 +306,8 @@ void OsmJsonReader::_parseOverpassJson()
 
   // Make a map, and iterate through all of our elements, adding them
   pt::ptree elements = _propTree.get_child("elements");
-  for (pt::ptree::const_iterator elementIt = elements.begin(); elementIt != elements.end(); ++elementIt)
+  for (pt::ptree::const_iterator elementIt = elements.begin(); elementIt != elements.end();
+       ++elementIt)
   {
     // Type can be node, way, or relation
     string typeStr = elementIt->second.get("type", string("--"));

@@ -55,6 +55,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -178,6 +179,7 @@ public:
 
     HOOT_STR_EQUALS("[3]{(Way(-26), Relation(-1)), (Way(-25), Relation(-1)), (Way(-14), Relation(-1))}",
                     replaced);
+    const QString actual = OsmJsonWriter(8).toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-218,\"lat\":39.593278,\"lon\":-104.80656},\n"
                     "{\"type\":\"node\",\"id\":-219,\"lat\":39.593114,\"lon\":-104.80653},\n"
@@ -195,13 +197,14 @@ public:
                     "{\"type\":\"node\",\"id\":-231,\"lat\":39.593152,\"lon\":-104.80613},\n"
                     "{\"type\":\"node\",\"id\":-232,\"lat\":39.593143,\"lon\":-104.80622},\n"
                     "{\"type\":\"node\",\"id\":-233,\"lat\":39.593122,\"lon\":-104.80621},\n"
-                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
+                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"way\",\"ref\":-26,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"name\":\"Panera Bread\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"" + MetadataTags::HootBuildingMatch() + "\":\"true\",\"building\":\"yes\",\"" + MetadataTags::Ref1() + "\":\"Panera\",\"" + MetadataTags::Ref2() + "\":\"Panera\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"name\":\"Panera Bread\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"" + MetadataTags::HootBuildingMatch() + "\":\"true\",\"building\":\"yes\",\"" + MetadataTags::Ref1() + "\":\"Panera\",\"" + MetadataTags::Ref2() + "\":\"Panera\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
                     "}\n",
-                    OsmJsonWriter(8).toString(map));
+                    actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest1()

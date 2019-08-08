@@ -95,8 +95,9 @@ public:
                     "{\"type\":\"node\",\"id\":-3,\"lat\":14,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"Not the same\",\"source:hash\":\"CCC;DDD\",\"place\":\"locality\"}},\n"
                     "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
                     "{\"type\":\"node\",\"ref\":-3,\"role\":\"reviewee\"},\n"
-                    "{\"type\":\"node\",\"ref\":-1,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:type\":\"POI\",\"hoot:review:note\":\"Somewhat similar (12m) - very close together, similar POI type\",\"hoot:review:members\":\"2\",\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"-1\"}]\n"
+                    "{\"type\":\"node\",\"ref\":-1,\"role\":\"reviewee\"}],\"tags\":{\"hoot:review:type\":\"POI\",\"hoot:review:note\":\"Somewhat similar (12m) - very close together, similar POI type\",\"hoot:review:members\":\"2\",\"hoot:review:needs\":\"yes\",\"hoot:review:score\":\"-1\"}}]\n"
                     "}\n", result);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(result));
   }
 
 };

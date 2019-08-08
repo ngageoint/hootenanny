@@ -34,6 +34,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/rnd/visitors/RemoveRef2VisitorMultipleCriterion.h>
+#include <hoot/core/io/OsmJsonReader.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -70,6 +71,8 @@ public:
     RemoveRef2VisitorMultipleCriterion v;
     v.addCriterion(chainCrit);
     map->visitRw(v);
+
+    const QString actual = OsmJsonWriter(8).toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-861027,\"lat\":37.801158,\"lon\":-122.41708},\n"
                     "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"
@@ -79,12 +82,13 @@ public:
                     "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"A\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861056,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"C\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861057,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"}}]\n"
                     "}\n",
-                    OsmJsonWriter(8).toString(map));
+                    actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
   void runToyTest2()
@@ -99,6 +103,8 @@ public:
     RemoveRef2VisitorMultipleCriterion v;
     v.addCriterion(chainCrit);
     map->visitRw(v);
+
+    const QString actual = OsmJsonWriter(8).toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-861027,\"lat\":37.801158,\"lon\":-122.41708},\n"
                     "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"
@@ -108,12 +114,13 @@ public:
                     "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"none\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861056,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"C\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
                     "{\"type\":\"node\",\"id\":-861057,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"C\",\"error:circular\":\"15\"},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"B\",\"error:circular\":\"15\"}]\n"
+                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
+                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"B\",\"error:circular\":\"15\"}}]\n"
                     "}\n",
-                    OsmJsonWriter(8).toString(map));
+                    actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
 };
