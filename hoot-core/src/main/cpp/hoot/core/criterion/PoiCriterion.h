@@ -45,6 +45,9 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
+  virtual ConflatableGeometryType getGeometryType() const
+  { return ConflatableGeometryType::Point; }
+
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiCriterion()); }
 
   virtual QString getDescription() const { return "Identifies POIs"; }

@@ -48,6 +48,9 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
+  virtual ConflatableGeometryType getGeometryType() const
+  { return ConflatableGeometryType::Line; }
+
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new HighwayCriterion()); }
 
   virtual QString getDescription() const { return "Identifies roads"; }

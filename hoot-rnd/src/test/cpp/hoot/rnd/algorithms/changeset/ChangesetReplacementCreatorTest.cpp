@@ -60,7 +60,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
   CPPUNIT_TEST(runLinearLenientOsmTest);// passing
   CPPUNIT_TEST(runLinearStrictOsmTest); // passing
-  //CPPUNIT_TEST(runPolyLenientJsonTest);
+//  CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
 //  CPPUNIT_TEST(runLinearLenientJsonTest);

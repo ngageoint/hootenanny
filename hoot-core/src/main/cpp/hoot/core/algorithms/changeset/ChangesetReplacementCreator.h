@@ -119,12 +119,6 @@ private:
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
 
-  // determine geometry type based on hoot criterion class; may need something better for these
-
-  bool _isPointCrit(const QString& critClassName) const;
-  bool _isLinearCrit(const QString& critClassName) const;
-  bool _isPolyCrit(const QString& critClassName) const;
-
   bool _isNetworkConflate() const;
 
   void _validateInputs(const QString& input1, const QString& input2);
@@ -133,11 +127,12 @@ private:
     const QString& featureTypeFilterClassName);
 
   void _filterFeatures(
-    OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureCrit,
+    OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
     const QString& debugFileName);
 
-  void _parseConfigOpts(const bool lenientBounds, const QString& critClassName,
-                        const QString& boundsStr);
+  void _parseConfigOpts(
+    const bool lenientBounds, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
+    const QString& boundsStr);
 
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);

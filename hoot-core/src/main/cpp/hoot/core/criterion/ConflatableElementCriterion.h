@@ -42,9 +42,18 @@ class ConflatableElementCriterion : public ElementCriterion
 {
 public:
 
+  enum ConflatableGeometryType
+  {
+    Point = 0,
+    Line,
+    Polygon
+  };
+
   static std::string className() { return "hoot::ConflatableElementCriterion"; }
 
   virtual ~ConflatableElementCriterion() {}
+
+  virtual ConflatableGeometryType getGeometryType() const = 0;
 
   /**
    * Determines which criteria consider an element as conflatable
