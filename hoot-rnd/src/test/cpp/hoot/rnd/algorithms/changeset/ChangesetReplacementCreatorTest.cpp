@@ -44,10 +44,8 @@ namespace hoot
 {
 
 /*
- * These tests are very similar to the tests in
- * test-files/cmd/glacial/serial/Service*ReplacementTest.sh. The main differences are that these
- * don't interact with a database, don't try to apply the output changeset, and only generate the
- * input data once.
+ * These tests are very similar to the tests in Service*ReplacementTest.sh. The main differences are
+ * that these tests don't interact with a database and don't try to apply the output changeset.
  *
  * This test file is in hoot-rnd since it needs to use PertyOp.
  */
@@ -55,11 +53,11 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   // We're already testing API DB inputs with command tests, so skipping those here.
-  CPPUNIT_TEST(runPolyLenientOsmTest);
-//  CPPUNIT_TEST(runPolyStrictOsmTest);
-//  CPPUNIT_TEST(runPoiStrictOsmTest);
-//  CPPUNIT_TEST(runLinearLenientOsmTest);
-//  CPPUNIT_TEST(runLinearStrictOsmTest);
+  CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
+  CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
+  CPPUNIT_TEST(runPoiStrictOsmTest);
+  CPPUNIT_TEST(runLinearLenientOsmTest);
+  CPPUNIT_TEST(runLinearStrictOsmTest);
 //  CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
@@ -72,12 +70,10 @@ public:
   ChangesetReplacementCreatorTest() :
   HootTestFixture(
     "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/")//,
-  //_bounds(geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902))
+    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/"),
+  _bounds(geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902))
   {
     setResetType(ResetAll);
-
-    _bounds = GeometryUtils::envelopeFromConfigString("-71.4698,42.4866,-71.4657,42.4902");
 
     conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
@@ -85,16 +81,19 @@ public:
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
     // TODO: remove
-    conf().set(
-      "log.class.filter",
-      "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
-
-    _prepInputData();
+//    conf().set(
+//      ConfigOptions::getLogClassFilterKey(),
+//      "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
+//    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void runPolyLenientOsmTest()
   {     
-    _runTest("runPolyLenientOsmTest", "osm", GeometryType::Polygon, true);
+    const QString testName = "runPolyLenientOsmTest";
+    const GeometryType geometryType = GeometryType::Polygon;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "osm", geometryType, true);
 
     CPPUNIT_ASSERT_EQUAL(632, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(0, _getChangesetDeriver()->getNumModifyChanges());
@@ -103,7 +102,11 @@ public:
 
   void runPolyStrictOsmTest()
   {
-    _runTest("runPolyStrictOsmTest", "osm", GeometryType::Polygon, false);
+    const QString testName = "runPolyStrictOsmTest";
+    const GeometryType geometryType = GeometryType::Polygon;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "osm", geometryType, false);
 
     CPPUNIT_ASSERT_EQUAL(529, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
@@ -112,7 +115,11 @@ public:
 
   void runPoiStrictOsmTest()
   {
-    _runTest("runPoiStrictOsmTest", "osm", GeometryType::Point, false);
+    const QString testName = "runPoiStrictOsmTest";
+    const GeometryType geometryType = GeometryType::Point;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "osm", geometryType, false);
 
     CPPUNIT_ASSERT_EQUAL(3, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
@@ -121,7 +128,11 @@ public:
 
   void runLinearLenientOsmTest()
   {
-    _runTest("runLinearLenientOsmTest", "osm", GeometryType::Line, true);
+    const QString testName = "runLinearLenientOsmTest";
+    const GeometryType geometryType = GeometryType::Line;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "osm", geometryType, true);
 
     CPPUNIT_ASSERT_EQUAL(146, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(7, _getChangesetDeriver()->getNumModifyChanges());
@@ -130,7 +141,11 @@ public:
 
   void runLinearStrictOsmTest()
   {
-    _runTest("runLinearStrictOsmTest", "osm", GeometryType::Line, false);
+    const QString testName = "runLinearStrictOsmTest";
+    const GeometryType geometryType = GeometryType::Line;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "osm", geometryType, false);
 
     CPPUNIT_ASSERT_EQUAL(47, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(5, _getChangesetDeriver()->getNumModifyChanges());
@@ -139,7 +154,11 @@ public:
 
   void runPolyLenientJsonTest()
   {
-    _runTest("runPolyLenientJsonTest", "json", GeometryType::Polygon, true);
+    const QString testName = "runPolyLenientJsonTest";
+    const GeometryType geometryType = GeometryType::Polygon;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "json", geometryType, true);
 
     CPPUNIT_ASSERT_EQUAL(632, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(0, _getChangesetDeriver()->getNumModifyChanges());
@@ -148,7 +167,11 @@ public:
 
   void runPolyStrictJsonTest()
   {
-    _runTest("runPolyStrictJsonTest", "json", GeometryType::Polygon, false);
+    const QString testName = "runPolyStrictJsonTest";
+    const GeometryType geometryType = GeometryType::Polygon;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "json", geometryType, false);
 
     CPPUNIT_ASSERT_EQUAL(529, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
@@ -157,7 +180,11 @@ public:
 
   void runPoiStrictJsonTest()
   {
-    _runTest("runPoiStrictJsonTest", "json", GeometryType::Point, false);
+    const QString testName = "runPoiStrictJsonTest";
+    const GeometryType geometryType = GeometryType::Point;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "json", geometryType, false);
 
     CPPUNIT_ASSERT_EQUAL(3, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
@@ -166,7 +193,11 @@ public:
 
   void runLinearLenientJsonTest()
   {
-    _runTest("runLinearLenientJsonTest", "json", GeometryType::Line, true);
+    const QString testName = "runLinearLenientJsonTest";
+    const GeometryType geometryType = GeometryType::Line;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "json", geometryType, true);
 
     CPPUNIT_ASSERT_EQUAL(146, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(7, _getChangesetDeriver()->getNumModifyChanges());
@@ -175,7 +206,11 @@ public:
 
   void runLinearStrictJsonTest()
   {
-    _runTest("runLinearStrictJsonTest", "json", GeometryType::Line, false);
+    const QString testName = "runLinearStrictJsonTest";
+    const GeometryType geometryType = GeometryType::Line;
+
+    _prepInputData(testName, geometryType);
+    _runTest(testName, "json", geometryType, false);
 
     CPPUNIT_ASSERT_EQUAL(47, _getChangesetDeriver()->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(5, _getChangesetDeriver()->getNumModifyChanges());
@@ -199,39 +234,59 @@ private:
     return _changesetReplacementCreator._changesetCreator->_changesetDeriver;
   }
 
-  void _prepInputData()
+  void _prepInputData(const QString& testName, const GeometryType& geometryType)
   {
     // TODO: JSON isn't writing (?) versions properly
 
-    const QString refInXml = _outputPath + "ref-in.osm";
-    if (!QFile(refInXml).exists())
+    QString customTagKey = "";
+    QString customTagVal = "";
+    switch (geometryType)
     {
-      _generateXml("hoot::PositiveIdGenerator", "Feature 1", true, Status::Unknown1, refInXml);
+      case GeometryType::Point:
+        break;
+      case GeometryType::Line:
+        customTagKey = "note";
+        customTagVal = "Highway";
+        break;
+      case GeometryType::Polygon:
+        customTagKey = "name";
+        customTagVal = "Building";
+        break;
+      default:
+        throw IllegalArgumentException("Invalid geometry type.");
     }
-    const QString refInJson = _outputPath + "ref-in.json";
-    if (!QFile(refInJson).exists())
+
+    const QString refInXml = _outputPath + testName + "-ref-in.osm";
+    QString modifiedCustomTagVal = "";
+    if (!customTagVal.isEmpty())
     {
-      conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-      DataConverter().convert(refInXml, refInJson);
+      modifiedCustomTagVal = customTagVal + " 1";
     }
-    const QString secInXml = _outputPath + "sec-in.osm";
-    if (!QFile(secInXml).exists())
+    _generateXml(
+      "hoot::PositiveIdGenerator", customTagKey, modifiedCustomTagVal, true, Status::Unknown1,
+      refInXml);
+
+    const QString refInJson = _outputPath + testName + "-ref-in.json";
+    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+    DataConverter().convert(refInXml, refInJson);
+
+    const QString secInXml = _outputPath + testName + "-sec-in.osm";
+    if (!customTagVal.isEmpty())
     {
-      _generateXml("hoot::DefaultIdGenerator", "Feature 2", false, Status::Unknown2, secInXml);
+      modifiedCustomTagVal = customTagVal + " 2";
     }
-    const QString secInJson = _outputPath + "sec-in.json";
-    if (!QFile(secInJson).exists())
-    {
-      conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-      DataConverter().convert(secInXml, secInJson);
-    }
+    _generateXml(
+      "hoot::DefaultIdGenerator", customTagKey, modifiedCustomTagVal, false, Status::Unknown2,
+      secInXml);
+
+    const QString secInJson = _outputPath + testName + "-sec-in.json";
+    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+    DataConverter().convert(secInXml, secInJson);
   }
 
-  void _generateXml(const QString& idGen, const QString& note, const bool perturb,
-                    const Status& status, const QString& outFile)
+  void _generateXml(const QString& idGen, const QString& customTagKey, const QString& customTagVal,
+                    const bool perturb, const Status& status, const QString& outFile)
   {
-    // TODO: projections issues here
-
     conf().set(ConfigOptions::getIdGeneratorKey(), idGen);
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
 
@@ -239,8 +294,20 @@ private:
     IoUtils::loadMap(map, "test-files/BostonSubsetRoadBuilding_FromOsm.osm", false, status);
     MapProjector::projectToWgs84(map);
 
-    SetTagValueVisitor tagSetter("note", note);
-    map->visitRw(tagSetter);
+    if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
+    {
+      QString criterionName = "";
+      if (customTagVal.toLower().contains("building"))
+      {
+        criterionName = QString::fromStdString(BuildingCriterion::className());
+      }
+      else
+      {
+        criterionName = QString::fromStdString(HighwayCriterion::className());
+      }
+      SetTagValueVisitor tagSetter(customTagKey, customTagVal, false, criterionName);
+      map->visitRw(tagSetter);
+    }
 
     if (perturb)
     {
@@ -277,8 +344,9 @@ private:
     const QString outFile = _outputPath + testName + "-out.osc";
 
     _changesetReplacementCreator.create(
-      _outputPath + "ref-in." + fileExtension, _outputPath + "sec-in." + fileExtension,
-      _bounds, _getFilterCrit(geometryType), lenientBounds, outFile);
+      _outputPath + testName + "-ref-in." + fileExtension,
+      _outputPath + testName + "-sec-in." + fileExtension, _bounds, _getFilterCrit(geometryType),
+      lenientBounds, outFile);
 
     //HOOT_STR_EQUALS(
       //FileUtils::readFully(_inputPath + testName + "-out.osc"), FileUtils::readFully(outFile));

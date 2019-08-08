@@ -640,6 +640,12 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
 {
   // global opts
 
+  // TODO: remove
+//  conf().set(
+//    ConfigOptions::getLogClassFilterKey(),
+//    "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
+//  conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
