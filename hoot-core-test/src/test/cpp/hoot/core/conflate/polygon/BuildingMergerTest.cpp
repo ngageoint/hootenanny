@@ -179,7 +179,9 @@ public:
 
     HOOT_STR_EQUALS("[3]{(Way(-26), Relation(-1)), (Way(-25), Relation(-1)), (Way(-14), Relation(-1))}",
                     replaced);
-    const QString actual = OsmJsonWriter(8).toString(map);
+    OsmJsonWriter writer(8);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-218,\"lat\":39.593278,\"lon\":-104.80656},\n"
                     "{\"type\":\"node\",\"id\":-219,\"lat\":39.593114,\"lon\":-104.80653},\n"

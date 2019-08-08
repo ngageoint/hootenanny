@@ -231,7 +231,9 @@ public:
     reader.setPermissive(true);
     reader.parseElements(&ss, map);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"relation\",\"id\":42,\"members\":[\n"
                     "{\"type\":\"node\",\"ref\":1,\"role\":\"s\"},\n"
@@ -301,7 +303,9 @@ public:
     OsmMapPtr map(new OsmMap());
     uut.parse(&input, map);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-1,\"lat\":39.5918365,\"lon\":-104.8046341},\n"
                     "{\"type\":\"node\",\"id\":-2,\"lat\":39.5918286,\"lon\":-104.8037526},\n"

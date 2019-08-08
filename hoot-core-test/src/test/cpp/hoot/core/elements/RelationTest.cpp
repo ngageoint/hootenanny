@@ -150,7 +150,9 @@ public:
 
     r1->replaceElement(w1, newWays);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
       "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
@@ -189,7 +191,9 @@ public:
 
     r1->replaceElement(w1, newWays);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
       "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"

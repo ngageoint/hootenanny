@@ -301,7 +301,9 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    QString json = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    QString json = writer.toString(map);
 
     TestUtils::mkpath("tmp");
     MapProjector::projectToWgs84(map);
@@ -371,7 +373,9 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    QString json = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    QString json = writer.toString(map);
 
     QString expected = QString(
       "{'version': 0.6,'generator': 'Hootenanny','elements': [\n"
@@ -437,7 +441,9 @@ public:
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
 
-    QString json = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    QString json = writer.toString(map);
     LOG_VART(TestUtils::toQuotedString(json.replace("\"", "'")));
 
     QString expected = QString(

@@ -102,9 +102,9 @@ public:
     uut.mark(map, n1, n2, "a note", "test");
 
     OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
     writer.setIncludeCircularError(false);
     QString result = writer.toString(map);
-
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"
@@ -139,9 +139,9 @@ public:
     uut.mark(map, n1, n2, "a note 2", "test", 0.5);
 
     OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
     writer.setIncludeCircularError(false);
     QString result = writer.toString(map);
-
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n2\"}},\n"
       "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0,\"tags\":{\"uuid\":\"n1\"}},\n"

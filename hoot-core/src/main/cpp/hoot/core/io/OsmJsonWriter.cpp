@@ -39,6 +39,7 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -56,6 +57,7 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
 OsmJsonWriter::OsmJsonWriter(int precision)
   : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
+    _includeCompatibilityTags(true),
     _precision(precision),
     _out(0),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
@@ -161,6 +163,45 @@ void OsmJsonWriter::_writeKvp(const QString& key, double value)
   _write(markupString(key) % ":" % QString::number(value, 'g', _precision), false);
 }
 
+void OsmJsonWriter::_writeMetadata(const Element& element)
+{
+  if (_includeCompatibilityTags)
+  {
+    _writeKvp("timestamp", OsmUtils::toTimeString(element.getTimestamp())); _write(",");
+    long version = element.getVersion();
+    if (version == ElementData::VERSION_EMPTY)
+    {
+      version = 1;
+    }
+    _writeKvp("version", version); _write(",");
+  }
+  else
+  {
+    if (element.getTimestamp() != ElementData::TIMESTAMP_EMPTY)
+    {
+      _writeKvp("timestamp", OsmUtils::toTimeString(element.getTimestamp())); _write(",");
+    }
+    if (element.getVersion() != ElementData::VERSION_EMPTY)
+    {
+      _writeKvp("version", element.getVersion()); _write(",");
+    }
+  }
+  if (element.getChangeset() != ElementData::CHANGESET_EMPTY &&
+      //  Negative IDs are considered "new" elements and shouldn't have a changeset
+      element.getId() > 0)
+  {
+    _writeKvp("changeset", element.getChangeset()); _write(",");
+  }
+  if (element.getUser() != ElementData::USER_EMPTY)
+  {
+    _writeKvp("user", element.getUser()); _write(",");
+  }
+  if (element.getUid() != ElementData::UID_EMPTY)
+  {
+    _writeKvp("uid", element.getUid()); _write(",");
+  }
+}
+
 void OsmJsonWriter::_writeNodes()
 {
   QList<long> nids;
@@ -179,6 +220,9 @@ void OsmJsonWriter::_writeNodes()
     _write("{");
     _writeKvp("type", "node"); _write(",");
     _writeKvp("id", n->getId()); _write(",");
+
+    _writeMetadata(*n);
+
     _writeKvp("lat", n->getY()); _write(",");
     _writeKvp("lon", n->getX());
     if (_hasTags(n)) _write(",");
@@ -264,6 +308,8 @@ void OsmJsonWriter::_writeWays()
     _writeKvp("type", "way"); _write(",");
     _writeKvp("id", w->getId()); _write(",");
 
+    _writeMetadata(*w);
+
     _write("\"nodes\":[");
     for (size_t j = 0; j < w->getNodeCount(); j++)
     {
@@ -301,6 +347,8 @@ void OsmJsonWriter::_writeRelations()
     _write("{");
     _writeKvp("type", "relation"); _write(",");
     _writeKvp("id", r->getId()); _write(",");
+
+    _writeMetadata(*r);
 
     const vector<RelationData::Entry>& members = r->getMembers();
     _write("\"members\":[");

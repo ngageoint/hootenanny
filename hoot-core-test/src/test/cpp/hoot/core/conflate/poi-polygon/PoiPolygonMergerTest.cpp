@@ -97,7 +97,9 @@ public:
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
-      const QString actual = OsmJsonWriter().toString(map2);
+      OsmJsonWriter writer;
+      writer.setIncludeCompatibilityTags(false);
+      const QString actual = writer.toString(map2);
       HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                       "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0},\n"
                       "{\"type\":\"node\",\"id\":-2,\"lat\":0,\"lon\":20},\n"
@@ -123,7 +125,9 @@ public:
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
-      const QString actual = OsmJsonWriter().toString(map2);
+      OsmJsonWriter writer;
+      writer.setIncludeCompatibilityTags(false);
+      const QString actual = writer.toString(map2);
       HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                       "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0},\n"
                       "{\"type\":\"node\",\"id\":-2,\"lat\":0,\"lon\":20},\n"
@@ -212,7 +216,9 @@ public:
 
     HOOT_STR_EQUALS("[6]{(Way(-22), Relation(-1)), (Way(-21), Relation(-1)), (Way(-20), Relation(-1)), (Way(-19), Relation(-1)), (Way(-6), Relation(-1)), (Node(-145), Relation(-1))}",
                     replaced);
-    const QString actual = OsmJsonWriter(4).toString(map);
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":-129,\"lat\":0.00173,\"lon\":-0.004071},\n"
       "{\"type\":\"node\",\"id\":-130,\"lat\":0.001743,\"lon\":-0.003632},\n"
@@ -259,7 +265,9 @@ public:
     //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy2.osm");
     HOOT_STR_EQUALS("[6]{(Way(-18), Relation(-1)), (Way(-17), Relation(-1)), (Way(-16), Relation(-1)), (Way(-15), Relation(-1)), (Way(-5), Relation(-1)), (Node(-120), Relation(-1))}",
                     replaced);
-    const QString actual = OsmJsonWriter(4).toString(map);
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-112,\"lat\":0.002596,\"lon\":0.0009711},\n"
                     "{\"type\":\"node\",\"id\":-113,\"lat\":0.002771,\"lon\":-0.0005339},\n"
@@ -306,7 +314,9 @@ public:
     //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy3.osm");
     HOOT_STR_EQUALS("[7]{(Way(-14), Relation(-1)), (Way(-13), Relation(-1)), (Way(-12), Relation(-1)), (Way(-11), Relation(-1)), (Way(-4), Relation(-1)), (Node(-38), Relation(-1)), (Node(-83), Relation(-1))}",
                     replaced);
-    const QString actual = OsmJsonWriter(4).toString(map);
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-96,\"lat\":0.0009777,\"lon\":0.002351},\n"
                     "{\"type\":\"node\",\"id\":-97,\"lat\":0.0009652,\"lon\":0.003166},\n"
@@ -353,7 +363,9 @@ public:
     //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy4.osm");
     HOOT_STR_EQUALS("[6]{(Way(-10), Relation(-1)), (Way(-9), Relation(-1)), (Way(-8), Relation(-1)), (Way(-3), Relation(-1)), (Node(-13), Relation(-1)), (Node(-82), Relation(-1))}",
                     replaced);
-    const QString actual = OsmJsonWriter(4).toString(map);
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-84,\"lat\":-0.001932,\"lon\":-0.003431},\n"
                     "{\"type\":\"node\",\"id\":-85,\"lat\":-0.001944,\"lon\":-0.002616},\n"
@@ -396,7 +408,9 @@ public:
     //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy5.osm");
     HOOT_STR_EQUALS("[1]{(Node(-81), Way(-2))}",
                     replaced);
-    const QString actual = OsmJsonWriter(4).toString(map);
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-14,\"lat\":-0.0005151,\"lon\":-0.0005625},\n"
                     "{\"type\":\"node\",\"id\":-15,\"lat\":-0.0005143,\"lon\":-0.001151},\n"
@@ -437,7 +451,9 @@ public:
 
     //OsmMapWriterFactory::write(map, "test-output/conflate/PoiBuildingToy6.osm");
     HOOT_STR_EQUALS("[1]{(Node(-75), Way(-1))}", replaced);
-    const QString actual = OsmJsonWriter(4).toString(map);
+    OsmJsonWriter writer(4);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-1,\"lat\":-0.0004775,\"lon\":0.00236},\n"
                     "{\"type\":\"node\",\"id\":-2,\"lat\":-0.0004766,\"lon\":0.001771},\n"

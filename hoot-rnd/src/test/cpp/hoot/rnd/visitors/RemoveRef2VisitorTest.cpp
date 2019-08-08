@@ -68,7 +68,9 @@ public:
     v.addCriterion(c);
     map->visitRw(v);
 
-    const QString actual = OsmJsonWriter(8).toString(map);
+    OsmJsonWriter writer(8);
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-861027,\"lat\":37.801158,\"lon\":-122.41708},\n"
                     "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"

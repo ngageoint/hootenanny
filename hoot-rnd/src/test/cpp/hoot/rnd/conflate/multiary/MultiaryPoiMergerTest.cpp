@@ -87,8 +87,8 @@ public:
 
     OsmJsonWriter writer;
     writer.setIncludeCircularError(false);
+    writer.setIncludeCompatibilityTags(false);
     QString result = writer.toString(map);
-
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-1,\"lat\":2,\"lon\":-3,\"tags\":{\"amenity\":\"pub\",\"hoot:hash\":\"\",\"name\":\"My Restaurant\",\"alt_name\":\"my Restaurant\",\"source:hash\":\"AAA;BBB\"}},\n"

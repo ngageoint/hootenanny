@@ -646,7 +646,9 @@ public:
 
     map->replace(w1, newWays);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
       "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
@@ -682,7 +684,9 @@ public:
 
     map->replace(w1, newNodes);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"node\",\"id\":3,\"lat\":0,\"lon\":0},\n"
       "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0},\n"
@@ -727,7 +731,9 @@ public:
 
     map->replace(n1, newNode);
 
-    const QString actual = OsmJsonWriter().toString(map);
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
       "{\"type\":\"way\",\"id\":1,\"nodes\":[2],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
       "}\n",

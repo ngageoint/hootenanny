@@ -162,10 +162,6 @@ void OsmJsonReader::close()
     _file.close();
 }
 
-// TODO: implement support for immediately connected outside of bounds ways; without it, the
-// lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
-// TODO: consolidate read code
-
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
