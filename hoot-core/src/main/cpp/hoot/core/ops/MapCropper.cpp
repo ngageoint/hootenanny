@@ -225,6 +225,7 @@ void MapCropper::apply(OsmMapPtr& map)
   {
     LOG_VARD(_envelopeG->toString());
   }
+  LOG_VARD(_inclusionCrit.get());
 
   // go through all the ways
   long wayCtr = 0;

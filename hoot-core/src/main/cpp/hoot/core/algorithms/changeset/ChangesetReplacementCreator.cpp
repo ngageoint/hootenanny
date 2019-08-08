@@ -186,6 +186,7 @@ void ChangesetReplacementCreator::create(
     // data in the resulting changeset and generate modify statements instead.
 
     ReplacementSnappedWayJoiner(refIdToVersionMappings).join(conflatedMap);
+    LOG_VARD(MapProjector::toWkt(conflatedMap->getProjection()));
   }
 
   // PRE-CHANGESET DERIVATION DATA PREP
@@ -315,6 +316,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
+  LOG_VARD(MapProjector::toWkt(refMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
   return refMap;
 }
@@ -338,7 +340,7 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   idToVersionMapper.apply(map);
   LOG_DEBUG(idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
-  LOG_VARD(idToVersionMappings);
+  LOG_VART(idToVersionMappings);
   return idToVersionMappings;
 }
 
@@ -389,6 +391,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
   OsmMapPtr secMap(new OsmMap());
   secMap->setName("sec");
   IoUtils::loadMap(secMap, input, false, Status::Unknown2);
+  LOG_VARD(MapProjector::toWkt(secMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
   return secMap;
 }
@@ -404,27 +407,35 @@ void ChangesetReplacementCreator::_filterFeatures(
   LOG_DEBUG(elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
   LOG_DEBUG(elementPruner.getCompletedStatusMessage());
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap)
 {
+  LOG_VARD(MapProjector::toWkt(doughMap->getProjection()));
+  LOG_VARD(MapProjector::toWkt(cutterMap->getProjection()));
+
   // Generate a cutter shape based on the cropped secondary map.
 
   LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
   OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(cutterMap);
   // not exactly sure yet why this needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
+  LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
 
   LOG_DEBUG("Cookie cutting cutter shape out of: " << doughMap->getName() << "...");
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
+  //OsmMapPtr cookieCutMap(new OsmMap(doughMap, MapProjector::createWgs84Projection()));
+  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
   cookieCutMap->setName("cookie-cut");
   CookieCutter(false, 0.0, _cookieCutKeepEntireCrossingBounds, _cookieCutKeepOnlyInsideBounds)
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
+  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
   return cookieCutMap;
@@ -442,6 +453,7 @@ void ChangesetReplacementCreator::_combineMaps(OsmMapPtr& map1, OsmMapPtr& map2,
   MapProjector::projectToWgs84(map2);   // not exactly sure yet why this needs to be done
 
   map1->append(map2, throwOutDupes);
+  LOG_VARD(MapProjector::toWkt(map1->getProjection()));
 
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
@@ -470,6 +482,7 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
   MapProjector::projectToWgs84(map);  // conflation works in planar
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, "conflated");
 }
 
@@ -497,6 +510,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(OsmMapPtr& map, const QSt
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
 
   MapProjector::projectToWgs84(map);   // snapping works in planar
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
 
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
@@ -516,6 +530,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
         new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
   OsmMapPtr connectedWays = OsmUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
+  LOG_VARD(MapProjector::toWkt(connectedWays->getProjection()));
   OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
   return connectedWays;
 }
@@ -538,6 +553,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // with no information.
   SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
@@ -561,6 +577,7 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   LOG_DEBUG(removeVis.getInitStatusMessage());
   map->visitRw(removeVis);
   LOG_DEBUG(removeVis.getCompletedStatusMessage());
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
 }
 
@@ -582,6 +599,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
   tagSetter.apply(map);
   LOG_DEBUG(tagSetter.getCompletedStatusMessage());
 
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");
 }
 

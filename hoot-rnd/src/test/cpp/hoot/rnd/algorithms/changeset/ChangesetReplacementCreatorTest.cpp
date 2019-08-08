@@ -56,10 +56,10 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   // We're already testing API DB inputs with command tests, so skipping those here.
   CPPUNIT_TEST(runPolyLenientOsmTest);
-  CPPUNIT_TEST(runPolyStrictOsmTest);
-  CPPUNIT_TEST(runPoiStrictOsmTest);
-  CPPUNIT_TEST(runLinearLenientOsmTest);
-  CPPUNIT_TEST(runLinearStrictOsmTest);
+//  CPPUNIT_TEST(runPolyStrictOsmTest);
+//  CPPUNIT_TEST(runPoiStrictOsmTest);
+//  CPPUNIT_TEST(runLinearLenientOsmTest);
+//  CPPUNIT_TEST(runLinearStrictOsmTest);
 //  CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
@@ -84,11 +84,16 @@ public:
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
+    // TODO: remove
+    conf().set(
+      "log.class.filter",
+      "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
+
     _prepInputData();
   }
 
   void runPolyLenientOsmTest()
-  {   
+  {     
     _runTest("runPolyLenientOsmTest", "osm", GeometryType::Polygon, true);
 
     CPPUNIT_ASSERT_EQUAL(632, _getChangesetDeriver()->getNumCreateChanges());
@@ -196,7 +201,7 @@ private:
 
   void _prepInputData()
   {
-    // TODO: JSON isn't setting versions properly
+    // TODO: JSON isn't writing (?) versions properly
 
     const QString refInXml = _outputPath + "ref-in.osm";
     if (!QFile(refInXml).exists())

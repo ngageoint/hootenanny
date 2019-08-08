@@ -56,6 +56,7 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
+  LOG_VARD(_mustCompletelyContain);
   const geos::geom::Envelope bounds =
     GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
   if (!bounds.isNull())
@@ -66,9 +67,9 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 
 void InBoundsCriterion::setBounds(const geos::geom::Envelope& bounds)
 {
-  LOG_VART(bounds);
+  LOG_VARD(bounds);
   _boundsGeom.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-  LOG_VART(_boundsGeom->toString());
+  LOG_VARD(_boundsGeom->toString());
 }
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)

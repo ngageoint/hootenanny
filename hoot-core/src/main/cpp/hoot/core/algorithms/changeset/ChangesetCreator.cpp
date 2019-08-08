@@ -216,6 +216,9 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
   map1->visitRw(truncateTags);
   map2->visitRw(truncateTags);
 
+  LOG_VARD(MapProjector::toWkt(map1->getProjection()));
+  LOG_VARD(MapProjector::toWkt(map2->getProjection()));
+
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
   //sortedElements2 is the newer state of the data
