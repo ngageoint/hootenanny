@@ -640,10 +640,11 @@ void ChangesetReplacementCreator::_parseConfigOpts(const bool lenientBounds,
 {
   // global opts
 
-  // TODO: remove
+  // TODO: this doesn't seem to work during testing for some reason
 //  conf().set(
 //    ConfigOptions::getLogClassFilterKey(),
 //    "ChangesetReplacementCreator;MapCropper;ImmediatelyConnectedOutOfBoundsWayTagger");
+  // TODO: remove
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);

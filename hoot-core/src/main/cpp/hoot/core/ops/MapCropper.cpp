@@ -251,14 +251,14 @@ void MapCropper::apply(OsmMapPtr& map)
       _explicitlyIncludedWayIds.insert(w->getId());
       _numWaysInBounds++;
     }
-    else if (_isWhollyOutside(wayEnv))
+    else if ((_envelopeG && _isWhollyOutside(*ls)) || _isWhollyOutside(wayEnv))
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
       RemoveWayByEid::removeWayFully(map, w->getId());
       _numWaysOutOfBounds++;
     }
-    else if (_isWhollyInside(wayEnv))
+    else if ((_envelopeG && _isWhollyInside(*ls)) && _isWhollyInside(wayEnv))
     {
       // keep the way
       LOG_TRACE("Keeping wholly inside way: " << w->getElementId() << "...");
@@ -521,6 +521,29 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
   return result;
 }
 
+bool MapCropper::_isWhollyInside(const Geometry& e)
+{
+  bool result = false;
+  LOG_VART(_envelope.isNull());
+
+  if (_invert)
+  {
+    result = !_envelopeG->intersects(&e);
+    LOG_TRACE(
+      "Wholly inside way check: inverted crop and the envelope intersects with the element=" <<
+      !result);
+  }
+  else
+  {
+    // If it isn't inverted, we need to do an expensive check.
+    result = _envelopeG->covers(&e);
+    LOG_TRACE(
+      "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
+  }
+  LOG_TRACE("Wholly inside way check result: " << result);
+  return result;
+}
+
 bool MapCropper::_isWhollyOutside(const Envelope& e)
 {
   bool result = false;
@@ -546,6 +569,7 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
     if (_invert == false)
     {
       result = !_envelopeG->getEnvelopeInternal()->intersects(e);
+      //result = !_envelopeG->intersects(GeometryFactory::getDefaultInstance()->toGeometry(&e));
       LOG_TRACE(
         "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
         !result);
@@ -553,9 +577,30 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
     else
     {
       result = _envelopeG->getEnvelopeInternal()->covers(e);
+      //result = _envelopeG->covers(GeometryFactory::getDefaultInstance()->toGeometry(&e));
       LOG_TRACE(
         "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
     }
+  }
+  LOG_TRACE("Wholly outside way check result: " << result);
+  return result;
+}
+
+bool MapCropper::_isWhollyOutside(const Geometry& e)
+{
+  bool result = false;
+  if (_invert == false)
+  {
+    result = !_envelopeG->intersects(&e);
+    LOG_TRACE(
+      "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
+      !result);
+  }
+  else
+  {
+    result = _envelopeG->covers(&e);
+    LOG_TRACE(
+      "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
   }
   LOG_TRACE("Wholly outside way check result: " << result);
   return result;

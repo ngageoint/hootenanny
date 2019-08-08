@@ -44,6 +44,9 @@
 // Qt
 #include <QFileInfo>
 
+// GEOS
+#include <geos/geom/GeometryFactory.h>
+
 namespace hoot
 {
 
@@ -138,7 +141,11 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
                            const bool keepConnectedOobWays)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
-  MapCropper cropper(bounds);
+  //MapCropper cropper(bounds);
+  //_boundsGeom.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
+  std::shared_ptr<geos::geom::Geometry> boundsGeom(
+    geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
+  MapCropper cropper(boundsGeom);
 
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());

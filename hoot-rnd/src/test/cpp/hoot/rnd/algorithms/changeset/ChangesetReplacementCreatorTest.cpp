@@ -58,8 +58,8 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
   CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
   CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
-  //CPPUNIT_TEST(runLinearLenientOsmTest);
-  //CPPUNIT_TEST(runLinearStrictOsmTest);
+  CPPUNIT_TEST(runLinearLenientOsmTest);// passing
+  CPPUNIT_TEST(runLinearStrictOsmTest); // passing
 //  CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
@@ -82,10 +82,11 @@ public:
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
     // TODO: remove
-    //OsmXmlReader
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
 //      "ChangesetReplacementCreator;MapCropper;ImmediatelyConnectedOutOfBoundsWayTagger");
+    // TODO: this doesn't seem to work during testing for some reason
+    //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void runPolyLenientOsmTest()
