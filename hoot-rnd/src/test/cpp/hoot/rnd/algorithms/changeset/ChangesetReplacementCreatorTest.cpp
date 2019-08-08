@@ -39,6 +39,8 @@
 #include <hoot/rnd/perty/PertyOp.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/PositiveIdGenerator.h>
+#include <hoot/core/util/DefaultIdGenerator.h>
 
 namespace hoot
 {
@@ -56,8 +58,8 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
   CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
   CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
-  CPPUNIT_TEST(runLinearLenientOsmTest);
-  CPPUNIT_TEST(runLinearStrictOsmTest);
+  //CPPUNIT_TEST(runLinearLenientOsmTest);
+  //CPPUNIT_TEST(runLinearStrictOsmTest);
 //  CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
@@ -78,12 +80,6 @@ public:
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-
-/*    conf().set(
-      ConfigOptions::getLogClassFilterKey(),
-      "ChangesetReplacementCreator;MapCropper;OsmXmlReader;MapProjector;ChangesetCreator;ChangesetDeriver;IoUtils;ImmediatelyConnectedOutOfBoundsWayTagger;InBoundsCriterion");
-    // TODO: disable
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true)*/;
   }
 
   // Simply checking changeset statement type counts isn't super robust, but given the detailed
@@ -272,8 +268,8 @@ private:
     }
     const bool perturbRef = geometryType != GeometryType::Point;
     _generateXml(
-      refSourceFile, "hoot::PositiveIdGenerator", customTagKey, modifiedCustomTagVal, perturbRef,
-      Status::Unknown1, refInXml);
+      refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), customTagKey,
+      modifiedCustomTagVal, perturbRef, Status::Unknown1, refInXml);
 
     const QString refInJson = _outputPath + testName + "-ref-in.json";
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
@@ -285,22 +281,23 @@ private:
       modifiedCustomTagVal = customTagVal + " 2";
     }
     _generateXml(
-      secSourceFile, "hoot::DefaultIdGenerator", customTagKey, modifiedCustomTagVal, false,
-      Status::Unknown2, secInXml);
+      secSourceFile, std::shared_ptr<IdGenerator>(new DefaultIdGenerator()), customTagKey,
+      modifiedCustomTagVal, false, Status::Unknown2, secInXml);
 
     const QString secInJson = _outputPath + testName + "-sec-in.json";
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
     DataConverter().convert(secInXml, secInJson);
   }
 
-  void _generateXml(const QString& sourceFile, const QString& idGen, const QString& customTagKey,
-                    const QString& customTagVal, const bool perturb, const Status& /*status*/,
-                    const QString& outFile)
+  void _generateXml(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
+                    const QString& customTagKey, const QString& customTagVal, const bool perturb,
+                    const Status& /*status*/, const QString& outFile)
   {
-    conf().set(ConfigOptions::getIdGeneratorKey(), idGen);
+    TestUtils::resetBasic();
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
 
     OsmMapPtr map(new OsmMap());
+    map->setIdGenerator(idGen);
     IoUtils::loadMap(map, sourceFile, false/*, status*/);
 
     if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
@@ -328,7 +325,6 @@ private:
       MapProjector::projectToWgs84(map);  // perty works in planar
     }
 
-    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
     IoUtils::saveMap(map, outFile);
   }
 
