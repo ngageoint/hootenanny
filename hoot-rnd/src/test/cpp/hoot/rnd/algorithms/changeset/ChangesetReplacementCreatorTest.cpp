@@ -80,10 +80,13 @@ public:
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  }
 
-  // Simply checking changeset statement type counts isn't super robust, but given the detailed
-  // output checking in Service*ReplacementTest.sh for database sources we'll go with it for now.
+    // TODO: remove
+    //OsmXmlReader
+//    conf().set(
+//      ConfigOptions::getLogClassFilterKey(),
+//      "ChangesetReplacementCreator;MapCropper;ImmediatelyConnectedOutOfBoundsWayTagger");
+  }
 
   void runPolyLenientOsmTest()
   {     
@@ -91,11 +94,7 @@ public:
     const GeometryType geometryType = GeometryType::Polygon;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true);
-
-    CPPUNIT_ASSERT_EQUAL(632, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(0, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(583, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "osm", geometryType, true, 632, 0, 583);
   }
 
   void runPolyStrictOsmTest()
@@ -104,11 +103,7 @@ public:
     const GeometryType geometryType = GeometryType::Polygon;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false);
-
-    CPPUNIT_ASSERT_EQUAL(529, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(517, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "osm", geometryType, false, 529, 1, 517);
   }
 
   void runPoiStrictOsmTest()
@@ -117,11 +112,7 @@ public:
     const GeometryType geometryType = GeometryType::Point;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false);
-
-    CPPUNIT_ASSERT_EQUAL(3, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "osm", geometryType, false, 3, 1, 1);
   }
 
   void runLinearLenientOsmTest()
@@ -130,11 +121,7 @@ public:
     const GeometryType geometryType = GeometryType::Line;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true);
-
-    CPPUNIT_ASSERT_EQUAL(146, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(7, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(141, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "osm", geometryType, true, 146, 7, 141);
   }
 
   void runLinearStrictOsmTest()
@@ -143,11 +130,7 @@ public:
     const GeometryType geometryType = GeometryType::Line;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false);
-
-    CPPUNIT_ASSERT_EQUAL(47, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(5, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(36, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "osm", geometryType, false, 47, 5, 36);
   }
 
   void runPolyLenientJsonTest()
@@ -156,11 +139,7 @@ public:
     const GeometryType geometryType = GeometryType::Polygon;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true);
-
-    CPPUNIT_ASSERT_EQUAL(632, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(0, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(583, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "json", geometryType, true, 632, 0, 583);
   }
 
   void runPolyStrictJsonTest()
@@ -169,11 +148,7 @@ public:
     const GeometryType geometryType = GeometryType::Polygon;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false);
-
-    CPPUNIT_ASSERT_EQUAL(529, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(517, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "json", geometryType, false, 529, 1, 517);
   }
 
   void runPoiStrictJsonTest()
@@ -182,11 +157,7 @@ public:
     const GeometryType geometryType = GeometryType::Point;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false);
-
-    CPPUNIT_ASSERT_EQUAL(3, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(1, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "json", geometryType, false, 3, 1, 1);
   }
 
   void runLinearLenientJsonTest()
@@ -195,11 +166,7 @@ public:
     const GeometryType geometryType = GeometryType::Line;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true);
-
-    CPPUNIT_ASSERT_EQUAL(146, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(7, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(141, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "json", geometryType, true, 146, 7, 141);
   }
 
   void runLinearStrictJsonTest()
@@ -208,11 +175,7 @@ public:
     const GeometryType geometryType = GeometryType::Line;
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false);
-
-    CPPUNIT_ASSERT_EQUAL(47, _getChangesetDeriver()->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(5, _getChangesetDeriver()->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(36, _getChangesetDeriver()->getNumDeleteChanges());
+    _runTest(testName, "json", geometryType, false, 47, 5, 36);
   }
 
 private:
@@ -224,11 +187,10 @@ private:
     Polygon
   };
 
-  ChangesetReplacementCreator _changesetReplacementCreator;
-
-  ChangesetDeriverPtr _getChangesetDeriver() const
+  ChangesetDeriverPtr _getChangesetDeriver(
+    const ChangesetReplacementCreator& changesetReplacementCreator) const
   {
-    return _changesetReplacementCreator._changesetCreator->_changesetDeriver;
+    return changesetReplacementCreator._changesetCreator->_changesetDeriver;
   }
 
   void _prepInputData(const QString& testName, const GeometryType& geometryType)
@@ -329,7 +291,9 @@ private:
   }
 
   void _runTest(const QString& testName, const QString& fileExtension,
-                const GeometryType& geometryType, const bool lenientBounds)
+                const GeometryType& geometryType, const bool lenientBounds,
+                const int numExpectedCreateStatements, const int numExpectedModifyStatements,
+                const int numExpectedDeleteStatements)
   {
     if (geometryType == GeometryType::Line)
     {
@@ -348,11 +312,21 @@ private:
 
     const QString outFile = _outputPath + testName + "-out.osc";
 
-    _changesetReplacementCreator.create(
+    ChangesetReplacementCreator changesetCreator;
+    changesetCreator.create(
       _outputPath + testName + "-ref-in." + fileExtension,
       _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType),
       _getFilterCrit(geometryType), lenientBounds, outFile);
 
+    CPPUNIT_ASSERT_EQUAL(
+      numExpectedCreateStatements, _getChangesetDeriver(changesetCreator)->getNumCreateChanges());
+    CPPUNIT_ASSERT_EQUAL(
+      numExpectedModifyStatements, _getChangesetDeriver(changesetCreator)->getNumModifyChanges());
+    CPPUNIT_ASSERT_EQUAL(
+      numExpectedDeleteStatements, _getChangesetDeriver(changesetCreator)->getNumDeleteChanges());
+    // This is needed because simply counting changeset statement types isn't enough, as it doesn't
+    // take into account the element IDs. Still doing the statement type count check, as it provides
+    // information more quickly about why a test failed vs looking at the changeset file.
     //HOOT_STR_EQUALS(
       //FileUtils::readFully(_inputPath + testName + "-out.osc"), FileUtils::readFully(outFile));
   }

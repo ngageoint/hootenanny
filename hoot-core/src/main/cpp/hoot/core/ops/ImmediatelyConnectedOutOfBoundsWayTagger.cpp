@@ -63,7 +63,7 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
   for (WayMap::iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr way = wayItr->second;
-    LOG_TRACE("Examining source: " << way->getElementId() << "...");
+    LOG_TRACE("Examining source way: " << way->getElementId() << "...");
 
     // if the way hasn't already been tagged and falls within the bounds
     LOG_VART(directlyConnectedWayIds.find(way->getId()) == directlyConnectedWayIds.end());
@@ -105,9 +105,27 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
               directlyConnectedWayIds.insert(connectedWayId);
               _numAffected++;
             }
+            else
+            {
+               LOG_TRACE(
+                 "Skipping connected way: " << connectedWay->getElementId() << " that didn't " <<
+                 "pass criterion...");
+            }
+          }
+          else
+          {
+            LOG_TRACE(
+              "Skipping connected way: " << ElementId(ElementType::Way, connectedWayId) <<
+              " that was already tagged...");
           }
         }
       }
+    }
+    else
+    {
+      LOG_TRACE(
+        "Skipping source way: " << way->getElementId() << " that either didn't satisfy " <<
+        "the criterion or was already tagged...");
     }
 
     _numProcessed++;
