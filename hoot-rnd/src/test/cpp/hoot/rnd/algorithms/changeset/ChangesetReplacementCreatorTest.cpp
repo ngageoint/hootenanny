@@ -46,15 +46,15 @@ namespace hoot
 {
 
 /*
- * These tests are very similar to the tests in Service*ReplacementTest.sh. The main differences are
- * that these tests don't interact with a database and don't try to apply the output changeset.
+ * These tests are very similar to the tests in Service*ReplacementTest.sh, which test the
+ * replacement changeset workflow against API DB data sources. These tests test against file
+ * data sources only, don't interact with a database, and don't try to apply the output changeset.
  *
  * This test file is in hoot-rnd since it needs to use PertyOp.
  */
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  // We're already testing API DB inputs with command tests, so skipping those here.
   CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
   CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
   CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
@@ -196,8 +196,6 @@ private:
 
   void _prepInputData(const QString& testName, const GeometryType& geometryType)
   {
-    // TODO: JSON isn't writing (?) versions properly
-
     QString customTagKey = "";
     QString customTagVal = "";
     QString refSourceFile = "test-files/BostonSubsetRoadBuilding_FromOsm.osm";
