@@ -33,6 +33,7 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -70,7 +71,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Removing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_count) + " elements."; }
+  { return "Removed " + StringUtils::formatLargeNumber(_count) + " elements."; }
 
 private:
 

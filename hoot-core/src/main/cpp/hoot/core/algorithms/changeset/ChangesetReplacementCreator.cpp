@@ -623,7 +623,10 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 //    ConfigOptions::getLogClassFilterKey(),
 //    "ChangesetReplacementCreator;MapCropper;ImmediatelyConnectedOutOfBoundsWayTagger");
   // TODO: remove
-  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+  conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+//  conf().set(
+//    ConfigOptions::getDebugMapsFilenameKey(),
+//    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/debug.osm");
 
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);

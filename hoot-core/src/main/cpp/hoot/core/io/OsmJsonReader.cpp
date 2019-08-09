@@ -62,6 +62,7 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
+// TODO: implement Configurable
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
@@ -80,6 +81,7 @@ OsmJsonReader::OsmJsonReader()
     _runParallel(ConfigOptions().getJsonReaderHttpBboxParallel()),
     _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
     _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount()),
+    _bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
     _keepImmediatelyConnectedWaysOutsideBounds(
       ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
 {

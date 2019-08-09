@@ -141,11 +141,15 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
                            const bool keepConnectedOobWays)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
-  //MapCropper cropper(bounds);
-  //_boundsGeom.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-  std::shared_ptr<geos::geom::Geometry> boundsGeom(
-    geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-  MapCropper cropper(boundsGeom);
+  LOG_VARD(keepConnectedOobWays);
+  LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
+
+  // We can get more precise bounds intersection calcs for ways when passing in a geometry here
+  // instead of an envelope.
+//  std::shared_ptr<geos::geom::Geometry> boundsGeom(
+//    geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
+//  MapCropper cropper(boundsGeom);
+  MapCropper cropper(bounds);
 
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
@@ -173,6 +177,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   }
   cropper.setInclusionCriterion(inclusionCrit);
 
+  LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
   LOG_INFO(cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());

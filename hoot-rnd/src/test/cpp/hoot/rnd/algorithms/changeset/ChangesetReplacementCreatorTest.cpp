@@ -47,8 +47,9 @@ namespace hoot
 
 /*
  * These tests are very similar to the tests in Service*ReplacementTest.sh, which test the
- * replacement changeset workflow against API DB data sources. These tests test against file
- * data sources only, don't interact with a database, and don't try to apply the output changeset.
+ * replacement changeset workflow against API DB data sources. These differences are that these
+ * tests test against file data sources only, don't interact with a database, and don't try to
+ * apply the output changeset.
  *
  * This test file is in hoot-rnd since it needs to use PertyOp.
  */
@@ -56,11 +57,11 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
-  CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
-  CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
-  CPPUNIT_TEST(runLinearLenientOsmTest);// passing
-  CPPUNIT_TEST(runLinearStrictOsmTest); // passing
-  //CPPUNIT_TEST(runPolyLenientJsonTest);
+//  CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
+//  CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
+//  CPPUNIT_TEST(runLinearLenientOsmTest);// passing
+//  CPPUNIT_TEST(runLinearStrictOsmTest); // passing
+  CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
 //  CPPUNIT_TEST(runLinearLenientJsonTest);
@@ -83,9 +84,9 @@ public:
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
     // TODO: remove
-//    conf().set(
-//      ConfigOptions::getLogClassFilterKey(),
-//      "");
+    conf().set(
+      ConfigOptions::getLogClassFilterKey(),
+      "ChangesetReplacementCreatorTest;ChangesetReplacementCreator;MapCropper;IoUtils");
     // TODO: this doesn't seem to work during testing for some reason
     //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
@@ -93,10 +94,15 @@ public:
   void runPolyLenientOsmTest()
   {     
     const QString testName = "runPolyLenientOsmTest";
+    LOG_DEBUG("Running test: " << testName << "...");
     const GeometryType geometryType = GeometryType::Polygon;
     //const QString goldTestName = "ServiceBuildingReplacementTest";
     //const QString goldFile =
       //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+    conf().set(
+      ConfigOptions::getDebugMapsFilenameKey(),
+      "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/" + testName +
+      "-debug.osm");
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "osm", geometryType, true, 632, 0, 583, /*goldFile*/"");
@@ -154,10 +160,15 @@ public:
   void runPolyLenientJsonTest()
   {
     const QString testName = "runPolyLenientJsonTest";
+    LOG_DEBUG("Running test: " << testName << "...");
     const GeometryType geometryType = GeometryType::Polygon;
     //const QString goldTestName = "ServiceBuildingReplacementTest";
     //const QString goldFile =
       //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+    conf().set(
+      ConfigOptions::getDebugMapsFilenameKey(),
+      "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/" + testName +
+      "-debug.osm");
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "json", geometryType, true, 632, 0, 583, "");
@@ -230,6 +241,8 @@ private:
 
   void _prepInputData(const QString& testName, const GeometryType& geometryType)
   {
+    LOG_DEBUG("Preparing input data...");
+
     QString customTagKey = "";
     QString customTagVal = "";
     QString refSourceFile = "test-files/BostonSubsetRoadBuilding_FromOsm.osm";
@@ -252,8 +265,7 @@ private:
         throw IllegalArgumentException("Invalid geometry type.");
     }
 
-    // TODO: Do we need to suppress crop warning somewhere in here? Or does it need to be done in
-    // the readers?
+    // TODO: Do we need to suppress crop warnings here? Or does it need to be done in the readers?
 
     const QString refInXml = _outputPath + testName + "-ref-in.osm";
     QString modifiedCustomTagVal = "";
@@ -268,6 +280,7 @@ private:
 
     const QString refInJson = _outputPath + testName + "-ref-in.json";
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+    LOG_DEBUG("Converting xml: " << refInXml << " to json: " << refInJson << "...");
     DataConverter().convert(refInXml, refInJson);
 
     const QString secInXml = _outputPath + testName + "-sec-in.osm";
@@ -281,6 +294,7 @@ private:
 
     const QString secInJson = _outputPath + testName + "-sec-in.json";
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+    LOG_DEBUG("Converting xml: " << secInXml << " to json: " << secInJson << "...");
     DataConverter().convert(secInXml, secInJson);
   }
 
@@ -288,6 +302,8 @@ private:
                     const QString& customTagKey, const QString& customTagVal, const bool perturb,
                     const Status& /*status*/, const QString& outFile)
   {
+    LOG_DEBUG("Preparing input xml from: " << sourceFile << " to " << outFile << "...");
+
     TestUtils::resetBasic();
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
 
@@ -297,6 +313,7 @@ private:
 
     if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
     {
+      LOG_DEBUG("Setting custom tag: " << customTagKey << "=" << customTagVal << "...");
       QString criterionName = "";
       if (customTagVal.toLower().contains("building"))
       {
@@ -312,6 +329,7 @@ private:
 
     if (perturb)
     {
+      LOG_DEBUG("Perturbing map...");
       PertyOp perturber;
       perturber.setSystematicError(15.0, 15.0);
       perturber.setSeed(1);

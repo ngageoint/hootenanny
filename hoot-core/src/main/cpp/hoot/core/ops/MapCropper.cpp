@@ -227,6 +227,7 @@ void MapCropper::apply(OsmMapPtr& map)
   }
   LOG_VARD(_inclusionCrit.get());
 
+  //ElementConverter elementConverter(map);
   // go through all the ways
   long wayCtr = 0;
   const WayMap ways = map->getWays();
@@ -234,9 +235,14 @@ void MapCropper::apply(OsmMapPtr& map)
   {
     const std::shared_ptr<Way>& w = it->second;
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
-    //LOG_VART(w->getNodeIds());
+    LOG_VART(w->getNodeIds());
 
-    std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    std::shared_ptr<LineString> ls = /*elementConverter*/ElementConverter(map).convertToLineString(w);
+    LOG_VART(ls.get());
+    if (!ls.get())
+    {
+      continue;
+    }
     const Envelope& wayEnv = *(ls->getEnvelopeInternal());
     LOG_VART(wayEnv);
 
