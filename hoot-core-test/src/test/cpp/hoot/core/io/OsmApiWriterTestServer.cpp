@@ -31,6 +31,9 @@
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/Log.h>
 
+//  Standard
+#include <regex>
+
 namespace hoot
 {
 
@@ -99,6 +102,70 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
   return continue_processing;
 }
 
+bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
+{
+  /*
+  *  - Capabilities
+  *  - Permissions
+  *  - Changeset Create
+  *  - Changeset 1 Upload - respond with an HTTP 404 error for the test
+  *  - Element get
+  *  - Changeset 1 Upload - respond with updated version
+  *  - Changeset Close
+  *  - Changeset Create
+  *  - Changeset 2 Upload - respond with update versions
+  *  - Changeset Close
+  */
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Determine the response message's HTTP header
+  std::string message;
+  //  Capabilities
+  if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CAPABILITIES + "\r\n";
+  //  Permissions
+  else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_PERMISSIONS + "\r\n";
+  //  Create changeset
+  else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    message = HTTP_200_OK + std::to_string(_changeset_id) + "\r\n";
+  //  Upload changeset 1
+  else if (headers.find(std::regex_replace(std::string(OsmApiWriter::API_PATH_UPLOAD_CHANGESET), std::regex("\%1"), std::string("1"))) != std::string::npos)
+  {
+    //  The first time through, the 'version' of element 1 should fail.
+    if (!_has_error)
+    {
+      message = std::string("HTTP/1.1 404\r\n");
+      _has_error = true;
+    }
+    else
+      message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CHANGESET_1_RESPONSE + "\r\n";
+  }
+  //  Upload changeset 2
+  else if (headers.find(std::regex_replace(std::string(OsmApiWriter::API_PATH_UPLOAD_CHANGESET), std::regex("\%1"), std::string("1"))) != std::string::npos)
+    message = HTTP_200_OK + OsmApiSampleResponses::SAMPLE_CHANGESET_2_RESPONSE + "\r\n";
+  //  Close changeset
+  else if (headers.find("/close/"))
+  {
+    message = HTTP_200_OK;
+    _changeset_id++;
+    if (_changeset_id > 2)
+      continue_processing = false;
+  }
+  else
+  {
+    //  Error out here
+    message = HTTP_404_NOT_FOUND;
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, message);
+  //  Return true if we should continue listening and processing requests
+  return continue_processing;
+}
+
 const char* OsmApiSampleResponses::SAMPLE_CAPABILITIES =
     "<?xml version='1.0' encoding='UTF-8'?>"
     "<osm version='0.6' generator='OpenStreetMap server' copyright='OpenStreetMap and contributors' attribution='https://www.openstreetmap.org/copyright' license='http://opendatacommons.org/licenses/odbl/1-0/'>"
@@ -129,5 +196,15 @@ const char* OsmApiSampleResponses::SAMPLE_PERMISSIONS =
     "    <permission name='allow_write_gpx'/>"
     "  </permissions>"
     "</osm>";
+const char* OsmApiSampleResponses::SAMPLE_CHANGESET_1_RESPONSE =
+    "<diffResult generator='OpenStreetMap Server' version='0.6'>"
+    "  <way old_id='1' new_id='1' new_version='3'/>"
+    "</diffResult>";
+const char* OsmApiSampleResponses::SAMPLE_CHANGESET_2_RESPONSE =
+    "<diffResult generator='OpenStreetMap Server' version='0.6'>"
+    "  <way old_id='2' new_id='2' new_version='2'/>"
+    "  <way old_id='3' new_id='3' new_version='2'/>"
+    "  <way old_id='4' new_id='4' new_version='2'/>"
+    "</diffResult>";
 
 }
