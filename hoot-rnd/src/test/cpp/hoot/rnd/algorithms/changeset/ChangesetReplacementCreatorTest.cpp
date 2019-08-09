@@ -60,7 +60,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
   CPPUNIT_TEST(runLinearLenientOsmTest);// passing
   CPPUNIT_TEST(runLinearStrictOsmTest); // passing
-//  CPPUNIT_TEST(runPolyLenientJsonTest);
+  //CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
 //  CPPUNIT_TEST(runLinearLenientJsonTest);
@@ -72,7 +72,8 @@ public:
   ChangesetReplacementCreatorTest() :
   HootTestFixture(
     "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/")
+    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/"),
+  _goldFileDirBase("test-files/cmd/glacial/serial/")
   {
     setResetType(ResetAll);
 
@@ -84,7 +85,7 @@ public:
     // TODO: remove
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
-//      "ChangesetReplacementCreator;MapCropper;ImmediatelyConnectedOutOfBoundsWayTagger");
+//      "");
     // TODO: this doesn't seem to work during testing for some reason
     //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
@@ -93,93 +94,126 @@ public:
   {     
     const QString testName = "runPolyLenientOsmTest";
     const GeometryType geometryType = GeometryType::Polygon;
+    //const QString goldTestName = "ServiceBuildingReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 632, 0, 583);
+    _runTest(testName, "osm", geometryType, true, 632, 0, 583, /*goldFile*/"");
   }
 
   void runPolyStrictOsmTest()
   {
     const QString testName = "runPolyStrictOsmTest";
     const GeometryType geometryType = GeometryType::Polygon;
+    //const QString goldTestName = "ServiceBuildingStrictReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 529, 1, 517);
+    _runTest(
+      testName, "osm", geometryType, false, 529, 1, 517, /*goldFile*/"");
   }
 
   void runPoiStrictOsmTest()
   {
     const QString testName = "runPoiStrictOsmTest";
     const GeometryType geometryType = GeometryType::Point;
+    //const QString goldTestName = "ServicePoiStrictReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 3, 1, 1);
+    _runTest(testName, "osm", geometryType, false, 3, 1, 1, /*goldFile*/"");
   }
 
   void runLinearLenientOsmTest()
   {
     const QString testName = "runLinearLenientOsmTest";
     const GeometryType geometryType = GeometryType::Line;
+    //const QString goldTestName = "ServiceRoadReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 146, 7, 141);
+    _runTest(testName, "osm", geometryType, true, 146, 7, 141, /*goldFile*/"");
   }
 
   void runLinearStrictOsmTest()
   {
     const QString testName = "runLinearStrictOsmTest";
     const GeometryType geometryType = GeometryType::Line;
+    //const QString goldTestName = "ServiceRoadStrictReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 47, 5, 36);
+    _runTest(testName, "osm", geometryType, false, 47, 5, 36, /*goldFile*/"");
   }
 
   void runPolyLenientJsonTest()
   {
     const QString testName = "runPolyLenientJsonTest";
     const GeometryType geometryType = GeometryType::Polygon;
+    //const QString goldTestName = "ServiceBuildingReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true, 632, 0, 583);
+    _runTest(testName, "json", geometryType, true, 632, 0, 583, "");
   }
 
   void runPolyStrictJsonTest()
   {
     const QString testName = "runPolyStrictJsonTest";
     const GeometryType geometryType = GeometryType::Polygon;
+    //const QString goldTestName = "ServiceBuildingStrictReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 529, 1, 517);
+    _runTest(testName, "json", geometryType, false, 529, 1, 517, "");
   }
 
   void runPoiStrictJsonTest()
   {
     const QString testName = "runPoiStrictJsonTest";
     const GeometryType geometryType = GeometryType::Point;
+    //const QString goldTestName = "ServicePoiStrictReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 3, 1, 1);
+    _runTest(testName, "json", geometryType, false, 3, 1, 1, "");
   }
 
   void runLinearLenientJsonTest()
   {
     const QString testName = "runLinearLenientJsonTest";
     const GeometryType geometryType = GeometryType::Line;
+    //const QString goldTestName = "ServiceRoadReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true, 146, 7, 141);
+    _runTest(testName, "json", geometryType, true, 146, 7, 141, "");
   }
 
   void runLinearStrictJsonTest()
   {
     const QString testName = "runLinearStrictJsonTest";
     const GeometryType geometryType = GeometryType::Line;
+    //const QString goldTestName = "ServiceRoadStrictReplacementTest";
+    //const QString goldFile =
+      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 47, 5, 36);
+    _runTest(testName, "json", geometryType, false, 47, 5, 36, "");
   }
 
 private:
+
+  QString _goldFileDirBase;
 
   enum GeometryType
   {
@@ -292,7 +326,7 @@ private:
   void _runTest(const QString& testName, const QString& fileExtension,
                 const GeometryType& geometryType, const bool lenientBounds,
                 const int numExpectedCreateStatements, const int numExpectedModifyStatements,
-                const int numExpectedDeleteStatements)
+                const int numExpectedDeleteStatements, const QString goldChangesetFile)
   {
     if (geometryType == GeometryType::Line)
     {
@@ -326,8 +360,10 @@ private:
     // This is needed because simply counting changeset statement types isn't enough, as it doesn't
     // take into account the element IDs. Still doing the statement type count check, as it provides
     // information more quickly about why a test failed vs looking at the changeset file.
-    //HOOT_STR_EQUALS(
-      //FileUtils::readFully(_inputPath + testName + "-out.osc"), FileUtils::readFully(outFile));
+    if (!goldChangesetFile.isEmpty())
+    {
+      HOOT_STR_EQUALS(FileUtils::readFully(goldChangesetFile), FileUtils::readFully(outFile));
+    }
   }
 
   QString _getFilterCrit(const GeometryType& geometryType) const
