@@ -179,19 +179,14 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr&
 
 std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
 {
-  LOG_TRACE("Converting " << w->getElementId() << " to a line string...");
-
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
-  LOG_VART(size);
   if (size == 1)
   {
     size = 2;
   }
   CoordinateSequence* cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(size, 2);
-  LOG_VART(cs == 0);
-  LOG_VART(cs->size());
 
   for (size_t i = 0; i < ids.size(); i++)
   {
@@ -205,7 +200,6 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
     }
     cs->setAt(n->toCoordinate(), i);
   }
-  LOG_VART(cs->size());
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
@@ -218,10 +212,8 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
     }
     cs->setAt(n->toCoordinate(), 1);
   }
-  LOG_VART(cs->size());
 
   std::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
-  LOG_VART(result.get());
   return result;
 }
 

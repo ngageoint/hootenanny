@@ -71,7 +71,10 @@ public:
   virtual QString getInitStatusMessage() const { return "Removing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + StringUtils::formatLargeNumber(_count) + " elements."; }
+  {
+    return
+      "Removed " + StringUtils::formatLargeNumber(_count) + " / " +
+      StringUtils::formatLargeNumber(_startElementCount) + " elements."; }
 
 private:
 
@@ -82,6 +85,7 @@ private:
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriteria;
   bool _chainCriteria;
+  long _startElementCount;
 
   bool _criteriaSatisfied(const ConstElementPtr& e) const;
 };

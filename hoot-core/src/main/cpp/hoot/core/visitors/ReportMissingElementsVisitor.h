@@ -54,7 +54,7 @@ public:
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
 
-  virtual void setOsmMap(const OsmMap* map) { assert(!_removeMissing); _constMap = map; }
+  //virtual void setOsmMap(const OsmMap* map) { assert(!_removeMissing); _constMap = map; }
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -75,15 +75,13 @@ public:
 protected:
 
   OsmMap* _map;
-  const OsmMap* _constMap;
+  //const OsmMap* _constMap;
   int _maxReport;
   int _missingCount;
   bool _removeMissing;
 
   virtual void _reportMissing(ElementId referer, ElementId missing);
-
   virtual void _visitRo(ElementType type, long id);
-
   virtual void _visitRw(ElementType type, long id);
 };
 

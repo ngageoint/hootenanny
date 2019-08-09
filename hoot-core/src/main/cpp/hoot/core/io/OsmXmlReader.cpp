@@ -354,6 +354,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     throw HootException(_errorString);
   }
   file.close();
+  LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 
   // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
@@ -363,6 +364,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   if (!_bounds.isNull())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
   ReportMissingElementsVisitor visitor;
@@ -391,6 +393,13 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   if (reader.parse(xmlInputSource) == false)
   {
     throw Exception(_errorString);
+  }
+
+  LOG_VARD(_bounds.isNull());
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
   ReportMissingElementsVisitor visitor;

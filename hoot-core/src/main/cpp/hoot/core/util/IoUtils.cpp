@@ -181,6 +181,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   LOG_INFO(cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
+  LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 }
 
 }

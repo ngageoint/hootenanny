@@ -306,6 +306,7 @@ std::shared_ptr<ConflatableElementCriterion> ChangesetReplacementCreator::_valid
 
 OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
 {
+  LOG_DEBUG("Loading ref map: " << input << "...");
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
     _loadRefKeepEntireCrossingBounds);
@@ -342,7 +343,7 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   idToVersionMapper.apply(map);
   LOG_DEBUG(idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
-  LOG_VART(idToVersionMappings);
+  LOG_VART(idToVersionMappings.size());
   return idToVersionMappings;
 }
 
@@ -382,6 +383,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
 
 OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 {
+  LOG_DEBUG("Loading sec map: " << input << "...");
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
     _loadSecKeepEntireCrossingBounds);
@@ -618,15 +620,8 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 {
   // global opts
 
-  // TODO: this doesn't seem to work during testing for some reason
-//  conf().set(
-//    ConfigOptions::getLogClassFilterKey(),
-//    "ChangesetReplacementCreator;MapCropper;ImmediatelyConnectedOutOfBoundsWayTagger");
   // TODO: remove
-  conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
-//  conf().set(
-//    ConfigOptions::getDebugMapsFilenameKey(),
-//    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/debug.osm");
+  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);

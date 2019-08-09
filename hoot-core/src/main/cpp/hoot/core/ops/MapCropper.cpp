@@ -208,6 +208,7 @@ void MapCropper::apply(OsmMapPtr& map)
 
   LOG_DEBUG("Cropping ways...");
 
+  _numProcessed = 0;
   _numAffected = 0;
   _numWaysInBounds = 0;
   _numWaysOutOfBounds = 0;
@@ -227,7 +228,6 @@ void MapCropper::apply(OsmMapPtr& map)
   }
   LOG_VARD(_inclusionCrit.get());
 
-  //ElementConverter elementConverter(map);
   // go through all the ways
   long wayCtr = 0;
   const WayMap ways = map->getWays();
@@ -237,10 +237,12 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
     LOG_VART(w->getNodeIds());
 
-    std::shared_ptr<LineString> ls = /*elementConverter*/ElementConverter(map).convertToLineString(w);
-    LOG_VART(ls.get());
+    std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     if (!ls.get())
     {
+      LOG_TRACE("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
+      _numProcessed++;
+      wayCtr++;
       continue;
     }
     const Envelope& wayEnv = *(ls->getEnvelopeInternal());
@@ -257,12 +259,14 @@ void MapCropper::apply(OsmMapPtr& map)
       _explicitlyIncludedWayIds.insert(w->getId());
       _numWaysInBounds++;
     }
+    // TODO: clean up
     else if ((_envelopeG && _isWhollyOutside(*ls)) || _isWhollyOutside(wayEnv))
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
       RemoveWayByEid::removeWayFully(map, w->getId());
       _numWaysOutOfBounds++;
+      _numAffected++;
     }
     else if ((_envelopeG && _isWhollyInside(*ls)) && _isWhollyInside(wayEnv))
     {
@@ -277,6 +281,7 @@ void MapCropper::apply(OsmMapPtr& map)
         "Dropping due to _keepOnlyFeaturesInsideBounds=true: " << w->getElementId() << "...");
       RemoveWayByEid::removeWayFully(map, w->getId());
       _numWaysOutOfBounds++;
+      _numAffected++;
     }
     else if (!_keepEntireFeaturesCrossingBounds)
     {
@@ -295,6 +300,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
 
     wayCtr++;
+    _numProcessed++;
     if (wayCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO(
@@ -390,26 +396,31 @@ void MapCropper::apply(OsmMapPtr& map)
               "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
             RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
             nodesRemoved++;
+            _numAffected++;
           }
         }
       }
     }
 
     nodeCtr++;
+    _numProcessed++;
     if (nodeCtr % _statusUpdateInterval == 0)
     {
       PROGRESS_INFO("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
     }
   }
 
-  RemoveEmptyRelationsOp().apply(map);
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  LOG_INFO(emptyRelationRemover.getInitStatusMessage());
+  emptyRelationRemover.apply(map);
+  LOG_DEBUG(emptyRelationRemover.getCompletedStatusMessage());
 
-  LOG_VARD(_numWaysInBounds);
-  LOG_VARD(_numWaysOutOfBounds);
-  LOG_VARD(_numWaysCrossingThreshold);
-  LOG_VARD(_numCrossingWaysKept);
-  LOG_VARD(_numCrossingWaysRemoved);
-  LOG_VARD(_numNodesRemoved);
+  LOG_VARD(StringUtils::formatLargeNumber(_numWaysInBounds));
+  LOG_VARD(StringUtils::formatLargeNumber(_numWaysOutOfBounds));
+  LOG_VARD(StringUtils::formatLargeNumber(_numWaysCrossingThreshold));
+  LOG_VARD(StringUtils::formatLargeNumber(_numCrossingWaysKept));
+  LOG_VARD(StringUtils::formatLargeNumber(_numCrossingWaysRemoved));
+  LOG_VARD(StringUtils::formatLargeNumber(_numNodesRemoved));
 }
 
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
@@ -450,6 +461,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     LOG_TRACE("Removing way during crop check: " << way->getElementId() << "...");
     RemoveWayByEid::removeWayFully(map, way->getId());
     _numCrossingWaysRemoved++;
+    _numAffected++;
   }
   else
   {

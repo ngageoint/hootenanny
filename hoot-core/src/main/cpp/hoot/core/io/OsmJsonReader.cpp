@@ -181,11 +181,13 @@ void OsmJsonReader::read(const OsmMapPtr& map)
     _loadJSON(_results[i]);
     _parseOverpassJson();
   }
+  LOG_VARD(_map->getElementCount());
 
   // See related note in OsmXmlReader::read.
   if (!_bounds.isNull())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
 
@@ -193,10 +195,12 @@ void OsmJsonReader::_readToMap()
 {
   _map.reset(new OsmMap());
   _parseOverpassJson();
+  LOG_VARD(_map->getElementCount());
 
   if (!_bounds.isNull())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
 

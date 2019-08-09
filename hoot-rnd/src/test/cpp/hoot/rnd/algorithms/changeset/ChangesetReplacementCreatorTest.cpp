@@ -41,13 +41,15 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/PositiveIdGenerator.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
+#include <hoot/core/visitors/AddUuidVisitor.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 namespace hoot
 {
 
 /*
  * These tests are very similar to the tests in Service*ReplacementTest.sh, which test the
- * replacement changeset workflow against API DB data sources. These differences are that these
+ * replacement changeset workflow against API DB data sources. Differences here are that these
  * tests test against file data sources only, don't interact with a database, and don't try to
  * apply the output changeset.
  *
@@ -57,11 +59,11 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
-//  CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
-//  CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
-//  CPPUNIT_TEST(runLinearLenientOsmTest);// passing
-//  CPPUNIT_TEST(runLinearStrictOsmTest); // passing
-  CPPUNIT_TEST(runPolyLenientJsonTest);
+  CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
+  CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
+  CPPUNIT_TEST(runLinearLenientOsmTest);// passing
+  CPPUNIT_TEST(runLinearStrictOsmTest); // passing
+  //CPPUNIT_TEST(runPolyLenientJsonTest);
 //  CPPUNIT_TEST(runPolyStrictJsonTest);
 //  CPPUNIT_TEST(runPoiStrictJsonTest);
 //  CPPUNIT_TEST(runLinearLenientJsonTest);
@@ -84,11 +86,9 @@ public:
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
     // TODO: remove
-    conf().set(
-      ConfigOptions::getLogClassFilterKey(),
-      "ChangesetReplacementCreatorTest;ChangesetReplacementCreator;MapCropper;IoUtils");
-    // TODO: this doesn't seem to work during testing for some reason
-    //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+//    conf().set(
+//      ConfigOptions::getLogClassFilterKey(),
+//      "ChangesetReplacementCreatorTest;ChangesetReplacementCreator;IoUtils;MapCropper;ElementConverter");
   }
 
   void runPolyLenientOsmTest()
@@ -267,42 +267,53 @@ private:
 
     // TODO: Do we need to suppress crop warnings here? Or does it need to be done in the readers?
 
-    const QString refInXml = _outputPath + testName + "-ref-in.osm";
     QString modifiedCustomTagVal = "";
     if (!customTagVal.isEmpty())
     {
       modifiedCustomTagVal = customTagVal + " 1";
     }
     const bool perturbRef = geometryType != GeometryType::Point;
-    _generateXml(
-      refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), customTagKey,
-      modifiedCustomTagVal, perturbRef, Status::Unknown1, refInXml);
+    OsmMapPtr refMap =
+      _getTestMap(
+        refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), customTagKey,
+        modifiedCustomTagVal, perturbRef, Status::Unknown1);
+    QString outFile = _outputPath + testName + "-ref-in.";
+    if (testName.toLower().contains("osm"))
+    {
+      outFile += "osm";
+    }
+    else
+    {
+      outFile += "json";
+    }
+    IoUtils::saveMap(refMap, outFile);
 
-    const QString refInJson = _outputPath + testName + "-ref-in.json";
-    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-    LOG_DEBUG("Converting xml: " << refInXml << " to json: " << refInJson << "...");
-    DataConverter().convert(refInXml, refInJson);
-
-    const QString secInXml = _outputPath + testName + "-sec-in.osm";
     if (!customTagVal.isEmpty())
     {
       modifiedCustomTagVal = customTagVal + " 2";
     }
-    _generateXml(
-      secSourceFile, std::shared_ptr<IdGenerator>(new DefaultIdGenerator()), customTagKey,
-      modifiedCustomTagVal, false, Status::Unknown2, secInXml);
+    OsmMapPtr secMap =
+      _getTestMap(
+        secSourceFile, std::shared_ptr<IdGenerator>(new DefaultIdGenerator()), customTagKey,
+        modifiedCustomTagVal, false, Status::Unknown2);
+    outFile = outFile.replace("ref", "sec");
+    IoUtils::saveMap(secMap, outFile);
 
-    const QString secInJson = _outputPath + testName + "-sec-in.json";
-    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-    LOG_DEBUG("Converting xml: " << secInXml << " to json: " << secInJson << "...");
-    DataConverter().convert(secInXml, secInJson);
+    // This is very strange... If I don't call this method at the end, a couple of tests fail. The
+    // only thing I can imagine is that DataConverter is setting some global config that happens
+    // to be needed by the tests. I've tried what's commented out below and none of them do the
+    // trick. Have to figure out what's going on here.
+    _copyJson(outFile, _outputPath + "temp-do-not-use.json");
+//    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+//    conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
+//    conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
   }
 
-  void _generateXml(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
-                    const QString& customTagKey, const QString& customTagVal, const bool perturb,
-                    const Status& /*status*/, const QString& outFile)
+  OsmMapPtr _getTestMap(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
+                        const QString& customTagKey, const QString& customTagVal,
+                        const bool perturb, const Status& /*status*/)
   {
-    LOG_DEBUG("Preparing input xml from: " << sourceFile << " to " << outFile << "...");
+    LOG_DEBUG("Preparing map from: " << sourceFile << "...");
 
     TestUtils::resetBasic();
     conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
@@ -327,6 +338,9 @@ private:
       map->visitRw(tagSetter);
     }
 
+    AddUuidVisitor uuidAdder("uuid");
+    map->visitRw(uuidAdder);
+
     if (perturb)
     {
       LOG_DEBUG("Perturbing map...");
@@ -338,7 +352,14 @@ private:
       MapProjector::projectToWgs84(map);  // perty works in planar
     }
 
-    IoUtils::saveMap(map, outFile);
+    return map;
+  }
+
+  void _copyJson(const QString& inXmlFile, const QString& outFile)
+  {
+    //conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
+    LOG_DEBUG("Converting xml: " << inXmlFile << " to json: " << outFile << "...");
+    DataConverter().convert(inXmlFile, outFile);
   }
 
   void _runTest(const QString& testName, const QString& fileExtension,

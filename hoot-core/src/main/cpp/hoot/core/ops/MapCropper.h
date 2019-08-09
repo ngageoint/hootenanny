@@ -40,6 +40,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -92,7 +93,10 @@ public:
   { return "Cropping map..."; }
 
   virtual QString getCompletedStatusMessage() const override
-  { return "Cropped " + QString::number(_numAffected) + " elements"; }
+  {
+    return
+      "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+      StringUtils::formatLargeNumber(_numProcessed) + " elements"; }
 
   void setInvert(bool invert);
   void setKeepEntireFeaturesCrossingBounds(bool keep);
