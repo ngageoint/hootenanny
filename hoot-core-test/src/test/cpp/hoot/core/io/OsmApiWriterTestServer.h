@@ -78,7 +78,7 @@ class RetryVersionTestServer : public HttpTestServer
 {
 public:
   /** Constructor */
-  RetryVersionTestServer(int port) : HttpTestServer(port), _changeset_id(1), _has_error(false) { }
+  RetryVersionTestServer(int port) : HttpTestServer(port), _has_error(false) { }
 
 protected:
   /** respond() function that responds to a series of OSM API requests
@@ -91,33 +91,33 @@ protected:
    *  - Element get
    *  - Changeset 1 Upload - respond with updated version
    *  - Changeset Close
-   *  - Changeset Create
-   *  - Changeset 2 Upload - respond with update versions
-   *  - Changeset Close
    */
   virtual bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 
 private:
-  /** Keep track of the changeset ID to create */
-  int _changeset_id;
   /** Flag set to false until the first changeset has failed once */
   bool _has_error;
 };
 
-class OsmApiSampleResponses
+class OsmApiSampleRequestResponse
 {
 public:
   /** Sample Capabilities response body from '/api/0.6/capabilities'
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Capabilities:_GET_.2Fapi.2Fcapabilities
    */
-  static const char* SAMPLE_CAPABILITIES;
+  static const char* SAMPLE_CAPABILITIES_RESPONSE;
   /** Sample Permissions response body from '/api/0.6/permissions'
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_permissions:_GET_.2Fapi.2F0.6.2Fpermissions
    */
-  static const char* SAMPLE_PERMISSIONS;
-
+  static const char* SAMPLE_PERMISSIONS_RESPONSE;
+  /** Sample Changeset upload request body from '/api/0.6/changeset/#id/upload'
+   *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
+   */
+  static const char* SAMPLE_CHANGESET_REQUEST;
+  /** Sample Changeset upload response body from '/api/0.6/changeset/1/upload' */
   static const char* SAMPLE_CHANGESET_1_RESPONSE;
-  static const char* SAMPLE_CHANGESET_2_RESPONSE;
+  /** Sample element GET response from '/api/0.6/way/1' */
+  static const char* SAMPLE_ELEMENT_1_GET_RESPONSE;
 };
 
 }

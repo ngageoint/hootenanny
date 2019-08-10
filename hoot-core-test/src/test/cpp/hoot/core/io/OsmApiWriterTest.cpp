@@ -52,6 +52,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runParsePermissionsTest);
   CPPUNIT_TEST(runPermissionsTest);
   CPPUNIT_TEST(runRetryConflictsTest);
+  CPPUNIT_TEST(runVersionConflictResolutionTest);
   /* These tests are for local testing and require additional resources to complete */
 //  CPPUNIT_TEST(runChangesetTest);
 //  CPPUNIT_TEST(runChangesetTrottleTest);
@@ -66,13 +67,15 @@ public:
   const QString LOCAL_API_URL = "http://localhost:%1";
 
   const int PORT_CAPABILITIES = 9800;
-  const int PORT_PERMISSIONS = 9801;
-  const int PORT_CONFLICTS = 9802;
+  const int PORT_PERMISSIONS =  9801;
+  const int PORT_CONFLICTS =    9802;
+  const int PORT_VERSION =      9803;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
                       UNUSED_PATH)
   {
+    setResetType(ResetBasic);
   }
 
   void runParseStatusTest()
@@ -86,7 +89,7 @@ public:
   void runParseCapabilitiesTest()
   {
     OsmApiWriter writer;
-    OsmApiCapabilites capabilities = writer._parseCapabilities(OsmApiSampleResponses::SAMPLE_CAPABILITIES);
+    OsmApiCapabilites capabilities = writer._parseCapabilities(OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE);
     HOOT_STR_EQUALS(capabilities.getVersion(), QString("0.6"));
     CPPUNIT_ASSERT_EQUAL(capabilities.getTracepoints(), static_cast<long>(5000));
     CPPUNIT_ASSERT_EQUAL(capabilities.getWayNodes(), static_cast<long>(2000));
@@ -129,7 +132,7 @@ public:
   void runParsePermissionsTest()
   {
     OsmApiWriter writer;
-    CPPUNIT_ASSERT(writer._parsePermissions(OsmApiSampleResponses::SAMPLE_PERMISSIONS));
+    CPPUNIT_ASSERT(writer._parsePermissions(OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   }
 
   void runPermissionsTest()
@@ -286,6 +289,44 @@ public:
             .replace("timestamp=\"\"", "timestamp=\"\" changeset=\"0\"")
             .replace("    ", "\t"),
       writer.getFailedChangeset());
+    //  Check the stats
+    checkStats(writer.getStats(), 3, 2, 0, 2, 1, 2, 5);
+  }
+
+  void runVersionConflictResolutionTest()
+  {
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level.
+    //  We expect the all of the errors
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    Log::getInstance().setLevel(Log::Fatal);
+
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_API_URL.arg(PORT_VERSION));
+    osm.setUserInfo("test01:hoottest");
+
+    //  Kick off the version conflict test server
+    RetryVersionTestServer server(PORT_VERSION);
+    server.start();
+
+    OsmApiWriter writer(osm, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_REQUEST);
+
+    Settings s;
+    s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
+    s.set(ConfigOptions::getChangesetApidbSizeMaxKey(), 100);
+    writer.setConfiguration(s);
+
+    writer.apply();
+
+    //  Wait for the test server to finish
+    server.wait();
+
+    Log::getInstance().setLevel(logLevel);
+
+    //  Make sure that none of the changes failed
+    CPPUNIT_ASSERT(!writer.containsFailed());
+    //  Check the stats
+    checkStats(writer.getStats(), 0, 4, 0, 0, 4, 0, 0);
   }
 
   void oauthTest()
@@ -310,9 +351,39 @@ public:
 
     writer.apply();
   }
+
+  void checkStats(QList<SingleStat> stats,
+                  int nodes, int ways, int relations,
+                  int created, int modified, int deleted,
+                  int errors)
+  {
+    for (int i = 0; i < stats.size(); ++i)
+    {
+      SingleStat stat = stats[i];
+      if (stat.name == "Total Nodes in Changeset")
+        testStat(stat, nodes);
+      else if (stat.name == "Total Ways in Changeset")
+        testStat(stat, ways);
+      else if (stat.name == "Total Relations in Changeset")
+        testStat(stat, relations);
+      else if (stat.name == "Total Elements Created")
+        testStat(stat, created);
+      else if (stat.name == "Total Elements Modified")
+        testStat(stat, modified);
+      else if (stat.name == "Total Elements Deleted")
+        testStat(stat, deleted);
+      else if (stat.name == "Total Errors")
+        testStat(stat, errors);
+    }
+  }
+
+  void testStat(SingleStat stat, int value)
+  {
+    HOOT_STR_EQUALS(QString("%1: %2").arg(stat.name).arg(value), stat.toString());
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
 
 }

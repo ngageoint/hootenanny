@@ -194,6 +194,8 @@ private:
    * @return success Whether or not the function was able to find a resolvable issue
    */
   bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
+
+  bool _fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr changeset, const QString& conflictExplanation);
   /**
    * @brief _getNode/Way/Relation Perform HTTP GET request to OSM API to get current node/way/relation by ID
    * @param request Network request object initialized with OSM API URL
@@ -264,10 +266,10 @@ private:
   QString _accessToken;
   /** OAuth 1.0 secret token granted through OAuth authorization */
   QString _secretToken;
-  /** Default constructor for testing purposes only */
-  OsmApiWriter() {}
   /** For white box testing */
   friend class OsmApiWriterTest;
+  /** Default constructor for testing purposes only */
+  OsmApiWriter() {}
 };
 
 }
