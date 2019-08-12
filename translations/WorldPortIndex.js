@@ -40,12 +40,7 @@ function translateToOsm(attrs, layerName, geometryType)
     var tags = {};
 
     // Debug:
-    if (config.getOgrDebugDumptags() == 'true')
-    {
-        print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
-        var kList = Object.keys(attrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-    }
+    if (config.getOgrDebugDumptags() == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     translate.applySimpleNumBiased(attrs, tags, wpi.numRules, 'forward',[]);
     translate.applySimpleTxtBiased(attrs, tags, wpi.txtRules, 'forward');
@@ -62,8 +57,7 @@ function translateToOsm(attrs, layerName, geometryType)
     // Debug:
     if (config.getOgrDebugDumptags() == 'true')
     {
-        var kList = Object.keys(tags).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
     }
     return tags;

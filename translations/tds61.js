@@ -2318,12 +2318,7 @@ tds61 = {
         }
 
         // Debug:
-        if (tds61.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (tds61.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
@@ -2341,8 +2336,7 @@ tds61 = {
             // Debug:
             if (tds61.configIn.OgrDebugDumptags == 'true')
             {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
                 print('');
             }
 
@@ -2383,11 +2377,8 @@ tds61 = {
         // Debug:
         if (tds61.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
         }
 
         // pre processing
@@ -2444,11 +2435,8 @@ tds61 = {
         // Debug:
         if (tds61.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(notUsedAttrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -2492,12 +2480,7 @@ tds61 = {
 
         // Start processing here
         // Debug:
-        if (tds61.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (tds61.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -2583,28 +2566,12 @@ tds61 = {
         // NOTE: This deletes tags as they are used
         translate.applyTdsOne2One(notUsedTags, attrs, tds61.lookup, tds61.fcodeLookup);
 
-        // Debug:
-        // if (tds61.configOut.OgrDebugDumptags == 'true')
-        // {
-        //     print('After applytdsone2one');
-        //     var kList = Object.keys(tags).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        //     kList = Object.keys(notUsedTags).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        //     kList = Object.keys(attrs).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        // }
-
         // Post Processing
         // We send the original list of tags and the list of tags we haven't used yet
         tds61.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (tds61.configOut.OgrDebugDumptags == 'true')
-        {
-            var kList = Object.keys(notUsedTags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        }
+        if (tds61.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // If we have unused tags, add them to the memo field
         if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'attribute')
@@ -2717,11 +2684,7 @@ tds61 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (tds61.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (tds61.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
             // We want to keep the hoot:id if present
             if (tags['hoot:id'])
@@ -2767,8 +2730,7 @@ tds61 = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }

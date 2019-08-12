@@ -803,15 +803,7 @@ mgcp = {
                 }
                 break;
         } // End switch condifion
-//####
 
-// print('Before Swtich F_CODE: Geometry: ' + geometryType);
-// var kList = Object.keys(attrs).sort()
-// for (var i = 0, fLen = kList.length; i < fLen; i++) print('attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-// var kList = Object.keys(tags).sort()
-// for (var i = 0, fLen = kList.length; i < fLen; i++) print('tags: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-//####
         // Add 'building = yes' to amenities if we don't already have one
         // if (tags.amenity && !tags.building)
         // {
@@ -1181,7 +1173,7 @@ mgcp = {
             ["t.resource","t.product = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
             // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
-            ["t.tourism == 'information' && t.informatin","delete t.tourism"],
+            ["t.tourism == 'information' && t.information","delete t.tourism"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
@@ -1316,7 +1308,6 @@ mgcp = {
 
             if (tags.product == 'unknown') delete tags.product;
         }
-
 
         // More facilities
         switch (tags.amenity)
@@ -1979,12 +1970,7 @@ mgcp = {
         }
 
         // Debug:
-        if (mgcp.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (mgcp.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
@@ -2002,10 +1988,10 @@ mgcp = {
             // Debug:
             if (mgcp.configIn.OgrDebugDumptags == 'true')
             {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
                 print('');
             }
+
 
             return tags;
         } // End layername = o2s_X
@@ -2045,11 +2031,8 @@ mgcp = {
         // Debug:
         if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
         }
 
         // pre processing
@@ -2097,10 +2080,8 @@ mgcp = {
         // Debug:
         if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
-            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -2146,12 +2127,7 @@ mgcp = {
         if (geometryType == 'Collection') return null;
 
         // Debug:
-        if (mgcp.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // Set up the fcode translation rules
         if (mgcp.fcodeLookup == undefined)
@@ -2206,7 +2182,7 @@ mgcp = {
         mgcp.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // If we have unused tags, add them to the TXT field
         // NOTE: We are not checking if this is longer than 255 characters
@@ -2306,11 +2282,8 @@ mgcp = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (mgcp.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+
 
             // We want to keep the hoot:id if present
             if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
@@ -2358,10 +2331,8 @@ mgcp = {
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-                print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
-                // for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }

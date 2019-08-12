@@ -2229,7 +2229,11 @@ tds40 = {
             if (! tags.source) tags.source = 'tdsv40:' + layerName.toLowerCase();
 
             // Debug:
-            if (tds40.configIn.OgrDebugDumptags == 'true') translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+            if (tds40.configIn.OgrDebugDumptags == 'true')
+                {
+                    translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+                    print('');
+                }
 
             return tags;
         } // End layername = o2s_X
@@ -2430,18 +2434,6 @@ tds40 = {
         // one 2 one - we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
         translate.applyTdsOne2One(notUsedTags, attrs, tds40.lookup, tds40.fcodeLookup);
-
-        // Debug:
-        // if (tds61.configOut.OgrDebugDumptags == 'true')
-        // {
-        //     print('After applytdsone2one');
-        //     var kList = Object.keys(tags).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        //     kList = Object.keys(notUsedTags).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        //     kList = Object.keys(attrs).sort()
-        //     for (var i = 0, fLen = kList.length; i < fLen; i++) print('attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        // }
 
         // Post Processing
         // We send the original list of tags and the list of tags we haven't used yet

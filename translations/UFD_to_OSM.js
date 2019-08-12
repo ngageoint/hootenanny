@@ -3675,12 +3675,7 @@ function translateToOsm(attrs, layerName, geometryType)
     tags = {};
 
     // Debug:
-    if (ufd.configIn.OgrDebugDumptags == 'true')
-    {
-        print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
-        var kList = Object.keys(attrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-    }
+    if (ufd.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // pre processing
     ufd.applyToOsmPreProcessing(attrs, layerName, geometryType);
@@ -3733,11 +3728,8 @@ function translateToOsm(attrs, layerName, geometryType)
     // Debug:
     if (ufd.configIn.OgrDebugDumptags == 'true')
     {
-        var kList = Object.keys(notUsedAttrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-        var kList = Object.keys(tags).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+        translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
     }
 
