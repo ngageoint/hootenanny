@@ -131,6 +131,7 @@ public final class HootProperties {
     public static final String PUBLIC_OSMAPI_CAPABILITIES_URL;
 
     public static final String PUBLIC_OVERPASS_URL;
+    public static final String MAX_OVERPASS_FEATURE_COUNT;
 
     public static final String RAILSPORT_PUSH_URL;
     public static final String RAILSPORT_PULL_URL;
@@ -220,6 +221,7 @@ public final class HootProperties {
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         HTTP_TIMEOUT = getProperty("httpTimeout");
+        MAX_OVERPASS_FEATURE_COUNT = getProperty("grailMaxFeatureCount");
         GRAIL_OVERPASS_QUERY = getProperty("grailOverpassQueryPath");
         GRAIL_OVERPASS_STATS_QUERY = getProperty("grailOverpassStatsQueryPath");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");

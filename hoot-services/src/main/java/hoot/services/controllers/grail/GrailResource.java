@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
 import static hoot.services.HootProperties.HOME_FOLDER;
@@ -695,6 +696,7 @@ public class GrailResource {
 
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("overpassQuery", url);
+        jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
