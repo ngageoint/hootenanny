@@ -103,10 +103,10 @@ httpTimeout=600000
 grailMaxFeatureCount=20000
 
 # Grail pull overpass query file
-grailOverpassQueryPath=conf/services/grailOverpassQuery.conf
+grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
 
 # Grail pull overpass stats query file
-grailOverpassStatsQueryPath=conf/services/grailOverpassStatsQuery.conf
+grailOverpassStatsQueryPath=conf/services/grailOverpassStatsQuery.oql
 
 # Config options asciidoc location
 configAsciidocPath=conf/core/ConfigOptions.asciidoc
