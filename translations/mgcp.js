@@ -805,11 +805,11 @@ mgcp = {
         } // End switch condifion
 //####
 
-print('Before Swtich F_CODE: Geometry: ' + geometryType);
-var kList = Object.keys(attrs).sort()
-for (var i = 0, fLen = kList.length; i < fLen; i++) print('attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-var kList = Object.keys(tags).sort()
-for (var i = 0, fLen = kList.length; i < fLen; i++) print('tags: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+// print('Before Swtich F_CODE: Geometry: ' + geometryType);
+// var kList = Object.keys(attrs).sort()
+// for (var i = 0, fLen = kList.length; i < fLen; i++) print('attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
+// var kList = Object.keys(tags).sort()
+// for (var i = 0, fLen = kList.length; i < fLen; i++) print('tags: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
 
 //####
         // Add 'building = yes' to amenities if we don't already have one

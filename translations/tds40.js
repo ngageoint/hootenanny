@@ -846,70 +846,82 @@ tds40 = {
             case undefined: // Break early if no value. Should not get here.....
                 break;
 
-            /* Now sort out Roads
-            HCT, TYP, RTY etc are related. No easy way to use one2one rules
+            case 'AP030':
+                /* Now sort out Roads
+                HCT, TYP, RTY etc are related. No easy way to use one2one rules
 
-            HCT : Thoroughfare Class - TDS 3.0
-            TYP ; Thoroughfare Type - TDS 3.0 & 4.0
-            RTN_ROI: Route Designation - TDS 4.0
-            RIN_ROI: Route Designation - TDS 5.0 & 6.0
-            RTY: Roadway Type - TDS 5.0 & 6.0
+                HCT : Thoroughfare Class - TDS 3.0
+                TYP ; Thoroughfare Type - TDS 3.0 & 4.0
+                RTN_ROI: Route Designation - TDS 4.0
+                RIN_ROI: Route Designation - TDS 5.0 & 6.0
+                RTY: Roadway Type - TDS 5.0 & 6.0
 
-            TDS3   TDS4       TDS5       TDS6
-            HCT -> RTN_ROI -> RIN_ROI -> RIN_ROI
-            TYP -> TYP     -> RTY     -> RTY
-            */
-            case 'AP030': // Make sure we have a road
+                TDS3   TDS4       TDS5       TDS6
+                HCT -> RTN_ROI -> RIN_ROI -> RIN_ROI
+                TYP -> TYP     -> RTY     -> RTY
+                */
+
                 // Set a Default: "It is a road but we don't know what it is"
                 tags.highway = 'road';
 
-                switch (tags['ref:road:type'])
+                // This was a heap of if, else if, else if etc
+                if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
                 {
-                    case undefined: // Break early if no value. Should not get here.....
-                        break;
+                    tags.highway = 'motorway';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
+                {
+                    tags.highway = 'trunk';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'parkway' || tags['ref:road:class'] == 'secondary')
+                {
+                    tags.highway = 'primary';
+                    break;
+                }
 
-                    // Top level
-                    case 'motorway':
-                    case 'national_motorway':
-                        tags.highway = 'motorway';
-                        break;
-                    
-                    case 'limited_access_motorway':
-                    case 'primary':
-                        tags.highway = 'trunk';
-                        break;
+                if (tags['ref:road:class'] == 'local')
+                {
+                    tags.highway = 'secondary';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'road' || tags['ref:road:type'] == 'boulevard')
+                {
+                    tags.highway = 'tertiary';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'street')
+                {
+                    tags.highway = 'unclassified';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'lane')
+                {
+                    tags.highway = 'service';
+                    break;
+                }
 
-                    case 'secondary':
-                    case 'parkway':
-                        tags.highway = 'primary';
-                        break;
+                // Other should get picked up by the OTH field
+                if (tags['ref:road:type'] == 'other')
+                {
+                    tags.highway = 'road';
+                    break;
+                }
+                
+                // Catch all for the rest of the ref:road:type: close, circle drive etc
+                if (tags['ref:road:type'])
+                {
+                    tags.highway = 'residential';
+                    break;
+                }
 
-                    case 'local':
-                        tags.highway = 'secondary';
-                        break;
-
-                    case 'road':
-                    case 'boulevard':
-                        tags.highway = 'tertiary';
-                        break;
-
-                    case 'street':
-                        tags.highway = 'unclassified';
-                        break;
-
-                    case 'lane':
-                        tags.highway = 'service';
-                        break;
-
-                    // Other should get picked up by the OTH field
-                    case 'other':
-                        tags.highway = 'road';
-                        break;
-
-                    // Catch all for the rest of the ref:road:type: close, circle drive etc
-                    default:
-                        tags.highway = 'residential';
-                } // End switch road:type
+                // If we get this far then we are going with the default.
                 break;
             
             case 'AA052': // Fix oil/gas/petroleum fields
@@ -2201,12 +2213,7 @@ tds40 = {
         }
 
         // Debug:
-        if (tds40.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (tds40.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
@@ -2222,12 +2229,7 @@ tds40 = {
             if (! tags.source) tags.source = 'tdsv40:' + layerName.toLowerCase();
 
             // Debug:
-            if (tds40.configIn.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-                print('');
-            }
+            if (tds40.configIn.OgrDebugDumptags == 'true') translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
 
             return tags;
         } // End layername = o2s_X
@@ -2266,11 +2268,8 @@ tds40 = {
         // Debug:
         if (tds40.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
         }
 
         // pre processing
@@ -2327,11 +2326,8 @@ tds40 = {
         // Debug:
         if (tds40.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(notUsedAttrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -2375,12 +2371,7 @@ tds40 = {
 
         // Start processing here
         // Debug:
-        if (tds40.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -2457,11 +2448,7 @@ tds40 = {
         tds40.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (tds40.configOut.OgrDebugDumptags == 'true')
-        {
-            var kList = Object.keys(notUsedTags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        }
+        if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // If we have unused tags, add them to the memo field
         if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
@@ -2574,11 +2561,7 @@ tds40 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (tds40.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
             // We want to keep the hoot:id if present
             if (tags['hoot:id'])
@@ -2624,8 +2607,7 @@ tds40 = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }

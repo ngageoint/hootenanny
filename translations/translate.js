@@ -1290,6 +1290,18 @@ translate = {
     }, // End addFdName
 
 
+    // debugOutput - Dump out tags or attributes to figure out what is going on
+    debugOutput : function(values,layerName,geometryType,elementType,text)
+    {
+        var kList = Object.keys(values).sort()
+        if (kList.length > 0)
+        {
+            print('LayerName: ' + layerName + '  Geometry: ' + geometryType + '  Element Type: ' + elementType);
+            for (var i = 0, fLen = kList.length; i < fLen; i++) print(text + kList[i] + ': :' + values[kList[i]] + ':');
+        }
+    }, // End debugOutput
+
+
     // dumpLookup - Dump a Lookup table so we can check it
     dumpLookup : function(lookupTable)
     {
