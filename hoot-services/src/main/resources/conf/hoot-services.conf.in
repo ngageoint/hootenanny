@@ -100,7 +100,7 @@ exportSizeThreshold=400000000
 httpTimeout=600000
 
 # Max feature count for grail operations
-grailMaxFeatureCount=20000
+grailMaxFeatureCount=200000
 
 # Grail pull overpass query file
 grailOverpassQueryPath=conf/services/grailOverpassQuery.oql

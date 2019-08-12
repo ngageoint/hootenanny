@@ -686,7 +686,7 @@ public class GrailResource {
         try {
             overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
         } catch(Exception exc) {
-            String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getAbsolutePath();
+            String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
             throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
         }
 
