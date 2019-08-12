@@ -42,7 +42,6 @@
 #include <hoot/core/util/PositiveIdGenerator.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
-#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 namespace hoot
 {
@@ -58,16 +57,16 @@ namespace hoot
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  CPPUNIT_TEST(runPolyLenientOsmTest);  // passing
-  CPPUNIT_TEST(runPolyStrictOsmTest);   // passing
-  CPPUNIT_TEST(runPoiStrictOsmTest);    // passing
-  CPPUNIT_TEST(runLinearLenientOsmTest);// passing
-  CPPUNIT_TEST(runLinearStrictOsmTest); // passing
-  //CPPUNIT_TEST(runPolyLenientJsonTest);
-//  CPPUNIT_TEST(runPolyStrictJsonTest);
-//  CPPUNIT_TEST(runPoiStrictJsonTest);
-//  CPPUNIT_TEST(runLinearLenientJsonTest);
-//  CPPUNIT_TEST(runLinearStrictJsonTest);
+  CPPUNIT_TEST(runPolyLenientOsmTest);
+  CPPUNIT_TEST(runPolyStrictOsmTest);
+  CPPUNIT_TEST(runPoiStrictOsmTest);
+  CPPUNIT_TEST(runLinearLenientOsmTest);
+  CPPUNIT_TEST(runLinearStrictOsmTest);
+  CPPUNIT_TEST(runPolyLenientJsonTest);
+  CPPUNIT_TEST(runPolyStrictJsonTest);
+  CPPUNIT_TEST(runPoiStrictJsonTest);
+  CPPUNIT_TEST(runLinearLenientJsonTest);
+  CPPUNIT_TEST(runLinearStrictJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -88,11 +87,14 @@ public:
     // TODO: remove
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
-//      "ChangesetReplacementCreatorTest;ChangesetReplacementCreator;IoUtils;MapCropper;ElementConverter");
+//      "ChangesetReplacementCreatorTest");
   }
 
   void runPolyLenientOsmTest()
   {     
+    // This is here to avoid seeing the missing element warnings from the readers after cropping.
+    DisableLog dl;
+
     const QString testName = "runPolyLenientOsmTest";
     LOG_DEBUG("Running test: " << testName << "...");
     const GeometryType geometryType = GeometryType::Polygon;
@@ -110,6 +112,8 @@ public:
 
   void runPolyStrictOsmTest()
   {
+    DisableLog dl;
+
     const QString testName = "runPolyStrictOsmTest";
     const GeometryType geometryType = GeometryType::Polygon;
     //const QString goldTestName = "ServiceBuildingStrictReplacementTest";
@@ -123,6 +127,8 @@ public:
 
   void runPoiStrictOsmTest()
   {
+    DisableLog dl;
+
     const QString testName = "runPoiStrictOsmTest";
     const GeometryType geometryType = GeometryType::Point;
     //const QString goldTestName = "ServicePoiStrictReplacementTest";
@@ -135,6 +141,8 @@ public:
 
   void runLinearLenientOsmTest()
   {
+    DisableLog dl;
+
     const QString testName = "runLinearLenientOsmTest";
     const GeometryType geometryType = GeometryType::Line;
     //const QString goldTestName = "ServiceRoadReplacementTest";
@@ -147,6 +155,8 @@ public:
 
   void runLinearStrictOsmTest()
   {
+    DisableLog dl;
+
     const QString testName = "runLinearStrictOsmTest";
     const GeometryType geometryType = GeometryType::Line;
     //const QString goldTestName = "ServiceRoadStrictReplacementTest";
@@ -159,6 +169,8 @@ public:
 
   void runPolyLenientJsonTest()
   {
+    DisableLog dl;
+
     const QString testName = "runPolyLenientJsonTest";
     LOG_DEBUG("Running test: " << testName << "...");
     const GeometryType geometryType = GeometryType::Polygon;
@@ -176,6 +188,8 @@ public:
 
   void runPolyStrictJsonTest()
   {
+    DisableLog dl;
+
     const QString testName = "runPolyStrictJsonTest";
     const GeometryType geometryType = GeometryType::Polygon;
     //const QString goldTestName = "ServiceBuildingStrictReplacementTest";
@@ -188,6 +202,8 @@ public:
 
   void runPoiStrictJsonTest()
   {
+    DisableLog dl;
+
     const QString testName = "runPoiStrictJsonTest";
     const GeometryType geometryType = GeometryType::Point;
     //const QString goldTestName = "ServicePoiStrictReplacementTest";
@@ -200,6 +216,8 @@ public:
 
   void runLinearLenientJsonTest()
   {
+    DisableLog dl;
+
     const QString testName = "runLinearLenientJsonTest";
     const GeometryType geometryType = GeometryType::Line;
     //const QString goldTestName = "ServiceRoadReplacementTest";
@@ -212,6 +230,8 @@ public:
 
   void runLinearStrictJsonTest()
   {
+    DisableLog dl;
+
     const QString testName = "runLinearStrictJsonTest";
     const GeometryType geometryType = GeometryType::Line;
     //const QString goldTestName = "ServiceRoadStrictReplacementTest";
@@ -265,8 +285,6 @@ private:
         throw IllegalArgumentException("Invalid geometry type.");
     }
 
-    // TODO: Do we need to suppress crop warnings here? Or does it need to be done in the readers?
-
     QString modifiedCustomTagVal = "";
     if (!customTagVal.isEmpty())
     {
@@ -299,8 +317,8 @@ private:
     outFile = outFile.replace("ref", "sec");
     IoUtils::saveMap(secMap, outFile);
 
-    // This is very strange... If I don't call this method at the end, a couple of tests fail. The
-    // only thing I can imagine is that DataConverter is setting some global config that happens
+    // TODO: This is very strange... If I don't call this method at the end, a couple of tests fail.
+    // The only thing I can imagine is that DataConverter is setting some global config that happens
     // to be needed by the tests. I've tried what's commented out below and none of them do the
     // trick. Have to figure out what's going on here.
     _copyJson(outFile, _outputPath + "temp-do-not-use.json");
@@ -338,9 +356,6 @@ private:
       map->visitRw(tagSetter);
     }
 
-    AddUuidVisitor uuidAdder("uuid");
-    map->visitRw(uuidAdder);
-
     if (perturb)
     {
       LOG_DEBUG("Perturbing map...");
@@ -351,6 +366,14 @@ private:
       perturber.apply(map);
       MapProjector::projectToWgs84(map);  // perty works in planar
     }
+
+//    RemoveMissingElementsVisitor elementRemover;
+//    map->visitRw(elementRemover);
+/*    MapCleaner().apply(map);
+    MapProjector::projectToWgs84(map)*/;
+
+    AddUuidVisitor uuidAdder("uuid");
+    map->visitRw(uuidAdder);
 
     return map;
   }

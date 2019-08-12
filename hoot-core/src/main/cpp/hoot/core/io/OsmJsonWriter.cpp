@@ -204,6 +204,8 @@ void OsmJsonWriter::_writeMetadata(const Element& element)
 
 void OsmJsonWriter::_writeNodes()
 {
+  const long debugId = -25928;
+
   QList<long> nids;
   const NodeMap& nodes = _map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -215,8 +217,19 @@ void OsmJsonWriter::_writeNodes()
   for (int i = 0; i < nids.size(); i++)
   {
     ConstNodePtr n = _map->getNode(nids[i]);
+    const QString msg = "Writing node: " + n->toString() + "...";
+    if (n->getId() == debugId)
+    {
+      LOG_VARD(msg);
+    }
+    else
+    {
+      LOG_VART(msg);
+    }
+
     if (!_firstElement) _write(",", true);
     _firstElement = false;
+
     _write("{");
     _writeKvp("type", "node"); _write(",");
     _writeKvp("id", n->getId()); _write(",");
@@ -298,12 +311,34 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 
 void OsmJsonWriter::_writeWays()
 {
-  WayMap::const_iterator it = _map->getWays().begin();
-  while (it != _map->getWays().end())
+  const long debugId = -3047;
+
+  QList<long> wids;
+  const WayMap& ways = _map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
+    wids.append(it->first);
+  }
+  // sort the values to give consistent results.
+  qSort(wids.begin(), wids.end(), qGreater<long>());
+
+  for (int i = 0; i < wids.size(); i++)
+  {
+    ConstWayPtr w = _map->getWay(wids[i]);
+    const QString msg = "Writing way: " + w->toString() + "...";
+
+    if (w->getId() == debugId)
+    {
+      LOG_VARD(msg);
+    }
+    else
+    {
+      LOG_VART(msg);
+    }
+
     if (!_firstElement) _write(",", true);
     _firstElement = false;
-    ConstWayPtr w = it->second;
+
     _write("{");
     _writeKvp("type", "way"); _write(",");
     _writeKvp("id", w->getId()); _write(",");
@@ -330,19 +365,38 @@ void OsmJsonWriter::_writeWays()
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
-
-    ++it;
   }
 }
 
 void OsmJsonWriter::_writeRelations()
 {
-  RelationMap::const_iterator it = _map->getRelations().begin();
-  while (it != _map->getRelations().end())
+  const long debugId = 0;
+
+  QList<long> rids;
+  const RelationMap& relations = _map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
+    rids.append(it->first);
+  }
+
+  // sort the values to give consistent results.
+  qSort(rids.begin(), rids.end(), qGreater<long>());
+
+  for (int i = 0; i < rids.size(); i++)
+  {
+    ConstRelationPtr r = _map->getRelation(rids[i]);
+    const QString msg = "Writing relation: " + r->toString() + "...";
+    if (r->getId() == debugId)
+    {
+      LOG_VARD(msg);
+    }
+    else
+    {
+      LOG_VART(msg);
+    }
+
     if (!_firstElement) _write(",", true);
     _firstElement = false;
-    ConstRelationPtr r = it->second;
 
     _write("{");
     _writeKvp("type", "relation"); _write(",");
@@ -380,8 +434,6 @@ void OsmJsonWriter::_writeRelations()
       PROGRESS_INFO(
         "Wrote " << StringUtils::formatLargeNumber(_numWritten) << " elements to output.");
     }
-
-    ++it;
   }
 }
 

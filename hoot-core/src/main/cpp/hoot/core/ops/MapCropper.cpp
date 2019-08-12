@@ -70,6 +70,8 @@ using namespace Tgs;
 namespace hoot
 {
 
+int MapCropper::logWarnCount = 0;
+
 HOOT_FACTORY_REGISTER(OsmMapOperation, MapCropper)
 
 MapCropper::MapCropper() :
@@ -240,7 +242,17 @@ void MapCropper::apply(OsmMapPtr& map)
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     if (!ls.get())
     {
-      LOG_TRACE("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
+        LOG_VARW(w);
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+
       _numProcessed++;
       wayCtr++;
       continue;

@@ -64,6 +64,8 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
+_missingNodeCount(0),
+_missingWayCount(0),
 _useDataSourceId(false),
 _inputCompressed(false),
 _numRead(0),
@@ -106,6 +108,13 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
 {
   long id = _parseLong(attributes.value("id"));
   //LOG_VART(id);
+
+  if (_nodeIdMap.contains(id))
+  {
+    throw HootException(
+      QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
+  }
+
   long newId;
   if (_useDataSourceId)
   {
@@ -165,7 +174,8 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 
   if (_wayIdMap.contains(_wayId))
   {
-    throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
+    throw HootException(
+      QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
   }
 
   long newId;
@@ -216,6 +226,13 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
 void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
 {
   _relationId = _parseLong(attributes.value("id"));
+
+  if (_relationIdMap.contains(_relationId))
+  {
+    throw HootException(
+      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_path));
+  }
+
   long newId = _getRelationId(_relationId);
 
   // check the next 3 attributes to see if a value exist, if not, assign a default since these are
@@ -499,7 +516,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           _missingNodeCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+            LOG_WARN(
+              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
+              ElementId(ElementType::Way, _wayId) << ".");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -539,7 +558,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             _missingNodeCount++;
             if (logWarnCount < Log::getWarnMessageLimit())
             {
-              LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+              LOG_WARN(
+                "Missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << ".");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {
@@ -570,7 +591,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             _missingWayCount++;
             if (logWarnCount < Log::getWarnMessageLimit())
             {
-              LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+              LOG_WARN(
+                "Missing " << ElementId(ElementType::Way, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << ".");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {

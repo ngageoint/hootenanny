@@ -62,7 +62,7 @@ int OsmJsonReader::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmJsonReader)
 
-// TODO: implement Configurable
+// TODO: implement Configurable to help simplify this
 OsmJsonReader::OsmJsonReader()
   : _defaultStatus(Status::Invalid),
     _useDataSourceIds(true),
@@ -83,7 +83,9 @@ OsmJsonReader::OsmJsonReader()
     _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount()),
     _bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
     _keepImmediatelyConnectedWaysOutsideBounds(
-      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
+      ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
+    _missingNodeCount(0),
+    _missingWayCount(0)
 {
 }
 
@@ -125,6 +127,7 @@ void OsmJsonReader::open(const QString& url)
   {
     _isFile = false;
     _isWeb = false;
+    _path = url;
 
     // Bail out if unsupported
     if (!isSupported(url))
@@ -166,6 +169,11 @@ void OsmJsonReader::close()
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
+  // clear node id maps in case the reader is used for multiple files
+  _nodeIdMap.clear();
+  _relationIdMap.clear();
+  _wayIdMap.clear();
+
   _map = map;
   if (_isFile)
   {
@@ -193,6 +201,11 @@ void OsmJsonReader::read(const OsmMapPtr& map)
 
 void OsmJsonReader::_readToMap()
 {
+  // clear node id maps in case the reader is used for multiple files
+  _nodeIdMap.clear();
+  _relationIdMap.clear();
+  _wayIdMap.clear();
+
   _map.reset(new OsmMap());
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
@@ -343,12 +356,39 @@ void OsmJsonReader::_parseOverpassJson()
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 {
+  const long debugId = -25928;
+
   // Get info we need to construct our node
-  long id = -1;
+  long id = item.get("id", id);
+
+  if (_nodeIdMap.contains(id))
+  {
+    throw HootException(
+      QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
+  }
+
+  long newId;
   if (_useDataSourceIds)
-    id = item.get("id", id);
+  {
+    newId = id;
+  }
   else
-    id = _map->createNextNodeId();
+  {
+    newId = _map->createNextNodeId();
+  }
+  LOG_VART(id);
+  LOG_VART(newId);
+  _nodeIdMap.insert(id, newId);
+
+  const QString msg = "Reading " + ElementId(ElementType::Node, newId).toString() + "...";
+  if (newId == debugId)
+  {
+    LOG_VARD(msg);
+  }
+  else
+  {
+    LOG_VART(msg);
+  }
 
   double lat = item.get("lat", 0.0);
   double lon = item.get("lon", 0.0);
@@ -367,7 +407,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   // Construct node
   NodePtr pNode(
     new Node(
-      _defaultStatus, id, lon, lat, _defaultCircErr, changeset, version, timestamp,
+      _defaultStatus, newId, lon, lat, _defaultCircErr, changeset, version, timestamp,
       QString::fromStdString(user), uid));
 
   // Add tags
@@ -375,6 +415,8 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 
   // Add node to map
   _map->addNode(pNode);
+
+  LOG_TRACE("Loaded node: " << pNode);
 
   _numRead++;
   if (_numRead % _statusUpdateInterval == 0)
@@ -385,12 +427,37 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 
 void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
 {
+  const long debugId = -3047;
+
   // Get info we need to construct our way
-  long id = -1;
+  long id = item.get("id", id);
+
+  if (_wayIdMap.contains(id))
+  {
+    throw HootException(
+      QString("Duplicate way id %1 in map %2 encountered.").arg(id).arg(_path));
+  }
+
+  long newId;
   if (_useDataSourceIds)
-    id = item.get("id", id);
+  {
+    newId = id;
+  }
   else
-    id = _map->createNextWayId();
+  {
+    newId = _map->createNextWayId();
+  }
+  _wayIdMap.insert(id, newId);
+
+  const QString msg = "Reading " + ElementId(ElementType::Way, newId).toString() + "...";
+  if (newId == debugId)
+  {
+    LOG_VARD(msg);
+  }
+  else
+  {
+    LOG_VART(msg);
+  }
 
   long version = ElementData::VERSION_EMPTY;
   version = item.get("version", version);
@@ -406,7 +473,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   // Construct Way
   WayPtr pWay(
     new Way(
-      _defaultStatus, id, _defaultCircErr, changeset, version, timestamp,
+      _defaultStatus, newId, _defaultCircErr, changeset, version, timestamp,
       QString::fromStdString(user), uid));
 
   // Add nodes
@@ -417,7 +484,32 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
     while (nodeIt != nodes.end())
     {
       long v = nodeIt->second.get_value<long>();
-      pWay->addNode(v);
+      LOG_VART(v);
+
+      const bool nodePresent = _nodeIdMap.contains(v);
+      LOG_VART(nodePresent);
+      if (!nodePresent)
+      {
+        _missingNodeCount++;
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN(
+            "Missing " << ElementId(ElementType::Node, v) << " in " <<
+            ElementId(ElementType::Way, newId) << ".");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+      }
+      else
+      {
+        long newRef = _nodeIdMap.value(v);
+        LOG_TRACE("Adding way node: " << newRef << "...");
+        pWay->addNode(newRef);
+      }
+
       ++nodeIt;
     }
   }
@@ -428,6 +520,8 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   // Add way to map
   _map->addWay(pWay);
 
+  LOG_TRACE("Loaded way: " << pWay);
+
   _numRead++;
   if (_numRead % _statusUpdateInterval == 0)
   {
@@ -437,12 +531,37 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
 
 void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
 {
+  const long debugId = 0;
+
   // Get info we need to construct our relation
-  long id = -1;
+  long id = item.get("id", id);
+
+  if (_relationIdMap.contains(id))
+  {
+    throw HootException(
+      QString("Duplicate realtion id %1 in map %2 encountered.").arg(id).arg(_path));
+  }
+
+  long newId;
   if (_useDataSourceIds)
-    id = item.get("id", id);
+  {
+    newId = id;
+  }
   else
-    id = _map->createNextRelationId();
+  {
+    newId = _map->createNextRelationId();
+  }
+  _relationIdMap.insert(id, newId);
+
+  const QString msg = "Reading " + ElementId(ElementType::Relation, newId).toString() + "...";
+  if (newId == debugId)
+  {
+    LOG_VARD(msg);
+  }
+  else
+  {
+    LOG_VART(msg);
+  }
 
   long version = ElementData::VERSION_EMPTY;
   version = item.get("version", version);
@@ -458,7 +577,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   // Construct Relation
   RelationPtr pRelation(
     new Relation(
-      _defaultStatus, id, _defaultCircErr, "", changeset, version, timestamp,
+      _defaultStatus, newId, _defaultCircErr, "", changeset, version, timestamp,
       QString::fromStdString(user), uid));
 
   // Add members
@@ -472,9 +591,80 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       long ref = memberIt->second.get("ref", -1l); // default -1 ?
       string role = memberIt->second.get("role", string(""));
 
-      pRelation->addElement(QString::fromStdString(role),
-                            ElementType::fromString(QString::fromStdString(typeStr)),
-                            ref);
+      bool okToAdd = false;
+      if (typeStr == "node")
+      {
+        const bool memberPresent = _nodeIdMap.contains(ref);
+        if (!memberPresent)
+        {
+          _missingNodeCount++;
+          if (logWarnCount < Log::getWarnMessageLimit())
+          {
+            LOG_WARN(
+              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
+              ElementId(ElementType::Relation, newId) << ".");
+          }
+          else if (logWarnCount == Log::getWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
+        }
+        else
+        {
+          okToAdd = true;
+        }
+      }
+      else if (typeStr == "way")
+      {
+        const bool memberPresent = _wayIdMap.contains(ref);
+        if (!memberPresent)
+        {
+          _missingWayCount++;
+          if (logWarnCount < Log::getWarnMessageLimit())
+          {
+            LOG_WARN(
+              "Missing " << ElementId(ElementType::Way, ref) << " in " <<
+              ElementId(ElementType::Relation, newId) << ".");
+          }
+          else if (logWarnCount == Log::getWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
+        }
+        else
+        {
+          okToAdd = true;
+        }
+      }
+      else if (typeStr == "relation")
+      {
+        ref = _getRelationId(ref);
+        okToAdd = true;
+      }
+      else
+      {
+        if (logWarnCount < Log::getWarnMessageLimit())
+        {
+          LOG_WARN("Found a relation member with unexpected type: " << typeStr << " in relation ("
+                     << id << ")");
+        }
+        else if (logWarnCount == Log::getWarnMessageLimit())
+        {
+          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+        }
+        logWarnCount++;
+        okToAdd = false;
+      }
+
+      if (okToAdd)
+      {
+        LOG_TRACE("Adding relation relation member: " << ref << "...");
+        pRelation->addElement(QString::fromStdString(role),
+                              ElementType::fromString(QString::fromStdString(typeStr)), ref);
+      }
+
       ++memberIt;
     }
   }
@@ -485,11 +675,36 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   // Add relation to map
   _map->addRelation(pRelation);
 
+  LOG_TRACE("Loaded relation: " << pRelation);
+
   _numRead++;
   if (_numRead % _statusUpdateInterval == 0)
   {
     PROGRESS_INFO("Read " << StringUtils::formatLargeNumber(_numRead) << " elements from input.");
   }
+}
+
+long OsmJsonReader::_getRelationId(long fileId)
+{
+  long newId;
+  if (_useDataSourceIds)
+  {
+    newId = fileId;
+    _relationIdMap.insert(fileId, newId);
+  }
+  else
+  {
+    if (_relationIdMap.find(fileId) == _relationIdMap.end())
+    {
+      newId = _map->createNextRelationId();
+      _relationIdMap.insert(fileId, newId);
+    }
+    else
+    {
+      newId = _relationIdMap[fileId];
+    }
+  }
+  return newId;
 }
 
 void OsmJsonReader::_addTags(const boost::property_tree::ptree& item, hoot::ElementPtr pElement)

@@ -79,7 +79,9 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
   }
   else
   {
-    Coordinate last = _map->getNode(way->getNodeId(0))->toCoordinate();
+    ConstNodePtr lastNode = _map->getNode(way->getNodeId(0));
+    LOG_VART(lastNode);
+    Coordinate last = lastNode->toCoordinate();
 
     _segmentIndex = way->getNodeCount() - 1;
     _segmentFraction = 0;
@@ -87,6 +89,7 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
     for (size_t i = 1; i < way->getNodeCount(); i++)
     {
       ConstNodePtr n = _map->getNode(_way->getNodeId(i));
+      LOG_VART(n.get());
       Coordinate next = n->toCoordinate();
       double delta = next.distance(last);
       last = next;

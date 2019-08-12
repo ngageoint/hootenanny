@@ -66,6 +66,8 @@ using namespace std;
 namespace hoot
 {
 
+int ElementConverter::logWarnCount = 0;
+
 ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
   _constProvider(provider),
   _spatialReference(provider->getProjection())
@@ -190,12 +192,18 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
 
   for (size_t i = 0; i < ids.size(); i++)
   {
-    LOG_VART(ids[1]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
-    LOG_VART(n.get());
     if (!n.get())
     {
-      LOG_TRACE("Missing node: " << ids[i] << ". Not creating line string...");
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Missing node: " << ids[i] << ". Not creating line string...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), i);
@@ -207,7 +215,15 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
     ConstNodePtr n = _constProvider->getNode(ids[0]);
     if (!n.get())
     {
-      LOG_TRACE("Missing node: " << ids[0] << ". Not creating line string...");
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Missing node: " << ids[0] << ". Not creating line string...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
       return std::shared_ptr<LineString>();
     }
     cs->setAt(n->toCoordinate(), 1);

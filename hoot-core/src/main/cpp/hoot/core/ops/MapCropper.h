@@ -65,6 +65,8 @@ class MapCropper : public OsmMapOperation, public Serializable, public Boundable
 {
 public:
 
+  static int logWarnCount;
+
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();

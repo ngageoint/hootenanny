@@ -307,6 +307,7 @@ std::shared_ptr<ConflatableElementCriterion> ChangesetReplacementCreator::_valid
 OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
 {
   LOG_DEBUG("Loading ref map: " << input << "...");
+
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
     _loadRefKeepEntireCrossingBounds);
@@ -316,11 +317,14 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     _loadRefKeepImmediateConnectedWaysOutsideBounds);
+
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
+
   LOG_VARD(MapProjector::toWkt(refMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
+
   return refMap;
 }
 
@@ -384,6 +388,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
 OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 {
   LOG_DEBUG("Loading sec map: " << input << "...");
+
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
     _loadSecKeepEntireCrossingBounds);
@@ -392,11 +397,14 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
     _loadSecKeepOnlyInsideBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+
   OsmMapPtr secMap(new OsmMap());
   secMap->setName("sec");
   IoUtils::loadMap(secMap, input, false, Status::Unknown2);
+
   LOG_VARD(MapProjector::toWkt(secMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
+
   return secMap;
 }
 

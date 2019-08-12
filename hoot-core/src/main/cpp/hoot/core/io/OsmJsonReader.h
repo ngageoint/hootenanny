@@ -285,6 +285,15 @@ protected:
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 
+  /// Maps from old node ids to new node ids.
+  QHash<long, long> _nodeIdMap;
+  QHash<long, long> _relationIdMap;
+  QHash<long, long> _wayIdMap;
+
+  int _missingNodeCount;
+  int _missingWayCount;
+  QString _path;
+
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
    * @param jsonStr String to load
@@ -339,6 +348,8 @@ protected:
   void _doHttpRequestFunc();
 
   void _readToMap();
+
+  long _getRelationId(long fileId);
 };
 
 }
