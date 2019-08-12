@@ -494,8 +494,6 @@ public class GrailResource {
         String input2 = reqParams.getInput2();
 
         JSONObject json = new JSONObject();
-        //We store the mapid here because it was the best solution to getting the referenceId during differential push
-        //This acts as a trigger to tell the differentialpush endpoint if we will do a rails port data refresh
         String mainJobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         json.put("jobid", mainJobId);
 

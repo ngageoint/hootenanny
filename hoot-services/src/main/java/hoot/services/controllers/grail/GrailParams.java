@@ -201,7 +201,7 @@ public class GrailParams {
                 ", input1='" + input1 + '\'' +
                 ", input2='" + input2 + '\'' +
                 ", output='" + output + '\'' +
-                ", folder='" + parentId + '\'' +
+                ", parentId='" + parentId + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
                 ", maxBBoxSize='" + maxSize + '\'' +
