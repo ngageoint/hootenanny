@@ -90,7 +90,8 @@ class OsmMapTest : public HootTestFixture
 
 public:
 
-  OsmMapTest() : HootTestFixture("test-files/elements/", "test-output/elements/")
+  OsmMapTest() :
+  HootTestFixture("test-files/elements/OsmMapTest/", "test-output/elements/OsmMapTest/")
   {
     setResetType(ResetBasic);
   }
@@ -646,21 +647,14 @@ public:
 
     map->replace(w1, newWays);
 
+    const QString testFileName = "runReplaceListTest1.json";
     OsmJsonWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    const QString actual = writer.toString(map);
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
-      "}\n",
-      actual);
-    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**
@@ -684,16 +678,14 @@ public:
 
     map->replace(w1, newNodes);
 
+    const QString testFileName = "runReplaceListTest2.json";
     OsmJsonWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    const QString actual = writer.toString(map);
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"node\",\"id\":3,\"lat\":0,\"lon\":0},\n"
-      "{\"type\":\"node\",\"id\":2,\"lat\":0,\"lon\":0},\n"
-      "{\"type\":\"node\",\"id\":1,\"lat\":0,\"lon\":0}]\n"
-      "}\n",
-      actual);
-    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**

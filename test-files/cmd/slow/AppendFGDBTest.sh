@@ -3,7 +3,7 @@ set -e
 
 HOOT_OPT="--error"
 
-INPUT_OSM=test-files/elements/OsmMapAppendTest.osm
+INPUT_OSM=test-files/elements/OsmMapTest/OsmMapAppendTest.osm
 
 # We are making a FGDB. we need a clean directory
 OUTPUT_DIR=test-output/cmd/slow/AppendFGDBTest

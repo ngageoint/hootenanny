@@ -83,7 +83,10 @@ class BuildingMergerTest : public HootTestFixture
 
 public:
 
-  BuildingMergerTest() : HootTestFixture("test-files/", "test-output/conflate/polygon/")
+  BuildingMergerTest() :
+  HootTestFixture(
+    "test-files/conflate/polygon/BuildingMergerTest/",
+    "test-output/conflate/polygon/BuildingMergerTest/")
   {
     setResetType(ResetBasic);
   }
@@ -122,9 +125,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
+    reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
+    reader.read("test-files/ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 =
@@ -154,9 +157,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "conflate/unified/AllDataTypesA.osm", map);
+    reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "conflate/unified/AllDataTypesB.osm", map);
+    reader.read("test-files/conflate/unified/AllDataTypesB.osm", map);
 
     vector<long> wids1 =
       ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "Panera");
@@ -176,37 +179,17 @@ public:
 
     BuildingMerger bm(pairs);
     bm.apply(map, replaced);
-
     HOOT_STR_EQUALS("[3]{(Way(-26), Relation(-1)), (Way(-25), Relation(-1)), (Way(-14), Relation(-1))}",
                     replaced);
+
+    const QString testFileName = "runTagTest.json";
     OsmJsonWriter writer(8);
     writer.setIncludeCompatibilityTags(false);
-    const QString actual = writer.toString(map);
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-218,\"lat\":39.593278,\"lon\":-104.80656},\n"
-                    "{\"type\":\"node\",\"id\":-219,\"lat\":39.593114,\"lon\":-104.80653},\n"
-                    "{\"type\":\"node\",\"id\":-220,\"lat\":39.593124,\"lon\":-104.80645},\n"
-                    "{\"type\":\"node\",\"id\":-221,\"lat\":39.593106,\"lon\":-104.80644},\n"
-                    "{\"type\":\"node\",\"id\":-222,\"lat\":39.593114,\"lon\":-104.8064},\n"
-                    "{\"type\":\"node\",\"id\":-223,\"lat\":39.593115,\"lon\":-104.80635},\n"
-                    "{\"type\":\"node\",\"id\":-224,\"lat\":39.593291,\"lon\":-104.80637},\n"
-                    "{\"type\":\"node\",\"id\":-225,\"lat\":39.593307,\"lon\":-104.80638},\n"
-                    "{\"type\":\"node\",\"id\":-226,\"lat\":39.593279,\"lon\":-104.80647},\n"
-                    "{\"type\":\"node\",\"id\":-227,\"lat\":39.593297,\"lon\":-104.80625},\n"
-                    "{\"type\":\"node\",\"id\":-228,\"lat\":39.593303,\"lon\":-104.80612},\n"
-                    "{\"type\":\"node\",\"id\":-229,\"lat\":39.593127,\"lon\":-104.80609},\n"
-                    "{\"type\":\"node\",\"id\":-230,\"lat\":39.593124,\"lon\":-104.80611},\n"
-                    "{\"type\":\"node\",\"id\":-231,\"lat\":39.593152,\"lon\":-104.80613},\n"
-                    "{\"type\":\"node\",\"id\":-232,\"lat\":39.593143,\"lon\":-104.80622},\n"
-                    "{\"type\":\"node\",\"id\":-233,\"lat\":39.593122,\"lon\":-104.80621},\n"
-                    "{\"type\":\"way\",\"id\":-26,\"nodes\":[-224,-227,-228,-229,-230,-231,-232,-233,-223,-224],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-25,\"nodes\":[-218,-219,-220,-221,-222,-223,-224,-225,-226,-218],\"tags\":{\"" + MetadataTags::BuildingPart() + "\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"relation\",\"id\":-1,\"members\":[\n"
-                    "{\"type\":\"way\",\"ref\":-26,\"role\":\"part\"},\n"
-                    "{\"type\":\"way\",\"ref\":-25,\"role\":\"part\"}],\"tags\":{\"name\":\"Panera Bread\",\"alt_name\":\"Maid-Rite;Maid-Rite Diner\",\"" + MetadataTags::HootBuildingMatch() + "\":\"true\",\"building\":\"yes\",\"" + MetadataTags::Ref1() + "\":\"Panera\",\"" + MetadataTags::Ref2() + "\":\"Panera\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
-                    "}\n",
-                    actual);
-    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   void runKeepMoreComplexGeometryWhenAutoMergingTest1()
@@ -279,9 +262,9 @@ private:
   {
     OsmXmlReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "ToyBuildingsTestA.osm", map);
+    reader.read("test-files/ToyBuildingsTestA.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "ToyBuildingsTestB.osm", map);
+    reader.read("test-files/ToyBuildingsTestB.osm", map);
     MapProjector::projectToPlanar(map);
 
     vector<long> wids1 =

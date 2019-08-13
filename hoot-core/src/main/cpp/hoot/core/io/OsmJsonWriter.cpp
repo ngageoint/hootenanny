@@ -204,7 +204,7 @@ void OsmJsonWriter::_writeMetadata(const Element& element)
 
 void OsmJsonWriter::_writeNodes()
 {
-  const long debugId = -25928;
+  const long debugId = 0;
 
   QList<long> nids;
   const NodeMap& nodes = _map->getNodes();
@@ -213,7 +213,7 @@ void OsmJsonWriter::_writeNodes()
     nids.append(it->first);
   }
   // sort the values to give consistent results.
-  qSort(nids.begin(), nids.end(), qGreater<long>());
+  qSort(nids.begin(), nids.end(), qLess<long>());
   for (int i = 0; i < nids.size(); i++)
   {
     ConstNodePtr n = _map->getNode(nids[i]);
@@ -311,7 +311,7 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 
 void OsmJsonWriter::_writeWays()
 {
-  const long debugId = -3047;
+  const long debugId = 0;
 
   QList<long> wids;
   const WayMap& ways = _map->getWays();
@@ -320,7 +320,7 @@ void OsmJsonWriter::_writeWays()
     wids.append(it->first);
   }
   // sort the values to give consistent results.
-  qSort(wids.begin(), wids.end(), qGreater<long>());
+  qSort(wids.begin(), wids.end(), qLess<long>());
 
   for (int i = 0; i < wids.size(); i++)
   {
@@ -380,7 +380,7 @@ void OsmJsonWriter::_writeRelations()
   }
 
   // sort the values to give consistent results.
-  qSort(rids.begin(), rids.end(), qGreater<long>());
+  qSort(rids.begin(), rids.end(), qLess<long>());
 
   for (int i = 0; i < rids.size(); i++)
   {

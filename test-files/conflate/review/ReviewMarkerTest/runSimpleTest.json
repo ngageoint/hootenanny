@@ -1,0 +1,7 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":1,"lat":0,"lon":0,"tags":{"uuid":"n1"}},
+{"type":"node","id":2,"lat":0,"lon":0,"tags":{"uuid":"n2"}},
+{"type":"relation","id":-1,"members":[
+{"type":"node","ref":1,"role":"reviewee"},
+{"type":"node","ref":2,"role":"reviewee"}],"tags":{"hoot:review:type":"test","hoot:review:note":"a note","hoot:review:members":"2","hoot:review:needs":"yes","hoot:review:score":"-1"}}]
+}

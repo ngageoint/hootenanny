@@ -35,6 +35,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/rnd/visitors/RemoveRef2Visitor.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/util/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -52,8 +53,8 @@ class RemoveRef2VisitorTest : public HootTestFixture
 public:
 
   RemoveRef2VisitorTest()
-    : HootTestFixture("test-files/rnd/visitors/",
-                      UNUSED_PATH)
+    : HootTestFixture("test-files/rnd/visitors/RemoveRef2VisitorTest/",
+                      "test-output/rnd/visitors/RemoveRef2VisitorTest/")
   {
     setResetType(ResetAll);
   }
@@ -68,26 +69,15 @@ public:
     v.addCriterion(c);
     map->visitRw(v);
 
+    const QString testFileName = "runToyTest.json";
     OsmJsonWriter writer(8);
     writer.setIncludeCompatibilityTags(false);
-    const QString actual = writer.toString(map);
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-861027,\"lat\":37.801158,\"lon\":-122.41708},\n"
-                    "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"
-                    "{\"type\":\"node\",\"id\":-861035,\"lat\":37.801179,\"lon\":-122.41703},\n"
-                    "{\"type\":\"node\",\"id\":-861038,\"lat\":37.801294,\"lon\":-122.41694},\n"
-                    "{\"type\":\"node\",\"id\":-861054,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"" + MetadataTags::Ref1() + "\":\"A\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861077,\"lat\":37.80112,\"lon\":-122.41676,\"tags\":{\"" + MetadataTags::Ref2() + "\":\"none\",\"poi\":\"yes\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861082,\"lat\":37.801247,\"lon\":-122.41672,\"tags\":{\"amenity\":\"restaurant\",\"" + MetadataTags::Ref2() + "\":\"none\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861083,\"lat\":37.801263,\"lon\":-122.41673,\"tags\":{\"amenity\":\"restaurant\",\"" + MetadataTags::Ref1() + "\":\"C\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"highway\":\"road\",\"" + MetadataTags::Ref2() + "\":\"B\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"highway\":\"road\",\"" + MetadataTags::Ref1() + "\":\"B\",\"" + MetadataTags::ErrorCircular() + "\":\"15\"}}]\n"
-                    "}\n",
-                    actual);
-    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveRef2VisitorTest, "quick");

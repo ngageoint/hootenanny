@@ -35,6 +35,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/rnd/visitors/RemoveRef2VisitorMultipleCriterion.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/util/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>
@@ -53,8 +54,8 @@ class RemoveRef2VisitorMultipleCriterionTest : public HootTestFixture
 public:
 
   RemoveRef2VisitorMultipleCriterionTest()
-    : HootTestFixture("test-files/rnd/visitors/",
-                      UNUSED_PATH)
+    : HootTestFixture("test-files/rnd/visitors/RemoveRef2VisitorMultipleCriterionTest/",
+                      "test-output/rnd/visitors/RemoveRef2VisitorMultipleCriterionTest/")
   {
     setResetType(ResetAll);
   }
@@ -72,25 +73,14 @@ public:
     v.addCriterion(chainCrit);
     map->visitRw(v);
 
+    const QString testFileName = "runToyTest1.json";
     OsmJsonWriter writer(8);
     writer.setIncludeCompatibilityTags(false);
-    const QString actual = writer.toString(map);
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-861027,\"lat\":37.801158,\"lon\":-122.41708},\n"
-                    "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"
-                    "{\"type\":\"node\",\"id\":-861035,\"lat\":37.801179,\"lon\":-122.41703},\n"
-                    "{\"type\":\"node\",\"id\":-861038,\"lat\":37.801294,\"lon\":-122.41694},\n"
-                    "{\"type\":\"node\",\"id\":-861054,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"B\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"A\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861056,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"C\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861057,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"none\",\"error:circular\":\"15\"}}]\n"
-                    "}\n",
-                    actual);
-    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   void runToyTest2()
@@ -106,25 +96,14 @@ public:
     v.addCriterion(chainCrit);
     map->visitRw(v);
 
+    const QString testFileName = "runToyTest2.json";
     OsmJsonWriter writer(8);
     writer.setIncludeCompatibilityTags(false);
-    const QString actual = writer.toString(map);
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                    "{\"type\":\"node\",\"id\":-861027,\"lat\":37.801158,\"lon\":-122.41708},\n"
-                    "{\"type\":\"node\",\"id\":-861032,\"lat\":37.80132,\"lon\":-122.41689},\n"
-                    "{\"type\":\"node\",\"id\":-861035,\"lat\":37.801179,\"lon\":-122.41703},\n"
-                    "{\"type\":\"node\",\"id\":-861038,\"lat\":37.801294,\"lon\":-122.41694},\n"
-                    "{\"type\":\"node\",\"id\":-861054,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"B\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861055,\"lat\":37.801128,\"lon\":-122.41674,\"tags\":{\"REF2\":\"none\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861056,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF1\":\"C\",\"poi\":\"yes\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"node\",\"id\":-861057,\"lat\":37.801136,\"lon\":-122.41677,\"tags\":{\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861037,\"nodes\":[-861035,-861038],\"tags\":{\"building\":\"yes\",\"REF1\":\"A\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861031,\"nodes\":[-861027,-861032],\"tags\":{\"REF2\":\"D\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861030,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"C\",\"error:circular\":\"15\"}},\n"
-                    "{\"type\":\"way\",\"id\":-861029,\"nodes\":[-861027,-861032],\"tags\":{\"building\":\"yes\",\"REF2\":\"B\",\"error:circular\":\"15\"}}]\n"
-                    "}\n",
-                    actual);
-    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
 };
