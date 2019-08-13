@@ -331,10 +331,10 @@ ggdm30.rules = {
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'HYCD':'hydraulic_conductivity', // Hydraulic Conductivity
     'KVA':'voltage', // Power Line Maximum Voltage
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LCA':'crane:lifting_capacity', // Lifting Capacity
     // 'LCN':'raw:LCN', // Light Characteristic Number - BC040_LCN
     'LDC':'length:crest', // Dam Crest Length
@@ -1852,12 +1852,12 @@ ggdm30.rules = {
 
     // EET - Engineered Earthwork Type
     // ['EET','-999999',undefined,undefined], // No Information
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3','military','trench'], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // ESC - Elevation Surface Category
     // ['ESC','-999999',undefined,undefined], // No Information

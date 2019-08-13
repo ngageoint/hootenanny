@@ -142,10 +142,10 @@ ufd = {
         'GAW':'gauge', // Gauge Width
         'HGT':'height', // Height Above Surface Level
         'KVA':'voltage', // Kilovolt Capacity Attribute
-        'LC1':'bridge:load_class1', // Load Class Type 1
-        'LC2':'bridge:load_class2', // Load Class Type 2
-        'LC3':'bridge:load_class3', // Load Class Type 3
-        'LC4':'bridge:load_class4', // Load Class Type 4
+        'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+        'LC2':'mlc:wheeled', // Load Class Type 2
+        'LC3':'mlc:tracked_oneway', // Load Class Type 3
+        'LC4':'mlc:tracked', // Load Class Type 4
         'LEG':'length', // Length/Diameter in Meters With Greater Precision
         'LEN':'length', // Length
         'LEN_':'length2', // Length/Diameter2 ?????
@@ -3675,12 +3675,7 @@ function translateToOsm(attrs, layerName, geometryType)
     tags = {};
 
     // Debug:
-    if (ufd.configIn.OgrDebugDumptags == 'true')
-    {
-        print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
-        var kList = Object.keys(attrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-    }
+    if (ufd.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // pre processing
     ufd.applyToOsmPreProcessing(attrs, layerName, geometryType);
@@ -3733,11 +3728,8 @@ function translateToOsm(attrs, layerName, geometryType)
     // Debug:
     if (ufd.configIn.OgrDebugDumptags == 'true')
     {
-        var kList = Object.keys(notUsedAttrs).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-        var kList = Object.keys(tags).sort()
-        for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+        translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+        translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
         print('');
     }
 

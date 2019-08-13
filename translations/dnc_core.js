@@ -1324,12 +1324,7 @@ dnc = {
             dnc.toChange = hoot.Settings.get("schema.translation.override");
         }
         // Debug:
-        if (dnc.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (dnc.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
@@ -1347,8 +1342,7 @@ dnc = {
             // Debug:
             if (dnc.configIn.OgrDebugDumptags == 'true')
             {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
                 print('');
             }
 
@@ -1426,10 +1420,8 @@ dnc = {
         // Debug:
         if (dnc.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(notUsedAttrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -1478,12 +1470,7 @@ dnc = {
 
         // Start processing here
         // Debug:
-        if (dnc.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (dnc.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // Set up the fcode translation rules. We need this due to clashes between the one2one and
         // the fcode one2one rules
@@ -1565,11 +1552,7 @@ dnc = {
         } // End clean notUsedTags
 
         // Debug
-        if (dnc.configOut.OgrDebugDumptags == 'true')
-        {
-            var kList = Object.keys(notUsedTags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        }
+        if (dnc.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // Now check for invalid feature geometry
         // E.g. If the spec says a runway is a polygon and we have a line, throw error and
@@ -1668,11 +1651,7 @@ dnc = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (dnc.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (dnc.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
             // We want to keep the hoot:id if present
             if (tags['hoot:id'])
@@ -1735,10 +1714,7 @@ dnc = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                //for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++)
-                    if (returnData[i]['attrs'][kList[j]]) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }

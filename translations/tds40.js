@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -227,7 +227,7 @@ tds40 = {
         // Add the empty Review layers
         newSchema = translate.addReviewFeature(newSchema);
 
-        // Debugging:
+        // Debug:
         // translate.dumpSchema(newSchema);
 
         return newSchema;
@@ -252,8 +252,8 @@ tds40 = {
 
         if (attrList != undefined)
         {
-            for (var val in attrs)
-            {
+           for (var val in attrs)
+           {
                 if (attrList.indexOf(val) == -1)
                 {
                     if (val in othList)
@@ -284,12 +284,11 @@ tds40 = {
                         }
                         else
                         {
+                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds40.rules.txtLength[val] + ' characters.');
                             // Still too long. Chop to the maximum length
                             attrs[val] = tStr[0].substring(0,tds40.rules.txtLength[val]);
-                            hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' long. Truncating to ' + tds40.rules.txtLength[val] + ' characters.');
                         }
                     } // End text attr length > max length
-                    // It's text fo skip the next test
                     continue;
                 } // End in txtLength
             } // End attrs loop
@@ -328,7 +327,7 @@ tds40 = {
             var enumName = feature.columns[i].name;
 
             // Skip stuff that is missing and will end up as a default value
-            if (!(attrs[enumName])) continue;
+            if (! attrs[enumName]) continue;
 
             var attrValue = attrs[enumName];
             var enumList = feature.columns[i].enumerations;
@@ -386,7 +385,6 @@ tds40 = {
     // This is generally for Roads, Railways, bridges, tunnels etc
     manyFeatures: function(geometryType, tags, attrs)
     {
-
         // Add the first feature to the structure that we return
         var returnData = [{attrs:attrs, tableName:''}];
 
@@ -425,6 +423,7 @@ tds40 = {
                     case 'steps':
                     case 'path':
                     case 'bridleway':
+                    case 'cycleway':
                         newAttributes.TRS = '9'; // Transport Type = Pedestrian
                         break;
 
@@ -518,8 +517,8 @@ tds40 = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds40.rules.numBiased, 'backward',tds40.rules.intList);
-            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds40.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds40.rules.numBiased,'backward',tds40.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds40.rules.txtBiased,'backward');
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds40.lookup, tds40.fcodeLookup);
@@ -532,7 +531,6 @@ tds40 = {
 
         return returnData;
     }, // End manyFeatures
-
 
     // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
     // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
@@ -624,16 +622,15 @@ tds40 = {
     }, // End untangleAttributes
 
 
+// #####################################################################################################
     // ##### Start of the xxToOsmxx Block #####
     applyToOsmPreProcessing: function(attrs, layerName, geometryType)
     {
         // Drop the FCSUBTYPE since we don't use it
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
-
-
         // List of data values to drop/ignore
-        var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
+        var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
         // List of attributes that can't have '0' as a value
         var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
@@ -644,7 +641,7 @@ tds40 = {
         // 3) Swap some of the funky named attrs around
         for (var col in attrs)
         {
-            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // slightly ugly but we would like to account for: 'No Information','noInformation' etc
             // First, push to lowercase
             var attrValue = attrs[col].toString().toLowerCase();
 
@@ -662,7 +659,7 @@ tds40 = {
             if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
             {
                 delete attrs[col];
-                continue
+                continue;
             }
 
             // Push the attribute to upper case - if needed
@@ -675,11 +672,11 @@ tds40 = {
             }
 
             // Now see if we need to swap attr names
-            if (col in tds40.rules.swapList)
+            if (col in tds40.rules.swapListIn)
             {
                 // Debug:
                 // print('Swapped: ' + tds40.rules.swapList[i]);
-                attrs[tds40.rules.swapList[col]] = attrs[col];
+                attrs[tds40.rules.swapListIn[col]] = attrs[col];
                 delete attrs[col];
                 continue;
             }
@@ -698,8 +695,7 @@ tds40 = {
             }
         } // End in attrs loop
 
-        // Drop all of the XXX Closure default values IFF the associated attributes are
-        // not set
+        // Drop all of the XXX Closure default values IFF the associated attributes are not set
         // Doing this after the main cleaning loop so all of the -999999 values are
         // already gone and we can just check for existance
         for (var i in tds40.rules.closureList)
@@ -717,6 +713,7 @@ tds40 = {
             }
         } // End closureList
 
+        // Now find an F_CODE
         if (attrs.F_CODE)
         {
             // Drop the the "Not Found" F_CODE. This is from the UI
@@ -748,6 +745,8 @@ tds40 = {
 
     }, // End of applyToOsmPreProcessing
 
+
+// #####################################################################################################
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
         // Unpack the ZI006_MEM field
@@ -767,7 +766,7 @@ tds40 = {
                 }
             }
 
-            if (tObj.text !== '')
+            if (tObj.text && tObj.text !== '')
             {
                 tags.note = tObj.text;
             }
@@ -776,69 +775,6 @@ tds40 = {
                 delete tags.note;
             }
         } // End unpack tags.note
-
-     /* Now sort out Roads
-        HCT, TYP, RTY etc are related. No easy way to use one2one rules
-
-        HCT : Thoroughfare Class - TDS 3.0
-        TYP ; Thoroughfare Type - TDS 3.0 & 4.0
-        RTN_ROI: Route Designation - TDS 4.0
-        RIN_ROI: Route Designation - TDS 5.0 & 6.0
-        RTY: Roadway Type - TDS 5.0 & 6.0
-
-        TDS3   TDS4       TDS5       TDS6
-        HCT -> RTN_ROI -> RIN_ROI -> RIN_ROI
-        TYP -> TYP     -> RTY     -> RTY
-     */
-        if (attrs.F_CODE == 'AP030') // Make sure we have a road
-        {
-            // Set a Default: "It is a road but we don't know what it is"
-            tags.highway = 'road';
-
-            // Top level
-            if (tags['ref:road:type'] == 'motorway'
-                || tags['ref:road:class'] == 'national_motorway')
-            {
-                tags.highway = 'motorway';
-            }
-            else if (tags['ref:road:type'] == 'limited_access_motorway'
-                || tags['ref:road:class'] == 'primary')
-            {
-                tags.highway = 'trunk';
-            }
-            else if (tags['ref:road:class'] == 'secondary'
-                || tags['ref:road:type'] == 'parkway')
-            {
-                tags.highway = 'primary';
-            }
-            else if (tags['ref:road:class'] == 'local')
-            {
-                tags.highway = 'secondary';
-            }
-            else if (tags['ref:road:type'] == 'road'
-                || tags['ref:road:type'] == 'boulevard')
-            {
-                tags.highway = 'tertiary';
-            }
-            else if (tags['ref:road:type'] == 'street')
-            {
-                tags.highway = 'unclassified';
-            }
-            else if (tags['ref:road:type'] == 'lane')
-            {
-                tags.highway = 'service';
-            }
-            // Other should get picked up by the OTH field
-            else if (tags['ref:road:type'] == 'other')
-            {
-                tags.highway = 'road';
-            }
-            // Catch all for the rest of the ref:road:type: close, circle drive etc
-            else if (tags['ref:road:type'])
-            {
-                tags.highway = 'residential';
-            }
-       } // End if AP030
 
         // Add the LayerName to the source
         if ((! tags.source) && layerName !== '') tags.source = 'tdsv40:' + layerName.toLowerCase();
@@ -852,7 +788,6 @@ tds40 = {
         {
             if (tds40.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
         }
-
 
         if (tds40.osmPostRules == undefined)
         {
@@ -903,8 +838,116 @@ tds40 = {
         {
             if (tds40.osmPostRules[i][0](tags)) tds40.osmPostRules[i][1](tags,attrs);
         }
-
         // ##############
+
+        // Additional rules for particular FCODE's
+        switch (attrs.F_CODE)
+        {
+            case undefined: // Break early if no value. Should not get here.....
+                break;
+
+            case 'AP030':
+                /* Now sort out Roads
+                HCT, TYP, RTY etc are related. No easy way to use one2one rules
+
+                HCT : Thoroughfare Class - TDS 3.0
+                TYP ; Thoroughfare Type - TDS 3.0 & 4.0
+                RTN_ROI: Route Designation - TDS 4.0
+                RIN_ROI: Route Designation - TDS 5.0 & 6.0
+                RTY: Roadway Type - TDS 5.0 & 6.0
+
+                TDS3   TDS4       TDS5       TDS6
+                HCT -> RTN_ROI -> RIN_ROI -> RIN_ROI
+                TYP -> TYP     -> RTY     -> RTY
+                */
+
+                // Set a Default: "It is a road but we don't know what it is"
+                tags.highway = 'road';
+
+                // This was a heap of if, else if, else if etc
+                if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
+                {
+                    tags.highway = 'motorway';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
+                {
+                    tags.highway = 'trunk';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'parkway' || tags['ref:road:class'] == 'secondary')
+                {
+                    tags.highway = 'primary';
+                    break;
+                }
+
+                if (tags['ref:road:class'] == 'local')
+                {
+                    tags.highway = 'secondary';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'road' || tags['ref:road:type'] == 'boulevard')
+                {
+                    tags.highway = 'tertiary';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'street')
+                {
+                    tags.highway = 'unclassified';
+                    break;
+                }
+                
+                if (tags['ref:road:type'] == 'lane')
+                {
+                    tags.highway = 'service';
+                    break;
+                }
+
+                // Other should get picked up by the OTH field
+                if (tags['ref:road:type'] == 'other')
+                {
+                    tags.highway = 'road';
+                    break;
+                }
+                
+                // Catch all for the rest of the ref:road:type: close, circle drive etc
+                if (tags['ref:road:type'])
+                {
+                    tags.highway = 'residential';
+                    break;
+                }
+
+                // If we get this far then we are going with the default.
+                break;
+            
+            case 'AA052': // Fix oil/gas/petroleum fields
+                switch (tags.product)
+                {
+                    case undefined:
+                        break;
+
+                    case 'gas':
+                        tags.industrial = 'gas';
+                        break;
+
+                    case 'petroleum':
+                        tags.industrial = 'oil';
+                        break;
+                }
+                break;
+
+            // AK030 - Amusement Parks
+            // F_CODE translation == tourism but FFN translation could be leisure
+            // E.g. water parks
+            case 'AK030':
+                if (tags.leisure && tags.tourism) delete tags.tourism;
+                break;
+
+        } // End switch F_CODE
 
         // Road & Railway Crossings
         // Road/Rail = crossing
@@ -915,11 +958,11 @@ tds40 = {
             {
                 tags.railway = 'crossing';
 
-                if (tags['transport:type2'] == 'road') tags.railway = 'level_crossing';
+                if (tags['transport:type:2'] == 'road') tags.railway = 'level_crossing';
             }
             else if (tags['transport:type'] == 'road')
             {
-                if (tags['transport:type2'] == 'railway')
+                if (tags['transport:type:2'] == 'railway')
                 {
                     tags.railway = 'level_crossing';
                 }
@@ -930,22 +973,14 @@ tds40 = {
             }
         } // End crossing_point
 
-
-        // Add a building tag to buildings if we don't have one
+        // Add a building tag to Buildings and Fortified Buildings if we don't have one
         // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-        if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
+        if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building)) tags.building = 'yes';
 
-        // facility list is used for translating between buildings and facilities based on use
-        // format:  "use":"building or amenity"
-        // var facilityList = {'education':'school', 'healthcare':'hospital', 'university':'university'};
-
-        // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
-        if (tags.building == 'yes' && tags.use)
+        if (tags.building == 'yes')
         {
-            if ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))
-            {
-                tags.building = 'industrial';
-            }
+            // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
+            if (tags.use && ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))) tags.building = 'industrial';
       /*
             else if (tags.use in facilityList)
             {
@@ -953,6 +988,9 @@ tds40 = {
                 // delete tags.use;
             }
        */
+
+            // Undo the blanket AL013/AL055 building assignment if required
+            if (tags.military == 'bunker') delete tags.building;
         }
 
         // Education:
@@ -980,14 +1018,10 @@ tds40 = {
             }
         }
 
-
         // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
         if (tags.facility && tags.use)
         {
-            if ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))
-            {
-                tags.man_made = 'works';
-            }
+            if ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1)) tags.man_made = 'works';
        /*
             else if (tags.use in facilityList)
             {
@@ -1020,29 +1054,6 @@ tds40 = {
                     break;
             } // End switch
         }
-
-        // Add defaults for common features
-        if (attrs.F_CODE == 'AP020' && !(tags.junction)) tags.junction = 'yes';
-        if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
-        if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
-
-        // Fix oil/gas/petroleum fields
-        if (attrs.F_CODE == 'AA052')
-        {
-            switch (tags.product)
-            {
-                case undefined:
-                    break;
-
-                case 'gas':
-                    tags.industrial = 'gas';
-                    break;
-
-                case 'petroleum':
-                    tags.industrial = 'oil';
-                    break;
-            }
-        } // End Hydrocarbons
 
         // Fix lifecycle tags
         switch (tags.condition)
@@ -1116,20 +1127,10 @@ tds40 = {
             tags.amenity = 'place_of_worship';
         }
 
-        // Fords & Roads
+        // Fords and Roads
+        // Putting this on hold
         // if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
         // if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
-
-        // AK030 - Amusement Parks
-        // F_CODE translation == tourism but FFN translation could be leisure
-        // E.g. water parks
-        if (attrs.F_CODE == 'AK030')
-        {
-            if (tags.leisure && tags.tourism)
-            {
-                delete tags.tourism;
-            }
-        }
 
         // Fix up areas
         // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area
@@ -1162,9 +1163,26 @@ tds40 = {
         }
     */
 
+        // Bunkers. Are they actually Military?
+        if (tags.man_made == 'bunker' && tags.controlling_authority)
+        {
+            if (tags.controlling_authority == 'military' || tags.controlling_authority == '')
+            {
+                // Debug
+                print('Bunker: drop man_made. military = ' + tags.military);
+                tags.military = 'bunker';
+                delete tags.man_made;
+            }
+        }
+
+        // Catch all. Particularly for Hardened Aircraft Shelters
+        if (tags.bunker_type && !(tags.man_made == 'bunker' || tags.military == 'bunker')) tags.military = 'bunker';
+
     }, // End of applyToOsmPostProcessing
 
     // ##### End of the xxToOsmxx Block #####
+
+// #####################################################################################################
 
     // ##### Start of the xxToTdsxx Block #####
 
@@ -1186,7 +1204,7 @@ tds40 = {
                 continue;
             }
 
-            // Convert "abandoned:XXX" features
+            // Convert "abandoned:XXX" and "disused:XXX"features
             if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
             {
                 // Hopeing there is only one ':' in the tag name...
@@ -1208,6 +1226,28 @@ tds40 = {
                 continue;
             }
         } // End Cleanup loop
+
+        // Fix Bunkers. Putting this first to skip the building=* rules
+        if (tags.building == 'bunker')
+        {
+            tags.military = 'bunker';
+            delete tags.building;
+        }
+
+        // Fortified buildings vs Surface Bunkers
+        if (tags.military == 'bunker')
+        {
+            // Making a guess that these are military...
+            if (! tags.controlling_authority) tags.controlling_authority = 'military';
+
+            if (tags['bunker_type'] == 'munitions')
+            {
+                attrs.F_CODE = 'AM060'; // Surface Bunker
+                attrs.PPO = '3'; // Ammunition
+                delete tags.military;
+                delete tags['bunker_type'];
+            }
+        }
 
         // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
         // repeating the code
@@ -1341,7 +1381,6 @@ tds40 = {
                 break;
         }
 
-
         if (tds40.PreRules == undefined)
         {
         // See ToOsmPostProcessing for more details about rulesList
@@ -1384,7 +1423,7 @@ tds40 = {
             ["t.power == 'generator'","t.use = 'power_generation'; a.F_CODE = 'AL013'"],
             ["t.rapids == 'yes'","t.waterway = 'rapids'; delete t.rapids"],
             ["t.railway == 'station'","t.public_transport = 'station';  t['transport:type'] = 'railway'"],
-            ["t.railway == 'level_crossing'","t['transport:type'] = 'railway';t['transport:type2'] = 'road'; a.F_CODE = 'AQ062'; delete t.railway"],
+            ["t.railway == 'level_crossing'","t['transport:type'] = 'railway';t['transport:type:2'] = 'road'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.resource","t.raw_material = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
@@ -1417,42 +1456,25 @@ tds40 = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // // Some tags imply that they are buildings but don't actually say so
-        // // Most of these are taken from raw OSM and the OSM Wiki
-        // // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-        // // are not buildings
-        // // Taking "place_of_worship" out of this and making it a building
-        // var notBuildingList = [
-        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-        //     'trailer_park','game_feeding', 'ferry_terminal'
-        //     ]; // End notBuildingList
-
-        // if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
-
         // going out on a limb and processing OSM specific tags:
         // - Building == a thing,
         // - Amenity == The area around a thing
         // Note: amenity=place_of_worship is a special case. It _should_ have an associated building tag
-        var facilityList = {
-            'school':'850', 'university':'855', 'college':'857', 'hospital':'860'
-            };
+        var facilityList = {'school':'850','university':'855','college':'857','hospital':'860'};
 
         if (tags.amenity in facilityList)
         {
             if (geometryType == 'Area')
             {
                 attrs.F_CODE = 'AL010'; // Facility
+
+                // If the user has also set a building tag, delete it
+                if (tags.building) delete tags.building;
             }
             else
             {
                 // Make sure we don't turn point facilities into buildings
-                if (!(tags.facility = 'yes'))
+                if (tags.facility !== 'yes')
                 {
                     // Debug
                     // print('Making a building: ' + tags.facility);
@@ -1461,7 +1483,7 @@ tds40 = {
             }
 
             // If we don't have a Feature Function then assign one
-            if (!(attrs.FFN))
+            if (! attrs.FFN)
             {
                 // attrs.FFN = facilityList[tags.amenity];
                 // Debug
@@ -1508,7 +1530,7 @@ tds40 = {
         }
 
         // Cutlines/Cleared Ways & Highways
-        // When we can output two features, this will be split
+        // This might need a cleanup
         if (tags.man_made == 'cutline' && tags.highway)
         {
             if (geometryType == 'Area')
@@ -1683,26 +1705,8 @@ tds40 = {
                         }
                     }
                     break;
-
-            case 'island':
-            case 'islet':
-                if (tags.natural == 'coastline')
-                    if (geometryType == 'Line')
-                    {
-                        attrs.F_CODE = 'BA010'; // Land/Water Boundary - Line
-                        delete tags.place;
-                        break;
-                    }
-                    else
-                    {
-                        // NOTE: Islands can be Points or Areas
-                        attrs.F_CODE = 'BA030'; // Island - Polygon
-                        delete tags.natural;
-                        break;
-                    }
             } // End switch
         }
-
 
         // Bridges & Roads.  If we have an area or a line everything is fine
         // If we have a point, we need to make sure that it becomes a bridge, not a road
@@ -1771,14 +1775,13 @@ tds40 = {
         // are not buildings
         // Taking "place_of_worship" out of this and making it a building
         var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding', 'ferry_terminal'
+            'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+            'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+            'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+            'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+            'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+            'waste_basket','waste_disposal','water','water_point','watering_place','yes',
+            'fuel' // NOTE: Fuel goes to a different F_CODE
             ]; // End notBuildingList
 
         if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
@@ -1787,26 +1790,30 @@ tds40 = {
         if (!attrs.F_CODE)
         {
             var fcodeMap = {
-                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
-                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
-                'barrier':'AP040', 'tourism':'AL013','junction':'AP020','mine:access':'AA010', 
-                'tomb':'AL036'
+                'highway':'AP030','railway':'AN010','building':'AL013','ford':'BH070',
+                'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
+                'barrier':'AP040','tourism':'AL013','junction':'AP020','mine:access':'AA010', 
+                'tomb':'AL036','shop':'AL015','office':'AL015'
                            };
 
             for (var i in fcodeMap)
             {
-                if (i in tags) attrs.F_CODE = fcodeMap[i];
+                if (i in tags)
+                {
+                    attrs.F_CODE = fcodeMap[i];
+                    break;
+                }
             }
         }
 
         // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly
         var pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];
 
-        var vcmList = [ 'AA040', 'AC020', 'AD010', 'AD025', 'AD030', 'AD041', 'AD050', 'AF010',
-                        'AF020', 'AF021', 'AF030', 'AF040', 'AF070', 'AH055', 'AJ050', 'AJ051',
-                        'AJ080', 'AJ085', 'AL010', 'AL013', 'AL019', 'AL080', 'AM011', 'AM020',
-                        'AM030', 'AM070', 'AN076', 'AQ040', 'AQ045', 'AQ060', 'AQ116', 'BC050',
-                        'BD115', 'BI010', 'BI050', 'GB230' ];
+        var vcmList = [ 'AA040','AC020','AD010','AD025','AD030','AD041','AD050','AF010',
+                        'AF020','AF021','AF030','AF040','AF070','AH055','AJ050','AJ051',
+                        'AJ080','AJ085','AL010','AL013','AL019','AL080','AM011','AM020',
+                        'AM030','AM070','AN076','AQ040','AQ045','AQ060','AQ116','BC050',
+                        'BD115','BI010','BI050','GB230' ];
 
         if (tags.material)
         {
@@ -1822,7 +1829,7 @@ tds40 = {
             }
         }
 
-        // Protected areas have two attributes that need sorting out
+       // Protected areas have two attributes that need sorting out
        if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
        {
            if (tags.protect_class) delete tags.protect_class;
@@ -1912,13 +1919,32 @@ tds40 = {
                 break;
         }
 
-        // Amusement Parks
-        if (attrs.F_CODE == 'AK030' && !(attrs.FFN))
+        // Stop some Religion tags from stomping on Denomination tags
+        if (tags.religion && tags.denomination)
         {
-            attrs.FFN = '921'; // Recreation
-        }
+            if (tags.religion == 'christian' || tags.religion == 'muslim')
+            {
+                switch (tags.denomination)
+                {
+                    case 'roman_catholic':
+                    case 'orthodox':
+                    case 'protestant':
+                    case 'chaldean_catholic':
+                    case 'nestorian': // Not sure about this
+                    case 'shia':
+                    case 'sunni':
+                        delete tags.religion;
+                        break;
+                } // End switch
+            }
+        } // End if religion & denomination
 
+        // Names. Sometimes we don't have a name but we do have language ones 
+        if (!tags.name) translate.swapName(tags);
+    
     }, // End applyToTdsPreProcessing
+
+// #####################################################################################################
 
     applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)
     {
@@ -1928,47 +1954,15 @@ tds40 = {
         // Inland Water Body (BH082) also covers a lot of features
         if (attrs.IWT && !(attrs.F_CODE)) attrs.F_CODE = 'BH082';
 
-
         // The follwing bit of ugly code is to account for the specs haveing two different attributes
         // with similar names and roughly the same attributes. Bleah!
-        // Format is: <FCODE>:[<from>:<to>]
-        var swapList = {
-            'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
-            'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AL020':{'ZI005_NFN':'ZI005_NFN1'},
-            'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
-            'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AM080':{'ZI014_YWQ':'YWQ', 'ZI016_WD1':'WD1'},
-            'AQ113':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AQ116':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'AT005':{'WLE':'ZI025_WLE'},
-            'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB', 'CAB2':'AT005_CAB2', 'CAB3':'AT005_CAB3'},
-            'BD100':{'WLE':'ZI025_WLE'},
-            'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
-            'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
-            'ED010':{'ZI024_HYP':'HYP'},
-            'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
-            'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'}
-                };
-
-        if (swapList[attrs.F_CODE])
+        if (tds40.rules.swapListOut[attrs.F_CODE])
         {
-            for (var i in swapList[attrs.F_CODE])
+            for (var i in tds40.rules.swapListOut[attrs.F_CODE])
             {
                 if (i in attrs)
                 {
-                    attrs[swapList[attrs.F_CODE][i]] = attrs[i];
+                    attrs[tds40.rules.swapListOut[attrs.F_CODE][i]] = attrs[i];
                     delete attrs[i]
                 }
             }
@@ -1983,7 +1977,8 @@ tds40 = {
         else if (tags['hoot:id'])
         {
             attrs.UFI = 'raw_id:' + tags['hoot:id'];
-        }        else
+        }
+        else
         {
             if (tds40.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
         }
@@ -2047,88 +2042,116 @@ tds40 = {
             }
         }
 
-        // Custom Road rules
-        // - Fix the "highway=" stuff that cant be done in the one2one rules
-        if (attrs.F_CODE == 'AP030')
+        // Rules for specific F_CODES
+        switch (attrs.F_CODE)
         {
-            // If we haven't sorted out the road type/class, have a try with the
-            // "highway" tag. If that doesn't work, we end up with default values
-            // These are pretty vague classifications
-            if (!attrs.TYP && !attrs.RTN_ROI)
-            {
-                switch (tags.highway)
+            case 'AP030': // Custom Road rules
+                // - Fix the "highway=" stuff that cant be done in the one2one rules
+                // If we haven't sorted out the road type/class, have a try with the
+                // "highway" tag. If that doesn't work, we end up with default values
+                // These are pretty vague classifications
+                if (!attrs.TYP && !attrs.RTN_ROI)
                 {
-                    case 'motorway':
-                    case 'motorway_link':
-                        attrs.RTN_ROI = '2'; // National Motorway
-                        attrs.TYP = '41'; // motorway
-                        break;
+                    switch (tags.highway)
+                    {
+                        case 'motorway':
+                        case 'motorway_link':
+                            attrs.RTN_ROI = '2'; // National Motorway
+                            attrs.TYP = '41'; // motorway
+                            break;
 
-                    case 'trunk':
-                    case 'trunk_link':
-                        attrs.RTN_ROI = '3'; // National/Primary
-                        attrs.TYP = '47'; // Limited Access Motorway
-                        break;
+                        case 'trunk':
+                        case 'trunk_link':
+                            attrs.RTN_ROI = '3'; // National/Primary
+                            attrs.TYP = '47'; // Limited Access Motorway
+                            break;
 
-                    case 'primary':
-                    case 'primary_link':
-                        attrs.RTN_ROI = '4'; // Secondary
-                        attrs.TYP = '1'; // road
-                        break;
+                        case 'primary':
+                        case 'primary_link':
+                            attrs.RTN_ROI = '4'; // Secondary
+                            attrs.TYP = '1'; // road
+                            break;
 
-                    case 'secondary':
-                    case 'secondary_link':
-                    case 'tertiary':
-                    case 'tertiary_link':
-                        attrs.RTN_ROI = '5'; // Local
-                        attrs.TYP = '1'; // road
-                        break;
+                        case 'secondary':
+                        case 'secondary_link':
+                        case 'tertiary':
+                        case 'tertiary_link':
+                            attrs.RTN_ROI = '5'; // Local
+                            attrs.TYP = '1'; // road
+                            break;
 
-                    case 'residential':
-                    case 'unclassified':
-                    case 'service':
-                        attrs.RTN_ROI = '5'; // Local
-                        attrs.TYP = '33'; // street
-                        break;
+                        case 'residential':
+                        case 'unclassified':
+                        case 'service':
+                            attrs.RTN_ROI = '5'; // Local
+                            attrs.TYP = '33'; // street
+                            break;
 
-                    case 'road':
-                        attrs.RTN_ROI = '-999999'; // No Information
-                        attrs.TYP = '-999999'; // No Information
-                } // End tags.highway switch}
-            } // End if TYP/RTN_ROISL
-        }
+                        case 'road':
+                            attrs.RTN_ROI = '-999999'; // No Information
+                            attrs.TYP = '-999999'; // No Information
+                    } // End tags.highway switch}
+                } // End if TYP/RTN_ROISL
+                break;
+
+            case 'AH055': // Fortified Building
+                if (attrs.FZR && !(attrs.FFN)) attrs.FFN = '835'; // Fortification type -> Defence Activities
+                break;
+
+            case 'AL020': // AL020 Built-Up-Areas have ZI005_FNA1 instead of ZI005_FNA. Why???
+                if (attrs.ZI005_FNA)
+                {
+                    attrs.ZI005_FNA1 = attrs.ZI005_FNA;
+                    delete attrs.ZI005_FNA;
+                }
+                break;
+
+            case 'AP010': // Clean up Cart Track attributes
+                if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
+                {
+                    var othVal = '(TRS:' + attrs.TRS + ')';
+                    attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
+                    attrs.TRS = '999';
+                }
+                break;
+
+            case 'ZI040': // Spatial Metadata Entity Collection
+                //Map alternate source date tags to ZI001_SSD in order of precedence
+                //default is 'source:datetime'
+                if (! attrs.ZI001_SSD)
+                    attrs.ZI001_SSD = tags['source:imagery:datetime']
+                        || tags['source:date']
+                        || tags['source:geometry:date']
+                        || '';
+
+                //Map alternate source tags to ZI001_SSN in order of precedence
+                //default is 'source'
+                if (! attrs.ZI001_SSN)
+                    attrs.ZI001_SSN = tags['source:imagery']
+                        || tags['source:description']
+                        || '';
+                break;
+
+            case 'AH025': // Engineered Earthwork
+                if (! attrs.EET) attrs.EET = '3';
+                break;
+
+            case 'AK030': // Amusement Parks
+                if (!attrs.FFN) attrs.FFN = '921'; // Recreation
+                break;
+
+        } // End switch F_CODE
 
         // TODO: Need to sort out Sinkholes. If FCODE = BH145 and no WST, fix
 
-        // AL020 Built-Up-Areas have ZI005_FNA1 instead of ZI005_FNA. Why???
-        if (attrs.F_CODE == 'AL020' && attrs.ZI005_FNA)
-        {
-            attrs.ZI005_FNA1 = attrs.ZI005_FNA;
-            delete attrs.ZI005_FNA;
-        }
-
         // RLE vs LOC: Need to deconflict this for various features
         // locList: list of features that can be "Above Surface". Other features use RLE (Relitive Level) instead
-        // var locList = ['AT005', 'AQ113', 'BH065', 'BH110'];
-
+        // var locList = ['AT005','AQ113','BH065','BH110'];
 //         if (attrs.LOC == '45' && (locList.indexOf(attrs.TRS) == -1))
         if (attrs.LOC == '45' && (['AT005','AQ113','BH065','BH110'].indexOf(attrs.TRS) == -1))
         {
             attrs.RLE = '2'; // Raised above surface
             attrs.LOC = '44'; // On Surface
-        }
-
-        // Clean up Cart Track attributes
-        if (attrs.F_CODE == 'AP010')
-        {
-//             var trsList = ['3','4','6','11','21','22','999'];
-//             if (attrs.TRS && (trsList.indexOf(attrs.TRS) == -1))
-            if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
-            {
-                var othVal = '(TRS:' + attrs.TRS + ')';
-                attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
-                attrs.TRS = '999';
-            }
         }
 
         // Fix HGT and LMC to keep GAIT happy
@@ -2141,49 +2164,8 @@ tds40 = {
             // We were going to push the Alt Name onto the end of the standard name field - ZI005_FNA
             // but this causes problems so until the customer gives us more direction, we are going to drop it
             // attrs.ZI005_FNA = translate.appendValue(attrs.ZI005_FNA,attrs.ZI005_FNA2,';');
-
             delete attrs.ZI005_FNA2;
         }
-
-        // Fix ZI001_SSD
-        if (attrs.F_CODE == 'ZI040') // Spatial Metadata Entity Collection
-        {
-            //Map alternate source date tags to ZI001_SSD in order of precedence
-            //default is 'source:datetime'
-            if (! attrs.ZI001_SSD)
-                attrs.ZI001_SSD = tags['source:imagery:datetime']
-                    || tags['source:date']
-                    || tags['source:geometry:date']
-                    || '';
-
-            //Map alternate source tags to ZI001_SSN in order of precedence
-            //default is 'source'
-            if (! attrs.ZI001_SSN)
-                attrs.ZI001_SSN = tags['source:imagery']
-                    || tags['source:description']
-                    || '';
-
-        }
-
-        // Stop some Religion tags from stomping on Denomination tags
-        if (tags.religion && tags.denomination)
-        {
-            if (tags.religion == 'christian' || tags.religion == 'muslim')
-            {
-                switch (tags.denomination)
-                {
-                    case 'roman_catholic':
-                    case 'orthodox':
-                    case 'protestant':
-                    case 'chaldean_catholic':
-                    case 'nestorian': // Not sure about this
-                    case 'shia':
-                    case 'sunni':
-                        delete tags.religion;
-                        break;
-                } // End switch
-            }
-        } // End if religion & denomination
 
         // Wetlands
         // Normally, these go to Marsh
@@ -2199,6 +2181,8 @@ tds40 = {
         } // End Wetlands
 
     }, // End applyToTdsPostProcessing
+
+// #####################################################################################################
 
     // ##### End of the xxToTdsxx Block #####
 
@@ -2222,12 +2206,7 @@ tds40 = {
         }
 
         // Debug:
-        if (tds40.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (tds40.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
@@ -2245,8 +2224,7 @@ tds40 = {
             // Debug:
             if (tds40.configIn.OgrDebugDumptags == 'true')
             {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
                 print('');
             }
 
@@ -2287,16 +2265,12 @@ tds40 = {
         // Debug:
         if (tds40.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
         }
 
         // pre processing
         tds40.applyToOsmPreProcessing(attrs, layerName, geometryType);
-
 
         // Use the FCODE to add some tags
         if (attrs.F_CODE)
@@ -2323,8 +2297,8 @@ tds40 = {
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-        translate.applySimpleNumBiased(notUsedAttrs, tags, tds40.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds40.rules.txtBiased, 'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, tds40.rules.numBiased,'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds40.rules.txtBiased,'forward');
 
         // one 2 one
         //translate.applyOne2One(notUsedAttrs, tags, tds40.lookup, {'k':'v'});
@@ -2349,11 +2323,8 @@ tds40 = {
         // Debug:
         if (tds40.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(notUsedAttrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -2368,7 +2339,7 @@ tds40 = {
     {
         var tableName = ''; // The final table name
         var returnData = []; // The array of features to return
-        attrs = {}; // The output
+        attrs = {}; // The output attributes
         attrs.F_CODE = ''; // Initial setup
 
         // Setup config variables. We could do this in initialize() but some things don't call it :-(
@@ -2396,13 +2367,8 @@ tds40 = {
         }
 
         // Start processing here
-        // Debug
-        if (tds40.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        // Debug:
+        if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -2451,27 +2417,23 @@ tds40 = {
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
         // NOTE: These delete tags as they are used
-        translate.applySimpleNumBiased(attrs, notUsedTags, tds40.rules.numBiased, 'backward',tds40.rules.intList);
-        translate.applySimpleTxtBiased(attrs, notUsedTags, tds40.rules.txtBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, notUsedTags, tds40.rules.numBiased,'backward',tds40.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags, tds40.rules.txtBiased,'backward');
 
         // Translate the XXX:2, XXX2, XXX:3 etc attributes
         // Note: This deletes tags as they are used
         translate.fix23Tags(notUsedTags, attrs, tds40.lookup);
 
-        // one 2 one - we call the version that knows about OTH fields
+        // one 2 one - we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
         translate.applyTdsOne2One(notUsedTags, attrs, tds40.lookup, tds40.fcodeLookup);
 
-        // post processing
-        // tds40.applyToTdsPostProcessing(attrs, tableName, geometryType);
+        // Post Processing
+        // We send the original list of tags and the list of tags we haven't used yet
         tds40.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (tds40.configOut.OgrDebugDumptags == 'true')
-        {
-            var kList = Object.keys(notUsedTags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        }
+        if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // If we have unused tags, add them to the memo field
         if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
@@ -2488,7 +2450,7 @@ tds40 = {
         if (tds40.AttrLookup[gFcode.toUpperCase()])
         {
             // Check if we need to make more features
-            // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
+            // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
             returnData = tds40.manyFeatures(geometryType,tags,attrs);
 
             // Debug: Add the first feature
@@ -2529,6 +2491,7 @@ tds40 = {
                     // Debug
                     // print('## Skipping: ' + gFcode);
                     returnData.splice(i,1);
+                    fLen = returnData.length;
                 }
             } // End returnData loop
 
@@ -2558,8 +2521,8 @@ tds40 = {
                 var reviewTable = 'review_' + geometryType.toString().charAt(0);
                 returnData.push({attrs: reviewAttrs, tableName: reviewTable});
             } // End ReviewTags
-        } 
-    else // We DON'T have a feature
+        }
+        else // We DON'T have a feature
         {
             // For the UI: Throw an error and die if we don't have a valid feature
             if (tds40.configOut.OgrThrowError == 'true')
@@ -2583,18 +2546,14 @@ tds40 = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (tds40.configOut.getOgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
+            // We want to keep the hoot:id if present
             if (tags['hoot:id'])
             {
                 tags.raw_id = tags['hoot:id'];
                 delete tags['hoot:id'];
             }
-
 
             // Convert all of the Tags to a string so we can jam it into an attribute
             // var str = JSON.stringify(tags);
@@ -2625,7 +2584,7 @@ tds40 = {
             }
 
             returnData.push({attrs: attrs, tableName: tableName});
-        } // End We DON'T have a feature
+        } // End else We DON'T have a feature
 
         // Debug:
         if (tds40.configOut.OgrDebugDumptags == 'true')
@@ -2633,8 +2592,7 @@ tds40 = {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }
@@ -2643,4 +2601,4 @@ tds40 = {
 
     } // End of toTds
 
-} // End of tds
+} // End of tds40

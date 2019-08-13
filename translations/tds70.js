@@ -28,7 +28,7 @@
 /*
     TDSv70 conversion script
         TDSv70 -> OSM+, and
-        OSM+ -> TDSv61
+        OSM+ -> TDSv70
 
     Based on mgcp/__init__.js script
 */
@@ -549,8 +549,8 @@ tds70 = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds70.rules.numBiased, 'backward',tds70.rules.intList);
-            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds70.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds70.rules.numBiased,'backward',tds70.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds70.rules.txtBiased,'backward');
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds70.lookup, tds70.fcodeLookup);
@@ -664,7 +664,7 @@ tds70 = {
         if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
         // List of data values to drop/ignore
-        var ignoreList = { '-999999.0':1, '-999999':1, 'noinformation':1 };
+        var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
         // List of attributes that can't have '0' as a value
         var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
@@ -674,7 +674,7 @@ tds70 = {
         // 2) Convert all of the Attrs to uppercase - if needed
        for (var col in attrs)
         {
-            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // slightly ugly but we would like to account for: 'No Information','noInformation' etc
             // First, push to lowercase
             var attrValue = attrs[col].toString().toLowerCase();
 
@@ -771,7 +771,7 @@ tds70 = {
 // #####################################################################################################
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
     {
-        // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
+        // Roads
         if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
         {
              // Set a Default: "It is a road but we don't know what it is"
@@ -833,7 +833,7 @@ tds70 = {
         }
 
         // Add the LayerName to the source
-        if ((! tags.source) && layerName !== '') tags.source = 'tdsv61:' + layerName.toLowerCase();
+        if ((! tags.source) && layerName !== '') tags.source = 'tdsv70:' + layerName.toLowerCase();
 
         // If we have a UFI, store it. Some of the MAAX data has a LINK_ID instead of a UFI
         if (attrs.UFI)
@@ -1284,13 +1284,12 @@ tds70 = {
         // are not buildings.
         // Taking "place_of_worship" out of this and making it a building
         var notBuildingList = [
-            'artwork', 'atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental', 'biergarten', 'boat_sharing',
-            'car_sharing', 'charging_station', 'clock', 'compressed_air', 'dog_bin', 'dog_waste_bin', 'drinking_water',
-            'drinking_water', 'emergency_phone', 'fire_hydrant', 'fountain', 'game_feeding', 'grass_strip', 'grit_bin',
-            'hunting_stand', 'hydrant', 'life_ring', 'loading_dock', 'marketplace', 'nameplate', 'park', 'parking',
-            'parking_entrance', 'parking_space', 'picnic_table', 'post_box', 'recycling', 'street_light', 'swimming_pool',
-            'taxi', 'trailer_park', 'tricycle_station', 'vending_machine', 'waste_basket', 'waste_disposal', 'water',
-            'water_point', 'watering_place', 'yes', 'ferry_terminal',
+            'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+            'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+            'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+            'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+            'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+            'waste_basket','waste_disposal','water','water_point','watering_place','yes',
             'fuel' // NOTE: Fuel goes to a different F_CODE
             ]; // End notBuildingList
 
@@ -1301,7 +1300,7 @@ tds70 = {
         // - Amenity == The area around a thing
         // Note: amenity=place_of_worship is a special case. It _should_ have an associated building tag
         var facilityList = {
-            'school':'850', 'university':'855', 'college':'857', 'hospital':'860'
+            'school':'850','university':'855','college':'857','hospital':'860'
             };
 
         if (tags.amenity in facilityList)
@@ -1623,10 +1622,11 @@ tds70 = {
         if (!attrs.F_CODE)
         {
             var fcodeMap = {
-                'highway':'AP030', 'railway':'AN010', 'building':'AL013', 'ford':'BH070',
-                'waterway':'BH140', 'bridge':'AQ040', 'railway:in_road':'AN010',
-                'barrier':'AP040', 'tourism':'AL013','junction':'AP020',
-                'mine:access':'AA010', 'cutting':'DB070', 'tomb':'AL036'
+                'highway':'AP030','railway':'AN010','building':'AL013','ford':'BH070',
+                'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
+                'barrier':'AP040','tourism':'AL013','junction':'AP020',
+                'mine:access':'AA010','cutting':'DB070','tomb':'AL036',
+                'shop':'AL015','office':'AL015'
                            };
 
             for (var i in fcodeMap)
@@ -1642,11 +1642,11 @@ tds70 = {
         // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly
         var pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];
 
-        var vcmList = [ 'AA040', 'AC020', 'AD010', 'AD025', 'AD030', 'AD041', 'AD050', 'AF010',
-                        'AF020', 'AF021', 'AF030', 'AF040', 'AF070', 'AH055', 'AJ050', 'AJ051',
-                        'AJ080', 'AJ085', 'AL010', 'AL013', 'AL019', 'AL080', 'AM011', 'AM020',
-                        'AM030', 'AM070', 'AN076', 'AQ040', 'AQ045', 'AQ060', 'AQ116', 'BC050',
-                        'BD115', 'BI010', 'BI050', 'GB230' ];
+        var vcmList = [ 'AA040','AC020','AD010','AD025','AD030','AD041','AD050','AF010',
+                        'AF020','AF021','AF030','AF040','AF070','AH055','AJ050','AJ051',
+                        'AJ080','AJ085','AL010','AL013','AL019','AL080','AM011','AM020',
+                        'AM030','AM070','AN076','AQ040','AQ045','AQ060','AQ116','BC050',
+                        'BD115','BI010','BI050','GB230' ];
 
         if (tags.material)
         {
@@ -1818,7 +1818,9 @@ tds70 = {
             }
         } // End if religion & denomination
 
-
+        // Names. Sometimes we don't have a name but we do have language ones
+        if (!tags.name) translate.swapName(tags);
+    
     }, // End applyToTdsPreProcessing
 
 // #####################################################################################################
@@ -2142,12 +2144,7 @@ tds70 = {
         }
 
         // Debug:
-        if (tds70.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName + '  In Geometry: ' + geometryType);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (tds70.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it.
         if (layerName.indexOf('o2s_') > -1)
@@ -2156,13 +2153,12 @@ tds70 = {
 
             // Add some metadata
             if (! tags.uuid) tags.uuid = createUuid();
-            if (! tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
+            if (! tags.source) tags.source = 'tdsv70:' + layerName.toLowerCase();
 
             // Debug:
             if (tds70.configIn.OgrDebugDumptags == 'true')
             {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
                 print('');
             }
 
@@ -2204,11 +2200,8 @@ tds70 = {
         // Debug:
         if (tds70.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
         }
 
         // pre processing
@@ -2238,8 +2231,8 @@ tds70 = {
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
-        translate.applySimpleNumBiased(notUsedAttrs, tags, tds70.rules.numBiased, 'forward',[]);
-        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds70.rules.txtBiased, 'forward');
+        translate.applySimpleNumBiased(notUsedAttrs, tags, tds70.rules.numBiased,'forward',[]);
+        translate.applySimpleTxtBiased(notUsedAttrs, tags, tds70.rules.txtBiased,'forward');
 
         // one 2 one
         //translate.applyOne2One(notUsedAttrs, tags, tds70.lookup, {'k':'v'});
@@ -2261,11 +2254,8 @@ tds70 = {
         // Debug:
         if (tds70.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(notUsedAttrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedAttrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -2312,12 +2302,7 @@ tds70 = {
 
         // Start processing here
         // Debug:
-        if (tds70.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // The Nuke Option: If we have a relation, drop the feature and carry on
         if (tags['building:part']) return null;
@@ -2386,8 +2371,8 @@ tds70 = {
         // Apply the simple number and text biased rules
         // NOTE: These are BACKWARD, not forward!
         // NOTE: These delete tags as they are used
-        translate.applySimpleNumBiased(attrs, notUsedTags, tds70.rules.numBiased, 'backward',tds70.rules.intList);
-        translate.applySimpleTxtBiased(attrs, notUsedTags, tds70.rules.txtBiased, 'backward');
+        translate.applySimpleNumBiased(attrs, notUsedTags, tds70.rules.numBiased,'backward',tds70.rules.intList);
+        translate.applySimpleTxtBiased(attrs, notUsedTags, tds70.rules.txtBiased,'backward');
 
         // Apply the fuzzy rules
         // NOTE: This deletes tags as they are used
@@ -2399,11 +2384,7 @@ tds70 = {
 
         // one 2 one: we call the version that knows about the OTH field
         // NOTE: This deletes tags as they are used
-        if (tds70.configOut.OgrDebugDumptags == 'true')
-        {
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         translate.applyTdsOne2One(notUsedTags, attrs, tds70.lookup, tds70.fcodeLookup);
 
@@ -2413,11 +2394,7 @@ tds70 = {
         tds70.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        if (tds70.configOut.getOgrDebugDumptags == 'true')
-        {
-            var kList = Object.keys(notUsedTags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Not Used: ' + kList[i] + ': :' + notUsedTags[kList[i]] + ':');
-        }
+        if (tds70.configOut.getOgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // If we have unused tags, add them to the memo field.
         if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
@@ -2444,7 +2421,7 @@ tds70 = {
                 else
                 {
                     //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+                    returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv70'}, tableName: ''});
                     return returnData;
                 }
             }
@@ -2456,11 +2433,7 @@ print('FCODE and Geometry: ' + gFcode + ' is not in the schema');
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (tds70.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
 
             // We want to keep the hoot:id if present
             if (tags['hoot:id'])
@@ -2581,8 +2554,7 @@ print('FCODE and Geometry: ' + gFcode + ' is not in the schema');
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
                 print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }
