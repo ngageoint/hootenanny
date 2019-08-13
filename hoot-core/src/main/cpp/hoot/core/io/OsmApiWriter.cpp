@@ -265,9 +265,20 @@ void OsmApiWriter::_changesetThreadFunc()
         //  Split the changeset on conflict errors
         switch (info->status)
         {
+        case 409:   //  Conflict, check for version conflicts and fix, or split and continue
+          {
+            if (_fixConflict(request, workInfo, info->response))
+            {
+              _workQueueMutex.lock();
+              _workQueue.push(workInfo);
+              _workQueueMutex.unlock();
+              //  Loop back around to work on the next changeset
+              continue;
+            }
+            //  Fall through here to split the changeset and retry
+          }
         case 400:   //  Placeholder ID is missing or not unique
         case 404:   //  Diff contains elements where the given ID could not be found
-        case 409:   //  Conflict, Split the changeset, push both back on the queue
         case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
           {
             _changesetMutex.lock();
@@ -598,6 +609,36 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
     LOG_WARN(ex.what());
   }
   return info;
+}
+
+bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr changeset, const QString& conflictExplanation)
+{
+  bool success = false;
+  long element_id = 0;
+  ElementType::Type element_type = ElementType::Unknown;
+  long version_old = 0;
+  long version_new = 0;
+  if (_changeset.matchesChangesetConflictVersionMismatchFailure(conflictExplanation, element_id, element_type, version_old, version_new))
+  {
+    for (int changesetType = XmlChangeset::TypeModify; changesetType < XmlChangeset::TypeMax; ++changesetType)
+    {
+      ChangesetInfo::iterator element = changeset->begin((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType);
+      if (element != changeset->end((ElementType::Type)element_type, (XmlChangeset::ChangesetType)changesetType))
+      {
+        QString update = "";
+        //  Get the element from the OSM API
+        if (element_type == ElementType::Node)
+          update = _getNode(request, element_id);
+        else if (element_type == ElementType::Way)
+          update = _getWay(request, element_id);
+        else if (element_type == ElementType::Relation)
+          update = _getRelation(request, element_id);
+        //  Fix the changeset with the node/way/relation from the OSM API
+        success |= _changeset.fixChangeset(update);
+      }
+    }
+  }
+  return success;
 }
 
 bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)

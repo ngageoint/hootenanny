@@ -103,7 +103,7 @@ class UpdateDbCommand implements InternalCommand {
             createQuery().insert(folders)
                     .columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId,
                             folders.parentId)
-                    .values(folderId, now, params.getFolder(), false, userId, parentId)
+                    .values(folderId, now, params.getParentId(), false, userId, parentId)
                     .execute();
         }
         catch (Exception e) {

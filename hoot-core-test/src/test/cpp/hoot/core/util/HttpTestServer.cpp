@@ -33,8 +33,9 @@
 namespace hoot
 {
 
-const std::string HttpTestServer::HTTP_200_OK = "HTTP/1.1 200 OK\r\n\r\n";
-const std::string HttpTestServer::HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n\r\n";
+const std::string HttpTestServer::HTTP_200_OK =         "HTTP/1.1 200 OK\r\n\r\n";
+const std::string HttpTestServer::HTTP_404_NOT_FOUND =  "HTTP/1.1 404 Not Found\r\n\r\n";
+const std::string HttpTestServer::HTTP_409_CONFLICT =   "HTTP/1.1 409 Conflict\r\n\r\n";
 
 HttpTestServer::HttpTestServer(int port)
   : _port(port)
@@ -123,11 +124,9 @@ std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionP
 
 void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)
 {
-  //  Write the response to the socket asynchronously
-  boost::asio::async_write(connection->socket(), boost::asio::buffer(response),
-                           boost::bind(&HttpConnection::handle_write, connection,
-                                       boost::asio::placeholders::error,
-                                       boost::asio::placeholders::bytes_transferred));
+  //  Write the response to the socket synchronously
+  boost::asio::write(connection->socket(), boost::asio::buffer(response));
+  connection->socket().close();
 }
 
 

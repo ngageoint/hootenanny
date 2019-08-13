@@ -47,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.models.db.CommandStatus;
+import hoot.services.utils.DbUtils;
 
 
 @Component
@@ -70,6 +71,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
             newJobStatus.setResourceId(job.getMapId());
             Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
             newJobStatus.setStart(ts);
+            newJobStatus.setParentId(job.getParentId());
 
             // We only get the external command count because they take the longest to run so they have
             // the biggest impact on the math for job progress

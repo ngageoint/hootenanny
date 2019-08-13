@@ -75,6 +75,7 @@ public:
   static const int DEFAULT_SERVER_PORT = 8910;
   static const std::string HTTP_200_OK;
   static const std::string HTTP_404_NOT_FOUND;
+  static const std::string HTTP_409_CONFLICT;
   /** Constructor */
   HttpTestServer(int port = DEFAULT_SERVER_PORT);
   /** Function to start the HTTP server */
