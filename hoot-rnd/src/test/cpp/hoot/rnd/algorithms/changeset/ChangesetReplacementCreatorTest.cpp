@@ -310,11 +310,10 @@ private:
     // TODO: This is very strange... If I don't call this method at the end, a couple of tests fail.
     // The only thing I can imagine is that DataConverter is setting some global config that happens
     // to be needed by the tests. I've tried what's commented out below and none of them do the
-    // trick. Have to figure out what's going on here.
+    // trick.
     _copyJson(outFile, _outputPath + "temp-do-not-use.json");
-//    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
-//    conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
-//    conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
+    //conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
+    //conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
   }
 
   OsmMapPtr _getTestMap(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
@@ -362,7 +361,6 @@ private:
 
   void _copyJson(const QString& inXmlFile, const QString& outFile)
   {
-    //conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), true);
     LOG_DEBUG("Converting xml: " << inXmlFile << " to json: " << outFile << "...");
     DataConverter().convert(inXmlFile, outFile);
   }
