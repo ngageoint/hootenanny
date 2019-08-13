@@ -1539,11 +1539,13 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap
           tags.remove(key);
       }
       //  Add in any tags that are missing
-      QXmlStreamAttributes attributes;
       for (QMap<QString, QString>::iterator it = tags.begin(); it != tags.end(); ++it)
-        attributes.append("", it.key(), it.value());
-      if (attributes.size() > 0)
+      {
+        QXmlStreamAttributes attributes;
+        attributes.append("", "k", it.key());
+        attributes.append("", "v", it.value());
         element->addTag(XmlObject("tag", attributes));
+      }
     }
   }
   return success;

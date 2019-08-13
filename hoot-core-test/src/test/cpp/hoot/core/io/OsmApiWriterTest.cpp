@@ -37,8 +37,10 @@
 //  Qt
 #include <QNetworkReply>
 
-//  Run tests locally or against a remote server
-#define RUN_LOCAL_TESTS
+//  Run tests against a local test server
+#define RUN_LOCAL_TEST_SERVER
+//  Run tests against a local copy of OSM API
+//#define RUN_LOCAL_OSM_API_SERVER
 
 namespace hoot
 {
@@ -51,20 +53,24 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runCapabilitesTest);
   CPPUNIT_TEST(runParsePermissionsTest);
   CPPUNIT_TEST(runPermissionsTest);
+#ifdef RUN_LOCAL_TEST_SERVER
   CPPUNIT_TEST(runRetryConflictsTest);
   CPPUNIT_TEST(runVersionConflictResolutionTest);
+#endif
   /* These tests are for local testing and require additional resources to complete */
-//  CPPUNIT_TEST(runChangesetTest);
-//  CPPUNIT_TEST(runChangesetTrottleTest);
-//  CPPUNIT_TEST(runChangesetConflictTest);
-//  CPPUNIT_TEST(oauthTest);
+  CPPUNIT_TEST(runChangesetTest);
+  CPPUNIT_TEST(runChangesetTrottleTest);
+  CPPUNIT_TEST(runChangesetConflictTest);
+  CPPUNIT_TEST(oauthTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   const QString OSM_API_URL = "https://www.openstreetmap.org";
-  const QString ME_API_URL = "http://ec2-34-237-221-226.compute-1.amazonaws.com";
-  const QString LOCAL_API_URL = "http://localhost:%1";
+  const QString LOCAL_TEST_API_URL = "http://localhost:%1";
+#ifdef RUN_LOCAL_OSM_API_SERVER
+  const QString LOCAL_OSM_API_URL = "http://<Enter local OSM API URL here>";
+#endif
 
   const int PORT_CAPABILITIES = 9800;
   const int PORT_PERMISSIONS =  9801;
@@ -103,8 +109,8 @@ public:
   void runCapabilitesTest()
   {
     QUrl osm;
-#ifdef RUN_LOCAL_TESTS
-    osm.setUrl(LOCAL_API_URL.arg(PORT_CAPABILITIES));
+#ifdef RUN_LOCAL_TEST_SERVER
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_CAPABILITIES));
     CapabilitiesTestServer server(PORT_CAPABILITIES);
     server.start();
 #else
@@ -124,7 +130,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getDatabaseStatus(), OsmApiStatus::ONLINE);
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getApiStatus(), OsmApiStatus::ONLINE);
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getGpxStatus(), OsmApiStatus::ONLINE);
-#ifdef RUN_LOCAL_TESTS
+#ifdef RUN_LOCAL_TEST_SERVER
     server.wait();
 #endif
   }
@@ -139,8 +145,8 @@ public:
   {
     QUrl osm;
     osm.setUserInfo("test01:hoottest");
-#ifdef RUN_LOCAL_TESTS
-    osm.setUrl(LOCAL_API_URL.arg(PORT_PERMISSIONS));
+#ifdef RUN_LOCAL_TEST_SERVER
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_PERMISSIONS));
     PermissionsTestServer server(PORT_PERMISSIONS);
     server.start();
 #else
@@ -152,15 +158,16 @@ public:
     OsmApiWriter writer(osm, changesets);
     CPPUNIT_ASSERT(writer.validatePermissions(request));
     CPPUNIT_ASSERT_EQUAL(request->getHttpStatus(), 200);
-#ifdef RUN_LOCAL_TESTS
+#ifdef RUN_LOCAL_TEST_SERVER
     server.shutdown();
 #endif
   }
 
   void runChangesetTest()
   {
+#ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
-    osm.setUrl(ME_API_URL);
+    osm.setUrl(LOCAL_OSM_API_URL);
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
@@ -174,12 +181,14 @@ public:
     writer.setConfiguration(s);
 
     writer.apply();
+#endif
   }
 
   void runChangesetTrottleTest()
   {
+#ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
-    osm.setUrl(ME_API_URL);
+    osm.setUrl(LOCAL_OSM_API_URL);
     osm.setUserInfo("test01:hoottest");
 
     QList<QString> changesets;
@@ -195,12 +204,14 @@ public:
     writer.setConfiguration(s);
 
     writer.apply();
+#endif
   }
 
   void runChangesetConflictTest()
   {
+#ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
-    osm.setUrl(ME_API_URL);
+    osm.setUrl(LOCAL_OSM_API_URL);
     osm.setUserInfo("test01:hoottest");
 
     //  Load up the all-create ToyTestA
@@ -247,18 +258,22 @@ public:
         "</osmChange>\n",
         writer.getFailedChangeset());
     }
+#endif
   }
 
   void runRetryConflictsTest()
   {
-    //  Suppress the OsmApiWriter errors by temporarily changing the log level.
-    //  We expect the all of the errors
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
-    Log::getInstance().setLevel(Log::Fatal);
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
 
     //  Setup the test
     QUrl osm;
-    osm.setUrl(LOCAL_API_URL.arg(PORT_CONFLICTS));
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_CONFLICTS));
     osm.setUserInfo("test01:hoottest");
 
     //  Kick off the conflict test server
@@ -291,18 +306,22 @@ public:
       writer.getFailedChangeset());
     //  Check the stats
     checkStats(writer.getStats(), 3, 2, 0, 2, 1, 2, 5);
+#endif
   }
 
   void runVersionConflictResolutionTest()
   {
-    //  Suppress the OsmApiWriter errors by temporarily changing the log level.
-    //  We expect the all of the errors
+#ifdef RUN_LOCAL_TEST_SERVER
+    //  Suppress the OsmApiWriter errors by temporarily changing the log level
+    //  when the log level is Info or above because we expect the all of the errors.
+    //  Below Info is Debug and Trace, those are set because we want to see everything
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
-    Log::getInstance().setLevel(Log::Fatal);
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Fatal);
 
     //  Setup the test
     QUrl osm;
-    osm.setUrl(LOCAL_API_URL.arg(PORT_VERSION));
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_VERSION));
     osm.setUserInfo("test01:hoottest");
 
     //  Kick off the version conflict test server
@@ -327,12 +346,14 @@ public:
     CPPUNIT_ASSERT(!writer.containsFailed());
     //  Check the stats
     checkStats(writer.getStats(), 0, 4, 0, 0, 4, 0, 0);
+#endif
   }
 
   void oauthTest()
   {
+#ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
-    osm.setUrl(ME_API_URL);
+    osm.setUrl(LOCAL_OSM_API_URL);
 
     QList<QString> changesets;
     changesets.append("test-files/ToyTestA.osm");
@@ -350,6 +371,7 @@ public:
     writer.setConfiguration(s);
 
     writer.apply();
+#endif
   }
 
   void checkStats(QList<SingleStat> stats,
@@ -384,6 +406,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
-
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
 }

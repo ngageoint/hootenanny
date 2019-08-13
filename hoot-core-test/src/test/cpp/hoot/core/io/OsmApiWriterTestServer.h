@@ -63,7 +63,7 @@ public:
 
 protected:
   /** respond() function that responds to a series of OSM API requests
-   *
+   *  to simulate a 405 Method Not Allowed error to test error resolution
    *  Requests, in order:
    *   - Capabilities
    *   - Permissions
