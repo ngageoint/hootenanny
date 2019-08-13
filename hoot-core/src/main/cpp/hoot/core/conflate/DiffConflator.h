@@ -82,6 +82,8 @@ class DiffConflator : public OsmMapOperation, public Serializable, public Bounda
 {
 public:
 
+  static int logWarnCount;
+
   /**
    * @brief className - Get a string that represents this class name
    * @return - class name

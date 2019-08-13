@@ -142,10 +142,18 @@ QString OsmUtils::getRelationMembersDetailedString(const ConstRelationPtr& relat
 {
   QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  LOG_VART(relationMembers.size());
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     str += "Member #" + QString::number(i + 1) + ":\n\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (!member)
+    {
+      throw HootException(
+        "Unable to retrieve relation member: " + relationMembers[i].getElementId().toString() +
+        ". Skipping adding it to output...");
+    }
+    LOG_VART(member->getElementId());
     str += member->toString() + "\n\n";
   }
   return str;

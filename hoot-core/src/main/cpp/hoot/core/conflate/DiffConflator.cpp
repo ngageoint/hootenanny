@@ -55,6 +55,7 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // standard
 #include <algorithm>
@@ -69,6 +70,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+int DiffConflator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
@@ -314,8 +317,22 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
       // Diff conflation doesn't do relations
-      throw HootException("Relation handling not implemented with differential "
-                          "conflation yet.");
+
+//      LOG_VART(c);
+//      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
+//      LOG_VART(relation->getElementId());
+//      LOG_VART(OsmUtils::getRelationDetailedString(relation, _pOriginalMap));
+
+      //throw HootException("Relation handling not implemented with differential conflation yet.");
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Relation handling not implemented with differential conflation yet: " << c);
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
   OsmMapWriterFactory::writeDebugMap(pMap, "after-adding-diff-tag-changes");
