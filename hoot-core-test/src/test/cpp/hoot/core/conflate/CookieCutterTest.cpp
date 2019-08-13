@@ -83,7 +83,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterTest.osm",
                      _outputPath + "CookieCutterTest.osm");
   }
 
@@ -105,7 +105,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterCropTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterCropTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterCropTest.osm",
                      _outputPath + "CookieCutterCropTest.osm");
   }
 
@@ -127,7 +127,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterBufferTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterBufferTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterBufferTest.osm",
                      _outputPath + "CookieCutterBufferTest.osm");
   }
 
@@ -149,7 +149,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterNegativeBufferTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterNegativeBufferTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterNegativeBufferTest.osm",
                      _outputPath + "CookieCutterNegativeBufferTest.osm");
   }
 
@@ -171,7 +171,7 @@ public:
     OsmXmlWriter writer;
     writer.write(cookieCutMap, _outputPath + "CookieCutterCropAndBufferTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "CookieCutterCropAndBufferTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "CookieCutterCropAndBufferTest.osm",
                      _outputPath + "CookieCutterCropAndBufferTest.osm");
   }
 };
