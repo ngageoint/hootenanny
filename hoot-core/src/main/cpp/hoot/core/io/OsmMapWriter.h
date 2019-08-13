@@ -70,7 +70,7 @@ public:
    */
   virtual QString supportedFormats() = 0;
 
-  // TODO: These should be implemented across the other writers.
+  // TODO: These methods should be implemented across writers other than OsmXmlWriter.
 
   /**
    * Sets flag indicating the writer is writing a debug map so that extra debugging metadata is

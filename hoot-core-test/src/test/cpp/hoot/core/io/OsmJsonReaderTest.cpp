@@ -583,9 +583,6 @@ public:
   {
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
 
-    // TODO: remove
-    conf().set("log.class.filter", "OsmJsonReader;MapCropper");
-
     OsmJsonReader uut;
     uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
     OsmMapPtr map(new OsmMap());

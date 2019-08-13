@@ -346,12 +346,12 @@ public:
   static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
 
   /**
-   * TODO
+   * Determines if a specified node is contained by a way, given a list of way IDs
    *
-   * @param nodeId
-   * @param wayIds
-   * @param map
-   * @return
+   * @param nodeId the ID of the node to search for
+   * @param wayIds the IDs for the ways to search in
+   * @param map the map containing the nodes/ways
+   * @return true if any way in the ID list contains the node; false otherwise
    */
   static bool nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
                                     const ConstOsmMapPtr& map);

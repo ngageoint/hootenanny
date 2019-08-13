@@ -96,12 +96,19 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * TODO
+   * Converts multiple datasets from format to a single output format
    *
-   * @param inputs
-   * @param output
+   * @param inputs the inputs to convert
+   * @param output the converted output path
    */
   void convert(const QStringList& inputs, const QString& output);
+
+  /**
+   * Converts a dataset from format to another output format
+   *
+   * @param input the input to convert
+   * @param output the converted output path
+   */
   void convert(const QString& input, const QString& output);
 
   void setTranslation(const QString& translation) { _translation = translation; }
