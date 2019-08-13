@@ -41,7 +41,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/PositiveIdGenerator.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
-#include <hoot/core/visitors/AddUuidVisitor.h>
+//#include <hoot/core/visitors/AddUuidVisitor.h>
 
 namespace hoot
 {
@@ -83,8 +83,6 @@ public:
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-
-    // TODO: remove
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
 //      "ChangesetReplacementCreatorTest");
@@ -98,16 +96,12 @@ public:
     const QString testName = "runPolyLenientOsmTest";
     LOG_DEBUG("Running test: " << testName << "...");
     const GeometryType geometryType = GeometryType::Polygon;
-    //const QString goldTestName = "ServiceBuildingReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(),
-      "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/" + testName +
-      "-debug.osm");
+//    const QString goldTestName = "ServiceBuildingReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 632, 0, 583, /*goldFile*/"");
+    _runTest(testName, "osm", geometryType, true, 632, 0, 583, "");
   }
 
   void runPolyStrictOsmTest()
@@ -116,13 +110,13 @@ public:
 
     const QString testName = "runPolyStrictOsmTest";
     const GeometryType geometryType = GeometryType::Polygon;
-    //const QString goldTestName = "ServiceBuildingStrictReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+/*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
+    const QString goldFile =
+      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
 
     _prepInputData(testName, geometryType);
     _runTest(
-      testName, "osm", geometryType, false, 529, 1, 517, /*goldFile*/"");
+      testName, "osm", geometryType, false, 529, 1, 517, "");
   }
 
   void runPoiStrictOsmTest()
@@ -131,12 +125,12 @@ public:
 
     const QString testName = "runPoiStrictOsmTest";
     const GeometryType geometryType = GeometryType::Point;
-    //const QString goldTestName = "ServicePoiStrictReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+//    const QString goldTestName = "ServicePoiStrictReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 3, 1, 1, /*goldFile*/"");
+    _runTest(testName, "osm", geometryType, false, 3, 1, 1, "");
   }
 
   void runLinearLenientOsmTest()
@@ -145,12 +139,12 @@ public:
 
     const QString testName = "runLinearLenientOsmTest";
     const GeometryType geometryType = GeometryType::Line;
-    //const QString goldTestName = "ServiceRoadReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+//    const QString goldTestName = "ServiceRoadReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 146, 7, 141, /*goldFile*/"");
+    _runTest(testName, "osm", geometryType, true, 146, 7, 141, "");
   }
 
   void runLinearStrictOsmTest()
@@ -159,12 +153,12 @@ public:
 
     const QString testName = "runLinearStrictOsmTest";
     const GeometryType geometryType = GeometryType::Line;
-    //const QString goldTestName = "ServiceRoadStrictReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+//    const QString goldTestName = "ServiceRoadStrictReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 47, 5, 36, /*goldFile*/"");
+    _runTest(testName, "osm", geometryType, false, 47, 5, 36, "");
   }
 
   void runPolyLenientJsonTest()
@@ -174,13 +168,9 @@ public:
     const QString testName = "runPolyLenientJsonTest";
     LOG_DEBUG("Running test: " << testName << "...");
     const GeometryType geometryType = GeometryType::Polygon;
-    //const QString goldTestName = "ServiceBuildingReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-    conf().set(
-      ConfigOptions::getDebugMapsFilenameKey(),
-      "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/" + testName +
-      "-debug.osm");
+//    const QString goldTestName = "ServiceBuildingReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "json", geometryType, true, 632, 0, 583, "");
@@ -192,9 +182,9 @@ public:
 
     const QString testName = "runPolyStrictJsonTest";
     const GeometryType geometryType = GeometryType::Polygon;
-    //const QString goldTestName = "ServiceBuildingStrictReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+/*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
+    const QString goldFile =
+      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "json", geometryType, false, 529, 1, 517, "");
@@ -206,9 +196,9 @@ public:
 
     const QString testName = "runPoiStrictJsonTest";
     const GeometryType geometryType = GeometryType::Point;
-    //const QString goldTestName = "ServicePoiStrictReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+//    const QString goldTestName = "ServicePoiStrictReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "json", geometryType, false, 3, 1, 1, "");
@@ -220,9 +210,9 @@ public:
 
     const QString testName = "runLinearLenientJsonTest";
     const GeometryType geometryType = GeometryType::Line;
-    //const QString goldTestName = "ServiceRoadReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+//    const QString goldTestName = "ServiceRoadReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "json", geometryType, true, 146, 7, 141, "");
@@ -234,9 +224,9 @@ public:
 
     const QString testName = "runLinearStrictJsonTest";
     const GeometryType geometryType = GeometryType::Line;
-    //const QString goldTestName = "ServiceRoadStrictReplacementTest";
-    //const QString goldFile =
-      //_goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+//    const QString goldTestName = "ServiceRoadStrictReplacementTest";
+//    const QString goldFile =
+//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
 
     _prepInputData(testName, geometryType);
     _runTest(testName, "json", geometryType, false, 47, 5, 36, "");
@@ -294,7 +284,7 @@ private:
     OsmMapPtr refMap =
       _getTestMap(
         refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), customTagKey,
-        modifiedCustomTagVal, perturbRef, Status::Unknown1);
+        modifiedCustomTagVal, perturbRef);
     QString outFile = _outputPath + testName + "-ref-in.";
     if (testName.toLower().contains("osm"))
     {
@@ -313,7 +303,7 @@ private:
     OsmMapPtr secMap =
       _getTestMap(
         secSourceFile, std::shared_ptr<IdGenerator>(new DefaultIdGenerator()), customTagKey,
-        modifiedCustomTagVal, false, Status::Unknown2);
+        modifiedCustomTagVal, false);
     outFile = outFile.replace("ref", "sec");
     IoUtils::saveMap(secMap, outFile);
 
@@ -329,16 +319,13 @@ private:
 
   OsmMapPtr _getTestMap(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
                         const QString& customTagKey, const QString& customTagVal,
-                        const bool perturb, const Status& /*status*/)
+                        const bool perturb)
   {
     LOG_DEBUG("Preparing map from: " << sourceFile << "...");
 
-    TestUtils::resetBasic();
-    conf().set(ConfigOptions::getReaderUseDataSourceIdsKey(), false);
-
     OsmMapPtr map(new OsmMap());
     map->setIdGenerator(idGen);
-    IoUtils::loadMap(map, sourceFile, false/*, status*/);
+    IoUtils::loadMap(map, sourceFile, false);
 
     if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
     {
@@ -367,13 +354,8 @@ private:
       MapProjector::projectToWgs84(map);  // perty works in planar
     }
 
-//    RemoveMissingElementsVisitor elementRemover;
-//    map->visitRw(elementRemover);
-/*    MapCleaner().apply(map);
-    MapProjector::projectToWgs84(map)*/;
-
-    AddUuidVisitor uuidAdder("uuid");
-    map->visitRw(uuidAdder);
+    //AddUuidVisitor uuidAdder("uuid");
+    //map->visitRw(uuidAdder);
 
     return map;
   }
@@ -413,18 +395,18 @@ private:
       _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType),
       _getFilterCrit(geometryType), lenientBounds, outFile);
 
+    // Going only with this level of checking for now. We could extend this to diff the actual
+    // changeset files.
     CPPUNIT_ASSERT_EQUAL(
       numExpectedCreateStatements, _getChangesetDeriver(changesetCreator)->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(
       numExpectedModifyStatements, _getChangesetDeriver(changesetCreator)->getNumModifyChanges());
     CPPUNIT_ASSERT_EQUAL(
       numExpectedDeleteStatements, _getChangesetDeriver(changesetCreator)->getNumDeleteChanges());
-    // This is needed because simply counting changeset statement types isn't enough, as it doesn't
-    // take into account the element IDs. Still doing the statement type count check, as it provides
-    // information more quickly about why a test failed vs looking at the changeset file.
+    // ignoring this for now
     if (!goldChangesetFile.isEmpty())
     {
-      HOOT_STR_EQUALS(FileUtils::readFully(goldChangesetFile), FileUtils::readFully(outFile));
+      HOOT_FILE_EQUALS(goldChangesetFile, outFile);
     }
   }
 

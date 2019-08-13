@@ -628,9 +628,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 {
   // global opts
 
-  // TODO: remove
-  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
-
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
@@ -638,6 +635,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
   conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
   // dataset specific opts
 
