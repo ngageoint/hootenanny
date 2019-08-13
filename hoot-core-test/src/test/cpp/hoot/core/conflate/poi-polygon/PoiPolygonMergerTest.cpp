@@ -97,21 +97,14 @@ public:
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
+      const QString testFileName = "basicTest1.json";
       OsmJsonWriter writer;
       writer.setIncludeCompatibilityTags(false);
-      const QString actual = writer.toString(map2);
-      HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                      "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"node\",\"id\":-2,\"lat\":0,\"lon\":20},\n"
-                      "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":20},\n"
-                      "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
-                      "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"amenity\":\"bar\",\"area\":\"yes\",\"name\":\"foo\",\"alt_name\":\"bar\",\"note\":\"w1\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
-                      "}\n"
-                      "",
-                      actual);
-      CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
-      //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
+      writer.open(_outputPath + testFileName);
+      MapProjector::projectToWgs84(map2);
+      writer.write(map2);
+      writer.close();
+      HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
     }
 
     {
@@ -125,20 +118,14 @@ public:
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
+      const QString testFileName = "basicTest2.json";
       OsmJsonWriter writer;
       writer.setIncludeCompatibilityTags(false);
-      const QString actual = writer.toString(map2);
-      HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-                      "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"node\",\"id\":-2,\"lat\":0,\"lon\":20},\n"
-                      "{\"type\":\"node\",\"id\":-3,\"lat\":20,\"lon\":20},\n"
-                      "{\"type\":\"node\",\"id\":-4,\"lat\":20,\"lon\":0},\n"
-                      "{\"type\":\"node\",\"id\":-5,\"lat\":0,\"lon\":0},\n"
-                      "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"hoot:poipolygon:poismerged\":\"1\",\"amenity\":\"cafe\",\"area\":\"yes\",\"name\":\"bar\",\"alt_name\":\"foo\",\"note\":\"w1\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
-                      "}\n"
-                      "",
-                      actual);
-      CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
+      writer.open(_outputPath + testFileName);
+      MapProjector::projectToWgs84(map2);
+      writer.write(map2);
+      writer.close();
+      HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
     }
   }
 

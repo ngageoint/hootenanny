@@ -192,7 +192,7 @@ public:
 
     r1->replaceElement(w1, newWays);
 
-    const QString testFileName = "runReplaceTest1.json";
+    const QString testFileName = "runReplaceTest2.json";
     OsmJsonWriter writer;
     writer.setIncludeCompatibilityTags(false);
     writer.open(_outputPath + testFileName);
