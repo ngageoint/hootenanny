@@ -414,7 +414,8 @@ public:
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
-    Log::getInstance().setLevel(Log::Error);
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Error);
 
     int ctr = 0;
     while (reader.hasMoreElements())
@@ -455,7 +456,8 @@ public:
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
-    Log::getInstance().setLevel(Log::Error);
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Error);
 
     int ctr = 0;
     while (reader.hasMoreElements())
@@ -547,7 +549,8 @@ public:
     //the log level.  We expect the nodes to be missing since we're doing partial map reads and
     //don't need to see the messages.
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
-    Log::getInstance().setLevel(Log::Error);
+    if (Log::getInstance().getLevel() >= Log::Info)
+      Log::getInstance().setLevel(Log::Error);
     reader1.read(map1);
 
     CPPUNIT_ASSERT_EQUAL(false, reader1.getSortedTypeThenId());

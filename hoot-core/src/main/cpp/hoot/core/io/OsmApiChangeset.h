@@ -69,10 +69,10 @@ public:
   /**  Allow test class to access protected members for white box testing */
   friend class OsmApiChangesetTest;
   /**
-   * @brief loadChangeset Load changeset file, can be called multiple times on changeset that are split across files
-   * @param changesetPath
+   * @brief loadChangeset Load changeset file or string, can be called multiple times on changeset that are split across files
+   * @param changeset Path to changeset file or changeset as a string
    */
-  void loadChangeset(const QString& changesetPath);
+  void loadChangeset(const QString& changeset);
   /**
    * @brief splitLongWays The API defaults to only allowing a maximum of 2000 nodes per way, split the way if necessary
    * @param maxWayNodes Maximum number of nodes per way from the API capabilities query
@@ -201,8 +201,74 @@ public:
    * @return Number of elements processed so far
    */
   long getProcessedCount()      { return _processedCount; }
+  /**
+   * @brief matchesPlaceholderFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Placeholder node not found for reference -145213 in way -5687"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesPlaceholderFailure(const QString& hint,
+                                 long& member_id, ElementType::Type& member_type,
+                                 long& element_id, ElementType::Type& element_type);
+  /**
+   * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   * @param hint Error message from OSM API
+   * @param element_id ID of the element that failed
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
+  /**
+   * @brief matchesChangesetPreconditionFailure
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesChangesetPreconditionFailure(const QString& hint,
+                                           long& member_id, ElementType::Type& member_type,
+                                           long& element_id, ElementType::Type& element_type);
+  /**
+   * @brief matchesChangesetConflictVersionMismatchFailure
+   * @param hint
+   * @param element_id
+   * @param element_type
+   * @param version_old
+   * @param version_new
+   * @return
+   */
+  static bool matchesChangesetConflictVersionMismatchFailure(const QString& hint,
+                                                      long& element_id, ElementType::Type& element_type,
+                                                      long& version_old, long& version_new);
 
 private:
+  /**
+   * @brief loadChangesetFile Load changeset file, can be called multiple times on changeset that are split across files
+   * @param changesetPath
+   */
+  void loadChangesetFile(const QString& changesetPath);
+  /**
+   * @brief loadChangesetXml Load changeset XML text, can be called multiple times on changesets that are split
+   * @param changesetXml
+   */
+  void loadChangesetXml(const QString& changesetXml);
+  /**
+   * @brief loadChangeset Load a .osc changeset file
+   * @param reader
+   */
+  void loadChangeset(QXmlStreamReader& reader);
+  /**
+   * @brief loadOsmAsChangeset Load an OSM file as a changeset of <create> elements
+   * @param reader
+   */
+  void loadOsmAsChangeset(QXmlStreamReader& reader);
   /**
    * @brief updateElement Update the element ID map with the new ID and update the version of the element
    * @param map Map of elements (nodes/ways/relations)
@@ -352,40 +418,6 @@ private:
   void failNode(long id, bool beforeSend = false);
   void failWay(long id, bool beforeSend = false);
   void failRelation(long id, bool beforeSend = false);
-  /**
-   * @brief matchesPlaceholderFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Placeholder node not found for reference -145213 in way -5687"
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  bool matchesPlaceholderFailure(const QString& hint,
-                                 long& member_id, ElementType::Type& member_type,
-                                 long& element_id, ElementType::Type& element_type);
-  /**
-   * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
-   * @param hint Error message from OSM API
-   * @param element_id ID of the element that failed
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @return True if the message matches and was parsed
-   */
-  bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
-  /**
-   * @brief matchesChangesetPreconditionFailure
-   * @param hint Error message from OSM API
-   * @param member_id ID of the member element that caused the element to fail
-   * @param member_type Type of the member element that caused the element to fail
-   * @param element_id ID of the element that failed
-   * @param element_type Type of the element that failed
-   * @return True if the message matches and was parsed
-   */
-  bool matchesChangesetPreconditionFailure(const QString& hint,
-                                           long& member_id, ElementType::Type& member_type,
-                                           long& element_id, ElementType::Type& element_type);
   /**
    * @brief getNodes/Ways/Relations Output node/way/relation text to the text stream
    * @param changeset Pointer to the changeset to output

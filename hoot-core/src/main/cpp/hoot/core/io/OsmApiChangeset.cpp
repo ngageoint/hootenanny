@@ -68,62 +68,80 @@ XmlChangeset::XmlChangeset(const QList<QString> &changesets)
     loadChangeset(*it);
 }
 
-void XmlChangeset::loadChangeset(const QString &changesetPath)
+void XmlChangeset::loadChangeset(const QString &changeset)
 {
-  /* <osmChange version="0.6" generator="acme osm editor">
-   *   <create|modify|delete>
-   *     <node|way|relation.../>
-   *     ...
-   *   </create|modify|delete>
-   *   ...
-   * </osmChange>
-   */
-  QFile file(changesetPath);
+  if (QFile::exists(changeset))
+    loadChangesetFile(changeset);
+  else
+    loadChangesetXml(changeset);
+}
+
+void XmlChangeset::loadChangesetFile(const QString& path)
+{
+  //  Attempt to open the file
+  QFile file(path);
   if (!file.open(QIODevice::ReadOnly))
   {
-    LOG_ERROR("Unable to read file at: " << changesetPath);
+    LOG_ERROR("Unable to read file at: " << path);
     return;
   }
   //  Open the XML stream reader and attach it to the file
   QXmlStreamReader reader(&file);
+  //  Read the OSC changeset
+  if (path.endsWith(".osc"))
+    loadChangeset(reader);
+  else  //  .osm file
+    loadOsmAsChangeset(reader);
+}
+
+void XmlChangeset::loadChangesetXml(const QString &changesetXml)
+{
+  //  Load the XML directly into the reader
+  QXmlStreamReader reader(changesetXml);
+  //  Load the changeset formatted XML
+  loadChangeset(reader);
+}
+
+void XmlChangeset::loadChangeset(QXmlStreamReader &reader)
+{
   //  Make sure that the XML provided starts with the <diffResult> tag
   QXmlStreamReader::TokenType type = reader.readNext();
   if (type == QXmlStreamReader::StartDocument)
     type = reader.readNext();
-  //  Read the OSC changeset
-  if (changesetPath.endsWith(".osc"))
+  if (type == QXmlStreamReader::StartElement && reader.name() != "osmChange")
   {
-    if (type == QXmlStreamReader::StartElement && reader.name() != "osmChange")
+    LOG_ERROR("Unknown changeset file format.");
+    return;
+  }
+  //  Iterate all of updates and record them
+  while (!reader.atEnd() && !reader.hasError())
+  {
+    type = reader.readNext();
+    if (type == QXmlStreamReader::StartElement)
     {
-      LOG_ERROR("Unknown changeset file format.");
-      return;
-    }
-    //  Iterate all of updates and record them
-    while (!reader.atEnd() && !reader.hasError())
-    {
-      type = reader.readNext();
-      if (type == QXmlStreamReader::StartElement)
-      {
-        QStringRef name = reader.name();
-        if (name == "create")
-          loadElements(reader, ChangesetType::TypeCreate);
-        else if (name == "modify")
-          loadElements(reader, ChangesetType::TypeModify);
-        else if (name == "delete")
-          loadElements(reader, ChangesetType::TypeDelete);
-      }
+      QStringRef name = reader.name();
+      if (name == "create")
+        loadElements(reader, ChangesetType::TypeCreate);
+      else if (name == "modify")
+        loadElements(reader, ChangesetType::TypeModify);
+      else if (name == "delete")
+        loadElements(reader, ChangesetType::TypeDelete);
     }
   }
-  else  //  .osm file
+}
+
+void XmlChangeset::loadOsmAsChangeset(QXmlStreamReader& reader)
+{
+  QXmlStreamReader::TokenType type = reader.readNext();
+  if (type == QXmlStreamReader::StartDocument)
+    type = reader.readNext();
+  if (type == QXmlStreamReader::StartElement && reader.name() != "osm")
   {
-    if (type == QXmlStreamReader::StartElement && reader.name() != "osm")
-    {
-      LOG_ERROR("Unknown OSM XML file format.");
-      return;
-    }
-    //  Force load all of the elements as 'create' elements
-    loadElements(reader, ChangesetType::TypeCreate);
+    LOG_ERROR("Unknown OSM XML file format.");
+    return;
   }
+  //  Force load all of the elements as 'create' elements
+  loadElements(reader, ChangesetType::TypeCreate);
 }
 
 void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changeset_type)
@@ -1121,6 +1139,7 @@ bool XmlChangeset::matchesChangesetPreconditionFailure(const QString& hint,
                                                        long& member_id, ElementType::Type& member_type,
                                                        long& element_id, ElementType::Type& element_type)
 {
+  //  Precondition failed: Node 55 is still used by ways 123
   QRegularExpression reg(
         "Precondition failed: (Node|Way|Relation) (-?[0-9]+) is still used by (node|way|relation)s (-?[0-9]+)",
         QRegularExpression::CaseInsensitiveOption);
@@ -1139,6 +1158,30 @@ bool XmlChangeset::matchesChangesetPreconditionFailure(const QString& hint,
   return false;
 }
 
+bool XmlChangeset::matchesChangesetConflictVersionMismatchFailure(const QString& hint,
+                                                                  long& element_id, ElementType::Type& element_type,
+                                                                  long& version_old, long& version_new)
+{
+  //  Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616
+  QRegularExpression reg(
+        "Changeset conflict: Version mismatch: Provided ([0-9]+), server had: ([0-9]+) of (Node|Way|Relation) ([0-9]+)",
+        QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = reg.match(hint);
+  if (match.hasMatch())
+  {
+    bool success = false;
+    version_old = match.captured(1).toLong(&success);
+    if (!success)
+      return success;
+    version_new = match.captured(2).toLong(&success);
+    if (!success)
+      return success;
+    element_type = ElementType::fromString(match.captured(3).toLower());
+    element_id = match.captured(4).toLong(&success);
+    return success;
+  }
+  return false;
+}
 
 ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const QString& splitHint)
 {
@@ -1496,11 +1539,13 @@ bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap
           tags.remove(key);
       }
       //  Add in any tags that are missing
-      QXmlStreamAttributes attributes;
       for (QMap<QString, QString>::iterator it = tags.begin(); it != tags.end(); ++it)
-        attributes.append("", it.key(), it.value());
-      if (attributes.size() > 0)
-        element->addTag(XmlObject("tag", QXmlStreamAttributes()));
+      {
+        QXmlStreamAttributes attributes;
+        attributes.append("", "k", it.key());
+        attributes.append("", "v", it.value());
+        element->addTag(XmlObject("tag", attributes));
+      }
     }
   }
   return success;
