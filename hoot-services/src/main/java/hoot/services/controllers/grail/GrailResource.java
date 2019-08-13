@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
+import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
@@ -90,7 +92,6 @@ import org.w3c.dom.NodeList;
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
 import hoot.services.command.InternalCommand;
-import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.map.SetMapTagsCommandFactory;
 import hoot.services.controllers.osm.map.UpdateParentCommandFactory;
 import hoot.services.geo.BoundingBox;
@@ -130,9 +131,6 @@ public class GrailResource {
 
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
-
-    @Autowired
-    private UserManager userManager;
 
     public GrailResource() {}
 
@@ -619,6 +617,35 @@ public class GrailResource {
         response = responseBuilder.build();
 
         return response;
+    }
+
+    @GET
+    @Path("/overpassStatsQuery")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response overpassStats(@Context HttpServletRequest request,
+            @QueryParam("bbox") String bbox) {
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
+
+        // Get grail overpass query from the file and store it in a string
+        String overpassQuery;
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
+            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+        }
+
+        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+        String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "/api/interpreter?data=" + overpassQuery;
+
+        JSONObject jobInfo = new JSONObject();
+        jobInfo.put("overpassQuery", url);
+        jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
+
+        return Response.ok(jobInfo.toJSONString()).build();
     }
 
     /**
