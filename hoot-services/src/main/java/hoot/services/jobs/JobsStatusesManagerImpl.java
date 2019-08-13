@@ -108,6 +108,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
             response.setStart(j.getStart().getTime());
             response.setEnd(j.getEnd().getTime());
             response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
+            response.setStatusDetail(j.getStatusDetail());
 
             return response;
         }).collect(Collectors.toList());

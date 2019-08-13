@@ -52,15 +52,17 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     public static final QJobStatus jobStatus = new QJobStatus("job_status");
 
-    public final DateTimePath<java.sql.Timestamp> end = createDateTime("end", java.sql.Timestamp.class);
-
     public final StringPath jobId = createString("jobId");
 
-    public final NumberPath<Integer> percentComplete = createNumber("percentComplete", Integer.class);
+    public final com.querydsl.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
 
     public final DateTimePath<java.sql.Timestamp> start = createDateTime("start", java.sql.Timestamp.class);
 
+    public final DateTimePath<java.sql.Timestamp> end = createDateTime("end", java.sql.Timestamp.class);
+
     public final NumberPath<Integer> status = createNumber("status", Integer.class);
+
+    public final NumberPath<Integer> percentComplete = createNumber("percentComplete", Integer.class);
 
     public final StringPath statusDetail = createString("statusDetail");
 
@@ -72,7 +74,7 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     public final NumberPath<Integer> trackableCommandCount = createNumber("trackableCommandCount", Integer.class);
 
-    public final com.querydsl.sql.PrimaryKey<JobStatus> jobStatusPkey = createPrimaryKey(jobId);
+    public final StringPath parentId = createString("parentId");
 
     public QJobStatus(String variable) {
         super(JobStatus.class, forVariable(variable), "public", "job_status");
@@ -105,6 +107,7 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
         addMetadata(userId, ColumnMetadata.named("user_id").withIndex(8).ofType(Types.BIGINT).withSize(19).notNull());
         addMetadata(jobType, ColumnMetadata.named("job_type").withIndex(9).ofType(Types.INTEGER).withSize(10));
         addMetadata(trackableCommandCount, ColumnMetadata.named("trackable_command_count").withIndex(10).ofType(Types.INTEGER).withSize(10));
+        addMetadata(parentId, ColumnMetadata.named("parent_id").withIndex(11).ofType(Types.VARCHAR).withSize(64).notNull());
     }
 
 }

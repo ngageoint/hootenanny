@@ -74,6 +74,7 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.QUsers;
 
 
@@ -363,6 +364,18 @@ public class DbUtils {
     }
 
     /**
+     * Retrieves the maps reference layer id
+     * @param mapId
+     * @return reference layer id
+     */
+    public static Long getMergedReference(long mapId) {
+        Map<String, String> tags = getMapsTableTags(mapId);
+        String referenceId = tags.get("input1");
+
+        return Long.parseLong(referenceId);
+    }
+
+    /**
      * Inserts a mapid to the folder mapping table if it doesn't exist
      * Updates mapid's parent if it does exist
      *
@@ -605,6 +618,38 @@ public class DbUtils {
         }
 
         return -1;
+    }
+
+    // Returns the parentId for the specified jobId job
+    public static String getParentId(String jobId) {
+        return createQuery()
+                .select(jobStatus.parentId)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchFirst();
+    }
+
+    // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
+    public static void setStale(String jobId) {
+        // Find the job
+        JobStatus job = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchFirst();
+
+        if(job != null) {
+            createQuery()
+                .update(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .set(jobStatus.statusDetail, "STALE")
+                .execute();
+
+            // If it has a parent, make the parent stale too
+            if(job.getParentId() != null && !job.getParentId().equals("")) {
+                setStale(job.getParentId());
+            }
+        }
     }
 
     /**
