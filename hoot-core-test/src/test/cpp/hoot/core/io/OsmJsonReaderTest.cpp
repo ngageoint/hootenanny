@@ -333,6 +333,9 @@ public:
   // Try hitting the network to get some data...
   void urlTest()
   {
+    // needed to suppress map crop missing element warnings
+    DisableLog dl;
+
     OsmMapPtr pMap;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
     QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
