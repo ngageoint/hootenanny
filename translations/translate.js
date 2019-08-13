@@ -797,6 +797,18 @@ translate = {
     },
 
 
+    swapName : function(tags)
+    {
+        // If we have an English name, make it the main "name"
+        // This is run after a check for the existance of "name"
+        if (tags['name:en']) 
+        {
+            tags.name = tags['name:en'];
+            delete tags['name:en'];
+        }
+    },
+
+
     fixConstruction : function(tags, key)
     {
         if ('condition' in tags && key in tags && tags.condition == 'construction' && tags[key] != '')

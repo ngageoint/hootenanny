@@ -1582,15 +1582,8 @@ mgcp = {
                 break;
         }
 
-        // Names. Sometimes we don't have a name but we do have language ones 
-        if (!tags.name)
-        {
-            if (tags['name:en']) 
-            {
-                tags.name = tags['name:en'];
-                delete tags['name:en'];
-            }
-        }
+        // Names. Sometimes we don't have a name but we do have language ones
+        if (!tags.name) translate.swapName(tags);
 
     }, // End applyToMgcpPreProcessing
 

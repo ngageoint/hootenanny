@@ -1940,14 +1940,7 @@ tds40 = {
         } // End if religion & denomination
 
         // Names. Sometimes we don't have a name but we do have language ones 
-        if (!tags.name)
-        {
-            if (tags['name:en']) 
-            {
-                tags.name = tags['name:en'];
-                delete tags['name:en'];
-            }
-        }
+        if (!tags.name) translate.swapName(tags);
     
     }, // End applyToTdsPreProcessing
 
@@ -2230,10 +2223,10 @@ tds40 = {
 
             // Debug:
             if (tds40.configIn.OgrDebugDumptags == 'true')
-                {
-                    translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
-                    print('');
-                }
+            {
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+                print('');
+            }
 
             return tags;
         } // End layername = o2s_X
