@@ -60,6 +60,9 @@ public:
 
   void runTest()
   {
+    // needed to suppress map crop missing element warnings
+    DisableLog dl;
+
     OsmXmlReader reader;
 
     OsmMapPtr map(new OsmMap());
@@ -87,6 +90,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CookieCutterOpTest, "current");
 
 }

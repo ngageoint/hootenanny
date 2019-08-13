@@ -73,6 +73,10 @@ class ElementConverter
 {
 public:
 
+  static int logWarnCount;
+
+  static std::string className() { return "hoot::ElementConverter"; }
+
   /**
    * see class description
    *

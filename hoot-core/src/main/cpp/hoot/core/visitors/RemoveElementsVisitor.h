@@ -33,6 +33,7 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -70,7 +71,10 @@ public:
   virtual QString getInitStatusMessage() const { return "Removing elements..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_count) + " elements."; }
+  {
+    return
+      "Removed " + StringUtils::formatLargeNumber(_count) + " / " +
+      StringUtils::formatLargeNumber(_startElementCount) + " elements."; }
 
 private:
 
@@ -81,6 +85,7 @@ private:
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriteria;
   bool _chainCriteria;
+  long _startElementCount;
 
   bool _criteriaSatisfied(const ConstElementPtr& e) const;
 };

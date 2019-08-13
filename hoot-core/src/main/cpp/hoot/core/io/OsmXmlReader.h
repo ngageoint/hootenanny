@@ -121,6 +121,11 @@ public:
 
   virtual void setConfiguration(const Settings& conf) override;
 
+  // Its possible we may want to move this method and the ones for all other classes using it up
+  // to OsmMapReader;
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
 private:
 
   bool _osmFound;
@@ -170,6 +175,8 @@ private:
   long _statusUpdateInterval;
 
   geos::geom::Envelope _bounds;
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
 
   void _createNode(const QXmlAttributes& attributes);
   void _createWay(const QXmlAttributes& attributes);

@@ -36,9 +36,16 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
 
 // Qt
 #include <QFileInfo>
+
+// GEOS
+#include <geos/geom/GeometryFactory.h>
 
 namespace hoot
 {
@@ -130,19 +137,51 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
   OsmMapWriterFactory::write(map, path);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds)
+void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
+                           const bool keepConnectedOobWays)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
+  LOG_VARD(keepConnectedOobWays);
+  LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
+
+  // We can get more precise bounds intersection calcs for ways when passing in a geometry here
+  // instead of an envelope.
+//  std::shared_ptr<geos::geom::Geometry> boundsGeom(
+//    geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
+//  MapCropper cropper(boundsGeom);
   MapCropper cropper(bounds);
-  LOG_INFO(cropper.getInitStatusMessage());
-  // We don't reuse MapCropper's version of these options, since we want the freedom to have
-  // different default values than what MapCropper uses.
+
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
-  cropper.setKeepOnlyFeaturesInsideBounds(
-    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds());
+  const bool strictBoundsHandling =
+    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds();
+  cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
+
+  // If we want to keep ways that are outside of the crop bounds but connected to a way that's
+  // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
+  // them alone.
+  ElementCriterionPtr inclusionCrit;
+  if (keepConnectedOobWays)
+  {
+    // The two cropper config opts above will always be opposite of one another, so we'll just
+    // determine bounds strictness off of one of them.
+    ImmediatelyConnectedOutOfBoundsWayTagger tagger(bounds, strictBoundsHandling);
+    LOG_INFO(tagger.getInitStatusMessage());
+    tagger.apply(map);
+    LOG_DEBUG(tagger.getCompletedStatusMessage());
+    inclusionCrit.reset(
+      new ChainCriterion(
+        std::shared_ptr<WayCriterion>(new WayCriterion()),
+        std::shared_ptr<TagKeyCriterion>(
+          new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+  }
+  cropper.setInclusionCriterion(inclusionCrit);
+
+  LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
+  LOG_INFO(cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
+  LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 }
 
 }

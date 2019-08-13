@@ -39,6 +39,8 @@
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -62,6 +64,8 @@ class MapCropper : public OsmMapOperation, public Serializable, public Boundable
   public Configurable, public OperationStatusInfo
 {
 public:
+
+  static int logWarnCount;
 
   static std::string className() { return "hoot::MapCropper"; }
 
@@ -91,11 +95,15 @@ public:
   { return "Cropping map..."; }
 
   virtual QString getCompletedStatusMessage() const override
-  { return "Cropped " + QString::number(_numAffected) + " elements"; }
+  {
+    return
+      "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+      StringUtils::formatLargeNumber(_numProcessed) + " elements"; }
 
   void setInvert(bool invert);
   void setKeepEntireFeaturesCrossingBounds(bool keep);
   void setKeepOnlyFeaturesInsideBounds(bool keep);
+  void setInclusionCriterion(const ElementCriterionPtr& crit) { _inclusionCrit = crit; }
 
 private:
 
@@ -110,6 +118,10 @@ private:
   // If true, will only keep features falling completely inside the specified bounds. This overrides
   // _keepEntireFeaturesCrossingBounds and sets it to false;
   bool _keepOnlyFeaturesInsideBounds;
+  // Any way meeting this criterion and all of its way nodes will not be cropped out of the map
+  ElementCriterionPtr _inclusionCrit;
+  // tracks all ways satisfying _inclusionCrit
+  std::set<long> _explicitlyIncludedWayIds;
 
   int _statusUpdateInterval;
 
@@ -123,21 +135,16 @@ private:
   void _cropWay(const std::shared_ptr<OsmMap>& map, long wid);
 
   /**
-   * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
-   * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
-   */
-  long _findNodeId(const std::shared_ptr<const OsmMap>& map, const std::shared_ptr<const Way>& w,
-                   const geos::geom::Coordinate& c);
-
-  /**
    * Returns true if the specified envelope is wholly inside the region that will be kept.
    */
   bool _isWhollyInside(const geos::geom::Envelope& e);
+  bool _isWhollyInside(const geos::geom::Geometry& e);
 
   /**
    * Returns true if the specified envelope is wholly outside the region that will be kept.
    */
   bool _isWhollyOutside(const geos::geom::Envelope& e);
+  bool _isWhollyOutside(const geos::geom::Geometry& e);
 };
 
 }

@@ -71,6 +71,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
     r->setTag("area", "yes");
   }
 
+  LOG_VARD(MapProjector::toWkt(result->getProjection()));
   OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
 
   return result;
@@ -79,6 +80,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputMap)
 {
   MapProjector::projectToPlanar(inputMap);
+  LOG_VARD(MapProjector::toWkt(inputMap->getProjection()));
 
   // put all the nodes into a vector of points.
   std::vector<std::pair<double, double>> points;

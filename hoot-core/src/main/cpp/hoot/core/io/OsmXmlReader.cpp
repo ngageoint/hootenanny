@@ -64,9 +64,12 @@ HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
 _status(Status::Invalid),
+_missingNodeCount(0),
+_missingWayCount(0),
 _useDataSourceId(false),
 _inputCompressed(false),
-_numRead(0)
+_numRead(0),
+_keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());
 }
@@ -87,6 +90,8 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setAddChildRefsWhenMissing(configOptions.getOsmMapReaderXmlAddChildRefsWhenMissing());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  setKeepImmediatelyConnectedWaysOutsideBounds(
+    ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -99,10 +104,17 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
   }
 }
 
-void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
+void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 {
   long id = _parseLong(attributes.value("id"));
   //LOG_VART(id);
+
+  if (_nodeIdMap.contains(id))
+  {
+    throw HootException(
+      QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
+  }
+
   long newId;
   if (_useDataSourceId)
   {
@@ -118,7 +130,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   double x = _parseDouble(attributes.value("lon"));
   double y = _parseDouble(attributes.value("lat"));
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these
+  // check the next 3 attributes to see if a value exists, if not, assign a default since these
   // are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
@@ -156,13 +168,14 @@ void OsmXmlReader::_createNode(const QXmlAttributes &attributes)
   }
 }
 
-void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
+void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 {
   _wayId = _parseLong(attributes.value("id"));
 
   if (_wayIdMap.contains(_wayId))
   {
-    throw HootException(QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
+    throw HootException(
+      QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
   }
 
   long newId;
@@ -176,7 +189,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
   }
   _wayIdMap.insert(_wayId, newId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since
+  // check the next 3 attributes to see if a value exists, if not, assign a default since
   // these are not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
@@ -210,12 +223,20 @@ void OsmXmlReader::_createWay(const QXmlAttributes &attributes)
   _parseTimeStamp(attributes);
 }
 
-void OsmXmlReader::_createRelation(const QXmlAttributes &attributes)
+void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
 {
   _relationId = _parseLong(attributes.value("id"));
+
+  // Adding this in causes issues with the tests...worth looking into at some point.
+//  if (_relationIdMap.contains(_relationId))
+//  {
+//    throw HootException(
+//      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_path));
+//  }
+
   long newId = _getRelationId(_relationId);
 
-  // check the next 3 attributes to see if a value exist, if not, assign a default since these are
+  // check the next 3 attributes to see if a value exists, if not, assign a default since these are
   // not officially required by the DTD
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
@@ -351,9 +372,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     throw HootException(_errorString);
   }
   file.close();
-
-  // TODO: implement support for immediately connected outside of bounds ways; without it, the
-  // lenient linear changeset replacement workflow may drop ways (see ApiDbReader)
+  LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 
   // This is meant for taking a larger input down to a smaller size. Clearly, if the input data's
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
@@ -362,7 +381,8 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
   {
-    IoUtils::cropToBounds(_map, _bounds);
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
   ReportMissingElementsVisitor visitor;
@@ -391,6 +411,13 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   if (reader.parse(xmlInputSource) == false)
   {
     throw Exception(_errorString);
+  }
+
+  LOG_VARD(_bounds.isNull());
+  if (!_bounds.isNull())
+  {
+    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
   ReportMissingElementsVisitor visitor;
@@ -490,7 +517,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           _missingNodeCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Missing node (" << ref << ") in way (" << _wayId << ").");
+            LOG_WARN(
+              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
+              ElementId(ElementType::Way, _wayId) << ".");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -530,7 +559,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             _missingNodeCount++;
             if (logWarnCount < Log::getWarnMessageLimit())
             {
-              LOG_WARN("Missing node (" << ref << ") in relation (" << _relationId << ").");
+              LOG_WARN(
+                "Missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << ".");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {
@@ -561,7 +592,9 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             _missingWayCount++;
             if (logWarnCount < Log::getWarnMessageLimit())
             {
-              LOG_WARN("Missing way (" << ref << ") in relation (" << _relationId << ").");
+              LOG_WARN(
+                "Missing " << ElementId(ElementType::Way, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << ".");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {

@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 
@@ -91,10 +92,15 @@ public:
     UnifyingConflator conflator;
     conflator.apply(map);
 
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    const QString actual = writer.toString(map);
     //LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter().toString(map)));
     HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
                     "{\"type\":\"node\",\"id\":-1,\"lat\":0,\"lon\":0,\"tags\":{\"hoot:hash\":\"\",\"name\":\"foo\",\"alt_name\":\"bar;baz;qux\",\"source:hash\":\"AAA;BBB;CCC\",\"poi\":\"yes\",\"error:circular\":\"15\"}}]\n"
-                    "}\n", OsmJsonWriter().toString(map));
+                    "}\n",
+                    actual);
+    CPPUNIT_ASSERT(OsmJsonReader().isValidJson(actual));
   }
 
 };

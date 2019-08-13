@@ -52,16 +52,23 @@ void ReportMissingElementsVisitor::setConfiguration(const Settings& conf)
 
 void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId missing)
 {
+  QString msg;
+  if (_removeMissing)
+  {
+    msg = "Removing missing " + missing.toString() + " in " + referer.toString() + ".";
+  }
+  else
+  {
+    msg = "Missing " + missing.toString() + " in " + referer.toString() + ".";
+  }
+
   if (_missingCount < _maxReport)
   {
-    if (_removeMissing)
-    {
-      LOG_DEBUG("Removing missing " << missing.toString() << " in " << referer.toString() << ".");
-    }
-    else
-    {
-      LOG_DEBUG("Missing " << missing.toString() << " in " << referer.toString() << ".");
-    }
+    LOG_DEBUG(msg);
+  }
+  else
+  {
+    LOG_TRACE(msg);
   }
   _missingCount++;
   if (_missingCount == _maxReport)
@@ -131,8 +138,10 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
     }
     if (newNids.size() != w->getNodeCount())
     {
+      LOG_TRACE("Way nodes size before: " << w->getNodeCount());
       w->setNodes(newNids);
-    }
+      LOG_TRACE("Way nodes size after: " << w->getNodeCount());
+    } 
   }
   else if (type == ElementType::Relation)
   {
@@ -153,7 +162,9 @@ void ReportMissingElementsVisitor::_visitRw(ElementType type, long id)
     }
     if (newEntries.size() != r->getMembers().size())
     {
+      LOG_TRACE("Relation members size before: " << r->getMembers().size());
       r->setMembers(newEntries);
+      LOG_TRACE("Relation members size after: " << r->getMembers().size());
     }
   }
 }

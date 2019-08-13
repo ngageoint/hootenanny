@@ -48,6 +48,9 @@ public:
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
+  virtual ConflatableGeometryType getGeometryType() const
+  { return ConflatableGeometryType::Polygon; }
+
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
 
   virtual QString getDescription() const { return "Identifies areas"; }

@@ -27,6 +27,9 @@
 
 #include "InBoundsCriterion.h"
 
+// GEOS
+#include <geos/geom/GeometryFactory.h>
+
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
@@ -53,12 +56,20 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
-  geos::geom::Envelope bounds =
+  LOG_VARD(_mustCompletelyContain);
+  const geos::geom::Envelope bounds =
     GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
   if (!bounds.isNull())
   {
-    _bounds = bounds;
+    setBounds(bounds);
   }
+}
+
+void InBoundsCriterion::setBounds(const geos::geom::Envelope& bounds)
+{
+  LOG_VARD(bounds);
+  _boundsGeom.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
+  LOG_VARD(_boundsGeom->toString());
 }
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
@@ -69,24 +80,27 @@ void InBoundsCriterion::setOsmMap(const OsmMap* map)
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (_bounds.isNull())
+  if (!_boundsGeom)
   {
     throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
+  }
+  if (!_elementConverter)
+  {
+    throw IllegalArgumentException("No map set on InBoundsCriterion.");
   }
 
   LOG_VART(e->getElementId());
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
-  LOG_VART(geom.get());
-  LOG_VART(_bounds);
+  LOG_VART(geom->toString());
   if (_mustCompletelyContain)
   {
-    LOG_VART(_bounds.contains(geom->getEnvelopeInternal()));
-    return _bounds.contains(geom->getEnvelopeInternal());
+    LOG_VART(_boundsGeom->contains(geom.get()));
+    return _boundsGeom->contains(geom.get());
   }
   else
   {
-    LOG_VART(_bounds.intersects(geom->getEnvelopeInternal()));
-    return _bounds.intersects(geom->getEnvelopeInternal());
+    LOG_VART(_boundsGeom->intersects(geom.get()));
+    return _boundsGeom->intersects(geom.get());
   }
 }
 

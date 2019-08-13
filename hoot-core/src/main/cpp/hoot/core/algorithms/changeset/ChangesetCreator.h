@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 namespace hoot
 {
@@ -91,6 +92,8 @@ public:
 
 private:
 
+  friend class ChangesetReplacementCreatorTest;
+
   QString _osmApiDbUrl;
 
   int _numTotalTasks;
@@ -101,6 +104,8 @@ private:
   // If true, we are generating a changeset that will be made up of everything in the single input
   // provided.
   bool _singleInput;
+
+  ChangesetDeriverPtr _changesetDeriver;
 
   bool _isSupportedOutputFormat(const QString& format) const;
   bool _inputIsSorted(const QString& input) const;

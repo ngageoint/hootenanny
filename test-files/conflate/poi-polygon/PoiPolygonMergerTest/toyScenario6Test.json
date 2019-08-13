@@ -1,0 +1,15 @@
+{"version": 0.6,"generator": "Hootenanny","elements": [
+{"type":"node","id":-12,"lat":0.0001194,"lon":0.00236},
+{"type":"node","id":-11,"lat":0.0001179,"lon":0.00332},
+{"type":"node","id":-10,"lat":-0.0004452,"lon":0.003319},
+{"type":"node","id":-9,"lat":-0.0004462,"lon":0.003985},
+{"type":"node","id":-8,"lat":-0.001406,"lon":0.003983},
+{"type":"node","id":-7,"lat":-0.001405,"lon":0.003339},
+{"type":"node","id":-6,"lat":-0.001901,"lon":0.003338},
+{"type":"node","id":-5,"lat":-0.0019,"lon":0.00236},
+{"type":"node","id":-4,"lat":-0.001456,"lon":0.00236},
+{"type":"node","id":-3,"lat":-0.001455,"lon":0.00177},
+{"type":"node","id":-2,"lat":-0.0004766,"lon":0.001771},
+{"type":"node","id":-1,"lat":-0.0004775,"lon":0.00236},
+{"type":"way","id":-1,"nodes":[-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,-12],"tags":{"hoot:poipolygon:poismerged":"1","name":"A","alt_name":"F","note":"Toy Scenario 6","building":"yes","poi":"yes","error:circular":"15"}}]
+}

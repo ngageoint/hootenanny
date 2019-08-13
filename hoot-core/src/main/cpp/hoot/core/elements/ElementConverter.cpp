@@ -66,6 +66,8 @@ using namespace std;
 namespace hoot
 {
 
+int ElementConverter::logWarnCount = 0;
+
 ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
   _constProvider(provider),
   _spatialReference(provider->getProjection())
@@ -99,7 +101,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
-  switch(e->getElementType().getEnum())
+  switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
     return convertToGeometry(std::dynamic_pointer_cast<const Node>(e));
@@ -126,8 +128,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) c
 }
 
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
-                                                         bool throwError,
-                                                         const bool statsFlag) const
+                                                              bool throwError,
+                                                              const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
   if (gid == GEOS_POLYGON)
@@ -147,8 +149,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
 }
 
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
-                                                                bool throwError,
-                                                                const bool statsFlag) const
+                                                              bool throwError,
+                                                              const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
 
@@ -191,6 +193,19 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
   for (size_t i = 0; i < ids.size(); i++)
   {
     ConstNodePtr n = _constProvider->getNode(ids[i]);
+    if (!n.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Missing node: " << ids[i] << ". Not creating line string...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      return std::shared_ptr<LineString>();
+    }
     cs->setAt(n->toCoordinate(), i);
   }
 
@@ -198,11 +213,23 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
   if (ids.size() == 1)
   {
     ConstNodePtr n = _constProvider->getNode(ids[0]);
+    if (!n.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Missing node: " << ids[0] << ". Not creating line string...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      return std::shared_ptr<LineString>();
+    }
     cs->setAt(n->toCoordinate(), 1);
   }
 
   std::shared_ptr<LineString> result(GeometryFactory::getDefaultInstance()->createLineString(cs));
-
   return result;
 }
 
@@ -256,8 +283,8 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   return result;
 }
 
-geos::geom::GeometryTypeId ElementConverter::getGeometryType(const ConstElementPtr& e,
-  bool throwError, const bool statsFlag)
+geos::geom::GeometryTypeId ElementConverter::getGeometryType(
+  const ConstElementPtr& e, bool throwError, const bool statsFlag)
 {
   // This is used to pass the relation type back to the exception handler
   QString relationType = "";
