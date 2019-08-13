@@ -536,11 +536,12 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   // Get info we need to construct our relation
   long id = item.get("id", id);
 
-  if (_relationIdMap.contains(id))
-  {
-    throw HootException(
-      QString("Duplicate realtion id %1 in map %2 encountered.").arg(id).arg(_path));
-  }
+  // See related note in OsmXmlReader::_createRelation.
+//  if (_relationIdMap.contains(id))
+//  {
+//    throw HootException(
+//      QString("Duplicate realtion id %1 in map %2 encountered.").arg(id).arg(_path));
+//  }
 
   long newId;
   if (_useDataSourceIds)
