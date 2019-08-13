@@ -271,7 +271,9 @@ void MapCropper::apply(OsmMapPtr& map)
       _explicitlyIncludedWayIds.insert(w->getId());
       _numWaysInBounds++;
     }
-    // TODO: clean up
+    // Have found that if we have _envelopeG, using it for inside/outside way comparison is more
+    // accurate than using the envelope. Its possible that we could eventually use that method
+    // exclusively and get rid of storing _envelope.
     else if ((_envelopeG && _isWhollyOutside(*ls)) || _isWhollyOutside(wayEnv))
     {
       // remove the way
@@ -280,7 +282,7 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-    else if ((_envelopeG && _isWhollyInside(*ls)) && _isWhollyInside(wayEnv))
+    else if ((_envelopeG && _isWhollyInside(*ls)) || _isWhollyInside(wayEnv))
     {
       // keep the way
       LOG_TRACE("Keeping wholly inside way: " << w->getElementId() << "...");
@@ -393,6 +395,8 @@ void MapCropper::apply(OsmMapPtr& map)
       if (!nodeInside)
       {
         // if the node is within the limiting bounds.
+        // TODO: This may have been left over from support for four pass conflation using Hadoop.
+        // Could we just use _envelope or _envelopeG here instead?
         LOG_VART(_nodeBounds.isNull());
         if (!_nodeBounds.isNull())
         {

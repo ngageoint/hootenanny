@@ -56,6 +56,8 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
+    const QString boundsStr = args[2].trimmed();
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
     BoundedCommand::runSimple(args);
 
     // process optional params
@@ -90,7 +92,6 @@ public:
 
     const QString input1 = args[0].trimmed();
     const QString input2 = args[1].trimmed();
-    const QString boundsStr = args[2].trimmed();
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
     const QString critClassName = args[3].trimmed();
     const QString output = args[4].trimmed();
