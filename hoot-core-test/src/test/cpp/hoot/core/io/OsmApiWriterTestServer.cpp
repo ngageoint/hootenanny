@@ -31,9 +31,6 @@
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/Log.h>
 
-//  Standard
-#include <regex>
-
 namespace hoot
 {
 
