@@ -233,6 +233,11 @@ public:
 
   virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
 
+  void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
+  { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
+
+  bool isValidJson(const QString& jsonStr);
+
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -277,6 +282,17 @@ protected:
   int _threadCount;
 
   geos::geom::Envelope _bounds;
+  // only valid is _bounds is not null
+  bool _keepImmediatelyConnectedWaysOutsideBounds;
+
+  /// Maps from old node ids to new node ids.
+  QHash<long, long> _nodeIdMap;
+  QHash<long, long> _relationIdMap;
+  QHash<long, long> _wayIdMap;
+
+  int _missingNodeCount;
+  int _missingWayCount;
+  QString _path;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
@@ -330,6 +346,10 @@ protected:
    *   list until the queue is empty.
    */
   void _doHttpRequestFunc();
+
+  void _readToMap();
+
+  long _getRelationId(long fileId);
 };
 
 }

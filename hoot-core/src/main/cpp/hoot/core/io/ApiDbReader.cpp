@@ -62,7 +62,9 @@ _totalNumMapWays(0),
 _totalNumMapRelations(0),
 _numNodesRead(0),
 _numWaysRead(0),
-_numRelationsRead(0)
+_numRelationsRead(0),
+_keepImmediatelyConnectedWaysOutsideBounds(
+  ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
 {
 }
 
@@ -303,8 +305,8 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     // of the requested bounds but are directly connected to a way that is being returned by the
     // query.
     QSet<QString> connectedWayIds;
-    LOG_VARD(ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
-    if (ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
+    LOG_VARD(_keepImmediatelyConnectedWaysOutsideBounds);
+    if (_keepImmediatelyConnectedWaysOutsideBounds)
     {
       LOG_DEBUG("Retrieving way IDs immediately connected to the current ways...");
       connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);
@@ -319,7 +321,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     const bool tagConnectedWays =
-      ConfigOptions().getApidbReaderTagImmediatelyConnectedOutOfBoundsWays();
+      ConfigOptions().getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWays();
     LOG_VARD(tagConnectedWays);
     while (wayItr->next())
     {
@@ -564,6 +566,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
   { 
+    // We've already handled keeping immediately connected oob ways during the query, so don't need
+    // to worry about it here.
     IoUtils::cropToBounds(map, _bounds);
   }
 

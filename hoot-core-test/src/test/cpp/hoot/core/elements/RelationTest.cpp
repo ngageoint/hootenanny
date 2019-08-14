@@ -33,6 +33,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
@@ -49,6 +51,11 @@ class RelationTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  RelationTest() :
+  HootTestFixture("test-files/elements/RelationTest/", "test-output/elements/RelationTest/")
+  {
+  }
 
   void runCircularVisitRo1Test()
   {
@@ -149,15 +156,14 @@ public:
 
     r1->replaceElement(w1, newWays);
 
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"foo\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
-      "}\n",
-      OsmJsonWriter().toString(map));
+    const QString testFileName = "runReplaceTest1.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
   /**
@@ -186,18 +192,14 @@ public:
 
     r1->replaceElement(w1, newWays);
 
-    HOOT_STR_EQUALS("{\"version\": 0.6,\"generator\": \"Hootenanny\",\"elements\": [\n"
-      "{\"type\":\"way\",\"id\":1,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":2,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"way\",\"id\":3,\"nodes\":[],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"},\n"
-      "{\"type\":\"relation\",\"id\":1,\"members\":[\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"foo\"},\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"bar\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"bar\"},\n"
-      "{\"type\":\"way\",\"ref\":2,\"role\":\"lucky\"},\n"
-      "{\"type\":\"way\",\"ref\":3,\"role\":\"lucky\"}],\"tags\":{\"" + MetadataTags::ErrorCircular() + "\":\"15\"}]\n"
-      "}\n",
-      OsmJsonWriter().toString(map));
+    const QString testFileName = "runReplaceTest2.json";
+    OsmJsonWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.open(_outputPath + testFileName);
+    MapProjector::projectToWgs84(map);
+    writer.write(map);
+    writer.close();
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 };
 

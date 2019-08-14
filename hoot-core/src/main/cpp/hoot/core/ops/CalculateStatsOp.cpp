@@ -116,7 +116,9 @@ void CalculateStatsOp::_readGenericStatsData()
     else if (listType.first == "slow") pCurr = &_slowStatData;
     else
     {
-      throw HootException("Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() + ". Allowed: 'quick' or 'slow'.");
+      throw HootException(
+        "Invalid stats data list name '" + listType.first + "' in " + statsFileName.toStdString() +
+        ". Allowed: 'quick' or 'slow'.");
     }
 
     foreach (bpt::ptree::value_type entry, listType.second)
@@ -140,12 +142,16 @@ void CalculateStatsOp::_readGenericStatsData()
           }
           else
           {
-            throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + statsFileName.toStdString());
+            throw HootException(
+              "Invalid stats data field '" + val.toStdString() + "' in " +
+              statsFileName.toStdString());
           }
         }
         else
         {
-          throw HootException("Invalid stats data field '" + val.toStdString() + "' in " + statsFileName.toStdString());
+          throw HootException(
+            "Invalid stats data field '" + val.toStdString() + "' in " +
+            statsFileName.toStdString());
         }
       }
 
@@ -447,7 +453,9 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       }
       catch (...)
       {
-        throw HootException(QString("Unable to construct criterion '%1' in stats data entry '%2'").arg(d.criterion, d.name) );
+        throw HootException(
+          QString("Unable to construct criterion '%1' in stats data entry '%2'")
+            .arg(d.criterion, d.name) );
       }
 
       _criterionCache[d.criterion] = pCrit;
@@ -473,10 +481,13 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       }
       catch (...)
       {
-        throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
+        throw HootException(
+          QString("Unable to construct visitor '%1' in stats data entry '%2'")
+            .arg(d.visitor, d.name) );
       }
 
-      FilteredVisitor filteredVisitor = FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
+      FilteredVisitor filteredVisitor =
+        FilteredVisitor(pCrit, ConstElementVisitorPtr(pCriterionVisitor));
       val = _applyVisitor(filteredVisitor, d.statCall);
     }
     else
@@ -497,7 +508,9 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
         }
         catch (...)
         {
-          throw HootException(QString("Unable to construct visitor '%1' in stats data entry '%2'").arg(d.visitor, d.name) );
+          throw HootException(
+            QString("Unable to construct visitor '%1' in stats data entry '%2'")
+              .arg(d.visitor, d.name) );
         }
 
         // without criterion, apply the visitor directly and interpret as NumericStatistic
@@ -545,7 +558,8 @@ bool CalculateStatsOp::_matchDescriptorCompare(const CreatorDescription& m1,
   return m1.className > m2.className;
 }
 
-double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit, ConstElementVisitor* pVis, StatCall call)
+double CalculateStatsOp::_applyVisitor(ElementCriterion* pCrit,
+                                       ConstElementVisitor* pVis, StatCall call)
 {
   return _applyVisitor(FilteredVisitor(pCrit, pVis), call);
 }
@@ -556,7 +570,8 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, StatCall call)
   return _applyVisitor(v, emptyVisitorData, call);
 }
 
-double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData, StatCall call)
+double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& visitorData,
+                                       StatCall call)
 {
   // this is a hack to let C++ pass v as a temporary. Bad Jason.
   FilteredVisitor* fv = const_cast<FilteredVisitor*>(&v);
@@ -663,7 +678,9 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   LOG_VARD(description);
 
   double totalFeatures = 0.0;
-  totalFeatures = _applyVisitor(FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
+  totalFeatures =
+    _applyVisitor(
+      FilteredVisitor(criterion->clone(), _getElementVisitorForFeatureType(featureType)));
   LOG_VARD(totalFeatures);
   _addStat(QString("%1s").arg(description), totalFeatures);
   _addStat(QString("Conflatable %1s").arg(description), conflatableCount);
@@ -726,8 +743,10 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   else if (type == CreatorDescription::CalcTypeArea)
   {
     _addStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
-      _applyVisitor(FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor()))));
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
+          criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor()))));
   }
 
   double percentageOfTotalFeaturesConflated = 0.0;
@@ -737,7 +756,8 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
       ((double)conflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesConflated);
-  _addStat(QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
+  _addStat(
+    QString("Percentage of %1s Conflated").arg(description), percentageOfTotalFeaturesConflated);
   double percentageOfTotalFeaturesMarkedForReview = 0.0;
   if (totalFeatures > 0.0)
   {
@@ -753,7 +773,8 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
       ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
-  _addStat(QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
+  _addStat(
+    QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
 }
 
 }

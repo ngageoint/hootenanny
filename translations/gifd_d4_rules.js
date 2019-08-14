@@ -464,10 +464,10 @@ gifd.rules = {
        'HTH':'raw:HTH', // Maximum height of obstacles in a Hull Integrity Test Site
        'IDN':'identification_number', // Identification Number
        'KVA':'voltage', // Kilovolt Capacity Attribute
-       'LC1':'bridge:load_class4', // Load Class Type 1
-       'LC2':'bridge:load_class4', // Load Class Type 2
-       'LC3':'bridge:load_class4', // Load Class Type 3
-       'LC4':'bridge:load_class4', // Load Class Type 4
+       'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+       'LC2':'mlc:wheeled', // Load Class Type 2
+       'LC3':'mlc:tracked_oneway', // Load Class Type 3
+       'LC4':'mlc:tracked', // Load Class Type 4
        'LEG':'length', // Length/Diameter in Meters With Greater Precision
        'LEN_':'length', // Length/Diameter
        'LNU':'length:interior_useable', // Useable Length

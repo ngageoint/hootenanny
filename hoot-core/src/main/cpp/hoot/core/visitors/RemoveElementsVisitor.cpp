@@ -45,7 +45,8 @@ RemoveElementsVisitor::RemoveElementsVisitor(bool negateCriteria) :
 _recursive(false),
 _count(0),
 _negateCriteria(negateCriteria),
-_chainCriteria(false)
+_chainCriteria(false),
+_startElementCount(0)
 {
 }
 
@@ -87,6 +88,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;
+  _startElementCount = _map->getElementCount();
 
   for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
        it != _criteria.end(); ++it)

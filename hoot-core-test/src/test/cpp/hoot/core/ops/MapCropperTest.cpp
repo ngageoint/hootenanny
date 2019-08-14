@@ -39,6 +39,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -72,6 +73,7 @@ class MapCropperTest : public HootTestFixture
   CPPUNIT_TEST(runKeepFeaturesOnlyCompletelyInBoundsTest);
   CPPUNIT_TEST(runDontSplitCrossingFeaturesTest);
   CPPUNIT_TEST(runInvertTest);
+  CPPUNIT_TEST(runInclusionTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -185,78 +187,6 @@ public:
     settings.set("crop.bounds", "12,41.891,13.,42");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._envelope.toString());
-
-    cropper._envelope = Envelope();
-
-    settings.clear();
-    settings.set("crop.bounds", "12.462,41.891,-12.477,41.898");
-    QString exceptionMsg("");
-    try
-    {
-      cropper.setConfiguration(settings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
-    HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
-
-    settings.clear();
-    settings.set("crop.bounds", "12.462,41.891,12.477,-41.898");
-    exceptionMsg = "";
-    try
-    {
-      cropper.setConfiguration(settings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
-    HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
-
-    settings.clear();
-    settings.set("crop.bounds", "41.891,12.477,41.898");
-    exceptionMsg = "";
-    try
-    {
-      cropper.setConfiguration(settings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
-    HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
-
-    settings.clear();
-    settings.set("crop.bounds", "12.462,asdf,12.477,41.898");
-    exceptionMsg = "";
-    try
-    {
-      cropper.setConfiguration(settings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
-    HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
-
-    settings.clear();
-    settings.set("crop.bounds", "12.462,,12.477,41.898");
-    exceptionMsg = "";
-    try
-    {
-      cropper.setConfiguration(settings);
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid envelope string"));
-    HOOT_STR_EQUALS("Env[0:-1,0:-1]", cropper._envelope.toString());
   }
 
   void runMultiPolygonTest()
@@ -462,6 +392,35 @@ public:
     MapProjector::projectToWgs84(map);
     testFileName = testFileNameBase + "-2.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void runInclusionTest()
+  {
+    const QString testFileNameBase = "runInclusionTest";
+    QString testFileName;
+    OsmMapPtr map;
+    geos::geom::Envelope bounds(38.91362, 38.915478, 15.37365, 15.37506);
+    OsmMapWriterFactory::write(
+      GeometryUtils::createMapFromBounds(bounds),
+      _outputPath + "/" + testFileNameBase + "-bounds.osm");
+
+    MapCropper uut(bounds);
+    map.reset(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);
+    uut.setInvert(false);
+    uut.setKeepEntireFeaturesCrossingBounds(false);
+    uut.setKeepOnlyFeaturesInsideBounds(false);
+    // Exclude one way outside of the bounds from being cropped out of the map. The whole way and
+    // its nodes should be retained.
+    uut.setInclusionCriterion(
+      ElementCriterionPtr(new ElementIdCriterion(ElementId(ElementType::Way, 1687))));
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    testFileName = testFileNameBase + ".osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 };

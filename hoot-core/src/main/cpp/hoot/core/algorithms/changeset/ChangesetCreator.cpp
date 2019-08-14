@@ -27,7 +27,6 @@
 #include "ChangesetCreator.h"
 
 // Hoot
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
@@ -216,6 +215,9 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
   ApiTagTruncateVisitor truncateTags;
   map1->visitRw(truncateTags);
   map2->visitRw(truncateTags);
+
+  LOG_VARD(MapProjector::toWkt(map1->getProjection()));
+  LOG_VARD(MapProjector::toWkt(map2->getProjection()));
 
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
@@ -592,25 +594,25 @@ void ChangesetCreator::_streamChangesetOutput(ElementInputStreamPtr input1,
 
   // Could this eventually be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
   // instead?
-  ChangesetDeriverPtr changesetDeriver(new ChangesetDeriver(input1, input2));
+  _changesetDeriver.reset(new ChangesetDeriver(input1, input2));
   if (output.endsWith(".osc"))
   {
     OsmXmlChangesetFileWriter writer;
-    writer.write(output, changesetDeriver);
+    writer.write(output, _changesetDeriver);
     stats = writer.getStatsTable();
   }
   else if (output.endsWith(".osc.sql"))
   {
     assert(!_osmApiDbUrl.isEmpty());
-    OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetDeriver);
+    OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, _changesetDeriver);
   }
 
-  LOG_VARD(changesetDeriver->getNumCreateChanges());
-  LOG_VARD(changesetDeriver->getNumModifyChanges());
-  LOG_VARD(changesetDeriver->getNumDeleteChanges());
-  LOG_VARD(changesetDeriver->getNumFromElementsParsed());
-  LOG_VARD(changesetDeriver->getNumToElementsParsed());
-  if (changesetDeriver->getNumChanges() == 0)
+  LOG_VARD(_changesetDeriver->getNumCreateChanges());
+  LOG_VARD(_changesetDeriver->getNumModifyChanges());
+  LOG_VARD(_changesetDeriver->getNumDeleteChanges());
+  LOG_VARD(_changesetDeriver->getNumFromElementsParsed());
+  LOG_VARD(_changesetDeriver->getNumToElementsParsed());
+  if (_changesetDeriver->getNumChanges() == 0)
   {
     LOG_WARN("No changes written to changeset.");
   }

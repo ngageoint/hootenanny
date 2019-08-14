@@ -230,17 +230,6 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
-=== apidb.reader.tag.immediately.connected.out.of.bounds.ways
-
-* Data Type: bool
-* Default Value: `false`
-
-If enabled, all ways that are outside of the bounds specified by convert.bounding.box when
-performing a bounded API database query but are immediately connected to a way that falls within or
-crosses the bounds are tagged with a custom tag.
-
-TODO: remove "apidb." from the front of this when implementing it for #3376
-
 === arff.writer.precision
 
 * Data Type: int
@@ -737,7 +726,8 @@ command only and kept as a separate option with a different default value.
 * Default Value: `false`
 
 If enabled, bounded queries will also return ways that are outside of `convert.bounding.box` but
-immediately connected to ways crossing or within the bounds.
+immediately connected to ways crossing or within the bounds. Can be used in conjunction with
+`convert.bounding.box.tag.immediately.connected.out.of.bounds.ways`. Not supported by all readers.
 
 === convert.bounding.box.keep.only.features.inside.bounds
 
@@ -756,6 +746,16 @@ the convert command only and kept as a separate option.
 Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
 data sources when used with the convert and conflate commands.  This setting takes precendence over
 the convert.bounding.box setting for OSM API database data sources only.
+
+=== convert.bounding.box.tag.immediately.connected.out.of.bounds.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, all ways that are outside of the bounds specified by convert.bounding.box when
+performing a bounded API database query but are immediately connected to a way that falls within or
+crosses the bounds are tagged with a custom tag. Must be used in conjunction with
+`convert.bounding.box.keep.immediately.connected.ways.outside.bounds`. Not supported by all readers.
 
 === convert.ops
 

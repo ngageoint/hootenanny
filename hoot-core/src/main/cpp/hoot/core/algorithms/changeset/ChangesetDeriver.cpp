@@ -90,7 +90,7 @@ Change ChangesetDeriver::_nextChange()
 {
   // TODO: this method is a bit of mess now...refactor into smaller chunks
 
-  LOG_DEBUG("Reading next change...");
+  LOG_TRACE("Reading next change...");
 
   const long debugId = 6633775;
 

@@ -106,7 +106,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
 void AddExportTagsVisitor::overrideDebugSettings()
 {
   _includeIds = true;
-  _textStatus = true;
+  _textStatus = false;
   _includeCircularError= true;
   _includeDebug = true;
 }

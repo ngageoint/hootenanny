@@ -78,7 +78,7 @@ public:
     }
   }
 
-virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const { return ""; }
 
   virtual void visit(const std::shared_ptr<Element>&) {}
 
@@ -158,6 +158,7 @@ virtual QString getDescription() const { return ""; }
   }
 
 private:
+
   const Mat& _EX;
   int _cols;
   const Envelope& _e;

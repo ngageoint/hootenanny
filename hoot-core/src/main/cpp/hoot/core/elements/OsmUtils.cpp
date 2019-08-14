@@ -386,4 +386,15 @@ OsmMapPtr OsmUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriteri
   return output;
 }
 
+bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
+                                     const ConstOsmMapPtr& map)
+{
+  std::set<long> waysContainingNode = map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId);
+  std::set<long> commonWayIds;
+  std::set_intersection(
+    waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
+    std::inserter(commonWayIds, commonWayIds.begin()));
+  return commonWayIds.size() > 0;
+}
+
 }

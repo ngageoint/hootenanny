@@ -161,10 +161,10 @@ void OsmMapWriterFactory::writeDebugMap(const ConstOsmMapPtr& map, const QString
       throw IllegalArgumentException("Debug maps must be written to an .osm file.");
     }
 
-    LOG_VARD(map->getElementCount());
-    LOG_VARD(map->getNodeCount());
-    LOG_VARD(map->getWayCount());
-    LOG_VARD(map->getRelationCount());
+    LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
+    LOG_VARD(StringUtils::formatLargeNumber(map->getNodeCount()));
+    LOG_VARD(StringUtils::formatLargeNumber(map->getWayCount()));
+    LOG_VARD(StringUtils::formatLargeNumber(map->getRelationCount()));
 
     const QString fileNumberStr = StringUtils::getNumberStringPaddedWithZeroes(_debugMapCount, 3);
     if (!title.isEmpty())

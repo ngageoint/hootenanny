@@ -54,6 +54,8 @@ class PermuteGridCalculator;
  * 1. Evaluating conflation methods using uncertainty modeling - Peter Doucette, et al. 2013
  *    https://insightcloud.digitalglobe.com/redmine/attachments/download/1667/2013%20Evaluating%20conflation%20methods%20using%20uncertainty%20modeling.pdf
  *    http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=1691369
+ *
+ * TODO: implement OperationStatusInfo
  */
 class PertyOp : public OsmMapOperation, public Configurable
 {

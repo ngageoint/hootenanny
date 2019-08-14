@@ -58,7 +58,6 @@ tds40.rules = {
     ['F_CODE','AL020','landuse','industrial'], // From OSM - Map to BUA
     ['F_CODE','AL020','landuse','residential'], // From OSM - Map to BUA
     ['F_CODE','AL030','amenity','grave_yard'], // From OSM Data
-    ['F_CODE','AL105','tourism','caravan_site'], // From OSM data, not a building so...
     ['F_CODE','AL130','historic','memorial'], // From OSM data, not great
     ['F_CODE','AL200','ruins','yes'], // Ruins
     ['F_CODE','AL241','man_made','mast'], // OSM
@@ -203,10 +202,10 @@ tds40.rules = {
     'HGT':'height', // Height Above Surface Level
     'HVA':'source:accuracy:height', // Height Vertical Accuracy (90%)
     'KVA':'voltage', // Power Line Maximum Voltage
-    'LC1':'bridge:load_class1', // Load Class Type 1
-    'LC2':'bridge:load_class2', // Load Class Type 2
-    'LC3':'bridge:load_class3', // Load Class Type 3
-    'LC4':'bridge:load_class4', // Load Class Type 4
+    'LC1':'mlc:wheeled_oneway', // Load Class Type 1
+    'LC2':'mlc:wheeled', // Load Class Type 2
+    'LC3':'mlc:tracked_oneway', // Load Class Type 3
+    'LC4':'mlc:tracked', // Load Class Type 4
     'LCA':'crane:max_load', // Lifting Capacity
     'LEA':'depth:minimum_below_surface', // Least Depth Below Surface Level
     'LNU':'length:interior_useable', // Usable Length
@@ -978,12 +977,12 @@ tds40.rules = {
 
     // EET - Engineered Earthwork Type
     // ['EET','-999999',undefined,undefined], // No Information
-    ['EET','1','earthwork:type','battery'], // Battery
-    ['EET','2','earthwork:type','military_parapet'], // Military Parapet
-    ['EET','3','earthwork:type','military_trench'], // Military Trench
-    ['EET','4','earthwork:type','rampart'], // Rampart
-    ['EET','5','earthwork:type','redoubt'], // Redoubt
-    ['EET','999','earthwork:type','other'], // Other
+    ['EET','1','trench','battery'], // Battery
+    ['EET','2','trench','parapet'], // Military Parapet
+    ['EET','3',undefined,undefined], // Military Trench
+    ['EET','4','trench','rampart'], // Rampart
+    ['EET','5','trench','redoubt'], // Redoubt
+    ['EET','999','trench','other'], // Other
 
     // EQC - Equivalent Scale Category
     // ['EQC','-999999',undefined,undefined], // No Information
@@ -1500,13 +1499,13 @@ tds40.rules = {
 
     // FZR - Fortified Building Type
     // ['FZR','-999999',undefined,undefined], // No Information
-    ['FZR','1','fortified:type','blockhouse'], // Blockhouse
-    ['FZR','2','fortified:type','casement'], // Casement
-    ['FZR','3','fortified:type','keep'], // Keep
-    ['FZR','4','fortified:type','martello_tower'], // Martello Tower
-    ['FZR','5','fortified:type','non-specific_fortified'], // Non-specific Fortified
-    ['FZR','6','fortified:type','pillbox'], // Pillbox
-    ['FZR','999','fortified:type','other'], // Other
+    ['FZR','1','bunker_type','blockhouse'], // Blockhouse
+    ['FZR','2','bunker_type','casement'], // Casement
+    ['FZR','3','bunker_type','keep'], // Keep
+    ['FZR','4','bunker_type','martello_tower'], // Martello Tower
+    ['FZR','5','bunker_type','non-specific'], // Non-specific Fortified
+    ['FZR','6','bunker_type','pillbox'], // Pillbox
+    ['FZR','999','bunker_type','other'], // Other
 
     // GFT - Geologic Fault Trace Visible
     // ['GFT','-999999',undefined,undefined], // No Information
@@ -4358,7 +4357,6 @@ tds40.rules = {
 
     // ### From OSM - This list could never end.....
     ['FFN','464','shop','books'], // Specialized Store
-    ['FFN','465','shop','supermarket'], // Non-specialized
     ['FFN','563','building','house'], // Residence
     ['FFN','558','building','dependents_housing'], // Dependents Housing
     ['FFN','610','office','telecommunication'], // telecommunication
@@ -4369,17 +4367,6 @@ tds40.rules = {
    ], // End one2oneOut
 
     // ##### End of One2One Rules #####
-
-   // ##### Start of txtLength #####
-    // This list is for validateing the lengths of text attributes prior to export
-    txtLength : {
-    'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
-    'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
-    'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
-    'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
-    'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
-    },
-    // ##### End of txtLength #####
 
     // ##### Start of ignoreList #####
     // This is taken from OSM pre processing and a few things added.
@@ -4450,60 +4437,6 @@ tds40.rules = {
     ],
     // ##### End of ignoreList #####
 
-    // ##### Start of swapList #####
-    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
-    // but renamed in different features. Some of these were done during the move from TDSv30 to
-    // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
-    // These get converted back on output - if we need to.
-    swapList : {
-    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
-    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
-    'DEP':'DZP',
-    'HYP':'ZI024_HYP',
-    'LEN_':'LZN',
-    'MEM':'ZI006_MEM',
-    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
-    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
-    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
-    'RCG':'ZI004_RCG',
-    'WD1':'ZI016_WD1',
-    'YWQ':'ZI024_YWQ',
-    'ZI005_FNAA':'ZI005_FNA',
-    'ZI005_FNAB':'ZI005_FNA2',
-    'ZI005_NFNA':'ZI005_NFN',
-    'ZI005_NFNB':'ZI005_NFN2',
-    'ZI020_IC2':'IC2',
-    'ZI025_WLE':'WLE',
-    'ZI032_GUG':'GUG',
-    'ZI032_TOS':'TOS',
-    'ZI032_PYC':'PYC',
-    'ZI032_PYM':'PYM',
-    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3'
-    },
-    // ##### End of swapList #####
-
-    // ##### Start of closureList #####
-    closureList : {
-    'AQTC':['AQTL','AQTU'],
-    'AYRC':['AYRL','AYRU'],
-    'BPWHAC':['BPWHAL','BPWHAU'],
-    'BPWHBC':['BPWHBL','BPWHBU'],
-    'BPWSAC':['BPWSAL','BPWSAU'],
-    'BPWSBC':['BPWSBL','BPWSBU'],
-    'BWVCAC':['BWVCAL','BWVCAU'],
-    'BWVCBC':['BWVCBL','BWVCBU'],
-    'DMBC':['DMBL','DMBU'],
-    'DPAC':['DPAL','DPAU'],
-    'GSGCHC':['GSGCHL','GSGCHU'],
-    'GSGCLC':['GSGCLL','GSGCLU'],
-    'RMWC':['RMWL','RMWU'],
-    'SDCC':['SDCL','SDCU'],
-    'SDSC':['SDSL','SDSU'],
-    'SGCC':['SGCL','SGCU'],
-    'TSCC':['TSCL','TSCU']
-    },
-    // ##### End of closureList #####
-
     // ##### Start of fCodeMap #####
     // This is a map of FCODE's and filenames
     fCodeMap : [
@@ -4564,6 +4497,104 @@ tds40.rules = {
     ['ZD045', ['zd045','annotated_location_s','annotated_location_c','annotated_location_p']], // Named Location
     ],
     // ##### End of fCodeMap#####
+
+    // ##### Start of closureList #####
+    closureList : {
+    'AQTC':['AQTL','AQTU'],
+    'AYRC':['AYRL','AYRU'],
+    'BPWHAC':['BPWHAL','BPWHAU'],
+    'BPWHBC':['BPWHBL','BPWHBU'],
+    'BPWSAC':['BPWSAL','BPWSAU'],
+    'BPWSBC':['BPWSBL','BPWSBU'],
+    'BWVCAC':['BWVCAL','BWVCAU'],
+    'BWVCBC':['BWVCBL','BWVCBU'],
+    'DMBC':['DMBL','DMBU'],
+    'DPAC':['DPAL','DPAU'],
+    'GSGCHC':['GSGCHL','GSGCHU'],
+    'GSGCLC':['GSGCLL','GSGCLU'],
+    'RMWC':['RMWL','RMWU'],
+    'SDCC':['SDCL','SDCU'],
+    'SDSC':['SDSL','SDSU'],
+    'SGCC':['SGCL','SGCU'],
+    'TSCC':['TSCL','TSCU']
+    },
+    // ##### End of closureList #####
+
+    // ##### Start of swapList #####
+    // The What Were They Thinking? swap list.  Each of these is the _same_ attribute
+    // but renamed in different features. Some of these were done during the move from TDSv30 to
+    // TDSv40.  We swap these so that there is only one set of rules needed in the One2One section.
+    // These get converted back on output - if we need to.
+    swapListIn : {
+    'ASU':'ZI019_ASU', 'ASU2':'ZI019_ASU3', 'ASU3':'ZI019_ASU3',
+    'AT005_CAB':'CAB', 'AT005_CAB2':'CAB2', 'AT005_CAB3':'CAB3',
+    'DEP':'DZP',
+    'HYP':'ZI024_HYP',
+    'LEN_':'LZN',
+    'MEM':'ZI006_MEM',
+    'PBY':'ZI014_PBY', 'PBY2':'ZI014_PBY2', 'PBY3':'ZI014_PBY3',
+    'PPO':'ZI014_PPO', 'PPO2':'ZI014_PPO2', 'PPO3':'ZI014_PPO3',
+    'PRW':'ZI014_PRW', 'PRW2':'ZI014_PRW2', 'PRW3':'ZI014_PRW3',
+    'RCG':'ZI004_RCG',
+    'WD1':'ZI016_WD1',
+    'YWQ':'ZI024_YWQ',
+    'ZI005_FNAA':'ZI005_FNA',
+    'ZI005_FNAB':'ZI005_FNA2',
+    'ZI005_NFNA':'ZI005_NFN',
+    'ZI005_NFNB':'ZI005_NFN2',
+    'ZI020_IC2':'IC2',
+    'ZI025_WLE':'WLE',
+    'ZI032_GUG':'GUG',
+    'ZI032_TOS':'TOS',
+    'ZI032_PYC':'PYC',
+    'ZI032_PYM':'PYM',
+    'ZI071_FFN':'FFN', 'ZI071_FFN2':'FFN2', 'ZI071_FFN3':'FFN3'
+    },
+    // ##### End of swapListIn #####
+
+    // ##### Start of swapListOut #####
+    // Format is: <FCODE>:{<from>:<to>}
+    swapListOut : {
+    'AA010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA040':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA052':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AA054':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AB000':{'ZI014_PBY':'PBY', 'ZI014_PBY2':'PBY2', 'ZI014_PBY3':'PBY3'},
+    'AC060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AD020':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AD025':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AJ050':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AL020':{'ZI005_NFN':'ZI005_NFN1'},
+    'AM010':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM040':{'ZI014_PRW':'PRW', 'ZI014_PRW2':'PRW2', 'ZI014_PRW3':'PRW3'},
+    'AM060':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM070':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM071':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AM080':{'ZI014_YWQ':'YWQ', 'ZI016_WD1':'WD1'},
+    'AQ113':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AQ116':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'AT005':{'WLE':'ZI025_WLE'},
+    'AT042':{'GUG':'ZI032_GUG', 'PYC':'ZI032_PYC', 'PYM':'ZI032_PYM', 'TOS':'ZI032_TOS', 'CAB':'AT005_CAB', 'CAB2':'AT005_CAB2', 'CAB3':'AT005_CAB3'},
+    'BD100':{'WLE':'ZI025_WLE'},
+    'BH051':{'ZI014_PPO':'PPO', 'ZI014_PPO2':'PPO2', 'ZI014_PPO3':'PPO3'},
+    'DB029':{'FFN':'ZI071_FFN', 'FFN2':'ZI071_FFN2', 'FFN3':'ZI071_FFN3'},
+    'ED010':{'ZI024_HYP':'HYP'},
+    'GB045':{'ZI019_ASU':'ASU', 'ZI019_ASU2':'ASU2', 'ZI019_ASU3':'ASU3'},
+    'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'}
+    },
+    // ##### End of swapListOut #####
+    
+   // ##### Start of txtLength #####
+    // This list is for validateing the lengths of text attributes prior to export
+    txtLength : {
+    'BA000_VDR':80, 'BRN':24, 'CID':20, 'CPS':30, 'EQC':30, 'ETS':30, 'ETZ':24, 'GB052_RIDH':14, 'GB052_RIDL':14,
+    'HZD':30, 'IC2':14, 'IKO':14, 'MDE':20, 'NA8':80, 'RCG':30, 'RTN2':24, 'RTN':24, 'RTN3':24, 'SSE':14, 'UFI':254,
+    'URI':254, 'VDT':30, 'VOI':14, 'WPI':14, 'ZI001_NSD':20, 'ZI001_NSP':30, 'ZI001_SSD':20, 'ZI001_SSY':30, 'ZI001_VSC':30,
+    'ZI001_VSD':20, 'ZI004_RCG':30, 'ZI005_FNA1':200, 'ZI005_FNA':200, 'ZI005_FNA2':200, 'ZI005_NFN1':18, 'ZI005_NFN':18,
+    'ZI005_NFN2':18, 'ZSAX_RS0':2, 'ZSAX_RX3':254, 'ZSAX_RX4':254
+    },
+    // ##### End of txtLength #####
 
     // ##### Start of intList #####
     // This list is for validateing the integer attributes prior to export

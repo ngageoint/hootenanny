@@ -26,9 +26,9 @@ test-output/cmd/slow/SortCmdTest/osm-output-2.osm is sorted.
 Sorting pbf on disk...
 
 test-files/cmd/slow/SortCmdTest/input.osm.pbf is not sorted.
-20:40:22.379 WARN  .../hoot/core/io/OsmXmlReader.cpp( 453) Missing node (-35) in way (-4).
-20:40:22.380 WARN  .../hoot/core/io/OsmXmlReader.cpp( 453) Missing node (-36) in way (-4).
-20:40:22.380 WARN  .../hoot/core/io/OsmXmlReader.cpp( 453) Missing node (-29) in way (-3).
-20:40:22.380 WARN  .../hoot/core/io/OsmXmlReader.cpp( 457) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+14:50:32.223 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(-35) in Way(-4).
+14:50:32.223 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(-36) in Way(-4).
+14:50:32.224 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(-29) in Way(-3).
+14:50:32.224 WARN   .../hoot/core/io/OsmXmlReader.cpp( 525) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 test-output/cmd/slow/SortCmdTest/pbf-output-2.osm.pbf is sorted.
 

@@ -3,25 +3,25 @@
 
 === Description
 
-The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets within 
-a given bounds. The data from the secondary input dataset completely replaces data in the reference dataset within the bounds. 
+The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input 
+OSM datasets within a given bounds where the data from the secondary input dataset completely replaces data in the 
+reference dataset. 
 
-Generally, the reference data is sourced from an authoritative data store, like an OSM API database. The changeset derivation algorithm 
-avoids unnecessary clipping of features and stitches up areas where features must be clipped. The output changeset file can be applied 
-directly to an OSM API database or the Rails Port with the +changeset-apply+ command.
-
-Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element IDs for 
-the second input (secondary dataset) are not retained and treated as completely new data. 
+The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing the AOI) and 
+stitches up areas where features must be clipped (e.g. roads crossing the AOI). The output changeset file can be 
+applied directly to an OSM API database or the Rails Port with the  +changeset-apply+ command. Generally, the reference 
+data is sourced from an authoritative data store, like an OSM API database. Element IDs for the first input (reference 
+data) are retained and treated as data resident in an authoritative data store. Element IDs for the second input 
+(secondary dataset) are not retained and treated as completely new data. 
 
 * +input1+            - OSM data reference input (e.g. .osm file); must support bounded queries
 * +input2+            - OSM data secondary input (e.g. .osm file); must support bounded queries
 * +bounds+            - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
 * +featureFilter+     - A single criterion class name used to determine which type of features are replaced in the 
-                        reference dataset. Must be a conflatable criterion (see "Type Filtering" section below). e.g. "hoot::BuildingCriterion"
+                        reference dataset. Must be a conflatable criterion (see "Type Filtering" section below). e.g.                                 "hoot::BuildingCriterion"
 * +output+            - Output location (e.g. .osc or .osc.sql file)
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
-                        element ID continuity with a particular database instance when generating SQL
-                        changesets only (.osc.sql).
+* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a particular 
+                        database instance when generating SQL changesets only (.osc.sql).
 * +--lenient-bounds+  - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
                         makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
                         for more detail.
@@ -59,16 +59,18 @@ hoot info --conflatable-criteria
 
 === Bounds Handling
 
-All inputs must support bounded reading. To list the Hootenanny input formats that support bounded readings:
+All inputs must support bounded reading. To list the Hootenanny input formats that support bounded reading:
 -----
 hoot info --formats --input-bounded
 -----
 
-Unless the reference data is being read directly from a direction connection to an OSM API database (with OsmApiDbReader), reference input 
+Unless the reference data is being read from a direct connection to an OSM API database (osmapidb://), reference input 
 datasets containing linear data should be slightly larger than the replacement AOI, so as not to drop linear features in the changeset output 
-(OsmApiDbReader handles this issue automatically).
+(osmapidb:// reference inputs handle this issue automatically).
 
 ==== Strict Bounds Handling
+
+The following describes how the AOI is interpreted by the command when the +--lenient+ bounds option is absent.
 
 ===== Points
 
@@ -78,14 +80,16 @@ datasets containing linear data should be slightly larger than the replacement A
 ===== Lines
 
 * No reference feature crossing the bounds will be modified outside of the bounds. Reference features may be split.
-* No parts of secondary features crossing the bounds will be included in the output
+* No parts of secondary features crossing the bounds will be included in the output.
 
 ===== Polygons
 
-* No reference features crossing the bounds will be modified
-* No secondary features crossing the bounds will be included in the output
+* No reference features crossing the bounds will be modified.
+* No secondary features crossing the bounds will be included in the output.
 
 ==== Lenient Bounds Handling
+
+The following describes how the AOI is interpreted by the command when the +--lenient+ bounds option is present.
 
 ===== Points
 
@@ -93,7 +97,7 @@ N/A - Point bounds relationships are only handled in a strict fashion.
 
 ===== Lines
 
-* Reference features crossing the bounds will be completely replaced by secondary features
+* Reference features crossing the bounds will be completely replaced by secondary features.
 
 ===== Polygons
 
@@ -102,17 +106,14 @@ N/A - Point bounds relationships are only handled in a strict fashion.
 
 === Versioning
 
-All input features from the reference dataset must be populated with the correct versions or application of the resulting changeset will fail. 
+If the target of the resulting changeset is an OSM API database, all input features from the reference dataset must 
+be populated with the correct changeset versions or application of the resulting changeset will fail. 
+
 For Overpass API queries, add "out meta" to the query retrieving the reference data.
 
 === Unsupported Formats
 
 GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
-
-=== Caveats
-
-The lenient AOI linear replacement workflow does not completely work at this time with OSM XML or JSON inputs, as some features outside of the
-AOI may be dropped. https://github.com/ngageoint/hootenanny/issues/3376 will fix this.
 
 === See Also
 

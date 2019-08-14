@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 // Qt
 #include <QString>
@@ -89,8 +90,11 @@ public:
    *
    * @param map the map to crop
    * @param bounds the bounds to crop to
+   * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
+   * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds);
+  static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
+                           const bool keepConnectedOobWays = false);
 };
 
 }

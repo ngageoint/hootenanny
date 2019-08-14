@@ -68,6 +68,9 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // create two groups for the ways
   vector<std::shared_ptr<Way>> g1, g2;
 
+  LOG_VART(intersectingNode);
+  LOG_VART(wayIds);
+
   // put the first way in the first group
   g1.push_back(_result->getWay(*wayIds.begin()));
 
@@ -106,17 +109,21 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   }
 }
 
-double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,
+double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
+                                                   const std::shared_ptr<Way>& w1,
                                                    const std::shared_ptr<Way>& w2)
 {
   // pressume it is a valid intersection
   double p = 1.0;
 
-  //LOG_VART(w1->getElementId());
-  //LOG_VART(w2->getElementId());
+  LOG_VART(intersectingNode);
+  LOG_VART(w1->getElementId());
+  LOG_VART(w2->getElementId());
 
   int i1 = w1->getNodeIndex(intersectingNode);
   int i2 = w2->getNodeIndex(intersectingNode);
+  LOG_VART(i1);
+  LOG_VART(i2);
   // if either node is within the way (not an end node)
   if ((i1 != 0 && i1 != (int)w1->getNodeCount() - 1) ||
       (i2 != 0 && i2 != (int)w2->getNodeCount() - 1))
@@ -126,6 +133,7 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, const 
         w1->getTags()["tunnel"] != w2->getTags()["tunnel"])
     {
       p *= .2;
+      LOG_VART(p);
     }
     // if one is a motorway and the other isn't
     if ((w1->getTags()["highway"] == "motorway") !=
@@ -136,14 +144,19 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, const 
         w2->getTags()["highway"].startsWith("motorway"))
       {
         p *= .4;
+        LOG_VART(p);
       }
     }
   }
+  LOG_VART(p);
 
   Radians h1 = WayHeading::calculateHeading(WayLocation(_result, w1, i1, 0.0));
+  LOG_VART(h1);
   Radians h2 = WayHeading::calculateHeading(WayLocation(_result, w2, i2, 0.0));
+  LOG_VART(h2);
   Degrees d = toDegrees(WayHeading::deltaMagnitude(h1, h2));
   d = min(fabs(d - 180), d);
+  LOG_VART(d);
   // if angle is > 45deg
   if (d > 45)
   {
@@ -152,6 +165,7 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, const 
         w1->getTags()["tunnel"] != w2->getTags()["tunnel"])
     {
       p *= .2;
+      LOG_VART(p);
     }
     // if one is a motorway and the other isn't
     if ((w1->getTags()["highway"] == "motorway") != (w2->getTags()["highway"] == "motorway"))
@@ -161,10 +175,12 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode, const 
         w2->getTags()["highway"].startsWith("motorway"))
       {
         p *= .4;
+        LOG_VART(p);
       }
     }
   }
 
+  LOG_VART(p);
   return p;
 }
 
@@ -177,11 +193,18 @@ void UnlikelyIntersectionRemover::removeIntersections(std::shared_ptr<OsmMap> ma
 void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
                                                      const vector<std::shared_ptr<Way>>& g2)
 {
+  LOG_VART(intersectingNode);
+  LOG_VART(g2.size());
+
   NodePtr oldNode = _result->getNode(intersectingNode);
+  LOG_VART(oldNode->getElementId());
   // create a copy of the intersecting node
-  NodePtr newNode(new Node(oldNode->getStatus(), _result->createNextNodeId(),
-    oldNode->toCoordinate(), oldNode->getCircularError()));
+  NodePtr newNode(
+    new Node(
+      oldNode->getStatus(), _result->createNextNodeId(), oldNode->toCoordinate(),
+      oldNode->getCircularError()));
   newNode->setTags(oldNode->getTags());
+  LOG_VART(newNode->getElementId());
   _result->addNode(newNode);
 
   // all ways in group one are unchanged
@@ -189,6 +212,7 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   // all ways in group 2 get the intersecting node replaced by the new node.
   for (size_t i = 0; i < g2.size(); i++)
   {
+    LOG_VART(g2[i]->getElementId());
     g2[i]->replaceNode(intersectingNode, newNode->getId());
   }
 }

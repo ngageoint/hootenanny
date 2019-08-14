@@ -301,8 +301,8 @@ mgcp = {
 
             // apply the simple number and text biased rules
             // Note: These are BACKWARD, not forward!
-            translate.applySimpleNumBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
-            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased, 'backward');
+            translate.applySimpleNumBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.numBiased,'backward',mgcp.rules.intList);
+            translate.applySimpleTxtBiased(newFeatures[i]['attrs'], notUsedTags, mgcp.rules.txtBiased,'backward');
 
             // one 2 one - we call the version that knows about OTH fields
             translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup);
@@ -403,16 +403,16 @@ mgcp = {
                 };
 
         // List of data values to drop/ignore
-        var ignoreList = { '-32765':1, '-32767':1, '-32768':1,
-                           '998':1, '-999999':1,
-                           'n_a':1, 'noinformation':1, 'unknown':1, 'unk':1 };
+        var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
+                           '998':1,'-999999':1,
+                           'n_a':1,'noinformation':1,'unknown':1,'unk':1 };
 
         // Unit conversion. Some attributes are in centimetres, others in decimetres
-        // var unitList = { 'GAW':100, 'HCA':10, 'WD1':10, 'WD2':10, 'WD3':10, 'WT2':10 };
+        // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
 
         for (var col in attrs)
         {
-            // slightly ugly but we would like to account for: 'No Information', 'noInformation' etc
+            // slightly ugly but we would like to account for: 'No Information','noInformation' etc
             // First, push to lowercase
             var attrValue = attrs[col].toString().toLowerCase();
 
@@ -505,7 +505,7 @@ mgcp = {
                 ['AN060', ['an060']], // Railway Yard
                 ['AN075', ['an075']], // Railway Turntable
                 ['AP010', ['ap010','trackl','track_l','cart_track','carttrack','cart_track_l']], // Cart Track
-                ['AP020', ['ap020','interchange_l', 'interchangel']], // Interchange
+                ['AP020', ['ap020','interchange_l','interchangel']], // Interchange
                 ['AP030', ['ap030','roadnet','road_l','roadl']], // Road
                 ['AP050', ['ap050','traill','trail_l']], // Trail
                 ['AQ040', ['aq040','bridgel','bridge_l','bridge_tunnel_l','bridge_overpass_l']], // Bridge
@@ -813,14 +813,6 @@ mgcp = {
         //     if (!tags.place) tags.building = 'yes';
         // }
 
-        // Add 'building = yes' to military if it isn't a range
-        if (tags.military && !tags.building)
-        {
-            // Debug:
-            // print('Added building to military');
-            if (tags.military !== 'range') tags.building = 'yes';
-        }
-
         // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
         // if ('ford' in tags && !tags.highway) tags.highway = 'road';
 
@@ -913,6 +905,10 @@ mgcp = {
                 tags.navigationaid = 'als';
                 break;
 
+            case 'AH050': // Fortification
+                // Castles are not Bunkers but they get stored in the same layer
+                if (tags.military == 'bunker' && tags.historic == 'castle') delete tags.military;
+                break;
         } // End switch FCODE
 
         // Sort out TRS (Transport Type)
@@ -1177,6 +1173,7 @@ mgcp = {
             ["t.resource","t.product = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
             // ["(t.shop || t.office) && !(t.building)","a.F_CODE = 'AL015'"],
+            ["t.tourism == 'information' && t.information","delete t.tourism"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
             ["!(t.water) && t.natural == 'water'","t.water = 'lake'"],
             ["t.water == 'pond'","a.F_CODE = 'BH170'; t.natural = 'other_pool_type'"],
@@ -1280,33 +1277,20 @@ mgcp = {
             delete tags.barrier; // Take away the walls...
         }
 
-        // // An "amenitiy" can be a building or a thing
-        // // If appropriate, make the "amenity" into a building
-        // // This list is taken from the OSM Wiki and Taginfo
-        // var notBuildingList = [
-        //     'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-        //     'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-        //     'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-        //     'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-        //     'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-        //     'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-        //     'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-        //     'trailer_park','game_feeding','ferry_terminal'
-        //     ]; // End bldArray
-
-        // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
-
         // Going out on a limb and processing OSM specific tags:
         // - Building == a thing,
         // - Amenity == The area around a thing. Except for the ones that are not.....
         // If it is a Point feature, it becomes a building. Polygon features become Facilities
         // Line features become buildings and then get ignored
-        var facilityList = {'school':'850','hospital':'860','university':'850'};
+        var facilityList = {'school':'850','hospital':'860','university':'850','college':'850'};
         if (tags.amenity in facilityList)
         {
             if (geometryType == 'Area')
             {
                 attrs.F_CODE = 'AL010'; // Facility
+
+                // If the user has also set a building tag, delete it
+                if (tags.building) delete tags.building;
             }
             else
             {
@@ -1324,6 +1308,26 @@ mgcp = {
 
             if (tags.product == 'unknown') delete tags.product;
         }
+
+        // More facilities
+        switch (tags.amenity)
+        {
+            case undefined: // Break early
+                break;
+
+            case 'munitions_storage':
+                attrs.F_CODE = 'AM010'; // Storage Depot
+                attrs.PPO = '3'; // Ammunition - close to munitions....
+                delete tags.amenity;
+                break;
+
+            case 'fuel_storage':
+                attrs.F_CODE = 'AM010'; // Storage Depot
+                attrs.PPO = '46'; // Petrol - close but not great
+                                  // Other options are: Petroleum:83, Oil:75 
+                delete tags.amenity;
+                break;
+        } // End switch Amenity
 
         // Cutlines and Highways
         // In OSM, a cutline is a cleared way, if it is a polygon then drop the highway info
@@ -1456,18 +1460,16 @@ mgcp = {
             }
         }
 
-        // An "amenitiy" can be a building or a thing
+        // An "amenity" can be a building or a thing
         // If appropriate, make the "amenity" into a building
         // This list is taken from the OSM Wiki and Taginfo
         var notBuildingList = [
-            'bbq','biergarten','drinking_water','bicycle_parking','bicycle_rental','boat_sharing',
-            'car_sharing','charging_station','grit_bin','parking','parking_entrance','parking_space',
-            'taxi','atm','fountain','bench','clock','hunting_stand','post_box',
-            'recycling', 'vending_machine','waste_disposal','watering_place','water_point',
-            'waste_basket','drinking_water','swimming_pool','fire_hydrant','emergency_phone','yes',
-            'compressed_air','water','nameplate','picnic_table','life_ring','grass_strip','dog_bin',
-            'artwork','dog_waste_bin','street_light','park','hydrant','tricycle_station','loading_dock',
-            'trailer_park','game_feeding','ferry_terminal'
+            'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+            'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+            'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+            'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+            'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+            'waste_basket','waste_disposal','water','water_point','watering_place','yes',
             ]; // End bldArray
 
         // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
@@ -1532,7 +1534,6 @@ mgcp = {
                     attrs.F_CODE = 'DA010'; // Soil Surface Region
                     tags.material = tags.surface;
                     break;
-
             }
         } // End ! F_CODE
 
@@ -1581,6 +1582,8 @@ mgcp = {
                 break;
         }
 
+        // Names. Sometimes we don't have a name but we do have language ones
+        if (!tags.name) translate.swapName(tags);
 
     }, // End applyToMgcpPreProcessing
 
@@ -1599,8 +1602,10 @@ mgcp = {
         if (!attrs.F_CODE)
         {
             var fcodeMap = {
-                'highway':'AP030', 'railway':'AN010', 'building':'AL015',
-                'ford':'BH070', 'waterway':'BH140', 'bridge':'AQ040', 'tomb':'AL036'
+                'highway':'AP030','railway':'AN010','building':'AL015',
+                'ford':'BH070','waterway':'BH140','bridge':'AQ040','tomb':'AL036',
+                'railway:in_road':'AN010','tourism':'AL013','mine:access':'AA010',
+                'cutting':'DB070','shop':'AL015','office':'AL015'
             };
 
             for (var i in fcodeMap)
@@ -1643,10 +1648,10 @@ mgcp = {
         // Therefore:
         // - clean up the the attrs
         // - JSON the tags and stick them in a text field
-        var noAttrList = [ 'AJ010', 'AJ030', 'AK170', 'AL019', 'AL070', 'AL099', 'AN076',
-                           'BD100', 'BD180', 'BH165', 'BI010', 'BJ020', 'BJ031', 'BJ110',
-                           'DB061', 'DB071', 'DB100',
-                           'EA020', 'EA055', 'EC010', 'EC040', 'EC060',
+        var noAttrList = [ 'AJ010','AJ030','AK170','AL019','AL070','AL099','AN076',
+                           'BD100','BD180','BH165','BI010','BJ020','BJ031','BJ110',
+                           'DB061','DB071','DB100',
+                           'EA020','EA055','EC010','EC040','EC060',
                            'FA090',
                            'GB050',
                            'ZD020',
@@ -1730,12 +1735,18 @@ mgcp = {
                     attrs.FFN = '931';
                 }
 
-
                 if (attrs.FFN && (attrs.FFN !== '930' && attrs.FFN !== '931'))
                 {
                     // Debug
                     //print('AL015: Setting HWT 998');
                     attrs.HWT = '998';
+                }
+
+                // This is a catch all and assigns "Commerce" as the function
+                // Exceptions to this are in the rules list
+                if (!attrs.FFN)
+                {
+                    if (tags.shop || tags.office) attrs.FFN = '440';
                 }
                 break;
 
@@ -1855,6 +1866,18 @@ mgcp = {
             case 'ED030': // Mangrove Swamp
                 if (! attrs.TID) attrs.TID = '1001'; // Tidal
                 break;
+
+            case 'AH050': // Fortification
+                if (tags['bunker_type'] == 'munitions') 
+                {
+                    attrs.F_CODE = 'AM060'; // Surface bunker
+                    if (! attrs.PPO) attrs.PPO = '3'; // Ammunition
+                }
+
+                // If we have a Castle, stop it being turned into a Bunker on import
+                if (tags.historic == 'castle') notUsedTags.historic = 'castle';
+                break;
+
         } // End switch FCODE
 
         if (mgcp.mgcpPostRules == undefined)
@@ -1940,12 +1963,7 @@ mgcp = {
         }
 
         // Debug:
-        if (mgcp.configIn.OgrDebugDumptags == 'true')
-        {
-            print('In Layername: ' + layerName + '  Geometry: ' + geometryType);
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-        }
+        if (mgcp.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In Attrs: ');
 
         // See if we have an o2s_X layer and try to unpack it
         if (layerName.indexOf('o2s_') > -1)
@@ -1963,10 +1981,10 @@ mgcp = {
             // Debug:
             if (mgcp.configIn.OgrDebugDumptags == 'true')
             {
-                var kList = Object.keys(tags).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+                translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
                 print('');
             }
+
 
             return tags;
         } // End layername = o2s_X
@@ -2006,11 +2024,8 @@ mgcp = {
         // Debug:
         if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
-            var kList = Object.keys(attrs).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Attrs: ' + kList[i] + ': :' + attrs[kList[i]] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Untangle Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
         }
 
         // pre processing
@@ -2040,7 +2055,7 @@ mgcp = {
 
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-        translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.rules.numBiased, 'forward',[]);
+        translate.applySimpleNumBiased(notUsedAttrs, tags, mgcp.rules.numBiased,'forward',[]);
         translate.applySimpleTxtBiased(notUsedAttrs, tags,  mgcp.rules.txtBiased,'forward');
 
         // one 2 one
@@ -2058,10 +2073,8 @@ mgcp = {
         // Debug:
         if (mgcp.configIn.OgrDebugDumptags == 'true')
         {
-            for (var i in notUsedAttrs) print('NotUsed: ' + i + ': :' + notUsedAttrs[i] + ':');
-
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('Out Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
+            translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+            translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
             print('');
         }
 
@@ -2107,12 +2120,7 @@ mgcp = {
         if (geometryType == 'Collection') return null;
 
         // Debug:
-        if (mgcp.configOut.OgrDebugDumptags == 'true')
-        {
-            print('In Geometry: ' + geometryType + '  In Element Type: ' + elementType);
-            var kList = Object.keys(tags).sort()
-            for (var i = 0, fLen = kList.length; i < fLen; i++) print('In Tags: ' + kList[i] + ': :' + tags[kList[i]] + ':');
-        }
+        if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
         // Set up the fcode translation rules
         if (mgcp.fcodeLookup == undefined)
@@ -2156,7 +2164,7 @@ mgcp = {
         if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
 
         // apply the simple number and text biased rules
-        translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased, 'backward',mgcp.rules.intList);
+        translate.applySimpleNumBiased(attrs, notUsedTags, mgcp.rules.numBiased,'backward',mgcp.rules.intList);
         translate.applySimpleTxtBiased(attrs, notUsedTags,  mgcp.rules.txtBiased,'backward');
 
         // one 2 one
@@ -2167,7 +2175,7 @@ mgcp = {
         mgcp.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
 
         // Debug
-        // for (var i in notUsedTags) print('NotUsed: ' + i + ': :' + notUsedTags[i] + ':');
+        if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
         // If we have unused tags, add them to the TXT field
         // NOTE: We are not checking if this is longer than 255 characters
@@ -2267,11 +2275,8 @@ mgcp = {
 
             // Debug:
             // Dump out what attributes we have converted before they get wiped out
-            if (mgcp.configOut.OgrDebugDumptags == 'true')
-            {
-                var kList = Object.keys(attrs).sort()
-                for (var i = 0, fLen = kList.length; i < fLen; i++) print('Converted Attrs:' + kList[i] + ': :' + attrs[kList[i]] + ':');
-            }
+            if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(attrs,'',geometryType,elementType,'Converted attrs: ');
+
 
             // We want to keep the hoot:id if present
             if (tags['hoot:id']) tags.raw_id = tags['hoot:id'];
@@ -2319,10 +2324,8 @@ mgcp = {
         {
             for (var i = 0, fLen = returnData.length; i < fLen; i++)
             {
-                print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['FCODE'] + '  Geom: ' + geometryType);
-                // for (var j in returnData[i]['attrs']) print('Out Attrs:' + j + ': :' + returnData[i]['attrs'][j] + ':');
-                var kList = Object.keys(returnData[i]['attrs']).sort()
-                for (var j = 0, kLen = kList.length; j < kLen; j++) print('Out Attrs:' + kList[j] + ': :' + returnData[i]['attrs'][kList[j]] + ':');
+                print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
+                translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');
             }
             print('');
         }

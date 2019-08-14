@@ -5,10 +5,10 @@
 **Hootenanny can import from:**
 
 * ESRI File Geodatabase (.gdb)
-* GeoJSON (.geojson file or GeoJSON URL) (M1)
+* GeoJSON (.geojson file or Overpass query URL) (M1)
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
-* Overpass JSON (.json or JSON URL) (M1)
+* Overpass JSON (.json file or OVerpass query URL) (M1)
 * OpenStreetMap XML (.osm)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
@@ -30,7 +30,7 @@
 
 **Hootenanny can export changesets to:**
 
-* OpenStreetMap API Web Service
+* OpenStreetMap API Web Service (http://)
 * OpenStreetMap SQL changeset file (.osc.sql)
 * OpenStreetMap XML changeset file (.osc)
 
@@ -40,6 +40,6 @@
 * (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
 
-Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer
+Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer 
 Guide for details.
 

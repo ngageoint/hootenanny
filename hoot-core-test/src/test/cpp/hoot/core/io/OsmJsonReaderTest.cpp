@@ -28,7 +28,6 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
@@ -49,9 +48,15 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(scrubQuoteTest);
   CPPUNIT_TEST(scrubBigIntsTest);
   CPPUNIT_TEST(isSupportedTest);
+  CPPUNIT_TEST(runBoundsTest);
+  CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+
+  OsmJsonReaderTest() : HootTestFixture("test-files/io/OsmJsonReaderTest/")
+  {
+  }
 
   void nodeTest()
   {
@@ -328,6 +333,9 @@ public:
   // Try hitting the network to get some data...
   void urlTest()
   {
+    // needed to suppress map crop missing element warnings
+    DisableLog dl;
+
     OsmMapPtr pMap;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
     QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
@@ -573,9 +581,47 @@ public:
     CPPUNIT_ASSERT(!uut.isSupported("http://blah"));
     CPPUNIT_ASSERT(!uut.isSupported("https://blah"));
   }
+
+  void runBoundsTest()
+  {
+    // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
+
+    OsmJsonReader uut;
+    uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
+    OsmMapPtr map(new OsmMap());
+    uut.open(_inputPath + "runBoundsTest-in.json");
+    uut.read(map);
+    uut.close();
+
+    CPPUNIT_ASSERT_EQUAL(32, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getWays().size());
+  }
+
+  void runBoundsLeaveConnectedOobWaysTest()
+  {
+    // This will leave any ways in the output which are outside of the bounds but are directly
+    // connected to ways which cross the bounds.
+
+    OsmJsonReader uut;
+    uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
+    uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
+
+    // set cropping up for strict bounds handling
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+
+    OsmMapPtr map(new OsmMap());
+    uut.open(_inputPath + "runBoundsLeaveConnectedOobWaysTest-in.json");
+    uut.read(map);
+    uut.close();
+    //OsmMapWriterFactory::write(
+      //map, _outputPath + "/runBoundsLeaveConnectedOobWaysTest.osm", false, true);
+
+    CPPUNIT_ASSERT_EQUAL(17, (int)map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
+  }
 };
 }
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::OsmJsonReaderTest, "slow");
 

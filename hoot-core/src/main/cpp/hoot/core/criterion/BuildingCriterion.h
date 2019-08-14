@@ -53,6 +53,9 @@ public:
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
+  virtual ConflatableGeometryType getGeometryType() const
+  { return ConflatableGeometryType::Polygon; }
+
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingCriterion(_map)); }

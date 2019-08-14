@@ -96,7 +96,7 @@ public:
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
   static std::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t,
-                                                                 ConstOsmMapPtr map);
+                                                               ConstOsmMapPtr map);
 
   QString toString() const;
 };
