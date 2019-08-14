@@ -289,6 +289,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
   while (pChanges->hasMoreChanges())
   {
     Change c = pChanges->readNextChange();
+    LOG_VART(c);
 
     // Need to add children
     if (ElementType::Way == c.getElement()->getElementType().getEnum())
@@ -326,7 +327,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
       //throw HootException("Relation handling not implemented with differential conflation yet.");
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN("Relation handling not implemented with differential conflation yet: " << c);
+        LOG_WARN("Relation handling not implemented with differential conflation: " << c);
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -382,13 +383,16 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      // Double check to make sure we don't create multiple changes for the
-      // same element
+      LOG_VART(pOldElement->getElementId());
+      LOG_VART(pNewElement->getElementId());
+
+      // Double check to make sure we don't create multiple changes for the same element
       if (!_pTagChanges->containsChange(pOldElement->getElementId())
           && _compareTags(pOldElement->getTags(), pNewElement->getTags()))
       {
         // Make new change
         Change newChange = _getChange(pOldElement, pNewElement);
+        LOG_VART(newChange);
 
         // Add it to our list
         _pTagChanges->addChange(newChange);

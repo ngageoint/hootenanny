@@ -42,6 +42,7 @@
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/AttributeValueCriterion.h>
 
 // Qt
 #include <QDateTime>
@@ -395,6 +396,16 @@ bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
   return commonWayIds.size() > 0;
+}
+
+int OsmUtils::versionLessThanOneCount(const OsmMapPtr& map)
+{
+  std::shared_ptr<AttributeValueCriterion> attrCrit(
+    new AttributeValueCriterion(
+      ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan));
+  return
+    (int)FilteredVisitor::getStat(
+      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
 }
 
 }

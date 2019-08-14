@@ -64,8 +64,6 @@
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/criterion/AttributeValueCriterion.h>
 #include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
@@ -115,7 +113,7 @@ void ChangesetReplacementCreator::create(
   // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
   // now to give the chance to back out earlier.
 
-  const int numberOfRefElementsWithVersionLessThan1 = _versionLessThanOneCount(refMap);
+  const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(refMap);
   if (numberOfRefElementsWithVersionLessThan1 > 0)
   {
     LOG_WARN(
@@ -326,16 +324,6 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
 
   return refMap;
-}
-
-int ChangesetReplacementCreator::_versionLessThanOneCount(const OsmMapPtr& map) const
-{
-  std::shared_ptr<AttributeValueCriterion> attrCrit(
-    new AttributeValueCriterion(
-      ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan));
-  return
-    (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
 }
 
 QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(

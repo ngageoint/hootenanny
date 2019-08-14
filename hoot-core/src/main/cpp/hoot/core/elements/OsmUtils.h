@@ -355,6 +355,14 @@ public:
    */
   static bool nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
                                     const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the number of features with a changeset version less than one
+   *
+   * @param map
+   * @return TODO
+   */
+  static int versionLessThanOneCount(const OsmMapPtr& map);
 };
 
 }

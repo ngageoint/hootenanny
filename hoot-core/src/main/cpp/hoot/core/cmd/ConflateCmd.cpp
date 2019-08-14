@@ -54,6 +54,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Standard
 #include <fstream>
@@ -235,6 +236,20 @@ int ConflateCmd::runSimple(QStringList& args)
 
     if (isDiffConflate)
     {
+      if (output.endsWith(".osc"))
+      {
+        const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(map);
+        if (numberOfRefElementsWithVersionLessThan1 > 0)
+        {
+          // TODO: could throw here instead
+          LOG_WARN(
+            StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
+            "the reference map have a version less than one. This could lead to difficulties when " <<
+            "applying the resulting changeset back to an authoritative data store. Are the versions " <<
+            "on the features being populated correctly?")
+        }
+      }
+
       // Store original IDs for tag diff
       progress.set(
         _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");
