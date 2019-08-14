@@ -238,16 +238,7 @@ int ConflateCmd::runSimple(QStringList& args)
     {
       if (output.endsWith(".osc"))
       {
-        const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(map);
-        if (numberOfRefElementsWithVersionLessThan1 > 0)
-        {
-          // TODO: could throw here instead
-          LOG_WARN(
-            StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
-            "the reference map have a version less than one. This could lead to difficulties when " <<
-            "applying the resulting changeset back to an authoritative data store. Are the versions " <<
-            "on the features being populated correctly?")
-        }
+        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
       }
 
       // Store original IDs for tag diff

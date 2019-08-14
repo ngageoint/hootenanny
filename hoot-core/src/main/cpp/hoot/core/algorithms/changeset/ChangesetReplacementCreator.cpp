@@ -113,15 +113,7 @@ void ChangesetReplacementCreator::create(
   // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
   // now to give the chance to back out earlier.
 
-  const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(refMap);
-  if (numberOfRefElementsWithVersionLessThan1 > 0)
-  {
-    LOG_WARN(
-      StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
-      "the reference map have a version less than one. This could lead to difficulties when " <<
-      "applying the resulting changeset back to an authoritative data store. Are the versions " <<
-      "on the features being populated correctly?")
-  }
+  OsmUtils::checkVersionLessThanOneCountAndLogWarning(refMap);
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.

@@ -43,6 +43,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/AttributeValueCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -406,6 +407,19 @@ int OsmUtils::versionLessThanOneCount(const OsmMapPtr& map)
   return
     (int)FilteredVisitor::getStat(
       attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
+}
+
+void OsmUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)
+{
+  const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(map);
+  if (numberOfRefElementsWithVersionLessThan1 > 0)
+  {
+    LOG_WARN(
+      StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
+      "the reference map have a version less than one. This could lead to difficulties when " <<
+      "applying the resulting changeset back to an authoritative data store. Are the versions " <<
+      "on the features being populated correctly?")
+  }
 }
 
 }

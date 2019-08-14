@@ -363,6 +363,13 @@ public:
    * @return TODO
    */
   static int versionLessThanOneCount(const OsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param map
+   */
+  static void checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
 };
 
 }
