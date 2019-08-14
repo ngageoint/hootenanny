@@ -142,10 +142,15 @@ void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
   if (_criteria.size() > 0 && !_criteriaSatisfied(e))
   {
-    LOG_TRACE("Element didn't satisfy criteria: " << e->getElementId() << ". Skipping...");
+    LOG_TRACE("Element did not satisfy criteria: " << e->getElementId() << ". Skipping...");
+    //if (e->getElementId() == ElementId(ElementType::Way, -373462))
+    //{
+      LOG_VART(e->getStatus());
+    //}
     return;
   }
 
+  LOG_TRACE("Modifying attributes for: " << e->getElementId() << "...");
   for (int i = 0; i < _attributes.length(); i++)
   {
     QString attributeValue;

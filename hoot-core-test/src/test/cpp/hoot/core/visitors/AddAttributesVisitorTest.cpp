@@ -51,6 +51,7 @@ class AddAttributesVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runAddMissingAttributeValueTest);
   CPPUNIT_TEST(runAddEmptyAttributeValueTest);
   CPPUNIT_TEST(runAddInvalidValueTest);
+  // TODO: test crit
   CPPUNIT_TEST_SUITE_END();
 
 public:
