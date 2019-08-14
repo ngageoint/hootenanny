@@ -36,6 +36,8 @@ class ElementCriterionConsumer
 {
 public:
 
+  static std::string className() { return "hoot::ElementCriterionConsumer"; }
+
   virtual ~ElementCriterionConsumer() {}
 
   virtual void addCriterion(const ElementCriterionPtr& e) = 0;

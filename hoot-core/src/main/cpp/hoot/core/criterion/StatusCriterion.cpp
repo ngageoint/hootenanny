@@ -33,6 +33,10 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, StatusCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, Unknown1Criterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, Unknown2Criterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, ConflatedCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, InvalidCriterion)
 
 bool StatusCriterion::isSatisfied(const ConstElementPtr& e) const
 {

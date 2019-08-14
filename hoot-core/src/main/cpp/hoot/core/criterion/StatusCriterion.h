@@ -47,6 +47,8 @@ public:
   StatusCriterion() { setConfiguration(conf()); }
   StatusCriterion(Status s) : _status(s) { }
 
+  virtual ~StatusCriterion() {}
+
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual void setConfiguration(const Settings& conf);
@@ -55,9 +57,45 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements with a particular status"; }
 
-private:
+protected:
 
   Status _status;
+};
+
+class Unknown1Criterion : public StatusCriterion
+{
+public:
+
+  static std::string className() { return "hoot::Unknown1Criterion"; }
+  Unknown1Criterion() : StatusCriterion(Status::Unknown1) {}
+  virtual QString getDescription() const { return "Identifies elements with status Unknown1"; }
+};
+
+class Unknown2Criterion : public StatusCriterion
+{
+public:
+
+  static std::string className() { return "hoot::Unknown2Criterion"; }
+  Unknown2Criterion() : StatusCriterion(Status::Unknown2) {}
+  virtual QString getDescription() const { return "Identifies elements with status Unknown2"; }
+};
+
+class ConflatedCriterion : public StatusCriterion
+{
+public:
+
+  static std::string className() { return "hoot::ConflatedCriterion"; }
+  ConflatedCriterion() : StatusCriterion(Status::Conflated) {}
+  virtual QString getDescription() const { return "Identifies elements with status Conflated"; }
+};
+
+class InvalidCriterion : public StatusCriterion
+{
+public:
+
+  static std::string className() { return "hoot::InvalidCriterion"; }
+  InvalidCriterion() : StatusCriterion(Status::Invalid) {}
+  virtual QString getDescription() const { return "Identifies elements with status Invalid"; }
 };
 
 }
