@@ -52,6 +52,7 @@ import java.util.UUID;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.ForbiddenException;
@@ -563,15 +564,18 @@ public class GrailResource {
     @Path("/pulloverpasstodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox) {
+            @QueryParam("bbox") String bbox,
+            @QueryParam("name") String layerName) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
-        String mapSuffix = jobId.substring(0, 7);
-        String mapName = SECONDARY + "_" + mapSuffix;
         String folderName = "grail_" + bbox.replace(",", "_");
+
+        if (DbUtils.mapExists(layerName)) {
+            throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
+        }
 
         Response response;
         JSONObject json = new JSONObject();
@@ -605,12 +609,12 @@ public class GrailResource {
 
         String url = "'" + PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery + "'";
         params.setInput1(url);
-        params.setOutput(mapName);
+        params.setOutput(layerName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importOverpass);
 
         // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, mapName, user, this.getClass());
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());
         workflow.add(setFolder);
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
@@ -672,16 +676,19 @@ public class GrailResource {
     @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox) {
+            @QueryParam("bbox") String bbox,
+            @QueryParam("name") String layerName) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
-        String mapSuffix = jobId.substring(0, 7);
-        String mapName = REFERENCE + "_" + mapSuffix;
         String folderName = "grail_" + bbox.replace(",", "_");
+
+        if (DbUtils.mapExists(layerName)) {
+            throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
+        }
 
         Response response;
         JSONObject json = new JSONObject();
@@ -690,7 +697,7 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setWorkDir(workDir);
-        params.setOutput(mapName);
+        params.setOutput(layerName);
         params.setBounds(bbox);
         params.setParentId(folderName);
 
