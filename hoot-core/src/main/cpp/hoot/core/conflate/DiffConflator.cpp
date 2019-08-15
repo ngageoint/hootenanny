@@ -56,6 +56,7 @@
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 // standard
 #include <algorithm>
@@ -387,6 +388,19 @@ void DiffConflator::_calcAndStoreTagChanges()
 
       LOG_VART(pOldElement->getElementId());
       LOG_VART(pNewElement->getElementId());
+
+      // Apparently a NetworkMatch can be a node/way pair. See note in
+      // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
+      // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
+      // other conflation type other than poi/poly which matches differing geometry types then this
+      // will need to be updated.
+      if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
+          (pOldElement->getElementType() != ElementType::Way ||
+           pNewElement->getElementType() != ElementType::Way))
+      {
+        LOG_TRACE("Skipping conflate match with differing element types: " << match << "...");
+        continue;
+      }
 
       // Double check to make sure we don't create multiple changes for the same element
       if (!_pTagChanges->containsChange(pOldElement->getElementId())
