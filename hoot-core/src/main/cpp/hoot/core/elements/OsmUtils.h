@@ -357,17 +357,17 @@ public:
                                     const ConstOsmMapPtr& map);
 
   /**
-   * Returns the number of features with a changeset version less than one
+   * Returns the number of elements with a changeset version less than one
    *
-   * @param map
-   * @return TODO
+   * @param map the map to examine
+   * @return the number of elements meeting the criteria
    */
   static int versionLessThanOneCount(const OsmMapPtr& map);
 
   /**
-   * TODO
+   * Logs a warning if any element in the map has a changeset version less than one
    *
-   * @param map
+   * @param map the map to examine
    */
   static void checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
 };

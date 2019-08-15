@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.80112011104257" minlon="-122.4170845206333" maxlat="37.80132046235925" maxlon="-122.4167220492491"/>
+    <node visible="true" id="-861083" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560" lat="37.8012626561334599" lon="-122.4167320255257749">
+        <tag k="amenity" v="restaurant"/>
+        <tag k="REF1" v="C"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-861082" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560" lat="37.8012468907913401" lon="-122.4167220492491026">
+        <tag k="amenity" v="restaurant"/>
+        <tag k="REF2" v="C"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-861077" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560" lat="37.8011201110425716" lon="-122.4167594602864710">
+        <tag k="REF2" v="A"/>
+        <tag k="poi" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-861055" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560" lat="37.8011279937276043" lon="-122.4167428331587502">
+        <tag k="REF2" v="A"/>
+        <tag k="poi" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-861054" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560" lat="37.8011358764117702" lon="-122.4167694365631149">
+        <tag k="REF1" v="A"/>
+        <tag k="poi" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-861038" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8012941868076950" lon="-122.4169415273349699"/>
+    <node visible="true" id="-861035" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011785742698052" lon="-122.4170288197554868"/>
+    <node visible="true" id="-861032" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8013204623592500" lon="-122.4168899832390451"/>
+    <node visible="true" id="-861027" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.8011575537889470" lon="-122.4170845206333098"/>
+    <way visible="true" id="-861037" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560">
+        <nd ref="-861035"/>
+        <nd ref="-861038"/>
+        <tag k="highway" v="road"/>
+        <tag k="REF2" v="B"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-861029" timestamp="2016-05-04T22:07:19Z" version="1" user="Seandebasti" uid="550560">
+        <nd ref="-861027"/>
+        <nd ref="-861032"/>
+        <tag k="highway" v="road"/>
+        <tag k="REF1" v="B"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

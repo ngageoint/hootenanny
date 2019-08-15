@@ -50,7 +50,7 @@ public:
   static std::string className() { return "hoot::AddAttributesVisitor"; }
 
   AddAttributesVisitor();
-  explicit AddAttributesVisitor(const QStringList attributes);
+  explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
 
   virtual void visit(const std::shared_ptr<Element>& e);
 

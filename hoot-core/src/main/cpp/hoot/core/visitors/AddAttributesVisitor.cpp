@@ -46,10 +46,10 @@ _chainCriteria(false)
   setConfiguration(conf());
 }
 
-AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes) :
+AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes, const bool negateCriteria) :
 _attributes(attributes),
 _addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty()),
-_negateCriteria(false),
+_negateCriteria(negateCriteria),
 _chainCriteria(false)
 {
 }
