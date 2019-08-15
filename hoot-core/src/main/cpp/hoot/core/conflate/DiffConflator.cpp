@@ -487,6 +487,11 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 
 void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
 {
+  // It seems like our tag changes should be sorted by element type before passing them along to the
+  // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
+  // call changeset-derive. However, doing that here would require some refactoring so not worrying
+  // about it unless not being sorted actually causes problems.
+
   // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
@@ -502,7 +507,6 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
     OsmXmlChangesetFileWriter writer;
     writer.write(output, pGeoChanges);
 
-    // TODO: I think these tag changes need to be sorted
     QString outFileName = output;
     outFileName.replace(".osc", "");
     outFileName.append(".tags.osc");
