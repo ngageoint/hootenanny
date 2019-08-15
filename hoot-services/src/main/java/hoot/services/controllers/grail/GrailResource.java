@@ -626,10 +626,11 @@ public class GrailResource {
     }
 
     @GET
-    @Path("/overpassStatsQuery")
+    @Path("/grailMetadataQuery")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response overpassStats(@Context HttpServletRequest request,
+    public Response grailMetadata(@Context HttpServletRequest request,
             @QueryParam("bbox") String bbox) {
+
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
