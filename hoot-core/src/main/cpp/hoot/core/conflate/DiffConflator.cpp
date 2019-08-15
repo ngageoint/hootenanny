@@ -395,8 +395,7 @@ void DiffConflator::_calcAndStoreTagChanges()
       // other conflation type other than poi/poly which matches differing geometry types then this
       // will need to be updated.
       if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
-          (pOldElement->getElementType() != ElementType::Way ||
-           pNewElement->getElementType() != ElementType::Way))
+          pOldElement->getElementType() != pNewElement->getElementType())
       {
         LOG_TRACE("Skipping conflate match with differing element types: " << match << "...");
         continue;
