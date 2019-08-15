@@ -69,7 +69,6 @@ private:
   ChangeType _type;
   ConstElementPtr _element;
   ConstElementPtr _previousElement;
-
 };
 
 }

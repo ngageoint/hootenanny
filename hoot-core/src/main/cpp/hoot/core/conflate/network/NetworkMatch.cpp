@@ -99,32 +99,45 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   // Said another way if you're 10% down line 1, then that is equivalent to 10% down line 2.
   // Unfortunately, this can be a very coarse estimate. Something like Frechet distance may
   // improve this matching. - see #3158
+
   Meters d1 = 0.0;
   for (int i = 0; i < string1->getMembers().size(); ++i)
   {
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdge(i))->getElementId(),
-      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()));
+    ElementId element1Id = _toElement(string1->getEdge(i))->getElementId();
+    LOG_VART(element1Id);
+    ElementId element2Id =
+      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
 
     d1 += string1->getEdge(i)->calculateLength(map);
 
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdge(i))->getElementId(),
-      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId()));
+    element1Id = _toElement(string1->getEdge(i))->getElementId();
+    LOG_VART(element1Id);
+    element2Id =
+      _toElement(string2->getEdgeAtOffset(map, d1 / length1 * length2))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
   }
 
   Meters d2 = 0.0;
   for (int i = 0; i < string2->getMembers().size(); ++i)
   {
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-      _toElement(string2->getEdge(i))->getElementId()));
+    ElementId element1Id =
+      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
+    LOG_VART(element1Id);
+    ElementId element2Id = _toElement(string2->getEdge(i))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
 
     d2 += string2->getEdge(i)->calculateLength(map);
 
-    _pairs.insert(pair<ElementId, ElementId>(
-      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId(),
-      _toElement(string2->getEdge(i))->getElementId()));
+    element1Id =
+      _toElement(string1->getEdgeAtOffset(map, d2 / length2 * length2))->getElementId();
+    LOG_VART(element1Id);
+    element2Id = _toElement(string2->getEdge(i))->getElementId();
+    LOG_VART(element2Id);
+    _pairs.insert(pair<ElementId, ElementId>(element1Id, element2Id));
   }
 
   LOG_VART(_pairs);
@@ -176,12 +189,10 @@ bool NetworkMatch::contains(const NetworkMatch* other) const
 ConstElementPtr NetworkMatch::_toElement(ConstNetworkEdgePtr edge) const
 {
   QList<ConstElementPtr> members = edge->getMembers();
-
   if (members.size() != 1)
   {
     throw NotImplementedException("Only one member is support in the network edge at this time.");
   }
-
   return members[0];
 }
 

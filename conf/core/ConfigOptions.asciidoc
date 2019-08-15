@@ -881,7 +881,7 @@ significantly.
 * Default Value: `true`
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
-output.
+output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
 
 === differential.snap.unconnected.roads
 
