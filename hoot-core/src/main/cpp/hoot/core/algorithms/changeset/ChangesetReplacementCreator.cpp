@@ -64,8 +64,6 @@
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/criterion/AttributeValueCriterion.h>
 #include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
@@ -115,15 +113,7 @@ void ChangesetReplacementCreator::create(
   // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
   // now to give the chance to back out earlier.
 
-  const int numberOfRefElementsWithVersionLessThan1 = _versionLessThanOneCount(refMap);
-  if (numberOfRefElementsWithVersionLessThan1 > 0)
-  {
-    LOG_WARN(
-      StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
-      "the reference map have a version less than one. This could lead to difficulties when " <<
-      "applying the resulting changeset back to an authoritative data store. Are the versions " <<
-      "on the features being populated correctly?")
-  }
+  OsmUtils::checkVersionLessThanOneCountAndLogWarning(refMap);
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
@@ -326,16 +316,6 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
 
   return refMap;
-}
-
-int ChangesetReplacementCreator::_versionLessThanOneCount(const OsmMapPtr& map) const
-{
-  std::shared_ptr<AttributeValueCriterion> attrCrit(
-    new AttributeValueCriterion(
-      ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan));
-  return
-    (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
 }
 
 QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(

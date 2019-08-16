@@ -42,6 +42,8 @@
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/AttributeValueCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -142,10 +144,18 @@ QString OsmUtils::getRelationMembersDetailedString(const ConstRelationPtr& relat
 {
   QString str = "\nMember Detail:\n\n";
   const std::vector<RelationData::Entry> relationMembers = relation->getMembers();
+  LOG_VART(relationMembers.size());
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
     str += "Member #" + QString::number(i + 1) + ":\n\n";
     ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (!member)
+    {
+      throw HootException(
+        "Unable to retrieve relation member: " + relationMembers[i].getElementId().toString() +
+        ". Skipping adding it to output...");
+    }
+    LOG_VART(member->getElementId());
     str += member->toString() + "\n\n";
   }
   return str;
@@ -387,6 +397,29 @@ bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
   return commonWayIds.size() > 0;
+}
+
+int OsmUtils::versionLessThanOneCount(const OsmMapPtr& map)
+{
+  std::shared_ptr<AttributeValueCriterion> attrCrit(
+    new AttributeValueCriterion(
+      ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan));
+  return
+    (int)FilteredVisitor::getStat(
+      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
+}
+
+void OsmUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)
+{
+  const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(map);
+  if (numberOfRefElementsWithVersionLessThan1 > 0)
+  {
+    LOG_WARN(
+      StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
+      "the reference map have a version less than one. This could lead to difficulties when " <<
+      "applying the resulting changeset back to an authoritative data store. Are the versions " <<
+      "on the features being populated correctly?")
+  }
 }
 
 }

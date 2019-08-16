@@ -25,7 +25,7 @@ section of the Hootenanny User Guide.
 === Usage
 
 --------------------------------------
-conflate (input1) (input2) (output) [--differential] [--stats filename]
+conflate (input1) (input2) (output) [--differential] [--include-tags] [--stats filename]
 --------------------------------------
 
 ==== Examples

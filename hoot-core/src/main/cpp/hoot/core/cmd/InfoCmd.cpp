@@ -318,6 +318,7 @@ private:
     options.append("--conflatable-criteria");
     options.append("--conflate-post-operations");
     options.append("--conflate-pre-operations");
+    options.append("--criterion-consumers");
     options.append("--feature-extractors");
     options.append("--formats");
     options.append("--languages");
