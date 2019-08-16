@@ -422,23 +422,25 @@ public class GrailResource {
             String grandparentJobId = DbUtils.getParentId(reqParams.getParentId());
             Long resourceId = DbUtils.getMapIdByJobId(grandparentJobId); // the merged layer
 
-            // Setup workflow to refresh rails data after the push
-            long referenceId = DbUtils.getMergedReference(resourceId);
-            Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
+            if(resourceId != null) {
+                // Setup workflow to refresh rails data after the push
+                long referenceId = DbUtils.getMergedReference(resourceId);
+                Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
 
-            GrailParams refreshParams = new GrailParams();
-            refreshParams.setUser(user);
-            refreshParams.setWorkDir(workDir);
-            refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
-            refreshParams.setBounds(mapTags.get("bbox"));
-            refreshParams.setParentId("grail_" + mapTags.get("bbox").replace(",", "_"));
+                GrailParams refreshParams = new GrailParams();
+                refreshParams.setUser(user);
+                refreshParams.setWorkDir(workDir);
+                refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
+                refreshParams.setBounds(mapTags.get("bbox"));
+                refreshParams.setParentId("grail_" + mapTags.get("bbox").replace(",", "_"));
 
-            try {
-                List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
-                workflow.addAll(refreshWorkflow);
-            }
-            catch(UnavailableException exc) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+                try {
+                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
+                    workflow.addAll(refreshWorkflow);
+                }
+                catch(UnavailableException exc) {
+                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+                }
             }
 
             jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, reqParams.getParentId()));

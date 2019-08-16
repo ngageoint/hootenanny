@@ -55,6 +55,8 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 // standard
 #include <algorithm>
@@ -69,6 +71,8 @@ using namespace Tgs;
 
 namespace hoot
 {
+
+int DiffConflator::logWarnCount = 0;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
@@ -254,6 +258,7 @@ MemChangesetProviderPtr DiffConflator::getTagDiff()
 void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 {
   // Check map to make sure it contains only Unknown1 elements
+  // TODO: valid and conflated could be in here too, should we check for them as well?
   ElementCriterionPtr pStatusCrit(new StatusCriterion(Status::Unknown2));
   CriterionCountVisitor countVtor(pStatusCrit);
   pMap->visitRo(countVtor);
@@ -261,10 +266,11 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   if (countVtor.getCount() > 0)
   {
     // Not something a user can generally cause - more likely it's a misuse of this class.
-    LOG_ERROR("Map elements with Status::Unknown2 found when storing "
-              "original map for diff conflation. This can cause unpredictable "
-              "results. The original map should contain only Status::Unknown1 "
-              "elements. ");
+    throw IllegalArgumentException(
+      "Map elements with Status::Unknown2 found when storing "
+      "original map for diff conflation. This can cause unpredictable "
+      "results. The original map should contain only Status::Unknown1 "
+      "elements. ");
   }
 
   // Use the copy constructor
@@ -273,7 +279,7 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 
 void DiffConflator::markInputElements(OsmMapPtr pMap)
 {
-  // Mark input1 elements (Use Ref1 visitor, because it's already coded up)
+  // Mark input1 elements
   Settings visitorConf;
   visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
   std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
@@ -286,6 +292,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
   while (pChanges->hasMoreChanges())
   {
     Change c = pChanges->readNextChange();
+    LOG_VART(c);
 
     // Need to add children
     if (ElementType::Way == c.getElement()->getElementType().getEnum())
@@ -313,9 +320,21 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation doesn't do relations
-      throw HootException("Relation handling not implemented with differential "
-                          "conflation yet.");
+      // Diff conflation doesn't do relations yet
+
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN("Relation handling not implemented with differential conflation: " << c);
+        LOG_VART(c);
+        ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
+        LOG_VART(relation->getElementId());
+        LOG_VART(OsmUtils::getRelationDetailedString(relation, _pOriginalMap));
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
     }
   }
   OsmMapWriterFactory::writeDebugMap(pMap, "after-adding-diff-tag-changes");
@@ -335,7 +354,9 @@ void DiffConflator::_calcAndStoreTagChanges()
 
   for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+    const Match* match = *mit;
+    LOG_VART(match);
+    std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
 
     // Go through our match pairs, calculate tag diff for elements. We only
     // consider the "Original" elements when we do this - we want to ignore
@@ -345,7 +366,7 @@ void DiffConflator::_calcAndStoreTagChanges()
          pit != pairs.end(); ++pit)
     {
       // If it's a POI-Poly match, the poi always comes first, even if it's from the secondary
-      // dataset, so we can't always count on the first being the old element
+      // dataset, so we can't always count on the first being the old element.
       ConstElementPtr pOldElement;
       ConstElementPtr pNewElement;
       if (_pOriginalMap->containsElement(pit->first))
@@ -365,13 +386,28 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      // Double check to make sure we don't create multiple changes for the
-      // same element
+      LOG_VART(pOldElement->getElementId());
+      LOG_VART(pNewElement->getElementId());
+
+      // Apparently a NetworkMatch can be a node/way pair. See note in
+      // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
+      // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
+      // other conflation type other than poi/poly which matches differing geometry types then this
+      // will need to be updated.
+      if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
+          pOldElement->getElementType() != pNewElement->getElementType())
+      {
+        LOG_TRACE("Skipping conflate match with differing element types: " << match << "...");
+        continue;
+      }
+
+      // Double check to make sure we don't create multiple changes for the same element
       if (!_pTagChanges->containsChange(pOldElement->getElementId())
-          && _compareTags(pOldElement->getTags(), pNewElement->getTags()))
+          && _tagsAreDifferent(pOldElement->getTags(), pNewElement->getTags()))
       {
         // Make new change
         Change newChange = _getChange(pOldElement, pNewElement);
+        LOG_VART(newChange);
 
         // Add it to our list
         _pTagChanges->addChange(newChange);
@@ -382,10 +418,8 @@ void DiffConflator::_calcAndStoreTagChanges()
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
 
-bool DiffConflator::_compareTags (const Tags &oldTags, const Tags &newTags)
+bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags)
 {
-  // See if tags are the same
-
   QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
@@ -466,6 +500,11 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 
 void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
 {
+  // It seems like our tag changes should be sorted by element type before passing them along to the
+  // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
+  // call changeset-derive. However, doing that here would require some refactoring so not worrying
+  // about it unless not being sorted actually causes problems.
+
   // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
@@ -490,7 +529,8 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
   else
   {
     // write unified output
-    MultipleChangesetProviderPtr pChanges(new MultipleChangesetProvider(pResultMap->getProjection()));
+    MultipleChangesetProviderPtr pChanges(
+      new MultipleChangesetProvider(pResultMap->getProjection()));
     pChanges->addChangesetProvider(pGeoChanges);
     pChanges->addChangesetProvider(_pTagChanges);
     OsmXmlChangesetFileWriter writer;

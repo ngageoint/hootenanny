@@ -75,16 +75,17 @@ class MatchThreshold;
  * a change is recorded, in which no element geometry is changed, but the tags from the input2
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
- *
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
     public Configurable, public ProgressReporter
 {
 public:
 
+  static int logWarnCount;
+
   /**
    * @brief className - Get a string that represents this class name
-   * @return - class name
+   * @return class name
    */
   static std::string className() { return "hoot::DiffConflator"; }
 
@@ -102,11 +103,6 @@ public:
   ~DiffConflator();
 
   /**
-   * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
-   * map is not reprojected back to the original projection when conflation is complete.
-   */
-
-  /**
    * @brief apply - Applies the differential conflation operation to the supplied
    * map. If the map is not in a planar projection it is reprojected. The map
    * is not reprojected back to the original projection when conflation is complete.
@@ -116,7 +112,7 @@ public:
 
   /**
    * @brief getClassName - Gets the class name
-   * @return - The class name string
+   * @return The class name string
    */
   virtual std::string getClassName() const { return className(); }
 
@@ -162,8 +158,7 @@ public:
   void storeOriginalMap(OsmMapPtr& pMap);
 
   /**
-   * @brief storeOriginalMap - Mark input1 elements (Use Ref1 visitor, because
-   * it's already coded up)
+   * @brief storeOriginalMap - Mark input1 elements
    * @param pMap - Map to add the changes to
    */
   void markInputElements(OsmMapPtr pMap);
@@ -227,7 +222,7 @@ private:
    */
   void _reset();
 
-  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<const Match *> matches);
+  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<const Match*> matches);
 
   void _printMatches(std::vector<const Match*> matches);
   void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
@@ -239,7 +234,7 @@ private:
 
   // Decides if the newTags should replace the oldTags. Among other things,
   // it checks the differential.tag.ignore.list
-  bool _compareTags (const Tags &oldTags, const Tags &newTags);
+  bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags);
 
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);

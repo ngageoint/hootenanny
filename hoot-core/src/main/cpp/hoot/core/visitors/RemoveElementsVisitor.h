@@ -40,6 +40,9 @@ namespace hoot
 
 /**
  * Removes any elements where that satisfy a criterion
+ *
+ * TODO: the criterion related code in this class is kind of duplicated in other classes
+ * (e.g. AddAttributesVisitor)...may want to look into consolidating
  */
 class RemoveElementsVisitor : public ElementVisitor, public OsmMapConsumer,
     public ElementCriterionConsumer, public Configurable, public OperationStatusInfo

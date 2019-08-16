@@ -355,6 +355,21 @@ public:
    */
   static bool nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
                                     const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the number of elements with a changeset version less than one
+   *
+   * @param map the map to examine
+   * @return the number of elements meeting the criteria
+   */
+  static int versionLessThanOneCount(const OsmMapPtr& map);
+
+  /**
+   * Logs a warning if any element in the map has a changeset version less than one
+   *
+   * @param map the map to examine
+   */
+  static void checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
 };
 
 }

@@ -138,11 +138,6 @@ private:
   OsmMapPtr _loadSecMap(const QString& input);
 
   /*
-   * Returns the number of features with a changeset version less than one
-   */
-  int _versionLessThanOneCount(const OsmMapPtr& map) const;
-
-  /*
    * Keeps track of the changeset versions for features
    */
   QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map) const;

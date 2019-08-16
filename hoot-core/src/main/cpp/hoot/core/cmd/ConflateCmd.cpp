@@ -54,6 +54,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Standard
 #include <fstream>
@@ -235,6 +236,11 @@ int ConflateCmd::runSimple(QStringList& args)
 
     if (isDiffConflate)
     {
+      if (output.endsWith(".osc"))
+      {
+        OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
+      }
+
       // Store original IDs for tag diff
       progress.set(
         _getJobPercentComplete(currentTask - 1), "Storing original features for tag differential...");

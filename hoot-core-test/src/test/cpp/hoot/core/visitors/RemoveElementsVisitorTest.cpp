@@ -47,7 +47,9 @@ class RemoveElementsVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runRecursiveTest);
   CPPUNIT_TEST(runNegatedFilterTest);
   CPPUNIT_TEST(runReviewRelationTest);
-  CPPUNIT_TEST(runMultipleCriterionTest);
+  CPPUNIT_TEST(runMultipleCriteriaTest);
+  // TODO (will need to modify the input file):
+  //CPPUNIT_TEST(runChainCriteriaTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -126,7 +128,7 @@ public:
                      _outputPath + "RemoveElementsVisitorTest-reviewRelationTestOut.osm");
   }
 
-  void runMultipleCriterionTest()
+  void runMultipleCriteriaTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "RemoveElementsVisitorInput.osm");
@@ -139,11 +141,10 @@ public:
 
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
-    writer.write(map, _outputPath + "RemoveElementsVisitorTest-runMultipleCriterionTestOut.osm");
-    HOOT_FILE_EQUALS(_inputPath + "RemoveElementsVisitorTest-runMultipleCriterionTestOut.osm",
-                     _outputPath + "RemoveElementsVisitorTest-runMultipleCriterionTestOut.osm");
+    writer.write(map, _outputPath + "RemoveElementsVisitorTest-runMultipleCriteriaTestOut.osm");
+    HOOT_FILE_EQUALS(_inputPath + "RemoveElementsVisitorTest-runMultipleCriteriaTestOut.osm",
+                     _outputPath + "RemoveElementsVisitorTest-runMultipleCriteriaTestOut.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveElementsVisitorTest, "quick");

@@ -16,6 +16,7 @@ Only one of the following options can be passed to the command:
                                  `conflate.post.ops` configuration option)
 * +--conflate-pre-operations+  - Displays operations configured by default to run before a conflation job (can be customized via the
                                  `conflate.pre.ops` configuration option)
+* +--criterion-consumers+      - Displays operations capable of taking in an ElementCriterion as input
 * +--feature-extractors+       - Displays available feature extractors used in conflation model building
 * +--formats+                  - Displays supported data input/output formats
 * +--languages+                - Displays information about translatable/detectable spoken languages
@@ -99,13 +100,13 @@ The +--conflatable-crieria++ option prints out all element criteria classes that
 ==== Usage
 
 --------------------------------------
-info --conflatable-crieria
+info --conflatable-criteria
 --------------------------------------
 
 ==== Example
 
 --------------------------------------
-hoot info --conflatable-crieria
+hoot info --conflatable-criteria
 --------------------------------------
 
 === Conflate Post Operations
@@ -140,6 +141,23 @@ info --conflate-pre-operations
 
 --------------------------------------
 hoot info --conflate-pre-operations
+--------------------------------------
+
+=== Element Criterion Consumers
+
+The +--criterion-consumers++ option prints out all operations that are capable of taking an `ElementCriterion` as input. Passing in an
+`ElementCriterion` to an operation can be useful when filtering elements before performing data transformations on them.
+
+==== Usage
+
+--------------------------------------
+info --criterion-consumers
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --criterion-consumers
 --------------------------------------
 
 === Feature Extractors
