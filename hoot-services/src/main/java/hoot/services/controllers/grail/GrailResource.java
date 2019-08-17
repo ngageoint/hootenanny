@@ -593,7 +593,7 @@ public class GrailResource {
         try {
             overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
         } catch(Exception exc) {
-            logger.error("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getAbsolutePath());
+            logger.error("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
             return Response.status(Response.Status.BAD_REQUEST).entity("Could not find grail overpass query file").build();
         }
 

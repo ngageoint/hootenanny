@@ -26,10 +26,14 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
+import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 
 import javax.ws.rs.WebApplicationException;
@@ -82,38 +86,33 @@ class PullOverpassCommand implements InternalCommand {
     private void getOverpass() {
         String url = "";
         try {
-                BoundingBox boundingBox = new BoundingBox(params.getBounds());
-
-    // Compact QL
-    // https://overpass-api.de/api/interpreter?data=(node(-34.0044,150.9982,-33.9728,151.0656);<;>;);out meta qt;
-
-    // XML
-    // <osm-script>
-    //   <union into="_">
-    //     <bbox-query s="-34.0044" w="150.9982" n="-33.9728" e="151.0656"/>
-    //     <recurse from="_" into="_" type="up"/>
-    //     <recurse from="_" into="_" type="down"/>
-    //   </union>
-    //   <print e="" from="_" geometry="skeleton" ids="yes" limit="" mode="meta" n="" order="quadtile" s="" w=""/>
-    // </osm-script>
-
-                // This is Ugly! It is the encoded version of the compact QL script above
-                url = replaceSensitiveData(params.getPullUrl()) +
-                    "/api/interpreter?data=(node(" +
-                    boundingBox.getMinLat() + "%2C" +
-                    boundingBox.getMinLon() + "%2C" +
-                    boundingBox.getMaxLat() + "%2C" +
-                    boundingBox.getMaxLon() + ")%3B%3C%3B%3E%3B)%3Bout%20meta%20qt%3B";
-
-                URL requestUrl = new URL(url);
-                File outputFile = new File(params.getOutput());
-
-                FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+            // Get grail overpass query from the file and store it in a string
+            String overpassQuery;
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
             }
-            catch (Exception ex) {
-                String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
-                // throw new RuntimeException(msg, ex);
-                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-            }
+
+            //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+            overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(params.getBounds()).toOverpassString());
+            overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
+
+            try {
+                overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
+            } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
+
+            url = replaceSensitiveData(params.getPullUrl()) + "/api/interpreter?data=" + overpassQuery;
+
+            URL requestUrl = new URL(url);
+            File outputFile = new File(params.getOutput());
+
+            FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
+        }
+        catch (Exception ex) {
+            String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        }
     }
 }
