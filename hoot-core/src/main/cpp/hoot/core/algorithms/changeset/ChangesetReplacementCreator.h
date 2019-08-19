@@ -76,6 +76,8 @@ private:
 
   friend class ChangesetReplacementCreatorTest;
 
+  // TODO: let's encapsulate all of these bounds opts in a struct
+
   // Determines whether features crossing the bounds should be kept when loading reference data.
   bool _loadRefKeepEntireCrossingBounds;
   // Determines whether only features completely inside the bounds should be kept when loading

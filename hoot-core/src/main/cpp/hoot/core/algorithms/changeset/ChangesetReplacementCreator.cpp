@@ -126,7 +126,8 @@ void ChangesetReplacementCreator::create(
     _addChangesetDeleteExclusionTags(refMap);
   }
 
-  // Prune down the elements to just the feature types specified by the filter.
+  // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
+  // modifying anything else.
 
   _filterFeatures(refMap, featureFilter, "ref-after-type-pruning");
 
@@ -134,7 +135,8 @@ void ChangesetReplacementCreator::create(
 
   OsmMapPtr secMap = _loadSecMap(input2);
 
-  // Prune down the elements to just the feature types specified by the filter.
+  // Prune sec dataset down to just the feature types specified by the filter, so we don't end up
+  // modifying anything else.
 
   _filterFeatures(secMap, featureFilter, "sec-after-type-pruning");
 
@@ -151,7 +153,8 @@ void ChangesetReplacementCreator::create(
   // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
   // for relations here, which has since been removed from the codebase.
 
-  // Combine the cookie cut map back with the secondary map, so we can conflate it with the ref map.
+  // Combine the cookie cut ref map back with the secondary map, so we can conflate it with the ref
+  // map.
 
   _combineMaps(cookieCutRefMap, secMap, false, "combined-before-conflation");
   secMap.reset();
@@ -193,7 +196,7 @@ void ChangesetReplacementCreator::create(
 
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
   }
-  // Crop the ref and conflated maps appropriately for changeset derivation.
+  // Crop the original ref and conflated maps appropriately for changeset derivation.
 
   _cropMapForChangesetDerivation(
     refMap, bounds, _changesetRefKeepEntireCrossingBounds, _changesetRefKeepOnlyInsideBounds,
@@ -208,7 +211,7 @@ void ChangesetReplacementCreator::create(
     // completely outside of the bounds. However, joining after this snapping caused changeset
     // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
     // we're being as lenient as possible with the snapping here, allowing basically anything to
-    // join to anything else...could end up causing problems...but we'll go with it for now.
+    // join to anything else, which could end up causing problems...we'll go with it for now.
 
     _snapUnconnectedWays(
       conflatedMap, "Input2;Conflated;Input1", "Input1;Conflated;Input2",
@@ -411,6 +414,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   // Generate a cutter shape based on the cropped secondary map.
 
   LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
+  // TODO: pull these init values from the config?
   OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(cutterMap);
   // not exactly sure yet why this needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
