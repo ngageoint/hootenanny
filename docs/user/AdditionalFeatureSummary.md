@@ -27,9 +27,3 @@ In addition to conflating maps together, Hootenanny can also:
 * [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data
 * Translate feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English.
-
-Many other data conversion operations are available. Run the following to see a list of them:
-
-```
-hoot info --operators
-```
