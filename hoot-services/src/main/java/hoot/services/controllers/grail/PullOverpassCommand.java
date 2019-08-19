@@ -28,6 +28,7 @@ package hoot.services.controllers.grail;
 
 import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
@@ -86,24 +87,7 @@ class PullOverpassCommand implements InternalCommand {
     private void getOverpass() {
         String url = "";
         try {
-            // Get grail overpass query from the file and store it in a string
-            String overpassQuery;
-            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-            try {
-                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-            } catch(Exception exc) {
-                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
-            }
-
-            //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-            overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(params.getBounds()).toOverpassString());
-            overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
-
-            try {
-                overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
-            } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
-
-            url = replaceSensitiveData(params.getPullUrl()) + "/api/interpreter?data=" + overpassQuery;
+            url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
 
             URL requestUrl = new URL(url);
             File outputFile = new File(params.getOutput());
@@ -114,5 +98,44 @@ class PullOverpassCommand implements InternalCommand {
             String msg = "Failure to pull data from Overpass [" + url + "]" + ex.getMessage();
             throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
         }
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @return
+     */
+    static String getOverpassUrl(String bbox) {
+        return getOverpassUrl(bbox, "json");
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
+     * @return
+     */
+    static String getOverpassUrl(String bbox, String outputFormat) {
+        // Get grail overpass query from the file and store it in a string
+        String overpassQuery;
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        }
+
+        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+
+        if (outputFormat.equals("xml")) {
+            overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
+        }
+
+        try {
+            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
+
+        return PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery;
     }
 }
