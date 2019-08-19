@@ -47,6 +47,8 @@ namespace hoot
  * generated for and how strict the AOI is to be interpreted. ChangesetCreator is used for the
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
  * and a host of other things that need to happen before the changeset generation.
+ *
+ * TODO: implement progress
  */
 class ChangesetReplacementCreator
 {

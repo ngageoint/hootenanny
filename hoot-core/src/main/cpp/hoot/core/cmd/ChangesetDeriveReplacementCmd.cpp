@@ -37,9 +37,7 @@ namespace hoot
 {
 
 /**
- * Derives a set of replacement changes given one or two map inputs
- *
- * TODO: implement progress
+ * Derives a set of replacement changes given two map inputs
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
