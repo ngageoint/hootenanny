@@ -48,6 +48,7 @@
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 
 // std
 #include <vector>
@@ -579,12 +580,27 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   // The ordering for these added ops matters.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
-    _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
+    // Building outline updating needs to happen after building part merging, or we can end up with
+    // role verification warnings in JOSM.
+    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
+    {
+      _convertOps.prepend(QString::fromStdString(BuildingOutlineUpdateOp::className()));
+    }
+    if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
+    {
+      _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
+    }
   }
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
-    _convertOps.prepend(QString::fromStdString(MergeNearbyNodes::className()));
+    if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
+    {
+      _convertOps.prepend(QString::fromStdString(MergeNearbyNodes::className()));
+    }
   }
+  // Inclined to do this, but there could be some workflows where the same op needs to be called
+  // more than once.
+  //_convertOps.removeDuplicates();
   LOG_VARD(_convertOps);
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
