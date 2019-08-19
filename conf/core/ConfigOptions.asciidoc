@@ -2599,7 +2599,7 @@ Merges nearby nodes together when converting from an OGR format to OSM.
 === ogr2osm.simplify.complex.buildings
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 Implicitly merges certain individual building parts into a single part when converting from an OGR
 format to OSM.
