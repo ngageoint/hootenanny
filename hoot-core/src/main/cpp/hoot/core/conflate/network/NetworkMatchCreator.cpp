@@ -158,7 +158,9 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
-      matches.push_back(_createMatch(details, edgeMatch[i], threshold));
+      const Match* match = _createMatch(details, edgeMatch[i], threshold);
+      LOG_VART(match);
+      matches.push_back(match);
     }
   }
 

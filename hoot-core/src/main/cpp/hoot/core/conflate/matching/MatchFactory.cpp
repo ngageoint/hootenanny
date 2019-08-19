@@ -77,7 +77,7 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, vector<const Match*>
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   {
-    LOG_DEBUG("Launching match creator " << i +1 << " / " << _creators.size() << "...");
+    LOG_DEBUG("Launching match creator " << i + 1 << " / " << _creators.size() << "...");
     std::shared_ptr<MatchCreator> matchCreator = _creators[i];
     _checkMatchCreatorBoundable(matchCreator, bounds);
     if (threshold.get())

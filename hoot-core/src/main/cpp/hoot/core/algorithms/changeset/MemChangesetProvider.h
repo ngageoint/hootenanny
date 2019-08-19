@@ -72,6 +72,7 @@ public:
   bool containsChange(ElementId eID);
 
 private:
+
   std::shared_ptr<OGRSpatialReference> _projection;
   std::list<Change> _changes;
 };

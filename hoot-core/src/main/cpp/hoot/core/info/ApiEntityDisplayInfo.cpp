@@ -48,6 +48,8 @@
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/algorithms/WayJoiner.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
+
 //  Qt
 #include <QTextStream>
 
@@ -255,6 +257,14 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts << msg << endl;
     ts << _getApiEntities<ElementCriterion, ConflatableElementCriterion>(
       ElementCriterion::className(), "conflatable criteria", false, MAX_NAME_SIZE - 10);
+  }
+  else if (apiEntityType == "criterion-consumers")
+  {
+    msg += "):";
+    msg.prepend("Criterion Consumers");
+    ts << msg << endl;
+    ts << _getApiEntities<ElementCriterionConsumer, ElementCriterionConsumer>(
+      ElementCriterionConsumer::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
   }
   return ts.readAll();
 }

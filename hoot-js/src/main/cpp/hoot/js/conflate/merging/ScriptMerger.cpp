@@ -249,7 +249,8 @@ bool ScriptMerger::hasFunction(QString name) const
   HandleScope handleScope(current);
   Context::Scope context_scope(_script->getContext(current));
   Handle<Object> plugin =
-    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(String::NewFromUtf8(current, "plugin")));
+    Handle<Object>::Cast(_script->getContext(current)->Global()->Get(
+      String::NewFromUtf8(current, "plugin")));
   Handle<Value> value = plugin->Get(String::NewFromUtf8(current, name.toUtf8().data()));
 
   bool result = true;

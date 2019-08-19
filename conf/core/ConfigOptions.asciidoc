@@ -48,6 +48,25 @@ the same key as one specified in add.attributes.visitor.kvps, then the AddAttrib
 add the attribute.  If false, then AddAttributesVisitor will add the attribute to the element
 regardless.
 
+=== add.attributes.visitor.chain.element.criteria
+
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
+the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
+false, then only one of the specified criteria must be met in order to modify an the attributes of
+an element.
+
+=== add.attributes.visitor.element.criteria
+
+* Data Type: list
+* Default Value: ``
+
+One or more element criteria used for selecting elements whose attributes to modify. Delimit names
+with '='. From the command line, names with ';' and surround the entire list in double quotes.
+E.g. "hoot::TagCriterion;hoot::ReviewRelationCriterion"
+
 === add.attributes.visitor.kvps
 
 * Data Type: list
@@ -862,7 +881,7 @@ significantly.
 * Default Value: `true`
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
-output.
+output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
 
 === differential.snap.unconnected.roads
 
@@ -988,10 +1007,8 @@ Size of the in memory way cache used when streaming I/O is used with ways.
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterions passed to an ElementCriterionConsumer will be negated.  May not be
-honored by all ElementCriterionConsumers.  Example setting which pass element criterions to
-ElementCriterionConsumers: remove.elements.visitor.element.criterion,
-set.tag.value.visitor.element.criterion, etc.
+If true, element criterions passed to an ElementCriterionConsumer will be negated.  Not honored by
+all ElementCriterionConsumers.
 
 === element.sorter.element.buffer.size
 
@@ -2582,7 +2599,7 @@ Merges nearby nodes together when converting from an OGR format to OSM.
 === ogr2osm.simplify.complex.buildings
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 Implicitly merges certain individual building parts into a single part when converting from an OGR
 format to OSM.

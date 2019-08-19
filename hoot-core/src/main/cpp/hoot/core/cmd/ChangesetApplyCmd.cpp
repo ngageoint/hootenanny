@@ -88,7 +88,7 @@ public:
     {
       //  Get the endpoint URL
       const QString urlStr = args[args.size() - 1];
-      if (!urlStr.toLower().startsWith("http://") || !urlStr.toLower().startsWith("https://"))
+      if (!urlStr.toLower().startsWith("http://") && !urlStr.toLower().startsWith("https://"))
       {
         throw IllegalArgumentException(
           QString("XML changesets must be written to an OpenStreetMap compatible web service. ") +
