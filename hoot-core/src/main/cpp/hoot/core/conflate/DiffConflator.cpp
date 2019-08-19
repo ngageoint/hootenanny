@@ -155,9 +155,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  // Use matches to calculate and store tag diff. We must do this before we
-  // create the map diff, because that operation deletes all of the info needed
-  // for calculating the tag diff.
+  // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+  // because that operation deletes all of the info needed for calculating the tag diff.
   _updateProgress(currentStep - 1, "Storing tag differentials...");
   _calcAndStoreTagChanges();
   currentStep++;
@@ -225,6 +224,7 @@ void DiffConflator::_removeMatches(const Status& status)
         ElementPtr e = _pMap->getElement(pit->first);
         if (e && e->getStatus() == status)
         {
+          //LOG_VART(e->getTags().get("name"));
           RecursiveElementRemover(pit->first).apply(_pMap);
         }
       }
@@ -234,6 +234,7 @@ void DiffConflator::_removeMatches(const Status& status)
         ElementPtr e = _pMap->getElement(pit->second);
         if (e && e->getStatus() == status)
         {
+          //LOG_VART(e->getTags().get("name"));
           RecursiveElementRemover(pit->second).apply(_pMap);
         }
       }
@@ -293,6 +294,14 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
   {
     Change c = pChanges->readNextChange();
     LOG_VART(c);
+//    if (c.getElement())
+//    {
+//      LOG_VART(c.getElement()->getTags().get("name"));
+//    }
+//    if (c.getPreviousElement())
+//    {
+//      LOG_VART(c.getPreviousElement()->getTags().get("name"));
+//    }
 
     // Need to add children
     if (ElementType::Way == c.getElement()->getElementType().getEnum())
@@ -387,13 +396,15 @@ void DiffConflator::_calcAndStoreTagChanges()
       }
 
       LOG_VART(pOldElement->getElementId());
+      //LOG_VART(pOldElement->getTags().get("name"));
       LOG_VART(pNewElement->getElementId());
+      //LOG_VART(pNewElement->getTags().get("name"));
 
-      // Apparently a NetworkMatch can be a node/way pair. See note in
+      // Apparently, a NetworkMatch can be a node/way pair. See note in
       // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
       // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
-      // other conflation type other than poi/poly which matches differing geometry types then this
-      // will need to be updated.
+      // a conflation type other than poi/poly which matches differing geometry types then this will
+      // need to be updated.
       if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
       {
