@@ -26,11 +26,13 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
+import static hoot.services.HootProperties.GRAIL_OVERPASS_CODENAME;
+import static hoot.services.HootProperties.GRAIL_RAILS_CODENAME;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
@@ -648,9 +650,16 @@ public class GrailResource {
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
         String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "/api/interpreter?data=" + overpassQuery;
 
+        // append first 7 digits of a uuid to the rails and overpass codenames
+        String maxSuffix = UUID.randomUUID().toString().replace("-", "").substring(0, 7);
+        String railsCodename = GRAIL_RAILS_CODENAME + "_" + maxSuffix;
+        String overpassCodename = GRAIL_OVERPASS_CODENAME + "_" + maxSuffix;
+
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("overpassQuery", url);
         jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
+        jobInfo.put("railsCodename", railsCodename);
+        jobInfo.put("overpassCodename", overpassCodename);
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
