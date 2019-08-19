@@ -405,6 +405,7 @@ void DiffConflator::_calcAndStoreTagChanges()
       // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
       // a conflation type other than poi/poly which matches differing geometry types then this will
       // need to be updated.
+
       if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
       {
