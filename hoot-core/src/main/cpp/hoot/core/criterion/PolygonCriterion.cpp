@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "LinearCriterion.h"
+#include "PolygonCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -37,9 +37,9 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, PolygonCriterion)
 
-bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
+bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
 
@@ -50,14 +50,13 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   else if (e->getElementType() == ElementType::Relation)
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    result |= r->getType() == MetadataTags::RelationMultilineString();
-    result |= r->getType() == MetadataTags::RelationRoute();
-    result |= r->getType() == MetadataTags::RelationBoundary();
+    result |= r->getType() == MetadataTags::RelationBuilding();
+    result |= r->getType() == MetadataTags::RelationMultiPolygon();
   }
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    if (way->isClosedArea())
+    if (!way->isClosedArea())
     {
       return false;
     }
@@ -68,7 +67,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
-    if (g & (OsmGeometries::LineString /*| OsmGeometries::ClosedWay*/) && !(g & OsmGeometries::Area))
+    if (g & (OsmGeometries::ClosedWay | OsmGeometries::Area))
     {
       result = true;
       break;

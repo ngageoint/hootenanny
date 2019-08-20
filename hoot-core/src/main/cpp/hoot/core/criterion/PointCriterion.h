@@ -22,43 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ONEWAYCRITERION_H
-#define ONEWAYCRITERION_H
+#ifndef POINT_CRITERION_H
+#define POINT_CRITERION_H
 
-// hoot
+// Hoot
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Identifies one-way streets
+ * Identifies point features
  */
-class OneWayCriterion : public GeometryTypeCriterion
+class PointCriterion : public GeometryTypeCriterion
 {
 public:
+  static std::string className() { return "hoot::PointCriterion"; }
 
-  static std::string className() { return "hoot::OneWayCriterion"; }
-
-  OneWayCriterion(bool isOneWay = true);
+  PointCriterion() {}
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PointCriterion()); }
 
-  virtual QString getDescription() const { return "Identifies one way streets"; }
+  virtual QString getDescription() const { return "Identifies point features"; }
 
   virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
-
-private:
-
-  bool _isOneWay;
+  { return GeometryType::Point; }
 };
 
 }
-
-#endif // ONEWAYCRITERION_H
+#endif // POINT_CRITERION_H

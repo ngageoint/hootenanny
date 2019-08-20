@@ -30,7 +30,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -61,22 +62,36 @@ public:
    * Creates a changeset that completely replaces features in the first input with features from
    * the second input.
    *
-   * @param input1 the changeset target in which to replace features; must support Boundable
-   * @param input2 the changeset source to get replacement features from; must support Boundable
+   * @param input1 the target data for the changeset in which to replace features; must support
+   * Boundable
+   * @param input2 the source data for the changeset to get replacement features from; must support
+   * Boundable
    * @param bounds the bounds over which features are to be replaced
-   * @param featureTypeFilterClassName the type of feature to replace; must be a class name
-   * inheriting from ConflatableElementCriterion
-   * @param lenientBounds determines how strict the handling of the bounds is during replacement
-   * @param output the changeset file output location
-   * @todo support empty feature filters and filter with multiple types - #3360
+   * @param output the changeset file output locationn
    */
   void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output);
+    const QString& output);
+
+  void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
+  void setGeometryFilters(const QStringList& filterClassNames);
+  void setAdditionalFilters(const QStringList& filterClassNames);
+  void setChainAdditionalFilters(const bool chain) { _chainAdditionalFilters = chain; }
 
 private:
 
   friend class ChangesetReplacementCreatorTest;
+
+  // determines how strict the handling of the bounds is during replacement
+  bool _lenientBounds;
+  // TODO
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
+  // TODO
+  QStringList _linearFilterClassNames;
+  // TODO
+  std::shared_ptr<ChainCriterion> _additionalFilter;
+  // TODO
+  bool _chainAdditionalFilters;
 
   // TODO: let's encapsulate all of these bounds opts in a struct
 
@@ -127,16 +142,15 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
-  std::shared_ptr<ConflatableElementCriterion> _validateFilter(
-    const QString& featureTypeFilterClassName);
-
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+    _getDefaultGeometryFilters() const;
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters();
   void _filterFeatures(
-    OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
-    const QString& debugFileName);
+    OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const QString& debugFileName);
 
+  void _setGlobalOpts(const QString& boundsStr);
   void _parseConfigOpts(
-    const bool lenientBounds, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
-    const QString& boundsStr);
+    const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType);
 
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);
@@ -178,10 +192,11 @@ private:
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
 
-  void _snapUnconnectedWays(OsmMapPtr& map, const QString& snapWayStatus,
-                            const QString& snapToWayStatus,
-                            const QString& featureTypeFilterClassName, const bool markSnappedWays,
-                            const QString& debugFileName);
+  void _snapUnconnectedWays(
+    OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
+    const QStringList& geometryTypeFilterClassNames, const bool markSnappedWays,
+    const QString& debugFileName);
+
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different
    * cropping than done during initial load and cookie cutting.
@@ -189,6 +204,15 @@ private:
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
     const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName);
+
+  /*
+   * TODO
+   */
+  void _getMapsForGeometryType(
+    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
+    const QString& boundsStr, const ElementCriterionPtr& featureFilter,
+    const GeometryTypeCriterion::GeometryType& geometryType,
+    const QStringList& linearFilterClassNames = QStringList());
 };
 
 }

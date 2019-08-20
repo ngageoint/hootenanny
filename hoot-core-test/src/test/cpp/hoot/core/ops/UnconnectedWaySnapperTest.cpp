@@ -80,11 +80,11 @@ public:
     uut.setMarkSnappedWays(true);
     uut.setSnapToExistingWayNodes(true);
     uut.setWayDiscretizationSpacing(1.0);
-    uut.setSnapToWayStatus(Status(Status::Unknown1).toString());
-    uut.setSnapWayStatus(Status(Status::Unknown2).toString());
-    uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
-    uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
-    uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    uut.setWayNodeToSnapToCriteriaClassNames(QStringList("hoot::HighwayNodeCriterion"));
+    uut.setWayToSnapCriteriaClassNames(QStringList("hoot::HighwayCriterion"));
+    uut.setWayToSnapToCriteriaClassNames(QStringList("hoot::HighwayCriterion"));
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);
@@ -142,14 +142,14 @@ public:
       exceptionMsg.startsWith(
         "Invalid " + ConfigOptions::getSnapUnconnectedWaysDiscretizationSpacingKey() + " value:"));
 
-    uut.setWayToSnapToCriterionClassName("");
-    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapToCriterionClassName);
+    uut.setWayToSnapToCriteriaClassNames(QStringList());
+    HOOT_STR_EQUALS(QStringList("hoot::WayCriterion"), uut._wayToSnapToCriteriaClassNames);
 
-    uut.setWayToSnapCriterionClassName(" ");
-    HOOT_STR_EQUALS("hoot::WayCriterion", uut._wayToSnapCriterionClassName);
+    uut.setWayToSnapCriteriaClassNames(QStringList(" "));
+    HOOT_STR_EQUALS(QStringList("hoot::WayCriterion"), uut._wayToSnapCriteriaClassNames);
 
-    uut.setWayNodeToSnapToCriterionClassName(" ");
-    HOOT_STR_EQUALS("hoot::WayNodeCriterion", uut._wayNodeToSnapToCriterionClassName);
+    uut.setWayNodeToSnapToCriteriaClassNames(QStringList(" "));
+    HOOT_STR_EQUALS(QStringList("hoot::WayNodeCriterion"), uut._wayNodeToSnapToCriteriaClassNames);
   }
 
   void runStaticSnapTest()

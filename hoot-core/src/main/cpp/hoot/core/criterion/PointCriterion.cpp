@@ -22,43 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ONEWAYCRITERION_H
-#define ONEWAYCRITERION_H
+#include "PointCriterion.h"
 
 // hoot
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
-/**
- * Identifies one-way streets
- */
-class OneWayCriterion : public GeometryTypeCriterion
+HOOT_FACTORY_REGISTER(ElementCriterion, PointCriterion)
+
+bool PointCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-public:
-
-  static std::string className() { return "hoot::OneWayCriterion"; }
-
-  OneWayCriterion(bool isOneWay = true);
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new OneWayCriterion()); }
-
-  virtual QString getDescription() const { return "Identifies one way streets"; }
-
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
-
-private:
-
-  bool _isOneWay;
-};
+  return
+    ElementTypeCriterion(ElementType::Node).isSatisfied(e) && !WayNodeCriterion().isSatisfied(e);
+}
 
 }
 
-#endif // ONEWAYCRITERION_H

@@ -69,11 +69,11 @@ _snapToWayDiscretizationSpacing(1.0),
 _addCeToSearchDistance(false),
 _markSnappedNodes(false),
 _markSnappedWays(false),
-_wayToSnapToCriterionClassName("hoot::WayCriterion"),
-_wayToSnapCriterionClassName("hoot::WayCriterion"),
-_wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
-_snapWayStatus(Status::Unknown2),
-_snapToWayStatus(Status::Unknown1),
+_wayToSnapToCriteriaClassNames(QStringList("hoot::WayCriterion")),
+_wayToSnapCriteriaClassNames(QStringList("hoot::WayCriterion")),
+_wayNodeToSnapToCriteriaClassNames(QStringList("hoot::WayNodeCriterion")),
+_snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
+_snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _numSnappedToWays(0),
 _numSnappedToWayNodes(0),
 _taskStatusUpdateInterval(1000)
@@ -102,15 +102,14 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setMarkSnappedNodes(confOpts.getSnapUnconnectedWaysMarkSnappedNodes());
   setMarkSnappedWays(confOpts.getSnapUnconnectedWaysMarkSnappedWays());
 
-  setSnapWayStatus(confOpts.getSnapUnconnectedWaysSnapWayStatus().trimmed());
-  setSnapToWayStatus(confOpts.getSnapUnconnectedWaysSnapToWayStatus().trimmed());
+  setSnapWayStatuses(confOpts.getSnapUnconnectedWaysSnapWayStatuses());
+  setSnapToWayStatuses(confOpts.getSnapUnconnectedWaysSnapToWayStatuses());
 
-  setWayToSnapCriterionClassName(confOpts.getSnapUnconnectedWaysSnapWayCriterion().trimmed());
-  setWayToSnapToCriterionClassName(confOpts.getSnapUnconnectedWaysSnapToWayCriterion().trimmed());
+  setWayToSnapCriteriaClassNames(confOpts.getSnapUnconnectedWaysSnapWayCriteria());
+  setWayToSnapToCriteriaClassNames(confOpts.getSnapUnconnectedWaysSnapToWayCriteria());
   if (_snapToExistingWayNodes)
   {
-    setWayNodeToSnapToCriterionClassName(
-      confOpts.getSnapUnconnectedWaysSnapToWayNodeCriterion().trimmed());
+    setWayNodeToSnapToCriteriaClassNames(confOpts.getSnapUnconnectedWaysSnapToWayNodeCriteria());
   }
 
   _conf = conf;
@@ -149,52 +148,67 @@ void UnconnectedWaySnapper::setWayDiscretizationSpacing(double spacing)
   _snapToWayDiscretizationSpacing = spacing;
 }
 
-void UnconnectedWaySnapper::setWayToSnapToCriterionClassName(const QString& name)
+void UnconnectedWaySnapper::setWayToSnapToCriteriaClassNames(const QStringList& names)
 {
-  if (name.trimmed().isEmpty())
+  if (names.isEmpty())
   {
     LOG_WARN(
-      "No snap to way criterion specified for the Unconnected Way Snapper.  " <<
+      "No snap to way criteria specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayCriterion.");
-    _wayToSnapToCriterionClassName =
-      ConfigOptions::getSnapUnconnectedWaysSnapToWayCriterionDefaultValue();
+    _wayToSnapToCriteriaClassNames =
+      ConfigOptions::getSnapUnconnectedWaysSnapToWayCriteriaDefaultValue();
   }
   else
   {
-    _wayToSnapToCriterionClassName = name.trimmed();
+    _wayToSnapToCriteriaClassNames = names;
+    StringUtils::removeEmptyStrings(_wayToSnapToCriteriaClassNames);
   }
 }
 
-void UnconnectedWaySnapper::setWayToSnapCriterionClassName(const QString& name)
+void UnconnectedWaySnapper::setWayToSnapCriteriaClassNames(const QStringList& names)
 {
-  if (name.trimmed().isEmpty())
+  if (names.isEmpty())
   {
     LOG_WARN(
-      "No snap way criterion specified for the Unconnected Way Snapper.  " <<
+      "No snap way criteria specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayCriterion.");
-    _wayToSnapCriterionClassName =
-      ConfigOptions::getSnapUnconnectedWaysSnapWayCriterionDefaultValue();
+    _wayToSnapCriteriaClassNames =
+      ConfigOptions::getSnapUnconnectedWaysSnapWayCriteriaDefaultValue();
   }
   else
   {
-    _wayToSnapCriterionClassName = name.trimmed();
+    _wayToSnapCriteriaClassNames = names;
+    StringUtils::removeEmptyStrings(_wayToSnapCriteriaClassNames);
   }
 }
 
-void UnconnectedWaySnapper::setWayNodeToSnapToCriterionClassName(const QString& name)
+void UnconnectedWaySnapper::setWayNodeToSnapToCriteriaClassNames(const QStringList& names)
 {
-  if (name.trimmed().isEmpty())
+  if (names.isEmpty())
   {
     LOG_WARN(
-      "No snap to way node criterion specified for the Unconnected Way Snapper.  " <<
+      "No snap to way node criteria specified for the Unconnected Way Snapper.  " <<
       "Defaulting to: hoot::WayNodeCriterion.");
-    _wayNodeToSnapToCriterionClassName =
-      ConfigOptions::getSnapUnconnectedWaysSnapToWayNodeCriterionDefaultValue();
+    _wayNodeToSnapToCriteriaClassNames =
+      ConfigOptions::getSnapUnconnectedWaysSnapToWayNodeCriteriaDefaultValue();
   }
   else
   {
-    _wayNodeToSnapToCriterionClassName = name.trimmed();
+    _wayNodeToSnapToCriteriaClassNames = names;
+    StringUtils::removeEmptyStrings(_wayNodeToSnapToCriteriaClassNames);
   }
+}
+
+void UnconnectedWaySnapper::setSnapWayStatuses(const QStringList& statuses)
+{
+  _snapWayStatuses = statuses;
+  StringUtils::removeEmptyStrings(_snapWayStatuses);
+}
+
+void UnconnectedWaySnapper::setSnapToWayStatuses(const QStringList& statuses)
+{
+  _snapToWayStatuses = statuses;
+  StringUtils::removeEmptyStrings(_snapToWayStatuses);
 }
 
 void UnconnectedWaySnapper::apply(OsmMapPtr& map)
@@ -213,18 +227,26 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   // create feature crits for filtering what things we snap and snap to (will default to just
   // plain ways and way nodes if nothing was specified)
   ElementCriterionPtr wayToSnapCrit =
-    _createFeatureCriterion(_wayToSnapCriterionClassName, _snapWayStatus);
+    _createFeatureCriterion(_wayToSnapCriteriaClassNames, _snapWayStatuses);
+  if (!wayToSnapCrit)
+  {
+    throw IllegalArgumentException("No way to snap criteria specified.");
+  }
   ElementCriterionPtr wayToSnapToCrit =
-    _createFeatureCriterion(_wayToSnapToCriterionClassName, _snapToWayStatus);
+    _createFeatureCriterion(_wayToSnapToCriteriaClassNames, _snapToWayStatuses);
+  if (!wayToSnapToCrit)
+  {
+    throw IllegalArgumentException("No way to snap to criteria specified.");
+  }
   ElementCriterionPtr wayNodeToSnapToCrit;
   if (_snapToExistingWayNodes)
   {
     wayNodeToSnapToCrit =
-      _createFeatureCriterion(_wayNodeToSnapToCriterionClassName, _snapToWayStatus);
+      _createFeatureCriterion(_wayNodeToSnapToCriteriaClassNames, _snapToWayStatuses);
   }
   // The status of what contains an unconnected node doesn't matter, so we don't filter by status.
   ElementCriterionPtr unnconnectedWayNodeCrit =
-    _createFeatureCriterion(_wayToSnapCriterionClassName, "");
+    _createFeatureCriterion(_wayToSnapCriteriaClassNames, QStringList());
 
   // create needed geospatial indexes for surrounding feature searches; If the way node reuse option
   // was turned off, then no need to index way nodes.
@@ -358,60 +380,79 @@ long UnconnectedWaySnapper::_getPid(const ConstWayPtr& way) const
   return pid;
 }
 
-ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString& criterionClassName,
-                                                                   const QString& status)
+ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(
+  const QStringList& criterionClassNames, const QStringList& statuses)
 {
-  const QString critClass = criterionClassName.trimmed();
-  if (!critClass.isEmpty())
+  if (!criterionClassNames.isEmpty())
   {
     LOG_TRACE(
-      "Creating feature filtering criterion: " << criterionClassName << ", status: " <<
-      status << "...");
+      "Creating feature filtering criteria: " << criterionClassNames << ", statuses: " <<
+      statuses << "...");
 
-    // configure our element criterion, in case it needs it
-    ElementCriterionPtr typeCrit(
-      Factory::getInstance().constructObject<ElementCriterion>(critClass));
-    std::shared_ptr<Configurable> configurable =
-      std::dynamic_pointer_cast<Configurable>(typeCrit);
-    if (configurable)
-    {
-      configurable->setConfiguration(_conf);
-    }
-    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-      std::dynamic_pointer_cast<ConstOsmMapConsumer>(typeCrit);
-    if (mapConsumer)
-    {
-      mapConsumer->setOsmMap(_map.get());
-    }
+    // Arbitrarily, we're requiring there to be type crits present in order to use the status crits.
 
-    if (!status.trimmed().isEmpty())
+    ElementCriterionPtr typeCrit;
+    QList<ElementCriterionPtr> typeCrits;
+    for (int i = 0; i < criterionClassNames.size(); i++)
     {
-      // create our criterion for the feature status
-      ElementCriterionPtr statusCrit;
-      if (!status.contains(";"))
+      const QString critClassName = criterionClassNames.at(i).trimmed();
+      if (!critClassName.isEmpty())
       {
-        statusCrit.reset(new StatusCriterion(Status::fromString(status)));
+        ElementCriterionPtr typeCrit(
+          Factory::getInstance().constructObject<ElementCriterion>(critClassName));
+
+        std::shared_ptr<Configurable> configurable =
+          std::dynamic_pointer_cast<Configurable>(typeCrit);
+        if (configurable)
+        {
+          configurable->setConfiguration(_conf);
+        }
+        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+          std::dynamic_pointer_cast<ConstOsmMapConsumer>(typeCrit);
+        if (mapConsumer)
+        {
+          mapConsumer->setOsmMap(_map.get());
+        }
+
+        typeCrits.append(typeCrit);
       }
-      else
+    }
+    if (typeCrits.size() > 0)
+    {
+      std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
+      for (int i = 0; i < typeCrits.size(); i++)
       {
-        const QStringList statuses = status.split(";");
-        QList<std::shared_ptr<StatusCriterion>> statusCrits;
-        for (int i = 0; i < statuses.size(); i++)
+        orCrit->addCriterion(typeCrits.at(i));
+      }
+      typeCrit = orCrit;
+    }
+
+    if (!statuses.isEmpty())
+    {
+      ElementCriterionPtr statusCrit;
+      QList<std::shared_ptr<StatusCriterion>> statusCrits;
+      for (int i = 0; i < statuses.size(); i++)
+      {
+        const QString critClassName = statuses.at(i).trimmed();
+        if (!critClassName.isEmpty())
         {
           statusCrits.append(
             std::shared_ptr<StatusCriterion>(
-              new StatusCriterion(Status::fromString(statuses.at(i)))));
+              new StatusCriterion(Status::fromString(critClassName))));
         }
+      }
+      if (statusCrits.size() > 0)
+      {
         std::shared_ptr<OrCriterion> orCrit(new OrCriterion());
         for (int i = 0; i < statusCrits.size(); i++)
         {
           orCrit->addCriterion(statusCrits.at(i));
         }
         statusCrit = orCrit;
-      }
 
-      // combine our element type and status crits into a single crit
-      return std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, typeCrit));
+        // combine our element type and status crits into a single crit
+        return std::shared_ptr<ChainCriterion>(new ChainCriterion(statusCrit, typeCrit));
+      }
     }
     else
     {

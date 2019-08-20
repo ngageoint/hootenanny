@@ -44,7 +44,6 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
@@ -65,48 +64,173 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/OrCriterion.h>
 
 namespace hoot
 {
 
 ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
-                                                         const QString osmApiDbUrl)
+                                                         const QString osmApiDbUrl) :
+_lenientBounds(true),
+_chainAdditionalFilters(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
+  _geometryTypeFilters = _getDefaultGeometryFilters();
 }
 
-void ChangesetReplacementCreator::create(
-  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-  const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output)
+void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
 {
-  // INPUT VALIDATION AND SETUP
-
-  _validateInputs(input1, input2);
-  std::shared_ptr<ConflatableElementCriterion> featureFilter =
-    _validateFilter(featureTypeFilterClassName);
-  const bool isLinearCrit =
-    featureFilter->getGeometryType() == ConflatableElementCriterion::ConflatableGeometryType::Line;
-  const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
-  _parseConfigOpts(lenientBounds, featureFilter, boundsStr);
-
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-  QString lenientStr = "Bounds calculation is ";
-  if (! lenientBounds)
+  if (!filterClassNames.isEmpty())
   {
-    lenientStr += "not ";
+    _geometryTypeFilters.clear();
+    _geometryTypeFilters = _getDefaultGeometryFilters();
+    _linearFilterClassNames.clear();
+
+    for (int i = 0; i < filterClassNames.size(); i++)
+    {
+      const QString filterClassName = filterClassNames.at(i);
+
+      // Fail if the filter doesn't map to a geometry type.
+      std::shared_ptr<GeometryTypeCriterion> filter =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(
+          std::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(filterClassName)));
+      if (!filter)
+      {
+        throw IllegalArgumentException(
+          "Invalid feature geometry type filter: " + filterClassName +
+          ". Filter must be a GeometryTypeCriterion.");
+      }
+
+      std::shared_ptr<GeometryTypeCriterion> defaultFilter;
+      switch (filter->getGeometryType())
+      {
+        case GeometryTypeCriterion::GeometryType::Point:
+
+          defaultFilter =
+            std::dynamic_pointer_cast<PointCriterion>(
+              _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point]);
+          if (defaultFilter)
+          {
+            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point] = filter;
+          }
+          else
+          {
+            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point] =
+              std::shared_ptr<OrCriterion>(
+                new OrCriterion(_geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point],
+                filter));
+          }
+
+          break;
+
+        case GeometryTypeCriterion::GeometryType::Line:
+
+          defaultFilter =
+            std::dynamic_pointer_cast<LinearCriterion>(
+              _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line]);
+          if (defaultFilter)
+          {
+            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line] = filter;
+          }
+          else
+          {
+            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line] =
+              std::shared_ptr<OrCriterion>(
+                new OrCriterion(_geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line],
+                filter));
+          }
+          _linearFilterClassNames.append(filterClassName);
+
+          break;
+
+        case GeometryTypeCriterion::GeometryType::Polygon:
+
+          defaultFilter =
+            std::dynamic_pointer_cast<PolygonCriterion>(
+              _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon]);
+          if (defaultFilter)
+          {
+            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon] = filter;
+          }
+          else
+          {
+            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon] =
+              std::shared_ptr<OrCriterion>(
+                new OrCriterion(_geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon],
+                filter));
+          }
+
+          break;
+
+        default:
+          throw IllegalArgumentException("Invalid geometry type.");
+      }
+    }
+
+    if (_linearFilterClassNames.isEmpty())
+    {
+      _linearFilterClassNames.append("hoot::WayCriterion");
+    }
   }
-  lenientStr += "lenient.";
-  LOG_INFO(
-    "Deriving replacement output changeset: ..." << output.right(maxFilePrintLength) <<
-    " from inputs: ..." << input1.right(maxFilePrintLength) + " and ..." <<
-    input2.right(maxFilePrintLength) << ", with filter: " << featureTypeFilterClassName <<
-    ", at bounds: " << boundsStr << ". " << lenientStr);
+}
+
+void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filterClassNames)
+{
+  if (!filterClassNames.isEmpty())
+  {
+    if (_chainAdditionalFilters)
+    {
+      _additionalFilter.reset(new OrCriterion());
+    }
+    else
+    {
+      _additionalFilter.reset(new ChainCriterion());
+    }
+
+    for (int i = 0; i < filterClassNames.size(); i++)
+    {
+      const QString filterClassName = filterClassNames.at(i);
+
+      ElementCriterionPtr crit(
+        Factory::getInstance().constructObject<ElementCriterion>(filterClassName));
+      if (!crit)
+      {
+        throw IllegalArgumentException(
+          "Invalid additional filter: " + filterClassName + ". Filter must be a ElementCriterion.");
+      }
+
+      // Fail if the filter maps to a geometry type.
+      std::shared_ptr<GeometryTypeCriterion> geometryTypeFilter =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      if (geometryTypeFilter)
+      {
+        throw IllegalArgumentException(
+          "Invalid additional filter: " + filterClassName +
+          ". May not be a GeometryTypeCriterion.");
+      }
+
+      _additionalFilter->addCriterion(crit);
+    }
+  }
+}
+
+void ChangesetReplacementCreator::_getMapsForGeometryType(
+  OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
+  const QString& boundsStr, const ElementCriterionPtr& featureFilter,
+  const GeometryTypeCriterion::GeometryType& geometryType,
+  const QStringList& linearFilterClassNames)
+{
+  _parseConfigOpts(_lenientBounds, geometryType);
 
   // DATA LOAD AND INITIAL PREP
 
   // Load the ref dataset and crop to the specified aoi.
 
-  OsmMapPtr refMap = _loadRefMap(input1);
+  refMap = _loadRefMap(input1);
 
   // We want to alert the user to the fact their ref versions *could* be being populated incorectly
   // to avoid difficulties during changeset application at the end. Its likely if they are
@@ -119,7 +243,8 @@ void ChangesetReplacementCreator::create(
   // versions later.
 
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
-  if (lenientBounds && isLinearCrit)
+  const bool isLinearCrit = !linearFilterClassNames.isEmpty();
+  if (_lenientBounds && isLinearCrit)
   {
     // If we have a lenient bounds requirement and linear features, we need to exclude all ways
     // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
@@ -163,9 +288,9 @@ void ChangesetReplacementCreator::create(
 
   // Conflate the cookie cut ref map with the cropped sec map.
 
-  OsmMapPtr conflatedMap = cookieCutRefMap;
+  conflatedMap = cookieCutRefMap;
   // TODO: do something with reviews - #3361
-  _conflate(conflatedMap, lenientBounds);
+  _conflate(conflatedMap, _lenientBounds);
 
   if (isLinearCrit)
   {
@@ -173,8 +298,12 @@ void ChangesetReplacementCreator::create(
     // ref features may have been cut along the bounds. We're being lenient here by snapping
     // secondary to reference *and* allowing conflated data to be snapped to either dataset.
 
+    QStringList snapWayStatuses("Input2");
+    snapWayStatuses.append("Conflated");
+    QStringList snapToWayStatuses("Input1");
+    snapToWayStatuses.append("Conflated");
     _snapUnconnectedWays(
-      conflatedMap, "Input2;Conflated", "Input1;Conflated", featureTypeFilterClassName, false,
+      conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames, false,
       "conflated-snapped-sec-to-ref-1");
 
     // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
@@ -187,7 +316,7 @@ void ChangesetReplacementCreator::create(
   // PRE-CHANGESET DERIVATION DATA PREP
 
   OsmMapPtr immediatelyConnectedOutOfBoundsWays;
-  if (lenientBounds && isLinearCrit)
+  if (_lenientBounds && isLinearCrit)
   {
     // If we're conflating linear features with the lenient bounds requirement, copy the
     // immediately connected out of bounds ways to a new temp map. We'll lose those ways once we
@@ -198,13 +327,14 @@ void ChangesetReplacementCreator::create(
   }
   // Crop the original ref and conflated maps appropriately for changeset derivation.
 
+  const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
   _cropMapForChangesetDerivation(
     refMap, bounds, _changesetRefKeepEntireCrossingBounds, _changesetRefKeepOnlyInsideBounds,
     isLinearCrit, "ref-cropped-for-changeset");
   _cropMapForChangesetDerivation(
     conflatedMap, bounds, _changesetSecKeepEntireCrossingBounds, _changesetSecKeepOnlyInsideBounds,
     isLinearCrit, "sec-cropped-for-changeset");
-  if (lenientBounds && isLinearCrit)
+  if (_lenientBounds && isLinearCrit)
   {
     // The non-strict way replacement workflow benefits from a second snapping run right before
     // changeset derivation due to there being ways connected to replacement ways that fall
@@ -213,9 +343,15 @@ void ChangesetReplacementCreator::create(
     // we're being as lenient as possible with the snapping here, allowing basically anything to
     // join to anything else, which could end up causing problems...we'll go with it for now.
 
+    QStringList snapWayStatuses("Input2");
+    snapWayStatuses.append("Conflated");
+    snapWayStatuses.append("Input1");
+    QStringList snapToWayStatuses("Input1");
+    snapToWayStatuses.append("Conflated");
+    snapToWayStatuses.append("Input2");
     _snapUnconnectedWays(
-      conflatedMap, "Input2;Conflated;Input1", "Input1;Conflated;Input2",
-      featureTypeFilterClassName, false, "conflated-snapped-sec-to-ref-2");
+      conflatedMap, snapWayStatuses, snapToWayStatuses,linearFilterClassNames, false,
+      "conflated-snapped-sec-to-ref-2");
 
     // Combine the conflated map with the immediately connected out of bounds ways.
 
@@ -226,7 +362,7 @@ void ChangesetReplacementCreator::create(
     // snapped, as we'll need that info in the next step.
 
     _snapUnconnectedWays(
-      conflatedMap, "Input1", "Input1", featureTypeFilterClassName, true,
+      conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames, true,
       "conflated-snapped-immediately-connected-out-of-bounds");
 
     // Remove any ways that weren't snapped.
@@ -248,13 +384,59 @@ void ChangesetReplacementCreator::create(
 
     _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
+}
 
-  // CHANGESET DERIVATION
+void ChangesetReplacementCreator::create(
+  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  const QString& output)
+{
+  // INPUT VALIDATION AND SETUP
+
+  _validateInputs(input1, input2);
+  const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
+  _setGlobalOpts(boundsStr);
+  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters =
+    _getCombinedFilters();
+
+  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+  QString lenientStr = "Bounds calculation is ";
+  if (!_lenientBounds)
+  {
+    lenientStr += "not ";
+  }
+  lenientStr += "lenient.";
+  LOG_INFO(
+    "Deriving replacement output changeset: ..." << output.right(maxFilePrintLength) <<
+    " from inputs: ..." << input1.right(maxFilePrintLength) << " and ..." <<
+    input2.right(maxFilePrintLength) << ", at bounds: " << boundsStr << ". " << lenientStr);
+
+  // CHANGESET CALCULATION
+
+  QList<OsmMapPtr> refMaps;
+  QList<OsmMapPtr> conflatedMaps;
+  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
+         filters.begin(); itr != filters.end(); ++itr)
+  {
+    OsmMapPtr refMap;
+    OsmMapPtr conflatedMap;
+    QStringList linearFilterClassNames;
+    if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
+    {
+      linearFilterClassNames = _linearFilterClassNames;
+    }
+    _getMapsForGeometryType(
+      refMap, conflatedMap, input1, input2, boundsStr, itr.value(), itr.key(),
+      linearFilterClassNames);
+    refMaps.append(refMap);
+    conflatedMaps.append(conflatedMap);
+  }
+
+  // CHANGESET GENERATION
 
   // Derive a changeset between the ref and conflated maps that completely replaces ref features
   // with secondary features within the bounds and write it out.
 
-  _changesetCreator->create(refMap, conflatedMap, output);
+  _changesetCreator->create(refMaps, conflatedMaps, output);
 }
 
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
@@ -282,19 +464,34 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
   }
 }
 
-std::shared_ptr<ConflatableElementCriterion> ChangesetReplacementCreator::_validateFilter(
-  const QString& featureTypeFilterClassName)
+QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+  ChangesetReplacementCreator::_getDefaultGeometryFilters() const
 {
-  // Fail if a filter with an unconflatable feature type was specified.
-  std::shared_ptr<ConflatableElementCriterion> featureFilter =
-    std::dynamic_pointer_cast<ConflatableElementCriterion>(
-      std::shared_ptr<ElementCriterion>(
-        Factory::getInstance().constructObject<ElementCriterion>(featureTypeFilterClassName)));
-  if (!featureFilter)
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
+  featureFilters[GeometryTypeCriterion::GeometryType::Point] =
+    std::shared_ptr<ElementCriterion>(new PointCriterion());
+  featureFilters[GeometryTypeCriterion::GeometryType::Line] =
+    std::shared_ptr<ElementCriterion>(new LinearCriterion());
+  featureFilters[GeometryTypeCriterion::GeometryType::Polygon] =
+    std::shared_ptr<ElementCriterion>(new PolygonCriterion());
+  return featureFilters;
+}
+
+QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+  ChangesetReplacementCreator::_getCombinedFilters()
+{
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
+  if (_additionalFilter)
   {
-    throw IllegalArgumentException("Invalid feature type filter: " + featureTypeFilterClassName);
+    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
+           _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+    {
+      combinedFilters[itr.key()] =
+        std::shared_ptr<ChainCriterion>(
+          new ChainCriterion(itr.value().get(), _additionalFilter.get()));
+    }
   }
-  return featureFilter;
+  return combinedFilters;
 }
 
 OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
@@ -392,7 +589,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 }
 
 void ChangesetReplacementCreator::_filterFeatures(
-  OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
+  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
   const QString& debugFileName)
 {
   LOG_DEBUG("Filtering features for: " << map->getName() << " based on input filter...");
@@ -414,8 +611,10 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   // Generate a cutter shape based on the cropped secondary map.
 
   LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
-  // TODO: pull these init values from the config?
-  OsmMapPtr cutterShapeOutlineMap = AlphaShapeGenerator(1000.0, 0.0).generateMap(cutterMap);
+  ConfigOptions opts;
+  OsmMapPtr cutterShapeOutlineMap =
+    AlphaShapeGenerator(opts.getCookieCutterAlpha(), opts.getCookieCutterAlphaShapeBuffer())
+      .generateMap(cutterMap);
   // not exactly sure yet why this needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
   LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
@@ -482,25 +681,24 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   OsmMapWriterFactory::writeDebugMap(map, "conflated");
 }
 
-void ChangesetReplacementCreator::_snapUnconnectedWays(OsmMapPtr& map, const QString& snapWayStatus,
-                                                       const QString& snapToWayStatus,
-                                                       const QString& featureTypeFilterClassName,
-                                                       const bool markSnappedWays,
-                                                       const QString& debugFileName)
+void ChangesetReplacementCreator::_snapUnconnectedWays(
+  OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
+  const QStringList& geometryTypeFilterClassNames, const bool markSnappedWays,
+  const QString& debugFileName)
 {
   LOG_DEBUG("Snapping ways for map: " << map->getName() <<" ...");
 
   UnconnectedWaySnapper lineSnapper;
   lineSnapper.setConfiguration(conf());
   // override some of the default config
-  lineSnapper.setSnapToWayStatus(snapToWayStatus);
-  lineSnapper.setSnapWayStatus(snapWayStatus);
+  lineSnapper.setSnapToWayStatuses(snapToWayStatuses);
+  lineSnapper.setSnapWayStatuses(snapWayStatuses);
   lineSnapper.setMarkSnappedWays(markSnappedWays);
-  // TODO: hack - need a way to derive the way node crit from the input feature filter crit
-  lineSnapper.setWayNodeToSnapToCriterionClassName(
-    QString::fromStdString(WayNodeCriterion::className()));
-  lineSnapper.setWayToSnapCriterionClassName(featureTypeFilterClassName);
-  lineSnapper.setWayToSnapToCriterionClassName(featureTypeFilterClassName);
+  // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
+  lineSnapper.setWayNodeToSnapToCriteriaClassNames(
+    QStringList(QString::fromStdString(WayNodeCriterion::className())));
+  lineSnapper.setWayToSnapCriteriaClassNames(geometryTypeFilterClassNames);
+  lineSnapper.setWayToSnapToCriteriaClassNames(geometryTypeFilterClassNames);
   LOG_DEBUG(lineSnapper.getInitStatusMessage());
   lineSnapper.apply(map);
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
@@ -606,12 +804,8 @@ bool ChangesetReplacementCreator::_isNetworkConflate() const
       QString::fromStdString(NetworkMatchCreator::className()));
 }
 
-void ChangesetReplacementCreator::_parseConfigOpts(
-  const bool lenientBounds, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
-  const QString& boundsStr)
+void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
 {
-  // global opts
-
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
@@ -621,17 +815,18 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
-  // dataset specific opts
-
   // These don't change between scenarios (or at least haven't needed to yet).
   _loadRefKeepOnlyInsideBounds = false;
   _cookieCutKeepOnlyInsideBounds = false;
   _changesetRefKeepOnlyInsideBounds = false;
+}
 
+void ChangesetReplacementCreator::_parseConfigOpts(
+  const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType)
+{
   // only one of these should ever be true
 
-  if (featureFilter->getGeometryType() ==
-        ConflatableElementCriterion::ConflatableGeometryType::Point)
+  if (geometryType == GeometryTypeCriterion::GeometryType::Point)
   {
     if (lenientBounds)
     {
@@ -649,8 +844,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(
     _changesetAllowDeletingRefOutsideBounds = true;
     _inBoundsStrict = false;
   }
-  else if (featureFilter->getGeometryType() ==
-             ConflatableElementCriterion::ConflatableGeometryType::Line)
+  else if (geometryType == GeometryTypeCriterion::GeometryType::Line)
   {
     if (lenientBounds)
     {
@@ -695,8 +889,7 @@ void ChangesetReplacementCreator::_parseConfigOpts(
       LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
     }
   }
-  else if (featureFilter->getGeometryType() ==
-             ConflatableElementCriterion::ConflatableGeometryType::Polygon)
+  else if (geometryType == GeometryTypeCriterion::GeometryType::Polygon)
   {
     if (lenientBounds)
     {

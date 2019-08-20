@@ -3,59 +3,78 @@
 
 === Description
 
-The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input 
-OSM datasets within a given bounds where the data from the secondary input dataset completely replaces data in the 
-reference dataset. 
+The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets
+within a given bounds, where the data from the secondary input dataset completely replaces data in the reference dataset. 
 
-The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing the AOI) and 
-stitches up areas where features must be clipped (e.g. roads crossing the AOI). The output changeset file can be 
-applied directly to an OSM API database or the Rails Port with the  +changeset-apply+ command. Generally, the reference 
-data is sourced from an authoritative data store, like an OSM API database. Element IDs for the first input (reference 
-data) are retained and treated as data resident in an authoritative data store. Element IDs for the second input 
-(secondary dataset) are not retained and treated as completely new data. 
+The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing the AOI) and stitches up areas where 
+features must be clipped (e.g. roads crossing the AOI). The output changeset file can be applied directly to an OSM API database or the 
+Rails Port with the  +changeset-apply+ command. Generally, the reference data is sourced from an authoritative data store, like an OSM API 
+database. Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element 
+IDs for the second input (secondary dataset) are not retained and treated as completely new data. 
 
-* +input1+            - OSM data reference input (e.g. .osm file); must support bounded queries
-* +input2+            - OSM data secondary input (e.g. .osm file); must support bounded queries
-* +bounds+            - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
-* +featureFilter+     - A single criterion class name used to determine which type of features are replaced in the 
-                        reference dataset. Must be a conflatable criterion (see "Type Filtering" section below). e.g.                                 "hoot::BuildingCriterion"
-* +output+            - Output location (e.g. .osc or .osc.sql file)
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a particular 
-                        database instance when generating SQL changesets only (.osc.sql).
-* +--lenient-bounds+  - By default, features will only replaced if they lie completely within the specified bounds. Activating this option
-                        makes the bounds handling more lenient (has no effect on point datasets). See the "Bounds Handling" section below 
-                        for more detail.
-* +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only valid 
-                        for .osc output files)
-* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input 
-                        bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
+* +input1+                     - OSM data reference input (e.g. .osm file); input must support bounded reading
+* +input2+                     - OSM data secondary input (e.g. .osm file); input must support bounded reading
+* +bounds+                     - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
+* +output+                     - Output location (e.g. .osc or .osc.sql file)
+* +osmApiDatabaseUrl+          - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a 
+                                 particular database instance when generating SQL changesets only (.osc.sql).
+* +--geometry-filters+         - Criteria used to determine the geometry type of the features that are replaced in 
+                                 the reference dataset. See the "Geometry Filtering" section for more detail.
+* +--additional-filters+       - Criteria used for filtering beyond what is specified in --geometry-filters. See the "Additional Filtering" 
+                                 section for more detail.
+* +--chain-additional-filters+ - Determines how the criteria specified in --additional-filters are applied.
+* +--lenient-bounds+           - Determines how strict the interpretation of the specified bounds is during feature replacement. See the 
+                                 "Bounds Handling" section for more detail.
+* +--stats+                    - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only 
+                                 valid for .osc output files)
+* +--write-bounds+             - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the 
+                                 input bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (featureFilter) (output) [osmApiDatabaseUrl] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--geometry-filters] [--additional-filters] [--chain-additional-filters] [--lenient-bounds] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples
 
 --------------------------------------
-hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc 
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
 
-hoot changeset-derive-replacement -D convert.ops="op1;op2" input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc --lenient-bounds
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion" --lenient-bounds
 
-hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc --stats
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion" --stats
 
-hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" hoot::BuildingCriterion outputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName
+hoot changeset-derive-replacement -D tag.criterion.kvps="amenity=school" input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion --additional-filters "hoot::TagCriterion"
+
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" houtputChangeset.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName --geometry-filters "hoot::BuildingCriterion"
 --------------------------------------
 
-=== Type Filtering
+=== Filtering
 
-Currently, only one criterion may be specified per feature filter and at least one must always be specified. Future work will allow for 
-specifying no filter or multiple criteria per filter (https://github.com/ngageoint/hootenanny/issues/3360). To see a list of valid 
-conflatable element criteria for use as a feature filter:
+==== Geometry Filtering
+
+The command option, --geometry-filters, controls feature geometry filtering. One or more criterion class names can be used to determine the 
+geometry type of the features that are replaced in the reference dataset . The criteria specified must be geometry type criteria (e.g. 
+"hoot::BuildingCriterion" or "hoot::PointCriteron"). A feature may pass the geometry filter by satisfying any one of the individual specified 
+filters. From the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes.  If no filter is 
+specified, features of all geometry types within the bounds will be replaced. Geometry filters are handled separately from the filters 
+specified in --additional-filters since Hootenanny executes a different replacement changeset generation workflow dependent upon the geometry 
+type of the feature being replaced. 
+
+To see a list of valid geometry type criteria for use as a feature filter:
 -----
-hoot info --conflatable-criteria
+hoot info --geometry-type-criteria
 -----
+
+==== Additional Filtering
+
+The command option, --additional-filters, allows for feature filtering beyond geometry type. One or more criterion class names can be used 
+for filtering beyond what is specified in --geometry-filters to determine the features that are replaced in the reference dataset. The criteria
+specified may not be geometry type element criteria. The behavior of the filters is determined by the --chain-additional-filters option. If
+--chain-additional-features is used, then a feature must pass all criteria in order to pass the filter. If --chain-additional-filters is absent,
+then a feature must pass only a single specified criterion to pass the filter. From the command line, combine multiple criteria with a 
+semicolon and surround the entire value string with quotes.
 
 === Bounds Handling
 
@@ -64,8 +83,8 @@ All inputs must support bounded reading. To list the Hootenanny input formats th
 hoot info --formats --input-bounded
 -----
 
-Unless the reference data is being read from a direct connection to an OSM API database (osmapidb://), reference input 
-datasets containing linear data should be slightly larger than the replacement AOI, so as not to drop linear features in the changeset output 
+Unless the reference data is being read from a direct connection to an OSM API database (osmapidb://), reference input datasets containing 
+linear data should be slightly larger than the replacement AOI, so as not to drop linear features in the changeset output 
 (osmapidb:// reference inputs handle this issue automatically).
 
 ==== Strict Bounds Handling

@@ -28,7 +28,7 @@
 #define CONFLATABLE_ELEMENT_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -38,22 +38,13 @@ namespace hoot
  * feature type; e.g. BuildingCriterion.  All ElementCriterion used for identifying conflatable
  * features should inherit from this class
  */
-class ConflatableElementCriterion : public ElementCriterion
+class ConflatableElementCriterion : public GeometryTypeCriterion
 {
 public:
-
-  enum ConflatableGeometryType
-  {
-    Point = 0,
-    Line,
-    Polygon
-  };
 
   static std::string className() { return "hoot::ConflatableElementCriterion"; }
 
   virtual ~ConflatableElementCriterion() {}
-
-  virtual ConflatableGeometryType getGeometryType() const = 0;
 
   /**
    * Determines which criteria consider an element as conflatable

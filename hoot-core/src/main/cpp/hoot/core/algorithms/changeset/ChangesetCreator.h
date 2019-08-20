@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 namespace hoot
 {
@@ -85,10 +84,24 @@ public:
    * specified, the resulting changeset will be made entirely of the elements from the input.
    *
    * @param map1 the first input source
-   * @param map2 the optional second input source
+   * @param map2 the second input source
    * @param output the changeset output file target
    */
   void create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output);
+
+  /**
+   * TODO
+   *
+   * @param map1Inputs
+   * @param map2Inputs
+   * @param output
+   */
+  void create(const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs,
+              const QString& output);
+
+  int getNumCreateChanges() const { return _numCreateChanges; }
+  int getNumModifyChanges() const { return _numModifyChanges; }
+  int getNumDeleteChanges() const { return _numDeleteChanges; }
 
 private:
 
@@ -105,7 +118,9 @@ private:
   // provided.
   bool _singleInput;
 
-  ChangesetDeriverPtr _changesetDeriver;
+  int _numCreateChanges;
+  int _numModifyChanges;
+  int _numDeleteChanges;
 
   bool _isSupportedOutputFormat(const QString& format) const;
   bool _inputIsSorted(const QString& input) const;
@@ -143,6 +158,8 @@ private:
    */
   void _streamChangesetOutput(ElementInputStreamPtr input1, ElementInputStreamPtr input2,
                               const QString& output);
+  void _streamChangesetOutput(const QList<ElementInputStreamPtr>& inputs1,
+                              const QList<ElementInputStreamPtr>& inputs2, const QString& output);
 };
 
 }

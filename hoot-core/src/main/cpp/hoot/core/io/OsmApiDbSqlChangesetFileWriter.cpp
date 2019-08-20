@@ -57,10 +57,15 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
 void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
                                            ChangesetProviderPtr changesetProvider)
 {
-  LOG_DEBUG("Writing changeset to " << path);
+  QList<ChangesetProviderPtr> changesetProviders;
+  changesetProviders.append(changesetProvider);
+  write(path, changesetProviders);
+}
 
-  LOG_VARD(path);
-  LOG_VARD(changesetProvider->hasMoreChanges());
+void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
+                                           const QList<ChangesetProviderPtr>& changesetProviders)
+{
+  LOG_DEBUG("Writing changeset to: " << path << "...");
 
   _remappedIds.clear();
   _changesetBounds.init();
@@ -74,37 +79,42 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
   int changes = 0;
   _createChangeSet();
 
-  while (changesetProvider->hasMoreChanges())
+  for (int i = 0; i < changesetProviders.size(); i++)
   {
-    LOG_TRACE("Reading next SQL change...");
-    Change change = changesetProvider->readNextChange();
-    switch (change.getType())
+    ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
+    LOG_VARD(changesetProvider->hasMoreChanges());
+    while (changesetProvider->hasMoreChanges())
     {
-      case Change::Create:
-        _createNewElement(change.getElement());
-        break;
-      case Change::Modify:
-        _updateExistingElement(change.getElement());
-        break;
-      case Change::Delete:
-        _deleteExistingElement(change.getElement());
-        break;
-      case Change::Unknown:
-        //see comment in ChangesetDeriver::_nextChange() when
-        //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
-        break;
-      default:
-        throw IllegalArgumentException("Unexpected change type.");
-    }
-
-    if (change.getType() != Change::Unknown)
-    {
-      if (change.getElement()->getElementType().getEnum() == ElementType::Node)
+      LOG_TRACE("Reading next SQL change...");
+      Change change = changesetProvider->readNextChange();
+      switch (change.getType())
       {
-        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
-        _changesetBounds.expandToInclude(node->getX(), node->getY());
+        case Change::Create:
+          _createNewElement(change.getElement());
+          break;
+        case Change::Modify:
+          _updateExistingElement(change.getElement());
+          break;
+        case Change::Delete:
+          _deleteExistingElement(change.getElement());
+          break;
+        case Change::Unknown:
+          //see comment in ChangesetDeriver::_nextChange() when
+          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+          break;
+        default:
+          throw IllegalArgumentException("Unexpected change type.");
       }
-      changes++;
+
+      if (change.getType() != Change::Unknown)
+      {
+        if (change.getElement()->getElementType().getEnum() == ElementType::Node)
+        {
+          ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
+          _changesetBounds.expandToInclude(node->getX(), node->getY());
+        }
+        changes++;
+      }
     }
   }
 

@@ -60,6 +60,26 @@ public:
 
     // process optional params
 
+    QStringList geometryFilters;
+    if (args.contains("--geometry-filters"))
+    {
+      geometryFilters = args.at(args.indexOf("--geometry-filters")).split(";");
+      args.removeAt(args.indexOf("--geometry-filters"));
+      args.removeAll("--geometry-filters");
+    }
+    QStringList additionalFilters;
+    if (args.contains("--additional-filters"))
+    {
+      additionalFilters = args.at(args.indexOf("--additional-filters")).split(";");
+      args.removeAt(args.indexOf("--additional-filters"));
+      args.removeAll("--additional-filters");
+    }
+    bool chainAdditionalFilters = false;
+    if (args.contains("--chain-additional-filters"))
+    {
+      chainAdditionalFilters = true;
+      args.removeAll("--chain-additional-filters");
+    }
     bool lenientBounds = false;
     if (args.contains("--lenient-bounds"))
     {
@@ -80,10 +100,10 @@ public:
       throw IllegalArgumentException(getName() + " command does not support convert operations.");
     }
 
-    if (args.size() < 5 || args.size() > 6)
+    if (args.size() < 4 || args.size() > 5)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes five or six parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
     }
 
     // process non-optional params
@@ -91,23 +111,26 @@ public:
     const QString input1 = args[0].trimmed();
     const QString input2 = args[1].trimmed();
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
-    const QString critClassName = args[3].trimmed();
-    const QString output = args[4].trimmed();
+    const QString output = args[3].trimmed();
 
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
     {
-      if (args.size() != 6)
+      if (args.size() != 5)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
-          QString("%1 with SQL output takes six parameters.").arg(getName()));
+          QString("%1 with SQL output takes five parameters.").arg(getName()));
       }
-      osmApiDbUrl = args[5].trimmed();
+      osmApiDbUrl = args[4].trimmed();
     }
 
-    ChangesetReplacementCreator(printStats, osmApiDbUrl)
-      .create(input1, input2, bounds, critClassName, lenientBounds, output);
+    ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
+    changesetCreator.setLenientBounds(lenientBounds);
+    changesetCreator.setGeometryFilters(geometryFilters);
+    changesetCreator.setAdditionalFilters(additionalFilters);
+    changesetCreator.setChainAdditionalFilters(chainAdditionalFilters);
+    changesetCreator.create(input1, input2, bounds, output);
 
     return 0;
   }

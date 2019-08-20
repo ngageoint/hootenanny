@@ -50,8 +50,8 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ConflatableGeometryType getGeometryType() const
-  { return ConflatableGeometryType::Point; }
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Point; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
 

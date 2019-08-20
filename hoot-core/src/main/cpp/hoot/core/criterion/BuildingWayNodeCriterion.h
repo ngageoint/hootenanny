@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * A criterion that keeps nodes belonging to a building way.
  */
-class BuildingWayNodeCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class BuildingWayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
@@ -56,6 +56,9 @@ public:
   virtual QString getDescription() const { return "Identifies way nodes in buildings"; }
 
   long getMatchingWayId(const ConstElementPtr& e);
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Point; }
 
 private:
 

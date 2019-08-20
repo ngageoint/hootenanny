@@ -133,4 +133,17 @@ QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int
   return QString("%1").arg(number, padSize, 10, QChar('0'));
 }
 
+void StringUtils::removeEmptyStrings(QStringList& strings)
+{
+  QStringList output;
+  for (int i = 0; i < strings.size(); i++)
+  {
+    if (!strings.at(i).trimmed().isEmpty())
+    {
+      output.append(strings.at(i));
+    }
+  }
+  strings = output;
+}
+
 }

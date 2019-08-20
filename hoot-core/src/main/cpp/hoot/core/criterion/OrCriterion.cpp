@@ -35,6 +35,25 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OrCriterion)
 
+OrCriterion::OrCriterion()
+{
+}
+
+OrCriterion::OrCriterion(ElementCriterion* child1, ElementCriterion* child2) :
+ChainCriterion(child1, child2)
+{
+}
+
+OrCriterion::OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2) :
+ChainCriterion(child1, child2)
+{
+}
+
+ElementCriterionPtr OrCriterion::clone()
+{
+  return ElementCriterionPtr(new OrCriterion(_criteria[0]->clone(), _criteria[1]->clone()));
+}
+
 bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
@@ -44,7 +63,6 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
       return true;
     }
   }
-
   return false;
 }
 

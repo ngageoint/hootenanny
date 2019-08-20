@@ -67,6 +67,9 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPoiStrictJsonTest);
   CPPUNIT_TEST(runLinearLenientJsonTest);
   CPPUNIT_TEST(runLinearStrictJsonTest);
+  // TODO: multiple geometry filter test
+  // TODO: additional filter test
+  // TODO: geometry and additional filter test
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -243,12 +246,6 @@ private:
     Polygon
   };
 
-  ChangesetDeriverPtr _getChangesetDeriver(
-    const ChangesetReplacementCreator& changesetReplacementCreator) const
-  {
-    return changesetReplacementCreator._changesetCreator->_changesetDeriver;
-  }
-
   void _prepInputData(const QString& testName, const GeometryType& geometryType)
   {
     LOG_DEBUG("Preparing input data...");
@@ -388,19 +385,22 @@ private:
     const QString outFile = _outputPath + testName + "-out.osc";
 
     ChangesetReplacementCreator changesetCreator;
+    changesetCreator.setLenientBounds(lenientBounds);
+    changesetCreator.setGeometryFilters(QStringList(_getFilterCrit(geometryType)));
+    //changesetCreator.setAdditionalFilters(additionalFilters);
+    //changesetCreator.setChainAdditionalFilters(false);
     changesetCreator.create(
       _outputPath + testName + "-ref-in." + fileExtension,
-      _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType),
-      _getFilterCrit(geometryType), lenientBounds, outFile);
+      _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType), outFile);
 
     // Going only with this level of checking for now. We could extend this to diff the actual
     // changeset files.
     CPPUNIT_ASSERT_EQUAL(
-      numExpectedCreateStatements, _getChangesetDeriver(changesetCreator)->getNumCreateChanges());
+      numExpectedCreateStatements, changesetCreator._changesetCreator->getNumCreateChanges());
     CPPUNIT_ASSERT_EQUAL(
-      numExpectedModifyStatements, _getChangesetDeriver(changesetCreator)->getNumModifyChanges());
+      numExpectedModifyStatements, changesetCreator._changesetCreator->getNumModifyChanges());
     CPPUNIT_ASSERT_EQUAL(
-      numExpectedDeleteStatements, _getChangesetDeriver(changesetCreator)->getNumDeleteChanges());
+      numExpectedDeleteStatements, changesetCreator._changesetCreator->getNumDeleteChanges());
     // ignoring this for now
     if (!goldChangesetFile.isEmpty())
     {

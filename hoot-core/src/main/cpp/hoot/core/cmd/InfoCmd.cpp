@@ -43,10 +43,8 @@ namespace hoot
 {
 
 /*
- * Although, the types of things this command display aren't expected to grow in regular fashion
- * from this point forward, Some time should probably be spent exploring ways to make the classes
- * containing the information printed out by this command auto-register themselves in a more
- * extensible way.
+ * Some time needs to be spent exploring ways to make the classes containing the information
+ * printed out by this command auto-register themselves in a more extensible way.
  */
 class InfoCmd : public BaseCommand
 {
@@ -321,6 +319,7 @@ private:
     options.append("--criterion-consumers");
     options.append("--feature-extractors");
     options.append("--formats");
+    options.append("--geometry-type-criteria");
     options.append("--languages");
     options.append("--matchers");
     options.append("--match-creators");

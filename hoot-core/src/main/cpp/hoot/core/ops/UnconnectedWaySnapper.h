@@ -111,11 +111,11 @@ public:
   void setWayDiscretizationSpacing(double spacing);
   void setAddCeToSearchDistance(bool add) { _addCeToSearchDistance = add; }
   void setMarkSnappedNodes(bool mark) { _markSnappedNodes = mark; }
-  void setWayToSnapToCriterionClassName(const QString& name);
-  void setWayToSnapCriterionClassName(const QString& name);
-  void setWayNodeToSnapToCriterionClassName(const QString& name);
-  void setSnapWayStatus(const QString& status) { _snapWayStatus = status; }
-  void setSnapToWayStatus(const QString& status) { _snapToWayStatus = status; }
+  void setWayToSnapToCriteriaClassNames(const QStringList& names);
+  void setWayToSnapCriteriaClassNames(const QStringList& names);
+  void setWayNodeToSnapToCriteriaClassNames(const QStringList& names);
+  void setSnapWayStatuses(const QStringList& statuses);
+  void setSnapToWayStatuses(const QStringList& statuses);
   void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
 
   /**
@@ -153,16 +153,16 @@ private:
   // allow for optionally tagging snapped ways; useful for debugging
   bool _markSnappedWays;
 
-  // the feature criterion to be used for way snap target candidates
-  QString _wayToSnapToCriterionClassName;
-  // the feature criterion to be used for way snap source candidates
-  QString _wayToSnapCriterionClassName;
-  // the feature criterion to be used for way snap target candidates
-  QString _wayNodeToSnapToCriterionClassName;
-  // the status criterion to be used for the snap source way
-  QString _snapWayStatus;
-  // the status criterion to be used for the snap target way or way node
-  QString _snapToWayStatus;
+  // the feature criteria to be used for way snap target candidates
+  QStringList _wayToSnapToCriteriaClassNames;
+  // the feature criteria to be used for way snap source candidates
+  QStringList _wayToSnapCriteriaClassNames;
+  // the feature criteria to be used for way snap target candidates
+  QStringList _wayNodeToSnapToCriteriaClassNames;
+  // the status criteria to be used for the snap source way
+  QStringList _snapWayStatuses;
+  // the status criteria to be used for the snap target way or way node
+  QStringList _snapToWayStatuses;
 
   // feature indexes used for way nodes being snapped to
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
@@ -195,12 +195,12 @@ private:
   /*
    * Creates the criterion used to determine via filtering which features we want to snap or snap to
    *
-   * @param criterionClassName the name of a hoot ElementCriterion class
-   * @param status one or more hoot status strings
+   * @param criterionClassNames the names of a hoot ElementCriterion classes
+   * @param statuses one or more hoot status strings
    * @return an element criterion
    */
-  ElementCriterionPtr _createFeatureCriterion(const QString& criterionClassName,
-                                              const QString& status);
+  ElementCriterionPtr _createFeatureCriterion(const QStringList& criterionClassNames,
+                                              const QStringList& statuses);
   /*
    * Creates an index needed when searching for features to snap to
    *

@@ -105,13 +105,20 @@ public:
   static bool isNumber(const QString& input);
 
   /**
-   *
+   * TODO
    *
    * @param number
    * @param padSize
    * @return
    */
   static QString getNumberStringPaddedWithZeroes(const int number, const int padSize);
+
+  /**
+   * TODO
+   *
+   * @param strings
+   */
+  static void removeEmptyStrings(QStringList& strings);
 };
 
 }
