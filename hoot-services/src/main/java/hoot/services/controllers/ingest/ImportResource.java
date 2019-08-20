@@ -71,7 +71,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -261,11 +261,11 @@ public class ImportResource {
     @Path("/getoptions")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOptions() {
-        JSONArray template;
+        JSONObject template;
         JSONParser parser = new JSONParser();
 
         try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, IMPORT_OPTIONS))) {
-            template = (JSONArray) parser.parse(fileReader);
+            template = (JSONObject) parser.parse(fileReader);
         }
         catch (Exception e) {
             String msg = "Error getting import options!  Cause: " + e.getMessage();
