@@ -26,11 +26,13 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
+import static hoot.services.HootProperties.GRAIL_OVERPASS_CODENAME;
+import static hoot.services.HootProperties.GRAIL_RAILS_CODENAME;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
+import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
@@ -52,6 +54,7 @@ import java.util.UUID;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.ForbiddenException;
@@ -563,15 +566,18 @@ public class GrailResource {
     @Path("/pulloverpasstodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox) {
+            @QueryParam("bbox") String bbox,
+            @QueryParam("name") String layerName) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
-        String mapSuffix = jobId.substring(0, 7);
-        String mapName = SECONDARY + "_" + mapSuffix;
         String folderName = "grail_" + bbox.replace(",", "_");
+
+        if (DbUtils.mapExists(layerName)) {
+            throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
+        }
 
         Response response;
         JSONObject json = new JSONObject();
@@ -605,12 +611,12 @@ public class GrailResource {
 
         String url = "'" + PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery + "'";
         params.setInput1(url);
-        params.setOutput(mapName);
+        params.setOutput(layerName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importOverpass);
 
         // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, mapName, user, this.getClass());
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());
         workflow.add(setFolder);
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
@@ -622,10 +628,11 @@ public class GrailResource {
     }
 
     @GET
-    @Path("/overpassStatsQuery")
+    @Path("/grailMetadataQuery")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response overpassStats(@Context HttpServletRequest request,
+    public Response grailMetadata(@Context HttpServletRequest request,
             @QueryParam("bbox") String bbox) {
+
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
@@ -643,9 +650,16 @@ public class GrailResource {
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
         String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "/api/interpreter?data=" + overpassQuery;
 
+        // append first 7 digits of a uuid to the rails and overpass codenames
+        String maxSuffix = UUID.randomUUID().toString().replace("-", "").substring(0, 7);
+        String railsCodename = GRAIL_RAILS_CODENAME + "_" + maxSuffix;
+        String overpassCodename = GRAIL_OVERPASS_CODENAME + "_" + maxSuffix;
+
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("overpassQuery", url);
         jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
+        jobInfo.put("railsCodename", railsCodename);
+        jobInfo.put("overpassCodename", overpassCodename);
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -672,16 +686,19 @@ public class GrailResource {
     @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox) {
+            @QueryParam("bbox") String bbox,
+            @QueryParam("name") String layerName) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
-        String mapSuffix = jobId.substring(0, 7);
-        String mapName = REFERENCE + "_" + mapSuffix;
         String folderName = "grail_" + bbox.replace(",", "_");
+
+        if (DbUtils.mapExists(layerName)) {
+            throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
+        }
 
         Response response;
         JSONObject json = new JSONObject();
@@ -690,7 +707,7 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setWorkDir(workDir);
-        params.setOutput(mapName);
+        params.setOutput(layerName);
         params.setBounds(bbox);
         params.setParentId(folderName);
 
