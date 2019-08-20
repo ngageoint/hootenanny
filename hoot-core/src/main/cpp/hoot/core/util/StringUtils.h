@@ -105,18 +105,18 @@ public:
   static bool isNumber(const QString& input);
 
   /**
-   * TODO
+   * Pads the front of a number string with zeroes
    *
-   * @param number
-   * @param padSize
-   * @return
+   * @param number the number to pad
+   * @param padSize the number of zeroes to add
+   * @return a padded number string
    */
   static QString getNumberStringPaddedWithZeroes(const int number, const int padSize);
 
   /**
-   * TODO
+   * Removes all empty/blank strings from a list
    *
-   * @param strings
+   * @param strings the strings to modify
    */
   static void removeEmptyStrings(QStringList& strings);
 };

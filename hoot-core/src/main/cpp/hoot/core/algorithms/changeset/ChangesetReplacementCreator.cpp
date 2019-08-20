@@ -325,15 +325,16 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
   }
+
   // Crop the original ref and conflated maps appropriately for changeset derivation.
 
   const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
   _cropMapForChangesetDerivation(
-    refMap, bounds, _changesetRefKeepEntireCrossingBounds, _changesetRefKeepOnlyInsideBounds,
-    isLinearCrit, "ref-cropped-for-changeset");
+    refMap, bounds, _boundsOpts.changesetRefKeepEntireCrossingBounds,
+    _boundsOpts.changesetRefKeepOnlyInsideBounds, isLinearCrit, "ref-cropped-for-changeset");
   _cropMapForChangesetDerivation(
-    conflatedMap, bounds, _changesetSecKeepEntireCrossingBounds, _changesetSecKeepOnlyInsideBounds,
-    isLinearCrit, "sec-cropped-for-changeset");
+    conflatedMap, bounds, _boundsOpts.changesetSecKeepEntireCrossingBounds,
+    _boundsOpts.changesetSecKeepOnlyInsideBounds, isLinearCrit, "sec-cropped-for-changeset");
   if (_lenientBounds && isLinearCrit)
   {
     // The non-strict way replacement workflow benefits from a second snapping run right before
@@ -500,13 +501,13 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
 
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _loadRefKeepEntireCrossingBounds);
+    _boundsOpts.loadRefKeepEntireCrossingBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _loadRefKeepOnlyInsideBounds);
+    _boundsOpts.loadRefKeepOnlyInsideBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
-    _loadRefKeepImmediateConnectedWaysOutsideBounds);
+    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
@@ -571,10 +572,10 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _loadSecKeepEntireCrossingBounds);
+    _boundsOpts.loadSecKeepEntireCrossingBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _loadSecKeepOnlyInsideBounds);
+    _boundsOpts.loadSecKeepOnlyInsideBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
 
@@ -627,7 +628,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   //OsmMapPtr cookieCutMap(new OsmMap(doughMap, MapProjector::createWgs84Projection()));
   LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
   cookieCutMap->setName("cookie-cut");
-  CookieCutter(false, 0.0, _cookieCutKeepEntireCrossingBounds, _cookieCutKeepOnlyInsideBounds)
+  CookieCutter(
+    false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
+    _boundsOpts.cookieCutKeepOnlyInsideBounds)
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
   LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
@@ -781,7 +784,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
   LOG_DEBUG(
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
 
-  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_inBoundsStrict));
+  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
   boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(boundsStr));
   boundsCrit->setOsmMap(map.get());
   std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
@@ -816,9 +819,9 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
   // These don't change between scenarios (or at least haven't needed to yet).
-  _loadRefKeepOnlyInsideBounds = false;
-  _cookieCutKeepOnlyInsideBounds = false;
-  _changesetRefKeepOnlyInsideBounds = false;
+  _boundsOpts.loadRefKeepOnlyInsideBounds = false;
+  _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
+  _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
 }
 
 void ChangesetReplacementCreator::_parseConfigOpts(
@@ -833,44 +836,44 @@ void ChangesetReplacementCreator::_parseConfigOpts(
       LOG_WARN("--lenient-bounds option ignored with point datasets.");
     }
 
-    _loadRefKeepEntireCrossingBounds = false;
-    _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
-    _loadSecKeepEntireCrossingBounds = false;
-    _loadSecKeepOnlyInsideBounds = false;
-    _cookieCutKeepEntireCrossingBounds = false;
-    _changesetRefKeepEntireCrossingBounds = false;
-    _changesetSecKeepEntireCrossingBounds = false;
-    _changesetSecKeepOnlyInsideBounds = true;
-    _changesetAllowDeletingRefOutsideBounds = true;
-    _inBoundsStrict = false;
+    _boundsOpts.loadRefKeepEntireCrossingBounds = false;
+    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+    _boundsOpts.loadSecKeepEntireCrossingBounds = false;
+    _boundsOpts.loadSecKeepOnlyInsideBounds = false;
+    _boundsOpts.cookieCutKeepEntireCrossingBounds = false;
+    _boundsOpts.changesetRefKeepEntireCrossingBounds = false;
+    _boundsOpts.changesetSecKeepEntireCrossingBounds = false;
+    _boundsOpts.changesetSecKeepOnlyInsideBounds = true;
+    _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
+    _boundsOpts.inBoundsStrict = false;
   }
   else if (geometryType == GeometryTypeCriterion::GeometryType::Line)
   {
     if (lenientBounds)
     {
-      _loadRefKeepEntireCrossingBounds = true;
-      _loadRefKeepImmediateConnectedWaysOutsideBounds = true;
-      _loadSecKeepEntireCrossingBounds = true;
-      _loadSecKeepOnlyInsideBounds = false;
-      _cookieCutKeepEntireCrossingBounds = false;
-      _changesetRefKeepEntireCrossingBounds = true;
-      _changesetSecKeepEntireCrossingBounds = true;
-      _changesetSecKeepOnlyInsideBounds = false;
-      _changesetAllowDeletingRefOutsideBounds = true;
-      _inBoundsStrict = false;
+      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
+      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
+      _boundsOpts.loadSecKeepEntireCrossingBounds = true;
+      _boundsOpts.loadSecKeepOnlyInsideBounds = false;
+      _boundsOpts.cookieCutKeepEntireCrossingBounds = false;
+      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
+      _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
+      _boundsOpts.inBoundsStrict = false;
     }
     else
     {
-      _loadRefKeepEntireCrossingBounds = true;
-      _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
-      _loadSecKeepEntireCrossingBounds = false;
-      _loadSecKeepOnlyInsideBounds = false;
-      _cookieCutKeepEntireCrossingBounds = false;
-      _changesetRefKeepEntireCrossingBounds = true;
-      _changesetSecKeepEntireCrossingBounds = true;
-      _changesetSecKeepOnlyInsideBounds = false;
-      _changesetAllowDeletingRefOutsideBounds = false;
-      _inBoundsStrict = false;
+      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
+      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+      _boundsOpts.loadSecKeepEntireCrossingBounds = false;
+      _boundsOpts.loadSecKeepOnlyInsideBounds = false;
+      _boundsOpts.cookieCutKeepEntireCrossingBounds = false;
+      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
+      _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
+      _boundsOpts.inBoundsStrict = false;
 
       // Conflate way joining needs to happen later in the post ops for strict linear replacements.
       // Changing the default ordering of the post ops to accomodate this had detrimental effects
@@ -893,29 +896,29 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   {
     if (lenientBounds)
     {
-      _loadRefKeepEntireCrossingBounds = true;
-      _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
-      _loadSecKeepEntireCrossingBounds = true;
-      _loadSecKeepOnlyInsideBounds = false;
-      _cookieCutKeepEntireCrossingBounds = true;
-      _changesetRefKeepEntireCrossingBounds = true;
-      _changesetSecKeepEntireCrossingBounds = true;
-      _changesetSecKeepOnlyInsideBounds = false;
-      _changesetAllowDeletingRefOutsideBounds = true;
-      _inBoundsStrict = false;
+      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
+      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+      _boundsOpts.loadSecKeepEntireCrossingBounds = true;
+      _boundsOpts.loadSecKeepOnlyInsideBounds = false;
+      _boundsOpts.cookieCutKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
+      _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
+      _boundsOpts.inBoundsStrict = false;
     }
     else
     {
-      _loadRefKeepEntireCrossingBounds = true;
-      _loadRefKeepImmediateConnectedWaysOutsideBounds = false;
-      _loadSecKeepEntireCrossingBounds = false;
-      _loadSecKeepOnlyInsideBounds = true;
-      _cookieCutKeepEntireCrossingBounds = true;
-      _changesetRefKeepEntireCrossingBounds = true;
-      _changesetSecKeepEntireCrossingBounds = false;
-      _changesetSecKeepOnlyInsideBounds = true;
-      _changesetAllowDeletingRefOutsideBounds = false;
-      _inBoundsStrict = true;
+      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
+      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+      _boundsOpts.loadSecKeepEntireCrossingBounds = false;
+      _boundsOpts.loadSecKeepOnlyInsideBounds = true;
+      _boundsOpts.cookieCutKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
+      _boundsOpts.changesetSecKeepEntireCrossingBounds = false;
+      _boundsOpts.changesetSecKeepOnlyInsideBounds = true;
+      _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
+      _boundsOpts.inBoundsStrict = true;
     }
   }
   else
@@ -926,21 +929,21 @@ void ChangesetReplacementCreator::_parseConfigOpts(
 
   conf().set(
     ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
-    _changesetAllowDeletingRefOutsideBounds);
+    _boundsOpts.changesetAllowDeletingRefOutsideBounds);
 
-  LOG_VARD(_loadRefKeepEntireCrossingBounds);
-  LOG_VARD(_loadRefKeepOnlyInsideBounds);
-  LOG_VARD(_loadRefKeepImmediateConnectedWaysOutsideBounds);
-  LOG_VARD(_loadSecKeepEntireCrossingBounds);
-  LOG_VARD(_loadSecKeepOnlyInsideBounds);
-  LOG_VARD(_cookieCutKeepEntireCrossingBounds);
-  LOG_VARD(_cookieCutKeepOnlyInsideBounds);
-  LOG_VARD(_changesetRefKeepEntireCrossingBounds);
-  LOG_VARD(_changesetRefKeepOnlyInsideBounds);
-  LOG_VARD(_changesetSecKeepEntireCrossingBounds);
-  LOG_VARD(_changesetSecKeepOnlyInsideBounds);
-  LOG_VARD(_changesetAllowDeletingRefOutsideBounds);
-  LOG_VARD(_inBoundsStrict);
+  LOG_VARD(_boundsOpts.loadRefKeepEntireCrossingBounds);
+  LOG_VARD(_boundsOpts.loadRefKeepOnlyInsideBounds);
+  LOG_VARD(_boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
+  LOG_VARD(_boundsOpts.loadSecKeepEntireCrossingBounds);
+  LOG_VARD(_boundsOpts.loadSecKeepOnlyInsideBounds);
+  LOG_VARD(_boundsOpts.cookieCutKeepEntireCrossingBounds);
+  LOG_VARD(_boundsOpts.cookieCutKeepOnlyInsideBounds);
+  LOG_VARD(_boundsOpts.changesetRefKeepEntireCrossingBounds);
+  LOG_VARD(_boundsOpts.changesetRefKeepOnlyInsideBounds);
+  LOG_VARD(_boundsOpts.changesetSecKeepEntireCrossingBounds);
+  LOG_VARD(_boundsOpts.changesetSecKeepOnlyInsideBounds);
+  LOG_VARD(_boundsOpts.changesetAllowDeletingRefOutsideBounds);
+  LOG_VARD(_boundsOpts.inBoundsStrict);
 }
 
 }
