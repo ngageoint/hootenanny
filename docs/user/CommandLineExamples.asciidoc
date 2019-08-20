@@ -338,7 +338,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      hoot::BuildingCriterion output.osc
+      --geometry-filters "hoot::BuildingCriterion" output.osc
 -----
 
 ==== Data Transformation
