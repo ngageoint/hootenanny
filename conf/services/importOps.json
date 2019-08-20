@@ -1,0 +1,22 @@
+{
+  "name": "Import",
+  "members": [
+    {
+      "description": "If true, muli-part buildings will be split.",
+      "default": "false",
+      "input": "checkbox",
+      "type": "bool",
+      "id": "SimplifyComplexBuildings",
+      "label": "Simplify Complex Buildings"
+    },
+    {
+      "description": "Some other option.",
+      "default": "0.0",
+      "input": "text",
+      "type": "double",
+      "id": "Foo",
+      "label": "Foobar"
+    }
+  ],
+  "label": "Import"
+}

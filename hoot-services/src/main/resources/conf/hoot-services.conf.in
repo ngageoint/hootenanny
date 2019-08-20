@@ -144,6 +144,9 @@ horizontalConf=conf/core/HorizontalConflation.conf
 # Network Conflation Conf
 networkConf=conf/core/NetworkAlgorithm.conf
 
+# Import options
+importOptions=conf/services/importOps.json
+
 # Element merge Node Server port
 ElementMergeServerPort=8096
 
