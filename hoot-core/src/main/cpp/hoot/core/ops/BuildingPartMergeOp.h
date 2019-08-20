@@ -63,11 +63,9 @@ namespace hoot
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
  * height. While they may represent a single building they're presented in the Shapefile as
- * individual rows.
- *
- * I would like to maintain the richness available in the data they've collected (gabled roofs,
- * heights on sections of buildings, etc). This is very applicable to the 3D mapping being done
- * in OSM. [1]
+ * individual rows. We would like to maintain the richness available in the data they've collected
+ * (gabled roofs, heights on sections of buildings, etc). This is very applicable to the 3D mapping
+ * being done in OSM. [1]
  *
  * This class implicitly merges the individual building parts into a single part. If two buildings
  * share two or more contiguous nodes and the relevant tags match then the parts will be merged
