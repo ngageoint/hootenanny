@@ -585,7 +585,6 @@ public class GrailResource {
 
         List<Command> workflow = new LinkedList<>();
 
-
         // Create the folder if it doesn't exist
         Long folderId = DbUtils.createFolder(folderName, 0L, user.getId(), false);
 
@@ -593,23 +592,13 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
 
-        // Get grail overpass query from the file and store it in a string
-        String overpassQuery;
-        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        String url;
         try {
-            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-        } catch(Exception exc) {
-            logger.error("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getAbsolutePath());
-            return Response.status(Response.Status.BAD_REQUEST).entity("Could not find grail overpass query file").build();
+            url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
+        } catch(IllegalArgumentException exc) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(exc.getMessage()).build();
         }
 
-        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
-        try {
-            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
-
-        String url = "'" + PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery + "'";
         params.setInput1(url);
         params.setOutput(layerName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
