@@ -40,7 +40,7 @@
             "building.date.format": "Date format",
             "building.date.tag.key": "Date tag key",
             "building.keep.more.complex.geometry.when.auto.merging": "Keep more complicated geometry when auto merging",
-            "building.review.matches.other.than.one.to.one": "Mark all non one to one matches for review" 
+            "building.review.matches.other.than.one.to.one": "Mark all non one to one matches for review"
         }
     },
     "Pois": {
@@ -84,5 +84,16 @@
         "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {}
+    },
+    "Differential": {
+        "matcher": "",
+        "merger": "",
+        "members": {
+            "differential.remove.reference.data": "Remove reference data from differential output layer",
+            "differential.snap.unconnected.roads": "Snap unconnected roads to reference road",
+            "snap.unconnected.ways.snap.tolerance": "Maximum distance to snap unconnected ways to neighboring ways",
+            "snap.unconnected.ways.use.existing.way.nodes": "Snap Unconnected Way endpoint nodes to neighboring ways",
+            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance to snap unconnected ways directy to neighboring ways"
+        }
     }
 }
