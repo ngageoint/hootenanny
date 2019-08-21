@@ -5,7 +5,7 @@ exports.description = "Matches areas";
 exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.polygon.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"));
-exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
+exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
 
