@@ -179,6 +179,16 @@ QString GeometryUtils::toString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
+QString GeometryUtils::toConfigString(const Envelope& e)
+{
+  const int precision = ConfigOptions().getWriterPrecision();
+  return QString("%1,%2,%3,%4").
+      arg(e.getMinX(), 0, 'f', precision).
+      arg(e.getMinY(), 0, 'f', precision).
+      arg(e.getMaxX(), 0, 'f', precision).
+      arg(e.getMaxY(), 0, 'f', precision);
+}
+
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 {
   switch (g->getGeometryTypeId())

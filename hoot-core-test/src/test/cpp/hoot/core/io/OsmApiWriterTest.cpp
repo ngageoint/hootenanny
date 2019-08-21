@@ -34,9 +34,6 @@
 
 #include "OsmApiWriterTestServer.h"
 
-//  Qt
-#include <QNetworkReply>
-
 //  Run tests against a local test server
 #define RUN_LOCAL_TEST_SERVER
 //  Run tests against a local copy of OSM API

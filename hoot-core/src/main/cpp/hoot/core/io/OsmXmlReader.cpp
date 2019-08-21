@@ -69,7 +69,8 @@ _missingWayCount(0),
 _useDataSourceId(false),
 _inputCompressed(false),
 _numRead(0),
-_keepImmediatelyConnectedWaysOutsideBounds(false)
+_keepImmediatelyConnectedWaysOutsideBounds(false),
+_ignoreDuplicates(false)
 {
   setConfiguration(conf());
 }
@@ -106,13 +107,21 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 
 void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 {
+  _element.reset();
+
   long id = _parseLong(attributes.value("id"));
   //LOG_VART(id);
 
   if (_nodeIdMap.contains(id))
   {
-    throw HootException(
-      QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
+    if (_ignoreDuplicates)
+    {
+      LOG_TRACE("Ignoring node id " << id << " already exists");
+      return;
+    }
+    else
+      throw HootException(
+        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
   }
 
   long newId;
@@ -170,13 +179,23 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 
 void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 {
-  _wayId = _parseLong(attributes.value("id"));
+  _element.reset();
 
-  if (_wayIdMap.contains(_wayId))
+  long id = _parseLong(attributes.value("id"));
+
+  if (_wayIdMap.contains(id))
   {
-    throw HootException(
-      QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
+    if (_ignoreDuplicates)
+    {
+      LOG_TRACE("Ignoring way id " << id << " already exists");
+      return;
+    }
+    else
+      throw HootException(
+        QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
   }
+
+  _wayId = id;
 
   long newId;
   if (_useDataSourceId)
@@ -225,14 +244,23 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 
 void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
 {
-  _relationId = _parseLong(attributes.value("id"));
+  _element.reset();
 
-  // Adding this in causes issues with the tests...worth looking into at some point.
+  long id = _parseLong(attributes.value("id"));
+
+  if (_relationIdMap.contains(id) && _ignoreDuplicates)
+  {
+    LOG_TRACE("Ignoring relation id " << id << " already exists");
+    return;
+  }
+// Adding this in causes issues with the tests...worth looking into at some point.
 //  if (_relationIdMap.contains(_relationId))
 //  {
 //    throw HootException(
 //      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_path));
 //  }
+
+  _relationId = id;
 
   long newId = _getRelationId(_relationId);
 
@@ -283,19 +311,14 @@ bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 
 bool OsmXmlReader::isSupported(const QString& url)
 {
-  const int numExtensions = 3;
-  const QString validExtensions[numExtensions] = { ".osm", ".osm.bz2", ".osm.gz" };
+  QStringList validExtensions = supportedFormats().split(";");
   const QString checkString(url.toLower());
-
   // support compressed osm files
-  for (int i = 0; i < numExtensions; ++i)
+  for (int i = 0; i < validExtensions.size(); ++i)
   {
-    if (checkString.endsWith(validExtensions[i]) == true)
-    {
+    if (checkString.endsWith(validExtensions[i]))
       return true;
-    }
   }
-
   // If we fall out of loop, no dice
   return false;
 }

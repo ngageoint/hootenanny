@@ -274,8 +274,6 @@ protected:
   std::mutex _bboxMutex;
   /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
   bool _bboxContinue;
-  /** Flag indicating whether or not the bounding box (if it exists) should be split and run in parallel */
-  bool _runParallel;
   /** Grid division size (0.25 degrees lat/lon default) */
   double _coordGridSize;
   /** Number of threads to process the HTTP requests */

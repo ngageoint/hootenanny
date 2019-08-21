@@ -78,9 +78,8 @@ OsmJsonReader::OsmJsonReader()
     _numRead(0),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
     _bboxContinue(true),
-    _runParallel(ConfigOptions().getJsonReaderHttpBboxParallel()),
-    _coordGridSize(ConfigOptions().getJsonReaderHttpBboxMaxSize()),
-    _threadCount(ConfigOptions().getJsonReaderHttpBboxThreadCount()),
+    _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
+    _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
     _bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
     _keepImmediatelyConnectedWaysOutsideBounds(
       ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
@@ -305,9 +304,8 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
 void OsmJsonReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _runParallel = opts.getJsonReaderHttpBboxParallel();
-  _coordGridSize = opts.getJsonReaderHttpBboxMaxSize();
-  _threadCount = opts.getJsonReaderHttpBboxThreadCount();
+  _coordGridSize = opts.getReaderHttpBboxMaxSize();
+  _threadCount = opts.getReaderHttpBboxThreadCount();
   setBounds(GeometryUtils::envelopeFromConfigString(opts.getConvertBoundingBox()));
 }
 
@@ -787,7 +785,7 @@ void OsmJsonReader::_readFromHttp()
   int numSplits = 1;
   vector<thread> threads;
   //  Check if there is a bounding box
-  if (urlQuery.hasQueryItem("bbox") && _runParallel)
+  if (urlQuery.hasQueryItem("bbox"))
   {
     QStringList bbox = urlQuery.allQueryItemValues("bbox");
     //  Parse the bounding box
@@ -825,8 +823,8 @@ void OsmJsonReader::_readFromHttp()
           _bboxes.append(
               geos::geom::Envelope(
                   lon,
-                  std::max(lat, envelope.getMinY()),
                   std::min(lon + _coordGridSize, envelope.getMaxX()),
+                  std::max(lat, envelope.getMinY()),
                   lat + _coordGridSize));
           _bboxMutex.unlock();
         }
