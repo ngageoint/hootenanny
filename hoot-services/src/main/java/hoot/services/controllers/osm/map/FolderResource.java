@@ -334,9 +334,13 @@ public class FolderResource {
     @Path("/{folderId : \\d+}/move/{newParentFolderId : \\d+}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateParentId(@Context HttpServletRequest request, @PathParam("folderId") Long folderId, @PathParam("newParentFolderId") Long newParentFolderId) {
+    public Response updateParentId(@Context HttpServletRequest request,
+            @PathParam("folderId") Long folderId,
+            @PathParam("newParentFolderId") Long newParentFolderId) {
         if(folderId.equals(0L)) {
             throw new BadRequestException();
+        } else if(folderId.equals(newParentFolderId)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("The new parent folder cannot be the current folder").build();
         }
         Users user = Users.fromRequest(request);
         // handle some ACL logic:
@@ -364,12 +368,10 @@ public class FolderResource {
      * PUT hoot-services/osm/api/0.6/map/folders/modify/123456/New Dataset
      *
      *
-     * @param mapId
+     * @param folderId
      *            ID of map record or folder to be modified
      * @param modName
      *            The new name for the dataset
-     * @param inputType
-     *            Flag for either dataset or folder
      * @return jobId Success = True/False
      */
     @PUT
