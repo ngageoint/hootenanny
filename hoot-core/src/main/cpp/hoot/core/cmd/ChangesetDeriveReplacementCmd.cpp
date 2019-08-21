@@ -63,16 +63,20 @@ public:
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
     {
-      geometryFilters = args.at(args.indexOf("--geometry-filters")).split(";");
-      args.removeAt(args.indexOf("--geometry-filters"));
-      args.removeAll("--geometry-filters");
+      const int optionNameIndex = args.indexOf("--geometry-filters");
+      LOG_VARD(optionNameIndex);
+      geometryFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(geometryFilters);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
     }
     QStringList additionalFilters;
     if (args.contains("--additional-filters"))
     {
-      additionalFilters = args.at(args.indexOf("--additional-filters")).split(";");
-      args.removeAt(args.indexOf("--additional-filters"));
-      args.removeAll("--additional-filters");
+      const int optionNameIndex = args.indexOf("--additional-filters");
+      additionalFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
     }
     bool chainAdditionalFilters = false;
     if (args.contains("--chain-additional-filters"))
@@ -92,6 +96,7 @@ public:
       printStats = true;
       args.removeAll("--stats");
     }
+    LOG_VARD(args);
 
     // param error checking
 

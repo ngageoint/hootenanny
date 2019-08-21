@@ -56,7 +56,7 @@ hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OP
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (sql changeset out)..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --geometry-filters "hoot::BuildingCriterion" --lenient-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --geometry-filters "hoot::BuildingCriterion" --lenient-bounds
 
 # CHANGESET APPLICATION
 
