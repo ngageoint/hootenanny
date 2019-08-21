@@ -58,20 +58,21 @@ namespace hoot
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  CPPUNIT_TEST(runPolyLenientOsmTest);
-  CPPUNIT_TEST(runPolyStrictOsmTest);
-  CPPUNIT_TEST(runPoiStrictOsmTest);
-  CPPUNIT_TEST(runLinearLenientOsmTest);
-  CPPUNIT_TEST(runLinearStrictOsmTest);
-  CPPUNIT_TEST(runPolyLenientJsonTest);
-  CPPUNIT_TEST(runPolyStrictJsonTest);
-  CPPUNIT_TEST(runPoiStrictJsonTest);
-  CPPUNIT_TEST(runLinearLenientJsonTest);
-  CPPUNIT_TEST(runLinearStrictJsonTest);
-  // TODO: multiple geometry filter test
-  // TODO: additional filter test
-  // TODO: geometry and additional filter test
-  // TODO: empty filter test
+//  CPPUNIT_TEST(runPolyLenientOsmTest);
+//  CPPUNIT_TEST(runPolyStrictOsmTest);
+//  CPPUNIT_TEST(runPoiStrictOsmTest);
+//  CPPUNIT_TEST(runLinearLenientOsmTest);
+//  CPPUNIT_TEST(runLinearStrictOsmTest);
+//  CPPUNIT_TEST(runPolyLenientJsonTest);
+//  CPPUNIT_TEST(runPolyStrictJsonTest);
+//  CPPUNIT_TEST(runPoiStrictJsonTest);
+//  CPPUNIT_TEST(runLinearLenientJsonTest);
+//  CPPUNIT_TEST(runLinearStrictJsonTest);
+  CPPUNIT_TEST(runMultipleGeometryFilter1Test);
+//  CPPUNIT_TEST(runMultipleGeometryFilter2Test);
+//  CPPUNIT_TEST(runAdditionalFilterTest);
+//  CPPUNIT_TEST(runGeometryAndAdditionalFilterTest);
+//  CPPUNIT_TEST(runEmptyGeometryFilterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -79,8 +80,7 @@ public:
   ChangesetReplacementCreatorTest() :
   HootTestFixture(
     "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/"),
-  _goldFileDirBase("test-files/cmd/glacial/serial/")
+    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/")
   {
     setResetType(ResetAll);
 
@@ -97,164 +97,95 @@ public:
 
   void runPolyLenientOsmTest()
   {     
-    // These are here in the tests to avoid seeing the missing element warnings from the readers
-    // after cropping. Turn off for testing only.
-    DisableLog dl;
-
-    const QString testName = "runPolyLenientOsmTest";
-    LOG_DEBUG("Running test: " << testName << "...");
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Polygon;
-//    const QString goldTestName = "ServiceBuildingReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 632, 0, 583, "");
+    _runSingleGeometryFilterTest(
+      "runPolyLenientOsmTest", GeometryTypeCriterion::GeometryType::Polygon, true, 632, 0, 583);
   }
 
   void runPolyStrictOsmTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runPolyStrictOsmTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Polygon;
-/*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
-    const QString goldFile =
-      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 529, 1, 517, "");
+    _runSingleGeometryFilterTest(
+      "runPolyStrictOsmTest", GeometryTypeCriterion::GeometryType::Polygon, false, 529, 1, 517);
   }
 
   void runPoiStrictOsmTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runPoiStrictOsmTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Point;
-//    const QString goldTestName = "ServicePoiStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 3, 1, 1, "");
+  {  
+    _runSingleGeometryFilterTest(
+      "runPoiStrictOsmTest", GeometryTypeCriterion::GeometryType::Point, false, 3, 1, 1);
   }
 
   void runLinearLenientOsmTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runLinearLenientOsmTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 146, 7, 141, "");
+    _runSingleGeometryFilterTest(
+      "runLinearLenientOsmTest", GeometryTypeCriterion::GeometryType::Line, true, 146, 7, 141);
   }
 
   void runLinearStrictOsmTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runLinearStrictOsmTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 47, 5, 36, "");
+    _runSingleGeometryFilterTest(
+      "runLinearStrictOsmTest", GeometryTypeCriterion::GeometryType::Line, false, 47, 5, 36);
   }
 
   void runPolyLenientJsonTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runPolyLenientJsonTest";
-    LOG_DEBUG("Running test: " << testName << "...");
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Polygon;
-//    const QString goldTestName = "ServiceBuildingReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true, 632, 0, 583, "");
+    _runSingleGeometryFilterTest(
+      "runPolyLenientJsonTest", GeometryTypeCriterion::GeometryType::Polygon, true, 632, 0, 583);
   }
 
   void runPolyStrictJsonTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runPolyStrictJsonTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Polygon;
-/*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
-    const QString goldFile =
-      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 529, 1, 517, "");
+    _runSingleGeometryFilterTest(
+      "runPolyStrictJsonTest", GeometryTypeCriterion::GeometryType::Polygon, false, 529, 1, 517);
   }
 
   void runPoiStrictJsonTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runPoiStrictJsonTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Point;
-//    const QString goldTestName = "ServicePoiStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 3, 1, 1, "");
+    _runSingleGeometryFilterTest(
+      "runPoiStrictJsonTest", GeometryTypeCriterion::GeometryType::Point, false, 3, 1, 1);
   }
 
   void runLinearLenientJsonTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runLinearLenientJsonTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true, 146, 7, 141, "");
+    _runSingleGeometryFilterTest(
+      "runLinearLenientJsonTest", GeometryTypeCriterion::GeometryType::Line, true, 146, 7, 141);
   }
 
   void runLinearStrictJsonTest()
   {
-    DisableLog dl;
+    _runSingleGeometryFilterTest(
+      "runLinearStrictJsonTest", GeometryTypeCriterion::GeometryType::Line, false, 47, 5, 36);
+  }
 
-    const QString testName = "runLinearStrictJsonTest";
-    const GeometryTypeCriterion::GeometryType geometryType =
-      GeometryTypeCriterion::GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
+  void runMultipleGeometryFilter1Test()
+  {
+    // buildings and roads; original non-point AOI
 
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 47, 5, 36, "");
+
+  }
+
+  void runMultipleGeometryFilter2Test()
+  {
+    // buildings, roads, and pois; new AOI
+  }
+
+  void runAdditionalFilterTest()
+  {
+    // no geometry filter over original non-point AOI with some tag crit added
+  }
+
+  void runGeometryAndAdditionalFilterTest()
+  {
+    // buildings and roads; original non-point AOI with some tag crit added
+  }
+
+  void runEmptyGeometryFilterTest()
+  {
+
   }
 
 private:
 
-  QString _goldFileDirBase;
-
-  void _prepInputData(const QString& testName,
-                      const GeometryTypeCriterion::GeometryType& geometryType)
+  void _prepSingleGeometryFilterInputData(
+    const QString& testName, const GeometryTypeCriterion::GeometryType& geometryType)
   {
     LOG_DEBUG("Preparing input data...");
 
@@ -321,9 +252,9 @@ private:
     //conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
   }
 
-  OsmMapPtr _getTestMap(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
-                        const QString& customTagKey, const QString& customTagVal,
-                        const bool perturb)
+  OsmMapPtr _getTestMap(
+    const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
+    const QString& customTagKey, const QString& customTagVal, const bool perturb)
   {
     LOG_DEBUG("Preparing map from: " << sourceFile << "...");
 
@@ -370,36 +301,39 @@ private:
     DataConverter().convert(inXmlFile, outFile);
   }
 
-  void _runTest(const QString& testName, const QString& fileExtension,
-                const GeometryTypeCriterion::GeometryType& geometryType, const bool lenientBounds,
-                const int numExpectedCreateStatements, const int numExpectedModifyStatements,
-                const int numExpectedDeleteStatements, const QString goldChangesetFile)
+  void _runSingleGeometryFilterTest(
+    const QString& testName, const GeometryTypeCriterion::GeometryType& geometryType,
+    const bool lenientBounds, const int numExpectedCreateStatements,
+    const int numExpectedModifyStatements, const int numExpectedDeleteStatements)
   {
-    if (geometryType == GeometryTypeCriterion::GeometryType::Line)
-    {
-      double existingWayNodeTolerance = 45.0;
-      double snapTolerance = 45.0;
-      if (lenientBounds)
-      {
-        existingWayNodeTolerance = 20.0;
-        snapTolerance = 20.0;
-      }
-      conf().set(
-        ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(),
-        existingWayNodeTolerance);
-      conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), snapTolerance);
-    }
+    // This log disabling statement is here to avoid seeing the missing element warnings from the
+    // readers after cropping. Turn off for testing only.
+    DisableLog dl;
+
+    // set the way snap opts regardless...will only end up being used if the geometry type is linear
+    _setWaySnapOpts(lenientBounds);
+
+    _prepSingleGeometryFilterInputData(testName, geometryType);
 
     const QString outFile = _outputPath + testName + "-out.osc";
+    QString fileExtension;
+    if (testName.toLower().contains("osm"))
+    {
+      fileExtension = "osm";
+    }
+    else
+    {
+      fileExtension = "json";
+    }
 
     ChangesetReplacementCreator changesetCreator;
     changesetCreator.setLenientBounds(lenientBounds);
-    changesetCreator.setGeometryFilters(QStringList(_getFilterCrit(geometryType)));
-    //changesetCreator.setAdditionalFilters(additionalFilters);
-    //changesetCreator.setChainAdditionalFilters(false);
+    changesetCreator.setGeometryFilters(
+      QStringList(_getFilterCritForSingleGeometryType(geometryType)));
     changesetCreator.create(
-      _outputPath + testName + "-ref-in." + fileExtension,
-      _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType), outFile);
+      _outputPath + testName + "-ref-in.osm" + fileExtension,
+      _outputPath + testName + "-sec-in.osm" + fileExtension,
+      _getBoundsForSingleGeometryType(geometryType), outFile);
 
     // Going only with this level of checking for now. We could extend this to diff the actual
     // changeset files.
@@ -409,14 +343,57 @@ private:
       numExpectedModifyStatements, changesetCreator._changesetCreator->getNumModifyChanges());
     CPPUNIT_ASSERT_EQUAL(
       numExpectedDeleteStatements, changesetCreator._changesetCreator->getNumDeleteChanges());
-    // ignoring this for now
-    if (!goldChangesetFile.isEmpty())
-    {
-      HOOT_FILE_EQUALS(goldChangesetFile, outFile);
-    }
   }
 
-  QString _getFilterCrit(const GeometryTypeCriterion::GeometryType& geometryType) const
+  void _runMultipleFilterXmlTest(
+    const QString& testName, const QString& boundsStr, const QStringList& geometryFilters,
+    const QStringList& additionalFilters, const bool lenientBounds,
+    const int numExpectedCreateStatements, const int numExpectedModifyStatements,
+    const int numExpectedDeleteStatements)
+  {
+    DisableLog dl;
+
+    _setWaySnapOpts(lenientBounds);
+
+    // TODO:
+    //_prepSingleGeometryFilterInputData(testName, geometryType);
+
+    const QString outFile = _outputPath + testName + "-out.osc";
+
+    ChangesetReplacementCreator changesetCreator;
+    changesetCreator.setLenientBounds(lenientBounds);
+    changesetCreator.setGeometryFilters(geometryFilters);
+    changesetCreator.setAdditionalFilters(additionalFilters);
+    changesetCreator.create(
+      _outputPath + testName + "-ref-in.osm",
+      _outputPath + testName + "-sec-in.osm",
+      GeometryUtils::envelopeFromConfigString(boundsStr), outFile);
+
+    CPPUNIT_ASSERT_EQUAL(
+      numExpectedCreateStatements, changesetCreator._changesetCreator->getNumCreateChanges());
+    CPPUNIT_ASSERT_EQUAL(
+      numExpectedModifyStatements, changesetCreator._changesetCreator->getNumModifyChanges());
+    CPPUNIT_ASSERT_EQUAL(
+      numExpectedDeleteStatements, changesetCreator._changesetCreator->getNumDeleteChanges());
+  }
+
+  void _setWaySnapOpts(const bool lenientBounds)
+  {
+    double existingWayNodeTolerance = 45.0;
+    double snapTolerance = 45.0;
+    if (lenientBounds)
+    {
+      existingWayNodeTolerance = 20.0;
+      snapTolerance = 20.0;
+    }
+    conf().set(
+      ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(),
+      existingWayNodeTolerance);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), snapTolerance);
+  }
+
+  QString _getFilterCritForSingleGeometryType(
+    const GeometryTypeCriterion::GeometryType& geometryType) const
   {
     std::string className;
     switch (geometryType)
@@ -436,7 +413,8 @@ private:
     return QString::fromStdString(className);
   }
 
-  geos::geom::Envelope _getBounds(const GeometryTypeCriterion::GeometryType& geometryType) const
+  geos::geom::Envelope _getBoundsForSingleGeometryType(
+    const GeometryTypeCriterion::GeometryType& geometryType) const
   {
     switch (geometryType)
     {
