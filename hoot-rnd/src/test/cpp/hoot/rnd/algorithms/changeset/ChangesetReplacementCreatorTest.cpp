@@ -70,6 +70,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   // TODO: multiple geometry filter test
   // TODO: additional filter test
   // TODO: geometry and additional filter test
+  // TODO: empty filter test
   CPPUNIT_TEST_SUITE_END();
 
 public:
