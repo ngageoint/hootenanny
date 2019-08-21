@@ -244,8 +244,8 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
     map1->visitRw(truncateTags);
     map2->visitRw(truncateTags);
 
-    LOG_VARD(MapProjector::toWkt(map1->getProjection()));
-    LOG_VARD(MapProjector::toWkt(map2->getProjection()));
+    LOG_VART(MapProjector::toWkt(map1->getProjection()));
+    LOG_VART(MapProjector::toWkt(map2->getProjection()));
 
     // no need to implement application of ops for this logic path
 
@@ -644,7 +644,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   {
     ChangesetDeriverPtr changesetDeriver =
       std::dynamic_pointer_cast<ChangesetDeriver>(changesetProviders.at(i));
-    LOG_DEBUG("Changeset deriver #" << i + 1 << ": ");
+    LOG_DEBUG("Derived changesetL " << i + 1 << " / " << inputs1.size() << ": ");
     LOG_VARD(changesetDeriver->getNumCreateChanges());
     _numCreateChanges += changesetDeriver->getNumCreateChanges();
     LOG_VARD(changesetDeriver->getNumModifyChanges());

@@ -83,15 +83,16 @@ _chainAdditionalFilters(false)
 
 void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
 {
+  LOG_VARD(filterClassNames);
   if (!filterClassNames.isEmpty())
   {
     _geometryTypeFilters.clear();
-    _geometryTypeFilters = _getDefaultGeometryFilters();
     _linearFilterClassNames.clear();
 
     for (int i = 0; i < filterClassNames.size(); i++)
     {
       const QString filterClassName = filterClassNames.at(i);
+      LOG_VARD(filterClassName);
 
       // Fail if the filter doesn't map to a geometry type.
       std::shared_ptr<GeometryTypeCriterion> filter =
@@ -105,85 +106,62 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
           ". Filter must be a GeometryTypeCriterion.");
       }
 
-      std::shared_ptr<GeometryTypeCriterion> defaultFilter;
+      std::shared_ptr<GeometryTypeCriterion> currentFilter;
       switch (filter->getGeometryType())
       {
         case GeometryTypeCriterion::GeometryType::Point:
-
-          defaultFilter =
+          currentFilter =
             std::dynamic_pointer_cast<PointCriterion>(
-              _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point]);
-          if (defaultFilter)
-          {
-            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point] = filter;
-          }
-          else
-          {
-            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point] =
-              std::shared_ptr<OrCriterion>(
-                new OrCriterion(_geometryTypeFilters[GeometryTypeCriterion::GeometryType::Point],
-                filter));
-          }
-
+              _geometryTypeFilters[filter->getGeometryType()]);
           break;
 
         case GeometryTypeCriterion::GeometryType::Line:
-
-          defaultFilter =
+          currentFilter =
             std::dynamic_pointer_cast<LinearCriterion>(
-              _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line]);
-          if (defaultFilter)
-          {
-            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line] = filter;
-          }
-          else
-          {
-            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line] =
-              std::shared_ptr<OrCriterion>(
-                new OrCriterion(_geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line],
-                filter));
-          }
+              _geometryTypeFilters[filter->getGeometryType()]);
           _linearFilterClassNames.append(filterClassName);
-
           break;
 
         case GeometryTypeCriterion::GeometryType::Polygon:
-
-          defaultFilter =
+          currentFilter =
             std::dynamic_pointer_cast<PolygonCriterion>(
-              _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon]);
-          if (defaultFilter)
-          {
-            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon] = filter;
-          }
-          else
-          {
-            _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon] =
-              std::shared_ptr<OrCriterion>(
-                new OrCriterion(_geometryTypeFilters[GeometryTypeCriterion::GeometryType::Polygon],
-                filter));
-          }
-
+              _geometryTypeFilters[filter->getGeometryType()]);
           break;
 
         default:
           throw IllegalArgumentException("Invalid geometry type.");
       }
+
+      if (!currentFilter)
+      {
+        _geometryTypeFilters[filter->getGeometryType()] = filter;
+      }
+      else
+      {
+        _geometryTypeFilters[filter->getGeometryType()] =
+          std::shared_ptr<OrCriterion>(new OrCriterion(currentFilter, filter));
+      }
     }
 
-    if (_linearFilterClassNames.isEmpty())
+    if (_geometryTypeFilters.isEmpty())
     {
+      _geometryTypeFilters = _getDefaultGeometryFilters();
       _linearFilterClassNames =
         ConflatableElementCriterion::getCriterionClassNamesByType(
           GeometryTypeCriterion::GeometryType::Line);
     }
   }
+
+  LOG_VARD(_geometryTypeFilters.size());
+  LOG_VARD(_linearFilterClassNames);
 }
 
 void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filterClassNames)
 {
+  LOG_VARD(filterClassNames.size());
   if (!filterClassNames.isEmpty())
   {
+    LOG_VARD(_chainAdditionalFilters);
     if (_chainAdditionalFilters)
     {
       _additionalFilter.reset(new OrCriterion());
@@ -196,6 +174,7 @@ void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filter
     for (int i = 0; i < filterClassNames.size(); i++)
     {
       const QString filterClassName = filterClassNames.at(i);
+      LOG_VARD(filterClassName);
 
       ElementCriterionPtr crit(
         Factory::getInstance().constructObject<ElementCriterion>(filterClassName));
@@ -220,12 +199,74 @@ void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filter
   }
 }
 
+void ChangesetReplacementCreator::create(
+  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  const QString& output)
+{
+  // INPUT VALIDATION AND SETUP
+
+  _validateInputs(input1, input2);
+  const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
+  _setGlobalOpts(boundsStr);
+  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters =
+    _getCombinedFilters();
+
+  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+  QString lenientStr = "Bounds calculation is ";
+  if (!_lenientBounds)
+  {
+    lenientStr += "not ";
+  }
+  lenientStr += "lenient.";
+  LOG_INFO(
+    "Deriving replacement output changeset: ..." << output.right(maxFilePrintLength) <<
+    " from inputs: ..." << input1.right(maxFilePrintLength) << " and ..." <<
+    input2.right(maxFilePrintLength) << "" << ", at bounds: " << boundsStr << ". " << lenientStr);
+
+  // CHANGESET CALCULATION
+
+  QList<OsmMapPtr> refMaps;
+  QList<OsmMapPtr> conflatedMaps;
+  int passCtr = 1;
+  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
+         filters.begin(); itr != filters.end(); ++itr)
+  {
+    LOG_DEBUG(
+      "Preparing maps for changeset derivation given geometry type: "<< itr.key() << ". Pass: " <<
+      passCtr << " / " << filters.size() << "...");
+
+    OsmMapPtr refMap;
+    OsmMapPtr conflatedMap;
+    QStringList linearFilterClassNames;
+    if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
+    {
+      linearFilterClassNames = _linearFilterClassNames;
+    }
+    _getMapsForGeometryType(
+      refMap, conflatedMap, input1, input2, boundsStr, itr.value(), itr.key(),
+      linearFilterClassNames);
+    refMaps.append(refMap);
+    conflatedMaps.append(conflatedMap);
+
+    passCtr++;
+  }
+
+  // CHANGESET GENERATION
+
+  // Derive a changeset between the ref and conflated maps that completely replaces ref features
+  // with secondary features within the bounds and write it out.
+
+  _changesetCreator->create(refMaps, conflatedMaps, output);
+}
+
 void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
   const QString& boundsStr, const ElementCriterionPtr& featureFilter,
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
+  // INPUT VALIDATION AND SETUP
+
   _parseConfigOpts(_lenientBounds, geometryType);
 
   // DATA LOAD AND INITIAL PREP
@@ -246,6 +287,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
   const bool isLinearCrit = !linearFilterClassNames.isEmpty();
+  LOG_VARD(isLinearCrit);
   if (_lenientBounds && isLinearCrit)
   {
     // If we have a lenient bounds requirement and linear features, we need to exclude all ways
@@ -256,7 +298,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
-  // TODO: Do we need to filter features with an empty filter?
   _filterFeatures(refMap, featureFilter, "ref-after-type-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
@@ -400,59 +441,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 }
 
-void ChangesetReplacementCreator::create(
-  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-  const QString& output)
-{
-  // INPUT VALIDATION AND SETUP
-
-  _validateInputs(input1, input2);
-  const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
-  _setGlobalOpts(boundsStr);
-  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters =
-    _getCombinedFilters();
-
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-  QString lenientStr = "Bounds calculation is ";
-  if (!_lenientBounds)
-  {
-    lenientStr += "not ";
-  }
-  lenientStr += "lenient.";
-  LOG_INFO(
-    "Deriving replacement output changeset: ..." << output.right(maxFilePrintLength) <<
-    " from inputs: ..." << input1.right(maxFilePrintLength) << " and ..." <<
-    input2.right(maxFilePrintLength) << ", at bounds: " << boundsStr << ". " << lenientStr);
-
-  // CHANGESET CALCULATION
-
-  QList<OsmMapPtr> refMaps;
-  QList<OsmMapPtr> conflatedMaps;
-  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         filters.begin(); itr != filters.end(); ++itr)
-  {
-    OsmMapPtr refMap;
-    OsmMapPtr conflatedMap;
-    QStringList linearFilterClassNames;
-    if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
-    {
-      linearFilterClassNames = _linearFilterClassNames;
-    }
-    _getMapsForGeometryType(
-      refMap, conflatedMap, input1, input2, boundsStr, itr.value(), itr.key(),
-      linearFilterClassNames);
-    refMaps.append(refMap);
-    conflatedMaps.append(conflatedMap);
-  }
-
-  // CHANGESET GENERATION
-
-  // Derive a changeset between the ref and conflated maps that completely replaces ref features
-  // with secondary features within the bounds and write it out.
-
-  _changesetCreator->create(refMaps, conflatedMaps, output);
-}
-
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
 {
   // Fail if the reader that supports either input doesn't implement Boundable.
@@ -495,6 +483,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ChangesetReplacementCreator::_getCombinedFilters()
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
+  LOG_VARD(_additionalFilter);
   if (_additionalFilter)
   {
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
@@ -505,6 +494,11 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
           new ChainCriterion(itr.value().get(), _additionalFilter.get()));
     }
   }
+  else
+  {
+    combinedFilters = _geometryTypeFilters;
+  }
+  LOG_VARD(combinedFilters.size());
   return combinedFilters;
 }
 
@@ -526,7 +520,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
 
-  LOG_VARD(MapProjector::toWkt(refMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(refMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
 
   return refMap;
@@ -596,15 +590,14 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
   secMap->setName("sec");
   IoUtils::loadMap(secMap, input, false, Status::Unknown2);
 
-  LOG_VARD(MapProjector::toWkt(secMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(secMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
 
   return secMap;
 }
 
 void ChangesetReplacementCreator::_filterFeatures(
-  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
-  const QString& debugFileName)
+  OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const QString& debugFileName)
 {
   LOG_DEBUG("Filtering features for: " << map->getName() << " based on input filter...");
   RemoveElementsVisitor elementPruner(true);
@@ -613,14 +606,14 @@ void ChangesetReplacementCreator::_filterFeatures(
   LOG_DEBUG(elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
   LOG_DEBUG(elementPruner.getCompletedStatusMessage());
-  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap)
 {
-  LOG_VARD(MapProjector::toWkt(doughMap->getProjection()));
-  LOG_VARD(MapProjector::toWkt(cutterMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   // Generate a cutter shape based on the cropped secondary map.
 
@@ -631,22 +624,21 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
       .generateMap(cutterMap);
   // not exactly sure yet why this needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
-  LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
 
   LOG_DEBUG("Cookie cutting cutter shape out of: " << doughMap->getName() << "...");
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-  //OsmMapPtr cookieCutMap(new OsmMap(doughMap, MapProjector::createWgs84Projection()));
-  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   cookieCutMap->setName("cookie-cut");
   CookieCutter(
     false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
     _boundsOpts.cookieCutKeepOnlyInsideBounds)
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
-  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
   return cookieCutMap;
@@ -664,7 +656,7 @@ void ChangesetReplacementCreator::_combineMaps(OsmMapPtr& map1, OsmMapPtr& map2,
   MapProjector::projectToWgs84(map2);   // not exactly sure yet why this needs to be done
 
   map1->append(map2, throwOutDupes);
-  LOG_VARD(MapProjector::toWkt(map1->getProjection()));
+  LOG_VART(MapProjector::toWkt(map1->getProjection()));
 
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
@@ -693,7 +685,7 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
   MapProjector::projectToWgs84(map);  // conflation works in planar
-  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, "conflated");
 }
 
@@ -701,7 +693,9 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
   const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
 {
-  LOG_DEBUG("Snapping ways for map: " << map->getName() <<" ...");
+  LOG_DEBUG(
+    "Snapping ways for map: " << map->getName() << ", with filter type: " <<
+    typeCriterionClassName << " ...");
 
   UnconnectedWaySnapper lineSnapper;
   lineSnapper.setConfiguration(conf());
@@ -719,7 +713,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
 
   MapProjector::projectToWgs84(map);   // snapping works in planar
-  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
 
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
@@ -739,7 +733,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
         new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
   OsmMapPtr connectedWays = OsmUtils::getMapSubset(map, copyCrit);
   connectedWays->setName(outputMapName);
-  LOG_VARD(MapProjector::toWkt(connectedWays->getProjection()));
+  LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
   OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
   return connectedWays;
 }
@@ -753,7 +747,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   MapCropper cropper(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
-  LOG_DEBUG(cropper.getInitStatusMessage());
+  //LOG_DEBUG(cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 
@@ -762,7 +756,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // with no information.
   SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
-  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
@@ -786,7 +780,7 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   LOG_DEBUG(removeVis.getInitStatusMessage());
   map->visitRw(removeVis);
   LOG_DEBUG(removeVis.getCompletedStatusMessage());
-  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
 }
 
@@ -808,7 +802,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
   tagSetter.apply(map);
   LOG_DEBUG(tagSetter.getCompletedStatusMessage());
 
-  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");
 }
 
@@ -828,6 +822,7 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
   conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
   // These don't change between scenarios (or at least haven't needed to yet).

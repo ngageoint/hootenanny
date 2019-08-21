@@ -50,7 +50,7 @@ class Element;
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the
  * NotCriterion for an example to negate criterion.
  *
- * Also see: ConflatableElementCriterion.
+ * Also see: ConflatableElementCriterion and GeometryTypeCriterion.
  */
 class ElementCriterion : public ApiEntityInfo
 {

@@ -91,11 +91,14 @@ public:
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
 //      "ChangesetReplacementCreatorTest");
+    // for testing only
+    //conf().set(ConfigOptions::getDebugMapsFilenameKey(), "/home/vagrant/hoot/tmp/debug.osm");
   }
 
   void runPolyLenientOsmTest()
   {     
-    // This is here to avoid seeing the missing element warnings from the readers after cropping.
+    // These are here in the tests to avoid seeing the missing element warnings from the readers
+    // after cropping. Turn off for testing only.
     DisableLog dl;
 
     const QString testName = "runPolyLenientOsmTest";
@@ -122,8 +125,7 @@ public:
       _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
 
     _prepInputData(testName, geometryType);
-    _runTest(
-      testName, "osm", geometryType, false, 529, 1, 517, "");
+    _runTest(testName, "osm", geometryType, false, 529, 1, 517, "");
   }
 
   void runPoiStrictOsmTest()

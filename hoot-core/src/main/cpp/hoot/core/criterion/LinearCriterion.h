@@ -40,6 +40,7 @@ namespace hoot
 class LinearCriterion : public GeometryTypeCriterion
 {
 public:
+
   static std::string className() { return "hoot::LinearCriterion"; }
 
   LinearCriterion() {}
@@ -50,8 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies linear features"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
 };
 
 }
