@@ -94,12 +94,9 @@
     "Waterways": {
         "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
         "merger": "hoot::ScriptMergerCreator",
-<<<<<<< HEAD
         "members": {
 	    "search.radius.waterway": "Waterway search radius"
-       }
-=======
-        "members": {}
+        }
     },
     "Differential": {
         "matcher": "",
@@ -110,6 +107,5 @@
             "snap.unconnected.ways.use.existing.way.nodes": "Reuse highway nodes when snapping unconnected roads",
             "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected highway nodes to neighboring roads"
         }
->>>>>>> master
     }
 }
