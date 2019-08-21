@@ -32,8 +32,7 @@
 namespace hoot
 {
 
-QStringList GeometryTypeCriterion::getGeometryTypeCriterionClassNamesByType(
-  const GeometryType& type)
+QStringList GeometryTypeCriterion::getCriterionClassNamesByType(const GeometryType& type)
 {
   QStringList classNamesByType;
   std::vector<std::string> classNames =

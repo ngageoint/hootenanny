@@ -173,9 +173,8 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
 
     if (_linearFilterClassNames.isEmpty())
     {
-      //_linearFilterClassNames.append("hoot::WayCriterion");
       _linearFilterClassNames =
-        GeometryTypeCriterion::getGeometryTypeCriterionClassNamesByType(
+        ConflatableElementCriterion::getCriterionClassNamesByType(
           GeometryTypeCriterion::GeometryType::Line);
     }
   }

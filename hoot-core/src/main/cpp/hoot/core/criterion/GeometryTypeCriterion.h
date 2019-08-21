@@ -59,7 +59,7 @@ public:
    * @param type
    * @return
    */
-  static QStringList getGeometryTypeCriterionClassNamesByType(const GeometryType& type);
+  static QStringList getCriterionClassNamesByType(const GeometryType& type);
 };
 
 }

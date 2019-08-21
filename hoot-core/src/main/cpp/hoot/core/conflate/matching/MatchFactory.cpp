@@ -253,12 +253,15 @@ void MatchFactory::setConfiguration(const Settings& s)
 
 MatchFactory& MatchFactory::getInstance()
 {
-  /* remove this hack after the following UI issues are fixed:
+  /* TODO: remove this hack after the following UI issues are fixed:
    *
    * https://github.com/ngageoint/hootenanny-ui/issues/969
    * https://github.com/ngageoint/hootenanny-ui/issues/970
    * https://github.com/ngageoint/hootenanny-ui/issues/971
    * https://github.com/ngageoint/hootenanny-ui/issues/972
+   *
+   * UPDATE: 8/21/19 - Believe the above issues should all have been fixed in v2 version of the UI.
+   * So, maybe replace these fixes with error checking and throw exceptions when bad inputs come in.
    * */
   if (ConfigOptions().getAutocorrectOptions())
   {

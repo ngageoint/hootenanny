@@ -55,7 +55,20 @@ public:
    */
   static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e);
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
+
+  /**
+   * TODO
+   *
+   * @param type
+   * @return
+   */
+  static QStringList getCriterionClassNamesByType(const GeometryType& type);
 
 private:
 

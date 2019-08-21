@@ -41,7 +41,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/PositiveIdGenerator.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
-//#include <hoot/core/visitors/AddUuidVisitor.h>
+#include <hoot/core/visitors/AddUuidVisitor.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -99,7 +100,8 @@ public:
 
     const QString testName = "runPolyLenientOsmTest";
     LOG_DEBUG("Running test: " << testName << "...");
-    const GeometryType geometryType = GeometryType::Polygon;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Polygon;
 //    const QString goldTestName = "ServiceBuildingReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -113,7 +115,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runPolyStrictOsmTest";
-    const GeometryType geometryType = GeometryType::Polygon;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Polygon;
 /*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
     const QString goldFile =
       _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
@@ -128,7 +131,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runPoiStrictOsmTest";
-    const GeometryType geometryType = GeometryType::Point;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Point;
 //    const QString goldTestName = "ServicePoiStrictReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -142,7 +146,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runLinearLenientOsmTest";
-    const GeometryType geometryType = GeometryType::Line;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Line;
 //    const QString goldTestName = "ServiceRoadReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -156,7 +161,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runLinearStrictOsmTest";
-    const GeometryType geometryType = GeometryType::Line;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Line;
 //    const QString goldTestName = "ServiceRoadStrictReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -171,7 +177,8 @@ public:
 
     const QString testName = "runPolyLenientJsonTest";
     LOG_DEBUG("Running test: " << testName << "...");
-    const GeometryType geometryType = GeometryType::Polygon;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Polygon;
 //    const QString goldTestName = "ServiceBuildingReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -185,7 +192,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runPolyStrictJsonTest";
-    const GeometryType geometryType = GeometryType::Polygon;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Polygon;
 /*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
     const QString goldFile =
       _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
@@ -199,7 +207,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runPoiStrictJsonTest";
-    const GeometryType geometryType = GeometryType::Point;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Point;
 //    const QString goldTestName = "ServicePoiStrictReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -213,7 +222,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runLinearLenientJsonTest";
-    const GeometryType geometryType = GeometryType::Line;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Line;
 //    const QString goldTestName = "ServiceRoadReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -227,7 +237,8 @@ public:
     DisableLog dl;
 
     const QString testName = "runLinearStrictJsonTest";
-    const GeometryType geometryType = GeometryType::Line;
+    const GeometryTypeCriterion::GeometryType geometryType =
+      GeometryTypeCriterion::GeometryType::Line;
 //    const QString goldTestName = "ServiceRoadStrictReplacementTest";
 //    const QString goldFile =
 //      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
@@ -240,14 +251,8 @@ private:
 
   QString _goldFileDirBase;
 
-  enum GeometryType
-  {
-    Point = 0,
-    Line,
-    Polygon
-  };
-
-  void _prepInputData(const QString& testName, const GeometryType& geometryType)
+  void _prepInputData(const QString& testName,
+                      const GeometryTypeCriterion::GeometryType& geometryType)
   {
     LOG_DEBUG("Preparing input data...");
 
@@ -257,15 +262,15 @@ private:
     QString secSourceFile = refSourceFile;
     switch (geometryType)
     {
-      case GeometryType::Point:
+      case GeometryTypeCriterion::GeometryType::Point:
         refSourceFile = "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm";
         secSourceFile = "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm";
         break;
-      case GeometryType::Line:
+      case GeometryTypeCriterion::GeometryType::Line:
         customTagKey = "note";
         customTagVal = "Highway";
         break;
-      case GeometryType::Polygon:
+      case GeometryTypeCriterion::GeometryType::Polygon:
         customTagKey = "name";
         customTagVal = "Building";
         break;
@@ -278,7 +283,7 @@ private:
     {
       modifiedCustomTagVal = customTagVal + " 1";
     }
-    const bool perturbRef = geometryType != GeometryType::Point;
+    const bool perturbRef = geometryType != GeometryTypeCriterion::GeometryType::Point;
     OsmMapPtr refMap =
       _getTestMap(
         refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), customTagKey,
@@ -364,11 +369,11 @@ private:
   }
 
   void _runTest(const QString& testName, const QString& fileExtension,
-                const GeometryType& geometryType, const bool lenientBounds,
+                const GeometryTypeCriterion::GeometryType& geometryType, const bool lenientBounds,
                 const int numExpectedCreateStatements, const int numExpectedModifyStatements,
                 const int numExpectedDeleteStatements, const QString goldChangesetFile)
   {
-    if (geometryType == GeometryType::Line)
+    if (geometryType == GeometryTypeCriterion::GeometryType::Line)
     {
       double existingWayNodeTolerance = 45.0;
       double snapTolerance = 45.0;
@@ -409,18 +414,18 @@ private:
     }
   }
 
-  QString _getFilterCrit(const GeometryType& geometryType) const
+  QString _getFilterCrit(const GeometryTypeCriterion::GeometryType& geometryType) const
   {
     std::string className;
     switch (geometryType)
     {
-      case GeometryType::Point:
+      case GeometryTypeCriterion::GeometryType::Point:
         className = PoiCriterion::className();
         break;
-      case GeometryType::Line:
+      case GeometryTypeCriterion::GeometryType::Line:
         className = HighwayCriterion::className();
         break;
-      case GeometryType::Polygon:
+      case GeometryTypeCriterion::GeometryType::Polygon:
         className = BuildingCriterion::className();
         break;
       default:
@@ -429,15 +434,15 @@ private:
     return QString::fromStdString(className);
   }
 
-  geos::geom::Envelope _getBounds(const GeometryType& geometryType) const
+  geos::geom::Envelope _getBounds(const GeometryTypeCriterion::GeometryType& geometryType) const
   {
     switch (geometryType)
     {
-      case GeometryType::Point:
+      case GeometryTypeCriterion::GeometryType::Point:
         return geos::geom::Envelope(-122.43204, -122.4303457, 37.7628, 37.76437);
-      case GeometryType::Line:
+      case GeometryTypeCriterion::GeometryType::Line:
         return geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902);
-      case GeometryType::Polygon:
+      case GeometryTypeCriterion::GeometryType::Polygon:
         return geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902);
       default:
         throw IllegalArgumentException("Invalid geometry type.");

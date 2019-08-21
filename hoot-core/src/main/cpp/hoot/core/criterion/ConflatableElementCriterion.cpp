@@ -83,4 +83,27 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
   return conflatableCriteriaForElement;
 }
 
+QStringList ConflatableElementCriterion::getCriterionClassNamesByType(const GeometryType& type)
+{
+  QStringList classNamesByType;
+  std::vector<std::string> classNames =
+    Factory::getInstance().getObjectNamesByBase("hoot::ElementCriterion");
+  for (size_t i = 0; i < classNames.size(); i++)
+  {
+    const std::string className = classNames[i];
+    if (Factory::getInstance().hasBase<ConflatableElementCriterion>(className))
+    {
+      std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(
+          std::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(className)));
+      if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
+      {
+        classNamesByType.append(QString::fromStdString(className));
+      }
+    }
+  }
+  return classNamesByType;
+}
+
 }
