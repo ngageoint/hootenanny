@@ -3945,28 +3945,23 @@ marked with a custom tag.  Useful for debugging purposes.
 If true, all ways snapped by the Unconnected Way Snapper to another way or way node will be
 marked with a custom tag.  Useful for debugging purposes.
 
-=== snap.unconnected.ways.snap.to.way.criteria
+=== snap.unconnected.ways.snap.to.way.criterion
 
-* Data Type: list
-* Default Value:
-** `hoot::WayCriterion`
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
 
-Optional criteria classes to filter the types of ways being snapped to. You may add multiple
-criteria and separate them with a semicolon surrounded by quotes. An example would be:
-"hoot::HighwayCriterion;hoot::LinearWaterWayCriterion" to snap road and river ways.  If no criteria
-are specified, then all ways are considered as targets for way snapping.
+Optional criterion class to filter the types of ways being snapped to.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
+way snapping.
 
-=== snap.unconnected.ways.snap.to.way.node.criteria
+=== snap.unconnected.ways.snap.to.way.node.criterion
 
-* Data Type: list
-* Default Value:
-** `hoot::WayNodeCriterion`
+* Data Type: string
+* Default Value: `hoot::WayNodeCriterion`
 
-Optional criteria classes to filter the types of way nodes being snapped to. You may add multiple
-criteria and separate them with a semicolon surrounded by quotes.  An example would be:
-"hoot::HighwayNodeCriterion".  If no criteria are specified, then all way nodes are considered as
-targets for way node snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes
-is enabled.
+Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
+hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
+for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
 
 === snap.unconnected.ways.snap.to.way.statuses
 
@@ -3974,10 +3969,10 @@ is enabled.
 * Default Value:
 ** `Input1`
 
-Statuses of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or
-'Conflated'. Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference
-ways to secondary ways. You may add multiple statuses and separate them with a semicolon surrounded
-by quotes. For example, to snap to both reference and conflated ways use: 'Input1;Conflated'.
+Statuses of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or 'Conflated'.
+Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
+secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
+snap to both reference and conflated ways use: 'Input1;Conflated'.
 
 === snap.unconnected.ways.snap.tolerance
 
@@ -3988,16 +3983,14 @@ Maximum distance used by the Unconnected Way Snapper, in meters, allowed between
 way endpoint node and a neighboring way for the way endpoint node to be snapped to the closest
 section of the neighboring way.
 
-=== snap.unconnected.ways.snap.way.criteria
+=== snap.unconnected.ways.snap.way.criterion
 
-* Data Type: list
-* Default Value:
-** `hoot::WayCriterion`
+* Data Type: string
+* Default Value: `hoot::WayCriterion`
 
-Optional criteria classes to filter the types of ways being snapped. You may add multiple
-criteria and separate them with a semicolon surrounded by quotes. An example would be:
-"hoot::HighwayCriterion;hoot::LinearWaterwayCriterion.  If no criterion is specified, then all ways
-are considered as sources for way snapping.
+Optional criterion class to filter the types of ways being snapped.  An example would be:
+hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
+way snapping.
 
 === snap.unconnected.ways.snap.way.statuses
 
@@ -4005,10 +3998,10 @@ are considered as sources for way snapping.
 * Default Value:
 ** `Input2`
 
-Status of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
+Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
-ways. You may add multiple statuses and separate them with a semicolon surrounded
-by quotes. For example, to snap both reference and conflated ways use: 'Input1;Conflated'.
+ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
+reference and conflated ways use: 'Input1;Conflated'.
 
 === snap.unconnected.ways.use.existing.way.nodes
 

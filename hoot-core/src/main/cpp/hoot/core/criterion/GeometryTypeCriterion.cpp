@@ -22,46 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef GEOMETRY_TYPE_CRITERION_H
-#define GEOMETRY_TYPE_CRITERION_H
+#include "GeometryTypeCriterion.h"
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-/**
- * TODO
- */
-class GeometryTypeCriterion : public ElementCriterion
+QStringList GeometryTypeCriterion::getGeometryTypeCriterionClassNamesByType(
+  const GeometryType& type)
 {
-public:
-
-  enum GeometryType
+  QStringList classNamesByType;
+  std::vector<std::string> classNames =
+    Factory::getInstance().getObjectNamesByBase("hoot::ElementCriterion");
+  for (size_t i = 0; i < classNames.size(); i++)
   {
-    Point = 0,
-    Line,
-    Polygon
-  };
-
-  static std::string className() { return "hoot::GeometryTypeCriterion"; }
-
-  virtual ~GeometryTypeCriterion() {}
-
-  virtual GeometryType getGeometryType() const = 0;
-
-  /**
-   * TODO
-   *
-   * @param type
-   * @return
-   */
-  static QStringList getGeometryTypeCriterionClassNamesByType(const GeometryType& type);
-};
-
+    const std::string className = classNames[i];
+    if (Factory::getInstance().hasBase<GeometryTypeCriterion>(className))
+    {
+      std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(
+          std::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(className)));
+      if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
+      {
+        classNamesByType.append(QString::fromStdString(className));
+      }
+    }
+  }
+  return classNamesByType;
 }
 
-#endif // GEOMETRY_TYPE_CRITERION_H
+}

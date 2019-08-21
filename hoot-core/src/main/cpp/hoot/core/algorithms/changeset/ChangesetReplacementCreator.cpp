@@ -173,7 +173,10 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
 
     if (_linearFilterClassNames.isEmpty())
     {
-      _linearFilterClassNames.append("hoot::WayCriterion");
+      //_linearFilterClassNames.append("hoot::WayCriterion");
+      _linearFilterClassNames =
+        GeometryTypeCriterion::getGeometryTypeCriterionClassNamesByType(
+          GeometryTypeCriterion::GeometryType::Line);
     }
   }
 }
@@ -254,6 +257,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
+  // TODO: Do we need to filter features with an empty filter?
   _filterFeatures(refMap, featureFilter, "ref-after-type-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
@@ -263,6 +267,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune sec dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
+  // TODO: Do we need to filter features with an empty filter?
   _filterFeatures(secMap, featureFilter, "sec-after-type-pruning");
 
   // COOKIE CUT
@@ -302,9 +307,12 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     snapWayStatuses.append("Conflated");
     QStringList snapToWayStatuses("Input1");
     snapToWayStatuses.append("Conflated");
-    _snapUnconnectedWays(
-      conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames, false,
-      "conflated-snapped-sec-to-ref-1");
+    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    {
+      _snapUnconnectedWays(
+        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
+        "conflated-snapped-sec-to-ref-1");
+    }
 
     // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
     // data in the resulting changeset and generate modify statements instead.
@@ -350,9 +358,12 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     QStringList snapToWayStatuses("Input1");
     snapToWayStatuses.append("Conflated");
     snapToWayStatuses.append("Input2");
-    _snapUnconnectedWays(
-      conflatedMap, snapWayStatuses, snapToWayStatuses,linearFilterClassNames, false,
-      "conflated-snapped-sec-to-ref-2");
+    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    {
+      _snapUnconnectedWays(
+        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
+        "conflated-snapped-sec-to-ref-2");
+    }
 
     // Combine the conflated map with the immediately connected out of bounds ways.
 
@@ -362,9 +373,12 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
 
-    _snapUnconnectedWays(
-      conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames, true,
-      "conflated-snapped-immediately-connected-out-of-bounds");
+    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    {
+      _snapUnconnectedWays(
+        conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
+        true, "conflated-snapped-immediately-connected-out-of-bounds");
+    }
 
     // Remove any ways that weren't snapped.
 
@@ -686,8 +700,7 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
 
 void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-  const QStringList& geometryTypeFilterClassNames, const bool markSnappedWays,
-  const QString& debugFileName)
+  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
 {
   LOG_DEBUG("Snapping ways for map: " << map->getName() <<" ...");
 
@@ -698,10 +711,10 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   lineSnapper.setSnapWayStatuses(snapWayStatuses);
   lineSnapper.setMarkSnappedWays(markSnappedWays);
   // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
-  lineSnapper.setWayNodeToSnapToCriteriaClassNames(
-    QStringList(QString::fromStdString(WayNodeCriterion::className())));
-  lineSnapper.setWayToSnapCriteriaClassNames(geometryTypeFilterClassNames);
-  lineSnapper.setWayToSnapToCriteriaClassNames(geometryTypeFilterClassNames);
+  lineSnapper.setWayNodeToSnapToCriterionClassName(
+    QString::fromStdString(WayNodeCriterion::className()));
+  lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
+  lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
   LOG_DEBUG(lineSnapper.getInitStatusMessage());
   lineSnapper.apply(map);
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());

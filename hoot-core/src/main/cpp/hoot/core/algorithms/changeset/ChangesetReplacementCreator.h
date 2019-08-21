@@ -200,7 +200,7 @@ private:
 
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-    const QStringList& geometryTypeFilterClassNames, const bool markSnappedWays,
+    const QString& typeCriterionClassName, const bool markSnappedWays,
     const QString& debugFileName);
 
   /*
