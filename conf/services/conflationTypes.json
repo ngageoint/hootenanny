@@ -89,11 +89,10 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "differential.remove.reference.data": "Remove reference data from differential output layer",
-            "differential.snap.unconnected.roads": "Snap unconnected roads to reference road",
-            "snap.unconnected.ways.snap.tolerance": "Maximum distance to snap unconnected ways to neighboring ways",
-            "snap.unconnected.ways.use.existing.way.nodes": "Snap Unconnected Way endpoint nodes to neighboring ways",
-            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance to snap unconnected ways directy to neighboring ways"
+            "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
+            "snap.unconnected.ways.snap.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to neighboring roads",
+            "snap.unconnected.ways.use.existing.way.nodes": "Reuse highway nodes when snapping unconnected roads",
+            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected highway nodes to neighboring roads"
         }
     }
 }
