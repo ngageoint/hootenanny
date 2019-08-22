@@ -177,8 +177,14 @@ void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filter
       const QString filterClassName = filterClassNames.at(i);
       LOG_VARD(filterClassName);
 
-      ElementCriterionPtr crit(
-        Factory::getInstance().constructObject<ElementCriterion>(filterClassName));
+      ElementCriterionPtr crit;
+      try
+      {
+        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(filterClassName));
+      }
+      catch (const boost::bad_any_cast&)
+      {
+      }
       if (!crit)
       {
         throw IllegalArgumentException(
@@ -186,8 +192,14 @@ void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filter
       }
 
       // Fail if the filter maps to a geometry type.
-      std::shared_ptr<GeometryTypeCriterion> geometryTypeFilter =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      std::shared_ptr<GeometryTypeCriterion> geometryTypeFilter;
+      try
+      {
+        geometryTypeFilter = std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      }
+      catch (const boost::bad_any_cast&)
+      {
+      }
       if (geometryTypeFilter)
       {
         throw IllegalArgumentException(

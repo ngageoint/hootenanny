@@ -50,41 +50,27 @@ namespace hoot
 {
 
 /*
- * These tests are very similar to the tests in ServiceChangesetReplacement*DbTest.sh, which test
- * the replacement changeset workflow against API DB data sources. Differences here are that these
- * tests test against file data sources only, don't interact with a database, and don't try to
- * apply the output changeset.
- *
- * This test file is in hoot-rnd since it needs to use PertyOp.
+ * This only tests some invalidation checking, as its easier to test the changeset generation in
+ * command line tests (ChangesetReplacement*Test.sh).
  */
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  // TODO: reduce this down to just error handling tests
-  CPPUNIT_TEST(runPolyLenientOsmTest);
-  CPPUNIT_TEST(runPolyStrictOsmTest);
-  CPPUNIT_TEST(runPoiStrictOsmTest);
-  CPPUNIT_TEST(runLinearLenientOsmTest);
-  CPPUNIT_TEST(runLinearStrictOsmTest);
-  CPPUNIT_TEST(runPolyLenientJsonTest);
-  CPPUNIT_TEST(runPolyStrictJsonTest);
-  CPPUNIT_TEST(runPoiStrictJsonTest);
-  CPPUNIT_TEST(runLinearLenientJsonTest);
-  CPPUNIT_TEST(runLinearStrictJsonTest);
-
-  //CPPUNIT_TEST(runMultipleGeometryFilter1LenientTest);
-  //CPPUNIT_TEST(runMultipleGeometryFilter1StrictTest);
-  //CPPUNIT_TEST(runMultipleGeometryFilter2LenientTest);
-//  CPPUNIT_TEST(runMultipleGeometryFilter2StrictTest);
-//  CPPUNIT_TEST(runAdditionalFilterTest);
-//  CPPUNIT_TEST(runGeometryAndAdditionalFilterTest);
-//  CPPUNIT_TEST(runEmptyGeometryFilterStrictTest);
-   //CPPUNIT_TEST(runEmptyGeometryFilterLenientTest);
-
-  //CPPUNIT_TEST(runInvalidGeometryFilterTest);
-  //CPPUNIT_TEST(runInvalidAdditionalFilterTest);
-  //CPPUNIT_TEST(runNonBoundableReaderTest);
-  //CPPUNIT_TEST(runNonGeoJsonTest);
+  // TODO: remove these
+//  CPPUNIT_TEST(runPolyLenientOsmTest);
+//  CPPUNIT_TEST(runPolyStrictOsmTest);
+//  CPPUNIT_TEST(runPoiStrictOsmTest);
+//  CPPUNIT_TEST(runLinearLenientOsmTest);
+//  CPPUNIT_TEST(runLinearStrictOsmTest);
+//  CPPUNIT_TEST(runPolyLenientJsonTest);
+//  CPPUNIT_TEST(runPolyStrictJsonTest);
+//  CPPUNIT_TEST(runPoiStrictJsonTest);
+//  CPPUNIT_TEST(runLinearLenientJsonTest);
+//  CPPUNIT_TEST(runLinearStrictJsonTest);
+  CPPUNIT_TEST(runInvalidGeometryFilterTest);
+  CPPUNIT_TEST(runInvalidAdditionalFilterTest);
+  CPPUNIT_TEST(runNonBoundableReaderTest);
+  CPPUNIT_TEST(runGeoJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -94,18 +80,94 @@ public:
     "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
     "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/")
   {
-    setResetType(ResetAll);
+    //setResetType(ResetAll);
 
-    conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
-    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
-    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
-    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+//    conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
+//    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+//    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
+//    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
 //      "ChangesetReplacementCreatorTest");
     // for testing only
     //conf().set(ConfigOptions::getDebugMapsFilenameKey(), "/home/vagrant/hoot/tmp/debug.osm");
   }
+
+  void runInvalidGeometryFilterTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    try
+    {
+      changesetCreator.setGeometryFilters(QStringList("hoot::TagCriterion"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid feature geometry type filter"));
+  }
+
+  void runInvalidAdditionalFilterTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+
+    try
+    {
+      changesetCreator.setAdditionalFilters(QStringList("hoot::AddAttributesVisitor"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional filter"));
+
+    try
+    {
+      changesetCreator.setAdditionalFilters(QStringList("hoot::PoiCriterion"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional filter"));
+  }
+
+  void runNonBoundableReaderTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    try
+    {
+      changesetCreator.create(
+        "test-files/cmd/quick/ConvertGeoNames.geonames", "test2.osm", geos::geom::Envelope(), "");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+
+    CPPUNIT_ASSERT(exceptionMsg.endsWith("must implement Boundable."));
+  }
+
+  void runGeoJsonTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    try
+    {
+      changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("GeoJSON inputs are not supported.").toStdString(), exceptionMsg.toStdString());
+  }
+
+  // TODO: remove the rest of these tests
 
   void runPolyLenientOsmTest()
   {
@@ -167,98 +229,6 @@ public:
       "runLinearStrictJsonTest", GeometryTypeCriterion::GeometryType::Line, false, 47, 5, 36);
   }
 
-  void runMultipleGeometryFilter1LenientTest()
-  {
-    // buildings and roads; original non-point AOI
-    QStringList geometryFilters;
-    geometryFilters.append(QString::fromStdString(HighwayCriterion::className()));
-    geometryFilters.append(QString::fromStdString(BuildingCriterion::className()));
-    _runMultipleFilterXmlTest(
-      "runMultipleGeometryFilter1LenientTest",
-      geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902), geometryFilters, QStringList(),
-      true, 0, 0, 0);
-  }
-
-  void runMultipleGeometryFilter1StrictTest()
-  {
-    // buildings and roads; original non-point AOI
-    QStringList geometryFilters;
-    geometryFilters.append(QString::fromStdString(HighwayCriterion::className()));
-    geometryFilters.append(QString::fromStdString(BuildingCriterion::className()));
-    _runMultipleFilterXmlTest(
-      "runMultipleGeometryFilter1StrictTest",
-      geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902), geometryFilters, QStringList(),
-      false, 0, 0, 0);
-  }
-
-  void runMultipleGeometryFilter2LenientTest()
-  {
-    // buildings and pois; new AOI
-    QStringList geometryFilters;
-    geometryFilters.append(QString::fromStdString(BuildingCriterion::className()));
-    geometryFilters.append(QString::fromStdString(PoiCriterion::className()));
-    _runMultipleFilterXmlTest(
-      "runMultipleGeometryFilter2LenientTest",
-      geos::geom::Envelope(-71.47355, -71.4657, 42.47595, 42.47675), geometryFilters, QStringList(),
-      true, 0, 0, 0);
-  }
-
-  void runMultipleGeometryFilter2StrictTest()
-  {
-    // buildings and pois; new AOI
-    QStringList geometryFilters;
-    geometryFilters.append(QString::fromStdString(BuildingCriterion::className()));
-    geometryFilters.append(QString::fromStdString(PoiCriterion::className()));
-    _runMultipleFilterXmlTest(
-      "runMultipleGeometryFilter2StrictTest",
-      geos::geom::Envelope(-71.47355, -71.4657, 42.47595, 42.47675), geometryFilters, QStringList(),
-      false, 0, 0, 0);
-  }
-
-  void runAdditionalFilterTest()
-  {
-    // no geometry filter over original non-point AOI with some tag crit added
-    QStringList additionalFilters;
-    additionalFilters.append(QString::fromStdString(TagCriterion::className()));
-    conf().set("tag.criterion.kvps", "amenity=restaurant");
-    _runMultipleFilterXmlTest(
-      "runAdditionalFilterTest",
-      geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902), QStringList(),
-      additionalFilters, true, 0, 0, 0);
-  }
-
-  void runGeometryAndAdditionalFilterTest()
-  {
-    // buildings and pois; new AOI with some tag crit added
-    QStringList geometryFilters;
-    geometryFilters.append(QString::fromStdString(BuildingCriterion::className()));
-    geometryFilters.append(QString::fromStdString(PoiCriterion::className()));
-    QStringList additionalFilters;
-    additionalFilters.append(QString::fromStdString(TagCriterion::className()));
-    _runMultipleFilterXmlTest(
-      "runGeometryAndAdditionalFilterTest",
-      geos::geom::Envelope(-71.47355, -71.4657, 42.47595, 42.47675), geometryFilters,
-      additionalFilters, true, 0, 0, 0);
-  }
-
-  void runEmptyGeometryFilterLenientTest()
-  {
-    //original non-point AOI
-    _runMultipleFilterXmlTest(
-      "runEmptyGeometryFilterLenientTest",
-      geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902), QStringList(), QStringList(),
-      true, 0, 0, 0);
-  }
-
-  void runEmptyGeometryFilterStrictTest()
-  {
-    //original non-point AOI
-    _runMultipleFilterXmlTest(
-      "runEmptyGeometryFilterStrictTest",
-      geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902), QStringList(), QStringList(),
-      false, 0, 0, 0);
-  }
-
 private:
 
   void _copyJson(const QString& inXmlFile, const QString& outFile)
@@ -266,8 +236,6 @@ private:
     LOG_DEBUG("Converting xml: " << inXmlFile << " to json: " << outFile << "...");
     DataConverter().convert(inXmlFile, outFile);
   }
-
-  // TODO: Can probably collapse the single/multiple filter code paths into one.
 
   void _runSingleGeometryFilterTest(
     const QString& testName, const GeometryTypeCriterion::GeometryType& geometryType,
@@ -424,117 +392,6 @@ private:
     //conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
   }
 
-  OsmMapPtr _getMultipleFilterXmlTestMap(
-    const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
-    const QList<std::shared_ptr<SetTagValueVisitor>>& tagVisitors, const bool perturb)
-  {
-    LOG_DEBUG("Preparing map from: " << sourceFile << "...");
-
-    OsmMapPtr map(new OsmMap());
-    map->setIdGenerator(idGen);
-    IoUtils::loadMap(map, sourceFile, false);
-
-    for (QList<std::shared_ptr<SetTagValueVisitor>>::const_iterator itr = tagVisitors.begin();
-         itr != tagVisitors.end(); ++itr)
-    {
-      std::shared_ptr<SetTagValueVisitor> vis = *itr;
-      map->visitRw(*vis);
-    }
-
-    if (perturb)
-    {
-      LOG_DEBUG("Perturbing map...");
-      PertyOp perturber;
-      perturber.setSystematicError(15.0, 15.0);
-      perturber.setSeed(1);
-      perturber.setNamedOps(QStringList());
-      perturber.apply(map);
-      MapProjector::projectToWgs84(map);  // perty works in planar
-    }
-
-    //AddUuidVisitor uuidAdder("uuid");
-    //map->visitRw(uuidAdder);
-
-    return map;
-  }
-
-  void _prepMultipleFilterXmlInputData(
-    const QString& testName,  const QStringList& geometryFilters)
-  {
-    LOG_DEBUG("Preparing input data...");
-
-    const QString refSourceFile = "test-files/BostonSubsetRoadBuilding_FromOsm.osm";
-    const QString secSourceFile = refSourceFile;
-
-    QList<std::shared_ptr<SetTagValueVisitor>> tagVisitors;
-
-    if (geometryFilters.contains(QString::fromStdString(HighwayCriterion::className())))
-    {
-      tagVisitors.append(std::shared_ptr<SetTagValueVisitor>(
-        new SetTagValueVisitor(
-          "note", "Highway 1", false, QString::fromStdString(HighwayCriterion::className()))));
-    }
-    if (geometryFilters.contains(QString::fromStdString(BuildingCriterion::className())))
-    {
-      tagVisitors.append(std::shared_ptr<SetTagValueVisitor>(
-        new SetTagValueVisitor(
-          "name", "Building 1", false, QString::fromStdString(BuildingCriterion::className()))));
-    }
-    OsmMapPtr refMap =
-      _getMultipleFilterXmlTestMap(
-        refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), tagVisitors, true);
-    IoUtils::saveMap(refMap, _outputPath + testName + "-ref-in.osm");
-
-    tagVisitors.clear();
-    if (geometryFilters.contains(QString::fromStdString(HighwayCriterion::className())))
-    {
-      tagVisitors.append(std::shared_ptr<SetTagValueVisitor>(
-        new SetTagValueVisitor(
-          "note", "Highway 2", false, QString::fromStdString(HighwayCriterion::className()))));
-    }
-    if (geometryFilters.contains(QString::fromStdString(BuildingCriterion::className())))
-    {
-      tagVisitors.append(std::shared_ptr<SetTagValueVisitor>(
-        new SetTagValueVisitor(
-          "name", "Building 2", false, QString::fromStdString(BuildingCriterion::className()))));
-    }
-    OsmMapPtr secMap =
-      _getMultipleFilterXmlTestMap(
-        secSourceFile, std::shared_ptr<IdGenerator>(new DefaultIdGenerator()), tagVisitors, false);
-    IoUtils::saveMap(secMap, _outputPath + testName + "-sec-in.osm");
-
-    _copyJson(_outputPath + testName + "-sec-in.osm", _outputPath + "temp-do-not-use.json");
-  }
-
-  void _runMultipleFilterXmlTest(
-    const QString& testName, const geos::geom::Envelope& bounds, const QStringList& geometryFilters,
-    const QStringList& additionalFilters, const bool lenientBounds,
-    const int numExpectedCreateStatements, const int numExpectedModifyStatements,
-    const int numExpectedDeleteStatements)
-  {
-    DisableLog dl;
-
-    _setWaySnapOpts(lenientBounds);
-    _prepMultipleFilterXmlInputData(testName, geometryFilters);
-
-    const QString outFile = _outputPath + testName + "-out.osc";
-
-    ChangesetReplacementCreator changesetCreator;
-    changesetCreator.setLenientBounds(lenientBounds);
-    changesetCreator.setGeometryFilters(geometryFilters);
-    changesetCreator.setAdditionalFilters(additionalFilters);
-    changesetCreator.create(
-      _outputPath + testName + "-ref-in.osm", _outputPath + testName + "-sec-in.osm", bounds,
-      outFile);
-
-    CPPUNIT_ASSERT_EQUAL(
-      numExpectedCreateStatements, changesetCreator._changesetCreator->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(
-      numExpectedModifyStatements, changesetCreator._changesetCreator->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(
-      numExpectedDeleteStatements, changesetCreator._changesetCreator->getNumDeleteChanges());
-  }
-
   void _setWaySnapOpts(const bool lenientBounds)
   {
     double existingWayNodeTolerance = 45.0;
@@ -589,6 +446,6 @@ private:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetReplacementCreatorTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetReplacementCreatorTest, "quick");
 
 }
