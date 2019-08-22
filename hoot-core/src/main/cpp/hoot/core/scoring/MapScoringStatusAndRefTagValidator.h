@@ -22,35 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#ifndef MAPSCORDINGSTATUSANDREFTAGVALIDATOR_H
+#define MAPSCORDINGSTATUSANDREFTAGVALIDATOR_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * Validates the tags of map for use in scoring
  */
-class SimpleTestListener : public CppUnit::TestListener
+class MapScoringStatusAndRefTagValidator
 {
 
 public:
 
-  SimpleTestListener();
+  MapScoringStatusAndRefTagValidator();
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
-
-private:
-
-  bool _failure;
+  /**
+   * Ensures that all elements with status Unknown1 have no REF2 tags and that all elements with
+   * status Uknown2 have no REF1 tags
+   *
+   * @param map the map to be examined
+   * @return true if the tags meet the required conditions; false otherwise
+   */
+  static bool allTagsAreValid(const ConstOsmMapPtr& map);
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // MAPSCORDINGSTATUSANDREFTAGVALIDATOR_H

@@ -22,35 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#ifndef PERTY_TEST_RUNNER_H
+#define PERTY_TEST_RUNNER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// hoot
+#include <hoot/core/util/HootException.h>
+
+// Qt
+#include <QString>
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ *
  */
-class SimpleTestListener : public CppUnit::TestListener
+class PertyTestResult
 {
 
 public:
 
-  SimpleTestListener();
+  PertyTestResult();
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
 
 private:
 
-  bool _failure;
+
+
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // PERTY_TEST_RUNNER_H

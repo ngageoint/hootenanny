@@ -22,35 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#ifndef ABSTRACTREGRESSIONTEST_H
+#define ABSTRACTREGRESSIONTEST_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// Hoot
+#include <hoot/core/test/AbstractTest.h>
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * Abstract base class for hoot regression tests
  */
-class SimpleTestListener : public CppUnit::TestListener
+class AbstractRegressionTest : public AbstractTest
 {
 
 public:
 
-  SimpleTestListener();
+  AbstractRegressionTest(QDir d, QStringList confs);
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
+  virtual void runTest();
 
-private:
+  double getScore() const { return _score; }
+  void setScore(double score) { _score = score; }
 
-  bool _failure;
+  int getTestStatus() const { return _testStatus; }
+  void setTestStatus(int status) { _testStatus = status; }
+
+protected:
+
+  virtual void _parseScore() = 0;
+
+  //output score
+  double _score;
+
+  //returned makefile status value
+  int _testStatus;
+
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // ABSTRACTREGRESSIONTEST_H
