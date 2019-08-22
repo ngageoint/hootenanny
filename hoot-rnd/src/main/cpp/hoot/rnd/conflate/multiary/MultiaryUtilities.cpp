@@ -36,7 +36,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryPoiMergerCreator.h>
-#include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
+#include <hoot/core/conflate/SearchBoundsCalculator.h>
 
 namespace hoot
 {

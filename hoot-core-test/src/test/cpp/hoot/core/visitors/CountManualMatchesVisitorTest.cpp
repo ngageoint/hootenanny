@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,35 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/CountManualMatchesVisitor.h>
 
 namespace hoot
 {
 
-/**
- * Wrapper around CPPUnit test listener for test failure notification purposes
- */
-class SimpleTestListener : public CppUnit::TestListener
+class CountManualMatchesVisitorTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(CountManualMatchesVisitorTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  SimpleTestListener();
+  CountManualMatchesVisitorTest() : HootTestFixture("test-files/visitors/", UNUSED_PATH)
+  {
+  }
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
+  void runBasicTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      _inputPath + "CountManualMatchesVisitorTest.osm",
+      false,
+      Status::Unknown2);
 
-private:
+    CountManualMatchesVisitor uut;
+    map->visitRo(uut);
+    int numMatchesMade = (int)uut.getStat();
+    CPPUNIT_ASSERT_EQUAL(35, numMatchesMade);
+  }
 
-  bool _failure;
 };
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CountManualMatchesVisitorTest, "quick");
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+

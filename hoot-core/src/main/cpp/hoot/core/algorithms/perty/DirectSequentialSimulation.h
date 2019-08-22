@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,35 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#ifndef DIRECT_SEQUENTIAL_SIMULATION_H
+#define DIRECT_SEQUENTIAL_SIMULATION_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// boost
+#include <boost/random/linear_congruential.hpp>
+
+// hoot
+#include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ *
  */
-class SimpleTestListener : public CppUnit::TestListener
+class DirectSequentialSimulation : public PermuteGridCalculator
 {
-
 public:
 
-  SimpleTestListener();
+  static std::string className() { return "hoot::DirectSequentialSimulation"; }
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
+  DirectSequentialSimulation();
+
+  /**
+   * @see PermuteGridCalculator
+   */
+  virtual cv::Mat permute(geos::geom::Envelope env, int& pointRows, int& pointCols);
 
 private:
 
-  bool _failure;
+  cv::Mat _gm2dPerturb2(geos::geom::Envelope env, Meters sigma, boost::minstd_rand& rng);
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // DIRECT_SEQUENTIAL_SIMULATION_H
