@@ -127,7 +127,7 @@ protected:
   /** URL of the API endpoint to query */
   QUrl _url;
   /** List of result strings, one for each HTTP response */
-  QStringList _results;
+  QStringList _resultsList;
   /** Total number of results received, should match _totalEnvelopes at the end to ensure all data has arrived */
   int _totalResults;
   /** Mutex guarding the results list */

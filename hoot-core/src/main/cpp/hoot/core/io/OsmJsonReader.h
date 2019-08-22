@@ -43,6 +43,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapReader.h>
+#include <hoot/core/io/ParallelBoundedApiReader.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Boundable.h>
@@ -106,7 +107,7 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable
+class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable, private ParallelBoundedApiReader
 {
 public:
 
@@ -266,18 +267,6 @@ protected:
 
   /** List of JSON strings, one for each HTTP response */
   QStringList _results;
-  /** Mutex guarding the results list */
-  std::mutex _resultsMutex;
-  /** Essentially the work queue of bounding boxes that the threads query from */
-  QList<geos::geom::Envelope> _bboxes;
-  /** Mutex guarding the bounding box list */
-  std::mutex _bboxMutex;
-  /** Flag indicating that the _bboxes list is still being loaded, set to false when completely loaded */
-  bool _bboxContinue;
-  /** Grid division size (0.25 degrees lat/lon default) */
-  double _coordGridSize;
-  /** Number of threads to process the HTTP requests */
-  int _threadCount;
 
   geos::geom::Envelope _bounds;
   // only valid is _bounds is not null
@@ -339,11 +328,6 @@ protected:
    *   spawns a thread pool to query bounding boxes
    */
   void _readFromHttp();
-  /**
-   * @brief _doHttpRequestFunc Thread processing function that loops processing a bounding box from the
-   *   list until the queue is empty.
-   */
-  void _doHttpRequestFunc();
 
   void _readToMap();
 

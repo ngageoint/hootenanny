@@ -69,8 +69,7 @@ _missingWayCount(0),
 _useDataSourceId(false),
 _inputCompressed(false),
 _numRead(0),
-_keepImmediatelyConnectedWaysOutsideBounds(false),
-_ignoreDuplicates(false)
+_keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());
 }

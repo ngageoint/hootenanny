@@ -126,11 +126,6 @@ public:
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
 
-  /**
-   * @brief setIgnoreDuplicates When an element is read should the duplicate ID be ignored or throw an error
-   */
-  void setIgnoreDuplicates(bool ignore) { _ignoreDuplicates = ignore; }
-
 protected:
 
   bool _osmFound;
@@ -182,8 +177,6 @@ protected:
   geos::geom::Envelope _bounds;
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
-  //  Ignore the duplicate IDs or throw an error
-  bool _ignoreDuplicates;
 
   void _createNode(const QXmlAttributes& attributes);
   void _createWay(const QXmlAttributes& attributes);

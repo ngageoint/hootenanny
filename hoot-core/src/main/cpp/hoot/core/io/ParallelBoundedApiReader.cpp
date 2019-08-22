@@ -113,8 +113,8 @@ bool ParallelBoundedApiReader::getSingleResult(QString& result)
   bool success = true;
   //  takeFirst() pops the first element and returns it
   _resultsMutex.lock();
-  if (_results.size() > 0)
-    result = _results.takeFirst();
+  if (_resultsList.size() > 0)
+    result = _resultsList.takeFirst();
   else
     success = false;
   _resultsMutex.unlock();
@@ -125,7 +125,7 @@ bool ParallelBoundedApiReader::getSingleResult(QString& result)
 bool ParallelBoundedApiReader::hasMoreResults()
 {
   _resultsMutex.lock();
-  bool more = _results.size() > 0;
+  bool more = _resultsList.size() > 0;
   _resultsMutex.unlock();
   bool done = isComplete();
   //  There are more results when the queue contains results
@@ -200,7 +200,7 @@ void ParallelBoundedApiReader::_process()
       case 200:
         //  Store the result and increment the number of results received
         _resultsMutex.lock();
-        _results.append(result);
+        _resultsList.append(result);
         _totalResults++;
         _resultsMutex.unlock();
         //  Write out a "debug map" for each result that comes in
