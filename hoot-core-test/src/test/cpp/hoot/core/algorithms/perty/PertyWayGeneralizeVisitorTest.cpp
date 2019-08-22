@@ -67,8 +67,8 @@ public:
   QMap<QString, OsmMapPtr> _inputMapCache;
 
   PertyWayGeneralizeVisitorTest()
-    : HootTestFixture("test-files/rnd/perty/PertyWayGeneralizeVisitorTest/",
-                      "test-output/rnd/perty/PertyWayGeneralizeVisitorTest/")
+    : HootTestFixture("test-files/algorithms/perty/PertyWayGeneralizeVisitorTest/",
+                      "test-output/algorithms/perty/PertyWayGeneralizeVisitorTest/")
   {
     setResetType(ResetBasic);
   }

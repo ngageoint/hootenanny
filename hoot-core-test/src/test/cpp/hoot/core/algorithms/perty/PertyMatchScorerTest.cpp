@@ -50,8 +50,8 @@ class PertyMatchScorerTest : public HootTestFixture
 public:
 
   PertyMatchScorerTest()
-    : HootTestFixture("test-files/rnd/perty/PertyMatchScorerTest/",
-                      "test-output/rnd/perty/PertyMatchScorerTest/")
+    : HootTestFixture("test-files/algorithms/perty/PertyMatchScorerTest/",
+                      "test-output/algorithms/perty/PertyMatchScorerTest/")
   {
     setResetType(ResetAll);
   }

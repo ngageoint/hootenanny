@@ -55,8 +55,8 @@ class PertyTestRunnerTest : public HootTestFixture
 public:
 
   PertyTestRunnerTest()
-    : HootTestFixture("test-files/rnd/perty/PertyTestRunnerTest/",
-                      "test-output/rnd/perty/PertyTestRunnerTest/")
+    : HootTestFixture("test-files/algorithms/perty/PertyTestRunnerTest/",
+                      "test-output/rnd/algorithms/perty/PertyTestRunnerTest/")
   {
     setResetType(ResetAll);
     TestUtils::mkpath(_outputPath + "Dynamic");

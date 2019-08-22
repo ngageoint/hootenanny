@@ -50,8 +50,8 @@ public:
 
 
   ImplicitTagRulesDatabaseDeriverTest()
-    : HootTestFixture("test-files/core/schema/ImplicitTagRulesDatabaseDeriverTest/",
-                      "test-output/core/schema/ImplicitTagRulesDatabaseDeriverTest/")
+    : HootTestFixture("test-files/schema/ImplicitTagRulesDatabaseDeriverTest/",
+                      "test-output/schema/ImplicitTagRulesDatabaseDeriverTest/")
   {
   }
 
@@ -168,7 +168,8 @@ public:
     rulesDeriver.setMinWordLength(1);
     rulesDeriver.setUseSchemaTagValuesForWordsOnly(true);
     rulesDeriver.setCustomRuleFile("");
-    rulesDeriver.setTagIgnoreFile(_inputPath + "ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
+    rulesDeriver.setTagIgnoreFile(
+      _inputPath + "ImplicitTagRulesDatabaseDeriverTest-tag-ignore-list");
     rulesDeriver.setWordIgnoreFile("");
     rulesDeriver.deriveRulesDatabase(input, dbOutputFile);
 

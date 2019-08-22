@@ -57,8 +57,8 @@ class PertyWaySplitVisitorTest : public HootTestFixture
 public:
 
   PertyWaySplitVisitorTest()
-    : HootTestFixture("test-files/rnd/perty/PertyWaySplitVisitorTest/",
-                      "test-output/rnd/perty/PertyWaySplitVisitorTest/")
+    : HootTestFixture("test-files/algorithms/perty/PertyWaySplitVisitorTest/",
+                      "test-output/algorithms/perty/PertyWaySplitVisitorTest/")
   {
     setResetType(ResetAll);
   }
