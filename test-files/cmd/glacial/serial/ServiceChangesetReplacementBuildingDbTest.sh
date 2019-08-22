@@ -7,7 +7,7 @@ set -e
 # features crossing the AOI may be included in the output or conflated with reference features. This workflow should work other polygon 
 # data types, but only buildings have been tested with it so far.
 
-TEST_NAME=RndServiceChangesetReplacementBuildingDbTest
+TEST_NAME=ServiceChangesetReplacementBuildingDbTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR

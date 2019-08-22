@@ -7,7 +7,7 @@ set -e
 # features outside the AOI or crossing it will be included in the output or conflated with anything in the ref layer.  This workflow could 
 # work for other polygon data types but only buildings have been attempted so far.
 
-TEST_NAME=RndServiceChangesetReplacementBuildingStrictDbTest
+TEST_NAME=ServiceChangesetReplacementBuildingStrictDbTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
