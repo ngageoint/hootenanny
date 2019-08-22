@@ -50,8 +50,8 @@ namespace hoot
 {
 
 /*
- * These tests are very similar to the tests in Service*ReplacementTest.sh, which test the
- * replacement changeset workflow against API DB data sources. Differences here are that these
+ * These tests are very similar to the tests in ServiceChangesetReplacement*DbTest.sh, which test
+ * the replacement changeset workflow against API DB data sources. Differences here are that these
  * tests test against file data sources only, don't interact with a database, and don't try to
  * apply the output changeset.
  *
@@ -60,7 +60,7 @@ namespace hoot
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  // TODO: add error handling tests
+  // TODO: reduce this down to just error handling tests
   CPPUNIT_TEST(runPolyLenientOsmTest);
   CPPUNIT_TEST(runPolyStrictOsmTest);
   CPPUNIT_TEST(runPoiStrictOsmTest);

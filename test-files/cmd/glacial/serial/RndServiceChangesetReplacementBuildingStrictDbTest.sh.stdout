@@ -1,0 +1,39 @@
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the reference dataset to an osm api db (contains features to be replaced)...
+
+15:53:34.531 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73301713) in Way(9514937).
+15:53:34.531 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73191975) in Way(9514937).
+15:53:34.532 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73238746) in Way(9514937).
+15:53:34.532 WARN   .../hoot/core/io/OsmXmlReader.cpp( 526) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Writing the secondary dataset to a hoot api db (contains features to replace with)...
+
+15:53:39.864 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73301713) in Way(9514937).
+15:53:39.864 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73191975) in Way(9514937).
+15:53:39.865 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73238746) in Way(9514937).
+15:53:39.865 WARN   .../hoot/core/io/OsmXmlReader.cpp( 526) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset...
+
+
+Applying the changeset to the reference data...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.4866588, max_lat=42.4901059, min_lon=-71.46973680000001, max_lon=-71.46607400000001, num_changes=1047
+Node(s) Created: 475
+Node(s) Modified: 0
+Node(s) Deleted: 465
+Way(s) Created: 54
+Way(s) Modified: 1
+Way(s) Deleted: 52
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+Reading the entire reference dataset out for verification...
+
