@@ -102,7 +102,7 @@ public:
   }
 
   void runPolyLenientOsmTest()
-  {     
+  {
     _runSingleGeometryFilterTest(
       "runPolyLenientOsmTest", GeometryTypeCriterion::GeometryType::Polygon, true, 632, 0, 583);
   }
@@ -114,7 +114,7 @@ public:
   }
 
   void runPoiStrictOsmTest()
-  {  
+  {
     _runSingleGeometryFilterTest(
       "runPoiStrictOsmTest", GeometryTypeCriterion::GeometryType::Point, false, 3, 1, 1);
   }
