@@ -3778,6 +3778,13 @@ If the script runs longer than the specified time, then it is forcefully stopped
 the value is set to -1, then there is no time limit for script tests.  This is useful when
 debugging tests which may hang on a remote build server.
 
+=== search.radius.area
+
+* Data Type: double
+* Default Value: `${search.radius.generic.polygon}`
+
+The search radius to use when conflating areas.  See `search.radius.default`
+
 === search.radius.calculator.element.criterion
 
 * Data Type: string
