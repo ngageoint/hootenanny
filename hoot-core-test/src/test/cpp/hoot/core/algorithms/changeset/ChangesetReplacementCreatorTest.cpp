@@ -71,6 +71,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPoiStrictJsonTest);
   CPPUNIT_TEST(runLinearLenientJsonTest);
   CPPUNIT_TEST(runLinearStrictJsonTest);
+
   //CPPUNIT_TEST(runMultipleGeometryFilter1LenientTest);
   //CPPUNIT_TEST(runMultipleGeometryFilter1StrictTest);
   //CPPUNIT_TEST(runMultipleGeometryFilter2LenientTest);
@@ -79,6 +80,11 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 //  CPPUNIT_TEST(runGeometryAndAdditionalFilterTest);
 //  CPPUNIT_TEST(runEmptyGeometryFilterStrictTest);
    //CPPUNIT_TEST(runEmptyGeometryFilterLenientTest);
+
+  //CPPUNIT_TEST(runInvalidGeometryFilterTest);
+  //CPPUNIT_TEST(runInvalidAdditionalFilterTest);
+  //CPPUNIT_TEST(runNonBoundableReaderTest);
+  //CPPUNIT_TEST(runNonGeoJsonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

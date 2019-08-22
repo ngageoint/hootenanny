@@ -28,14 +28,14 @@
 #define WAY_NODE_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class WayNodeCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
+class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
@@ -51,8 +51,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Point; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Point; }
 
 private:
 

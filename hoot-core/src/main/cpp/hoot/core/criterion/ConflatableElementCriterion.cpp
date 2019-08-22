@@ -74,12 +74,14 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
        itr != _conflatableCriteria.end(); ++itr)
   {
+    LOG_VART(itr.key());
     if (itr.value()->isSatisfied(e))
     {
-      // It is something we can conflate.
+      // It is something we can conflate?
       conflatableCriteriaForElement.append(itr.key());
     }
   }
+  LOG_VART(conflatableCriteriaForElement);
   return conflatableCriteriaForElement;
 }
 

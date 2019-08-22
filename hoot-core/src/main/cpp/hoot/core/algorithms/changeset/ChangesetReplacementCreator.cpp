@@ -68,6 +68,7 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
