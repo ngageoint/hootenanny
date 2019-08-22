@@ -22,35 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+#ifndef __RELEASETESTFITNESSFUNCTION_H__
+#define __RELEASETESTFITNESSFUNCTION_H__
+
+// Hoot
+#include <hoot/core/conflate/optimization/AbstractRegressionTestFitnessFunction.h>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * Fitness function which optimizes configuration settings against Hootenanny regression release
+ * test data.
  */
-class SimpleTestListener : public CppUnit::TestListener
+class ReleaseTestFitnessFunction : public AbstractRegressionTestFitnessFunction
 {
 
 public:
 
-  SimpleTestListener();
-
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
-
-private:
-
-  bool _failure;
+  /**
+   * Constructor
+   *
+   * @param dir base dir for the tests
+   * @param configFile custom config file to pass to the associated test suite
+   */
+  ReleaseTestFitnessFunction(QString dir, QString configFile);
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // __RELEASETESTFITNESSFUNCTION_H__

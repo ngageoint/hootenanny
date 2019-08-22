@@ -22,35 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#ifndef MATCH_SCORING_MAP_PREPARER_H
+#define MATCH_SCORING_MAP_PREPARER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// hoot
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * Prepares a map for match scoring
  */
-class SimpleTestListener : public CppUnit::TestListener
+class MatchScoringMapPreparer
 {
-
 public:
 
-  SimpleTestListener();
+  MatchScoringMapPreparer();
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
+  /**
+    Prepares a map for match scoring
 
-private:
-
-  bool _failure;
+    @param map the map to prepare
+    @param removeNodes if true, removes all nodes from the map
+    */
+  void prepMap(OsmMapPtr map, const bool removeNodes);
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // MATCH_SCORING_MAP_PREPARER_H

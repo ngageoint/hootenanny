@@ -22,35 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#ifndef RNGCONSUMER_H
+#define RNGCONSUMER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+// boost
+#include <boost/random/linear_congruential.hpp>
 
 namespace hoot
 {
 
 /**
- * Wrapper around CPPUnit test listener for test failure notification purposes
+ * Consumes a random number generator.
  */
-class SimpleTestListener : public CppUnit::TestListener
+class RngConsumer
 {
-
 public:
 
-  SimpleTestListener();
+  virtual ~RngConsumer()
+  {
+  }
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
-
-private:
-
-  bool _failure;
+  /**
+   * Set the classes random number generator. The class should use a reference to this random
+   * number generator and does not assume ownership.
+   */
+  virtual void setRng(boost::minstd_rand& rng) = 0;
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // RNGCONSUMER_H

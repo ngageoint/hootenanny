@@ -24,33 +24,16 @@
  *
  * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+#include "ReleaseTestFitnessFunction.h"
 
 namespace hoot
 {
 
-/**
- * Wrapper around CPPUnit test listener for test failure notification purposes
- */
-class SimpleTestListener : public CppUnit::TestListener
+ReleaseTestFitnessFunction::ReleaseTestFitnessFunction(QString dir, QString configFile) :
+//the test dir extension is hardcoded since its unlikely to change
+AbstractRegressionTestFitnessFunction(dir, configFile, ".release")
 {
-
-public:
-
-  SimpleTestListener();
-
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
-
-private:
-
-  bool _failure;
-};
-
 }
 
-#endif // SIMPLETESTLISTENER_H
+}

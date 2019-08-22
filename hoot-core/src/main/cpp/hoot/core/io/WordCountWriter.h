@@ -22,35 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+#ifndef WORDCOUNTWRITER_H
+#define WORDCOUNTWRITER_H
+
+// Qt
+#include <QVector>
+#include <QString>
 
 namespace hoot
 {
 
-/**
- * Wrapper around CPPUnit test listener for test failure notification purposes
- */
-class SimpleTestListener : public CppUnit::TestListener
-{
+class WordCount;
 
+class WordCountWriter
+{
 public:
 
-  SimpleTestListener();
+  static QString totalWordCount() { return QString("Total word count:"); }
 
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
+  /**
+   * Writes word counts to a database
+   */
+  WordCountWriter(long maxFrequent) : _maxFrequent(maxFrequent) {}
+
+  virtual ~WordCountWriter() {}
+
+  void write(QString basePath, QVector<WordCount> words);
 
 private:
 
-  bool _failure;
+  long _maxFrequent;
 };
 
 }
 
-#endif // SIMPLETESTLISTENER_H
+#endif // WORDCOUNTWRITER_H

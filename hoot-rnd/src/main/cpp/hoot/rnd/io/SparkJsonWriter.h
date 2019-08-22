@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/io/PartialOsmMapWriter.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
-#include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
+#include <hoot/core/conflate/SearchBoundsCalculator.h>
 
 // Qt
 #include <QFile>

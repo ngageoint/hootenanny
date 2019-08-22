@@ -22,35 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef SIMPLETESTLISTENER_H
-#define SIMPLETESTLISTENER_H
+#include "CountManualMatchesVisitor.h"
 
-// Cpp Unit
-#include <cppunit/TestListener.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-/**
- * Wrapper around CPPUnit test listener for test failure notification purposes
- */
-class SimpleTestListener : public CppUnit::TestListener
+HOOT_FACTORY_REGISTER(ElementVisitor, CountManualMatchesVisitor)
+
+CountManualMatchesVisitor::CountManualMatchesVisitor() :
+_numManualMatches(0)
 {
-
-public:
-
-  SimpleTestListener();
-
-  virtual void addFailure( const CppUnit::TestFailure & /*failure*/ ) { _failure = true; }
-  bool isFailure() const { return _failure; }
-
-private:
-
-  bool _failure;
-};
-
 }
 
-#endif // SIMPLETESTLISTENER_H
+void CountManualMatchesVisitor::visit(const ConstElementPtr& e)
+{
+  const Tags& tags = e->getTags();
+  QStringList refIds;
+  if (tags.contains(MetadataTags::Ref2()))
+  {
+    const QString ref2Val = tags.get(MetadataTags::Ref2());
+    if (ref2Val.toLower() != "todo")
+    {
+      refIds += ref2Val.split(";");
+    }
+  }
+  if (tags.contains("REVIEW"))
+  {
+    refIds += tags.get("REVIEW").split(";");
+  }
+  refIds.removeAll("none");
+  _numManualMatches += refIds.size();
+}
+
+}
