@@ -36,7 +36,7 @@
 #include <hoot/core/io/DataConverter.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/rnd/perty/PertyOp.h>
+#include <hoot/core/algorithms/perty/PertyOp.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/PositiveIdGenerator.h>
