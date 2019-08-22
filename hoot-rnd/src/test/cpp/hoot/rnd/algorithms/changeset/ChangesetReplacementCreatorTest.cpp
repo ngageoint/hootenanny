@@ -60,6 +60,7 @@ namespace hoot
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
+  // TODO: add error handling tests
   CPPUNIT_TEST(runPolyLenientOsmTest);
   CPPUNIT_TEST(runPolyStrictOsmTest);
   CPPUNIT_TEST(runPoiStrictOsmTest);
@@ -70,7 +71,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runPoiStrictJsonTest);
   CPPUNIT_TEST(runLinearLenientJsonTest);
   CPPUNIT_TEST(runLinearStrictJsonTest);
- // CPPUNIT_TEST(runMultipleGeometryFilter1LenientTest);
+  //CPPUNIT_TEST(runMultipleGeometryFilter1LenientTest);
   //CPPUNIT_TEST(runMultipleGeometryFilter1StrictTest);
   //CPPUNIT_TEST(runMultipleGeometryFilter2LenientTest);
 //  CPPUNIT_TEST(runMultipleGeometryFilter2StrictTest);

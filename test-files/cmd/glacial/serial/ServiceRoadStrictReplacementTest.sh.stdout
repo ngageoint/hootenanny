@@ -6,22 +6,19 @@ Writing the reference dataset to an osm api db (contains features to be replaced
       1
 (1 row)
 
-14:30:14.460 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(73301713) in Way(9514937).
-14:30:14.460 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(73191975) in Way(9514937).
-14:30:14.460 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(73238746) in Way(9514937).
-14:30:14.460 WARN   .../hoot/core/io/OsmXmlReader.cpp( 525) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+15:12:38.098 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73301713) in Way(9514937).
+15:12:38.098 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73191975) in Way(9514937).
+15:12:38.098 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73238746) in Way(9514937).
+15:12:38.098 WARN   .../hoot/core/io/OsmXmlReader.cpp( 526) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Writing the secondary dataset to a hoot api db (contains features to replace with)...
 
-14:30:24.679 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(73301713) in Way(9514937).
-14:30:24.680 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(73191975) in Way(9514937).
-14:30:24.680 WARN   .../hoot/core/io/OsmXmlReader.cpp( 521) Missing Node(73238746) in Way(9514937).
-14:30:24.680 WARN   .../hoot/core/io/OsmXmlReader.cpp( 525) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+15:12:48.086 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73301713) in Way(9514937).
+15:12:48.086 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73191975) in Way(9514937).
+15:12:48.086 WARN   .../hoot/core/io/OsmXmlReader.cpp( 522) Missing Node(73238746) in Way(9514937).
+15:12:48.086 WARN   .../hoot/core/io/OsmXmlReader.cpp( 526) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
-Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (xml changeset out)...
-
-
-Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset  (sql changeset out)...
+Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset...
 
 
 Applying the changeset to the reference data...

@@ -37,25 +37,20 @@ echo "Writing the reference dataset to an osm api db (contains features to be re
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $REF_LAYER_FILE $REF_LAYER 
 # needed for debugging only:
-hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_LAYER $OUT_DIR/$TEST_NAME-ref-layer-original-from-db.osm
+#hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_LAYER $OUT_DIR/$TEST_NAME-ref-layer-original-from-db.osm
 echo ""
 echo "Writing the secondary dataset to a hoot api db (contains features to replace with)..."
 echo ""
 hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=false $SEC_LAYER_FILE $SEC_LAYER
 # needed for debugging only:
-hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-layer-original-from-db.osm
+#hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_LAYER $OUT_DIR/$TEST_NAME-sec-layer-original-from-db.osm
 
 # CHANGESET DERIVATION
 
-CHANGESET_DERIVATION_MSG="Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset"
 echo ""
-echo $CHANGESET_DERIVATION_MSG " (xml changeset out)..."
+echo "Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc --strict-bounds --geometry-filters "hoot::PoiCriterion" --write-bounds
-echo ""
-echo $CHANGESET_DERIVATION_MSG " (sql changeset out)..."
-echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --strict-bounds --geometry-filters "hoot::PoiCriterion"
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --strict-bounds --geometry-filters "hoot::PoiCriterion" --write-bounds
 
 # CHANGESET APPLICATION
 
