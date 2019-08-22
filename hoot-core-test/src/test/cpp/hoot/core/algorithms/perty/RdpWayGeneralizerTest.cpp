@@ -66,8 +66,8 @@ public:
   QMap<QString, QList<Coordinate>> _inputCoordsCache;
 
   RdpWayGeneralizerTest()
-    : HootTestFixture("test-files/rnd/perty/RdpWayGeneralizerTest/",
-                      "test-output/rnd/perty/RdpWayGeneralizerTest/")
+    : HootTestFixture("test-files/algorithms/perty/RdpWayGeneralizerTest/",
+                      "test-output/algorithms/perty/RdpWayGeneralizerTest/")
   {
     setResetType(ResetBasic);
   }
