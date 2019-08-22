@@ -56,11 +56,11 @@ echo ""
 echo $CHANGESET_DERIVATION_MSG " (xml changeset out)..."
 echo ""
 #-C NetworkAlgorithm.conf
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc --geometry-filters "hoot::HighwayCriterion" --write-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc --strict-bounds --geometry-filters "hoot::HighwayCriterion" --write-bounds
 echo ""
 echo $CHANGESET_DERIVATION_MSG " (sql changeset out)..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --geometry-filters "hoot::HighwayCriterion"
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --strict-bounds --geometry-filters "hoot::HighwayCriterion"
 
 # CHANGESET APPLICATION
 

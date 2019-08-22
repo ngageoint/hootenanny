@@ -33,6 +33,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/IoUtils.h>
+
 namespace hoot
 {
 
@@ -84,11 +85,11 @@ public:
       chainAdditionalFilters = true;
       args.removeAll("--chain-additional-filters");
     }
-    bool lenientBounds = false;
-    if (args.contains("--lenient-bounds"))
+    bool lenientBounds = true;
+    if (args.contains("--strict-bounds"))
     {
-      lenientBounds = true;
-      args.removeAll("--lenient-bounds");
+      lenientBounds = false;
+      args.removeAll("--strict-bounds");
     }
     bool printStats = false;
     if (args.contains("--stats"))

@@ -6,11 +6,12 @@
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two input OSM datasets
 within a given bounds, where the data from the secondary input dataset completely replaces data in the reference dataset. 
 
-The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing the AOI) and stitches up areas where 
-features must be clipped (e.g. roads crossing the AOI). The output changeset file can be applied directly to an OSM API database or the 
-Rails Port with the  +changeset-apply+ command. Generally, the reference data is sourced from an authoritative data store, like an OSM API 
-database. Element IDs for the first input (reference data) are retained and treated as data resident in an authoritative data store. Element 
-IDs for the second input (secondary dataset) are not retained and treated as completely new data. 
+The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing the specified bounds) and stitches up 
+areas where features must be clipped (e.g. roads crossing the specified bounds). The output changeset file can be applied directly to an 
+OSM API database or the Rails Port API with the  +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
+data store, like an OSM API database, and the secondary can be any type of data. Element IDs for the first input dataset (reference data) are 
+retained and treated as data resident in an authoritative data store. Element IDs for the second input dataset (secondary data) are not retained 
+and treated as completely new data. 
 
 * +input1+                     - OSM data reference input (e.g. .osm file); input must support bounded reading
 * +input2+                     - OSM data secondary input (e.g. .osm file); input must support bounded reading
@@ -18,13 +19,13 @@ IDs for the second input (secondary dataset) are not retained and treated as com
 * +output+                     - Output location (e.g. .osc or .osc.sql file)
 * +osmApiDatabaseUrl+          - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a 
                                  particular database instance when generating SQL changesets only (.osc.sql).
-* +--geometry-filters+         - Criteria used to determine the geometry type of the features that are replaced in 
-                                 the reference dataset. See the "Geometry Filtering" section for more detail.
-* +--additional-filters+       - Criteria used for filtering beyond what is specified in --geometry-filters. See the "Additional Filtering" 
-                                 section for more detail.
-* +--chain-additional-filters+ - Determines how the criteria specified in --additional-filters are applied.
-* +--lenient-bounds+           - Determines how strict the interpretation of the specified bounds is during feature replacement. See the 
+* +--strict-bounds+            - Determines how strict the interpretation of the specified bounds is during feature replacement. See the 
                                  "Bounds Handling" section for more detail.
+* +--geometry-filters+         - Optional criteria used to determine the geometry type of the features that are replaced in the reference 
+                                 dataset. See the "Geometry Filtering" section for more detail.
+* +--additional-filters+       - Optional criteria used for filtering beyond what is specified in --geometry-filters. See the "Additional 
+                                 Filtering" section for more detail.
+* +--chain-additional-filters+ - Determines how the criteria specified in --additional-filters are applied.
 * +--stats+                    - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only 
                                  valid for .osc output files)
 * +--write-bounds+             - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the 
@@ -33,7 +34,7 @@ IDs for the second input (secondary dataset) are not retained and treated as com
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--geometry-filters] [--additional-filters] [--chain-additional-filters] [--lenient-bounds] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--strict-bounds] [--geometry-filters] [--additional-filters] [--chain-additional-filters] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -41,7 +42,7 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 --------------------------------------
 hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
 
-hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion" --lenient-bounds
+hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion" --strict-bounds
 
 hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc --geometry-filters "hoot::BuildingCriterion" --stats
 
@@ -89,7 +90,7 @@ linear data should be slightly larger than the replacement AOI, so as not to dro
 
 ==== Strict Bounds Handling
 
-The following describes how the AOI is interpreted by the command when the +--lenient+ bounds option is absent.
+The following describes how the AOI is interpreted by the command when the +--strict-bounds+ option is present.
 
 ===== Points
 
@@ -108,7 +109,7 @@ The following describes how the AOI is interpreted by the command when the +--le
 
 ==== Lenient Bounds Handling
 
-The following describes how the AOI is interpreted by the command when the +--lenient+ bounds option is present.
+The following describes how the AOI is interpreted by the command when the +--strict-bounds+ bounds option is absent.
 
 ===== Points
 
