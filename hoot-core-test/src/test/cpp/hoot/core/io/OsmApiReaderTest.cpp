@@ -47,6 +47,7 @@ class OsmApiReaderTest : public HootTestFixture
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runSplitGeographicTest);
   CPPUNIT_TEST(runSplitElementsTest);
+  CPPUNIT_TEST(runFailureTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -76,7 +77,7 @@ public:
     OsmMapPtr map(new OsmMap());
 
     OsmApiReader reader;
-    //  Set the bounds to be smaller than 0.25 degrees squared
+    //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that there is no splitting
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + "/api/0.6/map");
     reader.read(map);
@@ -100,7 +101,7 @@ public:
     OsmMapPtr map(new OsmMap());
 
     OsmApiReader reader;
-    //  Set the bounds to be larger than 0.25 degrees squared to cause a geographic split
+    //  Set the bounds to be larger than 0.25 degrees by 0.25 degrees to cause a geographic split
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1142, 40.4557, 40.7577));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + "/api/0.6/map");
     reader.read(map);
@@ -124,7 +125,7 @@ public:
     OsmMapPtr map(new OsmMap());
 
     OsmApiReader reader;
-    //  Set the bounds to be smaller than 0.25 degrees squared so that it is split by elements on the server
+    //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that it is split by elements on the server
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + "/api/0.6/map");
     reader.read(map);
@@ -138,6 +139,25 @@ public:
     writer.close();
 
     HOOT_FILE_EQUALS(_inputPath + "SplitTestExpected.osm", output);
+  }
+
+  void runFailureTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      OsmMapPtr map(new OsmMap());
+      OsmApiReader reader;
+      //  Set the bounds to be larger than 1 degree by 1 degree so that it will fail
+      reader.setBounds(geos::geom::Envelope(-111.3914, -110.2914, 40.5557, 41.7557));
+      reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + "/api/0.6/map");
+      reader.read(map);
+    }
+    catch (const UnsupportedException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg == "Cannot request areas larger than 1.0000 square degrees.");
   }
 };
 

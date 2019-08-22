@@ -3486,6 +3486,14 @@ The number of trees used to train a random forest conflation model.
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
 
+=== reader.http.bbox.max.download.size
+
+* Data Type: double
+* Default Value: `1.0`
+
+Maximum size of an overall bounding box in degrees before Hootenanny rejects the request,
+reject anything larger than 1 square degree.
+
 === reader.http.bbox.max.size
 
 * Data Type: double

@@ -45,6 +45,7 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
     _totalEnvelopes(0),
     _bboxContinue(true),
     _coordGridSize(ConfigOptions().getReaderHttpBboxMaxSize()),
+    _maxGridSize(ConfigOptions().getReaderHttpBboxMaxDownloadSize()),
     _threadCount(ConfigOptions().getReaderHttpBboxThreadCount()),
     _fatalError(false),
     _useOsmApiBboxFormat(useOsmApiBboxFormat),
@@ -61,6 +62,13 @@ ParallelBoundedApiReader::~ParallelBoundedApiReader()
 
 void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom::Envelope& envelope)
 {
+  //  Validate the size of the envelope before beginning, don't allow the whole earth to be downloaded!
+  if (envelope.getWidth() > _maxGridSize || envelope.getHeight() > _maxGridSize)
+  {
+    throw UnsupportedException("Cannot request areas larger than " +
+                               QString::number(_maxGridSize, 'f', 4) + " square degrees.");
+  }
+  //  Save the endpoint URL to query
   _url = endpoint;
   //  Split the envelope if it is bigger than the prescribed max
   int lon_div = 1;

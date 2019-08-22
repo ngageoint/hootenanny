@@ -142,6 +142,8 @@ protected:
   bool _bboxContinue;
   /** Grid division size (0.25 degrees lat/lon default) */
   double _coordGridSize;
+  /** Maximum size of an area that can be downloaded */
+  double _maxGridSize;
   /** Number of threads to process the HTTP requests */
   int _threadCount;
   /** Processing thread pool */
