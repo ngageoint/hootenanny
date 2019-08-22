@@ -60,17 +60,17 @@ namespace hoot
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-//  CPPUNIT_TEST(runPolyLenientOsmTest);
-//  CPPUNIT_TEST(runPolyStrictOsmTest);
-//  CPPUNIT_TEST(runPoiStrictOsmTest);
-//  CPPUNIT_TEST(runLinearLenientOsmTest);
-//  CPPUNIT_TEST(runLinearStrictOsmTest);
-//  CPPUNIT_TEST(runPolyLenientJsonTest);
-//  CPPUNIT_TEST(runPolyStrictJsonTest);
-//  CPPUNIT_TEST(runPoiStrictJsonTest);
-//  CPPUNIT_TEST(runLinearLenientJsonTest);
-//  CPPUNIT_TEST(runLinearStrictJsonTest);
-  CPPUNIT_TEST(runMultipleGeometryFilter1LenientTest);
+  CPPUNIT_TEST(runPolyLenientOsmTest);
+  CPPUNIT_TEST(runPolyStrictOsmTest);
+  CPPUNIT_TEST(runPoiStrictOsmTest);
+  CPPUNIT_TEST(runLinearLenientOsmTest);
+  CPPUNIT_TEST(runLinearStrictOsmTest);
+  CPPUNIT_TEST(runPolyLenientJsonTest);
+  CPPUNIT_TEST(runPolyStrictJsonTest);
+  CPPUNIT_TEST(runPoiStrictJsonTest);
+  CPPUNIT_TEST(runLinearLenientJsonTest);
+  CPPUNIT_TEST(runLinearStrictJsonTest);
+ // CPPUNIT_TEST(runMultipleGeometryFilter1LenientTest);
   //CPPUNIT_TEST(runMultipleGeometryFilter1StrictTest);
   //CPPUNIT_TEST(runMultipleGeometryFilter2LenientTest);
 //  CPPUNIT_TEST(runMultipleGeometryFilter2StrictTest);
@@ -292,8 +292,8 @@ private:
     changesetCreator.setGeometryFilters(
       QStringList(_getFilterCritForSingleGeometryType(geometryType)));
     changesetCreator.create(
-      _outputPath + testName + "-ref-in.osm" + fileExtension,
-      _outputPath + testName + "-sec-in.osm" + fileExtension,
+      _outputPath + testName + "-ref-in." + fileExtension,
+      _outputPath + testName + "-sec-in." + fileExtension,
       _getBoundsForSingleGeometryType(geometryType), outFile);
 
     // Going only with this level of checking for now. We could extend this to diff the actual
