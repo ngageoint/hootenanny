@@ -126,7 +126,7 @@ public:
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
 
-private:
+protected:
 
   bool _osmFound;
 
