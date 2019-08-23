@@ -4106,6 +4106,15 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.contains.criterion.kvps
+
+* Data Type: list
+* Default Value: ``
+
+Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
+command line, delimit multiple key/value pairs with ';' and surround the entire list in double
+quotes. E.g. "name=Java;name=Shop"
+
 === tag.criterion.kvps
 
 * Data Type: list

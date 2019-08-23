@@ -38,16 +38,23 @@ if [ "$7" == "" ]; then
 else
   ADDITIONAL_FILTERS=" --additional-filters "$7
 fi
-SOURCE_FORMATS=$8
-if [ "$9" == "" ]; then
+CHAIN_ADDITIONAL_FILTERS=$8
+if [ "$CHAIN_ADDITIONAL_FILTERS" == "true" ]; then
+  CHAIN_ADDITIONAL_FILTERS="--chain-additional-filters"
+else
+  CHAIN_ADDITIONAL_FILTERS=""
+fi 
+ADDITIONAL_FILTER_OPTS=$9
+SOURCE_FORMATS=${10}
+if [ "${11}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=$9
+  WAY_SNAP_TOLERANCE=${11}
 fi
-if [ "${10}" == "" ]; then
+if [ "${12}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${10}
+  EXISTING_WAY_NODE_TOLERANCE=${12}
 fi
 CUSTOM_TAG_KEY="note"
 CUSTOM_TAG_VAL="Source"
@@ -98,7 +105,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_DB_INPUT and $SEC_DB_INPUT to file: $CHANGESET_DB that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $ADDITIONAL_FILTER_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS $CHAIN_ADDITIONAL_FILTERS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -117,8 +124,6 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   hoot delete-db-map $HOOT_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/cleanup-db.osm $SEC_DB_INPUT
 
 fi
-
-
 
 # XML SOURCE WORKFLOW
 
@@ -150,7 +155,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT to file: $CHANGESET_XML that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $ADDITIONAL_FILTER_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS $CHAIN_ADDITIONAL_FILTERS
 
   # CHANGESET APPLICATION
 
@@ -197,7 +202,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT to file: $CHANGESET_JSON that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS $ADDITIONAL_FILTER_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS $CHAIN_ADDITIONAL_FILTERS
 
   # CHANGESET APPLICATION
 

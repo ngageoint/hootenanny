@@ -49,6 +49,26 @@ _valueSubstring(valueSubstrings)
 {
 }
 
+void TagContainsCriterion::setConfiguration(const Settings &s)
+{
+  ConfigOptions config = ConfigOptions(s);
+  setKvps(config.getTagContainsCriterionKvps());
+}
+
+void TagContainsCriterion::setKvps(const QStringList kvps)
+{
+  for (int i = 0; i < kvps.size(); i++)
+  {
+    const QString kvp = kvps.at(i);
+    const QStringList kvpParts = kvp.split("=");
+    if (kvpParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid TagCriterion KVP: " + kvp);
+    }
+    addPair(kvpParts.at(0), kvpParts.at(1));
+  }
+}
+
 bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool matches = false;
