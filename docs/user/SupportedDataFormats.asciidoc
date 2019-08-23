@@ -8,7 +8,7 @@
 * GeoJSON (.geojson file or Overpass query URL) (M1)
 * geonames.org (.geonames)
 * Hootenanny API Database (hootapidb://)
-* Overpass JSON (.json file or OVerpass query URL) (M1)
+* Overpass JSON (.json file or Overpass query URL) (M1)
 * OpenStreetMap XML (.osm)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
