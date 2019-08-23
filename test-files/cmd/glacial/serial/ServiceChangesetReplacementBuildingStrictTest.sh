@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-# Wholesale Building Replacement Workflow
+# Wholesale Building Replacement Workflow with Strict AOI Handling
 #
-# This test is lenient regarding the AOI, in that it may modify some features in the ref data that lie just outside of the AOI. Secondary 
-# features crossing the AOI may be included in the output or conflated with reference features. This workflow should work other polygon 
-# data types, but only buildings have been tested with it so far.
+# This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie outside of it. No secondary 
+# features outside the AOI or crossing it will be included in the output or conflated with anything in the ref layer.  This workflow could 
+# work for other polygon data types but only buildings have been attempted so far.
 
-TEST_NAME=ServiceBuildingReplacementTest
+TEST_NAME=ServiceChangesetReplacementBuildingStrictTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR
@@ -51,7 +51,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-se
 echo ""
 echo "Deriving a changeset that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --geometry-filters "hoot::BuildingCriterion" --write-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $REF_LAYER $SEC_LAYER $AOI $OUT_DIR/$TEST_NAME-changeset-1.osc.sql $REF_LAYER --strict-bounds --geometry-filters "hoot::BuildingCriterion" --write-bounds
 
 # CHANGESET APPLICATION
 

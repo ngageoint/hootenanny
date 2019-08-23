@@ -6,7 +6,7 @@ set -e
 # This test is not lenient regarding the AOI, in that it will not modify any features in the ref data that lie on or outside of it. No 
 # secondary features lying outside the AOI will be included in the output.
 
-TEST_NAME=ServiceChangesetReplacementPoiStrictDbTest
+TEST_NAME=ServiceChangesetReplacementPoiStrictTest
 IN_DIR=test-files/cmd/glacial/PoiPolygonConflateStandaloneTest
 IN_DIR_2=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME

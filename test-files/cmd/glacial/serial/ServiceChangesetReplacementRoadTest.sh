@@ -9,7 +9,7 @@ set -e
 # Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and 
 # re-created when they should have been modified. This workflow could work for other linear data types but only roads have been tested so far.
 
-TEST_NAME=ServiceChangesetReplacementRoadDbTest
+TEST_NAME=ServiceChangesetReplacementRoadTest
 IN_DIR=test-files/cmd/glacial/serial/$TEST_NAME
 OUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUT_DIR

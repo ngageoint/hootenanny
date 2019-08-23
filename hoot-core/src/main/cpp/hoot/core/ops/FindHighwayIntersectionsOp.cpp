@@ -67,6 +67,7 @@ void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_INFO(QString("%1 Relations found, after removal").arg(map->getRelations().size()));
 
   // pragmatically remove "bad" data in OSM afghanistan
+  // TODO: this really shouldn't be here
   std::shared_ptr<TagCriterion> pCrit(new TagCriterion("source", "AIMS"));
   RemoveElementsVisitor::removeWays(map, pCrit);
 
