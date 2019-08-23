@@ -24,10 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FINDHIGHWAYINTERSECTIONSOP_H
-#define FINDHIGHWAYINTERSECTIONSOP_H
+#ifndef FINDINTERSECTIONSOP_H
+#define FINDINTERSECTIONSOP_H
 
 // Hoot
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
@@ -36,23 +37,57 @@
 namespace hoot
 {
 
+class FindIntersectionsVisitor;
 
 /**
  * Op. to find intersections
  */
-class FindHighwayIntersectionsOp : public OsmMapOperation
+class FindIntersectionsOp : public OsmMapOperation
+{
+public:
+
+  static std::string className() { return "hoot::FindIntersectionsOp"; }
+
+  static QString opsKey() { return "map.cleaner.transforms"; }
+
+  FindIntersectionsOp();
+
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+
+  virtual QString getDescription() const override { return "Identifies generic intersections"; }
+
+  /**
+   *  Pure virtual function called by constructor to create the intersection visitor
+   */
+  virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
+};
+
+/**
+ *  Op that finds all road intersections
+ */
+class FindHighwayIntersectionsOp : public FindIntersectionsOp
 {
 public:
 
   static std::string className() { return "hoot::FindHighwayIntersectionsOp"; }
 
-  static QString opsKey() { return "map.cleaner.transforms"; }
+  virtual QString getDescription() const override { return "Identifies highway intersections"; }
 
-  FindHighwayIntersectionsOp();
+  virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
+};
 
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+/**
+ *  Op that finds all railway intersections
+ */
+class FindRailwayIntersectionsOp : public FindIntersectionsOp
+{
+public:
 
-  virtual QString getDescription() const override { return "Identifies road intersections"; }
+  static std::string className() { return "hoot::FindRailwayIntersectionsOp"; }
+
+  virtual QString getDescription() const override { return "Identifies railway intersections"; }
+
+  virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 };
 
 }
