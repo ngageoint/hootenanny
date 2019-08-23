@@ -25,10 +25,6 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// geos
-//#include <geos/io/WKTReader.h>
-//#include <geos/geom/Point.h>
-
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -37,10 +33,6 @@
 #include <hoot/core/ops/FindIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-
-// TGS
-//#include <tgs/Statistics/Random.h>
-//using namespace Tgs;
 
 namespace hoot
 {
