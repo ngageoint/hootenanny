@@ -74,6 +74,7 @@ public:
   /** Static constants for use in the HttpTestServer class */
   static const int DEFAULT_SERVER_PORT = 8910;
   static const std::string HTTP_200_OK;
+  static const std::string HTTP_400_BAD_REQUEST;
   static const std::string HTTP_404_NOT_FOUND;
   static const std::string HTTP_409_CONFLICT;
   /** Constructor */
