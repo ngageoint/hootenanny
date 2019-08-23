@@ -209,10 +209,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
             exception = e;
 
             // Need to perform cleanup for import jobs
-            int jobType = DbUtils.getJobTypeByJobId(jobId);
-            if (jobType == JobType.IMPORT.ordinal() || jobType == JobType.CONFLATE.ordinal() || jobType == JobType.CLIP.ordinal()) {
-                Long mapId = DbUtils.getMapIdByJobId(jobId);
-
+            Long mapId = DbUtils.getMapIdByJobId(jobId);
+            if (mapId != null) {
                 DbUtils.deleteMapRelatedTablesByMapId(mapId);
                 DbUtils.deleteMap(mapId);
             }
