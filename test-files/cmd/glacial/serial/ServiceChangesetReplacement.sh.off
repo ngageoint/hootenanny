@@ -81,7 +81,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-se
 echo ""
 echo "Deriving a changeset between $REF_DB_INPUT and $SEC_DB_INPUT to file: $CHANGESET_DB that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS --geometry-filters "hoot::BuildingCriterion" --write-bounds
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS --geometry-filters $ELEMENT_FILTER --write-bounds
 
 # CHANGESET APPLICATION
 
@@ -112,7 +112,7 @@ echo ""
 echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
-hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.keys=name -D set.tag.value.visitor.values="Building 1" $SOURCE_FILE_1 $REF_DB_INPUT
+hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criterion=$ELEMENT_FILTER -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
 echo ""
 echo "Writing the reference dataset from: $REF_DB_INPUT to an xml file: $REF_XML_INPUT (contains features to be replaced)..."
 echo ""
@@ -120,14 +120,14 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-re
 echo ""
 echo "Writing the secondary dataset from: $SOURCE_FILE_2 to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
 echo ""
-hoot convert $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.keys=name -D set.tag.value.visitor.values="Building 2" $SOURCE_FILE_2 $SEC_XML_INPUT
+hoot convert $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=$ELEMENT_FILTER -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
 
 # CHANGESET DERIVATION
 
 echo ""
 echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT to file: $CHANGESET_XML that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS --geometry-filters "hoot::BuildingCriterion"
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS --geometry-filters $ELEMENT_FILTER
 
 # CHANGESET APPLICATION
 
@@ -155,7 +155,7 @@ echo ""
 echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
-hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.keys=name -D set.tag.value.visitor.values="Building 1" $SOURCE_FILE_1 $REF_DB_INPUT
+hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criterion=$ELEMENT_FILTER -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
 echo ""
 echo "Writing the reference dataset from: $REF_DB_INPUT to a json file: $REF_JSON_INPUT (contains features to be replaced)..."
 echo ""
@@ -163,14 +163,14 @@ hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-re
 echo ""
 echo "Writing the secondary dataset from: $SOURCE_FILE_2 to a json file: $SEC_JSON_INPUT (contains features to replace with)..."
 echo ""
-hoot convert $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-json.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=hoot::BuildingCriterion -D set.tag.value.visitor.keys=name -D set.tag.value.visitor.values="Building 2" $SOURCE_FILE_2 $SEC_JSON_INPUT
+hoot convert $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-json.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criterion=$ELEMENT_FILTER -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_JSON_INPUT
 
 # CHANGESET DERIVATION
 
 echo ""
 echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT to file: $CHANGESET_JSON that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
 echo ""
-hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS --geometry-filters "hoot::BuildingCriterion"
+hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS --geometry-filters $ELEMENT_FILTER
 
 # CHANGESET APPLICATION
 
