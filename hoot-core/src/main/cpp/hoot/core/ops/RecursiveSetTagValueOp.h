@@ -104,7 +104,7 @@ private:
   ElementCriterionPtr _crit;
   bool _negateCriterion;
   // Wrap SetTagValueVisitor for tagging purposes only and handle the criterion filter separately
-  // in this class.
+  // within this class.
   std::shared_ptr<SetTagValueVisitor> _tagger;
 
   void _setCriterion(const QString& criterionName);

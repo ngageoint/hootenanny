@@ -7,6 +7,7 @@ mkdir -p $OUTPUT_DIR
 mkdir -p $HOOT_HOME/tmp
 
 # convert.bounding.box only works with db inputs
+# TODO: above no longer true...we could convert this to an xml file based test; also, the file name should be prefixed with "Rnd"
 
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"

@@ -55,8 +55,8 @@ regardless.
 
 If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
 the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
-false, then only one of the specified criteria must be met in order to modify an the attributes of
-an element.
+false, then only one of the specified criteria must be met in order to modify the attributes of an
+element.
 
 === add.attributes.visitor.element.criteria
 
@@ -3848,14 +3848,24 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 If true, any element with a value populated for the key defined by the set.tag.value.visitor.keys
 option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.value.visitor.element.criterion
+=== set.tag.value.visitor.chain.element.criteria
 
-* Data Type: string
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in set.tag.value.visitor.element.criteria,
+the tags of elements will be modified only if they satisfy all of the criteria.  If set to
+false, then only one of the specified criteria must be met in order to modify the tags of an
+element.
+
+=== set.tag.value.visitor.element.criteria
+
+* Data Type: list
 * Default Value: ``
 
-The plugin name of an element criterion used to select elements to add or modify tags on used by the
-SetTagValueVisitor and RecursiveSetTagValueOp classes.  To pass in complex nested criteria, use the
-Hootenanny Javascript interface instead.
+The element criteria used to select elements to add or modify tags on used by the SetTagValueVisitor
+and RecursiveSetTagValueOp classes.  To pass in complex nested criteria, use the Hootenanny
+Javascript interface instead.
 
 === set.tag.value.visitor.keys
 

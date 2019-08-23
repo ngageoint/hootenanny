@@ -75,7 +75,9 @@ public:
     if (args.contains("--additional-filters"))
     {
       const int optionNameIndex = args.indexOf("--additional-filters");
+      LOG_VARD(optionNameIndex);
       additionalFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(additionalFilters);
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
