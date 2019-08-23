@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# This script tests the replacement changeset generation workflow.
+#
 # Multiple input formats are tested here. Each time the resultant changeset is written back to an OSM API database, as that allows for ease of
 # visual inspection of the output which makes debugging easier.
 #
