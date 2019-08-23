@@ -3,8 +3,8 @@ set -e
 
 # This script tests the replacement changeset generation workflow.
 #
-# Multiple input formats are tested here. Each time the resultant changeset is written back to an OSM API database, as that allows for ease of
-# visual inspection of the output which makes debugging easier.
+# Multiple input formats are tested here. Each time the resultant changeset is written back to an OSM API database regardless of the 
+# source format, as that allows for ease of visual inspection of the output and makes debugging easier.
 #
 # Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and 
 # re-created when they should have been modified.
@@ -12,6 +12,7 @@ set -e
 TEST_NAME=$1
 SOURCE_FILE_1=$2
 SOURCE_FILE_2=$3
+# If only one source file was passed in, we'll perturb it and use the original data for the secondary and the perturbed for the ref.
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
   REF_CONVERT_OPS="hoot::SetTagValueVisitor;hoot::PertyOp"
