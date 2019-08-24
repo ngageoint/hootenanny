@@ -25,40 +25,30 @@
  * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-// geos
-#include <geos/io/WKTReader.h>
-#include <geos/geom/Point.h>
-
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/io/OsmJsonWriter.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/FindHighwayIntersectionsOp.h>
+#include <hoot/core/ops/FindIntersectionsOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-
-// TGS
-#include <tgs/Statistics/Random.h>
-using namespace Tgs;
 
 namespace hoot
 {
 
-class FindHighwayIntersectionsOpTest : public HootTestFixture
+class FindIntersectionsOpTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(FindHighwayIntersectionsOpTest);
+  CPPUNIT_TEST_SUITE(FindIntersectionsOpTest);
   CPPUNIT_TEST(runToyTest);
+  CPPUNIT_TEST(runRailwayTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  FindHighwayIntersectionsOpTest()
-    : HootTestFixture("test-files/ops/FindHighwayIntersectionsOp/",
-                      "test-output/ops/FindHighwayIntersectionsOp/")
+  FindIntersectionsOpTest()
+    : HootTestFixture("test-files/ops/FindIntersectionsOp/",
+                      "test-output/ops/FindIntersectionsOp/")
   {
     setResetType(ResetAll);
   }
@@ -74,8 +64,6 @@ public:
     FindHighwayIntersectionsOp op;
     op.apply(map);
 
-    LOG_VAR(TestUtils::toQuotedString(OsmJsonWriter(5).toString(map)));
-
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "Toy_intersections.osm");
@@ -83,9 +71,27 @@ public:
                      _outputPath + "Toy_intersections.osm");
   }
 
+  void runRailwayTest()
+  {
+    OsmXmlReader reader;
+
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "RailIntersections-Osm.osm", map);
+
+    FindRailwayIntersectionsOp op;
+    op.apply(map);
+
+    MapProjector::projectToWgs84(map);
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "RailIntersections-Output.osm");
+    HOOT_FILE_EQUALS( _inputPath + "RailIntersections-Expected.osm",
+                     _outputPath + "RailIntersections-Output.osm");
+  }
+
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FindHighwayIntersectionsOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FindIntersectionsOpTest, "quick");
 
 }
 

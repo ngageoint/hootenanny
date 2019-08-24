@@ -24,40 +24,40 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "FindHighwayIntersectionsOp.h"
+#include "FindIntersectionsOp.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/ops/DuplicateWayRemover.h>
-#include <hoot/core/ops/VisitorOp.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/UnlikelyIntersectionRemover.h>
 #include <hoot/core/algorithms/splitter/DualWaySplitter.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/visitors/FindHighwayIntersectionsVisitor.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementInIdListCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/DuplicateWayRemover.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/ops/UnlikelyIntersectionRemover.h>
+#include <hoot/core/ops/VisitorOp.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/visitors/FindIntersectionsVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, FindHighwayIntersectionsOp)
+HOOT_FACTORY_REGISTER(OsmMapOperation, FindRailwayIntersectionsOp)
 
-FindHighwayIntersectionsOp::FindHighwayIntersectionsOp()
+FindIntersectionsOp::FindIntersectionsOp()
 {
 }
 
-void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
+void FindIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
 {
   // remove all relations
   LOG_INFO(QString("%1 Relations found.").arg(map->getRelations().size()));
@@ -82,7 +82,7 @@ void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_INFO("Assuming drives on right.");
 
   // find all intersections
-  std::shared_ptr<FindHighwayIntersectionsVisitor> v(new FindHighwayIntersectionsVisitor());
+  std::shared_ptr<FindIntersectionsVisitor> v(createVisitor());
   VisitorOp(v).apply(map);
   LOG_INFO(QString("%1 Intersections found.").arg(v->getIntersections().size()));
 
@@ -103,6 +103,18 @@ void FindHighwayIntersectionsOp::apply(std::shared_ptr<OsmMap>& map)
   VisitorOp(removeIntersectionsVis).apply(map);
 
   MapCleaner().apply(map);
+}
+
+std::shared_ptr<FindIntersectionsVisitor> FindHighwayIntersectionsOp::createVisitor()
+{
+  //  Create a visitor to find all highway intersections
+  return std::shared_ptr<FindIntersectionsVisitor>(new FindHighwayIntersectionsVisitor());
+}
+
+std::shared_ptr<FindIntersectionsVisitor> FindRailwayIntersectionsOp::createVisitor()
+{
+  //  Create a visitor to find all railway intersections
+  return std::shared_ptr<FindIntersectionsVisitor>(new FindRailwayIntersectionsVisitor());
 }
 
 }
