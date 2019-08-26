@@ -30,6 +30,9 @@
 
 // Hoot
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -37,12 +40,12 @@ namespace hoot
 /**
  * Identifies point features
  */
-class PointCriterion : public GeometryTypeCriterion
+class PointCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
   static std::string className() { return "hoot::PointCriterion"; }
 
-  PointCriterion() {}
+  PointCriterion();
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -52,6 +55,12 @@ public:
 
   virtual GeometryType getGeometryType() const
   { return GeometryType::Point; }
+
+  virtual void setOsmMap(const OsmMap* map);
+
+private:
+
+  WayNodeCriterion _wayNodeCrit;
 };
 
 }

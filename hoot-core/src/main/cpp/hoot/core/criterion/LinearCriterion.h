@@ -43,7 +43,7 @@ public:
 
   static std::string className() { return "hoot::LinearCriterion"; }
 
-  LinearCriterion() {}
+  LinearCriterion();
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

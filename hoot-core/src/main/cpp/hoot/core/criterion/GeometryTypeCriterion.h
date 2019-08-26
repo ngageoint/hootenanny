@@ -60,6 +60,14 @@ public:
    * @return
    */
   static QStringList getCriterionClassNamesByType(const GeometryType& type);
+
+  /**
+   * TODO
+   *
+   * @param geometryType
+   * @return
+   */
+  static QString typeToString(const GeometryType& geometryType);
 };
 
 }

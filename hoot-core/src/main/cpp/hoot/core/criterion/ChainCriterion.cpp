@@ -76,6 +76,32 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
   _criteria.push_back(e);
 }
 
+void ChainCriterion::setOsmMap(const OsmMap* map)
+{
+  for (size_t i = 0; i < _criteria.size(); i++)
+  {
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_criteria[i]);
+    if (mapConsumer)
+    {
+      mapConsumer->setOsmMap(map);
+    }
+  }
+}
+
+void ChainCriterion::setConfiguration(const Settings& conf)
+{
+  for (size_t i = 0; i < _criteria.size(); i++)
+  {
+    std::shared_ptr<Configurable> configurable =
+      std::dynamic_pointer_cast<Configurable>(_criteria[i]);
+    if (configurable)
+    {
+      configurable->setConfiguration(conf);
+    }
+  }
+}
+
 bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
@@ -87,6 +113,7 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   return true;
 }
+
 
 QString ChainCriterion::toString() const
 {

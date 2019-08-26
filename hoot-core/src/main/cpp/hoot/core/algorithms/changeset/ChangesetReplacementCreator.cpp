@@ -79,7 +79,7 @@ _lenientBounds(true),
 _chainAdditionalFilters(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
-  _geometryTypeFilters = _getDefaultGeometryFilters();
+  setGeometryFilters(QStringList());
 }
 
 void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
@@ -107,32 +107,7 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
           ". Filter must be a GeometryTypeCriterion.");
       }
 
-      std::shared_ptr<GeometryTypeCriterion> currentFilter;
-      switch (filter->getGeometryType())
-      {
-        case GeometryTypeCriterion::GeometryType::Point:
-          currentFilter =
-            std::dynamic_pointer_cast<PointCriterion>(
-              _geometryTypeFilters[filter->getGeometryType()]);
-          break;
-
-        case GeometryTypeCriterion::GeometryType::Line:
-          currentFilter =
-            std::dynamic_pointer_cast<LinearCriterion>(
-              _geometryTypeFilters[filter->getGeometryType()]);
-          _linearFilterClassNames.append(filterClassName);
-          break;
-
-        case GeometryTypeCriterion::GeometryType::Polygon:
-          currentFilter =
-            std::dynamic_pointer_cast<PolygonCriterion>(
-              _geometryTypeFilters[filter->getGeometryType()]);
-          break;
-
-        default:
-          throw IllegalArgumentException("Invalid geometry type.");
-      }
-
+      ElementCriterionPtr currentFilter = _geometryTypeFilters[filter->getGeometryType()];
       if (!currentFilter)
       {
         _geometryTypeFilters[filter->getGeometryType()] = filter;
@@ -142,15 +117,21 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
         _geometryTypeFilters[filter->getGeometryType()] =
           std::shared_ptr<OrCriterion>(new OrCriterion(currentFilter, filter));
       }
-    }
 
-    if (_geometryTypeFilters.isEmpty())
-    {
-      _geometryTypeFilters = _getDefaultGeometryFilters();
-      _linearFilterClassNames =
-        ConflatableElementCriterion::getCriterionClassNamesByType(
-          GeometryTypeCriterion::GeometryType::Line);
+      if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
+      {
+        _linearFilterClassNames.append(filterClassName);
+      }
     }
+  }
+
+  LOG_VARD(_geometryTypeFilters.size());
+  if (_geometryTypeFilters.isEmpty())
+  {
+    _geometryTypeFilters = _getDefaultGeometryFilters();
+    _linearFilterClassNames =
+      ConflatableElementCriterion::getCriterionClassNamesByType(
+        GeometryTypeCriterion::GeometryType::Line);
   }
 
   LOG_VARD(_geometryTypeFilters.size());
@@ -245,12 +226,14 @@ void ChangesetReplacementCreator::create(
          filters.begin(); itr != filters.end(); ++itr)
   {
     LOG_DEBUG(
-      "Preparing maps for changeset derivation given geometry type: "<< itr.key() << ". Pass: " <<
-      passCtr << " / " << filters.size() << "...");
+      "Preparing maps for changeset derivation given geometry type: "<<
+      GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
+      filters.size() << "...");
 
     OsmMapPtr refMap;
     OsmMapPtr conflatedMap;
     QStringList linearFilterClassNames;
+    LOG_VARD(itr.value().get());
     if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
     {
       linearFilterClassNames = _linearFilterClassNames;
@@ -263,6 +246,8 @@ void ChangesetReplacementCreator::create(
 
     passCtr++;
   }
+  LOG_VARD(refMaps.size());
+  LOG_VARD(conflatedMaps.size());
 
   // CHANGESET GENERATION
 
@@ -278,6 +263,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
+  LOG_VARD(linearFilterClassNames);
+
   // INPUT VALIDATION AND SETUP
 
   _parseConfigOpts(_lenientBounds, geometryType);
@@ -322,6 +309,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // TODO: Do we need to filter features with an empty filter?
   _filterFeatures(secMap, featureFilter, "sec-after-type-pruning");
+
+  // TODO: Is this right?
+  LOG_VARD(refMap->getElementCount());
+  LOG_VARD(secMap->getElementCount());
+  if (refMap->getElementCount() == 0 && secMap->getElementCount() == 0)
+  {
+    LOG_DEBUG("Both input maps empty after filtering. Skipping changeset generation...");
+    return;
+  }
 
   // COOKIE CUT
 
@@ -396,6 +392,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   _cropMapForChangesetDerivation(
     conflatedMap, bounds, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, isLinearCrit, "sec-cropped-for-changeset");
+  LOG_VARD(_lenientBounds);
+  LOG_VARD(isLinearCrit);
   if (_lenientBounds && isLinearCrit)
   {
     // The non-strict way replacement workflow benefits from a second snapping run right before
@@ -411,6 +409,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     QStringList snapToWayStatuses("Input1");
     snapToWayStatuses.append("Conflated");
     snapToWayStatuses.append("Input2");
+    LOG_VARD(linearFilterClassNames);
     for (int i = 0; i < linearFilterClassNames.size(); i++)
     {
       _snapUnconnectedWays(
@@ -502,6 +501,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
            _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
+      LOG_VARD(itr.key());
       combinedFilters[itr.key()] =
         std::shared_ptr<ChainCriterion>(
           new ChainCriterion(itr.value().get(), _additionalFilter.get()));
@@ -614,6 +614,21 @@ void ChangesetReplacementCreator::_filterFeatures(
 {
   LOG_DEBUG("Filtering features for: " << map->getName() << " based on input filter...");
   RemoveElementsVisitor elementPruner(true);
+  LOG_VARD(featureFilter.get());
+  std::shared_ptr<Configurable> configurable =
+    std::dynamic_pointer_cast<Configurable>(featureFilter);
+  LOG_VARD(configurable.get());
+  if (configurable)
+  {
+    configurable->setConfiguration(conf());
+  }
+  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+    std::dynamic_pointer_cast<ConstOsmMapConsumer>(featureFilter);
+  LOG_VARD(mapConsumer.get());
+  if (mapConsumer)
+  {
+    mapConsumer->setOsmMap(map.get());
+  }
   elementPruner.addCriterion(featureFilter);
   elementPruner.setRecursive(true);
   LOG_DEBUG(elementPruner.getInitStatusMessage());
@@ -708,7 +723,8 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
 {
   LOG_DEBUG(
     "Snapping ways for map: " << map->getName() << ", with filter type: " <<
-    typeCriterionClassName << " ...");
+    typeCriterionClassName << ", snap way statuses: " << snapWayStatuses <<
+    ", snap to way statuses: " << snapToWayStatuses << " ...");
 
   UnconnectedWaySnapper lineSnapper;
   lineSnapper.setConfiguration(conf());

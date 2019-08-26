@@ -42,7 +42,7 @@ class PolygonCriterion : public GeometryTypeCriterion
 public:
   static std::string className() { return "hoot::PolygonCriterion"; }
 
-  PolygonCriterion() {}
+  PolygonCriterion();
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 

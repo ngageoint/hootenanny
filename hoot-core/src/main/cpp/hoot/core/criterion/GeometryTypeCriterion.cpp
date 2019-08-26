@@ -55,4 +55,19 @@ QStringList GeometryTypeCriterion::getCriterionClassNamesByType(const GeometryTy
   return classNamesByType;
 }
 
+QString GeometryTypeCriterion::typeToString(const GeometryType& geometryType)
+{
+  switch (geometryType)
+  {
+    case GeometryType::Point:
+      return "point";
+    case GeometryType::Line:
+      return "line";
+    case GeometryType::Polygon:
+      return "polygon";
+    default:
+      throw IllegalArgumentException("Invalid geometry type.");
+  }
+}
+
 }

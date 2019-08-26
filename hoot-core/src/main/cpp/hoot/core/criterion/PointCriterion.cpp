@@ -30,17 +30,28 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, PointCriterion)
 
+PointCriterion::PointCriterion()
+{
+}
+
+void PointCriterion::setOsmMap(const OsmMap* map)
+{
+  LOG_VART("test1");
+  _wayNodeCrit.setOsmMap(map);
+}
+
 bool PointCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return
-    ElementTypeCriterion(ElementType::Node).isSatisfied(e) && !WayNodeCriterion().isSatisfied(e);
+  LOG_VART(e->getElementId());
+  LOG_VART(ElementTypeCriterion(ElementType::Node).isSatisfied(e));
+  LOG_VART(_wayNodeCrit.isSatisfied(e));
+  return ElementTypeCriterion(ElementType::Node).isSatisfied(e) && !_wayNodeCrit.isSatisfied(e);
 }
 
 }

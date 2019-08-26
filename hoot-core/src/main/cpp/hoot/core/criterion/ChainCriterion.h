@@ -29,6 +29,8 @@
 
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -36,7 +38,8 @@ namespace hoot
 /**
  * isSatisfied returns true if all the children are satisfied
  */
-class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer
+class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
+  public Configurable, public ConstOsmMapConsumer
 {
 public:
 
@@ -58,6 +61,10 @@ public:
   { return "Allows for chaining criteria together (logical AND)"; }
 
   QString toString() const;
+
+  virtual void setOsmMap(const OsmMap* map);
+
+  virtual void setConfiguration(const Settings& conf);
 
 protected:
 

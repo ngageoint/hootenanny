@@ -39,6 +39,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, LinearCriterion)
 
+LinearCriterion::LinearCriterion()
+{
+}
+
 bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   bool result = false;
