@@ -241,8 +241,14 @@ void ChangesetReplacementCreator::create(
     _getMapsForGeometryType(
       refMap, conflatedMap, input1, input2, boundsStr, itr.value(), itr.key(),
       linearFilterClassNames);
-    refMaps.append(refMap);
-    conflatedMaps.append(conflatedMap);
+    if (refMap && refMap->getElementCount() > 0)
+    {
+      refMaps.append(refMap);
+    }
+    if (conflatedMap && conflatedMap->getElementCount() > 0)
+    {
+      conflatedMaps.append(conflatedMap);
+    }
 
     passCtr++;
   }
