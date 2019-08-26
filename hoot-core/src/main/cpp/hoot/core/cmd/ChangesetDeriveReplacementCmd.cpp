@@ -87,18 +87,23 @@ public:
       chainAdditionalFilters = true;
       args.removeAll("--chain-additional-filters");
     }
+    LOG_VARD(chainAdditionalFilters);
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
       lenientBounds = false;
       args.removeAll("--strict-bounds");
     }
+    LOG_VARD(lenientBounds);
     bool printStats = false;
     if (args.contains("--stats"))
     {
       printStats = true;
       args.removeAll("--stats");
     }
+    LOG_VARD(printStats);
+
+    LOG_VARD(args.size());
     LOG_VARD(args);
 
     // param error checking
@@ -117,9 +122,13 @@ public:
     // process non-optional params
 
     const QString input1 = args[0].trimmed();
+    LOG_VARD(input1);
     const QString input2 = args[1].trimmed();
+    LOG_VARD(input2);
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
+    LOG_VARD(bounds);
     const QString output = args[3].trimmed();
+    LOG_VARD(output);
 
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
