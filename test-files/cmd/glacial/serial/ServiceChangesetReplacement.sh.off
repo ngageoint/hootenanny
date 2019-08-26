@@ -10,7 +10,9 @@ set -e
 # re-created when they should have been modified.
 
 TEST_NAME=$1
+#echo "test name: " $TEST_NAME
 SOURCE_FILE_1=$2
+#echo "source file 1: " $SOURCE_FILE_1
 SOURCE_FILE_2=$3
 # If only one source file was passed in, we'll perturb it and use the original data for the secondary and the perturbed for the ref.
 if [ "$SOURCE_FILE_2" == "" ]; then
@@ -19,13 +21,16 @@ if [ "$SOURCE_FILE_2" == "" ]; then
 else
   REF_CONVERT_OPS="hoot::SetTagValueVisitor"
 fi 
+#echo "source file 2: " $SOURCE_FILE_2
 AOI=$4
+#echo "aoi: " $AOI
 STRICT_BOUNDS=$5
 if [ "$STRICT_BOUNDS" == "true" ]; then
   STRICT_BOUNDS="--strict-bounds"
 else
   STRICT_BOUNDS=""
-fi 
+fi
+#echo "strict bounds: " $STRICT_BOUNDS
 if [ "$6" == "" ]; then
   GEOMETRY_FILTERS=""
   TAG_ELEMENT_CRITERIA="hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion"
@@ -33,29 +38,37 @@ else
   GEOMETRY_FILTERS=" --geometry-filters "$6
   TAG_ELEMENT_CRITERIA=$6
 fi 
+#echo "geometry filters: " $GEOMETRY_FILTERS
+#echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
 if [ "$7" == "" ]; then
   ADDITIONAL_FILTERS=""
 else
   ADDITIONAL_FILTERS=" --additional-filters "$7
 fi
+#echo "additional filters: " $ADDITIONAL_FILTERS
 CHAIN_ADDITIONAL_FILTERS=$8
 if [ "$CHAIN_ADDITIONAL_FILTERS" == "true" ]; then
   CHAIN_ADDITIONAL_FILTERS="--chain-additional-filters"
 else
   CHAIN_ADDITIONAL_FILTERS=""
-fi 
+fi
+#echo "chain additional filters: " $CHAIN_ADDITIONAL_FILTERS 
 ADDITIONAL_FILTER_OPTS=$9
+#echo "additional filter opts: " $ADDITIONAL_FILTER_OPTS 
 SOURCE_FORMATS=${10}
+#echo "source formats: " $SOURCE_FORMATS 
 if [ "${11}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
   WAY_SNAP_TOLERANCE=${11}
 fi
+#echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
 if [ "${12}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
   EXISTING_WAY_NODE_TOLERANCE=${12}
 fi
+#echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
 CUSTOM_TAG_KEY="note"
 CUSTOM_TAG_VAL="Source"
 
