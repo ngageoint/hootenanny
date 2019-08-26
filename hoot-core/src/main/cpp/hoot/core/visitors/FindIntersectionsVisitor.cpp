@@ -24,14 +24,15 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "FindHighwayIntersectionsVisitor.h"
+#include "FindIntersectionsVisitor.h"
 
+#include <hoot/core/conflate/matching/NodeMatcher.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/conflate/matching/NodeMatcher.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 using namespace std;
 
@@ -39,27 +40,30 @@ namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, FindHighwayIntersectionsVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, FindRailwayIntersectionsVisitor)
 
-void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
+void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 {
   std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
   long id = e->getId();
 
   const set<long>& wids = n2w->getWaysByNode(id);
-
-  // find all ways that are highways (ie roads)
+  // create the criterion if needed
+  if (!_criterion)
+    _criterion = createCriterion(_map->shared_from_this());
+  // find all ways that are of the criterion type
   set<long> hwids;
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     WayPtr w = _map->getWay(*it);
 
-    if (HighwayCriterion(_map->shared_from_this()).isSatisfied(w))
+    if (_criterion->isSatisfied(w))
     {
       hwids.insert(*it);
     }
   }
 
-  if (hwids.size() >= 3) // two or more roads intersecting
+  if (hwids.size() >= 3) // two or more ways intersecting
   {
     // keep it
     _ids.push_back(id);
@@ -93,6 +97,16 @@ void FindHighwayIntersectionsVisitor::visit(const ConstElementPtr& e)
     _map->getNode(id)->setTag("MinAngle", QString::number(minAngle));
     _map->getNode(id)->setTag("MaxAngle", QString::number(maxAngle));
   }
+}
+
+ElementCriterionPtr FindHighwayIntersectionsVisitor::createCriterion(ConstOsmMapPtr map)
+{
+  return ElementCriterionPtr(new HighwayCriterion(map));
+}
+
+ElementCriterionPtr FindRailwayIntersectionsVisitor::createCriterion(ConstOsmMapPtr /*map*/)
+{
+  return ElementCriterionPtr(new RailwayCriterion());
 }
 
 }
