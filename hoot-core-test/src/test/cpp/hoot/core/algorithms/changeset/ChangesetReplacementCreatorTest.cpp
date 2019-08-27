@@ -44,6 +44,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runInvalidAdditionalFilterTest);
   CPPUNIT_TEST(runNonBoundableReaderTest);
   CPPUNIT_TEST(runGeoJsonTest);
+  // TODO: add invalid config opts test
   CPPUNIT_TEST_SUITE_END();
 
 public:

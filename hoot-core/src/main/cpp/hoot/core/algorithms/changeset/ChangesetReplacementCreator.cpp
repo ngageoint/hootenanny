@@ -209,6 +209,39 @@ void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClas
   _setInputFilter(_input2Filter, filterClassNames, _chainInput2Filters);
 }
 
+void ChangesetReplacementCreator::_setInputFilterOptions(Settings& opts,
+                                                         const QStringList& optionKvps)
+{
+  opts = conf();
+  for (int i = 0; i < optionKvps.size(); i++)
+  {
+    const QString kvp = optionKvps.at(i);
+    // split on the first occurrence of '=' since the opt value itself could have an '=' in it
+    const int firstEqualOccurrence = kvp.indexOf("=");
+    if (firstEqualOccurrence == -1)
+    {
+      throw IllegalArgumentException("Invalid filter configuration option: " + kvp);
+    }
+    const QString key = kvp.mid(0, firstEqualOccurrence).trimmed().remove("\"").remove("'");
+    LOG_VARD(key);
+    const QString val = kvp.mid(firstEqualOccurrence + 2).trimmed().remove("\"").remove("'");
+    LOG_VARD(val);
+    opts.set(key, val);
+  }
+}
+
+void ChangesetReplacementCreator::setInput1FilterOptions(const QStringList& optionKvps)
+{
+  LOG_DEBUG("Creating input filter 1 options...");
+  _setInputFilterOptions(_input1FilterOptions, optionKvps);
+}
+
+void ChangesetReplacementCreator::setInput2FilterOptions(const QStringList& optionKvps)
+{
+  LOG_DEBUG("Creating input filter 2 options...");
+  _setInputFilterOptions(_input2FilterOptions, optionKvps);
+}
+
 void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
@@ -330,7 +363,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
-  _filterFeatures(refMap, refFeatureFilter, "ref-after-type-pruning");
+  _filterFeatures(refMap, refFeatureFilter, _input1FilterOptions, "ref-after-type-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
 
@@ -339,8 +372,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune sec dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
-  // TODO: Do we need to filter features with an empty filter?
-  _filterFeatures(secMap, secFeatureFilter, "sec-after-type-pruning");
+  _filterFeatures(secMap, secFeatureFilter, _input2FilterOptions, "sec-after-type-pruning");
 
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
@@ -653,17 +685,18 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap(const QString& input)
 }
 
 void ChangesetReplacementCreator::_filterFeatures(
-  OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const QString& debugFileName)
+  OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
+  const QString& debugFileName)
 {
   LOG_DEBUG("Filtering features for: " << map->getName() << " based on input filter...");
-  RemoveElementsVisitor elementPruner(true);
+
   LOG_VARD(featureFilter.get());
   std::shared_ptr<Configurable> configurable =
     std::dynamic_pointer_cast<Configurable>(featureFilter);
   LOG_VARD(configurable.get());
   if (configurable)
   {
-    configurable->setConfiguration(conf());
+    configurable->setConfiguration(config);
   }
   std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
     std::dynamic_pointer_cast<ConstOsmMapConsumer>(featureFilter);
@@ -672,11 +705,14 @@ void ChangesetReplacementCreator::_filterFeatures(
   {
     mapConsumer->setOsmMap(map.get());
   }
+
+  RemoveElementsVisitor elementPruner(true);
   elementPruner.addCriterion(featureFilter);
   elementPruner.setRecursive(true);
   LOG_DEBUG(elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
   LOG_DEBUG(elementPruner.getCompletedStatusMessage());
+
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }

@@ -123,8 +123,10 @@ public:
   void setGeometryFilters(const QStringList& filterClassNames);
   void setInput1Filters(const QStringList& filterClassNames);
   void setChainInput1Filters(const bool chain) { _chainInput1Filters = chain; }
+  void setInput1FilterOptions(const QStringList& optionKvps);
   void setInput2Filters(const QStringList& filterClassNames);
   void setChainInput2Filters(const bool chain) { _chainInput2Filters = chain; }
+  void setInput2FilterOptions(const QStringList& optionKvps);
 
 private:
 
@@ -144,6 +146,10 @@ private:
   bool _chainInput1Filters;
   // TODO
   bool _chainInput2Filters;
+  // TODO
+  Settings _input1FilterOptions;
+  // TODO
+  Settings _input2FilterOptions;
 
   BoundsOptions _boundsOpts;
 
@@ -159,10 +165,12 @@ private:
   void _setInputFilter(
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
     const bool chainFilters);
+  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     const bool ref);
   void _filterFeatures(
-    OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const QString& debugFileName);
+    OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
+    const QString& debugFileName);
 
   void _setGlobalOpts(const QString& boundsStr);
   void _parseConfigOpts(

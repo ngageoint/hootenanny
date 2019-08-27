@@ -355,7 +355,7 @@ See the User Guide for more details on command usage.
       output.osc -geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
 -----
 
-===== Replace all POIs in the first dataset with schools from the second dataset within the specified bounds:
+===== Replace all POIs in the first dataset with schools from the second dataset within the specified bounds (TODO: update):
 -----
     hoot changeset-derive-replacement -D tag.criterion.kvps="amenity=school" input1.osm input2.osm "38,-105,39,-104" \
       outputChangeset.osc --geometry-filters "hoot::PoiCriterion --input2-filters "hoot::TagCriterion"

@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -51,6 +52,10 @@ bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
       e->getTags().getNames().size() > 0;
   }
 
+  if (result)
+  {
+    LOG_TRACE("crit satisfied");
+  }
   return result;
 }
 

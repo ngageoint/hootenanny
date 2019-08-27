@@ -88,6 +88,16 @@ public:
       args.removeAll("--chain-input1-filters");
     }
     LOG_VARD(chainInput1Filters);
+    QStringList input1FilterOptions;
+    if (args.contains("--input1-filter-options"))
+    {
+      const int optionNameIndex = args.indexOf("--input1-filter-options");
+      LOG_VARD(optionNameIndex);
+      input1FilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(input1FilterOptions);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
     QStringList input2Filters;
     if (args.contains("--input2-filters"))
     {
@@ -104,7 +114,17 @@ public:
       chainInput2Filters = true;
       args.removeAll("--chain-input2-filters");
     }
-    LOG_VARD(chainInput1Filters);
+    LOG_VARD(chainInput2Filters);
+    QStringList input2FilterOptions;
+    if (args.contains("--input2-filter-options"))
+    {
+      const int optionNameIndex = args.indexOf("--input2-filter-options");
+      LOG_VARD(optionNameIndex);
+      input2FilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(input2FilterOptions);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
@@ -164,8 +184,10 @@ public:
     changesetCreator.setGeometryFilters(geometryFilters);
     changesetCreator.setInput1Filters(input1Filters);
     changesetCreator.setChainInput1Filters(chainInput1Filters);
+    changesetCreator.setInput1FilterOptions(input1FilterOptions);
     changesetCreator.setInput2Filters(input2Filters);
     changesetCreator.setChainInput2Filters(chainInput2Filters);
+    changesetCreator.setInput2FilterOptions(input2FilterOptions);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;

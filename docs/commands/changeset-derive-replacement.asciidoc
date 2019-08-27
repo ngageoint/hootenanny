@@ -13,35 +13,39 @@ data store, like an OSM API database, and the secondary can be any type of data.
 retained and treated as data resident in an authoritative data store. Element IDs for the second input dataset (secondary data) are not retained 
 and treated as completely new data. 
 
-* +input1+                 - OSM data reference input (e.g. .osm file); may be any supported input format that supports bounded reading. See 
-                             the "Bounds Handling" section.
-* +input2+                 - OSM data secondary input (e.g. .osm file); may be any supported input format that supports bounded reading. See 
-                             the "Bounds Handling" section.
-* +bounds+                 - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
-* +output+                 - Output location; must be an .osc or .osc.sql file.
-* +osmApiDatabaseUrl+      - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a 
-                             particular database instance when generating SQL changesets only (.osc.sql).
-* +--strict-bounds+        - Determines how strict the interpretation of the specified bounds is during feature replacement. See the  
-                             "Bounds Handling" section for more detail.
-* +--geometry-filters+     - Optional criteria used to determine the geometry type of the features that are replaced in the reference 
-                             dataset. See the "Geometry Filtering" section for more detail.
-* +--input1-filters+       - Optional filtering criteria beyond what is specified in --geometry-filters for determining which reference dataset 
-                             features are replaced. See the "Additional Filtering" section for more detail.
-* +--input2-filters+       - Optional filtering criteria beyond what is specified in --geometry-filters for determining which secondary dataset 
-                             features are used as replacement features. See the "Additional Filtering" section for more detail.
-* +--chain-input1-filters+ - Determines how the criteria specified in --input1-filters are applied. See the "Additional Filtering" section for 
-                             more detail.
-* +--chain-input2-filters+ - Determines how the criteria specified in --input2-filters are applied. See the "Additional Filtering" section for 
-                             more detail.
-* +--stats+                - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only 
-                             valid for .osc output files)
-* +--write-bounds+         - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the 
-                             input bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
+* +input1+                  - Reference input with features to replace; may be any supported input format that supports bounded reading 
+                              (e.g. OSM file). See the "Bounds Handling" section for more detail.
+* +input2+                  - Secondary input with the features used for replacement; may be any supported input format that supports bounded 
+                              reading (e.g. OSM file). See the "Bounds Handling" section for more detail.
+* +bounds+                  - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "38,-105,39,-104"
+* +output+                  - Output location; must be an .osc or .osc.sql file.
+* +osmApiDatabaseUrl+       - Target OSM API database the changeset is to be applied to.  Used to maintain element ID continuity with a 
+                              particular database instance when generating SQL changesets only (.osc.sql).
+* +--strict-bounds+         - Determines how strict the interpretation of the specified bounds is during feature replacement. See the  
+                              "Bounds Handling" section for more detail.
+* +--geometry-filters+      - Optional criteria used to determine the geometry type of the features that are replaced in the reference 
+                              dataset. See the "Geometry Filtering" section for more detail.
+* +--input1-filters+        - Optional filtering criteria beyond what is specified in --geometry-filters for determining which reference dataset 
+                              features are replaced. See the "Additional Filtering" section for more detail.
+* +--chain-input1-filters+  - Determines how the criteria specified in --input1-filters are applied. See the "Additional Filtering" section for 
+                              more detail.
+* +--input1-filter-options+ - Optional configuration options for the filters specified in --input1-filters. See the "Additional Filtering" 
+                              section for more detail.
+* +--input2-filters+        - Optional filtering criteria beyond what is specified in --geometry-filters for determining which secondary dataset 
+                              features are used as replacement features. See the "Additional Filtering" section for more detail.
+* +--chain-input2-filters+  - Determines how the criteria specified in --input2-filters are applied. See the "Additional Filtering" section for 
+                              more detail.
+* +--input2-filter-options+ - Optional configuration options for the filters specified in --input2-filters. See the "Additional Filtering" 
+                              section for more detail.
+* +--stats+                 - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only 
+                              valid for .osc output files)
+* +--write-bounds+          - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the 
+                              input bounds. The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--strict-bounds] [--geometry-filters] [--input1-filters] [--input2-filters] [--chain-input1-filters] [--chain-input2-filters] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--strict-bounds] [--geometry-filters] [--input1-filters] [--chain-input1-filters] [--input1-filter-options] [--input2-filters] [--chain-input2-filters] [--input2-filter-options] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -72,11 +76,19 @@ The command options, --input1-filters and --input2-filters, allow for feature fi
 names can added to --input1-filters for filtering beyond what is specified in --geometry-filters to determine the features that are replaced 
 in the reference dataset. One or more criterion class names can added to --input2-filters for filtering beyond what is specified in 
 --geometry-filters to determine the features that are used for replacement from the secondary dataset. The criteria specified may not be 
-geometry type element criteria. The behavior of the filters is determined by the --chain-input1-filters and --chain-input2-filters options. If
---chain-input1-filters is used, then a feature must pass all criteria in order to pass the filter specified in --input1-filters. If
---chain-input2-filters is used, then a feature must pass all criteria in order to pass the filter specified in --input2-filters. Likewie, if 
-the chain options are absent, then a feature must pass only a single specified criterion to pass the respective filters. From the command line, 
-combine multiple criteria with a semicolon and surround the entire value string with quotes.
+geometry type element criteria. From the command line, combine multiple criteria with a semicolon and surround the entire value string with 
+quotes. 
+
+The behavior of the filters is determined by the --chain-input1-filters and --chain-input2-filters options. If --chain-input1-filters is used, 
+then a feature must pass all criteria in order to pass the filter specified in --input1-filters. If --chain-input2-filters is used, then a 
+feature must pass all criteria in order to pass the filter specified in --input2-filters. Likewise, if the chain options are absent, then a 
+feature must pass only a single specified criterion to pass the respective filters. 
+
+Configuration options may be passed separately to each set of input filters via the --input1-filter-options and --input2-filter-options 
+parameters. The options take the form "<option name 1>=<option value 1>;<option name 2>=<option value 2>..." Passing them separately to each
+filter allows for the same criterion to be used with each filter but with a different configuration. Do not prepend these options with "-D" as
+is normally done with configuration options passed in from the command line. Any identically named configuration options passed into the command
+prepended by "-D" may override these filtering configuration options.
 
 === Bounds Handling
 
@@ -141,3 +153,4 @@ GeoJSON output from the Overpass API is not supported by this command, since it 
 * `changeset-derive` command
 * `changeset.*` configuration options
 * `snap.unconnected.ways.*` configuration options
+* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc

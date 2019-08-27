@@ -66,4 +66,13 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
   return false;
 }
 
+QString OrCriterion::toString() const
+{
+  QString txt = ChainCriterion::toString();
+  txt.replace(
+    QString::fromStdString(ChainCriterion::className()),
+    QString::fromStdString(OrCriterion::className()));
+  return txt;
+}
+
 }

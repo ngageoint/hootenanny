@@ -71,6 +71,7 @@ void TagContainsCriterion::setKvps(const QStringList kvps)
 
 bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e);
   bool matches = false;
   for (int i = 0; i < _key.size(); i++)
   {
@@ -79,6 +80,10 @@ bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
       matches = true;
       break;  //  Only one match is required
     }
+  }
+  if (matches)
+  {
+    LOG_TRACE("crit satisfied");
   }
   return matches;
 }

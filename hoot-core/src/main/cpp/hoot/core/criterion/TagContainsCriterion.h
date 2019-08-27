@@ -40,6 +40,8 @@ namespace hoot
 
 /**
  * Identifies elements by tag key and tag value substring
+ *
+ * TODO: handle case sensitivity as an option
  */
 class TagContainsCriterion : public ElementCriterion, public Configurable
 {
