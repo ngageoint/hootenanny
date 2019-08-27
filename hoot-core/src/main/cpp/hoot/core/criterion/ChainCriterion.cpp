@@ -108,9 +108,11 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     if (!_criteria[i]->isSatisfied(e))
     {
+      LOG_TRACE("One chained criterion not satisfied. Filter not satisfied for: " << e);
       return false;
     }
   }
+  LOG_TRACE("One chained criteria satisfied. Filter satisfied for: " << e);
   return true;
 }
 

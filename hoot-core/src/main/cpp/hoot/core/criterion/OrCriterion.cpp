@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -60,9 +61,11 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     if (_criteria[i]->isSatisfied(e))
     {
+      LOG_TRACE("One OR'd criterion satisfied. Filter satisfied for: " << e);
       return true;
     }
   }
+  LOG_TRACE("No OR'd criterion satisfied. Filter not satisfied for: " << e);
   return false;
 }
 

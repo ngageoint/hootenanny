@@ -147,7 +147,7 @@ void ChangesetReplacementCreator::_setInputFilter(
   if (!filterClassNames.isEmpty())
   {
     LOG_VARD(chainFilters);
-    if (chainFilters)
+    if (!chainFilters)
     {
       inputFilter.reset(new OrCriterion());
     }
@@ -199,14 +199,20 @@ void ChangesetReplacementCreator::_setInputFilter(
 
 void ChangesetReplacementCreator::setInput1Filters(const QStringList& filterClassNames)
 {
-  LOG_DEBUG("Creating input filter 1...");
-  _setInputFilter(_input1Filter, filterClassNames, _chainInput1Filters);
+  if (filterClassNames.size() > 0)
+  {
+    LOG_DEBUG("Creating input filter 1...");
+    _setInputFilter(_input1Filter, filterClassNames, _chainInput1Filters);
+  }
 }
 
 void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClassNames)
 {
-  LOG_DEBUG("Creating input filter 2...");
-  _setInputFilter(_input2Filter, filterClassNames, _chainInput2Filters);
+  if (filterClassNames.size() > 0)
+  {
+    LOG_DEBUG("Creating input filter 2...");
+    _setInputFilter(_input2Filter, filterClassNames, _chainInput2Filters);
+  }
 }
 
 void ChangesetReplacementCreator::_setInputFilterOptions(Settings& opts,
