@@ -319,6 +319,8 @@ void ChangesetReplacementCreator::create(
   // with secondary features within the bounds and write it out.
 
   _changesetCreator->create(refMaps, conflatedMaps, output);
+
+  LOG_INFO("Derived replacement changeset: " << output.right(maxFilePrintLength));
 }
 
 void ChangesetReplacementCreator::_getMapsForGeometryType(
@@ -563,24 +565,22 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   LOG_VARD(_input2Filter);
   if (ref && _input1Filter)
   {
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
+    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
       LOG_VARD(itr.key());
       combinedFilters[itr.key()] =
-        std::shared_ptr<ChainCriterion>(
-          new ChainCriterion(itr.value().get(), _input1Filter.get()));
+        std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), _input1Filter));
     }
   }
   else if (!ref && _input2Filter)
   {
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
+    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
       LOG_VARD(itr.key());
       combinedFilters[itr.key()] =
-        std::shared_ptr<ChainCriterion>(
-          new ChainCriterion(itr.value().get(), _input2Filter.get()));
+        std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), _input2Filter));
     }
   }
   else
