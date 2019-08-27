@@ -72,6 +72,9 @@ public:
 
   virtual QString supportedFormats() override { return ".geojson"; }
 
+  virtual QString toString(const ConstOsmMapPtr& map);
+
+
 protected:
 
   /**
