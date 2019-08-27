@@ -199,11 +199,13 @@ void ChangesetReplacementCreator::_setInputFilter(
 
 void ChangesetReplacementCreator::setInput1Filters(const QStringList& filterClassNames)
 {
+  LOG_DEBUG("Creating input filter 1...");
   _setInputFilter(_input1Filter, filterClassNames, _chainInput1Filters);
 }
 
 void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClassNames)
 {
+  LOG_DEBUG("Creating input filter 2...");
   _setInputFilter(_input2Filter, filterClassNames, _chainInput2Filters);
 }
 
