@@ -96,6 +96,7 @@ struct BoundsOptions
  * and a host of other things that need to happen before the changeset generation.
  *
  * TODO: implement progress
+ * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
  */
 class ChangesetReplacementCreator
 {
