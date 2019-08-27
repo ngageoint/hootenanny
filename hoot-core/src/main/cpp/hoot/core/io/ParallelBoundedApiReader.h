@@ -98,6 +98,8 @@ public:
    */
   void setMaxThreads(int max_threads) { _threadCount = max_threads; }
 
+  bool isError() { return _fatalError; }
+
 protected:
   /**
    * @brief _process Thread function that does the actual work of sending
