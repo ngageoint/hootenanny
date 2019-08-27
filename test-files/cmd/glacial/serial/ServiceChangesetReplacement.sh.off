@@ -41,32 +41,45 @@ fi
 #echo "geometry filters: " $GEOMETRY_FILTERS
 #echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
 if [ "$7" == "" ]; then
-  ADDITIONAL_FILTERS=""
+  INPUT1_FILTERS=""
 else
-  ADDITIONAL_FILTERS=" --additional-filters "$7
+  INPUT1_FILTERS=" --input1-filters "$7
 fi
-#echo "additional filters: " $ADDITIONAL_FILTERS
-CHAIN_ADDITIONAL_FILTERS=$8
-if [ "$CHAIN_ADDITIONAL_FILTERS" == "true" ]; then
-  CHAIN_ADDITIONAL_FILTERS="--chain-additional-filters"
+#echo "input1 filters: " $INPUT1_FILTERS
+CHAIN_INPUT1_FILTERS=$8
+if [ "$CHAIN_INPUT1_FILTERS" == "true" ]; then
+  CHAIN_INPUT1_FILTERS="--chain-input1-filters"
 else
-  CHAIN_ADDITIONAL_FILTERS=""
+  CHAIN_INPUT1_FILTERS=""
 fi
-#echo "chain additional filters: " $CHAIN_ADDITIONAL_FILTERS 
-ADDITIONAL_FILTER_OPTS=$9
+#echo "chain input1 filters: " $CHAIN_INPUT1_FILTERS 
+if [ "$9" == "" ]; then
+  INPUT2_FILTERS=""
+else
+  INPUT2_FILTERS=" --input2-filters "$9
+fi
+#echo "input2 filters: " $INPUT2_FILTERS
+CHAIN_INPUT2_FILTERS=${10}
+if [ "$CHAIN_INPUT2_FILTERS" == "true" ]; then
+  CHAIN_INPUT2_FILTERS="--chain-input2-filters"
+else
+  CHAIN_INPUT2_FILTERS=""
+fi
+#echo "chain input2 filters: " $CHAIN_INPUT2_FILTERS
+ADDITIONAL_FILTER_OPTS=${11}
 #echo "additional filter opts: " $ADDITIONAL_FILTER_OPTS 
-SOURCE_FORMATS=${10}
+SOURCE_FORMATS=${12}
 #echo "source formats: " $SOURCE_FORMATS 
-if [ "${11}" == "" ]; then
+if [ "${13}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=${11}
+  WAY_SNAP_TOLERANCE=${13}
 fi
 #echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
-if [ "${12}" == "" ]; then
+if [ "${14}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${12}
+  EXISTING_WAY_NODE_TOLERANCE=${14}
 fi
 #echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
 CUSTOM_TAG_KEY="note"
@@ -83,6 +96,7 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 
+# ChangesetReplacementCreator;TagValueNumericRangeCriterion;TagCriterion;PoiCriterion
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
@@ -119,7 +133,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_DB_INPUT and $SEC_DB_INPUT to file: $CHANGESET_DB that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS $CHAIN_ADDITIONAL_FILTERS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $INPUT1_FILTERS $CHAIN_INPUT1_FILTERS $INPUT2_FILTERS $CHAIN_INPUT2_FILTERS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -169,7 +183,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT to file: $CHANGESET_XML that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS $CHAIN_ADDITIONAL_FILTERS
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $INPUT1_FILTERS $CHAIN_INPUT1_FILTERS $INPUT2_FILTERS $CHAIN_INPUT2_FILTERS
 
   # CHANGESET APPLICATION
 
@@ -216,7 +230,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT to file: $CHANGESET_JSON that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $ADDITIONAL_FILTERS $CHAIN_ADDITIONAL_FILTERS
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $INPUT1_FILTERS $CHAIN_INPUT1_FILTERS $INPUT2_FILTERS $CHAIN_INPUT2_FILTERS
 
   # CHANGESET APPLICATION
 

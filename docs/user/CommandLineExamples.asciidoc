@@ -54,7 +54,14 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
 -----
 
-===== Create a changeset that completely replaces all buildings in one dataset with those in another over an AOI:
+===== Replace all features in the first dataset with buildings from the second dataset with a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc
+-----
+
+===== Replace all buildings in the first dataset with buildings from the second dataset with a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
@@ -341,27 +348,33 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 
-===== Create a changeset that completely replaces all features in one dataset with those in another over an AOI:
-
------
-    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc
------
-
-===== Create a changeset that completely replaces all buildings and POIs in one dataset with those in another over an AOI:
+===== Replace all buildings and POIs in the first dataset with all buildings and POIs from the second dataset within the specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc -geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
 -----
 
-===== Create a changeset that completely replaces all cafes with "Java" in the name in one dataset with those in another over an AOI:
+===== Replace all POIs in the first dataset with schools from the second dataset within the specified bounds:
+-----
+    hoot changeset-derive-replacement -D tag.criterion.kvps="amenity=school" input1.osm input2.osm "38,-105,39,-104" \
+      outputChangeset.osc --geometry-filters "hoot::PoiCriterion --input2-filters "hoot::TagCriterion"
+-----
+
+===== Replace all schools in the first dataset with schools from the second dataset within the specified bounds:
+-----
+    hoot changeset-derive-replacement -D tag.criterion.kvps="amenity=school" input1.osm input2.osm "38,-105,39,-104" \
+      outputChangeset.osc --geometry-filters "hoot::PoiCriterion --input1-filters "hoot::TagCriterion" \
+      --input2-filters "hoot::TagCriterion"
+-----
+
+===== Replace all POIs in the first dataset with cafes that hava "Java" in the name from the second dataset within the specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 -D tag.criterion.kvps="amenity=cafe" \
       -D tag.contains.criterion.kvps='name=Java' input1.osm input2.osm "-122.43204,37.7628,-122.4303457,37.76437" \
       output.osc --geometry-filters "hoot::PoiCriterion" 
-      --additional-filters "hoot::TagContainsCriterion;hoot::TagCriterion" --chain-additional-filters
+      --input2-filters "hoot::TagContainsCriterion;hoot::TagCriterion" --chain-input2-filters
 -----
 
 ==== Data Transformation

@@ -76,7 +76,8 @@ namespace hoot
 ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
                                                          const QString osmApiDbUrl) :
 _lenientBounds(true),
-_chainAdditionalFilters(false)
+_chainInput1Filters(false),
+_chainInput2Filters(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -138,19 +139,21 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
   LOG_VARD(_linearFilterClassNames);
 }
 
-void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filterClassNames)
+void ChangesetReplacementCreator::_setInputFilter(
+  std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
+  const bool chainFilters)
 {
   LOG_VARD(filterClassNames.size());
   if (!filterClassNames.isEmpty())
   {
-    LOG_VARD(_chainAdditionalFilters);
-    if (_chainAdditionalFilters)
+    LOG_VARD(chainFilters);
+    if (chainFilters)
     {
-      _additionalFilter.reset(new OrCriterion());
+      inputFilter.reset(new OrCriterion());
     }
     else
     {
-      _additionalFilter.reset(new ChainCriterion());
+      inputFilter.reset(new ChainCriterion());
     }
 
     for (int i = 0; i < filterClassNames.size(); i++)
@@ -169,7 +172,7 @@ void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filter
       if (!crit)
       {
         throw IllegalArgumentException(
-          "Invalid additional filter: " + filterClassName + ". Filter must be a ElementCriterion.");
+          "Invalid input filter: " + filterClassName + ". Filter must be a ElementCriterion.");
       }
 
       // Fail if the filter maps to a geometry type.
@@ -184,13 +187,24 @@ void ChangesetReplacementCreator::setAdditionalFilters(const QStringList& filter
       if (geometryTypeFilter)
       {
         throw IllegalArgumentException(
-          "Invalid additional filter: " + filterClassName +
-          ". May not be a GeometryTypeCriterion.");
+          "Invalid input filter: " + filterClassName + ". May not be a GeometryTypeCriterion.");
       }
 
-      _additionalFilter->addCriterion(crit);
+      inputFilter->addCriterion(crit);
     }
+
+    LOG_VARD(inputFilter->criteriaSize());
   }
+}
+
+void ChangesetReplacementCreator::setInput1Filters(const QStringList& filterClassNames)
+{
+  _setInputFilter(_input1Filter, filterClassNames, _chainInput1Filters);
+}
+
+void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClassNames)
+{
+  _setInputFilter(_input2Filter, filterClassNames, _chainInput2Filters);
 }
 
 void ChangesetReplacementCreator::create(
@@ -202,8 +216,10 @@ void ChangesetReplacementCreator::create(
   _validateInputs(input1, input2);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
-  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters =
-    _getCombinedFilters();
+  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
+    _getCombinedFilters(true);
+  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
+    _getCombinedFilters(false);
 
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString lenientStr = "Bounds calculation is ";
@@ -223,12 +239,12 @@ void ChangesetReplacementCreator::create(
   QList<OsmMapPtr> conflatedMaps;
   int passCtr = 1;
   for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         filters.begin(); itr != filters.end(); ++itr)
+         refFilters.begin(); itr != refFilters.end(); ++itr)
   {
     LOG_DEBUG(
       "Preparing maps for changeset derivation given geometry type: "<<
       GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
-      filters.size() << "...");
+      refFilters.size() << "...");
 
     OsmMapPtr refMap;
     OsmMapPtr conflatedMap;
@@ -239,8 +255,8 @@ void ChangesetReplacementCreator::create(
       linearFilterClassNames = _linearFilterClassNames;
     }
     _getMapsForGeometryType(
-      refMap, conflatedMap, input1, input2, boundsStr, itr.value(), itr.key(),
-      linearFilterClassNames);
+      refMap, conflatedMap, input1, input2, boundsStr, itr.value(), secFilters[itr.key()],
+      itr.key(), linearFilterClassNames);
     if (refMap && refMap->getElementCount() > 0)
     {
       refMaps.append(refMap);
@@ -252,8 +268,15 @@ void ChangesetReplacementCreator::create(
 
     passCtr++;
   }
+
   LOG_VARD(refMaps.size());
   LOG_VARD(conflatedMaps.size());
+  if (refMaps.size() == 0 || conflatedMaps.size() == 0)
+  {
+    LOG_DEBUG("No features remain after filtering. Skipping changeset generation...");
+    return;
+  }
+  assert(refMaps.size() == conflatedMaps.size());
 
   // CHANGESET GENERATION
 
@@ -265,7 +288,8 @@ void ChangesetReplacementCreator::create(
 
 void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
-  const QString& boundsStr, const ElementCriterionPtr& featureFilter,
+  const QString& boundsStr, const ElementCriterionPtr& refFeatureFilter,
+  const ElementCriterionPtr& secFeatureFilter,
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
@@ -304,7 +328,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
-  _filterFeatures(refMap, featureFilter, "ref-after-type-pruning");
+  _filterFeatures(refMap, refFeatureFilter, "ref-after-type-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
 
@@ -314,11 +338,11 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // modifying anything else.
 
   // TODO: Do we need to filter features with an empty filter?
-  _filterFeatures(secMap, featureFilter, "sec-after-type-pruning");
+  _filterFeatures(secMap, secFeatureFilter, "sec-after-type-pruning");
 
-  // TODO: Is this right?
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
+  // TODO: Is this right?
   if (refMap->getElementCount() == 0 && secMap->getElementCount() == 0)
   {
     LOG_DEBUG("Both input maps empty after filtering. Skipping changeset generation...");
@@ -498,19 +522,31 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetReplacementCreator::_getCombinedFilters()
+  ChangesetReplacementCreator::_getCombinedFilters(const bool ref)
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
-  LOG_VARD(_additionalFilter);
-  if (_additionalFilter)
+  LOG_VARD(_input1Filter);
+  LOG_VARD(_input2Filter);
+  if (ref && _input1Filter)
   {
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
-           _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
       LOG_VARD(itr.key());
       combinedFilters[itr.key()] =
         std::shared_ptr<ChainCriterion>(
-          new ChainCriterion(itr.value().get(), _additionalFilter.get()));
+          new ChainCriterion(itr.value().get(), _input1Filter.get()));
+    }
+  }
+  else if (!ref && _input2Filter)
+  {
+    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::iterator itr =
+         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+    {
+      LOG_VARD(itr.key());
+      combinedFilters[itr.key()] =
+        std::shared_ptr<ChainCriterion>(
+          new ChainCriterion(itr.value().get(), _input2Filter.get()));
     }
   }
   else
@@ -548,7 +584,6 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
 QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   const OsmMapPtr& map) const
 {
-  LOG_DEBUG("Recording ID to version mappings for: " << map->getName() << "...");
   ElementIdToVersionMapper idToVersionMapper;
   LOG_DEBUG(idToVersionMapper.getInitStatusMessage());
   idToVersionMapper.apply(map);

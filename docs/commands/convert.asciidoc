@@ -7,10 +7,11 @@ The +convert+ command converts map data from one input format to another.  Optio
 conversion.  The process may be memory bound depending upon the input or output formats selected.  See the Hootenanny User Guide Supported
 Data Formats section for more information.
 
-* +input(s)+       - Input path(s) to convert from; Multiple inputs are supported unless converting to an OGR format, and path wildcards may 
-                     be used for inputs within the same directory. For OGR inputs, layer names may also optionally be specified.  Use a single 
-                     space to separate each input and a ';' between inputs and layer (<filename>;<layer name>).
-* +output+         - Output path to convert to (e.g. .osm file, etc.).
+* +input(s)+       - Input path(s) to convert from; may be any supported input format; Multiple inputs are supported unless converting to 
+                     an OGR format, and path wildcards may be used for inputs within the same directory. For OGR inputs, layer names may 
+                     also optionally be specified.  Use a single space to separate each input and a ';' between inputs and layer 
+                     (<filename>;<layer name>).
+* +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
 * +--write-bounds+ - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
 
@@ -189,3 +190,7 @@ field separators. If you get errors using absolute paths, check that you have th
 *** If the Zip file is in the current directory, the input will be: /vsizip/./test_data.zip/dir/LAP010.shp
 *** If you do not specify a specific shapefile then it will read in all shapefiles in the given directory
 * To prevent memory bound conversion when converting to OSM XML, you must set the writer.xml.sort.by.id configuration option to false.
+
+=== See Also
+
+* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc

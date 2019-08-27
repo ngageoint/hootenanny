@@ -71,23 +71,40 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    QStringList additionalFilters;
-    if (args.contains("--additional-filters"))
+    QStringList input1Filters;
+    if (args.contains("--input1-filters"))
     {
-      const int optionNameIndex = args.indexOf("--additional-filters");
+      const int optionNameIndex = args.indexOf("--input1-filters");
       LOG_VARD(optionNameIndex);
-      additionalFilters = args.at(optionNameIndex + 1).trimmed().split(";");
-      LOG_VARD(additionalFilters);
+      input1Filters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(input1Filters);
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    bool chainAdditionalFilters = false;
-    if (args.contains("--chain-additional-filters"))
+    bool chainInput1Filters = false;
+    if (args.contains("--chain-input1-filters"))
     {
-      chainAdditionalFilters = true;
-      args.removeAll("--chain-additional-filters");
+      chainInput1Filters = true;
+      args.removeAll("--chain-input1-filters");
     }
-    LOG_VARD(chainAdditionalFilters);
+    LOG_VARD(chainInput1Filters);
+    QStringList input2Filters;
+    if (args.contains("--input2-filters"))
+    {
+      const int optionNameIndex = args.indexOf("--input2-filters");
+      LOG_VARD(optionNameIndex);
+      input1Filters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(input2Filters);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    bool chainInput2Filters = false;
+    if (args.contains("--chain-input2-filters"))
+    {
+      chainInput2Filters = true;
+      args.removeAll("--chain-input2-filters");
+    }
+    LOG_VARD(chainInput1Filters);
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
@@ -145,8 +162,10 @@ public:
     ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);
-    changesetCreator.setAdditionalFilters(additionalFilters);
-    changesetCreator.setChainAdditionalFilters(chainAdditionalFilters);
+    changesetCreator.setInput1Filters(input1Filters);
+    changesetCreator.setChainInput1Filters(chainInput1Filters);
+    changesetCreator.setInput2Filters(input2Filters);
+    changesetCreator.setChainInput2Filters(chainInput2Filters);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;

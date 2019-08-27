@@ -114,7 +114,6 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
   return true;
 }
 
-
 QString ChainCriterion::toString() const
 {
   LOG_VART(_criteria.size());

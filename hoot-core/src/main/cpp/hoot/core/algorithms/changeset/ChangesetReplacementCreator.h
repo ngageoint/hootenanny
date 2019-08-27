@@ -121,8 +121,10 @@ public:
 
   void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
   void setGeometryFilters(const QStringList& filterClassNames);
-  void setAdditionalFilters(const QStringList& filterClassNames);
-  void setChainAdditionalFilters(const bool chain) { _chainAdditionalFilters = chain; }
+  void setInput1Filters(const QStringList& filterClassNames);
+  void setChainInput1Filters(const bool chain) { _chainInput1Filters = chain; }
+  void setInput2Filters(const QStringList& filterClassNames);
+  void setChainInput2Filters(const bool chain) { _chainInput2Filters = chain; }
 
 private:
 
@@ -135,9 +137,13 @@ private:
   // TODO
   QStringList _linearFilterClassNames;
   // TODO
-  std::shared_ptr<ChainCriterion> _additionalFilter;
+  std::shared_ptr<ChainCriterion> _input1Filter;
   // TODO
-  bool _chainAdditionalFilters;
+  std::shared_ptr<ChainCriterion> _input2Filter;
+  // TODO
+  bool _chainInput1Filters;
+  // TODO
+  bool _chainInput2Filters;
 
   BoundsOptions _boundsOpts;
 
@@ -150,7 +156,11 @@ private:
 
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const;
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters();
+  void _setInputFilter(
+    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
+    const bool chainFilters);
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
+    const bool ref);
   void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const QString& debugFileName);
 
@@ -217,7 +227,8 @@ private:
    */
   void _getMapsForGeometryType(
     OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
-    const QString& boundsStr, const ElementCriterionPtr& featureFilter,
+    const QString& boundsStr, const ElementCriterionPtr& refFeatureFilter,
+    const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
 };

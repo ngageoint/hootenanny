@@ -38,6 +38,8 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
 bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e);
+
   bool result = false;
 
   // we consider all point features with a name, or part of the explicitly defined point category

@@ -66,6 +66,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  int criteriaSize() const { return _criteria.size(); }
+
 protected:
 
   ChainCriterion(const std::vector<std::shared_ptr<ElementCriterion>>& criteria);

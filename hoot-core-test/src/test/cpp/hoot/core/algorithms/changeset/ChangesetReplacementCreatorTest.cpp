@@ -77,23 +77,23 @@ public:
 
     try
     {
-      changesetCreator.setAdditionalFilters(QStringList("hoot::AddAttributesVisitor"));
+      changesetCreator.setInput1Filters(QStringList("hoot::AddAttributesVisitor"));
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional filter"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid input filter"));
 
     try
     {
-      changesetCreator.setAdditionalFilters(QStringList("hoot::PoiCriterion"));
+      changesetCreator.setInput1Filters(QStringList("hoot::PoiCriterion"));
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional filter"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid input filter"));
   }
 
   void runNonBoundableReaderTest()

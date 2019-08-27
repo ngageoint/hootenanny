@@ -67,7 +67,7 @@ void TagCriterion::setConfiguration(const Settings &s)
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(e->getTags());
+  LOG_VART(e);
   for (int i = 0; i < _kvps.size(); i++)
   {
     const QStringList kvpParts = _kvps.at(i).split("=");

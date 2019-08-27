@@ -60,6 +60,7 @@ void TagValueNumericRangeCriterion::setConfiguration(const Settings& conf)
 
 bool TagValueNumericRangeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e);
   //The element must have tags for all keys passed in, and all the values for those keys must be
   //within the specified range.
   for (int i = 0; i < _tagKeys.size(); i++)
