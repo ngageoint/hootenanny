@@ -11,9 +11,10 @@ the +changeset-apply+ command.
 If deriving a changeset between two inputs from different dates, the first input should be the older
 dataset and the second should be the newer dataset.
 
-* +input1+            - OSM data input 1 (e.g. .osm file).
-* +input2+            - OSM data input 2 (e.g. .osm file or empty string ("") to derive changeset from one input only).
-* +output+            - Output location (e.g. .osc or .osc.sql file.
+* +input1+            - OSM data input 1; may be any supported input format (e.g. .osm file).
+* +input2+            - OSM data input 2; may be any supported input format (e.g. .osm file or empty string ("") to derive changeset from one 
+                        input only).
+* +output+            - Output location; may be an .osc or .osc.sql file.
 * +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
                         element ID continuity with a particular database instance when generating SQL
                         changesets only.  Required only if the changeset output format is .osc.sql.
@@ -59,3 +60,4 @@ OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
 === See Also
 
 * `changeset.*` configuration options
+* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc

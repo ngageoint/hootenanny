@@ -76,7 +76,7 @@ hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 
   input1.osm input2.osm output.osm
 --------------------------------------
 
-==== See Also
+=== See Also
 
 * _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 * _Differential Conflation_, <<hootalgo,Hootenanny - Algorithms>>

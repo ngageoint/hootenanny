@@ -6,14 +6,15 @@
 The +node-density-tiles+ command calculates a collection of bounding boxes that contain roughly equal distributions of node data from
 the specified input(s) and writes the output to a file.
 
-* +input+               - one or more OSM data inputs; specify multiple inputs by separating them with a semicolon
-* +output+              - output file to write the tile boundaries to; valid formats are GeoJSON (*.geojson)
+* +input+               - One or more inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them 
+                          with a semicolon.
+* +output+              - Output file to write the tile boundaries to; must be GeoJSON (*.geojson).
 * +maxNodeCountPerTile+ - The maximum number of nodes in any tile.  The default is 1000; optional only if pixelSize is not specified
 * +pixelSize+           - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if
                           maxNodeCountPerTile is not specified
-* +random-seed+         - seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
+* +random-seed+         - Seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
                           use -1 for no seeding; defaults to -1
-* +--random+            - selects a single random tile from those calculated
+* +--random+            - Selects a single random tile from those calculated
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the algorithm used may not be able
 to find a solution.

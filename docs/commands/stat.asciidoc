@@ -5,7 +5,7 @@
 
 The +stat+ command displays a statistic calculated from the features in a map.
 
-* +input+  -  An OSM data input
+* +input+  -  Input; may be any supported input format (e.g. OSM file).
 * +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the
               SingleStatistic interface.  Use the +info --operators+ command to obtain a list of available Hootenanny visitors.
 
@@ -26,4 +26,7 @@ hoot stat -D tags.visitor.keys="accuracy" input1.osm hoot::AverageNumericTagsVis
 hoot stat input1.osm hoot::CountManualMatchesVisitor
 --------------------------------------
 
+=== See Also
+
+* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
 
