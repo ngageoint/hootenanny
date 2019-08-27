@@ -151,6 +151,9 @@ void OsmApiReader::read(const OsmMapPtr& map)
       _sleep();
   }
 
+  if (isError())
+    throw HootException("Error reading OSM API");
+
   LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 
   ReportMissingElementsVisitor visitor;
