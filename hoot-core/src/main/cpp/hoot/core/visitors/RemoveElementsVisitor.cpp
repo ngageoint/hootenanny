@@ -60,6 +60,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   LOG_VART(critNames);
   _addCriteria(critNames);
   // TODO: Maybe we should just make MultipleCriterionConsumerVisitor configurable and move this up?
+  LOG_VARD(_criteria.size());
   for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
        it != _criteria.end(); ++it)
   {
@@ -68,6 +69,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
     if (c != 0)
     {
       c->setConfiguration(conf);
+      LOG_DEBUG("Set config on: " << crit->toString());
     }
   }
 

@@ -60,8 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements containing a specified tag key/value combination"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString toString() const override;
 
 private:
 

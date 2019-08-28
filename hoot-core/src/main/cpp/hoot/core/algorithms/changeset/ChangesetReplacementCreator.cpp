@@ -218,7 +218,9 @@ void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClas
 void ChangesetReplacementCreator::_setInputFilterOptions(Settings& opts,
                                                          const QStringList& optionKvps)
 {
+  LOG_VARD(optionKvps.size());
   opts = conf();
+  LOG_DEBUG("Opts size before adding custom opts: " << opts.size());
   for (int i = 0; i < optionKvps.size(); i++)
   {
     const QString kvp = optionKvps.at(i);
@@ -234,6 +236,7 @@ void ChangesetReplacementCreator::_setInputFilterOptions(Settings& opts,
     LOG_VARD(val);
     opts.set(key, val);
   }
+  LOG_DEBUG("Opts size after adding custom opts: " << opts.size());
 }
 
 void ChangesetReplacementCreator::setInput1FilterOptions(const QStringList& optionKvps)
@@ -386,7 +389,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
-  // TODO: Is this right?
   if (refMap->getElementCount() == 0 && secMap->getElementCount() == 0)
   {
     LOG_DEBUG("Both input maps empty after filtering. Skipping changeset generation...");

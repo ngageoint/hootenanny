@@ -39,13 +39,13 @@ HOOT_FACTORY_REGISTER(ElementCriterion, TagContainsCriterion)
 
 TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
 {
-  _key.append(key);
-  _valueSubstring.append(valueSubstring);
+  _keys.append(key);
+  _valueSubstrings.append(valueSubstring);
 }
 
 TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
-_key(keys),
-_valueSubstring(valueSubstrings)
+_keys(keys),
+_valueSubstrings(valueSubstrings)
 {
 }
 
@@ -71,11 +71,17 @@ void TagContainsCriterion::setKvps(const QStringList kvps)
 
 bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (_keys.size() == 0 || _valueSubstrings.size() == 0)
+  {
+    throw IllegalArgumentException(
+      "No tag keys or values specified for: " + QString::fromStdString(className()));
+  }
+
   LOG_VART(e);
   bool matches = false;
-  for (int i = 0; i < _key.size(); i++)
+  for (int i = 0; i < _keys.size(); i++)
   {
-    if (e->getTags().contains(_key[i]) && e->getTags()[_key[i]].contains(_valueSubstring[i]))
+    if (e->getTags().contains(_keys[i]) && e->getTags()[_keys[i]].contains(_valueSubstrings[i]))
     {
       matches = true;
       break;  //  Only one match is required
@@ -90,8 +96,15 @@ bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 
 void TagContainsCriterion::addPair(QString key, QString valueSubstring)
 {
-  _key.append(key);
-  _valueSubstring.append(valueSubstring);
+  _keys.append(key);
+  _valueSubstrings.append(valueSubstring);
+}
+
+QString TagContainsCriterion::toString() const
+{
+  return
+    QString::fromStdString(className()).remove("hoot::") + ":keys:" + _keys.join(",") + ":vals:" +
+    _valueSubstrings.join(",");
 }
 
 }

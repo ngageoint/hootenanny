@@ -70,13 +70,12 @@ public:
 
   void setKvps(const QStringList kvps);
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString toString() const override;
 
 private:
 
-  QStringList _key;
-  QStringList _valueSubstring;
+  QStringList _keys;
+  QStringList _valueSubstrings;
 };
 
 }

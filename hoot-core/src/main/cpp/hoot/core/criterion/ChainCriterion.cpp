@@ -98,6 +98,7 @@ void ChainCriterion::setConfiguration(const Settings& conf)
     if (configurable)
     {
       configurable->setConfiguration(conf);
+      LOG_DEBUG("Set config on: " << _criteria[i]->toString());
     }
   }
 }

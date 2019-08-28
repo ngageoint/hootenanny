@@ -67,6 +67,12 @@ void TagCriterion::setConfiguration(const Settings &s)
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (_kvps.size() == 0)
+  {
+    throw IllegalArgumentException(
+      "No tag key/value pairs specified for: " + QString::fromStdString(className()));
+  }
+
   LOG_VART(e);
   for (int i = 0; i < _kvps.size(); i++)
   {
@@ -82,6 +88,11 @@ bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
   return false;
+}
+
+QString TagCriterion::toString() const
+{
+  return QString::fromStdString(className()).remove("hoot::")+ ":kvps:" + _kvps.join(",");
 }
 
 }
