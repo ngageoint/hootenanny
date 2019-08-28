@@ -141,7 +141,7 @@ void MapIoJs::loadGeoJsonFromString(const FunctionCallbackInfo<Value>& args)
     status = (Status::Type)args[3]->ToInteger()->Value();
     reader.setDefaultStatus(status);
   }
-  reader.loadMapFromString(mapGeoJson, map->getMap());
+  reader.loadFromString(mapGeoJson, map->getMap());
 
   args.GetReturnValue().SetUndefined();
 }

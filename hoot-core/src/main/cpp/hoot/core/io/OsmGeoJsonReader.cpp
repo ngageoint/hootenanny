@@ -117,25 +117,13 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
   }
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromString(const QString& jsonStr)
-{
-  _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
-  _parseGeoJson();
-  return _map;
-}
-
-// GeoJson version of OsmXmlReader:: readFromString(QString, map)
-// Primarily used by the NodeJS bindings for consistency
-void OsmGeoJsonReader::loadMapFromString(const QString& jsonStr, const OsmMapPtr& map)
+void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 {
   _loadJSON(jsonStr);
   _map = map;
   _parseGeoJson();
   _map.reset();
 }
-
-
 
 OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)
 {
