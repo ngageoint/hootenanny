@@ -75,7 +75,6 @@ private:
   bool _addOnlyIfEmpty;
 
   ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue);
-  bool _criteriaSatisfied(const ConstElementPtr& e) const;
 };
 
 }
