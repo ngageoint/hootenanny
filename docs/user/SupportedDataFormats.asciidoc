@@ -2,7 +2,7 @@
 [[SupportedDataFormats]]
 == Supported Data Formats
 
-**Hootenanny can import from:**
+**Hootenanny supports the following formats as input:**
 
 * File Geodatabase (.gdb)
 * GeoJSON (.geojson file or Overpass query URL) (M1)
@@ -17,7 +17,7 @@
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 * Additional OGR supported formats not listed here
 
-**Hootenanny can export to:**
+**Hootenanny supports the following formats as output:**
 
 * File Geodatabase (.gdb)
 * GeoJSON (.geojson) (M1)
@@ -37,5 +37,7 @@
 * (M1) = format requires reading entire dataset into memory during processing
 * (M2) = format requires reading entire dataset into memory during processing only if element ID output needs to remain sorted
 * All data read with a specified bounding box filter requires reading the entire dataset into memory during processing.
+
+All Hootenanny commands can be passed any supported input/output format unless otherwise stated in the command's documentation. See the Hootenanny User Guide for details.
 
 Additional data types can be be made importable/exportable using Hootenanny's pluggable I/O architecture.  See the Hootenanny Developer Guide for details.
