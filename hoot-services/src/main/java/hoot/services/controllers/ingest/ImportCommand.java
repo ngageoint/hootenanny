@@ -30,12 +30,12 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.SCRIPT_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
+import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 import static hoot.services.controllers.ingest.UploadClassification.OSM;
 import static hoot.services.controllers.ingest.UploadClassification.SHP;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
-import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
-import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +88,7 @@ class ImportCommand extends ExternalCommand {
             //options.add("schema.translation.script=" + translationPath);
         //}
 
-        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
+        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP))
         {
           options.add("schema.translation.script=" + translationPath);
         }
@@ -103,7 +103,7 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         String command = null;
         if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {
