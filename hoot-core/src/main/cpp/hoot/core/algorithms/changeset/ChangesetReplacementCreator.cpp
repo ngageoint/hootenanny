@@ -258,9 +258,9 @@ void ChangesetReplacementCreator::create(
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _getCombinedFilters(true);
+    _getCombinedFilters(_input1Filter);
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-    _getCombinedFilters(false);
+    _getCombinedFilters(_input2Filter);
 
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString lenientStr = "Bounds calculation is ";
@@ -566,29 +566,19 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetReplacementCreator::_getCombinedFilters(const bool ref)
+  ChangesetReplacementCreator::_getCombinedFilters(
+    std::shared_ptr<ChainCriterion> nonGeometryFilter)
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
-  LOG_VARD(_input1Filter.get());
-  LOG_VARD(_input2Filter.get());
-  if (ref && _input1Filter)
+  LOG_VARD(nonGeometryFilter.get());
+  if (nonGeometryFilter)
   {
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
       combinedFilters[itr.key()] =
-        std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), _input1Filter));
-      LOG_DEBUG("Combined ref filter: " << combinedFilters[itr.key()]->toString());
-    }
-  }
-  else if (!ref && _input2Filter)
-  {
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
-    {
-      combinedFilters[itr.key()] =
-        std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), _input2Filter));
-      LOG_DEBUG("Combined sec filter: " << combinedFilters[itr.key()]->toString());
+        std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), nonGeometryFilter));
+      LOG_DEBUG("New combined filter: " << combinedFilters[itr.key()]->toString());
     }
   }
   else

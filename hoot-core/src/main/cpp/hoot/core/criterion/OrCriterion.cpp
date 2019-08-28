@@ -71,4 +71,12 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
   return false;
 }
 
+QString OrCriterion::toString() const
+{
+  return
+    ChainCriterion::toString().replace(
+      QString::fromStdString(ChainCriterion::className()).replace("hoot::", ""),
+      QString::fromStdString(className()).replace("hoot::", ""));
+}
+
 }

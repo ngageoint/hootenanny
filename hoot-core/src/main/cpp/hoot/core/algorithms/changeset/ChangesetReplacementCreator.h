@@ -168,7 +168,7 @@ private:
     const bool chainFilters);
   void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
-    const bool ref);
+    std::shared_ptr<ChainCriterion> nonGeometryFilter);
   void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
     const QString& debugFileName);

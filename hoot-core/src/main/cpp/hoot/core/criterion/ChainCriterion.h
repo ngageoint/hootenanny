@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Allows for chaining criteria together (logical AND)"; }
 
-  QString toString() const override;
+  virtual QString toString() const override;
 
   virtual void setOsmMap(const OsmMap* map);
 

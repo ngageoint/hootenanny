@@ -120,13 +120,13 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 
 QString ChainCriterion::toString() const
 {
-  QString txt;
+  QString txt = "ChainCriterion(";
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    //QString(typeid(*_criteria.at(i)).name())
     txt += _criteria.at(i)->toString() + ";";
   }
   txt.chop(1);
+  txt += ")";
   return txt;
 }
 
