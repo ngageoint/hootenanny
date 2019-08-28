@@ -123,7 +123,8 @@ QString ChainCriterion::toString() const
   QString txt;
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    txt += QString(typeid(*_criteria.at(i)).name()) + ";";
+    //QString(typeid(*_criteria.at(i)).name())
+    txt += _criteria.at(i)->toString() + ";";
   }
   txt.chop(1);
   return txt;

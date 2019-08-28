@@ -70,6 +70,9 @@ public:
 
   void setKvps(const QStringList kvps);
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   QStringList _key;

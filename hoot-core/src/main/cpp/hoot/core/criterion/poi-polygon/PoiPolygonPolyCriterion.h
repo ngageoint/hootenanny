@@ -56,6 +56,9 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   QStringList _tagIgnoreList;

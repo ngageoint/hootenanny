@@ -59,6 +59,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements that have no use"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   ConstOsmMapPtr _map;

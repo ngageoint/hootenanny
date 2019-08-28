@@ -58,6 +58,10 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
+
 private:
 
   WayNodeCriterion _wayNodeCrit;

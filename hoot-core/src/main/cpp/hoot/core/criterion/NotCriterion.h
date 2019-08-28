@@ -55,6 +55,8 @@ public:
 
   virtual QString getDescription() const { return "Negates a criterion"; }
 
+  virtual QString toString() const override;
+
 private:
 
   ElementCriterionPtr _child;

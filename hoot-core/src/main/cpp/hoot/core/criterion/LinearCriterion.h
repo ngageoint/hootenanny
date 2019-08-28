@@ -52,6 +52,10 @@ public:
   virtual QString getDescription() const { return "Identifies linear features"; }
 
   virtual GeometryType getGeometryType() const { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

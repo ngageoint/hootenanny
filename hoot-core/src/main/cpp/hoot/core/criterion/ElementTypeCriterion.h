@@ -53,6 +53,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements based on the specified type"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 protected:
 
   ElementType::Type _elementType;
@@ -64,8 +67,13 @@ class NodeCriterion : public ElementTypeCriterion
 public:
 
   static std::string className() { return "hoot::NodeCriterion"; }
+
   NodeCriterion() : ElementTypeCriterion(ElementType::Node) {}
+
   virtual QString getDescription() const { return "Identifies nodes"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 class WayCriterion : public ElementTypeCriterion
@@ -73,8 +81,13 @@ class WayCriterion : public ElementTypeCriterion
 public:
 
   static std::string className() { return "hoot::WayCriterion"; }
+
   WayCriterion() : ElementTypeCriterion(ElementType::Way) {}
+
   virtual QString getDescription() const { return "Identifies ways"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 class RelationCriterion : public ElementTypeCriterion
@@ -82,8 +95,13 @@ class RelationCriterion : public ElementTypeCriterion
 public:
 
   static std::string className() { return "hoot::RelationCriterion"; }
+
   RelationCriterion() : ElementTypeCriterion(ElementType::Relation) {}
+
   virtual QString getDescription() const { return "Identifies relations"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }

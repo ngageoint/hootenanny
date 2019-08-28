@@ -109,6 +109,10 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
   }
+  else
+  {
+    LOG_TRACE("Not removing element: " << e);
+  }
 }
 
 void RemoveElementsVisitor::removeWays(const std::shared_ptr<OsmMap>& pMap,

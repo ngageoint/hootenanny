@@ -68,6 +68,9 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   std::function<bool (const std::shared_ptr<const Element> &e)> _f;

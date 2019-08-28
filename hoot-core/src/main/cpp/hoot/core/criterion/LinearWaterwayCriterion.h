@@ -51,6 +51,10 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearWaterwayCriterion()); }
 
   virtual QString getDescription() const { return "Identifies linear bodies of water"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

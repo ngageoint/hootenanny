@@ -52,6 +52,9 @@ public:
 
   virtual GeometryType getGeometryType() const
   { return GeometryType::Polygon; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }

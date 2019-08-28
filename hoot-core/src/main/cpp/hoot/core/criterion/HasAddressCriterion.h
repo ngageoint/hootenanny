@@ -54,6 +54,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies features with addresses"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   AddressParser _addressParser;

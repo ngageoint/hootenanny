@@ -64,4 +64,9 @@ bool NotCriterion::isSatisfied(const ConstElementPtr& e) const
   return !_child->isSatisfied(e);
 }
 
+QString NotCriterion::toString() const
+{
+  return "NotCriterion(" + _child->toString() + ")";
+}
+
 }

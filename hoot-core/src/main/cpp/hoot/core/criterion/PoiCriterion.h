@@ -51,6 +51,10 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiCriterion()); }
 
   virtual QString getDescription() const { return "Identifies POIs"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

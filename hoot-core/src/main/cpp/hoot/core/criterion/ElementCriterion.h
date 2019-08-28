@@ -69,6 +69,13 @@ public:
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  virtual QString toString() const = 0;
 };
 
 typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;

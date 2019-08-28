@@ -103,7 +103,7 @@ public:
     {
       const int optionNameIndex = args.indexOf("--input2-filters");
       LOG_VARD(optionNameIndex);
-      input1Filters = args.at(optionNameIndex + 1).trimmed().split(";");
+      input2Filters = args.at(optionNameIndex + 1).trimmed().split(";");
       LOG_VARD(input2Filters);
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);

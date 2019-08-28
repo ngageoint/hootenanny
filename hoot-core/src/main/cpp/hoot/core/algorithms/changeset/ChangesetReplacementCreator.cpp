@@ -38,18 +38,15 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 #include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/Boundable.h>
-#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
@@ -69,6 +66,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 
 namespace hoot
 {
@@ -193,12 +191,13 @@ void ChangesetReplacementCreator::_setInputFilter(
       inputFilter->addCriterion(crit);
     }
 
-    LOG_VARD(inputFilter->criteriaSize());
+    LOG_VARD(inputFilter->toString());
   }
 }
 
 void ChangesetReplacementCreator::setInput1Filters(const QStringList& filterClassNames)
 {
+  LOG_VARD(filterClassNames.size());
   if (filterClassNames.size() > 0)
   {
     LOG_DEBUG("Creating input filter 1...");
@@ -208,6 +207,7 @@ void ChangesetReplacementCreator::setInput1Filters(const QStringList& filterClas
 
 void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClassNames)
 {
+  LOG_VARD(filterClassNames.size());
   if (filterClassNames.size() > 0)
   {
     LOG_DEBUG("Creating input filter 2...");
@@ -337,6 +337,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   const QStringList& linearFilterClassNames)
 {
   LOG_VARD(linearFilterClassNames);
+  LOG_VARD(refFeatureFilter);
+  LOG_VARD(secFeatureFilter);
 
   // INPUT VALIDATION AND SETUP
 
@@ -567,16 +569,16 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ChangesetReplacementCreator::_getCombinedFilters(const bool ref)
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
-  LOG_VARD(_input1Filter);
-  LOG_VARD(_input2Filter);
+  LOG_VARD(_input1Filter.get());
+  LOG_VARD(_input2Filter.get());
   if (ref && _input1Filter)
   {
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
-      LOG_VARD(itr.key());
       combinedFilters[itr.key()] =
         std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), _input1Filter));
+      LOG_DEBUG("Combined ref filter: " << combinedFilters[itr.key()]->toString());
     }
   }
   else if (!ref && _input2Filter)
@@ -584,9 +586,9 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
     {
-      LOG_VARD(itr.key());
       combinedFilters[itr.key()] =
         std::shared_ptr<ChainCriterion>(new ChainCriterion(itr.value(), _input2Filter));
+      LOG_DEBUG("Combined sec filter: " << combinedFilters[itr.key()]->toString());
     }
   }
   else
@@ -694,7 +696,9 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
   const QString& debugFileName)
 {
-  LOG_DEBUG("Filtering features for: " << map->getName() << " based on input filter...");
+  LOG_DEBUG(
+    "Filtering features for: " << map->getName() << " based on input filter: " <<
+    featureFilter->toString() << "...");
 
   RemoveElementsVisitor elementPruner(true);
   // The criteria must be added before the config or map is set. We may want to change

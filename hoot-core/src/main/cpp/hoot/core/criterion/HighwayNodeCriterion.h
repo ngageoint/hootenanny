@@ -54,6 +54,9 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Point; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 
 private:
 
