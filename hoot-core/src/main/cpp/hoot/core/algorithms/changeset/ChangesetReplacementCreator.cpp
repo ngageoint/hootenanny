@@ -696,24 +696,12 @@ void ChangesetReplacementCreator::_filterFeatures(
 {
   LOG_DEBUG("Filtering features for: " << map->getName() << " based on input filter...");
 
-  LOG_VARD(featureFilter.get());
-  std::shared_ptr<Configurable> configurable =
-    std::dynamic_pointer_cast<Configurable>(featureFilter);
-  LOG_VARD(configurable.get());
-  if (configurable)
-  {
-    configurable->setConfiguration(config);
-  }
-  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-    std::dynamic_pointer_cast<ConstOsmMapConsumer>(featureFilter);
-  LOG_VARD(mapConsumer.get());
-  if (mapConsumer)
-  {
-    mapConsumer->setOsmMap(map.get());
-  }
-
   RemoveElementsVisitor elementPruner(true);
+  // The criteria must be added before the config or map is set. We may want to change
+  // MultipleCriterionConsumerVisitor and RemoveElementsVisitor to make this behavior less brittle.
   elementPruner.addCriterion(featureFilter);
+  elementPruner.setConfiguration(config);
+  elementPruner.setOsmMap(map.get());
   elementPruner.setRecursive(true);
   LOG_DEBUG(elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);

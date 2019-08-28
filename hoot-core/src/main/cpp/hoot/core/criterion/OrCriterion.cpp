@@ -61,21 +61,14 @@ bool OrCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     if (_criteria[i]->isSatisfied(e))
     {
-      LOG_TRACE("One OR'd criterion satisfied. Filter satisfied for: " << e);
+      LOG_TRACE(
+        "One OR'd criterion satisfied in: " << toString() << ". Filter satisfied for: " << e);
       return true;
     }
   }
-  LOG_TRACE("No OR'd criterion satisfied. Filter not satisfied for: " << e);
+  LOG_TRACE(
+    "No OR'd criterion satisfied in: " << toString() << ". Filter not satisfied for: " << e);
   return false;
-}
-
-QString OrCriterion::toString() const
-{
-  QString txt = ChainCriterion::toString();
-  txt.replace(
-    QString::fromStdString(ChainCriterion::className()),
-    QString::fromStdString(OrCriterion::className()));
-  return txt;
 }
 
 }

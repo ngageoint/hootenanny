@@ -64,7 +64,17 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   _chainCriteria = configOptions.getAddAttributesVisitorChainElementCriteria();
   const QStringList critNames = configOptions.getAddAttributesVisitorElementCriteria();
   LOG_VART(critNames);
-  _addCriteria(critNames, conf);
+  _addCriteria(critNames);
+  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+       it != _criteria.end(); ++it)
+  {
+    ElementCriterionPtr crit = *it;
+    Configurable* c = dynamic_cast<Configurable*>(crit.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf);
+    }
+  }
 }
 
 void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)

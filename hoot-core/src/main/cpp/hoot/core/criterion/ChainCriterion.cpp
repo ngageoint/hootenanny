@@ -108,22 +108,24 @@ bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     if (!_criteria[i]->isSatisfied(e))
     {
-      LOG_TRACE("One chained criterion not satisfied. Filter not satisfied for: " << e);
+      LOG_TRACE(
+        "One chained criterion not satisfied in: " << toString() << ". Filter not satisfied " <<
+        "for: " << e);
       return false;
     }
   }
-  LOG_TRACE("One chained criteria satisfied. Filter satisfied for: " << e);
+  LOG_TRACE("One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " << e);
   return true;
 }
 
 QString ChainCriterion::toString() const
 {
-  LOG_VART(_criteria.size());
-  QString txt = "ChainCriterion members: ";
+  QString txt;
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    txt += typeid(*_criteria.at(i)).name();
+    txt += QString(typeid(*_criteria.at(i)).name()) + ";";
   }
+  txt.chop(1);
   return txt;
 }
 

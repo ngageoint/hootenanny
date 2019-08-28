@@ -63,7 +63,7 @@ _overwriteExistingTag(overwriteExistingTag)
 
   _negateCriteria = negateCriteria;
   _chainCriteria = false;
-  _addCriteria(criteriaClassNames, conf());
+  _addCriteria(criteriaClassNames);
 }
 
 SetTagValueVisitor::SetTagValueVisitor(
@@ -78,7 +78,7 @@ _overwriteExistingTag(overwriteExistingTag)
 
   _negateCriteria = negateCriteria;
   _chainCriteria = false;
-  _addCriteria(criteriaClassNames, conf());
+  _addCriteria(criteriaClassNames);
 }
 
 void SetTagValueVisitor::setConfiguration(const Settings& conf)
@@ -100,7 +100,17 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
   _chainCriteria = configOptions.getSetTagValueVisitorChainElementCriteria();
   const QStringList critNames = configOptions.getSetTagValueVisitorElementCriteria();
   LOG_VART(critNames);
-  _addCriteria(critNames, conf);
+  _addCriteria(critNames);
+  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+       it != _criteria.end(); ++it)
+  {
+    ElementCriterionPtr crit = *it;
+    Configurable* c = dynamic_cast<Configurable*>(crit.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf);
+    }
+  }
 }
 
 void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QString& v)

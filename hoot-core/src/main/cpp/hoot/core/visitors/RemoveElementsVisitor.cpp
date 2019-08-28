@@ -54,11 +54,22 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
 
   _negateCriteria = configOptions.getElementCriterionNegate();
-  const QStringList critNames = configOptions.getRemoveElementsVisitorElementCriteria();
-  LOG_VART(critNames);
-  _addCriteria(critNames, conf);
   _chainCriteria = configOptions.getRemoveElementsVisitorChainElementCriteria();
   LOG_VARD(_chainCriteria);
+  const QStringList critNames = configOptions.getRemoveElementsVisitorElementCriteria();
+  LOG_VART(critNames);
+  _addCriteria(critNames);
+  // TODO: Maybe we should just make MultipleCriterionConsumerVisitor configurable and move this up?
+  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+       it != _criteria.end(); ++it)
+  {
+    ElementCriterionPtr crit = *it;
+    Configurable* c = dynamic_cast<Configurable*>(crit.get());
+    if (c != 0)
+    {
+      c->setConfiguration(conf);
+    }
+  }
 
   _recursive = configOptions.getRemoveElementsVisitorRecursive();
 }

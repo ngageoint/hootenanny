@@ -51,7 +51,7 @@ void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& c
 }
 
 void MultipleCriterionConsumerVisitor::_addCriteria(
-  const QStringList& criteriaClassNames, const Settings& conf)
+  const QStringList& criteriaClassNames)
 {
   if (criteriaClassNames.size() > 0)
   {
@@ -66,11 +66,6 @@ void MultipleCriterionConsumerVisitor::_addCriteria(
           std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
         addCriterion(crit);
-        Configurable* c = dynamic_cast<Configurable*>(crit.get());
-        if (c != 0)
-        {
-          c->setConfiguration(conf);
-        }
       }
     }
   }
@@ -89,8 +84,16 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
       if (crit->isSatisfied(e))
       {
         criteriaSatisfied = true;
+        LOG_TRACE(
+          "One OR'd criterion satisfied in: " << toString() << ". Filter satisfied for: " <<
+          e);
         break;
       }
+    }
+    if (!criteriaSatisfied)
+    {
+      LOG_TRACE(
+        "No OR'd criterion satisfied in: " <<  toString() << ". Filter not satisfied for: " << e);
     }
   }
   else
@@ -103,11 +106,30 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
       if (!crit->isSatisfied(e))
       {
         criteriaSatisfied = false;
+        LOG_TRACE(
+          "One chained criterion not satisfied in: " << toString() << ". Filter not satisfied " <<
+          "for: " << e);
         break;
       }
     }
+    if (criteriaSatisfied)
+    {
+      LOG_TRACE(
+        "One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " << e);
+    }
   }
   return criteriaSatisfied;
+}
+
+QString MultipleCriterionConsumerVisitor::toString() const
+{
+  QString txt;
+  for (size_t i = 0; i < _criteria.size(); i++)
+  {
+    txt += QString(typeid(*_criteria.at(i)).name()) + ";";
+  }
+  txt.chop(1);
+  return txt;
 }
 
 }

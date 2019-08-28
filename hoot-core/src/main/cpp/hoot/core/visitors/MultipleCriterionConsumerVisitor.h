@@ -52,6 +52,8 @@ public:
   void setChainCriteria(bool chain) { _chainCriteria = chain; }
   void setNegateCriteria(bool negate) { _negateCriteria = negate; }
 
+  QString toString() const;
+
 protected:
 
   std::vector<ElementCriterionPtr> _criteria;
@@ -60,7 +62,7 @@ protected:
   bool _chainCriteria;
 
   bool _criteriaSatisfied(const ConstElementPtr& e) const;
-  void _addCriteria(const QStringList& criteriaClassNames, const Settings& conf);
+  void _addCriteria(const QStringList& criteriaClassNames);
 };
 
 

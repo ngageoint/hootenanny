@@ -18,8 +18,10 @@ SOURCE_FILE_2=$3
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
   REF_CONVERT_OPS="hoot::SetTagValueVisitor;hoot::PertyOp"
+  PERTURBING_REF="true"
 else
   REF_CONVERT_OPS="hoot::SetTagValueVisitor"
+  PERTURBING_REF="true"
 fi 
 #echo "source file 2: " $SOURCE_FILE_2
 AOI=$4
@@ -106,12 +108,14 @@ export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 
-# 
-GENERAL_OPTS="--trace -D log.class.filter=ChangesetReplacementCreator;PoiCriterion;TagCriterion;TagContainsCriterion;OrCriterion;ChainCriterion -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
+# ChangesetReplacementCreator;PoiCriterion;TagCriterion;TagContainsCriterion;OrCriterion;ChainCriterion
+GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=true"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE"
 #echo "changeset derive opts: " $CHANGESET_DERIVE_OPTS
+
+# TODO: consolidate the three workflows into a single function
 
 # DB SOURCE WORKFLOW
 
@@ -167,7 +171,11 @@ fi
 
 if [[ $SOURCE_FORMATS == *"xml"* ]]; then
 
-  REF_XML_INPUT=$OUT_DIR/ref-perturbed-original.osm
+  if [ "$PERTURBING_REF" == "true" ]; then
+    REF_XML_INPUT=$OUT_DIR/ref-perturbed-original.osm
+  else
+    REF_XML_INPUT=$OUT_DIR/ref-original.osm
+  fi
   SEC_XML_INPUT=$OUT_DIR/sec-original.osm
   CHANGESET_XML=$OUT_DIR/$TEST_NAME-changeset-xml.osc.sql
   OUT_XML=$TEST_NAME-xml-replaced.osm
@@ -214,7 +222,11 @@ fi
 
 if [[ $SOURCE_FORMATS == *"json"* ]]; then
 
-  REF_JSON_INPUT=$OUT_DIR/ref-perturbed-original.json
+  if [ "$PERTURBING_REF" == "true" ]; then
+    REF_JSON_INPUT=$OUT_DIR/ref-perturbed-original.json
+  else
+    REF_JSON_INPUT=$OUT_DIR/ref-original.json
+  fi
   SEC_JSON_INPUT=$OUT_DIR/sec-original.json
   CHANGESET_JSON=$OUT_DIR/$TEST_NAME-changeset-json.osc.sql
   OUT_JSON=$TEST_NAME-json-replaced.osm
