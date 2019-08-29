@@ -39,9 +39,9 @@ import hoot.services.models.db.Users;
 class ImportCommandFactory {
 
     ImportCommand build(String jobId, File workDir, List<File> filesToImport,
-                         List<File> zipsToImport, String translation, String etlName, Boolean isNoneTranslation,
+                         List<File> zipsToImport, String translation, String advUploadOpts, String etlName, Boolean isNoneTranslation,
                          String debugLevel, UploadClassification uploadClassification, Class<?> caller, Users user) {
-        return new ImportCommand(jobId, workDir, filesToImport, zipsToImport, translation, etlName, isNoneTranslation,
+        return new ImportCommand(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts, etlName, isNoneTranslation,
                                  debugLevel, uploadClassification, caller, user);
     }
 }

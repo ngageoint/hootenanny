@@ -59,7 +59,7 @@ class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
-    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
+    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
         super(jobId);
@@ -78,7 +78,7 @@ class ImportCommand extends ExternalCommand {
 
         List<String> options = new LinkedList<>();
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
-        //TODO: always set remap ids to false??
+       //TODO: always set remap ids to false??
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + user.getEmail());
@@ -91,6 +91,11 @@ class ImportCommand extends ExternalCommand {
         if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
         {
           options.add("schema.translation.script=" + translationPath);
+        }
+        
+        if ( advUploadOpts.length() > 0 && (classification == SHP) ) {
+            options.add("ogr2osm.simplify.complex.buildings=true");
+            options.add("merge.nearby.nodes.distance=true");
         }
 
         List<String> hootOptions = toHootOptions(options);

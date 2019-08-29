@@ -111,6 +111,8 @@ public class ImportResource {
      *
      * @param translation
      *            Translation script used during OGR ETL process.
+     * @param advUploadOpts
+     * 			  advanced options for importing shapefiles.
      * @param inputType
      *            [OSM | OGR ] OSM for osm file and OGR for shapefile.
      * @param inputName
@@ -133,6 +135,7 @@ public class ImportResource {
                                       @QueryParam("INPUT_NAME") String inputName,
                                       @QueryParam("USER_EMAIL") String userEmail,
                                       @QueryParam("NONE_TRANSLATION") Boolean noneTranslation,
+                                      @QueryParam("ADV_UPLOAD_OPTS") String advUploadOpts,
                                       @QueryParam("FOLDER_ID") String folderId,
                                       @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel,
                                       FormDataMultiPart multiPart) {
@@ -182,7 +185,7 @@ public class ImportResource {
                     zipCnt++;
                 }
 
-                // Update the counts
+                // Update the counts*
                 shpCnt += counts.get(SHP);
                 fgdbCnt += counts.get(FGDB);
                 osmCnt += counts.get(OSM);
@@ -224,7 +227,7 @@ public class ImportResource {
 
             List<Command> workflow = new LinkedList<>();
 
-            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation,
+            ExternalCommand importCommand = fileETLCommandFactory.build(jobId, workDir, filesToImport, zipsToImport, translation, advUploadOpts,
                     etlName, noneTranslation, debugLevel, finalUploadClassification, this.getClass(), user);
             workflow.add(importCommand);
 
