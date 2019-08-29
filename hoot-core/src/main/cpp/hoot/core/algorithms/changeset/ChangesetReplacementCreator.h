@@ -122,12 +122,9 @@ public:
 
   void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
   void setGeometryFilters(const QStringList& filterClassNames);
-  void setInput1Filters(const QStringList& filterClassNames);
-  void setChainInput1Filters(const bool chain) { _chainInput1Filters = chain; }
-  void setInput1FilterOptions(const QStringList& optionKvps);
-  void setInput2Filters(const QStringList& filterClassNames);
-  void setChainInput2Filters(const bool chain) { _chainInput2Filters = chain; }
-  void setInput2FilterOptions(const QStringList& optionKvps);
+  void setReplacementFilters(const QStringList& filterClassNames);
+  void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
+  void setReplacementFilterOptions(const QStringList& optionKvps);
 
 private:
 
@@ -140,17 +137,11 @@ private:
   // TODO
   QStringList _linearFilterClassNames;
   // TODO
-  std::shared_ptr<ChainCriterion> _input1Filter;
+  std::shared_ptr<ChainCriterion> _replacementFilter;
   // TODO
-  std::shared_ptr<ChainCriterion> _input2Filter;
+  bool _chainReplacementFilters;
   // TODO
-  bool _chainInput1Filters;
-  // TODO
-  bool _chainInput2Filters;
-  // TODO
-  Settings _input1FilterOptions;
-  // TODO
-  Settings _input2FilterOptions;
+  Settings _replacementFilterOptions;
 
   BoundsOptions _boundsOpts;
 
@@ -233,6 +224,8 @@ private:
   /*
    * Populates a reference and a conflated map based on the geometry type being replaced. The maps
    * can then used to derive the replacement changeset.
+   *
+   * TODO
    */
   void _getMapsForGeometryType(
     OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,

@@ -71,57 +71,30 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    QStringList input1Filters;
-    if (args.contains("--input1-filters"))
+    QStringList replacementFilters;
+    if (args.contains("--replacement-filters"))
     {
-      const int optionNameIndex = args.indexOf("--input1-filters");
+      const int optionNameIndex = args.indexOf("--replacement-filters");
       LOG_VARD(optionNameIndex);
-      input1Filters = args.at(optionNameIndex + 1).trimmed().split(";");
-      LOG_VARD(input1Filters);
+      replacementFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(replacementFilters);
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
-    bool chainInput1Filters = false;
-    if (args.contains("--chain-input1-filters"))
+    bool chainReplacementFilters = false;
+    if (args.contains("--chain-replacement-filters"))
     {
-      chainInput1Filters = true;
-      args.removeAll("--chain-input1-filters");
+      chainReplacementFilters = true;
+      args.removeAll("--chain-replacement-filters");
     }
-    LOG_VARD(chainInput1Filters);
-    QStringList input1FilterOptions;
-    if (args.contains("--input1-filter-options"))
+    LOG_VARD(chainReplacementFilters);
+    QStringList replacementFilterOptions;
+    if (args.contains("--replacement-filter-options"))
     {
-      const int optionNameIndex = args.indexOf("--input1-filter-options");
+      const int optionNameIndex = args.indexOf("--replacement-filter-options");
       LOG_VARD(optionNameIndex);
-      input1FilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
-      LOG_VARD(input1FilterOptions);
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    QStringList input2Filters;
-    if (args.contains("--input2-filters"))
-    {
-      const int optionNameIndex = args.indexOf("--input2-filters");
-      LOG_VARD(optionNameIndex);
-      input2Filters = args.at(optionNameIndex + 1).trimmed().split(";");
-      LOG_VARD(input2Filters);
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    bool chainInput2Filters = false;
-    if (args.contains("--chain-input2-filters"))
-    {
-      chainInput2Filters = true;
-      args.removeAll("--chain-input2-filters");
-    }
-    LOG_VARD(chainInput2Filters);
-    QStringList input2FilterOptions;
-    if (args.contains("--input2-filter-options"))
-    {
-      const int optionNameIndex = args.indexOf("--input2-filter-options");
-      LOG_VARD(optionNameIndex);
-      input2FilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
-      LOG_VARD(input2FilterOptions);
+      replacementFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(replacementFilterOptions);
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
@@ -182,12 +155,9 @@ public:
     ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);
-    changesetCreator.setInput1Filters(input1Filters);
-    changesetCreator.setChainInput1Filters(chainInput1Filters);
-    changesetCreator.setInput1FilterOptions(input1FilterOptions);
-    changesetCreator.setInput2Filters(input2Filters);
-    changesetCreator.setChainInput2Filters(chainInput2Filters);
-    changesetCreator.setInput2FilterOptions(input2FilterOptions);
+    changesetCreator.setReplacementFilters(replacementFilters);
+    changesetCreator.setChainReplacementFilters(chainReplacementFilters);
+    changesetCreator.setReplacementFilterOptions(replacementFilterOptions);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;

@@ -74,8 +74,7 @@ namespace hoot
 ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
                                                          const QString osmApiDbUrl) :
 _lenientBounds(true),
-_chainInput1Filters(false),
-_chainInput2Filters(false)
+_chainReplacementFilters(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -195,23 +194,13 @@ void ChangesetReplacementCreator::_setInputFilter(
   }
 }
 
-void ChangesetReplacementCreator::setInput1Filters(const QStringList& filterClassNames)
+void ChangesetReplacementCreator::setReplacementFilters(const QStringList& filterClassNames)
 {
   LOG_VARD(filterClassNames.size());
   if (filterClassNames.size() > 0)
   {
-    LOG_DEBUG("Creating input filter 1...");
-    _setInputFilter(_input1Filter, filterClassNames, _chainInput1Filters);
-  }
-}
-
-void ChangesetReplacementCreator::setInput2Filters(const QStringList& filterClassNames)
-{
-  LOG_VARD(filterClassNames.size());
-  if (filterClassNames.size() > 0)
-  {
-    LOG_DEBUG("Creating input filter 2...");
-    _setInputFilter(_input2Filter, filterClassNames, _chainInput2Filters);
+    LOG_DEBUG("Creating replacement filter...");
+    _setInputFilter(_replacementFilter, filterClassNames, _chainReplacementFilters);
   }
 }
 
@@ -239,16 +228,10 @@ void ChangesetReplacementCreator::_setInputFilterOptions(Settings& opts,
   LOG_DEBUG("Opts size after adding custom opts: " << opts.size());
 }
 
-void ChangesetReplacementCreator::setInput1FilterOptions(const QStringList& optionKvps)
+void ChangesetReplacementCreator::setReplacementFilterOptions(const QStringList& optionKvps)
 {
-  LOG_DEBUG("Creating input filter 1 options...");
-  _setInputFilterOptions(_input1FilterOptions, optionKvps);
-}
-
-void ChangesetReplacementCreator::setInput2FilterOptions(const QStringList& optionKvps)
-{
-  LOG_DEBUG("Creating input filter 2 options...");
-  _setInputFilterOptions(_input2FilterOptions, optionKvps);
+  LOG_DEBUG("Creating replacement filter options...");
+  _setInputFilterOptions(_replacementFilterOptions, optionKvps);
 }
 
 void ChangesetReplacementCreator::create(
@@ -261,9 +244,9 @@ void ChangesetReplacementCreator::create(
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _getCombinedFilters(_input1Filter);
+    _geometryTypeFilters;
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-    _getCombinedFilters(_input2Filter);
+    _getCombinedFilters(_replacementFilter);
 
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString lenientStr = "Bounds calculation is ";
@@ -340,7 +323,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   const QStringList& linearFilterClassNames)
 {
   LOG_VARD(linearFilterClassNames);
-  LOG_VARD(refFeatureFilter);
   LOG_VARD(secFeatureFilter);
 
   // INPUT VALIDATION AND SETUP
@@ -376,7 +358,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
-  _filterFeatures(refMap, refFeatureFilter, _input1FilterOptions, "ref-after-type-pruning");
+  _filterFeatures(refMap, refFeatureFilter, conf(), "ref-after-type-pruning");
 
   // Load the sec dataset and crop to the specified aoi.
 
@@ -385,7 +367,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Prune sec dataset down to just the feature types specified by the filter, so we don't end up
   // modifying anything else.
 
-  _filterFeatures(secMap, secFeatureFilter, _input2FilterOptions, "sec-after-type-pruning");
+  _filterFeatures(secMap, secFeatureFilter, _replacementFilterOptions, "sec-after-type-pruning");
 
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
@@ -689,7 +671,7 @@ void ChangesetReplacementCreator::_filterFeatures(
   const QString& debugFileName)
 {
   LOG_DEBUG(
-    "Filtering features for: " << map->getName() << " based on input filter: " <<
+    "Filtering features for: " << map->getName() << " based on input filter: " +
     featureFilter->toString() << "...");
 
   RemoveElementsVisitor elementPruner(true);
@@ -716,6 +698,11 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
 
   LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
   ConfigOptions opts;
+
+  // TODO: trying to do something like this as part of #3429
+  //OsmMapPtr cutterMap2(doughMap);
+  //_combineMaps(cutterMap2, cutterMap, true, "combined-cutter-shape");
+
   OsmMapPtr cutterShapeOutlineMap =
     AlphaShapeGenerator(opts.getCookieCutterAlpha(), opts.getCookieCutterAlphaShapeBuffer())
       .generateMap(cutterMap);

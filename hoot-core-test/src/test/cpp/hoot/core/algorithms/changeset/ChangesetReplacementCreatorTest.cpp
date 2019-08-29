@@ -41,7 +41,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   CPPUNIT_TEST(runInvalidGeometryFilterTest);
-  CPPUNIT_TEST(runInvalidAdditionalFilterTest);
+  CPPUNIT_TEST(runInvalidReplacementFilterTest);
   CPPUNIT_TEST(runNonBoundableReaderTest);
   CPPUNIT_TEST(runGeoJsonTest);
   // TODO: add invalid config opts test
@@ -71,14 +71,14 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid feature geometry type filter"));
   }
 
-  void runInvalidAdditionalFilterTest()
+  void runInvalidReplacementFilterTest()
   {
     QString exceptionMsg;
     ChangesetReplacementCreator changesetCreator;
 
     try
     {
-      changesetCreator.setInput1Filters(QStringList("hoot::AddAttributesVisitor"));
+      changesetCreator.setReplacementFilters(QStringList("hoot::AddAttributesVisitor"));
     }
     catch (const HootException& e)
     {
@@ -88,7 +88,7 @@ public:
 
     try
     {
-      changesetCreator.setInput1Filters(QStringList("hoot::PoiCriterion"));
+      changesetCreator.setReplacementFilters(QStringList("hoot::PoiCriterion"));
     }
     catch (const HootException& e)
     {

@@ -43,55 +43,36 @@ fi
 #echo "geometry filters: " $GEOMETRY_FILTERS
 #echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
 if [ "$7" == "" ]; then
-  INPUT1_FILTERS=""
+  REPLACEMENT_FILTERS=""
 else
-  INPUT1_FILTERS=" --input1-filters "$7
+  REPLACEMENT_FILTERS=" --replacement-filters "$7
 fi
-#echo "input1 filters: " $INPUT1_FILTERS
-CHAIN_INPUT1_FILTERS=$8
-if [ "$CHAIN_INPUT1_FILTERS" == "true" ]; then
-  CHAIN_INPUT1_FILTERS="--chain-input1-filters"
+#echo "replacement filters: " $REPLACEMENT_FILTERS
+CHAIN_REPLACEMENT_FILTERS=$8
+if [ "$CHAIN_REPLACEMENT_FILTERS" == "true" ]; then
+  CHAIN_REPLACEMENT_FILTERS="--chain-replacement-filters"
 else
-  CHAIN_INPUT1_FILTERS=""
+  CHAIN_REPLACEMENT_FILTERS=""
 fi
-#echo "chain input1 filters: " $CHAIN_INPUT1_FILTERS 
+#echo "chain replacement filters: " $CHAIN_REPLACEMENT_FILTERS 
 if [ "$9" == "" ]; then
-  INPUT1_FILTER_OPTIONS=""
+  REPLACEMENT_FILTER_OPTIONS=""
 else
-  INPUT1_FILTER_OPTIONS=" --input1-filter-options "$9
+  REPLACEMENT_FILTER_OPTIONS=" --replacement-filter-options "$9
 fi
-#echo "input1 filter options: " $INPUT1_FILTER_OPTIONS
-if [ "${10}" == "" ]; then
-  INPUT2_FILTERS=""
-else
-  INPUT2_FILTERS=" --input2-filters "${10}
-fi
-#echo "input2 filters: " $INPUT2_FILTERS
-CHAIN_INPUT2_FILTERS=${11}
-if [ "$CHAIN_INPUT2_FILTERS" == "true" ]; then
-  CHAIN_INPUT2_FILTERS="--chain-input2-filters"
-else
-  CHAIN_INPUT2_FILTERS=""
-fi
-#echo "chain input2 filters: " $CHAIN_INPUT2_FILTERS
-if [ "${12}" == "" ]; then
-  INPUT2_FILTER_OPTIONS=""
-else
-  INPUT2_FILTER_OPTIONS=" --input2-filter-options "${12}
-fi
-#echo "input2 filter options: " $INPUT2_FILTER_OPTIONS 
-SOURCE_FORMATS=${13}
+#echo "replacement filter options: " $REPLACEMENT_FILTER_OPTIONS
+SOURCE_FORMATS=${10}
 #echo "source formats: " $SOURCE_FORMATS 
-if [ "${14}" == "" ]; then
+if [ "${11}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=${14}
+  WAY_SNAP_TOLERANCE=${11}
 fi
 #echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
-if [ "${15}" == "" ]; then
+if [ "${12}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${15}
+  EXISTING_WAY_NODE_TOLERANCE=${12}
 fi
 #echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
 CUSTOM_TAG_KEY="note"
@@ -147,7 +128,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_DB_INPUT and $SEC_DB_INPUT to file: $CHANGESET_DB that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $INPUT1_FILTERS $CHAIN_INPUT1_FILTERS $INPUT1_FILTER_OPTIONS $INPUT2_FILTERS $CHAIN_INPUT2_FILTERS $INPUT2_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -201,7 +182,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT to file: $CHANGESET_XML that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $INPUT1_FILTERS $CHAIN_INPUT1_FILTERS $INPUT1_FILTER_OPTIONS $INPUT2_FILTERS $CHAIN_INPUT2_FILTERS $INPUT2_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -252,7 +233,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT to file: $CHANGESET_JSON that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $INPUT1_FILTERS $CHAIN_INPUT1_FILTERS $INPUT1_FILTER_OPTIONS $INPUT2_FILTERS $CHAIN_INPUT2_FILTERS $INPUT2_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
