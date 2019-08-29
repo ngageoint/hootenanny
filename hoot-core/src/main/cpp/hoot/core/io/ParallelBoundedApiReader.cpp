@@ -85,15 +85,15 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
     double lon = envelope.getMinX() + _coordGridSize * i;
     for (int j = 0; j < lat_div; ++j)
     {
-      double lat = envelope.getMaxY() - _coordGridSize * j;
+      double lat = envelope.getMinY() + _coordGridSize * j;
       _bboxMutex.lock();
       //  Start at the upper right corner and create boxes left to right, top to bottom
       _bboxes.push(
           geos::geom::Envelope(
               lon,
               std::min(lon + _coordGridSize, envelope.getMaxX()),
-              std::min(lat - _coordGridSize, envelope.getMinY()),
-              lat));
+              lat,
+              std::min(lat + _coordGridSize, envelope.getMaxY())));
       _bboxMutex.unlock();
     }
   }
@@ -138,7 +138,8 @@ bool ParallelBoundedApiReader::hasMoreResults()
   bool done = isComplete();
   //  There are more results when the queue contains results
   //  or the threads are still processing envelopes
-  return more || !done;
+  //  and there isn't an error
+  return (more || !done) && !_fatalError;
 }
 
 void ParallelBoundedApiReader::wait()
@@ -165,7 +166,7 @@ void ParallelBoundedApiReader::_sleep()
 void ParallelBoundedApiReader::_process()
 {
   //  Continue working until all of the results are back
-  while (!isComplete() && _continueRunning)
+  while (!isComplete() && _continueRunning && !_fatalError)
   {
     //  Try to grab the next envelope on the queue
     geos::geom::Envelope envelope;
@@ -221,9 +222,9 @@ void ParallelBoundedApiReader::_process()
           double lon2 = envelope.getMinX() + envelope.getWidth() / 2.0f;
           double lon3 = envelope.getMaxX();
 
-          double lat1 = envelope.getMaxY();
-          double lat2 = envelope.getMaxY() - envelope.getHeight() / 2.0f;
-          double lat3 = envelope.getMinY();
+          double lat1 = envelope.getMinY();
+          double lat2 = envelope.getMinY() + envelope.getHeight() / 2.0f;
+          double lat3 = envelope.getMaxY();
           _bboxMutex.lock();
           //  Split the boxes into quads and push them onto the queue
           _bboxes.push(geos::geom::Envelope(lon1, lon2, lat1, lat2));
