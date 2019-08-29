@@ -155,6 +155,7 @@ test-files/DcTigerRoadsHighwayExactMatchInputs.osm
 inputFeatures.png
 docs/developer/restDocs/
 docs/developer/wpsDocs/
+docs/**/__*.png
 Vagrant.marker
 test-files/services-system/node_modules
 vagrant*.lock

@@ -12,6 +12,7 @@
 * OpenStreetMap XML (.osm)
 * OpenStreetMap Protocol Buffers (.osm.pbf)
 * OpenStreetMap API Database (osmapidb://)
+* OpenStreetMap Web API (http://<server>/api/0.6/map)
 * Shapefile (.shp)
 * Zip files containing shapefiles and/or ESRI File Geodatabase files (.zip)
 * Additional OGR supported formats

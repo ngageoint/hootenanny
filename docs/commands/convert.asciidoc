@@ -168,6 +168,14 @@ Convert all TDS shapefiles stored in the top level of a Zip file:
 hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.zip/ tds_roads.osm
 --------------------------------------
 
+==== Converting OSM API data to OSM
+
+Retrieve OSM data around Paris, France from an OSM API and save it to an OSM file:
+
+--------------------------------------
+hoot convert -D convert.bounding.box=2.277303,48.851684,2.311635,48.864701 https://osm-api-url/api/0.6/map download.osm
+--------------------------------------
+
 === Notes
 
 * The format for OSM database URLs is: protocol://<user name>:<password>@<host name>:<port>/<database name>

@@ -233,8 +233,8 @@ The web interface exposes reviewable items through an intuitive interface that g
 In some cases there are more than two files that must be conflated. If this is the case the data must be conflated in a pairwise fashion. For instance if you are conflated three data sets, A, B & C, then the conflation may go as follows:
 
 .Pairwise Conflation Example
-
--------
+[graphviz, images/__PairwiseConflation.png, fdp]
+---------------------------------------------------------------------
 digraph G
 {
   rankdir = LR;
@@ -248,7 +248,7 @@ digraph G
   C -> conflate2;
   conflate2 -> ABC;
 }
--------
+---------------------------------------------------------------------
 
 ==== Export
 

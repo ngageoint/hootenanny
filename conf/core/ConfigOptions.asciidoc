@@ -692,9 +692,9 @@ ID of the node that ContainsNodeCriterion should search for.
 * Default Value: ``
 
 If specified, supporting readers will limit data read from the data source to only features that
-intersect the given bounding box. The format is "minx,miny,maxx,maxy" specified in the projection
-of the input data source.  This setting can be used with both the convert and conflate commands.
-See the documentation for more details.
+intersect the given bounding box. The format is "minx,miny,maxx,maxy" or "min_lon,min_lat,max_lon,max_lat"
+specified in the projection of the input data source.  This setting can be used with both the convert and
+conflate commands. See the documentation for more details.
 
 Example Usage:
 
