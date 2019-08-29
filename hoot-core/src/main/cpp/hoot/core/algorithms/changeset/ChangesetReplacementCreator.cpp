@@ -27,47 +27,54 @@
 #include "ChangesetReplacementCreator.h"
 
 // Hoot
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/IoUtils.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
-#include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/ops/RecursiveSetTagValueOp.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
-#include <hoot/core/ops/ElementIdToVersionMapper.h>
-#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/io/OsmGeoJsonReader.h>
-#include <hoot/core/ops/WayJoinerOp.h>
-#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/OrCriterion.h>
+
+#include <hoot/core/conflate/CookieCutter.h>
+#include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/conflate/network/NetworkMatchCreator.h>
+
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+
+#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/io/OsmGeoJsonReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+
+#include <hoot/core/ops/ElementIdToVersionMapper.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
+
+#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/PointsToPolysConverter.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/RecursiveSetTagValueOp.h>
+#include <hoot/core/ops/WayJoinerOp.h>
+
+#include <hoot/core/util/Boundable.h>
+
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/MapProjector.h>
+
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
 
 namespace hoot
 {
@@ -402,7 +409,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // CONFLATE
 
-  // Conflate the cookie cut ref map with the cropped sec map.
+  // Conflate the cookie cut ref map with the sec map.
 
   conflatedMap = cookieCutRefMap;
   // TODO: do something with reviews - #3361
