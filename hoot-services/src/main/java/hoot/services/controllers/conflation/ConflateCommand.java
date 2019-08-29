@@ -193,9 +193,13 @@ class ConflateCommand extends ExternalCommand {
                 for (String feature: conflationFeatures.keySet()) {
                     // ignore the road matcher/mergers not relevant conflation type/algorithm confs...
                     if (feature.equals(roadType)) continue;
-                    if (!disabledFeatures.contains(feature)) {
-                        matchers.add((String) conflationFeatures.get(feature).get("matcher"));
-                        mergers.add((String) conflationFeatures.get(feature).get("merger"));
+                    // ignore conflationFeatures that don't have a matcher and merger
+                    Map<String, Object> conflationFeature = conflationFeatures.get(feature);
+                    String conflationMatcher = (String) conflationFeature.get("matcher");
+                    String conflationMerger = (String) conflationFeature.get("merger");
+                    if (conflationMatcher != null && conflationMerger != null && !disabledFeatures.contains(feature)) {
+                        matchers.add(conflationMatcher);
+                        mergers.add(conflationMerger);
                     }
                 }
                 options.add("match.creators=" + String.join(";", matchers));
