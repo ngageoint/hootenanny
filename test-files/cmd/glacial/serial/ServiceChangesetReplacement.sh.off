@@ -9,6 +9,11 @@ set -e
 # Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and 
 # re-created when they should have been modified.
 
+# TODO: 
+# - consolidate the three workflows into a single function
+# - reduce the size of the source data down to reduce test run times
+# - can probably also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except the POI test, right now)
+
 TEST_NAME=$1
 #echo "test name: " $TEST_NAME
 SOURCE_FILE_1=$2
@@ -94,8 +99,6 @@ DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE"
 #echo "changeset derive opts: " $CHANGESET_DERIVE_OPTS
-
-# TODO: consolidate the three workflows into a single function
 
 # DB SOURCE WORKFLOW
 
