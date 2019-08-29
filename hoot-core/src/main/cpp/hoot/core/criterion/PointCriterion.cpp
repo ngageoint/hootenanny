@@ -42,7 +42,6 @@ PointCriterion::PointCriterion()
 
 void PointCriterion::setOsmMap(const OsmMap* map)
 {
-  LOG_VART("test1");
   _wayNodeCrit.setOsmMap(map);
 }
 

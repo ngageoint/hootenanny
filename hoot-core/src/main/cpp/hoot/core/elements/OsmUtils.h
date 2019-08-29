@@ -357,6 +357,33 @@ public:
                                     const ConstOsmMapPtr& map);
 
   /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @return
+   */
+  static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @return
+   */
+  static bool elementContainedByAnyRelation(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param elementId
+   * @param map
+   * @return
+   */
+  static bool isChild(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
    * Returns the number of elements with a changeset version less than one
    *
    * @param map the map to examine
@@ -370,6 +397,14 @@ public:
    * @param map the map to examine
    */
   static void checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @return
+   */
+  static bool mapIsPointsOnly(const OsmMapPtr& map);
 };
 
 }

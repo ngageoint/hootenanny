@@ -71,6 +71,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
+    LOG_VARD(geometryFilters);
     QStringList replacementFilters;
     if (args.contains("--replacement-filters"))
     {
@@ -81,6 +82,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
+    LOG_VARD(replacementFilters);
     bool chainReplacementFilters = false;
     if (args.contains("--chain-replacement-filters"))
     {
@@ -98,6 +100,7 @@ public:
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
     }
+    LOG_VARD(replacementFilterOptions);
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
@@ -155,8 +158,9 @@ public:
     ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);
-    changesetCreator.setReplacementFilters(replacementFilters);
+    // chain param must be set before the filters themselves
     changesetCreator.setChainReplacementFilters(chainReplacementFilters);
+    changesetCreator.setReplacementFilters(replacementFilters);
     changesetCreator.setReplacementFilterOptions(replacementFilterOptions);
     changesetCreator.create(input1, input2, bounds, output);
 

@@ -44,6 +44,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/AttributeValueCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/PointCriterion.h>
 
 // Qt
 #include <QDateTime>
@@ -388,6 +389,16 @@ OsmMapPtr OsmUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriteri
   return output;
 }
 
+bool OsmUtils::elementContainedByAnyRelation(const ElementId& elementId, const ConstOsmMapPtr& map)
+{
+  return map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).size() > 0;
+}
+
+bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
+{
+  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;
+}
+
 bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
                                      const ConstOsmMapPtr& map)
 {
@@ -397,6 +408,19 @@ bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
   return commonWayIds.size() > 0;
+}
+
+bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
+{
+  if (elementContainedByAnyRelation(elementId, map))
+  {
+    return true;
+  }
+  if (elementId.getType() == ElementType::Node && nodeContainedByAnyWay(elementId.getId(), map))
+  {
+    return true;
+  }
+  return false;
 }
 
 int OsmUtils::versionLessThanOneCount(const OsmMapPtr& map)
@@ -420,6 +444,16 @@ void OsmUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)
       "applying the resulting changeset back to an authoritative data store. Are the versions " <<
       "on the features being populated correctly?")
   }
+}
+
+bool OsmUtils::mapIsPointsOnly(const OsmMapPtr& map)
+{
+  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  pointCrit->setOsmMap(map.get());
+  return
+    (int)FilteredVisitor::getStat(
+      pointCrit, ElementVisitorPtr(new ElementCountVisitor()), map) ==
+    (int)map->getElementCount();
 }
 
 }

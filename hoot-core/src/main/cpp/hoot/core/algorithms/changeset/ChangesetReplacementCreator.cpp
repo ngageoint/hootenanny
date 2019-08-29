@@ -67,6 +67,7 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/ops/PointsToPolysConverter.h>
 
 namespace hoot
 {
@@ -238,6 +239,9 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  LOG_VARD(_chainReplacementFilters);
+  LOG_VARD(_lenientBounds);
+
   // INPUT VALIDATION AND SETUP
 
   _validateInputs(input1, input2);
@@ -697,15 +701,49 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   // Generate a cutter shape based on the cropped secondary map.
 
   LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
-  ConfigOptions opts;
 
   // TODO: trying to do something like this as part of #3429
   //OsmMapPtr cutterMap2(doughMap);
   //_combineMaps(cutterMap2, cutterMap, true, "combined-cutter-shape");
 
-  OsmMapPtr cutterShapeOutlineMap =
-    AlphaShapeGenerator(opts.getCookieCutterAlpha(), opts.getCookieCutterAlphaShapeBuffer())
-      .generateMap(cutterMap);
+  // TODO:
+  OsmMapPtr cutterMapToUse;
+  LOG_VARD(cutterMap->getElementCount());
+  LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
+  if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
+  {
+    OsmMapPtr cutterMapToUse(cutterMap);
+    PointsToPolysConverter pointConverter(5.0);
+    LOG_DEBUG(pointConverter.getInitStatusMessage());
+    pointConverter.apply(cutterMapToUse);
+    LOG_DEBUG(pointConverter.getCompletedStatusMessage());
+    MapProjector::projectToWgs84(cutterMapToUse);
+    OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-shape-poly");
+  }
+  else
+  {
+    cutterMapToUse = cutterMap;
+  }
+
+  ConfigOptions opts(conf());
+  OsmMapPtr cutterShapeOutlineMap;
+  try
+  {
+    cutterShapeOutlineMap =
+      AlphaShapeGenerator(opts.getCookieCutterAlpha(), opts.getCookieCutterAlphaShapeBuffer())
+        .generateMap(cutterMap);
+  }
+  catch (const HootException& e)
+  {
+    if (e.getWhat().contains("Alpha Shape area is zero"))
+    {
+      LOG_ERROR(
+        "No cut shape generated from secondary data. Is your secondary data empty or have you " <<
+        "filtered it to be empty?");
+    }
+    throw e;
+  }
+
   // not exactly sure yet why this needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
