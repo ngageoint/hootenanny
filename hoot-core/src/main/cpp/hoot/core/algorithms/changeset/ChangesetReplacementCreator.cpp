@@ -696,6 +696,7 @@ void ChangesetReplacementCreator::_filterFeatures(
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap)
 {
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   // Generate a cutter shape based on the cropped secondary map.
@@ -712,18 +713,18 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
   if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
   {
-    OsmMapPtr cutterMapToUse(cutterMap);
-    PointsToPolysConverter pointConverter(5.0);
+    cutterMapToUse.reset(new OsmMap(cutterMap));
+    PointsToPolysConverter pointConverter;
     LOG_DEBUG(pointConverter.getInitStatusMessage());
     pointConverter.apply(cutterMapToUse);
     LOG_DEBUG(pointConverter.getCompletedStatusMessage());
     MapProjector::projectToWgs84(cutterMapToUse);
-    OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-shape-poly");
   }
   else
   {
     cutterMapToUse = cutterMap;
   }
+  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map");
 
   ConfigOptions opts(conf());
   OsmMapPtr cutterShapeOutlineMap;
@@ -731,7 +732,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   {
     cutterShapeOutlineMap =
       AlphaShapeGenerator(opts.getCookieCutterAlpha(), opts.getCookieCutterAlphaShapeBuffer())
-        .generateMap(cutterMap);
+        .generateMap(cutterMapToUse);
   }
   catch (const HootException& e)
   {
