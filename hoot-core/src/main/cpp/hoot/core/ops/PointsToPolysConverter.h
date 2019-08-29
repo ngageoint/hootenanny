@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Converts any node in a map that isn't a child of another element to a small square polygon. This
+ * can be useful if you need to calculate an alpha shape for a small number of points.
  */
 class PointsToPolysConverter : public OsmMapOperation, public OperationStatusInfo
 {

@@ -87,13 +87,16 @@ struct BoundsOptions
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
- * completely replace features inside of a specified bounds) and then calls on appropriate
- * changeset file writers.
+ * replaces features inside of a specified bounds) and then calls on appropriate changeset file
+ * writers.
  *
  * This class uses a customized workflow that depends upon the feature type the changeset is being
  * generated for and how strict the AOI is to be interpreted. ChangesetCreator is used for the
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
- * and a host of other things that need to happen before the changeset generation.
+ * and a host of other things that need to happen before the changeset generation. Reference
+ * features are only replaced that overlap with the alpha shape calculated by the secondary
+ * features (this restriction could be removed with #3429). The secondary data added to the output
+ * changeset can be further restricted with a non-geometry type filter.
  *
  * TODO: implement progress
  * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
@@ -132,15 +135,18 @@ private:
 
   // determines how strict the handling of the bounds is during replacement
   bool _lenientBounds;
-  // TODO
+  // A set of geometry type filters, organized by core geometry type (point, line, poly) to
+  // separately filter the input datasets on.
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
-  // TODO
+  // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
-  // TODO
+  // One or more non-geometry criteria to be combined with the geometry type filters for the
+  // secondary input.
   std::shared_ptr<ChainCriterion> _replacementFilter;
-  // TODO
+  // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
+  // together.
   bool _chainReplacementFilters;
-  // TODO
+  // Configuration options to pass to the filters in _replacementFilter.
   Settings _replacementFilterOptions;
 
   BoundsOptions _boundsOpts;
@@ -158,6 +164,7 @@ private:
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
     const bool chainFilters);
   void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
+  // Combines filters in _geometryTypeFilters with _replacementFilter.
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
   void _filterFeatures(
@@ -224,8 +231,6 @@ private:
   /*
    * Populates a reference and a conflated map based on the geometry type being replaced. The maps
    * can then used to derive the replacement changeset.
-   *
-   * TODO
    */
   void _getMapsForGeometryType(
     OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,

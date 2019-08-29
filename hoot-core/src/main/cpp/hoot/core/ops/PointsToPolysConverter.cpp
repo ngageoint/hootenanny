@@ -56,6 +56,7 @@ void PointsToPolysConverter::apply(OsmMapPtr& map)
   {
     const long nodeId = it->first;
     LOG_VART(nodeId);
+    // not allowing child nodes to be converted (could/should we?)
     LOG_VART(OsmUtils::isChild(ElementId(ElementType::Node, nodeId), map));
     if (!OsmUtils::isChild(ElementId(ElementType::Node, nodeId), map))
     {
@@ -81,7 +82,6 @@ void PointsToPolysConverter::_addPolyFromPoint(const ConstNodePtr& point, const 
   geos::geom::Envelope polyBounds(point->toCoordinate());
   polyBounds.expandBy(_bufferSize);
 
-  // TODO: add version?
   NodePtr lowerLeft(
     new Node(
       point->getStatus(),

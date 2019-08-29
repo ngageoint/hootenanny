@@ -70,7 +70,7 @@ public:
   ChangesetCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**
-   * Writes the changeset between one or two inputs to an output file. If only one input is
+   * Writes a changeset between one or two inputs to an output file. If only one input is
    * specified, the resulting changeset will be made entirely of the elements from the input.
    *
    * @param output the changeset output file target
@@ -80,7 +80,7 @@ public:
   void create(const QString& output, const QString& input1, const QString& input2 = "");
 
   /**
-   * Writes the changeset between one or two maps to an output file. If only one input is
+   * Writes a changeset between one or two maps to an output file. If only one input is
    * specified, the resulting changeset will be made entirely of the elements from the input.
    *
    * @param map1 the first input source
@@ -90,11 +90,12 @@ public:
   void create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output);
 
   /**
-   * TODO
+   * Writes a single combined changeset between multiple sets of maps to an output file. The number
+   * of maps in each set must be equal to each other
    *
-   * @param map1Inputs
-   * @param map2Inputs
-   * @param output
+   * @param map1Inputs A set of maps with the original state of the data.
+   * @param map2Inputs A set of maps with the new state of the data.
+   * @param output the changeset output file target
    */
   void create(const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs,
               const QString& output);

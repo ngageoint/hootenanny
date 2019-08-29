@@ -64,7 +64,6 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 
 #include <hoot/core/util/Boundable.h>
-
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
@@ -254,8 +253,12 @@ void ChangesetReplacementCreator::create(
   _validateInputs(input1, input2);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
+  // We're not doing any ref filtering (yet?), so the ref filters are just the geometry type
+  // filters.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
     _geometryTypeFilters;
+  // If a replacement filter was specified, we'll AND it together with each geometry type filter to
+  // further restrict what replacement data goes into the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
     _getCombinedFilters(_replacementFilter);
 
@@ -272,6 +275,9 @@ void ChangesetReplacementCreator::create(
     input2.right(maxFilePrintLength) << "" << ", at bounds: " << boundsStr << ". " << lenientStr);
 
   // CHANGESET CALCULATION
+
+  // Since data with different geometry types require different settings, we'll calculate a separate
+  // pair of before/after maps for each geometry type.
 
   QList<OsmMapPtr> refMaps;
   QList<OsmMapPtr> conflatedMaps;
@@ -318,8 +324,8 @@ void ChangesetReplacementCreator::create(
 
   // CHANGESET GENERATION
 
-  // Derive a changeset between the ref and conflated maps that completely replaces ref features
-  // with secondary features within the bounds and write it out.
+  // Derive a changeset between the ref and conflated maps that replaces ref features with
+  // secondary features within the bounds and write it out.
 
   _changesetCreator->create(refMaps, conflatedMaps, output);
 
@@ -366,8 +372,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _addChangesetDeleteExclusionTags(refMap);
   }
 
-  // Prune ref dataset down to just the feature types specified by the filter, so we don't end up
-  // modifying anything else.
+  // Prune the ref dataset down to just the feature types specified by the filter, so we don't end
+  // up modifying anything else.
 
   _filterFeatures(refMap, refFeatureFilter, conf(), "ref-after-type-pruning");
 
@@ -375,13 +381,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   OsmMapPtr secMap = _loadSecMap(input2);
 
-  // Prune sec dataset down to just the feature types specified by the filter, so we don't end up
-  // modifying anything else.
+  // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
+  // up modifying anything else.
 
   _filterFeatures(secMap, secFeatureFilter, _replacementFilterOptions, "sec-after-type-pruning");
 
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
+  // If we're empty here, then the filtering must have removed everything...no changeset to
+  // calculate.
   if (refMap->getElementCount() == 0 && secMap->getElementCount() == 0)
   {
     LOG_DEBUG("Both input maps empty after filtering. Skipping changeset generation...");
@@ -420,6 +428,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // Snap secondary features back to reference features if dealing with linear features where
     // ref features may have been cut along the bounds. We're being lenient here by snapping
     // secondary to reference *and* allowing conflated data to be snapped to either dataset.
+
+    // We only want to snap ways of like types together, so we'll loop through each applicable
+    // linear type and snap them separately.
 
     QStringList snapWayStatuses("Input2");
     snapWayStatuses.append("Conflated");
@@ -494,6 +505,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
 
+    LOG_VARD(linearFilterClassNames);
     for (int i = 0; i < linearFilterClassNames.size(); i++)
     {
       _snapUnconnectedWays(
@@ -710,16 +722,19 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
 
   LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
 
-  // TODO: trying to do something like this as part of #3429
+  // TODO: trying to do something like this as part of #3429 ??
   //OsmMapPtr cutterMap2(doughMap);
   //_combineMaps(cutterMap2, cutterMap, true, "combined-cutter-shape");
 
-  // TODO:
   OsmMapPtr cutterMapToUse;
   LOG_VARD(cutterMap->getElementCount());
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
   if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
   {
+    // Found that if a map only has a couple points or less, generating an alpha shape from them may
+    // not be possible (or at least I don't know how to yet). So instead, go through the points in
+    // the map and replace them with small square polys...from that we can generate the alpha shape.
+
     cutterMapToUse.reset(new OsmMap(cutterMap));
     PointsToPolysConverter pointConverter;
     LOG_DEBUG(pointConverter.getInitStatusMessage());

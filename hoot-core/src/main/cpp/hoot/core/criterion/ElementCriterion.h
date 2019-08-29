@@ -71,9 +71,10 @@ public:
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
 
   /**
-   * TODO
+   * Returns a string uniquely identifying the criterion. May contain information about the data
+   * contained within the criterion.
    *
-   * @return
+   * @return a descriptive string
    */
   virtual QString toString() const = 0;
 };

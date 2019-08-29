@@ -34,7 +34,10 @@ namespace hoot
 {
 
 /**
- * TODO
+ * A criterion that can be mapped to a single geometry type.
+ *
+ * We may eventually run into situations where a criterion needs to be mapped to more than one
+ * geometry type.
  */
 class GeometryTypeCriterion : public ElementCriterion
 {
@@ -54,18 +57,18 @@ public:
   virtual GeometryType getGeometryType() const = 0;
 
   /**
-   * TODO
+   * Returns all GeometryTypeCriterion class names for a given geometry type
    *
-   * @param type
-   * @return
+   * @param type geometry type
+   * @return a list of classes inheriting from GeometryTypeCriterion
    */
   static QStringList getCriterionClassNamesByType(const GeometryType& type);
 
   /**
-   * TODO
+   * Returns a string representation of a geometry type
    *
-   * @param geometryType
-   * @return
+   * @param geometryType geometry type
+   * @return a geometry type string
    */
   static QString typeToString(const GeometryType& geometryType);
 };
