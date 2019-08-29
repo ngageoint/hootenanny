@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIPLE_CRITERION_CONSUMER_VISITOR_H
 #define MULTIPLE_CRITERION_CONSUMER_VISITOR_H
@@ -37,7 +37,7 @@ namespace hoot
 class Settings;
 
 /**
- * TODO
+ * Base class for a visitor that consumes multiple element criteria
  */
 class MultipleCriterionConsumerVisitor : public ElementVisitor, public ElementCriterionConsumer
 {
