@@ -73,18 +73,37 @@ else
   REPLACEMENT_FILTER_OPTIONS=" --replacement-filter-options "${10}
 fi
 #echo "replacement filter options: " $REPLACEMENT_FILTER_OPTIONS
-SOURCE_FORMATS=${11}
+if [ "${11}" == "" ]; then
+  RETAINMENT_FILTERS=""
+else
+  RETAINMENT_FILTERS=" --retainment-filters "${11}
+fi
+#echo "retainment filters: " $REPLACEMENT_FILTERS
+CHAIN_RETAINMENT_FILTERS=${12}
+if [ "$CHAIN_RETAINMENT_FILTERS" == "true" ]; then
+  CHAIN_RETAINMENT_FILTERS="--chain-retainment-filters"
+else
+  CHAIN_RETAINMENT_FILTERS=""
+fi
+#echo "chain retainment filters: " $CHAIN_RETAINMENT_FILTERS 
+if [ "${13}" == "" ]; then
+  RETAINMENT_FILTER_OPTIONS=""
+else
+  RETAINMENT_FILTER_OPTIONS=" --retainment-filter-options "${13}
+fi
+#echo "retainment filter options: " $RETAINMENT_FILTER_OPTIONS
+SOURCE_FORMATS=${14}
 #echo "source formats: " $SOURCE_FORMATS 
-if [ "${12}" == "" ]; then
+if [ "${15}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=${12}
+  WAY_SNAP_TOLERANCE=${15}
 fi
 #echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
-if [ "${13}" == "" ]; then
+if [ "${16}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${13}
+  EXISTING_WAY_NODE_TOLERANCE=${16}
 fi
 #echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
 CUSTOM_TAG_KEY="note"

@@ -108,6 +108,35 @@ public:
       args.removeAt(optionNameIndex);
     }
     LOG_VARD(replacementFilterOptions);
+    QStringList retainmentFilters;
+    if (args.contains("--retainment-filters"))
+    {
+      const int optionNameIndex = args.indexOf("--retainment-filters");
+      LOG_VARD(optionNameIndex);
+      retainmentFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(retainmentFilters);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(retainmentFilters);
+    bool chainRetainmentFilters = false;
+    if (args.contains("--chain-retainment-filters"))
+    {
+      chainRetainmentFilters = true;
+      args.removeAll("--chain-retainment-filters");
+    }
+    LOG_VARD(chainRetainmentFilters);
+    QStringList retainmentFilterOptions;
+    if (args.contains("--retainment-filter-options"))
+    {
+      const int optionNameIndex = args.indexOf("--retainment-filter-options");
+      LOG_VARD(optionNameIndex);
+      retainmentFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(retainmentFilterOptions);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(retainmentFilterOptions);
     bool lenientBounds = true;
     if (args.contains("--strict-bounds"))
     {
@@ -128,15 +157,15 @@ public:
 
     // param error checking
 
-    if (ConfigOptions().getConvertOps().size())
-    {
-      throw IllegalArgumentException(getName() + " command does not support convert operations.");
-    }
-
     if (args.size() < 4 || args.size() > 5)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
+    }
+
+    if (ConfigOptions().getConvertOps().size())
+    {
+      throw IllegalArgumentException(getName() + " command does not support convert operations.");
     }
 
     // process non-optional params
@@ -170,6 +199,9 @@ public:
     changesetCreator.setChainReplacementFilters(chainReplacementFilters);
     changesetCreator.setReplacementFilters(replacementFilters);
     changesetCreator.setReplacementFilterOptions(replacementFilterOptions);
+    changesetCreator.setChainRetainmentFilters(chainRetainmentFilters);
+    changesetCreator.setRetainmentFilters(retainmentFilters);
+    changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;

@@ -129,6 +129,9 @@ public:
   void setReplacementFilters(const QStringList& filterClassNames);
   void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
   void setReplacementFilterOptions(const QStringList& optionKvps);
+  void setRetainmentFilters(const QStringList& filterClassNames);
+  void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
+  void setRetainmentFilterOptions(const QStringList& optionKvps);
 
 private:
 
@@ -145,13 +148,21 @@ private:
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
   // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // secondary input.
+  // secondary input. Allows for further restriction of the secondary data that makes it to output.
   std::shared_ptr<ChainCriterion> _replacementFilter;
   // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
   // together.
   bool _chainReplacementFilters;
   // Configuration options to pass to the filters in _replacementFilter.
   Settings _replacementFilterOptions;
+  // One or more non-geometry criteria to be combined with the geometry type filters for the
+  // reference input. Allows for further restriction of the ref data that gets replaced.
+  std::shared_ptr<ChainCriterion> _retainmentFilter;
+  // If true the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
+  // together.
+  bool _chainRetainmentFilters;
+  // Configuration options to pass to the filters in _retainmentFilter.
+  Settings _retainmentFilterOptions;
 
   BoundsOptions _boundsOpts;
 

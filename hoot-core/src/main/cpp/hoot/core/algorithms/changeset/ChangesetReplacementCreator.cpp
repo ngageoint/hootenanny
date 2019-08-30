@@ -82,7 +82,8 @@ ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
                                                          const QString osmApiDbUrl) :
 _fullReplacement(false),
 _lenientBounds(true),
-_chainReplacementFilters(false)
+_chainReplacementFilters(false),
+_chainRetainmentFilters(false)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -212,6 +213,16 @@ void ChangesetReplacementCreator::setReplacementFilters(const QStringList& filte
   }
 }
 
+void ChangesetReplacementCreator::setRetainmentFilters(const QStringList& filterClassNames)
+{
+  LOG_VARD(filterClassNames.size());
+  if (filterClassNames.size() > 0)
+  {
+    LOG_DEBUG("Creating retainment filter...");
+    _setInputFilter(_retainmentFilter, filterClassNames, _chainRetainmentFilters);
+  }
+}
+
 void ChangesetReplacementCreator::_setInputFilterOptions(Settings& opts,
                                                          const QStringList& optionKvps)
 {
@@ -242,6 +253,12 @@ void ChangesetReplacementCreator::setReplacementFilterOptions(const QStringList&
   _setInputFilterOptions(_replacementFilterOptions, optionKvps);
 }
 
+void ChangesetReplacementCreator::setRetainmentFilterOptions(const QStringList& optionKvps)
+{
+  LOG_DEBUG("Creating retainment filter options...");
+  _setInputFilterOptions(_retainmentFilterOptions, optionKvps);
+}
+
 void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
@@ -255,12 +272,12 @@ void ChangesetReplacementCreator::create(
   _validateInputs(input1, input2);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
-  // We're not doing any ref filtering (yet?), so the ref filters are just the geometry type
-  // filters.
+  // If a retainment filter was specified, we'll AND it together with each geometry type filter to
+  // further restrict what reference data gets replaced in the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _geometryTypeFilters;
+   _getCombinedFilters(_retainmentFilter);
   // If a replacement filter was specified, we'll AND it together with each geometry type filter to
-  // further restrict what replacement data goes into the final changeset.
+  // further restrict what secondary replacement data goes into the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
     _getCombinedFilters(_replacementFilter);
 
@@ -548,12 +565,14 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
     std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input1));
   if (!boundable)
   {
-    throw IllegalArgumentException("Reader for " + input1 + " must implement Boundable.");
+    throw IllegalArgumentException(
+      "Reader for " + input1 + " must implement Boundable for replacement changeset derivation.");
   }
   boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(input2));
   if (!boundable)
   {
-    throw IllegalArgumentException("Reader for " + input2 + " must implement Boundable.");
+    throw IllegalArgumentException(
+      "Reader for " + input2 + " must implement Boundable for replacement changeset derivation.");
   }
 
   // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
@@ -562,7 +581,15 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
   OsmGeoJsonReader geoJsonReader;
   if (geoJsonReader.isSupported(input1) || geoJsonReader.isSupported(input2))
   {
-    throw IllegalArgumentException("GeoJSON inputs are not supported.");
+    throw IllegalArgumentException(
+      "GeoJSON inputs are not supported by replacement changeset derivation.");
+  }
+
+  if (_fullReplacement && _retainmentFilter)
+  {
+    throw IllegalArgumentException(
+      "Both full reference data replacement and a reference data retainment filter may not "
+      "be specified for replacement changeset derivation.");
   }
 }
 
