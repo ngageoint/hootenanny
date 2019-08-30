@@ -62,6 +62,7 @@ _valueMatcher(new QRegExp("*", Qt::CaseInsensitive, QRegExp::Wildcard))
 
 void TagAdvancedCriterion::setConfiguration(const Settings& s)
 {
+  // TODO: rename, since this crit isn't specific to conflation
   const QString tagFilter = ConfigOptions(s).getConflateTagFilter();
   if (!tagFilter.trimmed().isEmpty())
   {

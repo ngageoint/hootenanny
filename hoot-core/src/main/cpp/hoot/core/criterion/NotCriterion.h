@@ -29,11 +29,14 @@
 
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
 
-class NotCriterion : public ElementCriterion, public ElementCriterionConsumer
+class NotCriterion : public ElementCriterion, public ElementCriterionConsumer, public Configurable,
+  public ConstOsmMapConsumer
 {
 public:
 
@@ -54,6 +57,12 @@ public:
   { return ElementCriterionPtr(new NotCriterion(_child->clone())); }
 
   virtual QString getDescription() const { return "Negates a criterion"; }
+
+  virtual QString toString() const override;
+
+  virtual void setConfiguration(const Settings& conf);
+
+  virtual void setOsmMap(const OsmMap* map);
 
 private:
 

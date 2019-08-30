@@ -114,8 +114,8 @@ public:
   void setWayToSnapToCriterionClassName(const QString& name);
   void setWayToSnapCriterionClassName(const QString& name);
   void setWayNodeToSnapToCriterionClassName(const QString& name);
-  void setSnapWayStatus(const QString& status) { _snapWayStatus = status; }
-  void setSnapToWayStatus(const QString& status) { _snapToWayStatus = status; }
+  void setSnapWayStatuses(const QStringList& statuses);
+  void setSnapToWayStatuses(const QStringList& statuses);
   void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
 
   /**
@@ -159,10 +159,10 @@ private:
   QString _wayToSnapCriterionClassName;
   // the feature criterion to be used for way snap target candidates
   QString _wayNodeToSnapToCriterionClassName;
-  // the status criterion to be used for the snap source way
-  QString _snapWayStatus;
-  // the status criterion to be used for the snap target way or way node
-  QString _snapToWayStatus;
+  // the status criteria to be used for the snap source way
+  QStringList _snapWayStatuses;
+  // the status criteria to be used for the snap target way or way node
+  QStringList _snapToWayStatuses;
 
   // feature indexes used for way nodes being snapped to
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayNodeIndex;
@@ -196,11 +196,11 @@ private:
    * Creates the criterion used to determine via filtering which features we want to snap or snap to
    *
    * @param criterionClassName the name of a hoot ElementCriterion class
-   * @param status one or more hoot status strings
+   * @param statuses one or more hoot status strings
    * @return an element criterion
    */
   ElementCriterionPtr _createFeatureCriterion(const QString& criterionClassName,
-                                              const QString& status);
+                                              const QStringList& statuses);
   /*
    * Creates an index needed when searching for features to snap to
    *

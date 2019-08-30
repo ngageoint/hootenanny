@@ -25,6 +25,7 @@ arguments and a short help screen will be displayed.
 include::build-model.asciidoc[]
 include::changeset-apply.asciidoc[]
 include::changeset-derive.asciidoc[]
+include::changeset-derive-replacement.asciidoc[]
 include::clean.asciidoc[]
 include::compare.asciidoc[]
 include::conflate.asciidoc[]

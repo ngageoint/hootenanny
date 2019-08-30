@@ -73,6 +73,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements by tag using a set of advanced schema functionality"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   // one filter for each type: must, must_not, and should

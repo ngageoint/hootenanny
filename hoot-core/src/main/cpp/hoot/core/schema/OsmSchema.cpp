@@ -326,6 +326,7 @@ public:
     return result;
   }
 
+  // TODO: move this to a test class
   void createTestingGraph()
   {
     SchemaVertex v;

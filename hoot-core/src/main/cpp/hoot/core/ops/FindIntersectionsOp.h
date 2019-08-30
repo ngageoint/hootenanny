@@ -40,7 +40,7 @@ namespace hoot
 class FindIntersectionsVisitor;
 
 /**
- * Op. to find intersections
+ * Finds road intersections
  */
 class FindIntersectionsOp : public OsmMapOperation
 {

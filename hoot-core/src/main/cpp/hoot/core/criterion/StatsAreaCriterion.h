@@ -49,6 +49,10 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new StatsAreaCriterion()); }
 
   virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

@@ -68,18 +68,24 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProviderPtr& cs)
+void OsmXmlChangesetFileWriter::write(const QString& path,
+                                      const ChangesetProviderPtr& changesetProvider)
+{
+  QList<ChangesetProviderPtr> changesetProviders;
+  changesetProviders.append(changesetProvider);
+  write(path, changesetProviders);
+}
+
+void OsmXmlChangesetFileWriter::write(const QString& path,
+                                      const QList<ChangesetProviderPtr>& changesetProviders)
 {  
-  LOG_VARD(path);
-  LOG_VARD(cs->hasMoreChanges());
+  LOG_DEBUG("Writing changeset to: " << path << "...");
 
   QString filepath = path;
 
   _initIdCounters();
 
   long changesetProgress = 1;
-
-  LOG_INFO("Writing changeset to " << filepath);
 
   QFile f;
   f.setFileName(filepath);
@@ -99,67 +105,77 @@ void OsmXmlChangesetFileWriter::write(const QString& path, const ChangesetProvid
 
   Change::ChangeType last = Change::Unknown;
 
-  while (cs->hasMoreChanges())
+  for (int i = 0; i < changesetProviders.size(); i++)
   {
-    LOG_TRACE("Reading next XML change...");
-    _change = cs->readNextChange();
-    LOG_VART(_change.toString());
-    if (_change.getType() != last)
+    LOG_DEBUG(
+      "Derving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "...");
+
+    ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
+    LOG_VARD(changesetProvider->hasMoreChanges());
+    while (changesetProvider->hasMoreChanges())
     {
-      if (last != Change::Unknown)
+      LOG_TRACE("Reading next XML change...");
+      _change = changesetProvider->readNextChange();
+      LOG_VART(_change.toString());
+      if (_change.getType() != last)
       {
-        writer.writeEndElement();
+        if (last != Change::Unknown)
+        {
+          writer.writeEndElement();
+        }
+        switch (_change.getType())
+        {
+          case Change::Create:
+            writer.writeStartElement("create");
+            break;
+          case Change::Delete:
+            writer.writeStartElement("delete");
+            break;
+          case Change::Modify:
+            writer.writeStartElement("modify");
+            break;
+          case Change::Unknown:
+            //see comment in ChangesetDeriver::_nextChange() when
+            //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+            break;
+          default:
+            throw IllegalArgumentException("Unexpected change type.");
+        }
+        last = _change.getType();
+        LOG_VART(last);
       }
-      switch (_change.getType())
+
+      if (_change.getType() != Change::Unknown)
       {
-        case Change::Create:
-          writer.writeStartElement("create");
-          break;
-        case Change::Delete:
-          writer.writeStartElement("delete");
-          break;
-        case Change::Modify:
-          writer.writeStartElement("modify");
-          break;
-        case Change::Unknown:
-          //see comment in ChangesetDeriver::_nextChange() when
-          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
-          break;
-        default:
-          throw IllegalArgumentException("Unexpected change type.");
+        ElementType::Type type = _change.getElement()->getElementType().getEnum();
+        switch (type)
+        {
+          case ElementType::Node:
+            _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
+            break;
+          case ElementType::Way:
+            _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
+            break;
+          case ElementType::Relation:
+            _writeRelation(
+              writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
+            break;
+          default:
+            throw IllegalArgumentException("Unexpected element type.");
+        }
+        changesetProgress++;
+        //  Update the stats
+        _stats(last, type)++;
       }
-      last = _change.getType();
-      LOG_VART(last);
     }
 
-    if (_change.getType() != Change::Unknown)
+    if (last != Change::Unknown)
     {
-      ElementType::Type type = _change.getElement()->getElementType().getEnum();
-      switch (type)
-      {
-        case ElementType::Node:
-          _writeNode(writer, std::dynamic_pointer_cast<const Node>(_change.getElement()));
-          break;
-        case ElementType::Way:
-          _writeWay(writer, std::dynamic_pointer_cast<const Way>(_change.getElement()));
-          break;
-        case ElementType::Relation:
-          _writeRelation(
-            writer, std::dynamic_pointer_cast<const Relation>(_change.getElement()));
-          break;
-        default:
-          throw IllegalArgumentException("Unexpected element type.");
-      }
-      changesetProgress++;
-      //  Update the stats
-      _stats(last, type)++;
+      writer.writeEndElement();
     }
   }
 
-  if (last != Change::Unknown)
-  {
-    writer.writeEndElement();
-  }
   writer.writeEndElement();
   writer.writeEndDocument();
 

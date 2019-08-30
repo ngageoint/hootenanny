@@ -5,8 +5,8 @@
 
 The +tag-info+ command prints out unique feature tag values grouped by tag key.
 
-* +inputs+             - One or more inputs.  If using an OGR layer within a data source, then delimit the data source and layer
-                         with a semicolon.
+* +inputs+             - One or more inputs; may be any supported input format (e.g. OSM file).  If using an OGR layer within a data source, 
+                         then delimit the data source and layer with a semicolon.
 * +--tag-values-limit+ - Limits the number of unique tag values printed per tag key.  By default, there is no limit.  This option is ignored
                          if --keys-only is specified.
 * +--keys+             - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon (e.g. "key1;key2").
@@ -74,5 +74,9 @@ hoot tag-info input.osm --keys "key" --partial-key-match
 
 === Notes
 
-This command works on streamable inputs only.  At the time of this writing that includes all inputs except JSON.
+This command works on streamable inputs only.
+
+=== See Also
+
+* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
 

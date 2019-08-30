@@ -59,6 +59,9 @@ public:
   void setText(const QString& text) { _text = text; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   QString _text;

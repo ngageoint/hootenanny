@@ -13,9 +13,9 @@ smaller than the .rf output.
 
 ==== Input Parameters
 
-* +ref1+               - Input with REF1 tags (e.g. .osm file).
-* +ref2+               - Input with REF2 tags (e.g. .osm file).
-* +output+             - Output model base name.
+* +ref1+               - Input with REF1 tags; may be any supported input format (e.g. .osm file).
+* +ref2+               - Input with REF2 tags; may be any supported input format (e.g. .osm file).
+* +output+             - Output model base name (file name with file extension).
 * +--export-arff-only+ - Exports only the .arff file and skips the building and exporting of the .rf file.
 
 ==== Usage

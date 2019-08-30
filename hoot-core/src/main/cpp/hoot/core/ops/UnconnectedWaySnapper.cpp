@@ -72,8 +72,8 @@ _markSnappedWays(false),
 _wayToSnapToCriterionClassName("hoot::WayCriterion"),
 _wayToSnapCriterionClassName("hoot::WayCriterion"),
 _wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
-_snapWayStatus(Status::Unknown2),
-_snapToWayStatus(Status::Unknown1),
+_snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
+_snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _numSnappedToWays(0),
 _numSnappedToWayNodes(0),
 _taskStatusUpdateInterval(1000)
@@ -102,8 +102,8 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setMarkSnappedNodes(confOpts.getSnapUnconnectedWaysMarkSnappedNodes());
   setMarkSnappedWays(confOpts.getSnapUnconnectedWaysMarkSnappedWays());
 
-  setSnapWayStatus(confOpts.getSnapUnconnectedWaysSnapWayStatus().trimmed());
-  setSnapToWayStatus(confOpts.getSnapUnconnectedWaysSnapToWayStatus().trimmed());
+  setSnapWayStatuses(confOpts.getSnapUnconnectedWaysSnapWayStatuses());
+  setSnapToWayStatuses(confOpts.getSnapUnconnectedWaysSnapToWayStatuses());
 
   setWayToSnapCriterionClassName(confOpts.getSnapUnconnectedWaysSnapWayCriterion().trimmed());
   setWayToSnapToCriterionClassName(confOpts.getSnapUnconnectedWaysSnapToWayCriterion().trimmed());
@@ -197,6 +197,18 @@ void UnconnectedWaySnapper::setWayNodeToSnapToCriterionClassName(const QString& 
   }
 }
 
+void UnconnectedWaySnapper::setSnapWayStatuses(const QStringList& statuses)
+{
+  _snapWayStatuses = statuses;
+  StringUtils::removeEmptyStrings(_snapWayStatuses);
+}
+
+ void UnconnectedWaySnapper::setSnapToWayStatuses(const QStringList& statuses)
+{
+  _snapToWayStatuses = statuses;
+  StringUtils::removeEmptyStrings(_snapToWayStatuses);
+}
+
 void UnconnectedWaySnapper::apply(OsmMapPtr& map)
 {
   _map = map;
@@ -213,18 +225,18 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
   // create feature crits for filtering what things we snap and snap to (will default to just
   // plain ways and way nodes if nothing was specified)
   ElementCriterionPtr wayToSnapCrit =
-    _createFeatureCriterion(_wayToSnapCriterionClassName, _snapWayStatus);
+    _createFeatureCriterion(_wayToSnapCriterionClassName, _snapWayStatuses);
   ElementCriterionPtr wayToSnapToCrit =
-    _createFeatureCriterion(_wayToSnapToCriterionClassName, _snapToWayStatus);
+    _createFeatureCriterion(_wayToSnapToCriterionClassName, _snapToWayStatuses);
   ElementCriterionPtr wayNodeToSnapToCrit;
   if (_snapToExistingWayNodes)
   {
     wayNodeToSnapToCrit =
-      _createFeatureCriterion(_wayNodeToSnapToCriterionClassName, _snapToWayStatus);
+      _createFeatureCriterion(_wayNodeToSnapToCriterionClassName, _snapToWayStatuses);
   }
   // The status of what contains an unconnected node doesn't matter, so we don't filter by status.
   ElementCriterionPtr unnconnectedWayNodeCrit =
-    _createFeatureCriterion(_wayToSnapCriterionClassName, "");
+    _createFeatureCriterion(_wayToSnapCriterionClassName, QStringList());
 
   // create needed geospatial indexes for surrounding feature searches; If the way node reuse option
   // was turned off, then no need to index way nodes.
@@ -358,15 +370,15 @@ long UnconnectedWaySnapper::_getPid(const ConstWayPtr& way) const
   return pid;
 }
 
-ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString& criterionClassName,
-                                                                   const QString& status)
+ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(
+  const QString& criterionClassName, const QStringList& statuses)
 {
   const QString critClass = criterionClassName.trimmed();
   if (!critClass.isEmpty())
   {
     LOG_TRACE(
-      "Creating feature filtering criterion: " << criterionClassName << ", status: " <<
-      status << "...");
+      "Creating feature filtering criterion: " << criterionClassName << ", statuses: " <<
+      statuses << "...");
 
     // configure our element criterion, in case it needs it
     ElementCriterionPtr typeCrit(
@@ -384,17 +396,16 @@ ElementCriterionPtr UnconnectedWaySnapper::_createFeatureCriterion(const QString
       mapConsumer->setOsmMap(_map.get());
     }
 
-    if (!status.trimmed().isEmpty())
+    if (!statuses.isEmpty())
     {
       // create our criterion for the feature status
       ElementCriterionPtr statusCrit;
-      if (!status.contains(";"))
+      if (statuses.size() == 1)
       {
-        statusCrit.reset(new StatusCriterion(Status::fromString(status)));
+        statusCrit.reset(new StatusCriterion(Status::fromString(statuses.at(0))));
       }
       else
       {
-        const QStringList statuses = status.split(";");
         QList<std::shared_ptr<StatusCriterion>> statusCrits;
         for (int i = 0; i < statuses.size(); i++)
         {

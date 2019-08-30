@@ -27,7 +27,8 @@
 #ifndef ROUNDABOUT_CRITERION_H
 #define ROUNDABOUT_CRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +38,7 @@ class Element;
 /**
  * Identifies road roundabout junctions
  */
-class RoundaboutCriterion : public ElementCriterion
+class RoundaboutCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -50,6 +51,13 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new RoundaboutCriterion()); }
 
   virtual QString getDescription() const { return "Identifies road roundabout junctions"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

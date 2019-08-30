@@ -1,0 +1,44 @@
+
+Writing the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to an osm api db: osmapidb://hoot:hoottest@localhost:5432/osmapi_test (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+21:40:29.932 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+21:40:29.932 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+21:40:29.932 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+21:40:29.932 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Writing the reference dataset from: osmapidb://hoot:hoottest@localhost:5432/osmapi_test to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm (contains features to be replaced)...
+
+
+Writing the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/sec-original.osm (contains features to replace with)...
+
+21:40:39.107 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+21:40:39.108 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+21:40:39.108 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+21:40:39.108 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/sec-original.osm to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset...
+
+21:40:40.489 WARN   ...hangesetReplacementCreator.cpp( 975) --lenient-bounds option ignored with point datasets.
+21:40:41.141 WARN   ...oot/core/elements/OsmUtils.cpp( 445) 45 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql to the reference data in: osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.481937, max_lat=42.4914948, min_lon=-71.473525, max_lon=-71.4605954, num_changes=1510
+Node(s) Created: 709
+Node(s) Modified: 3
+Node(s) Deleted: 658
+Way(s) Created: 68
+Way(s) Modified: 6
+Way(s) Deleted: 65
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 1
+
+Reading the entire reference dataset out of: osmapidb://hoot:hoottest@localhost:5432/osmapi_test to: ServiceChangesetReplacementEmptyGeometryFilterTest-xml-replaced.osm for verification...
+

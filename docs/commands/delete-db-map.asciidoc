@@ -4,7 +4,7 @@
 === Description
 The +delete-db-map+ command deletes a map from the Hootenanny database.
 
-* +Map Name+  - The name of the map.
+* +Map Name+  - The name of the map database layer.
 
 === Usage
 

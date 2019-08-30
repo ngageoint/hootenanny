@@ -30,9 +30,8 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementAttributeType.h>
-#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 
 namespace hoot
 {
@@ -41,8 +40,8 @@ namespace hoot
  * Adds one or more attributes to elements.  Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
-class AddAttributesVisitor : public ElementVisitor, public Configurable, public OperationStatusInfo,
-  public ElementCriterionConsumer
+class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Configurable,
+  public OperationStatusInfo
 {
 
 public:
@@ -67,8 +66,6 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " attributes"; }
 
-  virtual void addCriterion(const ElementCriterionPtr& crit);
-
 private:
 
   //a semicolon delimited list of attributes of the form key=value
@@ -77,12 +74,7 @@ private:
   //forces the visitor to only update features where the attribute has an empty (default) value
   bool _addOnlyIfEmpty;
 
-  std::vector<ElementCriterionPtr> _criteria;
-  bool _negateCriteria;
-  bool _chainCriteria;
-
   ElementAttributeType::Type _getAttributeType(const QString& attribute, QString& attributeValue);
-  bool _criteriaSatisfied(const ConstElementPtr& e) const;
 };
 
 }

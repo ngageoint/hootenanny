@@ -52,9 +52,7 @@ public:
   OsmMapIndex(const OsmMap& map);
 
   void addNode(const ConstNodePtr& n);
-
   void addRelation(const ConstRelationPtr& r);
-
   void addWay(ConstWayPtr w);
 
   /**
@@ -71,7 +69,6 @@ public:
   std::set<ElementId> findWayRelations(const geos::geom::Envelope& e) const;
 
   std::vector<long> findNodes(const geos::geom::Coordinate& from, Meters maxDistance) const;
-
   std::vector<long> findNodes(const geos::geom::Envelope& e) const;
 
   long findNearestWay(geos::geom::Coordinate c) const;
@@ -82,12 +79,10 @@ public:
    */
   std::vector<long> findWayNeighbors(const ConstWayPtr& way, Meters buffer,
                                      bool addError = false) const;
-
   /**
    * Very inefficient.
    */
   std::vector<long> findWayNeighbors(geos::geom::Coordinate& from, Meters buffer) const;
-
   std::vector<long> findWayNeighborsBruteForce(ConstWayPtr way, Meters buffer) const;
 
   /**
@@ -124,13 +119,10 @@ public:
    * postGeometryChange the index is in an inconsistent state.
    */
   virtual void preGeometryChange(Element* element);
-
   virtual void postGeometryChange(Element* element);
 
   void removeNode(ConstNodePtr n);
-
   void removeRelation(const ConstRelationPtr& r);
-
   void removeWay(ConstWayPtr w);
 
   void reset();
