@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -63,6 +64,7 @@ void TagCriterion::setKvps(const QStringList kvps)
 void TagCriterion::setConfiguration(const Settings &s)
 {
   setKvps(ConfigOptions(s).getTagCriterionKvps());
+  LOG_VART(_kvps);
 }
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const

@@ -61,15 +61,18 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
   _addCriteria(critNames);
   // TODO: Maybe we should just make MultipleCriterionConsumerVisitor configurable and move this up?
   LOG_VARD(_criteria.size());
-  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-       it != _criteria.end(); ++it)
+  LOG_VARD(_configureChildren);
+  if (_configureChildren)
   {
-    ElementCriterionPtr crit = *it;
-    Configurable* c = dynamic_cast<Configurable*>(crit.get());
-    if (c != 0)
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
     {
-      c->setConfiguration(conf);
-      LOG_DEBUG("Set config on: " << crit->toString());
+      ElementCriterionPtr crit = *it;
+      Configurable* c = dynamic_cast<Configurable*>(crit.get());
+      if (c != 0)
+      {
+        c->setConfiguration(conf);
+      }
     }
   }
 

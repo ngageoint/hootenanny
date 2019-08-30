@@ -45,12 +45,14 @@ public:
 
   static std::string className() { return "hoot::MultipleCriterionConsumerVisitor"; }
 
+  MultipleCriterionConsumerVisitor();
   virtual ~MultipleCriterionConsumerVisitor() {}
 
   virtual void addCriterion(const ElementCriterionPtr& crit) override;
 
   void setChainCriteria(bool chain) { _chainCriteria = chain; }
   void setNegateCriteria(bool negate) { _negateCriteria = negate; }
+  void setConfigureChildren(bool configure) { _configureChildren = configure; }
 
   QString toString() const;
 
@@ -60,6 +62,7 @@ protected:
   //This allows for negating the criterion as an option sent in from the command line.
   bool _negateCriteria;
   bool _chainCriteria;
+  bool _configureChildren;
 
   bool _criteriaSatisfied(const ConstElementPtr& e) const;
   void _addCriteria(const QStringList& criteriaClassNames);

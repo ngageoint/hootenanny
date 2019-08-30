@@ -65,14 +65,17 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
   const QStringList critNames = configOptions.getAddAttributesVisitorElementCriteria();
   LOG_VART(critNames);
   _addCriteria(critNames);
-  for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-       it != _criteria.end(); ++it)
+  if (_configureChildren)
   {
-    ElementCriterionPtr crit = *it;
-    Configurable* c = dynamic_cast<Configurable*>(crit.get());
-    if (c != 0)
+    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
+         it != _criteria.end(); ++it)
     {
-      c->setConfiguration(conf);
+      ElementCriterionPtr crit = *it;
+      Configurable* c = dynamic_cast<Configurable*>(crit.get());
+      if (c != 0)
+      {
+        c->setConfiguration(conf);
+      }
     }
   }
 }

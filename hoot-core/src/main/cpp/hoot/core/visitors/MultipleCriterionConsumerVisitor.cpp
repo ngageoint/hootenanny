@@ -35,6 +35,14 @@
 namespace hoot
 {
 
+MultipleCriterionConsumerVisitor::MultipleCriterionConsumerVisitor() :
+_negateCriteria(false),
+_chainCriteria(false),
+_configureChildren(true)
+{
+
+}
+
 void MultipleCriterionConsumerVisitor::addCriterion(const ElementCriterionPtr& crit)
 {
   LOG_VART(_negateCriteria);
