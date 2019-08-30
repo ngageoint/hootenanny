@@ -134,7 +134,8 @@ private:
 
   friend class ChangesetReplacementCreatorTest;
 
-  // TODO
+  // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
+  // alpha shape of the sec data gets replaced.
   bool _fullReplacement;
   // determines how strict the handling of the bounds is during replacement
   bool _lenientBounds;
