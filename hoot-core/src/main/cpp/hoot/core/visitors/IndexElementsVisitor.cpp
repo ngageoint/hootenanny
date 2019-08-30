@@ -162,7 +162,7 @@ QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
     ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
     if (!neighborNode)
     {
-      // TODO: This shouldn't happen unless the geospatial indices were set up improperly for the
+      // This shouldn't happen unless the geospatial indices were set up improperly for the
       // query node.
       const QString errorMsg =
         QString("Map does not contain neighbor node: %1. Skipping neighbor...")

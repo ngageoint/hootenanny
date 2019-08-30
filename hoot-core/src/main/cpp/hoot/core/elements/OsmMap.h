@@ -157,6 +157,7 @@ public:
   ElementPtr getElement(ElementType type, long id);
 
   size_t getElementCount() const;
+  size_t size() const { return getElementCount(); }
 
   const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
 
@@ -199,7 +200,7 @@ public:
   const ConstWayPtr getWay(ElementId eid) const;
   const WayMap& getWays() const { return _ways; }
 
-  bool isEmpty() const { return _nodes.size() == 0 && _ways.size() == 0 && _relations.size() == 0;}
+  bool isEmpty() const { return getElementCount() == 0; }
 
   void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
 

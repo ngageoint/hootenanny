@@ -301,12 +301,14 @@ void ChangesetReplacementCreator::create(
     _getMapsForGeometryType(
       refMap, conflatedMap, input1, input2, boundsStr, itr.value(), secFilters[itr.key()],
       itr.key(), linearFilterClassNames);
-    if (refMap && refMap->getElementCount() > 0)
+
+    LOG_VARD(refMap.get());
+    LOG_VARD(conflatedMap.get());
+    if (refMap && conflatedMap && conflatedMap->size() > 0)
     {
+      LOG_VARD(refMap->size());
+      LOG_VARD(conflatedMap.get());
       refMaps.append(refMap);
-    }
-    if (conflatedMap && conflatedMap->getElementCount() > 0)
-    {
       conflatedMaps.append(conflatedMap);
     }
 
@@ -372,7 +374,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _addChangesetDeleteExclusionTags(refMap);
   }
 
-  // Prune the ref dataset down to just the feature types specified by the filter, so we don't end
+  // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
   // up modifying anything else.
 
   _filterFeatures(refMap, refFeatureFilter, conf(), "ref-after-type-pruning");
@@ -409,8 +411,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
   // for relations here, which has since been removed from the codebase.
 
-  // Combine the cookie cut ref map back with the secondary map, so we can conflate it with the ref
-  // map.
+  // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
+  // together.
 
   _combineMaps(cookieCutRefMap, secMap, false, "combined-before-conflation");
   secMap.reset();
@@ -532,6 +534,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
     _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
+
+  LOG_VARD(refMap->getElementCount());
+  LOG_VARD(conflatedMap->getElementCount());
 }
 
 void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
@@ -714,23 +719,37 @@ void ChangesetReplacementCreator::_filterFeatures(
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap)
 {
+  LOG_VARD(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");
+  LOG_VARD(cutterMap->getElementCount());
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
-  // Generate a cutter shape based on the cropped secondary map.
+  OsmMapPtr cookieCutMap(new OsmMap(doughMap));
+  cookieCutMap->setName("cookie-cut");
+  LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
 
-  LOG_DEBUG("Generating cutter shape map from: " << cutterMap->getName() << "...");
+  // TODO: move to option
+  const bool cropAllRef = false;
 
-  // TODO: trying to do something like this as part of #3429 ??
-  //OsmMapPtr cutterMap2(doughMap);
-  //_combineMaps(cutterMap2, cutterMap, true, "combined-cutter-shape");
+  LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
   OsmMapPtr cutterMapToUse;
   LOG_VARD(cutterMap->getElementCount());
+  ConfigOptions opts(conf());
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
-  if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
+  double cookieCutterAlpha = opts.getCookieCutterAlpha();
+  double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
+  if (cropAllRef)
   {
+    // Generate a cutter shape based on the ref map.
+    cutterMapToUse = doughMap;
+    cookieCutterAlphaShapeBuffer = 10.0;
+  }
+  else if (cutterMap->getElementCount() < 3 && OsmUtils::mapIsPointsOnly(cutterMap))
+  {
+    // Generate a cutter shape based on a transformation of the cropped secondary map.
+
     // Found that if a map only has a couple points or less, generating an alpha shape from them may
     // not be possible (or at least I don't know how to yet). So instead, go through the points in
     // the map and replace them with small square polys...from that we can generate the alpha shape.
@@ -744,16 +763,19 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   }
   else
   {
+    // Generate a cutter shape based on the cropped secondary map.
     cutterMapToUse = cutterMap;
   }
+  LOG_VARD(cutterMapToUse->getElementCount());
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map");
 
-  ConfigOptions opts(conf());
+  LOG_DEBUG("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
+
   OsmMapPtr cutterShapeOutlineMap;
   try
   {
     cutterShapeOutlineMap =
-      AlphaShapeGenerator(opts.getCookieCutterAlpha(), opts.getCookieCutterAlphaShapeBuffer())
+      AlphaShapeGenerator(cookieCutterAlpha, cookieCutterAlphaShapeBuffer)
         .generateMap(cutterMapToUse);
   }
   catch (const HootException& e)
@@ -767,22 +789,22 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
     throw e;
   }
 
-  // not exactly sure yet why this needs to be done
+  // not exactly sure yet why this projection needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
+  LOG_DEBUG("Cookie cutting cutter shape out of: " << cookieCutMap->getName() << "...");
 
-  LOG_DEBUG("Cookie cutting cutter shape out of: " << doughMap->getName() << "...");
-  OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-  LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
-  cookieCutMap->setName("cookie-cut");
   CookieCutter(
     false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
     _boundsOpts.cookieCutKeepOnlyInsideBounds)
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
+  LOG_VARD(cookieCutMap->getElementCount());
+  MapProjector::projectToWgs84(doughMap);
+  LOG_VARD(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
 
@@ -889,6 +911,8 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName)
 {
   LOG_DEBUG("Cropping map: " << map->getName() << " for changeset derivation...");
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  //LOG_VART(map->getProjection()->GetName());
 
   MapCropper cropper(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);

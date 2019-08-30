@@ -80,8 +80,7 @@ public:
   void create(const QString& output, const QString& input1, const QString& input2 = "");
 
   /**
-   * Writes a changeset between one or two maps to an output file. If only one input is
-   * specified, the resulting changeset will be made entirely of the elements from the input.
+   * Writes a changeset between two maps to an output file.
    *
    * @param map1 the first input source
    * @param map2 the second input source
