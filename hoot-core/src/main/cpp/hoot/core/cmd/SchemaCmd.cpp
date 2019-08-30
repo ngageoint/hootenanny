@@ -37,13 +37,13 @@ using namespace std;
 namespace hoot
 {
 
-class TagSchemaCmd : public BaseCommand
+class SchemaCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::TagSchemaCmd"; }
+  static string className() { return "hoot::SchemaCmd"; }
 
-  TagSchemaCmd() {}
+  SchemaCmd() {}
 
   virtual QString getName() const override { return "schema"; }
 
@@ -77,6 +77,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, TagSchemaCmd)
+HOOT_FACTORY_REGISTER(Command, SchemaCmd)
 
 }
