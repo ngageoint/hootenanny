@@ -61,6 +61,13 @@ public:
 
     // process optional params
 
+    bool fullReplacement = false;
+    if (args.contains("--full-replacement"))
+    {
+      fullReplacement = true;
+      args.removeAll("--full-replacement");
+    }
+    LOG_VARD(fullReplacement);
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
     {
@@ -156,6 +163,7 @@ public:
     }
 
     ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
+    changesetCreator.setFullReplacement(fullReplacement);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);
     // chain param must be set before the filters themselves

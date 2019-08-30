@@ -54,18 +54,32 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
 -----
 
-===== Replace all features in a first dataset with overlapping features from the second dataset within a specified bounds:
+===== Replace all features in a first dataset with overlapping features from a second dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc
 -----
 
-===== Replace all buildings in a first dataset with overlapping buildings from the second dataset within a specified bounds:
+===== Completely replace all features in a first dataset with features from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc --full-replacement
+-----
+
+===== Replace all buildings in a first dataset with overlapping buildings from a second dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc -geometry-filters "hoot::BuildingCriterion"
+-----
+
+===== Completely replace all buildings in a first dataset with buildings from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc -geometry-filters "hoot::BuildingCriterion" --full-replacement
 -----
 
 ==== MetaInfo

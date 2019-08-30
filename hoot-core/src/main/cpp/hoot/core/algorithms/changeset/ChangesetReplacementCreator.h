@@ -87,19 +87,19 @@ struct BoundsOptions
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
- * replaces features inside of a specified bounds) and then calls on appropriate changeset file
+ * replace features inside of a specified bounds) and then calls on appropriate changeset file
  * writers.
  *
  * This class uses a customized workflow that depends upon the feature type the changeset is being
- * generated for and how strict the AOI is to be interpreted. ChangesetCreator is used for the
+ * generated for, whether all the reference features or just those that overlap secondary features
+ * are to be replaced, and how strict the AOI is to be interpreted. ChangesetCreator is used for the
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
- * and a host of other things that need to happen before the changeset generation. Reference
- * features are only replaced that overlap with the alpha shape calculated by the secondary
- * features (this restriction could be removed with #3429). The secondary data added to the output
- * changeset can be further restricted with a non-geometry type filter.
+ * and a host of other things that need to happen before the changeset generation. The secondary
+ * data added to the output changeset can be further restricted with a non-geometry type filter.
  *
  * TODO: implement progress
  * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
+ * TODO: add an option to specify filter that further restricts what can be replaced in the ref?
  */
 class ChangesetReplacementCreator
 {
@@ -109,8 +109,8 @@ public:
   ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**
-   * Creates a changeset that completely replaces features in the first input with features from
-   * the second input.
+   * Creates a changeset that replaces features in the first input with features from the second
+   * input.
    *
    * @param input1 the target data for the changeset in which to replace features; must support
    * Boundable
@@ -123,6 +123,7 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
+  void setFullReplacement(const bool full) { _fullReplacement = full; LOG_VARD(_fullReplacement); }
   void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
   void setGeometryFilters(const QStringList& filterClassNames);
   void setReplacementFilters(const QStringList& filterClassNames);
@@ -133,6 +134,9 @@ private:
 
   friend class ChangesetReplacementCreatorTest;
 
+  // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
+  // alpha shape of the sec data gets replaced.
+  bool _fullReplacement;
   // determines how strict the handling of the bounds is during replacement
   bool _lenientBounds;
   // A set of geometry type filters, organized by core geometry type (point, line, poly) to

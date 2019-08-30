@@ -223,6 +223,13 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
   {
     OsmMapPtr map1 = map1Inputs.at(i);
     OsmMapPtr map2 = map2Inputs.at(i);
+    if (map2->isEmpty())
+    {
+      // An empty map2 makes no sense, b/c you would just have an empty changeset.
+      LOG_INFO(
+        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
+      continue;
+    }
     LOG_DEBUG(
       "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
       " to output: " << output << "...");
@@ -250,8 +257,17 @@ void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
     // no need to implement application of ops for this logic path
 
     // sortedInputs1 is the former state of the data
-    sortedInputs1.append(_sortElementsInMemory(map1));
-    // sortedInputs2 is the newer state of the data;
+    if (map1->isEmpty())
+    {
+      // An empty former map, means the changeset will be made up of entirely statements based on
+      // map2.
+      sortedInputs1.append(_getEmptyInputStream());
+    }
+    else
+    {
+      sortedInputs1.append(_sortElementsInMemory(map1));
+    }
+    // sortedInputs2 is the newer state of the data
     sortedInputs2.append(_sortElementsInMemory(map2));
   }
 
@@ -607,7 +623,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
 {
   if (inputs1.size() != inputs2.size())
   {
-    throw IllegalArgumentException("Changeset input data inputs are not the same size.");
+    throw IllegalArgumentException(
+      "Changeset input data inputs are not the same size for streaming to output.");
   }
 
   LOG_INFO("Streaming changeset output to " << output.right(25) << "...")

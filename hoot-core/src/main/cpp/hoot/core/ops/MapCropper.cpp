@@ -238,6 +238,7 @@ void MapCropper::apply(OsmMapPtr& map)
     const std::shared_ptr<Way>& w = it->second;
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
     LOG_VART(w->getNodeIds());
+    LOG_VART(w);
 
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     if (!ls.get())
@@ -334,7 +335,8 @@ void MapCropper::apply(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     NodePtr node = it->second;
-    LOG_VART(node->getElementId());
+    LOG_TRACE("Checking " << node->getElementId() << " for cropping...");
+    LOG_VART(node);
 
     bool nodeInside = false;
 
