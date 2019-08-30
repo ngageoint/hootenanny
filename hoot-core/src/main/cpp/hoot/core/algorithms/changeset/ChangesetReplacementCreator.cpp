@@ -248,6 +248,7 @@ void ChangesetReplacementCreator::create(
 {
   LOG_VARD(_chainReplacementFilters);
   LOG_VARD(_lenientBounds);
+  LOG_VARD(_fullReplacement);
 
   // INPUT VALIDATION AND SETUP
 
@@ -739,6 +740,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
   double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
+  LOG_VARD(_fullReplacement);
   if (_fullReplacement)
   {
     // Generate a cutter shape based on the ref map, which will cause all the ref data to be

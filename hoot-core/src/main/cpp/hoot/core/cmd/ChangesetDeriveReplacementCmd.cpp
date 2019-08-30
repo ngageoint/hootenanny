@@ -163,6 +163,7 @@ public:
     }
 
     ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
+    changesetCreator.setFullReplacement(fullReplacement);
     changesetCreator.setLenientBounds(lenientBounds);
     changesetCreator.setGeometryFilters(geometryFilters);
     // chain param must be set before the filters themselves

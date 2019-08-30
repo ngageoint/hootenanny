@@ -123,7 +123,7 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
-  void setFullReplacement(const bool full) { _fullReplacement = full; }
+  void setFullReplacement(const bool full) { _fullReplacement = full; LOG_VARD(_fullReplacement); }
   void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
   void setGeometryFilters(const QStringList& filterClassNames);
   void setReplacementFilters(const QStringList& filterClassNames);
