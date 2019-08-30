@@ -80,6 +80,7 @@ namespace hoot
 
 ChangesetReplacementCreator::ChangesetReplacementCreator(const bool printStats,
                                                          const QString osmApiDbUrl) :
+_fullReplacement(false),
 _lenientBounds(true),
 _chainReplacementFilters(false)
 {
@@ -719,6 +720,8 @@ void ChangesetReplacementCreator::_filterFeatures(
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap)
 {
+  // TODO: could use some refactoring here after the addition of _fullReplacement
+
   LOG_VARD(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");
@@ -728,10 +731,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
   cookieCutMap->setName("cookie-cut");
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
-
-  // TODO: move to option
-  const bool cropAllRef = false;
-
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
   OsmMapPtr cutterMapToUse;
@@ -740,9 +739,10 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
   LOG_VARD(OsmUtils::mapIsPointsOnly(cutterMap));
   double cookieCutterAlpha = opts.getCookieCutterAlpha();
   double cookieCutterAlphaShapeBuffer = opts.getCookieCutterAlphaShapeBuffer();
-  if (cropAllRef)
+  if (_fullReplacement)
   {
-    // Generate a cutter shape based on the ref map.
+    // Generate a cutter shape based on the ref map, which will cause all the ref data to be
+    // replaced.
     cutterMapToUse = doughMap;
     cookieCutterAlphaShapeBuffer = 10.0;
   }
