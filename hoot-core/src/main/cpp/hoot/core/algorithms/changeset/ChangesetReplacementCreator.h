@@ -96,16 +96,24 @@ struct BoundsOptions
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
  * and a host of other things that need to happen before the changeset generation. The secondary
  * data added to the output changeset can be further restricted with a non-geometry type filter.
+ * The reference data removed from the changeset can also be further restricted with a non-geometry
+ * type filter.
  *
  * TODO: implement progress
  * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
- * TODO: add an option to specify filter that further restricts what can be replaced in the ref?
  */
 class ChangesetReplacementCreator
 {
 
 public:
 
+  /**
+   * Constructor
+   *
+   * @param printStats prints statistics for the output changeset
+   * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
+   * the output changeset is of type .osc.sql.
+   */
   ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**
