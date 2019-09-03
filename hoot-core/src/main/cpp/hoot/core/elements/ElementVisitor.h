@@ -40,18 +40,19 @@ namespace hoot
 /**
  * Visits elements in a collection in a way that they can be modified.
  *
- * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this override
+ * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this over
  * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
- * does not require it and you are not running in the conflate pipeline).
+ * does not require it and you are not running in the conflate pipeline where all map data must
+ * be read into memory).
  */
 class ElementVisitor : public ApiEntityInfo
 {
 public:
 
+  static std::string className() { return "hoot::ElementVisitor"; }
+
   ElementVisitor() : _numAffected(0), _numProcessed(0) {}
   virtual ~ElementVisitor() {}
-
-  static std::string className() { return "hoot::ElementVisitor"; }
 
   virtual void visit(const ElementPtr& e) = 0;
 

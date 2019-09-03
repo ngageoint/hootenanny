@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -63,11 +64,18 @@ void TagCriterion::setKvps(const QStringList kvps)
 void TagCriterion::setConfiguration(const Settings &s)
 {
   setKvps(ConfigOptions(s).getTagCriterionKvps());
+  LOG_VART(_kvps);
 }
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(e->getTags());
+  if (_kvps.size() == 0)
+  {
+    throw IllegalArgumentException(
+      "No tag key/value pairs specified for: " + QString::fromStdString(className()));
+  }
+
+  LOG_VART(e);
   for (int i = 0; i < _kvps.size(); i++)
   {
     const QStringList kvpParts = _kvps.at(i).split("=");
@@ -82,6 +90,11 @@ bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
   return false;
+}
+
+QString TagCriterion::toString() const
+{
+  return QString::fromStdString(className()).remove("hoot::")+ ":kvps:" + _kvps.join(",");
 }
 
 }

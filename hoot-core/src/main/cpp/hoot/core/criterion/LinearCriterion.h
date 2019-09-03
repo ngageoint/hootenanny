@@ -28,7 +28,8 @@
 #ifndef LINEARCRITERION_H
 #define LINEARCRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -36,18 +37,25 @@ namespace hoot
 /**
  * Identifies linear features
  */
-class LinearCriterion : public ElementCriterion
+class LinearCriterion : public GeometryTypeCriterion
 {
 public:
+
   static std::string className() { return "hoot::LinearCriterion"; }
 
-  LinearCriterion() {}
+  LinearCriterion();
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new LinearCriterion()); }
 
   virtual QString getDescription() const { return "Identifies linear features"; }
+
+  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

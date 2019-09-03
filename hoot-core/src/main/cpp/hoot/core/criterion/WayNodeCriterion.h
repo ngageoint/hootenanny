@@ -28,14 +28,14 @@
 #define WAY_NODE_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class WayNodeCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class WayNodeCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
 
@@ -50,6 +50,11 @@ public:
   virtual QString getDescription() const { return "Identifies way nodes"; }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+  virtual GeometryType getGeometryType() const { return GeometryType::Point; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
 

@@ -59,10 +59,19 @@ public:
 
   /**
    * Write the changeset out to the specified file
+   *
    * @param path Pathname for the output file(s)
-   * @param cs Changeset provider to stream the changes from
+   * @param changesetProvider changeset provider to stream the changes from
    */
-  void write(const QString& path, const ChangesetProviderPtr& cs);
+  void write(const QString& path, const ChangesetProviderPtr& changesetProvider);
+
+  /**
+   * Write the changeset out to the specified file
+   *
+   * @param path Pathname for the output file(s)
+   * @param changesetProviders changeset providers to stream the changes from
+   */
+  void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
 
   /**
    * Set the configuration settings

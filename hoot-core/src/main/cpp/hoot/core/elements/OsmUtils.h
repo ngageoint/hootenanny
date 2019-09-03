@@ -357,6 +357,33 @@ public:
                                     const ConstOsmMapPtr& map);
 
   /**
+   * Determines if a node is contained by any way in a map
+   *
+   * @param nodeId the ID of the node to search for
+   * @param map the map containing the nodes/ways
+   * @return true if any way in the map contains the node; false otherwise
+   */
+  static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if an element is contained by any relation in a map
+   *
+   * @param elementId the ID of the element to search for
+   * @param map the map containing the element
+   * @return true if any relation in the map contains the element; false otherwise
+   */
+  static bool elementContainedByAnyRelation(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if an element is contained by any way or relation in a map
+   *
+   * @param elementId the ID of the element to search for
+   * @param map the map containing the element
+   * @return true if any way or relation in the map contains the element; false otherwise
+   */
+  static bool isChild(const ElementId& elementId, const ConstOsmMapPtr& map);
+
+  /**
    * Returns the number of elements with a changeset version less than one
    *
    * @param map the map to examine
@@ -370,6 +397,14 @@ public:
    * @param map the map to examine
    */
   static void checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
+
+  /**
+   * Determines if a map contains only nodes that are not way nodes
+   *
+   * @param map the map to examine
+   * @return true if the map is made up of non-way node points only; false otherwise
+   */
+  static bool mapIsPointsOnly(const OsmMapPtr& map);
 };
 
 }

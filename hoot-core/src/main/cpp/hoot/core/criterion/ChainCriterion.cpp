@@ -76,26 +76,58 @@ void ChainCriterion::addCriterion(const ElementCriterionPtr& e)
   _criteria.push_back(e);
 }
 
+void ChainCriterion::setOsmMap(const OsmMap* map)
+{
+  for (size_t i = 0; i < _criteria.size(); i++)
+  {
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_criteria[i]);
+    if (mapConsumer)
+    {
+      mapConsumer->setOsmMap(map);
+    }
+  }
+}
+
+void ChainCriterion::setConfiguration(const Settings& conf)
+{
+  for (size_t i = 0; i < _criteria.size(); i++)
+  {
+    std::shared_ptr<Configurable> configurable =
+      std::dynamic_pointer_cast<Configurable>(_criteria[i]);
+    if (configurable)
+    {
+      configurable->setConfiguration(conf);
+      LOG_DEBUG("Set config on: " << _criteria[i]->toString());
+    }
+  }
+}
+
 bool ChainCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   for (size_t i = 0; i < _criteria.size(); i++)
   {
     if (!_criteria[i]->isSatisfied(e))
     {
+      LOG_TRACE(
+        "One chained criterion not satisfied in: " << toString() << ". Filter not satisfied " <<
+        "for: " << e);
       return false;
     }
   }
+  LOG_TRACE("One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " << e);
   return true;
 }
 
 QString ChainCriterion::toString() const
 {
-  LOG_VART(_criteria.size());
-  QString txt = "ChainCriterion members: ";
+  QString txt = "ChainCriterion(";
   for (size_t i = 0; i < _criteria.size(); i++)
   {
-    txt += typeid(*_criteria.at(i)).name();
+    txt += _criteria.at(i)->toString() + ";";
   }
+  txt.chop(1);
+  txt += ")";
   return txt;
 }
 

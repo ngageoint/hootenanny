@@ -54,6 +54,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   ConstOsmMapPtr _map;

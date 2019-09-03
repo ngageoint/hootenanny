@@ -19,6 +19,7 @@ Only one of the following options can be passed to the command:
 * +--criterion-consumers+      - Displays operations capable of taking in an ElementCriterion as input
 * +--feature-extractors+       - Displays available feature extractors used in conflation model building
 * +--formats+                  - Displays supported data input/output formats
+* +--geometry-type-criteria+   - Displays criteria that identify a feature geometry type
 * +--languages+                - Displays information about translatable/detectable spoken languages
 * +--matchers+                 - Displays available feature matchers used during conflation
 * +--match-creators+           - Displays available feature match creators used during conflation
@@ -199,6 +200,22 @@ hoot info --formats --input
 hoot info --formats --output
 
 hoot info --formats --input-bounded
+--------------------------------------
+
+=== Geometry Type Criteria
+
+The +--geometry-type-crieria++ option prints out all element criteria classes that can be used to identify an element's geometry.
+
+==== Usage
+
+--------------------------------------
+info --geometry-type-crieria
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --geometry-type-crieria
 --------------------------------------
 
 === Languages

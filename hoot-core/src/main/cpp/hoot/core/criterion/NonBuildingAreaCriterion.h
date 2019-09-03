@@ -28,7 +28,7 @@
 #define NONBUILDINGAREACRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -39,7 +39,7 @@ namespace hoot
  * Should be able to accomplish the same thing with a not building and is area chain but
  * couldn't.  See comments in train-area/RemoveIrrelevants.js
  */
-class NonBuildingAreaCriterion : public ElementCriterion
+class NonBuildingAreaCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -54,6 +54,12 @@ public:
 
   virtual QString getDescription() const
   { return "Identifies features that are areas but not buildings"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 };
 

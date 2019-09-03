@@ -80,8 +80,8 @@ public:
     uut.setMarkSnappedWays(true);
     uut.setSnapToExistingWayNodes(true);
     uut.setWayDiscretizationSpacing(1.0);
-    uut.setSnapToWayStatus(Status(Status::Unknown1).toString());
-    uut.setSnapWayStatus(Status(Status::Unknown2).toString());
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
     uut.setWayNodeToSnapToCriterionClassName("hoot::HighwayNodeCriterion");
     uut.setWayToSnapCriterionClassName("hoot::HighwayCriterion");
     uut.setWayToSnapToCriterionClassName("hoot::HighwayCriterion");

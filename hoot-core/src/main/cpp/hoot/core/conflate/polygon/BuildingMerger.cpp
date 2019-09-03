@@ -85,6 +85,8 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 
+  virtual QString toString() const override { return ""; }
+
 private:
 
   BuildingCriterion _buildingCrit;

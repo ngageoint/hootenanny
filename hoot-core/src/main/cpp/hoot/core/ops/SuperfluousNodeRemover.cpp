@@ -137,7 +137,9 @@ void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   {
     s.setBounds(e);
   }
+  LOG_DEBUG(s.getInitStatusMessage());
   s.apply(map);
+  LOG_DEBUG(s.getCompletedStatusMessage());
 }
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)

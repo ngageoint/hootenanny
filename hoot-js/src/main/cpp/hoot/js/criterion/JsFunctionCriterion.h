@@ -57,6 +57,8 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  virtual QString toString() const override { return ""; }
+
 private:
 
   JsFunctionCriterion(v8::Persistent<v8::Function>& func)

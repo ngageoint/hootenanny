@@ -50,7 +50,7 @@ class Element;
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the
  * NotCriterion for an example to negate criterion.
  *
- * Also see: ConflatableElementCriterion.
+ * Also see: ConflatableElementCriterion and GeometryTypeCriterion.
  */
 class ElementCriterion : public ApiEntityInfo
 {
@@ -69,6 +69,14 @@ public:
    * Use the clone pattern for all classes based on the ElementCriterion class
    */
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
+
+  /**
+   * Returns a string uniquely identifying the criterion. May contain information about the data
+   * contained within the criterion.
+   *
+   * @return a descriptive string
+   */
+  virtual QString toString() const = 0;
 };
 
 typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;

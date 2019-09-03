@@ -52,8 +52,6 @@ _numTagsRemoved(0)
 
 void RemoveTagsVisitor::setConfiguration(const Settings& conf)
 {
-  // TODO: We could also add support for chained criteria here like in RemoveElementsVisitor
-
   ConfigOptions configOptions(conf);
   _keys = configOptions.getTagFilterKeys();
   LOG_VART(_keys);
