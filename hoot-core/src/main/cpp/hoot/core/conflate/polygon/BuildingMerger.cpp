@@ -129,6 +129,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
+  LOG_VART(_manyToManyMatch);
+  LOG_VART(_mergeManyToManyMatches);
+
   ReviewMarker reviewMarker;
   if (_manyToManyMatch && !_mergeManyToManyMatches)
   {
