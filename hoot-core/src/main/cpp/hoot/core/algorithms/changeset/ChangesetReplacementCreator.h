@@ -131,7 +131,7 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
-  void setFullReplacement(const bool full) { _fullReplacement = full; LOG_VARD(_fullReplacement); }
+  void setFullReplacement(const bool full) { _fullReplacement = full; }
   void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
   void setGeometryFilters(const QStringList& filterClassNames);
   void setReplacementFilters(const QStringList& filterClassNames);
@@ -148,30 +148,40 @@ private:
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
   // alpha shape of the sec data gets replaced.
   bool _fullReplacement;
+
   // determines how strict the handling of the bounds is during replacement
   bool _lenientBounds;
+
   // A set of geometry type filters, organized by core geometry type (point, line, poly) to
   // separately filter the input datasets on.
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
+
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
+
   // One or more non-geometry criteria to be combined with the geometry type filters for the
   // secondary input. Allows for further restriction of the secondary data that makes it to output.
   std::shared_ptr<ChainCriterion> _replacementFilter;
+
   // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
   // together.
   bool _chainReplacementFilters;
+
   // Configuration options to pass to the filters in _replacementFilter.
   Settings _replacementFilterOptions;
+
   // One or more non-geometry criteria to be combined with the geometry type filters for the
   // reference input. Allows for further restriction of the ref data that gets replaced.
   std::shared_ptr<ChainCriterion> _retainmentFilter;
+
   // If true the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
   // together.
   bool _chainRetainmentFilters;
+
   // Configuration options to pass to the filters in _retainmentFilter.
   Settings _retainmentFilterOptions;
 
+  // controls cropping
   BoundsOptions _boundsOpts;
 
   // handles changeset generation and output
@@ -183,13 +193,17 @@ private:
 
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const;
+
   void _setInputFilter(
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
     const bool chainFilters);
+
   void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
+
   // Combines filters in _geometryTypeFilters with _replacementFilter.
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
+
   void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
     const QString& debugFileName);
