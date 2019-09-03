@@ -275,7 +275,6 @@ void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
   _loadJSON(jsonStr);
   _readToMap();
   _map.reset();
-//  return _map;
 }
 
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)

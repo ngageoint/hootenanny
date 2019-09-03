@@ -63,7 +63,6 @@ void OsmGeoJsonWriterJs::toString(const FunctionCallbackInfo<Value>& args)
 
   OsmGeoJsonWriter writer;
 
-//  args.GetReturnValue().Set(toV8(OsmGeoJsonWriter::write(map)));
   args.GetReturnValue().Set(toV8(writer.toString(map)));
 }
 
