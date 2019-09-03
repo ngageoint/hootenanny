@@ -55,7 +55,6 @@ public final class HootProperties {
     public static final String DIFFERENTIAL_CONFLATION_PATH;
     public static final String HORIZONTAL_CONFLATION_PATH;
     public static final String NETWORK_CONFLATION_PATH;
-    public static final String IMPORT_OPTIONS;
     public static final String CONFIG_OPTIONS;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
@@ -203,7 +202,6 @@ public final class HootProperties {
         DIFFERENTIAL_CONFLATION_PATH = getProperty("differentialConf");
         HORIZONTAL_CONFLATION_PATH = getProperty("horizontalConf");
         NETWORK_CONFLATION_PATH = getProperty("networkConf");
-        IMPORT_OPTIONS = getProperty("importOptions");
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");
