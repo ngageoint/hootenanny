@@ -163,11 +163,6 @@ public:
       throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
     }
 
-    if (ConfigOptions().getConvertOps().size())
-    {
-      throw IllegalArgumentException(getName() + " command does not support convert operations.");
-    }
-
     // process non-optional params
 
     const QString input1 = args[0].trimmed();

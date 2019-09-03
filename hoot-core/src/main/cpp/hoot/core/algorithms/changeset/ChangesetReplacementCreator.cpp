@@ -178,7 +178,8 @@ void ChangesetReplacementCreator::_setInputFilter(
       if (!crit)
       {
         throw IllegalArgumentException(
-          "Invalid input filter: " + filterClassName + ". Filter must be a ElementCriterion.");
+          "Invalid additional input filter: " + filterClassName +
+          ". Filter must be a ElementCriterion.");
       }
 
       // Fail if the filter maps to a geometry type.
@@ -193,7 +194,8 @@ void ChangesetReplacementCreator::_setInputFilter(
       if (geometryTypeFilter)
       {
         throw IllegalArgumentException(
-          "Invalid input filter: " + filterClassName + ". May not be a GeometryTypeCriterion.");
+          "Invalid additional input filter: " + filterClassName +
+          ". May not be a GeometryTypeCriterion.");
       }
 
       inputFilter->addCriterion(crit);
@@ -590,6 +592,12 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
     throw IllegalArgumentException(
       "Both full reference data replacement and a reference data retainment filter may not "
       "be specified for replacement changeset derivation.");
+  }
+
+  if (ConfigOptions().getConvertOps().size())
+  {
+    throw IllegalArgumentException(
+      "Replacement changeset derivation does not support convert operations.");
   }
 }
 
