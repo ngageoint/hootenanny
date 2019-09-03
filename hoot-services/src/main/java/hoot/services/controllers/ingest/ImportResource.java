@@ -145,7 +145,7 @@ public class ImportResource {
         try {
             String jobId = UUID.randomUUID().toString();
             File workDir = new File(UPLOAD_FOLDER, jobId);
-
+            
             List<File> uploadedFiles = MultipartSerializer.serializeUpload(multiPart, workDir);
 
             int shpCnt = 0, osmCnt = 0, fgdbCnt = 0, geojsonCnt = 0, geonamesCnt = 0, gpkgCnt = 0, zipCnt = 0;

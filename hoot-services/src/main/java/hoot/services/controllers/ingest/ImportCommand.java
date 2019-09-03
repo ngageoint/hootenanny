@@ -39,6 +39,7 @@ import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,9 +94,20 @@ class ImportCommand extends ExternalCommand {
           options.add("schema.translation.script=" + translationPath);
         }
         
-        if ( advUploadOpts.length() > 0 && (classification == SHP) ) {
-            options.add("ogr2osm.simplify.complex.buildings=true");
-            options.add("merge.nearby.nodes.distance=true");
+        if (advUploadOpts != null && (classification == SHP)) {
+        	
+        	List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
+        	
+        	final boolean simplifyBuildings = getAdvOpts.stream().anyMatch("SimplifyComplexBuildings"::equalsIgnoreCase);
+        	final boolean mergeNearbyNodes = getAdvOpts.stream().anyMatch("MergeNearbyNodes"::equalsIgnoreCase);
+        	
+        	if (simplifyBuildings) {
+        		options.add("ogr2osm.simplify.complex.buildings=true");
+        	}
+        	
+        	else if(mergeNearbyNodes) {
+        		 options.add("ogr2osm.merge.nearby.nodes=true");
+        	}
         }
 
         List<String> hootOptions = toHootOptions(options);

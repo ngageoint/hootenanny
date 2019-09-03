@@ -7,15 +7,17 @@
       "input": "checkbox",
       "type": "bool",
       "id": "SimplifyComplexBuildings",
-      "label": "Simplify Complex Buildings"
+      "label": "Simplify Complex Buildings",
+      "hoot_key": "ogr2osm.simplify.complex.buildings"
     },
     {
-      "description": "Some other option.",
-      "default": "0.0",
-      "input": "text",
-      "type": "double",
-      "id": "Foo",
-      "label": "Foobar"
+      "description": "If true, nearby nodes will be merged.",
+      "default": "false",
+      "input": "checkbox",
+      "type": "bool",
+      "id": "MergeNearbyNodes",
+      "label": "Merge Nearby Nodes",
+      "hoot_key": "merge.nearby.nodes.distance"
     }
   ],
   "label": "Import"
