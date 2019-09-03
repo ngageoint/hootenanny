@@ -17,7 +17,7 @@
       "type": "bool",
       "id": "MergeNearbyNodes",
       "label": "Merge Nearby Nodes",
-      "hoot_key": "merge.nearby.nodes.distance"
+      "hoot_key": "ogr2osm.merge.nearby.nodes"
     }
   ],
   "label": "Import"
