@@ -126,6 +126,7 @@ sudo yum versionlock add \
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
+    --skip-broken \
     asciidoc \
     autoconf \
     autoconf-archive \
