@@ -27,7 +27,6 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
-import static hoot.services.HootProperties.IMPORT_OPTIONS;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
@@ -267,7 +266,7 @@ public class ImportResource {
         JSONObject template;
         JSONParser parser = new JSONParser();
 
-        try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, IMPORT_OPTIONS))) {
+        try (FileReader fileReader = new FileReader(new File(HOME_FOLDER))) {
             template = (JSONObject) parser.parse(fileReader);
         }
         catch (Exception e) {
