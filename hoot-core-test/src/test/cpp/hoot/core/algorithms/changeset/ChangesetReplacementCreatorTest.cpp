@@ -29,22 +29,28 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 namespace hoot
 {
 
 /*
- * This only tests some invalidation checking, as its easier to test the changeset generation in
- * command line tests (ChangesetReplacement*Test.sh).
+ * This only tests some input validation checks, as its easier to test the actual changeset
+ * generation from command line tests (ServiceChangesetReplacement*Test.sh), as you can see the
+ * results of applying the changesets back to the source data.
  */
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
   CPPUNIT_TEST(runInvalidGeometryFilterTest);
   CPPUNIT_TEST(runInvalidReplacementFilterTest);
+  CPPUNIT_TEST(runInvalidRetainmentFilterTest);
   CPPUNIT_TEST(runNonBoundableReaderTest);
   CPPUNIT_TEST(runGeoJsonTest);
-  // TODO: add invalid config opts test
+  CPPUNIT_TEST(runInvalidFilterConfigOptsTest);
+  CPPUNIT_TEST(runConvertOpsTest);
+  CPPUNIT_TEST(runFullReplacmentWithRetainmentFilterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -54,6 +60,7 @@ public:
     "test-files/algorithms/changeset/ChangesetReplacementCreatorTest/",
     "test-output/ralgorithms/changeset/ChangesetReplacementCreatorTest/")
   {
+    setResetType(ResetAll);
   }
 
   void runInvalidGeometryFilterTest()
@@ -84,7 +91,7 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid input filter"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
 
     try
     {
@@ -94,7 +101,33 @@ public:
     {
       exceptionMsg = e.what();
     }
-    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid input filter"));
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
+  }
+
+  void runInvalidRetainmentFilterTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+
+    try
+    {
+      changesetCreator.setRetainmentFilters(QStringList("hoot::AddAttributesVisitor"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
+
+    try
+    {
+      changesetCreator.setRetainmentFilters(QStringList("hoot::PoiCriterion"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
   }
 
   void runNonBoundableReaderTest()
@@ -104,14 +137,16 @@ public:
     try
     {
       changesetCreator.create(
-        "test-files/cmd/quick/ConvertGeoNames.geonames", "test2.osm", geos::geom::Envelope(), "");
+        "test-files/cmd/quick/ConvertGeoNames.geonames", "test2.osm", geos::geom::Envelope(),
+        "out.osm");
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
 
-    CPPUNIT_ASSERT(exceptionMsg.endsWith("must implement Boundable."));
+    CPPUNIT_ASSERT(
+      exceptionMsg.endsWith("must implement Boundable for replacement changeset derivation."));
   }
 
   void runGeoJsonTest()
@@ -120,14 +155,90 @@ public:
     ChangesetReplacementCreator changesetCreator;
     try
     {
-      changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "");
+      changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "out.osm");
     }
     catch (const HootException& e)
     {
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT_EQUAL(
-      QString("GeoJSON inputs are not supported.").toStdString(), exceptionMsg.toStdString());
+      QString("GeoJSON inputs are not supported by replacement changeset derivation.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runInvalidFilterConfigOptsTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+
+    // the filter can be any non-geometry crit here
+    changesetCreator.setReplacementFilters(
+      QStringList(QString::fromStdString(TagCriterion::className())));
+    try
+    {
+      changesetCreator.setReplacementFilterOptions(QStringList("blah"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
+
+    // the filter can be any non-geometry crit here
+    changesetCreator.setRetainmentFilters(
+      QStringList(QString::fromStdString(TagCriterion::className())));
+    try
+    {
+      changesetCreator.setRetainmentFilterOptions(QStringList("blah"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
+  }
+
+  void runConvertOpsTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    // the convert ops added here can contain any op
+    conf().set(
+      ConfigOptions::getConvertOpsKey(),
+      QStringList(QString::fromStdString(MergeNearbyNodes::className())));
+    try
+    {
+      changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Replacement changeset derivation does not support convert operations.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runFullReplacmentWithRetainmentFilterTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    changesetCreator.setFullReplacement(true);
+    // the filter can be any non-geometry crit here
+    changesetCreator.setRetainmentFilters(
+      QStringList(QString::fromStdString(TagCriterion::className())));
+    try
+    {
+      changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Both full reference data replacement and a reference data retainment filter may not "
+              "be specified for replacement changeset derivation.").toStdString(),
+      exceptionMsg.toStdString());
   }
 };
 

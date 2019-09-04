@@ -67,6 +67,13 @@ public:
 
   static const QString JOB_SOURCE;
 
+  /**
+   * Constructor
+   *
+   * @param printStats prints statistics for the output changeset
+   * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
+   * the output changeset is of type .osc.sql.
+   */
   ChangesetCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**

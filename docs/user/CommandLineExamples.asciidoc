@@ -375,11 +375,13 @@ See the User Guide for more details on command usage.
       output.osc -geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
 -----
 
-===== Replace all POIs in a first dataset with overlapping schools from a second dataset within a specified bounds:
+===== Completely replace all POIs in a first dataset, except those with "Staunton" in the name, with schools from a second dataset within a specified bounds:
 -----
     hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc \
       --geometry-filters "hoot::PoiCriterion --replacement-filters "hoot::TagCriterion" \
-      --replacement-filter-options "tag.criterion.kvps='amenity=school'"
+      --replacement-filter-options "tag.criterion.kvps='amenity=school'" \
+      --retainment-filters "hoot::TagContainsCriterion" \
+      --retainment-filter-options "tag.criterion.kvps='name=Staunton' --full-replacement
 -----
 
 ===== Replace all POIs in a first dataset with overlapping cafes having "Java" in the name from a second dataset within a specified bounds:
