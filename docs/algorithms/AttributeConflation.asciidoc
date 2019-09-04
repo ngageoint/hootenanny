@@ -74,3 +74,7 @@ with.  See the configuration options +review.score.criterion.min.threshold+ and 
 return reviews with a score of 1.0 when it has no idea how to conflate a particular pair of features or those feature exhibit some unusual
 properties.  Therefore counterintuitively, setting a maximum threshold below 1.0 may reduce the number of reviews you see even further in the
 conflated output.
+
+=== Configuration
+
+Attribute Conflation can further be customized by modifying the +conf/core/AttributeConflation.conf+ configuration options file.
