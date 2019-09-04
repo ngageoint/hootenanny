@@ -117,6 +117,7 @@ class ImportCommand extends ExternalCommand {
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("ADV_UPLOAD_OPTS", advUploadOpts);
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
