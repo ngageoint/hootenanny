@@ -48,6 +48,7 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -154,6 +155,9 @@ void BuildingOutlineUpdateOp::apply(std::shared_ptr<OsmMap>& map)
   }
 
   LOG_VART(_removeBuildingRelations);
+  // TODO: This was only done to appease Attribute Conflation. Another option has been added to
+  // turn this op off completely for AC. If we decide we don't ever want to run this op when running
+  // AC, then we *may* be able to remove this option completely.
   if (_removeBuildingRelations)
   {
     _deleteBuildingRelations();
@@ -165,8 +169,9 @@ void BuildingOutlineUpdateOp::_deleteBuildingRelations()
   for (std::set<ElementId>::const_iterator it = _buildingRelationIds.begin(); it !=
        _buildingRelationIds.end(); ++it)
   {
-    LOG_TRACE("Removing building relation: " << *it << "...");
+    LOG_TRACE("Removing building relation: " << _map->getRelation((*it).getId()) << "...");
     RecursiveElementRemover(*it).apply(_map);
+    //RemoveRelationByEid::removeRelation(_map, (*it).getId());
   }
 }
 

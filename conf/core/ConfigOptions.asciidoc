@@ -263,6 +263,14 @@ reference dataset will be lost.
 If true, all reviews outside of the score range established by the configuration options
 review.score.criterion.max/min.threshold will be removed.
 
+=== attribute.conflation.update.building.outlines
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, building outlines get updated after conflation (complex buildings are merged). TODO: This
+may go away completely, along with building.outline.update.op.remove.building.relations.
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
