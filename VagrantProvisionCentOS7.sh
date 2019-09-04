@@ -126,6 +126,11 @@ sudo yum versionlock add \
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
+    `#################################################################` \
+    `# TODO: Remove this once qt5-qtwebkit is fixed in the EPEL repo #` \
+    `#################################################################` \
+    --skip-broken \
+    `#################################################################` \
     asciidoc \
     autoconf \
     autoconf-archive \
