@@ -117,12 +117,12 @@ void OsmGeoJsonReader::read(const OsmMapPtr& map)
   }
 }
 
-OsmMapPtr OsmGeoJsonReader::loadFromString(const QString& jsonStr)
+void OsmGeoJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr& map)
 {
   _loadJSON(jsonStr);
-  _map.reset(new OsmMap());
+  _map = map;
   _parseGeoJson();
-  return _map;
+  _map.reset();
 }
 
 OsmMapPtr OsmGeoJsonReader::loadFromFile(const QString& path)

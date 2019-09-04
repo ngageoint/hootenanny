@@ -92,7 +92,10 @@ public:
       "]                                      \n"
       "}                                      \n");
 
-    OsmMapPtr map = OsmJsonReader().loadFromString(testJsonStr);
+    OsmMapPtr map(new OsmMap());
+    OsmJsonReader().loadFromString(testJsonStr, map);
+
+
     // the JSON parser doesn't handle exotic characters
     map->getNode(-5)->getTags()["alt_name"] = QString::fromUtf8("Şiḩḩī");
 

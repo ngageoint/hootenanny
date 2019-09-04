@@ -69,8 +69,10 @@ public:
       "  'tags':{'hoot:status':'Input002', 'ID':'2-000000', 'MATCH':'none', 'poi':'yes'}}\n"
       "]}\n";
 
-    OsmMapPtr input = OsmJsonReader().loadFromString(inputJson);
-    OsmMapPtr conflated = OsmJsonReader().loadFromString(inputJson);
+    OsmMapPtr input(new OsmMap());
+    OsmJsonReader().loadFromString(inputJson, input);
+    OsmMapPtr conflated(new OsmMap());
+    OsmJsonReader().loadFromString(inputJson, conflated);
 
     MultiaryMatchComparator uut;
     double correct = uut.evaluateMatches(input, conflated);
@@ -103,8 +105,11 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
 
     MultiaryMatchComparator uut;
     double correct = uut.evaluateMatches(input, conflated);
@@ -143,9 +148,13 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
@@ -194,9 +203,13 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
@@ -233,8 +246,12 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
 
     MultiaryMatchComparator uut;
     double correct = uut.evaluateMatches(input, conflated);
@@ -289,9 +306,13 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
@@ -344,9 +365,13 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
     input->getNode(-3)->setStatus(Status::Unknown2);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-3)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
@@ -392,9 +417,13 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
     input->getNode(-2)->setStatus(Status::Unknown2);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-2)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
@@ -450,9 +479,13 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
+
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
     input->getNode(-2)->setStatus(Status::Unknown2);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
     conflated->getNode(-2)->setStatus(Status::Unknown2);
 
     MultiaryMatchComparator uut;
@@ -512,8 +545,11 @@ public:
 
     OsmJsonReader reader;
     reader.setDefaultStatus(Status::Unknown1);
-    OsmMapPtr input = reader.loadFromString(inputJson);
-    OsmMapPtr conflated = reader.loadFromString(conflatedJson);
+    OsmMapPtr input(new OsmMap());
+    reader.loadFromString(inputJson, input);
+
+    OsmMapPtr conflated(new OsmMap());
+    reader.loadFromString(conflatedJson, conflated);
 
     MultiaryMatchComparator uut;
     double correct = uut.evaluateMatches(input, conflated);

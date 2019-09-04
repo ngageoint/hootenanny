@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MAPIOJS_H
-#define MAPIOJS_H
+#ifndef OSMGEOJSONWRITER_H
+#define OSMGEOJSONWRITER_H
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -33,20 +33,18 @@
 namespace hoot
 {
 
-class MapIoJs
+class OsmGeoJsonWriterJs : public node::ObjectWrap
 {
 public:
+ static void Init(v8::Handle<v8::Object> target);
 
-  MapIoJs();
+private:
+  OsmGeoJsonWriterJs();
+  ~OsmGeoJsonWriterJs();
 
-  static void Init(v8::Handle<v8::Object> exports);
-
-  static void loadMap(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadGeoJsonFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadMapFromString(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void loadMapFromStringPreserveIdAndStatus(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void saveMap(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }
-#endif // MAPIOJS_H
+
+#endif // OSMGEOJSONWRITER_H
