@@ -59,8 +59,8 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 
 === Examples
 
-* "Basic":https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes
-* "Advanced":https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes-1
+* https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
+* https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
 
 === Bounds Handling
 
