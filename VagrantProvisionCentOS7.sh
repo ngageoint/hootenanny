@@ -73,7 +73,9 @@ else
          proj \
          proj-devel \
          stxxl \
-         stxxl-devel
+         stxxl-devel \
+         qt5-qtwebkit \
+         qt5-qtwebkit-devel \
 
 fi
 
@@ -98,7 +100,9 @@ sudo yum install -y \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
-     stxxl-devel-$STXXL_VERSION
+     stxxl-devel-$STXXL_VERSION \
+     qt5-qtwebkit-$QT_VERSION \
+     qt5-qtwebkit-devel-$QT_VERSION
 
 echo "### Locking versions of libraries"
 sudo yum versionlock add \
@@ -121,12 +125,13 @@ sudo yum versionlock add \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
      stxxl-$STXXL_VERSION \
-     stxxl-devel-$STXXL_VERSION
+     stxxl-devel-$STXXL_VERSION \
+     qt5-qtwebkit-$QT_VERSION \
+     qt5-qtwebkit-devel-$QT_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
-    --skip-broken \
     asciidoc \
     autoconf \
     autoconf-archive \
@@ -177,8 +182,6 @@ sudo yum -y install \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
-    qt5-qtwebkit \
-    qt5-qtwebkit-devel \
     redhat-lsb-core \
     swig \
     tex-fonts-hebrew \

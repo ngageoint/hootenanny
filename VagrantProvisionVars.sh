@@ -17,6 +17,9 @@ export NODE_VERSION=8.9.3
 export PROJ_VERSION=4.8.0
 export STXXL_VERSION=1.3.1
 
+# Qt Version 5.9.1-2 for qt5-qtwebkit is currently broken, when it is fixed remove this
+export QT_VERSION=5.9.1-1.el7
+
 # FGDB 1.5 is required to compile using g++ >= 5.1
 # https://trac.osgeo.org/gdal/wiki/FileGDB#HowtodealwithGCC5.1C11ABIonLinux
 export FGDB_VERSION=1.5.1
