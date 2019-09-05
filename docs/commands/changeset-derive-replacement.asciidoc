@@ -62,7 +62,7 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 * https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
 * https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
 
-=== Bounds Handling
+=== Input Data
 
 All inputs must support bounded reading. To list the Hootenanny input formats that support bounded reading:
 -----
@@ -73,7 +73,9 @@ Unless the reference data is being read from a direct connection to an OSM API d
 linear data should be slightly larger than the replacement AOI, so as not to drop linear features in the changeset output 
 (osmapidb:// reference inputs handle this issue automatically).
 
-==== Full vs Overlapping Only Replacement
+GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
+
+=== Full vs Overlapping Only Replacement
 
 If the +--full-replacement+ command option is absent, reference features inside the specified bounds will only be replaced if the area they 
 cover intersects with the area covered by secondary features. The covered area is determined by an Alpha Shape. If the +--full-replacement+ 
@@ -89,43 +91,43 @@ replacement to enable continuity of the data across the AOI.
 Full replacement may not work well with linear data in certain circumstances with the strict bounds interpretation (e.g. roads), as it may end 
 up leaving a large enough gap between the reference and secondary data that the data cannot easily be joined back together in the output.
 
-==== Strict Bounds Handling
+=== Strict Bounds Handling
 
 The following describes how the specified bounds is interpreted by the command when the +--strict-bounds+ option is present.
 
-===== Points
+==== Points
 
 * Only reference features completely inside the specified bounds and overlapping with the combined shape of the secondary features will be 
   replaced.
 * No secondary feature lying on or outside the specified bounds will be included in the output.
 
-===== Lines
+==== Lines
 
 * Only reference features overlapping with the combined shape of the secondary features will be replaced.
 * No reference feature crossing the specified bounds will be modified outside of the bounds. Reference features may be split at the specified 
   bounds.
 * No parts of secondary features crossing the specified bounds will be included in the output.
 
-===== Polygons
+==== Polygons
 
 * Only reference features overlapping with the combined shape of the secondary features will be replaced.
 * No reference features crossing the specified bounds will be modified.
 * No secondary features crossing the specified bounds will be included in the output.
 
-==== Lenient Bounds Handling
+=== Lenient Bounds Handling
 
 The following describes how the specified bounds is interpreted by the command when the +--strict-bounds+ bounds option is absent.
 
-===== Points
+==== Points
 
 N/A - Point bounds relationships are only handled in a strict fashion.
 
-===== Lines
+==== Lines
 
 * Only reference features overlapping with the combined shape of the secondary features will be replaced.
 * Reference features crossing the specified bounds will be completely replaced by secondary features.
 
-===== Polygons
+==== Polygons
 
 * Only reference features overlapping with the combined shape of the secondary features will be replaced.
 * Reference features crossing the specified bounds may be modified. They will not be split, and will only be conflated with secondary features.
@@ -187,10 +189,6 @@ If the target of the resulting changeset is an OSM API database, all input featu
 correct changeset versions or application of the resulting changeset will fail. 
 
 For Overpass API queries, add "out meta" to the query retrieving the reference data.
-
-=== Unsupported Formats
-
-GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
 
 === Notes
 
