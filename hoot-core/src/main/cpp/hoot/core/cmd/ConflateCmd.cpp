@@ -107,7 +107,7 @@ int ConflateCmd::runSimple(QStringList& args)
       //remove "--stats" from args list
       args.pop_back();
     }
-    else if (args[args.size() - 1] == "--stats")
+    else if (args[args.size() - 2] == "--stats")
     {
       displayStats = true;
       outputStatsFile = args[args.size() - 1];
