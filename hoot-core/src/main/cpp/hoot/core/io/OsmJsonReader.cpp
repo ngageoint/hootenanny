@@ -203,7 +203,6 @@ void OsmJsonReader::_readToMap()
   _relationIdMap.clear();
   _wayIdMap.clear();
 
-  _map.reset(new OsmMap());
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
@@ -270,16 +269,18 @@ bool OsmJsonReader::isValidJson(const QString& jsonStr)
   return true;
 }
 
-OsmMapPtr OsmJsonReader::loadFromString(const QString& jsonStr)
+void OsmJsonReader::loadFromString(const QString& jsonStr, const OsmMapPtr &map)
 {
+  _map = map;
   _loadJSON(jsonStr);
   _readToMap();
-  return _map;
+  _map.reset();
 }
 
 OsmMapPtr OsmJsonReader::loadFromPtree(const boost::property_tree::ptree &tree)
 {
   _propTree = tree;
+  _map.reset(new OsmMap());
   _readToMap();
   return _map;
 }
@@ -295,6 +296,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
   QTextStream instream(&infile);
   QString jsonStr = instream.readAll();
   _loadJSON(jsonStr);
+  _map.reset(new OsmMap());
   _readToMap();
   return _map;
 }

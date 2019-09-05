@@ -100,7 +100,8 @@ public:
      "}                                      \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Need to test read from file, too
     OsmMapPtr pMap2 = uut.loadFromFile("test-files/nodes.json");
@@ -138,7 +139,8 @@ public:
                           "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
                           "}\n";
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Test against osm xml
     QString testOsmStr =
@@ -271,7 +273,8 @@ public:
       "}                                       \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Useful for debug
     //OsmXmlWriter writer;

@@ -55,7 +55,8 @@ public:
 
   QByteArray convertJsonToPbf(QString json)
   {
-    OsmMapPtr map = OsmJsonReader().loadFromString(json);
+    OsmMapPtr map(new OsmMap());
+    OsmJsonReader().loadFromString(json, map);
 
     assert(map->getNodeCount() == 1);
 

@@ -67,7 +67,9 @@ public:
       "   'tags': { 'military': 'yes', 'name': 'James Base' } }\n"
       "]                                      \n"
       "}                                      \n";
-    OsmMapPtr pMap = OsmJsonReader().loadFromString(testJsonStr);
+
+    OsmMapPtr pMap(new OsmMap());
+    OsmJsonReader().loadFromString(testJsonStr, pMap);
     return pMap;
   }
 

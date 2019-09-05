@@ -3150,8 +3150,7 @@ expensive when enabled.
 * Default Value: `true`
 
 If true, POI to Polygon conflation will attempt to reduce unnecessary reviews without increasing
-incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
-enabled.
+incorrect matches.  This setting may be runtime expensive when enabled for large datasets.
 
 === poi.polygon.keep.closest.matches.only
 
@@ -3330,7 +3329,7 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 
 The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If
 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger'
-is always used.
+is always used and changes to this option value are ignore.
 
 === poi.polygon.type.score.threshold
 
