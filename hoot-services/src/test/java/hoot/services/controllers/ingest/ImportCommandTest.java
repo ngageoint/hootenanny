@@ -33,6 +33,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.controllers.ingest.UploadClassification.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -129,6 +130,7 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
+        assertNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
