@@ -63,6 +63,7 @@ public class ImportCommandTest {
         List<String> options = new LinkedList<>();
         //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("ogr2osm.simplify.complex.buildings=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("schema.translation.script=" + translation);
@@ -115,7 +116,7 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
@@ -128,7 +129,6 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -170,8 +170,9 @@ public class ImportCommandTest {
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("hootapi.db.writer.overwrite.map=true");
+        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");options.add("ogr2osm.simplify.complex.buildings=true");
+        
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
@@ -247,7 +248,6 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -294,7 +294,6 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
