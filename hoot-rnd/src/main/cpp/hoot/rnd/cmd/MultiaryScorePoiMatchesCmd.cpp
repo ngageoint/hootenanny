@@ -163,7 +163,6 @@ public:
     for (int i = 0; i < args.size() - 1; i++)
     {
       Status s = Status::fromInput(i);
-
       IoUtils::loadMap(map, args[i], false, s);
     }
 

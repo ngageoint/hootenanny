@@ -28,7 +28,7 @@
 #define BUILDING_PART_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Identifies parts of buildings
  */
-class BuildingPartCriterion : public ElementCriterion
+class BuildingPartCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -49,6 +49,12 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingPartCriterion()); }
 
   virtual QString getDescription() const { return "Identifies parts of buildings"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Polygon; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }

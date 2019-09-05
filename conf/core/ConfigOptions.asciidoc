@@ -55,8 +55,8 @@ regardless.
 
 If set to true and multiple criterion are specified in add.attributes.visitor.element.criteria,
 the attributes of elements will be modified only if they satisfy all of the criteria.  If set to
-false, then only one of the specified criteria must be met in order to modify an the attributes of
-an element.
+false, then only one of the specified criteria must be met in order to modify the attributes of an
+element.
 
 === add.attributes.visitor.element.criteria
 
@@ -1703,29 +1703,6 @@ Write out empty OSM tags to JSON such as `"text":""`
 
 Write out JSON in a more legible manner
 
-=== json.reader.http.bbox.max.size
-
-* Data Type: double
-* Default Value: `0.25`
-
-Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
-boxes and run in parallel
-
-=== json.reader.http.bbox.parallel
-
-* Data Type: bool
-* Default Value: `false`
-
-Split the bounding box of an HTTP read request into smaller bounding boxes that can be run in parallel
-
-=== json.reader.http.bbox.thread.count
-
-* Data Type: int
-* Default Value: `8`
-
-Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
-large to query at once (see `json.reader.http.bbox.max.size`).
-
 === language.detection.detector
 
 * Data Type: string
@@ -3165,8 +3142,7 @@ expensive when enabled.
 * Default Value: `true`
 
 If true, POI to Polygon conflation will attempt to reduce unnecessary reviews without increasing
-incorrect matches.  This setting is somewhat experimental and can be runtime expensive when
-enabled.
+incorrect matches.  This setting may be runtime expensive when enabled for large datasets.
 
 === poi.polygon.keep.closest.matches.only
 
@@ -3345,7 +3321,7 @@ The source tag key to be used in conjunction with poi.polygon.disable.same.sourc
 
 The tag merger used by POI/Polygon conflation. See 'tag.merger.default' for more information. If
 'poi.polygon.auto.merge.many.poi.to.one.poly.matches' is set to true then 'PreserveTypesTagMerger'
-is always used.
+is always used and changes to this option value are ignore.
 
 === poi.polygon.type.score.threshold
 
@@ -3508,6 +3484,30 @@ The number of trees used to train a random forest conflation model.
 
 By default add the `source:datetime` or `source:ingest:datetime` stamp when reading files.  Not
 honored by all readers.
+
+=== reader.http.bbox.max.download.size
+
+* Data Type: double
+* Default Value: `1.0`
+
+Maximum size of an overall bounding box in degrees before Hootenanny rejects the request,
+reject anything larger than 1 square degree.
+
+=== reader.http.bbox.max.size
+
+* Data Type: double
+* Default Value: `0.25`
+
+Maximum size of an HTTP request's bounding box in degrees before it is split up into smaller bounding
+boxes and run in parallel
+
+=== reader.http.bbox.thread.count
+
+* Data Type: int
+* Default Value: `4`
+
+Number of threads in the thread pool to process HTTP requests that contain bounding boxes that are too
+large to query at once (see `reader.http.bbox.max.size`).
 
 === reader.keep.status.tag
 
@@ -3778,6 +3778,13 @@ If the script runs longer than the specified time, then it is forcefully stopped
 the value is set to -1, then there is no time limit for script tests.  This is useful when
 debugging tests which may hang on a remote build server.
 
+=== search.radius.area
+
+* Data Type: double
+* Default Value: `${search.radius.generic.polygon}`
+
+The search radius to use when conflating areas.  See `search.radius.default`
+
 === search.radius.calculator.element.criterion
 
 * Data Type: string
@@ -3841,14 +3848,24 @@ waterway.auto.calc.search.radius = true.  See `search.radius.default`.
 If true, any element with a value populated for the key defined by the set.tag.value.visitor.keys
 option will have the value specified in the set.tag.value.visitor.value option appended to it.
 
-=== set.tag.value.visitor.element.criterion
+=== set.tag.value.visitor.chain.element.criteria
 
-* Data Type: string
+* Data Type: bool
+* Default Value: `false`
+
+If set to true and multiple criterion are specified in set.tag.value.visitor.element.criteria,
+the tags of elements will be modified only if they satisfy all of the criteria.  If set to
+false, then only one of the specified criteria must be met in order to modify the tags of an
+element.
+
+=== set.tag.value.visitor.element.criteria
+
+* Data Type: list
 * Default Value: ``
 
-The plugin name of an element criterion used to select elements to add or modify tags on used by the
-SetTagValueVisitor and RecursiveSetTagValueOp classes.  To pass in complex nested criteria, use the
-Hootenanny Javascript interface instead.
+The element criteria used to select elements to add or modify tags on used by the SetTagValueVisitor
+and RecursiveSetTagValueOp classes.  To pass in complex nested criteria, use the Hootenanny
+Javascript interface instead.
 
 === set.tag.value.visitor.keys
 
@@ -3963,12 +3980,13 @@ Optional criterion class to filter the types of way nodes being snapped to.  An 
 hoot::HighwayNodeCriterion.  If no criterion is specified, then all ways are considered as targets
 for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is enabled.
 
-=== snap.unconnected.ways.snap.to.way.status
+=== snap.unconnected.ways.snap.to.way.statuses
 
-* Data Type: string
-* Default Value: `Input1`
+* Data Type: list
+* Default Value:
+** `Input1`
 
-Status of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or 'Conflated'.
+Statuses of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
 secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
 snap to both reference and conflated ways use: 'Input1;Conflated'.
@@ -3991,12 +4009,13 @@ Optional criterion class to filter the types of ways being snapped.  An example 
 hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
 way snapping.
 
-=== snap.unconnected.ways.snap.way.status
+=== snap.unconnected.ways.snap.way.statuses
 
-* Data Type: string
-* Default Value: `Input2`
+* Data Type: list
+* Default Value:
+** `Input2`
 
-Status of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
+Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
 ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
 reference and conflated ways use: 'Input1;Conflated'.
@@ -4086,6 +4105,15 @@ Primarily, this is useful within the node.js interface.
 
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
+
+=== tag.contains.criterion.kvps
+
+* Data Type: list
+* Default Value: ``
+
+Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
+command line, delimit multiple key/value pairs with ';' and surround the entire list in double
+quotes. E.g. "name=Java;name=Shop"
 
 === tag.criterion.kvps
 

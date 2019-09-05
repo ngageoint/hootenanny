@@ -65,7 +65,6 @@ public:
   typedef QHash<QString, QVariant> SettingsMap;
 
   void append(const QString& key, const QStringList& values);
-
   void prepend(const QString& key, const QStringList& values);
 
   /**
@@ -79,12 +78,10 @@ public:
   static Settings& getInstance();
 
   void loadDefaults();
-
   /**
    * Loads the system environment variables
    */
   void loadEnvironment();
-
   void loadFromString(QString json);
 
   /**
@@ -95,19 +92,16 @@ public:
   QVariant get(const QString& key) const;
 
   QString getString(const QString& key) const;
-
   QString getString(const QString& key, const QString& defaultValue) const;
 
   const SettingsMap& getAll() const { return _settings; }
 
   bool getBool(const QString& key) const;
-
   bool getBool(const QString& key, bool defaultValue) const;
 
   double getDouble(const QString& key) const;
   double getDouble(const QString& key, double defaultValue) const;
   double getDouble(const QString& key, double defaultValue, double minValue, double maxValue ) const;
-
   /**
    * Returns the double represented in the supplied string. Where necessary variables will be
    * resolved.
@@ -115,7 +109,6 @@ public:
   double getDoubleValue(const QString& value) const;
 
   int getInt(const QString& key) const;
-
   int getInt(const QString& key, int defaultValue) const;
   int getInt(const QString& key, int defaultValue, int min, int max) const;
 
@@ -128,7 +121,6 @@ public:
    * QString::split(";", QString::SkipEmptyParts)
    */
   QStringList getList(const QString& key) const;
-
   QStringList getList(const QString& key, const QString& defaultValue) const;
   QStringList getList(const QString& key, const QStringList& defaultValue) const;
 
@@ -147,17 +139,11 @@ public:
   static void parseCommonArguments(QStringList &args);
 
   void set(const QString& key, const char* value) { set(key, QString(value)); }
-
   void set(const QString& key, const std::string& value) { set(key, QString::fromStdString(value)); }
-
   void set(const QString& key, const QString& value);
-
   void set(const QString& key, double value) { _settings[key] = QVariant(value); }
-
   void set(const QString& key, int value) { _settings[key] = QVariant(value); }
-
   void set(const QString& key, bool value) { set(key, value ? "true" : "false"); }
-
   void set(const QString& key, const QStringList& value);
 
   void storeJson(const QString& path) const;
@@ -187,9 +173,7 @@ private:
   void _checkConvert(const QString& key, const QVariant& value, QVariant::Type type) const;
 
   QString _replaceStaticVariables(QString value) const;
-
   QString _replaceVariables(const QString& key, std::set<QString> used) const;
-
   QString _replaceVariablesValue(QString value) const;
   QString _replaceVariablesValue(QString value, std::set<QString> used) const;
 };

@@ -28,7 +28,7 @@
 #define MULTI_USE_BUILDING_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -36,7 +36,7 @@ namespace hoot
 /**
  * Identifies buildings with multiple purposes
  */
-class MultiUseBuildingCriterion : public ElementCriterion
+class MultiUseBuildingCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -46,9 +46,17 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new MultiUseBuildingCriterion()); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new MultiUseBuildingCriterion()); }
 
   virtual QString getDescription() const { return "Identifies buildings with multiple purposes"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Polygon; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

@@ -50,6 +50,9 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BridgeCriterion()); }
 
   virtual QString getDescription() const { return "Identifies bridges"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }

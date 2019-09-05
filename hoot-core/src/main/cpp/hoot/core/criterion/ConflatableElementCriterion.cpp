@@ -74,13 +74,45 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(const 
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = _conflatableCriteria.begin();
        itr != _conflatableCriteria.end(); ++itr)
   {
+    LOG_VART(itr.key());
     if (itr.value()->isSatisfied(e))
     {
-      // It is something we can conflate.
+      // It is something we can conflate?
       conflatableCriteriaForElement.append(itr.key());
     }
   }
+  LOG_VART(conflatableCriteriaForElement);
   return conflatableCriteriaForElement;
+}
+
+QStringList ConflatableElementCriterion::getCriterionClassNamesByType(const GeometryType& type)
+{
+  QStringList classNamesByType;
+  std::vector<std::string> classNames =
+    Factory::getInstance().getObjectNamesByBase("hoot::ElementCriterion");
+  LOG_VARD(classNamesByType);
+  for (size_t i = 0; i < classNames.size(); i++)
+  {
+    const std::string className = classNames[i];
+    LOG_VARD(className);
+
+    ElementCriterionPtr crit(
+      Factory::getInstance().constructObject<ElementCriterion>(className));
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+      std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+    if (conflatableCrit)
+    {
+      LOG_DEBUG("is conflatable: " << className);
+      std::shared_ptr<GeometryTypeCriterion> geometryTypeCrit =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
+      if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
+      {
+        LOG_DEBUG("is same geometry: " << className);
+        classNamesByType.append(QString::fromStdString(className));
+      }
+    }
+  }
+  return classNamesByType;
 }
 
 }

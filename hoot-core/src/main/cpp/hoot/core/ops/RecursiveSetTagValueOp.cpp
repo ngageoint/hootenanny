@@ -53,7 +53,8 @@ _crit(elementCriterion),
 _negateCriterion(false)
 {
   _tagger.reset(
-    new SetTagValueVisitor(keys, values, appendToExistingValue, "", overwriteExistingTag));
+    new SetTagValueVisitor(
+      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
 }
 
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
@@ -63,7 +64,7 @@ _crit(elementCriterion),
 _negateCriterion(false)
 {
   _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, "", overwriteExistingTag));
+    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
 }
 
 RecursiveSetTagValueOp::RecursiveSetTagValueOp(
@@ -73,7 +74,8 @@ RecursiveSetTagValueOp::RecursiveSetTagValueOp(
 _negateCriterion(negateCriterion)
 {
   _tagger.reset(
-    new SetTagValueVisitor(keys, values, appendToExistingValue, "", overwriteExistingTag));
+    new SetTagValueVisitor(
+      keys, values, appendToExistingValue, QStringList(), overwriteExistingTag));
   _setCriterion(criterionName);
 }
 
@@ -84,7 +86,7 @@ RecursiveSetTagValueOp::RecursiveSetTagValueOp(
 _negateCriterion(negateCriterion)
 {
   _tagger.reset(
-    new SetTagValueVisitor(key, value, appendToExistingValue, "", overwriteExistingTag));
+    new SetTagValueVisitor(key, value, appendToExistingValue, QStringList(), overwriteExistingTag));
   _setCriterion(criterionName);
 }
 
@@ -94,10 +96,11 @@ void RecursiveSetTagValueOp::setConfiguration(const Settings& conf)
   _tagger.reset(
     new SetTagValueVisitor(
       configOptions.getSetTagValueVisitorKeys(), configOptions.getSetTagValueVisitorValues(),
-      configOptions.getSetTagValueVisitorAppendToExistingValue(), "",
+      configOptions.getSetTagValueVisitorAppendToExistingValue(), QStringList(),
       configOptions.getSetTagValueVisitorOverwrite()));
   _negateCriterion = configOptions.getElementCriterionNegate();
-  _setCriterion(configOptions.getSetTagValueVisitorElementCriterion());
+  // We're only supporting one crit here for now.
+  _setCriterion(configOptions.getSetTagValueVisitorElementCriteria().at(0));
 }
 
 void RecursiveSetTagValueOp::addCriterion(const ElementCriterionPtr& e)

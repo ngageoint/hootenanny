@@ -33,13 +33,12 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/IoUtils.h>
+
 namespace hoot
 {
 
 /**
- * Derives a set of replacement changes given one or two map inputs
- *
- * TODO: implement progress
+ * Derives a set of replacement changes given two map inputs
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
@@ -62,54 +61,143 @@ public:
 
     // process optional params
 
-    bool lenientBounds = false;
-    if (args.contains("--lenient-bounds"))
+    bool fullReplacement = false;
+    if (args.contains("--full-replacement"))
     {
-      lenientBounds = true;
-      args.removeAll("--lenient-bounds");
+      fullReplacement = true;
+      args.removeAll("--full-replacement");
     }
+    LOG_VARD(fullReplacement);
+    QStringList geometryFilters;
+    if (args.contains("--geometry-filters"))
+    {
+      const int optionNameIndex = args.indexOf("--geometry-filters");
+      LOG_VARD(optionNameIndex);
+      geometryFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(geometryFilters);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(geometryFilters);
+    QStringList replacementFilters;
+    if (args.contains("--replacement-filters"))
+    {
+      const int optionNameIndex = args.indexOf("--replacement-filters");
+      LOG_VARD(optionNameIndex);
+      replacementFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(replacementFilters);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(replacementFilters);
+    bool chainReplacementFilters = false;
+    if (args.contains("--chain-replacement-filters"))
+    {
+      chainReplacementFilters = true;
+      args.removeAll("--chain-replacement-filters");
+    }
+    LOG_VARD(chainReplacementFilters);
+    QStringList replacementFilterOptions;
+    if (args.contains("--replacement-filter-options"))
+    {
+      const int optionNameIndex = args.indexOf("--replacement-filter-options");
+      LOG_VARD(optionNameIndex);
+      replacementFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(replacementFilterOptions);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(replacementFilterOptions);
+    QStringList retainmentFilters;
+    if (args.contains("--retainment-filters"))
+    {
+      const int optionNameIndex = args.indexOf("--retainment-filters");
+      LOG_VARD(optionNameIndex);
+      retainmentFilters = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(retainmentFilters);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(retainmentFilters);
+    bool chainRetainmentFilters = false;
+    if (args.contains("--chain-retainment-filters"))
+    {
+      chainRetainmentFilters = true;
+      args.removeAll("--chain-retainment-filters");
+    }
+    LOG_VARD(chainRetainmentFilters);
+    QStringList retainmentFilterOptions;
+    if (args.contains("--retainment-filter-options"))
+    {
+      const int optionNameIndex = args.indexOf("--retainment-filter-options");
+      LOG_VARD(optionNameIndex);
+      retainmentFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
+      LOG_VARD(retainmentFilterOptions);
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    LOG_VARD(retainmentFilterOptions);
+    bool lenientBounds = true;
+    if (args.contains("--strict-bounds"))
+    {
+      lenientBounds = false;
+      args.removeAll("--strict-bounds");
+    }
+    LOG_VARD(lenientBounds);
     bool printStats = false;
     if (args.contains("--stats"))
     {
       printStats = true;
       args.removeAll("--stats");
     }
+    LOG_VARD(printStats);
+
+    LOG_VARD(args.size());
+    LOG_VARD(args);
 
     // param error checking
 
-    if (ConfigOptions().getConvertOps().size())
-    {
-      throw IllegalArgumentException(getName() + " command does not support convert operations.");
-    }
-
-    if (args.size() < 5 || args.size() > 6)
+    if (args.size() < 4 || args.size() > 5)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes five or six parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
     }
 
     // process non-optional params
 
     const QString input1 = args[0].trimmed();
+    LOG_VARD(input1);
     const QString input2 = args[1].trimmed();
+    LOG_VARD(input2);
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
-    const QString critClassName = args[3].trimmed();
-    const QString output = args[4].trimmed();
+    LOG_VARD(bounds);
+    const QString output = args[3].trimmed();
+    LOG_VARD(output);
 
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
     {
-      if (args.size() != 6)
+      if (args.size() != 5)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
-          QString("%1 with SQL output takes six parameters.").arg(getName()));
+          QString("%1 with SQL output takes five parameters.").arg(getName()));
       }
-      osmApiDbUrl = args[5].trimmed();
+      osmApiDbUrl = args[4].trimmed();
     }
 
-    ChangesetReplacementCreator(printStats, osmApiDbUrl)
-      .create(input1, input2, bounds, critClassName, lenientBounds, output);
+    ChangesetReplacementCreator changesetCreator(printStats, osmApiDbUrl);
+    changesetCreator.setFullReplacement(fullReplacement);
+    changesetCreator.setLenientBounds(lenientBounds);
+    changesetCreator.setGeometryFilters(geometryFilters);
+    // chain param must be set before the filters themselves
+    changesetCreator.setChainReplacementFilters(chainReplacementFilters);
+    changesetCreator.setReplacementFilters(replacementFilters);
+    changesetCreator.setReplacementFilterOptions(replacementFilterOptions);
+    changesetCreator.setChainRetainmentFilters(chainRetainmentFilters);
+    changesetCreator.setRetainmentFilters(retainmentFilters);
+    changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
+    changesetCreator.create(input1, input2, bounds, output);
 
     return 0;
   }

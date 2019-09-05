@@ -266,6 +266,14 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts << _getApiEntities<ElementCriterionConsumer, ElementCriterionConsumer>(
       ElementCriterionConsumer::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
   }
+  else if (apiEntityType == "geometry-type-criteria")
+  {
+    msg += "):";
+    msg.prepend("Geometry Type Criteria");
+    ts << msg << endl;
+    ts << _getApiEntities<ElementCriterion, GeometryTypeCriterion>(
+      ElementCriterion::className(), "geometry type criteria", false, MAX_NAME_SIZE - 10);
+  }
   return ts.readAll();
 }
 

@@ -48,7 +48,17 @@ public:
 
   HelpCmd()
   {
+    // Add hoot-core commands to this list that are in production use but either are typically
+    // used by developers only during advanced tasks like model training, etc. or commands that
+    // admittedly may need some testing against real world data before they're ready for the prime
+    // time. This makes the command list display a little cleaner and less confusing.
     _forceToRndList.append("build-model");
+    _forceToRndList.append("generate-alpha-shape");
+    _forceToRndList.append("optimize-network-conf");
+    _forceToRndList.append("perty");
+    _forceToRndList.append("score-matches");
+    _forceToRndList.append("type-tagger-rules");
+    _forceToRndList.append("write-name-counts");
   }
 
   static bool commandCompare(const std::string& n1, const std::string& n2)

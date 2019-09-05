@@ -33,15 +33,14 @@ Additional feature types can be made conflatable quickly via custom script by us
 
 # Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
 ## Default
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both 
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both 
 input datasets.
 ## Advanced
-* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - Conflate map A with B where only tags are transferred from B to A and few or no changes are made to A's geometry. Use this type of conflation when the first 
-dataset's geometry is superior to a second dataset but the attributes of the second dataset are superior to that of the first dataset.
-* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you only
+* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to A and few or no changes are made to A's geometry. Use this type of conflation when the first dataset's geometry is superior to a second dataset but the attributes of the second dataset are superior to that of the first dataset.
+* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add what's new_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you only
 want to fill in holes in your dataset with data from another source without modifying the first dataset. Optionally, you can configure to 
 overwrite tags in A from B even when there is overlap or to output the unmodified map A data as well.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - Define a specific region in map A that should not be modified and stitch in data from map B around or inside of it. Use this type of
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - Define a specific region in map A that should not be modified and stitch in data from map B around or inside of it. Use this type of
 conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
 
 There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 

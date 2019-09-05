@@ -55,6 +55,27 @@ void NotCriterion::addCriterion(const ElementCriterionPtr& e)
   _child = e;
 }
 
+void NotCriterion::setConfiguration(const Settings& conf)
+{
+  std::shared_ptr<Configurable> configurable =
+    std::dynamic_pointer_cast<Configurable>(_child);
+  if (configurable)
+  {
+    configurable->setConfiguration(conf);
+    LOG_DEBUG("Set config on: " << _child->toString());
+  }
+}
+
+void NotCriterion::setOsmMap(const OsmMap* map)
+{
+  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+    std::dynamic_pointer_cast<ConstOsmMapConsumer>(_child);
+  if (mapConsumer)
+  {
+    mapConsumer->setOsmMap(map);
+  }
+}
+
 /**
  * Returns true if the element satisfies the criterion.
  */
@@ -62,6 +83,11 @@ bool NotCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   assert(_child.get());
   return !_child->isSatisfied(e);
+}
+
+QString NotCriterion::toString() const
+{
+  return "NotCriterion(" + _child->toString() + ")";
 }
 
 }

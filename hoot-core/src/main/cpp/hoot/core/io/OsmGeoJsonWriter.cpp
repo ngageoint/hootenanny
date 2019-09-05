@@ -96,6 +96,23 @@ void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
   close();
 }
 
+// Taken directly from OsmXmlWriter.
+QString OsmGeoJsonWriter::toString(const ConstOsmMapPtr& map)
+{
+  QBuffer buf;
+
+  if (!buf.open(QBuffer::WriteOnly))
+  {
+    throw InternalErrorException(QObject::tr("Error opening QBuffer for writing. Odd."));
+  }
+
+  _out = &buf;
+  write(map);
+  _out = 0;
+
+  return QString::fromUtf8(buf.buffer());
+}
+
 QString OsmGeoJsonWriter::_getBbox()
 {
   Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_map);

@@ -641,7 +641,6 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
   {
     MapProjector proj;
     std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
-    //srs->importFromEPSG(4326);
     srs->SetWellKnownGeogCS("WGS84");
     proj.project(map, srs);
   }

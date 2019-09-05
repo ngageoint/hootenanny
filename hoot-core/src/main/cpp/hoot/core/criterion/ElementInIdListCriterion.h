@@ -57,6 +57,9 @@ public:
 
   virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   std::set<long> _ids;

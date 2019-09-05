@@ -33,9 +33,10 @@
 namespace hoot
 {
 
-const std::string HttpTestServer::HTTP_200_OK =         "HTTP/1.1 200 OK\r\n\r\n";
-const std::string HttpTestServer::HTTP_404_NOT_FOUND =  "HTTP/1.1 404 Not Found\r\n\r\n";
-const std::string HttpTestServer::HTTP_409_CONFLICT =   "HTTP/1.1 409 Conflict\r\n\r\n";
+const std::string HttpTestServer::HTTP_200_OK =           "HTTP/1.1 200 OK\r\n\r\n";
+const std::string HttpTestServer::HTTP_400_BAD_REQUEST =  "HTTP/1.1 400 Bad Request\r\n\r\n";
+const std::string HttpTestServer::HTTP_404_NOT_FOUND =    "HTTP/1.1 404 Not Found\r\n\r\n";
+const std::string HttpTestServer::HTTP_409_CONFLICT =     "HTTP/1.1 409 Conflict\r\n\r\n";
 
 HttpTestServer::HttpTestServer(int port)
   : _port(port)

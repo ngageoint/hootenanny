@@ -94,7 +94,8 @@ bool StringUtils::isNumber(const QString& input)
   return isNumber;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(const QString& jsonStr)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(
+  const QString& jsonStr)
 {
   LOG_VART(jsonStr);
   std::stringstream strStrm(jsonStr.toUtf8().constData(), std::ios::in);
@@ -116,7 +117,8 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::jsonStringToPropTree(c
   return jsonObj;
 }
 
-std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(const QStringList& stringList)
+std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonStringArray(
+  const QStringList& stringList)
 {
   std::shared_ptr<boost::property_tree::ptree> strArr(new boost::property_tree::ptree());
   for (int i = 0; i < stringList.size(); i++)
@@ -131,6 +133,19 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonString
 QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int padSize)
 {
   return QString("%1").arg(number, padSize, 10, QChar('0'));
+}
+
+void StringUtils::removeEmptyStrings(QStringList& strings)
+{
+  QStringList output;
+  for (int i = 0; i < strings.size(); i++)
+  {
+    if (!strings.at(i).trimmed().isEmpty())
+    {
+      output.append(strings.at(i));
+    }
+  }
+  strings = output;
 }
 
 }

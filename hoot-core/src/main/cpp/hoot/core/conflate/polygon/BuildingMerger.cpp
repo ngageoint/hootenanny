@@ -85,6 +85,8 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 
+  virtual QString toString() const override { return ""; }
+
 private:
 
   BuildingCriterion _buildingCrit;
@@ -126,6 +128,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     combined.insert(sit->second);
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
+
+  LOG_VART(_manyToManyMatch);
+  LOG_VART(_mergeManyToManyMatches);
 
   ReviewMarker reviewMarker;
   if (_manyToManyMatch && !_mergeManyToManyMatches)

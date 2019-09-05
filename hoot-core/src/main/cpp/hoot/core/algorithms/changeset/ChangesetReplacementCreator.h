@@ -30,7 +30,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -39,82 +40,149 @@ namespace hoot
 {
 
 /**
+ * Options used to control cropping at various stages of the replacement changeset workflow
+ */
+struct BoundsOptions
+{
+  // Determines whether features crossing the bounds should be kept when loading reference data.
+  bool loadRefKeepEntireCrossingBounds;
+  // Determines whether only features completely inside the bounds should be kept when loading
+  // reference data.
+  bool loadRefKeepOnlyInsideBounds;
+  // Determines whether ways immediately connected to other ways being kept but completely outside
+  // of the bounds should also be kept
+  bool loadRefKeepImmediateConnectedWaysOutsideBounds;
+  // Determines whether features crossing the bounds should be kept when loading secondary data.
+  bool loadSecKeepEntireCrossingBounds;
+  // Determines whether only features completely inside the bounds should be kept when loading
+  // secondary data.
+  bool loadSecKeepOnlyInsideBounds;
+
+  // Determines whether features crossing the bounds should be kept when cookie cutting reference
+  // data.
+  bool cookieCutKeepEntireCrossingBounds;
+  // Determines whether only features completely inside the bounds should be kept when cookie
+  // cutting reference data.
+  bool cookieCutKeepOnlyInsideBounds;
+
+  // Determines whether reference features crossing the bounds should be kept when deriving a
+  // changeset.
+  bool changesetRefKeepEntireCrossingBounds;
+  // Determines whether secondary features crossing the bounds should be kept when deriving a
+  // changeset.
+  bool changesetSecKeepEntireCrossingBounds;
+  // Determines whether only reference features completely inside the bounds should be kept when
+  // deriving a changeset.
+  bool changesetRefKeepOnlyInsideBounds;
+  // Determines whether only secondary features completely inside the bounds should be kept when
+  // deriving a changeset.
+  bool changesetSecKeepOnlyInsideBounds;
+  // Determines whether deleting reference features existing either partially of completely outside
+  // of the bounds is allowed during changeset generation
+  bool changesetAllowDeletingRefOutsideBounds;
+  // the strictness of the bounds calculation used in conjunction with
+  // _changesetAllowDeletingRefOutsideBounds
+  bool inBoundsStrict;
+};
+
+/**
  * High level class for prepping data for replacement changeset generation (changesets which
- * completely replace features inside of a specified bounds) and then calls on appropriate
- * changeset file writers.
+ * replace features inside of a specified bounds) and then calls on appropriate changeset file
+ * writers.
  *
  * This class uses a customized workflow that depends upon the feature type the changeset is being
- * generated for and how strict the AOI is to be interpreted. ChangesetCreator is used for the
+ * generated for, whether all the reference features or just those that overlap secondary features
+ * are to be replaced, and how strict the AOI is to be interpreted. ChangesetCreator is used for the
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
- * and a host of other things that need to happen before the changeset generation.
+ * and a host of other things that need to happen before the changeset generation. The secondary
+ * data added to the output changeset can be further restricted with a non-geometry type filter.
+ * The reference data removed from the changeset can also be further restricted with a non-geometry
+ * type filter.
+ *
+ * TODO: implement progress
+ * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
  */
 class ChangesetReplacementCreator
 {
 
 public:
 
+  /**
+   * Constructor
+   *
+   * @param printStats prints statistics for the output changeset
+   * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
+   * the output changeset is of type .osc.sql.
+   */
   ChangesetReplacementCreator(const bool printStats = false, const QString osmApiDbUrl = "");
 
   /**
-   * Creates a changeset that completely replaces features in the first input with features from
-   * the second input.
+   * Creates a changeset that replaces features in the first input with features from the second
+   * input.
    *
-   * @param input1 the changeset target in which to replace features; must support Boundable
-   * @param input2 the changeset source to get replacement features from; must support Boundable
+   * @param input1 the target data for the changeset in which to replace features; must support
+   * Boundable
+   * @param input2 the source data for the changeset to get replacement features from; must support
+   * Boundable
    * @param bounds the bounds over which features are to be replaced
-   * @param featureTypeFilterClassName the type of feature to replace; must be a class name
-   * inheriting from ConflatableElementCriterion
-   * @param lenientBounds determines how strict the handling of the bounds is during replacement
-   * @param output the changeset file output location
-   * @todo support empty feature filters and filter with multiple types - #3360
+   * @param output the changeset file output locationn
    */
   void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& featureTypeFilterClassName, const bool lenientBounds, const QString& output);
+    const QString& output);
+
+  void setFullReplacement(const bool full) { _fullReplacement = full; }
+  void setLenientBounds(const bool lenient) { _lenientBounds = lenient; }
+  void setGeometryFilters(const QStringList& filterClassNames);
+  void setReplacementFilters(const QStringList& filterClassNames);
+  void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
+  void setReplacementFilterOptions(const QStringList& optionKvps);
+  void setRetainmentFilters(const QStringList& filterClassNames);
+  void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
+  void setRetainmentFilterOptions(const QStringList& optionKvps);
 
 private:
 
   friend class ChangesetReplacementCreatorTest;
 
-  // Determines whether features crossing the bounds should be kept when loading reference data.
-  bool _loadRefKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when loading
-  // reference data.
-  bool _loadRefKeepOnlyInsideBounds;
-  // Determines whether ways immediately connected to other ways being kept but completely outside
-  // of the bounds should also be kept
-  bool _loadRefKeepImmediateConnectedWaysOutsideBounds;
-  // Determines whether features crossing the bounds should be kept when loading secondary data.
-  bool _loadSecKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when loading
-  // secondary data.
-  bool _loadSecKeepOnlyInsideBounds;
+  // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
+  // alpha shape of the sec data gets replaced.
+  bool _fullReplacement;
 
-  // Determines whether features crossing the bounds should be kept when cookie cutting reference
-  // data.
-  bool _cookieCutKeepEntireCrossingBounds;
-  // Determines whether only features completely inside the bounds should be kept when cookie
-  // cutting reference data.
-  bool _cookieCutKeepOnlyInsideBounds;
+  // determines how strict the handling of the bounds is during replacement
+  bool _lenientBounds;
 
-  // Determines whether reference features crossing the bounds should be kept when deriving a
-  // changeset.
-  bool _changesetRefKeepEntireCrossingBounds;
-  // Determines whether secondary features crossing the bounds should be kept when deriving a
-  // changeset.
-  bool _changesetSecKeepEntireCrossingBounds;
-  // Determines whether only reference features completely inside the bounds should be kept when
-  // deriving a changeset.
-  bool _changesetRefKeepOnlyInsideBounds;
-  // Determines whether only secondary features completely inside the bounds should be kept when
-  // deriving a changeset.
-  bool _changesetSecKeepOnlyInsideBounds;
-  // Determines whether deleting reference features existing either partially of completely outside
-  // of the bounds is allowed during changeset generation
-  bool _changesetAllowDeletingRefOutsideBounds;
-  // the strictness of the bounds calculation used in conjunction with
-  // _changesetAllowDeletingRefOutsideBounds
-  bool _inBoundsStrict;
+  // A set of geometry type filters, organized by core geometry type (point, line, poly) to
+  // separately filter the input datasets on.
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
+
+  // A list of linear geometry criterion classes to apply way snapping to.
+  QStringList _linearFilterClassNames;
+
+  // One or more non-geometry criteria to be combined with the geometry type filters for the
+  // secondary input. Allows for further restriction of the secondary data that makes it to output.
+  std::shared_ptr<ChainCriterion> _replacementFilter;
+
+  // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
+  // together.
+  bool _chainReplacementFilters;
+
+  // Configuration options to pass to the filters in _replacementFilter.
+  Settings _replacementFilterOptions;
+
+  // One or more non-geometry criteria to be combined with the geometry type filters for the
+  // reference input. Allows for further restriction of the ref data that gets replaced.
+  std::shared_ptr<ChainCriterion> _retainmentFilter;
+
+  // If true the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
+  // together.
+  bool _chainRetainmentFilters;
+
+  // Configuration options to pass to the filters in _retainmentFilter.
+  Settings _retainmentFilterOptions;
+
+  // controls cropping
+  BoundsOptions _boundsOpts;
 
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
@@ -123,16 +191,26 @@ private:
 
   void _validateInputs(const QString& input1, const QString& input2);
 
-  std::shared_ptr<ConflatableElementCriterion> _validateFilter(
-    const QString& featureTypeFilterClassName);
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+    _getDefaultGeometryFilters() const;
+
+  void _setInputFilter(
+    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
+    const bool chainFilters);
+
+  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
+
+  // Combines filters in _geometryTypeFilters with _replacementFilter.
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
+    std::shared_ptr<ChainCriterion> nonGeometryFilter);
 
   void _filterFeatures(
-    OsmMapPtr& map, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
+    OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
     const QString& debugFileName);
 
+  void _setGlobalOpts(const QString& boundsStr);
   void _parseConfigOpts(
-    const bool lenientBounds, const std::shared_ptr<ConflatableElementCriterion>& featureFilter,
-    const QString& boundsStr);
+    const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType);
 
   OsmMapPtr _loadRefMap(const QString& input);
   OsmMapPtr _loadSecMap(const QString& input);
@@ -174,10 +252,11 @@ private:
 
   void _conflate(OsmMapPtr& map, const bool lenientBounds);
 
-  void _snapUnconnectedWays(OsmMapPtr& map, const QString& snapWayStatus,
-                            const QString& snapToWayStatus,
-                            const QString& featureTypeFilterClassName, const bool markSnappedWays,
-                            const QString& debugFileName);
+  void _snapUnconnectedWays(
+    OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
+    const QString& typeCriterionClassName, const bool markSnappedWays,
+    const QString& debugFileName);
+
   /*
    * Performs cropping to prepare a map for changeset derivation. This is potentially different
    * cropping than done during initial load and cookie cutting.
@@ -185,6 +264,17 @@ private:
   void _cropMapForChangesetDerivation(
     OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
     const bool keepOnlyFeaturesInsideBounds, const bool isLinearMap, const QString& debugFileName);
+
+  /*
+   * Populates a reference and a conflated map based on the geometry type being replaced. The maps
+   * can then used to derive the replacement changeset.
+   */
+  void _getMapsForGeometryType(
+    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
+    const QString& boundsStr, const ElementCriterionPtr& refFeatureFilter,
+    const ElementCriterionPtr& secFeatureFilter,
+    const GeometryTypeCriterion::GeometryType& geometryType,
+    const QStringList& linearFilterClassNames = QStringList());
 };
 
 }

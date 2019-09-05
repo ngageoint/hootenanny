@@ -70,6 +70,9 @@ public:
    */
   virtual QString getDescription() const { return "Identifies element attributes by value"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   // attribute to examine

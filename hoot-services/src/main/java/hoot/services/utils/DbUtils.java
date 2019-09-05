@@ -192,6 +192,28 @@ public class DbUtils {
     }
 
     /**
+     * Gets the job type for the specified jobId
+     * @param jobId
+     * @return
+     */
+    public static Integer getJobTypeByJobId(String jobId) {
+        return createQuery()
+                .select(jobStatus.jobType)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+    }
+
+    /**
+     * Deletes the specified mapId
+     * @param mapId
+     */
+    public static void deleteMap(Long mapId) {
+        createQuery().delete(maps)
+                .where(maps.id.eq(mapId))
+                .execute();
+    }
+
+    /**
      * Creates a new folder under the parent directory
      * if not already present and returns it's id
      *
