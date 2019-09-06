@@ -106,7 +106,7 @@ class ImportCommand extends ExternalCommand {
         	}
         	
         	else if(mergeNearbyNodes) {
-        		 options.add("ogr2osm.merge.nearby.nodes=true");
+        		 options.add("ogr2osm.merge.nearby.nodes");
         	}
         }
 
