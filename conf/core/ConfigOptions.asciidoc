@@ -640,7 +640,7 @@ See also:
 * Default Value: ``
 
 The string that lists the types of conflation used in the user interface.  The possible values
-are: reference, cookieCutter, average, and advancedConflation.
+are: reference, cookieCutter, average, and advancedConflation. TODO: Is this used anywhere?
 
 === conflate.tag.disable.value.truncation
 
