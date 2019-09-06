@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-# This script tests the replacement changeset generation workflow for various geometry types.
+# This script tests the replacement changeset generation workflow for various geometry types. It is called from the 
+# ServiceChangesetReplacement*.sh tests
 #
 # Multiple input formats are tested here. Each time the resultant changeset is written back to an OSM API database regardless of the 
 # source format, as that allows for ease of visual inspection of the changes and makes debugging easier.
@@ -10,102 +11,103 @@ set -e
 # re-created when they should have been modified.
 
 # TODO: 
-# - consolidate the three workflows into a single function
-# - reduce the size of the source data down to reduce test run times
-# - can probably also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except the POI test, right now)
+# - consolidate the three replacement workflows into a single function
+# - can maybe also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except the POI test, right now)
 
 TEST_NAME=$1
-#echo "test name: " $TEST_NAME
+echo "test name: " $TEST_NAME
 SOURCE_FILE_1=$2
-#echo "source file 1: " $SOURCE_FILE_1
+echo "source file 1: " $SOURCE_FILE_1
 SOURCE_FILE_2=$3
 # If only one source file was passed in, we'll perturb it and use the original data for the secondary and the perturbed for the ref.
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
-  REF_CONVERT_OPS="hoot::SetTagValueVisitor;hoot::PertyOp"
+  REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp"
   PERTURBING_REF="true"
 else
-  REF_CONVERT_OPS="hoot::SetTagValueVisitor"
+  REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
   PERTURBING_REF="false"
 fi 
-#echo "source file 2: " $SOURCE_FILE_2
-AOI=$4
-#echo "aoi: " $AOI
-FULL_REPLACEMENT=$5
+echo "source file 2: " $SOURCE_FILE_2
+REPLACEMENT_AOI=$4
+echo "replacement aoi: " $REPLACEMENT_AOI
+CROP_AOI=$5
+echo "crop aoi: " $CROP_AOI
+FULL_REPLACEMENT=$6
 if [ "$FULL_REPLACEMENT" == "true" ]; then
   FULL_REPLACEMENT="--full-replacement"
 else
   FULL_REPLACEMENT=""
 fi
-#echo "full replacement: " $FULL_REPLACEMENT
-STRICT_BOUNDS=$6
+echo "full replacement: " $FULL_REPLACEMENT
+STRICT_BOUNDS=$7
 if [ "$STRICT_BOUNDS" == "true" ]; then
   STRICT_BOUNDS="--strict-bounds"
 else
   STRICT_BOUNDS=""
 fi
-#echo "strict bounds: " $STRICT_BOUNDS
-if [ "$7" == "" ]; then
+echo "strict bounds: " $STRICT_BOUNDS
+if [ "$8" == "" ]; then
   GEOMETRY_FILTERS=""
   TAG_ELEMENT_CRITERIA="hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion"
 else
-  GEOMETRY_FILTERS=" --geometry-filters "$7
-  TAG_ELEMENT_CRITERIA=$7
+  GEOMETRY_FILTERS=" --geometry-filters "$8
+  TAG_ELEMENT_CRITERIA=$8
 fi 
-#echo "geometry filters: " $GEOMETRY_FILTERS
-#echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
-if [ "$8" == "" ]; then
+echo "geometry filters: " $GEOMETRY_FILTERS
+echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
+if [ "$9" == "" ]; then
   REPLACEMENT_FILTERS=""
 else
-  REPLACEMENT_FILTERS=" --replacement-filters "$8
+  REPLACEMENT_FILTERS=" --replacement-filters "$9
 fi
-#echo "replacement filters: " $REPLACEMENT_FILTERS
-CHAIN_REPLACEMENT_FILTERS=$9
+echo "replacement filters: " $REPLACEMENT_FILTERS
+CHAIN_REPLACEMENT_FILTERS=${10}
 if [ "$CHAIN_REPLACEMENT_FILTERS" == "true" ]; then
   CHAIN_REPLACEMENT_FILTERS="--chain-replacement-filters"
 else
   CHAIN_REPLACEMENT_FILTERS=""
 fi
-#echo "chain replacement filters: " $CHAIN_REPLACEMENT_FILTERS 
-if [ "${10}" == "" ]; then
+echo "chain replacement filters: " $CHAIN_REPLACEMENT_FILTERS 
+if [ "${11}" == "" ]; then
   REPLACEMENT_FILTER_OPTIONS=""
 else
-  REPLACEMENT_FILTER_OPTIONS=" --replacement-filter-options "${10}
+  REPLACEMENT_FILTER_OPTIONS=" --replacement-filter-options "${11}
 fi
-#echo "replacement filter options: " $REPLACEMENT_FILTER_OPTIONS
-if [ "${11}" == "" ]; then
+echo "replacement filter options: " $REPLACEMENT_FILTER_OPTIONS
+if [ "${12}" == "" ]; then
   RETAINMENT_FILTERS=""
 else
-  RETAINMENT_FILTERS=" --retainment-filters "${11}
+  RETAINMENT_FILTERS=" --retainment-filters "${12}
 fi
-#echo "retainment filters: " $REPLACEMENT_FILTERS
-CHAIN_RETAINMENT_FILTERS=${12}
+echo "retainment filters: " $REPLACEMENT_FILTERS
+CHAIN_RETAINMENT_FILTERS=${13}
 if [ "$CHAIN_RETAINMENT_FILTERS" == "true" ]; then
   CHAIN_RETAINMENT_FILTERS="--chain-retainment-filters"
 else
   CHAIN_RETAINMENT_FILTERS=""
 fi
-#echo "chain retainment filters: " $CHAIN_RETAINMENT_FILTERS 
-if [ "${13}" == "" ]; then
+echo "chain retainment filters: " $CHAIN_RETAINMENT_FILTERS 
+if [ "${14}" == "" ]; then
   RETAINMENT_FILTER_OPTIONS=""
 else
-  RETAINMENT_FILTER_OPTIONS=" --retainment-filter-options "${13}
+  RETAINMENT_FILTER_OPTIONS=" --retainment-filter-options "${14}
 fi
-#echo "retainment filter options: " $RETAINMENT_FILTER_OPTIONS
-SOURCE_FORMATS=${14}
-#echo "source formats: " $SOURCE_FORMATS 
-if [ "${15}" == "" ]; then
+echo "retainment filter options: " $RETAINMENT_FILTER_OPTIONS
+SOURCE_FORMATS=${15}
+echo "source formats: " $SOURCE_FORMATS 
+if [ "${16}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=${15}
+  WAY_SNAP_TOLERANCE=${16}
 fi
-#echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
-if [ "${16}" == "" ]; then
+echo "way snap tolerance: " $WAY_SNAP_TOLERANCE 
+if [ "${17}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${16}
+  EXISTING_WAY_NODE_TOLERANCE=${17}
 fi
-#echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
+echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
 CUSTOM_TAG_KEY="note"
 CUSTOM_TAG_VAL="Source"
 
@@ -122,6 +124,7 @@ REF_DB_INPUT=$OSM_API_DB_URL
 
 GENERAL_OPTS="--warn -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
+CROP_OPTS="-D crop.bounds=$CROP_AOI"
 PERTY_OPTS="-D perty.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE"
 #echo "changeset derive opts: " $CHANGESET_DERIVE_OPTS
@@ -138,25 +141,25 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   # DATA PREP
 
   echo ""
-  echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
+  echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
-  hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
+  hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $OUT_DIR/ref-original-tmp.osm
   echo ""
-  echo "Writing the secondary dataset from: $SOURCE_FILE_2 to a hoot api db: $SEC_DB_INPUT (contains features to replace with)..."
+  echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a hoot api db: $SEC_DB_INPUT (contains features to replace with)..."
   echo ""
-  hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
+  hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_DB_INPUT $OUT_DIR/sec-original-tmp.osm
 
   # CHANGESET DERIVATION
 
   echo ""
-  echo "Deriving a changeset between $REF_DB_INPUT and $SEC_DB_INPUT to file: $CHANGESET_DB that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
+  echo "Deriving a changeset between $REF_DB_INPUT and $SEC_DB_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -192,25 +195,25 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   # DATA PREP
 
   echo ""
-  echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
+  echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
-  hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
+  hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
   echo ""
   echo "Writing the reference dataset from: $REF_DB_INPUT to an xml file: $REF_XML_INPUT (contains features to be replaced)..."
   echo ""
   hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $REF_XML_INPUT
   echo ""
-  echo "Writing the secondary dataset from: $SOURCE_FILE_2 to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
+  echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
   echo ""
-  hoot convert $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
+  hoot convert $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
 
   # CHANGESET DERIVATION
 
   echo ""
-  echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT to file: $CHANGESET_XML that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
+  echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -243,25 +246,25 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   # DATA PREP
 
   echo ""
-  echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
+  echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db: $REF_DB_INPUT (contains features to be replaced)..."
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
-  hoot convert $GENERAL_OPTS $DB_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
+  hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
   echo ""
   echo "Writing the reference dataset from: $REF_DB_INPUT to a json file: $REF_JSON_INPUT (contains features to be replaced)..."
   echo ""
   hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $REF_JSON_INPUT
   echo ""
-  echo "Writing the secondary dataset from: $SOURCE_FILE_2 to a json file: $SEC_JSON_INPUT (contains features to replace with)..."
+  echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a json file: $SEC_JSON_INPUT (contains features to replace with)..."
   echo ""
-  hoot convert $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-json.osm -D reader.use.data.source.ids=false -D convert.ops=hoot::SetTagValueVisitor -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_JSON_INPUT
+  hoot convert $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-json.osm -D reader.use.data.source.ids=false -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_JSON_INPUT
 
   # CHANGESET DERIVATION
 
   echo ""
-  echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT to file: $CHANGESET_JSON that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset..."
+  echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement -C UnifyingAlgorithm.conf $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
