@@ -4171,8 +4171,8 @@ available mergers.
 * Default Value:
 ** ``
 
-A list of tags not to be overwritten on target features during tag merging. Please keep
-alphabetized.
+A list of tags not to be overwritten on target features during tag merging when using
+OverwriteTagMerger only. Please keep alphabetized.
 
 === tag.printing.format
 

@@ -61,7 +61,8 @@ struct Entry
 
 TagComparator::TagComparator()
 {
-  setCaseSensitive(ConfigOptions().getDuplicateNameCaseSensitive());
+  ConfigOptions opts(conf());
+  setCaseSensitive(opts.getDuplicateNameCaseSensitive());
 }
 
 void TagComparator::_addAsDefault(Tags& t, const QString& key, const QString& value)

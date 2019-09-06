@@ -107,8 +107,6 @@ public:
    */
   Tags overwriteAllMerge(Tags t1, Tags t2);
 
-  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
-
   /**
    * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
    * is determined with duplicate.name.case.sensitive.
@@ -129,11 +127,20 @@ public:
    */
   void mergeText(Tags& t1, Tags& t2, Tags& result);
 
+  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
+  void setOverwriteExcludeTagKeys(const QStringList& exclude)
+  { _overwriteExcludeTagKeys = exclude; }
+
 private:
 
-  TagComparator();
+  bool _caseSensitive;
+
+  // keys for tags not to be overwritten
+  QStringList _overwriteExcludeTagKeys;
 
   static std::shared_ptr<TagComparator> _theInstance;
+
+  TagComparator();
 
   void _addDefaults(Tags& t);
 
@@ -172,8 +179,6 @@ private:
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result);
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
-
-  bool _caseSensitive;
 };
 
 }
