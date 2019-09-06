@@ -38,10 +38,8 @@ input datasets.
 ## Advanced
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to A and few or no changes are made to A's geometry. Use this type of conflation when the first dataset's geometry is superior to a second dataset but the attributes of the second dataset are superior to that of the first dataset.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add what's new_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you only
-want to fill in holes in your dataset with data from another source without modifying the first dataset. Optionally, you can configure to 
-overwrite tags in A from B even when there is overlap or to output the unmodified map A data as well.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - Define a specific region in map A that should not be modified and stitch in data from map B around or inside of it. Use this type of
-conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
+want to fill in holes in your dataset with data from another source without modifying the first dataset. Optionally, you can configure to overwrite tags in A from B even when there is feature overlap.
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_ - 1) Define a specific region in map A to replace and replace everything in the region with data from map B 2) Or define a specific region in map A to preserve and replace everything around it with data from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
 
 There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
 available to customize the conflation workflows.
