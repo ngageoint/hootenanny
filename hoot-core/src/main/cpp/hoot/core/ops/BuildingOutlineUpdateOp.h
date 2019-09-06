@@ -48,6 +48,9 @@ class OsmMap;
  *
  * This class has gone through a few iterations based on user feedback and its complexity may have
  * increased unnecessarily as a result...maybe needs some refactoring to simplify.
+ *
+ * TODO: update to only add building type relations when there is 3D info (for #3451)? otherwise
+ * just add a multipoly relation; remove _removeBuildingRelations option?
  */
 class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
   public OperationStatusInfo, public Configurable

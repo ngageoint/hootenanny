@@ -4165,6 +4165,15 @@ Specifies the default way of merging tags. This is used by most merge routines, 
 depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
 available mergers.
 
+=== tag.merger.overwrite.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tags not to be overwritten on target features during tag merging. Please keep
+alphabetized.
+
 === tag.printing.format
 
 * Data Type: string

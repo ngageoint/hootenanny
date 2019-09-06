@@ -542,6 +542,8 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
 
 void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
 {
+  // TODO: implement overwrite.tag.merger.exclude
+
   LOG_VART(t1);
   LOG_VART(t2);
 
@@ -637,6 +639,8 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result)
 {
   OsmSchema& schema = OsmSchema::getInstance();
 
+  // TODO: implement overwrite.tag.merger.exclude
+
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
   {
@@ -713,7 +717,7 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
 }
 
 Tags TagComparator::overwriteMerge(Tags t1, Tags t2)
-{
+{ 
   Tags result;
 
   // Names are merged using _mergeNames.
@@ -740,6 +744,8 @@ Tags TagComparator::overwriteAllMerge(Tags t1, Tags t2)
 
 void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result)
 {
+  // TODO: implement overwrite.tag.merger.exclude
+
   // Add t2 tags
   for (Tags::ConstIterator it2 = t2.constBegin(); it2 != t2.constEnd(); ++it2)
   {
