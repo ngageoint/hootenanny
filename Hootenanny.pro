@@ -12,6 +12,7 @@ SUBDIRS += \
     tgs \
     hoot-core \
     hoot-core-test \
+    docs
 
 nodejs {
 SUBDIRS += \
