@@ -34,6 +34,7 @@ docs/*.epub
 docs/*.pdf
 docs/*-docinfo.xml
 docs/*.png
+docs/**/__*.png
 docs/.*
 docs/*.html
 docs/*.xml
