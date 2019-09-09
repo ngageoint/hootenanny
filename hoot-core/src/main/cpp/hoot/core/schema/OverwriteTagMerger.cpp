@@ -44,16 +44,20 @@ OverwriteTagMerger::OverwriteTagMerger(bool swap)
 
 Tags OverwriteTagMerger::mergeTags(const Tags& t1, const Tags& t2, ElementType /*et*/) const
 {
-  TagComparator& tagComp = TagComparator::getInstance();
-  tagComp.setOverwriteExcludeTagKeys(ConfigOptions().getTagMergerOverwriteExclude());
   if (_swap)
   {
-    return tagComp.overwriteMerge(t2, t1);
+    return TagComparator::getInstance().overwriteMerge(t2, t1, _overwriteExcludeTagKeys);
   }
   else
   {
-    return tagComp.overwriteMerge(t1, t2);
+    return TagComparator::getInstance().overwriteMerge(t1, t2, _overwriteExcludeTagKeys);
   }
+}
+
+void OverwriteTagMerger::setConfiguration(const Settings& conf)
+{
+  ConfigOptions config = ConfigOptions(conf);
+  setOverwriteExcludeTagKeys(config.getTagMergerOverwriteExclude());
 }
 
 }

@@ -543,8 +543,7 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
 
 void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
 {
-  // TODO: implement overwrite.tag.merger.exclude
-
+  LOG_DEBUG("Merging names...");
   LOG_VART(t1);
   LOG_VART(t2);
 
@@ -560,22 +559,22 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       QStringList sl = Tags::split(it1.value());
       altNames.insert(sl.begin(), sl.end());
     }
-    else
+    else if (OsmSchema::getInstance().isAncestor(it1.key(), "abstract_name"))
     {
-      if (OsmSchema::getInstance().isAncestor(it1.key(), "abstract_name"))
-      {
-        result[it1.key()] = it1.value();
-        QStringList sl = Tags::split(it1.value());
-        // keep track of all the names we've used
-        nonAltNames.insert(sl.begin(), sl.end());
-        toRemove.insert(it1.key());
-      }
+      result[it1.key()] = it1.value();
+      QStringList sl = Tags::split(it1.value());
+      // keep track of all the names we've used
+      nonAltNames.insert(sl.begin(), sl.end());
+      toRemove.insert(it1.key());
     }
   }
   LOG_VART(altNames);
   LOG_VART(nonAltNames);
   LOG_VART(toRemove);
   LOG_VART(result);
+
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
   {
@@ -584,25 +583,18 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
       QStringList sl = Tags::split(it2.value());
       altNames.insert(sl.begin(), sl.end());
     }
-    else if (result.contains(it2.key()))
+    else if (result.contains(it2.key()) &&
+             result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
     {
-      const Qt::CaseSensitivity caseSensitivity =
-        _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-      if (result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
-      {
-        QStringList sl = Tags::split(it2.value());
-        altNames.insert(sl.begin(), sl.end());
-      }
+      QStringList sl = Tags::split(it2.value());
+      altNames.insert(sl.begin(), sl.end());
     }
-    else
+    else if (OsmSchema::getInstance().isAncestor(it2.key(), "abstract_name"))
     {
-      if (OsmSchema::getInstance().isAncestor(it2.key(), "abstract_name"))
-      {
-        result[it2.key()] = it2.value();
-        QStringList sl = Tags::split(it2.value());
-        nonAltNames.insert(sl.begin(), sl.end());
-        toRemove.insert(it2.key());
-      }
+      result[it2.key()] = it2.value();
+      QStringList sl = Tags::split(it2.value());
+      nonAltNames.insert(sl.begin(), sl.end());
+      toRemove.insert(it2.key());
     }
   }
   LOG_VART(altNames);
@@ -638,9 +630,10 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result)
 
 void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result)
 {
+  LOG_DEBUG("Merging text...");
+  LOG_VART(t1);
+  LOG_VART(t2);
   OsmSchema& schema = OsmSchema::getInstance();
-
-  // TODO: implement overwrite.tag.merger.exclude
 
   const Tags t1Copy = t1;
   for (Tags::ConstIterator it1 = t1Copy.begin(); it1 != t1Copy.end(); ++it1)
@@ -652,14 +645,18 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result)
     {
       // only keep the unique text fields
       QStringList values = t1.getList(it1.key());
+      LOG_VART(values);
       values.append(t2.getList(it1.key()));
+      LOG_VART(values);
 
       // append all unique values in the existing order.
       for (int i = 0; i < values.size(); i++)
       {
+        LOG_VART(values[i]);
         if (values[i].isEmpty() == false)
         {
           result.appendValueIfUnique(it1.key(), values[i]);
+          LOG_VART(result);
         }
       }
 
@@ -667,6 +664,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result)
       t2.remove(it1.key());
     }
   }
+  LOG_VART(result);
 }
 
 void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
@@ -717,7 +715,7 @@ void TagComparator::_mergeUnrecognizedTags(Tags& t1, Tags& t2, Tags& result)
   }
 }
 
-Tags TagComparator::overwriteMerge(Tags t1, Tags t2)
+Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys)
 { 
   Tags result;
 
@@ -728,24 +726,19 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2)
   mergeText(t1, t2, result);
 
   // use the tags in t1 first, then fall back to tags in t2
-  _overwriteRemainingTags(t1, t2, result);
+  _overwriteRemainingTags(t1, t2, result, overwriteExcludeTagKeys);
 
   return result;
 }
 
-Tags TagComparator::overwriteAllMerge(Tags t1, Tags t2)
-{
-  Tags result;
-
-  // use the tags in t1 first, then fall back to tags in t2
-  _overwriteRemainingTags(t1, t2, result);
-
-  return result;
-}
-
-void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result)
+void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
+                                            const QStringList& overwriteExcludeTagKeys)
 {
   // TODO: implement overwrite.tag.merger.exclude
+
+  LOG_DEBUG("Overwriting remaining tags...");
+  LOG_VART(t1);
+  LOG_VART(t2);
 
   // Add t2 tags
   for (Tags::ConstIterator it2 = t2.constBegin(); it2 != t2.constEnd(); ++it2)
@@ -755,15 +748,20 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result)
       result[it2.key()] = it2.value();
     }
   }
+  LOG_VART(result);
 
-  // Add t1 tags overwriting any t2 tags in the process.
+  // Add t1 tags overwriting any t2 tags in the process (except those in the optional exclude list).
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   for (Tags::ConstIterator it1 = t1.constBegin(); it1 != t1.constEnd(); ++it1)
   {
-    if (it1.value().isEmpty() == false)
+    if (it1.value().isEmpty() == false &&
+        !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity))
     {
       result[it1.key()] = it1.value();
     }
   }
+  LOG_VART(result);
 
   t1.clear();
   t2.clear();
