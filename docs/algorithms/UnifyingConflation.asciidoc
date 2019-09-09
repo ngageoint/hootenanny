@@ -16,7 +16,7 @@ subsequent efforts with the following design goals:
 
 [[unifying-conflation-flow]]
 .Unifying Conflation Flow
-[graphviz]
+[graphviz, images/__UnifyingConflation.png]
 ---------------------------------------------------------------------
 digraph G
 {

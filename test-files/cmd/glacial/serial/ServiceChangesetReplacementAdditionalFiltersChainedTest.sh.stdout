@@ -1,5 +1,23 @@
+test name:  ServiceChangesetReplacementAdditionalFiltersChainedTest
+source file 1:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm
+source file 2:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm
+replacement aoi:  -122.43208,37.76075,-122.42892,37.7647
+crop aoi:  -122.43384,37.76069,-122.42742,37.76869
+full replacement: 
+strict bounds:  --strict-bounds
+geometry filters:  --geometry-filters hoot::PoiCriterion
+tag element criteria:  hoot::PoiCriterion
+replacement filters:  --replacement-filters hoot::TagCriterion;hoot::TagContainsCriterion
+chain replacement filters:  --chain-replacement-filters
+replacement filter options:  --replacement-filter-options tag.criterion.kvps='amenity=school';tag.contains.criterion.kvps='name=Preschool'
+retainment filters:  --replacement-filters hoot::TagCriterion;hoot::TagContainsCriterion
+chain retainment filters:  --chain-retainment-filters
+retainment filter options:  --retainment-filter-options tag.criterion.kvps='amenity=school';tag.contains.criterion.kvps='name=School'
+source formats:  xml
+way snap tolerance:  0.0
+existing way node tolerance:  0.0
 
-Writing the reference dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm to an osm api db: osmapidb://hoot:hoottest@localhost:5432/osmapi_test (contains features to be replaced)...
+Cropping the reference dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm to: -122.43384,37.76069,-122.42742,37.76869, then writing it to an osm api db: osmapidb://hoot:hoottest@localhost:5432/osmapi_test (contains features to be replaced)...
 
  setval 
 --------
@@ -10,10 +28,10 @@ Writing the reference dataset from: test-files/cmd/glacial/PoiPolygonConflateSta
 Writing the reference dataset from: osmapidb://hoot:hoottest@localhost:5432/osmapi_test to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/ref-original.osm (contains features to be replaced)...
 
 
-Writing the secondary dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/sec-original.osm (contains features to replace with)...
+Cropping the secondary dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm to: -122.43384,37.76069,-122.42742,37.76869, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/sec-original.osm (contains features to replace with)...
 
 
-Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/sec-original.osm to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/ServiceChangesetReplacementAdditionalFiltersChainedTest-changeset-xml.osc.sql that completely replaces features in the reference dataset within the specified AOI with those from a secondary dataset...
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/sec-original.osm over: -122.43208,37.76075,-122.42892,37.7647, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/ServiceChangesetReplacementAdditionalFiltersChainedTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
 
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementAdditionalFiltersChainedTest/ServiceChangesetReplacementAdditionalFiltersChainedTest-changeset-xml.osc.sql to the reference data in: osmapidb://hoot:hoottest@localhost:5432/osmapi_test...

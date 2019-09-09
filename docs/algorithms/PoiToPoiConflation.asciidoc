@@ -172,7 +172,7 @@ relationships.
 | place=village, name:en=Al Maks | name=Al Maks, amenity=pub | 0.5 Miss | very similar names, very close together, no place match
 | barrier=toll_booth | building=guardhouse | 1.5 Review | very close together, similar POI type
 | name=Georg-Brauchle-Ring, railway=subway_entrance | station=light_rail, name=U-BAHN-GEORG-BRAUCHLE-RING | 2 Match | very similar names, similar POI type
-| name=Izbat Hawd an Nada, place=village | name=Izbat as Sab`in, place=populated | 0 Miss | None given by routine (Izbat is a common word so it is given a low weight when comparing names)
+| name=Izbat Hawd an Nada, place=village | name=Izbat as Sab'in, place=populated | 0 Miss | None given by routine (Izbat is a common word so it is given a low weight when comparing names)
 |======
 
 ==== Merging POIs
@@ -235,7 +235,7 @@ improved.
 
 [[PoiTestFlow]]
 .POI Test Flow
-[graphviz]
+[graphviz, images/__PoiTestFlow.png]
 ---------------------------------------------------------------------
 digraph G
 {

@@ -376,6 +376,7 @@ See the User Guide for more details on command usage.
 -----
 
 ===== Completely replace all POIs in a first dataset, except those with "Staunton" in the name, with schools from a second dataset within a specified bounds:
+
 -----
     hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc \
       --geometry-filters "hoot::PoiCriterion --replacement-filters "hoot::TagCriterion" \
@@ -385,6 +386,7 @@ See the User Guide for more details on command usage.
 -----
 
 ===== Replace all POIs in a first dataset with overlapping cafes having "Java" in the name from a second dataset within a specified bounds:
+
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm \
       "-122.43204,37.7628,-122.4303457,37.76437" output.osc --geometry-filters "hoot::PoiCriterion" \
@@ -581,6 +583,12 @@ See the User Guide for more details on command usage.
 
 -----
     hoot node-density-plot input.osm output.png 100
+-----
+
+===== Detect railway intersections:
+
+-----
+hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.osm
 -----
 
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:

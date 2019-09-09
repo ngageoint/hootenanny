@@ -70,7 +70,7 @@ road match is further evaluated to determine the match relationship.
 
 [[RoadMatchingFlow]]
 .Road Matching Flow
-[graphviz]
+[graphviz, images/__RoadMatching.png]
 ---------------------------------------------------------------------
 digraph G
 {
