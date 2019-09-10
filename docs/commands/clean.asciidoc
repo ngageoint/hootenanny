@@ -9,6 +9,11 @@ in the `map.cleaner.transforms` configuration option.
 * +input+  - Input; may be any supported input format (e.g. .osm file).
 * +output+ - Output file; may be any supported output format (e.g. .osm file).
 
+To see a list of available cleaning operations:
+-----
+hoot info --cleaning-operations
+-----
+
 === Usage
 
 --------------------------------------
