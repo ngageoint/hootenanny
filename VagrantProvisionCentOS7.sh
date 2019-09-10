@@ -72,11 +72,15 @@ else
          nodejs-devel \
          proj \
          proj-devel \
+         qt5-qtwebkit \
+         qt5-qtwebkit-devel \
          stxxl \
          stxxl-devel
 
 fi
 
+# TODO: Remove version locks of qt5-qtwebkit packages when CentOS 7.7 is released and
+#       qt5-qtbase-5.9.7 is available
 echo "### Installing libraries with locked versions"
 sudo yum install -y \
      armadillo-$ARMADILLO_VERSION \
@@ -97,6 +101,8 @@ sudo yum install -y \
      nodejs-devel-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
+     qt5-qtwebkit-$QT5_WEBKIT_VERSION \
+     qt5-qtwebkit-devel-$QT5_WEBKIT_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
@@ -120,17 +126,14 @@ sudo yum versionlock add \
      nodejs-devel-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
+     qt5-qtwebkit-$QT5_WEBKIT_VERSION \
+     qt5-qtwebkit-devel-$QT5_WEBKIT_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
-    `#################################################################` \
-    `# TODO: Remove this once qt5-qtwebkit is fixed in the EPEL repo #` \
-    `#################################################################` \
-    --skip-broken \
-    `#################################################################` \
     asciidoc \
     autoconf \
     autoconf-archive \
@@ -181,8 +184,6 @@ sudo yum -y install \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
-    qt5-qtwebkit \
-    qt5-qtwebkit-devel \
     redhat-lsb-core \
     swig \
     tex-fonts-hebrew \
