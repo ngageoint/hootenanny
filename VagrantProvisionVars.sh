@@ -19,7 +19,7 @@ export STXXL_VERSION=1.3.1
 
 # TODO: Remove when CentOS 7.7 is released and qt5-qtbase-5.9.7 is available
 #       in the base repository.
-export QT5_WEBKIT_VERSION=5.9.1-1
+export QT5_WEBKIT_VERSION=5.9.1-1.el7
 
 # FGDB 1.5 is required to compile using g++ >= 5.1
 # https://trac.osgeo.org/gdal/wiki/FileGDB#HowtodealwithGCC5.1C11ABIonLinux
