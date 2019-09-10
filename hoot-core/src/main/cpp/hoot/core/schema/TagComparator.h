@@ -93,8 +93,10 @@ public:
    * @param t1 - Tags that are given preference
    * @param t2 - These names/tags get demoted to alt_name
    * @param result Tags w/names merged
+   * @param overwriteExcludeTagKeys TODO
    */
-  void mergeNames(Tags& t1, Tags& t2, Tags& result);
+  void mergeNames(Tags& t1, Tags& t2, Tags& result,
+                  const QStringList& overwriteExcludeTagKeys = QStringList());
 
   /**
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
@@ -123,8 +125,10 @@ public:
    * @param t1 first set of tags to merge
    * @param t2 second set of tags to merge
    * @param result merged tags
+   * @param overwriteExcludeTagKeys TODO
    */
-  void mergeText(Tags& t1, Tags& t2, Tags& result);
+  void mergeText(Tags& t1, Tags& t2, Tags& result,
+                 const QStringList& overwriteExcludeTagKeys = QStringList());
 
   void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
