@@ -44,8 +44,8 @@ class OverwriteTagMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OverwriteTagMergerTest);
   CPPUNIT_TEST(overwriteTest);
-  //CPPUNIT_TEST(overwriteSwapTest);
-  //CPPUNIT_TEST(overwriteExcludeTest);
+  CPPUNIT_TEST(overwriteSwapTest);
+  CPPUNIT_TEST(overwriteExcludeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -176,7 +176,7 @@ public:
     excludeKeys.append("lanes");
     // tag in sec, not in ref
     excludeKeys.append("bridge");
-    //uut.setOverwriteExcludeTagKeys(excludeKeys);
+    uut.setOverwriteExcludeTagKeys(excludeKeys);
 
     Tags t1;
     t1["highway"] = "trunk";
