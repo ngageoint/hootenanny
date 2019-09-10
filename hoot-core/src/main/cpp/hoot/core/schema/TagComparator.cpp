@@ -658,7 +658,9 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
       for (int i = 0; i < values1.size(); i++)
       {
         LOG_VART(values1[i]);
-        if (values1[i].isEmpty() == false)
+        if (values1[i].isEmpty() == false &&
+            (!t2.contains(it1.key()) ||
+             !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
         {
           result.appendValueIfUnique(it1.key(), values1[i]);
           LOG_VART(result);
@@ -667,8 +669,7 @@ void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
       for (int i = 0; i < values2.size(); i++)
       {
         LOG_VART(values2[i]);
-        if (values2[i].isEmpty() == false ||
-            overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity))
+        if (values2[i].isEmpty() == false)
         {
           result.appendValueIfUnique(it1.key(), values2[i]);
           LOG_VART(result);
@@ -768,9 +769,13 @@ void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   for (Tags::ConstIterator it1 = t1.constBegin(); it1 != t1.constEnd(); ++it1)
   {
+    LOG_VART(it1.key());
+    LOG_VART(it1.value());
     LOG_VART(overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity));
+    LOG_VART(result.contains(it1.key()));
     if (it1.value().isEmpty() == false &&
-        !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity))
+        (!result.contains(it1.key()) ||
+         !overwriteExcludeTagKeys.contains(it1.key(), caseSensitivity)))
     {
       result[it1.key()] = it1.value();
     }

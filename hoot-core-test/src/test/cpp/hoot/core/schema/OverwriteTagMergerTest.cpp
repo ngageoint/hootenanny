@@ -52,7 +52,7 @@ public:
 
   void overwriteTest()
   {
-    // overwrite 2
+    // overwrite t2
 
     {
       OverwriteTagMerger uut;
@@ -123,7 +123,7 @@ public:
 
   void overwriteSwapTest()
   {
-    // overwrite 1
+    // overwrite t1
 
     OverwriteTagMerger uut(true);
 
@@ -164,6 +164,8 @@ public:
 
   void overwriteExcludeTest()
   {
+    // overwrite t2; exclude some tags from being overwritten
+
     OverwriteTagMerger uut;
     QStringList excludeKeys;
     // tag w/ inheritance
@@ -204,10 +206,10 @@ public:
     expected["ref"] = "US 24";
     expected["oneway"] = "yes";
     expected["lanes"] = "2";
-    expected["alt_name"] = "24;Midland Expy";
+    expected["alt_name"] = "24";
     expected["name:he"] = QString::fromUtf8("מידלנד המהיר");
     expected["bridge"] = "yes";
-    expected["uuid"] = "foo";
+    expected["uuid"] = "bar";
 
     Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
     CPPUNIT_ASSERT_EQUAL(expected, merged);
