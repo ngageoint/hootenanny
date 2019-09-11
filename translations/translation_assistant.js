@@ -62,11 +62,26 @@ translation_assistant = {
                     } else if (typeof tagValue === 'string') { //attribute is mapped to a static tag
                         tags[tagKey] = tagValue;
                     } else { //attribute value is mapped to a tag value (if tag key and value is not empty string)
-                        if (attrs[key].length > 0 && tagValue[attrs[key]].length > 0) {
-                            if (tags[tagKey] && (tags[tagKey] !== tagValue[attrs[key]])) { //append values to existing tags
-                                tags[tagKey] = tags[tagKey] + ";" + tagValue[attrs[key]];
-                            } else {
-                                tags[tagKey] = tagValue[attrs[key]];
+                        if (attrs[key].length > 0) {
+                            if (tagValue[attrs[key]] && tagValue[attrs[key]].length > 0) {
+                                if (tags[tagKey] && (tags[tagKey] !== tagValue[attrs[key]])) { //append values to existing tags
+                                    tags[tagKey] = tags[tagKey] + ";" + tagValue[attrs[key]];
+                                } else {
+                                    tags[tagKey] = tagValue[attrs[key]];
+                                }
+                            } else { //check if the attribute value is a regular expression and run that
+                                for (var attrReg in tagValue) {
+                                    if (attrReg.startsWith("/") && attrReg.endsWith("/")) {
+                                        var regex = new RegExp(attrReg.substring(1, attrReg.length - 1));
+                                        if (regex.test(attrs[key])) {
+                                            if (tags[tagKey] && (tags[tagKey] !== tagValue[attrReg])) { //append values to existing tags
+                                                tags[tagKey] = tags[tagKey] + ";" + tagValue[attrReg];
+                                            } else {
+                                                tags[tagKey] = tagValue[attrReg];
+                                            }
+                                        }
+                                    }
+                                } 
                             }
                         }
                     }
