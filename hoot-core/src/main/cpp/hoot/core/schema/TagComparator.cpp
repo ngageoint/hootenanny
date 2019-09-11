@@ -59,7 +59,8 @@ struct Entry
   }
 };
 
-TagComparator::TagComparator()
+TagComparator::TagComparator() :
+_caseSensitive(false)
 {
   ConfigOptions opts(conf());
   setCaseSensitive(opts.getDuplicateNameCaseSensitive());
@@ -547,16 +548,21 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
   LOG_DEBUG("Merging names...");
   LOG_VART(t1);
   LOG_VART(t2);
+  LOG_VART(result);
+  LOG_VART(overwriteExcludeTagKeys);
 
   set<QString> altNames, nonAltNames;
   set<QString> toRemove;
   const Qt::CaseSensitivity caseSensitivity =
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  LOG_VART(_caseSensitive);
 
   toRemove.insert("alt_name");
 
   for (Tags::const_iterator it1 = t1.begin(); it1 != t1.end(); ++it1)
   {
+    LOG_VART(it1.key());
+    LOG_VART(it1.value());
     if (it1.key() == "alt_name" && !overwriteExcludeTagKeys.contains("alt_name"))
     {
       QStringList sl = Tags::split(it1.value());
@@ -579,16 +585,20 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
 
   for (Tags::const_iterator it2 = t2.begin(); it2 != t2.end(); ++it2)
   {
+    LOG_VART(it2.key());
+    LOG_VART(it2.value());
     if (it2.key() == "alt_name")
     {
       QStringList sl = Tags::split(it2.value());
       altNames.insert(sl.begin(), sl.end());
     }
-    else if (result.contains(it2.key()) &&
-             result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
+    else if (result.contains(it2.key()))
     {
-      QStringList sl = Tags::split(it2.value());
-      altNames.insert(sl.begin(), sl.end());
+      if (result[it2.key()].compare(it2.value(), caseSensitivity) != 0)
+      {
+        QStringList sl = Tags::split(it2.value());
+        altNames.insert(sl.begin(), sl.end());
+      }
     }
     else if (OsmSchema::getInstance().isAncestor(it2.key(), "abstract_name"))
     {
