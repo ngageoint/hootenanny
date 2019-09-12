@@ -104,7 +104,7 @@ class ImportCommand extends ExternalCommand {
             if (simplifyBuildings) {
                 options.add("ogr2osm.simplify.complex.buildings=true");
             } else if(mergeNearbyNodes) {
-                options.add("ogr2osm.merge.nearby.nodes");
+                options.add("ogr2osm.merge.nearby.nodes=true");
             }
         }
 
