@@ -39,6 +39,7 @@ import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +60,7 @@ class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
-    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
+    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
         super(jobId);
@@ -88,9 +89,23 @@ class ImportCommand extends ExternalCommand {
             //options.add("schema.translation.script=" + translationPath);
         //}
 
-        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
+        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP))
         {
           options.add("schema.translation.script=" + translationPath);
+        }
+
+        if (advUploadOpts != null && (classification == SHP)) {
+
+            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
+
+            final boolean simplifyBuildings = getAdvOpts.stream().anyMatch("SimplifyComplexBuildings"::equalsIgnoreCase);
+            final boolean mergeNearbyNodes  = getAdvOpts.stream().anyMatch("MergeNearbyNodes"::equalsIgnoreCase);
+
+            if (simplifyBuildings) {
+                options.add("ogr2osm.simplify.complex.buildings=true");
+            } else if(mergeNearbyNodes) {
+                options.add("ogr2osm.merge.nearby.nodes");
+            }
         }
 
         List<String> hootOptions = toHootOptions(options);
@@ -100,6 +115,7 @@ class ImportCommand extends ExternalCommand {
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
+        substitutionMap.put("ADV_UPLOAD_OPTS", advUploadOpts);
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 

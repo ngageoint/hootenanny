@@ -33,6 +33,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.controllers.ingest.UploadClassification.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -56,17 +57,19 @@ public class ImportCommandTest {
 
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
+        String advUploadOpts = "SimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
         //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
+        options.add("ogr2osm.simplify.complex.buildings=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("schema.translation.script=" + translation);
 
-        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                                       etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
@@ -83,11 +86,12 @@ public class ImportCommandTest {
         assertEquals(HOOTAPI_DB_URL + "/" + etlName, importCommand.getSubstitutionMap().get("INPUT_NAME"));
 
         isNoneTranslation = true;
-        importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                                           etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
+        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -108,23 +112,25 @@ public class ImportCommandTest {
 
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
+        String advUploadOpts = "SimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
         options.add("schema.translation.script=" + translation);
 
-        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, FGDB, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
+        assertNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -135,7 +141,7 @@ public class ImportCommandTest {
         assertEquals(HOOTAPI_DB_URL + "/" + etlName, importCommand.getSubstitutionMap().get("INPUT_NAME"));
 
         isNoneTranslation = true;
-        importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         assertEquals(jobId, importCommand.getJobId());
@@ -161,22 +167,25 @@ public class ImportCommandTest {
         zips.add(new File("file.zip"));
 
         String translation = "translations/TDSv40.js";
+        String advUploadOpts = "SimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
         List<String> options = new LinkedList<>();
-        options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
-        options.add("hootapi.db.writer.overwrite.map=true");
+        //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
+        options.add("hootapi.db.writer.overwrite.map=true");options.add("ogr2osm.simplify.complex.buildings=true");
+        
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
-        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
+        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -191,11 +200,12 @@ public class ImportCommandTest {
         assertTrue(importCommand.getSubstitutionMap().get("TRANSLATION_PATH").toString().endsWith(translation));
 
         isNoneTranslation = true;
-        importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, ZIP, caller, null);
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
+        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -219,6 +229,7 @@ public class ImportCommandTest {
 
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
+        String advUploadOpts = "SimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
@@ -232,7 +243,7 @@ public class ImportCommandTest {
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
-        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                                           etlName, isNoneTranslation, debugLevel, OSM, caller, null);
 
         assertEquals(hootConvertCommand, importCommand.getCommand());
@@ -264,6 +275,7 @@ public class ImportCommandTest {
 
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
+        String advUploadOpts = "SimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
@@ -277,7 +289,7 @@ public class ImportCommandTest {
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
-        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation,
+        ImportCommand importCommand = new ImportCommand(jobId, workDir, filesToImport, zips, translation, advUploadOpts,
                 etlName, isNoneTranslation, debugLevel, OSM, caller, null);
 
         assertEquals(hootConvertCommand, importCommand.getCommand());
