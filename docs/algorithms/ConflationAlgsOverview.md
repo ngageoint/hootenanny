@@ -1,5 +1,5 @@
 
-# Conflation Algorithms Overview
+# Conflation Algorithms
 
 * **[Area Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#area-to-area-conflation)** ([detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AreaToAreaConflation.asciidoc)) uses a machine learning based approach implemented with [Generic Line Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc) to conflate non-building area polygons (area=yes and derivatives).
 * **[Building Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc#building-conflation)** ([detail](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/BuildingConflation.asciidoc)) uses a machine learning based approach to conflate building polygons.
