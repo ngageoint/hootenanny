@@ -145,6 +145,9 @@ differentialConf=conf/core/DifferentialConflation.conf
 # Horizontal Algorithm Conf
 horizontalConf=conf/core/HorizontalConflation.conf
 
+# Import options
+importOptions=conf/services/importOps.json
+
 # Network Conflation Conf
 networkConf=conf/core/NetworkAlgorithm.conf
 

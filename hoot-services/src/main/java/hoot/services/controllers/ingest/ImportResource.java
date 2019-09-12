@@ -27,6 +27,7 @@
 package hoot.services.controllers.ingest;
 
 import static hoot.services.HootProperties.HOME_FOLDER;
+import static hoot.services.HootProperties.IMPORT_OPTIONS;
 import static hoot.services.HootProperties.UPLOAD_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB_ZIP;
