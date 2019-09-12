@@ -33,9 +33,9 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 Additional feature types can be made conflatable via Javascript by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
 # When To Use
-No automated technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring conflation software options to get the best conflated output. 
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring conflation software options to get the best conflated output. 
 
-For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [tasking manager campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves you effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
+For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
 
 # Scalability
 Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of it supported a map/reduce architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance costs to support the capability (so the conflation algorithms are capable of supporting distributed computing). Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the density of the data being conflated.
@@ -52,12 +52,12 @@ input datasets.
 
 # Feature Filtering
 
-Hootenanny has the capability to let you selectively pick the features that are conflated to save you from some pre-conflation data wrangling. Some examples:
+Hootenanny has the capability to let you selectively pick the features that are conflated from your data to save you from some pre-conflation data wrangling. Some examples:
 * conflate only buildings and leave roads untouched
 * conflate only restaurant buildings
 * conflate only restaurant buildings with "Subway" in the name
 
-Additionally, any of Hootenanny's many filters can specified to perform feature filtering during conflation.
+Additionally, any of Hootenanny's many [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) can specified to perform feature filtering during conflation.
 
 # Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
@@ -161,9 +161,9 @@ In addition to running full conflation on map data, Hootenanny also provides fin
 
 Don't hesitate to ask for help if something isn't conflating how you expect it to. If you have any support questions, please create an issue in this repository.
 
-As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation algorithm.  Hootenanny attempts to capture most scenarios with the default configuration options, but many times you will need to modify options specific to the data you are conflating to get the best results. If you are dealing with fairly large amounts of data then any time spent tweaking configuration options might still be dwarfed by the time you would spend alternatively manually conflating the features in the dataset.
+As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny attempts to capture most scenarios with the default configuration options, but sometimes you will need to modify configuration options specific to the data you are conflating to get the best results.
 
-Additionally, the addition of new conflation features and algorithms to the user interface may lag their initial development by a development cycle or two. If you find a feature you want to use mentioned in the documentation but can't find it in the UI let us know.
+Additionally, the addition of new conflation features to the user interface may lag their initial development by a cycle or two. If you find a conflation feature you want to use mentioned in the documentation but can't find it in the UI, let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
