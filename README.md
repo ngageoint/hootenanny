@@ -49,7 +49,7 @@ Hootenanny has the capability to let you selectively pick the features that are 
 * conflate only restaurant buildings
 * conflate only restaurant buildings with "Subway" in the name
 
-Additionally, any of Hootenanny's many filters can be passed in perform feature filtering during conflation.
+Additionally, any of Hootenanny's many filters can specified to perform feature filtering during conflation.
 
 # Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
