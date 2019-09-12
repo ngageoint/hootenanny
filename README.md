@@ -11,9 +11,11 @@ _Conflation_:
 
 1. Fancy word for merge
 
-[Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain.  In short, it merges multiple maps into a single seamless map.
+[Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain. In short, it merges multiple maps into a single seamless map.
 
 Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.
+
+No automated technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring Hootenanny conflation options to get the best results. For larger datasets you will find that the conflation automation provided by Hootenanny saves you time overall and that most inaccuracies in the conflated output are a small subset of the input data and end up being flagged for human review so they can later be corrected.
 
 # Goals
 * Automatically combine geospatial features for decision making
@@ -151,9 +153,11 @@ In addition to running full conflation on map data, Hootenanny also provides fin
 # Support
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
-As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation algorithm.  Hootenanny attempts to capture most scenarios with the default configuration options, but many times you will need to modify options specific to the data you are conflating to get the best results. Don't hesitate to ask for help if something isn't conflating how you expect it to. 
+Don't hesitate to ask for help if something isn't conflating how you expect it to. If you have any support questions, please create an issue in this repository.
 
-If you have any support questions, please create an issue in this repository.
+As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation algorithm.  Hootenanny attempts to capture most scenarios with the default configuration options, but many times you will need to modify options specific to the data you are conflating to get the best results. If you are dealing with fairly large amounts of data then any time spent tweaking configuration options might still be dwarfed by the time you would spend alternatively manually conflating the features in the dataset.
+
+Additionally, the addition of new conflation features and algorithms to the user interface may lag their initial development by a development cycle or two. If you find a feature you want to use mentioned in the documentation but can't find it in the UI let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
