@@ -268,8 +268,9 @@ review.score.criterion.max/min.threshold will be removed.
 * Data Type: bool
 * Default Value: `false`
 
-If true, building outlines get updated after conflation (complex buildings are merged). TODO: This
-may go away completely, along with building.outline.update.op.remove.building.relations.
+If true, building outlines get updated after conflation (complex buildings are merged). TODO: I
+think will go away completely as part of #3451, along with
+building.outline.update.op.remove.building.relations.
 
 === attribute.score.extractor.use.weight
 
