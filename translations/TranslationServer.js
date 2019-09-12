@@ -6,18 +6,6 @@ to translate feature tags between OSM and supported schemas.
 var http = require('http');
 var url = require('url');
 var serverPort = 8094;
-var availableTrans = {
-    TDSv40: {isavailable: true},
-    TDSv61: {isavailable: true},
-    MGCP: {isavailable: true},
-    GGDMv30: {isavailable: true}
-};
-var availableTranslations = [
-    'TDSv40',
-    'TDSv61',
-    'MGCP',
-    'GGDMv30'
-];
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -37,17 +25,12 @@ if (typeof hoot === 'undefined') {
 var schemaMap = {
     TDSv40: require(HOOT_HOME + '/translations/tds40_full_schema.js'),
     TDSv61: require(HOOT_HOME + '/translations/tds61_full_schema.js'),
+    TDSv70: require(HOOT_HOME + '/translations/tds70_full_schema.js'),
     MGCP: require(HOOT_HOME + '/translations/mgcp_schema.js'),
     GGDMv30: require(HOOT_HOME + '/translations/ggdm30_schema.js')
 };
 
-//Getting osm tags for fcode
-var fcodeLookup = {
-    TDSv40: require(HOOT_HOME + '/translations/etds40_osm.js'),
-    TDSv61: require(HOOT_HOME + '/translations/etds61_osm.js'),
-    MGCP: require(HOOT_HOME + '/translations/emgcp_osm.js'),
-    GGDMv30: require(HOOT_HOME + '/translations/eggdm30_osm.js')
-};
+var availableTranslations = Object.keys(schemaMap);
 
 var translationsMap = {
     toogr: {
@@ -57,6 +40,10 @@ var translationsMap = {
         }),
         TDSv61: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'schema.translation.direction': 'toogr'
+        }),
+        TDSv70: new hoot.SchemaTranslationOp({
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv70.js',
             'schema.translation.direction': 'toogr'
         }),
         MGCP: new hoot.SchemaTranslationOp({
@@ -75,6 +62,10 @@ var translationsMap = {
         }),
         TDSv61: new hoot.SchemaTranslationOp({
             'schema.translation.script': HOOT_HOME + '/translations/TDSv61.js',
+            'schema.translation.direction': 'toosm'
+        }),
+        TDSv70: new hoot.SchemaTranslationOp({
+            'schema.translation.script': HOOT_HOME + '/translations/TDSv70.js',
             'schema.translation.direction': 'toosm'
         }),
         MGCP: new hoot.SchemaTranslationOp({
@@ -247,14 +238,6 @@ var getSupportedGeometries = function(params) {
     }
 }
 
-var getCapabilities = function(params) {
-    if (params.method === 'GET'){
-        return availableTrans;
-    } else {
-        throw new Error('Unsupported method');
-    }
-};
-
 var getTranslations = function(params) {
     if (params.method === 'GET'){
         return availableTranslations;
@@ -372,9 +355,8 @@ var ogr2osm = function(params) {
         return postHandler(params);
     } else if (params.method === 'GET') {
         //Get OSM tags for F_CODE
-        createUuid = hoot.UuidHelper.createUuid;
-        var osm = fcodeLookup[params.translation].toOSM({
-            'Feature Code': params.fcode
+        var osm = translateToOsm.toosm[params.translation].toOSM({
+            'FCODE': params.fcode
         }, '', '');
 
         return osm;
