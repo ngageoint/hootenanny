@@ -22,27 +22,25 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 * Create up-to-date routable transportation networks from multiple sources
 
 # Conflatable Feature Types
-* Area polygons
-* Building polygons
+* Areas
+* Buildings
 * Points of Interest (POIs)
-* Transportation polylines (roads and railways)
-* Utility polylines (power lines)
-* Waterway polylines
+* Power Lines
+* Railways
+* Rivers
+* Roads
 
-Additional feature types can be made conflatable quickly via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
+Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
-# Types of [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc)
-## Default
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both 
+# [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** (default) - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both 
 input datasets.
-## Advanced
-* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to A and few or no changes are made to A's geometry. Use this type of conflation when the first dataset's geometry is superior to a second dataset but the attributes of the second dataset are superior to that of the first dataset.
-* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add what's new_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you only
-want to fill in holes in your dataset with data from another source without modifying the first dataset. Optionally, you can configure to overwrite tags in A from B even when there is feature overlap.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_ - 1) Define a specific region in map A to replace and replace everything in the region with data from map B 2) Or define a specific region in map A to preserve and replace everything around it with data from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
+* **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries. Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
+* **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add new features_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you want to fill in holes in your dataset with data from another source without modifying any data in the first dataset.
+* **[Differential Tag Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add new tags_ - Conflate map A with B where only tags are transferred from B to matching features in A and entire features are added from B to A in areas where B does not overlap with A. This workflow provides a mix of capabilities from both [Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc) and regular [Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc).
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - 1) Define a region in map A and replace data in that region with data in the same region from map B OR 2) Define a region in map A to preserve and replace data outside of it with data in the same region from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
 
-There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) 
-available to customize the conflation workflows.
+There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) available to customize the conflation workflows.
 
 # [Conflation Algorithms](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
 
@@ -55,8 +53,6 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
 Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations).
-
-# [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
 # Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
@@ -97,7 +93,35 @@ new hoot.UnifyingConflator().apply(map)
 hoot.saveMap(map, "output.osm");
 ```
 
-# [Additional Feature Summary](https://github.com/ngageoint/hootenanny/tree/master/docs/user/AdditionalFeatureSummary.md)
+# Additional Features
+
+In addition to running full conflation on map data, Hootenanny also provides finer-grained capabilities:
+* Add [missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features based on their name
+* [Align](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/rubber-sheet.asciidoc) two maps more closely with each other
+* Apply [data transformation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) operations to a map
+* Calculate the [geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
+* [Clean](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc) map data
+* [Compare](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/diff.asciidoc) maps with each other
+* Compute [bounding tiles](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-tiles.asciidoc) based on node density
+* [Convert](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) maps between [different geodata formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
+* [Crop](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) a map to a geospatial extent
+* [Derive](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) large changesets between maps and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) them through the OpenStreetMap API with automatic conflict resolution
+* [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data
+* [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)
+* [Filter](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) a subset of features before conflation based on tag content and schema relationships
+* Gather [statistics](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stats.asciidoc) from a map
+* [Identify](https://github.com/ngageoint/hootenanny/blob/master/docs/user/IdentifyRoadIntersections.asciidoc) road intersections in a map
+* [Locate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LocatePhoneNumbers.asciidoc) phone numbers geographically
+* [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes
+* Plot [node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-plot.asciidoc)
+* [Snap](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) unconnected ways to neighboring ways by type
+* [Process](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc) map postal address data
+* [Replace](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacment.asciidoc) OpenStreetMap data completely within a bounding box
+* [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data
+* [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
+* [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English.
+
+# [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
 # Documentation
 * [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
