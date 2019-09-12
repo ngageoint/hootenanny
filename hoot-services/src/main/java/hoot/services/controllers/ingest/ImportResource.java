@@ -259,19 +259,18 @@ public class ImportResource {
         return Response.ok(results).build();
     }
 
-
     @GET
     @Path("/getoptions")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getoptions() {
+    public Response getOptions() {
         JSONObject template;
         JSONParser parser = new JSONParser();
 
         try (FileReader fileReader = new FileReader(new File(HOME_FOLDER))) {
             template = (JSONObject) parser.parse(fileReader);
         }
-        catch(Exception e) {
-            String msg = "Error getting import options! Cause: " + e.getMessage();
+        catch (Exception e) {
+            String msg = "Error getting import options!  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
