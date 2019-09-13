@@ -101,24 +101,32 @@ class HootTestListener : public CppUnit::TestListener
 {
 public:
 
-  HootTestListener(bool showTestName, double testTimeout = QUICK_WAIT, bool showElapsed = true)
+  HootTestListener(bool showTestName, bool suppressFailureDetail = false,
+                   double testTimeout = QUICK_WAIT, bool showElapsed = true)
     : _success(true),
       _showTestName(showTestName),
+      _suppressFailureDetail(suppressFailureDetail),
       _showElapsed(showElapsed),
       _start(Tgs::Time::getTime()),
       _allStart(_start),
       _testTimeout(testTimeout)
   {
+    //LOG_VARE(_suppressFailureDetail);
   }
 
   virtual void addFailure(const CppUnit::TestFailure& failure)
   {
-    cout << endl << "Failure: " << failure.failedTest()->getName() << endl
-      << "  " << failure.sourceLine().fileName() << "(" << failure.sourceLine().lineNumber() << ") ";
-    CppUnit::Exception* e = failure.thrownException();
-    if (e != NULL && QString::fromStdString(e->message().details()).trimmed() != "")
+    cout << endl << "Failure: " << failure.failedTest()->getName() << endl;
+    //LOG_VARE(_suppressFailureDetail);
+    if (!_suppressFailureDetail)
     {
-      cout << "  " << e->message().details();
+      cout  << "  " << failure.sourceLine().fileName() << "(" <<
+        failure.sourceLine().lineNumber() << ") ";
+      CppUnit::Exception* e = failure.thrownException();
+      if (e != NULL && QString::fromStdString(e->message().details()).trimmed() != "")
+      {
+        cout << "  " << e->message().details();
+      }
     }
     cout.flush();
     _success = false;
@@ -171,6 +179,7 @@ private:
 
   bool _success;
   bool _showTestName;
+  bool _suppressFailureDetail;
   bool _showElapsed;
 
   double _start;
@@ -387,31 +396,34 @@ int main(int argc, char* argv[])
 
   if (argc == 1)
   {
+    // keep this alphabetized
+    // TODO: quick vs quick only?
     cout << argv[0] << " Usage:\n"
-            "--current - Run the 'current' tests.\n"
-            "--quick - Run the quick (unnamed) tests and all above.\n"
-            "--slow - Run the 'slow' tests and all above.\n"
-            "--glacial - Run the 'glacial' tests and all above.\n"
-            "--all - Run all the above tests.\n"
-            "--quick-only - Run the quick (unnamed) tests only.\n"
-            "--slow-only - Run the 'slow' tests only.\n"
-            "--glacial-only - Run the 'glacial' tests only.\n"
-            "--case-only - Run the case tests only.\n"
-            "--single [test name] - Run only the test specified.\n"
+            "--all - Run all the tests.\n"
+            "--all-names - Print the names of all the tests without running them.\n"
+            "--case-only - Run the conflate case tests only.\n"
+            "--current - Run the 'current' level tests.\n"
+            "--debug - Show debug level log messages and above.\n"
+            "--diff - Print a diff when a script test fails.\n"
+            "--error - Show error log level messages and above.\n"
+            "--exclude=[regex] - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
+            "--fatal - Show fatal error log level messages only.\n"
+            "--glacial - Run 'glacial' level tests and below.\n"
+            "--glacial-only - Run the 'glacial' level tests only.\n"
+            "--include=[regex] - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
+            "--info - Show info log level messages and above.\n"
+            "--quick - Run the 'quick' level' tests.\n"
+            "--quick-only - Run the 'quick' level tests only.\n"
             "--names - Show the names of all the tests as they run.\n"
-            "--all-names - Only print the names of all the tests.\n"
-            "--fatal - Show fatal error messages only.\n"
-            "--error - Show error messages and above.\n"
-            "--status - Show status messages and above.\n"
-            "--warn - Show warning messages and above.\n"
-            "--info - Show info messages and above.\n"
-            "--verbose - Show verbose messages and above.\n"
-            "--debug - Show debug messages and above.\n"
-            "--trace - Show trace messages and above.\n"
-            "--diff - Print diff when a script test fails.\n"
-            "--include=[regex] - Include only tests that match the specified regex.\n"
-            "--exclude=[regex] - Exclude tests that match the specified regex.\n"
-            "--parallel [process count] - Run the specified tests in parallel.\n"
+            "--parallel [process count] - Run the specified tests in parallel with the specified number of processes. With no process count specified, all available CPU cores are used to launch processes.\n"
+            "--single [test name] - Run only the test specified.\n"
+            "--slow - Run the 'slow' level tests and above.\n"
+            "--slow-only - Run the 'slow' level tests only.\n"
+            "--status - Show status log level messages and above.\n"
+            "--suppress-failure-detail - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
+            "--trace - Show trace log level messages and above.\n"
+            "--verbose - Show verbose log level messages and above.\n"
+            "--warn - Show warning log level messages and above.\n"
             "\n"
             "See the Hootenanny Developer Guide for more information.\n"
             ;
@@ -430,6 +442,7 @@ int main(int argc, char* argv[])
     {
       args << argv[i];
     }
+    //LOG_VARE(args);
 
     Log::getInstance().setLevel(Log::Warn);
     std::vector<TestPtr> vAllTests;
@@ -451,6 +464,14 @@ int main(int argc, char* argv[])
       return 0;
     }
 
+    bool suppressFailureDetail = false;
+    if (args.contains("--suppress-failure-detail"))
+    {
+      suppressFailureDetail = true;
+      Log::getInstance().setLevel(Log::Error);
+    }
+    //LOG_VARE(suppressFailureDetail);
+
     // Run a single test
     if (args.contains("--single"))
     {
@@ -461,7 +482,7 @@ int main(int argc, char* argv[])
       }
       QString testName = args[i];
 
-      listener.reset(new HootTestListener(false, -1));
+      listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
       populateTests(ALL, vAllTests, printDiff);
@@ -482,7 +503,7 @@ int main(int argc, char* argv[])
       if (i < args.size())
         slowTest = args[i].toDouble();
 
-      listener.reset(new HootTestListener(false, slowTest, false));
+      listener.reset(new HootTestListener(false, suppressFailureDetail, slowTest, false));
       if (args.contains("--names"))
         listener->showTestNames(true);
       result.addListener(listener.get());
@@ -511,43 +532,43 @@ int main(int argc, char* argv[])
     {
       if (args.contains("--current"))
       {
-        listener.reset(new HootTestListener(true));
+        listener.reset(new HootTestListener(true, suppressFailureDetail));
         Log::getInstance().setLevel(Log::Info);
         populateTests(CURRENT, vAllTests, printDiff);
       }
       else if (args.contains("--quick"))
       {
-        listener.reset(new HootTestListener(false, QUICK_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, QUICK_WAIT));
         populateTests(QUICK, vAllTests, printDiff);
       }
       else if (args.contains("--quick-only"))
       {
-        listener.reset(new HootTestListener(false, QUICK_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, QUICK_WAIT));
         populateTests(QUICK_ONLY, vAllTests, printDiff);
       }
       else if (args.contains("--slow"))
       {
-        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
         populateTests(SLOW, vAllTests, printDiff);
       }
       else if (args.contains("--slow-only"))
       {
-        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
         populateTests(SLOW_ONLY, vAllTests, printDiff);
       }
       else if (args.contains("--all") || args.contains("--glacial"))
       {
-        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, GLACIAL_WAIT));
         populateTests(GLACIAL, vAllTests, printDiff);
       }
       else if (args.contains("--glacial-only"))
       {
-        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, GLACIAL_WAIT));
         populateTests(GLACIAL_ONLY, vAllTests, printDiff);
       }
       else if (args.contains("--case-only"))
       {
-        listener.reset(new HootTestListener(false, SLOW_WAIT));
+        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
         populateTests(CASE_ONLY, vAllTests, printDiff);
       }
 
@@ -605,6 +626,7 @@ int main(int argc, char* argv[])
       }
       ProcessPool pool(nproc, listener->getTestTimeout(),
                        (bool)args.contains("--names"),
+                       (bool)args.contains("--suppress-failure-detail"),
                        (bool)args.contains("--diff"));
 
       //  Get the names of all of the tests to run

@@ -73,12 +73,14 @@ void JobQueue::push(const QString& job)
 }
 
 ProcessThread::ProcessThread(bool showTestName,
+                             bool suppressFailureDetail,
                              bool printDiff,
                              double waitTime,
                              QMutex* outMutex,
                              JobQueue* parallelJobs,
                              JobQueue* serialJobs)
   : _showTestName(showTestName),
+    _suppressFailureDetail(suppressFailureDetail),
     _printDiff(printDiff),
     _waitTime(waitTime),
     _outMutex(outMutex),
@@ -110,8 +112,9 @@ QProcess* ProcessThread::createProcess()
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   proc->setProcessEnvironment(env);
   QString names = (_showTestName ? "--names" : "");
+  QString suppressFailureDetail = (_suppressFailureDetail ? "--suppress-failure-detail" : "");
   QString diff = (_printDiff ? "--diff" : "");
-  proc->start(QString("HootTest %1 %2 --listen %3").arg(names).arg(diff).arg((int)_waitTime));
+  proc->start(QString("HootTest %1 %2 %3 --listen %4").arg(names).arg(suppressFailureDetail).arg(diff).arg((int)_waitTime));
   return proc;
 }
 
@@ -212,7 +215,7 @@ void ProcessThread::processJobs(JobQueue* queue)
 }
 
 ProcessPool::ProcessPool(int nproc, double waitTime,
-                         bool showTestName, bool printDiff)
+                         bool showTestName, bool suppressFailureDetail, bool printDiff)
   : _failed(0)
 {
   for (int i = 0; i < nproc; ++i)
@@ -220,6 +223,7 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
     //  First process gets the serial jobs
     JobQueue* serial = (i == 0) ? &_serialJobs : NULL;
     ProcessThreadPtr thread(new ProcessThread(showTestName,
+                                              suppressFailureDetail,
                                               printDiff,
                                               waitTime, &_mutex,
                                               &_parallelJobs,
