@@ -17,9 +17,9 @@ hoot delete-db-map $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTes
 wait
 ###
 # I've run into strange situations where it seems like the whole files isn't being converted.
-# It almost looks like the transaction isn't fully committed when the conflat op runs. I can't
+# It almost looks like the transaction isn't fully committed when the conflate op runs. I can't
 # reproduce it reliably, but I would like to fix it if I can get more info. -JRS
-# I think this is fixed by #3588, but can't really prove a negative. -JRS
+# UPDATE: I think this is fixed by redmine #3588, but can't really prove a negative. -JRS
 ##
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesA.osm "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
 hoot convert $HOOT_OPTS test-files/conflate/unified/AllDataTypesB.osm "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
