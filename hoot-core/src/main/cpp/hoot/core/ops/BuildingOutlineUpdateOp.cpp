@@ -287,6 +287,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     }
   }
 
+  LOG_VART(outline->isEmpty());
   if (!outline->isEmpty())
   {
     LOG_TRACE("Creating building outline element...");
@@ -294,6 +295,13 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
     const std::shared_ptr<Element> pOutlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
+    // TODO: hack
+    if (pOutlineElement->getTags()["area"] == "yes")
+    {
+      pOutlineElement->getTags().remove("area");
+      pOutlineElement->getTags()["building"] = "yes";
+    }
+    LOG_VART(pOutlineElement);
     _mergeNodes(pOutlineElement, pBuilding);
 
     if (_removeBuildingRelations)
@@ -376,6 +384,7 @@ void BuildingOutlineUpdateOp::_updateMultipolyWayMembers(
       }
     }
   }
+  LOG_VART(pOutlineWay);
 }
 
 void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed,

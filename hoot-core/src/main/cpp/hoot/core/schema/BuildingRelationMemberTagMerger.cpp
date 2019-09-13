@@ -87,10 +87,10 @@ Tags BuildingRelationMemberTagMerger::mergeTags(
   for (Tags::const_iterator it = constituentBuildingTags.begin();
        it != constituentBuildingTags.end(); ++it)
   {
-    // ignore specified keys
+    // ignore any specified ignore keys
     if (_ignoreTagKeys.find(it.key()) == _ignoreTagKeys.end())
     {
-      // if the tag isn't already in the relation
+      // If the tag isn't already in the relation, add it.
       if (mergedTags.contains(it.key()) == false)
       {
         mergedTags[it.key()] = it.value();

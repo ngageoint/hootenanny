@@ -101,6 +101,7 @@
         <nd ref="-90"/>
         <nd ref="-89"/>
         <nd ref="-93"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -111,6 +112,7 @@
         <nd ref="-85"/>
         <nd ref="-89"/>
         <nd ref="-90"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -120,6 +122,7 @@
         <nd ref="-85"/>
         <nd ref="-89"/>
         <nd ref="-93"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -131,6 +134,7 @@
         <nd ref="-82"/>
         <nd ref="-55"/>
         <nd ref="-83"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -139,6 +143,7 @@
         <nd ref="-78"/>
         <nd ref="-77"/>
         <nd ref="-80"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -148,6 +153,7 @@
         <nd ref="-74"/>
         <nd ref="-80"/>
         <nd ref="-77"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -175,6 +181,7 @@
         <nd ref="-63"/>
         <nd ref="-71"/>
         <nd ref="-65"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -200,6 +207,7 @@
         <nd ref="-46"/>
         <nd ref="-50"/>
         <nd ref="-54"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -209,6 +217,7 @@
         <nd ref="-47"/>
         <nd ref="-46"/>
         <nd ref="-50"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -217,6 +226,7 @@
         <nd ref="-45"/>
         <nd ref="-44"/>
         <nd ref="-50"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -268,6 +278,7 @@
         <nd ref="-26"/>
         <nd ref="-25"/>
         <nd ref="-27"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -276,6 +287,7 @@
         <nd ref="-22"/>
         <nd ref="-21"/>
         <nd ref="-24"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -402,6 +414,7 @@
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-19" role="outer"/>
         <member type="way" ref="-18" role="inner"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
         <tag k="type" v="multipolygon"/>
     </relation>

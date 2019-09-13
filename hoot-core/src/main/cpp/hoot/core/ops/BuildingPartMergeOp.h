@@ -89,6 +89,9 @@ namespace hoot
  * part level, and not at the building level, because a single building relation may have far more
  * building parts than others, which would cause an imbalance with paralleization made at the
  * building level.
+ *
+ * TODO: Should this class be renamed since it merges not only building:part now but also multipoly
+ * buildings? Or should we change it only to merge building:part features (if that's possible)?
  */
 class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
   public Configurable

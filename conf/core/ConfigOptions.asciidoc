@@ -266,7 +266,7 @@ review.score.criterion.max/min.threshold will be removed.
 === attribute.conflation.update.building.outlines
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, building outlines get updated after conflation (complex buildings are merged). TODO: I
 think will go away completely as part of #3451, along with

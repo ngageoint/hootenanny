@@ -379,7 +379,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
       {
         RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
 
-        // TODO: should this also be handling buildings that are multipoly relations?
+        // TODO: should this also be handling input buildings that are multipoly relations?
 
         if (r->getType() == MetadataTags::RelationBuilding())
         {
@@ -510,7 +510,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     }
     else
     {
-      // TODO: is role=outer right here?
+      // TODO: is role=outer correct here?
       parentRelation->addElement(MetadataTags::RoleOuter(), constituentBuilding);
     }
     relationTags =
@@ -520,7 +520,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   }
   if (!parentRelation->getTags().contains("building"))
   {
-   parentRelation->getTags()["building"] = "yes";
+    parentRelation->getTags()["building"] = "yes";
   }
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
@@ -531,7 +531,10 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     for (size_t i = 0; i < constituentBuildings.size(); i++)
     {
       ElementPtr constituentBuilding = constituentBuildings[i];
-      if (constituentBuilding->getTags().contains(it.key()))
+      // TODO: leave building=* on the relation member, right?; remove status here since it will
+      // be on the parent relation as conflated?
+      if (it.key() != "building" &&
+          (constituentBuilding->getTags().contains(it.key()) || it.key() == MetadataTags::HootStatus()))
       {
         constituentBuilding->getTags().remove(it.key());
       }
