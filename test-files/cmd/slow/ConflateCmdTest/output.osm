@@ -252,8 +252,6 @@
         <nd ref="-1560009"/>
         <nd ref="-1560008"/>
         <tag k="area" v="yes"/>
-        <tag k="name" v="Maid-Rite"/>
-        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1560080" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -319,7 +317,7 @@
         <nd ref="-1560017"/>
         <nd ref="-1560007"/>
         <nd ref="-1560008"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559916" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1560002"/>
@@ -332,7 +330,7 @@
         <nd ref="-1560009"/>
         <nd ref="-1560010"/>
         <nd ref="-1560002"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559915" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559991"/>
@@ -346,6 +344,7 @@
         <nd ref="-1559991"/>
         <tag k="name" v="Best Buy"/>
         <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559905" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559866"/>
@@ -353,6 +352,7 @@
         <nd ref="-1559871"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="3"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559705" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559685"/>
@@ -367,6 +367,7 @@
         <tag k="building" v="yes"/>
         <tag k="REF1" v="Cheddar's"/>
         <tag k="REF2" v="Cheddar's"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559703" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559677"/>
@@ -378,6 +379,7 @@
         <tag k="building" v="yes"/>
         <tag k="REF1" v="Biondi"/>
         <tag k="REF2" v="Biondi"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559701" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559669"/>
@@ -390,6 +392,7 @@
         <tag k="name" v="Freddy's"/>
         <tag k="building" v="yes"/>
         <tag k="REF1" v="Freddy's"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559699" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559657"/>
@@ -431,6 +434,7 @@
         <tag k="building" v="yes"/>
         <tag k="REF1" v="Target"/>
         <tag k="REF2" v="Target"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559697" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559633"/>
@@ -442,6 +446,7 @@
         <tag k="name" v="Convoluted Example"/>
         <tag k="building" v="yes"/>
         <tag k="REF1" v="Convoluted No Match 1"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559695" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559625"/>
@@ -452,6 +457,7 @@
         <tag k="name" v="Bad Pair"/>
         <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559693" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559617"/>
@@ -462,6 +468,7 @@
         <tag k="name" v="Bad Pair"/>
         <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559691" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559609"/>
@@ -472,6 +479,7 @@
         <tag k="name" v="Bad Pair"/>
         <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1559689" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1559601"/>
@@ -482,18 +490,19 @@
         <tag k="name" v="Bad Pair"/>
         <tag k="building" v="yes"/>
         <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-1559917" role="part"/>
-        <member type="way" ref="-1559916" role="part"/>
-        <member type="way" ref="-1560104" role="outline"/>
+        <member type="way" ref="-1559917" role="outer"/>
+        <member type="way" ref="-1559916" role="outer"/>
         <tag k="name" v="Maid-Rite"/>
         <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="building" v="yes"/>
         <tag k="REF1" v="Panera"/>
         <tag k="REF2" v="Panera"/>
-        <tag k="type" v="building"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1559815" role="reviewee"/>

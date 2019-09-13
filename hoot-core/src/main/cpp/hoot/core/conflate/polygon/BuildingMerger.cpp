@@ -510,6 +510,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     }
     else
     {
+      // TODO: is role=outer right here?
       parentRelation->addElement(MetadataTags::RoleOuter(), constituentBuilding);
     }
     relationTags =
