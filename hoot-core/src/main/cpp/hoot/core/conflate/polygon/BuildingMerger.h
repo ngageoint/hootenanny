@@ -81,6 +81,18 @@ public:
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
 
+  /**
+   * TODO
+   *
+   * @param map the map to add the relation containing the buildings to
+   * @param constituentBuildings the buildings to add to the relation
+   * @param preserveTypes
+   * @return a relation
+   */
+  static RelationPtr combineConstituentBuildingsIntoRelation(
+    const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
+    const bool preserveTypes = false);
+
   virtual QString getDescription() const { return "Merges buildings"; }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)

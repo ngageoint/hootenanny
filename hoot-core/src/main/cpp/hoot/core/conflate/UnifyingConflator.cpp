@@ -300,12 +300,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     replaced.clear();
 
     // Enabling this may result in a lot of files being generated.
-//    if (i % 10 == 0)
-//    {
-//      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
-//    }
+    OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
   }
-  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
+  //OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   size_t mergerCount = _mergers.size();

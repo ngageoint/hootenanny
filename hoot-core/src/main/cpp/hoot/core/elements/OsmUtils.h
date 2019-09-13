@@ -405,6 +405,46 @@ public:
    * @return true if the map is made up of non-way node points only; false otherwise
    */
   static bool mapIsPointsOnly(const OsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param tagKeys
+   * @param elements
+   * @return
+   */
+  static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::vector<ElementPtr>& elements);
+
+  /**
+   * TODO
+   *
+   * @param kvp
+   * @param elements
+   * @return
+   */
+  static bool allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::vector<ElementPtr>& elements);
+
+  /**
+   * TODO
+   *
+   * @param tagKeys
+   * @param elements
+   * @return
+   */
+  static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::vector<ElementPtr>& elements);
+
+  /**
+   * TODO
+   *
+   * @param kvps
+   * @param elements
+   * @return
+   */
+  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::vector<ElementPtr>& elements);
 };
 
 }

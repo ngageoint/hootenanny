@@ -48,6 +48,14 @@ public:
   TagMerger() {}
   virtual ~TagMerger() {}
 
+  /**
+   * TODO
+   *
+   * @param t1
+   * @param t2
+   * @param et
+   * @return
+   */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 };
 

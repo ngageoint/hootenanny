@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/OverwriteTagMerger.h>
@@ -46,6 +45,9 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
 
 using namespace std;
 
@@ -294,7 +296,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
     scrap->getTags().clear();
 
-    // delete any multipoly members
+    // delete any pre-existing multipoly members
     LOG_TRACE("Removing multi-poly members: " << multiPolyMemberIds);
     for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
          it != multiPolyMemberIds.end(); ++it)
@@ -365,16 +367,20 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
   {
     LOG_VART(preserveTypes);
 
-    vector<std::shared_ptr<Element>> parts;
+    vector<std::shared_ptr<Element>> constituentBuildings;
     vector<ElementId> toRemove;
-    parts.reserve(eid.size());
+    constituentBuildings.reserve(eid.size());
     for (set<ElementId>::const_iterator it = eid.begin(); it != eid.end(); ++it)
     {
       std::shared_ptr<Element> e = map->getElement(*it);
+      LOG_VART(e);
       bool isBuilding = false;
       if (e && e->getElementType() == ElementType::Relation)
       {
         RelationPtr r = std::dynamic_pointer_cast<Relation>(e);
+
+        // TODO: should this also be handling buildings that are multipoly relations?
+
         if (r->getType() == MetadataTags::RelationBuilding())
         {
           LOG_VART(r);
@@ -396,7 +402,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
                 OverwriteTagMerger().mergeTags(
                   buildingPart->getTags(), r->getTags(), buildingPart->getElementType()));
               LOG_TRACE("Building part after tag update: " << buildingPart);
-              parts.push_back(buildingPart);
+              constituentBuildings.push_back(buildingPart);
             }
           }
 
@@ -407,19 +413,18 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
       if (!isBuilding)
       {
         OsmUtils::logElementDetail(e, map, Log::Trace, "BuildingMerger: Non-building part");
-        parts.push_back(e);
+        constituentBuildings.push_back(e);
       }
     }
-    LOG_VART(parts.size());
-    LOG_VART(parts);
+    LOG_VART(constituentBuildings.size());
+    LOG_VART(constituentBuildings);
     LOG_VART(toRemove.size());
     LOG_VART(toRemove);
 
     std::shared_ptr<Element> result =
-      BuildingPartMergeOp(preserveTypes).combineBuildingParts(map, parts);
+      combineConstituentBuildingsIntoRelation(map, constituentBuildings, preserveTypes);
     LOG_TRACE("Combined building parts into: " << result);
 
-    // likely create a crit that only matches buildings and building parts and pass that
     DeletableBuildingCriterion crit;
     for (size_t i = 0; i < toRemove.size(); i++)
     {
@@ -435,6 +440,123 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
 
     return result;
   }
+}
+
+RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
+  const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings, const bool preserveTypes)
+{
+  if (constituentBuildings.size() == 0)
+  {
+    throw IllegalArgumentException("No constituent buildings passed to building merger.");
+  }
+
+  // This is primarily in place to support testable output.
+  InMemoryElementSorter::sort(constituentBuildings);
+
+  QStringList threeDBuildingKeys;
+  threeDBuildingKeys.append(MetadataTags::BuildingLevels());
+  threeDBuildingKeys.append(MetadataTags::BuildingHeight());
+  // Just looking for any key that denotes multi-level buildings. Not handling the situation where
+  // a non-3D building is merging with a 3D building...not exactly sure what to do there...create
+  // both a multipoly and building relation. No point in worrying about it until its seen in the
+  // wild.
+  const bool allAreBuildingParts =
+    OsmUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
+  if (!allAreBuildingParts &&
+      OsmUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
+  {
+    LOG_WARN(
+      "Merging building group where some buildings have 3D tags and others do not. A " <<
+      "multipolygon relation will be created instead of a building relation.")
+  }
+
+  // put the building parts into a relation
+  QString relationType = MetadataTags::RelationMultiPolygon();
+  if (allAreBuildingParts)
+  {
+    relationType = MetadataTags::RelationBuilding();
+  }
+  RelationPtr parentRelation(
+    new Relation(
+      constituentBuildings[0]->getStatus(), map->createNextRelationId(),
+      WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType));
+
+  TagMergerPtr tagMerger;
+  LOG_VARD(preserveTypes);
+  std::set<QString> overwriteExcludeTags;
+  if (allAreBuildingParts)
+  {
+    // exclude building part type tags from the type tag preservation by passing them in to be
+    // skipped
+    overwriteExcludeTags = BuildingRelationMemberTagMerger::getBuildingPartTagNames();
+  }
+  if (!preserveTypes)
+  {
+    tagMerger.reset(new BuildingRelationMemberTagMerger(overwriteExcludeTags));
+  }
+  else
+  {
+    tagMerger.reset(new PreserveTypesTagMerger(overwriteExcludeTags));
+  }
+
+  Tags& relationTags = parentRelation->getTags();
+  LOG_TRACE("Parent relation starting tags:" << relationTags);
+  for (size_t i = 0; i < constituentBuildings.size(); i++)
+  {
+    ElementPtr constituentBuilding = constituentBuildings[i];
+    if (allAreBuildingParts)
+    {
+      parentRelation->addElement(MetadataTags::RolePart(), constituentBuilding);
+    }
+    else
+    {
+      parentRelation->addElement(MetadataTags::RoleOuter(), constituentBuilding);
+    }
+    relationTags =
+      tagMerger->mergeTags(
+        parentRelation->getTags(), constituentBuilding->getTags(), ElementType::Relation);
+    parentRelation->setTags(relationTags);
+  }
+  if (!parentRelation->getTags().contains("building"))
+  {
+   parentRelation->getTags()["building"] = "yes";
+  }
+  relationTags = parentRelation->getTags();
+  LOG_VART(relationTags);
+
+  for (Tags::const_iterator it = relationTags.begin(); it != relationTags.end(); ++it)
+  {
+    // Remove any tags in the parent relation from each of the constituent buildings.
+    for (size_t i = 0; i < constituentBuildings.size(); i++)
+    {
+      ElementPtr constituentBuilding = constituentBuildings[i];
+      if (constituentBuilding->getTags().contains(it.key()))
+      {
+        constituentBuilding->getTags().remove(it.key());
+      }
+    }
+  }
+
+  if (allAreBuildingParts)
+  {
+    // Replace the building tag with building:part tags.
+    for (size_t i = 0; i < constituentBuildings.size(); i++)
+    {
+      ElementPtr constituentBuilding = constituentBuildings[i];
+      constituentBuilding->getTags().remove("building");
+      constituentBuilding->getTags()[MetadataTags::BuildingPart()] = "yes";
+    }
+  }
+
+  LOG_VART(parentRelation);
+  for (size_t i = 0; i < constituentBuildings.size(); i++)
+  {
+    LOG_VART(constituentBuildings[i]);
+  }
+
+  map->addRelation(parentRelation);
+
+  return parentRelation;
 }
 
 std::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
