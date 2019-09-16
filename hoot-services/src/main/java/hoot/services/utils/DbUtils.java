@@ -248,18 +248,15 @@ public class DbUtils {
         return sql.fetchFirst();
     }
 
-    public static void setFolderMapping(Long mapId, Long folderId) {
-        Long newId = createQuery()
-            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-            .from()
-            .fetchOne();
+    public static List<Long> getChildrenFolders(Long folderId) {
+        List<Long> childrenFolders = createQuery()
+                .select(folders.id)
+                .from(folders)
+                .where(folders.parentId.eq(folderId))
+                .fetch();
 
-        createQuery()
-            .insert(folderMapMappings)
-            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-            .values(newId, mapId, folderId).execute();
+        return childrenFolders;
     }
-
 
     /**
      * Sets the parent directory for the specified folder

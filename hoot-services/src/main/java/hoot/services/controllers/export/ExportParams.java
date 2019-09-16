@@ -79,6 +79,8 @@ public class ExportParams {
     @JsonProperty("PIXEL_SIZE")
     private double pixelSize = -1.0;
 
+    private String outputPath;
+
     public String getOutputType() {
         return outputType;
     }
@@ -197,6 +199,14 @@ public class ExportParams {
 
     public Boolean getHoot2() {
         return hoot2;
+    }
+
+    public String getOutputPath() {
+        return outputPath;
+    }
+
+    public void setOutputPath(String outputPath) {
+        this.outputPath = outputPath;
     }
 
     @Override
