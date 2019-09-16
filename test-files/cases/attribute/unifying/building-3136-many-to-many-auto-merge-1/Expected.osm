@@ -85,42 +85,6 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0776892799799995" lon="-69.3409668293899983">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1"/>
-        <nd ref="-2"/>
-        <nd ref="-3"/>
-        <nd ref="-4"/>
-        <nd ref="-1"/>
-        <tag k="hoot:status" v="3"/>
-    </way>
-    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5"/>
-        <nd ref="-6"/>
-        <nd ref="-7"/>
-        <nd ref="-8"/>
-        <nd ref="-9"/>
-        <nd ref="-10"/>
-        <nd ref="-11"/>
-        <nd ref="-12"/>
-        <nd ref="-13"/>
-        <nd ref="-14"/>
-        <nd ref="-15"/>
-        <nd ref="-16"/>
-        <nd ref="-17"/>
-        <nd ref="-18"/>
-        <nd ref="-19"/>
-        <nd ref="-20"/>
-        <nd ref="-21"/>
-        <nd ref="-22"/>
-        <nd ref="-23"/>
-        <nd ref="-24"/>
-        <nd ref="-25"/>
-        <nd ref="-26"/>
-        <nd ref="-27"/>
-        <nd ref="-28"/>
-        <nd ref="-5"/>
-        <tag k="hoot:status" v="3"/>
-    </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
@@ -159,12 +123,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="building" v="yes"/>
     </way>
-    <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3" role="outer"/>
-        <member type="way" ref="-4" role="outer"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="type" v="multipolygon"/>
-    </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2" role="outer"/>
         <member type="way" ref="-1" role="outer"/>
