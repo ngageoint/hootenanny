@@ -461,8 +461,8 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   threeDBuildingKeys.append("ele");
   // Just looking for any key that denotes multi-level buildings. Not handling the situation where
   // a non-3D building is merging with a 3D building...not exactly sure what to do there...create
-  // both a multipoly and building relation. No point in worrying about it until its seen in the
-  // wild.
+  // both a multipoly and building relation (even though it wouldn't be valid)? No point in worrying
+  // about it until its seen in the wild.
   const bool allAreBuildingParts =
     OsmUtils::allElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings);
   if (!allAreBuildingParts &&
@@ -537,7 +537,8 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       // TODO: leave building=* on the relation member, right?; remove status here since it will
       // be on the parent relation as conflated?
       if (it.key() != "building" &&
-          (constituentBuilding->getTags().contains(it.key()) || it.key() == MetadataTags::HootStatus()))
+          (constituentBuilding->getTags().contains(it.key()) ||
+           it.key() == MetadataTags::HootStatus()))
       {
         constituentBuilding->getTags().remove(it.key());
       }

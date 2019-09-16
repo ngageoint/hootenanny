@@ -587,7 +587,7 @@
         <nd ref="-190"/>
         <nd ref="-193"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-71" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-189"/>
@@ -597,7 +597,7 @@
         <nd ref="-185"/>
         <nd ref="-189"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-70" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-184"/>
@@ -606,7 +606,7 @@
         <nd ref="-189"/>
         <nd ref="-184"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-69" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-182"/>
@@ -615,7 +615,7 @@
         <nd ref="-184"/>
         <nd ref="-182"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-68" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-180"/>
@@ -624,7 +624,7 @@
         <nd ref="-182"/>
         <nd ref="-180"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-67" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-178"/>
@@ -633,7 +633,7 @@
         <nd ref="-180"/>
         <nd ref="-178"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-66" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-176"/>
@@ -642,7 +642,7 @@
         <nd ref="-178"/>
         <nd ref="-176"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-65" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-174"/>
@@ -651,7 +651,7 @@
         <nd ref="-176"/>
         <nd ref="-174"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-64" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-172"/>
@@ -660,7 +660,7 @@
         <nd ref="-174"/>
         <nd ref="-172"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-63" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-171"/>
@@ -669,7 +669,7 @@
         <nd ref="-169"/>
         <nd ref="-171"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-62" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-168"/>
@@ -678,7 +678,7 @@
         <nd ref="-165"/>
         <nd ref="-168"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-61" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-164"/>
@@ -687,7 +687,7 @@
         <nd ref="-161"/>
         <nd ref="-164"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-60" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-160"/>
@@ -696,7 +696,7 @@
         <nd ref="-157"/>
         <nd ref="-160"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-59" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-156"/>
@@ -707,7 +707,7 @@
         <nd ref="-151"/>
         <nd ref="-156"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-58" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-150"/>
@@ -716,7 +716,7 @@
         <nd ref="-147"/>
         <nd ref="-150"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-57" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-146"/>
@@ -725,7 +725,7 @@
         <nd ref="-143"/>
         <nd ref="-146"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-56" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-142"/>
@@ -734,7 +734,7 @@
         <nd ref="-146"/>
         <nd ref="-142"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-55" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-140"/>
@@ -743,7 +743,7 @@
         <nd ref="-142"/>
         <nd ref="-140"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-54" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-138"/>
@@ -752,7 +752,7 @@
         <nd ref="-140"/>
         <nd ref="-138"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-53" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-149"/>
@@ -761,7 +761,7 @@
         <nd ref="-138"/>
         <nd ref="-149"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-52" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-136"/>
@@ -770,7 +770,7 @@
         <nd ref="-164"/>
         <nd ref="-136"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-51" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-133"/>
@@ -779,7 +779,7 @@
         <nd ref="-136"/>
         <nd ref="-133"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-50" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-131"/>
@@ -788,7 +788,7 @@
         <nd ref="-133"/>
         <nd ref="-131"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-49" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-129"/>
@@ -797,7 +797,7 @@
         <nd ref="-127"/>
         <nd ref="-129"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-48" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-126"/>
@@ -806,7 +806,7 @@
         <nd ref="-129"/>
         <nd ref="-126"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-47" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-124"/>
@@ -815,7 +815,7 @@
         <nd ref="-126"/>
         <nd ref="-124"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-46" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-123"/>
@@ -824,7 +824,7 @@
         <nd ref="-121"/>
         <nd ref="-123"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-45" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-120"/>
@@ -835,7 +835,7 @@
         <nd ref="-117"/>
         <nd ref="-120"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-44" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-116"/>
@@ -844,7 +844,7 @@
         <nd ref="-113"/>
         <nd ref="-116"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-43" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-112"/>
@@ -853,7 +853,7 @@
         <nd ref="-111"/>
         <nd ref="-112"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-42" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-119"/>
@@ -864,10 +864,10 @@
         <nd ref="-119"/>
         <tag k="feature_area" v="410.6"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="14.3"/>
         <tag k="angle" v="162.2"/>
         <tag k="length" v="30.4"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-41" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-109"/>
@@ -877,10 +877,10 @@
         <nd ref="-109"/>
         <tag k="feature_area" v="344.8"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="16.9"/>
         <tag k="angle" v="173.1"/>
         <tag k="length" v="20.5"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-40" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-107"/>
@@ -890,10 +890,10 @@
         <nd ref="-107"/>
         <tag k="feature_area" v="248.7"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="15.5"/>
         <tag k="angle" v="173.1"/>
         <tag k="length" v="16.2"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-39" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-103"/>
@@ -904,10 +904,10 @@
         <nd ref="-103"/>
         <tag k="feature_area" v="313.9"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="15.4"/>
         <tag k="angle" v="353.1"/>
         <tag k="length" v="20.5"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-38" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-104"/>
@@ -917,10 +917,10 @@
         <nd ref="-104"/>
         <tag k="feature_area" v="243.9"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="13.3"/>
         <tag k="angle" v="263.0"/>
         <tag k="length" v="18.4"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-37" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-106"/>
@@ -930,10 +930,10 @@
         <nd ref="-106"/>
         <tag k="feature_area" v="174.1"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="10.8"/>
         <tag k="angle" v="173.1"/>
         <tag k="length" v="16.1"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-36" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-97"/>
@@ -944,7 +944,7 @@
         <nd ref="-92"/>
         <nd ref="-97"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-35" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-91"/>
@@ -953,7 +953,7 @@
         <nd ref="-88"/>
         <nd ref="-91"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-34" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-87"/>
@@ -964,7 +964,7 @@
         <nd ref="-82"/>
         <nd ref="-87"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-33" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-96"/>
@@ -973,7 +973,7 @@
         <nd ref="-80"/>
         <nd ref="-96"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-32" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-79"/>
@@ -982,7 +982,7 @@
         <nd ref="-76"/>
         <nd ref="-79"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-31" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-75"/>
@@ -991,7 +991,7 @@
         <nd ref="-72"/>
         <nd ref="-75"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-30" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-78"/>
@@ -1000,7 +1000,7 @@
         <nd ref="-75"/>
         <nd ref="-78"/>
         <tag k="hoot:status" v="1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-29" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-71"/>
@@ -1009,8 +1009,8 @@
         <nd ref="-68"/>
         <nd ref="-71"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="18.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-28" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-67"/>
@@ -1021,9 +1021,9 @@
         <nd ref="-67"/>
         <tag k="feature_area" v="312.8"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="15.8"/>
         <tag k="length" v="19.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-27" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-190"/>
@@ -1032,8 +1032,8 @@
         <nd ref="-71"/>
         <nd ref="-190"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="15.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-26" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-62"/>
@@ -1042,8 +1042,8 @@
         <nd ref="-193"/>
         <nd ref="-62"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="16.6"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-25" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-60"/>
@@ -1052,8 +1052,8 @@
         <nd ref="-62"/>
         <nd ref="-60"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="16.3"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-24" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-58"/>
@@ -1062,8 +1062,8 @@
         <nd ref="-60"/>
         <nd ref="-58"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="18.0"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-23" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-56"/>
@@ -1072,8 +1072,8 @@
         <nd ref="-54"/>
         <nd ref="-56"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="19.3"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-22" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-53"/>
@@ -1082,8 +1082,8 @@
         <nd ref="-50"/>
         <nd ref="-53"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="19.0"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-21" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-49"/>
@@ -1093,8 +1093,8 @@
         <nd ref="-47"/>
         <nd ref="-49"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="19.3"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-20" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-46"/>
@@ -1103,8 +1103,8 @@
         <nd ref="-49"/>
         <nd ref="-46"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="15.3"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-19" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-45"/>
@@ -1113,8 +1113,8 @@
         <nd ref="-53"/>
         <nd ref="-45"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="19.0"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-18" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-43"/>
@@ -1124,8 +1124,8 @@
         <nd ref="-41"/>
         <nd ref="-43"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="19.0"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-17" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-40"/>
@@ -1134,8 +1134,8 @@
         <nd ref="-43"/>
         <nd ref="-40"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="15.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-16" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-38"/>
@@ -1144,8 +1144,8 @@
         <nd ref="-40"/>
         <nd ref="-38"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="15.7"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-15" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-36"/>
@@ -1154,8 +1154,8 @@
         <nd ref="-38"/>
         <nd ref="-36"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="15.7"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-14" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-34"/>
@@ -1164,8 +1164,8 @@
         <nd ref="-36"/>
         <nd ref="-34"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="16.5"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-13" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-32"/>
@@ -1175,8 +1175,8 @@
         <nd ref="-28"/>
         <nd ref="-32"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="19.4"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-12" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-31"/>
@@ -1185,8 +1185,8 @@
         <nd ref="-34"/>
         <nd ref="-31"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="length" v="15.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-11" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-27"/>
@@ -1196,9 +1196,9 @@
         <nd ref="-27"/>
         <tag k="feature_area" v="197.2"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="15.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-10" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-25"/>
@@ -1208,9 +1208,9 @@
         <nd ref="-25"/>
         <tag k="feature_area" v="215.7"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="17.4"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-9" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-23"/>
@@ -1220,9 +1220,9 @@
         <nd ref="-23"/>
         <tag k="feature_area" v="200.4"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="16.2"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-8" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-21"/>
@@ -1232,9 +1232,9 @@
         <nd ref="-21"/>
         <tag k="feature_area" v="185.3"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="15.0"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-7" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-19"/>
@@ -1244,9 +1244,9 @@
         <nd ref="-19"/>
         <tag k="feature_area" v="213.1"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="17.2"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-6" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-16"/>
@@ -1256,9 +1256,9 @@
         <nd ref="-16"/>
         <tag k="feature_area" v="196.3"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="15.9"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-5" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-15"/>
@@ -1269,9 +1269,9 @@
         <nd ref="-15"/>
         <tag k="feature_area" v="258.8"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="15.2"/>
         <tag k="length" v="17.1"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-4" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-11"/>
@@ -1281,9 +1281,9 @@
         <nd ref="-11"/>
         <tag k="feature_area" v="249.4"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="15.2"/>
         <tag k="length" v="16.5"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-3" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-14"/>
@@ -1293,9 +1293,9 @@
         <nd ref="-14"/>
         <tag k="feature_area" v="242.2"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="12.5"/>
         <tag k="length" v="19.6"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-2" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-7"/>
@@ -1305,10 +1305,10 @@
         <nd ref="-7"/>
         <tag k="feature_area" v="24.6"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="4.3"/>
         <tag k="angle" v="252.0"/>
         <tag k="length" v="5.8"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <way visible="true" id="-1" timestamp="2019-08-16T11:05:19Z" version="1">
         <nd ref="-4"/>
@@ -1318,22 +1318,22 @@
         <nd ref="-4"/>
         <tag k="feature_area" v="127.3"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
         <tag k="width" v="6.2"/>
         <tag k="angle" v="164.3"/>
         <tag k="length" v="20.5"/>
-        <tag k="building:part" v="yes"/>
     </way>
     <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-28" role="part"/>
-        <member type="way" ref="-11" role="part"/>
-        <member type="way" ref="-10" role="part"/>
-        <member type="way" ref="-9" role="part"/>
-        <member type="way" ref="-8" role="part"/>
-        <member type="way" ref="-7" role="part"/>
-        <member type="way" ref="-6" role="part"/>
-        <member type="way" ref="-5" role="part"/>
-        <member type="way" ref="-4" role="part"/>
-        <member type="way" ref="-3" role="part"/>
+        <member type="way" ref="-28" role="outer"/>
+        <member type="way" ref="-11" role="outer"/>
+        <member type="way" ref="-10" role="outer"/>
+        <member type="way" ref="-9" role="outer"/>
+        <member type="way" ref="-8" role="outer"/>
+        <member type="way" ref="-7" role="outer"/>
+        <member type="way" ref="-6" role="outer"/>
+        <member type="way" ref="-5" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
+        <member type="way" ref="-3" role="outer"/>
         <tag k="feature_area" v="2431.5"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Test"/>
@@ -1344,16 +1344,16 @@
         <tag k="width" v="15.2"/>
         <tag k="angle" v="247.7"/>
         <tag k="length" v="166.1"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-36" role="part"/>
-        <member type="way" ref="-35" role="part"/>
-        <member type="way" ref="-34" role="part"/>
-        <member type="way" ref="-33" role="part"/>
-        <member type="way" ref="-32" role="part"/>
-        <member type="way" ref="-31" role="part"/>
-        <member type="way" ref="-30" role="part"/>
+        <member type="way" ref="-36" role="outer"/>
+        <member type="way" ref="-35" role="outer"/>
+        <member type="way" ref="-34" role="outer"/>
+        <member type="way" ref="-33" role="outer"/>
+        <member type="way" ref="-32" role="outer"/>
+        <member type="way" ref="-31" role="outer"/>
+        <member type="way" ref="-30" role="outer"/>
         <tag k="feature_area" v="3885.8"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Test"/>
@@ -1364,16 +1364,16 @@
         <tag k="width" v="33.7"/>
         <tag k="angle" v="72.9"/>
         <tag k="length" v="127.3"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-59" role="part"/>
-        <member type="way" ref="-58" role="part"/>
-        <member type="way" ref="-57" role="part"/>
-        <member type="way" ref="-56" role="part"/>
-        <member type="way" ref="-55" role="part"/>
-        <member type="way" ref="-54" role="part"/>
-        <member type="way" ref="-53" role="part"/>
+        <member type="way" ref="-59" role="outer"/>
+        <member type="way" ref="-58" role="outer"/>
+        <member type="way" ref="-57" role="outer"/>
+        <member type="way" ref="-56" role="outer"/>
+        <member type="way" ref="-55" role="outer"/>
+        <member type="way" ref="-54" role="outer"/>
+        <member type="way" ref="-53" role="outer"/>
         <tag k="feature_area" v="3988.0"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Test"/>
@@ -1384,30 +1384,30 @@
         <tag k="width" v="25.4"/>
         <tag k="angle" v="71.6"/>
         <tag k="length" v="161.0"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-62" role="part"/>
-        <member type="way" ref="-61" role="part"/>
-        <member type="way" ref="-60" role="part"/>
-        <member type="way" ref="-52" role="part"/>
-        <member type="way" ref="-51" role="part"/>
-        <member type="way" ref="-50" role="part"/>
-        <member type="way" ref="-49" role="part"/>
-        <member type="way" ref="-48" role="part"/>
-        <member type="way" ref="-47" role="part"/>
-        <member type="way" ref="-46" role="part"/>
-        <member type="way" ref="-45" role="part"/>
-        <member type="way" ref="-44" role="part"/>
-        <member type="way" ref="-43" role="part"/>
-        <member type="way" ref="-42" role="part"/>
-        <member type="way" ref="-41" role="part"/>
-        <member type="way" ref="-40" role="part"/>
-        <member type="way" ref="-39" role="part"/>
-        <member type="way" ref="-38" role="part"/>
-        <member type="way" ref="-37" role="part"/>
-        <member type="way" ref="-2" role="part"/>
-        <member type="way" ref="-1" role="part"/>
+        <member type="way" ref="-62" role="outer"/>
+        <member type="way" ref="-61" role="outer"/>
+        <member type="way" ref="-60" role="outer"/>
+        <member type="way" ref="-52" role="outer"/>
+        <member type="way" ref="-51" role="outer"/>
+        <member type="way" ref="-50" role="outer"/>
+        <member type="way" ref="-49" role="outer"/>
+        <member type="way" ref="-48" role="outer"/>
+        <member type="way" ref="-47" role="outer"/>
+        <member type="way" ref="-46" role="outer"/>
+        <member type="way" ref="-45" role="outer"/>
+        <member type="way" ref="-44" role="outer"/>
+        <member type="way" ref="-43" role="outer"/>
+        <member type="way" ref="-42" role="outer"/>
+        <member type="way" ref="-41" role="outer"/>
+        <member type="way" ref="-40" role="outer"/>
+        <member type="way" ref="-39" role="outer"/>
+        <member type="way" ref="-38" role="outer"/>
+        <member type="way" ref="-37" role="outer"/>
+        <member type="way" ref="-2" role="outer"/>
+        <member type="way" ref="-1" role="outer"/>
         <tag k="feature_area" v="8086.9"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Test"/>
@@ -1418,18 +1418,18 @@
         <tag k="width" v="46.3"/>
         <tag k="angle" v="163.9"/>
         <tag k="length" v="338.9"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-71" role="part"/>
-        <member type="way" ref="-70" role="part"/>
-        <member type="way" ref="-69" role="part"/>
-        <member type="way" ref="-68" role="part"/>
-        <member type="way" ref="-67" role="part"/>
-        <member type="way" ref="-66" role="part"/>
-        <member type="way" ref="-65" role="part"/>
-        <member type="way" ref="-64" role="part"/>
-        <member type="way" ref="-63" role="part"/>
+        <member type="way" ref="-71" role="outer"/>
+        <member type="way" ref="-70" role="outer"/>
+        <member type="way" ref="-69" role="outer"/>
+        <member type="way" ref="-68" role="outer"/>
+        <member type="way" ref="-67" role="outer"/>
+        <member type="way" ref="-66" role="outer"/>
+        <member type="way" ref="-65" role="outer"/>
+        <member type="way" ref="-64" role="outer"/>
+        <member type="way" ref="-63" role="outer"/>
         <tag k="feature_area" v="2633.6"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Test"/>
@@ -1440,27 +1440,27 @@
         <tag k="width" v="20.4"/>
         <tag k="angle" v="72.8"/>
         <tag k="length" v="153.5"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-72" role="part"/>
-        <member type="way" ref="-29" role="part"/>
-        <member type="way" ref="-27" role="part"/>
-        <member type="way" ref="-26" role="part"/>
-        <member type="way" ref="-25" role="part"/>
-        <member type="way" ref="-24" role="part"/>
-        <member type="way" ref="-23" role="part"/>
-        <member type="way" ref="-22" role="part"/>
-        <member type="way" ref="-21" role="part"/>
-        <member type="way" ref="-20" role="part"/>
-        <member type="way" ref="-19" role="part"/>
-        <member type="way" ref="-18" role="part"/>
-        <member type="way" ref="-17" role="part"/>
-        <member type="way" ref="-16" role="part"/>
-        <member type="way" ref="-15" role="part"/>
-        <member type="way" ref="-14" role="part"/>
-        <member type="way" ref="-13" role="part"/>
-        <member type="way" ref="-12" role="part"/>
+        <member type="way" ref="-72" role="outer"/>
+        <member type="way" ref="-29" role="outer"/>
+        <member type="way" ref="-27" role="outer"/>
+        <member type="way" ref="-26" role="outer"/>
+        <member type="way" ref="-25" role="outer"/>
+        <member type="way" ref="-24" role="outer"/>
+        <member type="way" ref="-23" role="outer"/>
+        <member type="way" ref="-22" role="outer"/>
+        <member type="way" ref="-21" role="outer"/>
+        <member type="way" ref="-20" role="outer"/>
+        <member type="way" ref="-19" role="outer"/>
+        <member type="way" ref="-18" role="outer"/>
+        <member type="way" ref="-17" role="outer"/>
+        <member type="way" ref="-16" role="outer"/>
+        <member type="way" ref="-15" role="outer"/>
+        <member type="way" ref="-14" role="outer"/>
+        <member type="way" ref="-13" role="outer"/>
+        <member type="way" ref="-12" role="outer"/>
         <tag k="feature_area" v="4830.3"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Test"/>
@@ -1471,6 +1471,6 @@
         <tag k="width" v="19.8"/>
         <tag k="angle" v="247.8"/>
         <tag k="length" v="298.3"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

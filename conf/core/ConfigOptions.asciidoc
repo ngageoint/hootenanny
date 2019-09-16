@@ -263,15 +263,6 @@ reference dataset will be lost.
 If true, all reviews outside of the score range established by the configuration options
 review.score.criterion.max/min.threshold will be removed.
 
-=== attribute.conflation.update.building.outlines
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, building outlines get updated after conflation (complex buildings are merged). TODO: I
-think will go away completely as part of #3451, along with
-building.outline.update.op.remove.building.relations.
-
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -387,15 +378,6 @@ The threshold at which a miss is called a miss for buildings.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== building.outline.update.op.remove.building.relations
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, when building outlines are updated the updater will remove the source building relations
-used to create the outline multipolygon relation.  If false, both source building relations and
-outline multipolygon relations will remain.
 
 === building.part.merger.thread.count
 

@@ -481,51 +481,51 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
   // we have a better solution for changing these opts in place.
   if (ConfigOptions().getHighwayMergeTagsOnly())
   {
-    QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-    LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
-    const QString buildingOutlineUpdateOpName =
-      QString::fromStdString(BuildingOutlineUpdateOp::className());
+//    QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+//    LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
+//    const QString buildingOutlineUpdateOpName =
+//      QString::fromStdString(BuildingOutlineUpdateOp::className());
     const QString reviewRelationCritName =
       QString::fromStdString(ReviewRelationCriterion::className());
 
-    // handle BuildingOutlineUpdateOp combined with RemoveElementsVisitor behavior properly
+//    // handle BuildingOutlineUpdateOp combined with RemoveElementsVisitor behavior properly
 
-    if (postConflateOps.contains(buildingOutlineUpdateOpName))
-    {
-      // have a specific option that lets you drop BuildingOutlineUpdateOp; may be able to get rid
-      // of it after completing #3442
-      if (!ConfigOptions().getAttributeConflationUpdateBuildingOutlines())
-      {
-        postConflateOps.removeAll(buildingOutlineUpdateOpName);
-        conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-      }
-      else
-      {
-        const QString removeElementsVisitorName =
-          QString::fromStdString(RemoveElementsVisitor::className());
-        // If we're running Attribute Conflation AND removing building relations, we need to remove
-        // them after the review relations have been removed or some building relations may still
-        // remain that are involved in reviews.
-        if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
-            postConflateOps.contains(removeElementsVisitorName) &&
-            ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
-              reviewRelationCritName))
-        {
-          const int removeElementsVisIndex = postConflateOps.indexOf(removeElementsVisitorName);
-          const int buildingOutlineOpIndex = postConflateOps.indexOf(buildingOutlineUpdateOpName);
-          if (removeElementsVisIndex > buildingOutlineOpIndex)
-          {
-            postConflateOps.removeAll(buildingOutlineUpdateOpName);
-            postConflateOps.append(buildingOutlineUpdateOpName);
-            conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-          }
-        }
-      }
+//    if (postConflateOps.contains(buildingOutlineUpdateOpName))
+//    {
+//      // have a specific option that lets you drop BuildingOutlineUpdateOp; may be able to get rid
+//      // of it after completing #3442
+//      if (!ConfigOptions().getAttributeConflationUpdateBuildingOutlines())
+//      {
+//        postConflateOps.removeAll(buildingOutlineUpdateOpName);
+//        conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
+//      }
+//      else
+//      {
+//        const QString removeElementsVisitorName =
+//          QString::fromStdString(RemoveElementsVisitor::className());
+//        // If we're running Attribute Conflation AND removing building relations, we need to remove
+//        // them after the review relations have been removed or some building relations may still
+//        // remain that are involved in reviews.
+//        if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
+//            postConflateOps.contains(removeElementsVisitorName) &&
+//            ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
+//              reviewRelationCritName))
+//        {
+//          const int removeElementsVisIndex = postConflateOps.indexOf(removeElementsVisitorName);
+//          const int buildingOutlineOpIndex = postConflateOps.indexOf(buildingOutlineUpdateOpName);
+//          if (removeElementsVisIndex > buildingOutlineOpIndex)
+//          {
+//            postConflateOps.removeAll(buildingOutlineUpdateOpName);
+//            postConflateOps.append(buildingOutlineUpdateOpName);
+//            conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
+//          }
+//        }
+//      }
 
-      LOG_DEBUG(
-        "Post conflate ops after Attribute Conflation adjustment: " <<
-        conf().get("conflate.post.ops").toStringList());
-    }
+//      LOG_DEBUG(
+//        "Post conflate ops after Attribute Conflation adjustment: " <<
+//        conf().get("conflate.post.ops").toStringList());
+//    }
 
     // This swaps the logic that removes all reviews with the logic that removes them based on score
     // thresholding.
