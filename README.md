@@ -32,14 +32,6 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 
 Additional feature types can be made conflatable via Javascript by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
-# When To Use
-No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring conflation software options to get the best conflated output. 
-
-For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
-
-# Scalability
-Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of it supported a map/reduce architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance costs to support the capability (so the conflation algorithms are capable of supporting distributed computing). Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the density of the data being conflated.
-
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** (default) - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both 
 input datasets.
@@ -68,6 +60,14 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
 Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
+
+# When To Use
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring conflation software options to get the best conflated output. 
+
+For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
+
+# Scalability
+Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of it supported a map/reduce architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance costs to support the capability (so the conflation algorithms are capable of supporting distributed computing). Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the density of the data being conflated.
 
 # Configuration
 
