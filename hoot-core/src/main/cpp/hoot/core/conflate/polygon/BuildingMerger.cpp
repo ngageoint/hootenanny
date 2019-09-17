@@ -565,7 +565,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   }
   if (!parentRelation->getTags().contains("building"))
   {
-    // TODO: Not sure yet if this should be added for multipoly relation parts?
+    // TODO: not totally sure yet if this should be added for multipoly relation parts...
     parentRelation->getTags()["building"] = "yes";
   }
   relationTags = parentRelation->getTags();
