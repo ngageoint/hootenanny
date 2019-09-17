@@ -157,6 +157,8 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+  // temp tag used by BuildingMerger
+  inline static const QString HootMultiPolyRole()      { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
 

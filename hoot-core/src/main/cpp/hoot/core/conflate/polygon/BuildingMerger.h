@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
- * Merges two buildings
+ * Merges two or more buildings
+ *
+ * This guy could maybe use some refactoring.
  */
 class BuildingMerger : public MergerBase
 {
@@ -54,7 +56,8 @@ public:
    */
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings

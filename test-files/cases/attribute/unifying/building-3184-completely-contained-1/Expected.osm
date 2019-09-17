@@ -232,27 +232,59 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0445596964999986" lon="-69.4084859930700020">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-13"/>
-        <nd ref="-12"/>
-        <nd ref="-11"/>
-        <nd ref="-10"/>
-        <nd ref="-9"/>
-        <nd ref="-8"/>
-        <nd ref="-13"/>
-        <tag k="hoot:status" v="3"/>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-77"/>
+        <nd ref="-76"/>
+        <nd ref="-75"/>
+        <nd ref="-74"/>
+        <nd ref="-73"/>
+        <nd ref="-72"/>
+        <nd ref="-77"/>
+        <tag k="feature_area" v="417.4"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="width" v="19.1"/>
+        <tag k="angle" v="174.2"/>
+        <tag k="length" v="23.1"/>
     </way>
-    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-19"/>
-        <nd ref="-18"/>
-        <nd ref="-17"/>
-        <nd ref="-16"/>
-        <nd ref="-15"/>
-        <nd ref="-14"/>
-        <nd ref="-19"/>
-        <tag k="hoot:status" v="3"/>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-71"/>
+        <nd ref="-70"/>
+        <nd ref="-69"/>
+        <nd ref="-68"/>
+        <nd ref="-71"/>
+        <tag k="feature_area" v="262.8"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="width" v="13.8"/>
+        <tag k="angle" v="264.1"/>
+        <tag k="length" v="19.1"/>
     </way>
-    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-67"/>
+        <nd ref="-66"/>
+        <nd ref="-65"/>
+        <nd ref="-64"/>
+        <nd ref="-67"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="width" v="12.2"/>
+        <tag k="angle" v="180.4"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-63"/>
+        <nd ref="-62"/>
+        <nd ref="-61"/>
+        <nd ref="-60"/>
+        <nd ref="-59"/>
+        <nd ref="-58"/>
+        <nd ref="-63"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="width" v="13.8"/>
+        <tag k="angle" v="92.1"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-57"/>
         <nd ref="-56"/>
         <nd ref="-55"/>
@@ -292,59 +324,30 @@
         <nd ref="-21"/>
         <nd ref="-20"/>
         <nd ref="-57"/>
-        <tag k="hoot:status" v="3"/>
-    </way>
-    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-63"/>
-        <nd ref="-62"/>
-        <nd ref="-61"/>
-        <nd ref="-60"/>
-        <nd ref="-59"/>
-        <nd ref="-58"/>
-        <nd ref="-63"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="width" v="13.8"/>
-        <tag k="angle" v="92.1"/>
-        <tag k="building:part" v="yes"/>
-    </way>
-    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-67"/>
-        <nd ref="-66"/>
-        <nd ref="-65"/>
-        <nd ref="-64"/>
-        <nd ref="-67"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="width" v="12.2"/>
-        <tag k="angle" v="180.4"/>
-        <tag k="building:part" v="yes"/>
-    </way>
-    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-77"/>
-        <nd ref="-76"/>
-        <nd ref="-75"/>
-        <nd ref="-74"/>
-        <nd ref="-73"/>
-        <nd ref="-72"/>
-        <nd ref="-77"/>
-        <tag k="feature_area" v="417.4"/>
         <tag k="hoot:status" v="1"/>
         <tag k="building" v="yes"/>
-        <tag k="width" v="19.1"/>
-        <tag k="angle" v="174.2"/>
-        <tag k="length" v="23.1"/>
     </way>
-    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-71"/>
-        <nd ref="-70"/>
-        <nd ref="-69"/>
-        <nd ref="-68"/>
-        <nd ref="-71"/>
-        <tag k="feature_area" v="262.8"/>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19"/>
+        <nd ref="-18"/>
+        <nd ref="-17"/>
+        <nd ref="-16"/>
+        <nd ref="-15"/>
+        <nd ref="-14"/>
+        <nd ref="-19"/>
         <tag k="hoot:status" v="1"/>
         <tag k="building" v="yes"/>
-        <tag k="width" v="13.8"/>
-        <tag k="angle" v="264.1"/>
-        <tag k="length" v="19.1"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-12"/>
+        <nd ref="-11"/>
+        <nd ref="-10"/>
+        <nd ref="-9"/>
+        <nd ref="-8"/>
+        <nd ref="-13"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
@@ -372,12 +375,12 @@
         <tag k="angle" v="85.0"/>
         <tag k="length" v="20.4"/>
     </way>
-    <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-10" role="outer"/>
-        <member type="way" ref="-11" role="outer"/>
-        <member type="way" ref="-12" role="outer"/>
-        <member type="way" ref="-13" role="inner"/>
-        <member type="way" ref="-14" role="inner"/>
+    <relation visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-7" role="outer"/>
+        <member type="way" ref="-6" role="outer"/>
+        <member type="way" ref="-5" role="outer"/>
+        <member type="way" ref="-4" role="inner"/>
+        <member type="way" ref="-3" role="inner"/>
         <tag k="feature_area" v="33731.4"/>
         <tag k="hoot:status" v="3"/>
         <tag k="addr:street" v="Avenida Florencio Jimenez"/>
