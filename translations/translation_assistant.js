@@ -8,17 +8,42 @@ if (typeof hoot !== 'undefined') {
 
 translation_assistant = {
     difference: function(a, b) {
-            var diff = [];
-            for (var k in a) {
-                if (b.indexOf(a[k]) === -1) {
-                    diff.push(a[k]);
+        var diff = [];
+        for (var k in a) {
+            if (b.indexOf(a[k]) === -1) {
+                diff.push(a[k]);
+            }
+        }
+        return diff;
+    },
+    //Set the tag `tagKey=value` or append it unless `replace` is `true`
+    setTag: function(tags, tagKey, value, replace)
+    {
+        if (typeof replace !== "undefined" && replace) {
+            tags[tagKey] = value;
+        }
+        else if (tags[tagKey] && (tags[tagKey] !== value)) { //append values to existing tags
+            if (tags[tagKey] === "yes") { //replace a tag=yes with the new value instead of appending
+                tags[tagKey] = value;
+            }
+            else if (value !== "yes") { //append the value if unique and not yes
+                var values = tags[tagKey].split(";");
+                var found = false;
+                for (var v in values) {
+                    if (v === value) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    tags[tagKey] = tags[tagKey] + ";" + value;
                 }
             }
-            return diff;
-        },
-
+        } else {
+            tags[tagKey] = value;
+        }
+    },
     //Takes 'attrs' and returns OSM 'tags'
-    translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema)
+    translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema, replace)
     {
         var tags = {};
         var extras = []
@@ -54,31 +79,19 @@ translation_assistant = {
                             tags[tagKey] = k + "=" + attrs[key];
                         }
                     } else if (tagValue == k) { //tag is set to attribute value
-                        if (tags[tagKey] && (tags[tagKey] !== attrs[key])) { //append values to existing tags
-                            tags[tagKey] = tags[tagKey] + ";" + attrs[key];
-                        } else {
-                            tags[tagKey] = attrs[key];
-                        }
+                        translation_assistant.setTag(tags, tagKey, attrs[key], replace);
                     } else if (typeof tagValue === 'string') { //attribute is mapped to a static tag
-                        tags[tagKey] = tagValue;
+                        translation_assistant.setTag(tags, tagKey, tagValue, replace);
                     } else { //attribute value is mapped to a tag value (if tag key and value is not empty string)
                         if (attrs[key].length > 0) {
                             if (tagValue[attrs[key]] && tagValue[attrs[key]].length > 0) {
-                                if (tags[tagKey] && (tags[tagKey] !== tagValue[attrs[key]])) { //append values to existing tags
-                                    tags[tagKey] = tags[tagKey] + ";" + tagValue[attrs[key]];
-                                } else {
-                                    tags[tagKey] = tagValue[attrs[key]];
-                                }
+                                translation_assistant.setTag(tags, tagKey, tagValue[attrs[key]], replace);
                             } else { //check if the attribute value is a regular expression and run that
                                 for (var attrReg in tagValue) {
                                     if (attrReg.startsWith("/") && attrReg.endsWith("/")) {
                                         var regex = new RegExp(attrReg.substring(1, attrReg.length - 1));
                                         if (regex.test(attrs[key])) {
-                                            if (tags[tagKey] && (tags[tagKey] !== tagValue[attrReg])) { //append values to existing tags
-                                                tags[tagKey] = tags[tagKey] + ";" + tagValue[attrReg];
-                                            } else {
-                                                tags[tagKey] = tagValue[attrReg];
-                                            }
+                                            translation_assistant.setTag(tags, tagKey, tagValue[attrReg], replace);
                                         }
                                     }
                                 } 
@@ -88,7 +101,6 @@ translation_assistant = {
                 }
             }
         }
-
 
         //If necessary, convert from English TDS to OSM+
         if (tags['Feature Code'] || fcode) {
@@ -124,4 +136,5 @@ translation_assistant = {
 if (typeof exports !== 'undefined') {
     exports.translateAttributes = translation_assistant.translateAttributes;
     exports.difference = translation_assistant.difference;
+    exports.setTag = translation_assistant.setTag;
 }
