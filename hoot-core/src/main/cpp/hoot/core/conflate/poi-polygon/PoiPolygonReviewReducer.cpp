@@ -703,16 +703,20 @@ bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr 
         {
           LOG_VART(poi);
           LOG_VART(poiNeighbor);
+          //  This only handles ways as polygons and not relations
           ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
+          if (polyWay)
+          {
             std::shared_ptr<const LineString> polyLineStr =
               std::dynamic_pointer_cast<const LineString>(
                 ElementConverter(_map).convertToLineString(polyWay));
-          const long neighborPoiToPolyDist = polyLineStr->distance(poiNeighborGeom.get());
-          LOG_VART(neighborPoiToPolyDist);
-          if (_distance > neighborPoiToPolyDist)
-          {
-            LOG_TRACE("Returning miss per review reduction rule #25a...");
-            return true;
+            const long neighborPoiToPolyDist = polyLineStr->distance(poiNeighborGeom.get());
+            LOG_VART(neighborPoiToPolyDist);
+            if (_distance > neighborPoiToPolyDist)
+            {
+              LOG_TRACE("Returning miss per review reduction rule #25a...");
+              return true;
+            }
           }
         }
       }
