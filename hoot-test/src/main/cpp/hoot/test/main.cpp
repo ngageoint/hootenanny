@@ -111,13 +111,11 @@ public:
       _allStart(_start),
       _testTimeout(testTimeout)
   {
-    //LOG_VARE(_suppressFailureDetail);
   }
 
   virtual void addFailure(const CppUnit::TestFailure& failure)
   {
     cout << endl << "Failure: " << failure.failedTest()->getName() << endl;
-    //LOG_VARE(_suppressFailureDetail);
     if (!_suppressFailureDetail)
     {
       cout  << "  " << failure.sourceLine().fileName() << "(" <<
@@ -397,33 +395,32 @@ int main(int argc, char* argv[])
   if (argc == 1)
   {
     // keep this alphabetized
-    // TODO: quick vs quick only?
     cout << argv[0] << " Usage:\n"
-            "--all - Run all the tests.\n"
-            "--all-names - Print the names of all the tests without running them.\n"
-            "--case-only - Run the conflate case tests only.\n"
-            "--current - Run the 'current' level tests.\n"
-            "--debug - Show debug level log messages and above.\n"
-            "--diff - Print a diff when a script test fails.\n"
-            "--error - Show error log level messages and above.\n"
-            "--exclude=[regex] - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
-            "--fatal - Show fatal error log level messages only.\n"
-            "--glacial - Run 'glacial' level tests and below.\n"
-            "--glacial-only - Run the 'glacial' level tests only.\n"
-            "--include=[regex] - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
-            "--info - Show info log level messages and above.\n"
-            "--quick - Run the 'quick' level' tests.\n"
-            "--quick-only - Run the 'quick' level tests only.\n"
-            "--names - Show the names of all the tests as they run.\n"
+            "--all                      - Run all the tests.\n"
+            "--all-names                - Print the names of all the tests without running them.\n"
+            "--case-only                - Run the conflate case tests only.\n"
+            "--current                  - Run the 'current' level tests.\n"
+            "--debug                    - Show debug level log messages and above.\n"
+            "--diff                     - Print a diff when a script test fails.\n"
+            "--error                    - Show error log level messages and above.\n"
+            "--exclude=[regex]          - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
+            "--fatal                    - Show fatal error log level messages only.\n"
+            "--glacial                  - Run 'glacial' level tests and below.\n"
+            "--glacial-only             - Run the 'glacial' level tests only.\n"
+            "--include=[regex]          - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
+            "--info                     - Show info log level messages and above.\n"
+            "--quick                    - Run the 'quick' level' tests.\n"
+            "--quick-only               - Run the 'quick' level tests only.\n"
+            "--names                    - Show the names of all the tests as they run.\n"
             "--parallel [process count] - Run the specified tests in parallel with the specified number of processes. With no process count specified, all available CPU cores are used to launch processes.\n"
-            "--single [test name] - Run only the test specified.\n"
-            "--slow - Run the 'slow' level tests and above.\n"
-            "--slow-only - Run the 'slow' level tests only.\n"
-            "--status - Show status log level messages and above.\n"
-            "--suppress-failure-detail - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
-            "--trace - Show trace log level messages and above.\n"
-            "--verbose - Show verbose log level messages and above.\n"
-            "--warn - Show warning log level messages and above.\n"
+            "--single [test name]       - Run only the test specified.\n"
+            "--slow                     - Run the 'slow' level tests and above.\n"
+            "--slow-only                - Run the 'slow' level tests only.\n"
+            "--status                   - Show status log level messages and above.\n"
+            "--suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
+            "--trace                    - Show trace log level messages and above.\n"
+            "--verbose                  - Show verbose log level messages and above.\n"
+            "--warn                     - Show warning log level messages and above.\n"
             "\n"
             "See the Hootenanny Developer Guide for more information.\n"
             ;
@@ -442,7 +439,6 @@ int main(int argc, char* argv[])
     {
       args << argv[i];
     }
-    //LOG_VARE(args);
 
     Log::getInstance().setLevel(Log::Warn);
     std::vector<TestPtr> vAllTests;
@@ -470,7 +466,6 @@ int main(int argc, char* argv[])
       suppressFailureDetail = true;
       Log::getInstance().setLevel(Log::Error);
     }
-    //LOG_VARE(suppressFailureDetail);
 
     // Run a single test
     if (args.contains("--single"))
