@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Merges two or more buildings
  *
- * This guy could maybe use some refactoring.
+ * This guy could maybe use some refactoring now.
  */
 class BuildingMerger : public MergerBase
 {
