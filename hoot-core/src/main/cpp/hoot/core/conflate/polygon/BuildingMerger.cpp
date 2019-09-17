@@ -456,9 +456,6 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   QStringList threeDBuildingKeys;
   threeDBuildingKeys.append(MetadataTags::BuildingLevels());
   threeDBuildingKeys.append(MetadataTags::BuildingHeight());
-  // This one should be taken care of in a translation but adding here for now anyway to appease
-  // some case tests.
-  threeDBuildingKeys.append("ele");
   // Just looking for any key that denotes multi-level buildings. Not handling the situation where
   // a non-3D building is merging with a 3D building...not exactly sure what to do there...create
   // both a multipoly and building relation (even though it wouldn't be valid)? No point in worrying

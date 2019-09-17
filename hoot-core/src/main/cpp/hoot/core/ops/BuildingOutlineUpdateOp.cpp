@@ -183,21 +183,26 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
   std::shared_ptr<Geometry> pGeometry;
   try
   {
+    LOG_VART(pElement->getElementType());
     if (pElement->getElementType() == ElementType::Way)
     {
       const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pElement);
+      LOG_VART(pWay->isClosedArea());
       if (pWay->isClosedArea())
       {
         pGeometry = elementConverter.convertToPolygon(pWay);
+        LOG_VART(pGeometry->getGeometryTypeId());
       }
     }
 
     if (!pGeometry)
     {
       pGeometry = elementConverter.convertToGeometry(pElement);
+      LOG_VART(pGeometry->getGeometryTypeId());
     }
 
     pOutline.reset(pOutline->Union(pGeometry.get()));
+    LOG_VART(pOutline->getGeometryTypeId());
   }
   catch (const geos::util::TopologyException& e)
   {
@@ -206,6 +211,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
     try
     {
       pOutline.reset(pOutline->Union(cleanedGeom));
+      LOG_VART(pOutline->getGeometryTypeId());
     }
     catch (const geos::util::TopologyException& e)
     {
@@ -234,7 +240,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
 
   std::shared_ptr<Geometry> outline(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   const vector<RelationData::Entry> entries = pBuilding->getMembers();
-  QHash<RelationData::Entry,WayPtr> buildingWayLookup;
+  //QHash<RelationData::Entry,WayPtr> buildingWayLookup;
 
   //bool considerOuterRoleAsPart = !_removeBuildingRelations;
 
@@ -257,7 +263,7 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
         {
           LOG_TRACE("Unioning building part: " << way << "...");
           _unionOutline(pBuilding, way, outline);
-          buildingWayLookup[entries[i]] = way;
+          //buildingWayLookup[entries[i]] = way;
         }
       }
       else if (entries[i].getElementId().getType() == ElementType::Relation)
@@ -290,11 +296,13 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
   LOG_VART(outline->isEmpty());
   if (!outline->isEmpty())
   {
-    LOG_TRACE("Creating building outline element...");
+    LOG_TRACE(
+      "Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
 
     const std::shared_ptr<Element> pOutlineElement =
       GeometryConverter(_map).convertGeometryToElement(
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
+    LOG_VART(pOutlineElement->getElementType());
     // TODO: hack
     if (pOutlineElement->getTags()["area"] == "yes")
     {
