@@ -93,7 +93,7 @@ public:
    * @param t1 - Tags that are given preference
    * @param t2 - These names/tags get demoted to alt_name
    * @param result Tags w/names merged
-   * @param overwriteExcludeTagKeys TODO
+   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    */
   void mergeNames(Tags& t1, Tags& t2, Tags& result,
                   const QStringList& overwriteExcludeTagKeys = QStringList());
@@ -125,7 +125,7 @@ public:
    * @param t1 first set of tags to merge
    * @param t2 second set of tags to merge
    * @param result merged tags
-   * @param overwriteExcludeTagKeys TODO
+   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    */
   void mergeText(Tags& t1, Tags& t2, Tags& result,
                  const QStringList& overwriteExcludeTagKeys = QStringList());

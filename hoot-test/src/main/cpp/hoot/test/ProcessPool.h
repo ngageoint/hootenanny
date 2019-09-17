@@ -96,7 +96,7 @@ public:
   /**
    * @brief ProcessThread constructor
    * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
-   * @param suppressFailureDetail TODO
+   * @param suppressFailureDetail If true, only the failing test name gets logged and none of the failure detail is logged.
    * @param printDiff - boolean flag indicating if the thread should pass the '--diff' flag to the process
    * @param waitTime - number of seconds to wait before reporting that a test took too long
    * @param outMutex - mutex for preserving output ordering to standard out
@@ -137,7 +137,7 @@ private:
 
   /** Flag for showing test names in output */
   bool _showTestName;
-  // TODO
+  /** If true, only the failing test name gets logged and none of the failure detail is logged. */
   bool _suppressFailureDetail;
   /** Flag for showing diff for script test failures in output */
   bool _printDiff;
@@ -170,7 +170,8 @@ public:
    * @param nproc - number of threads/processes to add to the pool
    * @param waitTime - number of seconds to wait before reporting that a test took too long
    * @param showTestName - boolean flag indicating if the thread should pass the '--names' flag to the process
-   * @param suppressFailureDetail - TODO
+   * @param suppressFailureDetail - If true, only the failing test name gets logged and none of the
+   * failure detail is logged.
    * @param printDiff - boolean flag indicating if the thread should pass the '--diff' flag to the process
    */
   ProcessPool(int nproc, double waitTime, bool showTestName, bool suppressFailureDetail, bool printDiff);

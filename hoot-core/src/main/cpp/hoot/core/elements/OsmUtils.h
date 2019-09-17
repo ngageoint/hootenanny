@@ -407,41 +407,49 @@ public:
   static bool mapIsPointsOnly(const OsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines if all elements in a specified collection have any tag key from a specified set of
+   * keys
    *
-   * @param tagKeys
-   * @param elements
-   * @return
+   * @param tagKeys the tag keys to search for
+   * @param elements the elements to examine
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
    */
   static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
                                        const std::vector<ElementPtr>& elements);
 
   /**
-   * TODO
+   * Determines if all elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
    *
-   * @param kvp
-   * @param elements
-   * @return
+   * @param kvp the tag key/value pairs to search for
+   * @param elements the elements to examine
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
    */
   static bool allElementsHaveAnyKvp(const QStringList& kvps,
                                     const std::vector<ElementPtr>& elements);
 
   /**
-   * TODO
+   * Determines if any elements in a specified collection have any tag key from a specified set of
+   * keys
    *
-   * @param tagKeys
-   * @param elements
-   * @return
+   * @param tagKeys the tag keys to search for
+   * @param elements the elements to examine
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
    */
   static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
                                        const std::vector<ElementPtr>& elements);
 
   /**
-   * TODO
+   * Determines if any elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
    *
-   * @param kvps
-   * @param elements
-   * @return
+   * @param kvps the tag key/value pairs to search for
+   * @param elements the elements to examine
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
    */
   static bool anyElementsHaveAnyKvp(const QStringList& kvps,
                                     const std::vector<ElementPtr>& elements);

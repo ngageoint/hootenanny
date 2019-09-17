@@ -91,7 +91,8 @@ namespace hoot
  * building level.
  *
  * TODO: Should this class be renamed since it merges not only building:part now but also multipoly
- * buildings? Or should we change it only to merge building:part features (if that's possible)?
+ * buildings? Or should we change it only to be more strict and only merge building:part features
+ * (if that's possible; or maybe its already doing that)?
  */
 class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
   public Configurable
