@@ -33,6 +33,7 @@ import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.controllers.ingest.UploadClassification.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -58,6 +59,7 @@ public class ImportCommandTest {
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
         String advUploadOpts = "Ogr2osmSimplifyComplexBuildings";
+        String multiAdvOpts = "Ogr2osmSimplifyComplexBuildings,Ogr2osmMergeNearbyNodes";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
@@ -73,7 +75,7 @@ public class ImportCommandTest {
                                       etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-
+        
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
         assertNotNull(importCommand.getSubstitutionMap());
@@ -92,6 +94,7 @@ public class ImportCommandTest {
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
         assertNotNull(importCommand.getAdvUploadOpts());
+        assertNotSame(advUploadOpts, multiAdvOpts);
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());

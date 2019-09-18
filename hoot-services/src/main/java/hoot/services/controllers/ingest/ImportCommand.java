@@ -78,6 +78,7 @@ class ImportCommand extends ExternalCommand {
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
         List<String> options = new LinkedList<>();
+        List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         //TODO: always set remap ids to false??
         options.add("hootapi.db.writer.overwrite.map=true");
@@ -96,16 +97,19 @@ class ImportCommand extends ExternalCommand {
 
         if (advUploadOpts != null && (classification == SHP)) {
 
-            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
-
             final boolean simplifyBuildings = getAdvOpts.stream().anyMatch("Ogr2osmSimplifyComplexBuildings"::equalsIgnoreCase);
-            final boolean mergeNearbyNodes  = getAdvOpts.stream().anyMatch("Ogr2osmMergeNearbyNodes"::equalsIgnoreCase);
 
             if (simplifyBuildings) {
                 options.add("ogr2osm.simplify.complex.buildings=true");
-            } else if(mergeNearbyNodes) {
-                options.add("ogr2osm.merge.nearby.nodes=true");
             }
+        }
+        
+        if (advUploadOpts != null && (classification == SHP)) {
+        	
+        	final boolean mergeNearbyNodes  = getAdvOpts.stream().anyMatch("Ogr2osmMergeNearbyNodes"::equalsIgnoreCase);
+        	if (mergeNearbyNodes) {
+        		options.add("ogr2osm.merge.nearby.nodes=true");
+        	}
         }
 
         List<String> hootOptions = toHootOptions(options);
