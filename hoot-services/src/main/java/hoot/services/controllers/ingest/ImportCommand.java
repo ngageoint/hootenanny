@@ -98,8 +98,8 @@ class ImportCommand extends ExternalCommand {
 
             List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
 
-            final boolean simplifyBuildings = getAdvOpts.stream().anyMatch("SimplifyComplexBuildings"::equalsIgnoreCase);
-            final boolean mergeNearbyNodes  = getAdvOpts.stream().anyMatch("MergeNearbyNodes"::equalsIgnoreCase);
+            final boolean simplifyBuildings = getAdvOpts.stream().anyMatch("Ogr2osmSimplifyComplexBuildings"::equalsIgnoreCase);
+            final boolean mergeNearbyNodes  = getAdvOpts.stream().anyMatch("Ogr2osmMergeNearbyNodes"::equalsIgnoreCase);
 
             if (simplifyBuildings) {
                 options.add("ogr2osm.simplify.complex.buildings=true");
