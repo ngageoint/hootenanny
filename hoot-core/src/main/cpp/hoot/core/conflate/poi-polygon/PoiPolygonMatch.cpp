@@ -460,11 +460,11 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       const QString nameMatchStr = _nameScore >= _nameScoreThreshold ? "yes" : "no";
       const QString addressMatchStr = _addressScore >= 1.0 ? "yes" : "no";
       const QString distanceMatchStr = _distance <= _matchDistanceThreshold ? "yes" : "no";
-      // TODO: these score contributions are hardcoded
       _explainText =
-        QString("Features had an additive similarity score of %1, which is less than the required score of %2. Matches: distance: %3 (%4m; score: 2/2), type: %5 (score: %6/1), name: %7 (score: %8/1), address: %9 (score: %10/1). Max distance allowed for match: %11m, max distance allowed for review: %12m.")
+        QString("Features had an additive similarity score of %1, which is less than the required match score of %2 but meets the review score threshold of %3. Matches: distance: %4 (%5m; score: 2/2), type: %6 (score: %7/1), name: %8 (score: %9/1), address: %10 (score: %11/1). Max distance allowed for match: %12m, max distance allowed for review: %13m.")
           .arg(evidence)
           .arg(_matchEvidenceThreshold)
+          .arg(_reviewEvidenceThreshold)
           .arg(distanceMatchStr)
           .arg(round(_distance))
           .arg(typeMatchStr)
