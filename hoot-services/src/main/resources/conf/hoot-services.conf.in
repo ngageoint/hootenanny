@@ -100,7 +100,7 @@ exportSizeThreshold=400000000
 httpTimeout=600000
 
 # Max feature count for grail operations
-grailMaxFeatureCount=300000
+grailMaxFeatureCount=1000000
 
 # Code name we assign for the rails and overpass pull data
 grailRailsCodename=reference
