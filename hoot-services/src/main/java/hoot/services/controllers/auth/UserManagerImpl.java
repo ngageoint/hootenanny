@@ -174,4 +174,8 @@ public class UserManagerImpl implements UserManager {
         userCache.put(sessionId, user);
         return user;
     }
+
+    public static void clearCache() {
+        userCache.clear();
+    }
 }
