@@ -259,7 +259,7 @@ public class ImportResource {
 
         return Response.ok(results).build();
     }
-    
+
     @GET
     @Path("/getoptions")
     @Produces(MediaType.APPLICATION_JSON)
@@ -273,6 +273,6 @@ public class ImportResource {
             String msg = "Error getting import options!  Cause: " + e.getMessage();
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
-        return Response.ok(template.toJSONString()).build();
+        return Response.ok(template).build();
     }
 }

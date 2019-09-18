@@ -124,6 +124,9 @@ advOptTemplate=conf/services/conflateAdvOps.json
 # Advanced options hoot2 template
 advOptHoot2Override=conf/services/conflationHoot2Ops.json
 
+# Advanced options hoot2 import Options
+importOptions=conf/services/importHoot2Ops.json
+
 # Advanced options reference override
 advOptRefOverride=conf/services/conflationRefOps.json
 
@@ -144,9 +147,6 @@ differentialConf=conf/core/DifferentialConflation.conf
 
 # Horizontal Algorithm Conf
 horizontalConf=conf/core/HorizontalConflation.conf
-
-# Import options
-importOptions=conf/services/importOps.json
 
 # Network Conflation Conf
 networkConf=conf/core/NetworkAlgorithm.conf
