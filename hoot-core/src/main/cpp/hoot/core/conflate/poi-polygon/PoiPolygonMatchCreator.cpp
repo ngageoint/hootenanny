@@ -146,13 +146,9 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
 
 std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
+  //  Since the POI to Poly matcher is an additive model, all thresholds are 1.0
   if (!_matchThreshold.get())
-  {
-    ConfigOptions config;
-    _matchThreshold.reset(
-      new MatchThreshold(config.getPoiPolygonMatchThreshold(), config.getPoiPolygonMissThreshold(),
-                         config.getPoiPolygonReviewThreshold()));
-  }
+    _matchThreshold.reset(new MatchThreshold(1.0, 1.0, 1.0));
   return _matchThreshold;
 }
 
