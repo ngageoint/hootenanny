@@ -1174,6 +1174,8 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
 
   QStringList urlParts = url.path().split("/");
   bool ok;
+  // TODO: This needs to check to see if the map with this ID exists, and if not, treat the map ID
+  // like a map name.
   long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
   LOG_VART(ok);
   LOG_VART(mapId);
