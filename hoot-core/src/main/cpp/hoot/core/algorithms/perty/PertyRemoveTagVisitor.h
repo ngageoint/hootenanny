@@ -37,6 +37,8 @@ namespace hoot
 
 /**
  * A simple random tag remover
+ *
+ * @todo rename to RandomTagRemover
  */
 class PertyRemoveTagVisitor : public ElementVisitor, public RngConsumer, public Configurable
 {

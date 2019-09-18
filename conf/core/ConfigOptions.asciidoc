@@ -2936,14 +2936,6 @@ The number of simulations per test run executed by `perty-test`.  A test run is 
 multiple simulations.  Scores all simulation executed by the test run are averaged to give the
 final PERTY score for the test run.
 
-=== perty.way.generalize.epsilon
-
-* Data Type: double
-* Default Value: `1`
-
-Distance parameter, in meters, that determines to what degree a way is generalized by PERTY.
-Higher values result in more generalization (more nodes removed).
-
 === perty.way.generalize.probability
 
 * Data Type: double
@@ -4437,6 +4429,15 @@ The way subline matcher to use when determining matching sublines.
 
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
+
+=== way.generalize.epsilon
+
+* Data Type: double
+* Default Value: `1.0`
+
+Distance parameter, in meters, that determines to what degree a way is generalized by
+RdpWayGeneralizer, which is available standalone or as a part of PERTY. Higher values result in more
+generalization (more nodes removed).
 
 === way.joiner
 

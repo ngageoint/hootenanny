@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * A simple random name changer. This is not part of the original perty paper.
+ *
+ * @todo rename to RandomElementNameChanger
  */
 class PertyNameVisitor : public ElementVisitor, public RngConsumer, public Configurable,
   public OperationStatusInfo

@@ -641,6 +641,12 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
       input1.osm input2.osm output.osm
 -----
 
+===== Simplify ways in a map by removing unnecessary nodes from them:
+
+-----
+    hoot convert -D convert.ops="hoot::WayGeneralizeVistior" -D way.generalize.epsilon=1.0 input.osm output.osm
+-----
+
 ==== Statistics
 
 ===== Count all elements that are not POIs:

@@ -53,12 +53,9 @@ namespace hoot
  *    https://insightcloud.digitalglobe.com/redmine/attachments/download/1667/2013%20Evaluating%20conflation%20methods%20using%20uncertainty%20modeling.pdf
  *    http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=1691369
  *
- * The input map data should be projected to a planar coordinate system.
+ * @todo rename to RandomWaySplitter
  */
-class PertyWaySplitVisitor :
-    public ElementOsmMapVisitor,
-    public RngConsumer,
-    public Configurable
+class PertyWaySplitVisitor : public ElementOsmMapVisitor, public RngConsumer, public Configurable
 {
 
 public:
@@ -81,6 +78,8 @@ public:
     @see RngConsumer
     */
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+
+  virtual void setOsmMap(OsmMap* map) override;
 
   /**
     the probability that any way will be split into smaller segements

@@ -59,6 +59,15 @@ _splitRecursionLevel(0)
   setConfiguration(conf());
 }
 
+void PertyWaySplitVisitor::setOsmMap(OsmMap* map)
+{
+  _map = map;
+  //if (!_map->getProjection()->IsProjected() || _map->getProjection()->IsGeographic())
+  //{
+    MapProjector::projectToPlanar(_map->shared_from_this());
+  //}
+}
+
 void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
@@ -78,6 +87,15 @@ void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
 
 void PertyWaySplitVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  if (!_map)
+  {
+    throw IllegalArgumentException("No map passed to way splitter.");
+  }
+  else if (_map->getProjection()->IsGeographic())
+  {
+    throw IllegalArgumentException("Input map must be projected to planar.");
+  }
+
   LOG_TRACE(e->getElementType());
   if (HighwayCriterion().isSatisfied(e))
   {

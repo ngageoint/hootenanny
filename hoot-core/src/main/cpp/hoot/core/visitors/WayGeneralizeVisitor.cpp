@@ -22,65 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyWayGeneralizeVisitor.h"
-
-// boost
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/uniform_int.hpp>
+#include "WayGeneralizeVisitor.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyWayGeneralizeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, WayGeneralizeVisitor)
 
-PertyWayGeneralizeVisitor::PertyWayGeneralizeVisitor() :
+WayGeneralizeVisitor::WayGeneralizeVisitor() :
 _epsilon(1.0)
 {
-  _localRng.reset(new boost::minstd_rand());
-  _rng = _localRng.get();
-
   //setConfiguration(conf());
 }
 
-void PertyWayGeneralizeVisitor::setConfiguration(const Settings& conf)
+void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setWayGeneralizeProbability(configOptions.getPertyWayGeneralizeProbability());
   setEpsilon(configOptions.getWayGeneralizeEpsilon());
-  const int seed = configOptions.getPertySeed();
-  LOG_VARD(seed);
-  if (seed == -1)
-  {
-    _rng->seed(RandomNumberUtils::generateSeed());
-  }
-  else
-  {
-    _rng->seed(seed);
-  }
 }
 
-void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
+void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;
-  MapProjector::projectToPlanar(_map->shared_from_this());
+  //MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
   _generalizer.reset(new RdpWayGeneralizer(_epsilon));
   _generalizer->setOsmMap(_map);
 }
 
-void PertyWayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
+void WayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
 {
+  MapProjector::projectToPlanar(_map->shared_from_this());
+
   if (element->getElementType() == ElementType::Way)
   {
     if (!_map)
@@ -92,25 +74,7 @@ void PertyWayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
       throw IllegalArgumentException("Input map must be projected to planar.");
     }
 
-    //randomly select ways to generalize
-    boost::uniform_real<> randomGeneralizeDistribution(0.0, 1.0);
-    const double randomNum = randomGeneralizeDistribution(*_rng);
-    QString logMsg =
-      QString("element: %1 %2 be generalized based on a probability of: %3 and a randomly generated number: %4 \n")
-        .arg(element->getElementId().toString())
-        .arg("*will*")
-        .arg(QString::number(_wayGeneralizeProbability))
-        .arg(QString::number(randomNum));
-    if (randomNum <= _wayGeneralizeProbability)
-    {
-      LOG_TRACE(logMsg);
-      _generalizer->generalize(std::dynamic_pointer_cast<Way>(element));
-    }
-    else
-    {
-      logMsg = logMsg.replace("will", "will not");
-      LOG_TRACE(logMsg);
-    }
+    _generalizer->generalize(std::dynamic_pointer_cast<Way>(element));
   }
 }
 

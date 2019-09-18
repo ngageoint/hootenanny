@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Randomly removes elements from a map
+ *
+ * @todo rename to RandomElementRemover
  */
 class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngConsumer,
     public Configurable, public OperationStatusInfo

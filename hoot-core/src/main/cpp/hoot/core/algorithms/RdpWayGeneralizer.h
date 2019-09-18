@@ -28,13 +28,16 @@
 #ifndef RDP_WAY_GENERALIZER_H
 #define RDP_WAY_GENERALIZER_H
 
+// Hoot
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
+
 // Qt
 #include <QString>
 
 namespace hoot
 {
 
-class OsmMap;
 class Node;
 class Way;
 
@@ -44,11 +47,11 @@ class Way;
  *
  * "The Ramer-Douglas Peucker algorithm is an algorithm for reducing the number of points in a curve
  * that is approximated by a series of points. It does so by "thinking" of a line between the first
- * and last point in a set of points that form the curve. It checks which point in between is farthest
- * away from this line.  If the point (and as follows, all other in-between points) is closer than a
- * given distance 'epsilon', it removes all these in-between points. If on the other hand this
- * 'outlier point' is farther away from our imaginary line than epsilon, the curve is split in two
- * parts:
+ * and last point in a set of points that form the curve. It checks which point in between is
+ * farthest away from this line.  If the point (and as follows, all other in-between points) is
+ * closer than a given distance 'epsilon', it removes all these in-between points. If on the other
+ * hand this 'outlier point' is farther away from our imaginary line than epsilon, the curve is
+ * split in two parts:
  *
  * 1) From the first point up to and including the outlier
  * 2) The outlier and the remaining points
@@ -59,21 +62,19 @@ class Way;
  * 1. http://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm
  * 2. http://karthaus.nl/rdp/js/rdp.js
  *
- * The input map data should be projected to an orthographic coordinate system.
+ *  The input map data should be projected to an orthographic coordinate system.
  *
- * There is a GEOS implementation of this algorithm (DouglasPeuckerLineSimplifier).  Using it
- * proved not feasible, since it takes in a collection of Coordinates.  To use it, new nodes would
- * have to be generated for the points kept in the reduction, while deleting the old ones.  That
- * doesn't seem desirable.
+ * NOTE: There is a GEOS implementation of this algorithm (DouglasPeuckerLineSimplifier).  Using it
+ * proved not feasible, since it takes in a collection of Coordinate objects.  To use it, new nodes
+ * would have to have been generated for the points kept in the reduction, while deleting the old
+ * ones.  That isn't desirable from a runtime performance standpoint.
  */
-class RdpWayGeneralizer
+class RdpWayGeneralizer : public ConstOsmMapConsumer
 {
 
 public:
 
   RdpWayGeneralizer(double epsilon);
-
-  RdpWayGeneralizer(const std::shared_ptr<OsmMap>& map, double epsilon);
 
   /**
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
@@ -83,19 +84,12 @@ public:
   void generalize(const std::shared_ptr<Way>& way);
 
   /**
-    Generates a set of points that make up a generalized set of the input points
-
-    @param wayPoints the collection of points to be reduced
-    @returns a reduced set of line points
-    */
-  virtual QList<std::shared_ptr<const Node>> getGeneralizedPoints(
-    const QList<std::shared_ptr<const Node>>& wayPoints);
-
-  /**
     Sets the distance parameter that determines to what degree the way is generalized; higher
     values result in more generalization (more nodes are removed)
     */
   void setEpsilon(double epsilon);
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
 private:
 
@@ -103,7 +97,16 @@ private:
 
   double _epsilon;
 
-  std::shared_ptr<OsmMap> _map;
+  ConstOsmMapPtr _map;
+
+  /*
+    Generates a set of points that make up a generalized set of the input points
+
+    @param wayPoints the collection of points to be reduced
+    @returns a reduced set of line points
+    */
+  virtual QList<std::shared_ptr<const Node>> _getGeneralizedPoints(
+    const QList<std::shared_ptr<const Node>>& wayPoints);
 
   /*
     Finds the perpendicular distance between an imaginary line drawn from the first point on a line
@@ -119,7 +122,6 @@ private:
     const std::shared_ptr<const Node> splitPoint,
     const std::shared_ptr<const Node> lineToBeReducedStartPoint,
     const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
-
 };
 
 }
