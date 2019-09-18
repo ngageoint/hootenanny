@@ -57,7 +57,7 @@ public class ImportCommandTest {
 
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
-        String advUploadOpts = "SimplifyComplexBuildings";
+        String advUploadOpts = "Ogr2osmSimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
@@ -112,7 +112,7 @@ public class ImportCommandTest {
 
         List<File> zips = null;
         String translation = "translations/TDSv40.js";
-        String advUploadOpts = "SimplifyComplexBuildings";
+        String advUploadOpts = "Ogr2osmSimplifyComplexBuildings";
         String etlName = "ogrImport";
         Boolean isNoneTranslation = false;
 
@@ -174,7 +174,7 @@ public class ImportCommandTest {
         List<String> options = new LinkedList<>();
         //options.add("osm2ogr.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("hootapi.db.writer.overwrite.map=true");options.add("ogr2osm.simplify.complex.buildings=true");
-        
+
         options.add("hootapi.db.writer.create.user=true");
         options.add("api.db.email=test@test.com");
 
