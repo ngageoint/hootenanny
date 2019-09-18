@@ -202,6 +202,10 @@ class ExportCommand extends ExternalCommand {
     }
 
     private File getWorkFolder() {
-        return new File(TEMP_OUTPUT_PATH, getJobId());
+        if (params.getOutputPath() != null) {
+            return new File(params.getOutputPath());
+        } else {
+            return new File(TEMP_OUTPUT_PATH, getJobId());
+        }
     }
 }

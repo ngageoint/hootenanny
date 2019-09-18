@@ -11,7 +11,7 @@ _Conflation_:
 
 1. Fancy word for merge
 
-[Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain.  In short, it merges multiple maps into a single seamless map.
+[Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain. In short, it merges multiple maps into a single seamless map.
 
 Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.
 
@@ -30,7 +30,7 @@ Hootenanny conflation occurs at the dataset level, where the user’s workflow d
 * Rivers
 * Roads
 
-Additional feature types can be made conflatable via custom script by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
+Additional feature types can be made conflatable via Javascript by using Hootenanny's [Generic Conflation capability](https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyConflatingANewFeatureTypeWithGenericConflation.asciidoc).
 
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** (default) - _Keep the best of both_ - Conflate the best geometry and tag parts of map B into map A, favoring map A's data. Use this type of conflation when you want conflated output based on the best state of both 
@@ -40,11 +40,18 @@ input datasets.
 * **[Differential Tag Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add new tags_ - Conflate map A with B where only tags are transferred from B to matching features in A and entire features are added from B to A in areas where B does not overlap with A. This workflow provides a mix of capabilities from both [Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc) and regular [Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc).
 * **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - 1) Define a region in map A and replace data in that region with data in the same region from map B OR 2) Define a region in map A to preserve and replace data outside of it with data in the same region from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
 
-There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) available to customize the conflation workflows.
-
 # [Conflation Algorithms](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
 
-# Tag Schemas
+# Feature Filtering
+
+Hootenanny has the capability to let you selectively pick the features that are conflated from your data to save you from some pre-conflation data wrangling. Some examples:
+* conflate only buildings and leave roads untouched
+* conflate only restaurant buildings
+* conflate only restaurant buildings with "Subway" in the name
+
+Additionally, any of Hootenanny's many [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) can specified to perform feature filtering during conflation.
+
+# Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
 * Topographic Data Store (TDS) v6.1/v4.0 
 * Multi-National Geospatial Co-Production Program (MGCP)
@@ -52,7 +59,19 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 * OSM 
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
-Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations).
+Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
+
+# When To Use
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring conflation software options to get the best conflated output. 
+
+For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
+
+# Scalability
+Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of it supported a map/reduce architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance costs to support the capability (so the conflation algorithms are capable of supporting distributed computing). Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the density of the data being conflated.
+
+# Configuration
+
+There are a wide range of [configuration options](https://github.com/ngageoint/hootenanny/blob/master/conf/core/ConfigOptions.asciidoc) available to customize the conflation and translation workflows.
 
 # Web User Interface
 [Hootenanny's](https://github.com/ngageoint/hootenanny-ui) [web user interface](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc) is built upon the open source 
@@ -119,7 +138,7 @@ In addition to running full conflation on map data, Hootenanny also provides fin
 * [Replace](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacment.asciidoc) OpenStreetMap data completely within a bounding box
 * [Sort](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc) map data
 * [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) feature tags using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
-* [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English.
+* [Translate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) feature tags to English
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 
@@ -139,7 +158,12 @@ In addition to running full conflation on map data, Hootenanny also provides fin
 
 # Support
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
-* If you have any support questions, please create an issue in this repository.
+
+Don't hesitate to ask for help if something isn't conflating how you expect it to. If you have any support questions, please create an issue in this repository.
+
+As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny attempts to capture most scenarios with the default configuration options, but sometimes you will need to modify configuration options specific to the data you are conflating to get the best results.
+
+Additionally, the addition of new conflation features to the user interface may lag their initial development by a cycle or two. If you find a conflation feature you want to use mentioned in the documentation but can't find it in the UI, let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
