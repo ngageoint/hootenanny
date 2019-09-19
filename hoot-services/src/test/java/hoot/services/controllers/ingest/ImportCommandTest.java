@@ -81,6 +81,7 @@ public class ImportCommandTest {
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
+        assertNotSame(advUploadOpts, multiAdvOpts);
 
         assertEquals(hootConvertCommand, importCommand.getCommand());
         assertEquals(1, ((List)importCommand.getSubstitutionMap().get("INPUTS")).size());
@@ -94,7 +95,7 @@ public class ImportCommandTest {
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
         assertNotNull(importCommand.getAdvUploadOpts());
-        assertNotSame(advUploadOpts, multiAdvOpts);
+        
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
