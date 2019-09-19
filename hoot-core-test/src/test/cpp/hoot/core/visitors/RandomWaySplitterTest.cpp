@@ -38,16 +38,16 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/perty/PertyWaySplitVisitor.h>
+#include <hoot/core/visitors/RandomWaySplitter.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyWaySplitVisitorTest : public HootTestFixture
+class RandomWaySplitterTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PertyWaySplitVisitorTest);
+  CPPUNIT_TEST_SUITE(RandomWaySplitterTest);
   CPPUNIT_TEST(runWaySplitTest);
   CPPUNIT_TEST(runMultiLineStringSplitTest);
   CPPUNIT_TEST(runInvalidProbabilityTest);
@@ -56,23 +56,20 @@ class PertyWaySplitVisitorTest : public HootTestFixture
 
 public:
 
-  PertyWaySplitVisitorTest()
-    : HootTestFixture("test-files/algorithms/perty/PertyWaySplitVisitorTest/",
-                      "test-output/algorithms/perty/PertyWaySplitVisitorTest/")
+  RandomWaySplitterTest()
+    : HootTestFixture("test-files/visitors/RandomWaySplitterTest/",
+                      "test-output/visitors/RandomWaySplitterTest/")
   {
     setResetType(ResetAll);
   }
 
   void runWaySplitTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read(_inputPath + "PertyWaySplitVisitorTest-in-1.osm", map);
+    reader.read(_inputPath + "RandomWaySplitterTest-in-1.osm", map);
     const int numNodesBeforeSplitting = map->getNodes().size();
     LOG_VARD(numNodesBeforeSplitting);
     const int numWaysBeforeSplitting = map->getWays().size();
@@ -94,32 +91,26 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = _outputPath + "PertyWaySplitVisitorTest-out-1.osm";
+    const QString outFile = _outputPath + "RandomWaySplitterTest-out-1.osm";
     writer.write(map, outFile);
 
-    HOOT_FILE_EQUALS(
-      _inputPath + "PertyWaySplitVisitorTest-out-1.osm", outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
+    HOOT_FILE_EQUALS(_inputPath + "RandomWaySplitterTest-out-1.osm", outFile);
   }
 
   void runMultiLineStringSplitTest()
   {
-    //Log::WarningLevel levelBefore = Log::getInstance().getLevel();
-    //Log::getInstance().setLevel(Log::Debug);
-
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read(_inputPath + "PertyWaySplitVisitorTest-in-2.osm", map);
+    reader.read(_inputPath + "RandomWaySplitterTest-in-2.osm", map);
     const int numNodesBeforeSplitting = map->getNodes().size();
     LOG_VARD(numNodesBeforeSplitting);
     const int numWaysBeforeSplitting = map->getWays().size();
     LOG_VARD(numWaysBeforeSplitting)
 
     MapProjector::projectToPlanar(map);
-    PertyWaySplitVisitor waySplitVisitor;
+    RandomWaySplitter waySplitVisitor;
     boost::minstd_rand rng;
     rng.seed(1);
     waySplitVisitor.setRng(rng);
@@ -134,13 +125,10 @@ public:
 
     OsmXmlWriter writer;
     writer.setIncludeHootInfo(true);
-    const QString outFile = _outputPath + "PertyWaySplitVisitorTest-out-2.osm";
+    const QString outFile = _outputPath + "RandomWaySplitterTest-out-2.osm";
     writer.write(map, outFile);
 
-    HOOT_FILE_EQUALS(
-      _inputPath + "PertyWaySplitVisitorTest-out-2.osm", outFile);
-
-    //Log::getInstance().setLevel(levelBefore);
+    HOOT_FILE_EQUALS(_inputPath + "RandomWaySplitterTest-out-2.osm", outFile);
   }
 
   void runInvalidProbabilityTest()
@@ -148,7 +136,7 @@ public:
     QString exceptionMsg;
     try
     {
-      PertyWaySplitVisitor waySplitVisitor;
+      RandomWaySplitter waySplitVisitor;
       waySplitVisitor.setWaySplitProbability(-0.1);
     }
     catch (const HootException& e)
@@ -165,7 +153,7 @@ public:
     QString exceptionMsg;
     try
     {
-      PertyWaySplitVisitor waySplitVisitor;
+      RandomWaySplitter waySplitVisitor;
       waySplitVisitor.setMinNodeSpacing(-0.1);
     }
     catch (const HootException& e)
@@ -178,7 +166,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyDuplicatePoiOpTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyWaySplitVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomWaySplitterTest, "quick");
 
 }

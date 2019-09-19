@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyDuplicatePoiOp.h"
+#include "RandomNodeDuplicator.h"
 
 // boost
 #include <boost/random/normal_distribution.hpp>
@@ -43,17 +43,15 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, PertyDuplicatePoiOp)
+HOOT_FACTORY_REGISTER(OsmMapOperation, RandomNodeDuplicator)
 
-PertyDuplicatePoiOp::PertyDuplicatePoiOp()
+RandomNodeDuplicator::RandomNodeDuplicator()
 {
   _localRng.reset(new boost::minstd_rand(1));
   _rng = _localRng.get();
-
-  setConfiguration(conf());
 }
 
-void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
+void RandomNodeDuplicator::apply(OsmMapPtr& map)
 {
   _numAffected = 0;
 
@@ -80,7 +78,7 @@ void PertyDuplicatePoiOp::apply(OsmMapPtr& map)
   }
 }
 
-void PertyDuplicatePoiOp::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
+void RandomNodeDuplicator::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
 {
   boost::normal_distribution<> nd;
   boost::variate_generator<boost::minstd_rand&, boost::normal_distribution<>> N(*_rng, nd);
@@ -97,13 +95,13 @@ void PertyDuplicatePoiOp::duplicateNode(const NodePtr& n, const OsmMapPtr& map)
   _numAffected++;
 }
 
-void PertyDuplicatePoiOp::setConfiguration(const Settings& conf)
+void RandomNodeDuplicator::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setDuplicateSigma(configOptions.getPertyDuplicatePoiDuplicateSigma());
-  setProbability(configOptions.getPertyDuplicatePoiProbability());
-  setMoveMultiplier(configOptions.getPertyDuplicatePoiMoveMultiplier());
-  const int seed = configOptions.getPertySeed();
+  setDuplicateSigma(configOptions.getRandomNodeDuplicatorSigma());
+  setProbability(configOptions.getRandomNodeDuplicatorProbability());
+  setMoveMultiplier(configOptions.getRandomNodeDuplicatorMoveMultiplier());
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {

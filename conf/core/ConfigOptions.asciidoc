@@ -2738,16 +2738,6 @@ during conflation of reference and perturbed datasets.  This is equivalent in na
 'error:circular' tag used in Hootenanny conflation, however this setting is used instead for
 PERTY scoring only.
 
-=== perty.seed
-
-* Data Type: int
-* Default Value: `-1`
-
-A random seed integer passed to the random number generator accessed by PERTY to give consistent
-results over multiple runs. A value of -1 will generate a seed based on the time to provide
-pseudo-random results in the output.  Other seed values will yield repeatable results when the
-same seed is used in consecutive calls to the PERTY related commands.
-
 === perty.systematic.error.x
 
 * Data Type: double
@@ -3409,6 +3399,17 @@ how many duplicates will be created.
 
 The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
 guarantee that there will always be exactly one duplicate.
+
+=== random.seed
+
+* Data Type: int
+* Default Value: `-1`
+
+A random seed integer passed to the random number generator accessed by map operations and 
+visitors that modify element randomly (as used by PERTY). to give consistent results over 
+multiple runs. A value of -1 will generate a seed based on the time to provide pseudo-random 
+results in the output.  Other seed values will yield repeatable results when the same seed 
+is used in consecutive calls to the PERTY related commands.
 
 === random.tag.modifier.exempt.tag.keys
 

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyWaySplitVisitor.h"
+#include "RandomWaySplitter.h"
 
 // boost
 #include <boost/random/uniform_real.hpp>
@@ -48,32 +48,27 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyWaySplitVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RandomWaySplitter)
 
-PertyWaySplitVisitor::PertyWaySplitVisitor() :
+RandomWaySplitter::RandomWaySplitter() :
 _splitRecursionLevel(0)
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
-
-  setConfiguration(conf());
 }
 
-void PertyWaySplitVisitor::setOsmMap(OsmMap* map)
+void RandomWaySplitter::setOsmMap(OsmMap* map)
 {
   _map = map;
-  //if (!_map->getProjection()->IsProjected() || _map->getProjection()->IsGeographic())
-  //{
-    MapProjector::projectToPlanar(_map->shared_from_this());
-  //}
+  MapProjector::projectToPlanar(_map->shared_from_this());
 }
 
-void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
+void RandomWaySplitter::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setWaySplitProbability(configOptions.getPertyWaySplitProbability());
-  setMinNodeSpacing(configOptions.getPertyWaySplitMinNodeSpacing());
-  const int seed = configOptions.getPertySeed();
+  setWaySplitProbability(configOptions.getRandomWaySplitterProbability());
+  setMinNodeSpacing(configOptions.getRandomWaySplitterMinNodeSpacing());
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {
@@ -85,7 +80,7 @@ void PertyWaySplitVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyWaySplitVisitor::visit(const std::shared_ptr<Element>& e)
+void RandomWaySplitter::visit(const std::shared_ptr<Element>& e)
 {
   if (!_map)
   {
@@ -103,7 +98,7 @@ void PertyWaySplitVisitor::visit(const std::shared_ptr<Element>& e)
   }
 }
 
-vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
+vector<ElementPtr> RandomWaySplitter::_split(ElementPtr element)
 {
   //randomly select elements and split them into two parts
   boost::uniform_real<> randomSplitDistribution(0.0, 1.0);
@@ -227,7 +222,7 @@ vector<ElementPtr> PertyWaySplitVisitor::_split(ElementPtr element)
   return vector<ElementPtr>();
 }
 
-WayLocation PertyWaySplitVisitor::_calcSplitPoint(ConstWayPtr way) const
+WayLocation RandomWaySplitter::_calcSplitPoint(ConstWayPtr way) const
 {
   //create a way location that is the minimum node spacing distance from the beginning of the way
   WayLocation splitWayStart(_map->shared_from_this(), way, _minNodeSpacing);
@@ -253,8 +248,8 @@ WayLocation PertyWaySplitVisitor::_calcSplitPoint(ConstWayPtr way) const
   }
 }
 
-MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(ConstRelationPtr relation,
-                                                              ElementId& wayId) const
+MultiLineStringLocation RandomWaySplitter::_calcSplitPoint(ConstRelationPtr relation,
+                                                           ElementId& wayId) const
 {
   const vector<RelationData::Entry>& members = relation->getMembers();
   LOG_VART(members.size());
@@ -293,7 +288,7 @@ MultiLineStringLocation PertyWaySplitVisitor::_calcSplitPoint(ConstRelationPtr r
   }
 }
 
-NodePtr PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
+NodePtr RandomWaySplitter::_getNodeAddedBySplit(const QList<long>& nodeIdsBeforeSplit,
   const vector<ElementPtr>& newElementsAfterSplit) const
 {
   //newElementsAfterSplit is assumed to only contain ways; find the new node created by the way
@@ -311,9 +306,9 @@ NodePtr PertyWaySplitVisitor::_getNodeAddedBySplit(const QList<long>& nodeIdsBef
   return _map->getNode(firstNodeIdInLastWay);
 }
 
-void PertyWaySplitVisitor::_updateNewNodeProperties(NodePtr newNode,
-                                                   ConstNodePtr firstSplitBetweenNode,
-                                                   ConstNodePtr lastSplitBetweenNode)
+void RandomWaySplitter::_updateNewNodeProperties(NodePtr newNode,
+                                                 ConstNodePtr firstSplitBetweenNode,
+                                                 ConstNodePtr lastSplitBetweenNode)
 {
   //arbitrarily copy the status from one split between node to the new node
   newNode->setStatus(firstSplitBetweenNode->getStatus());

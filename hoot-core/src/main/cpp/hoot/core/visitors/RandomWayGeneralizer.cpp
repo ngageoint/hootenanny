@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyWayGeneralizeVisitor.h"
+#include "RandomWayGeneralizer.h"
 
 // boost
 #include <boost/random/uniform_real.hpp>
@@ -41,18 +41,16 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyWayGeneralizeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RandomWayGeneralizer)
 
-PertyWayGeneralizeVisitor::PertyWayGeneralizeVisitor() :
+RandomWayGeneralizer::RandomWayGeneralizer() :
 _epsilon(1.0)
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
-
-  //setConfiguration(conf());
 }
 
-void PertyWayGeneralizeVisitor::setConfiguration(const Settings& conf)
+void RandomWayGeneralizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setWayGeneralizeProbability(configOptions.getPertyWayGeneralizeProbability());
@@ -69,7 +67,7 @@ void PertyWayGeneralizeVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
+void RandomWayGeneralizer::setOsmMap(OsmMap* map)
 {
   _map = map;
   MapProjector::projectToPlanar(_map->shared_from_this());
@@ -79,7 +77,7 @@ void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
   _generalizer->setOsmMap(_map);
 }
 
-void PertyWayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
+void RandomWayGeneralizer::visit(const std::shared_ptr<Element>& element)
 {
   if (element->getElementType() == ElementType::Way)
   {

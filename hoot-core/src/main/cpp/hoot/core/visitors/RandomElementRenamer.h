@@ -24,29 +24,29 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTY_NAME_VISITOR_H
-#define PERTY_NAME_VISITOR_H
+#ifndef RANDOM_ELEMENT_RENAMER_H
+#define RANDOM_ELEMENT_RENAMER_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms//perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
 /**
- * A simple random name changer. This is not part of the original perty paper.
+ * A simple random name changer. This is not part of the original PERTY paper.
  */
-class PertyNameVisitor : public ElementVisitor, public RngConsumer, public Configurable,
+class RandomElementRenamer : public ElementVisitor, public RngConsumer, public Configurable,
   public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::PertyNameVisitor"; }
+  static std::string className() { return "hoot::RandomElementRenamer"; }
 
-  PertyNameVisitor();
+  RandomElementRenamer();
 
   QString permuteName(const QString& s);
 
@@ -85,4 +85,4 @@ private:
 
 }
 
-#endif // PERTY_NAME_VISITOR_H
+#endif // RANDOM_ELEMENT_RENAMER_H

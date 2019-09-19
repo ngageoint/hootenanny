@@ -24,27 +24,27 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTY_REMOVE_TAG_VISITOR_H
-#define PERTY_REMOVE_TAG_VISITOR_H
+#ifndef RANDOM_TAG_MODIFIER_H
+#define RANDOM_TAG_MODIFIER_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 
 namespace hoot
 {
 
 /**
- * A simple random tag remover
+ * A simple random tag modifier
  */
-class PertyRemoveTagVisitor : public ElementVisitor, public RngConsumer, public Configurable
+class RandomTagModifier : public ElementVisitor, public RngConsumer, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::PertyRemoveTagVisitor"; }
+  static std::string className() { return "hoot::RandomTagModifier"; }
 
-  PertyRemoveTagVisitor();
+  RandomTagModifier();
 
   QString permuteName(const QString& s);
 
@@ -60,12 +60,10 @@ public:
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
   void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
-
   void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
-
   void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
 
-  virtual QString getDescription() const { return "Randomly removes feature tags"; }
+  virtual QString getDescription() const { return "Randomly modifies feature tags"; }
 
 private:
 
@@ -80,4 +78,4 @@ private:
 
 }
 
-#endif // PERTY_REMOVE_TAG_VISITOR_H
+#endif // RANDOM_TAG_MODIFIER_H

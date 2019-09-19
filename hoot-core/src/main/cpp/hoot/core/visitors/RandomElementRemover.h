@@ -24,14 +24,14 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTYREMOVERANDOMELEMENTVISITOR_H
-#define PERTYREMOVERANDOMELEMENTVISITOR_H
+#ifndef RANDOM_ELEMENT_REMOVER_H
+#define RANDOM_ELEMENT_REMOVER_H
 
 // hoot
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 
 namespace hoot
 {
@@ -39,17 +39,17 @@ namespace hoot
 /**
  * Randomly removes elements from a map
  */
-class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngConsumer,
+class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer,
     public Configurable, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::PertyRemoveRandomElementVisitor"; }
+  static std::string className() { return "hoot::RandomElementRemover"; }
 
   /**
    * @arg p Probability that any given feature will be removed.
    */
-  PertyRemoveRandomElementVisitor();
+  RandomElementRemover();
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -80,4 +80,4 @@ private:
 
 }
 
-#endif // PERTYREMOVERANDOMELEMENTVISITOR_H
+#endif // RANDOM_ELEMENT_REMOVER_H

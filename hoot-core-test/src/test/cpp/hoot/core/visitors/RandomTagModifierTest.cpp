@@ -37,16 +37,16 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/algorithms/perty/PertyRemoveTagVisitor.h>
+#include <hoot/core/visitors/RandomTagModifier.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyRemoveTagVisitorTest : public HootTestFixture
+class RandomTagModifierTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PertyRemoveTagVisitorTest);
+  CPPUNIT_TEST_SUITE(RandomTagModifierTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runExemptTagKeysTest);
   CPPUNIT_TEST(runSubstituteValuesTest);
@@ -54,7 +54,7 @@ class PertyRemoveTagVisitorTest : public HootTestFixture
 
 public:
 
-  PertyRemoveTagVisitorTest()
+  RandomTagModifierTest()
   {
     setResetType(ResetBasic);
   }
@@ -76,7 +76,7 @@ public:
 
     boost::minstd_rand rng;
     rng.seed(1);
-    PertyRemoveTagVisitor v;
+    RandomTagModifier v;
     v.setRng(rng);
     v.setProbability(0.5);
     map->visitRw(v);
@@ -105,7 +105,7 @@ public:
 
     boost::minstd_rand rng;
     rng.seed(1);
-    PertyRemoveTagVisitor v;
+    RandomTagModifier v;
     v.setRng(rng);
     v.setProbability(1.0);
     QStringList exemptTagKeys;
@@ -139,7 +139,7 @@ public:
 
     boost::minstd_rand rng;
     rng.seed(1);
-    PertyRemoveTagVisitor v;
+    RandomTagModifier v;
     v.setRng(rng);
     v.setProbability(1.0);
     v.setExemptTagKeys(QStringList());
@@ -160,7 +160,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyRemoveTagVisitorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyRemoveTagVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomTagModifierTest, "quick");
 
 }

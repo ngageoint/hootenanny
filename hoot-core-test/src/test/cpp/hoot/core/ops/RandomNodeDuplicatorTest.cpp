@@ -39,7 +39,7 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/perty/PertyDuplicatePoiOp.h>
+#include <hoot/core/ops/RandomNodeDuplicator.h>
 
 // tbs
 #include <tbs/stats/SampleStats.h>
@@ -52,9 +52,9 @@ using namespace std;
 namespace hoot
 {
 
-class PertyDuplicatePoiOpTest : public HootTestFixture
+class RandomNodeDuplicatorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PertyDuplicatePoiOpTest);
+  CPPUNIT_TEST_SUITE(RandomNodeDuplicatorTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -80,7 +80,7 @@ public:
 
     boost::minstd_rand rng;
     rng.seed(1);
-    PertyDuplicatePoiOp uut;
+    RandomNodeDuplicator uut;
     uut.setRng(rng);
     uut.setDuplicateSigma(1.0);
     uut.setMoveMultiplier(0.5);
@@ -153,7 +153,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyDuplicatePoiOpTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyDuplicatePoiOpTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomNodeDuplicatorTest, "quick");
 
 }

@@ -43,16 +43,16 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/perty/PertyRemoveRandomElementVisitor.h>
+#include <hoot/core/visitors/RandomElementRemover.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-class PertyRemoveRandomElementVisitorTest : public HootTestFixture
+class RandomElementRemoverTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PertyRemoveRandomElementVisitorTest);
+  CPPUNIT_TEST_SUITE(RandomElementRemoverTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -77,7 +77,7 @@ public:
       map->addNode(n);
     }
 
-    PertyRemoveRandomElementVisitor v;
+    RandomElementRemover v;
     v.setRng(rng);
     map->visitRw(v);
 
@@ -86,7 +86,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RemoveRandomElementVisitorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyRemoveRandomElementVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomElementRemoverTest, "quick");
 
 }

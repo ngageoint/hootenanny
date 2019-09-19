@@ -38,7 +38,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/perty/PertyWayGeneralizeVisitor.h>
+#include <hoot/core/visitors/RandomWayGeneralizer.h>
 
 // Qt
 #include <QFileInfo>
@@ -48,9 +48,9 @@ using namespace std;
 namespace hoot
 {
 
-class PertyWayGeneralizeVisitorTest : public HootTestFixture
+class RandomWayGeneralizerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PertyWayGeneralizeVisitorTest);
+  CPPUNIT_TEST_SUITE(RandomWayGeneralizerTest);
   CPPUNIT_TEST(runTest1);
   CPPUNIT_TEST(runTest2);
   CPPUNIT_TEST(runTest3);
@@ -66,9 +66,9 @@ public:
 
   QMap<QString, OsmMapPtr> _inputMapCache;
 
-  PertyWayGeneralizeVisitorTest()
-    : HootTestFixture("test-files/algorithms/perty/PertyWayGeneralizeVisitorTest/",
-                      "test-output/algorithms/perty/PertyWayGeneralizeVisitorTest/")
+  RandomWayGeneralizerTest()
+    : HootTestFixture("test-files/visitors/RandomWayGeneralizerTest/",
+                      "test-output/visitors/RandomWayGeneralizerTest/")
   {
     setResetType(ResetBasic);
   }
@@ -107,7 +107,7 @@ public:
     LOG_VARD(numWaysBefore);
 
     MapProjector::projectToPlanar(map);
-    PertyWayGeneralizeVisitor wayGeneralizeVisitor;
+    RandomWayGeneralizer wayGeneralizeVisitor;
     boost::minstd_rand rng;
     rng.seed(randomNumberGeneratorSeed);
     wayGeneralizeVisitor.setRng(rng);
@@ -138,104 +138,103 @@ public:
   void runTest1()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       0.1,
       5.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-1.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-1.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-1.osm");
   }
 
   void runTest2()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       0.5,
       5.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-2.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-2.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-2.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-2.osm");
   }
 
   void runTest3()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       1.0,
       5.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-3.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-3.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-3.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-3.osm");
   }
 
   void runTest4()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       0.1,
       10.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-4.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-4.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-4.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-4.osm");
   }
 
   void runTest5()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       0.5,
       10.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-5.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-5.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-5.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-5.osm");
   }
 
   void runTest6()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       1.0,
       10.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-6.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-6.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-6.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-6.osm");
   }
 
   void runTest7()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       0.1,
       50.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-7.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-7.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-7.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-7.osm");
   }
 
   void runTest8()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       0.5,
       50.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-8.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-8.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-8.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-8.osm");
   }
 
   void runTest9()
   {
     runTest(
-      _inputPath + "PertyWayGeneralizeVisitorTest-in-1.osm",
+      _inputPath + "RandomWayGeneralizerTest-in-1.osm",
       1,
       1.0,
       50.0,
-      _outputPath + "PertyWayGeneralizeVisitorTest-out-9.osm",
-      _inputPath + "PertyWayGeneralizeVisitorTest-out-9.osm");
+      _outputPath + "RandomWayGeneralizerTest-out-9.osm",
+      _inputPath + "RandomWayGeneralizerTest-out-9.osm");
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyDuplicatePoiOpTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyWayGeneralizeVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomWayGeneralizerTest, "quick");
 
 }
