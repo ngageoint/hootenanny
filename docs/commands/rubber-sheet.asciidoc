@@ -79,4 +79,4 @@ hoot rubber-sheet --apply TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
 === See Also
 
 * <<hootalgo, RubberSheeting>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

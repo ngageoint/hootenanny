@@ -22,4 +22,4 @@ multiary-score-poi-matches [--confusion] (input1 input2) [input1 input2 ...] (ou
 === See Also
 
 * <<hootDevGuide, ManualMultiaryConflation>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

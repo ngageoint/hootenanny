@@ -44,15 +44,19 @@ class OverwriteTagMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OverwriteTagMergerTest);
   CPPUNIT_TEST(overwriteTest);
+  CPPUNIT_TEST(overwriteSwapTest);
+  CPPUNIT_TEST(overwriteExcludeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   void overwriteTest()
   {
-    OverwriteTagMerger uut;
+    // overwrite t2
 
     {
+      OverwriteTagMerger uut;
+
       Tags t1;
       t1["highway"] = "trunk";
       t1["name"] = "Midland Expressway";
@@ -89,43 +93,8 @@ public:
     }
 
     {
-      OverwriteTagMerger uut1(true);
+      OverwriteTagMerger uut;
 
-      Tags t1;
-      t1["highway"] = "trunk";
-      t1["name"] = "Midland Expressway";
-      t1["name:en"] = "Midland Expressway";
-      t1["ref"] = "US 24";
-      t1["oneway"] = "yes";
-      t1["lanes"] = "2";
-      t1["uuid"] = "foo";
-
-      Tags t2;
-      t2["highway"] = "secondary";
-      t2["name"] = "Midland Expy";
-      t2["name:en"] = "Midland Expressway";
-      t2["name:he"] = QString::fromUtf8("מידלנד המהיר");
-      t2["ref"] = "24";
-      t2["oneway"] = "true";
-      t2["bridge"] = "yes";
-      t2["uuid"] = "bar";
-
-      Tags expected;
-      expected["highway"] = "secondary";
-      expected["name"] = "Midland Expy";
-      expected["name:en"] = "Midland Expressway";
-      expected["ref"] = "24";
-      expected["oneway"] = "true";
-      expected["lanes"] = "2";
-      expected["alt_name"] = "US 24";
-      expected["name:he"] = QString::fromUtf8("מידלנד המהיר");
-      expected["bridge"] = "yes";
-      expected["uuid"] = "bar;foo";
-
-      Tags merged = uut1.mergeTags(t1, t2, ElementType::Way);
-      CPPUNIT_ASSERT_EQUAL(expected, merged);
-    }
-    {
       Tags t1;
       t1["highway"] = "primary_link";
       t1["all_weather"] = "yes";
@@ -150,6 +119,100 @@ public:
       Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
       CPPUNIT_ASSERT_EQUAL(expected, merged);
     }
+  }
+
+  void overwriteSwapTest()
+  {
+    // overwrite t1
+
+    OverwriteTagMerger uut(true);
+
+    Tags t1;
+    t1["highway"] = "trunk";
+    t1["name"] = "Midland Expressway";
+    t1["name:en"] = "Midland Expressway";
+    t1["ref"] = "US 24";
+    t1["oneway"] = "yes";
+    t1["lanes"] = "2";
+    t1["uuid"] = "foo";
+
+    Tags t2;
+    t2["highway"] = "secondary";
+    t2["name"] = "Midland Expy";
+    t2["name:en"] = "Midland Expressway";
+    t2["name:he"] = QString::fromUtf8("מידלנד המהיר");
+    t2["ref"] = "24";
+    t2["oneway"] = "true";
+    t2["bridge"] = "yes";
+    t2["uuid"] = "bar";
+
+    Tags expected;
+    expected["highway"] = "secondary";
+    expected["name"] = "Midland Expy";
+    expected["name:en"] = "Midland Expressway";
+    expected["ref"] = "24";
+    expected["oneway"] = "true";
+    expected["lanes"] = "2";
+    expected["alt_name"] = "US 24";
+    expected["name:he"] = QString::fromUtf8("מידלנד המהיר");
+    expected["bridge"] = "yes";
+    expected["uuid"] = "bar;foo";
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
+  }
+
+  void overwriteExcludeTest()
+  {
+    // overwrite t2; exclude some tags from being overwritten
+
+    OverwriteTagMerger uut;
+    QStringList excludeKeys;
+    // tag w/ inheritance
+    excludeKeys.append("highway");
+    // name tag
+    excludeKeys.append("name");
+    // text tag
+    excludeKeys.append("uuid");
+    // tag in ref, not in sec
+    excludeKeys.append("lanes");
+    // tag in sec, not in ref
+    excludeKeys.append("bridge");
+    uut.setOverwriteExcludeTagKeys(excludeKeys);
+
+    Tags t1;
+    t1["highway"] = "trunk";
+    t1["name"] = "Midland Expressway";
+    t1["name:en"] = "Midland Expressway";
+    t1["ref"] = "US 24";
+    t1["oneway"] = "yes";
+    t1["lanes"] = "2";
+    t1["uuid"] = "foo";
+
+    Tags t2;
+    t2["highway"] = "secondary";
+    t2["name"] = "Midland Expy";
+    t2["name:en"] = "Midland Expressway";
+    t2["name:he"] = QString::fromUtf8("מידלנד המהיר");
+    t2["ref"] = "24";
+    t2["oneway"] = "true";
+    t2["bridge"] = "yes";
+    t2["uuid"] = "bar";
+
+    Tags expected;
+    expected["highway"] = "secondary";
+    expected["name"] = "Midland Expy";
+    expected["name:en"] = "Midland Expressway";
+    expected["ref"] = "US 24";
+    expected["oneway"] = "yes";
+    expected["lanes"] = "2";
+    expected["alt_name"] = "24";
+    expected["name:he"] = QString::fromUtf8("מידלנד המהיר");
+    expected["bridge"] = "yes";
+    expected["uuid"] = "bar";
+
+    Tags merged = uut.mergeTags(t1, t2, ElementType::Way);
+    CPPUNIT_ASSERT_EQUAL(expected, merged);
   }
 };
 
