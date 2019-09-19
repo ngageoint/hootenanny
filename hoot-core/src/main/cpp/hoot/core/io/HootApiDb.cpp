@@ -1172,13 +1172,16 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
   LOG_TRACE("Retrieving map ID from url: " << url);
   LOG_VART(_currUserId);
 
-  QStringList urlParts = url.path().split("/");
+  const QStringList urlParts = url.path().split("/");
   bool ok;
   long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
   LOG_VART(ok);
   LOG_VART(mapId);
 
-  // if parsed map string is a name (not an id)
+  // If the ID was a valid number, treat it like an ID first.
+  ok = mapExists(mapId);
+
+  // If a map with the parsed ID doesn't exist, let's try it as a map name.
   if (!ok)
   {
     mapId = -1;
@@ -1197,8 +1200,6 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
       // try for public maps
       const std::set<long> mapIds = selectPublicMapIds(mapName);
       LOG_VART(mapIds);
-      // Here, we don't handle the situation where multiple maps across different users have the
-      // same name.
       if (mapIds.size() > 1)
       {
         throw HootException(

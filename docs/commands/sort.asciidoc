@@ -28,5 +28,5 @@ element.sorter.element.buffer.size to a value greater than zero
 
 === See Also
 
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

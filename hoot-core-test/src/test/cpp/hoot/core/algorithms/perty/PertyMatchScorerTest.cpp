@@ -72,7 +72,7 @@ public:
   void runLoadPerturbedMapTest()
   {
     Settings testSettings = conf();
-    testSettings.set("perty.seed", QString::number(1));
+    testSettings.set("random.seed", QString::number(1));
     testSettings.set("perty.systematic.error.x", QString::number(1));
     testSettings.set("perty.systematic.error.y", QString::number(1));
     PertyMatchScorer matchScorer;
