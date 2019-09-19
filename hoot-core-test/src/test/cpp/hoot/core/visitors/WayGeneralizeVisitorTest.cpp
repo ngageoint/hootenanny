@@ -61,7 +61,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
       map,
-      "test-files/algorithms/perty/PertyWayGeneralizeVisitorTest/PertyWayGeneralizeVisitorTest-in-1.osm");
+      "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");
 
     WayGeneralizeVisitor wayGeneralizeVisitor;
     wayGeneralizeVisitor.setEpsilon(5.0);
