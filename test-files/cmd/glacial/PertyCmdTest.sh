@@ -11,7 +11,7 @@ outputfile=$HOOT_HOME/test-output/cmd/glacial/PertyCmdTest/p_out.osm
 # Run the command. Note that we sanitize output to remove 
 # number of nodes reprojected, because this is variable
 hoot perty -D perty.search.distance=20 \
-           -D perty.way.generalize.probability=0.7 \
+           -D random.way.generalizer.probability=0.7 \
            $inputfile \
            $outputfile |\
            sed "s/^Reprojecting.*$//g"

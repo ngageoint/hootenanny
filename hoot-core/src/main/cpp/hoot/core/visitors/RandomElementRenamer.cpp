@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyNameVisitor.h"
+#include "RandomElementRenamer.h"
 
 // boost
 #include <boost/random/uniform_int.hpp>
@@ -46,17 +46,15 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyNameVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RandomElementRenamer)
 
-PertyNameVisitor::PertyNameVisitor()
+RandomElementRenamer::RandomElementRenamer()
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
-
-  setConfiguration(conf());
 }
 
-QString PertyNameVisitor::permuteName(const QString& s)
+QString RandomElementRenamer::permuteName(const QString& s)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   boost::uniform_int<> uniChange(0, 1);
@@ -94,12 +92,12 @@ QString PertyNameVisitor::permuteName(const QString& s)
   return result;
 }
 
-void PertyNameVisitor::setConfiguration(const Settings& conf)
+void RandomElementRenamer::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setProbability(configOptions.getPertyNameProbability());
-  setChangeProbability(configOptions.getPertyNameChangeProbability());
-  const int seed = configOptions.getPertySeed();
+  setProbability(configOptions.getRandomElementRenamerProbability());
+  setChangeProbability(configOptions.getRandomElementRenamerChangeProbability());
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {
@@ -111,7 +109,7 @@ void PertyNameVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyNameVisitor::visit(const std::shared_ptr<Element>& e)
+void RandomElementRenamer::visit(const std::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   QStringList keys = e->getTags().getMatchingKeys(Tags::getNameKeys());

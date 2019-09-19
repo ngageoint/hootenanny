@@ -40,7 +40,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/perty/RdpWayGeneralizer.h>
+#include <hoot/core/algorithms/RdpWayGeneralizer.h>
 
 using namespace geos::geom;
 
@@ -66,8 +66,8 @@ public:
   QMap<QString, QList<Coordinate>> _inputCoordsCache;
 
   RdpWayGeneralizerTest()
-    : HootTestFixture("test-files/algorithms/perty/RdpWayGeneralizerTest/",
-                      "test-output/algorithms/perty/RdpWayGeneralizerTest/")
+    : HootTestFixture("test-files/algorithms/RdpWayGeneralizerTest/",
+                      "test-output/algorithms/RdpWayGeneralizerTest/")
   {
     setResetType(ResetBasic);
   }
@@ -179,7 +179,7 @@ public:
 
     RdpWayGeneralizer generalizer(0.1);
     const QList<ConstNodePtr>& outputPoints =
-      generalizer.getGeneralizedPoints(inputPoints);
+      generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(148, outputPoints.size());
     QString outFile = _outputPath + "runCalcPointsInput1aTest-out.osm";
     writePointOutput(outputPoints, outFile);
@@ -194,7 +194,7 @@ public:
 
     RdpWayGeneralizer generalizer(5.9);
     const QList<ConstNodePtr>& outputPoints =
-      generalizer.getGeneralizedPoints(inputPoints);
+      generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(22, outputPoints.size());
     QString outFile = _outputPath + "runCalcPointsInput1bTest-out.osm";
     writePointOutput(outputPoints, outFile);
@@ -209,7 +209,7 @@ public:
 
     RdpWayGeneralizer generalizer(0.1);
     const QList<ConstNodePtr>& outputPoints =
-      generalizer.getGeneralizedPoints(inputPoints);
+      generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(48, outputPoints.size());
     QString outFile = _outputPath + "runCalcPointsInput2aTest-out.osm";
     writePointOutput(outputPoints, outFile);
@@ -224,7 +224,7 @@ public:
 
     RdpWayGeneralizer generalizer(5.9);
     const QList<ConstNodePtr>& outputPoints =
-      generalizer.getGeneralizedPoints(inputPoints);
+      generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(4, outputPoints.size());
     QString outFile = _outputPath + "runCalcPointsInput2bTest-out.osm";
     writePointOutput(outputPoints, outFile);
@@ -241,7 +241,8 @@ public:
     WayPtr way = TestUtils::createWay(map, Status::Unknown1, inputCoords.toVector().data(), 1, "");
     CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
 
-    RdpWayGeneralizer generalizer(map, 0.1);
+    RdpWayGeneralizer generalizer(0.1);
+    generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
     CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
@@ -278,7 +279,8 @@ public:
       }
     }
 
-    RdpWayGeneralizer generalizer(map, 0.1);
+    RdpWayGeneralizer generalizer(0.1);
+    generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
     CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
@@ -306,7 +308,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RdpWayGeneralizerTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RdpWayGeneralizerTest, "quick");
 
 }

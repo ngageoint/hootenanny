@@ -24,60 +24,65 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTYREMOVERANDOMELEMENTVISITOR_H
-#define PERTYREMOVERANDOMELEMENTVISITOR_H
+#ifndef RANDOM_ELEMENT_RENAMER_H
+#define RANDOM_ELEMENT_RENAMER_H
 
 // hoot
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
 
 /**
- * Randomly removes elements from a map
+ * A simple random name changer. This is not part of the original PERTY paper.
  */
-class PertyRemoveRandomElementVisitor : public ElementOsmMapVisitor, public RngConsumer,
-    public Configurable, public OperationStatusInfo
+class RandomElementRenamer : public ElementVisitor, public RngConsumer, public Configurable,
+  public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::PertyRemoveRandomElementVisitor"; }
+  static std::string className() { return "hoot::RandomElementRenamer"; }
 
-  /**
-   * @arg p Probability that any given feature will be removed.
-   */
-  PertyRemoveRandomElementVisitor();
+  RandomElementRenamer();
+
+  QString permuteName(const QString& s);
 
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Set the probability that a feature will be removed.
+   * The probability of a change to each character in the name. The expected number of changes is
+   * perty.name.change.p * str.size()
+   */
+  void setChangeProbability(double changeP) { _changeP = changeP; }
+
+  /**
+   * Set the probability that a name will be modified.
    */
   void setProbability(double p) { _p = p; }
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const ConstElementPtr& e);
-  virtual void visit(const std::shared_ptr<Element>& /*e*/) override {}
+  virtual void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
+  virtual QString getDescription() const { return "Randomly changes element names"; }
 
   virtual QString getInitStatusMessage() const
-  { return "Removing random elements..."; }
+  { return "Randomly changing element names..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
+  { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
 
 private:
 
+  double _changeP;
+  double _p;
   boost::minstd_rand* _rng;
   std::shared_ptr<boost::minstd_rand> _localRng;
-  double _p;
 };
 
 }
 
-#endif // PERTYREMOVERANDOMELEMENTVISITOR_H
+#endif // RANDOM_ELEMENT_RENAMER_H

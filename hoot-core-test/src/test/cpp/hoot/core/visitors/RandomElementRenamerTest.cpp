@@ -39,7 +39,7 @@
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/algorithms/perty/PertyNameVisitor.h>
+#include <hoot/core/visitors/RandomElementRenamer.h>
 
 // tbs
 #include <tbs/stats/SampleStats.h>
@@ -49,15 +49,15 @@ using namespace std;
 namespace hoot
 {
 
-class PertyNameVisitorTest : public HootTestFixture
+class RandomElementRenamerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PertyNameVisitorTest);
+  CPPUNIT_TEST_SUITE(RandomElementRenamerTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  PertyNameVisitorTest()
+  RandomElementRenamerTest()
   {
     setResetType(ResetBasic);
   }
@@ -79,7 +79,7 @@ public:
 
     boost::minstd_rand rng;
     rng.seed(1);
-    PertyNameVisitor v;
+    RandomElementRenamer v;
     v.setRng(rng);
     v.setChangeProbability(0.3);
     v.setProbability(0.5);
@@ -96,7 +96,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyNameVisitorTest, "current");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PertyNameVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RandomElementRenamerTest, "quick");
 
 }

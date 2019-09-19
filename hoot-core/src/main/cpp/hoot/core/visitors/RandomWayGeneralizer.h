@@ -24,14 +24,14 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTY_WAY_GENERALIZE_VISITOR_H
-#define PERTY_WAY_GENERALIZE_VISITOR_H
+#ifndef RANDOM_WAY_GENERALIZER_H
+#define RANDOM_WAY_GENERALIZER_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 
 namespace hoot
 {
@@ -47,17 +47,17 @@ namespace hoot
  *    http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=1691369
  * 2. http://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm
  *
- * The input map data should be projected to an orthographic coordinate system.
+ * The input map data will be projected to an orthographic coordinate system.
  */
-class PertyWayGeneralizeVisitor : public ElementOsmMapVisitor, public RngConsumer,
+class RandomWayGeneralizer : public ElementOsmMapVisitor, public RngConsumer,
   public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::PertyWayGeneralizeVisitor"; }
+  static std::string className() { return "hoot::RandomWayGeneralizer"; }
 
-  PertyWayGeneralizeVisitor();
+  RandomWayGeneralizer();
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -92,7 +92,7 @@ public:
     */
   void setEpsilon(double epsilon) { _epsilon = epsilon; }
 
-  virtual QString getDescription() const { return "Randomly generalizes ways"; }
+  virtual QString getDescription() const { return "Randomly simplifies ways by removing nodes"; }
 
 private:
 
@@ -110,4 +110,4 @@ private:
 
 }
 
-#endif // PERTY_WAY_GENERALIZE_VISITOR_H
+#endif // RANDOM_WAY_GENERALIZER_H

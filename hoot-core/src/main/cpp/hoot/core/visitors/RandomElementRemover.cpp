@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyRemoveRandomElementVisitor.h"
+#include "RandomElementRemover.h"
 
 // boost
 #include <boost/random/uniform_real.hpp>
@@ -41,21 +41,19 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyRemoveRandomElementVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RandomElementRemover)
 
-PertyRemoveRandomElementVisitor::PertyRemoveRandomElementVisitor()
+RandomElementRemover::RandomElementRemover()
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
-
-  setConfiguration(conf());
 }
 
-void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
+void RandomElementRemover::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setProbability(configOptions.getPertyRemoveRandomProbability());
-  const int seed = configOptions.getPertySeed();
+  setProbability(configOptions.getRandomElementRemoverProbability());
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {
@@ -67,7 +65,7 @@ void PertyRemoveRandomElementVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyRemoveRandomElementVisitor::visit(const ConstElementPtr& e)
+void RandomElementRemover::visit(const ConstElementPtr& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
   if (uni(*_rng) <= _p)
