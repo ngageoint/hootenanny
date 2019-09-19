@@ -46,7 +46,7 @@ _epsilon(1.0)
 void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setEpsilon(configOptions.getWayGeneralizeEpsilon());
+  setEpsilon(configOptions.getWayGeneralizerEpsilon());
 }
 
 void WayGeneralizeVisitor::setOsmMap(OsmMap* map)

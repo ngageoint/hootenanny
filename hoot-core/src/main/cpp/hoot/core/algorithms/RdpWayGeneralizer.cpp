@@ -59,27 +59,12 @@ void RdpWayGeneralizer::setEpsilon(double epsilon)
   LOG_VART(_epsilon);
 }
 
-//void RdpWayGeneralizer::setOsmMap(OsmMap* map)
-//{
-//  _map = map;
-//  //LOG_VARD(_map->getProjection()->IsProjected());
-// // LOG_VARD(_map->getProjection()->IsGeographic());
-//  //if (!_map->getProjection()->IsProjected() || _map->getProjection()->IsGeographic())
-//  //{
-//    MapProjector::projectToPlanar(_map->shared_from_this());
-//  //}
-//}
-
 void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 {
   if (!_map)
   {
     throw IllegalArgumentException("No map passed to way generalizer.");
   }
-//  else if (_map->getProjection()->IsGeographic())
-//  {
-//    throw IllegalArgumentException("Input map must be projected to planar.");
-//  }
 
   LOG_VART(way->getNodeIds().size());
   LOG_VART(QVector<long>::fromStdVector(way->getNodeIds()).toList());

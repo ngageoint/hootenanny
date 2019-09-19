@@ -4401,7 +4401,7 @@ The way subline matcher to use when determining matching sublines.
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
-=== way.generalize.epsilon
+=== way.generalizer.epsilon
 
 * Data Type: double
 * Default Value: `1.0`

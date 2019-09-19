@@ -644,7 +644,7 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 ===== Simplify ways in a map by removing unnecessary nodes from them:
 
 -----
-    hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalize.epsilon=5.0 input.osm output.osm
+    hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
 -----
 
 ==== Statistics

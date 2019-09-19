@@ -205,7 +205,6 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
   // Apply any user specified operations.
   NamedOp namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
-  //MapProjector::projectToPlanar(map);
   namedOps.apply(map);
 }
 
