@@ -3438,7 +3438,7 @@ Set the probability that a tag will be removed.
 
 A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
 values replaced instead.  The tag keys in the list match one to one with the replacement values in
-perty.remove.tag.visitor.subsitution.values.
+random.tag.modifier.subsitution.values.
 
 === random.tag.modifier.substitution.values
 
@@ -3447,7 +3447,7 @@ perty.remove.tag.visitor.subsitution.values.
 ** `road`
 
 A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
-list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.keys.
+list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
 
 === random.way.generalizer.probability
 
