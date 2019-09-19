@@ -2707,31 +2707,6 @@ If true, the data is rubbersheeted before conflation, moving perturbed data clos
 The PERTY D value. D is used in e ^ (-perty.grid.spacing / D). Defaults to 1000. Larger values
 result in a more correlated permutation grid.
 
-=== perty.duplicate.poi.duplicate.sigma
-
-* Data Type: double
-* Default Value: `1.0`
-
-The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
-guarantee that there will always be exactly one duplicate.
-
-=== perty.duplicate.poi.move.multiplier
-
-* Data Type: double
-* Default Value: `1.0`
-
-The distance that a feature is moved is based on the circular error of the source point. The
-new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
-sigma is the standard deviation associated with the source point.
-
-=== perty.duplicate.poi.probability
-
-* Data Type: double
-* Default Value: `0.10`
-
-The probability of at least one duplicate being created. See setDuplicateSigma to determine
-how many duplicates will be created.
-
 === perty.grid.spacing
 
 * Data Type: double
@@ -2739,79 +2714,19 @@ how many duplicates will be created.
 
 The size of the PERTY grid spacing in meters.
 
-=== perty.name.change.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability of a change to each character in the name. The expected number of changes is
-`perty.name.change.probability` * str.size().
-
-=== perty.name.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability that a name will be modified.
-
 === perty.ops
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor`
-** `hoot::PertyWayGeneralizeVisitor`
-** `hoot::PertyRemoveRandomElementVisitor`
-** `hoot::PertyDuplicatePoiOp`
-** `hoot::PertyRemoveTagVisitor`
-** `hoot::PertyNameVisitor`
+** `hoot::RandomWaySplitter`
+** `hoot::RandomWayGeneralizer`
+** `hoot::RandomElementRemover`
+** `hoot::RandomNodeDuplicator`
+** `hoot::RandomTagModifier`
+** `hoot::RandomElementRenamer`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 'hoot info --operators | grep Perty' displays information about the available operations.
-
-=== perty.remove.random.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability that a feature will be removed.
-
-=== perty.remove.tag.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-Set the probability that a tag will be removed.
-
-=== perty.remove.tag.visitor.exempt.tag.keys
-
-* Data Type: list
-* Default Value:
-** `REF1`
-** `REF2`
-** `hoot:status`
-** `uuid`
-
-A list of tag keys which are exempt from the tag removal done by PertyRemoveTagsVisitor.  This is
-useful for preventing the removal of tags Hootenanny relies on during conflation.
-
-=== perty.remove.tag.visitor.substitution.keys
-
-* Data Type: list
-* Default Value:
-** `highway`
-
-A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
-values replaced instead.  The tag keys in the list match one to one with the replacement values in
-perty.remove.tag.visitor.subsitution.values.
-
-=== perty.remove.tag.visitor.substitution.values
-
-* Data Type: list
-* Default Value:
-** `road`
-
-A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
-list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.keys.
 
 === perty.search.distance
 
@@ -2935,27 +2850,6 @@ perty.test.dynamic.variable.start.value), is/are altered by an increment during 
 The number of simulations per test run executed by `perty-test`.  A test run is made up of
 multiple simulations.  Scores all simulation executed by the test run are averaged to give the
 final PERTY score for the test run.
-
-=== perty.way.generalize.probability
-
-* Data Type: double
-* Default Value: `0.1`
-
-The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
-
-=== perty.way.split.min.node.spacing
-
-* Data Type: double
-* Default Value: `1`
-
-The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
-
-=== perty.way.split.probability
-
-* Data Type: double
-* Default Value: `0.1`
-
-The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
 
 === phone.number.additional.tag.keys
 
@@ -3462,12 +3356,118 @@ See also:
 
 The way subline matcher to use when determining matching sublines.
 
+=== random.element.remover.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a feature will be removed.
+
+=== random.element.renamer.change.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability of a change to each character in the name. The expected number of changes is
+`perty.name.change.probability` * str.size().
+
+=== random.element.renamer.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a name will be modified.
+
 === random.forest.model.trees
 
 * Data Type: int
 * Default Value: `40`
 
 The number of trees used to train a random forest conflation model.
+
+=== random.node.duplicator.move.multiplier
+
+* Data Type: double
+* Default Value: `1.0`
+
+The distance that a feature is moved is based on the circular error of the source point. The
+new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
+sigma is the standard deviation associated with the source point.
+
+=== random.node.duplicator.probability
+
+* Data Type: double
+* Default Value: `0.10`
+
+The probability of at least one duplicate being created. See setDuplicateSigma to determine
+how many duplicates will be created.
+
+=== random.node.duplicator.sigma
+
+* Data Type: double
+* Default Value: `1.0`
+
+The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+guarantee that there will always be exactly one duplicate.
+
+=== random.tag.modifier.exempt.tag.keys
+
+* Data Type: list
+* Default Value:
+** `REF1`
+** `REF2`
+** `hoot:status`
+** `uuid`
+
+A list of tag keys which are exempt from the tag removal done by PertyRemoveTagsVisitor.  This is
+useful for preventing the removal of tags Hootenanny relies on during conflation.
+
+=== random.tag.modifier.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+Set the probability that a tag will be removed.
+
+=== random.tag.modifier.substitution.keys
+
+* Data Type: list
+* Default Value:
+** `highway`
+
+A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
+values replaced instead.  The tag keys in the list match one to one with the replacement values in
+perty.remove.tag.visitor.subsitution.values.
+
+=== random.tag.modifier.substitution.values
+
+* Data Type: list
+* Default Value:
+** `road`
+
+A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
+list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.keys.
+
+=== random.way.generalizer.probability
+
+* Data Type: double
+* Default Value: `0.1`
+
+The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
+
+=== random.way.splitter.min.node.spacing
+
+* Data Type: double
+* Default Value: `1`
+
+The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
+
+=== random.way.splitter.probability
+
+* Data Type: double
+* Default Value: `0.1`
+
+The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
 
 === reader.add.source.datetime
 

@@ -48,8 +48,6 @@ namespace hoot
  * 2. http://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm
  *
  * The input map data should be projected to an orthographic coordinate system.
- *
- * @todo rename to RandomWayGeneralizer
  */
 class PertyWayGeneralizeVisitor : public ElementOsmMapVisitor, public RngConsumer,
   public Configurable

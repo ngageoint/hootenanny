@@ -35,8 +35,6 @@ namespace hoot
 
 /**
  * Consumes a random number generator.
- *
- * @todo move to util namespace
  */
 class RngConsumer
 {
