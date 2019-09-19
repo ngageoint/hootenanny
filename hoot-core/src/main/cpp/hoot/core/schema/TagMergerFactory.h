@@ -57,11 +57,11 @@ public:
    */
   const TagMerger& getDefault() { return *getDefaultPtr(); }
 
-  std::shared_ptr<const TagMerger> getDefaultPtr();
+  std::shared_ptr<TagMerger> getDefaultPtr();
 
   const TagMerger& getMerger(const QString& name) { return *getMergerPtr(name); }
 
-  std::shared_ptr<const TagMerger> getMergerPtr(const QString& name);
+  std::shared_ptr<TagMerger> getMergerPtr(const QString& name);
 
   /**
    * A convenience function for merging tags using the default mechanism. Equivalent to:
@@ -78,8 +78,8 @@ private:
 
   TagMergerFactory();
 
-  QHash<QString, std::shared_ptr<const TagMerger>> _mergers;
-  std::shared_ptr<const TagMerger> _default;
+  QHash<QString, std::shared_ptr<TagMerger>> _mergers;
+  std::shared_ptr<TagMerger> _default;
 
   static std::shared_ptr<TagMergerFactory> _theInstance;
 };

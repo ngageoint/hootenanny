@@ -7797,38 +7797,6 @@
         <tag k="REF1" v="0005ae"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <way visible="true" id="-805" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-476"/>
-        <nd ref="-456"/>
-        <nd ref="-454"/>
-        <nd ref="-502"/>
-        <nd ref="-504"/>
-        <nd ref="-461"/>
-        <nd ref="-457"/>
-        <nd ref="-477"/>
-        <nd ref="-476"/>
-        <tag k="area" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-804" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-962"/>
-        <nd ref="-968"/>
-        <nd ref="-970"/>
-        <nd ref="-969"/>
-        <nd ref="-963"/>
-        <nd ref="-962"/>
-        <tag k="area" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-803" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4584"/>
-        <nd ref="-3931"/>
-        <nd ref="-2474"/>
-        <nd ref="-4585"/>
-        <nd ref="-4584"/>
-        <tag k="area" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-802" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4700"/>
         <nd ref="-4699"/>

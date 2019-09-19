@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
- * Merges two buildings
+ * Merges two or more buildings
+ *
+ * This guy could maybe use some refactoring now.
  */
 class BuildingMerger : public MergerBase
 {
@@ -54,7 +56,8 @@ public:
    */
   explicit BuildingMerger(const std::set<std::pair<ElementId, ElementId>>& pairs);
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual void apply(const OsmMapPtr& map,
+                     std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /**
    * Creates a single building out of a group of buildings
@@ -80,6 +83,19 @@ public:
    * @param mergeTargetId the ID of the building which all other buildings should be merged into
    */
   static void mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetId);
+
+  /**
+   * Adds multiple buildings to the same relation
+   *
+   * @param map the map to add the relation containing the buildings to
+   * @param constituentBuildings the buildings to add to the relation
+   * @param preserveTypes if true, preserves type tags; see PreserveTypesTagMerger
+   * @return a building relation if the constituent buildings all have 3D tags; otherwise a
+   * multipolygon relation with a building tag
+   */
+  static RelationPtr combineConstituentBuildingsIntoRelation(
+    const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings,
+    const bool preserveTypes = false);
 
   virtual QString getDescription() const { return "Merges buildings"; }
 
