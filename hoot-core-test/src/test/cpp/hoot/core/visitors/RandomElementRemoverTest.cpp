@@ -78,6 +78,7 @@ public:
     }
 
     RandomElementRemover v;
+    v.setConfiguration(conf());
     v.setRng(rng);
     map->visitRw(v);
 
