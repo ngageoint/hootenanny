@@ -36,10 +36,6 @@
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/algorithms/perty/DirectSequentialSimulation.h>
-#include <hoot/core/algorithms/perty/PertyDuplicatePoiOp.h>
-#include <hoot/core/algorithms/perty/PertyNameVisitor.h>
-#include <hoot/core/algorithms/perty/PertyRemoveTagVisitor.h>
-#include <hoot/core/algorithms/perty/PertyRemoveRandomElementVisitor.h>
 #include <hoot/core/algorithms/perty/PermuteGridCalculator.h>
 
 //Qt
@@ -189,7 +185,7 @@ void PertyOp::_configure()
     configOptions.getPertySystematicErrorX(), configOptions.getPertySystematicErrorY());
   setGridSpacing(configOptions.getPertyGridSpacing());
   setCsmParameters(configOptions.getPertyCsmD());
-  setSeed(configOptions.getPertySeed());
+  setSeed(configOptions.getRandomSeed());
   setNamedOps(configOptions.getPertyOps());
 }
 

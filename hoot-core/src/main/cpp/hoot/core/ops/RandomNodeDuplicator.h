@@ -32,7 +32,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 
 // Qt
 #include <QString>

@@ -53,9 +53,9 @@ _epsilon(1.0)
 void RandomWayGeneralizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setWayGeneralizeProbability(configOptions.getPertyWayGeneralizeProbability());
+  setWayGeneralizeProbability(configOptions.getRandomWayGeneralizerProbability());
   setEpsilon(configOptions.getWayGeneralizeEpsilon());
-  const int seed = configOptions.getPertySeed();
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {

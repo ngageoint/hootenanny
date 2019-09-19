@@ -76,7 +76,7 @@ public:
     LOG_VARD(numWaysBeforeSplitting)
 
     MapProjector::projectToPlanar(map);
-    PertyWaySplitVisitor waySplitVisitor;
+    RandomWaySplitter waySplitVisitor;
     boost::minstd_rand rng;
     rng.seed(1);
     waySplitVisitor.setRng(rng);
