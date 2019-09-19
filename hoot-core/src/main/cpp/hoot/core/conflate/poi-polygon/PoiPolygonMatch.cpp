@@ -486,6 +486,11 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_TRACE("**************************");
 }
 
+MatchType PoiPolygonMatch::getType() const
+{
+  return _threshold->getType(_class);
+}
+
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
   _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);

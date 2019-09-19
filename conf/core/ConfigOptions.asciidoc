@@ -560,7 +560,7 @@ local path and then `$HOOT_HOME/conf/`.
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a match is called a match.
+The default threshold at which a match is called a match. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -571,7 +571,7 @@ See also:
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a miss is called a miss.
+The default threshold at which a miss is called a miss. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -620,7 +620,7 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 * Default Value: `0.6`
 
 The default threshold at which a review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear.
+other situations when the relationship is not clear. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -1185,7 +1185,7 @@ is required for unit tests, but shouldn't be used in normal operation.
 * Data Type: double
 * Default Value: `0.161`
 
-The threshold at which a match is called a match for roads.
+The threshold at which a match is called a match for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -3174,28 +3174,6 @@ features will be classified as a review or miss, depending on the value of
 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
 
-=== poi.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match when comparing POIs to polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss when comparing POIs to polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === poi.polygon.name.score.threshold
 
 * Data Type: double
@@ -3298,14 +3276,6 @@ the command line, surround the entire value string in double quotes.
 If true, POI to polygon conflation always marks matches between POIs and polygons where multi-use
 building polygons are present as needing review.  The definition of multi-use buildings is
 controlled by the Hootenanny schema.
-
-=== poi.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for PoiPolygon. See
-`conflate.review.threshold.default`.
 
 === poi.polygon.source.tag.key
 
