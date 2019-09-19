@@ -131,8 +131,6 @@ public:
 
     mapId = ids->at(0);
 
-    //LOG_WARN("Map ID out of ITM1: " << mapId);
-
     CPPUNIT_ASSERT(database.mapExists(mapId));
 
     HOOT_STR_EQUALS(true, database.hasTable(HootApiDb::getCurrentNodesTableName(mapId)));
