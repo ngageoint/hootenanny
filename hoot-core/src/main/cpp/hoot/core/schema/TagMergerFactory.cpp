@@ -30,6 +30,7 @@
 #include <hoot/core/schema/TagMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -54,7 +55,7 @@ TagMergerFactory& TagMergerFactory::getInstance()
   return *_theInstance;
 }
 
-std::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
+std::shared_ptr<TagMerger> TagMergerFactory::getDefaultPtr()
 {
   if (!_default)
   {
@@ -65,13 +66,18 @@ std::shared_ptr<const TagMerger> TagMergerFactory::getDefaultPtr()
   return _default;
 }
 
-std::shared_ptr<const TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
+std::shared_ptr<TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
 {
-  std::shared_ptr<const TagMerger> result;
-  QHash<QString, std::shared_ptr<const TagMerger>>::const_iterator it = _mergers.find(name);
+  std::shared_ptr<TagMerger> result;
+  QHash<QString, std::shared_ptr<TagMerger>>::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
     result.reset(Factory::getInstance().constructObject<TagMerger>(name.toStdString()));
+    std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(result);
+    if (configurable)
+    {
+      configurable->setConfiguration(conf());
+    }
     _mergers.insert(name, result);
   }
   else

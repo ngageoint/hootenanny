@@ -12,7 +12,7 @@ set -e
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
-# - can maybe also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except the POI test, right now)
+# - can maybe also ditch the single geometry tests, as they may be redundant with the multiple geometry tests (except for the POI test)
 
 TEST_NAME=$1
 echo "test name: " $TEST_NAME

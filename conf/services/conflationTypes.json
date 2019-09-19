@@ -2,8 +2,10 @@
     "General": {
         "members": {
             "add.review.tags.to.features": "Add review tags to individual features",
-            "review.score.criterion.min.threshold": "Minimum review score",
-            "review.score.criterion.max.threshold": "Maximum review score"
+            "corner.splitter.rounded.split": "Round corners when splitting",
+            "overwrite.tag.merger.exclude": "Tag overwrite exclude list",
+            "review.score.criterion.max.threshold": "Maximum review score",
+            "review.score.criterion.min.threshold": "Minimum review score"
         }
     },
     "Cleaning": {
@@ -14,7 +16,9 @@
     "Attribute": {
         "members": {
             "attribute.conflation.aggressive.highway.joining": "Aggressively join roads",
-            "attribute.conflation.allow.reviews.by.score": "Allow reviews by score"
+            "attribute.conflation.allow.reviews.by.score": "Allow reviews by score",
+            "attribute.conflation.ref.tag.overwrite.exclude": "Reference feature tags not to be overwritten",
+            "attribute.conflation.update.building.outlines": "Update building outlines after conflation"
         }
     },
     "Differential": {
@@ -49,7 +53,7 @@
             "building.force.contained.match": "Force matches when one building contains another",
             "building.keep.more.complex.geometry.when.auto.merging": "Keep more complex geometry when merging",
             "building.match.threshold": "Score threshold for matching",
-            "building.merge.many.to.many.matches": "For mergers for many to many matches",
+            "building.merge.many.to.many.matches": "Always merge many to many matches",
             "building.review.if.secondary.newer": "Review if secondary feature is newer",
             "building.review.matches.other.than.one.to.one": "Review matches that are not one to one"
         }
@@ -65,7 +69,7 @@
         "matcher": "hoot::PoiPolygonMatchCreator",
         "merger": "hoot::PoiPolygonMergerCreator",
         "members": {
-            "poi.polygon.allow.cross.conflation.merging": "Merge Building and Poi to Polygon matches",
+            "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and Poi to Polygon matches",
             "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Merge many to one POI to polygon matches",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
             "poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only": "Match key prefix only if same source conflation disabled",

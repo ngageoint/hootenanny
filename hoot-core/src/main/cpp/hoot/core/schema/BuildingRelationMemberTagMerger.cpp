@@ -24,12 +24,13 @@
  *
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "BuildingPartTagMerger.h"
+#include "BuildingRelationMemberTagMerger.h"
 
 // hoot
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 // Qt
 #include <QStringBuilder>
@@ -37,40 +38,59 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(TagMerger, BuildingPartTagMerger)
+std::set<QString> BuildingRelationMemberTagMerger::_buildingPartTagNames;
 
-BuildingPartTagMerger::BuildingPartTagMerger()
+HOOT_FACTORY_REGISTER(TagMerger, BuildingRelationMemberTagMerger)
+
+BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger()
 {
 }
 
-BuildingPartTagMerger::BuildingPartTagMerger(const std::set<QString>& buildingPartTagNames) :
-_buildingPartTagNames(buildingPartTagNames)
+BuildingRelationMemberTagMerger::BuildingRelationMemberTagMerger(
+  const std::set<QString>& ignoreTagKeys) :
+_ignoreTagKeys(ignoreTagKeys)
 {
 }
 
-Tags BuildingPartTagMerger::mergeTags(const Tags& buildingTags, const Tags& buildingPartTags,
-                                      ElementType /*elementType*/) const
+std::set<QString> BuildingRelationMemberTagMerger::getBuildingPartTagNames()
 {
-  LOG_VART(buildingTags);
-  LOG_VART(buildingPartTags);
+  if (_buildingPartTagNames.size() == 0)
+  {
+    const std::vector<SchemaVertex>& buildingPartTags =
+      OsmSchema::getInstance().getAssociatedTagsAsVertices(MetadataTags::BuildingPart() + "=yes");
+    for (size_t i = 0; i < buildingPartTags.size(); i++)
+    {
+      _buildingPartTagNames.insert(buildingPartTags[i].name.split("=")[0]);
+    }
+    _buildingPartTagNames.insert(MetadataTags::BuildingPart());
+  }
+  return _buildingPartTagNames;
+}
 
-  Tags mergedTags = buildingTags;
-  Tags buildingTagsCopy = buildingTags;
-  Tags buildingPartTagsCopy = buildingPartTags;
+Tags BuildingRelationMemberTagMerger::mergeTags(
+  const Tags& relationTags, const Tags& constituentBuildingTags, ElementType /*elementType*/) const
+{
+  LOG_VART(relationTags);
+  LOG_VART(constituentBuildingTags);
+
+  Tags mergedTags = relationTags;
+  Tags relationTagsCopy = relationTags;
+  Tags constituentBuildingTagsCopy = constituentBuildingTags;
 
   Tags names;
-  TagComparator::getInstance().mergeNames(buildingTagsCopy, buildingPartTagsCopy, names);
+  TagComparator::getInstance().mergeNames(relationTagsCopy, constituentBuildingTagsCopy, names);
   mergedTags.set(names);
   LOG_VART(mergedTags);
 
   // go through all the tags
   OsmSchema& schema = OsmSchema::getInstance();
-  for (Tags::const_iterator it = buildingPartTags.begin(); it != buildingPartTags.end(); ++it)
+  for (Tags::const_iterator it = constituentBuildingTags.begin();
+       it != constituentBuildingTags.end(); ++it)
   {
-    // ignore all keys that are building:part specific.
-    if (_buildingPartTagNames.find(it.key()) == _buildingPartTagNames.end())
+    // ignore any specified ignore keys
+    if (_ignoreTagKeys.find(it.key()) == _ignoreTagKeys.end())
     {
-      // if the tag isn't already in the relation
+      // If the tag isn't already in the relation, add it.
       if (mergedTags.contains(it.key()) == false)
       {
         mergedTags[it.key()] = it.value();
@@ -92,8 +112,8 @@ Tags BuildingPartTagMerger::mergeTags(const Tags& buildingTags, const Tags& buil
   // go through all the keys that were consistent for each of the parts and move them into the
   // relation.
 
-  buildingTagsCopy = mergedTags;
-  for (Tags::const_iterator it = buildingTagsCopy.begin(); it != buildingTagsCopy.end(); ++it)
+  relationTagsCopy = mergedTags;
+  for (Tags::const_iterator it = relationTagsCopy.begin(); it != relationTagsCopy.end(); ++it)
   {
     // If the value is empty, then the tag isn't needed, or it wasn't consistent between multiple
     // parts...remove it.

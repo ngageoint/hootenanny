@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.0756764" minlon="-69.342517" maxlat="10.0780791" maxlon="-69.33993329999998"/>
-    <node visible="true" id="-53" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182" lat="10.0759889000000005" lon="-69.3420507000000015"/>
-    <node visible="true" id="-52" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182" lat="10.0761556999999993" lon="-69.3417469999999980"/>
-    <node visible="true" id="-51" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182" lat="10.0764107000000003" lon="-69.3417469999999980"/>
-    <node visible="true" id="-50" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182" lat="10.0764169999999993" lon="-69.3418621000000002"/>
-    <node visible="true" id="-49" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182" lat="10.0765587000000032" lon="-69.3418652000000009"/>
-    <node visible="true" id="-48" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182" lat="10.0765492000000005" lon="-69.3420570999999910"/>
-    <node visible="true" id="-47" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0770876000000005" lon="-69.3413998999999990"/>
-    <node visible="true" id="-46" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0767316000000005" lon="-69.3413697999999954"/>
-    <node visible="true" id="-45" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0767150999999977" lon="-69.3417146999999829"/>
-    <node visible="true" id="-44" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0770842999999974" lon="-69.3417347999999834"/>
-    <node visible="true" id="-43" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0770909000000000" lon="-69.3415741000000025"/>
-    <node visible="true" id="-42" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0757393000000004" lon="-69.3424028999999962"/>
-    <node visible="true" id="-41" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0757098000000003" lon="-69.3423989000000063"/>
-    <node visible="true" id="-40" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0756882000000019" lon="-69.3423808999999949"/>
-    <node visible="true" id="-39" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0756764000000008" lon="-69.3423570000000069"/>
-    <node visible="true" id="-38" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0756823000000004" lon="-69.3423269999999974"/>
-    <node visible="true" id="-37" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0769535000000001" lon="-69.3401659000000024"/>
-    <node visible="true" id="-36" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0770123999999992" lon="-69.3400620999999973"/>
-    <node visible="true" id="-35" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0770516999999984" lon="-69.3400043000000039"/>
-    <node visible="true" id="-34" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0770929999999996" lon="-69.3399782999999843"/>
-    <node visible="true" id="-33" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0771636999999981" lon="-69.3399483999999973"/>
-    <node visible="true" id="-32" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0772148000000001" lon="-69.3399383999999941"/>
-    <node visible="true" id="-31" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0772536000000006" lon="-69.3399332999999842"/>
-    <node visible="true" id="-30" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0780791000000001" lon="-69.3400094999999936"/>
-    <node visible="true" id="-29" timestamp="2014-08-23T18:09:39Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182" lat="10.0771485999999975" lon="-69.3425170000000008"/>
+    <node visible="true" id="-53" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182" lat="10.0759889000000005" lon="-69.3420507000000015"/>
+    <node visible="true" id="-52" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182" lat="10.0761556999999993" lon="-69.3417469999999980"/>
+    <node visible="true" id="-51" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182" lat="10.0764107000000003" lon="-69.3417469999999980"/>
+    <node visible="true" id="-50" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182" lat="10.0764169999999993" lon="-69.3418621000000002"/>
+    <node visible="true" id="-49" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182" lat="10.0765587000000032" lon="-69.3418652000000009"/>
+    <node visible="true" id="-48" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182" lat="10.0765492000000005" lon="-69.3420570999999910"/>
+    <node visible="true" id="-47" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0770876000000005" lon="-69.3413998999999990"/>
+    <node visible="true" id="-46" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0767316000000005" lon="-69.3413697999999954"/>
+    <node visible="true" id="-45" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0767150999999977" lon="-69.3417146999999829"/>
+    <node visible="true" id="-44" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0770842999999974" lon="-69.3417347999999834"/>
+    <node visible="true" id="-43" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0770909000000000" lon="-69.3415741000000025"/>
+    <node visible="true" id="-42" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0757393000000004" lon="-69.3424028999999962"/>
+    <node visible="true" id="-41" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0757098000000003" lon="-69.3423989000000063"/>
+    <node visible="true" id="-40" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0756882000000019" lon="-69.3423808999999949"/>
+    <node visible="true" id="-39" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0756764000000008" lon="-69.3423570000000069"/>
+    <node visible="true" id="-38" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0756823000000004" lon="-69.3423269999999974"/>
+    <node visible="true" id="-37" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0769535000000001" lon="-69.3401659000000024"/>
+    <node visible="true" id="-36" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0770123999999992" lon="-69.3400620999999973"/>
+    <node visible="true" id="-35" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0770516999999984" lon="-69.3400043000000039"/>
+    <node visible="true" id="-34" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0770929999999996" lon="-69.3399782999999843"/>
+    <node visible="true" id="-33" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0771636999999981" lon="-69.3399483999999973"/>
+    <node visible="true" id="-32" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0772148000000001" lon="-69.3399383999999941"/>
+    <node visible="true" id="-31" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0772536000000006" lon="-69.3399332999999842"/>
+    <node visible="true" id="-30" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0780791000000001" lon="-69.3400094999999936"/>
+    <node visible="true" id="-29" timestamp="2014-08-23T18:09:39Z" version="1" user="Sidneyb" uid="2271182" lat="10.0771485999999975" lon="-69.3425170000000008"/>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0774442361799998" lon="-69.3409874849999994"/>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0774431924700032" lon="-69.3410223567800017"/>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0775685294499997" lon="-69.3410261765099989"/>
@@ -54,7 +54,7 @@
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0768206524300012" lon="-69.3404933413199984"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0777056220000016" lon="-69.3405268069599856"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0776892799799995" lon="-69.3409668293899983"/>
-    <way visible="true" id="-5" timestamp="2015-06-30T21:43:19Z" version="1" changeset="32319610" user="Sidneyb" uid="2271182">
+    <way visible="true" id="-5" timestamp="2015-06-30T21:43:19Z" version="1" user="Sidneyb" uid="2271182">
         <nd ref="-48"/>
         <nd ref="-49"/>
         <nd ref="-50"/>
@@ -62,20 +62,20 @@
         <nd ref="-52"/>
         <nd ref="-53"/>
         <nd ref="-48"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-4" timestamp="2014-08-23T18:09:40Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182">
+    <way visible="true" id="-4" timestamp="2014-08-23T18:09:40Z" version="1" user="Sidneyb" uid="2271182">
         <nd ref="-43"/>
         <nd ref="-44"/>
         <nd ref="-45"/>
         <nd ref="-46"/>
         <nd ref="-47"/>
         <nd ref="-43"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-3" timestamp="2014-08-23T18:09:40Z" version="1" changeset="24961643" user="Sidneyb" uid="2271182">
+    <way visible="true" id="-3" timestamp="2014-08-23T18:09:40Z" version="1" user="Sidneyb" uid="2271182">
         <nd ref="-29"/>
         <nd ref="-30"/>
         <nd ref="-31"/>
@@ -91,7 +91,7 @@
         <nd ref="-41"/>
         <nd ref="-42"/>
         <nd ref="-29"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -120,7 +120,7 @@
         <nd ref="-27"/>
         <nd ref="-28"/>
         <nd ref="-5"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -129,15 +129,15 @@
         <nd ref="-3"/>
         <nd ref="-4"/>
         <nd ref="-1"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5" role="part"/>
-        <member type="way" ref="-4" role="part"/>
-        <member type="way" ref="-3" role="part"/>
-        <member type="way" ref="-2" role="part"/>
-        <member type="way" ref="-1" role="part"/>
+        <member type="way" ref="-5" role="outer"/>
+        <member type="way" ref="-4" role="outer"/>
+        <member type="way" ref="-3" role="outer"/>
+        <member type="way" ref="-2" role="outer"/>
+        <member type="way" ref="-1" role="outer"/>
         <tag k="feature_area" v="5028.9"/>
         <tag k="amenity" v="fast_food"/>
         <tag k="addr:street" v="Avenida Libertador"/>
@@ -154,6 +154,6 @@
         <tag k="angle" v="356.8"/>
         <tag k="length" v="114.7"/>
         <tag k="error:circular" v="15"/>
-        <tag k="type" v="building"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# DC roads take about 6 minutes to run
-#baseMap1=$HOOT_HOME/test-files/DcGisRoads.osm
-#baseMap2=$HOOT_HOME/test-files/DcGisRoads.osm
-#uut=$HOOT_HOME/test-files/DcTigerRoads.osm
-
-# Toy files take about 9 sec to run
 baseMap1=$HOOT_HOME/test-files/ToyTestA.osm
 baseMap2=$HOOT_HOME/test-files/ToyTestA.osm
 uut=$HOOT_HOME/test-files/ToyTestB.osm

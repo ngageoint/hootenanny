@@ -379,15 +379,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== building.outline.update.op.remove.building.relations
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, when building outlines are updated the updater will remove the source building relations
-used to create the outline multipolygon relation.  If false, both source building relations and
-outline multipolygon relations will remain.
-
 === building.part.merger.thread.count
 
 * Data Type: int
@@ -4119,6 +4110,15 @@ key/value pairs with ';' and surround the entire list in double quotes.
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
 available mergers.
+
+=== tag.merger.overwrite.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tags not to be overwritten on target features during tag merging when using
+OverwriteTagMerger only. Please keep alphabetized.
 
 === tag.printing.format
 
