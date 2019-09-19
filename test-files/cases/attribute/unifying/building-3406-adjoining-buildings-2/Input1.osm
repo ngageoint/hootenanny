@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.06697243235" minlon="-69.36653603105" maxlat="10.06785004002" maxlon="-69.36604862945001"/>
+    <node visible="true" id="-5837890" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0670284650500008" lon="-69.3665173928799987"/>
+    <node visible="true" id="-5837889" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0670184733300001" lon="-69.3662402657299992"/>
+    <node visible="true" id="-5837888" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0669792364999999" lon="-69.3662417061199932"/>
+    <node visible="true" id="-5837887" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0669724323499992" lon="-69.3660529920399966"/>
+    <node visible="true" id="-5837886" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0670912692699996" lon="-69.3660486294500060"/>
+    <node visible="true" id="-5837885" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0670973351500006" lon="-69.3662168676400057"/>
+    <node visible="true" id="-5837884" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0671912666499992" lon="-69.3662134193999975"/>
+    <node visible="true" id="-5837883" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0671962507899995" lon="-69.3663516571100018"/>
+    <node visible="true" id="-5837882" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0670997202100008" lon="-69.3663552007299984"/>
+    <node visible="true" id="-5837881" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0671010448799993" lon="-69.3663919415599963"/>
+    <node visible="true" id="-5837812" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0677093041399992" lon="-69.3663696125299936"/>
+    <node visible="true" id="-5837811" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0677029042899999" lon="-69.3661921091400018"/>
+    <node visible="true" id="-5837810" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0678387126699995" lon="-69.3661871235700005"/>
+    <node visible="true" id="-5837809" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0678500400199997" lon="-69.3665012963799938"/>
+    <node visible="true" id="-5837808" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0678067159100006" lon="-69.3665051937999948"/>
+    <node visible="true" id="-5837807" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0678072452399991" lon="-69.3665198754499954"/>
+    <node visible="true" id="-5837806" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0673671493499999" lon="-69.3665360310500034"/>
+    <node visible="true" id="-5837805" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0673660306000006" lon="-69.3665050010800002"/>
+    <node visible="true" id="-5837804" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0672920572999995" lon="-69.3665077165899930"/>
+    <node visible="true" id="-5837803" timestamp="2019-08-16T11:05:19Z" version="1" lat="10.0672914742700002" lon="-69.3663849509599970"/>
+    <way visible="true" id="-5837891" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5837804"/>
+        <nd ref="-5837803"/>
+        <nd ref="-5837881"/>
+        <nd ref="-5837882"/>
+        <nd ref="-5837883"/>
+        <nd ref="-5837884"/>
+        <nd ref="-5837885"/>
+        <nd ref="-5837886"/>
+        <nd ref="-5837887"/>
+        <nd ref="-5837888"/>
+        <nd ref="-5837889"/>
+        <nd ref="-5837890"/>
+        <nd ref="-5837804"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="51.1"/>
+        <tag k="feature_area" v="976.1"/>
+        <tag k="width" v="34.2"/>
+        <tag k="angle" v="272.1"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+    <way visible="true" id="-5837813" timestamp="2019-08-16T11:05:19Z" version="1">
+        <nd ref="-5837803"/>
+        <nd ref="-5837804"/>
+        <nd ref="-5837805"/>
+        <nd ref="-5837806"/>
+        <nd ref="-5837807"/>
+        <nd ref="-5837808"/>
+        <nd ref="-5837809"/>
+        <nd ref="-5837810"/>
+        <nd ref="-5837811"/>
+        <nd ref="-5837812"/>
+        <nd ref="-5837803"/>
+        <tag k="building" v="yes"/>
+        <tag k="length" v="62.1"/>
+        <tag k="feature_area" v="1297.2"/>
+        <tag k="width" v="36.3"/>
+        <tag k="angle" v="2.1"/>
+        <tag k="source:datetime" v="2019-08-16T11:05:19Z"/>
+    </way>
+</osm>

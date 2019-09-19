@@ -146,38 +146,6 @@
     <node visible="true" id="7107" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0161605001099900" lon="125.7672680001199836"/>
     <node visible="true" id="8446" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0152670002699935" lon="125.7671639998199993"/>
     <node visible="true" id="8449" timestamp="2018-01-10T18:15:57Z" version="1" changeset="14855" lat="39.0152984999300045" lon="125.7669909999399920"/>
-    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4545"/>
-        <nd ref="4546"/>
-        <nd ref="4547"/>
-        <nd ref="4548"/>
-        <nd ref="4549"/>
-        <nd ref="4550"/>
-        <nd ref="4551"/>
-        <nd ref="4552"/>
-        <nd ref="4553"/>
-        <nd ref="4554"/>
-        <nd ref="4555"/>
-        <nd ref="4556"/>
-        <nd ref="4545"/>
-        <tag k="area" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-8"/>
-        <nd ref="-124"/>
-        <nd ref="-125"/>
-        <nd ref="-7"/>
-        <nd ref="-8"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-123"/>
-        <nd ref="-10"/>
-        <nd ref="-9"/>
-        <nd ref="-123"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-28" timestamp="2018-01-10T18:20:40Z" version="1">
         <nd ref="-126"/>
         <nd ref="-127"/>
@@ -617,12 +585,6 @@
         <tag k="length" v="66"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-369579" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-31" role="outer"/>
-        <member type="way" ref="-32" role="outer"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multipolygon"/>
-    </relation>
     <relation visible="true" id="-369578" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-2" role="reviewee"/>
         <member type="way" ref="-16" role="reviewee"/>

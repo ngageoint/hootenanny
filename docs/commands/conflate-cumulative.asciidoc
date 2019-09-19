@@ -32,5 +32,5 @@ hoot conflate-cumulative -D review.tags.treat.as.metadata=false -D tag.merger.de
 === See Also
 
 * _Unifying Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

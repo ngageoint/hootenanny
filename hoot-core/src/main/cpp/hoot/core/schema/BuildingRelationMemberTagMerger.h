@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BUILDING_PART_TAG_MERGER_H
-#define BUILDING_PART_TAG_MERGER_H
+#ifndef BUILDING_RELATION_MEMBER_TAG_MERGER_H
+#define BUILDING_RELATION_MEMBER_TAG_MERGER_H
 
 #include <hoot/core/schema/TagMerger.h>
 
@@ -33,39 +33,41 @@ namespace hoot
 {
 
 /**
- * A tag merger for buildings and their constituent parts
+ * A tag merger for relation building members
  */
-class BuildingPartTagMerger : public TagMerger
+class BuildingRelationMemberTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::BuildingPartTagMerger"; }
+  static std::string className() { return "hoot::BuildingRelationMemberTagMerger"; }
 
-  BuildingPartTagMerger();
-  BuildingPartTagMerger(const std::set<QString>& buildingPartTagNames);
+  BuildingRelationMemberTagMerger();
+  BuildingRelationMemberTagMerger(const std::set<QString>& ignoreTagKeys);
 
   /**
    * Merges tags between a building and a single building part
    *
-   * @param buildingTags the final output tags for the building
-   * @param buildingPartTags the tags of the building part
+   * @param relationTags the final output tags for the building
+   * @param constituentBuildingTags the tags of the building part
    * @param elementType the type of element whose tags are being merged (ignored)
    * @return a merged set of tags
    */
-  virtual Tags mergeTags(const Tags& buildingTags, const Tags& buildingPartTags,
+  virtual Tags mergeTags(const Tags& relationTags, const Tags& constituentBuildingTags,
                          ElementType elementType) const override;
 
   virtual QString getDescription() const
   { return "Merges building and building part tags together"; }
 
-  void setBuildingPartTagNames(std::set<QString> tagNames) { _buildingPartTagNames = tagNames; }
+  static std::set<QString> getBuildingPartTagNames();
 
 private:
 
-  // a set of building part tag keys, which will be ignored during tag merging
-  std::set<QString> _buildingPartTagNames;
+  // tag keys that identify building parts
+  static std::set<QString> _buildingPartTagNames;
+  // a set of tag keys, which will be ignored during tag merging
+  std::set<QString> _ignoreTagKeys;
 };
 
 }
 
-#endif // BUILDING_PART_TAG_MERGER_H
+#endif // BUILDING_RELATION_MEMBER_TAG_MERGER_H
