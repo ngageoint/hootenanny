@@ -1389,6 +1389,7 @@ QStringList HootApiDb::selectMapNamesAvailableToCurrentUser()
   result.append(selectMapNamesOwnedByCurrentUser());
   result.append(selectPublicMapNames());
   result.removeDuplicates();
+  result.sort();
   return result;
 }
 
@@ -1430,7 +1431,7 @@ QStringList HootApiDb::selectPublicMapNames()
   {
     _selectPublicMapNames.reset(new QSqlQuery(_db));
     const QString sql =
-      QString("SELECT m.display_name, f.public from " + getMapsTableName() + " m ") +
+      QString("SELECT m.display_name from " + getMapsTableName() + " m ") +
         QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
         QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
         QString("WHERE f.public = TRUE");
@@ -1446,7 +1447,7 @@ QStringList HootApiDb::selectPublicMapNames()
 
   while (_selectPublicMapNames->next())
   {
-    result.append(_selectPublicMapNames->value(1).toString());
+    result.append(_selectPublicMapNames->value(0).toString());
   }
   LOG_VART(result.size());
 

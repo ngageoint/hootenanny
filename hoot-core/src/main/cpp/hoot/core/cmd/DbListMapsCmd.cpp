@@ -57,14 +57,14 @@ public:
     HootApiDb mapReader;
     mapReader.open(args[0]);
     mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
-    const QStringList maps = mapReader.selectMapNamesAvailableToCurrentUser();
-    if (maps.size() == 0)
+    const QStringList mapNames = mapReader.selectMapNamesAvailableToCurrentUser();
+    if (mapNames.size() == 0)
     {
       std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
     }
     else
     {
-      std::cout << "Available map layers:\n\n" << maps.join("\n") << std::endl;
+      std::cout << "Available map layers:\n\n" << mapNames.join("\n") << std::endl;
     }
     mapReader.close();
 

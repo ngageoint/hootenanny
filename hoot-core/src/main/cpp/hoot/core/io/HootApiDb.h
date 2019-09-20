@@ -187,8 +187,7 @@ public:
    *
    * @sa createPendingMapIndexes();
    *
-   * @param mapName Name of the map to create.
-   * @param userId User id of the map owner.
+   * @param mapName name of the map to create
    * @return
    */
   long insertMap(QString mapName);
