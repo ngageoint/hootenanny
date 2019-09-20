@@ -27,7 +27,6 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ApiDbReader.h>
 #include <hoot/core/io/OsmMapReader.h>
@@ -37,14 +36,10 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QTemporaryFile>
-
-// Tgs
-#include <tgs/Statistics/Random.h>
 
 namespace hoot
 {
@@ -139,7 +134,7 @@ public:
 
     OsmMapPtr inputMap = _readInputs(inputs);
     const std::vector<std::vector<geos::geom::Envelope>> tiles =
-      _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
+      GeometryUtils::calculateTiles(maxNodesPerTile, pixelSize, inputMap);
     _writeOutputAsGeoJson(tiles, output, args.contains("--random"), randomSeed);
 
     return 0;
@@ -157,8 +152,18 @@ private:
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
+      const QString input = inputs.at(i);
       std::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::createReader(inputs.at(i), true, Status::Unknown1);
+        OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
+
+      std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
+      if (bboxSpecified && !boundable)
+      {
+        // TODO: need a test for this
+        throw IllegalArgumentException(
+          "Reader for " + input + " must implement Boundable when the " +
+          "convert.bounding.box configuration option is specified.");
+      }
 
       std::shared_ptr<ApiDbReader> apiDbReader =
         std::dynamic_pointer_cast<ApiDbReader>(reader);
@@ -170,15 +175,8 @@ private:
         //convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
         apiDbReader->setReturnNodesOnly(true);
       }
-      if (bboxSpecified && !apiDbReader)
-      {
-        //non api db readers don't support convert.bounding.box right now and are just going to
-        //generate confusing output with its specified, so let's throw
-        throw HootException(
-          "convert.bounding.box configuration option specified for a non API DB reader");
-      }
 
-      reader->open(inputs.at(i));
+      reader->open(input);
       reader->read(map);
     }
     LOG_VARD(map->getNodeCount());
@@ -189,21 +187,6 @@ private:
     OsmMapWriterFactory::writeDebugMap(map);
 
     return map;
-  }
-
-  std::vector<std::vector<geos::geom::Envelope>> _calculateTiles(const long maxNodesPerTile,
-                                                                   const double pixelSize,
-                                                                   OsmMapPtr map)
-  {
-    TileBoundsCalculator tileBoundsCalculator(pixelSize);
-    tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
-    //tbc.setSlop(0.1);
-    cv::Mat r1, r2;
-    tileBoundsCalculator.renderImage(map, r1, r2);
-    //we're calculating for unknown1 only, so fill the second matrix with all zeroes
-    cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
-    tileBoundsCalculator.setImages(r1, zeros);
-    return tileBoundsCalculator.calculateTiles();
   }
 
   void _writeOutputAsGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
@@ -252,15 +235,7 @@ private:
     int randomTileIndex = -1;
     if (selectSingleRandomTile)
     {
-      if (randomSeed == -1)
-      {
-        randomSeed = RandomNumberUtils::generateSeed();
-      }
-      LOG_VARD(randomSeed);
-      Tgs::Random::instance()->seed(randomSeed);
-
-      const size_t numBboxes = tiles.size() * tiles[0].size();
-      randomTileIndex = Tgs::Random::instance()->generateInt(numBboxes);
+      randomTileIndex = GeometryUtils::getRandomTileIndex(tiles, randomSeed);
     }
 
     OsmMapPtr boundaryMap(new OsmMap());

@@ -60,7 +60,7 @@ class Node;
  * this b/c of RAM limitations on my machine. In the future it may be necessary to change over
  * to 64bit floats, but I imagine that is a long way off. If you do switch then you'll have to
  * change the CV_32SC1 to CV_64FC1 (floating point representation). This will impact the
- * PaintNodes* code as well. -surratt
+ * PaintNodes* code as well.
  */
 class TileBoundsCalculator
 {
@@ -77,6 +77,7 @@ public:
   class Pixel
   {
   public:
+
     int x;
     int y;
 
@@ -91,6 +92,7 @@ public:
   class PixelBox
   {
   public:
+
     int minX;
     int minY;
     int maxX;

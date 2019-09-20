@@ -40,6 +40,11 @@
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
+#include <hoot/core/util/RandomNumberUtils.h>
+
+// Tgs
+#include <tgs/Statistics/Random.h>
 
 // Qt
 #include <QString>
@@ -372,6 +377,54 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
   boundaryMap->addWay(bbox);
 
   return boundaryMap;
+}
+
+std::vector<std::vector<geos::geom::Envelope>> GeometryUtils::calculateTiles(
+  const long maxNodesPerTile, const double pixelSize, OsmMapPtr map)
+{
+  TileBoundsCalculator tileBoundsCalculator(pixelSize);
+  tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
+  //tbc.setSlop(0.1);
+  cv::Mat r1, r2;
+  tileBoundsCalculator.renderImage(map, r1, r2);
+  //we're calculating for unknown1 only, so fill the second matrix with all zeroes
+  cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
+  tileBoundsCalculator.setImages(r1, zeros);
+  return tileBoundsCalculator.calculateTiles();
+}
+
+int GeometryUtils::getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                      int randomSeed)
+{
+  if (randomSeed == -1)
+  {
+    randomSeed = RandomNumberUtils::generateSeed();
+  }
+  LOG_VARD(randomSeed);
+  Tgs::Random::instance()->seed(randomSeed);
+
+  const size_t numBboxes = tiles.size() * tiles[0].size();
+  return Tgs::Random::instance()->generateInt(numBboxes);
+}
+
+geos::geom::Envelope GeometryUtils::getRandomTile(
+  const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed)
+{
+  const int randomTileIndex = getRandomTileIndex(tiles, randomSeed);
+  int bboxCtr = 1;
+  for (size_t tx = 0; tx < tiles.size(); tx++)
+  {
+    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+    {
+      if ((bboxCtr - 1) == randomTileIndex)
+      {
+        return tiles[tx][ty];
+      }
+      bboxCtr++;
+    }
+  }
+  // shouldn't ever get here
+  return geos::geom::Envelope();
 }
 
 }

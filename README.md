@@ -129,7 +129,8 @@ In addition to running conflation jobs with map data, Hootenanny also provides f
 * [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data
 * [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)
 * [Filter](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) a subset of features before conflation based on tag content and schema relationships
-* Gather [statistics](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/stats.asciidoc) from a map
+* [Grab](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop-random.asciidoc) a random section of data from a map for testing against
+* [Crop](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) a map to a geospatial extent
 * [Identify](https://github.com/ngageoint/hootenanny/blob/master/docs/user/IdentifyRoadIntersections.asciidoc) road intersections in a map
 * [Locate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LocatePhoneNumbers.asciidoc) phone numbers geographically
 * [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes

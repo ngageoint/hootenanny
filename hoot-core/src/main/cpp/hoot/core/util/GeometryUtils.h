@@ -144,6 +144,37 @@ public:
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * TODO
+   *
+   * @param maxNodesPerTile
+   * @param pixelSize
+   * @param map
+   * @return
+   */
+  static std::vector<std::vector<geos::geom::Envelope>> calculateTiles(
+    const long maxNodesPerTile, const double pixelSize, OsmMapPtr map);
+
+  /**
+   * TODO
+   *
+   * @param tiles
+   * @param randomSeed
+   * @return
+   */
+  static int getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                int randomSeed);
+
+  /**
+   * TODO
+   *
+   * @param tiles
+   * @param randomSeed
+   * @return
+   */
+  static geos::geom::Envelope getRandomTile(
+    const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
 };
 
 }

@@ -3,22 +3,30 @@
 
 === Description
 
-The +crop-random+ command randomly crops a section of map data to a specified element count. This is useful if you have a very large file 
-dataset and need a smaller subset of data to test conflation against.
+The +crop-random+ command randomly crops a section of map data to an area with a specified maximum node count. This is useful if you have a 
+very large file dataset and need a smaller subset of data to test conflation against.
 
-See the [[crop] command documentation for information on applicable configuration options.
-
-* +input+          - The input data path; may be any supported input format (e.g. OSM file).
-* +output+         - The output data path; may be any supported output format (e.g. OSM file).
-* +element-count+  - The number of elements to crop from the map.
+* +input+        - The input data path; may be any supported input format (e.g. OSM file)
+* +output+       - The output data path; may be any supported output format (e.g. OSM file)
+* +maxNodeCount+ - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is less than the 
+                   specified number, no cropping will occur.
+* +randomSeed+   - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for no seeding
 
 === Usage
 
 --------------------------------------
-crop-random (input.osm) (output.osm) (element-count)
+crop-random (input.osm) (output.osm) (maxNodeCount) [randomSeed]
 --------------------------------------
 
-==== Examples
+=== Configuration Options
+
+The following cropping configuration options are not supported:
+* +crop.bounds+ - This is unnecessary since the command calculates the crop bounds automatically based on maximum node count.
+* +crop.invert+
+
+See the [[crop]] command for details on the remaining supported cropping configuraiton options.
+
+=== Examples
 
 --------------------------------------
 
