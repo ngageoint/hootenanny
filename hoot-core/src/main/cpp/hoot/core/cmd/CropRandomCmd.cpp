@@ -28,40 +28,37 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/HootApiDbWriter.h>
-
-using namespace std;
 
 namespace hoot
 {
 
-class DeleteDbMapCmd : public BaseCommand
+class CropRandomCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::DeleteDbMapCmd"; }
+  static std::string className() { return "hoot::CropRandomCmd"; }
 
-  DeleteDbMapCmd() {}
+  CropRandomCmd() {}
 
-  virtual QString getName() const override { return "delete-db-map"; }
+  virtual QString getName() const override { return "crop-random"; }
 
   virtual QString getDescription() const override
-  { return "Deletes a map from the Hootenanny Web Services database"; }
+  { return "Crops out a random section of data"; }
 
   virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 1)
     {
-      cout << getHelp() << endl << endl;
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    HootApiDbWriter().deleteMap(args[0]);
+
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeleteDbMapCmd)
+HOOT_FACTORY_REGISTER(Command, CropRandomCmd)
 
 }

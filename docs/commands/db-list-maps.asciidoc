@@ -1,0 +1,13 @@
+[[db-list-maps]]
+== db-list-maps
+
+=== Description
+
+The +db-list-maps+ command lists all maps available in the Hootenanny We Services database.
+
+=== Usage
+
+--------------------------------------
+db-list-maps
+--------------------------------------
+

@@ -1,0 +1,29 @@
+[[crop-random]]
+== crop-random
+
+=== Description
+
+The +crop-random+ command randomly crops a section of map data to a specified element count. This is useful if you have a very large file 
+dataset and need a smaller subset of data to test conflation against.
+
+See the [[crop] command documentation for information on applicable configuration options.
+
+* +input+          - The input data path; may be any supported input format (e.g. OSM file).
+* +output+         - The output data path; may be any supported output format (e.g. OSM file).
+* +element-count+  - The number of elements to crop from the map.
+
+=== Usage
+
+--------------------------------------
+crop-random (input.osm) (output.osm) (element-count)
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+
+--------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

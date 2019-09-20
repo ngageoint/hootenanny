@@ -21,4 +21,4 @@ hoot convert --warn -D api.db.email=$EMAIL -D convert.ops="hoot::RemoveTagsVisit
 hoot diff test-files/cmd/slow/ServiceHootApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 echo "clean up database"
-hoot delete-db-map --warn -D api.db.email=$EMAIL "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderCmdTest"
+hoot db-delete-map --warn -D api.db.email=$EMAIL "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderCmdTest"
