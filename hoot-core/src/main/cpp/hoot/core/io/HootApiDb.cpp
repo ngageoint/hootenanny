@@ -713,7 +713,7 @@ void HootApiDb::endChangeset()
   LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
 
   // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
-  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
+  // database yet!   they will be refreshed upon opening a new database, so leave them alone!
   _changesetChangeCount = 0;
 }
 
@@ -1032,25 +1032,34 @@ bool HootApiDb::isSupported(const QUrl& url)
       if (plist[1] == "")
       {
         LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
-                 "postgresql://myhost:5432/mydb/mylayer");
+                 "hootapidb://myhost:5432/mydb/mylayer");
         valid = false;
       }
       else if (plist[2] == "")
       {
         LOG_WARN("Looks like a DB path, but a layer name was expected. E.g. "
-                 "postgresql://myhost:5432/mydb/mylayer");
+                 "hootapidb://myhost:5432/mydb/mylayer");
         valid = false;
       }
     }
     else if ((plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")))
     {
       LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
-               "postgresql://myhost:5432/mydb/mylayer/1");
+               "hootapidb://myhost:5432/mydb/mylayer/1");
       valid = false;
+    }
+    // need this for a base db connection; like used by db-list-maps
+    else if (plist.size() == 2)
+    {
+      if (plist[1] == "")
+      {
+        LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
+                 "hootapidb://myhost:5432/mydb");
+        valid = false;
+      }
     }
     else
     {
-      //It might be OsmApiDb url. postgresql://myhost:5432/osmapi_test
       valid = false;
     }
   }
@@ -1091,7 +1100,8 @@ void HootApiDb::open(const QUrl& url)
 
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
+    throw HootException(
+      "An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
   }
 
   _resetQueries();
@@ -1127,6 +1137,8 @@ void HootApiDb::_resetQueries()
   _selectNodeIdsForWay.reset();
   _selectMapIdsForCurrentUser.reset();
   _selectPublicMapIds.reset();
+  _selectPublicMaps.reset();
+  _selectMapsOwnedByCurrentUser.reset();
   _selectMembersForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
@@ -1367,6 +1379,96 @@ set<long> HootApiDb::selectPublicMapIds(QString name)
     }
     result.insert(id);
   }
+
+  return result;
+}
+
+QStringList HootApiDb::selectMapsAvailableToCurrentUser()
+{
+  QStringList result;
+  result.append(selectMapsOwnedByCurrentUser());
+  result.append(selectPublicMaps());
+  result.removeDuplicates();
+  return result;
+}
+
+QStringList HootApiDb::selectMapsOwnedByCurrentUser()
+{
+  QStringList result;
+
+  LOG_VART(_currUserId);
+
+  if (_selectMapsOwnedByCurrentUser == 0)
+  {
+    _selectMapsOwnedByCurrentUser.reset(new QSqlQuery(_db));
+    _selectMapsOwnedByCurrentUser->prepare(
+      "SELECT id, display_name FROM " + getMapsTableName() +
+      " WHERE user_id = :user_id");
+  }
+  _selectMapsOwnedByCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
+  LOG_VART(_selectMapsOwnedByCurrentUser->lastQuery());
+
+  if (_selectMapsOwnedByCurrentUser->exec() == false)
+  {
+    throw HootException(_selectMapsOwnedByCurrentUser->lastError().text());
+  }
+
+  while (_selectMapsOwnedByCurrentUser->next())
+  {
+    QString mapEntry;
+    bool ok;
+    long id = _selectMapsOwnedByCurrentUser->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error selecting maps owned by user: " + _currUserId);
+    }
+    mapEntry += "ID: " + QString::number(id);
+    mapEntry += ", Name: " + _selectMapsOwnedByCurrentUser->value(1).toString();
+    LOG_VART(mapEntry);
+    result.append(mapEntry);
+  }
+  LOG_VART(result.size());
+
+  return result;
+}
+
+QStringList HootApiDb::selectPublicMaps()
+{
+  QStringList result;
+
+  if (_selectPublicMaps == 0)
+  {
+    _selectPublicMaps.reset(new QSqlQuery(_db));
+    const QString sql =
+      QString("SELECT m.id, m.display_name, f.public from " + getMapsTableName() + " m ") +
+        QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
+        QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
+        QString("WHERE f.public = TRUE");
+    LOG_VART(sql);
+    _selectPublicMaps->prepare(sql);
+  }
+  LOG_VART(_selectPublicMaps->lastQuery());
+
+  if (_selectPublicMaps->exec() == false)
+  {
+    throw HootException(_selectPublicMaps->lastError().text());
+  }
+
+  while (_selectPublicMaps->next())
+  {
+    QString mapEntry;
+    bool ok;
+    long id = _selectPublicMaps->value(0).toLongLong(&ok);
+    if (!ok)
+    {
+      throw HootException("Error selecting public maps.");
+    }
+    mapEntry += "ID: " + QString::number(id);
+    mapEntry += ", Name: " + _selectPublicMaps->value(1).toString();
+    LOG_VART(mapEntry);
+    result.append(mapEntry);
+  }
+  LOG_VART(result.size());
 
   return result;
 }

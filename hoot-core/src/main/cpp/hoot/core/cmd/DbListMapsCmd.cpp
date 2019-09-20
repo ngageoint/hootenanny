@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/io/HootApiDb.h>
 
 namespace hoot
 {
@@ -43,7 +44,7 @@ public:
   virtual QString getName() const override { return "db-list-maps"; }
 
   virtual QString getDescription() const override
-  { return "Lists maps in the Hootenanny Web Services database"; }
+  { return "Lists maps in the Hootenanny Web Services database available to a user"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -53,7 +54,18 @@ public:
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-
+    HootApiDb mapReader;
+    mapReader.open(args[0]);
+    mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
+    const QStringList maps = mapReader.selectMapsAvailableToCurrentUser();
+    if (maps.size() == 0)
+    {
+      std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
+    }
+    else
+    {
+      std::cout << "Available map layers:\n\n" << maps.join("\n") << std::endl;
+    }
 
     return 0;
   }
