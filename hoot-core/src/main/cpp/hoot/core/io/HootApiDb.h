@@ -241,25 +241,25 @@ public:
   std::set<long> selectPublicMapIds(QString name);
 
   /**
-   * Returns IDs and names for all public maps
+   * Returns names for all public maps
    *
-   * @return a collection of strings, each containing an map ID and a map name
+   * @return a collection of map names
    */
-  QStringList selectPublicMaps();
+  QStringList selectPublicMapNames();
 
   /**
    * Returns IDs and names for all maps owned by the current user
    *
-   * @return a collection of strings, each containing an map ID and a map name
+   * @return a collection of map names
    */
-  QStringList selectMapsOwnedByCurrentUser();
+  QStringList selectMapNamesOwnedByCurrentUser();
 
   /**
-   * Returns uniqu IDs and names for all maps owned by the current user, as well as all public maps
+   * Returns unique names for all maps owned by the current user, as well as all public maps
    *
-   * @return a collection of strings, each containing an map ID and a map name
+   * @return a collection of map names
    */
-  QStringList selectMapsAvailableToCurrentUser();
+  QStringList selectMapNamesAvailableToCurrentUser();
 
   /**
    * Returns the IDs of all maps with the given name
@@ -599,8 +599,8 @@ private:
   std::shared_ptr<QSqlQuery> _selectReserveNodeIds;
   std::shared_ptr<QSqlQuery> _selectMapIdsForCurrentUser;
   std::shared_ptr<QSqlQuery> _selectPublicMapIds;
-  std::shared_ptr<QSqlQuery> _selectPublicMaps;
-  std::shared_ptr<QSqlQuery> _selectMapsOwnedByCurrentUser;
+  std::shared_ptr<QSqlQuery> _selectPublicMapNames;
+  std::shared_ptr<QSqlQuery> _selectMapNamesOwnedByCurrentUser;
   std::shared_ptr<QSqlQuery> _selectMembersForRelation;
   std::shared_ptr<QSqlQuery> _updateNode;
   std::shared_ptr<QSqlQuery> _updateRelation;

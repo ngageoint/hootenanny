@@ -1137,8 +1137,8 @@ void HootApiDb::_resetQueries()
   _selectNodeIdsForWay.reset();
   _selectMapIdsForCurrentUser.reset();
   _selectPublicMapIds.reset();
-  _selectPublicMaps.reset();
-  _selectMapsOwnedByCurrentUser.reset();
+  _selectPublicMapNames.reset();
+  _selectMapNamesOwnedByCurrentUser.reset();
   _selectMembersForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
@@ -1383,90 +1383,70 @@ set<long> HootApiDb::selectPublicMapIds(QString name)
   return result;
 }
 
-QStringList HootApiDb::selectMapsAvailableToCurrentUser()
+QStringList HootApiDb::selectMapNamesAvailableToCurrentUser()
 {
   QStringList result;
-  result.append(selectMapsOwnedByCurrentUser());
-  result.append(selectPublicMaps());
+  result.append(selectMapNamesOwnedByCurrentUser());
+  result.append(selectPublicMapNames());
   result.removeDuplicates();
   return result;
 }
 
-QStringList HootApiDb::selectMapsOwnedByCurrentUser()
+QStringList HootApiDb::selectMapNamesOwnedByCurrentUser()
 {
   QStringList result;
 
   LOG_VART(_currUserId);
 
-  if (_selectMapsOwnedByCurrentUser == 0)
+  if (_selectMapNamesOwnedByCurrentUser == 0)
   {
-    _selectMapsOwnedByCurrentUser.reset(new QSqlQuery(_db));
-    _selectMapsOwnedByCurrentUser->prepare(
-      "SELECT id, display_name FROM " + getMapsTableName() +
+    _selectMapNamesOwnedByCurrentUser.reset(new QSqlQuery(_db));
+    _selectMapNamesOwnedByCurrentUser->prepare(
+      "SELECT display_name FROM " + getMapsTableName() +
       " WHERE user_id = :user_id");
   }
-  _selectMapsOwnedByCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
-  LOG_VART(_selectMapsOwnedByCurrentUser->lastQuery());
+  _selectMapNamesOwnedByCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
+  LOG_VART(_selectMapNamesOwnedByCurrentUser->lastQuery());
 
-  if (_selectMapsOwnedByCurrentUser->exec() == false)
+  if (_selectMapNamesOwnedByCurrentUser->exec() == false)
   {
-    throw HootException(_selectMapsOwnedByCurrentUser->lastError().text());
+    throw HootException(_selectMapNamesOwnedByCurrentUser->lastError().text());
   }
 
-  while (_selectMapsOwnedByCurrentUser->next())
+  while (_selectMapNamesOwnedByCurrentUser->next())
   {
-    QString mapEntry;
-    bool ok;
-    long id = _selectMapsOwnedByCurrentUser->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Error selecting maps owned by user: " + _currUserId);
-    }
-    mapEntry += "ID: " + QString::number(id);
-    mapEntry += ", Name: " + _selectMapsOwnedByCurrentUser->value(1).toString();
-    LOG_VART(mapEntry);
-    result.append(mapEntry);
+    result.append(_selectMapNamesOwnedByCurrentUser->value(0).toString());
   }
   LOG_VART(result.size());
 
   return result;
 }
 
-QStringList HootApiDb::selectPublicMaps()
+QStringList HootApiDb::selectPublicMapNames()
 {
   QStringList result;
 
-  if (_selectPublicMaps == 0)
+  if (_selectPublicMapNames == 0)
   {
-    _selectPublicMaps.reset(new QSqlQuery(_db));
+    _selectPublicMapNames.reset(new QSqlQuery(_db));
     const QString sql =
-      QString("SELECT m.id, m.display_name, f.public from " + getMapsTableName() + " m ") +
+      QString("SELECT m.display_name, f.public from " + getMapsTableName() + " m ") +
         QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
         QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
         QString("WHERE f.public = TRUE");
     LOG_VART(sql);
-    _selectPublicMaps->prepare(sql);
+    _selectPublicMapNames->prepare(sql);
   }
-  LOG_VART(_selectPublicMaps->lastQuery());
+  LOG_VART(_selectPublicMapNames->lastQuery());
 
-  if (_selectPublicMaps->exec() == false)
+  if (_selectPublicMapNames->exec() == false)
   {
-    throw HootException(_selectPublicMaps->lastError().text());
+    throw HootException(_selectPublicMapNames->lastError().text());
   }
 
-  while (_selectPublicMaps->next())
+  while (_selectPublicMapNames->next())
   {
-    QString mapEntry;
-    bool ok;
-    long id = _selectPublicMaps->value(0).toLongLong(&ok);
-    if (!ok)
-    {
-      throw HootException("Error selecting public maps.");
-    }
-    mapEntry += "ID: " + QString::number(id);
-    mapEntry += ", Name: " + _selectPublicMaps->value(1).toString();
-    LOG_VART(mapEntry);
-    result.append(mapEntry);
+    result.append(_selectPublicMapNames->value(1).toString());
   }
   LOG_VART(result.size());
 
