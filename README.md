@@ -113,7 +113,7 @@ hoot.saveMap(map, "output.osm");
 
 # Additional Features
 
-In addition to running full conflation on map data, Hootenanny also provides finer-grained capabilities:
+In addition to running conflation jobs with map data, Hootenanny also provides finer-grained capabilities:
 * Add [missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features based on their name
 * [Align](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/rubber-sheet.asciidoc) two maps more closely with each other
 * Apply [data transformation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) operations to a map
@@ -132,6 +132,7 @@ In addition to running full conflation on map data, Hootenanny also provides fin
 * [Locate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LocatePhoneNumbers.asciidoc) phone numbers geographically
 * [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes
 * Plot [node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-plot.asciidoc)
+* [Simplify](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#simplify-ways-in-a-map-by-removing-unnecessary-nodes-from-them) ways
 * [Snap](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) unconnected ways to neighboring ways by type
 * [Process](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc) map postal address data
 * [Replace](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacment.asciidoc) OpenStreetMap data completely within a bounding box

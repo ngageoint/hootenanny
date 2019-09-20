@@ -18,7 +18,7 @@ based on the paper, "Evaluating conflation methods using uncertainty modeling," 
 
 === Optional Defines
 
-perty.* configuration options can be used with this command.  See the Configuration Options section for details.
+perty.* and random.* configuration options can be used with this command.  See the Configuration Options section for details.
 
 === Usage
 

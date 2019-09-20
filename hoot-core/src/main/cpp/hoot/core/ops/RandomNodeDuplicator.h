@@ -24,15 +24,15 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTYDUPLICATEPOIOP_H
-#define PERTYDUPLICATEPOIOP_H
+#ifndef RANDOM_NODE_DUPLICATOR_H
+#define RANDOM_NODE_DUPLICATOR_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 
 // Qt
 #include <QString>
@@ -41,20 +41,19 @@ namespace hoot
 {
 
 /**
- * Duplicates a POI with some random error.  This is not part of the original Perty paper.
+ * Duplicates a node with some random error.  This is not part of the original PERTY paper.
  *
- * This should really change the node after it has been duplicated.
- * @todo This duplicates nodes, not POIs, so the name should be corrected.
+ * @todo This should really change the node after it has been duplicated.
  */
-class PertyDuplicatePoiOp : public OsmMapOperation, public Configurable, public RngConsumer,
+class RandomNodeDuplicator : public OsmMapOperation, public Configurable, public RngConsumer,
   public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::PertyDuplicatePoiOp"; }
+  static std::string className() { return "hoot::RandomNodeDuplicator"; }
 
-  PertyDuplicatePoiOp();
-  virtual ~PertyDuplicatePoiOp() {}
+  RandomNodeDuplicator();
+  virtual ~RandomNodeDuplicator() {}
 
   virtual void apply(OsmMapPtr& map);
 
@@ -103,4 +102,4 @@ private:
 
 }
 
-#endif // PERTYDUPLICATEPOIOP_H
+#endif // RANDOM_NODE_DUPLICATOR_H

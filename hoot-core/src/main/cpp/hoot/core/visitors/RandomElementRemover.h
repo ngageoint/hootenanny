@@ -24,60 +24,60 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTY_REMOVE_TAG_VISITOR_H
-#define PERTY_REMOVE_TAG_VISITOR_H
+#ifndef RANDOM_ELEMENT_REMOVER_H
+#define RANDOM_ELEMENT_REMOVER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/util/RngConsumer.h>
 
 namespace hoot
 {
 
 /**
- * A simple random tag remover
+ * Randomly removes elements from a map
  */
-class PertyRemoveTagVisitor : public ElementVisitor, public RngConsumer, public Configurable
+class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer,
+    public Configurable, public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::PertyRemoveTagVisitor"; }
+  static std::string className() { return "hoot::RandomElementRemover"; }
 
-  PertyRemoveTagVisitor();
-
-  QString permuteName(const QString& s);
+  /**
+   * @arg p Probability that any given feature will be removed.
+   */
+  RandomElementRemover();
 
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Set the probability that a tag will be removed.
+   * Set the probability that a feature will be removed.
    */
   void setProbability(double p) { _p = p; }
 
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  virtual void visit(const ConstElementPtr& e);
+  virtual void visit(const std::shared_ptr<Element>& /*e*/) override {}
 
-  void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
+  virtual QString getDescription() const { return "Randomly removes elements from a map"; }
 
-  void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
+  virtual QString getInitStatusMessage() const
+  { return "Removing random elements..."; }
 
-  void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
-
-  virtual QString getDescription() const { return "Randomly removes feature tags"; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
 private:
 
-  double _p;
   boost::minstd_rand* _rng;
   std::shared_ptr<boost::minstd_rand> _localRng;
-
-  QStringList _exemptTagKeys;
-  QStringList _replacementTagKeys;
-  QStringList _replacementTagValues;
+  double _p;
 };
 
 }
 
-#endif // PERTY_REMOVE_TAG_VISITOR_H
+#endif // RANDOM_ELEMENT_REMOVER_H

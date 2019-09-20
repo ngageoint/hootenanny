@@ -24,15 +24,15 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTY_WAY_SPLIT_VISITOR_H
-#define PERTY_WAY_SPLIT_VISITOR_H
+#ifndef RANDOM_WAY_SPLITTER_H
+#define RANDOM_WAY_SPLITTER_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms/perty/RngConsumer.h>
+#include <hoot/core/util/RngConsumer.h>
 
 namespace hoot
 {
@@ -53,19 +53,16 @@ namespace hoot
  *    https://insightcloud.digitalglobe.com/redmine/attachments/download/1667/2013%20Evaluating%20conflation%20methods%20using%20uncertainty%20modeling.pdf
  *    http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=1691369
  *
- * The input map data should be projected to a planar coordinate system.
+ *  The input map data will be projected to an orthographic coordinate system.
  */
-class PertyWaySplitVisitor :
-    public ElementOsmMapVisitor,
-    public RngConsumer,
-    public Configurable
+class RandomWaySplitter : public ElementOsmMapVisitor, public RngConsumer, public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::PertyWaySplitVisitor"; }
+  static std::string className() { return "hoot::RandomWaySplitter"; }
 
-  PertyWaySplitVisitor();
+  RandomWaySplitter();
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -81,6 +78,8 @@ public:
     @see RngConsumer
     */
   virtual void setRng(boost::minstd_rand& rng) { _rng = &rng; }
+
+  virtual void setOsmMap(OsmMap* map) override;
 
   /**
     the probability that any way will be split into smaller segements
@@ -133,4 +132,4 @@ private:
 
 }
 
-#endif // PERTY_WAY_SPLIT_VISITOR_H
+#endif // RANDOM_WAY_SPLITTER_H

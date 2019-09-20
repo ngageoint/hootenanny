@@ -37,6 +37,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/util/MapProjector.h>
 
 using namespace std;
 
@@ -48,17 +49,21 @@ RdpWayGeneralizer::RdpWayGeneralizer(double epsilon)
   setEpsilon(epsilon);
 }
 
-RdpWayGeneralizer::RdpWayGeneralizer(const std::shared_ptr<OsmMap>& map, double epsilon) :
-_map(map)
+void RdpWayGeneralizer::setEpsilon(double epsilon)
 {
-  setEpsilon(epsilon);
+  if (epsilon <= 0.0)
+  {
+    throw HootException("Invalid epsilon value: " + QString::number(epsilon));
+  }
+  _epsilon = epsilon;
+  LOG_VART(_epsilon);
 }
 
 void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 {
-  if (!_map.get())
+  if (!_map)
   {
-    throw HootException("No map passed to way generalizer.");
+    throw IllegalArgumentException("No map passed to way generalizer.");
   }
 
   LOG_VART(way->getNodeIds().size());
@@ -85,7 +90,7 @@ void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 
   //get the generalized points
   const QList<std::shared_ptr<const Node>>& generalizedPoints =
-    getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
+    _getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
   LOG_VART(generalizedPoints.size());
   OsmUtils::printNodes("generalizedPoints", generalizedPoints);
 
@@ -97,7 +102,7 @@ void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   LOG_VART(QVector<long>::fromStdVector(_map->getWay(way->getId())->getNodeIds()).toList());
 }
 
-QList<std::shared_ptr<const Node>> RdpWayGeneralizer::getGeneralizedPoints(
+QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
   const QList<std::shared_ptr<const Node>>& wayPoints)
 {
   LOG_VART(wayPoints.size());
@@ -139,10 +144,10 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::getGeneralizedPoints(
     OsmUtils::printNodes("splitLine2", splitLine2);
 
     const QList<std::shared_ptr<const Node>> recursivelySplitLine1 =
-      getGeneralizedPoints(splitLine1);
+      _getGeneralizedPoints(splitLine1);
     OsmUtils::printNodes("recursivelySplitLine1", recursivelySplitLine1);
     const QList<std::shared_ptr<const Node>> recursivelySplitLine2 =
-      getGeneralizedPoints(splitLine2);
+      _getGeneralizedPoints(splitLine2);
     OsmUtils::printNodes("recursivelySplitLine2", recursivelySplitLine2);
 
     //concat r2 to r1 minus the end/start point that will be the same
@@ -163,18 +168,9 @@ QList<std::shared_ptr<const Node>> RdpWayGeneralizer::getGeneralizedPoints(
   }
 }
 
-void RdpWayGeneralizer::setEpsilon(double epsilon)
-{
-  if (epsilon <= 0.0)
-  {
-    throw HootException("Invalid epsilon value: " + QString::number(epsilon));
-  }
-  _epsilon = epsilon;
-  LOG_VART(_epsilon);
-}
-
 double RdpWayGeneralizer::_getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
-  const std::shared_ptr<const Node> splitPoint, const std::shared_ptr<const Node> lineToBeReducedStartPoint,
+  const std::shared_ptr<const Node> splitPoint,
+  const std::shared_ptr<const Node> lineToBeReducedStartPoint,
   const std::shared_ptr<const Node> lineToBeReducedEndPoint) const
 {
   LOG_VART(lineToBeReducedStartPoint->getX());

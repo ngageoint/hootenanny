@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyWayGeneralizeVisitor.h"
+#include "RandomWayGeneralizer.h"
 
 // boost
 #include <boost/random/uniform_real.hpp>
@@ -34,34 +34,28 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/RandomNumberUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/algorithms/perty/RdpWayGeneralizer.h>
-
-// Qt
-#include <QSet>
+#include <hoot/core/algorithms/RdpWayGeneralizer.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyWayGeneralizeVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RandomWayGeneralizer)
 
-PertyWayGeneralizeVisitor::PertyWayGeneralizeVisitor() :
-_epsilon(-1.0)
+RandomWayGeneralizer::RandomWayGeneralizer() :
+_epsilon(1.0)
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
-
-  setConfiguration(conf());
 }
 
-void PertyWayGeneralizeVisitor::setConfiguration(const Settings& conf)
+void RandomWayGeneralizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setWayGeneralizeProbability(configOptions.getPertyWayGeneralizeProbability());
-  setEpsilon(configOptions.getPertyWayGeneralizeEpsilon());
-  const int seed = configOptions.getPertySeed();
+  setWayGeneralizeProbability(configOptions.getRandomWayGeneralizerProbability());
+  setEpsilon(configOptions.getWayGeneralizerEpsilon());
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {
@@ -73,17 +67,29 @@ void PertyWayGeneralizeVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void PertyWayGeneralizeVisitor::setOsmMap(OsmMap* map)
+void RandomWayGeneralizer::setOsmMap(OsmMap* map)
 {
   _map = map;
+  MapProjector::projectToPlanar(_map->shared_from_this());
+
   assert(_epsilon != -1.0);
-  _generalizer.reset(new RdpWayGeneralizer(_map->shared_from_this(), _epsilon));
+  _generalizer.reset(new RdpWayGeneralizer(_epsilon));
+  _generalizer->setOsmMap(_map);
 }
 
-void PertyWayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
+void RandomWayGeneralizer::visit(const std::shared_ptr<Element>& element)
 {
   if (element->getElementType() == ElementType::Way)
   {
+    if (!_map)
+    {
+      throw IllegalArgumentException("No map passed to way generalizer.");
+    }
+    else if (_map->getProjection()->IsGeographic())
+    {
+      throw IllegalArgumentException("Input map must be projected to planar.");
+    }
+
     //randomly select ways to generalize
     boost::uniform_real<> randomGeneralizeDistribution(0.0, 1.0);
     const double randomNum = randomGeneralizeDistribution(*_rng);

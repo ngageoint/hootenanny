@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PertyRemoveTagVisitor.h"
+#include "RandomTagModifier.h"
 
 // boost
 #include <boost/random/uniform_int.hpp>
@@ -44,21 +44,19 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementVisitor, PertyRemoveTagVisitor)
+HOOT_FACTORY_REGISTER(ElementVisitor, RandomTagModifier)
 
-PertyRemoveTagVisitor::PertyRemoveTagVisitor()
+RandomTagModifier::RandomTagModifier()
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
-
-  setConfiguration(conf());
 }
 
-void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
+void RandomTagModifier::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  setProbability(configOptions.getPertyRemoveTagProbability());
-  const int seed = configOptions.getPertySeed();
+  setProbability(configOptions.getRandomTagModifierProbability());
+  const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
   {
@@ -68,12 +66,12 @@ void PertyRemoveTagVisitor::setConfiguration(const Settings& conf)
   {
     _rng->seed(seed);
   }
-  _exemptTagKeys = configOptions.getPertyRemoveTagVisitorExemptTagKeys();
-  _replacementTagKeys = configOptions.getPertyRemoveTagVisitorSubstitutionKeys();
-  _replacementTagValues = configOptions.getPertyRemoveTagVisitorSubstitutionValues();
+  _exemptTagKeys = configOptions.getRandomTagModifierExemptTagKeys();
+  _replacementTagKeys = configOptions.getRandomTagModifierSubstitutionKeys();
+  _replacementTagValues = configOptions.getRandomTagModifierSubstitutionValues();
 }
 
-void PertyRemoveTagVisitor::visit(const std::shared_ptr<Element>& e)
+void RandomTagModifier::visit(const std::shared_ptr<Element>& e)
 {
   boost::uniform_real<> uni(0.0, 1.0);
 

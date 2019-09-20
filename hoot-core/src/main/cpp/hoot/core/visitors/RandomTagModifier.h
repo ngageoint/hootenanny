@@ -24,42 +24,34 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef PERTY_NAME_VISITOR_H
-#define PERTY_NAME_VISITOR_H
+#ifndef RANDOM_TAG_MODIFIER_H
+#define RANDOM_TAG_MODIFIER_H
 
 // hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/algorithms//perty/RngConsumer.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/RngConsumer.h>
 
 namespace hoot
 {
 
 /**
- * A simple random name changer. This is not part of the original perty paper.
+ * A simple random tag modifier
  */
-class PertyNameVisitor : public ElementVisitor, public RngConsumer, public Configurable,
-  public OperationStatusInfo
+class RandomTagModifier : public ElementVisitor, public RngConsumer, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::PertyNameVisitor"; }
+  static std::string className() { return "hoot::RandomTagModifier"; }
 
-  PertyNameVisitor();
+  RandomTagModifier();
 
   QString permuteName(const QString& s);
 
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * The probability of a change to each character in the name. The expected number of changes is
-   * perty.name.change.p * str.size()
-   */
-  void setChangeProbability(double changeP) { _changeP = changeP; }
-
-  /**
-   * Set the probability that a name will be modified.
+   * Set the probability that a tag will be removed.
    */
   void setProbability(double p) { _p = p; }
 
@@ -67,22 +59,23 @@ public:
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getDescription() const { return "Randomly changes element names"; }
+  void setExemptTagKeys(const QStringList& keys) { _exemptTagKeys = keys; }
+  void setReplacementTagKeys(const QStringList& keys) { _replacementTagKeys = keys; }
+  void setReplacementTagValues(const QStringList& values) { _replacementTagValues = values; }
 
-  virtual QString getInitStatusMessage() const
-  { return "Randomly changing element names..."; }
-
-  virtual QString getCompletedStatusMessage() const
-  { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
+  virtual QString getDescription() const { return "Randomly modifies feature tags"; }
 
 private:
 
-  double _changeP;
   double _p;
   boost::minstd_rand* _rng;
   std::shared_ptr<boost::minstd_rand> _localRng;
+
+  QStringList _exemptTagKeys;
+  QStringList _replacementTagKeys;
+  QStringList _replacementTagValues;
 };
 
 }
 
-#endif // PERTY_NAME_VISITOR_H
+#endif // RANDOM_TAG_MODIFIER_H

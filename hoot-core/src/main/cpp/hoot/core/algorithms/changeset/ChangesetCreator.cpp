@@ -696,7 +696,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
 
   if (_printStats)
   {
-    LOG_INFO("Changeset Stats:\n" << stats);
+    LOG_STATUS("Changeset Stats:\n" << stats);
   }
   else
   {
