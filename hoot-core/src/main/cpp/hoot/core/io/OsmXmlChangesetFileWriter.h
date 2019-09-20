@@ -95,6 +95,7 @@ private:
 
   bool _addTimestamp;
   bool _includeDebugTags;
+  bool _includeCircularErrorTags;
 
   OsmXmlWriter _invalidCharacterHandler;
 
