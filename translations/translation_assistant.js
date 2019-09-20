@@ -19,22 +19,16 @@ translation_assistant = {
     //Set the tag `tagKey=value` or append it unless `replace` is `true`
     setTag: function(tags, tagKey, value, replace)
     {
-        if (typeof replace !== "undefined" && replace) {
+        if (replace) { //force the tag value replacement, order is not possible to define in translation mapping :(
             tags[tagKey] = value;
         }
         else if (tags[tagKey] && (tags[tagKey] !== value)) { //append values to existing tags
             if (tags[tagKey] === "yes") { //replace a tag=yes with the new value instead of appending
                 tags[tagKey] = value;
-            }
-            else if (value !== "yes") { //append the value if unique and not yes
+            } else { //append the value if unique and not yes
                 var values = tags[tagKey].split(";");
-                var found = false;
-                for (var v in values) {
-                    if (v === value) {
-                        found = true;
-                    }
-                }
-                if (!found) {
+
+                if (values.indexOf(value) === -1) {
                     tags[tagKey] = tags[tagKey] + ";" + value;
                 }
             }
@@ -94,7 +88,7 @@ translation_assistant = {
                                             translation_assistant.setTag(tags, tagKey, tagValue[attrReg], replace);
                                         }
                                     }
-                                } 
+                                }
                             }
                         }
                     }
@@ -136,5 +130,4 @@ translation_assistant = {
 if (typeof exports !== 'undefined') {
     exports.translateAttributes = translation_assistant.translateAttributes;
     exports.difference = translation_assistant.difference;
-    exports.setTag = translation_assistant.setTag;
 }
