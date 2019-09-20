@@ -58,7 +58,7 @@ public:
   ChangesetReplacementCreatorTest() :
   HootTestFixture(
     "test-files/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/ralgorithms/changeset/ChangesetReplacementCreatorTest/")
+    "test-output/algorithms/changeset/ChangesetReplacementCreatorTest/")
   {
     setResetType(ResetAll);
   }

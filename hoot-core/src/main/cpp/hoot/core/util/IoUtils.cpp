@@ -114,6 +114,7 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
   return true;
 }
 
+// TODO: Roll this into OsmMapReaderFactory somehow?
 void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
                       Status defaultStatus)
 {
@@ -131,6 +132,7 @@ void IoUtils::loadMap(const OsmMapPtr& map, const QString& path, bool useFileId,
   }
 }
 
+// TODO: Get rid of this??
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
   // We could pass a progress in here to get more granular write status feedback.

@@ -69,6 +69,7 @@ void RemoveRelationByEid::apply(OsmMapPtr& map)
       map->getRelation(parentRelationId)->removeElement(ElementId::relation(_rIdToRemove));
     }
 
+    LOG_TRACE("Removing relation: " << _rIdToRemove);
     map->_index->removeRelation(map->getRelation(_rIdToRemove));
     map->_relations.erase(_rIdToRemove);
     VALIDATE(map->validate());

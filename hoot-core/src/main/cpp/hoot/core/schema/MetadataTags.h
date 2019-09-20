@@ -132,6 +132,8 @@ public:
   inline static const QString Unknown2()                { return "Unknown2"; }
 
   inline static const QString BuildingPart()            { return "building:part"; }
+  inline static const QString BuildingHeight()          { return "height"; }
+  inline static const QString BuildingLevels()          { return "building:levels"; }
 
   inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
@@ -155,6 +157,8 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+  // temp tag used by BuildingMerger
+  inline static const QString HootMultiPolyRole()      { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
 

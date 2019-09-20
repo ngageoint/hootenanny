@@ -594,7 +594,7 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:
 
 -----
-    hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7 input.osm \
+    hoot perty -D perty.search.distance=20 -D way.generalize.probability=0.7 input.osm \
       perturbed.osm
     hoot perty --score input.osm perturbed.osm
 -----
@@ -639,6 +639,12 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
       -D snap.unconnected.ways.snap.to.way.status=Input1 \
       -D snap.unconnected.ways.snap.way.status=Input2 \
       input1.osm input2.osm output.osm
+-----
+
+===== Simplify ways in a map by removing unnecessary nodes from them:
+
+-----
+    hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
 -----
 
 ==== Statistics

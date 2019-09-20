@@ -82,5 +82,5 @@ hoot conflate -D unify.pre.ops=hoot::CookieCutterOp -D cookie.cutter.alpha=2500 
 * _Differential Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 * _Attribute Conflation_, <<hootalgo,Hootenanny - Algorithms>>
 * _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 
