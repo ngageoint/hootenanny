@@ -6,6 +6,14 @@ to translate feature tags between OSM and supported schemas.
 var http = require('http');
 var url = require('url');
 var serverPort = 8094;
+var availableTrans = {
+    TDSv40: {isavailable: true},
+    TDSv61: {isavailable: true},
+    TDSv70: {isavailable: true},
+    MGCP: {isavailable: true},
+    GGDMv30: {isavailable: true}
+};
+
 var HOOT_HOME = process.env.HOOT_HOME;
 if (typeof hoot === 'undefined') {
     hoot = require(HOOT_HOME + '/lib/HootJs');
@@ -31,6 +39,14 @@ var schemaMap = {
 };
 
 var availableTranslations = Object.keys(schemaMap);
+
+//Getting osm tags for fcode
+var fcodeLookup = {
+    TDSv40: require(HOOT_HOME + '/translations/etds40_osm.js'),
+    TDSv61: require(HOOT_HOME + '/translations/etds61_osm.js'),
+    MGCP: require(HOOT_HOME + '/translations/emgcp_osm.js'),
+    GGDMv30: require(HOOT_HOME + '/translations/eggdm30_osm.js')
+};
 
 var translationsMap = {
     toogr: {
@@ -238,6 +254,14 @@ var getSupportedGeometries = function(params) {
     }
 }
 
+var getCapabilities = function(params) {
+    if (params.method === 'GET'){
+        return availableTrans;
+    } else {
+        throw new Error('Unsupported method');
+    }
+};
+
 var getTranslations = function(params) {
     if (params.method === 'GET'){
         return availableTranslations;
@@ -355,8 +379,11 @@ var ogr2osm = function(params) {
         return postHandler(params);
     } else if (params.method === 'GET') {
         //Get OSM tags for F_CODE
-        var osm = translateToOsm.toosm[params.translation].toOSM({
-            'FCODE': params.fcode
+        // var osm = translateToOsm.toosm[params.translation].toOSM({
+        //     'FCODE': params.fcode
+        createUuid = hoot.UuidHelper.createUuid;
+        var osm = fcodeLookup[params.translation].toOSM({
+            'Feature Code': params.fcode
         }, '', '');
 
         return osm;
