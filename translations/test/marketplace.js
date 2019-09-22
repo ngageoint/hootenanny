@@ -16,6 +16,7 @@ describe('TranslationServer maintains Building and Facilty with same FFN', funct
     var ffns = [272, 343, 459, 460, 464, 465, 466, 474, 475, 476, 478, 640, 691, 701, 706, 711, 714, 717, 752, 760, 770, 775, 801, 810, 811, 812, 813, 814, 818, 819, 961, 962]
 
     var schemas = [
+        'TDSv70',
         'TDSv61',
         'TDSv40',
         // 'MGCP',
