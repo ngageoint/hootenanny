@@ -33,13 +33,18 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/util/TileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, RandomMapCropper)
 
-RandomMapCropper::RandomMapCropper()
+RandomMapCropper::RandomMapCropper() :
+_maxNodeCount(1000),
+_randomSeed(-1),
+_pixelSize(0.001)
 {
 }
 
@@ -49,7 +54,8 @@ void RandomMapCropper::setConfiguration(const Settings& conf)
   _cropper.setInvert(false);
 
   ConfigOptions confOpts = ConfigOptions(conf);
-  _maxNodeCount = confOpts.getRandomCropMaxNodeCount();
+  _maxNodeCount = confOpts.getCropRandomMaxNodeCount();
+  _pixelSize = confOpts.getCropRandomPixelSize();
   _randomSeed = confOpts.getRandomSeed();
 }
 
@@ -64,12 +70,24 @@ void RandomMapCropper::apply(OsmMapPtr& map)
 
   // compute tiles for the whole dataset, select one tile at random, and crop to the bounds of
   // the selected tile
-  geos::geom::Envelope randomTile =
-    TileUtils::getRandomTile(
-      TileUtils::calculateTiles(_maxNodeCount, 0.001, map), _randomSeed);
-  LOG_DEBUG("Randomly selected tile: " << GeometryUtils::toConfigString(randomTile));
-  _cropper.setBounds(randomTile);
+  // TODO: Can we intelligently calculate pixel size here somehow?
+  const std::vector<std::vector<geos::geom::Envelope>> tiles =
+    TileUtils::calculateTiles(_maxNodeCount, _pixelSize, map);
+  if (!_tileFootprintOutputPath.isEmpty())
+  {
+    if (_tileFootprintOutputPath.toLower().endsWith(".geojson"))
+    {
+      TileUtils::writeTilesToGeoJson(tiles, _tileFootprintOutputPath);
+    }
+    else
+    {
+      TileUtils::writeTilesToOsm(tiles, _tileFootprintOutputPath);
+    }
+  }
+  _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));
   _cropper.apply(map);
+  SuperfluousWayRemover::removeWays(map);
+  SuperfluousNodeRemover().apply(map);
 }
 
 }

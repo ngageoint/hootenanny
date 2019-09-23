@@ -73,6 +73,32 @@ public:
    */
   static geos::geom::Envelope getRandomTile(
     const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
+
+  /**
+   * TODO
+   *
+   * @param tiles
+   * @param outputPath
+   * @param selectSingleRandomTile
+   * @param randomSeed
+   * @todo move to TileFootprintWriter
+   */
+  static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                  const QString& outputPath,
+                                  const bool selectSingleRandomTile = false, int randomSeed = -1);
+
+  /**
+   * TODO
+   *
+   * @param tiles
+   * @param outputPath
+   * @param selectSingleRandomTile
+   * @param randomSeed
+   * @todo move to TileFootprintWriter
+   */
+  static void writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                              const QString& outputPath, const bool selectSingleRandomTile = false,
+                              int randomSeed = -1);
 };
 
 }

@@ -157,6 +157,8 @@ public:
 
   void setImages(const cv::Mat& r1, const cv::Mat& r2);
 
+  static QString tilesToString(const std::vector<std::vector<geos::geom::Envelope>>& tiles);
+
   /**
    * The entire tree will keep growing until all boxes are less than or equal to this number of
    * nodes.

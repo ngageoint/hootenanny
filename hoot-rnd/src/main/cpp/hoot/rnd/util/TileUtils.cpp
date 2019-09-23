@@ -32,10 +32,13 @@
 #include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
 
+// Qt
+#include <QTemporaryFile>
 
 namespace hoot
 {
@@ -70,6 +73,7 @@ int TileUtils::getRandomTileIndex(const std::vector<std::vector<geos::geom::Enve
   Tgs::Random::instance()->seed(randomSeed);
 
   const size_t numBboxes = tiles.size() * tiles[0].size();
+  LOG_VARD(numBboxes);
   return Tgs::Random::instance()->generateInt(numBboxes);
 }
 
@@ -85,7 +89,7 @@ geos::geom::Envelope TileUtils::getRandomTile(
     {
       if ((bboxCtr - 1) == randomTileIndex)
       {
-        LOG_VARD(GeometryUtils::toConfigString(tiles[tx][ty]));
+        LOG_DEBUG("Randomly selected tile: " << GeometryUtils::toConfigString(tiles[tx][ty]));
         return tiles[tx][ty];
       }
       bboxCtr++;
@@ -93,6 +97,117 @@ geos::geom::Envelope TileUtils::getRandomTile(
   }
   // shouldn't ever get here
   return geos::geom::Envelope();
+}
+
+void TileUtils::writeTilesToGeoJson(
+  const std::vector<std::vector<geos::geom::Envelope>>& tiles, const QString& outputPath,
+  const bool selectSingleRandomTile, int randomSeed)
+{
+  //write out to temp osm and then use ogr2ogr to convert to geojson
+
+  QTemporaryFile osmTempFile("tmp/tiles-calculate-temp-XXXXXX.osm");
+  if (!osmTempFile.open())
+  {
+    throw HootException(
+      "Unable to open OSM temp file: " + osmTempFile.fileName() + " for GeoJSON output.");
+  }
+  LOG_VARD(osmTempFile.fileName());
+  writeTilesToOsm(tiles, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
+
+  QFile outFile(outputPath);
+  if (outFile.exists() && !outFile.remove())
+  {
+    throw HootException("Unable to open GeoJSON file: " + outputPath + " for writing.");
+  }
+  LOG_VARD(outputPath);
+
+  //exporting as multipolygons, as that's what the Tasking Manager expects
+  const QString cmd =
+    "ogr2ogr -f GeoJSON -select \"name,boundary,osm_way_id\" " + outputPath + " " +
+    osmTempFile.fileName() + " multipolygons";
+  LOG_VARD(cmd);
+  LOG_INFO("Writing output to " << outputPath);
+  const int retval = std::system(cmd.toStdString().c_str());
+  if (retval != 0)
+  {
+    throw HootException(
+      "Failed converting " + osmTempFile.fileName() + " to GeoJSON: " + outputPath +
+      ".  Status: " + QString::number(retval));
+  }
+}
+
+void TileUtils::writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+                                const QString& outputPath, const bool selectSingleRandomTile,
+                                int randomSeed)
+{
+  LOG_VARD(outputPath);
+
+  int randomTileIndex = -1;
+  if (selectSingleRandomTile)
+  {
+    randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
+  }
+
+  OsmMapPtr boundaryMap(new OsmMap());
+  int bboxCtr = 1;
+  for (size_t tx = 0; tx < tiles.size(); tx++)
+  {
+    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+    {
+      // TODO: This code could possibly be replaced by GeometryUtils::createMapFromBounds.
+      const geos::geom::Envelope env = tiles[tx][ty];
+      const double circularError = ConfigOptions().getCircularErrorDefaultValue();
+
+      NodePtr lowerLeft(
+        new Node(
+          Status::Unknown1,
+          boundaryMap->createNextNodeId(),
+          geos::geom::Coordinate(env.getMinX(), env.getMinY()),
+          circularError));
+      boundaryMap->addNode(lowerLeft);
+      NodePtr upperRight(
+        new Node(
+          Status::Unknown1,
+          boundaryMap->createNextNodeId(),
+          geos::geom::Coordinate(env.getMaxX(), env.getMaxY()),
+          circularError));
+      boundaryMap->addNode(upperRight);
+      NodePtr upperLeft(
+        new Node(
+          Status::Unknown1,
+          boundaryMap->createNextNodeId(),
+          geos::geom::Coordinate(env.getMinX(), env.getMaxY()),
+          circularError));
+      boundaryMap->addNode(upperLeft);
+      NodePtr lowerRight(
+        new Node(
+          Status::Unknown1,
+          boundaryMap->createNextNodeId(),
+          geos::geom::Coordinate(env.getMaxX(), env.getMinY()),
+          circularError));
+      boundaryMap->addNode(lowerRight);
+
+      WayPtr bbox(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
+      bbox->addNode(lowerLeft->getId());
+      bbox->addNode(upperLeft->getId());
+      bbox->addNode(upperRight->getId());
+      bbox->addNode(lowerRight->getId());
+      bbox->addNode(lowerLeft->getId());
+      //gdal will recognize any closed way with the boundary tag as a polygon (tags
+      //for features recognized as polys configurable in osmconf.ini), which is the type of
+      //output we want
+      bbox->setTag("boundary", "task_grid_cell");
+      bbox->setTag("name", "Task Grid Cell #" + QString::number(bboxCtr));
+      if (!selectSingleRandomTile ||
+          (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
+      {
+        boundaryMap->addWay(bbox);
+      }
+      bboxCtr++;
+    }
+  }
+
+  OsmMapWriterFactory::write(boundaryMap, outputPath);
 }
 
 }

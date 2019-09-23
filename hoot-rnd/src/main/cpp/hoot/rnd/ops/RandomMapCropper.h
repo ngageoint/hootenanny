@@ -65,12 +65,16 @@ public:
 
   void setMaxNodeCount(int count) { _maxNodeCount = count; }
   void setRandomSeed(int seed) { _randomSeed = seed; }
+  void setTileFootprintOutputPath(QString path) { _tileFootprintOutputPath = path; }
+  void setPixelSize(double size) { _pixelSize = size; }
 
 private:
 
   int _maxNodeCount;
   int _randomSeed;
+  double _pixelSize;
   MapCropper _cropper;
+  QString _tileFootprintOutputPath;
 };
 
 }

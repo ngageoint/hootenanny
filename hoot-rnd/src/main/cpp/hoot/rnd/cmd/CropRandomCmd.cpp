@@ -29,11 +29,15 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+
+// Qt
+#include <QFileInfo>
 
 namespace hoot
 {
@@ -55,13 +59,33 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() < 3 || args.size() > 4)
+    if (args.size() < 4 || args.size() > 6)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three to four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes four to six parameters.").arg(getName()));
     }
 
+    bool writeTileFootprints = false;
+    if (args.contains("--write-tiles"))
+    {
+      writeTileFootprints = true;
+      args.removeAll("--write-tiles");
+    }
+    LOG_VARD(writeTileFootprints);
+
+    QStringList inputs;
     const QString input = args[0].trimmed();
+    LOG_VARD(input);
+    if (!input.contains(";"))
+    {
+      inputs.append(input);
+    }
+    else
+    {
+      //multiple inputs
+      inputs = input.split(";");
+    }
+    LOG_VARD(inputs);
     const QString output = args[1].trimmed();
     bool ok = false;
     const int maxNodes = args[2].toLong(&ok);
@@ -69,15 +93,37 @@ public:
     {
       throw HootException("Invalid maximum node count: " + args[2]);
     }
-    int randomSeed = -1;
-    if (args.size() > 3)
+
+    ok = false;
+    double pixelSize = args[3].toDouble(&ok);
+    if (!ok || pixelSize <= 0.0)
     {
-      bool ok = false;
-      randomSeed = args[3].toLong(&ok);
+      throw HootException("Invalid pixel size value: " + args[3]);
+    }
+    LOG_VARD(pixelSize);
+
+    int randomSeed = -1;
+    if (args.size() > 4)
+    {
+      ok = false;
+      randomSeed = args[4].toLong(&ok);
       if (!ok || randomSeed < -1)
       {
-        throw HootException("Invalid random seed: " + args[3]);
+        throw HootException("Invalid random seed: " + args[4]);
       }
+    }
+
+    QString tileOutputFootprintPath;
+    if (writeTileFootprints)
+    {
+      QFileInfo outputFileInfo(output);
+      tileOutputFootprintPath = output;
+      tileOutputFootprintPath =
+        tileOutputFootprintPath.replace(
+          outputFileInfo.baseName(), outputFileInfo.baseName() + "-tiles");
+      outputFileInfo.suffix() =
+        tileOutputFootprintPath.replace("." + outputFileInfo.completeSuffix(), ".osm");
+      LOG_VARD(tileOutputFootprintPath);
     }
 
     if (!ConfigOptions().getCropBounds().trimmed().isEmpty())
@@ -92,9 +138,7 @@ public:
         "The crop.invert configuration option is not supported by " + getName() + ".");
     }
 
-    OsmMapPtr map(new OsmMap());
-    // tile alg expects inputs read in as Unknown1
-    OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
+    OsmMapPtr map = _readInputs(inputs);
     LOG_DEBUG("Starting map size: " << StringUtils::formatLargeNumber(map->size()));
     LOG_DEBUG(
       "Starting map bounds: " <<
@@ -104,6 +148,8 @@ public:
     cropper.setConfiguration(conf());
     cropper.setMaxNodeCount(maxNodes);
     cropper.setRandomSeed(randomSeed);
+    cropper.setPixelSize(0.001);
+    cropper.setTileFootprintOutputPath(tileOutputFootprintPath);
     LOG_INFO(cropper.getInitStatusMessage());
     cropper.apply(map);
     LOG_INFO(cropper.getCompletedStatusMessage());
@@ -115,6 +161,28 @@ public:
     OsmMapWriterFactory::write(map, output);
 
     return 0;
+  }
+
+private:
+
+  OsmMapPtr _readInputs(const QStringList& inputs)
+  {
+    OsmMapPtr map(new OsmMap());
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      const QString input = inputs.at(i);
+      // tile alg expects inputs read in as Unknown1
+      std::shared_ptr<OsmMapReader> reader =
+        OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
+
+      reader->open(input);
+      reader->read(map);
+    }
+    LOG_VARD(map->getNodeCount());
+
+    OsmMapWriterFactory::writeDebugMap(map);
+
+    return map;
   }
 };
 

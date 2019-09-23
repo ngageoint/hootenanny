@@ -850,6 +850,20 @@ If true, will not break apart features crossing the crop bounds. Ignored if crop
 If true, will throw out any features that do not fall completely within the crop bounds. Ignored if
 crop.invert is enabled.
 
+=== crop.random.max.node.count
+
+* Data Type: int
+* Default Value: `-1`
+
+TODO
+
+=== crop.random.pixel.size
+
+* Data Type: double
+* Default Value: `0.001`
+
+TODO
+
 === debug.maps.filename
 
 * Data Type: string
@@ -3306,13 +3320,6 @@ See also:
 * Default Value: `hoot::MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines.
-
-=== random.crop.max.node.count
-
-* Data Type: int
-* Default Value: `-1`
-
-TODO
 
 === random.element.remover.probability
 

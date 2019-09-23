@@ -85,7 +85,21 @@ void TileBoundsCalculator::_calculateMin()
   }
 }
 
-vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
+QString TileBoundsCalculator::tilesToString(const vector<vector<Envelope>>& tiles)
+{
+  QString str;
+  for (size_t tx = 0; tx < tiles.size(); tx++)
+  {
+    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+    {
+      str += GeometryUtils::toConfigString(tiles[tx][ty]) + "\n";
+    }
+  }
+  str.chop(1);
+  return str;
+}
+
+vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
 {
   size_t width = 1;
   vector<PixelBox> boxes;
@@ -151,6 +165,7 @@ vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
     }
   }
   LOG_VARD(result.size());
+  LOG_DEBUG("Tiles: " + tilesToString(result));
   LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
   LOG_DEBUG("Min node count in one tile: " << minNodeCount);
   _exportResult(boxes, "tmp/result.png");
