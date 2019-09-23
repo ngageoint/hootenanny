@@ -408,7 +408,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VART(allLayers);
+  LOG_VARD(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -969,7 +969,7 @@ void OgrReaderInternal::open(const QString& path, const QString& layer)
   {
     _pendingLayers = getLayersWithGeometry(path);
   }
-  LOG_VART(_pendingLayers);
+  LOG_VARD(_pendingLayers);
 }
 
 void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
@@ -1094,6 +1094,8 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
 
 void OgrReaderInternal::read(const OsmMapPtr& map)
 {
+  LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...")
+
   _map = map;
   _count = 0;
 
@@ -1113,11 +1115,12 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     f = 0;
 
     _count++;
-    if (_progress.getState() != Progress::JobState::Pending && _count % 1000 == 0)
+    if (_progress.getState() != Progress::JobState::Pending && _count % 10000 == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
+      // TODO: This isn't clearing out the current line before each new log statement.
       _progress.setFromRelative(
         (float)_count / (float)_featureCount, Progress::JobState::Running,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +

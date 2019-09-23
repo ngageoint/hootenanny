@@ -49,10 +49,13 @@ public:
    * @param maxNodesPerTile
    * @param pixelSize
    * @param map
+   * @param minNodeCountInOneTile
+   * @param maxNodeCountInOneTile
    * @return
    */
   static std::vector<std::vector<geos::geom::Envelope>> calculateTiles(
-    const long maxNodesPerTile, const double pixelSize, OsmMapPtr map);
+    const long maxNodesPerTile, const double pixelSize, OsmMapPtr map,
+    long& minNodeCountInOneTile, long& maxNodeCountInOneTile);
 
   /**
    * TODO

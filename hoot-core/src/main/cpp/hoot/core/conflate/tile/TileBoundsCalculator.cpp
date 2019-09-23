@@ -49,12 +49,14 @@ namespace hoot
 
 int TileBoundsCalculator::logWarnCount = 0;
 
-TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
+TileBoundsCalculator::TileBoundsCalculator(double pixelSize) :
+_pixelSize(pixelSize),
+_maxNodesPerBox(1000),
+_slop(0.1),
+_maxNodeCountInOneTile(0),
+_minNodeCountInOneTile(LONG_MAX)
 {
-  _pixelSize = pixelSize;
   LOG_VARD(_pixelSize);
-  _slop = 0.1;
-  setMaxNodesPerBox(1000);
 }
 
 void TileBoundsCalculator::_calculateMin()
@@ -145,8 +147,9 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
 
   vector<vector<Envelope>> result;
 
-  long maxNodeCount = 0;
-  long minNodeCount = LONG_MAX;
+  _maxNodeCountInOneTile = 0;
+  _minNodeCountInOneTile = LONG_MAX;
+  LOG_VARD(width);
   result.resize(width);
   for (size_t tx = 0; tx < width; tx++)
   {
@@ -154,20 +157,32 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
+      LOG_VARD(pb.getWidth());
+      LOG_VARD(pb.getHeight());
       const long nodeCount = _sumPixels(pb);
-      maxNodeCount = std::max(maxNodeCount, nodeCount);
-      minNodeCount = std::min(minNodeCount, nodeCount);
+      _maxNodeCountInOneTile = std::max(_maxNodeCountInOneTile, nodeCount);
+      _minNodeCountInOneTile = std::min(_minNodeCountInOneTile, nodeCount);
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
-        throw HootException("PixelBox must be at least 3 pixels wide and tall.");
+        throw HootException(
+          QString("PixelBox must be at least 3 pixels wide and tall. Try reducing the pixel ") +
+          QString("size or increasing the max nodes per pixel value. Current pixel box width: ") +
+          QString::number(pb.getWidth()) + "; height: " + QString::number(pb.getHeight()));
       }
       result[tx][ty] = _toEnvelope(pb);
     }
   }
-  LOG_VARD(result.size());
-  LOG_DEBUG("Tiles: " + tilesToString(result));
-  LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
-  LOG_DEBUG("Min node count in one tile: " << minNodeCount);
+  if (_maxNodeCountInOneTile == 0)
+  {
+    throw HootException(
+      "_maxNodeCountInOneTile == 0; Try reducing the pixel size or increasing the max nodes "
+      "per pixel value.");
+  }
+  LOG_DEBUG("Tiles size: " << result.size());
+  LOG_DEBUG("Max node count in one tile: " << _maxNodeCountInOneTile);
+  LOG_DEBUG("Min node count in one tile: " << _minNodeCountInOneTile);
+  LOG_TRACE("Tiles: " + tilesToString(result));
+
   _exportResult(boxes, "tmp/result.png");
 
   return result;
@@ -190,7 +205,9 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
   LOG_VART(b.getWidth());
   if (b.getWidth() < 6)
   {
-    throw HootException("The input box must be at least six pixels high.");
+    throw HootException(
+      "The input box must be at least six pixels wide. Try reducing the pixel size or "
+      "increasing the max nodes per pixel value. Width: " + QString::number(b.getWidth()));
   }
 
   for (int c = b.minX + 2; c < b.maxX - 2; c++)
@@ -246,7 +263,9 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 
   if (b.getHeight() < 6)
   {
-    throw HootException("The input box must be at least six pixels high.");
+    throw HootException(
+      "The input box must be at least six pixels high. Try reducing the pixel size or "
+      "increasing the max nodes per pixel value.Height: " + QString::number(b.getHeight()));
   }
 
   for (int r = b.minY + 2; r < b.maxY - 2; r++)
@@ -464,8 +483,9 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
   if (minSize == true && smallEnough == false)
   {
-    throw HootException("Could not find a solution. Try reducing the pixel size or increasing the "
-      "max nodes per pixel value.");
+    throw HootException(
+      "Could not find a solution. Try reducing the pixel size or increasing the max nodes "
+      "per pixel value.");
   }
   else
   {
@@ -519,10 +539,20 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
 
   const NodeMap& nm = map->getNodes();
   LOG_VARD(nm.size());
+  long nodeCtr = 0;
+  const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     const std::shared_ptr<Node>& n = it->second;
     _countNode(n);
+
+    nodeCtr++;
+    if (nodeCtr % statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Counted " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        StringUtils::formatLargeNumber(nm.size()) << " nodes.");
+    }
   }
 
   r1 = _r1;

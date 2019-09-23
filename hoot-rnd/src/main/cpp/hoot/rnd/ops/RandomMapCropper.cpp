@@ -35,6 +35,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
@@ -61,18 +63,33 @@ void RandomMapCropper::setConfiguration(const Settings& conf)
 
 void RandomMapCropper::apply(OsmMapPtr& map)
 {
+  //LOG_VARD(_maxNodeCount);
   if (_maxNodeCount < 1 || _maxNodeCount > (int)map->size())
   {
     throw IllegalArgumentException("Invalid max node count: " + _maxNodeCount);
   }
-  LOG_VARD(_maxNodeCount);
+
+  LOG_INFO("Cropping to random map tile of max node size: " << _maxNodeCount << "...");
   LOG_VARD(_randomSeed);
+
+  MapProjector::projectToWgs84(map);    // TODO: necessary?
+
+  const int startingMapSize = (int)map->size();
+  // Could be an expensive operation. Keep as debug.
+  geos::geom::Envelope startingBounds;
+  if (Log::getInstance().getLevel() <= Log::Debug)
+  {
+    startingBounds = CalculateMapBoundsVisitor::getGeosBounds(map);
+  }
 
   // compute tiles for the whole dataset, select one tile at random, and crop to the bounds of
   // the selected tile
   // TODO: Can we intelligently calculate pixel size here somehow?
+  long minNodeCountInOneTile = 0;
+  long maxNodeCountInOneTile = 0;
   const std::vector<std::vector<geos::geom::Envelope>> tiles =
-    TileUtils::calculateTiles(_maxNodeCount, _pixelSize, map);
+    TileUtils::calculateTiles(
+      _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile);
   if (!_tileFootprintOutputPath.isEmpty())
   {
     if (_tileFootprintOutputPath.toLower().endsWith(".geojson"))
@@ -83,11 +100,23 @@ void RandomMapCropper::apply(OsmMapPtr& map)
     {
       TileUtils::writeTilesToOsm(tiles, _tileFootprintOutputPath);
     }
+    LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
   _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));
   _cropper.apply(map);
+
+  // cleanup
   SuperfluousWayRemover::removeWays(map);
   SuperfluousNodeRemover().apply(map);
+
+  LOG_INFO("Starting map size: " << StringUtils::formatLargeNumber(startingMapSize));
+  LOG_DEBUG("Starting map bounds: " << GeometryUtils::envelopeToConfigString(startingBounds));
+  LOG_INFO("Cropped map size: " << StringUtils::formatLargeNumber(map->size()));
+  LOG_DEBUG(
+    "Cropped map bounds: " <<
+    GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)));
+  LOG_INFO("Minimum nodes in a single tile: " << minNodeCountInOneTile);
+  LOG_INFO("Maximum nodes in a single tile: " << maxNodeCountInOneTile);
 }
 
 }

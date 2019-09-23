@@ -34,7 +34,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QFileInfo>
@@ -86,13 +85,17 @@ public:
       inputs = input.split(";");
     }
     LOG_VARD(inputs);
+
     const QString output = args[1].trimmed();
+    LOG_VARD(output);
+
     bool ok = false;
     const int maxNodes = args[2].toLong(&ok);
     if (!ok || maxNodes < 1)
     {
       throw HootException("Invalid maximum node count: " + args[2]);
     }
+    LOG_VARD(maxNodes);
 
     ok = false;
     double pixelSize = args[3].toDouble(&ok);
@@ -112,6 +115,7 @@ public:
         throw HootException("Invalid random seed: " + args[4]);
       }
     }
+    LOG_VARD(randomSeed);
 
     QString tileOutputFootprintPath;
     if (writeTileFootprints)
@@ -122,9 +126,9 @@ public:
         tileOutputFootprintPath.replace(
           outputFileInfo.baseName(), outputFileInfo.baseName() + "-tiles");
       outputFileInfo.suffix() =
-        tileOutputFootprintPath.replace("." + outputFileInfo.completeSuffix(), ".osm");
-      LOG_VARD(tileOutputFootprintPath);
+        tileOutputFootprintPath.replace("." + outputFileInfo.completeSuffix(), ".osm"); 
     }
+    LOG_VARD(tileOutputFootprintPath);
 
     if (!ConfigOptions().getCropBounds().trimmed().isEmpty())
     {
@@ -139,24 +143,16 @@ public:
     }
 
     OsmMapPtr map = _readInputs(inputs);
-    LOG_DEBUG("Starting map size: " << StringUtils::formatLargeNumber(map->size()));
-    LOG_DEBUG(
-      "Starting map bounds: " <<
-      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)));
 
     RandomMapCropper cropper;
     cropper.setConfiguration(conf());
     cropper.setMaxNodeCount(maxNodes);
     cropper.setRandomSeed(randomSeed);
-    cropper.setPixelSize(0.001);
+    cropper.setPixelSize(pixelSize);
     cropper.setTileFootprintOutputPath(tileOutputFootprintPath);
     LOG_INFO(cropper.getInitStatusMessage());
     cropper.apply(map);
     LOG_INFO(cropper.getCompletedStatusMessage());
-    LOG_DEBUG("Cropped map size: " << StringUtils::formatLargeNumber(map->size()));
-    LOG_DEBUG(
-      "Cropped map bounds: " <<
-      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)));
 
     OsmMapWriterFactory::write(map, output);
 
@@ -171,6 +167,7 @@ private:
     for (int i = 0; i < inputs.size(); i++)
     {
       const QString input = inputs.at(i);
+      LOG_INFO("Reading " << input << "...");
       // tile alg expects inputs read in as Unknown1
       std::shared_ptr<OsmMapReader> reader =
         OsmMapReaderFactory::createReader(input, true, Status::Unknown1);

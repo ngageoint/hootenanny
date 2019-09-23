@@ -39,10 +39,10 @@ If you need to run random map cropping inline, use the hoot::RandomMapCropper OS
 
 --------------------------------------
 # pseudo random selection
-hoot crop-random "input1.osm;input2.osm" output.osm 1000 0.001
+hoot crop-random -D crop.keep.only.features.inside.bounds=true "input1.osm;input2.osm" output.osm 1000 0.001
 
 # seed the random selection for testing
-hoot crop-random "input1.osm;input2.osm" output.osm 1000 0.001 3
+hoot crop-random -D crop.keep.only.features.inside.bounds=true "input1.osm;input2.osm" output.osm 1000 0.001 3
 --------------------------------------
 
 === See Also

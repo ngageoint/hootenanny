@@ -44,7 +44,8 @@ namespace hoot
 {
 
 std::vector<std::vector<geos::geom::Envelope>> TileUtils::calculateTiles(
-  const long maxNodesPerTile, const double pixelSize, OsmMapPtr map)
+  const long maxNodesPerTile, const double pixelSize, OsmMapPtr map, long& minNodeCountInOneTile,
+  long& maxNodeCountInOneTile)
 {
   TileBoundsCalculator tileBoundsCalculator(pixelSize);
   tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
@@ -54,7 +55,10 @@ std::vector<std::vector<geos::geom::Envelope>> TileUtils::calculateTiles(
   //we're calculating for unknown1 only, so fill the second matrix with all zeroes
   cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
   tileBoundsCalculator.setImages(r1, zeros);
-  return tileBoundsCalculator.calculateTiles();
+  std::vector<std::vector<geos::geom::Envelope>> tiles =  tileBoundsCalculator.calculateTiles();
+  minNodeCountInOneTile = tileBoundsCalculator.getMinNodeCountInOneTile();
+  maxNodeCountInOneTile = tileBoundsCalculator.getMaxNodeCountInOneTile();
+  return tiles;
 }
 
 int TileUtils::getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
