@@ -311,11 +311,9 @@ translate = {
                         // are valid
                         if (! outList[row[0]] || outList[row[0]].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            print('v1: ' + outList[row[0]]);
-                            print('v2: ' + row[1]);
                             outList[row[0]] = this.getMaxAsString(outList[row[0]], row[1]);
                             // Debug
-                            print('Used:' + key + ' = ' + inList[key]);
+                            // print('Used:' + key + ' = ' + inList[key]);
                             delete inList[key];
                         }
                         else if (! outList[row[0] + '2'] || outList[row[0] + '2'].slice(0, -1) === row[1].slice(0, -1))
