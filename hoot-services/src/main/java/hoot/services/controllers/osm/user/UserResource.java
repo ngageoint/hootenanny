@@ -29,10 +29,10 @@ package hoot.services.controllers.osm.user;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -49,18 +49,20 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
-import com.querydsl.core.Tuple;
-import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import hoot.services.controllers.auth.UserManagerImpl;
+import com.querydsl.core.Tuple;
+
+import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.User;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -71,6 +73,9 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/api/0.6/user")
 @Transactional
 public class UserResource {
+    @Autowired
+    UserManager userManager;
+
     public UserResource() {
     }
 
@@ -158,7 +163,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Deprecated
-    public Response getSaveUser(@Context HttpServletRequest request, @QueryParam("userEmail") String userEmail) {
+    public Response getSaveUser(@QueryParam("userEmail") String userEmail) {
         Users user;
         try {
             user = getOrSaveByEmail(userEmail);
@@ -261,9 +266,10 @@ public class UserResource {
                 .where(users.id.eq(userId))
                 .set(users.privileges, user.get("privileges"))
                 .execute();
-        }
 
-        UserManagerImpl.clearCache();
+            userManager.clearCachedUser(userId);
+
+        }
 
         return Response.ok().build();
     }
@@ -281,9 +287,9 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPrivileges(@Context HttpServletRequest request) {
         Users user = Users.fromRequest(request);
-        JSONObject json = new JSONObject((HashMap) user.getPrivileges());
+        Map<String, String> json = PostgresUtils.postgresObjToHStore(user.getPrivileges());
 
-        return Response.ok(json.toJSONString()).build();
+        return Response.ok(json).build();
     }
 
     /**
@@ -310,7 +316,7 @@ public class UserResource {
      * @return true if user has admin privileges, else false
      */
     private static boolean adminUserCheck(Users user) {
-        HashMap privileges = ((HashMap) user.getPrivileges());
+        Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
         return privileges != null && privileges.get("admin").equals("true");
     }
 

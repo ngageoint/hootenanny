@@ -45,4 +45,6 @@ public interface UserManager {
     Timestamp parseTimestamp(String timestamp);
 
     Users getUserBySession(String sessionId);
+
+    void clearCachedUser(Long userId);
 }
