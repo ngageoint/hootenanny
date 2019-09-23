@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/rnd/util/TileUtils.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -134,7 +134,7 @@ public:
 
     OsmMapPtr inputMap = _readInputs(inputs);
     const std::vector<std::vector<geos::geom::Envelope>> tiles =
-      GeometryUtils::calculateTiles(maxNodesPerTile, pixelSize, inputMap);
+      TileUtils::calculateTiles(maxNodesPerTile, pixelSize, inputMap);
     _writeOutputAsGeoJson(tiles, output, args.contains("--random"), randomSeed);
 
     return 0;
@@ -235,7 +235,7 @@ private:
     int randomTileIndex = -1;
     if (selectSingleRandomTile)
     {
-      randomTileIndex = GeometryUtils::getRandomTileIndex(tiles, randomSeed);
+      randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
     }
 
     OsmMapPtr boundaryMap(new OsmMap());

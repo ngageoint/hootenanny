@@ -54,7 +54,6 @@ public:
     // time. This makes the command list display a little cleaner and less confusing.
     _forceToRndList.append("build-model");
     _forceToRndList.append("changeset-derive-replacement");
-    _forceToRndList.append("crop-random");
     _forceToRndList.append("generate-alpha-shape");
     _forceToRndList.append("node-density-plot");
     _forceToRndList.append("optimize-network-conf");

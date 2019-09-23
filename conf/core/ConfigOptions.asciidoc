@@ -3307,6 +3307,13 @@ See also:
 
 The way subline matcher to use when determining matching sublines.
 
+=== random.crop.max.node.count
+
+* Data Type: int
+* Default Value: `-1`
+
+TODO
+
 === random.element.remover.probability
 
 * Data Type: double
@@ -3367,10 +3374,9 @@ guarantee that there will always be exactly one duplicate.
 * Default Value: `-1`
 
 A random seed integer passed to the random number generator accessed by map operations and 
-visitors that modify element randomly (as used by PERTY). to give consistent results over 
-multiple runs. A value of -1 will generate a seed based on the time to provide pseudo-random 
-results in the output.  Other seed values will yield repeatable results when the same seed 
-is used in consecutive calls to the PERTY related commands.
+visitors that modify elements randomly (used by PERTY, RandomMapCropper, etc.). to give consistent
+results over multiple runs. A value of -1 will generate a seed based on the time to provide
+pseudo-random results in the output.
 
 === random.tag.modifier.exempt.tag.keys
 

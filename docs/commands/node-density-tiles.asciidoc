@@ -13,7 +13,7 @@ the specified input(s) and writes the output to a file.
 * +pixelSize+           - The size of the pixel used in the calculation in degrees.  The default is 0.001; optional only if
                           maxNodeCountPerTile is not specified
 * +random-seed+         - Seeds the random number generator for consistent tile boundary selection; valid only if --random is specified;
-                          use -1 for no seeding; defaults to -1
+                          use -1 for pseudo-random seeding; defaults to -1
 * +--random+            - Selects a single random tile from those calculated
 
 If too low a value is specified for maxNodeCountPerTile or too high a value is specified for pixelSize, the algorithm used may not be able

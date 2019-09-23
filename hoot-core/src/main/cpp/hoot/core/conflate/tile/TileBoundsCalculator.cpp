@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QImage>
@@ -95,7 +96,7 @@ vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
   LOG_DEBUG("w: " << _r1.cols << " h: " << _r1.rows);
   LOG_DEBUG("Total node count: " << nodeCount);
 
-  LOG_VART(_maxNodesPerBox);
+  LOG_VARD(_maxNodesPerBox);
   while (!_isDone(boxes))
   {
     width *= 2;
@@ -149,6 +150,7 @@ vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
       result[tx][ty] = _toEnvelope(pb);
     }
   }
+  LOG_VARD(result.size());
   LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
   LOG_DEBUG("Min node count in one tile: " << minNodeCount);
   _exportResult(boxes, "tmp/result.png");
@@ -477,13 +479,13 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
     std::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
     LOG_VARD(tempEnv->toString());
   }
-  LOG_VART(_pixelSize);
-  LOG_VART(map->getNodeCount());
+  LOG_VARD(_pixelSize);
+  LOG_VARD(StringUtils::formatLargeNumber(map->getNodeCount()));
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
-  LOG_VART(w);
+  LOG_VARD(w);
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;
-  LOG_VART(h)
+  LOG_VARD(h)
 
   _r1 = cv::Mat(cvSize(w, h), CV_32SC1);
   _r2 = cv::Mat(cvSize(w, h), CV_32SC1);
@@ -501,7 +503,7 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
   }
 
   const NodeMap& nm = map->getNodes();
-  LOG_VART(nm.size());
+  LOG_VARD(nm.size());
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     const std::shared_ptr<Node>& n = it->second;

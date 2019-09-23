@@ -28,12 +28,12 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/rnd/ops/RandomMapCropper.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 namespace hoot
 {
@@ -49,7 +49,9 @@ public:
   virtual QString getName() const override { return "crop-random"; }
 
   virtual QString getDescription() const override
-  { return "Crops out a random section of data"; }
+  { return "Crops out a random section of data based on a given node size (experimental)"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -65,7 +67,7 @@ public:
     const int maxNodes = args[2].toLong(&ok);
     if (!ok || maxNodes < 1)
     {
-      throw HootException("Invalid maximim node count: " + args[2]);
+      throw HootException("Invalid maximum node count: " + args[2]);
     }
     int randomSeed = -1;
     if (args.size() > 3)
@@ -90,15 +92,26 @@ public:
         "The crop.invert configuration option is not supported by " + getName() + ".");
     }
 
-    // read in all of the data
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, input);
+    // tile alg expects inputs read in as Unknown1
+    OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
+    LOG_DEBUG("Starting map size: " << StringUtils::formatLargeNumber(map->size()));
+    LOG_DEBUG(
+      "Starting map bounds: " <<
+      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)));
 
-    // compute tiles for the whole dataset, select one tile at random, and crop to the bounds of
-    // the selected tile
-    MapCropper cropper(
-      GeometryUtils::getRandomTile(GeometryUtils::calculateTiles(maxNodes, 0.001, map), randomSeed));
+    RandomMapCropper cropper;
+    cropper.setConfiguration(conf());
+    cropper.setMaxNodeCount(maxNodes);
+    cropper.setRandomSeed(randomSeed);
+    LOG_INFO(cropper.getInitStatusMessage());
     cropper.apply(map);
+    LOG_INFO(cropper.getCompletedStatusMessage());
+    LOG_DEBUG("Cropped map size: " << StringUtils::formatLargeNumber(map->size()));
+    LOG_DEBUG(
+      "Cropped map bounds: " <<
+      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map)));
+
     OsmMapWriterFactory::write(map, output);
 
     return 0;
