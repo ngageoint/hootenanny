@@ -49,6 +49,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +75,8 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/api/0.6/user")
 @Transactional
 public class UserResource {
+    private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
+
     @Autowired
     UserManager userManager;
 
@@ -225,6 +229,8 @@ public class UserResource {
             return Response.ok().entity(userList).build();
         }
         catch (Exception e) {
+            logger.error("Failed to get all users", e);
+
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                     .type(MediaType.TEXT_PLAIN)
                     .entity("failed to list users")
