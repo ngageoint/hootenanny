@@ -80,7 +80,7 @@ public:
     cropper.apply(map);
     // Should we run these inside MapCropper instead?
     SuperfluousWayRemover::removeWays(map);
-    SuperfluousNodeRemover().apply(map);
+    SuperfluousNodeRemover::removeNodes(map);
 
     IoUtils::saveMap(map, out);
 

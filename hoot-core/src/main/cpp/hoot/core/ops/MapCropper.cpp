@@ -424,7 +424,9 @@ void MapCropper::apply(OsmMapPtr& map)
     _numProcessed++;
     if (nodeCtr % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
+      PROGRESS_INFO(
+        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        StringUtils::formatLargeNumber(nodes.size()) << " nodes.");
     }
   }
 

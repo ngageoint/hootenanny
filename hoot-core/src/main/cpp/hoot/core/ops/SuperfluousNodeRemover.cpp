@@ -137,7 +137,7 @@ void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   {
     s.setBounds(e);
   }
-  LOG_DEBUG(s.getInitStatusMessage());
+  LOG_INFO(s.getInitStatusMessage());
   s.apply(map);
   LOG_DEBUG(s.getCompletedStatusMessage());
 }

@@ -1092,8 +1092,6 @@ Meters OgrReaderInternal::_parseCircularError(Tags& t)
 
 void OgrReaderInternal::read(const OsmMapPtr& map)
 {
-  LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...")
-
   _map = map;
   _count = 0;
 
@@ -1104,6 +1102,8 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     throw HootException("Error reading from input. No valid layers. Did you forget to set the "
       "layer name?");
   }
+
+  LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...");
 
   OGRFeature* f;
   while ((f = _layer->GetNextFeature()) != NULL && (_limit == -1 || _count < _limit))

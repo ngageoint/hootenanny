@@ -107,7 +107,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
 
   // cleanup
   SuperfluousWayRemover::removeWays(map);
-  SuperfluousNodeRemover().apply(map);
+  SuperfluousNodeRemover::removeNodes(map);
 
   LOG_INFO("Starting map size: " << StringUtils::formatLargeNumber(startingMapSize));
   LOG_DEBUG("Starting map bounds: " << GeometryUtils::envelopeToConfigString(startingBounds));
