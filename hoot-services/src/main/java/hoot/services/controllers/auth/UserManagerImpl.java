@@ -26,8 +26,8 @@
  */
 package hoot.services.controllers.auth;
 
-import static hoot.services.models.db.QUsers.users;
 import static hoot.services.models.db.QSpringSession.springsessions;
+import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.io.IOException;
@@ -35,6 +35,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,7 +55,6 @@ import org.xml.sax.SAXException;
 
 import hoot.services.models.db.SpringSession;
 import hoot.services.models.db.Users;
-import hoot.services.utils.DbUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 @Component
@@ -155,6 +155,15 @@ public class UserManagerImpl implements UserManager {
         }
     }
 
+    private List<String> getUserSessionId(Long userId) {
+        List<String> sess = createQuery()
+                .select(springsessions.session_id)
+                .from(springsessions)
+                .where(springsessions.user_id.eq(userId))
+                .fetch();
+        return sess;
+    }
+
     @Override
     public Users upsert(String xml, OAuthConsumerToken accessToken, String sessionId) throws SAXException, IOException, ParserConfigurationException, InvalidUserProfileException {
         Users user = this.parseUser(xml);
@@ -173,5 +182,9 @@ public class UserManagerImpl implements UserManager {
         attributeSessionWithUser(sessionId, user);
         userCache.put(sessionId, user);
         return user;
+    }
+
+    public void clearCachedUser(Long userId) {
+        getUserSessionId(userId).forEach(id -> userCache.remove(id));
     }
 }
