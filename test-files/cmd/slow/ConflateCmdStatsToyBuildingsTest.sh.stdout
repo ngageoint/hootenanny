@@ -135,13 +135,13 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	70	56	86	
+Translated Populated Tags	70	55	86	
 Difference Between Total Features in Output and Total Features in Inputs			-5	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.77777777777778	
-Calculate Stats for Input 1 Time (sec)				7.718957185745239
-Calculate Stats for Input 2 Time (sec)				0.5920548439025879
-Apply Pre-Conflate Ops Time (sec)				0.005505084991455078
-Apply Post-Conflate Ops Time (sec)				0.003062009811401367
-Calculate Stats for Output Time (sec)				0.5932199954986572
+Calculate Stats for Input 1 Time (sec)				24.24515104293823
+Calculate Stats for Input 2 Time (sec)				1.715812921524048
+Apply Pre-Conflate Ops Time (sec)				0.05048418045043945
+Apply Post-Conflate Ops Time (sec)				0.01626300811767578
+Calculate Stats for Output Time (sec)				2.268957853317261
 
-14:59:01.450 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...st-files/ToyBuildingsTestA.osm and secondary: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+19:42:03.113 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...st-files/ToyBuildingsTestA.osm and secondary: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm

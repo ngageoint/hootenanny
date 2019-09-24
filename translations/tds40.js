@@ -533,7 +533,7 @@ tds40 = {
     }, // End manyFeatures
 
     // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
-    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
+    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these
     fixTransType : function(tags,geometry)
     {
         if (tags.railway)
@@ -870,13 +870,13 @@ tds40 = {
                     tags.highway = 'motorway';
                     break;
                 }
-                
+
                 if (tags['ref:road:type'] == 'limited_access_motorway' || tags['ref:road:class'] == 'primary')
                 {
                     tags.highway = 'trunk';
                     break;
                 }
-                
+
                 if (tags['ref:road:type'] == 'parkway' || tags['ref:road:class'] == 'secondary')
                 {
                     tags.highway = 'primary';
@@ -888,19 +888,19 @@ tds40 = {
                     tags.highway = 'secondary';
                     break;
                 }
-                
+
                 if (tags['ref:road:type'] == 'road' || tags['ref:road:type'] == 'boulevard')
                 {
                     tags.highway = 'tertiary';
                     break;
                 }
-                
+
                 if (tags['ref:road:type'] == 'street')
                 {
                     tags.highway = 'unclassified';
                     break;
                 }
-                
+
                 if (tags['ref:road:type'] == 'lane')
                 {
                     tags.highway = 'service';
@@ -913,7 +913,7 @@ tds40 = {
                     tags.highway = 'road';
                     break;
                 }
-                
+
                 // Catch all for the rest of the ref:road:type: close, circle drive etc
                 if (tags['ref:road:type'])
                 {
@@ -923,7 +923,7 @@ tds40 = {
 
                 // If we get this far then we are going with the default.
                 break;
-            
+
             case 'AA052': // Fix oil/gas/petroleum fields
                 switch (tags.product)
                 {
@@ -1275,7 +1275,7 @@ tds40 = {
                 }
                 else
                 {
-                    tags.highway = 'road';                    
+                    tags.highway = 'road';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1305,7 +1305,7 @@ tds40 = {
                 }
                 else
                 {
-                    tags.railway = 'rail';                    
+                    tags.railway = 'rail';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1340,7 +1340,7 @@ tds40 = {
                 }
                 else
                 {
-                    tags.building = 'yes';                    
+                    tags.building = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1375,7 +1375,7 @@ tds40 = {
                 }
                 else
                 {
-                    tags.bridge = 'yes';                    
+                    tags.bridge = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1485,7 +1485,7 @@ tds40 = {
             // If we don't have a Feature Function then assign one
             if (! attrs.FFN)
             {
-                // attrs.FFN = facilityList[tags.amenity];
+                attrs.FFN = facilityList[tags.amenity];
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
@@ -1792,7 +1792,7 @@ tds40 = {
             var fcodeMap = {
                 'highway':'AP030','railway':'AN010','building':'AL013','ford':'BH070',
                 'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
-                'barrier':'AP040','tourism':'AL013','junction':'AP020','mine:access':'AA010', 
+                'barrier':'AP040','tourism':'AL013','junction':'AP020','mine:access':'AA010',
                 'tomb':'AL036','shop':'AL015','office':'AL015'
                            };
 
@@ -1939,9 +1939,9 @@ tds40 = {
             }
         } // End if religion & denomination
 
-        // Names. Sometimes we don't have a name but we do have language ones 
+        // Names. Sometimes we don't have a name but we do have language ones
         if (!tags.name) translate.swapName(tags);
-    
+
     }, // End applyToTdsPreProcessing
 
 // #####################################################################################################
@@ -2257,7 +2257,7 @@ tds40 = {
         // A little cleaning before we try to untangle stuff
         delete attrs.SHAPE_Length;
         delete attrs.SHAPE_Area;
-        
+
         // Untangle TDS attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         tds40.untangleAttributes(attrs, tags);
