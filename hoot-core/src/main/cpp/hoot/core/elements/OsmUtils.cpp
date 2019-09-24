@@ -456,4 +456,102 @@ bool OsmUtils::mapIsPointsOnly(const OsmMapPtr& map)
     (int)map->getElementCount();
 }
 
+bool OsmUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                        const std::vector<ElementPtr>& elements)
+{
+  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    ElementPtr element = *it;
+    bool elementHasTagKey = false;
+    for (int i = 0; i < tagKeys.size(); i++)
+    {
+      if (element->getTags().contains(tagKeys.at(i)))
+      {
+        elementHasTagKey = true;
+        break;
+      }
+    }
+    if (!elementHasTagKey)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool OsmUtils::allElementsHaveAnyKvp(const QStringList& kvps,
+                                     const std::vector<ElementPtr>& elements)
+{
+
+  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    ElementPtr element = *it;
+    bool elementHasKvp = false;
+    for (int i = 0; i < kvps.size(); i++)
+    {
+      const QString kvp = kvps.at(i);
+      const QStringList kvpParts = kvp.split("=");
+      if (kvpParts.size() != 2)
+      {
+        throw IllegalArgumentException("Invalid kvp: " + kvp);
+      }
+      const QString key = kvpParts[0];
+      const QString val = kvpParts[1];
+      if (element->getTags()[key] == val)
+      {
+        elementHasKvp = true;
+        break;
+      }
+    }
+    if (!elementHasKvp)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool OsmUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                        const std::vector<ElementPtr>& elements)
+{
+  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    ElementPtr element = *it;
+    for (int i = 0; i < tagKeys.size(); i++)
+    {
+      if (element->getTags().contains(tagKeys.at(i)))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
+                                     const std::vector<ElementPtr>& elements)
+{
+
+  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
+  {
+    ElementPtr element = *it;
+    for (int i = 0; i < kvps.size(); i++)
+    {
+      const QString kvp = kvps.at(i);
+      const QStringList kvpParts = kvp.split("=");
+      if (kvpParts.size() != 2)
+      {
+        throw IllegalArgumentException("Invalid kvp: " + kvp);
+      }
+      const QString key = kvpParts[0];
+      const QString val = kvpParts[1];
+      if (element->getTags()[key] == val)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 }

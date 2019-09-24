@@ -72,8 +72,6 @@ else
          nodejs-devel \
          proj \
          proj-devel \
-         qt5-qtwebkit \
-         qt5-qtwebkit-devel \
          stxxl \
          stxxl-devel
 
@@ -101,8 +99,6 @@ sudo yum install -y \
      nodejs-devel-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
-     qt5-qtwebkit-$QT5_WEBKIT_VERSION \
-     qt5-qtwebkit-devel-$QT5_WEBKIT_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
@@ -126,8 +122,6 @@ sudo yum versionlock add \
      nodejs-devel-$NODE_VERSION \
      proj-$PROJ_VERSION \
      proj-devel-$PROJ_VERSION \
-     qt5-qtwebkit-$QT5_WEBKIT_VERSION \
-     qt5-qtwebkit-devel-$QT5_WEBKIT_VERSION \
      stxxl-$STXXL_VERSION \
      stxxl-devel-$STXXL_VERSION
 
@@ -184,6 +178,8 @@ sudo yum -y install \
     qt5-qtbase \
     qt5-qtbase-devel \
     qt5-qtbase-postgresql \
+    qt5-qtwebkit \
+    qt5-qtwebkit-devel \
     redhat-lsb-core \
     swig \
     tex-fonts-hebrew \

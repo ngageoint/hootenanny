@@ -44,7 +44,8 @@ namespace hoot
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
   _db.open(url);
 }
@@ -505,7 +506,10 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
     QString k = it.key();
     QString v = it.value();
 
-    if (k != MetadataTags::HootHash())
+    //  Don't include the hoot hash, also don't include the circular error tag
+    //  unless circular error tags AND debug tags are turned on
+    if (k != MetadataTags::HootHash() &&
+       (k != MetadataTags::ErrorCircular() || (_includeCircularErrorTags && _includeDebugTags)))
     {
       const QString currentTagValues =
       QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n")
@@ -642,6 +646,7 @@ void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
   ConfigOptions co(conf);
   _changesetUserId = co.getChangesetUserId();
   _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 }

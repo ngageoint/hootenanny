@@ -51,12 +51,12 @@ class ServiceHootApiDbTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbTest);
 
-  // standard hoot services tests
   CPPUNIT_TEST(runDbVersionTest);
   CPPUNIT_TEST(runOpenTest);
   CPPUNIT_TEST(runDropMapTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runMapExistsTest);
+  CPPUNIT_TEST(runMapUrlWithNameTest);
   CPPUNIT_TEST(runChangesetExistsTest);
   CPPUNIT_TEST(runNumElementsTest);
   CPPUNIT_TEST(runSelectAllElementsTest);
@@ -111,12 +111,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, db.getDB().isOpen());
   }
 
-  /***********************************************************************************************
-   * Purpose: Print the current Services DB version
-   * To see the version from this test, type the following:
-   *   bin/HootTest --debug --single hoot::ServicesDbTest::runDbVersionTest
-   * *********************************************************************************************
-   */
   void runDbVersionTest()
   {
     setUpTest("runDbVersionTest");
@@ -136,8 +130,6 @@ public:
     const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
 
     mapId = ids->at(0);
-
-    //LOG_WARN("Map ID out of ITM1: " << mapId);
 
     CPPUNIT_ASSERT(database.mapExists(mapId));
 
@@ -174,6 +166,19 @@ public:
 
     mapId = ids->at(0);
     CPPUNIT_ASSERT(database.mapExists(mapId));
+  }
+
+  void runMapUrlWithNameTest()
+  {
+    setUpTest("runMapUrlWithNameTest");
+    HootApiDb database;
+    QUrl dbModifyUrl = ServicesDbTestUtils::getDbModifyUrl(testName);
+    database.open(dbModifyUrl);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
+
+    // Should recognize that the URL refers to a db layer by name and not by numerical ID.
+    const long requestedMapId = database.getMapIdFromUrl(dbModifyUrl);
+    CPPUNIT_ASSERT_EQUAL(ids->at(0), requestedMapId);
   }
 
   void runChangesetExistsTest()

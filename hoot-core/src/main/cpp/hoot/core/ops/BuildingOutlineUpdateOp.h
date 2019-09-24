@@ -33,7 +33,6 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <set>
@@ -45,12 +44,9 @@ class OsmMap;
 /**
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
- *
- * This class has gone through a few iterations based on user feedback and its complexity may have
- * increased unnecessarily as a result...maybe needs some refactoring to simplify.
  */
 class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable,
-  public OperationStatusInfo, public Configurable
+  public OperationStatusInfo
 {
 public:
 
@@ -77,16 +73,10 @@ public:
   virtual QString getDescription() const override
   { return "Updates multi-part building outlines"; }
 
-  virtual void setConfiguration(const Settings& conf);
-
 private:
 
   std::shared_ptr<OsmMap> _map;
   ReviewMarker _reviewMarker;
-  // If enabled, this will remove all building relations that were used as a source for creating
-  // the outline multipoly relations by this class.
-  bool _removeBuildingRelations;
-  std::set<ElementId> _buildingRelationIds;
 
   void _createOutline(const RelationPtr& building);
   void _unionOutline(const RelationPtr& building, const ElementPtr& element,
@@ -98,10 +88,6 @@ private:
    */
   void _mergeNodes(const std::shared_ptr<Element>& changed,
                    const RelationPtr& reference);
-  void _updateMultipolyWayMembers(
-    WayPtr& pOutlineWay, QHash<RelationData::Entry,WayPtr>& buildingWayLookup);
-
-  void _deleteBuildingRelations();
 };
 
 }

@@ -530,7 +530,7 @@ tds61 = {
     }, // End manyFeatures
 
     // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
-    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
+    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these
     fixTransType : function(tags,geometry)
     {
         if (tags.railway)
@@ -985,14 +985,14 @@ tds61 = {
             case undefined: // Break early if no value. Should not get here.....
                 break;
 
-            case 'AP020': 
+            case 'AP020':
                 if (! tags.junction) tags.junction = 'yes';
                 break;
 
-            case 'AQ040': 
+            case 'AQ040':
                 if (! tags.bridge) tags.bridge = 'yes';
                 break;
-            
+
             case 'BH140':
                 if (! tags.waterway) tags.waterway = 'river';
                 break;
@@ -1274,7 +1274,7 @@ tds61 = {
                 }
                 else
                 {
-                    tags.highway = 'road';                    
+                    tags.highway = 'road';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1304,7 +1304,7 @@ tds61 = {
                 }
                 else
                 {
-                    tags.railway = 'rail';                    
+                    tags.railway = 'rail';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1339,7 +1339,7 @@ tds61 = {
                 }
                 else
                 {
-                    tags.building = 'yes';                    
+                    tags.building = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1374,7 +1374,7 @@ tds61 = {
                 }
                 else
                 {
-                    tags.bridge = 'yes';                    
+                    tags.bridge = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1485,7 +1485,7 @@ tds61 = {
             // If we don't have a Feature Function then assign one
             if (! attrs.FFN)
             {
-                // attrs.FFN = facilityList[tags.amenity];
+                attrs.FFN = facilityList[tags.amenity];
                 // Debug
                 // print('PreDropped: amenity = ' + tags.amenity);
                 delete tags.amenity;
@@ -1995,7 +1995,7 @@ tds61 = {
 
         // Names. Sometimes we don't have a name but we do have language ones
         if (!tags.name) translate.swapName(tags);
-    
+
     }, // End applyToTdsPreProcessing
 
 // #####################################################################################################
