@@ -37,6 +37,9 @@
 namespace hoot
 {
 
+/**
+ * Utilities for dealing with node density based tiles
+ */
 class TileUtils
 {
 public:
@@ -44,13 +47,13 @@ public:
   static std::string className() { return "hoot::TileUtils"; }
 
   /**
-   * TODO
+   * Calculates a set of boundary tiles
    *
-   * @param maxNodesPerTile
-   * @param pixelSize
-   * @param map
-   * @param minNodeCountInOneTile
-   * @param maxNodeCountInOneTile
+   * @param maxNodesPerTile the requested maximum number of nodes to be in any one tile
+   * @param pixelSize the pixel size used to calculate the boundaries
+   * @param map the map containing the nodes
+   * @param minNodeCountInOneTile the smallest number of nodes actually found in any one tile
+   * @param maxNodeCountInOneTile the largest number of nodes actually found in any one tile
    * @return
    */
   static std::vector<std::vector<geos::geom::Envelope>> calculateTiles(
@@ -58,46 +61,48 @@ public:
     long& minNodeCountInOneTile, long& maxNodeCountInOneTile);
 
   /**
-   * TODO
+   * Retrieves a random tile index from a collection of tiles
    *
-   * @param tiles
-   * @param randomSeed
-   * @return
+   * @param tiles the collection of tiles to calculate a random index for
+   * @param randomSeed optional random number generator seed
+   * @return an index
    */
   static int getRandomTileIndex(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
                                 int randomSeed);
 
   /**
-   * TODO
+   * Retrieves a random boundary tile from a collection of tiles
    *
-   * @param tiles
-   * @param randomSeed
+   * @param tiles the collection of tiles from which to select
+   * @param randomSeed optional random number generator seed
    * @return
    */
   static geos::geom::Envelope getRandomTile(
     const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
 
   /**
-   * TODO
+   * Writes boundary tiles to a GeoJSON output file
    *
-   * @param tiles
-   * @param outputPath
+   * @param tiles the collection of tiles to write
+   * @param outputPath the output file path
    * @param selectSingleRandomTile
-   * @param randomSeed
-   * @todo move to TileFootprintWriter
+   * @param randomSeed optional random number generator seed
+   * @todo collapse with OSM writing method and refactor to TileFootprintWriter?
+   * @todo refactor selectSingleRandomTile out?
    */
   static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
                                   const QString& outputPath,
                                   const bool selectSingleRandomTile = false, int randomSeed = -1);
 
   /**
-   * TODO
+   * Writes boundary tiles to an OSM output file
    *
-   * @param tiles
-   * @param outputPath
+   * @param tiles the collection of tiles to write
+   * @param outputPath the output file path
    * @param selectSingleRandomTile
-   * @param randomSeed
-   * @todo move to TileFootprintWriter
+   * @param randomSeed optional random number generator seed
+   * @todo collapse with GeoJSON writing method and refactor to TileFootprintWriter?
+   * @todo refactor selectSingleRandomTile out?
    */
   static void writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
                               const QString& outputPath, const bool selectSingleRandomTile = false,

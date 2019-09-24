@@ -855,14 +855,15 @@ crop.invert is enabled.
 * Data Type: int
 * Default Value: `-1`
 
-TODO
+The maximum number of nodes to be cropped out when running either the `crop-random` command or
+`RandomMapCropper`.
 
 === crop.random.pixel.size
 
 * Data Type: double
 * Default Value: `0.001`
 
-TODO
+The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
 
 === debug.maps.filename
 

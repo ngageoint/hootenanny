@@ -72,7 +72,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   LOG_INFO("Cropping to random map tile of max node size: " << _maxNodeCount << "...");
   LOG_VARD(_randomSeed);
 
-  MapProjector::projectToWgs84(map);    // TODO: necessary?
+  //MapProjector::projectToWgs84(map);
 
   const int startingMapSize = (int)map->size();
   // Could be an expensive operation. Keep as debug.
