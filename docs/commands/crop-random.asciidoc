@@ -31,7 +31,7 @@ The following cropping configuration options are not supported:
 * +crop.bounds+ - This is unnecessary since the command calculates the crop bounds automatically based on maximum node count.
 * +crop.invert+
 
-See the [[crop]] command for details on the remaining supported cropping configuration options.
+See the +crop+ command for details on the remaining supported cropping configuration options.
 
 If you need to run random map cropping inline, use the hoot::RandomMapCropper OSM map operation along with crop.random.* configuration options.
 
