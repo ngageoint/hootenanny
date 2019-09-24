@@ -130,8 +130,11 @@ public:
     conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
 
     OsmMapPtr inputMap = _readInputs(inputs);
+    long minNodeCountInOneTile = 0;
+    long maxNodeCountInOneTile = 0;
     const std::vector<std::vector<geos::geom::Envelope>> tiles =
-      TileUtils::calculateTiles(maxNodesPerTile, pixelSize, inputMap);
+      TileUtils::calculateTiles(
+        maxNodesPerTile, pixelSize, inputMap, minNodeCountInOneTile, maxNodeCountInOneTile);
     if (output.toLower().endsWith(".geojson"))
     {
       TileUtils::writeTilesToGeoJson(tiles, output, args.contains("--random"), randomSeed);

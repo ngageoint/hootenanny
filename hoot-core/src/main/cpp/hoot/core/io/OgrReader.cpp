@@ -261,7 +261,6 @@ private:
   OgrReaderInternal* _d;
 };
 
-
 OgrReader::OgrReader()
 {
   _d = new OgrReaderInternal();
@@ -578,7 +577,6 @@ QRegExp OgrReaderInternal::getNameFilter()
 
   return result;
 }
-
 
 void OgrReaderInternal::_addFeature(OGRFeature* f)
 {
@@ -1233,6 +1231,7 @@ void OgrReaderInternal::_translate(Tags& t)
       throw HootException("Unsupported geometry type.");
     }
 
+    LOG_TRACE("Translating tags of size: " << t.size() << " to OSM...");
     _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName(), geomType);
   }
   else

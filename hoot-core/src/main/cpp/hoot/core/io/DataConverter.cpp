@@ -651,7 +651,6 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
     " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
   currentTask++;
 
-  //MapProjector::projectToPlanar(map);   // Does this need to be here?
   if (_convertOps.size() > 0)
   {
     NamedOp convertOps(_convertOps);

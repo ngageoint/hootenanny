@@ -3394,7 +3394,7 @@ pseudo-random results in the output.
 ** `hoot:status`
 ** `uuid`
 
-A list of tag keys which are exempt from the tag removal done by PertyRemoveTagsVisitor.  This is
+A list of tag keys which are exempt from the tag removal done by RandomTagModifier.  This is
 useful for preventing the removal of tags Hootenanny relies on during conflation.
 
 === random.tag.modifier.probability
