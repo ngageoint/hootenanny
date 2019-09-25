@@ -85,19 +85,20 @@ PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
 
 void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>& e)
 {
+  LOG_TRACE("Checking for match with: " << e->getElementId());
+
   std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
-  std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                      _getPolyIndex(),
-                                                                      _polyIndexToEid,
-                                                                      _getMap());
-  ElementId from(e->getElementType(), e->getId());
+  LOG_TRACE("Searching for neighbors...");
+  std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(
+    *env, _getPolyIndex(), _polyIndexToEid, _getMap());
 
+  LOG_TRACE("Processing neighbors...");
+  ElementId from(e->getElementType(), e->getId());
   _elementsEvaluated++;
   int neighborCount = 0;
-
   for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
     if (from != *it)
@@ -132,26 +133,26 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
 
 void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<const Element>& e)
 {
+  LOG_TRACE("Collecting surrounding poly IDs...");
+
   _surroundingPolyIds.clear();
   std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
-  std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                      _getPolyIndex(),
-                                                                      _polyIndexToEid,
-                                                                      _getMap());
-  ElementId from(e->getElementType(), e->getId());
+  LOG_TRACE("Searching for neighbors...");
+  std::set<ElementId> neighbors =
+    IndexElementsVisitor::findNeighbors(
+      *env, _getPolyIndex(), _polyIndexToEid, _getMap());
 
+  LOG_TRACE("Processing neighbors...");
+  ElementId from(e->getElementType(), e->getId());
   for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
     if (from != *it)
     {
       const std::shared_ptr<const Element>& n = _map->getElement(*it);
-
-      // TODO: Aren't we already filtering by poly when we create the index?  Check this.  Also,
-      // maybe could make the unknown part of the criteria to being with.
-      if (n->isUnknown() && _polyCrit.isSatisfied(n))
+      if (n->isUnknown())
       {
         _surroundingPolyIds.insert(*it);
       }
@@ -161,26 +162,26 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<co
 
 void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const std::shared_ptr<const Element>& e)
 {
+  LOG_TRACE("Collecting surrounding POI IDs...");
+
   _surroundingPoiIds.clear();
   std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
-  std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(*env,
-                                                                      _getPoiIndex(),
-                                                                      _poiIndexToEid,
-                                                                      _getMap());
-  ElementId from(e->getElementType(), e->getId());
+  LOG_TRACE("Searching for neighbors...");
+  std::set<ElementId> neighbors =
+    IndexElementsVisitor::findNeighbors(
+      *env, _getPoiIndex(), _poiIndexToEid, _getMap());
 
+  LOG_TRACE("Processing neighbors...");
+  ElementId from(e->getElementType(), e->getId());
   for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
     if (from != *it)
     {
       const std::shared_ptr<const Element>& n = _map->getElement(*it);
-
-      // TODO: Aren't we already filtering by poi when we create the index?  Check this.  Also,
-      // maybe could make the unknown part of the criteria to begin with.
-      if (n->isUnknown() && _poiCrit.isSatisfied(n))
+      if (n->isUnknown())
       {
         _surroundingPoiIds.insert(*it);
       }
@@ -209,7 +210,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _checkForMatch(e);
 
     _numMatchCandidatesVisited++;
-    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
+    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval / 10 /** 10*/) == 0)
     {
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
@@ -219,7 +220,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 
   _numElementsVisited++;
-  if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
+  if (_numElementsVisited % (_taskStatusUpdateInterval / 10 /** 10*/) == 0)
   {
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<

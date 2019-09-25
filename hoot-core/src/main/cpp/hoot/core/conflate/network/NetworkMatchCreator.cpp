@@ -88,7 +88,7 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VART(threshold);
 
   // use another class to extract graph nodes and graph edges.

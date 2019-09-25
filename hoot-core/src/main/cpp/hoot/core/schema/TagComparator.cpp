@@ -545,7 +545,7 @@ void TagComparator::_mergeExactMatches(Tags& t1, Tags& t2, Tags& result)
 void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
                                const QStringList& overwriteExcludeTagKeys)
 {
-  LOG_DEBUG("Merging names...");
+  LOG_TRACE("Merging names...");
   LOG_VART(t1);
   LOG_VART(t2);
   LOG_VART(result);
@@ -642,7 +642,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
 void TagComparator::mergeText(Tags& t1, Tags& t2, Tags& result,
                               const QStringList& overwriteExcludeTagKeys)
 {
-  LOG_DEBUG("Merging text...");
+  LOG_TRACE("Merging text...");
   LOG_VART(t1);
   LOG_VART(t2);
   OsmSchema& schema = OsmSchema::getInstance();
@@ -760,7 +760,7 @@ Tags TagComparator::overwriteMerge(Tags t1, Tags t2, const QStringList& overwrit
 void TagComparator::_overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
                                             const QStringList& overwriteExcludeTagKeys)
 {
-  LOG_DEBUG("Overwriting remaining tags...");
+  LOG_TRACE("Overwriting remaining tags...");
   LOG_VART(t1);
   LOG_VART(t2);
 

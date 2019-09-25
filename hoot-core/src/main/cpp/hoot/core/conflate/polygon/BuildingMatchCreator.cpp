@@ -327,7 +327,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                          std::vector<const Match*>& matches,
                                          ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitRo(v);

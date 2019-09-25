@@ -140,7 +140,8 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
     }
   }
 
-  LOG_VART(neighborIds);
+  //LOG_VART(neighborIds);
+  LOG_VART(neighborIds.size());
   return neighborIds;
 }
 
