@@ -15,6 +15,7 @@ describe('TranslationServer', function () {
     };
 
     var schemas = [
+        'TDSv70',
         'TDSv61',
         'TDSv40',
         // 'MGCP',

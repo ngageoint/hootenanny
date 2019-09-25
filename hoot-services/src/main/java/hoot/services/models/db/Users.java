@@ -131,10 +131,12 @@ public class Users {
         return provider_created_at;
     }
 
+    @JsonIgnore
     public void setProviderCreatedAt(Timestamp provider_created_at) {
         this.provider_created_at = provider_created_at;
     }
 
+    @JsonIgnore
     public void setProviderCreatedAt(String provider_created_at) {
         Timestamp t = Timestamp.valueOf(provider_created_at);
         setProviderCreatedAt(t);
