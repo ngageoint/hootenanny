@@ -261,7 +261,6 @@ private:
   OgrReaderInternal* _d;
 };
 
-
 OgrReader::OgrReader()
 {
   _d = new OgrReaderInternal();
@@ -408,7 +407,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VART(allLayers);
+  LOG_VARD(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -578,7 +577,6 @@ QRegExp OgrReaderInternal::getNameFilter()
 
   return result;
 }
-
 
 void OgrReaderInternal::_addFeature(OGRFeature* f)
 {
@@ -969,7 +967,7 @@ void OgrReaderInternal::open(const QString& path, const QString& layer)
   {
     _pendingLayers = getLayersWithGeometry(path);
   }
-  LOG_VART(_pendingLayers);
+  LOG_VARD(_pendingLayers);
 }
 
 void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
@@ -1105,6 +1103,8 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
       "layer name?");
   }
 
+  LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...");
+
   OGRFeature* f;
   while ((f = _layer->GetNextFeature()) != NULL && (_limit == -1 || _count < _limit))
   {
@@ -1113,11 +1113,12 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     f = 0;
 
     _count++;
-    if (_progress.getState() != Progress::JobState::Pending && _count % 1000 == 0)
+    if (_progress.getState() != Progress::JobState::Pending && _count % 10000 == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
+      // TODO: This isn't clearing out the current line before each new log statement.
       _progress.setFromRelative(
         (float)_count / (float)_featureCount, Progress::JobState::Running,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +
@@ -1230,6 +1231,7 @@ void OgrReaderInternal::_translate(Tags& t)
       throw HootException("Unsupported geometry type.");
     }
 
+    LOG_TRACE("Translating tags of size: " << t.size() << " to OSM...");
     _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName(), geomType);
   }
   else

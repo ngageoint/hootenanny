@@ -27,24 +27,16 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/ApiDbReader.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/rnd/util/TileUtils.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-
-// Qt
-#include <QTemporaryFile>
-
-// Tgs
-#include <tgs/Statistics/Random.h>
 
 namespace hoot
 {
@@ -89,11 +81,11 @@ public:
     LOG_VARD(inputs);
 
     const QString output = args[1];
-    if (!output.toLower().endsWith(".geojson"))
+    if (!output.toLower().endsWith(".geojson") && !output.toLower().endsWith(".osm"))
     {
-      throw HootException(
-        "Invalid output file format: " + output + ".  Only the GeoJSON output format is " +
-        "supported.");
+      throw IllegalArgumentException(
+        "Invalid output file format: " + output + ".  Only the GeoJSON (.geojson) and OSM " +
+        "(.osm) output formats are supported.");
     }
     LOG_VARD(output);
 
@@ -138,16 +130,26 @@ public:
     conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
 
     OsmMapPtr inputMap = _readInputs(inputs);
+    long minNodeCountInOneTile = 0;
+    long maxNodeCountInOneTile = 0;
     const std::vector<std::vector<geos::geom::Envelope>> tiles =
-      _calculateTiles(maxNodesPerTile, pixelSize, inputMap);
-    _writeOutputAsGeoJson(tiles, output, args.contains("--random"), randomSeed);
+      TileUtils::calculateTiles(
+        maxNodesPerTile, pixelSize, inputMap, minNodeCountInOneTile, maxNodeCountInOneTile);
+    if (output.toLower().endsWith(".geojson"))
+    {
+      TileUtils::writeTilesToGeoJson(tiles, output, args.contains("--random"), randomSeed);
+    }
+    else
+    {
+      TileUtils::writeTilesToOsm(tiles, output, args.contains("--random"), randomSeed);
+    }
 
     return 0;
   }
 
 private:
 
-  OsmMapPtr _readInputs(const QStringList inputs)
+  OsmMapPtr _readInputs(const QStringList& inputs)
   {
     const bool bboxSpecified =
       !ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() ||
@@ -157,8 +159,18 @@ private:
     OsmMapPtr map(new OsmMap());
     for (int i = 0; i < inputs.size(); i++)
     {
+      const QString input = inputs.at(i);
       std::shared_ptr<OsmMapReader> reader =
-        OsmMapReaderFactory::createReader(inputs.at(i), true, Status::Unknown1);
+        OsmMapReaderFactory::createReader(input, true, Status::Unknown1);
+
+      std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
+      if (bboxSpecified && !boundable)
+      {
+        // TODO: need a test for this
+        throw IllegalArgumentException(
+          "Reader for " + input + " must implement Boundable when the " +
+          "convert.bounding.box configuration option is specified.");
+      }
 
       std::shared_ptr<ApiDbReader> apiDbReader =
         std::dynamic_pointer_cast<ApiDbReader>(reader);
@@ -170,15 +182,8 @@ private:
         //convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
         apiDbReader->setReturnNodesOnly(true);
       }
-      if (bboxSpecified && !apiDbReader)
-      {
-        //non api db readers don't support convert.bounding.box right now and are just going to
-        //generate confusing output with its specified, so let's throw
-        throw HootException(
-          "convert.bounding.box configuration option specified for a non API DB reader");
-      }
 
-      reader->open(inputs.at(i));
+      reader->open(input);
       reader->read(map);
     }
     LOG_VARD(map->getNodeCount());
@@ -189,148 +194,6 @@ private:
     OsmMapWriterFactory::writeDebugMap(map);
 
     return map;
-  }
-
-  std::vector<std::vector<geos::geom::Envelope>> _calculateTiles(const long maxNodesPerTile,
-                                                                   const double pixelSize,
-                                                                   OsmMapPtr map)
-  {
-    TileBoundsCalculator tileBoundsCalculator(pixelSize);
-    tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
-    //tbc.setSlop(0.1);
-    cv::Mat r1, r2;
-    tileBoundsCalculator.renderImage(map, r1, r2);
-    //we're calculating for unknown1 only, so fill the second matrix with all zeroes
-    cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
-    tileBoundsCalculator.setImages(r1, zeros);
-    return tileBoundsCalculator.calculateTiles();
-  }
-
-  void _writeOutputAsGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                             const QString& outputPath, const bool selectSingleRandomTile,
-                             int randomSeed)
-  {
-    //write out to temp osm and then use ogr2ogr to convert to geojson
-
-    QTemporaryFile osmTempFile("tmp/tiles-calculate-temp-XXXXXX.osm");
-    if (!osmTempFile.open())
-    {
-      throw HootException(
-        "Unable to open OSM temp file: " + osmTempFile.fileName() + " for GeoJSON output.");
-    }
-    LOG_VARD(osmTempFile.fileName());
-    _writeOutputAsOsm(tiles, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
-
-    QFile outFile(outputPath);
-    if (outFile.exists() && !outFile.remove())
-    {
-      throw HootException("Unable to open GeoJSON file: " + outputPath + " for writing.");
-    }
-    LOG_VARD(outputPath);
-
-    //exporting as multipolygons, as that's what the Tasking Manager expects
-    const QString cmd =
-      "ogr2ogr -f GeoJSON -select \"name,boundary,osm_way_id\" " + outputPath + " " +
-      osmTempFile.fileName() + " multipolygons";
-    LOG_VARD(cmd);
-    LOG_INFO("Writing output to " << outputPath);
-    const int retval = std::system(cmd.toStdString().c_str());
-    if (retval != 0)
-    {
-      throw HootException(
-        "Failed converting " + osmTempFile.fileName() + " to GeoJSON: " + outputPath +
-        ".  Status: " + QString::number(retval));
-    }
-  }
-
-  void _writeOutputAsOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                         const QString& outputPath, const bool selectSingleRandomTile,
-                         int randomSeed)
-  {
-    LOG_VARD(outputPath);
-
-    int randomTileIndex = -1;
-    if (selectSingleRandomTile)
-    {
-      if (randomSeed == -1)
-      {
-        randomSeed = RandomNumberUtils::generateSeed();
-      }
-      LOG_VARD(randomSeed);
-      Tgs::Random::instance()->seed(randomSeed);
-
-      const size_t numBboxes = tiles.size() * tiles[0].size();
-      randomTileIndex = Tgs::Random::instance()->generateInt(numBboxes);
-    }
-
-    OsmMapPtr boundaryMap(new OsmMap());
-    int bboxCtr = 1;
-    for (size_t tx = 0; tx < tiles.size(); tx++)
-    {
-      for (size_t ty = 0; ty < tiles[tx].size(); ty++)
-      {
-        // TODO: This code could possibly be replaced by GeometryUtils::createMapFromBounds.
-        const geos::geom::Envelope env = tiles[tx][ty];
-        const double circularError = ConfigOptions().getCircularErrorDefaultValue();
-
-        NodePtr lowerLeft(
-          new Node(
-            Status::Unknown1,
-            boundaryMap->createNextNodeId(),
-            geos::geom::Coordinate(env.getMinX(), env.getMinY()),
-            circularError));
-        boundaryMap->addNode(lowerLeft);
-        NodePtr upperRight(
-          new Node(
-            Status::Unknown1,
-            boundaryMap->createNextNodeId(),
-            geos::geom::Coordinate(env.getMaxX(), env.getMaxY()),
-            circularError));
-        boundaryMap->addNode(upperRight);
-        NodePtr upperLeft(
-          new Node(
-            Status::Unknown1,
-            boundaryMap->createNextNodeId(),
-            geos::geom::Coordinate(env.getMinX(), env.getMaxY()),
-            circularError));
-        boundaryMap->addNode(upperLeft);
-        NodePtr lowerRight(
-          new Node(
-            Status::Unknown1,
-            boundaryMap->createNextNodeId(),
-            geos::geom::Coordinate(env.getMaxX(), env.getMinY()),
-            circularError));
-        boundaryMap->addNode(lowerRight);
-
-        WayPtr bbox(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
-        bbox->addNode(lowerLeft->getId());
-        bbox->addNode(upperLeft->getId());
-        bbox->addNode(upperRight->getId());
-        bbox->addNode(lowerRight->getId());
-        bbox->addNode(lowerLeft->getId());
-        //gdal will recognize any closed way with the boundary tag as a polygon (tags
-        //for features recognized as polys configurable in osmconf.ini), which is the type of
-        //output we want
-        bbox->setTag("boundary", "task_grid_cell");
-        bbox->setTag("name", "Task Grid Cell #" + QString::number(bboxCtr));
-        if (!selectSingleRandomTile ||
-            (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
-        {
-          boundaryMap->addWay(bbox);
-        }
-        bboxCtr++;
-      }
-    }
-
-    OsmMapWriterFactory::write(boundaryMap, outputPath);
-
-  //      if (Log::getInstance().getLevel() <= Log::Debug)
-  //      {
-  //        const QString debugOutputPath = "tmp/calc-tiles-osm-debug.osm";
-  //        QFile outFile(outputPath);
-  //        LOG_DEBUG("writing debug output to " << debugOutputPath);
-  //        outFile.copy(debugOutputPath);
-  //      }
   }
 };
 

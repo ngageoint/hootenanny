@@ -22,9 +22,9 @@ crop (input.osm) (output.osm) (bounds) [--write-bounds]
 
 === Configuration Options
 
-The configuration options `crop.*` control the behavior of map cropping. See their descriptions for more detail.
+The configuration options `crop.*` control the behavior of map cropping. See their descriptions in the Hootenanny User Guide for more detail.
 
-==== Examples
+=== Examples
 
 --------------------------------------
 # regular crop

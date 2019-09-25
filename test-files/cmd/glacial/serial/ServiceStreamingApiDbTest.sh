@@ -86,6 +86,6 @@ hoot convert $HOOT_OPTS $OUTPUT_DIR/Poi1-cropped-osmapidb/poi.shp $OUTPUT_DIR/Po
 hoot diff $HOOT_OPTS $GOLD_DIR/Poi1-cropped-2.osm $OUTPUT_DIR/Poi1-cropped-osmapidb-ogr.osm
 
 # Cleanup the database
-hoot delete-db-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/ToyTestA"
-hoot delete-db-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/Poi1"
+hoot db-delete-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/ToyTestA"
+hoot db-delete-map -D api.db.email=ServiceStreamingApiDbTest@test.com "$HOOT_DB_URL/Poi1"
 scripts/database/CleanAndInitializeOsmApiDb.sh

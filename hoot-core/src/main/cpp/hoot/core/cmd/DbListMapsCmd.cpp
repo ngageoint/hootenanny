@@ -22,46 +22,56 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/HootApiDbWriter.h>
-
-using namespace std;
+#include <hoot/core/io/HootApiDb.h>
 
 namespace hoot
 {
 
-class DeleteDbMapCmd : public BaseCommand
+class DbListMapsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::DeleteDbMapCmd"; }
+  static std::string className() { return "hoot::DbListMapsCmd"; }
 
-  DeleteDbMapCmd() {}
+  DbListMapsCmd() {}
 
-  virtual QString getName() const override { return "delete-db-map"; }
+  virtual QString getName() const override { return "db-list-maps"; }
 
   virtual QString getDescription() const override
-  { return "Deletes a map from the Hootenanny Web Services database"; }
+  { return "Lists maps in the Hootenanny Web Services database available to a user"; }
 
   virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 1)
     {
-      cout << getHelp() << endl << endl;
+      std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes one parameter.").arg(getName()));
     }
 
-    HootApiDbWriter().deleteMap(args[0]);
+    HootApiDb mapReader;
+    mapReader.open(args[0]);
+    mapReader.setUserId(mapReader.getUserId(ConfigOptions().getApiDbEmail(), true));
+    const QStringList mapNames = mapReader.selectMapNamesAvailableToCurrentUser();
+    if (mapNames.size() == 0)
+    {
+      std::cout << "There are no maps available to the specified user in the Hootenanny Web Services database." << std::endl;
+    }
+    else
+    {
+      std::cout << "Available map layers:\n\n" << mapNames.join("\n") << std::endl;
+    }
+    mapReader.close();
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DeleteDbMapCmd)
+HOOT_FACTORY_REGISTER(Command, DbListMapsCmd)
 
 }
