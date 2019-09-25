@@ -571,6 +571,13 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
+  // Doing this for multipoly relations in Attribute Conflation only for the time being.
+  const bool suppressBuildingTagOnConstituents =
+    // relatively loose way to identify AC; also used in ConflateCmd
+    ConfigOptions().getHighwayMergeTagsOnly() &&
+    // allAreBuildingParts = building relation
+    !allAreBuildingParts &&
+    ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
   for (Tags::const_iterator it = relationTags.begin(); it != relationTags.end(); ++it)
   {
     // Remove any tags in the parent relation from each of the constituent buildings.
@@ -579,7 +586,8 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       ElementPtr constituentBuilding = constituentBuildings[i];
       // leave building=* on the relation member; remove status here since it will be on the parent
       // relation as conflated
-      if (it.key() != "building" &&
+      const bool isBuildingTag = it.key() == "building";
+      if ((!isBuildingTag || (isBuildingTag && suppressBuildingTagOnConstituents)) &&
           (constituentBuilding->getTags().contains(it.key()) ||
            it.key() == MetadataTags::HootStatus()))
       {

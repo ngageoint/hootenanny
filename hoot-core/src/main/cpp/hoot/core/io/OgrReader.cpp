@@ -98,7 +98,6 @@ public:
   std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs);
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
-
   Status getDefaultStatus() const { return _status; }
 
   QString getTranslationFile() const { return _translatePath; }
@@ -124,9 +123,7 @@ public:
   void readNext(const OsmMapPtr& map);
 
   void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
-
   void setDefaultStatus(Status s) { _status = s; }
-
   void setLimit(long limit) { _limit = limit; }
 
   void setSchemaTranslationScript(const QString& translate)
@@ -137,7 +134,6 @@ public:
   void setUseDataSourceIds(bool useIds);
 
   ElementPtr readNextElement();
-
   bool hasMoreElements();
 
   std::shared_ptr<OGRSpatialReference> getProjection() const;
@@ -176,17 +172,11 @@ protected:
   Progress _progress;
 
   void _addFeature(OGRFeature* f);
-
   void _addGeometry(OGRGeometry* g, Tags& t);
-
   void _addLineString(OGRLineString* ls, Tags& t);
-
   void _addMultiPolygon(OGRMultiPolygon* mp, Tags& t);
-
   void _addPolygon(OGRPolygon* p, Tags& t);
-
   void _addPoint(OGRPoint* p, Tags& t);
-
   void _addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError);
 
   WayPtr _createWay(OGRLinearRing* lr, Meters circularError);
@@ -202,7 +192,6 @@ protected:
   void _initTranslate();
 
   void _openLayer(const QString& path, const QString& layer);
-
   void _openNextLayer();
 
   Meters _parseCircularError(Tags& t);
@@ -1329,7 +1318,6 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
-
   return wgs84;
 }
 
