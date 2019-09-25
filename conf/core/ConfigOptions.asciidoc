@@ -2056,10 +2056,11 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 === merge.nearby.nodes.distance
 
 * Data Type: double
-* Default Value: `1.0`
+* Default Value: `0.0001`
 
-When merging nodes during convert, determines what tolerance should be used for deciding two nodes
-are identical. Units in meters and defaults to 1.0m.
+When merging nodes during convert, determines what tolerance should be used for deciding if two
+nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of
+each other. The units are in meters, and the value must be greater than zero.
 
 [[merger.creators]]
 === merger.creators
@@ -3365,15 +3366,15 @@ sigma is the standard deviation associated with the source point.
 * Data Type: double
 * Default Value: `0.10`
 
-The probability of at least one duplicate being created. See setDuplicateSigma to determine
-how many duplicates will be created.
+The probability of at least one duplicate node being created. See `random.node.duplicator.sigma` to
+determine how many duplicates will be created.
 
 === random.node.duplicator.sigma
 
 * Data Type: double
 * Default Value: `1.0`
 
-The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+The number of duplicate nodes is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
 guarantee that there will always be exactly one duplicate.
 
 === random.seed
