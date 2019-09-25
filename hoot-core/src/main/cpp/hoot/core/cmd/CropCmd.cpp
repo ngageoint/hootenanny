@@ -78,8 +78,9 @@ public:
     MapCropper cropper(*_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
+    // Should we run these inside MapCropper instead?
     SuperfluousWayRemover::removeWays(map);
-    SuperfluousNodeRemover().apply(map);
+    SuperfluousNodeRemover::removeNodes(map);
 
     IoUtils::saveMap(map, out);
 

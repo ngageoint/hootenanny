@@ -1747,6 +1747,7 @@ void OsmSchema::loadDefault()
 
   LOG_DEBUG("Loading translation files...");
   OsmSchemaLoaderFactory::getInstance().createLoader(path)->load(path, *this);
+  LOG_DEBUG("Translation files loaded.");
 }
 
 double OsmSchema::score(const QString& kvp1, const QString& kvp2)

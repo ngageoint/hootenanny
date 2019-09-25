@@ -169,3 +169,9 @@ echo "Listing conflatable criteria..."
 echo ""
 hoot info --conflatable-criteria | grep "BuildingCriterion"
 echo ""
+
+# FILTERS (aka ElementCriterion)
+echo "Listing filters..."
+echo ""
+hoot info --filters | grep "NonBuildingAreaCriterion"
+echo ""

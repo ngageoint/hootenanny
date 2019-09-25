@@ -567,6 +567,12 @@ See the User Guide for more details on command usage.
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
 -----
 
+===== Put out a random subset of data with a maximum node size from a large input dataset (useful during conflation testing):
+
+-----
+    hoot crop-random input.osm output.osm 5000
+-----
+
 ===== Sort data to the OSM standard that is too large to fit in memory:
 
 -----
@@ -948,6 +954,12 @@ Requires language translation server installation.  See the Hootenanny Install G
 
 -----
     hoot info --operators
+-----
+
+===== List all entities that can filter data (a subset of --operators):
+
+-----
+    hoot info --filters
 -----
 
 ===== List all entities that can compare strings:

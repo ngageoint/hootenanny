@@ -3751,3 +3751,7 @@ Listing conflatable criteria...
 
   BuildingCriterion                  Identifies buildings
 
+Listing filters...
+
+  NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings
+

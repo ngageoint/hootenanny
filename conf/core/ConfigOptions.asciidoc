@@ -850,6 +850,21 @@ If true, will not break apart features crossing the crop bounds. Ignored if crop
 If true, will throw out any features that do not fall completely within the crop bounds. Ignored if
 crop.invert is enabled.
 
+=== crop.random.max.node.count
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum number of nodes to be cropped out when running either the `crop-random` command or
+`RandomMapCropper`.
+
+=== crop.random.pixel.size
+
+* Data Type: double
+* Default Value: `0.001`
+
+The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
+
 === debug.maps.filename
 
 * Data Type: string
@@ -3367,10 +3382,9 @@ guarantee that there will always be exactly one duplicate.
 * Default Value: `-1`
 
 A random seed integer passed to the random number generator accessed by map operations and 
-visitors that modify element randomly (as used by PERTY). to give consistent results over 
-multiple runs. A value of -1 will generate a seed based on the time to provide pseudo-random 
-results in the output.  Other seed values will yield repeatable results when the same seed 
-is used in consecutive calls to the PERTY related commands.
+visitors that modify elements randomly (used by PERTY, RandomMapCropper, etc.). to give consistent
+results over multiple runs. A value of -1 will generate a seed based on the time to provide
+pseudo-random results in the output.
 
 === random.tag.modifier.exempt.tag.keys
 
@@ -3381,7 +3395,7 @@ is used in consecutive calls to the PERTY related commands.
 ** `hoot:status`
 ** `uuid`
 
-A list of tag keys which are exempt from the tag removal done by PertyRemoveTagsVisitor.  This is
+A list of tag keys which are exempt from the tag removal done by RandomTagModifier.  This is
 useful for preventing the removal of tags Hootenanny relies on during conflation.
 
 === random.tag.modifier.probability
