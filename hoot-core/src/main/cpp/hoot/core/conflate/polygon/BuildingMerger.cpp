@@ -27,27 +27,31 @@
 #include "BuildingMerger.h"
 
 // hoot
+#include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/schema/OverwriteTagMerger.h>
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/ElementCountVisitor.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/IdSwapOp.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/ops/ReuseNodeIdsOnWayOp.h>
+#include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OverwriteTagMerger.h>
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
+#include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/ElementCountVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
-#include <hoot/core/elements/InMemoryElementSorter.h>
-#include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
 
 using namespace std;
 
@@ -118,6 +122,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   set<ElementId> secondPairs;
   set<ElementId> combined;
 
+  bool preserveBuildingId = false;
+
   LOG_VART(_pairs);
 
   //check if it is many to many
@@ -143,19 +149,19 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
   else
   {
-    std::shared_ptr<Element> e1 = _buildBuilding(map, true);
+    ElementPtr e1 = _buildBuilding(map, true);
     if (e1.get())
     {
       OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
     }
-    std::shared_ptr<Element> e2 = _buildBuilding(map, false);
+    ElementPtr e2 = _buildBuilding(map, false);
     if (e2.get())
     {
       OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
     }
 
-    std::shared_ptr<Element> keeper;
-    std::shared_ptr<Element> scrap;
+    ElementPtr keeper;
+    ElementPtr scrap;
     LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
     if (_keepMoreComplexGeometryWhenAutoMerging)
     {
@@ -230,6 +236,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
         {
           keeper = e2;
           scrap = e1;
+          //  Keep e2's geometry but keep e1's ID
+          preserveBuildingId = true;
         }
         LOG_TRACE(
           "Keeping the more complex building geometry: " << keeper << "; scrap: " <<
@@ -292,9 +300,26 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     //relation members, need to be removed as well.
     const QSet<ElementId> multiPolyMemberIds = _getMultiPolyMemberIds(scrap);
 
-    // remove the duplicate element
-    DeletableBuildingCriterion crit;
+    //  Here is where we are able to reuse node IDs between buildings
+    ReuseNodeIdsOnWayOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+    //  Replace the scrap with the keeper in any parents
     ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+    //  Swap the IDs of the two elements if keeper isn't UNKNOWN1
+    if (preserveBuildingId)
+    {
+      ElementId oldKeeperId = keeper->getElementId();
+      ElementId oldScrapId = scrap->getElementId();
+      IdSwapOp swapOp(oldScrapId, oldKeeperId);
+      swapOp.apply(map);
+      //  Now swap the pointers so that the wrong one isn't deleted
+      if (swapOp.getNumAffected() > 0)
+      {
+        scrap = map->getElement(oldKeeperId);
+        keeper = map->getElement(oldScrapId);
+      }
+    }
+    //  Finally remove the scrap element from the map
+    DeletableBuildingCriterion crit;
     RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
     scrap->getTags().clear();
 
