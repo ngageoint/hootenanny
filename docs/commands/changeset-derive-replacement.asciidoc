@@ -159,7 +159,7 @@ replacement from the secondary dataset. The criteria specified in +--replacement
 populating the option value from the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes.
 To see a list of available filtering criteria:
 -----
-hoot info --operators
+hoot info --filters
 ----- 
 
 The behavior of +--replacement-filters+ is further configurable by the +--chain-replacement-filters+ option. If the 
@@ -178,7 +178,7 @@ replaced in the reference dataset. The criteria specified in +--retainment-filte
 the option value from the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes. To see a 
 list of available filtering criteria:
 -----
-hoot info --operators
+hoot info --filters
 ----- 
 
 The behavior of +--retainment-filters+ is further configurable by the +--chain-retainment-filters+ option. If the +--chain-retainment-filters+ 

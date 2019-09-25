@@ -60,7 +60,7 @@ class Node;
  * this b/c of RAM limitations on my machine. In the future it may be necessary to change over
  * to 64bit floats, but I imagine that is a long way off. If you do switch then you'll have to
  * change the CV_32SC1 to CV_64FC1 (floating point representation). This will impact the
- * PaintNodes* code as well. -surratt
+ * PaintNodes* code as well.
  */
 class TileBoundsCalculator
 {
@@ -77,6 +77,7 @@ public:
   class Pixel
   {
   public:
+
     int x;
     int y;
 
@@ -91,6 +92,7 @@ public:
   class PixelBox
   {
   public:
+
     int minX;
     int minY;
     int maxX;
@@ -155,6 +157,8 @@ public:
 
   void setImages(const cv::Mat& r1, const cv::Mat& r2);
 
+  static QString tilesToString(const std::vector<std::vector<geos::geom::Envelope>>& tiles);
+
   /**
    * The entire tree will keep growing until all boxes are less than or equal to this number of
    * nodes.
@@ -168,7 +172,13 @@ public:
    */
   void setSlop(double slop) { _slop = slop; }
 
+  long getMinNodeCountInOneTile() const { return _minNodeCountInOneTile; }
+  long getMaxNodeCountInOneTile() const { return _maxNodeCountInOneTile; }
+
 private:
+
+  // used for white box testing.
+  friend class TileBoundsCalculatorTest;
 
   cv::Mat _r1, _r2, _min;
 
@@ -177,6 +187,8 @@ private:
   long _maxNodesPerBox;
   double _slop;
   int32_t _maxValue;
+  long _maxNodeCountInOneTile;
+  long _minNodeCountInOneTile;
 
   void _calculateMin();
 
@@ -199,10 +211,6 @@ private:
   long _sumPixels(const PixelBox& pb) { return _sumPixels(pb, _r1) + _sumPixels(pb, _r2); }
 
   geos::geom::Envelope _toEnvelope(const PixelBox& pb);
-
-  // used for white box testing.
-  friend class TileBoundsCalculatorTest;
-
 };
 
 }

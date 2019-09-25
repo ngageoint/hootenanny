@@ -127,19 +127,20 @@ void SuperfluousNodeRemover::readObject(QDataStream& is)
   }
 }
 
-void SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
+long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
                                          const bool ignoreInformationTags,
                                          const geos::geom::Envelope& e)
 {
-  SuperfluousNodeRemover s;
-  s.setIgnoreInformationTags(ignoreInformationTags);
+  SuperfluousNodeRemover nodeRemover;
+  nodeRemover.setIgnoreInformationTags(ignoreInformationTags);
   if (!e.isNull())
   {
-    s.setBounds(e);
+    nodeRemover.setBounds(e);
   }
-  LOG_DEBUG(s.getInitStatusMessage());
-  s.apply(map);
-  LOG_DEBUG(s.getCompletedStatusMessage());
+  LOG_INFO(nodeRemover.getInitStatusMessage());
+  nodeRemover.apply(map);
+  LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
+  return nodeRemover.getNumAffected();
 }
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)

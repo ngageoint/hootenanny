@@ -318,6 +318,7 @@ private:
     options.append("--conflate-pre-operations");
     options.append("--criterion-consumers");
     options.append("--feature-extractors");
+    options.append("--filters");
     options.append("--formats");
     options.append("--geometry-type-criteria");
     options.append("--languages");
