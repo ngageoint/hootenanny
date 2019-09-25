@@ -597,7 +597,7 @@ public class GrailResource {
         String url;
         try {
             String customQuery = reqParams.getCustomQuery();
-            if (customQuery.equals("")) {
+            if (customQuery == null || customQuery.equals("")) {
                 url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
             } else {
                 url = "'" + PullOverpassCommand.getOverpassUrl(bbox, "json", customQuery) + "'";
@@ -637,7 +637,7 @@ public class GrailResource {
 
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
-        if (customQuery.equals("")) {
+        if (customQuery == null || customQuery.equals("")) {
             File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
             try {
                 overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
