@@ -109,13 +109,13 @@ public:
     const qint64 timeElapsed = timer.elapsed();
     if (timeElapsed > 60000)
     {
-      msg += QString::number(timeElapsed / 1000 / 60) + " minutes";
+      msg += QString::number(timeElapsed / 1000 / 60) + " total minutes";
     }
     else
     {
-      msg += QString::number(timeElapsed / 1000) + " seconds";
+      msg += QString::number(timeElapsed / 1000) + " total seconds";
     }
-    LOG_DEBUG(msg);
+    LOG_INFO(msg);
 
     return 0;
   }

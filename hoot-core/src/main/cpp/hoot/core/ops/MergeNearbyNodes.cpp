@@ -69,6 +69,12 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
   if (_distance < 0.0)
   {
     _distance = ConfigOptions().getMergeNearbyNodesDistance();
+    if (_distance <= 0.0)
+    {
+      throw IllegalArgumentException(
+        "Nearby node merging distance must be greater than zero. Distance specified: " +
+        QString::number(_distance));
+    }
   }
 }
 
