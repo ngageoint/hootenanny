@@ -556,22 +556,24 @@ public class GrailResource {
      * a private OSM instance that has diverged from the public OSM
      * with private changes.
      *
-     * @param bbox The bounding box
+     * @param reqParams Contains info such as bbox, layerName, and if the
+     * user provided one, a custom query for pulling overpass data
      *
      * @return Job ID
      * used by the client for polling job status
      * Internally, this provides the map dataset name suffix
      */
-    @GET
+    @POST
     @Path("/pulloverpasstodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox,
-            @QueryParam("name") String layerName) {
+            GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
+        String bbox = reqParams.getBounds();
+        String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
         String folderName = "grail_" + bbox.replace(",", "_");
 
@@ -594,7 +596,13 @@ public class GrailResource {
 
         String url;
         try {
-            url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
+            String customQuery = reqParams.getCustomQuery();
+            if (customQuery.equals("")) {
+                url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
+            } else {
+                url = "'" + PullOverpassCommand.getOverpassUrl(bbox, "json", customQuery) + "'";
+            }
+
         } catch(IllegalArgumentException exc) {
             return Response.status(Response.Status.BAD_REQUEST).entity(exc.getMessage()).build();
         }
@@ -616,27 +624,40 @@ public class GrailResource {
         return response;
     }
 
-    @GET
+    @POST
     @Path("/grailMetadataQuery")
     @Produces(MediaType.APPLICATION_JSON)
     public Response grailMetadata(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox) {
+            GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
+        String customQuery = reqParams.getCustomQuery();
+
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
-        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
-        try {
-            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-        } catch(Exception exc) {
-            String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
-            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+        if (customQuery.equals("")) {
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
+                throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+            }
+        } else {
+            overpassQuery = customQuery;
+
+            // first line that lists columns which are counts for each feature type
+            overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
+
+            // last row that lists output format
+            overpassQuery = overpassQuery.replace("out meta", "out count");
         }
 
+
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
         String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "/api/interpreter?data=" + overpassQuery;
 
         // append first 7 digits of a uuid to the rails and overpass codenames
@@ -665,22 +686,24 @@ public class GrailResource {
      * a private OSM instance that has diverged from the public OSM
      * with private changes.
      *
-     * @param bbox The bounding box
+     * @param reqParams Contains info such as bbox, layerName, and if the
+     * user provided one, a custom query for pulling overpass data
      *
      * @return Job ID
      * used by the client for polling job status
      * Internally, this provides the map dataset name suffix
      */
-    @GET
+    @POST
     @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
-            @QueryParam("bbox") String bbox,
-            @QueryParam("name") String layerName) {
+            GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
+        String bbox = reqParams.getBounds();
+        String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
         String folderName = "grail_" + bbox.replace(",", "_");

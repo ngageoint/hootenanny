@@ -73,6 +73,9 @@ public class GrailParams {
     @JsonProperty("maxBBoxSize")
     private Double maxSize;
 
+    @JsonProperty("customQuery")
+    private String customQuery;
+
     private String consumerKey;
 
     private String consumerSecret;
@@ -191,6 +194,14 @@ public class GrailParams {
 
     public String getConsumerSecret() {
         return consumerSecret;
+    }
+
+    public void setCustomQuery(String customQuery) {
+        this.customQuery = customQuery;
+    }
+
+    public String getCustomQuery() {
+        return customQuery;
     }
 
     @Override

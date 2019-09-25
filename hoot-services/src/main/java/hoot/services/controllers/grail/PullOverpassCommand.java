@@ -87,7 +87,11 @@ class PullOverpassCommand implements InternalCommand {
     private void getOverpass() {
         String url = "";
         try {
-            url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
+            if (params.getCustomQuery().equals("")) {
+                url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
+            } else {
+                url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml", params.getCustomQuery()));
+            }
 
             URL requestUrl = new URL(url);
             File outputFile = new File(params.getOutput());
@@ -116,13 +120,28 @@ class PullOverpassCommand implements InternalCommand {
      * @return
      */
     static String getOverpassUrl(String bbox, String outputFormat) {
+        return getOverpassUrl(bbox, outputFormat, null);
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
+     * @return
+     */
+    static String getOverpassUrl(String bbox, String outputFormat, String query) {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
-        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-        try {
-            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-        } catch(Exception exc) {
-            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+
+        if (query.equals("")) {
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+            }
+        } else {
+            overpassQuery = query;
         }
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
