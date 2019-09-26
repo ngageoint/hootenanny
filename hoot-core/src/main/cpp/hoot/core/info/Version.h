@@ -34,6 +34,7 @@ namespace hoot
 class Version
 {
 public:
+
   static const char* getBuiltBy();
 
   static const char* getFullVersion();
@@ -41,7 +42,6 @@ public:
   static const char* getRevision();
 
   static const char* getVersion();
-
 };
 }
 

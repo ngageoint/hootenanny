@@ -27,9 +27,7 @@
 #include "PoiPolygonReviewReducer.h"
 
 // geos
-#include <geos/geom/LineString.h>
 #include <geos/util/TopologyException.h>
-#include <geos/geom/Geometry.h>
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
@@ -45,6 +43,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/MultiUseCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Std
 #include <float.h>
@@ -52,21 +51,26 @@
 // Qt
 #include <QElapsedTimer>
 
-using namespace geos::geom;
-using namespace std;
-
 namespace hoot
 {
 
-PoiPolygonReviewReducer::PoiPolygonReviewReducer(const ConstOsmMapPtr& map,
-                                                 const set<ElementId>& polyNeighborIds,
-                                                 const set<ElementId>& poiNeighborIds,
-                                                 double distance, double nameScoreThreshold,
-                                                 double nameScore, bool nameMatch,
-                                                 bool exactNameMatch, double typeScoreThreshold,
-                                                 double typeScore, bool typeMatch,
-                                                 double matchDistanceThreshold, bool addressMatch,
-                                                 bool addressParsingEnabled) :
+QHash<QString, double> PoiPolygonReviewReducer::_elementDistanceCache;
+QHash<QString, bool> PoiPolygonReviewReducer::_elementContainsCache;
+QHash<QString, bool> PoiPolygonReviewReducer::_elementIntersectsCache;
+QHash<QString, double> PoiPolygonReviewReducer::_elementAngleHistogramCache;
+QHash<ElementId, double> PoiPolygonReviewReducer::_elementAreaCache;
+QHash<QString, double> PoiPolygonReviewReducer::_elementOverlapCache;
+QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> PoiPolygonReviewReducer::_geometryCache;
+QHash<ElementId, std::shared_ptr<geos::geom::LineString>> PoiPolygonReviewReducer::_lineStringCache;
+QHash<QString, int> PoiPolygonReviewReducer::_numCacheHitsByCacheType;
+QHash<QString, int> PoiPolygonReviewReducer::_cacheSizeByCacheType;
+
+PoiPolygonReviewReducer::PoiPolygonReviewReducer(
+  const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
+  const std::set<ElementId>& poiNeighborIds, double distance, double nameScoreThreshold,
+  double nameScore, bool nameMatch, bool exactNameMatch, double typeScoreThreshold,
+  double typeScore, bool typeMatch, double matchDistanceThreshold, bool addressMatch,
+  bool addressParsingEnabled) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
@@ -96,6 +100,33 @@ _addressParsingEnabled(addressParsingEnabled)
   LOG_VART(_matchDistanceThreshold);
   LOG_VART(_addressMatch);
   LOG_VART(_addressParsingEnabled);
+
+//  _elementDistanceCache.setMaxCost(MAX_CACHE_SIZE);
+//  _elementAreaCache.setMaxCost(MAX_CACHE_SIZE);
+//  _elementContainsCache.setMaxCost(MAX_CACHE_SIZE);
+//  _elementIntersectsCache.setMaxCost(MAX_CACHE_SIZE);
+//  _elementAngleHistogramCache.setMaxCost(MAX_CACHE_SIZE);
+//  _elementOverlapCache.setMaxCost(MAX_CACHE_SIZE);
+    _elementDistanceCache.reserve(_map->size());
+    _elementAreaCache.reserve(_map->size());
+    _elementContainsCache.reserve(_map->size());
+    _elementIntersectsCache.reserve(_map->size());
+    _elementAngleHistogramCache.reserve(_map->size());
+    _elementOverlapCache.reserve(_map->size());
+}
+
+void PoiPolygonReviewReducer::clearCaches()
+{
+  _elementDistanceCache.clear();
+  _elementAreaCache.clear();
+  _elementContainsCache.clear();
+  _elementIntersectsCache.clear();
+  _elementAngleHistogramCache.clear();
+  _elementOverlapCache.clear();
+  _geometryCache.clear();
+  _lineStringCache.clear();
+  _numCacheHitsByCacheType.clear();
+  _cacheSizeByCacheType.clear();
 }
 
 void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
@@ -145,6 +176,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  LOG_DEBUG("Review reduction has type: " << timer.elapsed());
 //  timer.restart();
 
+  LOG_TRACE("Checking rule #1...");
   if (_addressParsingEnabled)
   {
     const int numPolyAddresses = _addressParser.hasAddressRecursive(poly, *_map);
@@ -169,6 +201,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  LOG_DEBUG("Review reduction #1: " << timer.elapsed());
 //  timer.restart();
 
+  LOG_TRACE("Checking rule #2...");
   if (MultiUseCriterion().isSatisfied(poly) && poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #2...");
@@ -181,6 +214,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const QString polyPlaceVal = polyTags.get("place").toLower();
 
   //be a little stricter on place related reviews
+  LOG_TRACE("Checking rule #3...");
   if ((poiPlaceVal == "neighbourhood" || poiPlaceVal == "suburb") && !polyTags.contains("place"))
   {
     LOG_TRACE("Returning miss per review reduction rule #3...");
@@ -195,6 +229,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasLanduse = !polyLanduseVal.trimmed().isEmpty();
 
   // I think this one will eventually go away.
+  LOG_TRACE("Checking rule #4...");
   if (poiTags.get("man_made").toLower() == "mine" && polyLanduseVal == "quarry" &&
       polyTags.get("man_made").toLower() != "mine")
   {
@@ -205,6 +240,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //points sitting on islands need to have an island type, or the match doesn't make any sense
+  LOG_TRACE("Checking rule #5...");
   if ((poiPlaceVal == "island" || polyPlaceVal == "island") && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #5...");
@@ -225,6 +261,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool polyHasName = !polyName.isEmpty();
 
   //similar to above, but for gardens
+  LOG_TRACE("Checking rule #6...");
   if ((poiLeisureVal == "garden" || polyLeisureVal == "garden") &&
        (!_nonDistanceSimilaritiesPresent() ||
         (polyIsPark && !polyName.toLower().contains("garden"))))
@@ -236,6 +273,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   timer.restart()*/;
 
   //lots of things have fountains, so let's raise the requirements a bit
+  LOG_TRACE("Checking rule #7...");
   if (poiTags.get("amenity") == "fountain" && _nameScore < 0.5)
   {
     LOG_TRACE("Returning miss per review reduction rule #7...");
@@ -247,6 +285,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   // TODO: using custom match/review distances or custom score requirements may be a better way to
   // handle these types
+  LOG_TRACE("Checking rule #8...");
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
@@ -256,6 +295,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  LOG_DEBUG("Review reduction #8: " << timer.elapsed());
 //  timer.restart();
 
+  LOG_TRACE("Checking rule #9...");
   if (PoiPolygonTypeScoreExtractor::isRestaurant(poi) &&
       PoiPolygonTypeScoreExtractor::isRestaurant(poly) && poiHasName && polyHasName &&
       _nameScore < 0.5 && !_addressMatch)
@@ -267,6 +307,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //similar to above, but for sport fields
+  LOG_TRACE("Checking rule #10...");
   const bool poiNameEndsWithField = poiName.endsWith("field");
   LOG_VART(poiNameEndsWithField);
   const bool polyIsSport = PoiPolygonTypeScoreExtractor::isSport(poly);
@@ -287,6 +328,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
+  LOG_TRACE("Checking rule #11...");
   if (polyHasLanduse && !_nonDistanceSimilaritiesPresent())
   {
     LOG_TRACE("Returning miss per review reduction rule #11...");
@@ -295,6 +337,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  LOG_DEBUG("Review reduction #11: " << timer.elapsed());
 //  timer.restart();
 
+  LOG_TRACE("Checking rule #12...");
   LOG_VART(PoiPolygonTypeScoreExtractor::isSpecificSchool(poi));
   LOG_VART(PoiPolygonTypeScoreExtractor::isSpecificSchool(poly));
   LOG_VART(PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly));
@@ -313,6 +356,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Be more strict reviewing natural features and parks against building features.  This could be
   //extended
+  LOG_TRACE("Checking rule #13...");
   if ((polyIsNatural || polyIsPark) &&
       OsmSchema::getInstance().getCategories(poiTags).intersects(OsmSchemaCategory::building()))
   {
@@ -322,6 +366,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  LOG_DEBUG("Review reduction #13: " << timer.elapsed());
 //  timer.restart();
 
+  LOG_TRACE("Checking rule #14...");
   if (poiHasType && polyIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #14...");
@@ -331,6 +376,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //inverse of above
+  LOG_TRACE("Checking rule #15...");
   if (polyHasType && poiIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #15...");
@@ -340,6 +386,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //prevent athletic POIs within a park poly from being reviewed against that park poly
+  LOG_TRACE("Checking rule #16...");
   if (_distance == 0 && polyIsPark && poiLeisureVal == "pitch")
   {
     LOG_TRACE("Returning miss per review reduction rule #16...");
@@ -353,6 +400,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //Don't match a park poi to a sport poly.  Simpler version of some rules above.
   //may make some previous rules obsolete
+  LOG_TRACE("Checking rule #17...");
   if (poiIsPark && polyIsSport)
   {
     LOG_TRACE("Returning miss per review reduction rule #17...");
@@ -366,6 +414,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   LOG_VART(polyIsBuilding);
 
   //Similar to previous, except more focused for restrooms.
+  LOG_TRACE("Checking rule #18...");
   if (poiHasType && polyHasType && _typeScore != 1.0 &&
       PoiPolygonTypeScoreExtractor::isRestroom(poi) &&
       !OsmSchema::getInstance().getCategories(polyTags).intersects(OsmSchemaCategory::building()))
@@ -377,6 +426,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //Be more strict reviewing parking lots against other features.
+  LOG_TRACE("Checking rule #19...");
   if (poiHasType && polyHasType && PoiPolygonTypeScoreExtractor::isParking(poly) &&
       !_typeMatch && polyTags.get("parking") != "multi-storey")
   {
@@ -387,6 +437,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //Don't review schools against their sports fields.
+  LOG_TRACE("Checking rule #20...");
   if (PoiPolygonTypeScoreExtractor::isSchool(poi) && polyIsSport)
   {
     LOG_TRACE("Returning miss per review reduction rule #20...");
@@ -396,6 +447,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  timer.restart();
 
   //Need to be stricter on tunnels since we don't want above ground things to review against them.
+  LOG_TRACE("Checking rule #21...");
   if (polyTags.get("tunnel") == "yes" && poiHasType &&
       (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
@@ -405,31 +457,18 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 //  LOG_DEBUG("Review reduction #21: " << timer.elapsed());
 //  timer.restart();
 
-  ElementConverter elementConverter(_map);
-  std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-  if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+  std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
+  LOG_VART(polyGeom.get());
+  if (!polyGeom.get() ||
+      QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY")) // do we need still this?
   {
     throw geos::util::TopologyException();
   }
-  std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
 
-  double polyArea = -1.0;
-  try
-  {
-    polyArea = polyGeom->getArea();
-  }
-  catch (const geos::util::TopologyException& e)
-  {
-    if (_badGeomCount <= Log::getWarnMessageLimit())
-    {
-      LOG_TRACE(
-        "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-        "geometry: " << polyGeom->toString() << "\n" << e.what());
-      _badGeomCount++;
-    }
-  }
-
+  const double polyArea = _getArea(std::dynamic_pointer_cast<const Way>(poly));
+  LOG_VART(polyArea);
   //Don't review park poi's against large non-park polys.
+  LOG_TRACE("Checking rule #22...");
   if (poiHasType && polyHasType && !_nameMatch && !polyIsPark &&
       (((polyHasLanduse && !poiHasLanduse) ||
        (polyIsNatural && !poiIsNatural) ||
@@ -451,6 +490,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   //This is a simple rule to prevent matching poi's not at all like a park with park polys.
   //this may render some of the previous rules obsolete.
+  LOG_TRACE("Checking rule #23...");
   if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
   {
     LOG_TRACE("Returning miss per review reduction rule #23...");
@@ -465,6 +505,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //poi and the building way, then don't review the two.  This allows for tagged poi way nodes to
   //conflate cleanly with building ways they belong to, rather than being reviewed against other
   //building ways.
+  LOG_TRACE("Checking rule #24...");
   const long matchingWayId = BuildingWayNodeCriterion(_map).getMatchingWayId(poi);
   if (matchingWayId != 0)
   {
@@ -509,285 +550,579 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //This will check the current poi against all neighboring pois.  If any neighboring poi is
   //closer to the current poly than the current poi, then the current poi will not be matched or
   //reviewed against the current poly.
+  LOG_TRACE("Checking rule #25...");
   if (_keepClosestMatchesOnly && _poiNeighborIsCloserToPolyThanPoi(poi, poly))
   {
     LOG_TRACE("Returning miss per review reduction rule #25...");
     return true;
   }
-  //  LOG_DEBUG("Review reduction #25: " << timer.elapsed());
-  //  timer.restart();
+  //LOG_DEBUG("Review reduction #25: " << timer.elapsed());
+  //timer.restart();
 
-  LOG_VART(_polyNeighborIds);
+  LOG_VART(_polyNeighborIds.size());
+  //LOG_VART(_polyNeighborIds);
   // This loop becomes more expensive as the search radius is increased.
-  for (set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
+  for (std::set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
        polyNeighborItr != _polyNeighborIds.end(); ++polyNeighborItr)
   {
     ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
     if (polyNeighbor->getElementId() != poly->getElementId())
     {
-      std::shared_ptr<Geometry> polyNeighborGeom;
-      try
+      //This will check the current poly against all neighboring polys.  If any neighboring
+      //poly is closer to the current poi than the current poly, then the current poi will
+      //not be matched or reviewed against the current poly.
+      if (_keepClosestMatchesOnly && poly->getElementType() == ElementType::Way &&
+          polyNeighbor->getElementType() == ElementType::Way)
       {
-        polyNeighborGeom = ElementConverter(_map).convertToGeometry(polyNeighbor);
+        LOG_VART(poly);
+        LOG_VART(polyNeighbor);
 
-        if (polyNeighborGeom.get() &&
-            QString::fromStdString(polyNeighborGeom->toString()).toUpper().contains("EMPTY"))
+        LOG_TRACE("Checking rule #27...");
+        const double poiToNeighborPolyDist =
+          _getPolyToPointDistance(
+            std::dynamic_pointer_cast<const Way>(polyNeighbor),
+            std::dynamic_pointer_cast<const Node>(poi));
+        LOG_VART(poiToNeighborPolyDist);
+        if (poiToNeighborPolyDist != -1.0 && _distance > poiToNeighborPolyDist)
         {
-          if (_badGeomCount <= Log::getWarnMessageLimit())
+          LOG_TRACE("Returning miss per review reduction rule #27...");
+          return true;
+        }
+      }
+
+      if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
+      {
+        // Should this be OsmSchema::elementHasName instead?
+        otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
+        otherParkPolyNameScore = nameScorer.extract(*_map, poi, polyNeighbor);
+        otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
+
+        if (_polyContainsPoi(
+              std::dynamic_pointer_cast<const Way>(polyNeighbor),
+              std::dynamic_pointer_cast<const Node>(poi)))
+        {
+          poiContainedInAnotherParkPoly = true;
+          LOG_TRACE(
+            "poi examined and found to be contained within a park poly outside of this match " <<
+            "comparison: " << poi->toString());
+          LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
+        }
+
+        if (_elementIntersectsElement(polyNeighbor, poly))
+        {
+          parkPolyAngleHistVal = _getAngleHistogramVal(polyNeighbor, poly);
+          LOG_VART(parkPolyAngleHistVal);
+          parkPolyOverlapVal = _getOverlapVal(polyNeighbor, poly);
+          LOG_VART(parkPolyOverlapVal);
+
+          //When just using intersection as the criteria, only found one instance when something
+          //was considered as "very close" to a park poly when I didn't want it to be...so these
+          //values set very low to weed that instance out...overlap at least.
+          if (parkPolyAngleHistVal != -1.0 && parkPolyOverlapVal != 1.0 &&
+              parkPolyAngleHistVal >= 0.05 && parkPolyOverlapVal >= 0.02)
           {
+            polyVeryCloseToAnotherParkPoly = true;
+
+            if (poly->getElementType() == ElementType::Way &&
+                polyNeighbor->getElementType() == ElementType::Way)
+            {
+              //Calc the distance from the poi to the poly line instead of the poly itself.
+              //Calcing distance to the poly itself will always return 0 when the poi is in the
+              //poly.
+              poiToPolyNodeDist =
+                _getPolyToPointDistance(
+                  std::dynamic_pointer_cast<const Way>(poly),
+                  std::dynamic_pointer_cast<const Node>(poi));
+              poiToOtherParkPolyNodeDist =
+                _getPolyToPointDistance(
+                  std::dynamic_pointer_cast<const Way>(polyNeighbor),
+                  std::dynamic_pointer_cast<const Node>(poi));
+            }
             LOG_TRACE(
-              "Invalid area neighbor polygon passed to PoiPolygonMatchCreator: " <<
-              polyNeighborGeom->toString());
-            _badGeomCount++;
-          }
-        }
-        else if (polyNeighborGeom.get())
-        {
-          //This will check the current poly against all neighboring polys.  If any neighboring
-          //poly is closer to the current poi than the current poly, then the current poi will
-          //not be matched or reviewed against the current poly.
-          if (_keepClosestMatchesOnly && poly->getElementType() == ElementType::Way &&
-              polyNeighbor->getElementType() == ElementType::Way)
-          {
-            LOG_VART(poly);
-            LOG_VART(polyNeighbor);
-            ConstWayPtr polyNeighborWay = std::dynamic_pointer_cast<const Way>(polyNeighbor);
-            std::shared_ptr<const LineString> polyNeighborLineStr =
-              std::dynamic_pointer_cast<const LineString>(
-                ElementConverter(_map).convertToLineString(polyNeighborWay));
-            const long poiToNeighborPolyDist = polyNeighborLineStr->distance(poiGeom.get());
-            LOG_VART(poiToNeighborPolyDist);
-            if (_distance > poiToNeighborPolyDist)
-            {
-              LOG_TRACE("Returning miss per review reduction rule #27...");
-              return true;
-            }
-          }
-
-          if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
-          {
-            // Should this be OsmSchema::elementHasName instead?
-            otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
-            otherParkPolyNameScore = nameScorer.extract(*_map, poi, polyNeighbor);
-            otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
-
-            if (polyNeighborGeom->contains(poiGeom.get()))
-            {
-              poiContainedInAnotherParkPoly = true;
-
-              LOG_TRACE(
-                "poi examined and found to be contained within a park poly outside of this match " <<
-                "comparison: " << poi->toString());
-              LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
-            }
-
-            if (polyNeighborGeom->intersects(polyGeom.get()))
-            {
-              parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, polyNeighbor, poly);
-              LOG_VART(parkPolyAngleHistVal);
-              parkPolyOverlapVal = OverlapExtractor().extract(*_map, polyNeighbor, poly);
-              LOG_VART(parkPolyOverlapVal);
-
-              //When just using intersection as the criteria, only found one instance when something
-              //was considered as "very close" to a park poly when I didn't want it to be...so these
-              //values set very low to weed that instance out...overlap at least.
-              if (parkPolyAngleHistVal >= 0.05 && parkPolyOverlapVal >= 0.02)
-              {
-                polyVeryCloseToAnotherParkPoly = true;
-
-                if (poly->getElementType() == ElementType::Way &&
-                    polyNeighbor->getElementType() == ElementType::Way)
-                {
-                  //Calc the distance from the poi to the poly line instead of the poly itself.
-                  //Calcing distance to the poly itself will always return 0 when the poi is in the
-                  //poly.
-                  ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
-                  std::shared_ptr<const LineString> polyLineStr =
-                    std::dynamic_pointer_cast<const LineString>(
-                      ElementConverter(_map).convertToLineString(polyWay));
-                  poiToPolyNodeDist = polyLineStr->distance(poiGeom.get());
-                  ConstWayPtr polyNeighborWay = std::dynamic_pointer_cast<const Way>(polyNeighbor);
-                  std::shared_ptr<const LineString> polyNeighborLineStr =
-                    std::dynamic_pointer_cast<const LineString>(
-                      ElementConverter(_map).convertToLineString(polyNeighborWay));
-                  poiToOtherParkPolyNodeDist = polyNeighborLineStr->distance(poiGeom.get());
-                }
-                LOG_TRACE(
-                  "poly examined and found very close to a another park poly: " <<
-                  poly->toString());
-                LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
-              }
-            }
-          }
-          else if (poiIsSport)
-          {
-            //this is a little loose, b/c there could be more than one type match set of tags...
-            if (PoiPolygonTypeScoreExtractor::isSport(polyNeighbor) &&
-                polyNeighborGeom->contains(poiGeom.get()) &&
-                typeScorer.extract(*_map, poi, polyNeighbor) >= _typeScoreThreshold)
-            {
-              sportPoiOnOtherSportPolyWithTypeMatch = true;
-            }
-          }
-          else if (buildingCrit.isSatisfied(polyNeighbor))
-          {
-            if (polyNeighborGeom->contains(poiGeom.get()))
-            {
-              poiOnBuilding = true;
-            }
-          }
-        }
-
-        LOG_VART(poiToOtherParkPolyNodeDist);
-        LOG_VART(polyVeryCloseToAnotherParkPoly);
-        LOG_VART(poiToPolyNodeDist);
-        LOG_VART(poiToOtherParkPolyNodeDist);
-        LOG_VART(otherParkPolyHasName);
-        LOG_VART(otherParkPolyNameMatch);
-        LOG_VART(otherParkPolyNameScore);
-        LOG_VART(poiContainedInAnotherParkPoly);
-        LOG_VART(sportPoiOnOtherSportPolyWithTypeMatch);
-        LOG_VART(poiOnBuilding);
-
-        //If the POI is inside a poly that is very close to another park poly, declare miss if
-        //the distance to the outer ring of the other park poly is shorter than the distance to the
-        //outer ring of this poly and the other park poly has a name.
-        if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
-            poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
-            poiToOtherParkPolyNodeDist != DBL_MAX && otherParkPolyHasName &&
-            parkPolyOverlapVal < 0.9)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #28...");
-          return true;
-        }
-
-        //If the poi is a park, the poly it is being compared to is not a park or building, and that
-        //poly is "very close" to another park poly that has a name match with the poi, then
-        //declare a miss (exclude poly playgrounds from this).
-        if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
-            //Unfortunately, include polyIsPlayground here blows up too many matches.
-            otherParkPolyNameMatch /*&& !polyIsPlayground*/)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #29...");
-          return true;
-        }
-
-        //If a park poi is contained within one park poly, then there's no reason for it to trigger
-        //reviews in another one that its not contained in.
-        if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #30...");
-          return true;
-        }
-
-        //If a sport poi is contained within a type match sport poi poly, don't let it be
-        //matched against anything else.
-        if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #31...");
-          return true;
-        }
-
-        //If a poi is like and on top of a building, don't review it against a non-building poly.
-        if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #32...");
-          return true;
-        }
-
-        //If the poi is not a park and being compared to a park polygon or a polygon that is
-        //"very close" to another park poly, we want to be more restrictive on type matching, but
-        //only if the poi has any type at all.  If the poi has no type, then behave as normal.
-        //Also, let an exact name match cause a review here, rather than a miss.
-        if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
-            !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType)
-        {
-          if (!_exactNameMatch)
-          {
-            LOG_TRACE("Returning miss per review reduction rule #33...");
-            return true;
+              "poly examined and found very close to a another park poly: " << poly->toString());
+            LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
           }
         }
       }
-      catch (const geos::util::TopologyException& e)
+      else if (poiIsSport)
       {
-        if (_badGeomCount <= Log::getWarnMessageLimit())
+        //this is a little loose, b/c there could be more than one type match set of tags...
+        if (PoiPolygonTypeScoreExtractor::isSport(polyNeighbor) &&
+            _polyContainsPoi(
+              std::dynamic_pointer_cast<const Way>(polyNeighbor),
+              std::dynamic_pointer_cast<const Node>(poi)) &&
+            typeScorer.extract(*_map, poi, polyNeighbor) >= _typeScoreThreshold)
         {
-          LOG_TRACE(
-            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-            "geometry: " << polyNeighbor->toString() << "\n" << e.what());
-          _badGeomCount++;
+          sportPoiOnOtherSportPolyWithTypeMatch = true;
+        }
+      }
+      else if (buildingCrit.isSatisfied(polyNeighbor))
+      {
+        if (_polyContainsPoi(
+              std::dynamic_pointer_cast<const Way>(polyNeighbor),
+              std::dynamic_pointer_cast<const Node>(poi)))
+        {
+          poiOnBuilding = true;
+        }
+      }
+
+      LOG_VART(poiToOtherParkPolyNodeDist);
+      LOG_VART(polyVeryCloseToAnotherParkPoly);
+      LOG_VART(poiToPolyNodeDist);
+      LOG_VART(poiToOtherParkPolyNodeDist);
+      LOG_VART(otherParkPolyHasName);
+      LOG_VART(otherParkPolyNameMatch);
+      LOG_VART(otherParkPolyNameScore);
+      LOG_VART(poiContainedInAnotherParkPoly);
+      LOG_VART(sportPoiOnOtherSportPolyWithTypeMatch);
+      LOG_VART(poiOnBuilding);
+
+      //If the POI is inside a poly that is very close to another park poly, declare miss if
+      //the distance to the outer ring of the other park poly is shorter than the distance to the
+      //outer ring of this poly and the other park poly has a name.
+      LOG_TRACE("Checking rule #28...");
+      if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
+          poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
+          poiToPolyNodeDist != -1.0 && poiToOtherParkPolyNodeDist != DBL_MAX &&
+          poiToOtherParkPolyNodeDist != -1.0 && otherParkPolyHasName && parkPolyOverlapVal < 0.9)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #28...");
+        return true;
+      }
+
+      //If the poi is a park, the poly it is being compared to is not a park or building, and that
+      //poly is "very close" to another park poly that has a name match with the poi, then
+      //declare a miss (exclude poly playgrounds from this).
+      LOG_TRACE("Checking rule #29...");
+      if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
+          //Unfortunately, include polyIsPlayground here blows up too many matches.
+          otherParkPolyNameMatch /*&& !polyIsPlayground*/)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #29...");
+        return true;
+      }
+
+      //If a park poi is contained within one park poly, then there's no reason for it to trigger
+      //reviews in another one that its not contained in.
+      LOG_TRACE("Checking rule #30...");
+      if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #30...");
+        return true;
+      }
+
+      //If a sport poi is contained within a type match sport poi poly, don't let it be
+      //matched against anything else.
+      LOG_TRACE("Checking rule #31...");
+      if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #31...");
+        return true;
+      }
+
+      //If a poi is like and on top of a building, don't review it against a non-building poly.
+      LOG_TRACE("Checking rule #32...");
+      if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #32...");
+        return true;
+      }
+
+      //If the poi is not a park and being compared to a park polygon or a polygon that is
+      //"very close" to another park poly, we want to be more restrictive on type matching, but
+      //only if the poi has any type at all.  If the poi has no type, then behave as normal.
+      //Also, let an exact name match cause a review here, rather than a miss.
+      LOG_TRACE("Checking rule #33...");
+      if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
+          !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType)
+      {
+        if (!_exactNameMatch)
+        {
+          LOG_TRACE("Returning miss per review reduction rule #33...");
+          return true;
         }
       }
     }
   }
-  LOG_DEBUG("Review reduction #25-33: " << timer.elapsed());
+  LOG_DEBUG("Review reduction #26-33: " << timer.elapsed());
   timer.restart();
 
   return false;
 }
 
+QString PoiPolygonReviewReducer::getCacheHitsString()
+{
+  QString str = "\n";
+  for (QHash<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
+       numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
+  {
+    QString line = "The %1 cache had %2 cache hits and a total size of %3.\n";
+    str +=
+      line
+        .arg(numCacheHitsByCacheTypeItr.key())
+        .arg(StringUtils::formatLargeNumber(numCacheHitsByCacheTypeItr.value()))
+        .arg(
+          StringUtils::formatLargeNumber(
+            _cacheSizeByCacheType[numCacheHitsByCacheTypeItr.key()]));
+  }
+  LOG_VARD(str);
+  return str;
+}
+
 bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi,
                                                                 ConstElementPtr poly)
 {
-  LOG_VART(_poiNeighborIds);
-  for (set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
+  LOG_VART(_poiNeighborIds.size());
+  //LOG_VART(_poiNeighborIds);
+  for (std::set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
        poiNeighborItr != _poiNeighborIds.end(); ++poiNeighborItr)
   {
     ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
     if (poiNeighbor->getElementId() != poi->getElementId())
     {
-      std::shared_ptr<Geometry> poiNeighborGeom;
-      try
+      long neighborPoiToPolyDist = -1.0;
+      // This only handles ways as polygons and not relations. See #3474.
+      ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
+      if (polyWay)
       {
-        poiNeighborGeom = ElementConverter(_map).convertToGeometry(poiNeighbor);
-
-        if (poiNeighborGeom.get() &&
-            QString::fromStdString(poiNeighborGeom->toString()).toUpper().contains("EMPTY"))
-        {
-          if (_badGeomCount <= Log::getWarnMessageLimit())
-          {
-            LOG_TRACE(
-              "Invalid neighbor POI passed to PoiPolygonMatchCreator: " <<
-              poiNeighborGeom->toString());
-            _badGeomCount++;
-          }
-        }
-        else if (poiNeighborGeom.get())
-        {
-          LOG_VART(poi);
-          LOG_VART(poiNeighbor);
-          //  This only handles ways as polygons and not relations
-          ConstWayPtr polyWay = std::dynamic_pointer_cast<const Way>(poly);
-          if (polyWay)
-          {
-            std::shared_ptr<const LineString> polyLineStr =
-              std::dynamic_pointer_cast<const LineString>(
-                ElementConverter(_map).convertToLineString(polyWay));
-            const long neighborPoiToPolyDist = polyLineStr->distance(poiNeighborGeom.get());
-            LOG_VART(neighborPoiToPolyDist);
-            if (_distance > neighborPoiToPolyDist)
-            {
-              LOG_TRACE("Returning miss per review reduction rule #26...");
-              return true;
-            }
-          }
-        }
+        neighborPoiToPolyDist =
+          _getPolyToPointDistance(polyWay, std::dynamic_pointer_cast<const Node>(poiNeighbor));
       }
-      catch (const geos::util::TopologyException& e)
+      LOG_VART(neighborPoiToPolyDist);
+      if (neighborPoiToPolyDist != -1.0 && _distance > neighborPoiToPolyDist)
       {
-        if (_badGeomCount <= Log::getWarnMessageLimit())
-        {
-          LOG_TRACE(
-            "Feature passed to PoiPolygonMatchCreator caused topology exception on conversion to a " <<
-            "geometry: " << poiNeighbor->toString() << "\n" << e.what());
-          _badGeomCount++;
-        }
+        LOG_TRACE("Returning miss per review reduction rule #26...");
+        return true;
       }
     }
   }
 
   return false;
+}
+
+void PoiPolygonReviewReducer::_incrementCacheHitCount(const QString& cacheTypeKey)
+{
+  if (!_numCacheHitsByCacheType.contains(cacheTypeKey))
+  {
+    _numCacheHitsByCacheType[cacheTypeKey] = 1;
+  }
+  else
+  {
+    _numCacheHitsByCacheType[cacheTypeKey] = _numCacheHitsByCacheType[cacheTypeKey] + 1;
+  }
+}
+
+void PoiPolygonReviewReducer::_incrementCacheSizeCount(const QString& cacheTypeKey)
+{
+  if (!_cacheSizeByCacheType.contains(cacheTypeKey))
+  {
+    _cacheSizeByCacheType[cacheTypeKey] = 1;
+  }
+  else
+  {
+    _cacheSizeByCacheType[cacheTypeKey] = _cacheSizeByCacheType[cacheTypeKey] + 1;
+  }
+}
+
+
+std::shared_ptr<geos::geom::Geometry> PoiPolygonReviewReducer::_getGeometry(ConstElementPtr element)
+{
+  if (!element)
+  {
+    return std::shared_ptr<geos::geom::Geometry>();
+  }
+
+  if (_geometryCache.contains(element->getElementId()))
+  {
+    std::shared_ptr<geos::geom::Geometry> cachedGeom = _geometryCache[element->getElementId()];
+    _incrementCacheHitCount("geometry");
+    LOG_TRACE("Found geometry in cache for: " << element->getElementId());
+    return cachedGeom;
+  }
+  else
+  {
+    LOG_TRACE("No geometry in cache for: " << element->getElementId());
+    std::shared_ptr<geos::geom::Geometry> newGeom;
+    try
+    {
+      newGeom = ElementConverter(_map).convertToGeometry(element);
+    }
+    catch (const geos::util::TopologyException& e)
+    {
+      if (_badGeomCount <= Log::getWarnMessageLimit())
+      {
+        LOG_TRACE(
+          "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a " <<
+          "geometry: " << element->toString() << "\n" << e.what());
+        _badGeomCount++;
+      }
+    }
+    LOG_VART(newGeom.get());
+    if (newGeom.get() &&
+        QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+    {
+      if (_badGeomCount <= Log::getWarnMessageLimit())
+      {
+        LOG_TRACE("Invalid element passed to PoiPolygonReviewReducer: " << newGeom->toString());
+        _badGeomCount++;
+      }
+      newGeom.reset();
+    }
+    LOG_VART(newGeom.get());
+    if (_geometryCache.size() <= MAX_CACHE_SIZE)
+    {
+      _geometryCache[element->getElementId()] = newGeom;
+      LOG_TRACE("Updated geometry cache for: " << element->getElementId());
+      _incrementCacheSizeCount("geometry");
+    }
+    return newGeom;
+  }
+}
+
+std::shared_ptr<geos::geom::LineString> PoiPolygonReviewReducer::_getLineString(ConstWayPtr poly)
+{
+  if (!poly)
+  {
+    return std::shared_ptr<geos::geom::LineString>();
+  }
+
+  if (_lineStringCache.contains(poly->getElementId()))
+  {
+    std::shared_ptr<geos::geom::LineString> cachedGeom = _lineStringCache[poly->getElementId()];
+    _incrementCacheHitCount("linestring");
+    LOG_TRACE("Found line string in cache for: " << poly->getElementId());
+    return cachedGeom;
+  }
+  else
+  {
+    LOG_TRACE("No line string in cache for: " << poly->getElementId());
+    std::shared_ptr<geos::geom::LineString> newGeom;
+    try
+    {
+      newGeom = ElementConverter(_map).convertToLineString(poly);
+    }
+    catch (const geos::util::TopologyException& e)
+    {
+      if (_badGeomCount <= Log::getWarnMessageLimit())
+      {
+        LOG_TRACE(
+          "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a " <<
+          "geometry: " << poly->toString() << "\n" << e.what());
+        _badGeomCount++;
+      }
+    }
+    LOG_VART(newGeom.get());
+    if (newGeom.get() &&
+        QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+    {
+      if (_badGeomCount <= Log::getWarnMessageLimit())
+      {
+        LOG_TRACE("Invalid element passed to PoiPolygonReviewReducer: " << newGeom->toString());
+        _badGeomCount++;
+      }
+      newGeom.reset();
+    }
+    LOG_VART(newGeom.get());
+    if (_lineStringCache.size() <= MAX_CACHE_SIZE)
+    {
+      _lineStringCache[poly->getElementId()] = newGeom;
+      LOG_TRACE("Updated line string cache for: " << poly->getElementId());
+      _incrementCacheSizeCount("linestring");
+    }
+    return newGeom;
+  }
+}
+
+double PoiPolygonReviewReducer::_getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point)
+{
+  if (!poly || !point)
+  {
+    return -1.0;
+  }
+
+  const QString key =
+    poly->getElementId().toString() + ";" + point->getElementId().toString();
+  if (_elementDistanceCache.contains(key))
+  {
+    const double cachedDistance = _elementDistanceCache[key];
+    _incrementCacheHitCount("distance");
+    LOG_TRACE("Found distance of " << cachedDistance << " in cache for: " << key);
+    return cachedDistance;
+  }
+  else
+  {
+    LOG_TRACE("No distance in cache for: " << key);
+    std::shared_ptr<geos::geom::LineString> polyGeom = _getLineString(poly);
+    std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
+    LOG_VART(polyGeom.get());
+    LOG_VART(pointGeom.get());
+    double distance = -1.0;
+    if (polyGeom && pointGeom)
+    {
+      distance = polyGeom->distance(pointGeom.get());
+    }
+    _elementDistanceCache[key] = distance;
+    LOG_TRACE("Updated distance cache with: " << distance << " for: " << key);
+    _incrementCacheSizeCount("distance");
+    return distance;
+  }
+}
+
+double PoiPolygonReviewReducer::_getArea(ConstWayPtr poly)
+{
+  if (!poly)
+  {
+    return -1.0;
+  }
+
+  if (_elementAreaCache.contains(poly->getElementId()))
+  {
+    const double cachedArea = _elementAreaCache[poly->getElementId()];
+    _incrementCacheHitCount("area");
+    LOG_TRACE("Found area of " << cachedArea << " in cache for: " << poly->getElementId());
+    return cachedArea;
+  }
+  else
+  {
+    LOG_TRACE("No area in cache for: " << poly->getElementId());
+    std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
+    LOG_VART(polyGeom.get());
+    double area = -1.0;
+    if (polyGeom)
+    {
+      area = polyGeom->getArea();
+    }
+    _elementAreaCache[poly->getElementId()] = area;
+    LOG_TRACE("Updated area cache with: " << area << " for: " << poly->getElementId());
+    _incrementCacheSizeCount("area");
+    return area;
+  }
+}
+
+bool PoiPolygonReviewReducer::_polyContainsPoi(ConstWayPtr poly, ConstNodePtr point)
+{
+  if (!poly || !point)
+  {
+    return false;
+  }
+
+  const QString key =
+    poly->getElementId().toString() + ";" + point->getElementId().toString();
+  if (_elementContainsCache.contains(key))
+  {
+    const bool cachedContains = _elementContainsCache[key];
+    _incrementCacheHitCount("contains");
+    LOG_TRACE("Found contains=" << cachedContains << " in cache for: " << key);
+    return cachedContains;
+  }
+  else
+  {
+    LOG_TRACE("No contains in cache for: " << key);
+    std::shared_ptr<geos::geom::LineString> polyGeom = _getLineString(poly);
+    std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
+    LOG_VART(polyGeom.get());
+    LOG_VART(pointGeom.get());
+    bool contains = false;
+    if (polyGeom && pointGeom)
+    {
+      contains = polyGeom->contains(pointGeom.get());
+    }
+    _elementContainsCache[key] = contains;
+    LOG_TRACE("Updated contains cache with: " << contains << " for: " << key);
+    _incrementCacheSizeCount("contains");
+    return contains;
+  }
+}
+
+bool PoiPolygonReviewReducer::_elementIntersectsElement(
+  ConstElementPtr element1, ConstElementPtr element2)
+{
+  if (!element1 || !element2)
+  {
+    return false;
+  }
+
+  const QString key =
+    element1->getElementId().toString() + ";" + element2->getElementId().toString();
+  if (_elementIntersectsCache.contains(key))
+  {
+    const bool cachedIntersects = _elementIntersectsCache[key];
+    _incrementCacheHitCount("intersects");
+    LOG_TRACE("Found intersects=" << cachedIntersects << " in cache for: " << key);
+    return cachedIntersects;
+  }
+  else
+  {
+    LOG_TRACE("No intersects in cache for: " << key);
+    std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1);
+    std::shared_ptr<geos::geom::Geometry> geom2 = _getGeometry(element2);
+    LOG_VART(geom1.get());
+    LOG_VART(geom2.get());
+    bool intersects = false;
+    if (geom1 && geom2)
+    {
+      intersects = geom1->intersects(geom2.get());
+    }
+    _elementIntersectsCache[key] = intersects;
+    LOG_TRACE("Updated intersects cache with: " << intersects << " for: " << key);
+    _incrementCacheSizeCount("intersects");
+    return intersects;
+  }
+}
+
+double PoiPolygonReviewReducer::_getAngleHistogramVal(
+  ConstElementPtr element1, ConstElementPtr element2)
+{
+  if (!element1 || !element2)
+  {
+    return -1.0;
+  }
+
+  const QString key =
+    element1->getElementId().toString() + ";" + element2->getElementId().toString();
+  if (_elementAngleHistogramCache.contains(key))
+  {
+    const double cachedAngleHistVal = _elementAngleHistogramCache[key];
+    _incrementCacheHitCount("angleHist");
+    LOG_TRACE("Found angle hist: " << cachedAngleHistVal << " in cache for: " << key);
+    return cachedAngleHistVal;
+  }
+  else
+  {
+    LOG_TRACE("No angle hist in cache for: " << key);
+    const double angleHistVal = AngleHistogramExtractor().extract(*_map, element1, element2);
+    _elementAngleHistogramCache[key] = angleHistVal;
+    LOG_TRACE("Updated angle hist cache with: " << angleHistVal << " for: " << key);
+    _incrementCacheSizeCount("angleHist");
+    return angleHistVal;
+  }
+}
+
+double PoiPolygonReviewReducer::_getOverlapVal(ConstElementPtr element1, ConstElementPtr element2)
+{
+  if (!element1 || !element2)
+  {
+    return -1.0;
+  }
+
+  const QString key =
+    element1->getElementId().toString() + ";" + element2->getElementId().toString();
+  if (_elementOverlapCache.contains(key))
+  {
+    const double cachedOverlapVal = _elementOverlapCache[key];
+    _incrementCacheHitCount("overlap");
+    LOG_TRACE("Found overlap: " << cachedOverlapVal << " in cache for: " << key);
+    return cachedOverlapVal;
+  }
+  else
+  {
+    LOG_TRACE("No overlap in cache for: " << key);
+    const double overlapVal = OverlapExtractor().extract(*_map, element1, element2);
+    _elementOverlapCache[key] = overlapVal;
+    LOG_TRACE("Updated overlap cache with: " << overlapVal << " for: " << key);
+    _incrementCacheSizeCount("overlap");
+    return overlapVal;
+  }
 }
 
 }

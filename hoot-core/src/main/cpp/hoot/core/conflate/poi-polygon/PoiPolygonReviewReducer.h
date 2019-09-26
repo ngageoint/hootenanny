@@ -27,10 +27,17 @@
 #ifndef POIPOLYGONREVIEWREDUCER_H
 #define POIPOLYGONREVIEWREDUCER_H
 
+// geos
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
+
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/Configurable.h>
+
+//// Qt
+//#include <QCache>
 
 namespace hoot
 {
@@ -54,7 +61,9 @@ class PoiPolygonReviewReducer
 
 public:
 
-  // encapsulate all these params in a class...this is nasty
+  static const int MAX_CACHE_SIZE = 100000;
+
+  // maybe encapsulate all these params in a class...this is nasty
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                           const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, double nameScore, bool nameMatch,
@@ -74,6 +83,18 @@ public:
    * @note this needs to be broken up into more modular pieces
    */
   bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QString getCacheHitsString();
+
+  /**
+   * TODO
+   */
+  static void clearCaches();
 
 private:
 
@@ -102,6 +123,28 @@ private:
   bool _addressParsingEnabled;
   AddressParser _addressParser;
 
+  // caching
+
+  // keys are "elementId1;elementId2"
+
+  // ordering of the ID keys doesn't matter here
+  static QHash<QString, double> _elementDistanceCache;
+  // ordering of the ID keys does matter here; does first element contain second element
+  static QHash<QString, bool> _elementContainsCache;
+  // ordering of the ID keys doesn't matter here
+  static QHash<QString, bool> _elementIntersectsCache;
+  // ordering of the ID keys doesn't matter here
+  static QHash<QString, double> _elementAngleHistogramCache;
+  // ordering of the ID keys doesn't matter here
+  static QHash<QString, double> _elementOverlapCache;
+
+  static QHash<ElementId, double> _elementAreaCache;
+  static QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
+  static QHash<ElementId, std::shared_ptr<geos::geom::LineString>> _lineStringCache;
+
+  static QHash<QString, int> _numCacheHitsByCacheType;
+  static QHash<QString, int> _cacheSizeByCacheType;
+
   bool _nonDistanceSimilaritiesPresent() const;
 
   /*
@@ -112,6 +155,19 @@ private:
   bool _poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi, ConstElementPtr poly);
 
   bool _polyContainsPoiAsMember(ConstElementPtr poly, ConstElementPtr poi) const;
+
+  // caching enabled methods
+  std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
+  std::shared_ptr<geos::geom::LineString> _getLineString(ConstWayPtr way);
+  double _getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point);
+  double _getArea(ConstWayPtr poly);
+  bool _polyContainsPoi(ConstWayPtr poly, ConstNodePtr point);
+  bool _elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2);
+  double _getAngleHistogramVal(ConstElementPtr element1, ConstElementPtr element2);
+  double _getOverlapVal(ConstElementPtr element1, ConstElementPtr element2);
+
+  void _incrementCacheHitCount(const QString& cacheTypeKey);
+  void _incrementCacheSizeCount(const QString& cacheTypeKey);
 };
 
 }

@@ -120,6 +120,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
+  LOG_DEBUG(PoiPolygonMatch::getCacheHitsString());
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const

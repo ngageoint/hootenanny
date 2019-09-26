@@ -109,8 +109,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
       {
         // score each candidate and push it on the result vector
         LOG_TRACE(
-          "Calculating match between: " << poi->getElementId() << " and " <<
-          poly->getElementId() << "...");
+          "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
         PoiPolygonMatch* m =
           new PoiPolygonMatch(_map, _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
         m->setConfiguration(conf());
@@ -214,7 +213,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _checkForMatch(e);
 
     _numMatchCandidatesVisited++;
-    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
+    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval /** 10*/) == 0)
     {
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
@@ -224,7 +223,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 
   _numElementsVisited++;
-  if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
+  if (_numElementsVisited % (_taskStatusUpdateInterval /** 10*/) == 0)
   {
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<

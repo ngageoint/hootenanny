@@ -113,8 +113,8 @@ _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText("")
 {
-//  _timer.reset(new QElapsedTimer());
-//  _timer->start();
+  _timer.reset(new QElapsedTimer());
+  _timer->start();
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -414,8 +414,8 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
-//    LOG_TRACE("Review reduction: " << _timer->elapsed());
-//    _timer->restart();
+    LOG_DEBUG("Review reduction: " << _timer->elapsed());
+    _timer->restart();
   }
   LOG_VART(evidence);
 
@@ -768,6 +768,14 @@ void PoiPolygonMatch::printMatchDistanceInfo()
 void PoiPolygonMatch::resetMatchDistanceInfo()
 {
   PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
+}
+
+QString PoiPolygonMatch::getCacheHitsString()
+{
+  const QString cacheStr = PoiPolygonReviewReducer::getCacheHitsString();
+  // TODO: This doesn't seem right.
+  PoiPolygonReviewReducer::clearCaches();
+  return cacheStr;
 }
 
 set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
