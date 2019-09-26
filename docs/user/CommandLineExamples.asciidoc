@@ -45,6 +45,12 @@ See the User Guide for more details on command usage.
     hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
+===== Conflate over a bounding box (not supported by all input formats):
+
+-----
+    hoot conflate -D convert.bounding.box="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
+-----
+
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result back to a Rails Port instance:

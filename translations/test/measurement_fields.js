@@ -12,6 +12,7 @@ var server = require('../TranslationServer.js');
 describe('TranslationServer', function () {
 
     var schemas = [
+        'TDSv70',
         'TDSv61',
         'TDSv40',
         // 'MGCP', //used LEN not LZN
