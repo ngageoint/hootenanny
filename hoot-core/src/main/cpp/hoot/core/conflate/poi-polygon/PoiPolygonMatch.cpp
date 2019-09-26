@@ -41,6 +41,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
@@ -112,6 +113,8 @@ _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText("")
 {
+//  _timer.reset(new QElapsedTimer());
+//  _timer->start();
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -363,7 +366,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  const bool oneElementIsRelation =
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
-
   matchesProcessed++;
   _explainText = "";
   _class.setMiss();
@@ -396,19 +398,24 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
-    //this constructor has gotten a little out of hand
+    LOG_TRACE("Reducing reviews...");
+    // TODO: this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
       _addressMatchEnabled);
     reviewReducer.setConfiguration(conf());
+//    LOG_TRACE("Review reduction init and config: " << _timer->elapsed());
+//    _timer->restart();
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
       // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
+//    LOG_TRACE("Review reduction: " << _timer->elapsed());
+//    _timer->restart();
   }
   LOG_VART(evidence);
 
@@ -493,6 +500,8 @@ MatchType PoiPolygonMatch::getType() const
 
 unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  LOG_TRACE("Retrieving distance evidence...");
+
   _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
   if (_distance == -1.0)
   {
@@ -545,6 +554,8 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi,
                                                              ConstElementPtr poly)
 {
+  LOG_TRACE("Retrieving convex poly distance evidence...");
+
   //don't really need to put a distance == -1.0 check here for now, since we're assuming
   //PoiPolygonDistanceExtractor will always be run before this one
   const double alphaShapeDist =
@@ -560,6 +571,8 @@ unsigned int PoiPolygonMatch::_getConvexPolyDistanceEvidence(ConstElementPtr poi
 
 unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  LOG_TRACE("Retrieving type evidence...");
+
   _typeScorer.setFeatureDistance(_distance);
   _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
   _typeScore = _typeScorer.extract(*_map, poi, poly);
@@ -600,6 +613,8 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  LOG_TRACE("Retrieving name evidence...");
+
   _nameScorer.setNameScoreThreshold(_nameScoreThreshold);
   _nameScore = _nameScorer.extract(*_map, poi, poly);
   const bool nameMatch = _nameScore >= _nameScoreThreshold;
@@ -618,6 +633,8 @@ unsigned int PoiPolygonMatch::_getNameEvidence(ConstElementPtr poi, ConstElement
 
 unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  LOG_TRACE("Retrieving address evidence...");
+
   _addressScore = _addressScorer.extract(*_map, poi, poly);
   const bool addressMatch = _addressScore == 1.0;
   LOG_VART(addressMatch);
@@ -635,6 +652,8 @@ unsigned int PoiPolygonMatch::_getAddressEvidence(ConstElementPtr poi, ConstElem
 
 unsigned int PoiPolygonMatch::_getPhoneNumberEvidence(ConstElementPtr poi, ConstElementPtr poly)
 {
+  LOG_TRACE("Retrieving phone number evidence...");
+
   _phoneNumberScore = _phoneNumberScorer.extract(*_map, poi, poly);
   const bool phoneNumberMatch = _phoneNumberScore == 1.0;
   LOG_VART(phoneNumberMatch);
@@ -658,6 +677,8 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
+//  LOG_TRACE("Distance evidence calculation: " << _timer->elapsed());
+//  _timer->restart();
   //see comment in _getDistanceEvidence
   if (!_closeDistanceMatch)
   {
@@ -668,21 +689,41 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
   evidence += _getNameEvidence(poi, poly);
-  //Used to allow for kicking out of the method once enough evidence was accumulated for a match
+//  LOG_TRACE("Name evidence calculation: " << _timer->elapsed());
+//  _timer->restart();
+  //TODO: Used to allow for kicking out of the method once enough evidence was accumulated for a match
   //as a runtime optimization.  However, that results in incomplete scoring information passed to
   //the review reducer, so have since disabled.
-//  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
+  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
+  {
+    return evidence;
+  }
   evidence += _getTypeEvidence(poi, poly);
+//  LOG_TRACE("Type evidence calculation: " << _timer->elapsed());
+//  _timer->restart();
+  if (evidence >= _matchEvidenceThreshold)
+  {
+    return evidence;
+  }
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
+//    LOG_TRACE("Address evidence calculation: " << _timer->elapsed());
+//    _timer->restart();
+    if (evidence >= _matchEvidenceThreshold)
+    {
+      return evidence;
+    }
   }
   if (_phoneNumberMatchEnabled)
   {
     evidence += _getPhoneNumberEvidence(poi, poly);
+//    LOG_TRACE("Phone number evidence calculation: " << _timer->elapsed());
+//    _timer->restart();
+    if (evidence >= _matchEvidenceThreshold)
+    {
+      return evidence;
+    }
   }
 
   //We only want to run this if the previous match distance calculation was too large.
@@ -695,6 +736,8 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       BuildingCriterion().isSatisfied(poly))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
+//    LOG_TRACE("Convex poly distance evidence calculation: " << _timer->elapsed());
+//    _timer->restart();
     if (evidence >= _matchEvidenceThreshold)
     {
       return evidence;

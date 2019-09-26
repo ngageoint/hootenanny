@@ -85,33 +85,36 @@ PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
 
 void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>& e)
 {
-  LOG_TRACE("Checking for match with: " << e->getElementId());
+  LOG_TRACE("Checking for match with POI: " << e->getElementId());
 
   std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
   env->expandBy(_getSearchRadius(e));
 
   // find other nearby candidates
-  LOG_TRACE("Searching for neighbors...");
-  std::set<ElementId> neighbors = IndexElementsVisitor::findNeighbors(
-    *env, _getPolyIndex(), _polyIndexToEid, _getMap());
+  LOG_TRACE("Searching for polys neighboring the POI...");
+  const std::set<ElementId> neighbors =
+    IndexElementsVisitor::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
 
-  LOG_TRACE("Processing neighbors...");
-  ElementId from(e->getElementType(), e->getId());
+  LOG_TRACE("Attempting to match poly neighbors with POI...");
+  const ElementId poiId(e->getElementType(), e->getId());
   _elementsEvaluated++;
   int neighborCount = 0;
   for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
-    if (from != *it)
+    const ElementId polyId = *it;
+    if (poiId != polyId)
     {
-      const std::shared_ptr<const Element>& n = _map->getElement(*it);
-
-      if (n->isUnknown() && _polyCrit.isSatisfied(n))
+      const std::shared_ptr<const Element>& poly = _map->getElement(polyId);
+      if (poly->isUnknown() && _polyCrit.isSatisfied(poly))
       {
         // score each candidate and push it on the result vector
+        LOG_TRACE(
+          "Calculating match between: " << poi->getElementId() << " and " <<
+          poly->getElementId() << "...");
         PoiPolygonMatch* m =
           new PoiPolygonMatch(_map, _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
         m->setConfiguration(conf());
-        m->calculateMatch(from, *it);
+        m->calculateMatch(poiId, polyId);
 
         // if we're confident this is a miss
         if (m->getType() == MatchType::Miss)
@@ -141,9 +144,8 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<co
 
   // find other nearby candidates
   LOG_TRACE("Searching for neighbors...");
-  std::set<ElementId> neighbors =
-    IndexElementsVisitor::findNeighbors(
-      *env, _getPolyIndex(), _polyIndexToEid, _getMap());
+  const std::set<ElementId> neighbors =
+    IndexElementsVisitor::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
 
   LOG_TRACE("Processing neighbors...");
   ElementId from(e->getElementType(), e->getId());
@@ -170,9 +172,8 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const std::shared_ptr<con
 
   // find other nearby candidates
   LOG_TRACE("Searching for neighbors...");
-  std::set<ElementId> neighbors =
-    IndexElementsVisitor::findNeighbors(
-      *env, _getPoiIndex(), _poiIndexToEid, _getMap());
+  const std::set<ElementId> neighbors =
+    IndexElementsVisitor::findNeighbors(*env, _getPoiIndex(), _poiIndexToEid, _getMap());
 
   LOG_TRACE("Processing neighbors...");
   ElementId from(e->getElementType(), e->getId());
@@ -198,19 +199,22 @@ Meters PoiPolygonMatchVisitor::_getSearchRadius(const std::shared_ptr<const Elem
 
 void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 {
+  // See if the element is a POI as defined by poi/poly conflation.
   if (isMatchCandidate(e))
   {
-    // Technically, the density based matches depends on this data too, but since that code has
-    // been disabled, this check is good enough.
+    // If we are doing advanced matching or review reduction, let's collect all polys that surround
+    // the POI and also all POIs that surround it.
     if (_enableAdvancedMatching || _enableReviewReduction)
     {
       _collectSurroundingPolyIds(e);
       _collectSurroundingPoiIds(e);
     }
+    // Now, let's try to match all polys in the search radius with this POI (both as defined by
+    // poi/poly conflation).
     _checkForMatch(e);
 
     _numMatchCandidatesVisited++;
-    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval / 10 /** 10*/) == 0)
+    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
@@ -220,7 +224,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 
   _numElementsVisited++;
-  if (_numElementsVisited % (_taskStatusUpdateInterval / 10 /** 10*/) == 0)
+  if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
@@ -235,10 +239,10 @@ bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
     return false;
   }
 
-  //simpler logic to just examine each POI and check for surrounding polys, rather than check both
-  //POIs and their surrounding polys and polys and their surrounding POIs; note that this is
-  //different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
-  //the stats
+  // Itssimpler logic to just examine each POI and check for surrounding polys, rather than check
+  // both POIs and their surrounding polys and polys and their surrounding POIs; note that this is
+  // different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
+  // the stats.
   return element->isUnknown() && PoiPolygonPoiCriterion().isSatisfied(element);
 }
 

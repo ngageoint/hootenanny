@@ -44,6 +44,9 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 
+// Qt
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -194,8 +197,10 @@ private:
   double _phoneNumberScore;
   bool _phoneNumberMatchEnabled;
 
-  //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
+  //These two are used by PoiPolygonReviewReducer and PoiPolygonDistance
+  // all the polys within the search radius of the POI being matched
   std::set<ElementId> _polyNeighborIds;
+  // all the pois within the search radius of the POI being matched
   std::set<ElementId> _poiNeighborIds;
 
   MatchClassification _class;
@@ -217,6 +222,8 @@ private:
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
+
+  std::shared_ptr<QElapsedTimer> _timer;
 
   void _categorizeElementsByGeometryType();
 
