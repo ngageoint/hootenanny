@@ -28,9 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BoundedCommand.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -78,9 +76,6 @@ public:
     MapCropper cropper(*_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
-    // Should we run these inside MapCropper instead?
-    SuperfluousWayRemover::removeWays(map);
-    SuperfluousNodeRemover::removeNodes(map);
 
     IoUtils::saveMap(map, out);
 
