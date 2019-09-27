@@ -77,11 +77,13 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
+  QElapsedTimer timer;
+  timer.start();
   PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " POI to Polygon match candidates.");
+    " POI to Polygon match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
@@ -120,7 +122,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
-  LOG_DEBUG(PoiPolygonMatch::getCacheHitsString());
+  PoiPolygonMatch::printCacheInfo();
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const

@@ -110,7 +110,7 @@ public:
    *
    * @return
    */
-  static QString getCacheHitsString();
+  static void printCacheInfo();
 
   virtual QString explain() const override { return _explainText; }
 

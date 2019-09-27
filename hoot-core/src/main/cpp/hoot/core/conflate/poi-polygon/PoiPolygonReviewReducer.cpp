@@ -44,6 +44,7 @@
 #include <hoot/core/criterion/MultiUseCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 
 // Std
 #include <float.h>
@@ -64,6 +65,11 @@ QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> PoiPolygonReviewReducer:
 QHash<ElementId, std::shared_ptr<geos::geom::LineString>> PoiPolygonReviewReducer::_lineStringCache;
 QHash<QString, int> PoiPolygonReviewReducer::_numCacheHitsByCacheType;
 QHash<QString, int> PoiPolygonReviewReducer::_cacheSizeByCacheType;
+QHash<QString, double> PoiPolygonReviewReducer::_nameScoreCache;
+QHash<QString, double> PoiPolygonReviewReducer::_typeScoreCache;
+QHash<QString, bool> PoiPolygonReviewReducer::_isTypeCache;
+QHash<QString, bool> PoiPolygonReviewReducer::_hasCriterionCache;
+QHash<QString, ElementCriterionPtr> PoiPolygonReviewReducer::_criterionCache;
 
 PoiPolygonReviewReducer::PoiPolygonReviewReducer(
   const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
@@ -113,6 +119,10 @@ _addressParsingEnabled(addressParsingEnabled)
     _elementIntersectsCache.reserve(_map->size());
     _elementAngleHistogramCache.reserve(_map->size());
     _elementOverlapCache.reserve(_map->size());
+    _nameScoreCache.reserve(_map->size());
+    _typeScoreCache.reserve(_map->size());
+    _isTypeCache.reserve(_map->size());
+    _hasCriterionCache.reserve(_map->size());
 }
 
 void PoiPolygonReviewReducer::clearCaches()
@@ -157,7 +167,7 @@ bool PoiPolygonReviewReducer::_polyContainsPoiAsMember(ConstElementPtr poly,
 
 bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr poly)
 {
-  LOG_DEBUG("Checking review reduction rules...");
+  LOG_TRACE("Checking review reduction rules...");
   QElapsedTimer timer;
   timer.start();
 
@@ -545,8 +555,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   const bool poiIsBuilding = buildingCrit.isSatisfied(poi);
   LOG_VART(poiIsBuilding);
 
-  PoiPolygonNameScoreExtractor nameScorer;
-
   //This will check the current poi against all neighboring pois.  If any neighboring poi is
   //closer to the current poly than the current poi, then the current poi will not be matched or
   //reviewed against the current poly.
@@ -577,7 +585,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         LOG_VART(poly);
         LOG_VART(polyNeighbor);
 
-        LOG_TRACE("Checking rule #27...");
+        LOG_TRACE("Checking rule #26...");
         const double poiToNeighborPolyDist =
           _getPolyToPointDistance(
             std::dynamic_pointer_cast<const Way>(polyNeighbor),
@@ -585,16 +593,16 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
         LOG_VART(poiToNeighborPolyDist);
         if (poiToNeighborPolyDist != -1.0 && _distance > poiToNeighborPolyDist)
         {
-          LOG_TRACE("Returning miss per review reduction rule #27...");
+          LOG_TRACE("Returning miss per review reduction rule #26...");
           return true;
         }
       }
 
-      if (PoiPolygonTypeScoreExtractor::isPark(polyNeighbor))
+      if (_isType(polyNeighbor, "park"))
       {
         // Should this be OsmSchema::elementHasName instead?
         otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
-        otherParkPolyNameScore = nameScorer.extract(*_map, poi, polyNeighbor);
+        otherParkPolyNameScore = _getNameScore(poi, polyNeighbor);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
 
         if (_polyContainsPoi(
@@ -647,16 +655,16 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       else if (poiIsSport)
       {
         //this is a little loose, b/c there could be more than one type match set of tags...
-        if (PoiPolygonTypeScoreExtractor::isSport(polyNeighbor) &&
+        if (_isType(polyNeighbor, "sport") &&
             _polyContainsPoi(
               std::dynamic_pointer_cast<const Way>(polyNeighbor),
               std::dynamic_pointer_cast<const Node>(poi)) &&
-            typeScorer.extract(*_map, poi, polyNeighbor) >= _typeScoreThreshold)
+            _getTypeScore(poi, polyNeighbor) >= _typeScoreThreshold)
         {
           sportPoiOnOtherSportPolyWithTypeMatch = true;
         }
       }
-      else if (buildingCrit.isSatisfied(polyNeighbor))
+      else if (_hasCrit(polyNeighbor, QString::fromStdString(BuildingCriterion::className())))
       {
         if (_polyContainsPoi(
               std::dynamic_pointer_cast<const Way>(polyNeighbor),
@@ -680,51 +688,50 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       //If the POI is inside a poly that is very close to another park poly, declare miss if
       //the distance to the outer ring of the other park poly is shorter than the distance to the
       //outer ring of this poly and the other park poly has a name.
-      LOG_TRACE("Checking rule #28...");
+      LOG_TRACE("Checking rule #27...");
       if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
           poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
           poiToPolyNodeDist != -1.0 && poiToOtherParkPolyNodeDist != DBL_MAX &&
           poiToOtherParkPolyNodeDist != -1.0 && otherParkPolyHasName && parkPolyOverlapVal < 0.9)
       {
-        LOG_TRACE("Returning miss per review reduction rule #28...");
+        LOG_TRACE("Returning miss per review reduction rule #27...");
         return true;
       }
 
       //If the poi is a park, the poly it is being compared to is not a park or building, and that
       //poly is "very close" to another park poly that has a name match with the poi, then
       //declare a miss (exclude poly playgrounds from this).
-      LOG_TRACE("Checking rule #29...");
+      LOG_TRACE("Checking rule #28...");
       if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
-          //Unfortunately, include polyIsPlayground here blows up too many matches.
-          otherParkPolyNameMatch /*&& !polyIsPlayground*/)
+          otherParkPolyNameMatch)
       {
-        LOG_TRACE("Returning miss per review reduction rule #29...");
+        LOG_TRACE("Returning miss per review reduction rule #28...");
         return true;
       }
 
       //If a park poi is contained within one park poly, then there's no reason for it to trigger
       //reviews in another one that its not contained in.
-      LOG_TRACE("Checking rule #30...");
+      LOG_TRACE("Checking rule #29...");
       if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
       {
-        LOG_TRACE("Returning miss per review reduction rule #30...");
+        LOG_TRACE("Returning miss per review reduction rule #29...");
         return true;
       }
 
       //If a sport poi is contained within a type match sport poi poly, don't let it be
       //matched against anything else.
-      LOG_TRACE("Checking rule #31...");
+      LOG_TRACE("Checking rule #30...");
       if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
       {
-        LOG_TRACE("Returning miss per review reduction rule #31...");
+        LOG_TRACE("Returning miss per review reduction rule #30...");
         return true;
       }
 
       //If a poi is like and on top of a building, don't review it against a non-building poly.
-      LOG_TRACE("Checking rule #32...");
+      LOG_TRACE("Checking rule #31...");
       if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
       {
-        LOG_TRACE("Returning miss per review reduction rule #32...");
+        LOG_TRACE("Returning miss per review reduction rule #31...");
         return true;
       }
 
@@ -732,41 +739,19 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
       //"very close" to another park poly, we want to be more restrictive on type matching, but
       //only if the poi has any type at all.  If the poi has no type, then behave as normal.
       //Also, let an exact name match cause a review here, rather than a miss.
-      LOG_TRACE("Checking rule #33...");
+      LOG_TRACE("Checking rule #32...");
       if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
-          !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType)
+          !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType && _exactNameMatch)
       {
-        if (!_exactNameMatch)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #33...");
-          return true;
-        }
+        LOG_TRACE("Returning miss per review reduction rule #32...");
+        return true;
       }
     }
   }
-  LOG_DEBUG("Review reduction #26-33: " << timer.elapsed());
+  LOG_TRACE("Review reduction #26-32: " << timer.elapsed());
   timer.restart();
 
   return false;
-}
-
-QString PoiPolygonReviewReducer::getCacheHitsString()
-{
-  QString str = "\n";
-  for (QHash<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
-       numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
-  {
-    QString line = "The %1 cache had %2 cache hits and a total size of %3.\n";
-    str +=
-      line
-        .arg(numCacheHitsByCacheTypeItr.key())
-        .arg(StringUtils::formatLargeNumber(numCacheHitsByCacheTypeItr.value()))
-        .arg(
-          StringUtils::formatLargeNumber(
-            _cacheSizeByCacheType[numCacheHitsByCacheTypeItr.key()]));
-  }
-  LOG_VARD(str);
-  return str;
 }
 
 bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi,
@@ -791,13 +776,30 @@ bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstElementPtr 
       LOG_VART(neighborPoiToPolyDist);
       if (neighborPoiToPolyDist != -1.0 && _distance > neighborPoiToPolyDist)
       {
-        LOG_TRACE("Returning miss per review reduction rule #26...");
         return true;
       }
     }
   }
 
   return false;
+}
+
+void PoiPolygonReviewReducer::printCacheInfo()
+{
+  // TODO: change back
+  LOG_INFO("Cache info:");
+  for (QHash<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
+       numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
+  {
+    const QString line =
+      QString("%1:\t%2 hits     size: %3")
+        .arg(numCacheHitsByCacheTypeItr.key())
+        .arg(StringUtils::formatLargeNumber(numCacheHitsByCacheTypeItr.value()))
+        .arg(
+          StringUtils::formatLargeNumber(
+            _cacheSizeByCacheType[numCacheHitsByCacheTypeItr.key()]));
+    LOG_INFO(line);
+  }
 }
 
 void PoiPolygonReviewReducer::_incrementCacheHitCount(const QString& cacheTypeKey)
@@ -869,12 +871,12 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonReviewReducer::_getGeometry(Cons
       newGeom.reset();
     }
     LOG_VART(newGeom.get());
-    if (_geometryCache.size() <= MAX_CACHE_SIZE)
-    {
+    //if (_geometryCache.size() <= MAX_CACHE_SIZE)
+    //{
       _geometryCache[element->getElementId()] = newGeom;
       LOG_TRACE("Updated geometry cache for: " << element->getElementId());
       _incrementCacheSizeCount("geometry");
-    }
+    //}
     return newGeom;
   }
 }
@@ -923,12 +925,12 @@ std::shared_ptr<geos::geom::LineString> PoiPolygonReviewReducer::_getLineString(
       newGeom.reset();
     }
     LOG_VART(newGeom.get());
-    if (_lineStringCache.size() <= MAX_CACHE_SIZE)
-    {
+    //if (_lineStringCache.size() <= MAX_CACHE_SIZE)
+    //{
       _lineStringCache[poly->getElementId()] = newGeom;
       LOG_TRACE("Updated line string cache for: " << poly->getElementId());
       _incrementCacheSizeCount("linestring");
-    }
+    //}
     return newGeom;
   }
 }
@@ -1122,6 +1124,147 @@ double PoiPolygonReviewReducer::_getOverlapVal(ConstElementPtr element1, ConstEl
     LOG_TRACE("Updated overlap cache with: " << overlapVal << " for: " << key);
     _incrementCacheSizeCount("overlap");
     return overlapVal;
+  }
+}
+
+double PoiPolygonReviewReducer::_getNameScore(ConstElementPtr element1, ConstElementPtr element2)
+{
+  if (!element1 || !element2)
+  {
+    return -1.0;
+  }
+
+  const QString key =
+    element1->getElementId().toString() + ";" + element2->getElementId().toString();
+  if (_nameScoreCache.contains(key))
+  {
+    const double cachedNameScore = _nameScoreCache[key];
+    _incrementCacheHitCount("name");
+    LOG_TRACE("Found name score: " << cachedNameScore << " in cache for: " << key);
+    return cachedNameScore;
+  }
+  else
+  {
+    LOG_TRACE("No name score in cache for: " << key);
+    const double nameScore = PoiPolygonNameScoreExtractor().extract(*_map, element1, element2);
+    _nameScoreCache[key] = nameScore;
+    LOG_TRACE("Updated name score cache with: " << nameScore << " for: " << key);
+    _incrementCacheSizeCount("name");
+    return nameScore;
+  }
+}
+
+double PoiPolygonReviewReducer::_getTypeScore(ConstElementPtr element1, ConstElementPtr element2)
+{
+  if (!element1 || !element2)
+  {
+    return -1.0;
+  }
+
+  const QString key =
+    element1->getElementId().toString() + ";" + element2->getElementId().toString();
+  if (_typeScoreCache.contains(key))
+  {
+    const double cachedTypeScore = _typeScoreCache[key];
+    _incrementCacheHitCount("type");
+    LOG_TRACE("Found type score: " << cachedTypeScore << " in cache for: " << key);
+    return cachedTypeScore;
+  }
+  else
+  {
+    LOG_TRACE("No type score in cache for: " << key);
+    const double typeScore = PoiPolygonTypeScoreExtractor().extract(*_map, element1, element2);
+    _typeScoreCache[key] = typeScore;
+    LOG_TRACE("Updated type score cache with: " << typeScore << " for: " << key);
+    _incrementCacheSizeCount("type");
+    return typeScore;
+  }
+}
+
+bool PoiPolygonReviewReducer::_isType(ConstElementPtr element, const QString& type)
+{
+  if (!element || type.trimmed().isEmpty())
+  {
+    return false;
+  }
+
+  const QString key = element->getElementId().toString() + ";" + type;
+  if (_isTypeCache.contains(key))
+  {
+    const bool cachedIsType = _isTypeCache[key];
+    _incrementCacheHitCount("isType");
+    LOG_TRACE("Found is type: " << cachedIsType << " in cache for: " << key);
+    return cachedIsType;
+  }
+  else
+  {
+    LOG_TRACE("No is type in cache for: " << key);
+    bool isType = false;
+    if (type == "park")
+    {
+      isType = PoiPolygonTypeScoreExtractor::isPark(element);
+    }
+    else if (type == "sport")
+    {
+      isType = PoiPolygonTypeScoreExtractor::isSport(element);
+    }
+    else
+    {
+      throw IllegalArgumentException("TODO");
+    }
+    _isTypeCache[key] = isType;
+    LOG_TRACE("Updated isType cache with: " << isType << " for: " << key);
+    _incrementCacheSizeCount("isType");
+    return isType;
+  }
+}
+
+bool PoiPolygonReviewReducer::_hasCrit(ConstElementPtr element, const QString& criterionClassName)
+{
+  if (!element || criterionClassName.trimmed().isEmpty())
+  {
+    return false;
+  }
+
+  const QString key = element->getElementId().toString() + ";" + criterionClassName;
+  if (_hasCriterionCache.contains(key))
+  {
+    const bool cachedHasCrit = _hasCriterionCache[key];
+    _incrementCacheHitCount("hasCrit");
+    LOG_TRACE("Found is has crit: " << cachedHasCrit << " in cache for: " << key);
+    return cachedHasCrit;
+  }
+  else
+  {
+    LOG_TRACE("No has crit in cache for: " << key);
+    ElementCriterionPtr crit = _getCrit(criterionClassName);
+    const bool hasCrit = crit->isSatisfied(element);
+
+    _hasCriterionCache[key] = hasCrit;
+    LOG_TRACE("Updated has crit cache with: " << hasCrit << " for: " << key);
+    _incrementCacheSizeCount("hasCrit");
+    return hasCrit;
+  }
+}
+
+ElementCriterionPtr PoiPolygonReviewReducer::_getCrit(const QString& criterionClassName)
+{
+  if (criterionClassName.trimmed().isEmpty())
+  {
+    return ElementCriterionPtr();
+  }
+
+  if (_criterionCache.contains(criterionClassName))
+  {
+    return _criterionCache[criterionClassName];
+  }
+  else
+  {
+    ElementCriterionPtr crit =
+      ElementCriterionPtr(
+        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+    _criterionCache[criterionClassName] = crit;
+    return crit;
   }
 }
 

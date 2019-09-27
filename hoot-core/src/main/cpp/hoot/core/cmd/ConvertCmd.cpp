@@ -107,7 +107,7 @@ public:
     converter.convert(inputs, output);
 
     LOG_INFO(
-      "Convert operation completed in " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+      "Convert operation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }

@@ -35,9 +35,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/util/Configurable.h>
-
-//// Qt
-//#include <QCache>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -61,7 +59,7 @@ class PoiPolygonReviewReducer
 
 public:
 
-  static const int MAX_CACHE_SIZE = 100000;
+  //static const int MAX_CACHE_SIZE = 100000;
 
   // maybe encapsulate all these params in a class...this is nasty
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
@@ -86,10 +84,8 @@ public:
 
   /**
    * TODO
-   *
-   * @return
    */
-  static QString getCacheHitsString();
+  static void printCacheInfo();
 
   /**
    * TODO
@@ -125,18 +121,26 @@ private:
 
   // caching
 
-  // keys are "elementId1;elementId2"
-
-  // ordering of the ID keys doesn't matter here
+  // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   static QHash<QString, double> _elementDistanceCache;
-  // ordering of the ID keys does matter here; does first element contain second element
-  static QHash<QString, bool> _elementContainsCache;
-  // ordering of the ID keys doesn't matter here
   static QHash<QString, bool> _elementIntersectsCache;
-  // ordering of the ID keys doesn't matter here
   static QHash<QString, double> _elementAngleHistogramCache;
-  // ordering of the ID keys doesn't matter here
   static QHash<QString, double> _elementOverlapCache;
+  static QHash<QString, double> _nameScoreCache;
+  static QHash<QString, double> _typeScoreCache;
+
+  // ordering of the ID keys does matter here; does first element contain second element; keys are
+  // "elementId1;elementId2"
+  static QHash<QString, bool> _elementContainsCache;
+
+  // key is "elementId;type string"
+  static QHash<QString, bool> _isTypeCache;
+
+  // key is "elementId;criterion class name"
+  static QHash<QString, bool> _hasCriterionCache;
+
+  // key is element criterion class name
+  static QHash<QString, ElementCriterionPtr> _criterionCache;
 
   static QHash<ElementId, double> _elementAreaCache;
   static QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
@@ -165,6 +169,11 @@ private:
   bool _elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2);
   double _getAngleHistogramVal(ConstElementPtr element1, ConstElementPtr element2);
   double _getOverlapVal(ConstElementPtr element1, ConstElementPtr element2);
+  double _getNameScore(ConstElementPtr element1, ConstElementPtr element2);
+  double _getTypeScore(ConstElementPtr element1, ConstElementPtr element2);
+  bool _isType(ConstElementPtr element, const QString& type);
+  bool _hasCrit(ConstElementPtr element, const QString& criterionClassName);
+  ElementCriterionPtr _getCrit(const QString& criterionClassName);
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);
   void _incrementCacheSizeCount(const QString& cacheTypeKey);

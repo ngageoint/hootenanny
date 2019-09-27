@@ -399,22 +399,25 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
     LOG_TRACE("Reducing reviews...");
-    // TODO: this constructor has gotten a little out of hand
+    // this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
       _addressMatchEnabled);
     reviewReducer.setConfiguration(conf());
-//    LOG_TRACE("Review reduction init and config: " << _timer->elapsed());
-//    _timer->restart();
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
       // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
-    LOG_DEBUG("Review reduction: " << _timer->elapsed());
+    // TODO: change back
+    qint64 elapsed = _timer->elapsed();
+    if (elapsed > 0.5)
+    {
+      LOG_INFO("Review reduction: " << elapsed);
+    }
     _timer->restart();
   }
   LOG_VART(evidence);
@@ -770,12 +773,11 @@ void PoiPolygonMatch::resetMatchDistanceInfo()
   PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
 }
 
-QString PoiPolygonMatch::getCacheHitsString()
+void PoiPolygonMatch::printCacheInfo()
 {
-  const QString cacheStr = PoiPolygonReviewReducer::getCacheHitsString();
+  PoiPolygonReviewReducer::printCacheInfo();
   // TODO: This doesn't seem right.
   PoiPolygonReviewReducer::clearCaches();
-  return cacheStr;
 }
 
 set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const

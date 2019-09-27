@@ -146,7 +146,7 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       LOG_DEBUG(
         "\t" << statusInfo->getCompletedStatusMessage() + " in " +
-        StringUtils::secondsToDhms(timer.elapsed()));
+        StringUtils::millisecondsToDhms(timer.elapsed()));
     }
 
     opCount++;
