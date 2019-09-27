@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
@@ -94,16 +95,23 @@ class PullApiCommand implements InternalCommand {
                         ") is too large. It must be less than " + maxBboxArea + " degrees");
             }
 
-            url = replaceSensitiveData(params.getPullUrl()) + "?bbox=" + boundingBox.toServicesString();
+            // Checks to see the set pull url is for the private overpass url
+            if (params.getPullUrl().equals(PRIVATE_OVERPASS_URL)) {
+                url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), boundingBox.toServicesString(), "json");
+            } else {
+                url = replaceSensitiveData(params.getPullUrl()) + "?bbox=" + boundingBox.toServicesString();
+            }
+
             URL requestUrl = new URL(url);
 
             File outputFile = new File(params.getOutput());
 
             FileUtils.copyURLToFile(requestUrl,outputFile, Integer.parseInt(HootProperties.HTTP_TIMEOUT), Integer.parseInt(HootProperties.HTTP_TIMEOUT));
-            }
-            catch (IOException ex) {
-                String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();
-                throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
-            }
+        }
+        catch (IOException ex) {
+            String msg = "Failure to pull data from the OSM API [" + url + "]" + ex.getMessage();
+            throw new WebApplicationException(ex, Response.serverError().entity(msg).build());
+        }
+
     }
 }

@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_CODENAME;
 import static hoot.services.HootProperties.GRAIL_RAILS_CODENAME;
@@ -34,6 +33,7 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
 import static hoot.services.HootProperties.RAILSPORT_PULL_URL;
 import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
@@ -43,9 +43,7 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -148,8 +146,15 @@ public class GrailResource {
         params.setUser(user);
         params.setBounds(bounds);
         params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        params.setPullUrl(RAILSPORT_PULL_URL);
         params.setOutput(output);
+
+        // Checks to see that the sensitive data was actually replaced meaning there was a value
+        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+            params.setPullUrl(PRIVATE_OVERPASS_URL);
+        } else {
+            params.setPullUrl(RAILSPORT_PULL_URL);
+        }
+
         InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
         return command;
     }
@@ -637,7 +642,7 @@ public class GrailResource {
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
-        String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "/api/interpreter?data=" + overpassQuery;
+        String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
 
         // append first 7 digits of a uuid to the rails and overpass codenames
         String maxSuffix = UUID.randomUUID().toString().replace("-", "").substring(0, 7);

@@ -116,6 +116,16 @@ class PullOverpassCommand implements InternalCommand {
      * @return
      */
     static String getOverpassUrl(String bbox, String outputFormat) {
+        return getOverpassUrl(PUBLIC_OVERPASS_URL, bbox, outputFormat);
+    }
+
+    /**
+     * Returns the overpass query, with the expected output format set to json
+     * @param bbox
+     * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
+     * @return
+     */
+    static String getOverpassUrl(String overpassUrl, String bbox, String outputFormat) {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
         File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
@@ -136,6 +146,6 @@ class PullOverpassCommand implements InternalCommand {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
-        return PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery;
+        return overpassUrl + "?data=" + overpassQuery;
     }
 }
