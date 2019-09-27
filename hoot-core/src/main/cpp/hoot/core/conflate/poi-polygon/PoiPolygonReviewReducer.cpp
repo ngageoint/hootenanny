@@ -33,7 +33,6 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
@@ -60,13 +59,17 @@ QHash<QString, bool> PoiPolygonReviewReducer::_elementContainsCache;
 QHash<QString, bool> PoiPolygonReviewReducer::_elementIntersectsCache;
 QHash<QString, double> PoiPolygonReviewReducer::_elementAngleHistogramCache;
 QHash<ElementId, double> PoiPolygonReviewReducer::_elementAreaCache;
+QHash<ElementId, bool> PoiPolygonReviewReducer::_hasTypeCache;
+QHash<ElementId, bool> PoiPolygonReviewReducer::_hasMoreThanOneTypeCache;
+QHash<ElementId, int> PoiPolygonReviewReducer::_numAddressesCache;
 QHash<QString, double> PoiPolygonReviewReducer::_elementOverlapCache;
 QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> PoiPolygonReviewReducer::_geometryCache;
 QHash<ElementId, std::shared_ptr<geos::geom::LineString>> PoiPolygonReviewReducer::_lineStringCache;
-QHash<QString, int> PoiPolygonReviewReducer::_numCacheHitsByCacheType;
-QHash<QString, int> PoiPolygonReviewReducer::_cacheSizeByCacheType;
+QMap<QString, int> PoiPolygonReviewReducer::_numCacheHitsByCacheType;
+QMap<QString, int> PoiPolygonReviewReducer::_cacheSizeByCacheType;
 QHash<QString, double> PoiPolygonReviewReducer::_nameScoreCache;
 QHash<QString, double> PoiPolygonReviewReducer::_typeScoreCache;
+QHash<QString, bool> PoiPolygonReviewReducer::_specificSchoolMatchCache;
 QHash<QString, bool> PoiPolygonReviewReducer::_isTypeCache;
 QHash<QString, bool> PoiPolygonReviewReducer::_hasCriterionCache;
 QHash<QString, ElementCriterionPtr> PoiPolygonReviewReducer::_criterionCache;
@@ -117,6 +120,10 @@ _addressParsingEnabled(addressParsingEnabled)
   _typeScoreCache.reserve(_map->size());
   _isTypeCache.reserve(_map->size());
   _hasCriterionCache.reserve(_map->size());
+  _specificSchoolMatchCache.reserve(_map->size());
+  _hasTypeCache.reserve(_map->size());
+  _hasMoreThanOneTypeCache.reserve(_map->size());
+  _numAddressesCache.reserve(_map->size());
 }
 
 void PoiPolygonReviewReducer::clearCaches()
@@ -173,25 +180,20 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   //The rules below are *roughly* ordered by increasing processing expense and by decreasing
   //likelihood of occurrence (probably needs some reordering at this point).
 
-  const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
+  const bool poiHasType = _hasType(poi);
   LOG_VART(poiHasType);
-  const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
+  const bool polyHasType = _hasType(poly);
   LOG_VART(polyHasType);
-//  LOG_DEBUG("Review reduction has type: " << timer.elapsed());
-//  timer.restart();
 
   if (_addressParsingEnabled)
   {
-    const int numPolyAddresses = _addressParser.hasAddressRecursive(poly, *_map);
-    const bool polyHasAddress = numPolyAddresses > 0;
-
     //if both have addresses and they explicitly contradict each other, throw out the review; don't
     //do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch && _addressParser.hasAddressRecursive(poi, *_map) && polyHasAddress)
+    if (!_addressMatch && _hasAddress(poi) && _hasAddress(poly))
     {
       //check to make sure the only address the poly has isn't the poi itself as a way node /
       //relation member
-      if (_polyContainsPoiAsMember(poly, poi) && numPolyAddresses < 2)
+      if (_polyContainsPoiAsMember(poly, poi) && _getNumAddresses(poly) < 2)
       {
       }
       else
@@ -311,7 +313,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
   LOG_VART(PoiPolygonTypeScoreExtractor::isSpecificSchool(poly));
   LOG_VART(PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly));
   if (_isType(poi, "specificSchool") && _isType(poly, "specificSchool") &&
-      !PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly))
+      !_specificSchoolMatch(poi, poly))
   {
     LOG_TRACE("Returning miss per review reduction rule #12...");
     return true;
@@ -419,7 +421,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstElementPtr poi, ConstElementPtr 
 
   const bool polyIsPlayground = _isType(poly, "playground");
   LOG_VART(polyIsPlayground);
-  const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
+  const bool polyHasMoreThanOneType = _hasMoreThanOneType(poly);
   LOG_VART(polyHasMoreThanOneType);
   const bool poiIsParkish = _isType(poi, "parkish");
   LOG_VART(poiIsParkish);
@@ -696,7 +698,7 @@ void PoiPolygonReviewReducer::printCacheInfo()
 {
   // TODO: change back
   LOG_INFO("Cache info:");
-  for (QHash<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
+  for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
        numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
   {
     const QString line =
@@ -1207,6 +1209,124 @@ ElementCriterionPtr PoiPolygonReviewReducer::_getCrit(const QString& criterionCl
     _criterionCache[criterionClassName] = crit;
     return crit;
   }
+}
+
+bool PoiPolygonReviewReducer::_hasType(ConstElementPtr element)
+{
+  if (!element)
+  {
+    return false;
+  }
+
+  if (_hasTypeCache.contains(element->getElementId()))
+  {
+    const bool cachedHasType = _hasTypeCache[element->getElementId()];
+    _incrementCacheHitCount("hasType");
+    LOG_TRACE("Found has type: " << cachedHasType << " in cache for: " << element->getElementId());
+    return cachedHasType;
+  }
+  else
+  {
+    LOG_TRACE("No has type in cache for: " << element->getElementId());
+    const bool hasType = PoiPolygonTypeScoreExtractor::hasType(element);
+    _hasTypeCache[element->getElementId()] = hasType;
+    LOG_TRACE("Updated has type cache with: " << hasType << " for: " << element->getElementId());
+    _incrementCacheSizeCount("hasType");
+    return hasType;
+  }
+}
+
+bool PoiPolygonReviewReducer::_hasMoreThanOneType(ConstElementPtr element)
+{
+  if (!element)
+  {
+    return false;
+  }
+
+  if (_hasMoreThanOneTypeCache.contains(element->getElementId()))
+  {
+    const bool cachedHasMoreThanOneType = _hasMoreThanOneTypeCache[element->getElementId()];
+    _incrementCacheHitCount("hasMoreThanOneType");
+    LOG_TRACE(
+      "Found has type: " << cachedHasMoreThanOneType << " in cache for: " << element->getElementId());
+    return cachedHasMoreThanOneType;
+  }
+  else
+  {
+    LOG_TRACE("No has more than one type in cache for: " << element->getElementId());
+    const bool hasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(element);
+    _hasMoreThanOneTypeCache[element->getElementId()] = hasMoreThanOneType;
+    LOG_TRACE(
+      "Updated has more than one type cache with: " << hasMoreThanOneType << " for: " <<
+      element->getElementId());
+    _incrementCacheSizeCount("hasMoreThanOneType");
+    return hasMoreThanOneType;
+  }
+}
+
+bool PoiPolygonReviewReducer::_specificSchoolMatch(ConstElementPtr element1,
+                                                   ConstElementPtr element2)
+{
+  // We could also check for school type here to move it out of triggersRule.
+  if (!element1 || !element2)
+  {
+    return false;
+  }
+
+  const QString key =
+    element1->getElementId().toString() + ";" + element2->getElementId().toString();
+  if (_specificSchoolMatchCache.contains(key))
+  {
+    const bool cachedSpecificSchoolMatch = _specificSchoolMatchCache[key];
+    _incrementCacheHitCount("specificSchoolMatch");
+    LOG_TRACE(
+      "Found specific school match:" << cachedSpecificSchoolMatch << " in cache for: " << key);
+    return cachedSpecificSchoolMatch;
+  }
+  else
+  {
+    LOG_TRACE("No specific school match in cache for: " << key);
+    const bool specificSchoolMatch =
+      PoiPolygonTypeScoreExtractor::specificSchoolMatch(element1, element2);
+    _specificSchoolMatchCache[key] = specificSchoolMatch;
+    LOG_TRACE(
+      "Updated specific school match cache with: " << specificSchoolMatch << " for: " << key);
+    _incrementCacheSizeCount("specificSchoolMatch");
+    return specificSchoolMatch;
+  }
+}
+
+int PoiPolygonReviewReducer::_getNumAddresses(ConstElementPtr element)
+{
+  if (!element)
+  {
+    return false;
+  }
+
+  if (_numAddressesCache.contains(element->getElementId()))
+  {
+    const int cachedNumAddresses = _numAddressesCache[element->getElementId()];
+    _incrementCacheHitCount("numAddresses");
+    LOG_TRACE(
+      "Found num addresses: " << cachedNumAddresses << " in cache for: " <<
+      element->getElementId());
+    return cachedNumAddresses;
+  }
+  else
+  {
+    LOG_TRACE("No num addresses in cache for: " << element->getElementId());
+    const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
+    _numAddressesCache[element->getElementId()] = numAddresses;
+    LOG_TRACE(
+      "Updated num addresses cache with: " << numAddresses << " for: " << element->getElementId());
+    _incrementCacheSizeCount("numAddresses");
+    return numAddresses;
+  }
+}
+
+bool PoiPolygonReviewReducer::_hasAddress(ConstElementPtr element)
+{
+  return _getNumAddresses(element) > 0;
 }
 
 }

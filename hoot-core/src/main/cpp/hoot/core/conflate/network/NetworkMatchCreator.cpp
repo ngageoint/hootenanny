@@ -53,6 +53,9 @@
 // tgs
 #include <tgs/RandomForest/RandomForest.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 using namespace Tgs;
 
@@ -88,6 +91,8 @@ const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, Net
 void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
+  QElapsedTimer timer;
+  timer.start();
   LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VART(threshold);
 
@@ -165,7 +170,8 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   }
 
   LOG_INFO(
-    "Found " << StringUtils::formatLargeNumber(matches.size()) << " highway match candidates.");
+    "Found " << StringUtils::formatLargeNumber(matches.size()) <<
+    " highway match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const

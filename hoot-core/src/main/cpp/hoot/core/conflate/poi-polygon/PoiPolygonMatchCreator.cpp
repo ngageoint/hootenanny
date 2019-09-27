@@ -83,7 +83,8 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " POI to Polygon match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
+    " POI to Polygon match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+    ".");
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {

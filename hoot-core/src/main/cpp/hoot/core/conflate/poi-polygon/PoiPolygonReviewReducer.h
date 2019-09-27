@@ -132,6 +132,7 @@ private:
   static QHash<QString, double> _elementOverlapCache;
   static QHash<QString, double> _nameScoreCache;
   static QHash<QString, double> _typeScoreCache;
+  static QHash<QString, bool> _specificSchoolMatchCache;
 
   // ordering of the ID keys does matter here; does first element contain second element; keys are
   // "elementId1;elementId2"
@@ -147,11 +148,14 @@ private:
   static QHash<QString, ElementCriterionPtr> _criterionCache;
 
   static QHash<ElementId, double> _elementAreaCache;
+  static QHash<ElementId, bool> _hasTypeCache;
+  static QHash<ElementId, bool> _hasMoreThanOneTypeCache;
+  static QHash<ElementId, int> _numAddressesCache;
   static QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
   static QHash<ElementId, std::shared_ptr<geos::geom::LineString>> _lineStringCache;
 
-  static QHash<QString, int> _numCacheHitsByCacheType;
-  static QHash<QString, int> _cacheSizeByCacheType;
+  static QMap<QString, int> _numCacheHitsByCacheType;
+  static QMap<QString, int> _cacheSizeByCacheType;
 
   bool _nonDistanceSimilaritiesPresent() const;
 
@@ -178,6 +182,11 @@ private:
   bool _isType(ConstElementPtr element, const QString& type);
   bool _hasCrit(ConstElementPtr element, const QString& criterionClassName);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
+  bool _hasType(ConstElementPtr element);
+  bool _hasMoreThanOneType(ConstElementPtr element);
+  bool _specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
+  bool _hasAddress(ConstElementPtr element);
+  int _getNumAddresses(ConstElementPtr element);
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);
   void _incrementCacheSizeCount(const QString& cacheTypeKey);
