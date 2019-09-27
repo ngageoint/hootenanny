@@ -778,7 +778,7 @@ void PoiPolygonMatch::printCacheInfo()
 {
   PoiPolygonReviewReducer::printCacheInfo();
   // TODO: This doesn't seem right.
-  PoiPolygonReviewReducer::clearCaches();
+  //PoiPolygonReviewReducer::clearCaches();
 }
 
 set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const

@@ -126,19 +126,19 @@ _addressParsingEnabled(addressParsingEnabled)
   _numAddressesCache.reserve(_map->size());
 }
 
-void PoiPolygonReviewReducer::clearCaches()
-{
-  _elementDistanceCache.clear();
-  _elementAreaCache.clear();
-  _elementContainsCache.clear();
-  _elementIntersectsCache.clear();
-  _elementAngleHistogramCache.clear();
-  _elementOverlapCache.clear();
-  _geometryCache.clear();
-  _lineStringCache.clear();
-  _numCacheHitsByCacheType.clear();
-  _cacheSizeByCacheType.clear();
-}
+//void PoiPolygonReviewReducer::clearCaches()
+//{
+//  _elementDistanceCache.clear();
+//  _elementAreaCache.clear();
+//  _elementContainsCache.clear();
+//  _elementIntersectsCache.clear();
+//  _elementAngleHistogramCache.clear();
+//  _elementOverlapCache.clear();
+//  _geometryCache.clear();
+//  _lineStringCache.clear();
+//  _numCacheHitsByCacheType.clear();
+//  _cacheSizeByCacheType.clear();
+//}
 
 void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
 {
@@ -744,12 +744,13 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonReviewReducer::_getGeometry(Cons
     return std::shared_ptr<geos::geom::Geometry>();
   }
 
-  if (_geometryCache.contains(element->getElementId()))
+  QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
+    _geometryCache.find(element->getElementId());
+  if (itr != _geometryCache.end())
   {
-    std::shared_ptr<geos::geom::Geometry> cachedGeom = _geometryCache[element->getElementId()];
     _incrementCacheHitCount("geometry");
     LOG_TRACE("Found geometry in cache for: " << element->getElementId());
-    return cachedGeom;
+    return itr.value();
   }
   else
   {
@@ -781,12 +782,9 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonReviewReducer::_getGeometry(Cons
       newGeom.reset();
     }
     LOG_VART(newGeom.get());
-    //if (_geometryCache.size() <= MAX_CACHE_SIZE)
-    //{
-      _geometryCache[element->getElementId()] = newGeom;
-      LOG_TRACE("Updated geometry cache for: " << element->getElementId());
-      _incrementCacheSizeCount("geometry");
-    //}
+    _geometryCache[element->getElementId()] = newGeom;
+    LOG_TRACE("Updated geometry cache for: " << element->getElementId());
+    _incrementCacheSizeCount("geometry");
     return newGeom;
   }
 }
@@ -798,12 +796,13 @@ std::shared_ptr<geos::geom::LineString> PoiPolygonReviewReducer::_getLineString(
     return std::shared_ptr<geos::geom::LineString>();
   }
 
-  if (_lineStringCache.contains(poly->getElementId()))
+  QHash<ElementId, std::shared_ptr<geos::geom::LineString>>::const_iterator itr =
+    _lineStringCache.find(poly->getElementId());
+  if (itr != _lineStringCache.end())
   {
-    std::shared_ptr<geos::geom::LineString> cachedGeom = _lineStringCache[poly->getElementId()];
     _incrementCacheHitCount("linestring");
     LOG_TRACE("Found line string in cache for: " << poly->getElementId());
-    return cachedGeom;
+    return itr.value();
   }
   else
   {
@@ -835,12 +834,9 @@ std::shared_ptr<geos::geom::LineString> PoiPolygonReviewReducer::_getLineString(
       newGeom.reset();
     }
     LOG_VART(newGeom.get());
-    //if (_lineStringCache.size() <= MAX_CACHE_SIZE)
-    //{
-      _lineStringCache[poly->getElementId()] = newGeom;
-      LOG_TRACE("Updated line string cache for: " << poly->getElementId());
-      _incrementCacheSizeCount("linestring");
-    //}
+    _lineStringCache[poly->getElementId()] = newGeom;
+    LOG_TRACE("Updated line string cache for: " << poly->getElementId());
+    _incrementCacheSizeCount("linestring");
     return newGeom;
   }
 }
@@ -854,12 +850,12 @@ double PoiPolygonReviewReducer::_getPolyToPointDistance(ConstWayPtr poly, ConstN
 
   const QString key =
     poly->getElementId().toString() + ";" + point->getElementId().toString();
-  if (_elementDistanceCache.contains(key))
+  QHash<QString, double>::const_iterator itr = _elementDistanceCache.find(key);
+  if (itr != _elementDistanceCache.end())
   {
-    const double cachedDistance = _elementDistanceCache[key];
     _incrementCacheHitCount("distance");
-    LOG_TRACE("Found distance of " << cachedDistance << " in cache for: " << key);
-    return cachedDistance;
+    LOG_TRACE("Found distance of " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -887,12 +883,12 @@ double PoiPolygonReviewReducer::_getArea(ConstWayPtr poly)
     return -1.0;
   }
 
-  if (_elementAreaCache.contains(poly->getElementId()))
+  QHash<ElementId, double>::const_iterator itr = _elementAreaCache.find(poly->getElementId());
+  if (itr != _elementAreaCache.end())
   {
-    const double cachedArea = _elementAreaCache[poly->getElementId()];
     _incrementCacheHitCount("area");
-    LOG_TRACE("Found area of " << cachedArea << " in cache for: " << poly->getElementId());
-    return cachedArea;
+    LOG_TRACE("Found area of " << itr.value() << " in cache for: " << poly->getElementId());
+    return itr.value();
   }
   else
   {
@@ -920,12 +916,12 @@ bool PoiPolygonReviewReducer::_polyContainsPoi(ConstWayPtr poly, ConstNodePtr po
 
   const QString key =
     poly->getElementId().toString() + ";" + point->getElementId().toString();
-  if (_elementContainsCache.contains(key))
+  QHash<QString, bool>::const_iterator itr = _elementContainsCache.find(key);
+  if (itr != _elementContainsCache.end())
   {
-    const bool cachedContains = _elementContainsCache[key];
     _incrementCacheHitCount("contains");
-    LOG_TRACE("Found contains=" << cachedContains << " in cache for: " << key);
-    return cachedContains;
+    LOG_TRACE("Found contains=" << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -956,12 +952,12 @@ bool PoiPolygonReviewReducer::_elementIntersectsElement(
 
   const QString key =
     element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  if (_elementIntersectsCache.contains(key))
+  QHash<QString, bool>::const_iterator itr = _elementIntersectsCache.find(key);
+  if (itr != _elementIntersectsCache.end())
   {
-    const bool cachedIntersects = _elementIntersectsCache[key];
     _incrementCacheHitCount("intersects");
-    LOG_TRACE("Found intersects=" << cachedIntersects << " in cache for: " << key);
-    return cachedIntersects;
+    LOG_TRACE("Found intersects=" << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -992,12 +988,12 @@ double PoiPolygonReviewReducer::_getAngleHistogramVal(
 
   const QString key =
     element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  if (_elementAngleHistogramCache.contains(key))
+  QHash<QString, double>::const_iterator itr = _elementAngleHistogramCache.find(key);
+  if (itr != _elementAngleHistogramCache.end())
   {
-    const double cachedAngleHistVal = _elementAngleHistogramCache[key];
     _incrementCacheHitCount("angleHist");
-    LOG_TRACE("Found angle hist: " << cachedAngleHistVal << " in cache for: " << key);
-    return cachedAngleHistVal;
+    LOG_TRACE("Found angle hist: " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1019,12 +1015,12 @@ double PoiPolygonReviewReducer::_getOverlapVal(ConstElementPtr element1, ConstEl
 
   const QString key =
     element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  if (_elementOverlapCache.contains(key))
+  QHash<QString, double>::const_iterator itr = _elementOverlapCache.find(key);
+  if (itr != _elementOverlapCache.end())
   {
-    const double cachedOverlapVal = _elementOverlapCache[key];
     _incrementCacheHitCount("overlap");
-    LOG_TRACE("Found overlap: " << cachedOverlapVal << " in cache for: " << key);
-    return cachedOverlapVal;
+    LOG_TRACE("Found overlap: " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1046,12 +1042,12 @@ double PoiPolygonReviewReducer::_getNameScore(ConstElementPtr element1, ConstEle
 
   const QString key =
     element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  if (_nameScoreCache.contains(key))
+  QHash<QString, double>::const_iterator itr = _nameScoreCache.find(key);
+  if (itr != _nameScoreCache.end())
   {
-    const double cachedNameScore = _nameScoreCache[key];
     _incrementCacheHitCount("name");
-    LOG_TRACE("Found name score: " << cachedNameScore << " in cache for: " << key);
-    return cachedNameScore;
+    LOG_TRACE("Found name score: " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1073,12 +1069,12 @@ double PoiPolygonReviewReducer::_getTypeScore(ConstElementPtr element1, ConstEle
 
   const QString key =
     element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  if (_typeScoreCache.contains(key))
+  QHash<QString, double>::const_iterator itr = _typeScoreCache.find(key);
+  if (itr != _typeScoreCache.end())
   {
-    const double cachedTypeScore = _typeScoreCache[key];
     _incrementCacheHitCount("type");
-    LOG_TRACE("Found type score: " << cachedTypeScore << " in cache for: " << key);
-    return cachedTypeScore;
+    LOG_TRACE("Found type score: " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1099,12 +1095,12 @@ bool PoiPolygonReviewReducer::_isType(ConstElementPtr element, const QString& ty
   }
 
   const QString key = element->getElementId().toString() + ";" + type;
-  if (_isTypeCache.contains(key))
+  QHash<QString, bool>::const_iterator itr = _isTypeCache.find(key);
+  if (itr != _isTypeCache.end())
   {
-    const bool cachedIsType = _isTypeCache[key];
     _incrementCacheHitCount("isType");
-    LOG_TRACE("Found is type: " << cachedIsType << " in cache for: " << key);
-    return cachedIsType;
+    LOG_TRACE("Found is type: " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1170,12 +1166,12 @@ bool PoiPolygonReviewReducer::_hasCrit(ConstElementPtr element, const QString& c
   }
 
   const QString key = element->getElementId().toString() + ";" + criterionClassName;
-  if (_hasCriterionCache.contains(key))
+  QHash<QString, bool>::const_iterator itr = _hasCriterionCache.find(key);
+  if (itr != _hasCriterionCache.end())
   {
-    const bool cachedHasCrit = _hasCriterionCache[key];
     _incrementCacheHitCount("hasCrit");
-    LOG_TRACE("Found is has crit: " << cachedHasCrit << " in cache for: " << key);
-    return cachedHasCrit;
+    LOG_TRACE("Found is has crit: " << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1197,9 +1193,11 @@ ElementCriterionPtr PoiPolygonReviewReducer::_getCrit(const QString& criterionCl
     return ElementCriterionPtr();
   }
 
-  if (_criterionCache.contains(criterionClassName))
+  QHash<QString, ElementCriterionPtr>::const_iterator itr =
+    _criterionCache.find(criterionClassName);
+  if (itr != _criterionCache.end())
   {
-    return _criterionCache[criterionClassName];
+    return itr.value();
   }
   else
   {
@@ -1218,12 +1216,12 @@ bool PoiPolygonReviewReducer::_hasType(ConstElementPtr element)
     return false;
   }
 
-  if (_hasTypeCache.contains(element->getElementId()))
+  QHash<ElementId, bool>::const_iterator itr = _hasTypeCache.find(element->getElementId());
+  if (itr != _hasTypeCache.end())
   {
-    const bool cachedHasType = _hasTypeCache[element->getElementId()];
     _incrementCacheHitCount("hasType");
-    LOG_TRACE("Found has type: " << cachedHasType << " in cache for: " << element->getElementId());
-    return cachedHasType;
+    LOG_TRACE("Found has type: " << itr.value() << " in cache for: " << element->getElementId());
+    return itr.value();
   }
   else
   {
@@ -1243,13 +1241,13 @@ bool PoiPolygonReviewReducer::_hasMoreThanOneType(ConstElementPtr element)
     return false;
   }
 
-  if (_hasMoreThanOneTypeCache.contains(element->getElementId()))
+  QHash<ElementId, bool>::const_iterator itr =
+    _hasMoreThanOneTypeCache.find(element->getElementId());
+  if (itr != _hasMoreThanOneTypeCache.end())
   {
-    const bool cachedHasMoreThanOneType = _hasMoreThanOneTypeCache[element->getElementId()];
     _incrementCacheHitCount("hasMoreThanOneType");
-    LOG_TRACE(
-      "Found has type: " << cachedHasMoreThanOneType << " in cache for: " << element->getElementId());
-    return cachedHasMoreThanOneType;
+    LOG_TRACE("Found has type: " << itr.value() << " in cache for: " << element->getElementId());
+    return itr.value();
   }
   else
   {
@@ -1275,13 +1273,12 @@ bool PoiPolygonReviewReducer::_specificSchoolMatch(ConstElementPtr element1,
 
   const QString key =
     element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  if (_specificSchoolMatchCache.contains(key))
+  QHash<QString, bool>::const_iterator itr = _specificSchoolMatchCache.find(key);
+  if (itr != _specificSchoolMatchCache.end())
   {
-    const bool cachedSpecificSchoolMatch = _specificSchoolMatchCache[key];
     _incrementCacheHitCount("specificSchoolMatch");
-    LOG_TRACE(
-      "Found specific school match:" << cachedSpecificSchoolMatch << " in cache for: " << key);
-    return cachedSpecificSchoolMatch;
+    LOG_TRACE("Found specific school match:" << itr.value() << " in cache for: " << key);
+    return itr.value();
   }
   else
   {
@@ -1303,14 +1300,13 @@ int PoiPolygonReviewReducer::_getNumAddresses(ConstElementPtr element)
     return false;
   }
 
-  if (_numAddressesCache.contains(element->getElementId()))
+  QHash<ElementId, int>::const_iterator itr = _numAddressesCache.find(element->getElementId());
+  if (itr != _numAddressesCache.end())
   {
-    const int cachedNumAddresses = _numAddressesCache[element->getElementId()];
     _incrementCacheHitCount("numAddresses");
     LOG_TRACE(
-      "Found num addresses: " << cachedNumAddresses << " in cache for: " <<
-      element->getElementId());
-    return cachedNumAddresses;
+      "Found num addresses: " << itr.value() << " in cache for: " << element->getElementId());
+    return itr.value();
   }
   else
   {

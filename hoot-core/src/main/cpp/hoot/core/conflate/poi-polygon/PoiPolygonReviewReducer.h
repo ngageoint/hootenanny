@@ -87,10 +87,7 @@ public:
    */
   static void printCacheInfo();
 
-  /**
-   * TODO
-   */
-  static void clearCaches();
+  //static void clearCaches();
 
 private:
 
@@ -123,7 +120,8 @@ private:
 
   // Using QHash here instead of QCache, since we're mostly just storing primitives. Tried to use
   // QCache with the geometries, but since ElementConverter returns a shared pointer and QCache
-  // takes ownership, had trouble making it work.
+  // takes ownership, had trouble making it work. Also, not doing any management of the size of
+  // these caches, which may end up being needed to control memory usage.
 
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   static QHash<QString, double> _elementDistanceCache;
