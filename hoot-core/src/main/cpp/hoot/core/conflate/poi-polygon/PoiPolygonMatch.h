@@ -151,6 +151,7 @@ public:
   static long phoneNumbersProcesed;
   static long phoneNumberMatchCandidates;
   static long convexPolyDistanceMatches;
+  static long numReviewReductions;
 
 private:
 

@@ -122,6 +122,10 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
+  // TODO: change back
+  LOG_INFO(
+    "POI/Polygon review reductions: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::numReviewReductions));
   PoiPolygonMatch::printCacheInfo();
 }
 

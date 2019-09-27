@@ -121,6 +121,10 @@ private:
 
   // caching
 
+  // Using QHash here instead of QCache, since we're mostly just storing primitives. Tried to use
+  // QCache with the geometries, but since ElementConverter returns a shared pointer and QCache
+  // takes ownership, had trouble making it work.
+
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   static QHash<QString, double> _elementDistanceCache;
   static QHash<QString, bool> _elementIntersectsCache;

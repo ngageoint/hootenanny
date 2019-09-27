@@ -67,6 +67,7 @@ long PoiPolygonMatch::phoneNumberMatches = 0;
 long PoiPolygonMatch::phoneNumbersProcesed = 0;
 long PoiPolygonMatch::phoneNumberMatchCandidates = 0;
 long PoiPolygonMatch::convexPolyDistanceMatches = 0;
+long PoiPolygonMatch::numReviewReductions = 0;
 
 PoiPolygonMatch::PoiPolygonMatch() :
 Match()
@@ -113,8 +114,8 @@ _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText("")
 {
-  _timer.reset(new QElapsedTimer());
-  _timer->start();
+//  _timer.reset(new QElapsedTimer());
+//  _timer->start();
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -412,13 +413,13 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
       _explainText = "Match score automatically dropped by review reduction.";
     }
-    // TODO: change back
-    qint64 elapsed = _timer->elapsed();
-    if (elapsed > 0.5)
-    {
-      LOG_INFO("Review reduction: " << elapsed);
-    }
-    _timer->restart();
+    numReviewReductions++;
+//    const qint64 elapsed = _timer->elapsed();
+//    if (elapsed > 10)
+//    {
+//        LOG_INFO("Review reduction: " << elapsed);
+//    }
+//    _timer->restart();
   }
   LOG_VART(evidence);
 
