@@ -102,9 +102,9 @@ public:
      *
      * TODO: This only handles ways as polygons and not relations. See #3474.
      */
-    bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
-                                         const std::set<ElementId>& poiNeighborIds,
-                                         const double poiPolyDistance);
+  bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+                                       const std::set<ElementId>& poiNeighborIds,
+                                       const double poiPolyDistance);
 
   void printCacheInfo();
 
