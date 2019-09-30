@@ -33,9 +33,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/address/AddressParser.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/schema/OsmSchema.h>
 
 namespace hoot
@@ -48,18 +46,14 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
 /**
  * TODO (Singleton)
  */
-class PoiPolygonCache : public Configurable
+class PoiPolygonCache
 {
 
 public:
 
-  //static const int MAX_CACHE_SIZE = 100000;
-
   ~PoiPolygonCache();
 
   static const PoiPolygonCachePtr& getInstance(const ConstOsmMapPtr& map);
-
-  virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(const ConstOsmMapPtr& map);
 
@@ -71,37 +65,17 @@ public:
 
   bool elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2);
 
-  double getAngleHistogramVal(ConstElementPtr element1, ConstElementPtr element2);
-
-  double getOverlapVal(ConstElementPtr element1, ConstElementPtr element2);
-
-  double getNameScore(ConstElementPtr element1, ConstElementPtr element2);
-
-  double getTypeScore(ConstElementPtr element1, ConstElementPtr element2);
-
   bool isType(ConstElementPtr element, const QString& type);
 
   bool hasCrit(ConstElementPtr element, const QString& criterionClassName);
 
-  bool hasType(ConstElementPtr element);
-
-  bool hasMoreThanOneType(ConstElementPtr element);
-
-  bool hasAddress(ConstElementPtr element);
-
-  int getNumAddresses(ConstElementPtr element);
-
-  bool inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
-
-  long getMatchingWayId(ConstNodePtr node);
-
   /*
-     * Determines if there exists a poi in the search radius of the poi being evaluated that is
-     * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
-     * is increased.
-     *
-     * TODO: This only handles ways as polygons and not relations. See #3474.
-     */
+   * Determines if there exists a poi in the search radius of the poi being evaluated that is
+   * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
+   * is increased.
+   *
+   * TODO: This only handles ways as polygons and not relations. See #3474.
+   */
   bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
                                        const std::set<ElementId>& poiNeighborIds,
                                        const double poiPolyDistance);
@@ -116,8 +90,6 @@ private:
 
   int _badGeomCount;
 
-  AddressParser _addressParser;
-
   // Using QHash here instead of QCache, since we're mostly just storing primitives for values.
   // Tried to use QCache with the geometries, but since ElementConverter returns a shared pointer
   // and QCache takes ownership, had trouble making it work. Also, not doing any management of the
@@ -126,10 +98,6 @@ private:
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   QHash<QString, double> _elementDistanceCache;
   QHash<QString, bool> _elementIntersectsCache;
-  QHash<QString, double> _elementAngleHistogramCache;
-  QHash<QString, double> _elementOverlapCache;
-  QHash<QString, double> _nameScoreCache;
-  QHash<QString, double> _typeScoreCache;
   QHash<QString, bool> _poiNeighborCloserCache;
 
   // ordering of the ID keys does matter here; does first element contain second element?; keys are
@@ -145,28 +113,19 @@ private:
   // key is element criterion class name
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
-  // key is "elementId;category name"
-  QHash<QString, bool> _isInCategoryCache;
-
-  QHash<ElementId, double> _elementAreaCache;
-  QHash<ElementId, bool> _hasTypeCache;
-  QHash<ElementId, bool> _hasMoreThanOneTypeCache;
-  QHash<ElementId, int> _numAddressesCache;
-  QHash<ElementId, long> _matchingWayIdCache;
-
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
   QHash<ElementId, std::shared_ptr<geos::geom::LineString>> _lineStringCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
-  QMap<QString, int> _cacheSizeByCacheType;
+  QMap<QString, int> _cacheNumEntriesByCacheType;
 
   PoiPolygonCache();
 
-  void _clear();
-  void _init();
-
   std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
   std::shared_ptr<geos::geom::LineString> _getLineString(ConstWayPtr way);
+
+  void _clear();
+
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);

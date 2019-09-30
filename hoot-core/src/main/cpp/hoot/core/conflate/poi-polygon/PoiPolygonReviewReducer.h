@@ -30,6 +30,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 namespace hoot
 {
@@ -48,7 +50,7 @@ namespace hoot
  * forest model could make it entirely obsolete (#2323).  At the very least, triggersRule could
  * benefit from being refactored into smaller chunks.
  */
-class PoiPolygonReviewReducer
+class PoiPolygonReviewReducer : public Configurable
 {
 
 public:
@@ -61,7 +63,7 @@ public:
                           bool typeMatch, double matchDistanceThreshold, bool addressMatch,
                           bool addressParsingEnabled);
 
-  //virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  virtual void setConfiguration(const Settings& conf);
 
   /**
    * Determines whether the input features trigger a rule which precludes them from being matched or
@@ -97,6 +99,7 @@ private:
   bool _keepClosestMatchesOnly;
 
   bool _addressParsingEnabled;
+  AddressParser _addressParser;
 
   PoiPolygonCachePtr _infoCache;
 
@@ -104,6 +107,10 @@ private:
 
   bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
   bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
+
+  bool _hasAddress(ConstElementPtr element);
+
+  static bool _inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
 };
 
 }

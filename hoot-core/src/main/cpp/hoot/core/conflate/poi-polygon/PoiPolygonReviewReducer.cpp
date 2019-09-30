@@ -34,6 +34,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
+#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 
 // Std
 #include <float.h>
@@ -80,6 +84,16 @@ _addressParsingEnabled(addressParsingEnabled)
   LOG_VART(_addressParsingEnabled);
 }
 
+void PoiPolygonReviewReducer::setConfiguration(const Settings& conf)
+{
+  _addressParser.setConfiguration(conf);
+}
+
+bool PoiPolygonReviewReducer::_hasAddress(ConstElementPtr element)
+{
+  return _addressParser.numAddressesRecursive(element, *_map) > 0;
+}
+
 bool PoiPolygonReviewReducer::_nonDistanceSimilaritiesPresent() const
 {
   return _typeScore > 0.03 || _nameScore > 0.35 || _addressMatch;
@@ -95,6 +109,12 @@ bool PoiPolygonReviewReducer::_polyContainsPoiAsMember(ConstRelationPtr poly,
                                                        ConstElementPtr poi) const
 {
   return poly && poly->contains(poi->getElementId());
+}
+
+bool PoiPolygonReviewReducer::_inCategory(ConstElementPtr element,
+                                          const OsmSchemaCategory& category)
+{
+  return OsmSchema::getInstance().getCategories(element->getTags()).intersects(category);
 }
 
 bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr poly)
@@ -123,22 +143,22 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //The rules below are *roughly* ordered by increasing processing expense and by decreasing
   //likelihood of occurrence (probably needs some reordering at this point).
 
-  const bool poiHasType = _infoCache->hasType(poi);
+  const bool poiHasType = PoiPolygonTypeScoreExtractor::hasType(poi);
   LOG_VART(poiHasType);
-  const bool polyHasType = _infoCache->hasType(poly);
+  const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
 
   if (_addressParsingEnabled)
   {
     //if both have addresses and they explicitly contradict each other, throw out the review; don't
     //do it if the poly has more than one address, like in many multi-use buildings.
-    if (!_addressMatch && _infoCache->hasAddress(poi) && _infoCache->hasAddress(poly))
+    if (!_addressMatch && _hasAddress(poi) && _hasAddress(poly))
     {
       //check to make sure the only address the poly has isn't the poi itself as a way node /
       //relation member
       if (((polyAsWay && _polyContainsPoiAsMember(polyAsWay, poi)) ||
           (polyAsRelation && _polyContainsPoiAsMember(polyAsRelation, poi))) &&
-          _infoCache->getNumAddresses(poly) < 2)
+           _addressParser.numAddressesRecursive(poly, *_map) < 2)
       {
       }
       else
@@ -266,7 +286,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   //Be more strict reviewing natural features and parks against building features.  This could be
   //extended
-  if ((polyIsNatural || polyIsPark) && _infoCache->inCategory(poi, OsmSchemaCategory::building()))
+  if ((polyIsNatural || polyIsPark) && _inCategory(poi, OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #13...");
     return true;
@@ -309,7 +329,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   //Similar to previous, except more focused for restrooms.
   if (poiHasType && polyHasType && _typeScore != 1.0 && _infoCache->isType(poi, "restroom") &&
-      !_infoCache->inCategory(poly, OsmSchemaCategory::building()))
+      !_inCategory(poly, OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #18...");
     return true;
@@ -361,7 +381,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   const bool polyIsPlayground = _infoCache->isType(poly, "playground");
   LOG_VART(polyIsPlayground);
-  const bool polyHasMoreThanOneType = _infoCache->hasMoreThanOneType(poly);
+  const bool polyHasMoreThanOneType = PoiPolygonTypeScoreExtractor::hasMoreThanOneType(poly);
   LOG_VART(polyHasMoreThanOneType);
   const bool poiIsParkish = _infoCache->isType(poi, "parkish");
   LOG_VART(poiIsParkish);
@@ -378,13 +398,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //poi and the building way, then don't review the two.  This allows for tagged poi way nodes to
   //conflate cleanly with building ways they belong to, rather than being reviewed against other
   //building ways.
-  const long matchingWayId = _infoCache->getMatchingWayId(poi);
+  const long matchingWayId = BuildingWayNodeCriterion(_map).getMatchingWayId(poi);
   if (matchingWayId != 0)
   {
     ConstWayPtr matchingWay = _map->getWay(matchingWayId);
     assert(matchingWay.get());
     if (poly->getElementId() != matchingWay->getElementId() &&
-        _infoCache->getTypeScore(poi, matchingWay)  >= _typeScoreThreshold)
+        PoiPolygonTypeScoreExtractor().extract(*_map, poi, matchingWay)  >= _typeScoreThreshold)
     {
       LOG_TRACE("Returning miss per review reduction rule #24...");
       return true;
@@ -463,7 +483,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       {
         // Should this be OsmSchema::elementHasName instead?
         otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
-        otherParkPolyNameScore = _infoCache->getNameScore(poi, polyNeighbor);
+        otherParkPolyNameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, polyNeighbor);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
 
         if (_infoCache->polyContainsPoi(polyNeighborAsWay, poi))
@@ -477,9 +497,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
         if (_infoCache->elementIntersectsElement(polyNeighbor, poly))
         {
-          parkPolyAngleHistVal = _infoCache->getAngleHistogramVal(polyNeighbor, poly);
+          parkPolyAngleHistVal = AngleHistogramExtractor().extract(*_map, polyNeighbor, poly);
           LOG_VART(parkPolyAngleHistVal);
-          parkPolyOverlapVal = _infoCache->getOverlapVal(polyNeighbor, poly);
+          parkPolyOverlapVal =  OverlapExtractor().extract(*_map, polyNeighbor, poly);
           LOG_VART(parkPolyOverlapVal);
 
           //When just using intersection as the criteria, only found one instance when something
@@ -511,7 +531,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         //this is a little loose, b/c there could be more than one type match set of tags...
         if (_infoCache->isType(polyNeighbor, "sport") &&
             _infoCache->polyContainsPoi(polyNeighborAsWay, poi) &&
-            _infoCache->getTypeScore(poi, polyNeighbor) >= _typeScoreThreshold)
+            PoiPolygonTypeScoreExtractor().extract(*_map, poi, polyNeighbor) >= _typeScoreThreshold)
         {
           sportPoiOnOtherSportPolyWithTypeMatch = true;
         }
