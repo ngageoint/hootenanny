@@ -169,8 +169,8 @@ void MatchFactory::_tempFixDefaults()
 {
   QStringList matchCreators = ConfigOptions().getMatchCreators();
   QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARD(matchCreators);
-  LOG_VARD(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
   {
@@ -208,42 +208,42 @@ void MatchFactory::_tempFixDefaults()
         fixedMergerCreators.append("hoot::PoiPolygonMergerCreator");
       }
     }
-    LOG_DEBUG("Temp fixing merger.creators...");
+    LOG_TRACE("Temp fixing merger.creators...");
     conf().set("merger.creators", fixedMergerCreators.join(";"));
   }
-  LOG_VARD(mergerCreators);
+  LOG_VART(mergerCreators);
 
   //fix way subline matcher options - https://github.com/ngageoint/hootenanny-ui/issues/970
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
       ConfigOptions().getWaySublineMatcher() != "hoot::MaximalSublineMatcher")
   {
-    LOG_DEBUG("Temp fixing way.subline.matcher...");
+    LOG_TRACE("Temp fixing way.subline.matcher...");
     conf().set("way.subline.matcher", "hoot::MaximalSublineMatcher");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
            ConfigOptions().getWaySublineMatcher() != "hoot::FrechetSublineMatcher" &&
            ConfigOptions().getWaySublineMatcher() != "hoot::MaximalNearestSublineMatcher")
   {
-    LOG_DEBUG("Temp fixing way.subline.matcher...");
+    LOG_TRACE("Temp fixing way.subline.matcher...");
     conf().set("way.subline.matcher", "hoot::MaximalNearestSublineMatcher");
   }
-  LOG_VARD(ConfigOptions().getWaySublineMatcher());
+  LOG_VART(ConfigOptions().getWaySublineMatcher());
 
   //fix highway classifier - https://github.com/ngageoint/hootenanny-ui/issues/971
   if (matchCreators.contains("hoot::NetworkMatchCreator") &&
       ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayExpertClassifier")
   {
-    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
+    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
     conf().set("conflate.match.highway.classifier", "hoot::HighwayExpertClassifier");
   }
   else if (matchCreators.contains("hoot::HighwayMatchCreator") &&
            ConfigOptions().getConflateMatchHighwayClassifier() != "hoot::HighwayRfClassifier")
   {
-    LOG_DEBUG("Temp fixing conflate.match.highway.classifier...");
+    LOG_TRACE("Temp fixing conflate.match.highway.classifier...");
     conf().set("conflate.match.highway.classifier", "hoot::HighwayRfClassifier");
   }
-  LOG_VARD(ConfigOptions().getConflateMatchHighwayClassifier());
+  LOG_VART(ConfigOptions().getConflateMatchHighwayClassifier());
 }
 
 void MatchFactory::setConfiguration(const Settings& s)

@@ -163,7 +163,7 @@ private:
 
   ElementId _eid1;
   ElementId _eid2;
-  ConstElementPtr _poi;
+  ConstNodePtr _poi;
   ConstElementPtr _poly;
   std::shared_ptr<geos::geom::Geometry> _poiGeom;
   std::shared_ptr<geos::geom::Geometry> _polyGeom;

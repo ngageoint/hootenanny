@@ -42,6 +42,7 @@
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 using namespace std;
 
@@ -256,13 +257,15 @@ void PoiPolygonMatch::_categorizeElementsByGeometryType()
 
   if (_poiCrit.isSatisfied(e1) && _polyCrit.isSatisfied(e2))
   {
-    _poi = e1;
+    assert(e1->getElementType() == ElementType::Node);
+    _poi = std::dynamic_pointer_cast<const Node>(e1);
     _poly = e2;
     _e1IsPoi = true;
   }
   else if (_poiCrit.isSatisfied(e2) && _polyCrit.isSatisfied(e1))
   {
-    _poi = e2;
+    assert(e2->getElementType() == ElementType::Node);
+    _poi = std::dynamic_pointer_cast<const Node>(e2);
     _poly = e1;
     _e1IsPoi = false;
   }
@@ -399,14 +402,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   //no point in trying to reduce reviews if we're still at a miss here
   if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
   {
-    LOG_TRACE("Reducing reviews...");
     // this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
       _addressMatchEnabled);
-    reviewReducer.setConfiguration(conf());
     if (reviewReducer.triggersRule(_poi, _poly))
     {
       evidence = 0;
@@ -417,7 +418,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    const qint64 elapsed = _timer->elapsed();
 //    if (elapsed > 10)
 //    {
-//        LOG_INFO("Review reduction: " << elapsed);
+//      LOG_DEBUG("Review reduction: " << elapsed);
 //    }
 //    _timer->restart();
   }
@@ -430,7 +431,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       LOG_VART(_reviewMultiUseBuildings);
       LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
-      if (_reviewMultiUseBuildings && MultiUseBuildingCriterion().isSatisfied(_poly))
+      if (_reviewMultiUseBuildings &&
+          PoiPolygonCache::getInstance(_map)->hasCrit(
+            _poly, QString::fromStdString(MultiUseBuildingCriterion::className())))
       {
         _class.setReview();
         _explainText = "Match involves a multi-use building.";
@@ -776,9 +779,7 @@ void PoiPolygonMatch::resetMatchDistanceInfo()
 
 void PoiPolygonMatch::printCacheInfo()
 {
-  PoiPolygonReviewReducer::printCacheInfo();
-  // TODO: This doesn't seem right.
-  //PoiPolygonReviewReducer::clearCaches();
+  PoiPolygonCache::getInstance(ConstOsmMapPtr())->printCacheInfo();
 }
 
 set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
