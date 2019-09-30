@@ -95,7 +95,7 @@ public class ExportResource {
 
     private Class<? extends ExportCommand> getCommand(String outputType) {
         Class<? extends ExportCommand> exportCommand = null;
-        if (outputType.equals("tiles")) {
+        if (outputType.startsWith("tiles")) {
             exportCommand = CalculateTilesCommand.class;
         } else {
             exportCommand = ExportCommand.class;
