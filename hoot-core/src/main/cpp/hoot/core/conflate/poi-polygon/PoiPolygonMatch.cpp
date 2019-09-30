@@ -416,12 +416,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       _explainText = "Match score automatically dropped by review reduction.";
     }
     numReviewReductions++;
-//    const qint64 elapsed = _timer->elapsed();
-//    if (elapsed > 10)
-//    {
-//      LOG_DEBUG("Review reduction: " << elapsed);
-//    }
-//    _timer->restart();
   }
   LOG_VART(evidence);
 
@@ -683,10 +677,9 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //LOG_VART(poly);
 
   unsigned int evidence = 0;
+  const PoiPolygonCachePtr& infoCache = PoiPolygonCache::getInstance(_map);
 
   evidence += _getDistanceEvidence(poi, poly);
-//  LOG_TRACE("Distance evidence calculation: " << _timer->elapsed());
-//  _timer->restart();
   //see comment in _getDistanceEvidence
   if (!_closeDistanceMatch)
   {
@@ -697,18 +690,14 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
   evidence += _getNameEvidence(poi, poly);
-//  LOG_TRACE("Name evidence calculation: " << _timer->elapsed());
-//  _timer->restart();
-  //TODO: Used to allow for kicking out of the method once enough evidence was accumulated for a match
-  //as a runtime optimization.  However, that results in incomplete scoring information passed to
-  //the review reducer, so have since disabled.
-  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
-  {
-    return evidence;
-  }
+  // Used to allow for kicking out of the method once enough evidence was accumulated for a match
+  // as a runtime optimization.  However, that results in incomplete scoring information passed to
+  // the review reducer, so have since disabled. It also causes some regression tests to fail.
+//  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
+//  {
+//    return evidence;
+//  }
   evidence += _getTypeEvidence(poi, poly);
-//  LOG_TRACE("Type evidence calculation: " << _timer->elapsed());
-//  _timer->restart();
   if (evidence >= _matchEvidenceThreshold)
   {
     return evidence;
@@ -716,8 +705,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
-//    LOG_TRACE("Address evidence calculation: " << _timer->elapsed());
-//    _timer->restart();
     if (evidence >= _matchEvidenceThreshold)
     {
       return evidence;
@@ -726,8 +713,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   if (_phoneNumberMatchEnabled)
   {
     evidence += _getPhoneNumberEvidence(poi, poly);
-//    LOG_TRACE("Phone number evidence calculation: " << _timer->elapsed());
-//    _timer->restart();
     if (evidence >= _matchEvidenceThreshold)
     {
       return evidence;
@@ -740,12 +725,10 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //necessary.  The school requirement definitely seems too type specific (this type of evidence
   //has actually only been found with school pois in one test dataset so far), but when
   //removing it scores dropped for other datasets...so not changing it for now.
-  if (evidence == 0 && _distance <= 35.0 && poi->getTags().get("amenity") == "school" &&
-      BuildingCriterion().isSatisfied(poly))
+  if (evidence == 0 && _distance <= 35.0 && infoCache->isType(poi, "school") &&
+      infoCache->hasCrit(poly, QString::fromStdString(BuildingCriterion::className())))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
-//    LOG_TRACE("Convex poly distance evidence calculation: " << _timer->elapsed());
-//    _timer->restart();
     if (evidence >= _matchEvidenceThreshold)
     {
       return evidence;

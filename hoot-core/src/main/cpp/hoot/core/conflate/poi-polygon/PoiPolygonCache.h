@@ -44,7 +44,10 @@ class PoiPolygonCache;
 typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
 
 /**
- * TODO (Singleton)
+ * Cached back class storing POI/Polygon feature comparison info (Singleton)
+ *
+ * The caches used in this class were determined on 9/30/18 running against the regression test:
+ * unifying-tests.child/somalia.child/somalia-test3.child.
  */
 class PoiPolygonCache
 {
@@ -57,29 +60,78 @@ public:
 
   virtual void setOsmMap(const ConstOsmMapPtr& map);
 
+  /**
+   * TODO
+   *
+   * @param poly
+   * @param point
+   * @return
+   */
   double getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point);
 
+  /**
+   * TODO
+   *
+   * @param poly
+   * @return
+   */
   double getArea(ConstElementPtr poly);
 
+  /**
+   * TODO
+   *
+   * @param poly
+   * @param point
+   * @return
+   */
   bool polyContainsPoi(ConstWayPtr poly, ConstNodePtr point);
 
+  /**
+   * TODO
+   *
+   * @param element1
+   * @param element2
+   * @return
+   */
   bool elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2);
 
+  /**
+   * TODO
+   *
+   * @param element
+   * @param type
+   * @return
+   */
   bool isType(ConstElementPtr element, const QString& type);
 
+  /**
+   * TODO
+   *
+   * @param element
+   * @param criterionClassName
+   * @return
+   */
   bool hasCrit(ConstElementPtr element, const QString& criterionClassName);
 
-  /*
+  /**
    * Determines if there exists a poi in the search radius of the poi being evaluated that is
    * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
    * is increased.
    *
-   * TODO: This only handles ways as polygons and not relations. See #3474.
+   * @param poly
+   * @param poi
+   * @param poiNeighborIds
+   * @param poiPolyDistance
+   * @return
+   * @todo This only handles ways as polygons and not relations. See #3474.
    */
   bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
                                        const std::set<ElementId>& poiNeighborIds,
                                        const double poiPolyDistance);
 
+  /**
+   * TODO
+   */
   void printCacheInfo();
 
 private:
@@ -90,10 +142,11 @@ private:
 
   int _badGeomCount;
 
-  // Using QHash here instead of QCache, since we're mostly just storing primitives for values.
-  // Tried to use QCache with the geometries, but since ElementConverter returns a shared pointer
-  // and QCache takes ownership, had trouble making it work. Also, not doing any management of the
-  // size of these caches, which may eventually end up being needed to control memory usage.
+  // Using QHash here instead of QCache, since we're mostly just storing primitives for values and
+  // they all take up the same amount of space. Tried to use QCache with the geometries, but since
+  // ElementConverter returns a shared pointer and QCache takes ownership, had trouble making it
+  // work. Also, not doing any management of the size of these caches, which may eventually end up
+  // being needed to control memory usage.
 
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   QHash<QString, bool> _poiNeighborCloserCache;

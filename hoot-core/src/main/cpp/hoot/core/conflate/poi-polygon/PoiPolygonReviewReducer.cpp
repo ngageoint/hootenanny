@@ -120,8 +120,8 @@ bool PoiPolygonReviewReducer::_inCategory(ConstElementPtr element,
 bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr poly)
 {
   LOG_TRACE("Checking review reduction rules...");
-  QElapsedTimer timer;
-  timer.start();
+  //QElapsedTimer timer;
+  //timer.start();
   _infoCache = PoiPolygonCache::getInstance(_map);
 
   ConstWayPtr polyAsWay;
