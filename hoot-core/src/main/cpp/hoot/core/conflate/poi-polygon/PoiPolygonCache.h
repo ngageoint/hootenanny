@@ -97,6 +97,17 @@ public:
 
   long getMatchingWayId(ConstNodePtr node);
 
+  /*
+   * Determines if there exists a poi in the search radius of the poi being evaluated that is
+   * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
+   * is increased.
+   *
+   * TODO: This only handles ways as polygons and not relations. See #3474.
+   */
+  bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+                                       const std::set<ElementId>& poiNeighborIds,
+                                       const double poiPolyDistance);
+
   void printCacheInfo();
 
 private:
@@ -122,6 +133,7 @@ private:
   QHash<QString, double> _nameScoreCache;
   QHash<QString, double> _typeScoreCache;
   QHash<QString, bool> _specificSchoolMatchCache;
+  QHash<QString, bool> _poiNeighborCloserCache;
 
   // ordering of the ID keys does matter here; does first element contain second element; keys are
   // "elementId1;elementId2"

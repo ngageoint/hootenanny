@@ -98,6 +98,11 @@ void PoiPolygonCache::_clear()
   _numAddressesCache.clear();
   _isInCategoryCache.clear();
   _matchingWayIdCache.clear();
+  _poiNeighborCloserCache.clear();
+  _criterionCache.clear();
+  _isInCategoryCache.clear();
+  _geometryCache.clear();
+  _lineStringCache.clear();
 }
 
 void PoiPolygonCache::_init()
@@ -126,6 +131,7 @@ void PoiPolygonCache::printCacheInfo()
 {
   // TODO: change back to debug
   LOG_INFO("POI/Polygon cache info:");
+  LOG_INFO("Number of caches used: " << _numCacheHitsByCacheType.size());
   for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
        numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
   {
@@ -657,6 +663,55 @@ bool PoiPolygonCache::hasType(ConstElementPtr element)
     LOG_TRACE("Updated has type cache with: " << hasType << " for: " << element->getElementId());
     _incrementCacheSizeCount("hasType");
     return hasType;
+  }
+}
+
+bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+                                                      const std::set<ElementId>& poiNeighborIds,
+                                                      const double poiPolyDistance)
+{
+  if (!poly || !poi || poiNeighborIds.size() == 0)
+  {
+    return false;
+  }
+
+  const QString key = poly->getElementId().toString() + ";" + poi->getElementId().toString();
+  QHash<QString, bool>::const_iterator itr = _poiNeighborCloserCache.find(key);
+  if (itr != _poiNeighborCloserCache.end())
+  {
+    _incrementCacheHitCount("hasCloserPoiNeighbor");
+    LOG_TRACE("Found closer poi neighbor: " << itr.value() << " in cache for: " << key);
+    return itr.value();
+  }
+  else
+  {
+    LOG_TRACE("No closer poi neighbor in cache for: " << key);
+    bool hasCloserPoiNeighbor = false;
+    LOG_VART(poiNeighborIds.size());
+    //LOG_VART(_poiNeighborIds);
+    for (std::set<ElementId>::const_iterator poiNeighborItr = poiNeighborIds.begin();
+         poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
+    {
+      ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
+      if (poiNeighbor->getElementId() != poi->getElementId())
+      {
+        long neighborPoiToPolyDist = -1.0;
+        neighborPoiToPolyDist =
+          getPolyToPointDistance(poly, std::dynamic_pointer_cast<const Node>(poiNeighbor));
+        LOG_VART(neighborPoiToPolyDist);
+        if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
+        {
+          hasCloserPoiNeighbor = true;
+          break;
+        }
+      }
+    }
+
+    _poiNeighborCloserCache[key] = hasCloserPoiNeighbor;
+    LOG_TRACE(
+      "Updated closer poi neighbor cache with: " << hasCloserPoiNeighbor << " for: " << key);
+    _incrementCacheSizeCount("hasCloserPoiNeighbor");
+    return hasCloserPoiNeighbor;
   }
 }
 

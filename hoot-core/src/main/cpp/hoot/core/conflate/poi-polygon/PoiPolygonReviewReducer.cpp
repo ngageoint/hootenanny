@@ -418,7 +418,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //This will check the current poi against all neighboring pois.  If any neighboring poi is
   //closer to the current poly than the current poi, then the current poi will not be matched or
   //reviewed against the current poly.
-  if (_keepClosestMatchesOnly && _poiNeighborIsCloserToPolyThanPoi(poi, polyAsWay))
+  if (_keepClosestMatchesOnly &&
+      _infoCache->polyHasPoiNeighborCloserThanPoi(polyAsWay, poi, _poiNeighborIds, _distance))
   {
     LOG_TRACE("Returning miss per review reduction rule #25...");
     return true;
@@ -587,32 +588,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType && _exactNameMatch)
       {
         LOG_TRACE("Returning miss per review reduction rule #32...");
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
-bool PoiPolygonReviewReducer::_poiNeighborIsCloserToPolyThanPoi(ConstNodePtr poi, ConstWayPtr poly)
-{
-  // TODO: cache?
-  LOG_VART(_poiNeighborIds.size());
-  //LOG_VART(_poiNeighborIds);
-  for (std::set<ElementId>::const_iterator poiNeighborItr = _poiNeighborIds.begin();
-       poiNeighborItr != _poiNeighborIds.end(); ++poiNeighborItr)
-  {
-    ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
-    if (poiNeighbor->getElementId() != poi->getElementId())
-    {
-      long neighborPoiToPolyDist = -1.0;
-      neighborPoiToPolyDist =
-        _infoCache->getPolyToPointDistance(
-          poly, std::dynamic_pointer_cast<const Node>(poiNeighbor));
-      LOG_VART(neighborPoiToPolyDist);
-      if (neighborPoiToPolyDist != -1.0 && _distance > neighborPoiToPolyDist)
-      {
         return true;
       }
     }

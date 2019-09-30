@@ -102,15 +102,6 @@ private:
 
   bool _nonDistanceSimilaritiesPresent() const;
 
-  /*
-   * Determines if there exists a poi in the search radius of the poi being evaluated that is
-   * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
-   * is increased.
-   *
-   * TODO: This only handles ways as polygons and not relations. See #3474.
-   */
-  bool _poiNeighborIsCloserToPolyThanPoi(ConstNodePtr poi, ConstWayPtr poly);
-
   bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
   bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
 };
