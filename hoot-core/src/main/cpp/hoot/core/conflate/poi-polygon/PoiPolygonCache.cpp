@@ -95,7 +95,6 @@ void PoiPolygonCache::_clear()
   _typeScoreCache.clear();
   _isTypeCache.clear();
   _hasCriterionCache.clear();
-  _specificSchoolMatchCache.clear();
   _hasTypeCache.clear();
   _hasMoreThanOneTypeCache.clear();
   _numAddressesCache.clear();
@@ -103,7 +102,6 @@ void PoiPolygonCache::_clear()
   _matchingWayIdCache.clear();
   _poiNeighborCloserCache.clear();
   _criterionCache.clear();
-  _isInCategoryCache.clear();
   _geometryCache.clear();
   _lineStringCache.clear();
 }
@@ -122,7 +120,6 @@ void PoiPolygonCache::_init()
   _typeScoreCache.reserve(_map->size());
   _isTypeCache.reserve(_map->size());
   _hasCriterionCache.reserve(_map->size());
-  _specificSchoolMatchCache.reserve(_map->size());
   _hasTypeCache.reserve(_map->size());
   _hasMoreThanOneTypeCache.reserve(_map->size());
   _numAddressesCache.reserve(_map->size());
@@ -130,7 +127,6 @@ void PoiPolygonCache::_init()
   _matchingWayIdCache.reserve(_map->size());
   _poiNeighborCloserCache.reserve(_map->size());
   _criterionCache.reserve(_map->size());
-  _isInCategoryCache.reserve(_map->size());
   _geometryCache.reserve(_map->size());
   _lineStringCache.reserve(_map->size());
 }
@@ -674,55 +670,6 @@ bool PoiPolygonCache::hasType(ConstElementPtr element)
   }
 }
 
-bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
-                                                      const std::set<ElementId>& poiNeighborIds,
-                                                      const double poiPolyDistance)
-{
-  if (!poly || !poi || poiNeighborIds.size() == 0)
-  {
-    return false;
-  }
-
-  const QString key = poly->getElementId().toString() + ";" + poi->getElementId().toString();
-  QHash<QString, bool>::const_iterator itr = _poiNeighborCloserCache.find(key);
-  if (itr != _poiNeighborCloserCache.end())
-  {
-    _incrementCacheHitCount("hasCloserPoiNeighbor");
-    LOG_TRACE("Found closer poi neighbor: " << itr.value() << " in cache for: " << key);
-    return itr.value();
-  }
-  else
-  {
-    LOG_TRACE("No closer poi neighbor in cache for: " << key);
-    bool hasCloserPoiNeighbor = false;
-    LOG_VART(poiNeighborIds.size());
-    //LOG_VART(_poiNeighborIds);
-    for (std::set<ElementId>::const_iterator poiNeighborItr = poiNeighborIds.begin();
-         poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
-    {
-      ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
-      if (poiNeighbor->getElementId() != poi->getElementId())
-      {
-        long neighborPoiToPolyDist = -1.0;
-        neighborPoiToPolyDist =
-          getPolyToPointDistance(poly, std::dynamic_pointer_cast<const Node>(poiNeighbor));
-        LOG_VART(neighborPoiToPolyDist);
-        if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
-        {
-          hasCloserPoiNeighbor = true;
-          break;
-        }
-      }
-    }
-
-    _poiNeighborCloserCache[key] = hasCloserPoiNeighbor;
-    LOG_TRACE(
-      "Updated closer poi neighbor cache with: " << hasCloserPoiNeighbor << " for: " << key);
-    _incrementCacheSizeCount("hasCloserPoiNeighbor");
-    return hasCloserPoiNeighbor;
-  }
-}
-
 bool PoiPolygonCache::hasMoreThanOneType(ConstElementPtr element)
 {
   if (!element)
@@ -748,36 +695,6 @@ bool PoiPolygonCache::hasMoreThanOneType(ConstElementPtr element)
       element->getElementId());
     _incrementCacheSizeCount("hasMoreThanOneType");
     return hasMoreThanOneType;
-  }
-}
-
-bool PoiPolygonCache::specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2)
-{
-  // We could also check for school type here to move it out of triggersRule.
-  if (!element1 || !element2)
-  {
-    return false;
-  }
-
-  const QString key =
-    element1->getElementId().toString() + ";" + element2->getElementId().toString();
-  QHash<QString, bool>::const_iterator itr = _specificSchoolMatchCache.find(key);
-  if (itr != _specificSchoolMatchCache.end())
-  {
-    _incrementCacheHitCount("specificSchoolMatch");
-    LOG_TRACE("Found specific school match:" << itr.value() << " in cache for: " << key);
-    return itr.value();
-  }
-  else
-  {
-    LOG_TRACE("No specific school match in cache for: " << key);
-    const bool specificSchoolMatch =
-      PoiPolygonTypeScoreExtractor::specificSchoolMatch(element1, element2);
-    _specificSchoolMatchCache[key] = specificSchoolMatch;
-    LOG_TRACE(
-      "Updated specific school match cache with: " << specificSchoolMatch << " for: " << key);
-    _incrementCacheSizeCount("specificSchoolMatch");
-    return specificSchoolMatch;
   }
 }
 
@@ -862,6 +779,55 @@ long PoiPolygonCache::getMatchingWayId(ConstNodePtr node)
     LOG_TRACE("Updated matching way id cache with: " << matchingWayId << " for: " << node->getElementId());
     _incrementCacheSizeCount("matchingWayId");
     return matchingWayId;
+  }
+}
+
+bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+                                                      const std::set<ElementId>& poiNeighborIds,
+                                                      const double poiPolyDistance)
+{
+  if (!poly || !poi || poiNeighborIds.size() == 0)
+  {
+    return false;
+  }
+
+  const QString key = poly->getElementId().toString() + ";" + poi->getElementId().toString();
+  QHash<QString, bool>::const_iterator itr = _poiNeighborCloserCache.find(key);
+  if (itr != _poiNeighborCloserCache.end())
+  {
+    _incrementCacheHitCount("hasCloserPoiNeighbor");
+    LOG_TRACE("Found closer poi neighbor: " << itr.value() << " in cache for: " << key);
+    return itr.value();
+  }
+  else
+  {
+    LOG_TRACE("No closer poi neighbor in cache for: " << key);
+    bool hasCloserPoiNeighbor = false;
+    LOG_VART(poiNeighborIds.size());
+    //LOG_VART(_poiNeighborIds);
+    for (std::set<ElementId>::const_iterator poiNeighborItr = poiNeighborIds.begin();
+         poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
+    {
+      ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
+      if (poiNeighbor->getElementId() != poi->getElementId())
+      {
+        long neighborPoiToPolyDist = -1.0;
+        neighborPoiToPolyDist =
+          getPolyToPointDistance(poly, std::dynamic_pointer_cast<const Node>(poiNeighbor));
+        LOG_VART(neighborPoiToPolyDist);
+        if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
+        {
+          hasCloserPoiNeighbor = true;
+          break;
+        }
+      }
+    }
+
+    _poiNeighborCloserCache[key] = hasCloserPoiNeighbor;
+    LOG_TRACE(
+      "Updated closer poi neighbor cache with: " << hasCloserPoiNeighbor << " for: " << key);
+    _incrementCacheSizeCount("hasCloserPoiNeighbor");
+    return hasCloserPoiNeighbor;
   }
 }
 

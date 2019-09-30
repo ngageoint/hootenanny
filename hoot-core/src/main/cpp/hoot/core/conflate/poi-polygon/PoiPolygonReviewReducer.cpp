@@ -33,6 +33,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 
 // Std
 #include <float.h>
@@ -254,7 +255,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   }
 
   if (_infoCache->isType(poi, "specificSchool") && _infoCache->isType(poly, "specificSchool") &&
-      !_infoCache->specificSchoolMatch(poi, poly))
+      !PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly))
   {
     LOG_TRACE("Returning miss per review reduction rule #12...");
     return true;

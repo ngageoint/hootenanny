@@ -87,8 +87,6 @@ public:
 
   bool hasMoreThanOneType(ConstElementPtr element);
 
-  bool specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
-
   bool hasAddress(ConstElementPtr element);
 
   int getNumAddresses(ConstElementPtr element);
@@ -98,15 +96,15 @@ public:
   long getMatchingWayId(ConstNodePtr node);
 
   /*
-   * Determines if there exists a poi in the search radius of the poi being evaluated that is
-   * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
-   * is increased.
-   *
-   * TODO: This only handles ways as polygons and not relations. See #3474.
-   */
-  bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
-                                       const std::set<ElementId>& poiNeighborIds,
-                                       const double poiPolyDistance);
+     * Determines if there exists a poi in the search radius of the poi being evaluated that is
+     * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
+     * is increased.
+     *
+     * TODO: This only handles ways as polygons and not relations. See #3474.
+     */
+    bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+                                         const std::set<ElementId>& poiNeighborIds,
+                                         const double poiPolyDistance);
 
   void printCacheInfo();
 
@@ -120,10 +118,10 @@ private:
 
   AddressParser _addressParser;
 
-  // Using QHash here instead of QCache, since we're mostly just storing primitives. Tried to use
-  // QCache with the geometries, but since ElementConverter returns a shared pointer and QCache
-  // takes ownership, had trouble making it work. Also, not doing any management of the size of
-  // these caches, which may end up being needed to control memory usage.
+  // Using QHash here instead of QCache, since we're mostly just storing primitives for values.
+  // Tried to use QCache with the geometries, but since ElementConverter returns a shared pointer
+  // and QCache takes ownership, had trouble making it work. Also, not doing any management of the
+  // size of these caches, which may eventually end up being needed to control memory usage.
 
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   QHash<QString, double> _elementDistanceCache;
@@ -132,10 +130,9 @@ private:
   QHash<QString, double> _elementOverlapCache;
   QHash<QString, double> _nameScoreCache;
   QHash<QString, double> _typeScoreCache;
-  QHash<QString, bool> _specificSchoolMatchCache;
   QHash<QString, bool> _poiNeighborCloserCache;
 
-  // ordering of the ID keys does matter here; does first element contain second element; keys are
+  // ordering of the ID keys does matter here; does first element contain second element?; keys are
   // "elementId1;elementId2"
   QHash<QString, bool> _elementContainsCache;
 
