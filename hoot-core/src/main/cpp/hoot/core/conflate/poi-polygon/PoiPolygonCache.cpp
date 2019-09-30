@@ -82,6 +82,9 @@ void PoiPolygonCache::setConfiguration(const Settings& conf)
 
 void PoiPolygonCache::_clear()
 {
+  _numCacheHitsByCacheType.clear();
+  _cacheSizeByCacheType.clear();
+
   _elementDistanceCache.clear();
   _elementAreaCache.clear();
   _elementContainsCache.clear();
@@ -125,6 +128,11 @@ void PoiPolygonCache::_init()
   _numAddressesCache.reserve(_map->size());
   _isInCategoryCache.reserve(_map->size());
   _matchingWayIdCache.reserve(_map->size());
+  _poiNeighborCloserCache.reserve(_map->size());
+  _criterionCache.reserve(_map->size());
+  _isInCategoryCache.reserve(_map->size());
+  _geometryCache.reserve(_map->size());
+  _lineStringCache.reserve(_map->size());
 }
 
 void PoiPolygonCache::printCacheInfo()
