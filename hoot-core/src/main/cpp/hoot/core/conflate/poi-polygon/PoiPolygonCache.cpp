@@ -73,11 +73,9 @@ void PoiPolygonCache::setOsmMap(const ConstOsmMapPtr& map)
 void PoiPolygonCache::_clear()
 {
   _numCacheHitsByCacheType.clear();
-  _cacheNumEntriesByCacheType.clear();
+  _numCacheEntriesByCacheType.clear();
 
-  _elementDistanceCache.clear();
   _elementContainsCache.clear();
-  _elementIntersectsCache.clear();
   _isTypeCache.clear();
   _hasCriterionCache.clear();
   _poiNeighborCloserCache.clear();
@@ -99,7 +97,7 @@ void PoiPolygonCache::printCacheInfo()
         .arg(StringUtils::formatLargeNumber(numCacheHitsByCacheTypeItr.value()))
         .arg(
           StringUtils::formatLargeNumber(
-            _cacheNumEntriesByCacheType[numCacheHitsByCacheTypeItr.key()]));
+            _numCacheEntriesByCacheType[numCacheHitsByCacheTypeItr.key()]));
     LOG_DEBUG(line);
   }
 }
@@ -118,13 +116,13 @@ void PoiPolygonCache::_incrementCacheHitCount(const QString& cacheTypeKey)
 
 void PoiPolygonCache::_incrementCacheSizeCount(const QString& cacheTypeKey)
 {
-  if (!_cacheNumEntriesByCacheType.contains(cacheTypeKey))
+  if (!_numCacheEntriesByCacheType.contains(cacheTypeKey))
   {
-    _cacheNumEntriesByCacheType[cacheTypeKey] = 1;
+    _numCacheEntriesByCacheType[cacheTypeKey] = 1;
   }
   else
   {
-    _cacheNumEntriesByCacheType[cacheTypeKey] = _cacheNumEntriesByCacheType[cacheTypeKey] + 1;
+    _numCacheEntriesByCacheType[cacheTypeKey] = _numCacheEntriesByCacheType[cacheTypeKey] + 1;
   }
 }
 
@@ -268,7 +266,7 @@ bool PoiPolygonCache::isType(ConstElementPtr element, const QString& type)
   }
   else
   {
-    // A redesign is need to make this less maintenance prone.
+    // A redesign is needed to make this less maintenance prone.
     bool isType = false;
     if (type == "park")
     {

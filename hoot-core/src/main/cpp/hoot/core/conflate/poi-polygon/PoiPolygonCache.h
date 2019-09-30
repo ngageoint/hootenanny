@@ -96,8 +96,6 @@ private:
   // size of these caches, which may eventually end up being needed to control memory usage.
 
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
-  QHash<QString, double> _elementDistanceCache;
-  QHash<QString, bool> _elementIntersectsCache;
   QHash<QString, bool> _poiNeighborCloserCache;
 
   // ordering of the ID keys does matter here; does first element contain second element?; keys are
@@ -117,7 +115,7 @@ private:
   QHash<ElementId, std::shared_ptr<geos::geom::LineString>> _lineStringCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
-  QMap<QString, int> _cacheNumEntriesByCacheType;
+  QMap<QString, int> _numCacheEntriesByCacheType;
 
   PoiPolygonCache();
 
