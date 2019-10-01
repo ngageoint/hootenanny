@@ -17,34 +17,34 @@ source formats:  xml
 way snap tolerance:  20.0
 existing way node tolerance:  20.0
 
-Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db: osmapidb://hoot:hoottest@localhost:5432/osmapi_test (contains features to be replaced)...
+Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db (contains features to be replaced)...
 
  setval 
 --------
       1
 (1 row)
 
-17:34:17.306 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
-17:34:17.307 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
-17:34:17.307 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
-17:34:17.307 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+16:37:55.141 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+16:37:55.141 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+16:37:55.142 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+16:37:55.142 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
-Writing the reference dataset from: osmapidb://hoot:hoottest@localhost:5432/osmapi_test to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm (contains features to be replaced)...
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm (contains features to be replaced)...
 
 
 Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/sec-original.osm (contains features to replace with)...
 
-17:34:22.305 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
-17:34:22.305 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
-17:34:22.305 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
-17:34:22.305 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+16:37:59.088 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+16:37:59.089 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+16:37:59.089 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+16:37:59.089 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/sec-original.osm over: -71.4698,42.4866,-71.4657,42.4902, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
-17:34:23.553 WARN   ...hangesetReplacementCreator.cpp(1050) --lenient-bounds option ignored with point datasets.
-17:34:23.965 WARN   ...oot/core/elements/OsmUtils.cpp( 445) 61 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+16:37:59.756 WARN   ...hangesetReplacementCreator.cpp(1050) --lenient-bounds option ignored with point datasets.
+16:38:00.069 WARN   ...oot/core/elements/OsmUtils.cpp( 445) 61 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
 
-Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql to the reference data in: osmapidb://hoot:hoottest@localhost:5432/osmapi_test...
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementEmptyGeometryFilterTest/ServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
 Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4606041, num_changes=1526
@@ -58,5 +58,5 @@ Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 1
 
-Reading the entire reference dataset out of: osmapidb://hoot:hoottest@localhost:5432/osmapi_test to: ServiceChangesetReplacementEmptyGeometryFilterTest-xml-replaced.osm for verification...
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementEmptyGeometryFilterTest-xml-replaced.osm for verification...
 
