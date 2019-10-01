@@ -134,7 +134,7 @@ public:
                                        const double poiPolyDistance);
 
   /**
-   * TODO
+   * Clears the contents of the cache
    */
   void clear();
 
