@@ -107,13 +107,6 @@ public:
    */
   static void resetMatchDistanceInfo();
 
-  /**
-   * TODO
-   *
-   * @return
-   */
-  //static void printCacheInfo();
-
   virtual QString explain() const override { return _explainText; }
 
   virtual QString getDescription() const override { return "Matches POIs with polygons"; }
