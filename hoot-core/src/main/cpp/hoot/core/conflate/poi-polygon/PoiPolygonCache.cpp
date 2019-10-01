@@ -39,27 +39,12 @@
 namespace hoot
 {
 
-PoiPolygonCachePtr PoiPolygonCache::_theInstance;
-
 PoiPolygonCache::PoiPolygonCache()
 {
 }
 
 PoiPolygonCache::~PoiPolygonCache()
 {
-}
-
-const PoiPolygonCachePtr& PoiPolygonCache::getInstance(const ConstOsmMapPtr& map)
-{
-  if (_theInstance.get() == 0)
-  {
-    _theInstance.reset(new PoiPolygonCache());
-    if (map)
-    {
-      _theInstance->setOsmMap(map);
-    }
-  }
-  return _theInstance;
 }
 
 void PoiPolygonCache::setOsmMap(const ConstOsmMapPtr& map)
@@ -132,17 +117,21 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
   {
     return std::shared_ptr<geos::geom::Geometry>();
   }
+  LOG_VART(element->getElementType());
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
     _geometryCache.find(element->getElementId());
   if (itr != _geometryCache.end())
   {
+    LOG_VART(itr.value());
     _incrementCacheHitCount("geometry");
     return itr.value();
   }
   else
   {
     std::shared_ptr<geos::geom::Geometry> newGeom;
+    QString errorMsg =
+      "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a geometry: ";
     try
     {
       newGeom = ElementConverter(_map).convertToGeometry(element);
@@ -151,12 +140,19 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
     {
       if (_badGeomCount <= Log::getWarnMessageLimit())
       {
-        LOG_TRACE(
-          "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a " <<
-          "geometry: " << element->toString() << "\n" << e.what());
+        LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
         _badGeomCount++;
       }
     }
+    catch (const HootException& e)
+    {
+      if (_badGeomCount <= Log::getWarnMessageLimit())
+      {
+        LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
+        _badGeomCount++;
+      }
+    }
+    LOG_VART(newGeom.get());
     if (newGeom.get() &&
         QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
     {
@@ -167,6 +163,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
       }
       newGeom.reset();
     }
+    LOG_VART(newGeom.get());
     _geometryCache[element->getElementId()] = newGeom;
     _incrementCacheSizeCount("geometry");
     return newGeom;
@@ -175,6 +172,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
 
 std::shared_ptr<geos::geom::LineString> PoiPolygonCache::_getLineString(ConstWayPtr poly)
 {
+  LOG_VART(poly.get());
   if (!poly)
   {
     return std::shared_ptr<geos::geom::LineString>();
@@ -204,6 +202,7 @@ std::shared_ptr<geos::geom::LineString> PoiPolygonCache::_getLineString(ConstWay
         _badGeomCount++;
       }
     }
+    LOG_VART(newGeom.get());
     if (newGeom.get() &&
         QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
     {
@@ -214,6 +213,7 @@ std::shared_ptr<geos::geom::LineString> PoiPolygonCache::_getLineString(ConstWay
       }
       newGeom.reset();
     }
+    LOG_VART(newGeom.get());
     _lineStringCache[poly->getElementId()] = newGeom;
     _incrementCacheSizeCount("linestring");
     return newGeom;
@@ -310,7 +310,7 @@ bool PoiPolygonCache::isType(ConstElementPtr element, const QString& type)
     }
     else
     {
-      throw IllegalArgumentException("TODO");
+      throw IllegalArgumentException("Invalid type passed to PoiPolygonCache::isType: " + type);
     }
     _isTypeCache[key] = isType;
     _incrementCacheSizeCount("isType");
@@ -395,6 +395,7 @@ bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNod
          poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
     {
       ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
+      LOG_VART(poiNeighbor.get());
       if (poiNeighbor->getElementId() != poi->getElementId())
       {
         long neighborPoiToPolyDist = -1.0;
@@ -451,16 +452,20 @@ double PoiPolygonCache::getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr po
 
 double PoiPolygonCache::getArea(ConstElementPtr element)
 {
+  LOG_VART(element.get());
   if (!element)
   {
     return -1.0;
   }
+
   std::shared_ptr<geos::geom::Geometry> geom = _getGeometry(element);
+  LOG_VART(geom.get());
   double area = -1.0;
   if (geom)
   {
     area = geom->getArea();
   }
+  LOG_VART(area);
   return area;
 }
 

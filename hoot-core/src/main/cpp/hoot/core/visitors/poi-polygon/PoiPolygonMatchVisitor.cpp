@@ -60,6 +60,7 @@ PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
                                                std::vector<const Match*>& result,
                                                ConstMatchThresholdPtr threshold,
                                                std::shared_ptr<PoiPolygonRfClassifier> rf,
+                                               PoiPolygonCachePtr infoCache,
                                                ElementCriterionPtr filter) :
 _map(map),
 _result(result),
@@ -70,13 +71,16 @@ _threshold(threshold),
 _rf(rf),
 _numElementsVisited(0),
 _numMatchCandidatesVisited(0),
-_filter(filter)
+_filter(filter),
+_infoCache(infoCache)
 {
   ConfigOptions opts = ConfigOptions();
   _enableAdvancedMatching = opts.getPoiPolygonEnableAdvancedMatching();
   _enableReviewReduction = opts.getPoiPolygonEnableReviewReduction();
   _reviewDistanceThreshold = opts.getPoiPolygonReviewDistanceThreshold();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+
+  LOG_VART(_infoCache.get());
 }
 
 PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
@@ -111,7 +115,8 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
         LOG_TRACE(
           "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
         PoiPolygonMatch* m =
-          new PoiPolygonMatch(_map, _threshold, _rf, _surroundingPolyIds, _surroundingPoiIds);
+          new PoiPolygonMatch(
+            _map, _threshold, _rf, _infoCache, _surroundingPolyIds, _surroundingPoiIds);
         m->setConfiguration(conf());
         m->calculateMatch(poiId, polyId);
 

@@ -54,9 +54,8 @@ class PoiPolygonCache
 
 public:
 
+  PoiPolygonCache();
   ~PoiPolygonCache();
-
-  static const PoiPolygonCachePtr& getInstance(const ConstOsmMapPtr& map);
 
   virtual void setOsmMap(const ConstOsmMapPtr& map);
 
@@ -143,8 +142,6 @@ public:
 
 private:
 
-  static std::shared_ptr<PoiPolygonCache> _theInstance;
-
   ConstOsmMapPtr _map;
 
   int _badGeomCount;
@@ -176,8 +173,6 @@ private:
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
-
-  PoiPolygonCache();
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
   std::shared_ptr<geos::geom::LineString> _getLineString(ConstWayPtr way);

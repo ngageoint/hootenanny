@@ -43,6 +43,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -68,6 +69,7 @@ public:
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
+    PoiPolygonCachePtr infoCache = PoiPolygonCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
     const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 
@@ -110,7 +112,7 @@ public:
    *
    * @return
    */
-  static void printCacheInfo();
+  //static void printCacheInfo();
 
   virtual QString explain() const override { return _explainText; }
 
@@ -232,6 +234,8 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
 
   std::shared_ptr<QElapsedTimer> _timer;
+
+  PoiPolygonCachePtr _infoCache;
 
   void _categorizeElementsByGeometryType();
 

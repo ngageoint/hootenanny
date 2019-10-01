@@ -42,7 +42,6 @@
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 using namespace std;
 
@@ -82,6 +81,7 @@ Match(threshold)
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  std::shared_ptr<const PoiPolygonRfClassifier> rf,
+                                 PoiPolygonCachePtr infoCache,
                                  const set<ElementId>& polyNeighborIds,
                                  const set<ElementId>& poiNeighborIds) :
 Match(threshold),
@@ -113,10 +113,13 @@ _disableSameSourceConflationMatchTagKeyPrefixOnly(true),
 _sourceTagKey(""),
 _reviewMultiUseBuildings(false),
 _rf(rf),
-_explainText("")
+_explainText(""),
+_infoCache(infoCache)
 {
 //  _timer.reset(new QElapsedTimer());
 //  _timer->start();
+
+  LOG_VART(_infoCache.get());
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -407,7 +410,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
-      _addressMatchEnabled);
+      _addressMatchEnabled, _infoCache);
     reviewReducer.setConfiguration(conf());
     if (reviewReducer.triggersRule(_poi, _poly))
     {
@@ -427,7 +430,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
       if (_reviewMultiUseBuildings &&
-          PoiPolygonCache::getInstance(_map)->hasCriterion(
+          /*PoiPolygonCache::getInstance(_map)*/_infoCache->hasCriterion(
             _poly, QString::fromStdString(MultiUseBuildingCriterion::className())))
       {
         _class.setReview();
@@ -677,7 +680,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //LOG_VART(poly);
 
   unsigned int evidence = 0;
-  const PoiPolygonCachePtr& infoCache = PoiPolygonCache::getInstance(_map);
 
   evidence += _getDistanceEvidence(poi, poly);
   //see comment in _getDistanceEvidence
@@ -725,8 +727,8 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //necessary.  The school requirement definitely seems too type specific (this type of evidence
   //has actually only been found with school pois in one test dataset so far), but when
   //removing it scores dropped for other datasets...so not changing it for now.
-  if (evidence == 0 && _distance <= 35.0 && infoCache->isType(poi, "school") &&
-      infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
+  if (evidence == 0 && _distance <= 35.0 && _infoCache->isType(poi, "school") &&
+      _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
     if (evidence >= _matchEvidenceThreshold)
@@ -759,11 +761,6 @@ void PoiPolygonMatch::printMatchDistanceInfo()
 void PoiPolygonMatch::resetMatchDistanceInfo()
 {
   PoiPolygonDistanceTruthRecorder::resetMatchDistanceInfo();
-}
-
-void PoiPolygonMatch::printCacheInfo()
-{
-  PoiPolygonCache::getInstance(ConstOsmMapPtr())->printCacheInfo();
 }
 
 set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const

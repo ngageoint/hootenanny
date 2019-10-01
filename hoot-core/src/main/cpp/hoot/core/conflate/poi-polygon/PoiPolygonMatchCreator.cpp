@@ -48,6 +48,13 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonCache());
+    _infoCache->setOsmMap(map);
+  }
+
   PoiPolygonMatch* result = 0;
 
   if (eid1.getType() != eid2.getType())
@@ -59,7 +66,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
+      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache);
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -75,11 +82,18 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
 
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonCache());
+    _infoCache->setOsmMap(map);
+  }
+
   PoiPolygonMatch::resetMatchDistanceInfo();
 
   QElapsedTimer timer;
   timer.start();
-  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
+  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _infoCache, _filter);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
@@ -127,7 +141,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_INFO(
     "POI/Polygon review reductions: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::numReviewReductions));
-  PoiPolygonMatch::printCacheInfo();
+  _infoCache->printCacheInfo();
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const

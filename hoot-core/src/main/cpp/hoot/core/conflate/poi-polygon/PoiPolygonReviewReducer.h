@@ -61,7 +61,7 @@ public:
                           double nameScoreThreshold, double nameScore, bool nameMatch,
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
                           bool typeMatch, double matchDistanceThreshold, bool addressMatch,
-                          bool addressParsingEnabled);
+                          bool addressParsingEnabled, PoiPolygonCachePtr infoCache);
 
   virtual void setConfiguration(const Settings& conf);
 
