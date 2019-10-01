@@ -430,7 +430,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
       if (_reviewMultiUseBuildings &&
-          /*PoiPolygonCache::getInstance(_map)*/_infoCache->hasCriterion(
+          _infoCache->hasCriterion(
             _poly, QString::fromStdString(MultiUseBuildingCriterion::className())))
       {
         _class.setReview();
