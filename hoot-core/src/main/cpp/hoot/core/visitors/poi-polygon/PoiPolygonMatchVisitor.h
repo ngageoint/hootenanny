@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -54,7 +55,7 @@ public:
                          ElementCriterionPtr filter = ElementCriterionPtr());
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
                          ConstMatchThresholdPtr threshold,
-                         std::shared_ptr<PoiPolygonRfClassifier> rf,
+                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
@@ -107,6 +108,8 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
   ElementCriterionPtr _filter;
+
+  PoiPolygonCachePtr _infoCache;
 
   void _checkForMatch(const std::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);

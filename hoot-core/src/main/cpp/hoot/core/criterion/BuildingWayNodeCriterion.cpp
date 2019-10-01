@@ -90,8 +90,8 @@ long BuildingWayNodeCriterion::getMatchingWayId(const ConstElementPtr& e)
   {
     const set<long> waysContainingNode =
       _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getElementId().getId());
-    for (set<long>::const_iterator it = waysContainingNode.begin();
-         it != waysContainingNode.end(); ++it)
+    for (set<long>::const_iterator it = waysContainingNode.begin(); it != waysContainingNode.end();
+         ++it)
     {
       const long wayId = *it;
       if (_map->containsElement(ElementId(ElementType::Way, wayId)) &&

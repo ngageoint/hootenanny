@@ -29,8 +29,9 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 namespace hoot
 {
@@ -49,18 +50,18 @@ namespace hoot
  * forest model could make it entirely obsolete (#2323).  At the very least, triggersRule could
  * benefit from being refactored into smaller chunks.
  */
-class PoiPolygonReviewReducer
+class PoiPolygonReviewReducer : public Configurable
 {
 
 public:
 
-  // encapsulate all these params in a class...this is nasty
+  // maybe encapsulate all these params in a class...this is nasty
   PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
                           const std::set<ElementId>& poiNeighborIds, double distance,
                           double nameScoreThreshold, double nameScore, bool nameMatch,
                           bool exactNameMatch, double typeScoreThreshold, double typeScore,
                           bool typeMatch, double matchDistanceThreshold, bool addressMatch,
-                          bool addressParsingEnabled);
+                          bool addressParsingEnabled, PoiPolygonCachePtr infoCache);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -73,7 +74,7 @@ public:
    * @return return true if the features trigger a review reduction rule; false otherwise
    * @note this needs to be broken up into more modular pieces
    */
-  bool triggersRule(ConstElementPtr poi, ConstElementPtr poly);
+  bool triggersRule(ConstNodePtr poi, ConstElementPtr poly);
 
 private:
 
@@ -95,23 +96,21 @@ private:
 
   QStringList _genericLandUseTagVals;
 
-  int _badGeomCount;
-
   bool _keepClosestMatchesOnly;
 
   bool _addressParsingEnabled;
   AddressParser _addressParser;
 
+  PoiPolygonCachePtr _infoCache;
+
   bool _nonDistanceSimilaritiesPresent() const;
 
-  /*
-   * Determines if there exists a poi in the search radius of the poi being evaluated that is
-   * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
-   * is increased.
-   */
-  bool _poiNeighborIsCloserToPolyThanPoi(ConstElementPtr poi, ConstElementPtr poly);
+  bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
+  bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
 
-  bool _polyContainsPoiAsMember(ConstElementPtr poly, ConstElementPtr poi) const;
+  bool _hasAddress(ConstElementPtr element);
+
+  static bool _inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
 };
 
 }

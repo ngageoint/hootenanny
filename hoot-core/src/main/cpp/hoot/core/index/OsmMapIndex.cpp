@@ -135,7 +135,7 @@ void OsmMapIndex::_buildNodeTree() const
 
   _nodeTree->bulkInsert(boxes, ids);
 
-  LOG_INFO("  Node R-Tree index built. Time elapsed: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_INFO("  Node R-Tree index built. Time elapsed: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 void OsmMapIndex::_buildWayTree() const
@@ -188,7 +188,7 @@ void OsmMapIndex::_buildWayTree() const
 
   _wayTree->bulkInsert(boxes, ids);
 
-  LOG_DEBUG("Way R-Tree index built in: " << StringUtils::secondsToDhms(t.elapsed()));
+  LOG_DEBUG("Way R-Tree index built in: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 int OsmMapIndex::_createTreeNid(long nid) const

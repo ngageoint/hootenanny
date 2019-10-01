@@ -175,7 +175,7 @@ void HootApiDbBulkInserter::finalizePartial()
     StringUtils::formatLargeNumber(_getTotalFeaturesWritten()) <<
     " input records parsed (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
-    StringUtils::secondsToDhms(_timer->elapsed()));
+    StringUtils::millisecondsToDhms(_timer->elapsed()));
 
   //go ahead and clear out some of the data structures we don't need anymore
   _clearIdCollections();
@@ -236,7 +236,7 @@ void HootApiDbBulkInserter::_writeDataToDbPsql()
   ApiDb::execSqlFile(HootApiDb::removeLayerName(_outputUrl), _sqlOutputCombinedFile->fileName());
 
   LOG_INFO(
-    "SQL execution complete.  Time elapsed: " << StringUtils::secondsToDhms(_timer->elapsed()));
+    "SQL execution complete.  Time elapsed: " << StringUtils::millisecondsToDhms(_timer->elapsed()));
 }
 
 void HootApiDbBulkInserter::_writeDataToDb()
@@ -359,7 +359,7 @@ void HootApiDbBulkInserter::_writeCombinedSqlFile()
   LOG_INFO(
     "SQL file write complete.  (data pass #" << _fileDataPassCtr << " of " <<
     _numberOfFileDataPasses() << ").  Time elapsed: " <<
-    StringUtils::secondsToDhms(_timer->elapsed()));
+    StringUtils::millisecondsToDhms(_timer->elapsed()));
   LOG_DEBUG("Parsed " << StringUtils::formatLargeNumber(recordCtr) << " total SQL file lines.");
   QFileInfo outputInfo(_sqlOutputCombinedFile->fileName());
   LOG_VART(Tgs::SystemInfo::humanReadable(outputInfo.size()));

@@ -234,7 +234,7 @@ void ReviewMarker::mark(const OsmMapPtr &map, const std::vector<ElementId>& ids,
 
   map->addElement(r);
 
-  LOG_DEBUG("Marked review: " << r);
+  LOG_TRACE("Marked review: " << r);
 }
 
 void ReviewMarker::removeElement(const OsmMapPtr& map, ElementId eid)

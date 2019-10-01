@@ -47,6 +47,7 @@
 // Qt
 #include <QFileInfo>
 #include <qnumeric.h>
+#include <QElapsedTimer>
 
 // Standard
 #include <deque>
@@ -605,14 +606,16 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
   QFileInfo scriptFileInfo(_scriptPath);
 
-  LOG_DEBUG(
-    "Creating matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_INFO(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
-    " match candidates.");
+    " match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const

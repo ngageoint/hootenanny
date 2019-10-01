@@ -101,6 +101,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
+  LOG_VART(e->getElementType().toString());
   switch (e->getElementType().getEnum())
   {
   case ElementType::Node:
@@ -132,6 +133,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
                                                               const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
+  LOG_VART(gid);
   if (gid == GEOS_POLYGON)
   {
     return convertToPolygon(e);
@@ -143,6 +145,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
   else
   {
     // we don't recognize this geometry type.
+    LOG_TRACE("Returning empty geometry...");
     std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;
   }
@@ -153,7 +156,6 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelatio
                                                               const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
-
   if (gid == GEOS_MULTIPOLYGON)
   {
     return MultiPolygonCreator(_constProvider, e).createMultipolygon();
@@ -181,6 +183,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr&
 
 std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
 {
+  LOG_TRACE("Converting to line string...");
+
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
   if (size == 1)
@@ -235,7 +239,10 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
 
 std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) const
 {
+  LOG_TRACE("Converting to polygon...");
+
   const std::vector<long>& ids = w->getNodeIds();
+  LOG_VART(ids);
   size_t size = ids.size();
   if (size == 1)
   {
@@ -259,7 +266,13 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   size_t i;
   for (i = 0; i < ids.size(); i++)
   {
+    LOG_VART(ids[i]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
+    LOG_VART(n.get());
+//    if (!n)
+//    {
+//      throw HootException("Node " + QString::number(ids[i]) + " does not exist.");
+//    }
     cs->setAt(n->toCoordinate(), i);
   }
 

@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -105,17 +106,8 @@ public:
     converter.setConfiguration(conf());
     converter.convert(inputs, output);
 
-    QString msg = "Convert operation completed in ";
-    const qint64 timeElapsed = timer.elapsed();
-    if (timeElapsed > 60000)
-    {
-      msg += QString::number(timeElapsed / 1000 / 60) + " total minutes";
-    }
-    else
-    {
-      msg += QString::number(timeElapsed / 1000) + " total seconds";
-    }
-    LOG_INFO(msg);
+    LOG_INFO(
+      "Convert operation completed in " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
     return 0;
   }
