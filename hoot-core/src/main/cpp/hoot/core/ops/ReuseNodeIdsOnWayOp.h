@@ -24,63 +24,45 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef REUSE_NODE_IDS_ON_WAY_OP_H
+#define REUSE_NODE_IDS_ON_WAY_OP_H
 
-#ifndef IDSWAP_H
-#define IDSWAP_H
-
-#include <array>
-#include <map>
-
-//  Hoot
+// hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstElementConsumer.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
 {
 
-class IdSwap
+/**
+ * ReuseNodeIdsOnWayOp class attempts to reuse the node IDs of a way with status UNKNOWN1 that is
+ * being replaced by a way with status UNKNOWN2.  This preserves IDs of the original nodes and ends
+ * up creating a modify in a changeset for all preserved IDs rather than deleting the originals and
+ * creating new ones.
+ */
+class ReuseNodeIdsOnWayOp : public ConstOsmMapOperation, public ConstElementConsumer
 {
 public:
 
-  /** Helpful typedefs for container and iterators */
-  typedef std::map<ElementId, ElementId> container;
-  typedef typename container::iterator iterator;
-  typedef typename container::const_iterator const_iterator;
+  static std::string className() { return "hoot::ReuseNodeIdsOnWayOp"; }
 
-  IdSwap();
-  IdSwap(ElementId id_1, ElementId id_2) { add(id_1, id_2); }
+  ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
+  ReuseNodeIdsOnWayOp();
 
-  /**
-   * @brief add
-   * @param type
-   * @param id_1
-   * @param id_2
-   */
-  void add(ElementId id_1, ElementId id_2);
-  /**
-   * @brief begin Begin iterator
-   * @return iterator pointing to the beginning of the set
-   */
-  iterator begin();
-  /**
-   * @brief end End iterator
-   * @return iterator pointing off of the end of the set
-   */
-  iterator end();
-  /**
-   * @brief size Total number of elements to swap
-   * @return count
-   */
-  size_t size();
+  virtual void apply(const std::shared_ptr<OsmMap> &map) override;
+  virtual void addElement(const ConstElementPtr& e) override;
+
+  virtual QString getDescription() const { return "Reuses the node IDs from one way in another."; }
 
 private:
 
-  /** Containers to hold ID swap information, forward and backward mappings */
-  container _idMap;
-  container _idMapReversed;
-};
+  ElementId _from;
+  ElementId _to;
 
-typedef std::shared_ptr<IdSwap> IdSwapPtr;
+};
 
 }
 
-#endif  //  IDSWAP_H
+#endif  //  REUSE_NODE_IDS_ON_WAY_OP_H

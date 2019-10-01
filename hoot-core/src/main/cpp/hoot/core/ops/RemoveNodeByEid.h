@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
 {
@@ -42,7 +42,7 @@ namespace hoot
  * If removeFully is true, the node will be removed from all relations,
  * then removed from the map.
  */
-class RemoveNodeByEid : public OsmMapOperation
+class RemoveNodeByEid : public ConstOsmMapOperation
 {
 public:
 
@@ -77,7 +77,7 @@ public:
    * @brief apply Peform the op on the given map
    * @param map map upon which to operate
    */
-  void apply(OsmMapPtr& map);
+  void apply(const OsmMapPtr& map);
 
   /**
    * @brief setNodeId Sets the ID of the node to remove
@@ -92,7 +92,7 @@ public:
    * @param nId ID of node to remove
    * @param removeOnlyUnused remove only nodes that aren't a part of a way
    */
-  static void removeNode(OsmMapPtr map, long nId, bool removeOnlyUnused = false);
+  static void removeNode(const OsmMapPtr& map, long nId, bool removeOnlyUnused = false);
 
   /**
    * @brief removeNode Simply removes the node from the map (from index, from nodes
@@ -100,14 +100,14 @@ public:
    * @param map Map to operate on
    * @param nId ID of the node to remove
    */
-  static void removeNodeNoCheck(OsmMapPtr map, long nId);
+  static void removeNodeNoCheck(const OsmMapPtr& map, long nId);
 
   /**
    * @brief removeNodeFully Removes node from relations, ways, then from node collection
    * @param map Map to operate on
    * @param nId ID of the node to remove
    */
-  static void removeNodeFully(OsmMapPtr map, long nId);
+  static void removeNodeFully(const OsmMapPtr& map, long nId);
 
   virtual QString getDescription() const { return "Removes a single node by element ID"; }
 
@@ -118,9 +118,9 @@ private:
   bool _removeFully;
   bool _removeOnlyUnused;
 
-  void _removeNodeNoCheck(OsmMapPtr& map, long nId);
-  void _removeNode(OsmMapPtr& map, long nId);
-  void _removeNodeFully(OsmMapPtr& map, long nId);
+  void _removeNodeNoCheck(const OsmMapPtr& map, long nId);
+  void _removeNode(const OsmMapPtr& map, long nId);
+  void _removeNodeFully(const OsmMapPtr& map, long nId);
 };
 
 }

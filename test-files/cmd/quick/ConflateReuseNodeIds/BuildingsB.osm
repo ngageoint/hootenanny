@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59310625117" minlon="-104.80655676972" maxlat="39.59330740063" maxlon="-104.80608690952"/>
+    <node visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931217689499988" lon="-104.8062120958900039"/>
+    <node visible="true" id="15" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931432865099993" lon="-104.8062152723099985"/>
+    <node visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931524411000026" lon="-104.8061255811399946"/>
+    <node visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931238599300031" lon="-104.8061136186200031"/>
+    <node visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931271111399994" lon="-104.8060869095200047"/>
+    <node visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5933034489699978" lon="-104.8061230577099963"/>
+    <node visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5932969706700035" lon="-104.8062512639099992"/>
+    <node visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5932790907399976" lon="-104.8064697585799934"/>
+    <node visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5933074006300032" lon="-104.8063769466800039"/>
+    <node visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5932910106900025" lon="-104.8063692123599964"/>
+    <node visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931151911600026" lon="-104.8063479429700067"/>
+    <node visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931137011600001" lon="-104.8064001496600071"/>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931062511699992" lon="-104.8064407548600059"/>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931241311499988" lon="-104.8064523563499932"/>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931137011600001" lon="-104.8065277660100065"/>
+    <node visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5932776007499996" lon="-104.8065567697200038"/>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="7"/>
+        <nd ref="10"/>
+        <nd ref="11"/>
+        <nd ref="12"/>
+        <nd ref="13"/>
+        <nd ref="14"/>
+        <nd ref="15"/>
+        <nd ref="16"/>
+        <nd ref="6"/>
+        <nd ref="5"/>
+        <nd ref="4"/>
+        <nd ref="3"/>
+        <nd ref="2"/>
+        <nd ref="1"/>
+        <nd ref="9"/>
+        <nd ref="8"/>
+        <nd ref="7"/>
+        <tag k="name" v="Panera Bread"/>
+        <tag k="building" v="yes"/>
+    </way>
+</osm>
