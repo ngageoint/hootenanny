@@ -61,68 +61,75 @@ public:
   virtual void setOsmMap(const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Returns the distance from a point node to a polygon way
    *
-   * @param poly
-   * @param point
-   * @return
+   * @param poly the polygon to measure distance from
+   * @param point the point to measure distance from
+   * @return the distance between the point and polygon or -1.0 if the distance could not be
+   * calculated
+   * @note The distance calc is not backed by a cache, but the geometries used to derive it are.
    */
   double getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point);
 
   /**
-   * TODO
+   * Calculates the area of an element
    *
-   * @param poly
-   * @return
+   * @param element the feature to calculate the area of
+   * @return the area of the feature or -1.0 if the area could not be calculated
+   * @note The area calc is not backed by a cache, but the geometries used to derive it are.
    */
-  double getArea(ConstElementPtr poly);
+  double getArea(ConstElementPtr element);
 
   /**
-   * TODO
+   * Determines if a polygon contains a point
    *
-   * @param poly
-   * @param point
-   * @return
+   * @param poly the polygon to examine
+   * @param point the point to examine
+   * @return true if the polygon contains the point; false otherwise or if the containment could
+   * not be calculated
    */
   bool polyContainsPoi(ConstWayPtr poly, ConstNodePtr point);
 
   /**
-   * TODO
+   * Determines if an element intersects another element
    *
-   * @param element1
-   * @param element2
-   * @return
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @return true if the two elements intersect; false otherwise or if the intersection could not
+   * be calculated
    */
   bool elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2);
 
   /**
-   * TODO
+   * Determines if an element is of the given type
    *
-   * @param element
-   * @param type
-   * @return
+   * @param element the element to determine type membership for
+   * @param type the type to determine membership for the element
+   * @return true if the element is of the requested type; false otherwise
+   * @throws if the requested type is invalid
+   * @todo change type to enum
    */
   bool isType(ConstElementPtr element, const QString& type);
 
   /**
-   * TODO
+   * Determines if an element has a given criterion
    *
-   * @param element
-   * @param criterionClassName
-   * @return
+   * @param element the element to examine
+   * @param criterionClassName class name of the ElementCriterion to determine membership of
+   * @return true if the element has the criterion; false otherwise
+   * @throws if the criterion class name is invalid
    */
-  bool hasCrit(ConstElementPtr element, const QString& criterionClassName);
+  bool hasCriterion(ConstElementPtr element, const QString& criterionClassName);
 
   /**
-   * Determines if there exists a poi in the search radius of the poi being evaluated that is
-   * closer to the poly being evaluated.  The operation becomes more expensive as the search radius
-   * is increased.
+   * Determines if there exists another poi that is closer than a specified poi to a specified poly
    *
-   * @param poly
-   * @param poi
-   * @param poiNeighborIds
-   * @param poiPolyDistance
-   * @return
+   * @param poly the polygon to examine
+   * @param poi the POI to examine
+   * @param poiNeighborIds IDs of POI neighbors to the polygon
+   * @param poiPolyDistance the pre-calculated distance between poi and poly
+   * @return true if at least one other POI is closer to poly than poi; false otherwise
+   * @note The operation becomes more expensive as the search radius is increased.
    * @todo This only handles ways as polygons and not relations. See #3474.
    */
   bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
@@ -130,7 +137,7 @@ public:
                                        const double poiPolyDistance);
 
   /**
-   * TODO
+   * Prints information about the caches used by this class
    */
   void printCacheInfo();
 

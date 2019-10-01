@@ -427,7 +427,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
       if (_reviewMultiUseBuildings &&
-          PoiPolygonCache::getInstance(_map)->hasCrit(
+          PoiPolygonCache::getInstance(_map)->hasCriterion(
             _poly, QString::fromStdString(MultiUseBuildingCriterion::className())))
       {
         _class.setReview();
@@ -726,7 +726,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //has actually only been found with school pois in one test dataset so far), but when
   //removing it scores dropped for other datasets...so not changing it for now.
   if (evidence == 0 && _distance <= 35.0 && infoCache->isType(poi, "school") &&
-      infoCache->hasCrit(poly, QString::fromStdString(BuildingCriterion::className())))
+      infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
     if (evidence >= _matchEvidenceThreshold)

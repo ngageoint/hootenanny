@@ -168,7 +168,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       }
     }
   }
-  if (_infoCache->hasCrit(poly, QString::fromStdString(MultiUseCriterion::className())) &&
+  if (_infoCache->hasCriterion(poly, QString::fromStdString(MultiUseCriterion::className())) &&
        poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #2...");
@@ -324,7 +324,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   }
 
   const bool polyIsBuilding =
-    _infoCache->hasCrit(poly, QString::fromStdString(BuildingCriterion::className()));
+    _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className()));
   LOG_VART(polyIsBuilding);
 
   //Similar to previous, except more focused for restrooms.
@@ -433,7 +433,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   LOG_VART(poiContainedInParkPoly);
 
   const bool poiIsBuilding =
-    _infoCache->hasCrit(poi, QString::fromStdString(BuildingCriterion::className()));
+    _infoCache->hasCriterion(poi, QString::fromStdString(BuildingCriterion::className()));
   LOG_VART(poiIsBuilding);
 
   //This will check the current poi against all neighboring pois.  If any neighboring poi is
@@ -536,7 +536,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           sportPoiOnOtherSportPolyWithTypeMatch = true;
         }
       }
-      else if (_infoCache->hasCrit(
+      else if (_infoCache->hasCriterion(
                  polyNeighbor, QString::fromStdString(BuildingCriterion::className())))
       {
         if (_infoCache->polyContainsPoi(polyNeighborAsWay, poi))

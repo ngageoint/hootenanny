@@ -318,7 +318,7 @@ bool PoiPolygonCache::isType(ConstElementPtr element, const QString& type)
   }
 }
 
-bool PoiPolygonCache::hasCrit(ConstElementPtr element, const QString& criterionClassName)
+bool PoiPolygonCache::hasCriterion(ConstElementPtr element, const QString& criterionClassName)
 {
   if (!element || criterionClassName.trimmed().isEmpty())
   {
@@ -360,6 +360,11 @@ ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
     ElementCriterionPtr crit =
       ElementCriterionPtr(
         Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+    if (!crit)
+    {
+      throw IllegalArgumentException(
+        "Invalid criterion passed to PoiPolygonCache::hasCriterion: " + criterionClassName);
+    }
     _criterionCache[criterionClassName] = crit;
     return crit;
   }
@@ -444,17 +449,17 @@ double PoiPolygonCache::getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr po
   return distance;
 }
 
-double PoiPolygonCache::getArea(ConstElementPtr poly)
+double PoiPolygonCache::getArea(ConstElementPtr element)
 {
-  if (!poly)
+  if (!element)
   {
     return -1.0;
   }
-  std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
+  std::shared_ptr<geos::geom::Geometry> geom = _getGeometry(element);
   double area = -1.0;
-  if (polyGeom)
+  if (geom)
   {
-    area = polyGeom->getArea();
+    area = geom->getArea();
   }
   return area;
 }
