@@ -2,26 +2,27 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="39.74025976923" minlon="-104.99544904472" maxlat="39.74068671108" maxlon="-104.99490314789"/>
     <node visible="true" id="-222264" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7403925161399982" lon="-104.9954490447200044"/>
+    <node visible="true" id="-222262" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7406867110800022" lon="-104.9950687832500051"/>
+    <node visible="true" id="-222260" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405485831299998" lon="-104.9949031478899997"/>
     <node visible="true" id="-222258" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405109118200031" lon="-104.9952950738200030"/>
-    <node visible="true" id="-222256" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7406867110800022" lon="-104.9950687832500051"/>
-    <node visible="true" id="-222254" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7405485831299998" lon="-104.9949031478899997"/>
     <node visible="true" id="-222252" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7402597692300006" lon="-104.9952857422500045"/>
     <way visible="true" id="-222330" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-222258"/>
-        <nd ref="-222256"/>
-        <nd ref="-222254"/>
+        <nd ref="-222262"/>
+        <nd ref="-222260"/>
         <nd ref="-222252"/>
         <nd ref="-222264"/>
         <nd ref="-222258"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="name" v="building 1"/>
         <tag k="alt_name" v="building 2"/>
         <tag k="building" v="yes"/>
-        <tag k="name" v="building 1"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-279269" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-222330" role="outer"/>
         <tag k="name" v="empty"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

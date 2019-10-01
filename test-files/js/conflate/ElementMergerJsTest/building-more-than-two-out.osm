@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="39.73991621865" minlon="-104.99700095899" maxlat="39.74029398935" maxlon="-104.9965096792"/>
-    <node visible="true" id="-279485" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7401968485100028" lon="-104.9970009589900002"/>
-    <node visible="true" id="-279479" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7401051042600031" lon="-104.9968816481899978"/>
-    <node visible="true" id="-279477" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7402939893500005" lon="-104.9968956847500010"/>
-    <node visible="true" id="-279471" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7399162186500021" lon="-104.9966219717299936"/>
-    <node visible="true" id="-279469" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7400241533499994" lon="-104.9965096792000026"/>
+    <node visible="true" id="-279487" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7402939893500005" lon="-104.9968956847500010"/>
+    <node visible="true" id="-279481" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7401968485100028" lon="-104.9970009589900002"/>
+    <node visible="true" id="-279473" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7400241533499994" lon="-104.9965096792000026"/>
+    <node visible="true" id="-279467" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7401051042600031" lon="-104.9968816481899978"/>
+    <node visible="true" id="-279465" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.7399162186500021" lon="-104.9966219717299936"/>
     <way visible="true" id="-279655" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-279479"/>
-        <nd ref="-279485"/>
-        <nd ref="-279477"/>
-        <nd ref="-279469"/>
-        <nd ref="-279471"/>
-        <nd ref="-279479"/>
+        <nd ref="-279467"/>
+        <nd ref="-279481"/>
+        <nd ref="-279487"/>
+        <nd ref="-279473"/>
+        <nd ref="-279465"/>
+        <nd ref="-279467"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="name" v="building 3"/>
         <tag k="alt_name" v="building 1;building 2;building 4"/>
         <tag k="building" v="commercial"/>
-        <tag k="name" v="building 3"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

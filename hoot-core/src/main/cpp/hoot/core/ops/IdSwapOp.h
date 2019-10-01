@@ -28,14 +28,19 @@
 #ifndef IDSWAPOP_H
 #define IDSWAPOP_H
 
+#include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
 
 namespace hoot
 {
 
-class IdSwapOp : public OsmMapOperation, public OperationStatusInfo
+/**
+ * @brief The IdSwapOp class is used to swap node and way IDs with each other
+ *  It is used to preserve node IDs within ways when merging ways
+ */
+class IdSwapOp : public ConstOsmMapOperation, public OperationStatusInfo
 {
 public:
   /**
@@ -47,13 +52,23 @@ public:
   /**
    * @brief IdSwapOp - Default constructor
    */
-  IdSwapOp();
+  IdSwapOp() { }
+
+  /**
+   * @brief IdSwapOp - Constructor taking a swap object with the IDs to swap
+   */
+  IdSwapOp(const IdSwapPtr& idSwap) : _idSwap(idSwap) { }
+
+  /**
+   * @brief IdSwapOp - Constructor taking two elements to swap IDs
+   */
+  IdSwapOp(ElementId e1, ElementId e2) : _idSwap(new IdSwap(e1,e2)) { }
 
   /**
    * @brief apply - Apply the IdSwap op
    * @param pMap - Target map
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  virtual void apply(const std::shared_ptr<OsmMap>& map) override;
 
   virtual QString getDescription() const override
   { return "Swap IDs for ID preservation in Attribute Conflation"; }
@@ -63,6 +78,19 @@ public:
 
   virtual QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
+
+private:
+  /**
+   * @brief swapNodeIdInWay Swap the node ID in the ways with the swap ID
+   * @param map - Target map
+   * @param nodeId - Node ID of the node in the ways that is being replaced
+   * @param swapId - Node ID of the node to swap into the ways
+   */
+  void swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId);
+
+  /** Element IDs of elements to swap, if empty check the map for an IdSwap object */
+  IdSwapPtr _idSwap;
+
 };
 
 }
