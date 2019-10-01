@@ -69,7 +69,7 @@ public:
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
-    PoiPolygonCachePtr infoCache = PoiPolygonCachePtr(),
+    PoiPolygonCachePtr infoCache,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
     const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 

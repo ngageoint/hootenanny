@@ -54,10 +54,8 @@ class PoiPolygonCache
 
 public:
 
-  PoiPolygonCache();
+  PoiPolygonCache(const ConstOsmMapPtr& map);
   ~PoiPolygonCache();
-
-  virtual void setOsmMap(const ConstOsmMapPtr& map);
 
   /**
    * Returns the distance from a point node to a polygon way
@@ -136,6 +134,11 @@ public:
                                        const double poiPolyDistance);
 
   /**
+   * TODO
+   */
+  void clear();
+
+  /**
    * Prints information about the caches used by this class
    */
   void printCacheInfo();
@@ -176,8 +179,6 @@ private:
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
   std::shared_ptr<geos::geom::LineString> _getLineString(ConstWayPtr way);
-
-  void _clear();
 
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
 

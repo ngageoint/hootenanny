@@ -39,7 +39,8 @@
 namespace hoot
 {
 
-PoiPolygonCache::PoiPolygonCache()
+PoiPolygonCache::PoiPolygonCache(const ConstOsmMapPtr& map) :
+_map(map)
 {
 }
 
@@ -47,15 +48,15 @@ PoiPolygonCache::~PoiPolygonCache()
 {
 }
 
-void PoiPolygonCache::setOsmMap(const ConstOsmMapPtr& map)
-{
-  _map = map;
-  assert(map);
+//void PoiPolygonCache::setOsmMap(const ConstOsmMapPtr& map)
+//{
+//  _map = map;
+//  assert(map);
 
-  _clear();
-}
+//  _clear();
+//}
 
-void PoiPolygonCache::_clear()
+void PoiPolygonCache::clear()
 {
   _numCacheHitsByCacheType.clear();
   _numCacheEntriesByCacheType.clear();
