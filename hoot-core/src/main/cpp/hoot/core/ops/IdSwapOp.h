@@ -36,6 +36,10 @@
 namespace hoot
 {
 
+/**
+ * @brief The IdSwapOp class is used to swap node and way IDs with each other
+ *  It is used to preserve node IDs within ways when merging ways
+ */
 class IdSwapOp : public ConstOsmMapOperation, public OperationStatusInfo
 {
 public:
@@ -50,6 +54,9 @@ public:
    */
   IdSwapOp() { }
 
+  /**
+   * @brief IdSwapOp - Constructor taking a swap object with the IDs to swap
+   */
   IdSwapOp(const IdSwapPtr& idSwap) : _idSwap(idSwap) { }
 
   /**
@@ -74,10 +81,10 @@ public:
 
 private:
   /**
-   * @brief swapNodeIdInWay
-   * @param map
-   * @param nodeId
-   * @param swapId
+   * @brief swapNodeIdInWay Swap the node ID in the ways with the swap ID
+   * @param map - Target map
+   * @param nodeId - Node ID of the node in the ways that is being replaced
+   * @param swapId - Node ID of the node to swap into the ways
    */
   void swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, long swapId);
 

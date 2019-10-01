@@ -62,9 +62,10 @@ void IdSwapOp::apply(const std::shared_ptr<hoot::OsmMap>& map)
     if (element1->getElementType() != element2->getElementType())
       continue;
     //  Each type of element potentially has a something extra to swap
-    //  This is tricky because element1a has replaced element1 as the actual object
-    if (element1->getElementType() == ElementType::Way) //  Both are ensured to have the same type
+    //  Both are ensured to have the same type at this point
+    if (element1->getElementType() == ElementType::Way)
     {
+      //  This is tricky because element1a has replaced element1 as the actual object
       //  Create a copy of element elements
       ElementPtr element1a(element1->clone());
       ElementPtr element2a(element2->clone());
@@ -116,18 +117,22 @@ void IdSwapOp::swapNodeIdInWay(const std::shared_ptr<OsmMap>& map, long nodeId, 
 {
   std::shared_ptr<NodeToWayMap> nodeToWayMap = map->getIndex().getNodeToWayMap();
   std::set<long> ways = nodeToWayMap->getWaysByNode(nodeId);
+  //  Iterate all of the ways that contain this node
   for (std::set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
   {
     long wayId = *it;
     WayPtr way = map->getWay(wayId);
     if (!way)
       continue;
+    //  Get a list of all nodes in the way
     std::vector<long> nodes = way->getNodeIds();
+    //  Iterate all nodes in the way replacing nodeId with swapId as many times as it occurs
     for (size_t i = 0; i < nodes.size(); i++)
     {
       if (nodes[i] == nodeId)
         nodes[i] = swapId;
     }
+    //  Replace the vector of node IDs in the way with the new list
     way->setNodes(nodes);
   }
 }
