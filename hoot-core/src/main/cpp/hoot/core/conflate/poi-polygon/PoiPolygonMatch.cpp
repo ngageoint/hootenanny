@@ -700,25 +700,25 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //    return evidence;
 //  }
   evidence += _getTypeEvidence(poi, poly);
-  if (evidence >= _matchEvidenceThreshold)
-  {
-    return evidence;
-  }
+//  if (evidence >= _matchEvidenceThreshold)
+//  {
+//    return evidence;
+//  }
   if (_addressMatchEnabled)
   {
     evidence += _getAddressEvidence(poi, poly);
-    if (evidence >= _matchEvidenceThreshold)
-    {
-      return evidence;
-    }
+//    if (evidence >= _matchEvidenceThreshold)
+//    {
+//      return evidence;
+//    }
   }
   if (_phoneNumberMatchEnabled)
   {
     evidence += _getPhoneNumberEvidence(poi, poly);
-    if (evidence >= _matchEvidenceThreshold)
-    {
-      return evidence;
-    }
+//    if (evidence >= _matchEvidenceThreshold)
+//    {
+//      return evidence;
+//    }
   }
 
   //We only want to run this if the previous match distance calculation was too large.
@@ -731,10 +731,10 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
       _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
-    if (evidence >= _matchEvidenceThreshold)
-    {
-      return evidence;
-    }
+//    if (evidence >= _matchEvidenceThreshold)
+//    {
+//      return evidence;
+//    }
   }
 
   //no point in trying to increase evidence if we're already at a match
