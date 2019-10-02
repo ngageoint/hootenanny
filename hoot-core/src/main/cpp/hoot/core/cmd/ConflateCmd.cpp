@@ -352,7 +352,9 @@ int ConflateCmd::runSimple(QStringList& args)
   progress.set(_getJobPercentComplete(currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
-  LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
+  LOG_INFO(
+    "Generated " << StringUtils::formatLargeNumber(countReviewsVis.getStat()) <<
+    " feature reviews.");
   currentTask++;
 
   MapProjector::projectToWgs84(result);

@@ -77,6 +77,8 @@ private:
   // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
 
+  int _taskStatusUpdateInterval;
+
   QString _getInfo(const QString& input);
 
   QString _printJSON(const QString& lName, TagInfoHash& data);
