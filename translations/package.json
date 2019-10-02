@@ -6,12 +6,11 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
   "devDependencies": {
     "artillery": "^1.6.0-29",
-    "istanbul": "~0.4.5",
-    "lodash": "4.17.11",
+    "lodash": ">=4.17.13",
     "node-mocks-http": "^1.8.0",
+    "nyc": "^14.1.1",
     "osmtogeojson": "~3.0.0-beta.2",
     "xml2js": "^0.4.22",
     "xmlbuilder": "^9.0.7",
@@ -20,7 +19,7 @@
   "scripts": {
     "test": "mocha --reporter dot",
     "load-test": "artillery run load_test/translation_server_load_test.yml",
-    "cover": "istanbul cover _mocha --"
+    "cover": "nyc npm run test"
   },
   "repository": {
     "type": "git",
