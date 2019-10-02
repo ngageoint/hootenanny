@@ -40,6 +40,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -223,7 +224,7 @@ private:
       const long runningTotal = _total + inputTotal;
       if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
       {
-        QString msg = "Counted " + QString::number(runningTotal);
+        QString msg = "Counted " + StringUtils::formatLargeNumber(runningTotal);
         if (countFeaturesOnly)
         {
           msg += " features.";
