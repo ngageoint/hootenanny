@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 namespace hoot
 {
@@ -40,7 +41,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, WayGeneralizeVisitor)
 WayGeneralizeVisitor::WayGeneralizeVisitor() :
 _epsilon(1.0)
 {
-  //setConfiguration(conf());
 }
 
 void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
@@ -52,7 +52,6 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
 void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;
-  //MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
   _generalizer.reset(new RdpWayGeneralizer(_epsilon));
