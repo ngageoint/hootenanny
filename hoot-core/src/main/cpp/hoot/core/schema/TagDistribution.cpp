@@ -91,7 +91,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
         const QString tagValue = itr->first;
         const int count = itr->second;
         const double percentageOfTotal = (double)count / (double)_total;
-        ts << StringUtils::formatLargeNumber((count) << "\t(" <<
+        ts << StringUtils::formatLargeNumber(count) << "\t(" <<
               _getPercentageStr(percentageOfTotal) << "%)\t" << tagValue << endl;
 
         ctr++;
@@ -110,7 +110,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
         const QString tagValue = itr->second;
         const int count = itr->first;
         const double percentageOfTotal = (double)count / (double)_total;
-        ts << StringUtils::formatLargeNumber((count) << "\t(" <<
+        ts << StringUtils::formatLargeNumber(count) << "\t(" <<
            _getPercentageStr(percentageOfTotal) << "%)\t" << tagValue << endl;
 
         ctr++;
