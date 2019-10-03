@@ -137,7 +137,7 @@ void ProcessThread::processJobs(JobQueue* queue)
 {
   int restart_count = 0;
   const int MAX_RESTART = 3;
-  const int READ_TIMEOUT = 3000;
+  const int READ_TIMEOUT = 500;
   bool working = true;
   while (working)
   {
@@ -163,13 +163,15 @@ void ProcessThread::processJobs(JobQueue* queue)
           if (restart_count < MAX_RESTART)
           {
             _proc.reset(createProcess());
-            _outMutex->lock();
-            cout << test.toStdString() << " failed to launch, requeued." << endl;
-            _outMutex->unlock();
             output.clear();
           }
           else
+          {
             working = false;
+            _outMutex->lock();
+            cout << test.toStdString() << " failed to execute, exiting thread." << endl;
+            _outMutex->unlock();
+          }
           break;
         }
         else if (line == "")
@@ -181,14 +183,18 @@ void ProcessThread::processJobs(JobQueue* queue)
         {
           ++_failures;
           line.append("\n");
-          QString next;
-          while (next != HOOT_TEST_FINISHED)
+          //  If the process is still running, then wait for it to finish
+          if (_proc->state() == QProcess::Running)
           {
-            if (_proc->bytesAvailable() < 1)
-              _proc->waitForReadyRead(READ_TIMEOUT);
-            next = QString(_proc->readLine()).trimmed();
-            if (next != HOOT_TEST_FINISHED)
-              line.append(next.append("\n"));
+            QString next;
+            while (next != HOOT_TEST_FINISHED)
+            {
+              if (_proc->bytesAvailable() < 1)
+                _proc->waitForReadyRead(READ_TIMEOUT);
+              next = QString(_proc->readLine()).trimmed();
+              if (next != HOOT_TEST_FINISHED)
+                line.append(next.append("\n"));
+            }
           }
           output.append(line);
           //  Reset the process

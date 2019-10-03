@@ -69,6 +69,7 @@ public:
   const QString LOCAL_OSM_API_URL = "http://<Enter local OSM API URL here>";
 #endif
 
+  /** Separate port numbers so that tests can run in parallel */
   const int PORT_CAPABILITIES = 9800;
   const int PORT_PERMISSIONS =  9801;
   const int PORT_CONFLICTS =    9802;
@@ -128,7 +129,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getApiStatus(), OsmApiStatus::ONLINE);
     CPPUNIT_ASSERT_EQUAL(writer._capabilities.getGpxStatus(), OsmApiStatus::ONLINE);
 #ifdef RUN_LOCAL_TEST_SERVER
-    server.wait();
+    server.shutdown();
 #endif
   }
 
@@ -290,7 +291,7 @@ public:
     writer.apply();
 
     //  Wait for the test server to finish
-    server.wait();
+    server.shutdown();
 
     Log::getInstance().setLevel(logLevel);
 
@@ -335,7 +336,7 @@ public:
     writer.apply();
 
     //  Wait for the test server to finish
-    server.wait();
+    server.shutdown();
 
     Log::getInstance().setLevel(logLevel);
 
@@ -403,5 +404,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
+
 }
