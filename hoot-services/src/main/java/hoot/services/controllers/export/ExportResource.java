@@ -97,6 +97,8 @@ public class ExportResource {
         Class<? extends ExportCommand> exportCommand = null;
         if (outputType.startsWith("tiles")) {
             exportCommand = CalculateTilesCommand.class;
+        } else if (outputType.startsWith("alpha")) {
+            exportCommand = AlphaShapeCommand.class;
         } else {
             exportCommand = ExportCommand.class;
         }
