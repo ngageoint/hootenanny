@@ -41,10 +41,10 @@ public class ExportParams {
     private String outputName;
 
     @JsonProperty("textstatus")
-    private Boolean textStatus;
+    private Boolean textStatus = false;
 
     @JsonProperty("includehoottags")
-    private Boolean includeHootTags;
+    private Boolean includeHootTags = false;
 
     @JsonProperty("tagoverrides")
     private String tagOverrides;
@@ -65,7 +65,7 @@ public class ExportParams {
     private String translation;
 
     @JsonProperty("append")
-    private Boolean append;
+    private Boolean append = false;
 
     @JsonProperty("hoot2")
     private Boolean hoot2;

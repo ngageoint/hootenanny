@@ -109,7 +109,7 @@ void TileUtils::writeTilesToGeoJson(
 {
   //write out to temp osm and then use ogr2ogr to convert to geojson
 
-  QTemporaryFile osmTempFile("tmp/tiles-calculate-temp-XXXXXX.osm");
+  QTemporaryFile osmTempFile("/tmp/tiles-calculate-temp-XXXXXX.osm");
   if (!osmTempFile.open())
   {
     throw HootException(
