@@ -181,9 +181,9 @@ QString FormatsDisplayer::_getInputFormatsSupportingStreamingString()
   const QStringList formats = _getFormats<OsmMapReader>(OsmMapReader::className());
   LOG_VART(formats);
   QStringList streamableFormats;
-  for (int i = 0; i < streamableFormats.size(); i++)
+  for (int i = 0; i < formats.size(); i++)
   {
-    QString format = streamableFormats[i];
+    QString format = formats[i];
     QString formatTemp = format;
     if (formatTemp.startsWith("hootapidb://"))
     {
@@ -217,9 +217,9 @@ QString FormatsDisplayer::_getOutputFormatsSupportingStreamingString()
   const QStringList formats = _getFormats<OsmMapWriter>(OsmMapWriter::className());
   LOG_VART(formats);
   QStringList streamableFormats;
-  for (int i = 0; i < streamableFormats.size(); i++)
+  for (int i = 0; i < formats.size(); i++)
   {
-    QString format = streamableFormats[i];
+    QString format = formats[i];
     QString formatTemp = format;
     if (formatTemp.startsWith("hootapidb://"))
     {
