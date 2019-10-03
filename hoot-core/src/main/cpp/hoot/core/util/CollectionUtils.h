@@ -30,6 +30,10 @@
 
 // Qt
 #include <QString>
+#include <QSet>
+
+// Std
+#include <set>
 
 namespace hoot
 {
@@ -67,6 +71,24 @@ public:
    */
   static int numVectorItemsInCommon(const std::vector<long>& collection1,
                                     const std::vector<long>& collection2);
+
+  /**
+   * TODO
+   *
+   * @param set
+   * @return
+   */
+  template<typename T>
+  static QSet<T> stdSetToQSet(const std::set<T>& set)
+  {
+    // There's probably a better way to do this...
+    QSet<T> qSet;
+    for (typename std::set<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
+    {
+      qSet.insert(*itr);
+    }
+    return qSet;
+  }
 
 private:
 

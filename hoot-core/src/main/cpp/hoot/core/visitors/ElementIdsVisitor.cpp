@@ -74,6 +74,8 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   return v.getIds();
 }
 
+// TODO: Some of these may be redundant with related methods in OsmUtils.
+
 vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
                                                 const Coordinate& refCoord, Meters maxDistance)
 {

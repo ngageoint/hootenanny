@@ -22,38 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ORCRITERION_H
-#define ORCRITERION_H
+#include "ElementIdToTagValueMapper.h"
 
-#include <hoot/core/criterion/ChainCriterion.h>
-
+// hoot
+#include <hoot/core/util/Factory.h>
 namespace hoot
 {
 
-/**
- * Filters an element if any of the child criterion return true.
- */
-class OrCriterion : public ChainCriterion
+HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
+
+ElementIdToTagValueMapper::ElementIdToTagValueMapper()
 {
-public:
-
-  static std::string className() { return "hoot::OrCriterion"; }
-
-  OrCriterion();
-  OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
-  OrCriterion(ElementCriterionPtr child1, ElementCriterionPtr child2);
-
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  virtual ElementCriterionPtr clone();
-
-  virtual QString getDescription() const { return "Allows for combining criteria (logical OR)"; }
-
-  virtual QString toString() const override;
-};
-
 }
 
-#endif // ORCRITERION_H
+ElementIdToTagValueMapper::ElementIdToTagValueMapper(const QString& tagKey) :
+_tagKey(tagKey)
+{
+}
+
+void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
+{
+  if (_tagKey.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("No key specified for ElementIdToTagValueMapper.");
+  }
+
+  if (e->getTags().contains(_tagKey))
+  {
+    _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];
+  }
+}
+
+}

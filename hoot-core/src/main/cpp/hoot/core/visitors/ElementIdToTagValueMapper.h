@@ -22,44 +22,52 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef UNIQUE_ELEMENT_ID_VISITOR_H
-#define UNIQUE_ELEMENT_ID_VISITOR_H
+#ifndef ELEMENT_ID_TO_TAG_VALUE_MAPPER_H
+#define ELEMENT_ID_TO_TAG_VALUE_MAPPER_H
 
 // hoot
+#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
 
 /**
- * Returns a set of the element ids visited.
- *
- * @todo It may be possible to combine this with ElementIdsVisitor.
+ * TODO
  */
-class UniqueElementIdVisitor : public ConstElementVisitor
+class ElementIdToTagValueMapper : public ConstElementVisitor, public OperationStatusInfo
 {
+
 public:
 
-  static std::string className() { return "hoot::UniqueElementIdVisitor"; }
+  static std::string className() { return "hoot::ElementIdToTagValueMapper"; }
 
-  UniqueElementIdVisitor();
-
-  /**
-   * Returns a set containing all the ElementIds visited.
-   */
-  const std::set<ElementId>& getElementSet() const { return _elements; }
+  ElementIdToTagValueMapper();
+  ElementIdToTagValueMapper(const QString& tagKey);
 
   virtual void visit(const ConstElementPtr& e);
 
-  virtual QString getDescription() const { return "Returns the unqiue element IDs visited"; }
+  virtual QString getDescription() const
+  { return "Maps element IDs to tag values for a given tag key"; }
+
+  virtual QString getInitStatusMessage() const { return "Mapping tag values..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Mapped " + StringUtils::formatLargeNumber(_numAffected) + " tag values."; }
+
+  QMap<ElementId, QString> getIdToTagValueMappings() const { return _idToTagValueMappings; }
+
+  void setTagKey(const QString& key) { _tagKey = key; }
 
 private:
 
-  std::set<ElementId> _elements;
+  QString _tagKey;
+  QMap<ElementId, QString> _idToTagValueMappings;
 };
 
 }
 
-#endif // UNIQUE_ELEMENT_ID_VISITOR_H
+#endif // ELEMENT_ID_TO_TAG_VALUE_MAPPER_H

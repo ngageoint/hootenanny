@@ -204,8 +204,11 @@ public:
     for (int i = 0; i < args.size() - 1; i += 2)
     {
       OsmMapPtr map(new OsmMap());
-      IoUtils::loadMap(map, args[i], false, Status::Unknown1);
-      IoUtils::loadMap(map, args[i + 1], false, Status::Unknown2);
+      // TODO: either change this to true for score-matches-diff to work or tie it to
+      // conflate.use.data.source.ids.1/2 and specify in score-matches-diff doc that those
+      // settings must be enabled when calling this in order for it to work
+      IoUtils::loadMap(map, args[i], /*false*/true, Status::Unknown1);
+      IoUtils::loadMap(map, args[i + 1], /*false*/true, Status::Unknown2);
 
       if (!MapScoringStatusAndRefTagValidator::allTagsAreValid(map))
       {

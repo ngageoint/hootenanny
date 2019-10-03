@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Identifies elements in a list of IDs
  *
- * TODO: We could probably replace this with ElementIdCriterion.
+ * @todo We could probably replace this with ElementIdCriterion.
  */
 class ElementInIdListCriterion : public ElementCriterion
 {

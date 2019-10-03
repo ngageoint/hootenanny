@@ -74,6 +74,7 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   QString buffer;
   QTextStream ts(&buffer);
   QLocale locale(QLocale::English);
+
   if (tagCounts.size() == 0)
   {
     ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
@@ -121,6 +122,8 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       }
     }
   }
+
+  // See related note towards the end of TagDistributionCmd::runSimple.
   return ts.readAll();
 }
 

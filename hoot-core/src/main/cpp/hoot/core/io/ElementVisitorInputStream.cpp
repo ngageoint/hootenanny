@@ -53,4 +53,12 @@ ElementPtr ElementVisitorInputStream::readNextElement()
   return element;
 }
 
+void ElementVisitorInputStream::processAll()
+{
+  while (_elementSource->hasMoreElements())
+  {
+    readNextElement();
+  }
+}
+
 }
