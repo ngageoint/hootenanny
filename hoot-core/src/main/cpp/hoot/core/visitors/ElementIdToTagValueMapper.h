@@ -31,6 +31,7 @@
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -38,7 +39,8 @@ namespace hoot
 /**
  * TODO
  */
-class ElementIdToTagValueMapper : public ConstElementVisitor, public OperationStatusInfo
+class ElementIdToTagValueMapper : public ConstElementVisitor, public OperationStatusInfo,
+  public ElementCriterionConsumer
 {
 
 public:
@@ -46,9 +48,10 @@ public:
   static std::string className() { return "hoot::ElementIdToTagValueMapper"; }
 
   ElementIdToTagValueMapper();
-  ElementIdToTagValueMapper(const QString& tagKey);
 
   virtual void visit(const ConstElementPtr& e);
+
+  virtual void addCriterion(const ElementCriterionPtr& e);
 
   virtual QString getDescription() const
   { return "Maps element IDs to tag values for a given tag key"; }
@@ -65,6 +68,7 @@ public:
 private:
 
   QString _tagKey;
+  ElementCriterionPtr _crit;
   QMap<ElementId, QString> _idToTagValueMappings;
 };
 

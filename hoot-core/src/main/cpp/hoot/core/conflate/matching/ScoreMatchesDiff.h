@@ -28,7 +28,8 @@
 #define SCORE_MATCHES_DIFF_H
 
 // Hoot
-#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 
 // Qt
 #include <QMap>
@@ -62,7 +63,7 @@ public:
    *
    * @param output
    */
-  void printResults(const QString& output);
+  void printDiff(const QString& output);
 
   /**
    * TODO
@@ -71,9 +72,12 @@ public:
 
 private:
 
-  QMap<QString, QSet<ElementId>> _matchSwitches;
+  QMap<QString, QSet<ElementId>> _newlyWrongMatchSwitches;
+  QMap<QString, QSet<ElementId>> _newlyCorrectMatchSwitches;
   QSet<ElementId> _elementIdsAdded;
   QSet<ElementId> _elementIdsRemoved;
+  int _numManualMatches1;
+  int _numManualMatches2;
 
   QString _input1;
   QString _input2;
@@ -83,17 +87,19 @@ private:
 
   QSet<ElementId> _getAllIds(const QString& input);
 
-  QMap<ElementId, QString> _getActualTagMappings(const QString& input);
+  QMap<ElementId, QString> _getMatchStatuses(const ConstOsmMapPtr& map, const QString& tagKey);
 
-  QSet<ElementId> _getElementIdsWithDifferingConflateStatus(
-    const QMap<ElementId, QString>& actualTagMappings1,
-    const QMap<ElementId, QString>& actualTagMappings2);
+  QSet<ElementId> _getWrong(const ConstOsmMapPtr& map);
+
+//  QSet<ElementId> _getElementIdsWithDifferingConflateStatus(
+//    const QMap<ElementId, QString>& actualTagMappings1,
+//    const QMap<ElementId, QString>& actualTagMappings2);
 
   QMap<QString, QSet<ElementId>> _getConflateStatusDiff(
     const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& actualTagMappings1,
     const QMap<ElementId, QString>& actualTagMappings2);
 
-  void _getAddedAndRemovedElements(
+  void _setAddedAndRemovedElements(
     const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
     QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved);
 

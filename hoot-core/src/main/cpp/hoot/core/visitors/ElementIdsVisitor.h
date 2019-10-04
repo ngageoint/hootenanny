@@ -59,7 +59,7 @@ public:
   static std::vector<long> findWays(const ConstOsmMapPtr& map, ElementCriterion* pCrit,
                                     ConstWayPtr refWay, Meters maxDistance, bool addError);
 
-  // Convenience method for finding nodes that contain the given tag
+  // Convenience method for finding elements that contain the given tag
   static std::vector<long> findElementsByTag(const ConstOsmMapPtr& map,
                                              const ElementType& elementType, const QString& key,
                                              const QString& value);

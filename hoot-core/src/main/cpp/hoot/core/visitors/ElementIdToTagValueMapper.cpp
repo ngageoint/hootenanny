@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+
 namespace hoot
 {
 
@@ -37,21 +38,22 @@ ElementIdToTagValueMapper::ElementIdToTagValueMapper()
 {
 }
 
-ElementIdToTagValueMapper::ElementIdToTagValueMapper(const QString& tagKey) :
-_tagKey(tagKey)
+void ElementIdToTagValueMapper::addCriterion(const ElementCriterionPtr& e)
 {
+  _crit = e;
 }
 
 void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
 {
   if (_tagKey.trimmed().isEmpty())
   {
-    throw IllegalArgumentException("No key specified for ElementIdToTagValueMapper.");
+    throw IllegalArgumentException("No keys specified for ElementIdToTagValueMapper.");
   }
 
-  if (e->getTags().contains(_tagKey))
+  if (e->getTags().contains(_tagKey) && (!_crit || _crit->isSatisfied(e)))
   {
     _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];
+    _numAffected++;
   }
 }
 

@@ -61,7 +61,7 @@ public:
     {
       ScoreMatchesDiff diffGen;
       diffGen.calculateDiff(args[0].trimmed(), args[1].trimmed());
-      diffGen.printResults(args[2].trimmed());
+      diffGen.printDiff(args[2].trimmed());
     }
     catch (const HootException& e)
     {
