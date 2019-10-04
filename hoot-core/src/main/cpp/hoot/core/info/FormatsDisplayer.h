@@ -45,11 +45,11 @@ public:
    * Displays supported IO formats
    *
    * @param displayInputs if true, displays input formats
-   * @param displayInputsSupportingStreaming TODO
+   * @param displayInputsSupportingStreaming if true, displays streamable input formats
    * @param displayInputsSupportingBounds if true, displays input formats that supported bounded
    * reading
    * @param displayOutputs if true, displays output formats
-   * @param displayOutputsSupportingStreaming TODO
+   * @param displayOutputsSupportingStreaming if true, displays streamable output formats
    * @return a string describing the requested formats
    */
   static QString display(const bool displayInputs, const bool displayInputsSupportingStreaming,

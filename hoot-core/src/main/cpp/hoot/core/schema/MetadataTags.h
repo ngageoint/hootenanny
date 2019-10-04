@@ -62,8 +62,6 @@ public:
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
   inline static const QString HootActual()              { return "hoot:actual"; }
-  inline static const QString HootActual1()             { return "hoot:actual:1"; }
-  inline static const QString HootActual2()             { return "hoot:actual:2"; }
   inline static const QString HootExpected()            { return "hoot:expected"; }
   inline static const QString HootMismatch()            { return "hoot:mismatch"; }
   inline static const QString HootWrong()               { return "hoot:wrong"; }

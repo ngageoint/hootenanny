@@ -98,11 +98,11 @@ public:
                            const bool keepConnectedOobWays = false);
 
   /**
-   * TODO
+   * Creates an input stream with a visitor in the loop
    *
-   * @param input
-   * @param visitorClassName
-   * @return
+   * @param input the data soruce to read
+   * @param visitorClassName the class name of the visitor to use
+   * @return an input stream
    */
   static std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
     const QString& input, const QString& visitorClassName, const bool useDataSourceIds = false);

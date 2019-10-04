@@ -73,15 +73,16 @@ public:
                                     const std::vector<long>& collection2);
 
   /**
-   * TODO
+   * Converts a stdlib set to a Qt set
    *
-   * @param set
+   * @param set the set to convert
    * @return
+   * @note std::set is ordered and QSet
    */
   template<typename T>
   static QSet<T> stdSetToQSet(const std::set<T>& set)
   {
-    // There's probably a better way to do this...
+    // There's probably a more efficient way to do this...
     QSet<T> qSet;
     for (typename std::set<T>::const_iterator itr = set.begin(); itr != set.end(); ++itr)
     {

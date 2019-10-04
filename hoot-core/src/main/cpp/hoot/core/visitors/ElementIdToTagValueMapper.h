@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Creates a mapping between an element ID and the value of the specified tag, if it has the tag
  */
 class ElementIdToTagValueMapper : public ConstElementVisitor, public OperationStatusInfo,
   public ElementCriterionConsumer

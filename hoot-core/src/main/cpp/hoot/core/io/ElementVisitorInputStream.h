@@ -71,11 +71,6 @@ public:
    */
   virtual ElementPtr readNextElement();
 
-  /**
-   * TODO
-   */
-  void processAll();
-
   ElementVisitorPtr getVisitor() const { return _visitor; }
 
 private:

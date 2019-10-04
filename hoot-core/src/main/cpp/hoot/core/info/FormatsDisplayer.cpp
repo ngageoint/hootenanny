@@ -174,7 +174,7 @@ QString FormatsDisplayer::_getFormatsSupportingBoundsString()
   return _getPrintableString(boundableFormats);
 }
 
-// TODO: Can we consolidate these two streaming supported methods somehow?
+// TODO: consolidate these two streaming supported methods
 
 QString FormatsDisplayer::_getInputFormatsSupportingStreamingString()
 {
