@@ -44,8 +44,7 @@ namespace hoot
 {
 
 ScoreMatchesDiff::ScoreMatchesDiff() :
-_numManualMatches1(0),
-_numManualMatches2(0),
+_numManualMatches(0),
 _reviewDifferential(0)
 {
 }
@@ -57,6 +56,8 @@ ScoreMatchesDiff::~ScoreMatchesDiff()
 
 void ScoreMatchesDiff::clear()
 {
+  _newlyWrong.clear();
+  _newlyCorrect.clear();
   _newlyWrongMatchSwitches.clear();
   _newlyCorrectMatchSwitches.clear();
   _elementIdsAdded.clear();
@@ -71,8 +72,7 @@ void ScoreMatchesDiff::clear()
   }
   _outputFile.reset();
 
-  _numManualMatches1 = 0;
-  _numManualMatches2 = 0;
+  _numManualMatches = 0;
 }
 
 void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input2)
@@ -108,6 +108,27 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   LOG_VARD(map1->size());
   LOG_VARD(map2->size());
 
+  // count the manual matches made
+
+  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
+    new CountManualMatchesVisitor());
+  map1->visitRo(*manualMatchVisitor);
+  const int numManualMatches1 = manualMatchVisitor->getStat();
+  manualMatchVisitor.reset(new CountManualMatchesVisitor());
+  map2->visitRo(*manualMatchVisitor);
+  const int numManualMatches2 = manualMatchVisitor->getStat();
+
+  LOG_VARD(numManualMatches1);
+  LOG_VARD(numManualMatches2);
+
+  if (numManualMatches1 != numManualMatches2)
+  {
+    throw HootException(
+      QString("The two input datasets have a different number of manual matches and, therefore, ") +
+      QString("must not been derived from the same input data."));
+  }
+  _numManualMatches = numManualMatches1;
+
   // get all expected/actual match types
 
   const QMap<ElementId, QString> expected1 =
@@ -130,20 +151,21 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
 
   const QSet<ElementId> wrong1 = _getWrong(map1);
   const QSet<ElementId> wrong2 = _getWrong(map2);
-  QSet<ElementId> newlyWrong = wrong2;
-  newlyWrong.subtract(wrong1);
-  QSet<ElementId> newlyCorrect = wrong1;
-  newlyCorrect.subtract(wrong2);
+  _newlyWrong = wrong2;
+  _newlyWrong.subtract(wrong1);
+  _newlyCorrect = wrong1;
+  _newlyCorrect.subtract(wrong2);
 
   LOG_VARD(wrong1.size());
   LOG_VARD(wrong2.size());
-  LOG_VARD(newlyWrong.size());
-  LOG_VARD(newlyCorrect.size());
+  LOG_VARD(_newlyWrong.size());
+  LOG_VARD(_newlyCorrect.size());
 
-  // for newly wrong/correct, compare actual to expected to group match changes by type
+  // for newly wrong/correct, compare actual to expected to group match changes by type; TODO: is
+  // sending in expected2/actual2 right here?
 
-  _newlyWrongMatchSwitches = _getMatchScoringDiff(newlyWrong, expected2, actual2);
-  _newlyCorrectMatchSwitches = _getMatchScoringDiff(newlyCorrect, expected2, actual2);
+  _newlyWrongMatchSwitches = _getMatchScoringDiff(_newlyWrong, expected2, actual2);
+  _newlyCorrectMatchSwitches = _getMatchScoringDiff(_newlyCorrect, expected2, actual2);
 
   LOG_VARD(_newlyWrongMatchSwitches.size());
   for (QMap<QString, QSet<ElementId>>::const_iterator itr = _newlyWrongMatchSwitches.begin();
@@ -161,39 +183,30 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   // get a list of all element ids
 
   const QSet<ElementId> all1Ids = _getAllIds(map1);
-  LOG_VARD(all1Ids.size());
   const QSet<ElementId> all2Ids = _getAllIds(map2);
+
+  LOG_VARD(all1Ids.size());
   LOG_VARD(all2Ids.size());
 
   // determine any ids that are new or have been removed
 
   _setAddedAndRemovedElements(all1Ids, all2Ids, _elementIdsAdded, _elementIdsRemoved);
+
   LOG_VARD(_elementIdsAdded.size());
   LOG_VARD(_elementIdsRemoved.size());
-
-  // count the manual matches made
-
-  std::shared_ptr<CountManualMatchesVisitor> manualMatchVisitor(
-    new CountManualMatchesVisitor());
-  map1->visitRo(*manualMatchVisitor);
-  _numManualMatches1 += manualMatchVisitor->getStat();
-  LOG_VARD(_numManualMatches1);
-  manualMatchVisitor.reset(new CountManualMatchesVisitor());
-  map2->visitRo(*manualMatchVisitor);
-  _numManualMatches2 += manualMatchVisitor->getStat();
-  LOG_VARD(_numManualMatches2);
 
   // count the reviews
 
   CountUniqueReviewsVisitor countReviewsVis;
   map1->visitRo(countReviewsVis);
   const int numReviews1 = (int)countReviewsVis.getStat();
-  LOG_VARD(numReviews1);
   countReviewsVis.clear();
   map2->visitRo(countReviewsVis);
   const int numReviews2 = (int)countReviewsVis.getStat();
-  LOG_VARD(numReviews2);
   _reviewDifferential = numReviews2 - numReviews1;
+
+  LOG_VARD(numReviews1);
+  LOG_VARD(numReviews2);
   LOG_VARD(_reviewDifferential);
 
   LOG_INFO(
@@ -344,9 +357,7 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
   QString summary;
   summary += "Match Scoring Differential Summary:\n\n";
   summary +=
-    StringUtils::formatLargeNumber(_numManualMatches1) + " manual matches in first file.\n";
-  summary +=
-    StringUtils::formatLargeNumber(_numManualMatches2) + " manual matches in second file.\n";
+    StringUtils::formatLargeNumber(_numManualMatches) + " manual matches.\n";
   summary +=
     StringUtils::formatLargeNumber(_elementIdsRemoved.size()) +
     " elements from the first file were removed in the second file.\n";
@@ -354,10 +365,10 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
     StringUtils::formatLargeNumber(_elementIdsAdded.size()) +
     " new elements were added to the second file.\n";
   summary +=
-    StringUtils::formatLargeNumber(_newlyWrongMatchSwitches.size()) +
+    StringUtils::formatLargeNumber(_newlyWrong.size()) +
     " new elements are involved in wrong matches.\n";
   summary +=
-    StringUtils::formatLargeNumber(_newlyCorrectMatchSwitches.size()) +
+    StringUtils::formatLargeNumber(_newlyCorrect.size()) +
     " new elements are involved in correct matches.\n";
   for (QMap<QString, QSet<ElementId>>::const_iterator itr = _newlyWrongMatchSwitches.begin();
        itr != _newlyWrongMatchSwitches.end(); ++itr)
@@ -387,7 +398,7 @@ void ScoreMatchesDiff::_writeConflateStatusSummary(QTextStream& out)
   }
   else if (_reviewDifferential < 0)
   {
-    summary += QString::number(abs(_reviewDifferential)) + " reviews were removed.\n";
+    summary += QString::number(abs(_reviewDifferential)) + " reviews were lost.\n";
   }
 
   std::cout << summary << std::endl;

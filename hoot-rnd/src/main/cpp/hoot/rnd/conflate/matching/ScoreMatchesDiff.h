@@ -73,20 +73,27 @@ public:
 
 private:
 
+  // IDs of elements involved in a wrong match from the second input that aren't involved in a wrong
+  // match in the first input.
+  QSet<ElementId> _newlyWrong;
+  // IDs of elements involved in a correct match from the second input that aren't involved in a
+  // correct match in the first input.
+  QSet<ElementId> _newlyCorrect;
   // difference in match status between any element that wasn't involved in a wrong match in the
   // first input but is involved in a wrong match in the second
   QMap<QString, QSet<ElementId>> _newlyWrongMatchSwitches;
   // difference in match status between any element that was involved in a wrong match in the
   // first input but isn't involved in a wrong match in the second
   QMap<QString, QSet<ElementId>> _newlyCorrectMatchSwitches;
+
   // elements added to the second file when compared to the first
   QSet<ElementId> _elementIdsAdded;
   // elements removed from the first file when compared to the second
   QSet<ElementId> _elementIdsRemoved;
-  // number of manual matches made in the first input
-  int _numManualMatches1;
-  // number of manual matches made in the second input
-  int _numManualMatches2;
+
+  // number of manual matches made
+  int _numManualMatches;
+
   // difference in number of reviews in the two inputs
   int _reviewDifferential;
 
