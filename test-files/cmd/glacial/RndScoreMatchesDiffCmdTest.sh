@@ -1,8 +1,12 @@
 #!/bin/bash
 set -e
 
-IN_DIR=test-files/cmd/glacial/ScoreMatchesDiffCmdTest
-OUT_DIR=test-output/cmd/glacial/ScoreMatchesDiffCmdTest
+# derived from train-poi-poly-standalone regression test C cropped to -122.42035,37.7726,-122.41369,37.78593
+# the first input was created running poi/poly with default options; the second raises the review threshold 
+# (poi.polygon.review.evidence.threshold) to 2 to force some incorrect matches
+
+IN_DIR=test-files/cmd/glacial/RndScoreMatchesDiffCmdTest
+OUT_DIR=test-output/cmd/glacial/RndScoreMatchesDiffCmdTest
 mkdir -p $OUT_DIR
 
 hoot score-matches-diff --warn $IN_DIR/input1.osm $IN_DIR/input2.osm $OUT_DIR/output

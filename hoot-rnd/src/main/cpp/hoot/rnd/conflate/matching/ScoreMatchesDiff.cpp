@@ -411,7 +411,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
 {
   LOG_DEBUG("Printing conflate status detail...");
 
-  out << "\n\nMatch Type Changes\n";
+  out << "\nMatch Type Changes\n";
   if (_newlyWrongMatchSwitches.size() + _newlyCorrectMatchSwitches.size() == 0)
   {
     out << "none";
@@ -429,9 +429,10 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyWrongMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << matchSwitchTypeStr << "\n\n";
-        const QSet<ElementId> ids = itr.value();
-        for (QSet<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
+        out << "\n" << matchSwitchTypeStr << "\n\n";
+        QList<ElementId> ids = itr.value().toList();
+        qSort(ids);
+        for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
           out << id.toString() << "\n";
@@ -450,9 +451,10 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
            itr != _newlyCorrectMatchSwitches.end(); ++itr)
       {
         const QString matchSwitchTypeStr = itr.key();
-        out << matchSwitchTypeStr << "\n\n";
-        const QSet<ElementId> ids = itr.value();
-        for (QSet<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
+        out << "\n" << matchSwitchTypeStr << "\n\n";
+        QList<ElementId> ids = itr.value().toList();
+        qSort(ids);
+        for (QList<ElementId>::const_iterator itr2 = ids.begin(); itr2 != ids.end(); ++itr2)
         {
           const ElementId id = *itr2;
           out << id.toString() << "\n";
@@ -468,8 +470,10 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   }
   else
   {
-    for (QSet<ElementId>::const_iterator itr = _elementIdsAdded.begin();
-         itr != _elementIdsAdded.end(); ++itr)
+    QList<ElementId> elementIdsAdded = _elementIdsAdded.toList();
+    qSort(elementIdsAdded);
+    for (QList<ElementId>::const_iterator itr = elementIdsAdded.begin();
+         itr != elementIdsAdded.end(); ++itr)
     {
       const ElementId id = *itr;
       out << id.toString() << "\n";
@@ -483,8 +487,10 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   }
   else
   {
-    for (QSet<ElementId>::const_iterator itr = _elementIdsRemoved.begin();
-         itr != _elementIdsRemoved.end(); ++itr)
+    QList<ElementId> elementIdsRemoved = _elementIdsRemoved.toList();
+    qSort(elementIdsRemoved);
+    for (QList<ElementId>::const_iterator itr = elementIdsRemoved.begin();
+         itr != elementIdsRemoved.end(); ++itr)
     {
       const ElementId id = *itr;
       out << id.toString() << "\n";

@@ -42,7 +42,8 @@ namespace hoot
 
 /**
  * Compares two output files from score-matches and writes a file with the differences in the match
- * scoring.
+ * scoring. Useful when trying to determine why conflation logic changes results in increased
+ * incorrect matches.
  */
 class ScoreMatchesDiff
 {
