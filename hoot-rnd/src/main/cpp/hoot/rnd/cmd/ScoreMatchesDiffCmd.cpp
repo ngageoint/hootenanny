@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/conflate/matching/ScoreMatchesDiff.h>
+#include <hoot/rnd/conflate/matching/ScoreMatchesDiff.h>
 
 namespace hoot
 {
@@ -46,8 +46,10 @@ public:
 
   virtual QString getName() const override { return "score-matches-diff"; }
 
+  virtual QString getType() const override { return "rnd"; }
+
   virtual QString getDescription() const override
-  { return "Compares scored matching performance between different files output by score-matches"; }
+  { return "Compares conflation performance between files output by score-matches (experimental)"; }
 
   virtual int runSimple(QStringList& args) override
   {
