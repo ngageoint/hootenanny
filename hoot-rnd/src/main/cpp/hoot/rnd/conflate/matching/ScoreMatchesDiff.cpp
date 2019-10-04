@@ -222,7 +222,7 @@ void ScoreMatchesDiff::printDiff(const QString& output)
   {
     LOG_WARN(
       "There are no differences in match scoring status between the two input files. Did you " <<
-      "calculate a differential?");
+      "calculate a differential? Are the input files identical?");
     return;
   }
 
