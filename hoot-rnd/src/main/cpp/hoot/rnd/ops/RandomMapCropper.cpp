@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/rnd/util/TileUtils.h>
+#include <hoot/core/util/TileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
