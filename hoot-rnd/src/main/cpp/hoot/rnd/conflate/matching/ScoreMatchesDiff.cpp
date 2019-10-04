@@ -161,8 +161,8 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   LOG_VARD(_newlyWrong.size());
   LOG_VARD(_newlyCorrect.size());
 
-  // for newly wrong/correct, compare actual to expected to group match changes by type; TODO: is
-  // sending in expected2/actual2 right here?
+  // for newly wrong/correct, compare actual to expected to group match changes by type
+  // TODO: is sending in expected2/actual2 right here?
 
   _newlyWrongMatchSwitches = _getMatchScoringDiff(_newlyWrong, expected2, actual2);
   _newlyCorrectMatchSwitches = _getMatchScoringDiff(_newlyCorrect, expected2, actual2);
@@ -214,7 +214,7 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
     StringUtils::formatLargeNumber(all1Ids.size() + all2Ids.size()) << " total elements.");
 }
 
-void ScoreMatchesDiff::printDiff(const QString& output)
+bool ScoreMatchesDiff::printDiff(const QString& output)
 {
   _output = output;
   if (_newlyWrongMatchSwitches.isEmpty() && _newlyCorrectMatchSwitches.isEmpty() &&
@@ -223,7 +223,7 @@ void ScoreMatchesDiff::printDiff(const QString& output)
     LOG_WARN(
       "There are no differences in match scoring status between the two input files. Did you " <<
       "calculate a differential? Are the input files identical?");
-    return;
+    return false;
   }
 
   LOG_INFO(
@@ -236,6 +236,8 @@ void ScoreMatchesDiff::printDiff(const QString& output)
   out << "Input files: " << _input1.right(25) << " and " << _input2.right(25) << "\n\n";
   _writeConflateStatusSummary(out);
   _writeConflateStatusDetail(out);
+
+  return true;
 }
 
 std::shared_ptr<QFile> ScoreMatchesDiff::_getOutputFile(const QString& outputPath)

@@ -64,8 +64,9 @@ public:
    * Prints previously calculated match scoring differential
    *
    * @param output the file to write the differential information to
+   * @return true if the printing was successful; false otherwise
    */
-  void printDiff(const QString& output);
+  bool printDiff(const QString& output);
 
   /**
    * Clears calculated differential data
@@ -73,6 +74,8 @@ public:
   void clear();
 
 private:
+
+  friend class ScoreMatchesDiffTest;
 
   // IDs of elements involved in a wrong match from the second input that aren't involved in a wrong
   // match in the first input.
