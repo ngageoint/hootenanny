@@ -41,13 +41,13 @@ public class ExportParams {
     private String outputName;
 
     @JsonProperty("textstatus")
-    private Boolean textStatus;
+    private Boolean textStatus = false;
 
     @JsonProperty("includehoottags")
-    private Boolean includeHootTags;
+    private Boolean includeHootTags = false;
 
     @JsonProperty("tagoverrides")
-    private String tagOverrides;
+    private String tagOverrides = null;
 
     @JsonProperty("inputtype")
     private String inputType;
@@ -65,7 +65,7 @@ public class ExportParams {
     private String translation;
 
     @JsonProperty("append")
-    private Boolean append;
+    private Boolean append = false;
 
     @JsonProperty("hoot2")
     private Boolean hoot2;
@@ -78,6 +78,13 @@ public class ExportParams {
 
     @JsonProperty("PIXEL_SIZE")
     private double pixelSize = -1.0;
+
+    @JsonProperty("alpha")
+    private long alpha = 10000;
+
+    @JsonProperty("buffer")
+    private long buffer = 0;
+
 
     private String outputPath;
 
@@ -191,6 +198,22 @@ public class ExportParams {
 
     public void setPixelSize(double pixelSize) {
         this.pixelSize = pixelSize;
+    }
+
+    public long getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(long alpha) {
+        this.alpha = alpha;
+    }
+
+    public long getBuffer() {
+        return maxNodeCountPerTile;
+    }
+
+    public void setBuffer(long buffer) {
+        this.maxNodeCountPerTile = buffer;
     }
 
     public void setHoot2(boolean hoot2) {

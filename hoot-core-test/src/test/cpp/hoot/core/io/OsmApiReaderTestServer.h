@@ -44,39 +44,37 @@ protected:
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
 };
 
-class GeographicSplitReaderTestServer : public HttpTestServer
+class GeographicSplitReaderTestServer : public HttpSequencedServer
 {
 public:
   /** Constructor */
   GeographicSplitReaderTestServer(int port)
-    : HttpTestServer(port),
-      _section(0)
+    : HttpSequencedServer(4, port)
   { }
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
-  /** Keep track of which section is being requested */
-  int _section;
+  /** get_sequence_response() function that gets the response message based on the URL requested */
+  virtual HttpResponsePtr get_sequence_response(const std::string& request) override;
 };
 
-class ElementSplitReaderTestServer : public HttpTestServer
+class ElementSplitReaderTestServer : public HttpSequencedServer
 {
 public:
   /** Constructor */
   ElementSplitReaderTestServer(int port)
-    : HttpTestServer(port),
-      _splitForced(false),
-      _section(0)
+    : HttpSequencedServer(5, port),
+      _split_forced(false)
   { }
 
 protected:
   /** respond() function that responds once to the OSM API Capabilities request */
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection) override;
+  /** get_sequence_response() function that gets the response message based on the URL requested */
+  virtual HttpResponsePtr get_sequence_response(const std::string& url) override;
   /** Force split based on "element count" */
-  bool _splitForced;
-  /** Keep track of which section is being requested */
-  int _section;
+  bool _split_forced;
 };
 
 }

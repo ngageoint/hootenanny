@@ -39,12 +39,13 @@ bool SimpleReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connecti
   std::string headers = read_request_headers(connection);
   std::string message = "";
   //  Reply with ToyTestA.osm or with an HTTP 404 error
+  HttpResponsePtr response;
   if (headers.find("/api/0.6/map") != std::string::npos)
-    message = HTTP_200_OK + FileUtils::readFully("test-files/ToyTestA.osm").toStdString() + "\r\n";
+    response.reset(new HttpResponse(200, FileUtils::readFully("test-files/ToyTestA.osm").toStdString()));
   else
-    message = HTTP_404_NOT_FOUND;
+    response.reset(new HttpResponse(404));
   //  Write out the response
-  write_response(connection, message);
+  write_response(connection, response->to_string());
   return false;
 }
 
@@ -54,26 +55,46 @@ bool GeographicSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr&
   bool continue_processing = true;
   //  Read the HTTP request headers
   std::string headers = read_request_headers(connection);
-  std::string message = "";
+  HttpResponsePtr response;
   //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
-  if (headers.find("/api/0.6/map") != std::string::npos && _section < 4)
+  if (headers.find("/api/0.6/map") != std::string::npos && _current < _max)
   {
-    //  Increment the section
-    _section++;
-    QString path = QString("test-files/io/OsmApiReaderTest/ToyTestA-Part%1.osm").arg(_section);
-    message = HTTP_200_OK + FileUtils::readFully(path).toStdString() + "\r\n";
+    response = get_sequence_response(headers);
     //  After the fourth section, shutdown the test server
-    if (_section == 4)
+    if (_current == _max)
       continue_processing = false;
   }
   else
   {
-    message = HTTP_404_NOT_FOUND;
+    response.reset(new HttpResponse(404));
     continue_processing = false;
   }
   //  Write out the response
-  write_response(connection, message);
-  return continue_processing;
+  write_response(connection, response->to_string());
+  //  Continue processing while there is still something to process or while he haven't been interupted
+  return continue_processing && !get_interupt();
+}
+
+HttpResponsePtr GeographicSplitReaderTestServer::get_sequence_response(const std::string& request)
+{
+  HttpResponsePtr response(new HttpResponse(404));
+  //  Only respond up until the max is reached, then shutdown
+  if (_current < _max)
+  {
+    //  If the same thing is being requested again, respond with the previous value
+    std::map<std::string, HttpResponsePtr>::iterator it = _sequence_responses.find(request);
+    if (it != _sequence_responses.end())
+      response = it->second;
+    else
+    {
+      //  Increment the sequence
+      _current++;
+      QString path = QString("test-files/io/OsmApiReaderTest/ToyTestA-Part%1.osm").arg(_current);
+      response.reset(new HttpResponse(200, FileUtils::readFully(path).toStdString()));
+      _sequence_responses[request] = response;
+    }
+  }
+  return response;
 }
 
 bool ElementSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
@@ -82,31 +103,57 @@ bool ElementSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr& co
   bool continue_processing = true;
   //  Read the HTTP request headers
   std::string headers = read_request_headers(connection);
-  std::string message = "";
+  HttpResponsePtr response;
   //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
-  if (headers.find("/api/0.6/map") != std::string::npos && _section < 4)
+  if (headers.find("/api/0.6/map") != std::string::npos && _current < _max)
   {
-    if (!_splitForced)
+    response = get_sequence_response(headers);
+    //  After the fourth section, shutdown the test server
+    if (_current == _max)
+      continue_processing = false;
+  }
+  else
+  {
+    response.reset(new HttpResponse(404));
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Continue processing while there is still something to process or while he haven't been interupted
+  return continue_processing && !get_interupt();
+}
+
+HttpResponsePtr ElementSplitReaderTestServer::get_sequence_response(const std::string& request)
+{
+  HttpResponsePtr response(new HttpResponse(404));
+  //  Only respond up until the max is reached, then shutdown
+  if (_current < _max)
+  {
+    if (!_split_forced)
     {
-      message = HTTP_400_BAD_REQUEST;
-      _splitForced = true;
+      //  Force a split by responding with 400 BAD REQUEST
+      _split_forced = true;
+      _current = 1;
+      response.reset(new HttpResponse(400));
+      _sequence_responses[request] = response;
     }
     else
     {
-      //  Increment the section
-      _section++;
-      QString path = QString("test-files/io/OsmApiReaderTest/ToyTestA-Part%1.osm").arg(_section);
-      message = HTTP_200_OK + FileUtils::readFully(path).toStdString() + "\r\n";
-      //  After the fourth section, shutdown the test server
-      if (_section == 4)
-        continue_processing = false;
+      //  If the same thing is being requested again, respond with the previous value
+      std::map<std::string, HttpResponsePtr>::iterator it = _sequence_responses.find(request);
+      if (it != _sequence_responses.end())
+        response = it->second;
+      else
+      {
+        //  Increment the sequence
+        _current++;
+        QString path = QString("test-files/io/OsmApiReaderTest/ToyTestA-Part%1.osm").arg(_current - 1);
+        response.reset(new HttpResponse(200, FileUtils::readFully(path).toStdString()));
+        _sequence_responses[request] = response;
+      }
     }
   }
-  else
-    message = HTTP_404_NOT_FOUND;
-  //  Write out the response
-  write_response(connection, message);
-  return continue_processing;
+  return response;
 }
 
 }
