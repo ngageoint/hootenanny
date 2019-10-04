@@ -357,11 +357,12 @@ public class ExportResource {
     @Path("/geojson/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGeoJsonOutput(@PathParam("id") String jobId,
+                                 @QueryParam("outputname") String outputname,
                                  @QueryParam("ext") String ext) {
         Response response;
 
         try {
-            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "geojson" : ext);
+            File out = getExportFile(jobId, StringUtils.isEmpty(outputname) ? jobId : outputname, StringUtils.isEmpty(ext) ? "geojson" : ext);
             response = Response.ok(FileUtils.readFileToString(out, "UTF-8")).build();
         }
         catch (WebApplicationException e) {
