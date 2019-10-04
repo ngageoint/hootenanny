@@ -204,15 +204,12 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
 void ScoreMatchesDiff::printDiff(const QString& output)
 {
   _output = output;
-  if (!_output.toLower().endsWith(".txt"))
+  if (_newlyWrongMatchSwitches.isEmpty() && _newlyCorrectMatchSwitches.isEmpty() &&
+      _elementIdsAdded.isEmpty() && _elementIdsRemoved.isEmpty())
   {
-    throw IllegalArgumentException(
-      "Unsupported output format: " + _output + " Must be an .txt file.");
-  }
-  else if (_newlyWrongMatchSwitches.isEmpty() && _newlyCorrectMatchSwitches.isEmpty() &&
-           _elementIdsAdded.isEmpty() && _elementIdsRemoved.isEmpty())
-  {
-    LOG_WARN("No differences in conflate status. Did you calculate a differential?");
+    LOG_WARN(
+      "There are no differences in match scoring status between the two input files. Did you " <<
+      "calculate a differential?");
     return;
   }
 

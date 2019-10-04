@@ -41,7 +41,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Compares two output files from score-matches and writes a file with the differences in the match
+ * scoring.
  */
 class ScoreMatchesDiff
 {
@@ -51,33 +52,42 @@ public:
   ~ScoreMatchesDiff();
 
   /**
-   * TODO
+   * Calculates the differential between to separate score-matches outputs
    *
-   * @param input1
-   * @param input2
+   * @param input1 the first file to examine
+   * @param input2 the second file to examine
    */
   void calculateDiff(const QString& input1, const QString& input2);
 
   /**
-   * TODO
+   * Prints previously calculated match scoring differential
    *
-   * @param output
+   * @param output the file to write the differential information to
    */
   void printDiff(const QString& output);
 
   /**
-   * TODO
+   * Clears calculated differential data
    */
   void clear();
 
 private:
 
+  // difference in match status between any element that wasn't involved in a wrong match in the
+  // first input but is involved in a wrong match in the second
   QMap<QString, QSet<ElementId>> _newlyWrongMatchSwitches;
+  // difference in match status between any element that was involved in a wrong match in the
+  // first input but isn't involved in a wrong match in the second
   QMap<QString, QSet<ElementId>> _newlyCorrectMatchSwitches;
+  // elements added to the second file when compared to the first
   QSet<ElementId> _elementIdsAdded;
+  // elements removed from the first file when compared to the second
   QSet<ElementId> _elementIdsRemoved;
+  // number of manual matches made in the first input
   int _numManualMatches1;
+  // number of manual matches made in the second input
   int _numManualMatches2;
+  // difference in number of reviews in the two inputs
   int _reviewDifferential;
 
   QString _input1;
@@ -87,16 +97,32 @@ private:
 
   std::shared_ptr<QFile> _getOutputFile(const QString& outputPath);
 
+  /*
+   * Returns all element IDs in the map
+   */
   QSet<ElementId> _getAllIds(const ConstOsmMapPtr& map);
 
+  /*
+   * Returns all elements with the given match status (hoot:expected or hoot:actual), grouped by ID
+   */
   QMap<ElementId, QString> _getMatchStatuses(const ConstOsmMapPtr& map, const QString& tagKey);
 
+  /*
+   * Returns the IDS of all elements involved in a wrong match
+   */
   QSet<ElementId> _getWrong(const ConstOsmMapPtr& map);
 
+  /*
+   * For a given set of elements, groups them by how their match statuses changed between the two
+   * inputs
+   */
   QMap<QString, QSet<ElementId>> _getMatchScoringDiff(
     const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& actualTagMappings1,
     const QMap<ElementId, QString>& actualTagMappings2);
 
+  /*
+   * Records element differences between the two inputs
+   */
   void _setAddedAndRemovedElements(
     const QSet<ElementId>& all1Ids, const QSet<ElementId>& all2Ids,
     QSet<ElementId>& elementIdsAdded, QSet<ElementId>& elementIdsRemoved);

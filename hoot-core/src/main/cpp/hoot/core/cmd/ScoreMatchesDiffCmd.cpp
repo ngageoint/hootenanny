@@ -47,7 +47,7 @@ public:
   virtual QString getName() const override { return "score-matches-diff"; }
 
   virtual QString getDescription() const override
-  { return "Compares scored conflation performance between different invocations of score-matches"; }
+  { return "Compares scored matching performance between different files output by score-matches"; }
 
   virtual int runSimple(QStringList& args) override
   {

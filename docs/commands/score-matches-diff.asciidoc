@@ -8,7 +8,7 @@ outputs a summary describing the scoring difference between the two files and ad
 
 * +input1+      - Input 1; must be a conflated .osm file output from an execution of the +score-matches+ command
 * +input2+      - Input 2; must be a conflated .osm file output from an execution of the +score-matches+ command
-* +output+      - Output diff summary file; must be a .txt file.
+* +output+      - Output differential text file
 
 === Usage
 
