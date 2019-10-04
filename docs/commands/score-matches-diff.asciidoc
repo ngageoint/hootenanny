@@ -4,7 +4,7 @@
 === Description
 
 The +score-matches-diff+ command calculates the difference between two scored conflated output files created by the +score-matches+ command. It 
-writes a summary file describing the difference in the conflated state of the two input files.
+outputs a summary describing the scoring difference between the two files and additionally outputs difference detail to a file.
 
 * +input1+      - Input 1; must be a conflated .osm file output from an execution of the +score-matches+ command
 * +input2+      - Input 2; must be a conflated .osm file output from an execution of the +score-matches+ command

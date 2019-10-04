@@ -40,8 +40,12 @@ void CountUniqueReviewsVisitor::visit(const ConstElementPtr& e)
 {
   set<ReviewMarker::ReviewUid> reviews =
     _reviewMarker.getReviewUids(_map->shared_from_this(), e);
-
   _reviews.insert(reviews.begin(), reviews.end());
+}
+
+void CountUniqueReviewsVisitor::clear()
+{
+  _reviews.clear();
 }
 
 }

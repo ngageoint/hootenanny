@@ -78,24 +78,22 @@ private:
   QSet<ElementId> _elementIdsRemoved;
   int _numManualMatches1;
   int _numManualMatches2;
+  int _reviewDifferential;
 
   QString _input1;
   QString _input2;
+  QString _output;
   std::shared_ptr<QFile> _outputFile;
 
   std::shared_ptr<QFile> _getOutputFile(const QString& outputPath);
 
-  QSet<ElementId> _getAllIds(const QString& input);
+  QSet<ElementId> _getAllIds(const ConstOsmMapPtr& map);
 
   QMap<ElementId, QString> _getMatchStatuses(const ConstOsmMapPtr& map, const QString& tagKey);
 
   QSet<ElementId> _getWrong(const ConstOsmMapPtr& map);
 
-//  QSet<ElementId> _getElementIdsWithDifferingConflateStatus(
-//    const QMap<ElementId, QString>& actualTagMappings1,
-//    const QMap<ElementId, QString>& actualTagMappings2);
-
-  QMap<QString, QSet<ElementId>> _getConflateStatusDiff(
+  QMap<QString, QSet<ElementId>> _getMatchScoringDiff(
     const QSet<ElementId>& elementIds, const QMap<ElementId, QString>& actualTagMappings1,
     const QMap<ElementId, QString>& actualTagMappings2);
 
