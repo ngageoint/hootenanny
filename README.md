@@ -50,7 +50,7 @@ Hootenanny has the capability to let you selectively pick the features that are 
 
 [Command line example](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurants-see-the-user-guide-feature-filtering-section-for-more-filter-examples)
 
-Any of Hootenanny's many [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) can be specified to perform feature filtering during conflation.
+Hootenanny has many additional [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that can also be specified to perform feature filtering during conflation.
 
 # Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
@@ -63,7 +63,7 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
 
 # When To Use
-No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring conflation software options to get the best conflated output. 
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring Hootenanny options to get the best conflated output. 
 
 For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
 
@@ -79,9 +79,8 @@ There are a wide range of [configuration options](https://github.com/ngageoint/h
 [Mapbox iD Editor](https://github.com/openstreetmap/iD), which provides an intuitive and user-friendly conflation experience.
 
 # Web Services API
-Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients. 
-
-The web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
+Access to Hootenanny core capabilities are exposed through a web services API for those wishing to develop their own conflation clients. The 
+web services use [OAuth](https://github.com/ngageoint/hootenanny/tree/master/docs/developer/OAUTH.md) authentication.
 
 # Command Line Interface
 [Command line access](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) is available to aid
@@ -96,7 +95,7 @@ hoot conflate input1.osm input2.osm output.osm
 
 [More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
-The command line often exposes additional functionalities not available from the web user interface.
+Development of algorithms exposed by the CLI often precedes the access of those same capabilities within the web user interface.
 
 # Programming Language Bindings
 Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
@@ -130,7 +129,6 @@ In addition to running conflation jobs with map data, Hootenanny also provides f
 * [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)
 * [Filter](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) a subset of features before conflation based on tag content and schema relationships
 * [Grab](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop-random.asciidoc) a random section of data from a map for testing against
-* [Crop](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) a map to a geospatial extent
 * [Identify](https://github.com/ngageoint/hootenanny/blob/master/docs/user/IdentifyRoadIntersections.asciidoc) road intersections in a map
 * [Locate](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LocatePhoneNumbers.asciidoc) phone numbers geographically
 * [Perturb](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perty.asciidoc) map data for testing purposes
@@ -162,11 +160,11 @@ In addition to running conflation jobs with map data, Hootenanny also provides f
 # Support
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
-Don't hesitate to ask for help if something isn't conflating how you expect it to. If you have any support questions, please create an issue in this repository.
+Don't hesitate to ask for help if features aren't conflating how you expect them to. If you have any support questions, please create an issue in this repository.
 
-As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny attempts to capture most scenarios with the default configuration options, but sometimes you will need to modify configuration options specific to the data you are conflating to get the best results.
+As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny attempts to capture most conflation scenarios with the default configuration options, but sometimes you will need to modify configuration options specific to the data you are conflating to get the best results.
 
-Additionally, the addition of new software features to the user interface may lag their initial availability from the CLI by multiple development cycles. If you find a conflation feature you want to use mentioned in the CLI documentation but can't find it available in the UI, let us know.
+Additionally, the availability of software features to the user interface may lag their initial availability from the CLI by multiple development cycles. If you find a conflation feature you want to use mentioned in the CLI documentation but can't find it available in the UI, let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)

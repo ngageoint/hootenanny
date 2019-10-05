@@ -40,6 +40,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/ops/ImmediatelyConnectedOutOfBoundsWayTagger.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QFileInfo>
@@ -184,6 +185,24 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
+}
+
+std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
+  const QString& input, const QString& visitorClassName, const bool useDataSourceIds)
+{
+  std::shared_ptr<PartialOsmMapReader> reader =
+    std::dynamic_pointer_cast<PartialOsmMapReader>(
+      OsmMapReaderFactory::createReader(input));
+  reader->setUseDataSourceIds(useDataSourceIds);
+  reader->open(input);
+  reader->initializePartial();
+
+  return
+    std::shared_ptr<ElementVisitorInputStream>(
+      new ElementVisitorInputStream(
+        std::dynamic_pointer_cast<ElementInputStream>(reader),
+        ElementVisitorPtr(
+          Factory::getInstance().constructObject<ElementVisitor>(visitorClassName.toStdString()))));
 }
 
 }

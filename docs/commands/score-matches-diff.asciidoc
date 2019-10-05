@@ -1,0 +1,22 @@
+[[score-matches-diff]]
+== score-matches-diff
+
+=== Description
+
+The +score-matches-diff+ command calculates the difference between two scored conflated output files created by the +score-matches+ command. It 
+outputs a summary describing the scoring difference between the two files and additionally outputs difference detail to a file.
+
+* +input1+      - Input 1; must be a conflated .osm file output from an execution of the +score-matches+ command
+* +input2+      - Input 2; must be a conflated .osm file output from an execution of the +score-matches+ command
+* +output+      - Output differential text file
+
+=== Usage
+
+--------------------------------------
+score-matches-diff (input1) (input2) (output)
+--------------------------------------
+
+=== See Also
+
+* <<hootDevGuide, HootenannyManualConflation>>
+

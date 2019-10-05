@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 
 // Qt
 #include <QString>
@@ -95,6 +96,16 @@ public:
    */
   static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
                            const bool keepConnectedOobWays = false);
+
+  /**
+   * Creates an input stream with a visitor in the loop
+   *
+   * @param input the data soruce to read
+   * @param visitorClassName the class name of the visitor to use
+   * @return an input stream
+   */
+  static std::shared_ptr<ElementVisitorInputStream> getVisitorInputStream(
+    const QString& input, const QString& visitorClassName, const bool useDataSourceIds = false);
 };
 
 }

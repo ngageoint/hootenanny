@@ -49,7 +49,7 @@ public:
 
   virtual ElementCriterionPtr clone();
 
-  virtual QString getDescription() const { return "Allows for combining criteria (logical OR )"; }
+  virtual QString getDescription() const { return "Allows for combining criteria (logical OR)"; }
 
   virtual QString toString() const override;
 };

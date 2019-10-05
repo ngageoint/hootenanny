@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCHTYPE_H
 #define MATCHTYPE_H
@@ -39,6 +39,7 @@ namespace hoot
 class MatchType
 {
 public:
+
   enum Type
   {
     Miss = 0,
@@ -47,6 +48,7 @@ public:
   };
 
   MatchType(Type t) : _type(t) {}
+
   MatchType(double v)
   {
     int t = round(v);
@@ -56,6 +58,7 @@ public:
     }
     _type = (Type)t;
   }
+
   MatchType(QString v)
   {
     QString l = v.toLower();
@@ -98,6 +101,7 @@ public:
   }
 
 private:
+
   Type _type;
 };
 

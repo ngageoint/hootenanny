@@ -42,6 +42,7 @@ _pCrit(pCrit)
 {
   if (_elementType == ElementType::Relation)
   {
+    // why is this?
     throw NotImplementedException("ElementIdsVisitor does not currently support relations.");
   }
 }
@@ -73,6 +74,8 @@ vector<long> ElementIdsVisitor::findElements(const ConstOsmMapPtr& map,
   }
   return v.getIds();
 }
+
+// TODO: Some of these may be redundant with related methods in OsmUtils.
 
 vector<long> ElementIdsVisitor::_findCloseNodes(const ConstOsmMapPtr& map,
                                                 const Coordinate& refCoord, Meters maxDistance)
@@ -111,7 +114,6 @@ vector<long> ElementIdsVisitor::findWays(const ConstOsmMapPtr& map, ElementCrite
   return _findElements(map, pCrit, map->getIndex().findWayNeighbors(refWay, maxDistance, addError));
 }
 
-// Convenience method for finding elements that contain the given tag
 vector<long> ElementIdsVisitor::findElementsByTag(const ConstOsmMapPtr& map,
                                                   const ElementType& elementType,
                                                   const QString& key, const QString& value)
