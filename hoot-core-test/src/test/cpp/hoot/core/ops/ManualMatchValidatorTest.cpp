@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/ManualMatchValidator.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 
 // CPPUnit
 #include <cppunit/extensions/HelperMacros.h>
@@ -53,10 +53,8 @@ class ManualMatchValidatorTest : public HootTestFixture
 
 public:
 
-  ManualMatchValidatorTest() :
-  HootTestFixture("test-files/ops/ManualMatchValidatorTest/", UNUSED_PATH)
+  ManualMatchValidatorTest() : HootTestFixture(UNUSED_PATH, UNUSED_PATH)
   {
-    setResetType(ResetBasic);
   }
 
   void runEmptyIdTest()
@@ -67,14 +65,14 @@ public:
 
     Tags tags1;
     tags1.set(MetadataTags::Ref1(), "");
-    ConstNodePtr node = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags1);
+    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags1);
 
     Tags tags2;
     tags2.set(MetadataTags::Ref2(), "");
     geos::geom::Coordinate c1[] = {
       geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(1.0, 1.0),
       geos::geom::Coordinate::getNull() };
-    ConstWayPtr way = TestUtils::createWay(map, c1, Status::Unknown1, 15.0, tags2);
+    WayPtr way = TestUtils::createWay(map, c1, Status::Unknown1, 15.0, tags2);
 
     Tags tags3;
     tags3.set(MetadataTags::Review(), "");
@@ -91,11 +89,11 @@ public:
     CPPUNIT_ASSERT(uut.getErrors().size() == 3);
     QMap<ElementId, QString>::const_iterator errorItr =
       uut.getErrors().find(node->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Empty REF1 tag", errorItr.value().toStdString());
     errorItr = uut.getErrors().find(way->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Empty REF2 tag", errorItr.value());
     errorItr = uut.getErrors().find(relation->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Empty REVIEW tag", errorItr.value().toStdString());
   }
 
   void runInvalidIdComboTest()
@@ -109,21 +107,28 @@ public:
 
     tags.set(MetadataTags::Ref1(), "002c75");
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr node = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    uut.apply(map);
-    CPPUNIT_ASSERT(uut.hasErrors());
-    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(node->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
-    node->getTags().clear();
-    node->getTags().set(MetadataTags::Ref1(), "002c75");
-    node->getTags().set(MetadataTags::Review(), "002da0");
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(node->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS(
+      "Element has both REF1 and either a REF2 or REVIEW tag", errorItr.value().toStdString());
+
+    tags.clear();
+    tags.set(MetadataTags::Ref1(), "002c75");
+    tags.set(MetadataTags::Review(), "002da0");
+    node->setTags(tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(node->getElementId());
+    HOOT_STR_EQUALS(
+      "Element has both REF1 and either a REF2 or REVIEW tag", errorItr.value().toStdString());
   }
 
   void runMissingRef1Test()
@@ -136,30 +141,31 @@ public:
     QMap<ElementId, QString>::const_iterator errorItr;
 
     tags.set(MetadataTags::Ref1(), "002c75");
-    ConstNodePtr ref1 = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref1->setStatus(Status::Unknown1);
+    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
-    ConstNodePtr ref2 = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref2->setStatus(Status::Unknown2);
+    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(ref2->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("No REF1 exists for REF2=002da0", errorItr.value().toStdString());
 
     tags.clear();
+    RemoveNodeByEid::removeNode(map, ref2->getId());
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr review = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    review->setStatus(Status::Unknown2);
+    ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
+    //LOG_VARW(uut.getErrors().size());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(review->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("No REF1 exists for REVIEW=002da0", errorItr.value().toStdString());
   }
 
   void runInvalidIdTest()
@@ -171,49 +177,64 @@ public:
 
     // ref1 ids all must be hex
     tags.set(MetadataTags::Ref1(), "todo");
-    ConstNodePtr ref1 = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref1->setStatus(Status::Unknown1);
+    ConstNodePtr ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(ref1->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Invalid REF1=todo", errorItr.value().toStdString());
 
+    map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), "none");
-    ConstNodePtr ref1 = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref1->setStatus(Status::Unknown1);
+    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(ref1->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Invalid REF1=none", errorItr.value().toStdString());
 
+    map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref1(), "-");
-    ConstNodePtr ref1 = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref1->setStatus(Status::Unknown1);
+    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(ref1->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Invalid REF1=-", errorItr.value().toStdString());
 
     // ref2/review ids must all be either hex, 'todo', or 'none'
 
+    map->clear();
     tags.clear();
     tags.set(MetadataTags::Ref2(), "-");
-    ConstNodePtr ref1 = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref2->setStatus(Status::Unknown2);
+    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(ref2->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    HOOT_STR_EQUALS("Invalid REF2=-", errorItr.value().toStdString());
+
+    map->clear();
+    tags.clear();
+    tags.set(MetadataTags::Review(), "-");
+    ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(review->getElementId());
+    HOOT_STR_EQUALS("Invalid REVIEW=-", errorItr.value().toStdString());
   }
 
   void runRepeatedIdTest()
@@ -225,69 +246,67 @@ public:
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
 
+    tags.set(MetadataTags::Ref1(), "002da0");
+    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    tags.clear();
     tags.set(MetadataTags::Ref2(), "002da0");
     tags.set(MetadataTags::Review(), "002da0");
-    ConstNodePtr ref = TestUtils::createNode(map, 0.0, 0.0, 15.0, tags);
-    ref->setStatus(Status::Unknown2);
+    ConstNodePtr invalidRef = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
+    //LOG_VARW(uut.getErrors().size());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(ref->getElementId());
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    errorItr = uut.getErrors().find(invalidRef->getElementId());
+    HOOT_STR_EQUALS(
+      "Invalid repeated ID: REF2=002da0, REVIEW=002da0", errorItr.value().toStdString());
   }
 
   void runStatusTest()
   {
-    // This test makes sure data loaded with an Unknown1 status doesn't have any REF2 tags in it and
-    // that data loaded with an Unknown2 status doesn't have any REF1 tags in it.
+    // data loaded with an Unknown1 status can't have any REF2 tags in it and data loaded with an
+    // Unknown2 status can't have any REF1 tags in it
 
-    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
     ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
 
-    OsmMapPtr map1(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "has-ref1-tags-only.osm", map1);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "has-ref2-tags-only.osm", map1);
-    uut.apply(map1);
-    CPPUNIT_ASSERT(!uut.hasErrors());
+    tags.set(MetadataTags::Ref1(), "002da0");
+    ConstNodePtr invalidRef1 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
-    OsmMapPtr map2(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "has-ref1-tags-only.osm", map2);
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "has-ref2-tags-only.osm", map2);
-    uut.apply(map2);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef1->getElementId());
+    HOOT_STR_EQUALS("Unknown2 element with REF1 tag", errorItr.value().toStdString());
+
+    map->clear();
+    tags.clear();
+    tags.set(MetadataTags::Ref2(), "002da0");
+    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    QMap<ElementId, QString>::const_iterator errorItr =
-      uut.getErrors().find(ElementId(ElementType::Way, 1));
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS("Unknown1 element with REF2 or REVIEW tag", errorItr.value().toStdString());
 
-    OsmMapPtr map3(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "has-ref1-tags-only.osm", map3);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "has-ref1-tags-only.osm", map3);
-    uut.apply(map3);
+    map->clear();
+    tags.clear();
+    tags.set(MetadataTags::Review(), "002da0");
+    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    QMap<ElementId, QString>::const_iterator errorItr =
-      uut.getErrors().find(ElementId(ElementType::Way, 1));
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
-
-    OsmMapPtr map4(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read(_inputPath + "has-ref2-tags-only.osm", map4);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read(_inputPath + "has-ref2-tags-only.osm", map4);
-    uut.apply(map4);
-    CPPUNIT_ASSERT(uut.hasErrors());
-    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    QMap<ElementId, QString>::const_iterator errorItr =
-      uut.getErrors().find(ElementId(ElementType::Way, 1));
-    CPPUNIT_ASSERT_EQUAL("", errorItr.value());
+    errorItr = uut.getErrors().find(invalidReview->getElementId());
+    HOOT_STR_EQUALS("Unknown1 element with REF2 or REVIEW tag", errorItr.value().toStdString());
   }
 };
 

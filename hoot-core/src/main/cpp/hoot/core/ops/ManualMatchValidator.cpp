@@ -42,7 +42,8 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;
   _errors.clear();
-  _ref1Mappings.clear();
+  _ref1Mappings.getIdToTagValueMappings().clear();
+  _ref1Mappings.setTagKey(MetadataTags::Ref1());
 
   // Get all the REF1 values, as we'll need them when examining REF2/REVIEW tags.
   map->visitRo(_ref1Mappings);
@@ -139,21 +140,21 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   // validate manual match ids
   else if (!ref1.isEmpty() && !_isValidRef1Id(ref1))
   {
-    _errors[element->getElementId()] = "Invalid REF1: " + ref1;
+    _errors[element->getElementId()] = "Invalid REF1=" + ref1;
   }
   else if (!ref2.isEmpty() && !_isValidRef2OrReviewId(ref2))
   {
-    _errors[element->getElementId()] = "Invalid REF2: " + ref2;
+    _errors[element->getElementId()] = "Invalid REF2=" + ref2;
   }
   else if (!review.isEmpty() && !_isValidRef2OrReviewId(review))
   {
-    _errors[element->getElementId()] = "Invalid REVIEW: " + review;
+    _errors[element->getElementId()] = "Invalid REVIEW=" + review;
   }
   // same id can't be on both ref2 and review for the same element
   else if (!ref2.isEmpty() && !review.isEmpty() && ref2 == review && ref2 != "todo" &&
            ref2 != "none")
   {
-    _errors[element->getElementId()] = "Invalid REF2=" + ref2 + " or REVIEW=" + review;
+    _errors[element->getElementId()] = "Invalid repeated ID: REF2=" + ref2 + ", REVIEW=" + review;
   }
 }
 
@@ -166,7 +167,8 @@ bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
 
 bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
 {
-  return StringUtils::isAlphaNumeric(matchId);
+  const QString matchIdTemp = matchId.toLower();
+  return matchIdTemp != "todo" && matchIdTemp != "none" && StringUtils::isAlphaNumeric(matchIdTemp);
 }
 
 }
