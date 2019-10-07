@@ -89,7 +89,7 @@ public:
 
     ObjectInputStream uut(ss);
 
-    TestClass* tc = uut.readObject<TestClass>();
+    std::shared_ptr<TestClass> tc(uut.readObject<TestClass>());
 
     CPPUNIT_ASSERT_EQUAL(42, tc->a);
     CPPUNIT_ASSERT_EQUAL(-1, tc->b);
