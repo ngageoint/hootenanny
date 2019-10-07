@@ -87,6 +87,19 @@ bool StringUtils::hasDigit(const QString& input)
   return false;
 }
 
+bool StringUtils::isAlphaNumeric(const QString& input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    const QChar character = input.at(i);
+    if (!character.isLetterOrNumber())
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool StringUtils::isNumber(const QString& input)
 {
   bool isNumber = false;

@@ -101,6 +101,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   OsmMapPtr cookieCutMap = doughMap;
 
   // clean up any ugly bits left over
+  // TODO: This can be removed now, since its already happening in MapCropper, right?
   SuperfluousWayRemover::removeWays(cookieCutMap);
   SuperfluousNodeRemover::removeNodes(cookieCutMap);
 

@@ -106,6 +106,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   _cropper.apply(map);
 
   // cleanup
+  // TODO: This can be removed now, since its already happening in MapCropper, right?
   SuperfluousWayRemover::removeWays(map);
   SuperfluousNodeRemover::removeNodes(map);
 

@@ -119,6 +119,14 @@ public:
    * @param strings the strings to modify
    */
   static void removeEmptyStrings(QStringList& strings);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @return
+   */
+  static bool isAlphaNumeric(const QString& input);
 };
 
 }

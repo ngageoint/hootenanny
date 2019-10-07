@@ -44,10 +44,11 @@ class PoiPolygonCache;
 typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
 
 /**
- * Cached back class storing POI/Polygon feature comparison info (Singleton)
+ * Cached back class storing POI/Polygon feature comparison info
  *
  * The caches used in this class were determined on 9/30/18 running against the regression test:
- * unifying-tests.child/somalia.child/somalia-test3.child.
+ * unifying-tests.child/somalia.child/somalia-test3.child. Further caching could be deemed necessary
+ * for other datasets going forward.
  */
 class PoiPolygonCache
 {

@@ -35,7 +35,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
-#include <hoot/core/scoring/MapScoringStatusAndRefTagValidator.h>
+//#include <hoot/core/scoring/MapScoringStatusAndRefTagValidator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
@@ -43,6 +43,7 @@
 #include <hoot/core/util/IoUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/ops/ManualMatchValidator.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -61,6 +62,89 @@ public:
   static string className() { return "hoot::ScoreMatchesCmd"; }
 
   ScoreMatchesCmd() { }
+
+  virtual QString getName() const override { return "score-matches"; }
+
+  virtual QString getDescription() const override
+  { return "Scores conflation performance against a manually matched map"; }
+
+  virtual int runSimple(QStringList& args) override
+  {
+    bool showConfusion = false;
+    if (args.contains("--confusion"))
+    {
+      args.removeAll("--confusion");
+      showConfusion = true;
+    }
+    bool optimizeThresholds = false;
+    if (args.contains("--optimize"))
+    {
+      args.removeAll("--optimize");
+      optimizeThresholds = true;
+    }
+    if (args.size() < 3 || args.size() % 2 != 1)
+    {
+      LOG_VAR(args);
+      cout << getHelp() << endl << endl;
+      throw HootException(
+        QString("%1 takes at least three parameters: two or more input maps (even number) and an output map")
+          .arg(getName()));
+    }
+
+    ConfigUtils::checkForTagValueTruncationOverride();
+
+    vector<OsmMapPtr> maps;
+    QString output = args.last();
+    for (int i = 0; i < args.size() - 1; i += 2)
+    {
+      OsmMapPtr map(new OsmMap());
+      const QString map1Path = args[i];
+      const QString map2Path = args[i + 1];
+      IoUtils::loadMap(map, map1Path, false, Status::Unknown1);
+      IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
+
+      // If any of the map files have errors, we'll print some out and terminate.
+      if (_printErrors(map, map1Path, map2Path))
+      {
+        return 1;
+      }
+
+      MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
+      maps.push_back(map);
+    }
+    LOG_VARD(maps.size());
+
+    if (optimizeThresholds)
+    {
+      _optimize(maps, showConfusion);
+    }
+    else
+    {
+      double score;
+      std::shared_ptr<MatchThreshold> mt;
+      const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
+      cout << result;
+    }
+
+    return 0;
+  }
+
+  class ScoreFunction : public Tgs::NelderMead::Function
+  {
+  public:
+
+    virtual double f(Tgs::Vector v)
+    {
+      double score;
+      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
+      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
+      return score;
+    }
+
+    ScoreMatchesCmd* _cmd;
+    vector<OsmMapPtr> _maps;
+    bool _showConfusion;
+  };
 
   QString evaluateThreshold(vector<OsmMapPtr> maps, QString output,
                             std::shared_ptr<MatchThreshold> mt, bool showConfusion,
@@ -120,29 +204,47 @@ public:
     return result;
   }
 
-  virtual QString getName() const override { return "score-matches"; }
+private:
 
-  virtual QString getDescription() const override
-  { return "Scores conflation performance against a manually matched map"; }
-
-  class ScoreFunction : public Tgs::NelderMead::Function
+  bool _printErrors(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path)
   {
-  public:
+    ManualMatchValidator inputValidator;
+    inputValidator.getInitStatusMessage();
+    inputValidator.apply(map);
+    inputValidator.getCompletedStatusMessage();
 
-    virtual double f(Tgs::Vector v)
+    const QMap<ElementId, QStringList> errors = inputValidator.getErrors();
+    if (!errors.isEmpty())
     {
-      double score;
-      std::shared_ptr<MatchThreshold> mt(new MatchThreshold(v[0], v[1], v[2]));
-      _cmd->evaluateThreshold(_maps, "", mt, _showConfusion, score);
-      return score;
+      cout << "There are " << QString::number(errors.size()) <<
+              " manual match errors for inputs " << map1Path.right(25) << " and " <<
+              map2Path.right(25) << ":\n\n";
+      int errorCount = 0;
+      for (QMap<ElementId, QStringList>::const_iterator itr = errors.begin();
+           itr != errors.end(); ++itr)
+      {
+        QString errorLine = itr.key().toString() + ": ";
+        const QStringList errors = itr.value();
+        for (int i = 0; errors.size(); i++)
+        {
+          errorLine += errors.at(i) + ", ";
+        }
+        errorLine.chop(1);
+        errorLine += "\n";
+        cout << errorLine;
+
+        errorCount++;
+        if (errorCount >= 10)
+        {
+          cout << "Printing errors for the first 10 elements only..." << endl;
+          break;
+        }
+      }
     }
+    return !errors.isEmpty();
+  }
 
-    ScoreMatchesCmd* _cmd;
-    vector<OsmMapPtr> _maps;
-    bool _showConfusion;
-  };
-
-  void optimize(vector<OsmMapPtr> maps, bool showConfusion)
+  void _optimize(vector<OsmMapPtr> maps, bool showConfusion)
   {
     ScoreFunction* sf = new ScoreFunction();
     sf->_cmd = this;
@@ -170,71 +272,6 @@ public:
       result[2] = min(1., max(0., result[2]));
       LOG_VAR(result.getVector());
     }
-  }
-
-  virtual int runSimple(QStringList& args) override
-  {
-    bool optimizeThresholds = false;
-    bool showConfusion = false;
-    if (args.contains("--confusion"))
-    {
-      args.removeAll("--confusion");
-      showConfusion = true;
-    }
-
-    if (args.contains("--optimize"))
-    {
-      args.removeAll("--optimize");
-      optimizeThresholds = true;
-    }
-
-    if (args.size() < 3 || args.size() % 2 != 1)
-    {
-      LOG_VAR(args);
-      cout << getHelp() << endl << endl;
-      throw HootException(
-        QString("%1 takes at least three parameters: two or more input maps (even number) and an output map")
-          .arg(getName()));
-    }
-
-    ConfigUtils::checkForTagValueTruncationOverride();
-
-    vector<OsmMapPtr> maps;
-    QString output = args.last();
-    for (int i = 0; i < args.size() - 1; i += 2)
-    {
-      OsmMapPtr map(new OsmMap());
-      IoUtils::loadMap(map, args[i], false, Status::Unknown1);
-      IoUtils::loadMap(map, args[i + 1], false, Status::Unknown2);
-
-      if (!MapScoringStatusAndRefTagValidator::allTagsAreValid(map))
-      {
-        throw HootException(
-          QString("score-matches requires that the first input file contains %1 tags (no %2 tags) "
-                  "and the second input file contains %2 tags (no %1 tags).")
-              .arg(MetadataTags::Ref1())
-              .arg(MetadataTags::Ref2()));
-      }
-
-      MatchScoringMapPreparer().prepMap(map, ConfigOptions().getScoreMatchesRemoveNodes());
-      maps.push_back(map);
-    }
-    LOG_VARD(maps.size());
-
-    if (optimizeThresholds)
-    {
-      optimize(maps, showConfusion);
-    }
-    else
-    {
-      double score;
-      std::shared_ptr<MatchThreshold> mt;
-      const QString result = evaluateThreshold(maps, output, mt, showConfusion, score);
-
-      cout << result;
-    }
-
-    return 0;
   }
 };
 
