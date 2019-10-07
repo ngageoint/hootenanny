@@ -213,25 +213,17 @@ private:
     inputValidator.apply(map);
     inputValidator.getCompletedStatusMessage();
 
-    const QMap<ElementId, QStringList> errors = inputValidator.getErrors();
+    const QMap<ElementId, QString> errors = inputValidator.getErrors();
     if (!errors.isEmpty())
     {
       cout << "There are " << QString::number(errors.size()) <<
               " manual match errors for inputs " << map1Path.right(25) << " and " <<
               map2Path.right(25) << ":\n\n";
       int errorCount = 0;
-      for (QMap<ElementId, QStringList>::const_iterator itr = errors.begin();
+      for (QMap<ElementId, QString>::const_iterator itr = errors.begin();
            itr != errors.end(); ++itr)
       {
-        QString errorLine = itr.key().toString() + ": ";
-        const QStringList errors = itr.value();
-        for (int i = 0; errors.size(); i++)
-        {
-          errorLine += errors.at(i) + ", ";
-        }
-        errorLine.chop(1);
-        errorLine += "\n";
-        cout << errorLine;
+        cout << itr.key().toString() + ": " + itr.value() + "\n";
 
         errorCount++;
         if (errorCount >= 10)

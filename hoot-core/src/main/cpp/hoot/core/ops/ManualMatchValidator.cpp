@@ -41,6 +41,8 @@ ManualMatchValidator::ManualMatchValidator()
 void ManualMatchValidator::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;
+  _errors.clear();
+  _ref1Mappings.clear();
 
   // Get all the REF1 values, as we'll need them when examining REF2/REVIEW tags.
   map->visitRo(_ref1Mappings);
@@ -48,20 +50,23 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
   const NodeMap& nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    _validate(*it);
+    ConstNodePtr node = it->second;
+    _validate(node);
   }
 
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    _validate(*it);
+    ConstWayPtr way = it->second;
+    _validate(way);
   }
 
-  // TODO: Do we need to parse relations?
+  // Can't remember right now if relations are ever manually matched...maybe?
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
-    _validate(*it);
+    ConstRelationPtr relation = it->second;
+    _validate(relation);
   }
 }
 
@@ -69,53 +74,99 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 {
   _numAffected++;
 
-  const Tags& tags = element->getTags();
-  Tags::const_iterator tagRef1Itr = tags.find(MetadataTags::Ref1());
-  Tags::const_iterator tagRef2Itr = tags.find(MetadataTags::Ref2());
-  Tags::const_iterator tagReviewItr = tags.find(MetadataTags::Review());
+  // Just recording one error for each element, even if there are multiple.
 
-  // an unknown1 element can never have a ref2 or review tag
-  if (element->getStatus() == Status::Unknown1 &&
-      (tagRef2Itr != tags.end() || tagReviewItr != tags.end()))
+  const Tags& tags = element->getTags();
+  QString ref1;
+  Tags::const_iterator tagRef1Itr = tags.find(MetadataTags::Ref1());
+  if (tagRef1Itr != tags.end())
   {
-    _errors[element->getElementId].append("Unknown1 element with REF2 or REVIEW tag");
+    ref1 = tagRef1Itr.value().trimmed().toLower();
+    // values can't be blank
+    if (ref1.isEmpty())
+    {
+      _errors[element->getElementId()] = "Empty REF1 tag";
+      return;
+    }
   }
-  // an unknown2 element can never have a ref1 tag
-  else if (element->getStatus() == Status::Unknown2 && tagRef1Itr != tags.end())
+  QString ref2;
+  Tags::const_iterator tagRef2Itr = tags.find(MetadataTags::Ref2());
+  if (tagRef2Itr != tags.end())
   {
-    _errors[element->getElementId].append("Unknown2 element with REF1 tag");
+    ref2 = tagRef2Itr.value().trimmed().toLower();
+    if (ref2.isEmpty())
+    {
+      _errors[element->getElementId()] = "Empty REF2 tag";
+      return;
+    }
   }
-  // make sure a REF1 exists for each REF2 or REVIEW hex
-  else if (tagRef2Itr != tags.end() && !_ref1Mappings.contains(tagRef2Itr.value()))
+  QString review;
+  Tags::const_iterator tagReviewItr = tags.find(MetadataTags::Review());
+  if (tagReviewItr != tags.end())
   {
-    _errors[element->getElementId].append("No REF1 exists for REF2=" + tagRef2Itr.value());
+    review = tagReviewItr.value().trimmed().toLower();
+    if (review.isEmpty())
+    {
+      _errors[element->getElementId()] = "Empty REVIEW tag";
+      return;
+    }
   }
-  else if (tagReviewItr != tags.end() && !_ref1Mappings.contains(tagReviewItr.value()))
+
+  // can't have both ref1 and ref2/review on the same element
+  if (!ref1.isEmpty() && (!ref2.isEmpty() || !review.isEmpty()))
   {
-    _errors[element->getElementId].append("No REF1 exists for REVIEW=" + tagReviewItr.value());
+    _errors[element->getElementId()] = "Element has both REF1 and either a REF2 or REVIEW tag";
   }
-  // validate REF2 and REVIEW tag values (hex, todo, or none)
-  else if (tagRef2Itr != tags.end() && _isValidManualMatchId(tagRef2Itr.value()))
+  // an unknown1 element can't have a ref2 or review tag
+  else if (element->getStatus() == Status::Unknown1 && (!ref2.isEmpty() || !review.isEmpty()))
   {
-    _errors[element->getElementId].append("Invalid REF2: " + tagRef2Itr.value());
+    _errors[element->getElementId()] = "Unknown1 element with REF2 or REVIEW tag";
   }
-  else if (tagReviewItr != tags.end() && _isValidManualMatchId(tagReviewItr.value()))
+  // an unknown2 element can't have a ref1 tag
+  else if (element->getStatus() == Status::Unknown2 && !ref1.isEmpty())
   {
-    _errors[element->getElementId].append("Invalid REVIEW: " + tagReviewItr.value());
+    _errors[element->getElementId()] = "Unknown2 element with REF1 tag";
   }
-  // same ID can't be on both REF2 and REVIEW for the same element
-  else if (tagRef2Itr != tags.end() && tagReviewItr != tags.end() &&
-           tagRef2Itr.value().toLower() == tagReviewItr.value().toLower())
+  // make sure a ref1 exists for each ref2 or review
+  else if (!ref2.isEmpty() && !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2))
   {
-    _errors[element->getElementId].append("Invalid REVIEW: " + tagReviewItr.value());
+    _errors[element->getElementId()] = "No REF1 exists for REF2=" + ref2;
+  }
+  else if (!review.isEmpty() && !_ref1Mappings.getIdToTagValueMappings().values().contains(review))
+  {
+    _errors[element->getElementId()] = "No REF1 exists for REVIEW=" + review;
+  }
+  // validate manual match ids
+  else if (!ref1.isEmpty() && !_isValidRef1Id(ref1))
+  {
+    _errors[element->getElementId()] = "Invalid REF1: " + ref1;
+  }
+  else if (!ref2.isEmpty() && !_isValidRef2OrReviewId(ref2))
+  {
+    _errors[element->getElementId()] = "Invalid REF2: " + ref2;
+  }
+  else if (!review.isEmpty() && !_isValidRef2OrReviewId(review))
+  {
+    _errors[element->getElementId()] = "Invalid REVIEW: " + review;
+  }
+  // same id can't be on both ref2 and review for the same element
+  else if (!ref2.isEmpty() && !review.isEmpty() && ref2 == review && ref2 != "todo" &&
+           ref2 != "none")
+  {
+    _errors[element->getElementId()] = "Invalid REF2=" + ref2 + " or REVIEW=" + review;
   }
 }
 
-bool ManualMatchValidator::_isValidManualMatchId(const QString& matchId) const
+bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
 {
+  const QString matchIdTemp = matchId.toLower();
   return
-    matchId.toLower() == "todo" || matchId.toLower() == "none" ||
-    StringUtils::isAlphaNumeric(matchId);
+    matchIdTemp == "todo" || matchIdTemp == "none" || StringUtils::isAlphaNumeric(matchIdTemp);
+}
+
+bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
+{
+  return StringUtils::isAlphaNumeric(matchId);
 }
 
 }

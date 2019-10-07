@@ -68,15 +68,23 @@ public:
    * @param map
    * @return
    */
-  QMap<ElementId, QStringList> getErrors() const { return _errors; }
+  QMap<ElementId, QString> getErrors() const { return _errors; }
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  bool hasErrors() const { return _errors.size() > 0; }
 
 private:
 
-  QMap<ElementId, QStringList> _errors;
+  QMap<ElementId, QString> _errors;
   ElementIdToTagValueMapper _ref1Mappings;
 
   void _validate(const ConstElementPtr& element);
-  bool _isValidManualMatchId(const QString& matchId) const;
+  bool _isValidRef1Id(const QString& matchId) const;
+  bool _isValidRef2OrReviewId(const QString& matchId) const;
 };
 
 }
