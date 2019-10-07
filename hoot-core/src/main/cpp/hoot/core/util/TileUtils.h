@@ -39,6 +39,8 @@ namespace hoot
 
 /**
  * Utilities for dealing with node density based tiles
+ *
+ * @todo move to conflate/tile
  */
 class TileUtils
 {

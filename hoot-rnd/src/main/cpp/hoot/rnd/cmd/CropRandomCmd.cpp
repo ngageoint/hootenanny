@@ -52,7 +52,7 @@ public:
   virtual QString getName() const override { return "crop-random"; }
 
   virtual QString getDescription() const override
-  { return "Crops out a random section of data based on a given node size (experimental)"; }
+  { return "Crops out a random section of a map (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 

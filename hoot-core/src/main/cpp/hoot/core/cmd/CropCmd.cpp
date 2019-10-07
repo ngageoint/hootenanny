@@ -54,7 +54,7 @@ public:
 
   virtual QString getName() const override { return "crop"; }
 
-  virtual QString getDescription() const override { return "Crops a map to a geospatial bounds"; }
+  virtual QString getDescription() const override { return "Crops a map to a bounds"; }
 
   virtual int runSimple(QStringList& args) override
   {

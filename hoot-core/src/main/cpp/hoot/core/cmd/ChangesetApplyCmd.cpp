@@ -52,7 +52,8 @@ public:
 
   virtual QString getName() const override { return "changeset-apply"; }
 
-  virtual QString getDescription() const override { return "Writes an OSM changeset"; }
+  virtual QString getDescription() const override
+  { return "Writes an OSM changeset to an OSM data store"; }
 
   virtual int runSimple(QStringList& args) override
   {

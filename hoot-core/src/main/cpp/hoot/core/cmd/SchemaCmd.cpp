@@ -47,8 +47,7 @@ public:
 
   virtual QString getName() const override { return "schema"; }
 
-  virtual QString getDescription() const override
-  { return "Displays the tag schema that Hootenanny uses"; }
+  virtual QString getDescription() const override { return "Displays the tag schema used"; }
 
   virtual int runSimple(QStringList& args) override
   {

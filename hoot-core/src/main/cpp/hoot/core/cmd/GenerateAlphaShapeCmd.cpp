@@ -52,7 +52,7 @@ public:
   virtual QString getName() const override { return "generate-alpha-shape"; }
 
   virtual QString getDescription() const override
-  { return "Generates a concave hull for a set of points; useful in cookie cutting"; }
+  { return "Generates a shape that covers a set of features in a map"; }
 
   virtual int runSimple(QStringList& args) override
   {

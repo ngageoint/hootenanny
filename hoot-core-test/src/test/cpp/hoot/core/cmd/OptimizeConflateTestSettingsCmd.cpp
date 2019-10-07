@@ -49,7 +49,7 @@ public:
   virtual QString getName() const { return "optimize-network-conf"; }
 
   virtual QString getDescription() const
-  { return "Determines optimal network road conflation settings"; }
+  { return "Determines an optimal road conflation configuration for the Network Algorithm"; }
 
   virtual QString getType() const { return "rnd"; }
 

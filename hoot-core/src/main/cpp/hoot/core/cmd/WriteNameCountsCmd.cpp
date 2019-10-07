@@ -57,7 +57,7 @@ public:
   virtual QString getName() const override { return "write-name-counts"; }
 
   virtual QString getDescription() const override
-  { return "Writes name tag counts to a database file"; }
+  { return "Writes name tag counts for a map"; }
 
   virtual int runSimple(QStringList& args) override
   {
