@@ -57,6 +57,7 @@ public:
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perty");
     _forceToRndList.append("score-matches");
+    _forceToRndList.append("score-matches-diff");
     _forceToRndList.append("type-tagger-rules");
     _forceToRndList.append("write-name-counts");
   }
