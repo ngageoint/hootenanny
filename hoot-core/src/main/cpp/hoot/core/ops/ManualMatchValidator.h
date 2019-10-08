@@ -85,6 +85,8 @@ private:
   void _validate(const ConstElementPtr& element);
   bool _isValidRef1Id(const QString& matchId) const;
   bool _isValidRef2OrReviewId(const QString& matchId) const;
+  bool _isValidUniqueMatchId(const QString& matchId) const;
+  bool _isValidNonUniqueMatchId(const QString& matchId) const;
 };
 
 }

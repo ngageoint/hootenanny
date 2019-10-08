@@ -85,7 +85,9 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     ref1 = tagRef1Itr.value().trimmed().toLower();
     if (ref1.isEmpty())
     {
-      _errors[element->getElementId()] = "Empty REF1 tag";
+      const QString errorMsg = "Empty REF1 tag";
+      LOG_VART(errorMsg);
+      _errors[element->getElementId()] = errorMsg;
       return;
     }
   }
@@ -98,7 +100,9 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     ref2 = tagRef2Itr.value().trimmed().toLower().split(";");
     if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).isEmpty()))
     {
-      _errors[element->getElementId()] = "Empty REF2 tag";
+      const QString errorMsg = "Empty REF2 tag";
+      LOG_VART(errorMsg);
+      _errors[element->getElementId()] = errorMsg;
       return;
     }
   }
@@ -111,7 +115,9 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     review = tagReviewItr.value().trimmed().toLower().split(";");
     if (review.isEmpty() || (review.size() == 1 && review.at(0).isEmpty()))
     {
-      _errors[element->getElementId()] = "Empty REVIEW tag";
+      const QString errorMsg = "Empty REVIEW tag";
+      LOG_VART(errorMsg);
+      _errors[element->getElementId()] = errorMsg;
       return;
     }
   }
@@ -120,78 +126,95 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   // REF2 and review can be multiple IDs (many to one match), but REF1 is always a single ID.
   if (ref1.split(";").size() > 1)
   {
-    _errors[element->getElementId()] = "REF1 ID must be singular. REF1=" + ref1;
+    const QString errorMsg = "REF1 ID must be singular. REF1=" + ref1;
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   // validate manual match ids
   else if (!ref1.isEmpty() && !_isValidRef1Id(ref1))
   {
-    _errors[element->getElementId()] = "Invalid REF1=" + ref1;
+     const QString errorMsg = "Invalid REF1=" + ref1;
+     LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   // can't have both ref1 and ref2/review on the same element
   else if (!ref1.isEmpty() && (!ref2.isEmpty() || !review.isEmpty()))
   {
-    _errors[element->getElementId()] = "Element has both REF1 and either a REF2 or REVIEW tag";
+    const QString errorMsg = "Element has both REF1 and either a REF2 or REVIEW tag";
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   // an unknown1 element can't have a ref2 or review tag
   else if (element->getStatus() == Status::Unknown1 && (!ref2.isEmpty() || !review.isEmpty()))
   {
-    _errors[element->getElementId()] = "Unknown1 element with REF2 or REVIEW tag";
+    const QString errorMsg = "Unknown1 element with REF2 or REVIEW tag";
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   // an unknown2 element can't have a ref1 tag
   else if (element->getStatus() == Status::Unknown2 && !ref1.isEmpty())
   {
-    _errors[element->getElementId()] = "Unknown2 element with REF1 tag";
+    const QString errorMsg = "Unknown2 element with REF1 tag";
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   // If a ref2 or review has multiple ID's, they should all be hex.
-  else if (!ref2.isEmpty() && ref2.size() > 1 && (ref2.contains("todo") || ref2.contains("none")))
+  else if (!ref2.isEmpty() && ref2.size() > 1 &&
+           (ref2.contains("todo", Qt::CaseInsensitive) ||
+            ref2.contains("none", Qt::CaseInsensitive)))
   {
-    _errors[element->getElementId()] = "Invalid many to one REF2=" + ref2.join(";");
+    const QString errorMsg = "Invalid many to one REF2=" + ref2.join(";");
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   else if (!review.isEmpty() && review.size() > 1 &&
            (review.contains("todo") || review.contains("none")))
   {
-    _errors[element->getElementId()] = "Invalid many to one REVIEW=" + review.join(";");
+    const QString errorMsg = "Invalid many to one REVIEW=" + review.join(";");
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   // check for dupes
   else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )
   {
-    _errors[element->getElementId()] = "Duplicate ID found in REF2=" + ref2.join(";");
+    const QString errorMsg = "Duplicate ID found in REF2=" + ref2.join(";");
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   else if (!review.isEmpty() && review.toSet().size() != review.size())
   {
-    _errors[element->getElementId()] = "Duplicate ID found in REVIEW=" + review.join(";");
+    const QString errorMsg = "Duplicate ID found in REVIEW=" + review.join(";");
+    LOG_VART(errorMsg);
+    _errors[element->getElementId()] = errorMsg;
   }
   else if (!ref2.isEmpty())
   {
     for (int i = 0; i < ref2.size(); i++)
     {
-      const QString ref2Id = ref2.at(i).trimmed().toLower();
+      const QString ref2Id = ref2.at(i);
 
-      // check for empty
-      if (ref2Id.isEmpty())
+      if (!_isValidRef2OrReviewId(ref2Id))
       {
-        _errors[element->getElementId()] = "Empty REF2 tag";
-        break;
-      }
-      // make sure a each ref2 id is valid; no need to check for 'todo' or 'none' here, as
-      // we've previously handled that
-      else if (!_isValidRef2OrReviewId(ref2Id))
-      {
-        _errors[element->getElementId()] = "Invalid REF2=" + ref2Id;
+        const QString errorMsg = "Invalid REF2=" + ref2Id;
+        LOG_VART(errorMsg);
+        _errors[element->getElementId()] = errorMsg;
         break;
       }
       // make sure a ref1 exists for each ref2
-      else if (ref2Id != "none" && ref2Id != "todo" &&
+      else if (!_isValidNonUniqueMatchId(ref2Id) &&
                !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2Id))
       {
-        _errors[element->getElementId()] = "No REF1 exists for REF2=" + ref2Id;
+        const QString errorMsg = "No REF1 exists for REF2=" + ref2Id;
+        LOG_VART(errorMsg);
+        _errors[element->getElementId()] = errorMsg;
         break;
       }
       // same id can't be on both ref2 and review for the same element
-      else if (!review.isEmpty() && ref2Id != "todo" && ref2Id != "none" && review.contains(ref2Id))
+      else if (!review.isEmpty() && !_isValidNonUniqueMatchId(ref2Id) && review.contains(ref2Id))
       {
-        _errors[element->getElementId()] =
-          "Invalid repeated ID: REF2=" + ref2Id + ", REVIEW=" + ref2Id;
+        const QString errorMsg = "Invalid repeated ID: REF2=" + ref2Id + ", REVIEW=" + ref2Id;
+        LOG_VART(errorMsg);
+        _errors[element->getElementId()] = errorMsg;
         break;
       }
     }
@@ -201,22 +224,21 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   {
     for (int i = 0; i < review.size(); i++)
     {
-      const QString reviewId = review.at(i).trimmed().toLower();
+      const QString reviewId = review.at(i);
 
-      if (reviewId.isEmpty())
+      if (!_isValidRef2OrReviewId(reviewId))
       {
-        _errors[element->getElementId()] = "Empty REVIEW tag";
+        const QString errorMsg = "Invalid REVIEW=" + reviewId;
+        LOG_VART(errorMsg);
+        _errors[element->getElementId()] = errorMsg;
         break;
       }
-      else if (!_isValidRef2OrReviewId(reviewId))
-      {
-        _errors[element->getElementId()] = "Invalid REVIEW=" + reviewId;
-        break;
-      }
-      else if (reviewId != "none" && reviewId != "todo" &&
+      else if (!_isValidNonUniqueMatchId(reviewId) &&
                !_ref1Mappings.getIdToTagValueMappings().values().contains(reviewId))
       {
-        _errors[element->getElementId()] = "No REF1 exists for REVIEW=" + reviewId;
+        const QString errorMsg = "No REF1 exists for REVIEW=" + reviewId;
+        LOG_VART(errorMsg);
+        _errors[element->getElementId()] = errorMsg;
         break;
       }
     }
@@ -225,16 +247,32 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   _numAffected++;
 }
 
-// TODO: something to validate actual hex here instead?
-
 bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
 {
-  return matchId == "todo" || matchId == "none" || StringUtils::isAlphaNumeric(matchId);
+  const QString matchIdTemp = matchId.trimmed().toLower();
+  return
+    !matchIdTemp.isEmpty() &&
+    (_isValidNonUniqueMatchId(matchIdTemp) || _isValidUniqueMatchId(matchIdTemp));
 }
 
 bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
 {
-  return matchId != "todo" && matchId != "none" && StringUtils::isAlphaNumeric(matchId);
+  const QString matchIdTemp = matchId.trimmed().toLower();
+  return
+    !matchIdTemp.isEmpty() && !_isValidNonUniqueMatchId(matchIdTemp) &&
+    _isValidUniqueMatchId(matchIdTemp);
+}
+
+bool ManualMatchValidator::_isValidUniqueMatchId(const QString& matchId) const
+{
+  // This corresponds with how AddRef1Visitor creates the ids.
+  return matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6));
+}
+
+bool ManualMatchValidator::_isValidNonUniqueMatchId(const QString& matchId) const
+{
+  const QString matchIdTemp = matchId.toLower();
+  return matchIdTemp == "none" || matchIdTemp == "todo";
 }
 
 }

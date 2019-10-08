@@ -143,7 +143,8 @@ public:
 
   void runMissingRef1Test()
   {
-    // all ref2/review manual match ids have to have a corresponding ref1 id
+    // all ref2/review manual match ids, excluding todo's and none, have to have a corresponding
+    // and matching ref1 id
 
     OsmMapPtr map(new OsmMap());
     Tags tags;
@@ -176,6 +177,24 @@ public:
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(review->getElementId());
     HOOT_STR_EQUALS("No REF1 exists for REVIEW=002da0", errorItr.value().toStdString());
+
+    tags.clear();
+    RemoveNodeByEid::removeNode(map, review->getId());
+    tags.set(MetadataTags::Ref2(), "NONE");
+    ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(!uut.hasErrors());
+
+    tags.clear();
+    RemoveNodeByEid::removeNode(map, ref2->getId());
+    tags.set(MetadataTags::Review(), "todo");
+    review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(!uut.hasErrors());
   }
 
   void runInvalidIdTest()
@@ -184,8 +203,11 @@ public:
     Tags tags;
     ManualMatchValidator uut;
     QMap<ElementId, QString>::const_iterator errorItr;
+    QMap<ElementId, QString> errors;
+    QString expectedErrorMsg;
 
-    // ref1 ids all must be hex
+    // ref1 ids all must all be as defined by AddRef1Visitor
+
     tags.set(MetadataTags::Ref1(), "todo");
     ConstNodePtr ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
@@ -208,43 +230,96 @@ public:
     errorItr = uut.getErrors().find(ref1->getElementId());
     HOOT_STR_EQUALS("Invalid REF1=none", errorItr.value().toStdString());
 
+    const QString idWrongSize = "df1dd"; // ids are of size >= 6, since a prefix is allowed
+
     map->clear();
     tags.clear();
-    tags.set(MetadataTags::Ref1(), "-");
+    tags.set(MetadataTags::Ref1(), idWrongSize);
     ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(ref1->getElementId());
-    HOOT_STR_EQUALS("Invalid REF1=-", errorItr.value().toStdString());
+    errors = uut.getErrors();
+    errorItr = errors.find(ref1->getElementId());
+    expectedErrorMsg = "Invalid REF1=" + idWrongSize;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
 
-    // ref2/review ids must all be either hex, 'todo', or 'none'
+    // ref2/review ids must all be either in the format specified by AddRef1Visitor, 'todo', or
+    // 'none'
 
     map->clear();
     tags.clear();
-    tags.set(MetadataTags::Ref2(), "-");
+    tags.set(MetadataTags::Ref2(), idWrongSize);
     ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(ref2->getElementId());
-    HOOT_STR_EQUALS("Invalid REF2=-", errorItr.value().toStdString());
+    errors = uut.getErrors();
+    errorItr = errors.find(ref2->getElementId());
+    expectedErrorMsg = "Invalid REF2=" + idWrongSize;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
 
     map->clear();
     tags.clear();
-    tags.set(MetadataTags::Review(), "-");
+    tags.set(MetadataTags::Review(), idWrongSize);
     ConstNodePtr review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
 
     uut.apply(map);
 
     CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
-    errorItr = uut.getErrors().find(review->getElementId());
-    HOOT_STR_EQUALS("Invalid REVIEW=-", errorItr.value().toStdString());
+    errors = uut.getErrors();
+    errorItr = errors.find(review->getElementId());
+    expectedErrorMsg = "Invalid REVIEW=" + idWrongSize;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
+
+    const QString idWrongEnd = "aas32df132a-df1d"; // last six must be alphanumeric
+
+    map->clear();
+    tags.clear();
+    tags.set(MetadataTags::Ref1(), idWrongEnd);
+    ref1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errors = uut.getErrors();
+    errorItr = errors.find(ref1->getElementId());
+    expectedErrorMsg = "Invalid REF1=" + idWrongEnd;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
+
+    map->clear();
+    tags.clear();
+    tags.set(MetadataTags::Ref2(), idWrongEnd);
+    ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errors = uut.getErrors();
+    errorItr = errors.find(ref2->getElementId());
+    expectedErrorMsg = "Invalid REF2=" + idWrongEnd;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
+
+    map->clear();
+    tags.clear();
+    tags.set(MetadataTags::Review(), idWrongEnd);
+    review = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errors = uut.getErrors();
+    errorItr = errors.find(review->getElementId());
+    expectedErrorMsg = "Invalid REVIEW=" + idWrongEnd;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
   }
 
   void runRepeatedIdTest()
