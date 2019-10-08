@@ -121,10 +121,10 @@ public:
   static void removeEmptyStrings(QStringList& strings);
 
   /**
-   * TODO
+   * Determines if a string is made up of entirely alphanumeric characters
    *
-   * @param input
-   * @return
+   * @param input string to examine
+   * @return true if the string contains only alphanumeric characters; false otherwise
    */
   static bool isAlphaNumeric(const QString& input);
 };

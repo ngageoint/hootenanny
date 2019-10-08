@@ -50,6 +50,7 @@
 
 // Qt
 #include <QElapsedTimer>
+#include <QFileInfo>
 
 using namespace std;
 using namespace Tgs;
@@ -225,10 +226,11 @@ private:
     const QMap<ElementId, QString> errors = inputValidator.getErrors();
     if (!errors.isEmpty())
     {
-      // TODO: have this just print out file names, not full paths
+      QFileInfo fileInfo1(map1Path);
+      QFileInfo fileInfo2(map2Path);
       cout << "There are " << QString::number(errors.size()) <<
-              " manual match errors for inputs " << map1Path.right(25) << " and " <<
-              map2Path.right(25) << ":\n\n";
+              " manual match errors for inputs " << fileInfo1.completeBaseName().right(25) <<
+              " and " << fileInfo2.completeBaseName().right(25) << ":\n\n";
       int errorCount = 0;
       for (QMap<ElementId, QString>::const_iterator itr = errors.begin();
            itr != errors.end(); ++itr)
