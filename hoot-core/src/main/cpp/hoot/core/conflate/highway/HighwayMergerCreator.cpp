@@ -110,8 +110,8 @@ vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 bool HighwayMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
   ConstMatchPtr m2) const
 {
-  const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1);
-  const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2);
+  const HighwayMatch* hm1 = dynamic_cast<const HighwayMatch*>(m1.get());
+  const HighwayMatch* hm2 = dynamic_cast<const HighwayMatch*>(m2.get());
 
   if (hm1 && hm2)
   {
