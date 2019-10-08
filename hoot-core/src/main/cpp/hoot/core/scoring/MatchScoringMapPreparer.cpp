@@ -83,7 +83,7 @@ void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
   map->visitRw(remover);
 
   // add a uuid to all elements with a REF tag.
-  TagKeyCriterion criterion(MetadataTags::Ref1(), MetadataTags::Ref2(), "REVIEW");
+  TagKeyCriterion criterion(MetadataTags::Ref1(), MetadataTags::Ref2(), MetadataTags::Review());
   AddUuidVisitor uuid("uuid");
   FilteredVisitor v(criterion, uuid);
   map->visitRw(v);

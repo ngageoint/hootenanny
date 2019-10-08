@@ -36,6 +36,8 @@ namespace hoot
 /**
  * The UuidHelper provides a number of convenience functions when working with UUID. Many of these
  * functions become irrelevant with Qt 5.0+, but we're targetting Qt 4.7 now.
+ *
+ * @todo We're at Qt 5 now, so let's clean this up.
  */
 class UuidHelper
 {
