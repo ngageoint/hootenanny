@@ -1,2 +1,2 @@
 relation_id,changeset_id,timestamp,version,visible,tags
--1,0,,1,t,hoot:status=>3,name=>"Maid-Rite",hoot:building:match=>true,alt_name=>"Maid-Rite Diner;Panera Bread",building=>yes,REF1=>Panera
+-1,0,,1,t,hoot:status=>3,name=>"Maid-Rite",hoot:building:match=>true,alt_name=>"Maid-Rite Diner;Panera Bread",building=>yes,REF1=>002c75
