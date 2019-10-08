@@ -210,6 +210,7 @@ OsmGeometries::Type OsmGeometries::fromString(const QString& s)
   else
     throw HootException("Unexpected enumerated type when parsing OsmGeometries: " + s);
 
+  LOG_VART(result);
   return result;
 }
 
@@ -620,10 +621,15 @@ public:
 
   const SchemaVertex& getTagVertex(const QString& kvp) const
   {
+    LOG_VART(kvp);
+
     QString n = normalizeKvp(kvp);
+    LOG_VART(n);
     if (_name2Vertex.contains(n))
     {
       const SchemaVertex& v = _graph[_name2Vertex[n]];
+      LOG_VART(v);
+      LOG_VART(v.getType());
       if (v.getType() == SchemaVertex::Tag)
       {
         return v;
@@ -1640,9 +1646,12 @@ bool OsmSchema::hasCategory(const Tags& t, const QString& category) const
     if (it.value().isEmpty() == false)
     {
       const SchemaVertex& tv = getTagVertex(it.key() + "=" + it.value());
+      LOG_VART(tv);
+      LOG_VART(tv.categories);
       if (tv.categories.contains(category))
       {
         result = true;
+        LOG_VART(result);
         break;
       }
     }

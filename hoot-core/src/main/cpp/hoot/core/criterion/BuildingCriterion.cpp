@@ -71,6 +71,7 @@ bool BuildingCriterion::isParentABuilding(ElementId eid) const
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 
@@ -94,6 +95,7 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
       // see ticket #5952. If the building has a parent relation that is also a building then this
       // is really a building part, not a building.
       result = true;
+      LOG_VART(result);
     }
   }
 
@@ -104,6 +106,8 @@ bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& element
 {
   // There's no option to check the parent in this method, since doing so would require an element
   // ID and callers call this method, because they don't have it in certain circumstances.
+  LOG_VART(elementType);
+  LOG_VART(OsmSchema::getInstance().hasCategory(tags, "building"));
   return
     elementType != ElementType::Node && OsmSchema::getInstance().hasCategory(tags, "building");
 }
