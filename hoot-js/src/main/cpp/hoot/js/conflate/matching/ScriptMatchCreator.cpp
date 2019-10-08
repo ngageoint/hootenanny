@@ -163,7 +163,7 @@ public:
           delete m;
         }
         else
-        {;
+        {
           _result.push_back(m);
         }
       }

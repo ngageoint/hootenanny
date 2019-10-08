@@ -146,7 +146,7 @@ WayPtr TestUtils::createWay(OsmMapPtr map, const QList<NodePtr>& nodes, Status s
 }
 
 RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& elements,
-  Status status, Meters circularError)
+  Status status, Meters circularError, Tags tags)
 {
   RelationPtr relation(new Relation(status, map->createNextRelationId(), circularError));
   foreach (ElementPtr element, elements)
@@ -154,6 +154,7 @@ RelationPtr TestUtils::createRelation(OsmMapPtr map, const QList<ElementPtr>& el
     map->addElement(element);
     relation->addElement("test", element);
   }
+  relation->setTags(tags);
   map->addRelation(relation);
   return relation;
 }
