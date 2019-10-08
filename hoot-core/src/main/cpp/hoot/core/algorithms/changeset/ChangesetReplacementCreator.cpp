@@ -961,6 +961,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // Clean up straggling nodes in that are the result of cropping. Its ok to ignore info tags when
   // dealing with only linear features, as all nodes in the data being conflated should be way nodes
   // with no information.
+  // TODO: This can be removed now, since its already happening in MapCropper, right?
   SuperfluousNodeRemover::removeNodes(map, isLinearMap);
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
