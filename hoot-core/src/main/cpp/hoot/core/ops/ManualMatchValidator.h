@@ -87,6 +87,7 @@ private:
   bool _isValidRef2OrReviewId(const QString& matchId) const;
   bool _isValidUniqueMatchId(const QString& matchId) const;
   bool _isValidNonUniqueMatchId(const QString& matchId) const;
+  void _recordError(const ConstElementPtr& element, QString errorMessage);
 };
 
 }

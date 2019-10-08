@@ -126,6 +126,7 @@ public:
   inline static const QString Ref1()                    { return "REF1"; }
   inline static const QString Ref2()                    { return "REF2"; }
   inline static const QString Review()                  { return "REVIEW"; }
+  inline static const QString Uuid()                    { return "uuid"; }
 
   inline static const QString Unknown1()                { return "Unknown1"; }
   inline static const QString Unknown2()                { return "Unknown2"; }

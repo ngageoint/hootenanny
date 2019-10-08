@@ -35,7 +35,6 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
-//#include <hoot/core/scoring/MapScoringStatusAndRefTagValidator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
