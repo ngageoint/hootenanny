@@ -22,35 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "MapMatchScoringUtils.h"
+#include "ElementIdToTagValueMapper.h"
 
 // hoot
-#include <hoot/core/scoring/MatchComparator.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-MapMatchScoringUtils::MapMatchScoringUtils()
-{
+HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
 
+ElementIdToTagValueMapper::ElementIdToTagValueMapper()
+{
 }
 
-QString MapMatchScoringUtils::getMatchScoringString(
-  const std::shared_ptr<const MatchComparator>& matchComparator)
+void ElementIdToTagValueMapper::addCriterion(const ElementCriterionPtr& e)
 {
-  QString result;
-  result += matchComparator->toString() + "\n";
-  QString line =
-    QString("%1,%2,%3,%4\n").arg(-1)
-      .arg(matchComparator->getPercentCorrect())
-      .arg(matchComparator->getPercentWrong())
-      .arg(matchComparator->getPercentUnnecessaryReview());
-  result += line + "\n";
-  result += "PERTY Score: ";
-  result += QString::number(matchComparator->getPertyScore()) + "\n";
-  return result;
+  _crit = e;
+}
+
+void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
+{
+  if (_tagKey.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("No keys specified for ElementIdToTagValueMapper.");
+  }
+
+  if (e->getTags().contains(_tagKey) && (!_crit || _crit->isSatisfied(e)))
+  {
+    _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];
+    _numAffected++;
+  }
 }
 
 }

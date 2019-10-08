@@ -55,6 +55,8 @@ public:
 
   virtual QString getDescription() const { return "Counts the number of unique feature reviews"; }
 
+  void clear();
+
 private:
 
   std::set<ReviewMarker::ReviewUid> _reviews;

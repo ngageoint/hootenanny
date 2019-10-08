@@ -350,13 +350,15 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   // failing when seeing a conflated status...we could rework to update that status as well.
 
   // If the poly has an invalid status, we'll give it an Unknown1 status instead.
+  PoiPolygonPoiCriterion poiPolyPoi;
   StatusUpdateVisitor status1Vis(Status::Unknown1, true);
-  FilteredVisitor filteredVis1(PoiPolygonPoiCriterion(), status1Vis);
+  FilteredVisitor filteredVis1(poiPolyPoi, status1Vis);
   map->visitRw(filteredVis1);
 
   // If the POI has an invalid status, we'll give it an Unknown2 status instead.
+  PoiPolygonPolyCriterion poiPolyPoly;
   StatusUpdateVisitor status2Vis(Status::Unknown2, true);
-  FilteredVisitor filteredVis2(PoiPolygonPolyCriterion(), status2Vis);
+  FilteredVisitor filteredVis2(poiPolyPoly, status2Vis);
   map->visitRw(filteredVis2);
 
   // The BuildingMerger (used by both poi/poly and building merging) assumes that all input elements

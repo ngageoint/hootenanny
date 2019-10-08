@@ -78,16 +78,17 @@ typedef std::shared_ptr<CppUnit::Test> TestPtr;
 
 enum _TestType
 {
+  NONE          = 0x00,
   CURRENT       = 0x01,
   QUICK_ONLY    = 0x02,
   QUICK         = 0x03,
-  SLOW_ONLY     = 0x04,
-  SLOW          = 0x07,
-  GLACIAL_ONLY  = 0x08,
-  GLACIAL       = 0x0f,
-  SERIAL        = 0x10,
-  CASE_ONLY     = 0x11,
-  ALL           = 0x1f
+  CASE_ONLY     = 0x04,
+  SLOW_ONLY     = 0x08,
+  SLOW          = 0x0f,
+  GLACIAL_ONLY  = 0x10,
+  GLACIAL       = 0x1f,
+  SERIAL        = 0x20,
+  ALL           = 0x3f
 };
 
 enum _TimeOutValue
@@ -420,6 +421,38 @@ void usage(char* argv)
           ;
 }
 
+_TestType getTestType(const QStringList& args)
+{
+  if (args.contains("--current"))
+    return CURRENT;
+  else if (args.contains("--quick"))
+    return QUICK;
+  else if (args.contains("--quick-only"))
+    return QUICK_ONLY;
+  else if (args.contains("--slow"))
+    return SLOW;
+  else if (args.contains("--slow-only"))
+    return SLOW_ONLY;
+  else if (args.contains("--all") || args.contains("--glacial"))
+    return GLACIAL;
+  else if (args.contains("--glacial-only"))
+    return GLACIAL_ONLY;
+  else if (args.contains("--case-only"))
+    return CASE_ONLY;
+  else
+    return ALL;
+}
+
+_TimeOutValue getTimeoutValue(_TestType type)
+{
+  if (type & GLACIAL)
+      return GLACIAL_WAIT;
+  else if (type & SLOW)
+    return SLOW_WAIT;
+  else
+    return QUICK_WAIT;
+}
+
 int main(int argc, char* argv[])
 {
   // set the Qt hash seed to 0 for consistent test results
@@ -461,7 +494,7 @@ int main(int argc, char* argv[])
     // Print all names & exit without running anything
     if (args.contains("--all-names"))
     {
-      populateTests(ALL, vAllTests, printDiff);
+      populateTests(getTestType(args), vAllTests, printDiff);
       printNames(vAllTests);
       return 0;
     }
@@ -531,47 +564,17 @@ int main(int argc, char* argv[])
     }
     else
     {
-      if (args.contains("--current"))
+      _TestType type = getTestType(args);
+      _TimeOutValue timeout = getTimeoutValue(type);
+      if (type == CURRENT)
       {
-        listener.reset(new HootTestListener(true, suppressFailureDetail));
+        listener.reset(new HootTestListener(true, suppressFailureDetail, timeout));
         Log::getInstance().setLevel(Log::Info);
-        populateTests(CURRENT, vAllTests, printDiff);
       }
-      else if (args.contains("--quick"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, QUICK_WAIT));
-        populateTests(QUICK, vAllTests, printDiff);
-      }
-      else if (args.contains("--quick-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, QUICK_WAIT));
-        populateTests(QUICK_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--slow"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
-        populateTests(SLOW, vAllTests, printDiff);
-      }
-      else if (args.contains("--slow-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
-        populateTests(SLOW_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--all") || args.contains("--glacial"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, GLACIAL_WAIT));
-        populateTests(GLACIAL, vAllTests, printDiff);
-      }
-      else if (args.contains("--glacial-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, GLACIAL_WAIT));
-        populateTests(GLACIAL_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--case-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
-        populateTests(CASE_ONLY, vAllTests, printDiff);
-      }
+      else
+        listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));
+      //  Populate the list of tests
+      populateTests(type, vAllTests, printDiff);
 
       vector<CppUnit::Test*> vTests;
       getTestVector(vAllTests, vTests);

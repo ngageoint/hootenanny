@@ -89,8 +89,11 @@ public:
     {
       LineString* ls = dynamic_cast<LineString*>(i.get());
       assert(ls->getNumPoints() == 2);
-      result.p0 = *ls->getPointN(0)->getCoordinate();
-      result.p1 = *ls->getPointN(1)->getCoordinate();
+      //  getPointN creates a new Point object that needs to be deleted
+      std::shared_ptr<Point> p0(ls->getPointN(0));
+      std::shared_ptr<Point> p1(ls->getPointN(1));
+      result.p0 = *p0->getCoordinate();
+      result.p1 = *p1->getCoordinate();
     }
     else
     {
