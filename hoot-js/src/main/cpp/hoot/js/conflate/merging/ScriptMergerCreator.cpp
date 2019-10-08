@@ -141,8 +141,11 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
   ConstMatchPtr m2) const
 {
+  const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1);
+  const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2);
+
   bool result = false;
-  if (m1 && m2)
+  if (sm1 && sm2)
   {
     result = m1->isConflicting(m2, map);
   }
