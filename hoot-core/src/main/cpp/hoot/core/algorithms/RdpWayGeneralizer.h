@@ -29,7 +29,7 @@
 #define RDP_WAY_GENERALIZER_H
 
 // Hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
@@ -69,7 +69,7 @@ class Way;
  * would have to have been generated for the points kept in the reduction, while deleting the old
  * ones.  That isn't desirable from a runtime performance standpoint.
  */
-class RdpWayGeneralizer : public ConstOsmMapConsumer
+class RdpWayGeneralizer : public OsmMapConsumer
 {
 
 public:
@@ -89,7 +89,7 @@ public:
     */
   void setEpsilon(double epsilon);
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
 private:
 
@@ -97,7 +97,7 @@ private:
 
   double _epsilon;
 
-  ConstOsmMapPtr _map;
+  OsmMapPtr _map;
 
   /*
     Generates a set of points that make up a generalized set of the input points

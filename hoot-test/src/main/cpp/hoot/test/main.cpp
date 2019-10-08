@@ -78,16 +78,17 @@ typedef std::shared_ptr<CppUnit::Test> TestPtr;
 
 enum _TestType
 {
+  NONE          = 0x00,
   CURRENT       = 0x01,
   QUICK_ONLY    = 0x02,
   QUICK         = 0x03,
-  SLOW_ONLY     = 0x04,
-  SLOW          = 0x07,
-  GLACIAL_ONLY  = 0x08,
-  GLACIAL       = 0x0f,
-  SERIAL        = 0x10,
-  CASE_ONLY     = 0x11,
-  ALL           = 0x1f
+  CASE_ONLY     = 0x04,
+  SLOW_ONLY     = 0x08,
+  SLOW          = 0x0f,
+  GLACIAL_ONLY  = 0x10,
+  GLACIAL       = 0x1f,
+  SERIAL        = 0x20,
+  ALL           = 0x3f
 };
 
 enum _TimeOutValue
@@ -386,6 +387,72 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
   }
 }
 
+void usage(char* argv)
+{
+  // keep this alphabetized
+  cout << argv << " Usage:\n"
+          "  --all                      - Run all the tests.\n"
+          "  --all-names                - Print the names of all the tests without running them.\n"
+          "  --case-only                - Run the conflate case tests only.\n"
+          "  --current                  - Run the 'current' level tests.\n"
+          "  --debug                    - Show debug level log messages and above.\n"
+          "  --diff                     - Print a diff when a script test fails.\n"
+          "  --error                    - Show error log level messages and above.\n"
+          "  --exclude=[regex]          - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
+          "  --fatal                    - Show fatal error log level messages only.\n"
+          "  --glacial                  - Run 'glacial' level tests and below.\n"
+          "  --glacial-only             - Run the 'glacial' level tests only.\n"
+          "  --include=[regex]          - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
+          "  --info                     - Show info log level messages and above.\n"
+          "  --quick                    - Run the 'quick' level' tests.\n"
+          "  --quick-only               - Run the 'quick' level tests only.\n"
+          "  --names                    - Show the names of all the tests as they run.\n"
+          "  --parallel [process count] - Run the specified tests in parallel with the specified number of processes. With no process count specified, all available CPU cores are used to launch processes.\n"
+          "  --single [test name]       - Run only the test specified.\n"
+          "  --slow                     - Run the 'slow' level tests and above.\n"
+          "  --slow-only                - Run the 'slow' level tests only.\n"
+          "  --status                   - Show status log level messages and above.\n"
+          "  --suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
+          "  --trace                    - Show trace log level messages and above.\n"
+          "  --verbose                  - Show verbose log level messages and above.\n"
+          "  --warn                     - Show warning log level messages and above.\n"
+          "\n"
+          "See the Hootenanny Developer Guide for more information.\n"
+          ;
+}
+
+_TestType getTestType(const QStringList& args)
+{
+  if (args.contains("--current"))
+    return CURRENT;
+  else if (args.contains("--quick"))
+    return QUICK;
+  else if (args.contains("--quick-only"))
+    return QUICK_ONLY;
+  else if (args.contains("--slow"))
+    return SLOW;
+  else if (args.contains("--slow-only"))
+    return SLOW_ONLY;
+  else if (args.contains("--all") || args.contains("--glacial"))
+    return GLACIAL;
+  else if (args.contains("--glacial-only"))
+    return GLACIAL_ONLY;
+  else if (args.contains("--case-only"))
+    return CASE_ONLY;
+  else
+    return ALL;
+}
+
+_TimeOutValue getTimeoutValue(_TestType type)
+{
+  if (type & GLACIAL)
+      return GLACIAL_WAIT;
+  else if (type & SLOW)
+    return SLOW_WAIT;
+  else
+    return QUICK_WAIT;
+}
+
 int main(int argc, char* argv[])
 {
   // set the Qt hash seed to 0 for consistent test results
@@ -394,36 +461,8 @@ int main(int argc, char* argv[])
 
   if (argc == 1)
   {
-    // keep this alphabetized
-    cout << argv[0] << " Usage:\n"
-            "--all                      - Run all the tests.\n"
-            "--all-names                - Print the names of all the tests without running them.\n"
-            "--case-only                - Run the conflate case tests only.\n"
-            "--current                  - Run the 'current' level tests.\n"
-            "--debug                    - Show debug level log messages and above.\n"
-            "--diff                     - Print a diff when a script test fails.\n"
-            "--error                    - Show error log level messages and above.\n"
-            "--exclude=[regex]          - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
-            "--fatal                    - Show fatal error log level messages only.\n"
-            "--glacial                  - Run 'glacial' level tests and below.\n"
-            "--glacial-only             - Run the 'glacial' level tests only.\n"
-            "--include=[regex]          - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
-            "--info                     - Show info log level messages and above.\n"
-            "--quick                    - Run the 'quick' level' tests.\n"
-            "--quick-only               - Run the 'quick' level tests only.\n"
-            "--names                    - Show the names of all the tests as they run.\n"
-            "--parallel [process count] - Run the specified tests in parallel with the specified number of processes. With no process count specified, all available CPU cores are used to launch processes.\n"
-            "--single [test name]       - Run only the test specified.\n"
-            "--slow                     - Run the 'slow' level tests and above.\n"
-            "--slow-only                - Run the 'slow' level tests only.\n"
-            "--status                   - Show status log level messages and above.\n"
-            "--suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
-            "--trace                    - Show trace log level messages and above.\n"
-            "--verbose                  - Show verbose log level messages and above.\n"
-            "--warn                     - Show warning log level messages and above.\n"
-            "\n"
-            "See the Hootenanny Developer Guide for more information.\n"
-            ;
+    usage(argv[0]);
+    return 1;
   }
   else
   {
@@ -455,7 +494,7 @@ int main(int argc, char* argv[])
     // Print all names & exit without running anything
     if (args.contains("--all-names"))
     {
-      populateTests(ALL, vAllTests, printDiff);
+      populateTests(getTestType(args), vAllTests, printDiff);
       printNames(vAllTests);
       return 0;
     }
@@ -525,47 +564,17 @@ int main(int argc, char* argv[])
     }
     else
     {
-      if (args.contains("--current"))
+      _TestType type = getTestType(args);
+      _TimeOutValue timeout = getTimeoutValue(type);
+      if (type == CURRENT)
       {
-        listener.reset(new HootTestListener(true, suppressFailureDetail));
+        listener.reset(new HootTestListener(true, suppressFailureDetail, timeout));
         Log::getInstance().setLevel(Log::Info);
-        populateTests(CURRENT, vAllTests, printDiff);
       }
-      else if (args.contains("--quick"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, QUICK_WAIT));
-        populateTests(QUICK, vAllTests, printDiff);
-      }
-      else if (args.contains("--quick-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, QUICK_WAIT));
-        populateTests(QUICK_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--slow"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
-        populateTests(SLOW, vAllTests, printDiff);
-      }
-      else if (args.contains("--slow-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
-        populateTests(SLOW_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--all") || args.contains("--glacial"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, GLACIAL_WAIT));
-        populateTests(GLACIAL, vAllTests, printDiff);
-      }
-      else if (args.contains("--glacial-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, GLACIAL_WAIT));
-        populateTests(GLACIAL_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--case-only"))
-      {
-        listener.reset(new HootTestListener(false, suppressFailureDetail, SLOW_WAIT));
-        populateTests(CASE_ONLY, vAllTests, printDiff);
-      }
+      else
+        listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));
+      //  Populate the list of tests
+      populateTests(type, vAllTests, printDiff);
 
       vector<CppUnit::Test*> vTests;
       getTestVector(vAllTests, vTests);
@@ -600,6 +609,13 @@ int main(int argc, char* argv[])
       if (!filtered) // Do all tests
         vTestsToRun.swap(vTests);
       cout << "Running core tests.  Test count: " << vTestsToRun.size() << endl;
+    }
+
+    //  Error out here is there is no HootTestListener created by this point
+    if (!listener)
+    {
+      usage(argv[0]);
+      return 1;
     }
 
     if (args.contains("--parallel"))

@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
+QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
 {
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);

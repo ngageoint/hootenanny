@@ -47,6 +47,7 @@ public:
   typedef typename container::const_iterator const_iterator;
 
   IdSwap();
+  IdSwap(ElementId id_1, ElementId id_2) { add(id_1, id_2); }
 
   /**
    * @brief add

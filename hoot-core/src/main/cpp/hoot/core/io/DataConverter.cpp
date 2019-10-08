@@ -453,7 +453,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+      " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 }
 
@@ -649,7 +649,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   LOG_INFO(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   // turn this on for debugging only
   //OsmMapWriterFactory::writeDebugMap(map, "after-convert-from-ogr");
   currentTask++;
@@ -841,7 +841,7 @@ void DataConverter::_exportToShapeWithCols(const QString& output, const QStringL
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

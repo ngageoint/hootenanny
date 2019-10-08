@@ -48,6 +48,12 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonCache(map));
+  }
+
   PoiPolygonMatch* result = 0;
 
   if (eid1.getType() != eid2.getType())
@@ -59,7 +65,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
+      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache);
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -72,16 +78,25 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                            std::vector<const Match*>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonCache(map));
+  }
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
+  QElapsedTimer timer;
+  timer.start();
+  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _infoCache, _filter);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " POI to Polygon match candidates.");
+    " POI to Polygon match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+    ".");
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
@@ -120,6 +135,11 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
+  // TODO: change back
+  LOG_INFO(
+    "POI/Polygon review reductions: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::numReviewReductions));
+  _infoCache->printCacheInfo();
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const

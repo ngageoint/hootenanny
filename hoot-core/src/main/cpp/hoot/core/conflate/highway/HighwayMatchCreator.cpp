@@ -60,6 +60,9 @@
 #include <tgs/RStarTree/IntersectionIterator.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
@@ -323,7 +326,9 @@ Match* HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid
 void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
   ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
@@ -331,7 +336,7 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " highway match candidates.");
+    " highway match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const

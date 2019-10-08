@@ -269,7 +269,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     partialWriter->finalizePartial();
   }
 
-  LOG_INFO("Streaming element I/O took: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+  LOG_INFO("Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

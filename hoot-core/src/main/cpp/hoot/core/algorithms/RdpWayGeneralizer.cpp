@@ -38,6 +38,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 
 using namespace std;
 
@@ -93,13 +94,23 @@ void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
     _getGeneralizedPoints(OsmUtils::nodeIdsToNodes(wayNodeIdsAfterFiltering, _map));
   LOG_VART(generalizedPoints.size());
   OsmUtils::printNodes("generalizedPoints", generalizedPoints);
+  const QList<long> wayNodeIdsAfterGeneralization = OsmUtils::nodesToNodeIds(generalizedPoints);
 
   //replace the current nodes on the way with the reduced collection
-  way->setNodes(OsmUtils::nodesToNodeIds(generalizedPoints).toVector().toStdVector());
+  way->setNodes(wayNodeIdsAfterGeneralization.toVector().toStdVector());
   LOG_VART(way->getNodeIds().size());
   LOG_VART(QVector<long>::fromStdVector(way->getNodeIds()).toList());
   LOG_VART(_map->getWay(way->getId())->getNodeIds().size());
   LOG_VART(QVector<long>::fromStdVector(_map->getWay(way->getId())->getNodeIds()).toList());
+
+  // remove any of the unused, recently orphaned way nodes from the map (we could also do this
+  // with SuperfluousNodeRemover, but that might be a little more intrusive)
+  const QSet<long> nodeIdsToRemove =
+    wayNodeIdsBeforeFiltering.toSet().subtract(wayNodeIdsAfterGeneralization.toSet());
+  for (QSet<long>::const_iterator it = nodeIdsToRemove.begin(); it != nodeIdsToRemove.end(); ++it)
+  {
+    RemoveNodeByEid::removeNode(_map, *it, true);
+  }
 }
 
 QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(

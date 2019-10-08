@@ -55,6 +55,7 @@ using namespace std;
 
 //Qt
 #include <QFile>
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 
@@ -327,13 +328,15 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
                                          std::vector<const Match*>& matches,
                                          ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " building match candidates.");
+    " building match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const

@@ -34,6 +34,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 namespace hoot
 {
@@ -77,6 +78,8 @@ private:
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
+
+  PoiPolygonCachePtr _infoCache;
 };
 
 }

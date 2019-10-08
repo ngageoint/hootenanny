@@ -8,7 +8,7 @@ each value's frequency compared to all tag values processed for the key.
 
 * +inputs+           - Inputs; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them with a semicolon 
                        and surrounding them with quotes.
-* +tagKeys+          - The names tag keys to gather statistics for; specify multiple inputs by separating them with a semicolon and
+* +tagKeys+          - The names of tag keys to gather statistics for; specify multiple inputs by separating them with a semicolon and
                        surrounding them with quotes. Ignored if --names is specified.
 * +criterion+        - (optional) The criterion must be a single class name of a Hootenanny criterion inherting from ElementCriterion.  A
                        criterion can be negated using the element.criterion.negate configuration option. Use the +info --operators+ command to

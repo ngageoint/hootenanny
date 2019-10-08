@@ -52,7 +52,7 @@ public:
    * @param durationInMilliseconds seconds to convert
    * @return a DD:MM:SS string
    */
-  static QString secondsToDhms(const qint64 durationInMilliseconds);
+  static QString millisecondsToDhms(const qint64 durationInMilliseconds);
 
   /**
    * Converts a large number to a more human readable format

@@ -58,6 +58,7 @@ public:
   const QString LOCAL_OSM_API_URL = "http://<Enter local OSM API URL here>";
 #endif
 
+  /** Separate port numbers so that tests can run in parallel */
   const int PORT_SIMPLE =         9900;
   const int PORT_SPLIT_GEO =      9901;
   const int PORT_SPLIT_ELEMENTS = 9902;
@@ -82,7 +83,7 @@ public:
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + "/api/0.6/map");
     reader.read(map);
 
-    server.wait();
+    server.shutdown();
 
     QString output = _outputPath + "SimpleTestOutput.osm";
 
@@ -101,12 +102,15 @@ public:
     OsmMapPtr map(new OsmMap());
 
     OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    reader.setConfiguration(s);
     //  Set the bounds to be larger than 0.25 degrees by 0.25 degrees to cause a geographic split
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1142, 40.4557, 40.7577));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + "/api/0.6/map");
     reader.read(map);
 
-    server.wait();
+    server.shutdown();
 
     QString output = _outputPath + "SplitGeographicTestOutput.osm";
 
@@ -125,12 +129,15 @@ public:
     OsmMapPtr map(new OsmMap());
 
     OsmApiReader reader;
+    Settings s;
+    s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
+    reader.setConfiguration(s);
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that it is split by elements on the server
     reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + "/api/0.6/map");
     reader.read(map);
 
-    server.wait();
+    server.shutdown();
 
     QString output = _outputPath + "SplitElementsTestOutput.osm";
 
@@ -162,6 +169,5 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiReaderTest, "quick");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiReaderTest, "serial");
 
 }

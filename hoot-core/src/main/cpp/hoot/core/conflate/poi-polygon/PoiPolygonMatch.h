@@ -43,6 +43,10 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -65,6 +69,7 @@ public:
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
+    PoiPolygonCachePtr infoCache,
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
     const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 
@@ -141,6 +146,7 @@ public:
   static long phoneNumbersProcesed;
   static long phoneNumberMatchCandidates;
   static long convexPolyDistanceMatches;
+  static long numReviewReductions;
 
 private:
 
@@ -152,7 +158,7 @@ private:
 
   ElementId _eid1;
   ElementId _eid2;
-  ConstElementPtr _poi;
+  ConstNodePtr _poi;
   ConstElementPtr _poly;
   std::shared_ptr<geos::geom::Geometry> _poiGeom;
   std::shared_ptr<geos::geom::Geometry> _polyGeom;
@@ -194,8 +200,10 @@ private:
   double _phoneNumberScore;
   bool _phoneNumberMatchEnabled;
 
-  //These are only used by PoiPolygonCustomRules and PoiPolygonDistance
+  //These two are used by PoiPolygonReviewReducer and PoiPolygonDistance
+  // all the polys within the search radius of the POI being matched
   std::set<ElementId> _polyNeighborIds;
+  // all the pois within the search radius of the POI being matched
   std::set<ElementId> _poiNeighborIds;
 
   MatchClassification _class;
@@ -217,6 +225,10 @@ private:
 
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
+
+  std::shared_ptr<QElapsedTimer> _timer;
+
+  PoiPolygonCachePtr _infoCache;
 
   void _categorizeElementsByGeometryType();
 
