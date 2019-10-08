@@ -38,6 +38,7 @@ class AreaCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AreaCriterionTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runPoiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -84,6 +85,19 @@ public:
     t["leisure"] = "track";
     CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Way));
     CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Relation));
+  }
+
+  void runPoiTest()
+  {
+    AreaCriterion uut;
+
+    geos::geom::Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
+                       Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
+                       Coordinate::getNull() };
+    Tags tags;
+    tags.set("poi", "yes");
+    ConstWayPtr w1 = TestUtils::createWay(map, c, Status::Unknown1, 15.0, tags);
+    CPPUNIT_ASSERT(!uut.isSatisfied(w1));
   }
 };
 
