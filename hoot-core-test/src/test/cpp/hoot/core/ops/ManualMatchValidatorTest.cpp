@@ -43,12 +43,15 @@ namespace hoot
 class ManualMatchValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ManualMatchValidatorTest);
-  CPPUNIT_TEST(runStatusTest);
   CPPUNIT_TEST(runEmptyIdTest);
   CPPUNIT_TEST(runInvalidIdComboTest);
   CPPUNIT_TEST(runMissingRef1Test);
   CPPUNIT_TEST(runInvalidIdTest);
   CPPUNIT_TEST(runRepeatedIdTest);
+  CPPUNIT_TEST(runStatusTest);
+  CPPUNIT_TEST(runMultipleRef1Test);
+  CPPUNIT_TEST(runInvalidMultipleIdTest);
+  CPPUNIT_TEST(runDuplicateIdTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -62,30 +65,37 @@ public:
     // empty manual match ids aren't allowed
 
     OsmMapPtr map(new OsmMap());
+    Tags tags;
 
-    Tags tags1;
-    tags1.set(MetadataTags::Ref1(), "");
-    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags1);
+    tags.set(MetadataTags::Ref1(), "");
+    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
 
-    Tags tags2;
-    tags2.set(MetadataTags::Ref2(), "");
+    tags.clear();
+    tags.set(MetadataTags::Ref2(), "");
     geos::geom::Coordinate c1[] = {
       geos::geom::Coordinate(0.0, 0.0), geos::geom::Coordinate(1.0, 1.0),
       geos::geom::Coordinate::getNull() };
-    WayPtr way = TestUtils::createWay(map, c1, Status::Unknown1, 15.0, tags2);
+    WayPtr way = TestUtils::createWay(map, c1, Status::Unknown1, 15.0, tags);
 
-    Tags tags3;
-    tags3.set(MetadataTags::Review(), "");
+    tags.clear();
+    tags.set(MetadataTags::Review(), "");
     QList<ElementPtr> relationMembers;
     relationMembers.append(node);
     relationMembers.append(way);
     ConstRelationPtr relation =
-      TestUtils::createRelation(map, relationMembers, Status::Unknown1, 15.0, tags3);
+      TestUtils::createRelation(map, relationMembers, Status::Unknown1, 15.0, tags);
 
     ManualMatchValidator uut;
     uut.apply(map);
 
     CPPUNIT_ASSERT(uut.hasErrors());
+//    LOG_VARW(uut.getErrors().size());
+//    QMap<ElementId, QString> errors = uut.getErrors();
+//    for (QMap<ElementId, QString>::const_iterator itr = errors.begin();
+//         itr != errors.end(); ++itr)
+//    {
+//      LOG_WARN(itr.key().toString() << ";" << itr.value());
+//    }
     CPPUNIT_ASSERT(uut.getErrors().size() == 3);
     QMap<ElementId, QString>::const_iterator errorItr =
       uut.getErrors().find(node->getElementId());
@@ -307,6 +317,114 @@ public:
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
     HOOT_STR_EQUALS("Unknown1 element with REF2 or REVIEW tag", errorItr.value().toStdString());
+  }
+
+  void runMultipleRef1Test()
+  {
+    // ref1 is always a single id
+
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
+
+    tags.set(MetadataTags::Ref1(), "002da0;002e0f");
+    ConstNodePtr invalidRef1 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef1->getElementId());
+    HOOT_STR_EQUALS("REF1 ID must be singular. REF1=002da0;002e0f", errorItr.value().toStdString());
+  }
+
+  void runInvalidMultipleIdTest()
+  {
+    // if a ref2/review has multiple ids, 'todo' and 'none' aren't valid entries
+
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
+
+    tags.set(MetadataTags::Ref2(), "002da0;todo");
+    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS("Invalid many to one REF2=002da0;todo", errorItr.value().toStdString());
+
+    tags.clear();
+    map->clear();
+    tags.set(MetadataTags::Ref2(), "none;002da0");
+    invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS("Invalid many to one REF2=none;002da0", errorItr.value().toStdString());
+
+    tags.clear();
+    map->clear();
+    tags.set(MetadataTags::Review(), "002da0;todo");
+    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidReview->getElementId());
+    HOOT_STR_EQUALS("Invalid many to one REVIEW=002da0;todo", errorItr.value().toStdString());
+
+    tags.clear();
+    map->clear();
+    tags.set(MetadataTags::Review(), "none;002da0");
+    invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidReview->getElementId());
+    HOOT_STR_EQUALS("Invalid many to one REVIEW=none;002da0", errorItr.value().toStdString());
+  }
+
+  void runDuplicateIdTest()
+  {
+    // ref2/review can't have the same id duplicated within the same tag value
+
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
+
+    tags.set(MetadataTags::Ref2(), "002da0;002da0");
+    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS("Duplicate ID found in REF2=002da0;002da0", errorItr.value().toStdString());
+
+    tags.clear();
+    map->clear();
+    tags.set(MetadataTags::Review(), "002da0;002da0");
+    ConstNodePtr invalidReview = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidReview->getElementId());
+    HOOT_STR_EQUALS("Duplicate ID found in REVIEW=002da0;002da0", errorItr.value().toStdString());
   }
 };
 

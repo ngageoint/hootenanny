@@ -48,6 +48,9 @@
 // tgs
 #include <tgs/Optimization/NelderMead.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 using namespace Tgs;
 
@@ -208,10 +211,16 @@ private:
 
   bool _printErrors(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path)
   {
+    QElapsedTimer timer;
+    timer.start();
+    LOG_INFO("Validating manual matches...");
+
     ManualMatchValidator inputValidator;
     inputValidator.getInitStatusMessage();
     inputValidator.apply(map);
     inputValidator.getCompletedStatusMessage();
+
+    LOG_INFO("Validated manual matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
 
     const QMap<ElementId, QString> errors = inputValidator.getErrors();
     if (!errors.isEmpty())
@@ -234,6 +243,7 @@ private:
         }
       }
     }
+
     return !errors.isEmpty();
   }
 
