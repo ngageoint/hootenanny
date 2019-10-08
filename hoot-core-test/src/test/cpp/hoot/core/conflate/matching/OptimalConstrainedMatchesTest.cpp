@@ -181,15 +181,11 @@ public:
     MatchSet matchSet;
     matchSet.insert(subsetVector.begin(), subsetVector.end());
 
-//TODO: FIX ME
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.6, uut.getScore(), 0.001);
     CPPUNIT_ASSERT_EQUAL((size_t)3, matchSet.size());
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[0]) != matchSet.end());
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[2]) != matchSet.end());
     CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[3]) != matchSet.end());
-
-//DELETE ME:
-//    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[1]) != matchSet.end());
   }
 
   virtual void setUp()
