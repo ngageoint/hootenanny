@@ -75,7 +75,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 {
   _numAffected++;
 
-  // Just recording one error for each element, even if there are multiple.
+  // Just recording one error for each element, even if there are multiple, for performance reasons.
 
   const Tags& tags = element->getTags();
   QString ref1;
@@ -129,11 +129,13 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     _errors[element->getElementId()] = "Unknown2 element with REF1 tag";
   }
   // make sure a ref1 exists for each ref2 or review
-  else if (!ref2.isEmpty() && !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2))
+  else if (!ref2.isEmpty() && ref2 != "none" && ref2 != "todo" &&
+           !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2))
   {
     _errors[element->getElementId()] = "No REF1 exists for REF2=" + ref2;
   }
-  else if (!review.isEmpty() && !_ref1Mappings.getIdToTagValueMappings().values().contains(review))
+  else if (!review.isEmpty() && review != "none" && review != "todo" &&
+           !_ref1Mappings.getIdToTagValueMappings().values().contains(review))
   {
     _errors[element->getElementId()] = "No REF1 exists for REVIEW=" + review;
   }
@@ -157,6 +159,8 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     _errors[element->getElementId()] = "Invalid repeated ID: REF2=" + ref2 + ", REVIEW=" + review;
   }
 }
+
+// TODO: something to validate actual hex?
 
 bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
 {

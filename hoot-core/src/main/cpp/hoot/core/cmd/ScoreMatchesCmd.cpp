@@ -216,6 +216,7 @@ private:
     const QMap<ElementId, QString> errors = inputValidator.getErrors();
     if (!errors.isEmpty())
     {
+      // TODO: have this just print out file names, not full paths
       cout << "There are " << QString::number(errors.size()) <<
               " manual match errors for inputs " << map1Path.right(25) << " and " <<
               map2Path.right(25) << ":\n\n";

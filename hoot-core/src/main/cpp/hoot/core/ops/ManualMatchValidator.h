@@ -37,7 +37,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Finds errors in manual matches made by a human that are to be scored against hoot conflation
+ * with the score-matches command
  */
 class ManualMatchValidator : public ConstOsmMapOperation, public OperationStatusInfo
 {
@@ -48,7 +49,7 @@ public:
   ManualMatchValidator();
 
   /**
-   * TODO
+   * Validates all manual matches in the map and records the first error found for each element
    *
    * @param map
    */
@@ -63,17 +64,16 @@ public:
   { return "Validated " + QString::number(_numAffected) + " manual matches"; }
 
   /**
-   * TODO
+   * Returns found errors grouped by element ID (up to one for each element)
    *
-   * @param map
-   * @return
+   * @return a collection of errors
    */
   QMap<ElementId, QString> getErrors() const { return _errors; }
 
   /**
-   * TODO
+   * Determines if any errors were found by validation
    *
-   * @return
+   * @return true if any errors were found; false otherwise
    */
   bool hasErrors() const { return _errors.size() > 0; }
 
