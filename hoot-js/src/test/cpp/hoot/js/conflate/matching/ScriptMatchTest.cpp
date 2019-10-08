@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/MapProjector.h>
+
 #include <hoot/js/HootJsStable.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/matching/ScriptMatchCreator.h>
@@ -79,10 +80,10 @@ public:
 
     ScriptMatchCreator smc;
     smc.setArguments(QStringList() << "LineStringGenericTest.js");
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     smc.createMatches(map, matches, mt);
     HOOT_STR_EQUALS(2, matches.size());
-    HOOT_STR_EQUALS(false, matches[0]->isConflicting(*matches[1], map));
+    HOOT_STR_EQUALS(false, matches[0]->isConflicting(matches[1], map));
   }
 
   void cacheTest()

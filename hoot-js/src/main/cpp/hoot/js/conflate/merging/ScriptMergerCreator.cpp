@@ -27,8 +27,8 @@
 #include "ScriptMergerCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/conflate/merging/ScriptMerger.h>
 
@@ -60,9 +60,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m = *it;
+    ConstMatchPtr m = *it;
     LOG_VART(m->toString());
-    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m);
+    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m.get());
     // check to make sure all the input matches are script matches.
     if (sm == 0)
     {
@@ -138,16 +138,13 @@ vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
   return result;
 }
 
-bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-  const Match* m2) const
+bool ScriptMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
+  ConstMatchPtr m2) const
 {
-  const ScriptMatch* sm1 = dynamic_cast<const ScriptMatch*>(m1);
-  const ScriptMatch* sm2 = dynamic_cast<const ScriptMatch*>(m2);
-
   bool result = false;
-  if (sm1 && sm2)
+  if (m1 && m2)
   {
-    result = sm1->isConflicting(*sm2, map);
+    result = m1->isConflicting(m2, map);
   }
 
   return result;
