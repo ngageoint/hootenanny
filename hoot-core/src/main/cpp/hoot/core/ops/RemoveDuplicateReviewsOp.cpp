@@ -27,12 +27,12 @@
 #include "RemoveDuplicateReviewsOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
@@ -95,7 +95,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       copy->getElement(beid)->setStatus(Status::Unknown1);
       copy->getElement(eeid)->setStatus(Status::Unknown2);
 
-      Match* match = MatchFactory::getInstance().createMatch(copy, beid, eeid);
+      MatchPtr match = MatchFactory::getInstance().createMatch(copy, beid, eeid);
       if (match && match->getType() != MatchType::Miss)
       {
         QString explain = match->explain();

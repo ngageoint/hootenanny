@@ -28,16 +28,16 @@
 #include "MatchFeatureExtractor.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -248,7 +248,7 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
 
 void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
 {
-  vector<const Match*> matches;
+  vector<ConstMatchPtr> matches;
   Envelope bounds;
   bounds.setToNull();
   std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
@@ -256,7 +256,7 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
   {
-    const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i]);
+    const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i].get());
     if (d == 0)
     {
       if (logWarnCount < Log::getWarnMessageLimit())

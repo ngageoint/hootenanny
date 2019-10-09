@@ -51,9 +51,9 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 
 public:
 
-  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                          ElementCriterionPtr filter = ElementCriterionPtr());
-  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                          ConstMatchThresholdPtr threshold,
                          std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
@@ -79,7 +79,7 @@ private:
   friend class PoiPolygonMatchVisitorTest;
 
   const ConstOsmMapPtr& _map;
-  std::vector<const Match*>& _result;
+  std::vector<ConstMatchPtr>& _result;
   std::set<ElementId> _empty;
   int _neighborCountMax;
   int _neighborCountSum;

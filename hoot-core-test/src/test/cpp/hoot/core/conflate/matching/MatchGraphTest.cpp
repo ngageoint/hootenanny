@@ -43,6 +43,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
@@ -90,7 +91,7 @@ public:
 
   virtual double getProbability() const { return _p; }
 
-  virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const
+  virtual bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/) const
   {
     return false;
   }
@@ -100,15 +101,6 @@ public:
     set<pair<ElementId, ElementId>> result;
     result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
     return result;
-  }
-
-  FakeMatch* init(ElementId eid1, ElementId eid2, double p, ConstMatchThresholdPtr mt)
-  {
-    _eid1 = eid1;
-    _eid2 = eid2;
-    _p = p;
-    _threshold = mt;
-    return this;
   }
 
   virtual QString toString() const
@@ -127,7 +119,6 @@ private:
   mutable MatchClassification _c;
   ElementId _eid1, _eid2;
   double _p;
-  std::shared_ptr<const MatchThreshold> _threshold;
 };
 
 class MatchGraphTest : public HootTestFixture
@@ -146,36 +137,31 @@ public:
     ElementId d = ElementId::way(4);
     ElementId e = ElementId::way(5);
     ElementId f = ElementId::way(6);
-    vector<const Match*> matches;
+
     std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
-
-    // force the pointers to be in order which forces the set to be consistent between runs.
-    FakeMatch* fm = new FakeMatch[7];
-
-    matches.push_back(fm[0].init(a, b, 1, mt));
-    matches.push_back(fm[1].init(a, c, .1, mt));
-    matches.push_back(fm[2].init(c, d, 1, mt));
+    vector<std::shared_ptr<FakeMatch>> fm(7);
+    fm[0].reset(new FakeMatch(a, b, 1.0, mt));
+    fm[1].reset(new FakeMatch(a, c, 0.1, mt));
+    fm[2].reset(new FakeMatch(c, d, 1.0, mt));
     // duplicates are silly, but allowable
-    matches.push_back(fm[3].init(d, e, .9, mt));
-    matches.push_back(fm[4].init(d, e, .9, mt));
-    matches.push_back(fm[5].init(c, e, .1, mt));
+    fm[3].reset(new FakeMatch(d, e, 0.9, mt));
+    fm[4].reset(new FakeMatch(d, e, 0.9, mt));
+    fm[5].reset(new FakeMatch(c, e, 0.1, mt));
     // doesn't really make sense, but it shouldn't throw an error.
-    matches.push_back(fm[6].init(f, f, 1, mt));
+    fm[6].reset(new FakeMatch(f, f, 1.0, mt));
 
     MatchGraph uut;
 
-    uut.addMatches(matches.begin(), matches.end());
+    uut.addMatches(fm.begin(), fm.end());
 
     ConstOsmMapPtr empty;
 
-    vector<set<const Match*, MatchPtrComparator>> subgraphs = uut.findSubgraphs(empty);
+    vector<set<ConstMatchPtr, MatchPtrComparator>> subgraphs = uut.findSubgraphs(empty);
 
     stringstream ss;
     ss << subgraphs;
     CPPUNIT_ASSERT_EQUAL(string("[3]{[1]{pairs: [1]{(Way(1), Way(2))} p: 1}, [3]{pairs: [1]{(Way(3), Way(4))} p: 1, pairs: [1]{(Way(4), Way(5))} p: 0.9, pairs: [1]{(Way(4), Way(5))} p: 0.9}, [1]{pairs: [1]{(Way(6), Way(6))} p: 1}}"),
       ss.str());
-
-    delete [] fm;
   }
 };
 

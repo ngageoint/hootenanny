@@ -28,12 +28,12 @@
 #define HIGHWAYMATCH_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QHash>
@@ -60,34 +60,34 @@ public:
                const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
                ConstMatchThresholdPtr mt);
 
-  virtual QString explain() const;
+  virtual QString explain() const override;
 
-  virtual const MatchClassification& getClassification() const { return _c; }
+  virtual const MatchClassification& getClassification() const override { return _c; }
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
-  virtual QString getMatchName() const { return getHighwayMatchName(); }
+  virtual QString getMatchName() const override { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return _matchName; }
 
-  virtual double getProbability() const;
+  virtual double getProbability() const override;
 
-  virtual double getScore() const { return _score; }
+  virtual double getScore() const override { return _score; }
 
   const std::shared_ptr<SublineStringMatcher>& getSublineMatcher() const
   { return _sublineMatcher; }
 
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
   const WaySublineMatchString& getSublineMatch() const { return _sublineMatch; }
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual QString getDescription() const
+  virtual QString getDescription() const override
   { return "Matches roads with the 2nd Generation (Unifying) Algorithm"; }
 
 private:

@@ -43,10 +43,10 @@ OptimalConstrainedMatches::OptimalConstrainedMatches(const ConstOsmMapPtr& map) 
   _timeLimit = -1;
 }
 
-vector<const Match*> OptimalConstrainedMatches::calculateSubset()
+std::vector<ConstMatchPtr> OptimalConstrainedMatches::calculateSubset()
 {
   _score = -1;
-  vector<const Match*> result;
+  vector<ConstMatchPtr> result;
 
   if (_matches.size() == 0)
   {

@@ -86,7 +86,7 @@ public:
 
   void runIsCandidateTest()
   {
-    std::vector<const Match*> result;
+    std::vector<ConstMatchPtr> result;
 
     OsmMapPtr map = getTestMap1();
     CPPUNIT_ASSERT(

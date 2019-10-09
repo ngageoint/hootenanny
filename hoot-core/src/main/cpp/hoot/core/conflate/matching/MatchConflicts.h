@@ -28,6 +28,7 @@
 #define MATCHCONFLICTS_H
 
 // hoot
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/elements/OsmMap.h>
 
 // Qt
@@ -50,15 +51,15 @@ public:
 
   MatchConflicts(const ConstOsmMapPtr& map);
 
-  EidIndexMap calculateEidIndexMap(const std::vector<const Match*>& matches) const;
+  EidIndexMap calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const;
 
   /**
    * Calculates all the conflicts between matches and puts the indexes to the conflicting pairs in
    * the provided conflicts set. conflicts is cleared before inserting conflicts.
    */
-  void calculateMatchConflicts(const std::vector<const Match*> &matches, ConflictMap& conflicts);
+  void calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts);
 
-  void calculateSubsetConflicts(const std::vector<const Match*>& matches, ConflictMap& conflicts,
+  void calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches, ConflictMap& conflicts,
                                 const std::vector<int>& matchSet);
 
 private:

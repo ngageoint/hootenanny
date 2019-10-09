@@ -28,15 +28,15 @@
 
 // hoot
 #include <hoot/core/algorithms/aggregator/QuantileAggregator.h>
+#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/algorithms/extractors/SmallerOverlapExtractor.h>
-#include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QDateTime>
@@ -255,9 +255,9 @@ double BuildingMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool BuildingMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
+bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const
 {
-  const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(&other);
+  const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(other.get());
   if (bm == 0)
   {
     return true;
