@@ -55,9 +55,9 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m = *it;
+    ConstMatchPtr m = *it;
     LOG_VART(m->toString());
-    const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m);
+    const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(m.get());
     // check to make sure all the input matches are building matches.
     if (bm == 0)
     {
@@ -91,17 +91,17 @@ vector<CreatorDescription> BuildingMergerCreator::getAllCreators() const
   return result;
 }
 
-bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-  const Match* m2) const
+bool BuildingMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
+  ConstMatchPtr m2) const
 {
-  const BuildingMatch* bm1 = dynamic_cast<const BuildingMatch*>(m1);
-  const BuildingMatch* bm2 = dynamic_cast<const BuildingMatch*>(m2);
+  const BuildingMatch* bm1 = dynamic_cast<const BuildingMatch*>(m1.get());
+  const BuildingMatch* bm2 = dynamic_cast<const BuildingMatch*>(m2.get());
 
   // this shouldn't ever return true, but I'm calling the BuildingMatch::isConflicting just in
   // case the logic changes at some point.
   if (bm1 && bm2)
   {
-    return bm1->isConflicting(*bm2, map);
+    return m1->isConflicting(m2, map);
   }
   else
   {

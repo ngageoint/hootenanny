@@ -82,7 +82,7 @@ public:
     return map->getWay(wids[0]);
   }
 
-  bool contains(const vector<const Match*>& matches, ElementId eid1, ElementId eid2)
+  bool contains(const vector<ConstMatchPtr>& matches, ElementId eid1, ElementId eid2)
   {
     bool result = false;
     for (size_t i = 0; i < matches.size(); i++)
@@ -137,7 +137,7 @@ public:
     OsmMapPtr map = getTestMap();
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
 
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
@@ -192,7 +192,7 @@ public:
     conf().set("building.review.if.secondary.newer", "true");
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
@@ -210,9 +210,9 @@ public:
      */
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
-    for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    for (vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      const Match* match = *it;
+      ConstMatchPtr match = *it;
       std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
       assert(matchPairs.size() == 1);
@@ -252,7 +252,7 @@ public:
     conf().set("building.review.if.secondary.newer", "true");
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
 
@@ -280,7 +280,7 @@ public:
     conf().set("building.review.if.secondary.newer", "true");
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
 
@@ -307,7 +307,7 @@ public:
     conf().set("building.review.if.secondary.newer", "true");
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
 
     QString exceptionMsg("");
@@ -329,15 +329,15 @@ public:
     conf().set("building.review.matches.other.than.one.to.one", "true");
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
 
     CPPUNIT_ASSERT_EQUAL(3, int(matches.size()));
-    for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    for (vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      const Match* match = *it;
+      ConstMatchPtr match = *it;
       CPPUNIT_ASSERT_EQUAL(1.0, match->getClassification().getReviewP());
     }
   }
@@ -352,7 +352,7 @@ public:
     conf().set("building.review.matches.other.than.one.to.one", "true");
 
     BuildingMatchCreator uut;
-    vector<const Match*> matches;
+    vector<ConstMatchPtr> matches;
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.6, 0.6));
     uut.createMatches(map, matches, threshold);
     LOG_VARD(matches);
@@ -371,9 +371,9 @@ public:
      */
 
     CPPUNIT_ASSERT_EQUAL(7, int(matches.size()));
-    for (vector<const Match*>::const_iterator it = matches.begin(); it != matches.end(); ++it)
+    for (vector<ConstMatchPtr>::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      const Match* match = *it;
+      ConstMatchPtr match = *it;
       std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
       assert(matchPairs.size() == 1);

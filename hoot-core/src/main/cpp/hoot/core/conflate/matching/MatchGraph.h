@@ -28,6 +28,7 @@
 #define MATCHGRAPH_H
 
 // Hoot
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
 
 // Standard
@@ -38,7 +39,6 @@
 namespace hoot
 {
 
-class Match;
 class MatchGraphInternal;
 
 typedef std::vector<MatchSet> MatchSetVector;
@@ -84,7 +84,7 @@ public:
 
 private:
 
-  std::vector<const Match*> _matches;
+  std::vector<ConstMatchPtr> _matches;
   bool _checkForConflicts;
   /**
    * An internal data structure to prevent users of the class from recompiling the boost graph

@@ -29,9 +29,9 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -45,12 +45,12 @@ public:
 
   NetworkMatchCreator();
 
-  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
+  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2);
 
   /**
    * Search the provided map for network matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
                              ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
@@ -68,7 +68,7 @@ private:
   double _matchScoringFunctionCurveMidpointX;
   double _matchScoringFunctionCurveSteepness;
 
-  const Match* _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,
+  ConstMatchPtr _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,
     ConstMatchThresholdPtr mt);
 };
 
