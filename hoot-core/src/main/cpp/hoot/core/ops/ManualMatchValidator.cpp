@@ -34,7 +34,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ManualMatchValidator)
 
-ManualMatchValidator::ManualMatchValidator()
+ManualMatchValidator::ManualMatchValidator() :
+_requireRef1(true)
 {
 }
 
@@ -176,20 +177,9 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
         break;
       }
       // make sure a ref1 exists for each ref2
-      else if (!_isValidNonUniqueMatchId(ref2Id) &&
+      else if (_requireRef1 && !_isValidNonUniqueMatchId(ref2Id) &&
                !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2Id))
       {
-        /*
-         * There was one regression test where the crop bounds for some of the data caused some of
-         * the manual matches to drop out b/c they were right on the crop boundary. This wasn't a
-         * problem in that situation b/c they were simply ignored. You could make the argument that
-         * ignoring the problem in that situation is ok (and add a configuration option for it), or
-         * you could update the crop settings to not split features. Since this only occurred with
-         * one dataset, leaving the behavior as error in order to have the utmost awareness during
-         * match scoring. All of this would apply to the correspong logic in the next loop for
-         * reviews as well.
-         */
-
         _recordError(element, "No REF1 exists for REF2=" + ref2Id);
         break;
       }

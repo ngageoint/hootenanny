@@ -216,6 +216,7 @@ private:
     LOG_INFO("Validating manual matches...");
 
     ManualMatchValidator inputValidator;
+    inputValidator.setRequireRef1(ConfigOptions().getScoreMatchesRequireRef1());
     inputValidator.getInitStatusMessage();
     inputValidator.apply(map);
     inputValidator.getCompletedStatusMessage();
