@@ -43,6 +43,7 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 {
   _numAffected = 0;
   _errors.clear();
+  _warnings.clear();
   _ref1Mappings.getIdToTagValueMappings().clear();
   _ref1Mappings.setTagKey(MetadataTags::Ref1());
 
@@ -86,7 +87,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     ref1 = tagRef1Itr.value().trimmed().toLower();
     if (ref1.isEmpty())
     {
-      _recordError(element, "Empty REF1 tag");
+      _recordIssue(element, "Empty REF1 tag");
       return;
     }
   }
@@ -99,7 +100,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     ref2 = tagRef2Itr.value().trimmed().toLower().split(";");
     if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).isEmpty()))
     {
-      _recordError(element, "Empty REF2 tag");
+      _recordIssue(element, "Empty REF2 tag");
       return;
     }
   }
@@ -112,7 +113,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     review = tagReviewItr.value().trimmed().toLower().split(";");
     if (review.isEmpty() || (review.size() == 1 && review.at(0).isEmpty()))
     {
-      _recordError(element, "Empty REVIEW tag");
+      _recordIssue(element, "Empty REVIEW tag");
       return;
     }
   }
@@ -121,48 +122,48 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   // REF2 and review can be multiple IDs (many to one match), but REF1 is always a single ID.
   if (ref1.split(";").size() > 1)
   {
-    _recordError(element, "REF1 ID must be singular. REF1=" + ref1);
+    _recordIssue(element, "REF1 ID must be singular. REF1=" + ref1);
   }
   // validate manual match ids
   else if (!ref1.isEmpty() && !_isValidRef1Id(ref1))
   {
-    _recordError(element, "Invalid REF1=" + ref1);
+    _recordIssue(element, "Invalid REF1=" + ref1);
   }
   // can't have both ref1 and ref2/review on the same element
   else if (!ref1.isEmpty() && (!ref2.isEmpty() || !review.isEmpty()))
   {
-    _recordError(element, "Element has both REF1 and either a REF2 or REVIEW tag");
+    _recordIssue(element, "Element has both REF1 and either a REF2 or REVIEW tag");
   }
   // an unknown1 element can't have a ref2 or review tag
   else if (element->getStatus() == Status::Unknown1 && (!ref2.isEmpty() || !review.isEmpty()))
   {
-    _recordError(element, "Unknown1 element with REF2 or REVIEW tag");
+    _recordIssue(element, "Unknown1 element with REF2 or REVIEW tag");
   }
   // an unknown2 element can't have a ref1 tag
   else if (element->getStatus() == Status::Unknown2 && !ref1.isEmpty())
   {
-    _recordError(element, "Unknown2 element with REF1 tag");
+    _recordIssue(element, "Unknown2 element with REF1 tag");
   }
   // If a ref2 or review has multiple ID's, they should all be hex.
   else if (!ref2.isEmpty() && ref2.size() > 1 &&
            (ref2.contains("todo", Qt::CaseInsensitive) ||
             ref2.contains("none", Qt::CaseInsensitive)))
   {
-    _recordError(element, "Invalid many to one REF2=" + ref2.join(";"));
+    _recordIssue(element, "Invalid many to one REF2=" + ref2.join(";"));
   }
   else if (!review.isEmpty() && review.size() > 1 &&
            (review.contains("todo") || review.contains("none")))
   {
-    _recordError(element, "Invalid many to one REVIEW=" + review.join(";"));
+    _recordIssue(element, "Invalid many to one REVIEW=" + review.join(";"));
   }
   // check for dupes
   else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )
   {
-    _recordError(element, "Duplicate ID found in REF2=" + ref2.join(";"));
+    _recordIssue(element, "Duplicate ID found in REF2=" + ref2.join(";"));
   }
   else if (!review.isEmpty() && review.toSet().size() != review.size())
   {
-    _recordError(element, "Duplicate ID found in REVIEW=" + review.join(";"));
+    _recordIssue(element, "Duplicate ID found in REVIEW=" + review.join(";"));
   }
   else if (!ref2.isEmpty())
   {
@@ -173,20 +174,27 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 
       if (!_isValidRef2OrReviewId(ref2Id))
       {
-        _recordError(element, "Invalid REF2=" + ref2Id);
+        _recordIssue(element, "Invalid REF2=" + ref2Id);
         break;
       }
       // make sure a ref1 exists for each ref2
-      else if (_requireRef1 && !_isValidNonUniqueMatchId(ref2Id) &&
+      else if (!_isValidNonUniqueMatchId(ref2Id) &&
                !_ref1Mappings.getIdToTagValueMappings().values().contains(ref2Id))
       {
-        _recordError(element, "No REF1 exists for REF2=" + ref2Id);
+        if (_requireRef1)
+        {
+          _recordIssue(element, "No REF1 exists for REF2=" + ref2Id);
+        }
+        else
+        {
+          _recordIssue(element, "No REF1 exists for REF2=" + ref2Id, false);
+        }
         break;
       }
       // same id can't be on both ref2 and review for the same element
       else if (!review.isEmpty() && !_isValidNonUniqueMatchId(ref2Id) && review.contains(ref2Id))
       {
-        _recordError(element, "Invalid repeated ID: REF2=" + ref2Id + ", REVIEW=" + ref2Id);
+        _recordIssue(element, "Invalid repeated ID: REF2=" + ref2Id + ", REVIEW=" + ref2Id);
         break;
       }
     }
@@ -201,13 +209,13 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 
       if (!_isValidRef2OrReviewId(reviewId))
       {
-        _recordError(element, "Invalid REVIEW=" + reviewId);
+        _recordIssue(element, "Invalid REVIEW=" + reviewId);
         break;
       }
       else if (!_isValidNonUniqueMatchId(reviewId) &&
                !_ref1Mappings.getIdToTagValueMappings().values().contains(reviewId))
       {
-        _recordError(element, "No REF1 exists for REVIEW=" + reviewId);
+        _recordIssue(element, "No REF1 exists for REVIEW=" + reviewId);
         break;
       }
     }
@@ -216,7 +224,8 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   _numAffected++;
 }
 
-void ManualMatchValidator::_recordError(const ConstElementPtr& element, QString errorMessage)
+void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString message,
+                                        const bool isError)
 {
   Tags tags = element->getTags();
   Tags::const_iterator tagItr = tags.find(MetadataTags::Uuid());
@@ -227,10 +236,17 @@ void ManualMatchValidator::_recordError(const ConstElementPtr& element, QString 
     // reading the source file, so not much help when its time to find the problem in the source
     // file itself.
 
-    errorMessage += "; uuid=" + tagItr.value();
+    message += "; uuid=" + tagItr.value();
   }
-  LOG_VART(errorMessage);
-  _errors[element->getElementId()] = errorMessage;
+  LOG_VART(message);
+  if (isError)
+  {
+    _errors[element->getElementId()] = message;
+  }
+  else
+  {
+    _warnings[element->getElementId()] = message;
+  }
 }
 
 bool ManualMatchValidator::_isValidRef2OrReviewId(const QString& matchId) const
