@@ -57,9 +57,9 @@ public:
    * @param minNodeCountInOneTile the smallest number of nodes actually found in any one tile
    * @param maxNodeCountInOneTile the largest number of nodes actually found in any one tile
    * @param nodeCounts TODO
-   * @return
+   * @return TODO
    */
-  static std::vector<std::vector<geos::geom::Envelope>> calculateTiles(
+  static std::vector<std::vector<geos::geom::Envelope>>  calculateTiles(
     const long maxNodesPerTile, const double pixelSize, OsmMapPtr map,
     long& minNodeCountInOneTile, long& maxNodeCountInOneTile,
     std::vector<std::vector<long>>& nodeCounts);
@@ -79,7 +79,7 @@ public:
    *
    * @param tiles the collection of tiles from which to select
    * @param randomSeed optional random number generator seed
-   * @return
+   * @return TODO
    */
   static geos::geom::Envelope getRandomTile(
     const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
@@ -108,11 +108,10 @@ public:
    * @param outputPath the output file path
    * @param selectSingleRandomTile
    * @param randomSeed optional random number generator seed
-   * @return TODO
    * @todo collapse with GeoJSON writing method and refactor to TileFootprintWriter?
    * @todo refactor selectSingleRandomTile out?
    */
-  static QMap<QString, long> writeTilesToOsm(
+  static void writeTilesToOsm(
     const std::vector<std::vector<geos::geom::Envelope>>& tiles,
     const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
     const bool selectSingleRandomTile = false, int randomSeed = -1);

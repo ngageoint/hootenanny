@@ -115,8 +115,8 @@ void TileUtils::writeTilesToGeoJson(
   const bool selectSingleRandomTile, int randomSeed)
 {
   // write out to temp osm and then use ogr2ogr to convert to geojson; trying to remember, but I
-  // believe our geojson writer wouldn't quite give the output format needed for this...but that's
-  // worth verifying.
+  // believe our geojson writer wouldn't quite give the output format needed for this, which is
+  // why ogr2ogr is used here...but that's worth verifying.
 
   QTemporaryFile osmTempFile("/tmp/tiles-calculate-temp-XXXXXX.osm");
   if (!osmTempFile.open())
@@ -125,8 +125,14 @@ void TileUtils::writeTilesToGeoJson(
       "Unable to open OSM temp file: " + osmTempFile.fileName() + " for GeoJSON output.");
   }
   LOG_VARD(osmTempFile.fileName());
-  /*const QMap<QString, long> tileNamesToNodeCounts =*/
-    writeTilesToOsm(tiles, nodeCounts, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
+  writeTilesToOsm(tiles, nodeCounts, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
+
+  // hack - To get around having to modify osmconf.ini, hijacking the "amenity" field here since its
+  // supported in the default configuration. Doing this allows the ogr2ogr select to bring back the
+  // node counts. If we decide we want to modify the default osmconf.ini as part of the build
+  // process, then all of this "amenity" related logic can go away. These text replacements are
+  // inefficient, but the tile files aren't generally going to get huge.
+  FileUtils::replaceFully(osmTempFile.fileName(), "node_count", "amenity");
 
   QFile outFile(outputPath);
   if (outFile.exists() && !outFile.remove())
@@ -136,7 +142,7 @@ void TileUtils::writeTilesToGeoJson(
   LOG_VARD(outputPath);
 
   // exporting as multipolygons, as that's what the Tasking Manager expects; The fields available
-  // to select are configured in osmconf.ini. See note about "amenity" below.
+  // to select are configured in osmconf.ini. See note about "amenity" above.
   const QString cmd =
     "ogr2ogr -f GeoJSON -select \"name,boundary,amenity,osm_way_id\" " + outputPath + " " +
     osmTempFile.fileName() + " multipolygons";
@@ -150,15 +156,11 @@ void TileUtils::writeTilesToGeoJson(
       ".  Status: " + QString::number(retval));
   }
 
-  // hack - To get around having to modify osmconf.ini, hijacking the "amenity" field here since its
-  // supported in the default configuration. If we decide we want to modify the default osmconf.ini
-  // as part of the build process, then all of this "amenity" related logic can go away and a
-  // "node_count" tag can simply be added in writeTilesToOsm. This text replace is inefficient, but
-  // the tile files aren't generally going to get huge.
+  // see note above
   FileUtils::replaceFully(outputPath, "amenity", "node_count");
 }
 
-QMap<QString, long> TileUtils::writeTilesToOsm(
+void TileUtils::writeTilesToOsm(
   const std::vector<std::vector<geos::geom::Envelope>>& tiles,
   const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
   const bool selectSingleRandomTile, int randomSeed)
@@ -173,7 +175,6 @@ QMap<QString, long> TileUtils::writeTilesToOsm(
 
   OsmMapPtr boundaryMap(new OsmMap());
   int bboxCtr = 1;
-  QMap<QString, long> tileNamesToNodeCounts;
   for (size_t tx = 0; tx < tiles.size(); tx++)
   {
     for (size_t ty = 0; ty < tiles[tx].size(); ty++)
@@ -218,9 +219,10 @@ QMap<QString, long> TileUtils::writeTilesToOsm(
       bbox->addNode(lowerRight->getId());
       bbox->addNode(lowerLeft->getId());
 
-      // Anything added to these tags also needs to be added to the select statement in
-      // writeTilesToGeoJson and either custom handled or added to the defaults in osmconf.ini if
-      // you want to see it in the geojson (see related note in writeTilesToGeoJson).
+      // If you want any tags added here to be seen in the geojson output, update the select
+      // statement in writeTilesToGeoJson, if the field is already supported in osmconf.ini OR if
+      // its not supported in osmconfi.ini, add custom handling as a workaround (see related note
+      // in writeTilesToGeoJson).
 
       // gdal will recognize any closed way with the boundary tag as a polygon (tags
       // for features recognized as polys configurable in osmconf.ini), which is the type of
@@ -229,8 +231,7 @@ QMap<QString, long> TileUtils::writeTilesToOsm(
       const QString tileName = "Task Grid Cell #" + QString::number(bboxCtr);
       bbox->setTag("name", tileName);
       const long nodeCount = nodeCounts[tx][ty];
-      // hack - hijacking the amenity field here; see related note in writeTilesToGeoJson
-      bbox->setTag("amenity", QString::number(nodeCount));
+      bbox->setTag("node_count", QString::number(nodeCount));
 
       if (!selectSingleRandomTile ||
           (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
@@ -243,8 +244,6 @@ QMap<QString, long> TileUtils::writeTilesToOsm(
 
   OsmMapWriterFactory::write(boundaryMap, outputPath);
   OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
-
-  return tileNamesToNodeCounts;
 }
 
 }
