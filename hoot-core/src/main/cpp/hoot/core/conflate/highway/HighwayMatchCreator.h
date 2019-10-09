@@ -48,14 +48,14 @@ public:
   HighwayMatchCreator();
 
   /**
-   * Not implemented.
+   * Create the match
    */
-  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId eid1, ElementId eid2);
+  virtual MatchPtr createMatch(const ConstOsmMapPtr&, ElementId eid1, ElementId eid2) override;
 
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;

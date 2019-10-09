@@ -45,7 +45,7 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
-Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
   if (!_infoCache)
@@ -54,7 +54,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     _infoCache.reset(new PoiPolygonCache(map));
   }
 
-  PoiPolygonMatch* result = 0;
+  std::shared_ptr<PoiPolygonMatch> result;
 
   if (eid1.getType() != eid2.getType())
   {
@@ -65,7 +65,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache);
+      result.reset(new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache));
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -75,7 +75,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 }
 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                           std::vector<const Match*>& matches,
+                                           std::vector<ConstMatchPtr>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
   LOG_INFO("Looking for matches with: " << className() << "...");

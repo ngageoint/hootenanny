@@ -88,7 +88,7 @@ public:
   virtual double getProbability() const override { return _class.getMatchP(); }
 
   // Is the right implementation for this?
-  virtual bool isConflicting(const Match& /*other*/, const ConstOsmMapPtr& /*map*/) const override
+  virtual bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/) const override
   { return false; }
 
   virtual bool isWholeGroup() const override { return true; }

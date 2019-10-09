@@ -48,7 +48,7 @@ namespace hoot
 {
 
 PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
-                                               std::vector<const Match*>& result,
+                                               std::vector<ConstMatchPtr>& result,
                                                ElementCriterionPtr filter) :
 _map(map),
 _result(result),
@@ -57,7 +57,7 @@ _filter(filter)
 }
 
 PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
-                                               std::vector<const Match*>& result,
+                                               std::vector<ConstMatchPtr>& result,
                                                ConstMatchThresholdPtr threshold,
                                                std::shared_ptr<PoiPolygonRfClassifier> rf,
                                                PoiPolygonCachePtr infoCache,
@@ -114,18 +114,14 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
         // score each candidate and push it on the result vector
         LOG_TRACE(
           "Calculating match between: " << poiId << " and " << poly->getElementId() << "...");
-        PoiPolygonMatch* m =
+        std::shared_ptr<PoiPolygonMatch> m(
           new PoiPolygonMatch(
-            _map, _threshold, _rf, _infoCache, _surroundingPolyIds, _surroundingPoiIds);
+            _map, _threshold, _rf, _infoCache, _surroundingPolyIds, _surroundingPoiIds));
         m->setConfiguration(conf());
         m->calculateMatch(poiId, polyId);
 
         // if we're confident this is a miss
-        if (m->getType() == MatchType::Miss)
-        {
-          delete m;
-        }
-        else
+        if (m->getType() != MatchType::Miss)
         {
           _result.push_back(m);
           neighborCount++;

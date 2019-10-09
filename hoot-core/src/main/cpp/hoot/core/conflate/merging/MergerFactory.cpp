@@ -137,8 +137,8 @@ MergerFactory& MergerFactory::getInstance()
   return *_theInstance;
 }
 
-bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-                                  const Match* m2) const
+bool MergerFactory::isConflicting(const ConstOsmMapPtr& map, const ConstMatchPtr& m1,
+                                  const ConstMatchPtr& m2) const
 {
   LOG_VART(_creators.size());
   // if any creator considers a match conflicting then it is a conflict
