@@ -77,10 +77,25 @@ public:
    */
   bool hasErrors() const { return _errors.size() > 0; }
 
+  void setRequireRef1(bool require) { _requireRef1 = require; }
+
 private:
 
   QMap<ElementId, QString> _errors;
   ElementIdToTagValueMapper _ref1Mappings;
+  // TODO
+  /*
+   * There was one regression test where the crop bounds for some of the data caused some of
+   * the manual matches to drop out b/c they were right on the crop boundary. This wasn't a
+   * problem in that situation b/c they were simply ignored. You could make the argument that
+   * ignoring the problem in that situation is ok (and add a configuration option for it), or
+   * you could update the crop settings to not split features. Since this only occurred with
+   * one dataset, leaving the behavior as error in order to have the utmost awareness during
+   * match scoring. All of this would apply to the correspong logic in the next loop for
+   * reviews as well.
+   */
+
+  bool _requireRef1;
 
   void _validate(const ConstElementPtr& element);
   bool _isValidRef1Id(const QString& matchId) const;
