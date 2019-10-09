@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 using namespace geos::geom;
 
@@ -37,8 +38,7 @@ namespace hoot
 class AreaCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AreaCriterionTest);
-  // TODO: re-enable
-  //CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runPoiTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -99,6 +99,7 @@ public:
     tags.set("poi", "yes");
     OsmMapPtr map(new OsmMap());
     ConstWayPtr w1 = TestUtils::createWay(map, c, Status::Unknown1, 15.0, tags);
+
     CPPUNIT_ASSERT(!uut.isSatisfied(w1));
   }
 };
