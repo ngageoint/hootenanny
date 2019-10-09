@@ -39,6 +39,16 @@ namespace hoot
 /**
  * Finds errors in manual matches made by a human that are to be scored against hoot conflation
  * with the score-matches command
+ *
+ * A note on _requireRef1:
+ *
+ * If a regression test already exists where the input data has been cropped and the cropping
+ * split any features, you will end up with missing ref1 tags. One remedy may be to re-create the
+ * cropped input data with crop.keep.entire.features.crossing.bounds=true, but this might resut in
+ * larger inputs than you want. If the manual matches are dense, it might not work anyway. If
+ * re-creating the input data is not an option (input data created before this class was integrated
+ * with score-matches, etc.), then you can change the validator to only log warnings, which allows
+ * score-matches to proceed with missing ref1's by setting _requireRef1=false;
  */
 class ManualMatchValidator : public ConstOsmMapOperation, public OperationStatusInfo
 {
@@ -71,23 +81,44 @@ public:
   QMap<ElementId, QString> getErrors() const { return _errors; }
 
   /**
+   * Returns found warnings grouped by element ID (up to one for each element)
+   *
+   * @return a collection of warnings
+   */
+  QMap<ElementId, QString> getWarnings() const { return _warnings; }
+
+  /**
    * Determines if any errors were found by validation
    *
    * @return true if any errors were found; false otherwise
    */
   bool hasErrors() const { return _errors.size() > 0; }
 
+  /**
+   * Determines if any warnings were found by validation
+   *
+   * @return true if any errors were found; false otherwise
+   */
+  bool hasWarnings() const { return _warnings.size() > 0; }
+
+  void setRequireRef1(bool require) { _requireRef1 = require; }
+
 private:
 
   QMap<ElementId, QString> _errors;
+  QMap<ElementId, QString> _warnings;
   ElementIdToTagValueMapper _ref1Mappings;
+  // if true, every ref2/review id must have a correponding ref1 id in order to not trigger an error
+  bool _requireRef1;
 
   void _validate(const ConstElementPtr& element);
+
   bool _isValidRef1Id(const QString& matchId) const;
   bool _isValidRef2OrReviewId(const QString& matchId) const;
   bool _isValidUniqueMatchId(const QString& matchId) const;
   bool _isValidNonUniqueMatchId(const QString& matchId) const;
-  void _recordError(const ConstElementPtr& element, QString errorMessage);
+
+  void _recordIssue(const ConstElementPtr& element, QString message, const bool isError = true);
 };
 
 }

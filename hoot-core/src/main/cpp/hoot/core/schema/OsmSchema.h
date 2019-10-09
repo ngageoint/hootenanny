@@ -337,7 +337,7 @@ public:
    * set of tags. E.g. returns railway_platform, but not public_transit=platform.
    *
    * "Unique" may not be the best modifier in the method name, but "WithParentTagsRemoved" seemed
-   * a bit verbose. Open to suggestions. -JRS
+   * a bit verbose.
    */
   std::vector<SchemaVertex> getUniqueSchemaVertices(const Tags& tags) const;
 

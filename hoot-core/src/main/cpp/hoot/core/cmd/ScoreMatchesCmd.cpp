@@ -107,7 +107,7 @@ public:
       IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
 
       // If any of the map files have errors, we'll print some out and terminate.
-      if (_printErrors(map, map1Path, map2Path))
+      if (_validateMatches(map, map1Path, map2Path))
       {
         return 1;
       }
@@ -209,43 +209,51 @@ public:
 
 private:
 
-  bool _printErrors(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path)
+  bool _validateMatches(const OsmMapPtr& map, const QString& map1Path, const QString& map2Path)
   {
     QElapsedTimer timer;
     timer.start();
     LOG_INFO("Validating manual matches...");
 
     ManualMatchValidator inputValidator;
+    inputValidator.setRequireRef1(ConfigOptions().getScoreMatchesRequireRef1());
     inputValidator.getInitStatusMessage();
     inputValidator.apply(map);
     inputValidator.getCompletedStatusMessage();
 
     LOG_INFO("Validated manual matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
 
-    const QMap<ElementId, QString> errors = inputValidator.getErrors();
-    if (!errors.isEmpty())
+    _printIssues(inputValidator.getWarnings(), "warnings", map1Path, map2Path);
+    _printIssues(inputValidator.getErrors(), "errors", map1Path, map2Path);
+
+    return !inputValidator.getErrors().isEmpty();
+  }
+
+  void _printIssues(const QMap<ElementId, QString>& issues, const QString& type,
+                    const QString& map1Path, const QString& map2Path)
+  {
+    if (!issues.isEmpty())
     {
       QFileInfo fileInfo1(map1Path);
       QFileInfo fileInfo2(map2Path);
-      cout << "There are " << QString::number(errors.size()) <<
-              " manual match errors for inputs " << fileInfo1.completeBaseName().right(25) <<
+      cout << "There are " << QString::number(issues.size()) <<
+              " manual match " << type << " for inputs " <<
+              fileInfo1.completeBaseName().right(25) <<
               " and " << fileInfo2.completeBaseName().right(25) << ":\n\n";
-      int errorCount = 0;
-      for (QMap<ElementId, QString>::const_iterator itr = errors.begin();
-           itr != errors.end(); ++itr)
+      int issueCount = 0;
+      for (QMap<ElementId, QString>::const_iterator itr = issues.begin();
+           itr != issues.end(); ++itr)
       {
         cout << itr.key().toString() + ": " + itr.value() + "\n";
 
-        errorCount++;
-        if (errorCount >= 10)
+        issueCount++;
+        if (issueCount >= 10)
         {
-          cout << "Printing errors for the first 10 elements only..." << endl;
+          cout << "Printing " << type << " for the first 10 elements only..." << endl;
           break;
         }
       }
     }
-
-    return !errors.isEmpty();
   }
 
   void _optimize(vector<OsmMapPtr> maps, bool showConfusion)
