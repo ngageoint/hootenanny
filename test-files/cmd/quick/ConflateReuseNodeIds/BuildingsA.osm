@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59311913498" minlon="-104.80655664246" maxlat="39.59330667331" maxlon="-104.80609314529"/>
+    <node visible="true" id="104" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5932771729399988" lon="-104.8065566424599950"/>
+    <node visible="true" id="103" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5933066733100034" lon="-104.8061245920000033"/>
+    <node visible="true" id="102" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931528497700000" lon="-104.8060931452900064"/>
+    <node visible="true" id="101" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5931191349800002" lon="-104.8065292974900018"/>
+    <way visible="true" id="101" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="104"/>
+        <nd ref="103"/>
+        <nd ref="102"/>
+        <nd ref="101"/>
+        <nd ref="104"/>
+        <tag k="name" v="Panera Bread"/>
+        <tag k="building" v="yes"/>
+    </way>
+</osm>

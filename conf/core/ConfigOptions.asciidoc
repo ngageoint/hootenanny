@@ -263,6 +263,14 @@ reference dataset will be lost.
 If true, all reviews outside of the score range established by the configuration options
 review.score.criterion.max/min.threshold will be removed.
 
+=== attribute.conflation.suppress.building.tag.on.multipoly.relation.constituents
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, any buildings that are part of a multipolygon relation will have their building=yes tags
+removed during Attribute Conflation.
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -3736,6 +3744,13 @@ command).
 * Default Value: `false`
 
 Remove REF tags from nodes before match scoring when using the score-matches command.
+
+=== score.matches.require.ref1
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
 
 === script.test.max.exec.time
 

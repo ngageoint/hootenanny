@@ -69,15 +69,15 @@ public:
     writer.close();
 
     //  Check the results
-    HOOT_FILE_EQUALS( _inputPath + "runBasic-nodes.pgcsv",
+    HOOT_FILE_EQUALS(_inputPath + "runBasic-nodes.pgcsv",
                      _outputPath + "runBasic-nodes.pgcsv");
-    HOOT_FILE_EQUALS( _inputPath + "runBasic-ways.pgcsv",
+    HOOT_FILE_EQUALS(_inputPath + "runBasic-ways.pgcsv",
                      _outputPath + "runBasic-ways.pgcsv");
-    HOOT_FILE_EQUALS( _inputPath + "runBasic-waynodes.pgcsv",
+    HOOT_FILE_EQUALS(_inputPath + "runBasic-waynodes.pgcsv",
                      _outputPath + "runBasic-waynodes.pgcsv");
-    HOOT_FILE_EQUALS( _inputPath + "runBasic-relations.pgcsv",
+    HOOT_FILE_EQUALS(_inputPath + "runBasic-relations.pgcsv",
                      _outputPath + "runBasic-relations.pgcsv");
-    HOOT_FILE_EQUALS( _inputPath + "runBasic-relationmembers.pgcsv",
+    HOOT_FILE_EQUALS(_inputPath + "runBasic-relationmembers.pgcsv",
                      _outputPath + "runBasic-relationmembers.pgcsv");
   }
 

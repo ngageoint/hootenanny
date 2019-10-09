@@ -245,7 +245,7 @@ public:
     generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)148, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)148, way->getNodeIds().size());
     const QString outFile = _outputPath + "runGeneralizeWayInput1NoInformationNodesTest-out.osm";
     writeMap(map, outFile);
@@ -283,7 +283,7 @@ public:
     generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
-    CPPUNIT_ASSERT_EQUAL((size_t)197, map->getNodes().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)137, map->getNodes().size());
     CPPUNIT_ASSERT_EQUAL((size_t)137, way->getNodeIds().size());
     const QString outFile = _outputPath + "runGeneralizeWayInput1WithInformationNodesTest-out.osm";
     writeMap(map, outFile);

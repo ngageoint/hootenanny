@@ -104,6 +104,7 @@ OsmPbfWriter::OsmPbfWriter()
 OsmPbfWriter::~OsmPbfWriter()
 {
   close();
+  delete _d;
 }
 
 long OsmPbfWriter::_convertLon(double lon)
@@ -249,7 +250,6 @@ void OsmPbfWriter::close()
     {
       _openStream->close();
     }
-    delete _d;
     _needToCloseInput = false;
   }
 }

@@ -31,9 +31,9 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
+#include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
-#include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/util/Log.h>
 
 // CPP Unit
@@ -54,12 +54,12 @@ using namespace Tgs;
 namespace hoot
 {
 
-class ConstrainedFakeMatch : public Match
+class OptimalConstrainedFakeMatch : public Match
 {
 public:
 
-  ConstrainedFakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
-  ConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
+  OptimalConstrainedFakeMatch() : Match(std::shared_ptr<MatchThreshold>()) {}
+  OptimalConstrainedFakeMatch(ElementId eid1, ElementId eid2, double p,
     ConstMatchThresholdPtr threshold) :
     Match(threshold),
     _eid1(eid1),
@@ -67,13 +67,12 @@ public:
     _p(p)
   {}
 
-  ConstrainedFakeMatch* addConflict(const Match* conflict)
+  void addConflict(const ConstMatchPtr& conflict)
   {
     _conflicts.insert(conflict);
-    return this;
   }
 
-  virtual const MatchClassification& getClassification() const
+  virtual const MatchClassification& getClassification() const override
   {
     _c.setMatchP(_p);
     _c.setMissP(1 - _p);
@@ -81,50 +80,36 @@ public:
     return _c;
   }
 
-  virtual QString getMatchName() const { return "Fake Match"; }
+  virtual QString getMatchName() const override { return "Fake Match"; }
 
-  virtual double getProbability() const { return _p; }
+  virtual double getProbability() const override { return _p; }
 
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const override
   {
-    // this isn't a good way to do this since it relies on pointers, but it works for the unit test.
-    if (_conflicts.find(&other) == _conflicts.end())
+    QString otherString = other->toString();
+    for (MatchSet::iterator it = _conflicts.begin(); it != _conflicts.end(); ++it)
     {
-      return false;
+      if (otherString == (*it)->toString())
+        return true;
     }
-    else
-    {
-      return true;
-    }
+    return false;
   }
 
-  virtual set<pair<ElementId, ElementId>> getMatchPairs() const
+  virtual set<pair<ElementId, ElementId>> getMatchPairs() const override
   {
     set<pair<ElementId, ElementId>> result;
     result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
     return result;
   }
 
-  ConstrainedFakeMatch* init(ElementId eid1, ElementId eid2, double p,
-    ConstMatchThresholdPtr threshold)
-  {
-    _eid1 = eid1;
-    _eid2 = eid2;
-    _p = p;
-    _threshold = threshold;
-    return this;
-  }
-
-  virtual QString toString() const
+  virtual QString toString() const override
   {
     stringstream ss;
     ss << "pairs: " << getMatchPairs() << " p: " << getProbability();
     return QString::fromStdString(ss.str());
   }
 
-  MatchType getType() const { return _threshold->getType(*this); }
-
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const override { return ""; }
 
 private:
 
@@ -132,10 +117,9 @@ private:
   ElementId _eid1, _eid2;
   double _p;
   MatchSet _conflicts;
-  std::shared_ptr<const MatchThreshold> _threshold;
 };
 
-class ConstrainedFakeCreator : public MergerCreator
+class OptimalConstrainedFakeCreator : public MergerCreator
 {
 public:
 
@@ -145,12 +129,9 @@ public:
     return false;
   }
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override
   {
-    const ConstrainedFakeMatch* cfm1 = dynamic_cast<const ConstrainedFakeMatch*>(m1);
-    const ConstrainedFakeMatch* cfm2 = dynamic_cast<const ConstrainedFakeMatch*>(m2);
-
-    return cfm1->isConflicting(*cfm2, map);
+    return m1->isConflicting(m2, map);
   }
 
   vector<CreatorDescription> getAllCreators() const
@@ -181,37 +162,36 @@ public:
     ElementId b2 = ElementId::way(5);
     ElementId b3 = ElementId::way(6);
 
-    vector<const Match*> matches;
+    MatchThresholdPtr mt(new MatchThreshold(0.5, 0.5));
+    vector<std::shared_ptr<OptimalConstrainedFakeMatch>> fm(4);
+    fm[0].reset(new OptimalConstrainedFakeMatch(a1, b1, 0.8, mt));
+    fm[1].reset(new OptimalConstrainedFakeMatch(a2, b1, 1.0, mt));
+    fm[2].reset(new OptimalConstrainedFakeMatch(a2, b2, 0.9, mt));
+    fm[3].reset(new OptimalConstrainedFakeMatch(a3, b3, 0.9, mt));
 
-    // force the pointers to be in order which forces the set to be consistent between runs.
-    ConstrainedFakeMatch* fm = new ConstrainedFakeMatch[4];
-    std::shared_ptr<MatchThreshold> mt(new MatchThreshold(0.5, 0.5));
-
-    matches.push_back(fm[0].init(a1, b1, 0.8, mt)->addConflict(&fm[1]));
-    matches.push_back(fm[1].init(a2, b1, 1, mt)->addConflict(&fm[2]));
-    matches.push_back(fm[2].init(a2, b2, 0.9, mt));
-    matches.push_back(fm[3].init(a3, b3, 0.9, mt));
+    fm[0]->addConflict(fm[1]);
+    fm[1]->addConflict(fm[2]);
 
     ConstOsmMapPtr empty;
     OptimalConstrainedMatches uut(empty);
 
-    uut.addMatches(matches.begin(), matches.end());
-    vector<const Match*> subsetVector = uut.calculateSubset();
+    uut.addMatches(fm.begin(), fm.end());
+    vector<ConstMatchPtr> subsetVector = uut.calculateSubset();
 
     MatchSet matchSet;
     matchSet.insert(subsetVector.begin(), subsetVector.end());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.6, uut.getScore(), 0.001);
     CPPUNIT_ASSERT_EQUAL((size_t)3, matchSet.size());
-    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(&fm[0]) != matchSet.end());
-    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(&fm[2]) != matchSet.end());
-    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(&fm[3]) != matchSet.end());
+    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[0]) != matchSet.end());
+    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[2]) != matchSet.end());
+    CPPUNIT_ASSERT_EQUAL(true, matchSet.find(fm[3]) != matchSet.end());
   }
 
   virtual void setUp()
   {
     MergerFactory::getInstance().clear();
-    MergerFactory::getInstance().registerCreator(new ConstrainedFakeCreator());
+    MergerFactory::getInstance().registerCreator(new OptimalConstrainedFakeCreator());
   }
 
   virtual void tearDown()

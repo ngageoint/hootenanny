@@ -74,8 +74,9 @@ public:
   }
 
   void runTest(const QString& inputFile, const int randomNumberGeneratorSeed,
-               const double generalizeProbability, const double epsilon, const QString& outputFile,
-               const QString& outputCompareFile, const bool enableDebugLogging = false)
+               const double generalizeProbability, const double epsilon, const int numNodesRemoved,
+               const QString& outputFile, const QString& outputCompareFile,
+               const bool enableDebugLogging = false)
   {
     Log::WarningLevel levelBefore = Log::getInstance().getLevel();
     if (enableDebugLogging)
@@ -116,8 +117,8 @@ public:
     map->visitRw(wayGeneralizeVisitor);
     MapProjector::projectToWgs84(map);
 
-    const int numNodesRemoved = numNodesBefore - map->getNodes().size();
-    CPPUNIT_ASSERT_EQUAL(0, numNodesRemoved);
+    const int numNodesActuallyRemoved = numNodesBefore - map->getNodes().size();
+    CPPUNIT_ASSERT_EQUAL(numNodesRemoved, numNodesActuallyRemoved);
     LOG_VARD(numNodesRemoved);
     const int numWaysRemoved = numWaysBefore - map->getWays().size();
     CPPUNIT_ASSERT_EQUAL(0, numWaysRemoved);
@@ -142,6 +143,7 @@ public:
       1,
       0.1,
       5.0,
+      2,
       _outputPath + "RandomWayGeneralizerTest-out-1.osm",
       _inputPath + "RandomWayGeneralizerTest-out-1.osm");
   }
@@ -153,6 +155,7 @@ public:
       1,
       0.5,
       5.0,
+      2,
       _outputPath + "RandomWayGeneralizerTest-out-2.osm",
       _inputPath + "RandomWayGeneralizerTest-out-2.osm");
   }
@@ -164,6 +167,7 @@ public:
       1,
       1.0,
       5.0,
+      17,
       _outputPath + "RandomWayGeneralizerTest-out-3.osm",
       _inputPath + "RandomWayGeneralizerTest-out-3.osm");
   }
@@ -175,6 +179,7 @@ public:
       1,
       0.1,
       10.0,
+      2,
       _outputPath + "RandomWayGeneralizerTest-out-4.osm",
       _inputPath + "RandomWayGeneralizerTest-out-4.osm");
   }
@@ -186,6 +191,7 @@ public:
       1,
       0.5,
       10.0,
+      2,
       _outputPath + "RandomWayGeneralizerTest-out-5.osm",
       _inputPath + "RandomWayGeneralizerTest-out-5.osm");
   }
@@ -197,6 +203,7 @@ public:
       1,
       1.0,
       10.0,
+      21,
       _outputPath + "RandomWayGeneralizerTest-out-6.osm",
       _inputPath + "RandomWayGeneralizerTest-out-6.osm");
   }
@@ -208,6 +215,7 @@ public:
       1,
       0.1,
       50.0,
+      2,
       _outputPath + "RandomWayGeneralizerTest-out-7.osm",
       _inputPath + "RandomWayGeneralizerTest-out-7.osm");
   }
@@ -219,6 +227,7 @@ public:
       1,
       0.5,
       50.0,
+      2,
       _outputPath + "RandomWayGeneralizerTest-out-8.osm",
       _inputPath + "RandomWayGeneralizerTest-out-8.osm");
   }
@@ -230,6 +239,7 @@ public:
       1,
       1.0,
       50.0,
+      27,
       _outputPath + "RandomWayGeneralizerTest-out-9.osm",
       _inputPath + "RandomWayGeneralizerTest-out-9.osm");
   }

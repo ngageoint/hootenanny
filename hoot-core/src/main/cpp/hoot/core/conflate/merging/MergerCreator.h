@@ -28,8 +28,9 @@
 #define MERGECREATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/CreatorDescription.h>
 
 // Standard
@@ -40,7 +41,6 @@
 namespace hoot
 {
 
-class Match;
 class Merger;
 
 /**
@@ -76,7 +76,7 @@ public:
    * Returns true if m1 and m2 are conflicting. If the MergerCreator has no information on the two
    * input matches then false is returned.
    */
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const = 0;
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const = 0;
 
   virtual void setArguments(QStringList /*args*/) { throw IllegalArgumentException(); }
 };

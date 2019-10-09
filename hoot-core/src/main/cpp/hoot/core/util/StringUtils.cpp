@@ -37,7 +37,7 @@
 namespace hoot
 {
 
-QString StringUtils::secondsToDhms(const qint64 durationInMilliseconds)
+QString StringUtils::millisecondsToDhms(const qint64 durationInMilliseconds)
 {
   QString res;
   int duration = (int)(durationInMilliseconds / 1000);
@@ -85,6 +85,19 @@ bool StringUtils::hasDigit(const QString& input)
     }
   }
   return false;
+}
+
+bool StringUtils::isAlphaNumeric(const QString& input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    const QChar character = input.at(i);
+    if (!character.isLetterOrNumber())
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool StringUtils::isNumber(const QString& input)

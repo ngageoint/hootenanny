@@ -128,6 +128,8 @@ public:
     tagDist.setTagKeys(tagKeys);
     tagDist.setTokenize(tokenize);
 
+    // We may want to eventually consider refactoring this to write to a file support very large
+    // amounts of output.
     std::cout << tagDist.getTagCountsString(tagDist.getTagCounts(inputs));
 
     return 0;

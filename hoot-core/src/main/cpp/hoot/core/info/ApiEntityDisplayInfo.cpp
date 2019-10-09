@@ -74,7 +74,6 @@ public:
 static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
-
 QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 {
   LOG_TRACE("getDisplayInfoOps: " << optName);

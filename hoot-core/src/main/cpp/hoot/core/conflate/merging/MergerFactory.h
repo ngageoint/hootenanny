@@ -84,7 +84,8 @@ public:
    */
   static MergerFactory& getInstance();
 
-  bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+  bool isConflicting(const ConstOsmMapPtr& map,  const ConstMatchPtr& m1,
+                     const ConstMatchPtr& m2) const;
 
   /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.

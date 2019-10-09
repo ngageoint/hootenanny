@@ -267,11 +267,10 @@ function doExport(req, res, hash, input) {
         }
 
         //create command and run
-        command += 'hoot';
+        command += 'hoot convert -C NodeExport.conf';
         if (isFile) {
-            command += ' convert';
             if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
-	    if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
+            if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
                     command += ' -D convert.ops=hoot::SchemaTranslationOp';
@@ -287,7 +286,6 @@ function doExport(req, res, hash, input) {
                 if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
             }
         } else {
-            command += ' convert';
             if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];

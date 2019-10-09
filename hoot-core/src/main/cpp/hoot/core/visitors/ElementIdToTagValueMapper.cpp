@@ -22,37 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MAPSCORDINGSTATUSANDREFTAGVALIDATOR_H
-#define MAPSCORDINGSTATUSANDREFTAGVALIDATOR_H
+#include "ElementIdToTagValueMapper.h"
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-/**
- * Validates the tags of map for use in scoring
- */
-class MapScoringStatusAndRefTagValidator
+HOOT_FACTORY_REGISTER(ElementVisitor, ElementIdToTagValueMapper)
+
+ElementIdToTagValueMapper::ElementIdToTagValueMapper()
 {
-
-public:
-
-  MapScoringStatusAndRefTagValidator();
-
-  /**
-   * Ensures that all elements with status Unknown1 have no REF2 tags and that all elements with
-   * status Uknown2 have no REF1 tags
-   *
-   * @param map the map to be examined
-   * @return true if the tags meet the required conditions; false otherwise
-   */
-  static bool allTagsAreValid(const ConstOsmMapPtr& map);
-};
-
 }
 
-#endif // MAPSCORDINGSTATUSANDREFTAGVALIDATOR_H
+void ElementIdToTagValueMapper::addCriterion(const ElementCriterionPtr& e)
+{
+  _crit = e;
+}
+
+void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
+{
+  if (_tagKey.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("No keys specified for ElementIdToTagValueMapper.");
+  }
+
+  if (e->getTags().contains(_tagKey) && (!_crit || _crit->isSatisfied(e)))
+  {
+    LOG_TRACE(e->getElementId() << ";" << e->getTags()[_tagKey]);
+    _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];
+    _numAffected++;
+  }
+}
+
+}

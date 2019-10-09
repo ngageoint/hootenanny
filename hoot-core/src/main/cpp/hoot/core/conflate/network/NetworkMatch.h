@@ -54,7 +54,7 @@ public:
   /**
    * Classifies the match and returns a classification object.
    */
-  virtual const MatchClassification& getClassification() const { return _classification; }
+  virtual const MatchClassification& getClassification() const override { return _classification; }
 
   ConstNetworkDetailsPtr getNetworkDetails() const { return _details; }
 
@@ -64,28 +64,28 @@ public:
    * This may require modification if the network matcher ever matches things besides lines. E.g.
    * river polygons.
    */
-  virtual MatchMembers getMatchMembers() const { return MatchMembers::Polyline; }
+  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polyline; }
 
   /**
    * As new network matching routines are introduced this will need to be modified. E.g. Railway
    */
-  virtual QString getMatchName() const { return HighwayMatch::getHighwayMatchName(); }
+  virtual QString getMatchName() const override { return HighwayMatch::getHighwayMatchName(); }
 
-  virtual double getScore() const { return getProbability(); }
+  virtual double getScore() const override { return getProbability(); }
 
-  virtual double getProbability() const { return _classification.getMatchP(); }
+  virtual double getProbability() const override { return _classification.getMatchP(); }
 
   /**
    * Returns true if any of the elements in this are also in other's match pairs.
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
 
   /**
    * Returns true if either of the matched strings contains a non-whole edge.
    */
   bool isPartialMatch() const { return _edgeMatch->containsPartial(); }
 
-  virtual bool isWholeGroup() const { return true; }
+  virtual bool isWholeGroup() const override { return true; }
 
   /**
    * Returns a set of pairs that this match represents. For instance, if this match represents
@@ -100,17 +100,17 @@ public:
    * In general Unknown1 should be the status of the first element and Unknown2 the status of the
    * second element.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const { return _pairs; }
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override { return _pairs; }
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual MatchType getType() const { return _threshold->getType(getClassification()); }
+  virtual MatchType getType() const override { return _threshold->getType(getClassification()); }
 
   bool isVerySimilarTo(const NetworkMatch* other) const;
 
   bool contains(const NetworkMatch* other) const;
 
-  virtual QString getDescription() const { return "Matches roads with the Network Algorithm"; }
+  virtual QString getDescription() const override { return "Matches roads with the Network Algorithm"; }
 
 protected:
 

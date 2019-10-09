@@ -27,9 +27,9 @@
 #include "NetworkMatch.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <math.h>
@@ -148,9 +148,9 @@ void NetworkMatch::_discoverWayPairs(ConstOsmMapPtr map, ConstEdgeMatchPtr edgeM
   LOG_VART(_pairs);
 }
 
-bool NetworkMatch::isConflicting(const Match& other, const ConstOsmMapPtr& /*map*/) const
+bool NetworkMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/) const
 {
-  set<pair<ElementId, ElementId>> s = other.getMatchPairs();
+  set<pair<ElementId, ElementId>> s = other->getMatchPairs();
 
   // if any element ids overlap then they're conflicting.
   for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)

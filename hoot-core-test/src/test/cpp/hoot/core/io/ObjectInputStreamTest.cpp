@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -89,7 +89,7 @@ public:
 
     ObjectInputStream uut(ss);
 
-    TestClass* tc = uut.readObject<TestClass>();
+    std::shared_ptr<TestClass> tc(uut.readObject<TestClass>());
 
     CPPUNIT_ASSERT_EQUAL(42, tc->a);
     CPPUNIT_ASSERT_EQUAL(-1, tc->b);

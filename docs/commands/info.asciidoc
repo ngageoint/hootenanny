@@ -210,14 +210,23 @@ info --formats [--input] [--output] [--input-bounded]
 ==== Example
 
 --------------------------------------
-# prints all
+# prints all supported input and output formats
 hoot info --formats
 
+# prints supported input formats
 hoot info --formats --input
 
+# prints streamable supported input formats
+hoot info --formats --input-streamable
+
+# prints supported input formats that support bounded reading
+hoot info --formats --input-bounded
+
+# prints supported output formats
 hoot info --formats --output
 
-hoot info --formats --input-bounded
+# prints streamable supported input formats
+hoot info --formats --output-streamable
 --------------------------------------
 
 === Geometry Type Criteria

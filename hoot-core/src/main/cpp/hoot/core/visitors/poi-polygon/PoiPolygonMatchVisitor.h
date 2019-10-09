@@ -35,6 +35,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -50,11 +51,11 @@ class PoiPolygonMatchVisitor : public ConstElementVisitor
 
 public:
 
-  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                          ElementCriterionPtr filter = ElementCriterionPtr());
-  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+  PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                          ConstMatchThresholdPtr threshold,
-                         std::shared_ptr<PoiPolygonRfClassifier> rf,
+                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
@@ -78,7 +79,7 @@ private:
   friend class PoiPolygonMatchVisitorTest;
 
   const ConstOsmMapPtr& _map;
-  std::vector<const Match*>& _result;
+  std::vector<ConstMatchPtr>& _result;
   std::set<ElementId> _empty;
   int _neighborCountMax;
   int _neighborCountSum;
@@ -107,6 +108,8 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
   ElementCriterionPtr _filter;
+
+  PoiPolygonCachePtr _infoCache;
 
   void _checkForMatch(const std::shared_ptr<const Element>& e);
   void _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);

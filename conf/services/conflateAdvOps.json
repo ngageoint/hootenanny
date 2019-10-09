@@ -486,7 +486,7 @@
                 "hoot_key":"unify.optimizer.time.limit"
             }
         ]
-    }, 
+    },
     {
         "id":"hoot_road_options",
         "elem_type":"group",
@@ -841,22 +841,6 @@
                 "description":"If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
                 "name":"Merge Many to Many Matches",
                 "hoot_key":"building.merge.many.to.many.matches"
-            },
-            {
-            	"id":"building_outline_update_op_remove_building_relations",
-                "elem_type":"bool",
-                "defaultvalue":"false",
-                "description":"If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
-                "name":"Remove Building Relations",
-                "hoot_key":"building.outline.update.op.remove.building.relations"
-            },
-            {
-              "id": "building_remove_building_relations",
-              "elem_type": "bool",
-              "description": "If true, when building outlines are updated the updater will remove the source building relations used to create the outline multipolygon relation.  If false, both source building relations and outline multipolygon relations will remain.",
-              "name": "Remove Building Relations",
-              "defaultvalue": "false",
-              "hoot_key": "building.outline.update.op.remove.building.relations"
             },
             {
             	"id":"building_review_if_secondary_newer",

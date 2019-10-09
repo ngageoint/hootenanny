@@ -101,7 +101,7 @@ public:
    * Two matches can only be conflicting if they contain the same ElementIds in getMatchPairs().
    *
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const = 0;
+  virtual bool isConflicting(const std::shared_ptr<const Match>& other, const ConstOsmMapPtr& map) const = 0;
 
   /**
    * If the match should _not_ be optimized into a group of non-conflicting matches, then this
@@ -157,7 +157,10 @@ protected:
   const std::shared_ptr<const MatchThreshold> _threshold;
 };
 
-inline std::ostream& operator<<(std::ostream & o, const Match* m)
+typedef std::shared_ptr<Match> MatchPtr;
+typedef std::shared_ptr<const Match> ConstMatchPtr;
+
+inline std::ostream& operator<<(std::ostream & o, ConstMatchPtr m)
 {
   o << m->toString().toStdString();
   return o;
@@ -168,7 +171,7 @@ inline std::ostream& operator<<(std::ostream & o, const Match* m)
  */
 struct MatchPtrComparator
 {
-  bool operator() (const Match* m1, const Match* m2) const
+  bool operator() (ConstMatchPtr m1, ConstMatchPtr m2) const
   {
     return m1->_order < m2->_order;
   }

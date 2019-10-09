@@ -119,22 +119,22 @@ public:
   static NodePtr createNode(OsmMapPtr map, Status status, double x, double y,
     Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, Status s, geos::geom::Coordinate c[],
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), const QString& note = "");
+  static WayPtr createWay(
+    OsmMapPtr map, Status s, geos::geom::Coordinate c[],
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
+    const QString& note = "");
 
-  static WayPtr createWay(OsmMapPtr map, geos::geom::Coordinate c[],
-                          Status status = Status::Unknown1,
-                          Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-                          Tags tags = Tags());
+  static WayPtr createWay(
+    OsmMapPtr map, geos::geom::Coordinate c[], Status status = Status::Unknown1,
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
-  static WayPtr createWay(OsmMapPtr map, const QList<NodePtr>& nodes,
-                          Status status = Status::Unknown1,
-                          Meters circularError = ConfigOptions().getCircularErrorDefaultValue(),
-                          Tags tags = Tags());
+  static WayPtr createWay(
+    OsmMapPtr map, const QList<NodePtr>& nodes, Status status = Status::Unknown1,
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
   static RelationPtr createRelation(
     OsmMapPtr map, const QList<ElementPtr>& elements, Status status = Status::Unknown1,
-    Meters circularError = ConfigOptions().getCircularErrorDefaultValue());
+    Meters circularError = ConfigOptions().getCircularErrorDefaultValue(), Tags tags = Tags());
 
   static ElementPtr getElementWithNote(OsmMapPtr map, QString note);
 
@@ -144,9 +144,11 @@ public:
    * @param map map containing the element
    * @param tagKey tag key to search for
    * @param tagValue tag value to search for
-   * @return Returns a single element with the intput tag key/value pair; fails if more than one element
+   * @return Returns a single element with the intput tag key/value pair; fails if more than one
+   * element
    */
-  static ElementPtr getElementWithTag(OsmMapPtr map, const QString& tagKey, const QString& tagValue);
+  static ElementPtr getElementWithTag(
+    OsmMapPtr map, const QString& tagKey, const QString& tagValue);
 
   /**
    * Return the singleton instance.
@@ -177,7 +179,8 @@ public:
    */
   static QString toQuotedString(QString str);
 
-  static void verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath, const QString& outFilePath);
+  static void verifyStdMatchesOutputIgnoreDate(
+    const QString& stdFilePath, const QString& outFilePath);
 
   /**
    * Creates a folder path using QDir::mkpath in a more thread-safe way

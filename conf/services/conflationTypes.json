@@ -18,6 +18,7 @@
             "attribute.conflation.aggressive.highway.joining": "Aggressively join roads",
             "attribute.conflation.allow.reviews.by.score": "Allow reviews by score",
             "attribute.conflation.ref.tag.overwrite.exclude": "Reference feature tags not to be overwritten",
+            "attribute.conflation.suppress.building.tag.on.multipoly.relation.constituents": "Suppress building tags on multi-polygon relation building members",
             "attribute.conflation.update.building.outlines": "Update building outlines after conflation"
         }
     },
