@@ -35,7 +35,7 @@
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 namespace hoot
 {

@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>

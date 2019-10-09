@@ -137,12 +137,13 @@ void TileUtils::writeTilesToGeoJson(
   // process, then all of this "amenity" related logic can go away. These text replacements are
   // inefficient, but the tile files aren't generally going to get huge. Also our json I/O isn't
   // streamable, so it wouldn't be any more efficient, even it it could be used for this.
-  //FileUtils::replaceFully(osmTempFile.fileName(), "node_count", "amenity");
-  OsmMapPtr tempMap(new OsmMap());
-  OsmMapReaderFactory::read(tempMap, true, true, osmTempFile.fileName());
-  TagRenameKeyVisitor keyVis1("node_count", "amenity");
-  tempMap->visitWaysRw(keyVis1);
-  OsmMapWriterFactory::write(tempMap, osmTempFile.fileName());
+  FileUtils::replaceFully(
+    osmTempFile.fileName(), QStringList("node_count"), QStringList("amenity"));
+//  OsmMapPtr tempMap(new OsmMap());
+//  OsmMapReaderFactory::read(tempMap, true, true, osmTempFile.fileName());
+//  TagRenameKeyVisitor keyVis1("node_count", "amenity");
+//  tempMap->visitWaysRw(keyVis1);
+//  OsmMapWriterFactory::write(tempMap, osmTempFile.fileName());
 
   QFile outFile(outputPath);
   if (outFile.exists() && !outFile.remove())
@@ -153,8 +154,11 @@ void TileUtils::writeTilesToGeoJson(
 
   // exporting as multipolygons, as that's what the Tasking Manager expects; The fields available
   // to select are configured in osmconf.ini. See note about "amenity" above.
+//  const QString cmd =
+//    "ogr2ogr -f GeoJSON -select \"name,boundary,amenity,osm_way_id\" " + outputPath + " " +
+//    osmTempFile.fileName() + " multipolygons";
   const QString cmd =
-    "ogr2ogr -f GeoJSON -select \"name,boundary,amenity,osm_way_id\" " + outputPath + " " +
+    "ogr2ogr -f GeoJSON -select \"name,amenity,osm_way_id\" " + outputPath + " " +
     osmTempFile.fileName() + " multipolygons";
   LOG_VARD(cmd);
   LOG_INFO("Writing output to " << outputPath);
@@ -166,26 +170,26 @@ void TileUtils::writeTilesToGeoJson(
       ".  Status: " + QString::number(retval));
   }
 
-//  // see note above about amenity
-//  QStringList textsToReplace;
-//  textsToReplace("amenity");
-//  // for this one, just wanted to see it as "task" instead of "osm_way_id"; alternatively could have
-//  // hacked another ogr field for this, but not really gaining anything by doing that
-//  textsToReplace("osm_way_id");
-//  QStringList replacementTexts;
-//  replacementTexts("node_count");
-//  replacementTexts("task");
-//  FileUtils::replaceFully(outputPath, textsToReplace, replacementTexts);
-  tempMap.reset(new OsmMap());
-  OsmMapReaderFactory::read(tempMap, true, true, outputPath);
-  TagRenameKeyVisitor keyVis2("amenity", "node_count");
-  tempMap->visitWaysRw(keyVis2);
-  keyVis2.setOldKey("osm_way_id");
-  keyVis2.setNewKey("task");
-  tempMap->visitWaysRw(keyVis2);
-  RemoveTagsVisitor removeVis(QStringList("boundary"));
-  tempMap->visitWaysRw(removeVis);
-  OsmMapWriterFactory::write(tempMap, outputPath);
+  // see note above about amenity
+  QStringList textsToReplace;
+  textsToReplace.append("amenity");
+  // for this one, just wanted to see it as "task" instead of "osm_way_id"; alternatively could have
+  // hacked another ogr field for this, but not really gaining anything by doing that
+  textsToReplace.append("osm_way_id");
+  QStringList replacementTexts;
+  replacementTexts.append("node_count");
+  replacementTexts.append("task");
+  FileUtils::replaceFully(outputPath, textsToReplace, replacementTexts);
+//  tempMap.reset(new OsmMap());
+//  OsmMapReaderFactory::read(tempMap, true, true, outputPath);
+//  TagRenameKeyVisitor keyVis2("amenity", "node_count");
+//  tempMap->visitWaysRw(keyVis2);
+//  keyVis2.setOldKey("osm_way_id");
+//  keyVis2.setNewKey("task");
+//  tempMap->visitWaysRw(keyVis2);
+//  RemoveTagsVisitor removeVis(QStringList("boundary"));
+//  tempMap->visitWaysRw(removeVis);
+//  OsmMapWriterFactory::write(tempMap, outputPath);
 }
 
 void TileUtils::writeTilesToOsm(

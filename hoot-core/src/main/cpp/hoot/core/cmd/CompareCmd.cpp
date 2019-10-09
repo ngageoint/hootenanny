@@ -35,7 +35,7 @@
 #include <hoot/core/scoring/RasterComparator.h>
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
