@@ -39,6 +39,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <numeric>
@@ -315,7 +316,9 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
       }
     }
   }
-  LOG_INFO("Collected " << _samples.size() << " samples from " << matches.size() << " matches.");
+  LOG_INFO(
+    "Collected " << StringUtils::formatLargeNumber(_samples.size()) << " samples from " <<
+    StringUtils::formatLargeNumber(matches.size()) << " matches.");
 }
 
 void MatchFeatureExtractor::_resampleClasses()

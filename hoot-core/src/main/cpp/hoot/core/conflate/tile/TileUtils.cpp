@@ -34,6 +34,9 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/visitors/TagRenameKeyVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -115,8 +118,8 @@ void TileUtils::writeTilesToGeoJson(
   const bool selectSingleRandomTile, int randomSeed)
 {
   // write out to temp osm and then use ogr2ogr to convert to geojson; trying to remember, but I
-  // believe our geojson writer wouldn't quite give the output format needed for this, which is
-  // why ogr2ogr is used here...but that's worth verifying.
+  // believe our geojson writer wouldn't quite give the geometry output format needed for this,
+  // which is why ogr2ogr is used here...but that's worth verifying now.
 
   QTemporaryFile osmTempFile("/tmp/tiles-calculate-temp-XXXXXX.osm");
   if (!osmTempFile.open())
@@ -129,10 +132,17 @@ void TileUtils::writeTilesToGeoJson(
 
   // hack - To get around having to modify osmconf.ini, hijacking the "amenity" field here since its
   // supported in the default configuration. Doing this allows the ogr2ogr select to bring back the
-  // node counts. If we decide we want to modify the default osmconf.ini as part of the build
+  // node counts. We can get away with this b/c there's no actual element data other than the tiles
+  // in this file. If we decide we want to modify the default osmconf.ini as part of the build
   // process, then all of this "amenity" related logic can go away. These text replacements are
-  // inefficient, but the tile files aren't generally going to get huge.
-  FileUtils::replaceFully(osmTempFile.fileName(), "node_count", "amenity");
+  // inefficient, but the tile files aren't generally going to get huge. Also our json I/O isn't
+  // streamable, so it wouldn't be any more efficient, even it it could be used for this.
+  //FileUtils::replaceFully(osmTempFile.fileName(), "node_count", "amenity");
+  OsmMapPtr tempMap(new OsmMap());
+  OsmMapReaderFactory::read(tempMap, true, true, osmTempFile.fileName());
+  TagRenameKeyVisitor keyVis1("node_count", "amenity");
+  tempMap->visitWaysRw(keyVis1);
+  OsmMapWriterFactory::write(tempMap, osmTempFile.fileName());
 
   QFile outFile(outputPath);
   if (outFile.exists() && !outFile.remove())
@@ -156,8 +166,26 @@ void TileUtils::writeTilesToGeoJson(
       ".  Status: " + QString::number(retval));
   }
 
-  // see note above
-  FileUtils::replaceFully(outputPath, "amenity", "node_count");
+//  // see note above about amenity
+//  QStringList textsToReplace;
+//  textsToReplace("amenity");
+//  // for this one, just wanted to see it as "task" instead of "osm_way_id"; alternatively could have
+//  // hacked another ogr field for this, but not really gaining anything by doing that
+//  textsToReplace("osm_way_id");
+//  QStringList replacementTexts;
+//  replacementTexts("node_count");
+//  replacementTexts("task");
+//  FileUtils::replaceFully(outputPath, textsToReplace, replacementTexts);
+  tempMap.reset(new OsmMap());
+  OsmMapReaderFactory::read(tempMap, true, true, outputPath);
+  TagRenameKeyVisitor keyVis2("amenity", "node_count");
+  tempMap->visitWaysRw(keyVis2);
+  keyVis2.setOldKey("osm_way_id");
+  keyVis2.setNewKey("task");
+  tempMap->visitWaysRw(keyVis2);
+  RemoveTagsVisitor removeVis(QStringList("boundary"));
+  tempMap->visitWaysRw(removeVis);
+  OsmMapWriterFactory::write(tempMap, outputPath);
 }
 
 void TileUtils::writeTilesToOsm(
@@ -228,8 +256,8 @@ void TileUtils::writeTilesToOsm(
       // for features recognized as polys configurable in osmconf.ini), which is the type of
       // output we want
       bbox->setTag("boundary", "task_grid_cell");
-      const QString tileName = "Task Grid Cell #" + QString::number(bboxCtr);
-      bbox->setTag("name", tileName);
+      //const QString tileName = "Task Grid Cell #" + QString::number(bboxCtr);
+      //bbox->setTag("name", tileName);
       const long nodeCount = nodeCounts[tx][ty];
       bbox->setTag("node_count", QString::number(nodeCount));
 

@@ -140,11 +140,19 @@ void FileUtils::writeFully(const QString& path, const QString& text)
   outFile.close();
 }
 
-void FileUtils::replaceFully(const QString& path, const QString& textToReplace,
-                             const QString& replacementText)
+void FileUtils::replaceFully(const QString& path, const QStringList& textsToReplace,
+                             const QStringList& replacementTexts)
 {
+  if (textsToReplace.size() != replacementTexts.size())
+  {
+    throw IllegalArgumentException("Texts to replace not the same size as the replacements texts.");
+  }
+
   QString input = readFully(path);
-  input = input.replace(textToReplace, replacementText);
+  for (int i = 0; i < textsToReplace.size(); i++)
+  {
+    input = input.replace(textsToReplace.at(i), replacementTexts.at(i));
+  }
   writeFully(path, input);
 }
 

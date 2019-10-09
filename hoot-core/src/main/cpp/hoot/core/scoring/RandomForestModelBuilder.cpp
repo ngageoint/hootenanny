@@ -36,6 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/IoUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <hoot/core/io/ArffToRfConverter.h>
 
@@ -91,7 +92,8 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
 
     mfe.processMap(map);
   }
-  LOG_INFO("Processed " << mfe.getSamples().size() << " total samples.");
+  LOG_INFO(
+    "Processed " << StringUtils::formatLargeNumber(mfe.getSamples().size()) << " total samples.");
 
   ArffWriter aw(output + ".arff", true);
   aw.write(mfe.getSamples());

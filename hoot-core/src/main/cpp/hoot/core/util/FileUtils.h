@@ -79,11 +79,11 @@ public:
    * TODO
    *
    * @param path
-   * @param textToReplace
-   * @param replacementText
+   * @param textsToReplace
+   * @param replacementTexts
    */
-  static void replaceFully(const QString& path, const QString& textToReplace,
-                           const QString& replacementText);
+  static void replaceFully(const QString& path, const QStringList& textsToReplace,
+                           const QStringList& replacementTexts);
 
   /**
    * Returns the number of lines in a file
