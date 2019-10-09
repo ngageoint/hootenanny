@@ -76,6 +76,16 @@ public:
   static void writeFully(const QString& path, const QString& text);
 
   /**
+   * TODO
+   *
+   * @param path
+   * @param textToReplace
+   * @param replacementText
+   */
+  static void replaceFully(const QString& path, const QString& textToReplace,
+                           const QString& replacementText);
+
+  /**
    * Returns the number of lines in a file
    *
    * @param file file to examine

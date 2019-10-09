@@ -140,6 +140,14 @@ void FileUtils::writeFully(const QString& path, const QString& text)
   outFile.close();
 }
 
+void FileUtils::replaceFully(const QString& path, const QString& textToReplace,
+                             const QString& replacementText)
+{
+  QString input = readFully(path);
+  input = input.replace(textToReplace, replacementText);
+  writeFully(path, input);
+}
+
 long FileUtils::getNumberOfLinesInFile(const QString& file)
 {
   std::ifstream inFile(file.toStdString().c_str());

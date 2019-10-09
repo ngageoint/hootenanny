@@ -147,7 +147,19 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   std::vector<std::vector<geos::geom::Envelope>> calculateTiles();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  std::vector<std::vector<long>> getNodeCounts() const { return _nodeCounts; }
 
   void renderImage(const std::shared_ptr<OsmMap>& map);
 
@@ -189,6 +201,7 @@ private:
   int32_t _maxValue;
   long _maxNodeCountInOneTile;
   long _minNodeCountInOneTile;
+  std::vector<std::vector<long>> _nodeCounts;
 
   void _calculateMin();
 

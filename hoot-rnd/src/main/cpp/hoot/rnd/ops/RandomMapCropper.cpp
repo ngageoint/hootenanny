@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/TileUtils.h>
+#include <hoot/core/conflate/tile/TileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
@@ -87,18 +87,19 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   // TODO: Can we intelligently calculate pixel size here somehow?
   long minNodeCountInOneTile = 0;
   long maxNodeCountInOneTile = 0;
+  std::vector<std::vector<long>> nodeCounts;
   const std::vector<std::vector<geos::geom::Envelope>> tiles =
     TileUtils::calculateTiles(
-      _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile);
+      _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile, nodeCounts);
   if (!_tileFootprintOutputPath.isEmpty())
   {
     if (_tileFootprintOutputPath.toLower().endsWith(".geojson"))
     {
-      TileUtils::writeTilesToGeoJson(tiles, _tileFootprintOutputPath);
+      TileUtils::writeTilesToGeoJson(tiles, nodeCounts, _tileFootprintOutputPath);
     }
     else
     {
-      TileUtils::writeTilesToOsm(tiles, _tileFootprintOutputPath);
+      TileUtils::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
     }
     LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
