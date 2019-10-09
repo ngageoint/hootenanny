@@ -148,16 +148,17 @@ public:
   TileBoundsCalculator(double pixelSize);
 
   /**
-   * TODO
+   * Calculates a set of rectangular bounding boxes that at most contain a configured set of nodes;
+   * strives to return a set of tiles with the most balanced number of nodes possible
    *
-   * @return
+   * @return a grid of tile bounding boxes
    */
   std::vector<std::vector<geos::geom::Envelope>> calculateTiles();
 
   /**
-   * TODO
+   * Returns the node counts for each computed tile bounding box
    *
-   * @return
+   * @return a grid of node counts
    */
   std::vector<std::vector<long>> getNodeCounts() const { return _nodeCounts; }
 

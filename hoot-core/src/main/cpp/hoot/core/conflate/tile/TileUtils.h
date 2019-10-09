@@ -39,8 +39,6 @@ namespace hoot
 
 /**
  * Utilities for dealing with node density based tiles
- *
- * @todo move to conflate/tile
  */
 class TileUtils
 {
@@ -56,8 +54,8 @@ public:
    * @param map the map containing the nodes
    * @param minNodeCountInOneTile the smallest number of nodes actually found in any one tile
    * @param maxNodeCountInOneTile the largest number of nodes actually found in any one tile
-   * @param nodeCounts TODO
-   * @return TODO
+   * @param nodeCounts a collection to store the number of node counts for each computed tile
+   * @return a grid of tile bounding boxes
    */
   static std::vector<std::vector<geos::geom::Envelope>>  calculateTiles(
     const long maxNodesPerTile, const double pixelSize, OsmMapPtr map,
@@ -79,7 +77,7 @@ public:
    *
    * @param tiles the collection of tiles from which to select
    * @param randomSeed optional random number generator seed
-   * @return TODO
+   * @return a random tile selected from the computed tiles
    */
   static geos::geom::Envelope getRandomTile(
     const std::vector<std::vector<geos::geom::Envelope>>& tiles, int randomSeed);
@@ -88,7 +86,7 @@ public:
    * Writes boundary tiles to a GeoJSON output file
    *
    * @param tiles the collection of tiles to write
-   * @param nodeCounts TODO
+   * @param nodeCounts a collection of the number of node counts for each computed tile
    * @param outputPath the output file path
    * @param selectSingleRandomTile
    * @param randomSeed optional random number generator seed
@@ -104,7 +102,7 @@ public:
    * Writes boundary tiles to an OSM output file
    *
    * @param tiles the collection of tiles to write
-   * @param nodeCounts TODO
+   * @param nodeCounts a collection of the number of node counts for each computed tile
    * @param outputPath the output file path
    * @param selectSingleRandomTile
    * @param randomSeed optional random number generator seed

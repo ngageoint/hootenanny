@@ -76,11 +76,11 @@ public:
   static void writeFully(const QString& path, const QString& text);
 
   /**
-   * TODO
+   * Replaces a set of texts in a file with another set of texts
    *
-   * @param path
-   * @param textsToReplace
-   * @param replacementTexts
+   * @param path path of the file to modify
+   * @param textsToReplace the texts in the file to be replaced
+   * @param replacementTexts the texts in the file to replace with
    */
   static void replaceFully(const QString& path, const QStringList& textsToReplace,
                            const QStringList& replacementTexts);
