@@ -22,12 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 using namespace geos::geom;
 
@@ -38,6 +39,7 @@ class AreaCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(AreaCriterionTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runPoiTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -84,6 +86,21 @@ public:
     t["leisure"] = "track";
     CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Way));
     CPPUNIT_ASSERT_EQUAL(false, uut.isSatisfied(t, ElementType::Relation));
+  }
+
+  void runPoiTest()
+  {
+    AreaCriterion uut;
+
+    geos::geom::Coordinate c[] = { Coordinate(0.0, 0.0), Coordinate(100.0, 0.0),
+                       Coordinate(100.0, 10.0), Coordinate(0.0, 10.0),
+                       Coordinate::getNull() };
+    Tags tags;
+    tags.set("poi", "yes");
+    OsmMapPtr map(new OsmMap());
+    ConstWayPtr w1 = TestUtils::createWay(map, c, Status::Unknown1, 15.0, tags);
+
+    CPPUNIT_ASSERT(!uut.isSatisfied(w1));
   }
 };
 

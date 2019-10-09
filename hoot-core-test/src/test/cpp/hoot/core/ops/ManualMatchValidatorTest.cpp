@@ -46,6 +46,7 @@ class ManualMatchValidatorTest : public HootTestFixture
   CPPUNIT_TEST(runEmptyIdTest);
   CPPUNIT_TEST(runInvalidIdComboTest);
   CPPUNIT_TEST(runMissingRef1Test);
+  CPPUNIT_TEST(runMissingRef1NotRequiredTest);
   CPPUNIT_TEST(runInvalidIdTest);
   CPPUNIT_TEST(runRepeatedIdTest);
   CPPUNIT_TEST(runStatusTest);
@@ -195,6 +196,34 @@ public:
     uut.apply(map);
 
     CPPUNIT_ASSERT(!uut.hasErrors());
+  }
+
+  void runMissingRef1NotRequiredTest()
+  {
+    // This makes ref1's corresponding to ref2/review effectively optional by logging warnings
+    // instead of errors.
+
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator warningItr;
+
+    uut.setRequireRef1(false);
+
+    tags.set(MetadataTags::Ref1(), "002c75");
+    TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    tags.clear();
+    tags.set(MetadataTags::Ref2(), "002da0");
+    ConstNodePtr ref2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(!uut.hasErrors());
+    CPPUNIT_ASSERT(uut.hasWarnings());
+    CPPUNIT_ASSERT(uut.getWarnings().size() == 1);
+    warningItr = uut.getWarnings().find(ref2->getElementId());
+    HOOT_STR_EQUALS("No REF1 exists for REF2=002da0", warningItr.value().toStdString());
   }
 
   void runInvalidIdTest()

@@ -342,9 +342,11 @@ void JsonOsmSchemaLoader::_loadGeometries(SchemaVertex& tv, const QVariant& v) c
     for (int i = 0; i < arr.size(); i++)
     {
       QString v = toString(_asString(arr[i])).toLower();
+      LOG_VART(v);
       uint16_t e = OsmGeometries::fromString(v);
       g |= e;
     }
+    LOG_VART(g);
 
     tv.geometries = g;
   }

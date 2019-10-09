@@ -3745,6 +3745,13 @@ command).
 
 Remove REF tags from nodes before match scoring when using the score-matches command.
 
+=== score.matches.require.ref1
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === script.test.max.exec.time
 
 * Data Type: int
