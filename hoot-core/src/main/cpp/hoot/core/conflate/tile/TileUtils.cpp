@@ -34,9 +34,6 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/visitors/TagRenameKeyVisitor.h>
-#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -130,20 +127,18 @@ void TileUtils::writeTilesToGeoJson(
   LOG_VARD(osmTempFile.fileName());
   writeTilesToOsm(tiles, nodeCounts, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
 
-  // hack - To get around having to modify osmconf.ini, hijacking the "amenity" field here since its
-  // supported in the default configuration. Doing this allows the ogr2ogr select to bring back the
-  // node counts. We can get away with this b/c there's no actual element data other than the tiles
-  // in this file. If we decide we want to modify the default osmconf.ini as part of the build
-  // process, then all of this "amenity" related logic can go away. These text replacements are
-  // inefficient, but the tile files aren't generally going to get huge. Also our json I/O isn't
-  // streamable, so it wouldn't be any more efficient, even it it could be used for this.
+  // hack - To get around having to modify osmconf.ini, arbitrarily hijacking the "amenity" field
+  // here since its supported in the default ogr configuration. Doing this allows the ogr2ogr select
+  // to bring back the node counts. We can get away with this b/c there's no actual element data
+  // that could actually have an amenity tag...only tiles outlines in this file. If we decide we
+  // want to modify the default osmconf.ini as part of the build process to include a "node_count"
+  // tag, then all of this "amenity" related logic can go away. These full file  text replacements
+  // are inefficient, but the tile files aren't generally going to get huge. Ideally, our geojson
+  // I/O class could be used, but it munges the output (see above).
+
+  // replace "node_count" in the osm file with "amenity", so ogr can read it
   FileUtils::replaceFully(
     osmTempFile.fileName(), QStringList("node_count"), QStringList("amenity"));
-//  OsmMapPtr tempMap(new OsmMap());
-//  OsmMapReaderFactory::read(tempMap, true, true, osmTempFile.fileName());
-//  TagRenameKeyVisitor keyVis1("node_count", "amenity");
-//  tempMap->visitWaysRw(keyVis1);
-//  OsmMapWriterFactory::write(tempMap, osmTempFile.fileName());
 
   QFile outFile(outputPath);
   if (outFile.exists() && !outFile.remove())
@@ -154,11 +149,8 @@ void TileUtils::writeTilesToGeoJson(
 
   // exporting as multipolygons, as that's what the Tasking Manager expects; The fields available
   // to select are configured in osmconf.ini. See note about "amenity" above.
-//  const QString cmd =
-//    "ogr2ogr -f GeoJSON -select \"name,boundary,amenity,osm_way_id\" " + outputPath + " " +
-//    osmTempFile.fileName() + " multipolygons";
   const QString cmd =
-    "ogr2ogr -f GeoJSON -select \"name,amenity,osm_way_id\" " + outputPath + " " +
+    "ogr2ogr -f GeoJSON -select \"amenity,osm_way_id\" " + outputPath + " " +
     osmTempFile.fileName() + " multipolygons";
   LOG_VARD(cmd);
   LOG_INFO("Writing output to " << outputPath);
@@ -170,26 +162,17 @@ void TileUtils::writeTilesToGeoJson(
       ".  Status: " + QString::number(retval));
   }
 
-  // see note above about amenity
+  // restore the "node_count" tag key in place of the "amenity" tag key
   QStringList textsToReplace;
   textsToReplace.append("amenity");
-  // for this one, just wanted to see it as "task" instead of "osm_way_id"; alternatively could have
-  // hacked another ogr field for this, but not really gaining anything by doing that
+  // for this one, just wanted to see it shown as "task" instead of "osm_way_id"; we could make this
+  // configurable, if needed; alternatively could have hacked another ogr field for this purpose,
+  // but we're not really gaining anything by doing that
   textsToReplace.append("osm_way_id");
   QStringList replacementTexts;
   replacementTexts.append("node_count");
   replacementTexts.append("task");
   FileUtils::replaceFully(outputPath, textsToReplace, replacementTexts);
-//  tempMap.reset(new OsmMap());
-//  OsmMapReaderFactory::read(tempMap, true, true, outputPath);
-//  TagRenameKeyVisitor keyVis2("amenity", "node_count");
-//  tempMap->visitWaysRw(keyVis2);
-//  keyVis2.setOldKey("osm_way_id");
-//  keyVis2.setNewKey("task");
-//  tempMap->visitWaysRw(keyVis2);
-//  RemoveTagsVisitor removeVis(QStringList("boundary"));
-//  tempMap->visitWaysRw(removeVis);
-//  OsmMapWriterFactory::write(tempMap, outputPath);
 }
 
 void TileUtils::writeTilesToOsm(
@@ -258,12 +241,9 @@ void TileUtils::writeTilesToOsm(
 
       // gdal will recognize any closed way with the boundary tag as a polygon (tags
       // for features recognized as polys configurable in osmconf.ini), which is the type of
-      // output we want
+      // output we want...so we have to output this tag (can be removed after the fact)
       bbox->setTag("boundary", "task_grid_cell");
-      //const QString tileName = "Task Grid Cell #" + QString::number(bboxCtr);
-      //bbox->setTag("name", tileName);
-      const long nodeCount = nodeCounts[tx][ty];
-      bbox->setTag("node_count", QString::number(nodeCount));
+      bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
 
       if (!selectSingleRandomTile ||
           (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
