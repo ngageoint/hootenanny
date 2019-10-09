@@ -911,7 +911,7 @@ public:
     }
     catch (const HootException& e)
     {
-      exceptionMsg = e.what();\
+      exceptionMsg = e.what();
 
       reader.close();
 

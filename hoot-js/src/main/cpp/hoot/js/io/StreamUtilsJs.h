@@ -126,7 +126,7 @@ QString toJson(const v8::Local<T> object)
     v8::Handle<v8::String> s = v8::Handle<v8::String>::Cast(resultValue);
 
     size_t utf8Length = s->Utf8Length() + 1;
-    std::shared_ptr<char> buffer(new char[utf8Length]);
+    std::unique_ptr<char[]> buffer(new char[utf8Length]);
     s->WriteUtf8(buffer.get(), utf8Length);
 
     result = QString::fromUtf8(buffer.get());

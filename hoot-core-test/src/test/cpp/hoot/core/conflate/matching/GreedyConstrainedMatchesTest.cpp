@@ -189,13 +189,14 @@ public:
 
   virtual void setUp()
   {
-    MergerFactory::getInstance().clear();
-    MergerFactory::getInstance().registerCreator(new GreedyConstrainedFakeCreator());
+    MergerFactory::getInstance().reset();
+    MergerFactory::getInstance().registerCreator(
+          MergerCreatorPtr(new GreedyConstrainedFakeCreator()));
   }
 
   virtual void tearDown()
   {
-    MergerFactory::getInstance().clear();
+    MergerFactory::getInstance().reset();
     MergerFactory::getInstance().registerDefaultCreators();
   }
 };

@@ -52,7 +52,8 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
-  mergerFactory->registerCreator(new MultiaryPoiMergerCreator());
+  mergerFactory->registerCreator(
+        MergerCreatorPtr(new MultiaryPoiMergerCreator()));
 
   MatchThresholdPtr mt(new MatchThreshold(0.39, 0.61, 1.1));
 

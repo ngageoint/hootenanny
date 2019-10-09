@@ -431,7 +431,7 @@ void UnifyingConflator::_reset()
     _mergerFactory.reset(new MergerFactory());
     // register the mark for review merger first so all reviews get tagged before another merger
     // gets a chance.
-    _mergerFactory->registerCreator(new MarkForReviewMergerCreator());
+    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
     _mergerFactory->registerDefaultCreators();
   }
 
