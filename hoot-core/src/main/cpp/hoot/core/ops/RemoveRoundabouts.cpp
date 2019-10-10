@@ -63,6 +63,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
       _todoWays.push_back(it->first);
     }
   }
+  LOG_VART(_todoWays.size());
 
   // Make roundabout objects
   for (size_t i = 0; i < _todoWays.size(); i++)
