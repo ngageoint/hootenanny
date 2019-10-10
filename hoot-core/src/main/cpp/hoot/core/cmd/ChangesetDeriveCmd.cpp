@@ -49,7 +49,8 @@ public:
 
   virtual QString getName() const override { return "changeset-derive"; }
 
-  virtual QString getDescription() const override { return "Creates an OSM changeset"; }
+  virtual QString getDescription() const override
+  { return "Creates an OSM changeset representing the difference between two maps"; }
 
   virtual int runSimple(QStringList& args) override
   {

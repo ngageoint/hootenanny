@@ -54,8 +54,6 @@ public:
     // time. This makes the command list display a little cleaner and less confusing.
     _forceToRndList.append("build-model");
     _forceToRndList.append("changeset-derive-replacement");
-    _forceToRndList.append("generate-alpha-shape");
-    _forceToRndList.append("node-density-plot");
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perty");
     _forceToRndList.append("score-matches");
@@ -159,9 +157,9 @@ private:
 
     // Please update the asciidoc user documentation if you change this usage.
     cout << "usage: hoot <command> [--trace] [--debug] [--status] [--warn] [--error] " <<
-            "[-D name=value] [--conf <path>] [<args>]\n";
+            "[-D name=value] [-C <config file path>] [<args>]\n";
     cout << endl;
-    cout << "For detailed help on the following commands type: hoot help (command name)\n"
+    cout << "For detailed command help type: hoot help (command name)\n"
             "\n";
     _printCommands(coreCmds);
     cout << endl << "Advanced:" << endl << endl;

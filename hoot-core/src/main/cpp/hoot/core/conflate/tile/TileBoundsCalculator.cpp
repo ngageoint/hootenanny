@@ -146,22 +146,23 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
   }
 
   vector<vector<Envelope>> result;
-
   _maxNodeCountInOneTile = 0;
   _minNodeCountInOneTile = LONG_MAX;
   LOG_VARD(width);
   result.resize(width);
+  _nodeCounts.clear();
+  _nodeCounts.resize(width);
+
   for (size_t tx = 0; tx < width; tx++)
   {
     result[tx].resize(width);
+    _nodeCounts[tx].resize(width);
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
       LOG_VARD(pb.getWidth());
       LOG_VARD(pb.getHeight());
-      const long nodeCount = _sumPixels(pb);
-      _maxNodeCountInOneTile = std::max(_maxNodeCountInOneTile, nodeCount);
-      _minNodeCountInOneTile = std::min(_minNodeCountInOneTile, nodeCount);
+
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
         throw HootException(
@@ -169,6 +170,12 @@ vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
           QString("size or increasing the max nodes per pixel value. Current pixel box width: ") +
           QString::number(pb.getWidth()) + "; height: " + QString::number(pb.getHeight()));
       }
+
+      const long nodeCount = _sumPixels(pb);
+      _nodeCounts[tx][ty] = nodeCount;
+      _maxNodeCountInOneTile = std::max(_maxNodeCountInOneTile, nodeCount);
+      _minNodeCountInOneTile = std::min(_minNodeCountInOneTile, nodeCount);
+
       result[tx][ty] = _toEnvelope(pb);
     }
   }

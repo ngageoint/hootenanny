@@ -34,7 +34,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 

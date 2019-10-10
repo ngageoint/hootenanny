@@ -39,7 +39,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/ops/ManualMatchValidator.h>

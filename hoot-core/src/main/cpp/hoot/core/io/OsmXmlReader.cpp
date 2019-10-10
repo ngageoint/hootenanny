@@ -44,7 +44,7 @@
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // Qt
 #include <QBuffer>

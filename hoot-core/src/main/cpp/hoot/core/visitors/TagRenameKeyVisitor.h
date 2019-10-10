@@ -60,6 +60,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Renamed " + QString::number(_numAffected) + " tag keys"; }
 
+  void setOldKey(const QString& key) { _oldKey = key; }
+  void setNewKey(const QString& key) { _newKey = key; }
+
 private:
 
   QString _oldKey;
