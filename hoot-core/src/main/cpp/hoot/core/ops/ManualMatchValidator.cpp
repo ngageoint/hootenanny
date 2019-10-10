@@ -35,8 +35,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ManualMatchValidator)
 
 ManualMatchValidator::ManualMatchValidator() :
-_requireRef1(true)
+_requireRef1(true),
+_allowUuidManualMatchIds(false)
 {
+  _uuidRegEx.setPattern(
+    "\\{[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\}");
 }
 
 void ManualMatchValidator::apply(const OsmMapPtr& map)
@@ -75,6 +78,9 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 
 void ManualMatchValidator::_validate(const ConstElementPtr& element)
 {
+  LOG_VARD(_requireRef1);
+  LOG_VARD(_allowUuidManualMatchIds);
+
   // Just recording one error for each element for performance reasons, even if there are multiple.
 
   const Tags& tags = element->getTags();
@@ -267,8 +273,11 @@ bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
 
 bool ManualMatchValidator::_isValidUniqueMatchId(const QString& matchId) const
 {
-  // This corresponds with how AddRef1Visitor creates the ids.
-  return matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6));
+  return
+    // backward compatibility with the original uuid ids
+    (_allowUuidManualMatchIds && _uuidRegEx.exactMatch(matchId)) ||
+    // This corresponds with how AddRef1Visitor creates the ids.
+    (matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6)));
 }
 
 bool ManualMatchValidator::_isValidNonUniqueMatchId(const QString& matchId) const

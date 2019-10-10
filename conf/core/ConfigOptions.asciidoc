@@ -3738,6 +3738,15 @@ the "Translation" section of the Hootenanny User Guide.
 Export some of the images used when evaluating the graph connections between two maps (`score`
 command).
 
+=== score.matches.allow.uuids.as.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+The current manual match ID format is a 6 character hex string created by the AddRef*Visitor
+classes. This option allows backward compatibilty support for UUID ID formats that exist in some
+older manually matched input files.
+
 === score.matches.remove.nodes
 
 * Data Type: bool
@@ -3750,7 +3759,10 @@ Remove REF tags from nodes before match scoring when using the score-matches com
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+In some situations manually matched input data may need to be cropped to allow for smaller test
+runtimes. When this is done, sometimes REF1 features will be removed from the input. Disabling this
+option allows for score-matches to run when there are missing REF1 features. Warnings will be logged
+for any that are found.
 
 === script.test.max.exec.time
 

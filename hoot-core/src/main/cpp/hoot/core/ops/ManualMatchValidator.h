@@ -102,6 +102,7 @@ public:
   bool hasWarnings() const { return _warnings.size() > 0; }
 
   void setRequireRef1(bool require) { _requireRef1 = require; }
+  void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
 
 private:
 
@@ -110,6 +111,12 @@ private:
   ElementIdToTagValueMapper _ref1Mappings;
   // if true, every ref2/review id must have a correponding ref1 id in order to not trigger an error
   bool _requireRef1;
+  // The original manual matching implementation used uuids as ids instead of the 6 char hex used
+  // now, since manual matchers found the uuids a little unwieldy. There are still some regression
+  // tests with the uuid ids, so to avoid the cost of redoing the matches we'll support them on a
+  // case by case basis.
+  bool _allowUuidManualMatchIds;
+  QRegExp _uuidRegEx;
 
   void _validate(const ConstElementPtr& element);
 
