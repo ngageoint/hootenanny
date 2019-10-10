@@ -103,20 +103,26 @@ public:
 
   void setRequireRef1(bool require) { _requireRef1 = require; }
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
+  void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
 
 private:
 
   QMap<ElementId, QString> _errors;
   QMap<ElementId, QString> _warnings;
   ElementIdToTagValueMapper _ref1Mappings;
+
   // if true, every ref2/review id must have a correponding ref1 id in order to not trigger an error
   bool _requireRef1;
+
   // The original manual matching implementation used uuids as ids instead of the 6 char hex used
   // now, since manual matchers found the uuids a little unwieldy. There are still some regression
   // tests with the uuid ids, so to avoid the cost of redoing the matches we'll support them on a
   // case by case basis.
   bool _allowUuidManualMatchIds;
   QRegExp _uuidRegEx;
+
+  // TODO
+  bool _fullDebugOutput;
 
   void _validate(const ConstElementPtr& element);
 

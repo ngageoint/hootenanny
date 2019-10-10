@@ -54,6 +54,7 @@ class ManualMatchValidatorTest : public HootTestFixture
   CPPUNIT_TEST(runMultipleRef1Test);
   CPPUNIT_TEST(runInvalidMultipleIdTest);
   CPPUNIT_TEST(runDuplicateIdTest);
+  CPPUNIT_TEST(runFullDebugOutputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -576,6 +577,29 @@ public:
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
     HOOT_STR_EQUALS("Duplicate ID found in REVIEW=002da0;002da0", errorItr.value().toStdString());
+  }
+
+  void runFullDebugOutputTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
+
+    uut.setFullDebugOutput(true);
+
+    tags.set(MetadataTags::Ref2(), "002da0;002da0");
+    tags.set("blah", "bleh");
+    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS(
+      "Duplicate ID found in REF2=002da0;002da0; tags: blah = bleh\n",
+      errorItr.value().toStdString());
   }
 };
 

@@ -218,6 +218,7 @@ private:
     ManualMatchValidator inputValidator;
     inputValidator.setRequireRef1(ConfigOptions().getScoreMatchesRequireRef1());
     inputValidator.setAllowUuidManualMatchIds(ConfigOptions().getScoreMatchesAllowUuidsAsIds());
+    inputValidator.setFullDebugOutput(ConfigOptions().getScoreMatchesFullDebugOutput());
     inputValidator.getInitStatusMessage();
     inputValidator.apply(map);
     inputValidator.getCompletedStatusMessage();

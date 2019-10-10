@@ -3747,6 +3747,13 @@ The current manual match ID format is a 6 character hex string created by the Ad
 classes. This option allows backward compatibilty support for UUID ID formats that exist in some
 older manually matched input files.
 
+=== score.matches.full.debug.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Adds more detail to manual match validation warning/error messages.
+
 === score.matches.remove.nodes
 
 * Data Type: bool

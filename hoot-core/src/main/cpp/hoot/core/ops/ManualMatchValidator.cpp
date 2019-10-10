@@ -36,7 +36,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, ManualMatchValidator)
 
 ManualMatchValidator::ManualMatchValidator() :
 _requireRef1(true),
-_allowUuidManualMatchIds(false)
+_allowUuidManualMatchIds(false),
+_fullDebugOutput(false)
 {
   _uuidRegEx.setPattern(
     "\\{[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\}");
@@ -233,17 +234,31 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString message,
                                         const bool isError)
 {
+  // It can be tough to track down problems in elements without unique tags, since the source file
+  // element IDs won't necessarily match the element IDs here.
   Tags tags = element->getTags();
-  Tags::const_iterator tagItr = tags.find(MetadataTags::Uuid());
-  if (tagItr != tags.end())
+  tags.remove(MetadataTags::Ref1());
+  tags.remove(MetadataTags::Ref2());
+  tags.remove(MetadataTags::Review());
+  if (!_fullDebugOutput)
   {
-    // It can be rough to track down problems in elements without unique tags, so we'll take
-    // advantage here if an element has a uuid. score-matches adds uuids, but that's done after
-    // reading the source file, so not much help when its time to find the problem in the source
-    // file itself.
+    Tags::const_iterator tagItr = tags.find(MetadataTags::Uuid());
+    if (tagItr != tags.end())
+    {
+      // We'll take advantage here if an element has a uuid. score-matches adds uuids, but that's
+      // done after reading the source file, so not much help when its time to find the problem in
+      // the source file itself.
 
-    message += "; uuid=" + tagItr.value();
+      message += "; uuid=" + tagItr.value();
+    }
   }
+  else
+  {
+    // Here we'll just add all the tags.
+
+    message += "; tags: " + tags.toString();
+  }
+
   LOG_VART(message);
   if (isError)
   {
