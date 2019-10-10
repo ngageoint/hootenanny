@@ -161,4 +161,23 @@ void StringUtils::removeEmptyStrings(QStringList& strings)
   strings = output;
 }
 
+QSet<QString> StringUtils::getDuplicates(const QStringList& input)
+{
+  QSet<QString> duplicateStrings;
+  QSet<QString> uniqueStrings;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString str = input.at(i);
+    if (uniqueStrings.contains(str))
+    {
+      duplicateStrings.insert(str);
+    }
+    else
+    {
+      uniqueStrings.insert(str);
+    }
+  }
+  return duplicateStrings;
+}
+
 }

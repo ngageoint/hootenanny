@@ -85,6 +85,13 @@ public:
       args.removeAll("--optimize");
       optimizeThresholds = true;
     }
+    bool validateManualMatches = true;
+    if (args.contains("--validation-off"))
+    {
+      args.removeAll("--validation-off");
+      validateManualMatches = false;
+    }
+
     if (args.size() < 3 || args.size() % 2 != 1)
     {
       LOG_VAR(args);
@@ -107,7 +114,7 @@ public:
       IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
 
       // If any of the map files have errors, we'll print some out and terminate.
-      if (_validateMatches(map, map1Path, map2Path))
+      if (validateManualMatches && _validateMatches(map, map1Path, map2Path))
       {
         return 1;
       }
@@ -217,6 +224,8 @@ private:
 
     ManualMatchValidator inputValidator;
     inputValidator.setRequireRef1(ConfigOptions().getScoreMatchesRequireRef1());
+    inputValidator.setAllowUuidManualMatchIds(ConfigOptions().getScoreMatchesAllowUuidsAsIds());
+    inputValidator.setFullDebugOutput(ConfigOptions().getScoreMatchesFullDebugOutput());
     inputValidator.getInitStatusMessage();
     inputValidator.apply(map);
     inputValidator.getCompletedStatusMessage();
@@ -236,10 +245,10 @@ private:
     {
       QFileInfo fileInfo1(map1Path);
       QFileInfo fileInfo2(map2Path);
-      cout << "There are " << QString::number(issues.size()) <<
+      cout << "There are " << StringUtils::formatLargeNumber(issues.size()) <<
               " manual match " << type << " for inputs " <<
-              fileInfo1.completeBaseName().right(25) <<
-              " and " << fileInfo2.completeBaseName().right(25) << ":\n\n";
+              fileInfo1.completeBaseName().right(30) <<
+              " and " << fileInfo2.completeBaseName().right(30) << ":\n\n";
       int issueCount = 0;
       for (QMap<ElementId, QString>::const_iterator itr = issues.begin();
            itr != issues.end(); ++itr)
