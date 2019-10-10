@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchGraph.h>
+#include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/io/Serializable.h>
@@ -51,7 +52,6 @@ class Match;
 class MatchClassification;
 class MatchFactory;
 class MatchThreshold;
-class Merger;
 class MergerFactory;
 class ElementId;
 
@@ -114,25 +114,15 @@ private:
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;
-  HashMap<ElementId, std::vector<Merger*>> _e2m;
+  HashMap<ElementId, std::vector<MergerPtr>> _e2m;
   std::vector<ConstMatchPtr> _matches;
-  std::vector<Merger*> _mergers;
+  std::vector<MergerPtr> _mergers;
   QList<SingleStat> _stats;
   int _taskStatusUpdateInterval;
   Progress _progress;
 
   void _addReviewTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
-
-  template <typename InputCollection>
-  void _deleteAll(InputCollection& ic)
-  {
-    for (typename InputCollection::const_iterator it = ic.begin(); it != ic.end(); ++it)
-    {
-      delete *it;
-    }
-    ic.clear();
-  }
 
   /**
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This

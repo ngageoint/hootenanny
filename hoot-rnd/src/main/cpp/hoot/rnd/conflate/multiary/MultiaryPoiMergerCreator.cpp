@@ -39,7 +39,7 @@ MultiaryPoiMergerCreator::MultiaryPoiMergerCreator()
 {
 }
 
-bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vector<Merger*>& mergers)
+bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers)
   const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
@@ -59,7 +59,7 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
 
   if (eids.size() >= 1)
   {
-    mergers.push_back(new MultiaryPoiMerger(eids));
+    mergers.push_back(MergerPtr(new MultiaryPoiMerger(eids)));
     result = true;
   }
 
