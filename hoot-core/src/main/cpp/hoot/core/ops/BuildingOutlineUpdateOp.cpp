@@ -180,10 +180,10 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
   catch (const geos::util::TopologyException& e)
   {
     LOG_TRACE("Attempting to clean way geometry after union error: " << e.what());
-    Geometry* cleanedGeom = GeometryUtils::validateGeometry(pGeometry.get());
+    std::shared_ptr<Geometry> cleanedGeom(GeometryUtils::validateGeometry(pGeometry.get()));
     try
     {
-      pOutline.reset(pOutline->Union(cleanedGeom));
+      pOutline.reset(pOutline->Union(cleanedGeom.get()));
       LOG_VART(pOutline->getGeometryTypeId());
     }
     catch (const geos::util::TopologyException& e)
