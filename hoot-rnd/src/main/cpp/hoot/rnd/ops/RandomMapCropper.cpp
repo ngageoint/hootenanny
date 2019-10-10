@@ -37,6 +37,7 @@
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 namespace hoot
 {
@@ -59,6 +60,17 @@ void RandomMapCropper::setConfiguration(const Settings& conf)
   _maxNodeCount = confOpts.getCropRandomMaxNodeCount();
   _pixelSize = confOpts.getCropRandomPixelSize();
   _randomSeed = confOpts.getRandomSeed();
+}
+
+
+void RandomMapCropper::setTileFootprintOutputPath(QString path)
+{
+  _tileFootprintOutputPath = path;
+
+  if (!OsmXmlWriter().isSupported(_tileFootprintOutputPath))
+  {
+    throw IllegalArgumentException("RandomMapCropper supports .osm tile footprint outputs only.");
+  }
 }
 
 void RandomMapCropper::apply(OsmMapPtr& map)
@@ -93,14 +105,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
       _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile, nodeCounts);
   if (!_tileFootprintOutputPath.isEmpty())
   {
-    if (_tileFootprintOutputPath.toLower().endsWith(".geojson"))
-    {
-      TileUtils::writeTilesToGeoJson(tiles, nodeCounts, _tileFootprintOutputPath);
-    }
-    else
-    {
-      TileUtils::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
-    }
+    TileUtils::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
     LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
   _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));
