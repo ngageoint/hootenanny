@@ -327,14 +327,16 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
   else
   {
     LOG_DEBUG("Layer: " << layerName << " not found.  Creating layer...");
-    poLayer = _ds->CreateLayer(layerName.toLatin1(),
-                  MapProjector::createWgs84Projection()->Clone(), gtype, options.getCrypticOptions());
+    std::shared_ptr<OGRSpatialReference> projection = MapProjector::createWgs84Projection();
+    poLayer = _ds->CreateLayer(layerName.toLatin1(), projection.get(),
+                  gtype, options.getCrypticOptions());
 
     if (poLayer == NULL)
     {
       throw HootException(QString("Layer creation failed. %1").arg(layerName));
     }
     _layers[layer->getName()] = poLayer;
+    _projections[layer->getName()] = projection;
 
     std::shared_ptr<const FeatureDefinition> fd = layer->getFeatureDefinition();
     for (size_t i = 0; i < fd->getFieldCount(); i++)
