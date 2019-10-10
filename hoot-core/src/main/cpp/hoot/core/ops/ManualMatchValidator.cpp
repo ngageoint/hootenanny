@@ -104,8 +104,10 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   Tags::const_iterator tagRef2Itr = tags.find(MetadataTags::Ref2());
   if (tagRef2Itr != tags.end())
   {
-    ref2 = tagRef2Itr.value().trimmed().toLower().split(";");
-    if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).isEmpty()))
+    // use SkipEmptyParts to get past trailing semicolons
+    ref2 =
+      tagRef2Itr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).trimmed().isEmpty()))
     {
       _recordIssue(element, "Empty REF2 tag");
       return;
@@ -117,8 +119,9 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   Tags::const_iterator tagReviewItr = tags.find(MetadataTags::Review());
   if (tagReviewItr != tags.end())
   {
-    review = tagReviewItr.value().trimmed().toLower().split(";");
-    if (review.isEmpty() || (review.size() == 1 && review.at(0).isEmpty()))
+    review =
+      tagReviewItr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    if (review.isEmpty() || (review.size() == 1 && review.at(0).trimmed().isEmpty()))
     {
       _recordIssue(element, "Empty REVIEW tag");
       return;
