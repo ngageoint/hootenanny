@@ -72,9 +72,8 @@
         <nd ref="-170917"/>
         <nd ref="-170914"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="639"/>
         <tag k="name" v="Task Grid Cell #16"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13549" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170910"/>
@@ -83,9 +82,8 @@
         <nd ref="-170913"/>
         <nd ref="-170910"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="490"/>
         <tag k="name" v="Task Grid Cell #15"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13548" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170906"/>
@@ -94,9 +92,8 @@
         <nd ref="-170909"/>
         <nd ref="-170906"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="458"/>
         <tag k="name" v="Task Grid Cell #14"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13547" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170902"/>
@@ -105,9 +102,8 @@
         <nd ref="-170905"/>
         <nd ref="-170902"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="394"/>
         <tag k="name" v="Task Grid Cell #13"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13546" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170898"/>
@@ -116,9 +112,8 @@
         <nd ref="-170901"/>
         <nd ref="-170898"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="549"/>
         <tag k="name" v="Task Grid Cell #12"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13545" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170894"/>
@@ -127,9 +122,8 @@
         <nd ref="-170897"/>
         <nd ref="-170894"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="415"/>
         <tag k="name" v="Task Grid Cell #11"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13544" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170890"/>
@@ -138,9 +132,8 @@
         <nd ref="-170893"/>
         <nd ref="-170890"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="231"/>
         <tag k="name" v="Task Grid Cell #10"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13543" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170886"/>
@@ -149,9 +142,8 @@
         <nd ref="-170889"/>
         <nd ref="-170886"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="286"/>
         <tag k="name" v="Task Grid Cell #9"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13542" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170882"/>
@@ -160,9 +152,8 @@
         <nd ref="-170885"/>
         <nd ref="-170882"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="505"/>
         <tag k="name" v="Task Grid Cell #8"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13541" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170878"/>
@@ -171,9 +162,8 @@
         <nd ref="-170881"/>
         <nd ref="-170878"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="436"/>
         <tag k="name" v="Task Grid Cell #7"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13540" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170874"/>
@@ -182,9 +172,8 @@
         <nd ref="-170877"/>
         <nd ref="-170874"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="467"/>
         <tag k="name" v="Task Grid Cell #6"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13539" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170870"/>
@@ -193,9 +182,8 @@
         <nd ref="-170873"/>
         <nd ref="-170870"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="280"/>
         <tag k="name" v="Task Grid Cell #5"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13538" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170866"/>
@@ -204,9 +192,8 @@
         <nd ref="-170869"/>
         <nd ref="-170866"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="652"/>
         <tag k="name" v="Task Grid Cell #4"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13537" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170862"/>
@@ -215,9 +202,8 @@
         <nd ref="-170865"/>
         <nd ref="-170862"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="819"/>
         <tag k="name" v="Task Grid Cell #3"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13536" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170858"/>
@@ -226,9 +212,8 @@
         <nd ref="-170861"/>
         <nd ref="-170858"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="675"/>
         <tag k="name" v="Task Grid Cell #2"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13535" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170854"/>
@@ -237,8 +222,7 @@
         <nd ref="-170857"/>
         <nd ref="-170854"/>
         <tag k="boundary" v="task_grid_cell"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="node_count" v="74"/>
         <tag k="name" v="Task Grid Cell #1"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>
