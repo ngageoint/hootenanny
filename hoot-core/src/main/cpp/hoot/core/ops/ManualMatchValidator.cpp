@@ -107,6 +107,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
     // use SkipEmptyParts to get past trailing semicolons
     ref2 =
       tagRef2Itr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    ref2.removeAll(";");
     if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).trimmed().isEmpty()))
     {
       _recordIssue(element, "Empty REF2 tag");
@@ -121,6 +122,7 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   {
     review =
       tagReviewItr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    review.removeAll(";");
     if (review.isEmpty() || (review.size() == 1 && review.at(0).trimmed().isEmpty()))
     {
       _recordIssue(element, "Empty REVIEW tag");
@@ -169,11 +171,15 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   // check for dupes
   else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )
   {
-    _recordIssue(element, "Duplicate ID found in REF2=" + ref2.join(";"));
+    const QStringList duplicates = StringUtils::getDuplicates(ref2).toList();
+    assert(duplicates.size() > 0);
+    _recordIssue(element, "Duplicate IDs found in REF2: " + duplicates.join(";"));
   }
   else if (!review.isEmpty() && review.toSet().size() != review.size())
   {
-    _recordIssue(element, "Duplicate ID found in REVIEW=" + review.join(";"));
+    const QStringList duplicates = StringUtils::getDuplicates(review).toList();
+    assert(duplicates.size() > 0);
+    _recordIssue(element, "Duplicate IDs found in REVIEW: " + duplicates.join(";"));
   }
   else if (!ref2.isEmpty())
   {
