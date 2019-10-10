@@ -94,12 +94,12 @@ public:
     matchFactory.reset();
     matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
 
-    std::shared_ptr<MergerCreator> mergerCreator(
+    MergerCreatorPtr mergerCreator(
       Factory::getInstance().constructObject<MergerCreator>(
         QString("hoot::ScriptMergerCreator")));
     MergerFactory& mergerFactory = MergerFactory::getInstance();
     mergerFactory.reset();
-    mergerFactory.registerCreator(mergerCreator.get());
+    mergerFactory.registerCreator(mergerCreator);
 
     std::shared_ptr<MatchCreator> matchCreator = matchFactory.getCreators()[0];
 

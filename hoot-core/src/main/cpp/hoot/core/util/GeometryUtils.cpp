@@ -268,7 +268,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   {
     const LineString* oldShell = p->getExteriorRing();
     std::shared_ptr<LinearRing> oldLinearRing(
-      GeometryFactory::getDefaultInstance()->createLinearRing(*oldShell->getCoordinates()));
+      GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();
     holes->reserve(p->getNumInteriorRing());

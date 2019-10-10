@@ -127,9 +127,11 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     char* wkt1 = 0;
     getProjection()->exportToPrettyWkt(&wkt1);
     QString proj1 = QString::fromLatin1(wkt1);
+    CPLFree(wkt1);
     char* wkt2 = 0;
     appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
     QString proj2 = QString::fromLatin1(wkt2);
+    CPLFree(wkt2);
     throw HootException(
       "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
       "\nMap being appended from has projection:\n" + proj2);
