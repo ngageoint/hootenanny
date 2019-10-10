@@ -598,7 +598,7 @@ public:
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS(
-      "Duplicate ID found in REF2=002da0;002da0; tags: blah = bleh\n",
+      "Duplicate IDs found in REF2: 002da0; tags: blah = bleh\n",
       errorItr.value().toStdString());
   }
 };

@@ -85,6 +85,13 @@ public:
       args.removeAll("--optimize");
       optimizeThresholds = true;
     }
+    bool validateManualMatches = true;
+    if (args.contains("--validation-off"))
+    {
+      args.removeAll("--validation-off");
+      validateManualMatches = false;
+    }
+
     if (args.size() < 3 || args.size() % 2 != 1)
     {
       LOG_VAR(args);
@@ -107,7 +114,7 @@ public:
       IoUtils::loadMap(map, map2Path, false, Status::Unknown2);
 
       // If any of the map files have errors, we'll print some out and terminate.
-      if (_validateMatches(map, map1Path, map2Path))
+      if (validateManualMatches && _validateMatches(map, map1Path, map2Path))
       {
         return 1;
       }
