@@ -131,10 +131,13 @@ public final class HootProperties {
     public static final String PUBLIC_OSMAPI_CAPABILITIES_URL;
 
     public static final String PUBLIC_OVERPASS_URL;
+    public static final String PRIVATE_OVERPASS_URL;
+    public static final String PRIVATE_OVERPASS_CERT_PATH;
+    public static final String PRIVATE_OVERPASS_CERT_PHRASE;
     public static final String MAX_OVERPASS_FEATURE_COUNT;
 
-    public static final String GRAIL_RAILS_CODENAME;
-    public static final String GRAIL_OVERPASS_CODENAME;
+    public static final String GRAIL_RAILS_LABEL;
+    public static final String GRAIL_OVERPASS_LABEL;
 
     public static final String RAILSPORT_PUSH_URL;
     public static final String RAILSPORT_PULL_URL;
@@ -225,8 +228,8 @@ public final class HootProperties {
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         HTTP_TIMEOUT = getProperty("httpTimeout");
         MAX_OVERPASS_FEATURE_COUNT = getProperty("grailMaxFeatureCount");
-        GRAIL_RAILS_CODENAME =  getProperty("grailRailsCodename");
-        GRAIL_OVERPASS_CODENAME = getProperty("grailOverpassCodename");
+        GRAIL_RAILS_LABEL =  getProperty("grailRailsLabel");
+        GRAIL_OVERPASS_LABEL = getProperty("grailOverpassLabel");
         GRAIL_OVERPASS_QUERY = getProperty("grailOverpassQueryPath");
         GRAIL_OVERPASS_STATS_QUERY = getProperty("grailOverpassStatsQueryPath");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
@@ -308,6 +311,11 @@ public final class HootProperties {
 
         // The URL for the main Overpass server
         PUBLIC_OVERPASS_URL = "${PUBLIC_OVERPASS_URL}";
+
+        // The URL for the private Overpass server
+        PRIVATE_OVERPASS_URL = "${PRIVATE_OVERPASS_URL}";
+        PRIVATE_OVERPASS_CERT_PATH = "${PRIVATE_OVERPASS_CERT_PATH}";
+        PRIVATE_OVERPASS_CERT_PHRASE = "${PRIVATE_OVERPASS_CERT_PHRASE}";
 
         // The OSM Rails Port that we are going to pull and push data to.
         RAILSPORT_PROTOCOL = "${RAILSPORT_PROTOCOL}" + "://";

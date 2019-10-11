@@ -1,18 +1,7 @@
-[out:json][bbox:{{bbox}}];
+[out:json];
 (
-   node;<;>;
-)->.all;
-
-(
-   relation[natural=coastline];
-   way[natural=coastline];<;>;
-   relation[boundary=census];>;
-   relation[boundary=administrative];
-   way[boundary=administrative];>;
-   node[boundary=administrative];
-)->.exclude;
-
-(.all; - .exclude;);
-
+  node({{bbox}});
+  <;
+);
+(._;>;);
 out meta;
->;
