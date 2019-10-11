@@ -147,6 +147,7 @@ void IntersectionSplitter::splitIntersections()
     _todoNodes.remove(nodeId);
     numProcessed++;
 
+    // TODO: fix the total here
     if (_todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
     {
       PROGRESS_INFO(
