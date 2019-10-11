@@ -205,6 +205,7 @@ private:
   OsmMapPtr _pOriginalMap;
 
   Progress _progress;
+  int _taskStatusUpdateInterval;
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that

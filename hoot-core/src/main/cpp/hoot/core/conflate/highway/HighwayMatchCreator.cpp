@@ -213,7 +213,8 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
+      // TODO: change back to 100?
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_DEBUG(
           "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
@@ -222,7 +223,8 @@ public:
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
+    // TODO: change back to 100?
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<

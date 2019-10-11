@@ -78,14 +78,16 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
 DiffConflator::DiffConflator() :
   _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance())
+  _settings(Settings::getInstance()),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _reset();
 }
 
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance())
+  _settings(Settings::getInstance()),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -123,7 +125,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
-  LOG_DEBUG("\tDiscarding unconflatable elements...");
+  LOG_INFO("Discarding unconflatable elements...");
   NonConflatableElementRemover().apply(_pMap);
   _stats.append(
     SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
@@ -144,7 +146,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   LOG_INFO(
-    "\tFound: " << StringUtils::formatLargeNumber(_matches.size()) <<
+    "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation matches.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -342,7 +344,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_DEBUG("\tStoring tag changes...");
+  LOG_INFO("Storing tag changes...");
 
   MapProjector::projectToWgs84(_pMap);
 
@@ -352,6 +354,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     _pTagChanges.reset(new MemChangesetProvider(_pMap->getProjection()));
   }
 
+  int numMatchesProcessed = 0;
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
@@ -412,6 +415,14 @@ void DiffConflator::_calcAndStoreTagChanges()
         // Add it to our list
         _pTagChanges->addChange(newChange);
       }
+    }
+
+    numMatchesProcessed++;
+    if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "Stored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
+            StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }
 
