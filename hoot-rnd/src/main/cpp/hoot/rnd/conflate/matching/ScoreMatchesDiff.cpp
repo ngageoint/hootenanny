@@ -28,7 +28,7 @@
 
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/visitors/ElementIdToTagValueMapper.h>
 #include <hoot/core/io/OsmXmlReader.h>

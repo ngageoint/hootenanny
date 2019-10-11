@@ -49,9 +49,9 @@ public:
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override;
 
-  virtual void setConfiguration(const Settings &conf);
+  virtual void setConfiguration(const Settings &conf) override;
 
 private:
 

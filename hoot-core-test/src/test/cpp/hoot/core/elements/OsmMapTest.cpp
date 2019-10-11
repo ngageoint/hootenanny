@@ -466,7 +466,7 @@ public:
     OsmMapPtr mapA(new OsmMap());
     reader.read("test-files/ToyTestA.osm", mapA);
 
-    const char* exceptionMsg = "<wrong>";
+    QString exceptionMsg = "<wrong>";
     try
     {
       mapA->append(mapA);

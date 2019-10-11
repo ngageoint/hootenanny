@@ -73,7 +73,7 @@ class BuildingMatchVisitor : public ConstElementVisitor
 {
 public:
 
-  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<const Match*>& result,
+  BuildingMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                        ElementCriterionPtr filter = ElementCriterionPtr()) :
   _map(map),
   _result(result),
@@ -85,7 +85,7 @@ public:
    * @param matchStatus If the element's status matches this status then it is checked for a match.
    */
   BuildingMatchVisitor(const ConstOsmMapPtr& map,
-    std::vector<const Match*>& result, std::shared_ptr<BuildingRfClassifier> rf,
+    std::vector<ConstMatchPtr>& result, std::shared_ptr<BuildingRfClassifier> rf,
     ConstMatchThresholdPtr threshold, ElementCriterionPtr filter = ElementCriterionPtr(),
     Status matchStatus = Status::Invalid) :
     _map(map),
@@ -129,7 +129,7 @@ public:
     _elementsEvaluated++;
     int neighborCount = 0;
 
-    std::vector<Match*> tempMatches;
+    std::vector<MatchPtr> tempMatches;
 
     for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
@@ -140,13 +140,9 @@ public:
         if (isRelated(neighbor, e))
         {
           // score each candidate and push it on the result vector
-          BuildingMatch* match = createMatch(from, neighborId);
+          std::shared_ptr<BuildingMatch> match = createMatch(from, neighborId);
           // if we're confident this is a miss
-          if (match->getType() == MatchType::Miss)
-          {
-            delete match;
-          }
-          else
+          if (match->getType() != MatchType::Miss)
           {
             tempMatches.push_back(match);
             neighborCount++;
@@ -160,7 +156,7 @@ public:
       _markNonOneToOneMatchesAsReview(tempMatches);
     }
 
-    for (std::vector<Match*>::const_iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
+    for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
     {
       _result.push_back(*it);
     }
@@ -169,9 +165,9 @@ public:
     _neighborCountMax = std::max(_neighborCountMax, neighborCount);
   }
 
-  BuildingMatch* createMatch(ElementId eid1, ElementId eid2)
+  std::shared_ptr<BuildingMatch> createMatch(ElementId eid1, ElementId eid2)
   {
-    return new BuildingMatch(_map, _rf, eid1, eid2, _mt);
+    return std::shared_ptr<BuildingMatch>(new BuildingMatch(_map, _rf, eid1, eid2, _mt));
   }
 
   static bool isRelated(ConstElementPtr e1, ConstElementPtr e2)
@@ -264,7 +260,7 @@ public:
 private:
 
   const ConstOsmMapPtr& _map;
-  std::vector<const Match*>& _result;
+  std::vector<ConstMatchPtr>& _result;
   std::set<ElementId> _empty;
   std::shared_ptr<BuildingRfClassifier> _rf;
   ConstMatchThresholdPtr _mt;
@@ -285,11 +281,11 @@ private:
   long _numMatchCandidatesVisited;
   int _taskStatusUpdateInterval;
 
-  void _markNonOneToOneMatchesAsReview(std::vector<Match*>& matches)
+  void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
   {
-    for (std::vector<Match*>::iterator it = matches.begin(); it != matches.end(); ++it)
+    for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      Match* match = *it;
+      MatchPtr match = *it;
       //Not proud of this, but not sure what else to do at this point w/o having to change the
       //Match interface.
       MatchClassification& matchClass =
@@ -305,9 +301,9 @@ _conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
-Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
-  BuildingMatch* result = 0;
+  std::shared_ptr<BuildingMatch> result;
 
   if (eid1.getType() != ElementType::Node && eid2.getType() != ElementType::Node)
   {
@@ -317,7 +313,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
     if (BuildingMatchVisitor::isRelated(e1, e2))
     {
       // score each candidate and push it on the result vector
-      result = new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold());
+      result.reset(new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold()));
     }
   }
 
@@ -325,7 +321,7 @@ Match* BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
 }
 
 void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                         std::vector<const Match*>& matches,
+                                         std::vector<ConstMatchPtr>& matches,
                                          ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
@@ -379,7 +375,7 @@ std::shared_ptr<BuildingRfClassifier> BuildingMatchCreator::_getRf()
 
 bool BuildingMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map)
 {
-  std::vector<const Match*> matches;
+  std::vector<ConstMatchPtr> matches;
   return BuildingMatchVisitor(map, matches, _filter).isMatchCandidate(element);
 }
 

@@ -27,25 +27,25 @@
 #include "NetworkMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/conflate/network/NetworkMatch.h>
+#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/network/NetworkMatch.h>
-#include <hoot/core/conflate/network/OsmNetworkExtractor.h>
-#include <hoot/core/conflate/network/NetworkMatcher.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/NotImplementedException.h>
 
 // Standard
 #include <fstream>
@@ -72,23 +72,22 @@ _matchScoringFunctionCurveSteepness(ConfigOptions().getNetworkMatchScoringFuncti
   _userCriterion.reset(new HighwayCriterion());
 }
 
-Match* NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
+MatchPtr NetworkMatchCreator::createMatch(const ConstOsmMapPtr& /*map*/, ElementId /*eid1*/,
   ElementId /*eid2*/)
 {
-  Match* result = 0;
-  return result;
+  return MatchPtr();
 }
 
-const Match* NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
+ConstMatchPtr NetworkMatchCreator::_createMatch(const NetworkDetailsPtr& map, NetworkEdgeScorePtr e,
   ConstMatchThresholdPtr mt)
 {
-  return
+  return ConstMatchPtr(
     new NetworkMatch(
       map, e->getEdgeMatch(), e->getScore(), mt, _matchScoringFunctionMax,
-      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness);
+      _matchScoringFunctionCurveMidpointX, _matchScoringFunctionCurveSteepness));
 }
 
-void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*>& matches,
+void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
   ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
@@ -163,7 +162,7 @@ void NetworkMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const 
     if (edgeMatch[i]->getScore() > matcher->getMatchThreshold())
     {
       LOG_VART(edgeMatch[i]->getEdgeMatch()->getUid());
-      const Match* match = _createMatch(details, edgeMatch[i], threshold);
+      ConstMatchPtr match = _createMatch(details, edgeMatch[i], threshold);
       LOG_VART(match);
       matches.push_back(match);
     }

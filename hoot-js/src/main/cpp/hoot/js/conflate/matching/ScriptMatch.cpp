@@ -31,12 +31,13 @@
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/core/util/Factory.h>
+
 #include <hoot/js/conflate/merging/ScriptMergerCreator.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/io/StreamUtilsJs.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // Qt
 #include <qnumeric.h>
@@ -156,7 +157,7 @@ double ScriptMatch::getProbability() const
   return _p.getMatchP();
 }
 
-bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) const
+bool ScriptMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
 {
   if (_neverCausesConflict)
   {
@@ -165,7 +166,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
 
   bool conflicting = true;
 
-  const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(&other);
+  const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(other.get());
   if (hm == 0)
   {
     return true;
@@ -176,7 +177,7 @@ bool ScriptMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) c
   }
 
   // See ticket #5272
-  if (getClassification().getReviewP() == 1.0 || other.getClassification().getReviewP() == 1.0)
+  if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
   {
     return true;
   }
@@ -286,7 +287,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
   std::shared_ptr<ScriptMatch> m1(
     new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
   MatchSet ms;
-  ms.insert(m1.get());
+  ms.insert(m1);
   vector<Merger*> mergers;
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);

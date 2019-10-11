@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-INPUT_DIR=$HOOT_HOME/test-files/cmd/glacial/CropRandomCmdTest
-OUTPUT_DIR=$HOOT_HOME/test-output/cmd/glacial/CropRandomCmdTest
+INPUT_DIR=$HOOT_HOME/test-files/cmd/glacial/RndCropRandomCmdTest
+OUTPUT_DIR=$HOOT_HOME/test-output/cmd/glacial/RndCropRandomCmdTest
 mkdir -p $OUTPUT_DIR
 
 hoot crop-random --warn -D crop.keep.only.features.inside.bounds=true "test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm" $OUTPUT_DIR/out.osm 1000 0.001 1 --write-tiles

@@ -28,9 +28,9 @@
 #define DUPLICATEREVIEWSOP_H
 
 // Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/io/Serializable.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // Standard
 #include <set>

@@ -107,7 +107,8 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable, private ParallelBoundedApiReader
+class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable,
+  private ParallelBoundedApiReader
 {
 public:
 

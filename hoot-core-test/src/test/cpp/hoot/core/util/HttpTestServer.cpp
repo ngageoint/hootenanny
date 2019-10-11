@@ -107,6 +107,8 @@ void HttpTestServer::shutdown()
 {
   //  Interupt the threads
   _interupt = true;
+  //  Cancel the acceptor
+  _acceptor->cancel();
   //  Stop the IO service and wait for the server to stop
   _io_service.stop();
   wait();

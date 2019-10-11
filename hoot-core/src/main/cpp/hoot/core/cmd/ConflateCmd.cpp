@@ -43,7 +43,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
@@ -256,6 +256,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  LOG_INFO("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);

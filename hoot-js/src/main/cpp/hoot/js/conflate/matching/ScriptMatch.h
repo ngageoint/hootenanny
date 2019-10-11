@@ -60,22 +60,22 @@ public:
               const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj,
               const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
-  virtual const MatchClassification& getClassification() const { return _p; }
+  virtual const MatchClassification& getClassification() const override { return _p; }
 
   virtual QString explain() const override { return _explainText; }
 
   virtual QString getMatchName() const override { return _matchName; }
 
-  virtual double getProbability() const;
+  virtual double getProbability() const override;
 
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
 
-  virtual bool isWholeGroup() const { return _isWholeGroup; }
+  virtual bool isWholeGroup() const override { return _isWholeGroup; }
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
   v8::Local<v8::Object> getPlugin() const { return ToLocal(&_plugin); }
 
@@ -83,9 +83,9 @@ public:
 
   virtual QString toString() const override;
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
 
-  virtual QString getDescription() const { return "Matches elements with Generic Conflation"; }
+  virtual QString getDescription() const override { return "Matches elements with Generic Conflation"; }
 
 private:
 

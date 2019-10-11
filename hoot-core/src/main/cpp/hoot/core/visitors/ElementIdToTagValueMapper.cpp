@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -52,6 +53,7 @@ void ElementIdToTagValueMapper::visit(const ConstElementPtr& e)
 
   if (e->getTags().contains(_tagKey) && (!_crit || _crit->isSatisfied(e)))
   {
+    LOG_TRACE(e->getElementId() << ";" << e->getTags()[_tagKey]);
     _idToTagValueMappings[e->getElementId()] = e->getTags()[_tagKey];
     _numAffected++;
   }

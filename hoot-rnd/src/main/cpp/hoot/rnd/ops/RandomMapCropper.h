@@ -65,7 +65,7 @@ public:
 
   void setMaxNodeCount(int count) { _maxNodeCount = count; }
   void setRandomSeed(int seed) { _randomSeed = seed; }
-  void setTileFootprintOutputPath(QString path) { _tileFootprintOutputPath = path; }
+  void setTileFootprintOutputPath(QString path);
   void setPixelSize(double size) { _pixelSize = size; }
 
 private:

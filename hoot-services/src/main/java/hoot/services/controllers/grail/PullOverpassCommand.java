@@ -88,7 +88,7 @@ class PullOverpassCommand implements InternalCommand {
         String url = "";
         try {
             if (params.getCustomQuery().equals("")) {
-                url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
+            url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
             } else {
                 url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml", params.getCustomQuery()));
             }
@@ -136,12 +136,12 @@ class PullOverpassCommand implements InternalCommand {
         String overpassQuery;
 
         if (query.equals("")) {
-            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-            try {
-                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-            } catch(Exception exc) {
-                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
-            }
+        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+        try {
+            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+        } catch(Exception exc) {
+            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        }
         } else {
             overpassQuery = query;
         }
@@ -159,6 +159,6 @@ class PullOverpassCommand implements InternalCommand {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20");
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
-        return PUBLIC_OVERPASS_URL + "/api/interpreter?data=" + overpassQuery;
+        return overpassUrl + "?data=" + overpassQuery;
     }
 }

@@ -32,7 +32,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 namespace hoot
 {
@@ -51,7 +51,7 @@ public:
   virtual QString getName() const { return "changeset-derive-replacement"; }
 
   virtual QString getDescription() const
-  { return "Creates an OSM replacement changeset (experimental)"; }
+  { return "Creates an OSM changeset that replaces features in a map (experimental)"; }
 
   virtual int runSimple(QStringList& args) override
   {

@@ -48,14 +48,6 @@ PoiPolygonCache::~PoiPolygonCache()
 {
 }
 
-//void PoiPolygonCache::setOsmMap(const ConstOsmMapPtr& map)
-//{
-//  _map = map;
-//  assert(map);
-
-//  _clear();
-//}
-
 void PoiPolygonCache::clear()
 {
   _numCacheHitsByCacheType.clear();

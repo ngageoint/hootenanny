@@ -87,6 +87,19 @@ bool StringUtils::hasDigit(const QString& input)
   return false;
 }
 
+bool StringUtils::isAlphaNumeric(const QString& input)
+{
+  for (int i = 0; i < input.length(); i++)
+  {
+    const QChar character = input.at(i);
+    if (!character.isLetterOrNumber())
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool StringUtils::isNumber(const QString& input)
 {
   bool isNumber = false;
@@ -146,6 +159,25 @@ void StringUtils::removeEmptyStrings(QStringList& strings)
     }
   }
   strings = output;
+}
+
+QSet<QString> StringUtils::getDuplicates(const QStringList& input)
+{
+  QSet<QString> duplicateStrings;
+  QSet<QString> uniqueStrings;
+  for (int i = 0; i < input.size(); i++)
+  {
+    const QString str = input.at(i);
+    if (uniqueStrings.contains(str))
+    {
+      duplicateStrings.insert(str);
+    }
+    else
+    {
+      uniqueStrings.insert(str);
+    }
+  }
+  return duplicateStrings;
 }
 
 }

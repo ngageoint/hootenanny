@@ -27,36 +27,36 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
+#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 // standard
 #include <algorithm>
@@ -213,7 +213,7 @@ void DiffConflator::_snapSecondaryRoadsBackToRef()
 void DiffConflator::_removeMatches(const Status& status)
 {
   LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
-  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
@@ -352,9 +352,9 @@ void DiffConflator::_calcAndStoreTagChanges()
     _pTagChanges.reset(new MemChangesetProvider(_pMap->getProjection()));
   }
 
-  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    const Match* match = *mit;
+    ConstMatchPtr match = *mit;
     LOG_VART(match);
     std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
 
@@ -457,12 +457,12 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
 
 void DiffConflator::_reset()
 {
-  _deleteAll(_matches);
+  _matches.clear();
   _pMap.reset();
   _pTagChanges.reset();
 }
 
-void DiffConflator::_printMatches(vector<const Match*> matches)
+void DiffConflator::_printMatches(vector<ConstMatchPtr> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
@@ -470,11 +470,11 @@ void DiffConflator::_printMatches(vector<const Match*> matches)
   }
 }
 
-void DiffConflator::_printMatches(vector<const Match*> matches, const MatchType& typeFilter)
+void DiffConflator::_printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
-    const Match* match = matches[i];
+    ConstMatchPtr match = matches[i];
     if (match->getType() == typeFilter)
     {
       LOG_DEBUG(match);

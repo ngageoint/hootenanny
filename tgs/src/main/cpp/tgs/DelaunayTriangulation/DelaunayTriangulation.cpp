@@ -189,6 +189,7 @@ public:
   void DeleteEdge(InternalEdge * e);
   void Draw();
   InternalEdge* MakeEdge();
+  Point2d* MakePoint(const Point2d& pt);
 
   InternalEdge* getStartingEdge() const { return startingEdge; }
 
@@ -200,6 +201,7 @@ private:
   InternalEdge * startingEdge;
 
   set<QuadEdge*> _edges;
+  vector<Point2d*> _data;
 };
 
 class QuadEdge
@@ -322,6 +324,13 @@ InternalEdge *Subdivision::MakeEdge()
   return ql->e;
 }
 
+Point2d* Subdivision::MakePoint(const Point2d& pt)
+{
+  Point2d* point = new Point2d(pt);
+  _data.push_back(point);
+  return point;
+}
+
 void Splice(InternalEdge * a, InternalEdge * b)
 // This operator affects the two edge rings around the origins of a and b,
 // and, independently, the two edge rings around the left faces of a and b.
@@ -356,8 +365,9 @@ void Subdivision::DeleteEdge(InternalEdge * e)
 Subdivision::Subdivision(const Point2d & a, const Point2d & b, const Point2d & c)
 // Initialize a subdivision to the triangle defined by the points a, b, c.
 {
-  Point2d *da, *db, *dc;
-  da = new Point2d(a), db = new Point2d(b), dc = new Point2d(c);
+  Point2d* da = MakePoint(a);
+  Point2d* db = MakePoint(b);
+  Point2d* dc = MakePoint(c);
   InternalEdge *ea = MakeEdge();
   ea->EndPoints(da, db);
   InternalEdge *eb = MakeEdge();
@@ -373,10 +383,11 @@ Subdivision::Subdivision(const Point2d & a, const Point2d & b, const Point2d & c
 Subdivision::~Subdivision()
 {
   for (set<QuadEdge*>::iterator it = _edges.begin(); it != _edges.end(); ++it)
-  {
-    delete *it;
-  }
+    delete (*it);
   _edges.clear();
+  for (vector<Point2d*>::iterator it = _data.begin(); it != _data.end(); ++it)
+    delete (*it);
+  _data.clear();
 }
 
 InternalEdge *Subdivision::Connect(InternalEdge * a, InternalEdge * b)
@@ -551,7 +562,7 @@ void Subdivision::InsertSite(const Point2d & x)
   // triangle (or quadrilateral, if the new point fell on an
   // existing edge.)
   InternalEdge *base = MakeEdge();
-  base->EndPoints(e->Org(), new Point2d(x));
+  base->EndPoints(e->Org(), MakePoint(x));
   Splice(base, e);
   startingEdge = base;
   do

@@ -598,7 +598,7 @@
         <nd ref="-226"/>
         <nd ref="-225"/>
         <nd ref="-224"/>
-        <tag k="REF1" v="Panera"/>
+        <tag k="REF1" v="002c75"/>
 
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
@@ -822,7 +822,7 @@
         <nd ref="-79"/>
         <nd ref="-77"/>
         <nd ref="-74"/>
-        <tag k="REF1" v="Convoluted No Match 1"/>
+        <tag k="REF1" v="002e0f"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="Convoluted Example"/>
         <tag k="error:circular" v="15"/>
@@ -863,7 +863,7 @@
         <nd ref="-72"/>
         <nd ref="-73"/>
         <nd ref="-62"/>
-        <tag k="REF1" v="Target"/>
+        <tag k="REF1" v="002da0"/>
 
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Target - Aurora South;Target Grocery;Target Pharmacy"/>
@@ -881,7 +881,7 @@
         <nd ref="-60"/>
         <nd ref="-61"/>
         <nd ref="-56"/>
-        <tag k="REF1" v="Freddy's"/>
+        <tag k="REF1" v="002e0e"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="Freddy's"/>
         <tag k="error:circular" v="15"/>
@@ -894,7 +894,7 @@
         <nd ref="-54"/>
         <nd ref="-55"/>
         <nd ref="-52"/>
-        <tag k="REF1" v="Biondi"/>
+        <tag k="REF1" v="002e00"/>
 
         <tag k="hoot:building:match" v="true"/>
         <tag k="building" v="yes"/>
@@ -908,7 +908,7 @@
         <nd ref="-50"/>
         <nd ref="-51"/>
         <nd ref="-48"/>
-        <tag k="REF1" v="Cheddar's"/>
+        <tag k="REF1" v="002e0d"/>
 
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Cheddars"/>
@@ -933,7 +933,7 @@
         <member type="way" ref="-26" role="part"/>
         <member type="way" ref="-25" role="part"/>
         <member type="way" ref="-252" role="outline"/>
-        <tag k="REF1" v="Panera"/>
+        <tag k="REF1" v="002c75"/>
 
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>

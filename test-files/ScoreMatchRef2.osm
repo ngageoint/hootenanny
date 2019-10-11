@@ -599,7 +599,7 @@
         <nd ref="-225"/>
         <nd ref="-224"/>
 
-        <tag k="REF2" v="Panera"/>
+        <tag k="REF2" v="002c75"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
         <tag k="building" v="yes"/>
@@ -769,7 +769,7 @@
         <nd ref="-92"/>
         <nd ref="-93"/>
         <nd ref="-90"/>
-        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="REF2" v="none"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="error:circular" v="15"/>
@@ -782,7 +782,7 @@
         <nd ref="-88"/>
         <nd ref="-89"/>
         <nd ref="-86"/>
-        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="REF2" v="none"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="error:circular" v="15"/>
@@ -795,7 +795,7 @@
         <nd ref="-84"/>
         <nd ref="-85"/>
         <nd ref="-82"/>
-        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="REF2" v="none"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="error:circular" v="15"/>
@@ -808,7 +808,7 @@
         <nd ref="-80"/>
         <nd ref="-81"/>
         <nd ref="-78"/>
-        <tag k="REF2" v="Convoluted No Match 2"/>
+        <tag k="REF2" v="none"/>
         <tag k="building" v="yes"/>
         <tag k="name" v="Bad Pair"/>
         <tag k="error:circular" v="15"/>
@@ -864,7 +864,7 @@
         <nd ref="-73"/>
         <nd ref="-62"/>
 
-        <tag k="REF2" v="Target"/>
+        <tag k="REF2" v="002da0"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Target - Aurora South;Target Grocery;Target Pharmacy"/>
         <tag k="building" v="yes"/>
@@ -895,7 +895,7 @@
         <nd ref="-55"/>
         <nd ref="-52"/>
 
-        <tag k="REF2" v="Biondi"/>
+        <tag k="REF2" v="002e00"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
@@ -909,7 +909,7 @@
         <nd ref="-51"/>
         <nd ref="-48"/>
 
-        <tag k="REF2" v="Cheddar's"/>
+        <tag k="REF2" v="002e0d"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Cheddars"/>
         <tag k="building" v="yes"/>
@@ -934,7 +934,7 @@
         <member type="way" ref="-25" role="part"/>
         <member type="way" ref="-252" role="outline"/>
 
-        <tag k="REF2" v="Panera"/>
+        <tag k="REF2" v="002c75"/>
         <tag k="hoot:building:match" v="true"/>
         <tag k="alt_name" v="Maid-Rite Diner;Panera Bread"/>
         <tag k="building" v="yes"/>

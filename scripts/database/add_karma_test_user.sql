@@ -3,7 +3,7 @@ INSERT INTO users(email,id,display_name,provider_access_key,provider_access_toke
 
 
 -- Add a spring session for our test user
-INSERT INTO spring_session(session_id,creation_time,last_access_time,max_inactive_interval,principal_name,user_id) VALUES ('ff47f751-c831-41ee-800f-5ef8b9371ee3',1536767268854,1536774108752,31536000,'',-1541432234);
+INSERT INTO spring_session(session_id,creation_time,last_access_time,max_inactive_interval,principal_name,user_id) VALUES ('ff47f751-c831-41ee-800f-5ef8b9371ee3',1568933324000,1568933325000,31536000,'',-1541432234);
 
 
 -- Add rememberme attribute data for the spring session

@@ -71,7 +71,9 @@ void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
       return;
     }
     else
-      throw HootException("Removing a node, but it is still part of one or more ways.");
+      throw HootException(
+        "Attempting to remove: " + ElementId(ElementType::Node, nId).toString() +
+        ", but it is still part of one or more ways.");
   }
   _removeNodeNoCheck(map, nId);
 }

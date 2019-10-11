@@ -31,12 +31,13 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/rnd/util/TileUtils.h>
+#include <hoot/core/conflate/tile/TileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmXmlWriter.h>
 
 namespace hoot
 {
@@ -59,6 +60,17 @@ void RandomMapCropper::setConfiguration(const Settings& conf)
   _maxNodeCount = confOpts.getCropRandomMaxNodeCount();
   _pixelSize = confOpts.getCropRandomPixelSize();
   _randomSeed = confOpts.getRandomSeed();
+}
+
+
+void RandomMapCropper::setTileFootprintOutputPath(QString path)
+{
+  _tileFootprintOutputPath = path;
+
+  if (!OsmXmlWriter().isSupported(_tileFootprintOutputPath))
+  {
+    throw IllegalArgumentException("RandomMapCropper supports .osm tile footprint outputs only.");
+  }
 }
 
 void RandomMapCropper::apply(OsmMapPtr& map)
@@ -87,25 +99,20 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   // TODO: Can we intelligently calculate pixel size here somehow?
   long minNodeCountInOneTile = 0;
   long maxNodeCountInOneTile = 0;
+  std::vector<std::vector<long>> nodeCounts;
   const std::vector<std::vector<geos::geom::Envelope>> tiles =
     TileUtils::calculateTiles(
-      _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile);
+      _maxNodeCount, _pixelSize, map, minNodeCountInOneTile, maxNodeCountInOneTile, nodeCounts);
   if (!_tileFootprintOutputPath.isEmpty())
   {
-    if (_tileFootprintOutputPath.toLower().endsWith(".geojson"))
-    {
-      TileUtils::writeTilesToGeoJson(tiles, _tileFootprintOutputPath);
-    }
-    else
-    {
-      TileUtils::writeTilesToOsm(tiles, _tileFootprintOutputPath);
-    }
+    TileUtils::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
     LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
   _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));
   _cropper.apply(map);
 
   // cleanup
+  // TODO: This can be removed now, since its already happening in MapCropper, right?
   SuperfluousWayRemover::removeWays(map);
   SuperfluousNodeRemover::removeNodes(map);
 
