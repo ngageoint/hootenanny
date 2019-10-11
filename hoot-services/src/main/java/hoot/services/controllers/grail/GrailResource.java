@@ -671,14 +671,14 @@ public class GrailResource {
 
         // append first 7 digits of a uuid to the rails and overpass codenames
         String maxSuffix = UUID.randomUUID().toString().replace("-", "").substring(0, 7);
-        String railsCodename = GRAIL_RAILS_LABEL + "_" + maxSuffix;
-        String overpassCodename = GRAIL_OVERPASS_LABEL + "_" + maxSuffix;
+        String railsLabel = GRAIL_RAILS_LABEL + "_" + maxSuffix;
+        String overpassLabel = GRAIL_OVERPASS_LABEL + "_" + maxSuffix;
 
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("overpassQuery", url);
         jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
-        jobInfo.put("railsCodename", railsCodename);
-        jobInfo.put("overpassCodename", overpassCodename);
+        jobInfo.put("railsLabel", railsLabel);
+        jobInfo.put("overpassLabel", overpassLabel);
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
