@@ -78,6 +78,8 @@ void WayJoiner::join(const OsmMapPtr& map)
 
 void WayJoiner::_joinParentChild()
 {
+  LOG_INFO("Joining parent ways to children...");
+
   WayMap ways = _map->getWays();
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -103,7 +105,7 @@ void WayJoiner::_joinParentChild()
 
 void WayJoiner::_joinSiblings()
 {
-  LOG_TRACE("Joining siblings...");
+  LOG_INFO("Joining way siblings...");
 
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
@@ -130,6 +132,8 @@ void WayJoiner::_joinSiblings()
 
 void WayJoiner::_joinAtNode()
 {
+  LOG_INFO("Joining ways at shared nodes...");
+
   WayMap ways = _map->getWays();
   unordered_set<long> ids;
   //  Find all ways that have a split parent id
