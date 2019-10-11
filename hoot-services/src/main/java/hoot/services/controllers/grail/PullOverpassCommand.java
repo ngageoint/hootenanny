@@ -127,7 +127,9 @@ class PullOverpassCommand implements InternalCommand {
      * Returns the overpass query, with the expected output format set to json
      * @param bbox
      * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
-     * @return
+     * @param query optional custom overpass query
+     *
+     * @return overpass query url
      */
     static String getOverpassUrl(String bbox, String outputFormat, String query) {
         // Get grail overpass query from the file and store it in a string
@@ -147,8 +149,10 @@ class PullOverpassCommand implements InternalCommand {
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
 
-        if (outputFormat.equals("xml")) {
+        if (outputFormat.equals("xml") && overpassQuery.contains("out:json")) {
             overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
+        } else if (outputFormat.equals("json") && overpassQuery.contains("out:xml")) {
+            overpassQuery = overpassQuery.replace("out:xml", "out:json");
         }
 
         try {

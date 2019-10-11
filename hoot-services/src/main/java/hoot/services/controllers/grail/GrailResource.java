@@ -648,6 +648,10 @@ public class GrailResource {
         } else {
             overpassQuery = customQuery;
 
+            if (overpassQuery.contains("out:xml")) {
+                overpassQuery = overpassQuery.replace("out:xml", "out:json");
+            }
+
             // first line that lists columns which are counts for each feature type
             overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
 
