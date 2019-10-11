@@ -42,6 +42,8 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 
+using geos::geom::CoordinateSequence;
+
 namespace hoot
 {
 
@@ -152,8 +154,8 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
     {
       // Make list of waylocations
       std::vector<WayLocation> splitPoints;
-      geos::geom::Geometry * pIntersect = pRndGeo->intersection(pWayGeo.get());
-      geos::geom::CoordinateSequence *pCoords = pIntersect->getCoordinates();
+      GeomPtr pIntersect(pRndGeo->intersection(pWayGeo.get()));
+      std::shared_ptr<CoordinateSequence> pCoords(pIntersect->getCoordinates());
 
       // We are only interested in ways that intersect the geometry once or
       // twice. More than that is situation we are not prepared to handle.
