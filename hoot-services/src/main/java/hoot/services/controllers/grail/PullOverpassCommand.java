@@ -88,9 +88,9 @@ class PullOverpassCommand implements InternalCommand {
         String url = "";
         try {
             if (params.getCustomQuery().equals("")) {
-            url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", null));
             } else {
-                url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml", params.getCustomQuery()));
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", params.getCustomQuery()));
             }
 
             URL requestUrl = new URL(url);
@@ -120,7 +120,7 @@ class PullOverpassCommand implements InternalCommand {
      * @return
      */
     static String getOverpassUrl(String bbox, String outputFormat) {
-        return getOverpassUrl(bbox, outputFormat, null);
+        return getOverpassUrl(PUBLIC_OVERPASS_URL, bbox, outputFormat, null);
     }
 
     /**
@@ -131,16 +131,16 @@ class PullOverpassCommand implements InternalCommand {
      *
      * @return overpass query url
      */
-    static String getOverpassUrl(String bbox, String outputFormat, String query) {
+    static String getOverpassUrl(String overpassUrl, String bbox, String outputFormat, String query) {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
 
-        if (query.equals("")) {
-        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-        try {
-            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-        } catch(Exception exc) {
-            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        if (query == null || query.equals("")) {
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
         }
         } else {
             overpassQuery = query;

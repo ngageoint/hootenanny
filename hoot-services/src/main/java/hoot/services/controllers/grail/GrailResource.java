@@ -145,14 +145,14 @@ public class GrailResource {
         if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
         } else {
-        APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-        if (railsPortCapabilities.getApiStatus() == null
-                || railsPortCapabilities.getApiStatus().equals("offline")) {
-            throw new UnavailableException("The Rails port API is offline.");
-        }
+            APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
+            if (railsPortCapabilities.getApiStatus() == null
+                    || railsPortCapabilities.getApiStatus().equals("offline")) {
+                throw new UnavailableException("The Rails port API is offline.");
+            }
 
-        params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
-        params.setPullUrl(RAILSPORT_PULL_URL);
+            params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+            params.setPullUrl(RAILSPORT_PULL_URL);
         }
 
         InternalCommand command = apiCommandFactory.build(jobId, params, this.getClass());
@@ -605,7 +605,7 @@ public class GrailResource {
             if (customQuery == null || customQuery.equals("")) {
             url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
             } else {
-                url = "'" + PullOverpassCommand.getOverpassUrl(bbox, "json", customQuery) + "'";
+                url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "json", customQuery) + "'";
             }
 
         } catch(IllegalArgumentException exc) {
