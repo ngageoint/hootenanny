@@ -67,7 +67,7 @@ public:
    * The caller assumes ownership of the new Mergers in the result.
    */
   void createMergers(const hoot::OsmMapPtr &map, const MatchSet& matches,
-    std::vector<Merger *> &result) const;
+    std::vector<MergerPtr>& result) const;
 
   /**
    * @brief Returns a description of all available match creators.

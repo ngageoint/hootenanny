@@ -44,7 +44,7 @@ public:
   /**
    * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const override;
+  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 

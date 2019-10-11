@@ -209,11 +209,11 @@ public class ExportParams {
     }
 
     public long getBuffer() {
-        return maxNodeCountPerTile;
+        return buffer;
     }
 
     public void setBuffer(long buffer) {
-        this.maxNodeCountPerTile = buffer;
+        this.buffer = buffer;
     }
 
     public void setHoot2(boolean hoot2) {

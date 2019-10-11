@@ -54,7 +54,7 @@ NetworkMergerCreator::NetworkMergerCreator()
   _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
-bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merger*>& mergers) const
+bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<MergerPtr>& mergers) const
 {
   LOG_DEBUG("Creating mergers with " << className() << "...");
   LOG_TRACE("Creating mergers for match set: " << matchesIn);
@@ -108,15 +108,18 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
 
       if (!ConfigOptions().getHighwayMergeTagsOnly())
       {
-        mergers.push_back(new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()));
+        mergers.push_back(
+          MergerPtr(
+            new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails())));
       }
       else
       {
         mergers.push_back(
-          new HighwayTagOnlyMerger(
-            pairs,
-            std::shared_ptr<PartialNetworkMerger>(
-              new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails()))));
+          MergerPtr(
+            new HighwayTagOnlyMerger(
+              pairs,
+              std::shared_ptr<PartialNetworkMerger>(
+                new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails())))));
       }
     }
     else
@@ -130,19 +133,21 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         if (!ConfigOptions().getHighwayMergeTagsOnly())
         {
           mergers.push_back(
-            new PartialNetworkMerger(
-              larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-              larger->getNetworkDetails()));
+            MergerPtr(
+              new PartialNetworkMerger(
+                larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+                larger->getNetworkDetails())));
         }
         else
         {
           mergers.push_back(
-            new HighwayTagOnlyMerger(
-              larger->getMatchPairs(),
-              std::shared_ptr<PartialNetworkMerger>(
-                new PartialNetworkMerger(
-                  larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-                  larger->getNetworkDetails()))));
+            MergerPtr(
+              new HighwayTagOnlyMerger(
+                larger->getMatchPairs(),
+                std::shared_ptr<PartialNetworkMerger>(
+                  new PartialNetworkMerger(
+                    larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+                    larger->getNetworkDetails())))));
         }
       }
       else
@@ -156,19 +161,21 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
           if (!ConfigOptions().getHighwayMergeTagsOnly())
           {
             mergers.push_back(
-              new PartialNetworkMerger(
-                largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
-                largest->getNetworkDetails()));
+              MergerPtr(
+                new PartialNetworkMerger(
+                  largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+                  largest->getNetworkDetails())));
           }
           else
           {
             mergers.push_back(
-              new HighwayTagOnlyMerger(
-                largest->getMatchPairs(),
-                std::shared_ptr<PartialNetworkMerger>(
-                  new PartialNetworkMerger(
-                    largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
-                    largest->getNetworkDetails()))));
+              MergerPtr(
+                new HighwayTagOnlyMerger(
+                  largest->getMatchPairs(),
+                  std::shared_ptr<PartialNetworkMerger>(
+                    new PartialNetworkMerger(
+                      largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+                      largest->getNetworkDetails())))));
           }
         }
         else // Throw a review
@@ -188,12 +195,13 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
 
             const NetworkMatch* m = dynamic_cast<const NetworkMatch*>(it->get());
             mergers.push_back(
-              new MarkForReviewMerger(
-                eids,
-                "A complex road situation was found with multiple plausible solutions. Please "
-                "reference input data/imagery and manually merge or modify as needed.",
-                m->getMatchName(),
-                m->getScore()));
+              MergerPtr(
+                new MarkForReviewMerger(
+                  eids,
+                  "A complex road situation was found with multiple plausible solutions. Please "
+                  "reference input data/imagery and manually merge or modify as needed.",
+                  m->getMatchName(),
+                  m->getScore())));
 
             count++;
             if (count % 100 == 0)

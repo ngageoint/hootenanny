@@ -55,24 +55,6 @@ public:
   }
 };
 
-/**
- * Delete the Merger vector in a safe way.
- */
-struct ScopedMergerDeleter
-{
-  ScopedMergerDeleter(std::vector<Merger*>& ms) : _ms(ms) {}
-
-  ~ScopedMergerDeleter()
-  {
-    foreach (Merger* m, _ms)
-    {
-      delete m;
-    }
-  }
-
-  std::vector<Merger*>& _ms;
-};
-
 MultiaryPoiMergeCache::MultiaryPoiMergeCache(const ConstOsmMapPtr& map,
     const std::shared_ptr<MatchCreator>& matchCreator,
     const std::shared_ptr<MergerCreator>& mergerCreator) :
@@ -120,9 +102,8 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
     ms.insert(m);
   }
 
-  // create a merge vector and a clean way to clean it up.
-  std::vector<Merger*> mergers;
-  ScopedMergerDeleter deleteMergers(mergers);
+  // create a merge vector
+  std::vector<MergerPtr> mergers;
 
   // create a merger with the provided merge creator.
   _mergerCreator->createMergers(ms, mergers);

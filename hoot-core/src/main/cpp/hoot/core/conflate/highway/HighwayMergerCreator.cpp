@@ -46,7 +46,7 @@ HighwayMergerCreator::HighwayMergerCreator()
   setConfiguration(conf());
 }
 
-bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -86,11 +86,11 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<Merger*
   {
     if (!ConfigOptions().getHighwayMergeTagsOnly())
     {
-      mergers.push_back(new HighwaySnapMerger(eids, sublineMatcher));
+      mergers.push_back(MergerPtr(new HighwaySnapMerger(eids, sublineMatcher)));
     }
     else
     {
-      mergers.push_back(new HighwayTagOnlyMerger(eids, sublineMatcher));
+      mergers.push_back(MergerPtr(new HighwayTagOnlyMerger(eids, sublineMatcher)));
     }
     result = true;
   }

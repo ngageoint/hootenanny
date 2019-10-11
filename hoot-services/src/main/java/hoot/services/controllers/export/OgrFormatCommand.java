@@ -22,32 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MARKFORREVIEWMERGERCREATOR_H
-#define MARKFORREVIEWMERGERCREATOR_H
+package hoot.services.controllers.export;
 
-// hoot
-#include <hoot/core/conflate/merging/MergerCreator.h>
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-namespace hoot
-{
+import hoot.services.command.ExternalCommand;
 
-class MarkForReviewMergerCreator : public MergerCreator
-{
-public:
 
-  static std::string className() { return "hoot::MarkForReviewMergerCreator"; }
+class OgrFormatCommand extends ExternalCommand {
 
-  MarkForReviewMergerCreator();
+    OgrFormatCommand(String jobId, ExportParams params, Class<?> caller) {
+        super(jobId);
 
-  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const override;
+        //ogr2ogr -f "GeoJSON" output.geojson input.shp
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override;
-};
+        Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("INPUT", params.getInput());
 
+        String command = "ogr2ogr -f GeoJSON ${INPUT}.alpha.tiles.geojson ${INPUT}_alpha_tiles.shp";
+
+        super.configureCommand(command, substitutionMap, caller, new File("/tmp"));
+    }
 }
-
-#endif // MARKFORREVIEWMERGERCREATOR_H
