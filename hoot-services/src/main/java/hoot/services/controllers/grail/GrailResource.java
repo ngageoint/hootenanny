@@ -669,10 +669,8 @@ public class GrailResource {
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
         String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
 
-        // append first 7 digits of a uuid to the rails and overpass codenames
-        String maxSuffix = UUID.randomUUID().toString().replace("-", "").substring(0, 7);
-        String railsLabel = GRAIL_RAILS_LABEL + "_" + maxSuffix;
-        String overpassLabel = GRAIL_OVERPASS_LABEL + "_" + maxSuffix;
+        String railsLabel = GRAIL_RAILS_LABEL;
+        String overpassLabel = GRAIL_OVERPASS_LABEL;
 
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("overpassQuery", url);
