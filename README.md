@@ -37,7 +37,8 @@ Additional feature types can be made conflatable via Javascript by using Hootena
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to geometries_ - Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries. Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add new features_ - Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. Use this type of conflation when you want to fill in holes in your dataset with data from another source without modifying any data in the first dataset.
 * **[Differential Tag Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Only add new tags_ - Conflate map A with B where only tags are transferred from B to matching features in A and entire features are added from B to A in areas where B does not overlap with A. This workflow provides a mix of capabilities from both [Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc) and regular [Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc).
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - 1) Define a region in map A and replace data in that region with data in the same region from map B OR 2) Define a region in map A to preserve and replace data outside of it with data outside of the region from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset.
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Replace a section_ - Either 1) Define a region in map A and replace data in that region with data in the same region from map B OR 2) Define a region in map A to preserve and replace data outside of it with data outside of the region from map B. Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset or you would like to surround your dataset
+with new data.
 
 # [Conflation Algorithms](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
 
@@ -68,7 +69,12 @@ No automated map conflation technology is perfect. If you are conflating a relat
 For larger datasets, Hootenanny can be used standalone or as an inital step in conjunction with a crowd sourced [campaign](https://tasks.hotosm.org/) to conflate new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which end up being flagged for human review so they may later be manually corrected.
 
 # Scalability
-Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map/reduce architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance costs to support the capability (so the conflation algorithms are capable of supporting distributed computing, with some limitations). Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the density of the data being conflated and the RAM available on the machine.
+Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map-reduce 
+architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance costs to support the capability (so some of the conflation algorithms are actually capable of supporting distributed computing...with some 
+limitations). 
+
+Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
+density of the data being conflated and the RAM available on the machine.
 
 # Configuration
 
@@ -95,10 +101,9 @@ hoot conflate input1.osm input2.osm output.osm
 
 [More examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
-Development of algorithms exposed by the CLI often precedes the access of those same capabilities within the web user interface.
-
 # Programming Language Bindings
-Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose core conflation capabilities for creating custom workflows. 
+Hootenanny has [nodejs bindings](https://github.com/ngageoint/hootenanny/blob/master/docs/JavascriptOverview.asciidoc) available which expose 
+core conflation capabilities for creating custom workflows. 
 
 Example:
 
@@ -160,11 +165,16 @@ In addition to running conflation jobs with map data, Hootenanny also provides f
 # Support
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
-Don't hesitate to ask for help if features aren't conflating how you expect them to. If you have any support questions, please create an issue in this repository.
+Don't hesitate to ask for help if features aren't conflating how you expect them to or if you're experiencing difficulty while installing the 
+software. If you have any support questions, please create an issue in this repository.
 
-As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny attempts to capture most conflation scenarios with the default configuration options, but sometimes you will need to modify configuration options specific to the data you are conflating to get the best results.
+As there are lot of different conflation scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm.  Hootenanny 
+attempts to capture most conflation scenarios with the default configuration options, but sometimes you will need to modify configuration 
+options specific to the data you are conflating to get the best results.
 
-Additionally, the availability of software features to the user interface may lag their initial availability from the CLI by multiple development cycles. If you find a conflation feature you want to use mentioned in the CLI documentation but can't find it available in the UI, let us know.
+Additionally, the availability of software features to the user interface may lag their initial availability from the CLI by multiple 
+development cycles. If you find a conflation feature you want to use mentioned in the CLI documentation but can't find it available in the UI, 
+let us know.
 
 # Development
 * [Contributing](https://github.com/ngageoint/hootenanny/blob/master/CONTRIBUTING.md)
