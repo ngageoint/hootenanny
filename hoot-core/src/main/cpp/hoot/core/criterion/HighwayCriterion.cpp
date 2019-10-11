@@ -41,6 +41,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   LOG_VART(element->getElementId());
+  //LOG_VART(element);
   bool result = false;
   const Tags& tags = element->getTags();
   const ElementType type = element->getElementType();
@@ -62,7 +63,14 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   }
   else
   {
-    // TODO: what's this about?
+    // This doesn't make much sense. Why take an unmarked way and promote it to a road? You could
+    // end up with false positive matches. The runtime performance could also be hurt by checking
+    // for highway matches against non-roads. Road tags should be added to the feature before
+    // conflation, if necessary. Tried removing this and three case tests fail. One is just an
+    // element ID reordering, so ok. The other two are legit failures. Interestingly enough, if I
+    // turn off hash.seed.zero, then the tests pass. Unfortunately, doing that isn't really an
+    // option for the tests. It can probably be removed and have the tests passing but will just
+    // take a ton of debugging to figure out what's going on with the hash ordering.
 
     // Maybe it's a way with nothing but a time tag...
     it = tags.find(MetadataTags::SourceDateTime());

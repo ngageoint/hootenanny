@@ -256,11 +256,9 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
-                             _indexToEid,
-                             pCrit,
-                             std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+      IndexElementsVisitor v(
+        _index, _indexToEid, pCrit,
+        std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();
