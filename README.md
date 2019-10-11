@@ -49,8 +49,6 @@ Hootenanny has the capability to let you selectively pick the features that are 
 * [conflate only restaurant buildings](https://github.com/ngageoint/hootenanny/master/blob/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings)
 * [conflate only restaurant buildings with "Subway" in the name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings-with-subway-in-the-name)
 
-[Command line example](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurants-see-the-user-guide-feature-filtering-section-for-more-filter-examples)
-
 Hootenanny has many additional [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that can also be specified to perform feature filtering during conflation.
 
 # Attribute Translation
