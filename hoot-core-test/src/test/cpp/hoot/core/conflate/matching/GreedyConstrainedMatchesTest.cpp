@@ -123,7 +123,7 @@ class GreedyConstrainedFakeCreator : public MergerCreator
 {
 public:
 
-  virtual bool createMergers(const MatchSet&, vector<Merger*>&) const
+  virtual bool createMergers(const MatchSet&, vector<MergerPtr>&) const override
   {
     assert(false);
     return false;
