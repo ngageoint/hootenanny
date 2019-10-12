@@ -125,6 +125,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
+  // TODO: as part of #3385, I think we can make this step optional.
   LOG_INFO("Discarding unconflatable elements...");
   NonConflatableElementRemover().apply(_pMap);
   _stats.append(
@@ -421,7 +422,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
-        "Stored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
+        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
             StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
     }
   }

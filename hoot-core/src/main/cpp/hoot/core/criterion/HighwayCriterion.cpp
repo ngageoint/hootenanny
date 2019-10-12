@@ -63,14 +63,18 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   }
   else
   {
-    // This doesn't make much sense. Why take an unmarked way and promote it to a road? You could
-    // end up with false positive matches. The runtime performance could also be hurt by checking
-    // for highway matches against non-roads. Road tags should be added to the feature before
-    // conflation, if necessary. Tried removing this and three case tests fail. One is just an
-    // element ID reordering, so ok. The other two are legit failures. Interestingly enough, if I
-    // turn off hash.seed.zero, then the tests pass. Unfortunately, doing that isn't really an
-    // option for the tests. It can probably be removed and have the tests passing but will just
-    // take a ton of debugging to figure out what's going on with the hash ordering.
+    /*
+     * I don't think this is a good idea. A date isn't enough to identify a road. You could end up
+     * with false positive matches. The runtime performance could also be hurt by checking for
+     * highway matches against non-roads (although I haven't seen that in practice yet). Road tags
+     * should be added to the feature before conflation, if necessary.
+     *
+     * Tried removing this and three case tests fail. One is just an element ID reordering, so ok.
+     * The other two are legit failures. Interestingly enough if I turn off hash.seed.zero, then
+     * those tests pass. Unfortunately, doing that isn't really an option for the tests. This else
+     * statement can probably be removed and have the tests passing as well but will just take a
+     * ton of debugging to figure out what's going on with the hash ordering.
+     */
 
     // Maybe it's a way with nothing but a time tag...
     it = tags.find(MetadataTags::SourceDateTime());

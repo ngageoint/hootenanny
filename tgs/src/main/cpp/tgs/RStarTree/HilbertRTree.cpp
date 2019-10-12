@@ -65,6 +65,7 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
   _createLeafNodes(sortedBoxes, childNodes);
   _setHeight(0);
 
+  //std::cout << "Creating parent nodes..." << std::endl;
   while (childNodes.size() != 1)
   {
     std::vector<int> parentNodes;
@@ -78,6 +79,8 @@ void HilbertRTree::bulkInsert(const std::vector<Box>& boxes, const std::vector<i
 void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
   const std::vector<int>& fids, std::vector<UserBoxHolder>& hilbertBoxes)
 {
+  //std::cout << "Calculating Hilbert values..." << std::endl;
+
   assert(hilbertBoxes.size() == 0);
   HilbertCurve hilbertCurve(_dimensions, 16);
 
@@ -205,10 +208,14 @@ int HilbertRTree::_chooseWeightedChild(const std::vector<double>& weights)
 void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBoxes,
   std::vector<int>& result)
 {
+//  std::cout << "                                                            Creating leaf nodes..." <<
+//               std::endl;
+
   int maxChildCount = getRoot()->getMaxChildCount();
   result.reserve((int)ceil((float)hilbertBoxes.size() / (float)maxChildCount));
   RTreeNode* node = _getRoot();
   result.push_back(node->getId());
+  int numProcessed = 0;
   for (unsigned int i = 0; i < hilbertBoxes.size(); i++)
   {
     if (node->getChildCount() == maxChildCount)
@@ -217,6 +224,13 @@ void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBox
       result.push_back(node->getId());
     }
     node->addUserChild(*hilbertBoxes[i].box, hilbertBoxes[i].fid);
+
+//    numProcessed++;
+//    if (numProcessed % 100000 == 0)
+//    {
+//      std::cout << "                              Created " << numProcessed << " / " <<
+//        hilbertBoxes.size() << " leaf nodes." << std::endl;
+//    }
   }
 }
 
@@ -227,6 +241,7 @@ void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
   result.reserve((int)ceil((float)childNodes.size() / (float)maxChildCount));
   RTreeNode* node = _store.createNode();
   result.push_back(node->getId());
+  int numProcessed = 0;
   for (unsigned int i = 0; i < childNodes.size(); i++)
   {
     if (node->getChildCount() == maxChildCount)
@@ -235,6 +250,16 @@ void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
       result.push_back(node->getId());
     }
     node->addNodeChild(_getNode(childNodes[i]));
+
+//    numProcessed++;
+//    if (numProcessed % 1000 == 0)
+//    {
+//      // TODO: move StringUtils::formatLargeNumber up to tgs to get better formatting here; also
+//      // fix this spacing nonsense; also, this isn't really a long-term logging solution, since
+//      // it doesn't clear out each preceding line
+//      std::cout << "                                                            Created " <<
+//        numProcessed << " / " << childNodes.size() << " parent nodes." << std::endl;
+//    }
   }
 }
 

@@ -709,10 +709,11 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     }
 
     count++;
-    if (count % 100 == 0)
+    if (count % 10 == 0)
     {
       // Strangely, PROGRESS_INFO doesn't log one per line once StringUtils::formatLargeNumber gets
-      // added here...
+      // added here...why is that?; update 10/11/19: even with StringUtils removed here, I'm still
+      // seeing multiple lines logged
 //      PROGRESS_INFO(
 //        StringUtils::formatLargeNumber(count) << " / " <<
 //        StringUtils::formatLargeNumber(em.size()) << " edge match scores processed. " <<

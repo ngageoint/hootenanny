@@ -213,7 +213,6 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      // TODO: change back to 100?
       if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_DEBUG(
@@ -223,7 +222,6 @@ public:
     }
 
     _numElementsVisited++;
-    // TODO: change back to 100?
     if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
