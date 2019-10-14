@@ -65,9 +65,10 @@ void TagCriterion::setKvps(const QStringList kvps)
 
 void TagCriterion::setConfiguration(const Settings &s)
 {
-  setKvps(ConfigOptions(s).getTagCriterionKvps());
+  ConfigOptions confOpts = ConfigOptions(s);
+  setKvps(confOpts.getTagCriterionKvps());
   LOG_VART(_kvps);
-  setCaseSensitive(config.getTagCriterionCaseSensitive());
+  setCaseSensitive(confOpts.getTagCriterionCaseSensitive());
 }
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const

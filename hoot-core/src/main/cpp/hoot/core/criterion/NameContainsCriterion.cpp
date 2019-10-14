@@ -51,8 +51,8 @@ _caseSensitive(caseSensitive)
 void NameContainsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  _names = confOpts.getNameContainsCriterionNames();
-  _caseSensitive = confOpts.getNameContainsCriterionCaseSensitive();
+  _names = configOptions.getNameContainsCriterionNames();
+  _caseSensitive = configOptions.getNameContainsCriterionCaseSensitive();
 }
 
 bool NameContainsCriterion::isSatisfied(const ConstElementPtr& e) const

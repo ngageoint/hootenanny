@@ -56,21 +56,21 @@ public:
     uut.setNames(QStringList("Old Tavern"));
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-    uut.setText("OLD TOWN TAVERN");
+    uut.setNames(QStringList("OLD TOWN TAVERN"));
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    uut.setText("OLD TOWN");
+    uut.setNames(QStringList("OLD TOWN"));
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    uut.setText("blah");
+    uut.setNames(QStringList("blah"));
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
     uut.setCaseSensitive(true);
-    uut.setText("OLD TOWN TAVERN");
+
+    uut.setNames(QStringList("OLD TOWN TAVERN"));
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-    uut.setCaseSensitive(true);
-    uut.setText("OLD TOWN");
+    uut.setNames(QStringList("OLD TOWN"));
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };

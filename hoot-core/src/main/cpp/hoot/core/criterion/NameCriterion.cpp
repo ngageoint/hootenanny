@@ -40,7 +40,7 @@ _caseSensitive(false)
 {
 }
 
-NameCriterion::NameCriterion(const QString& names, const bool caseSensitive) :
+NameCriterion::NameCriterion(const QStringList& names, const bool caseSensitive) :
 _names(names),
 _caseSensitive(caseSensitive)
 {
