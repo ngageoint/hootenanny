@@ -598,6 +598,7 @@ public class GrailResource {
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
         params.setUser(user);
+        params.setPullUrl(PUBLIC_OVERPASS_URL);
 
         String url;
         try {
