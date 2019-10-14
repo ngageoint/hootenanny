@@ -57,15 +57,12 @@ bool NameCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Qt::CaseSensitivity caseSensitivity =
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-  const QStringList names = e->getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
+  const QStringList elementNames = e->getTags().getNames();
+  for (int i = 0; i < _names.size(); i++)
   {
-    for (int j = 0; j < _names.size(); j++)
+    if (elementNames.contains(_names.at(i), caseSensitivity))
     {
-      if (!e->getTags().get(names.at(i)).compare(_names.at(j), caseSensitivity) == 0)
-      {
-        return true;
-      }
+      return true;
     }
   }
   return false;

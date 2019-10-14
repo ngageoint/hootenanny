@@ -52,6 +52,7 @@ void NameContainsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   _names = configOptions.getNameContainsCriterionNames();
+  LOG_VART(_names);
   _caseSensitive = configOptions.getNameContainsCriterionCaseSensitive();
 }
 
@@ -59,12 +60,14 @@ bool NameContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Qt::CaseSensitivity caseSensitivity =
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-  const QStringList names = e->getTags().getNames();
-  for (int i = 0; i < names.size(); i++)
+  const QStringList elementNames = e->getTags().getNames();
+  LOG_VART(elementNames);
+  LOG_VART(_names);
+  for (int i = 0; i < elementNames.size(); i++)
   {
     for (int j = 0; j < _names.size(); j++)
     {
-      if (!e->getTags().get(names.at(i)).contains(_names.at(j), caseSensitivity) == 0)
+      if (elementNames.at(i).contains(_names.at(j), caseSensitivity))
       {
         return true;
       }

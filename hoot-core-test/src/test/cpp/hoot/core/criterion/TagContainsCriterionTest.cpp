@@ -46,16 +46,16 @@ public:
   void runBasicTest()
   {
     QStringList kvps;
-    kvps.append("key1=val1");
-    kvps.append("key2=val2");
+    kvps.append("key1=val");
+    kvps.append("key2=va2");
 
     TagContainsCriterion uut;
     uut.setKvps(kvps);
 
     NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
 
-    node->getTags().set("key1", "val");
-    node->getTags().set("key2", "val");
+    node->getTags().set("key1", "val1");
+    node->getTags().set("key2", "val2");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
     // only one match is required
@@ -78,20 +78,19 @@ public:
 
     NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
 
-    node->getTags().set("key", "val");
+    node->getTags().set("key", "val1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    node->getTags().set("key", "VAL");
+    node->getTags().set("key", "VAL1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    // the case sensitivity is meant for vals only and not keys but this will still work due to
-    // the way Tags is written
-    node->getTags().set("KEY", "val");
+    // This doesn't seem right.
+    node->getTags().set("KEY", "val1");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
     uut.setCaseSensitive(true);
 
-    node->getTags().set("key", "VAL");
+    node->getTags().set("key", "VAL1");
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };

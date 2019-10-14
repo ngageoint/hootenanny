@@ -80,10 +80,12 @@ bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
       "No tag keys or values specified for: " + QString::fromStdString(className()));
   }
 
-  LOG_VART(e);
   bool matches = false;
   const Qt::CaseSensitivity caseSensitivity =
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  LOG_VART(_keys);
+  LOG_VART(_valueSubstrings);
+  LOG_VART(e->getTags());
   for (int i = 0; i < _keys.size(); i++)
   {
     if (e->getTags().contains(_keys[i]) &&
