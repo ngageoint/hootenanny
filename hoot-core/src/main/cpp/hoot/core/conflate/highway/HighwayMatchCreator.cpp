@@ -213,7 +213,7 @@ public:
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
-      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 100) == 0)
+      if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
       {
         PROGRESS_DEBUG(
           "Processed " << _numMatchCandidatesVisited << " match candidates / " <<
@@ -222,7 +222,7 @@ public:
     }
 
     _numElementsVisited++;
-    if (_numElementsVisited % (_taskStatusUpdateInterval * 100) == 0)
+    if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_INFO(
         "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
@@ -254,11 +254,9 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
-                             _indexToEid,
-                             pCrit,
-                             std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+      IndexElementsVisitor v(
+        _index, _indexToEid, pCrit,
+        std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
 
       getMap()->visitRo(v);
       v.finalizeIndex();

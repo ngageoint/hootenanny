@@ -131,11 +131,15 @@ void OsmMapIndex::_buildNodeTree() const
   _pendingNodeInsert.clear();
   _pendingNodeRemoval.clear();
 
-  LOG_INFO("  Bulk inserting Node R-Tree...");
+  LOG_INFO("\tBulk inserting Node R-Tree...");
+
+  // If this takes a very long time, you can uncomment out the cout statements in HilbertRTree to
+  // get a better idea of how longs its going to take.
 
   _nodeTree->bulkInsert(boxes, ids);
 
-  LOG_INFO("  Node R-Tree index built. Time elapsed: " << StringUtils::millisecondsToDhms(t.elapsed()));
+  LOG_INFO(
+    "\tNode R-Tree index built. Time elapsed: " << StringUtils::millisecondsToDhms(t.elapsed()));
 }
 
 void OsmMapIndex::_buildWayTree() const
