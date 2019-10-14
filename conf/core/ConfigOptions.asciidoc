@@ -897,6 +897,14 @@ significantly.
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
 
+=== differential.remove.unconflatable.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true Differential Conflation will remove all elements from output which Hootenanny is unable to
+match. If false, the unconflatable data will pass through to the output.
+
 === differential.snap.unconnected.roads
 
 * Data Type: bool

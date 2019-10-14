@@ -90,3 +90,12 @@ hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C Netwo
  $OUTPUT_DIR/snapped-with-ref-output.osm --differential
 hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm || \
      diff $OUTPUT_DIR/snapped-with-ref-output.osm $INPUT_DIR/snapped-with-ref-output.osm
+
+# Run differential conflation and keep unconflatable features - The only difference you'll see here between this and the first diff
+# conflate execution is that the retaining wall from the second dataset, which hoot is unable to conflate, will pass through to output.
+echo "Running diff and passing unconflatable data through to output..."
+hoot conflate -C Testing.conf $LOG_LEVEL -C DifferentialConflation.conf -C NetworkAlgorithm.conf \
+ -D differential.remove.unconflatable.data=false $INPUT_DIR/input1.osm $INPUT_DIR/input2.osm \
+ $OUTPUT_DIR/output-keep-unconflatable.osm --differential
+hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output-keep-unconflatable.osm $INPUT_DIR/output-keep-unconflatable.osm || \
+     diff $OUTPUT_DIR/output-keep-unconflatable.osm $INPUT_DIR/output-keep-unconflatable.osm
