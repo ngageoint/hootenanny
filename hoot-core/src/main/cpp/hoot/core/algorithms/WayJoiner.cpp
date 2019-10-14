@@ -106,7 +106,7 @@ void WayJoiner::_joinParentChild()
 
 void WayJoiner::_joinSiblings()
 {
-  LOG_INFO("\tJoining way siblings...");  //*
+  LOG_INFO("\tJoining way siblings...");
 
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent

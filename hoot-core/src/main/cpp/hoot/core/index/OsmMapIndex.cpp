@@ -133,6 +133,9 @@ void OsmMapIndex::_buildNodeTree() const
 
   LOG_INFO("\tBulk inserting Node R-Tree...");
 
+  // If this takes a very long time, you can uncomment out the cout statements in HilbertRTree to
+  // get a better idea of how longs its going to take.
+
   _nodeTree->bulkInsert(boxes, ids);
 
   LOG_INFO(
