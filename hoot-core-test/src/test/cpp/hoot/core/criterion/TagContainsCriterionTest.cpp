@@ -27,41 +27,74 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/NameCriterion.h>
+#include <hoot/core/criterion/TagContainsCriterion.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-class NameCriterionTest : public HootTestFixture
+class TagContainsCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(NameCriterionTest);
-  CPPUNIT_TEST(runTest);
+  CPPUNIT_TEST_SUITE(TagContainsCriterionTest);
+  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runTest()
+  void runBasicTest()
   {
-    NameCriterion uut;
-    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node->getTags().set("name", "Old Town Tavern");
+    QStringList kvps;
+    kvps.append("key1=val1");
+    kvps.append("key2=val2");
+
+    TagContainsCriterion uut;
+    uut.setKvps(kvps);
+
+    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().set("key1", "val");
+    node->getTags().set("key2", "val");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    // only one match is required
+    node->getTags().clear();
+    node->getTags().set("key1", "val");
     node->getTags().set("key2", "blah");
-
-    uut.setNames(QStringList("Old Town Tavern"));
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    uut.setText("OLD TOWN TAVERN");
+    node->getTags().clear();
+    node->getTags().set("key1", "blah");
+    node->getTags().set("key2", "blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+  }
+
+  void runCaseSensitivityTest()
+  {
+    TagContainsCriterion uut;
+    uut.setKvps(QStringList("key=val"));
+    uut.setCaseSensitive(false);
+
+    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+
+    node->getTags().set("key", "val");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    uut.setText("blah");
+    node->getTags().set("key", "VAL");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    // the case sensitivity is for vals only and not keys
+    node->getTags().set("KEY", "val");
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
     uut.setCaseSensitive(true);
-    uut.setText("OLD TOWN TAVERN");
+
+    node->getTags().set("key", "VAL");
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NameCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(TagContainsCriterionTest, "quick");
 
 }

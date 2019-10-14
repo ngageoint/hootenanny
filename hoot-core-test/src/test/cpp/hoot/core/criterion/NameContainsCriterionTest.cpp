@@ -29,8 +29,6 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/criterion/NameContainsCriterion.h>
 
-using namespace geos::geom;
-
 namespace hoot
 {
 
@@ -44,29 +42,36 @@ public:
 
   void runTest()
   {
-//    TagKeyContainsCriterion uut;
-//    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
-//    node->getTags().set("source:phone", "blah");
-//    node->getTags().set("key2", "blah");
+    NameContainsCriterion uut;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node->getTags().set("name", "Old Town Tavern");
+    node->getTags().set("key2", "blah");
 
-//    uut.setText("phone");
-//    CPPUNIT_ASSERT(uut.isSatisfied(node));
+    uut.setNames(QStringList("Old Town Tavern"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-//    uut.setText("PHONE");
-//    CPPUNIT_ASSERT(uut.isSatisfied(node));
+    uut.setNames(QStringList("Old Town"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-//    uut.setText("source:phone");
-//    CPPUNIT_ASSERT(uut.isSatisfied(node));
+    uut.setNames(QStringList("Old Tavern"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
-//    uut.setText("source:phone:2");
-//    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+    uut.setText("OLD TOWN TAVERN");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-//    uut.setText("something else");
-//    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+    uut.setText("OLD TOWN");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-//    uut.setCaseSensitive(true);
-//    uut.setText("PHONE");
-//    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+    uut.setText("blah");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setCaseSensitive(true);
+    uut.setText("OLD TOWN TAVERN");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setCaseSensitive(true);
+    uut.setText("OLD TOWN");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };
 

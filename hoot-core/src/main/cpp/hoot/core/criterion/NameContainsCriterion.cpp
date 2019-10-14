@@ -42,35 +42,34 @@ _caseSensitive(false)
 {
 }
 
-NameContainsCriterion::NameContainsCriterion(const QStringList& names) :
+NameContainsCriterion::NameContainsCriterion(const QStringList& names, const bool caseSensitive) :
 _names(names),
-_caseSensitive(false)
+_caseSensitive(caseSensitive)
 {
 }
 
 void NameContainsCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-//  _text = configOptions.getTagKeyContainsCriterionText();
-//  LOG_VART(_text);
+  _names = confOpts.getNameContainsCriterionNames();
+  _caseSensitive = confOpts.getNameContainsCriterionCaseSensitive();
 }
 
 bool NameContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  Qt::CaseSensitivity caseSens = Qt::CaseSensitive;
-  if (!_caseSensitive)
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const QStringList names = e->getTags().getNames();
+  for (int i = 0; i < names.size(); i++)
   {
-    caseSens = Qt::CaseInsensitive;
+    for (int j = 0; j < _names.size(); j++)
+    {
+      if (!e->getTags().get(names.at(i)).contains(_names.at(j), caseSensitivity) == 0)
+      {
+        return true;
+      }
+    }
   }
-//  for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
-//  {
-//    const QString tagKey = it.key();
-//    LOG_VART(tagKey);
-//    if (tagKey.contains(_text, caseSens))
-//    {
-//      return true;
-//    }
-//  }
   return false;
 }
 

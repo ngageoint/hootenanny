@@ -39,6 +39,7 @@ class TagCriterionTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(TagCriterionTest);
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runInvalidKvpDelimiterTest);
+  CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -83,6 +84,33 @@ public:
     }
     LOG_VART(exceptionMsg);
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid TagCriterion KVP"));
+  }
+
+  void runCaseSensitivityTest()
+  {
+    TagCriterion uut;
+
+    uut.setCaseSensitive(false);
+    uut.setKvps(QStringList("key=val"));
+
+    NodePtr node(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node->getTags().set("key", "val");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    node->getTags().clear();
+    node->getTags().set("key", "VAL");
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    // the case sensitivity is for vals only and not keys
+    node->getTags().clear();
+    node->getTags().set("KEY", "val");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setCaseSensitive(true);
+
+    node->getTags().clear();
+    node->getTags().set("key", "VAL");
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };
 

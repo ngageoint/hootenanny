@@ -37,12 +37,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagCriterion)
 
-TagCriterion::TagCriterion()
+TagCriterion::TagCriterion() :
+_caseSensitive(false)
 {
   setConfiguration(conf());
 }
 
-TagCriterion::TagCriterion(const QString& k, const QString& v)
+TagCriterion::TagCriterion(const QString& k, const QString& v) :
+_caseSensitive(false)
 {
   _kvps.append(k + "=" + v);
 }
@@ -65,6 +67,7 @@ void TagCriterion::setConfiguration(const Settings &s)
 {
   setKvps(ConfigOptions(s).getTagCriterionKvps());
   LOG_VART(_kvps);
+  setCaseSensitive(config.getTagCriterionCaseSensitive());
 }
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -76,6 +79,8 @@ bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   LOG_VART(e);
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   for (int i = 0; i < _kvps.size(); i++)
   {
     const QStringList kvpParts = _kvps.at(i).split("=");
@@ -83,7 +88,7 @@ bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
     const QString val = kvpParts[1];
     LOG_VART(key);
     LOG_VART(val);
-    if (e->getTags().get(key) == val)
+    if (e->getTags().get(key).compare(val, caseSensitivity) == 0)
     {
       LOG_TRACE("crit satisifed");
       return true;

@@ -691,6 +691,26 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
 -----
 
+===== Count all features which have a name:
+
+-----
+    hoot count input.osm hoot::HasNameCriterion
+-----
+
+===== Count all features which have the name, "Old Town Tavern":
+
+-----
+    hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
+      input.osm hoot::NameCriterion
+-----
+
+===== Count all features whose name contains "subway":
+
+-----
+    hoot count -D name.contains.criterion.names="subway" -D name.contains.criterion.case.sensitive=false \
+      input.osm hoot::NameContainsCriterion
+-----
+
 ===== Calculate the area of all features in a map:
 
 -----

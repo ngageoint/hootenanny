@@ -35,30 +35,39 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, NameCriterion)
 
-NameCriterion::NameCriterion()
+NameCriterion::NameCriterion() :
+_caseSensitive(false)
 {
 }
 
-NameCriterion::NameCriterion(const QString& names) :
-_names(names)
+NameCriterion::NameCriterion(const QString& names, const bool caseSensitive) :
+_names(names),
+_caseSensitive(caseSensitive)
 {
 }
 
 void NameCriterion::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
-  //_keys = confOpts.getTagKeyCriterionKeys();
+  _names = confOpts.getNameCriterionNames();
+  _caseSensitive = confOpts.getNameCriterionCaseSensitive();
 }
 
 bool NameCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-//  for (int i = 0; i < _keys.size(); i++)
-//  {
-//    if (e->getTags().contains(_keys[i]))
-//    {
-//      return true;
-//    }
-//  }
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const QStringList names = e->getTags().getNames();
+  for (int i = 0; i < names.size(); i++)
+  {
+    for (int j = 0; j < _names.size(); j++)
+    {
+      if (!e->getTags().get(names.at(i)).compare(_names.at(j), caseSensitivity) == 0)
+      {
+        return true;
+      }
+    }
+  }
   return false;
 }
 

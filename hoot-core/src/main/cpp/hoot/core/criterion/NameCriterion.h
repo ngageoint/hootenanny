@@ -38,7 +38,7 @@ namespace hoot
 {
 
 /**
- * Identifies elements that contain a specified name
+ * Identifies elements that contain a specified namen
  */
 class NameCriterion : public ElementCriterion, public Configurable
 {
@@ -47,16 +47,20 @@ public:
   static std::string className() { return "hoot::NameCriterion"; }
 
   NameCriterion();
-  NameCriterion(const QStringList& names);
+  NameCriterion(const QStringList& names, const bool caseSensitive = false);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new NameCriterion(_names)); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new NameCriterion(_names, _caseSensitive)); }
 
   virtual QString getDescription() const
   { return "Identifies elements that contain a specified name"; }
 
   virtual void setConfiguration(const Settings& conf);
+
+  void setNames(const QStringList& names) { _names = names; }
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
@@ -64,6 +68,7 @@ public:
 private:
 
   QStringList _names;
+  bool _caseSensitive;
 };
 
 }

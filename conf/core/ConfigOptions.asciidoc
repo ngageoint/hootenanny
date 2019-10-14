@@ -2088,6 +2088,38 @@ List of merger creators to use during conflation. This can modify what features 
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 'hoot info --mergers' displays information about the available mergers.
 
+=== name.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameContainsCriterion will only identify partial names whose case matches exactly with the
+name values in name.contains.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.contains.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameContainsCriterion. From the command line, delimit multiple entries
+with ';' and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
+=== name.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameCriterion will only identify names whose case matches exactly with the name values in
+name.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
+and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
 === network.conflicts.aggression
 
 * Data Type: double
@@ -4109,6 +4141,15 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagContainsCriterion will only identify partial tag values whose case matches exactly with
+the tag key values in tag.contains.criterion.kvps. If false, the cases of the tag values do not have
+to match.
+
 === tag.contains.criterion.kvps
 
 * Data Type: list
@@ -4117,6 +4158,14 @@ Primarily, this is useful within the node.js interface.
 Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
 command line, delimit multiple key/value pairs with ';' and surround the entire list in double
 quotes. E.g. "name=Java;name=Shop"
+
+=== tag.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagCriterion will only identify tag strings whose cases match exactly with the values in
+tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
 
 === tag.criterion.kvps
 

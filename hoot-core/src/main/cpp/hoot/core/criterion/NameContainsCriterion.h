@@ -45,17 +45,19 @@ public:
   static std::string className() { return "hoot::NameContainsCriterion"; }
 
   NameContainsCriterion();
-  NameContainsCriterion(const QStringList& names);
+  NameContainsCriterion(const QStringList& names, const bool caseSensitive = false);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new NameContainsCriterion()); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new NameContainsCriterion(_names, _caseSensitive)); }
 
   virtual QString getDescription() const
   { return "Identifies elements which have a name containing specified text"; }
 
   virtual void setConfiguration(const Settings& conf);
 
+  void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   virtual QString toString() const override
