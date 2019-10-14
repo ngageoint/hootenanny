@@ -224,6 +224,41 @@ void filterPattern(const std::vector<CppUnit::Test*>& from, std::vector<CppUnit:
   }
 }
 
+void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests)
+{
+  vector<CppUnit::Test*> vTestsToRun;
+  bool filtered = false;
+
+  for (int i = 0; i < args.size(); i++)
+  {
+    if (args[i].startsWith("--exclude="))
+    {
+      if (vTestsToRun.size() > 0)
+      {
+        //  On the second (or more) time around exclude from the excluded list
+        vTests.swap(vTestsToRun);
+        vTestsToRun.clear();
+      }
+      int equalsPos = args[i].indexOf('=');
+      QString regex = args[i].mid(equalsPos + 1);
+      LOG_INFO("Excluding pattern: " << regex);
+      filterPattern(vTests, vTestsToRun, regex, false);
+      filtered = true;
+    }
+    else if (args[i].startsWith("--include="))
+    {
+      int equalsPos = args[i].indexOf('=');
+      QString regex = args[i].mid(equalsPos + 1);
+      LOG_INFO("Including only tests that match: " << regex);
+      filterPattern(vTests, vTestsToRun, regex, true);
+      filtered = true;
+    }
+  }
+  //  Swap the filtered tests into the test list
+  if (filtered)
+    vTests.swap(vTestsToRun);
+}
+
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 {
   if (name == t->getName())
@@ -293,12 +328,12 @@ void getNames(vector<string>& names, CppUnit::Test* t)
   }
 }
 
-void getNames(vector<string>& names, const std::vector<TestPtr>& vTests)
+void getNames(vector<string>& names, const std::vector<CppUnit::Test*>& vTests)
 {
   for (size_t i = 0; i < vTests.size(); i++)
   {
     // See if our test is really a suite
-    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i].get());
+    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i]);
     if (suite != 0)
     {
       vector<CppUnit::Test*> children = suite->getTests();
@@ -314,13 +349,7 @@ void getNames(vector<string>& names, const std::vector<TestPtr>& vTests)
   }
 }
 
-void getNames(std::vector<string>& names, const std::vector<CppUnit::Test*>& vTests)
-{
-  for (size_t i = 0; i < vTests.size(); i++)
-    names.push_back(vTests[i]->getName());
-}
-
-void printNames(const std::vector<TestPtr>& vTests)
+void printNames(const std::vector<CppUnit::Test*>& vTests)
 {
   vector<string> names;
   getNames(names, vTests);
@@ -495,7 +524,10 @@ int main(int argc, char* argv[])
     if (args.contains("--all-names"))
     {
       populateTests(getTestType(args), vAllTests, printDiff);
-      printNames(vAllTests);
+      getTestVector(vAllTests, vTestsToRun);
+      includeExcludeTests(args, vTestsToRun);
+      cout << "Test count: " << vTestsToRun.size() << endl;
+      printNames(vTestsToRun);
       return 0;
     }
 
@@ -577,37 +609,10 @@ int main(int argc, char* argv[])
       populateTests(type, vAllTests, printDiff);
 
       vector<CppUnit::Test*> vTests;
-      getTestVector(vAllTests, vTests);
-      bool filtered = false;
+      getTestVector(vAllTests, vTestsToRun);
+      //  Include or exclude tests
+      includeExcludeTests(args, vTestsToRun);
 
-      for (int i = 0; i < args.size(); i++)
-      {
-        if (args[i].startsWith("--exclude="))
-        {
-          if (vTestsToRun.size() > 0)
-          {
-            //  On the second (or more) time around exclude from the excluded list
-            vTests.swap(vTestsToRun);
-            vTestsToRun.clear();
-          }
-          int equalsPos = args[i].indexOf('=');
-          QString regex = args[i].mid(equalsPos + 1);
-          LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(vTests, vTestsToRun, regex, false);
-          filtered = true;
-        }
-        else if (args[i].startsWith("--include="))
-        {
-          int equalsPos = args[i].indexOf('=');
-          QString regex = args[i].mid(equalsPos + 1);
-          LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(vTests, vTestsToRun, regex, true);
-          filtered = true;
-        }
-      }
-
-      if (!filtered) // Do all tests
-        vTestsToRun.swap(vTests);
       cout << "Running core tests.  Test count: " << vTestsToRun.size() << endl;
     }
 
@@ -650,8 +655,10 @@ int main(int argc, char* argv[])
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       vector<TestPtr> serialTests;
       populateTests(SERIAL, serialTests, printDiff, true);
+      vector<CppUnit::Test*> vSerialTests;
+      getTestVector(serialTests, vSerialTests);
       vector<string> serialNames;
-      getNames(serialNames, serialTests);
+      getNames(serialNames, vSerialTests);
       for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
       {
         if (nameCheck.find(*it) != nameCheck.end())
