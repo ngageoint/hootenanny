@@ -305,6 +305,8 @@ def processValues(fileName):
                 tValues[fieldName]['values'] = {}
             continue
 
+
+
         # Default: Split the value and store it
         if (fieldValue.find('=') > -1):
             (aValue,aName) = fieldValue.split("=")
@@ -376,6 +378,9 @@ def processFile(fileName,enValues):
         # If no field name, no need to continue
         if fieldName == '':
             continue
+
+        # Swap "< >" for "[ ]" so that they don't get interpreted as HTML
+        fieldValue = fieldValue.replace("<","[").replace(">","]")
 
         # Process the attributes
         # Sort out a feature vs a codelist, enumeration etc
@@ -495,6 +500,7 @@ parser.add_argument('--dumpenum', help='Dump out the enumerated attributes, one 
 parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
 parser.add_argument('--fcodelist', help='Dump out a list of fcodes',action='store_true')
 parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
+parser.add_argument('--fieldvalues', help='Dump out the schema as a JSON object for the Translation Assistant',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
 parser.add_argument('--intattr', help='Dump out all attributes that are integers',action='store_true')
@@ -504,7 +510,7 @@ parser.add_argument('--rules', help='Dump out one2one rules',action='store_true'
 parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
 parser.add_argument('--txtlen', help='Dump out the lengths of all of the text attributes',action='store_true')
 parser.add_argument('--txtrules', help='Dump out text rules',action='store_true')
-parser.add_argument('--withdefs', help='Add feature ad attribute definitions to the schema',action='store_true')
+parser.add_argument('--withdefs', help='Add feature and attribute definitions to the schema',action='store_true')
 parser.add_argument('mainfile', help='The main GGDM spec csv file', action='store')
 # parser.add_argument('layerfile', help='A csv file with layer information', action='store')
 parser.add_argument('valuesfile', help='A csv file with enumerated values', action='store')
@@ -594,6 +600,9 @@ elif args.fullschema:
 
 elif args.dumpenum:
     dumpEnumerations(schema,'enumGGDM30')
+
+elif args.fieldvalues:
+    printFieldValues(schema,'tdsv70FieldValues')
 
 else: # The default is to dump out a basic schema with no text enumerations
     schema = convertTextEnumerations(schema)
