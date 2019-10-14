@@ -71,6 +71,7 @@ import com.querydsl.core.Tuple;
 
 import hoot.services.command.Command;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
+import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
@@ -205,6 +206,21 @@ public class ExportResource {
                 }
 
                 Command zipCommand = getZIPCommand(workDir, outputName); // zip maps into single folder...
+                workflow.add(zipCommand);
+
+            //generates density tiles and alpha shape and clips the first with the second
+            } else if (params.getOutputType().startsWith("alpha.tiles")) {
+                params.setOutputType("tiles.geojson");
+                workflow.add(getCommand(user, jobId, params, debugLevel));
+                params.setOutputType("alpha.shp");
+                workflow.add(getCommand(user, jobId, params, debugLevel));
+                params.setInputType("file");
+                params.setInput(workDir.getAbsolutePath() + "/" + params.getOutputName());
+                Command ogrClipCommand = new OgrClipCommand(jobId, params, this.getClass());
+                workflow.add(ogrClipCommand);
+                Command ogrFormatCommand = new OgrFormatCommand(jobId, params, this.getClass());
+                workflow.add(ogrFormatCommand);
+                Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
                 workflow.add(zipCommand);
 
             } else {

@@ -43,7 +43,7 @@ BuildingMergerCreator::BuildingMergerCreator()
 {
 }
 
-bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -76,7 +76,7 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
   // only add the building merge if there are elements to merge.
   if (eids.size() > 0)
   {
-    mergers.push_back(new BuildingMerger(eids));
+    mergers.push_back(MergerPtr(new BuildingMerger(eids)));
     result = true;
   }
 

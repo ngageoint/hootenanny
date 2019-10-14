@@ -399,10 +399,10 @@ void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementI
 {
   for (size_t i = 0; i < replaced.size(); ++i)
   {
-    HashMap<ElementId, vector<Merger*>>::const_iterator it = _e2m.find(replaced[i].first);
+    HashMap<ElementId, vector<MergerPtr>>::const_iterator it = _e2m.find(replaced[i].first);
     if (it != _e2m.end())
     {
-      const vector<Merger*>& mergers = it->second;
+      const vector<MergerPtr>& mergers = it->second;
       // replace the element id in all mergers.
       for (size_t i = 0; i < mergers.size(); ++i)
       {
@@ -437,7 +437,7 @@ void UnifyingConflator::_reset()
 
   _e2m.clear();
   _matches.clear();
-  _deleteAll(_mergers);
+  _mergers.clear();
 }
 
 void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
