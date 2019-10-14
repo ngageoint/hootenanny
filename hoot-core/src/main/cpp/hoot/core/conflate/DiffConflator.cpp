@@ -125,12 +125,15 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
-  // TODO: as part of #3385, I think we can make this step optional.
-  LOG_INFO("Discarding unconflatable elements...");
-  NonConflatableElementRemover().apply(_pMap);
-  _stats.append(
-    SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+  // If we don't do this, then any non-matchable data will simply pass through to output.
+  if (ConfigOptions().getDifferentialRemoveUnconflatableData())
+  {
+    LOG_INFO("Discarding unconflatable elements...");
+    NonConflatableElementRemover().apply(_pMap);
+    _stats.append(
+      SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
+    OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+  }
 
   // will reproject only if necessary
   MapProjector::projectToPlanar(_pMap);
