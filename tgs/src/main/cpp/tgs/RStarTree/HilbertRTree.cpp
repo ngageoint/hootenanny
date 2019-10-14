@@ -215,7 +215,7 @@ void HilbertRTree::_createLeafNodes(const std::vector<UserBoxHolder>& hilbertBox
   result.reserve((int)ceil((float)hilbertBoxes.size() / (float)maxChildCount));
   RTreeNode* node = _getRoot();
   result.push_back(node->getId());
-  int numProcessed = 0;
+  //int numProcessed = 0;
   for (unsigned int i = 0; i < hilbertBoxes.size(); i++)
   {
     if (node->getChildCount() == maxChildCount)
@@ -241,7 +241,7 @@ void HilbertRTree::_createParentNodes(const std::vector<int>& childNodes,
   result.reserve((int)ceil((float)childNodes.size() / (float)maxChildCount));
   RTreeNode* node = _store.createNode();
   result.push_back(node->getId());
-  int numProcessed = 0;
+  //int numProcessed = 0;
   for (unsigned int i = 0; i < childNodes.size(); i++)
   {
     if (node->getChildCount() == maxChildCount)
