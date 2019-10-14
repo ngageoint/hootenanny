@@ -22,42 +22,47 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/HasNameCriterion.h>
+#include <hoot/core/criterion/NameCriterion.h>
 
 namespace hoot
 {
 
-class HasNameCriterionTest : public HootTestFixture
+class NameCriterionTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(HasNameCriterionTest);
-  CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST_SUITE(NameCriterionTest);
+  CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runBasicTest()
+  void runTest()
   {
-    HasNameCriterion uut;
+    NameCriterion uut;
+    NodePtr node(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node->getTags().set("name", "Old Town Tavern");
+    node->getTags().set("key2", "blah");
 
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set("name", "blah");
-    CPPUNIT_ASSERT(uut.isSatisfied(node1));
+    uut.setNames(QStringList("Old Town Tavern"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    NodePtr node2(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set("blah", "blah");
-    CPPUNIT_ASSERT(!uut.isSatisfied(node2));
+    uut.setNames(QStringList("OLD TOWN TAVERN"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    NodePtr node3(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node3->getTags().set("alt_name", "blah");
-    CPPUNIT_ASSERT(uut.isSatisfied(node3));
+    uut.setNames(QStringList("blah"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setCaseSensitive(true);
+
+    uut.setNames(QStringList("OLD TOWN TAVERN"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HasNameCriterionTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(NameCriterionTest, "quick");
 
 }

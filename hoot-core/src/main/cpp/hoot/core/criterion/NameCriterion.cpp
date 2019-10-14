@@ -22,42 +22,50 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "NameCriterion.h"
 
-// Hoot
-#include <hoot/core/TestUtils.h>
-#include <hoot/core/criterion/HasNameCriterion.h>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
 
-class HasNameCriterionTest : public HootTestFixture
+HOOT_FACTORY_REGISTER(ElementCriterion, NameCriterion)
+
+NameCriterion::NameCriterion() :
+_caseSensitive(false)
 {
-  CPPUNIT_TEST_SUITE(HasNameCriterionTest);
-  CPPUNIT_TEST(runBasicTest);
-  CPPUNIT_TEST_SUITE_END();
+}
 
-public:
+NameCriterion::NameCriterion(const QStringList& names, const bool caseSensitive) :
+_names(names),
+_caseSensitive(caseSensitive)
+{
+}
 
-  void runBasicTest()
+void NameCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions confOpts = ConfigOptions(conf);
+  _names = confOpts.getNameCriterionNames();
+  _caseSensitive = confOpts.getNameCriterionCaseSensitive();
+}
+
+bool NameCriterion::isSatisfied(const ConstElementPtr& e) const
+{
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  const QStringList elementNames = e->getTags().getNames();
+  for (int i = 0; i < _names.size(); i++)
   {
-    HasNameCriterion uut;
-
-    NodePtr node1(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node1->getTags().set("name", "blah");
-    CPPUNIT_ASSERT(uut.isSatisfied(node1));
-
-    NodePtr node2(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node2->getTags().set("blah", "blah");
-    CPPUNIT_ASSERT(!uut.isSatisfied(node2));
-
-    NodePtr node3(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
-    node3->getTags().set("alt_name", "blah");
-    CPPUNIT_ASSERT(uut.isSatisfied(node3));
+    if (elementNames.contains(_names.at(i), caseSensitivity))
+    {
+      return true;
+    }
   }
-};
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HasNameCriterionTest, "quick");
+  return false;
+}
 
 }

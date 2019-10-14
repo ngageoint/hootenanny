@@ -22,53 +22,53 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef TAGCRITERION_H
-#define TAGCRITERION_H
+
+#ifndef NAME_CONTAINS_CRITERION_H
+#define NAME_CONTAINS_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Configurable.h>
 
-// Qt
-#include <QString>
-
 namespace hoot
 {
 
 /**
- * Returns true if k==v
+ * Identifies elements which have a name containing specified text
  */
-class TagCriterion : public ElementCriterion, public Configurable
+class NameContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagCriterion"; }
+  static std::string className() { return "hoot::NameContainsCriterion"; }
 
-  TagCriterion();
-  TagCriterion(const QString& k, const QString& v);
+  NameContainsCriterion();
+  NameContainsCriterion(const QStringList& names, const bool caseSensitive = false);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  void setConfiguration(const Settings& s);
-
-  void setKvps(const QStringList kvps);
-  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new NameContainsCriterion(_names, _caseSensitive)); }
 
   virtual QString getDescription() const
-  { return "Identifies elements containing a specified tag key/value combination"; }
+  { return "Identifies elements which have a name containing specified text"; }
 
-  virtual QString toString() const override;
+  virtual void setConfiguration(const Settings& conf);
+
+  void setNames(const QStringList& names) { _names = names; }
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
 
-  QStringList _kvps;
+  QStringList _names;
   bool _caseSensitive;
 };
 
 }
 
-#endif // TAGCRITERION_H
+#endif // NAME_CONTAINS_CRITERION_H

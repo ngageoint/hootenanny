@@ -40,8 +40,6 @@ namespace hoot
 
 /**
  * Identifies elements by tag key and tag value substring
- *
- * TODO: handle case sensitivity as an option
  */
 class TagContainsCriterion : public ElementCriterion, public Configurable
 {
@@ -69,6 +67,7 @@ public:
   { return "Identifies elements having a particular tag key and tag value substring"; }
 
   void setKvps(const QStringList kvps);
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   virtual QString toString() const override;
 
@@ -76,6 +75,7 @@ private:
 
   QStringList _keys;
   QStringList _valueSubstrings;
+  bool _caseSensitive;
 };
 
 }
