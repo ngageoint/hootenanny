@@ -101,10 +101,11 @@ public:
     node->getTags().set("key", "VAL");
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
-    // the case sensitivity is for vals only and not keys
+    // the case sensitivity is meant for vals only and not keys but this will still work due to
+    // the way Tags is written
     node->getTags().clear();
     node->getTags().set("KEY", "val");
-    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
 
     uut.setCaseSensitive(true);
 
