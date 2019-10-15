@@ -141,7 +141,7 @@ class PullApiCommand implements InternalCommand {
 
     }
 
-    private InputStream getHttpResponseWithSSL(String url) throws Exception {
+    public static InputStream getHttpResponseWithSSL(String url) throws Exception {
         String certPath = replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH);
         String keyPassphrase = replaceSensitiveData(PRIVATE_OVERPASS_CERT_PHRASE);
 

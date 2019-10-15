@@ -32,6 +32,7 @@ import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.RAILSPORT_CAPABILITIES_URL;
@@ -40,10 +41,16 @@ import static hoot.services.HootProperties.RAILSPORT_PUSH_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -630,10 +637,29 @@ public class GrailResource {
         return response;
     }
 
-    @POST
+    @GET
     @Path("/grailMetadataQuery")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grailMetadata(@Context HttpServletRequest request,
+    public Response grailMetadata(@Context HttpServletRequest request) {
+
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
+
+        String railsLabel = GRAIL_RAILS_LABEL;
+        String overpassLabel = GRAIL_OVERPASS_LABEL;
+
+        JSONObject jobInfo = new JSONObject();
+        jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
+        jobInfo.put("railsLabel", railsLabel);
+        jobInfo.put("overpassLabel", overpassLabel);
+
+        return Response.ok(jobInfo.toJSONString()).build();
+    }
+
+    @POST
+    @Path("/overpassStats")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response overpassStats(@Context HttpServletRequest request,
             GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
@@ -644,13 +670,13 @@ public class GrailResource {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
         if (customQuery == null || customQuery.equals("")) {
-        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
-        try {
-            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-        } catch(Exception exc) {
-            String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
-            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
-        }
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
+                throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+            }
         } else {
             overpassQuery = customQuery;
 
@@ -668,16 +694,24 @@ public class GrailResource {
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
-        String url = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
+        try {
+            overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
+        } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
-        String railsLabel = GRAIL_RAILS_LABEL;
-        String overpassLabel = GRAIL_OVERPASS_LABEL;
+        // Get public overpass data
+        String publicUrl = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
+        String publicStats = retrieveOverpassStats(publicUrl, false);
+
+        // Get private overpass data if private overpass url was provided
+        String privateStats = null;
+        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
+            privateStats = retrieveOverpassStats(privateUrl, true);
+        }
 
         JSONObject jobInfo = new JSONObject();
-        jobInfo.put("overpassQuery", url);
-        jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
-        jobInfo.put("railsLabel", railsLabel);
-        jobInfo.put("overpassLabel", overpassLabel);
+        jobInfo.put("publicStats", publicStats);
+        jobInfo.put("privateStats", privateStats);
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
@@ -855,6 +889,47 @@ public class GrailResource {
         }
 
         return params;
+    }
+
+    /**
+     *
+     * @param url
+     * @param usePrivateOverpass
+     *          If true and the cert path is set then we know to use the cert for the overpass request
+     *          If false then no cert will need to be used for the request
+     * @return
+     */
+    private static String retrieveOverpassStats(String url, boolean usePrivateOverpass) {
+        StringBuilder statsInfo = new StringBuilder();
+
+        try {
+            InputStream inputStream;
+
+            // if cert path is specified then we assume to use them for the request
+            // Both need to be true because in the case of using this function for public overpass we want it to skip immediately even if
+            // the cert path is specified.
+            if (usePrivateOverpass && !replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
+                inputStream = PullApiCommand.getHttpResponseWithSSL(url);
+            } else {
+                URLConnection conn = new URL(url).openConnection();
+                inputStream = conn.getInputStream();
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+
+            String inputLine;
+            while ((inputLine = br.readLine()) != null) {
+                statsInfo.append(inputLine + "\n");
+            }
+
+            br.close();
+        }
+        catch (Exception exc) {
+            String msg = "Error retrieving overpass stats!  Cause: " + exc.getMessage();
+            throw new WebApplicationException(exc, Response.status(Response.Status.NOT_FOUND).entity(msg).build());
+        }
+
+        return statsInfo.toString();
     }
 
 }
