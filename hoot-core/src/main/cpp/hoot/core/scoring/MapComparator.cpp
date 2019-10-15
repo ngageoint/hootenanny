@@ -31,6 +31,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
+#include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 
 // Standard
 #include <iomanip>
@@ -280,6 +281,20 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
       testMap->getRelations().size() << ")");
     mismatch = true;
   }
+
+  CountUniqueReviewsVisitor countReviewsVis;
+  refMap->visitRo(countReviewsVis);
+  const int refReviews = (int)countReviewsVis.getStat();
+  countReviewsVis.clear();
+  testMap->visitRo(countReviewsVis);
+  const int testReviews = (int)countReviewsVis.getStat();
+  if (refReviews != testReviews)
+  {
+    LOG_WARN(
+      "Number of reviews does not match (1: " << refReviews << "; 2: " << testReviews << ")");
+    mismatch = true;
+  }
+
   if (mismatch)
   {
     return false;

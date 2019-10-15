@@ -192,9 +192,7 @@ QList<EdgeSublineMatchPtr> NetworkDetails::calculateMatchingSublines(ConstNetwor
     {
       subline2->reverse();
     }
-    EdgeSublineMatchPtr m(new EdgeSublineMatch(
-      _toEdgeSubline(wsm.getSubline1(), e1),
-      subline2));
+    EdgeSublineMatchPtr m(new EdgeSublineMatch(_toEdgeSubline(wsm.getSubline1(), e1), subline2));
     result.append(m);
   }
 
