@@ -20,5 +20,7 @@ include::developer/HootenannyOsmApiDatabaseConflationNotes.asciidoc[]
 include::developer/HootenannyImplicitTagDatabaseGeneration.asciidoc[]
 include::developer/HootenannyLanguageTranslation.asciidoc[]
 include::developer/HootenannyRegenerateUnifyingRandomForestModels.asciidoc[]
+include::developer/HootenannyOptimizingNetworkAlgorithmSettings.asciidoc[]
+
 
 

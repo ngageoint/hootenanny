@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -82,7 +83,9 @@ void NetworkMatcher::_createEdge2Index()
     ctr++;
     if (ctr % 10 == 0)
     {
-      PROGRESS_INFO("Created " << ctr << " / " << em.size() << " edge mappings.");
+      PROGRESS_INFO(
+        "Created " << StringUtils::formatLargeNumber(ctr) << " / " <<
+        StringUtils::formatLargeNumber(em.size()) << " edge mappings.");
     }
   }
 
