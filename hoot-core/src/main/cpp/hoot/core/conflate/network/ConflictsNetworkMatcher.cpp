@@ -717,15 +717,12 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     {
       // Strangely, PROGRESS_INFO doesn't log one per line once StringUtils::formatLargeNumber gets
       // added here...why is that?; update 10/11/19: even with StringUtils removed here, I'm still
-      // seeing multiple lines logged
-//      PROGRESS_INFO(
-//        StringUtils::formatLargeNumber(count) << " / " <<
-//        StringUtils::formatLargeNumber(em.size()) << " edge match scores processed. " <<
-//        StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<
-//        " duplicate edge matches removed.");
+      // seeing multiple lines logged...why?
       PROGRESS_INFO(
-        count << " / " << em.size() << " edge match scores processed for " <<
-        totalNumIntersections << " total intersections. " << finder.getNumSimilarEdgeMatches() <<
+        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(em.size()) << " edge match scores processed for " <<
+        StringUtils::formatLargeNumber(totalNumIntersections) << " total intersections. " <<
+        StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<
         " duplicate edge matches removed.");
     }
   }
