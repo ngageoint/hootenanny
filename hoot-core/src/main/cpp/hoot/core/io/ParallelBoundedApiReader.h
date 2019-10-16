@@ -141,7 +141,7 @@ protected:
   };
   DataType _dataType;
   /** URL of the API endpoint to query */
-  QUrl _url;
+  QUrl _sourceUrl;
   /** List of result strings, one for each HTTP response */
   QStringList _resultsList;
   /** Total number of results received, should match _totalEnvelopes at the end to ensure all data has arrived */

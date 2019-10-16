@@ -38,6 +38,7 @@ PartialOsmMapReader::PartialOsmMapReader()
 
 void PartialOsmMapReader::read(const OsmMapPtr& map)
 {
+  map->appendSource(_url);
   readPartial(map);
   finalizePartial();
 }

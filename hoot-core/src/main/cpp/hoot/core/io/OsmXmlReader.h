@@ -83,8 +83,6 @@ public:
 
   virtual bool isSupported(const QString& url) override;
 
-  virtual void open(const QString& url) override;
-
   virtual void read(const OsmMapPtr& map) override;
 
   void readFromString(const QString& xml, const OsmMapPtr& map);
@@ -145,7 +143,6 @@ protected:
   int _missingNodeCount;
   int _missingWayCount;
   int _badAccuracyCount;
-  QString _path;
 
   bool _keepStatusTag;
   bool _useFileStatus;

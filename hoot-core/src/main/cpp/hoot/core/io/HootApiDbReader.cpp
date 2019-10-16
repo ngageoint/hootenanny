@@ -66,7 +66,7 @@ Envelope HootApiDbReader::calculateEnvelope() const
 
 void HootApiDbReader::open(const QString& urlStr)
 {
-  _url = urlStr;
+  OsmMapReader::open(urlStr);
   if (!isSupported(_url))
   {
     throw HootException("An unsupported URL was passed in to HootApiDbReader: " + _url);
