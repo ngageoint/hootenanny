@@ -35,6 +35,9 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace geos::geom;
 using namespace std;
 using namespace Tgs;
@@ -654,12 +657,9 @@ void ConflictsNetworkMatcher::finalize()
       const double theirScore = _scores[r->getEdge()];
 
       // If it's a conflict, AND we score a lot better, axe the other one
-      if (r->isConflict())
+      if (r->isConflict() && myScore > (_conflictingScoreThresholdModifier + theirScore))
       {
-        if (myScore > (_conflictingScoreThresholdModifier + theirScore))
-        {
-          _scores[r->getEdge()] = 1.0e-5;
-        }
+        _scores[r->getEdge()] = 1.0e-5;
       }
     }
 
@@ -672,7 +672,7 @@ void ConflictsNetworkMatcher::finalize()
 }
 
 void ConflictsNetworkMatcher::_seedEdgeScores()
-{
+{  
   EdgeMatchSetFinder finder(_details, _edgeMatches, _n1, _n2);
 
   // our stubs don't need to be bidirectional since they don't create new nodes.
@@ -682,17 +682,18 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
   int count = 0;
   // go through all the n1 edges
   const OsmNetwork::EdgeMap& em = _n1->getEdgeMap();
+  int totalNumIntersections = 0;
   for (OsmNetwork::EdgeMap::const_iterator it = em.begin(); it != em.end(); ++it)
   {
     ConstNetworkEdgePtr e1 = it.value();
 
     // find all the n2 edges that are in range of this one
     Envelope env = _details->getEnvelope(it.value());
-
     env.expandBy(_details->getSearchRadius(it.value()));
     LOG_TRACE("Search Radius: " << _details->getSearchRadius(it.value()));
 
     IntersectionIterator iit = _createIterator(env, _edge2Index);
+    int numIntersections = 0;
     while (iit.next())
     {
       ConstNetworkEdgePtr e2 = _index2Edge[iit.getId()];
@@ -706,6 +707,9 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
         // Add all the EdgeMatches that are seeded with this edge pair.
         finder.addEdgeMatches(e1, e2);
       }
+
+      numIntersections++;
+      totalNumIntersections++;
     }
 
     count++;
@@ -713,15 +717,13 @@ void ConflictsNetworkMatcher::_seedEdgeScores()
     {
       // Strangely, PROGRESS_INFO doesn't log one per line once StringUtils::formatLargeNumber gets
       // added here...why is that?; update 10/11/19: even with StringUtils removed here, I'm still
-      // seeing multiple lines logged
-//      PROGRESS_INFO(
-//        StringUtils::formatLargeNumber(count) << " / " <<
-//        StringUtils::formatLargeNumber(em.size()) << " edge match scores processed. " <<
-//        StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<
-//        " duplicate edge matches removed.");
+      // seeing multiple lines logged...why?
       PROGRESS_INFO(
-        count << " / " << em.size() << " edge match scores processed. " <<
-        finder.getNumSimilarEdgeMatches() << " duplicate edge matches removed.");
+        StringUtils::formatLargeNumber(count) << " / " <<
+        StringUtils::formatLargeNumber(em.size()) << " edge match scores processed for " <<
+        StringUtils::formatLargeNumber(totalNumIntersections) << " total intersections. " <<
+        StringUtils::formatLargeNumber(finder.getNumSimilarEdgeMatches()) <<
+        " duplicate edge matches removed.");
     }
   }
 
