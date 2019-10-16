@@ -103,7 +103,7 @@ public:
    * @brief getCenter - Gets the node set as the roundabout's center
    * @return - Node
    */
-  NodePtr getCenter(){ return _pCenterNode; }
+  NodePtr getCenter() { return _pCenterNode; }
 
   /**
    * @brief makeRoundabout - Creates & populates a roundabout object using the
@@ -112,8 +112,8 @@ public:
    * @param pWay - The roundabout way
    * @return - A newly constructed roundabout object
    */
-  static std::shared_ptr<Roundabout> makeRoundabout (const OsmMapPtr &pMap,
-                                                       WayPtr pWay);
+  static std::shared_ptr<Roundabout> makeRoundabout(const OsmMapPtr &pMap,
+                                                    WayPtr pWay);
 
   /**
    * @brief removeRoundabout - Removes this roundabout from the map, and

@@ -897,6 +897,14 @@ significantly.
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
 
+=== differential.remove.unconflatable.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true Differential Conflation will remove all elements from output which Hootenanny is unable to
+match. If false, the unconflatable data will pass through to the output.
+
 === differential.snap.unconnected.roads
 
 * Data Type: bool
@@ -2087,6 +2095,38 @@ each other. The units are in meters, and the value must be greater than zero.
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 'hoot info --mergers' displays information about the available mergers.
+
+=== name.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameContainsCriterion will only identify partial names whose case matches exactly with the
+name values in name.contains.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.contains.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameContainsCriterion. From the command line, delimit multiple entries
+with ';' and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
+=== name.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameCriterion will only identify names whose case matches exactly with the name values in
+name.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
+and surround the entire list in double quotes. E.g. "Subway;Jimmys"
 
 === network.conflicts.aggression
 
@@ -3738,6 +3778,22 @@ the "Translation" section of the Hootenanny User Guide.
 Export some of the images used when evaluating the graph connections between two maps (`score`
 command).
 
+=== score.matches.allow.uuids.as.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+The current manual match ID format is a 6 character hex string created by the AddRef*Visitor
+classes. This option allows backward compatibilty support for UUID ID formats that exist in some
+older manually matched input files.
+
+=== score.matches.full.debug.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Adds more detail to manual match validation warning/error messages.
+
 === score.matches.remove.nodes
 
 * Data Type: bool
@@ -3750,7 +3806,10 @@ Remove REF tags from nodes before match scoring when using the score-matches com
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+In some situations manually matched input data may need to be cropped to allow for smaller test
+runtimes. When this is done, sometimes REF1 features will be removed from the input. Disabling this
+option allows for score-matches to run when there are missing REF1 features. Warnings will be logged
+for any that are found.
 
 === script.test.max.exec.time
 
@@ -4090,6 +4149,15 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagContainsCriterion will only identify partial tag values whose case matches exactly with
+the tag key values in tag.contains.criterion.kvps. If false, the cases of the tag values do not have
+to match.
+
 === tag.contains.criterion.kvps
 
 * Data Type: list
@@ -4098,6 +4166,14 @@ Primarily, this is useful within the node.js interface.
 Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
 command line, delimit multiple key/value pairs with ';' and surround the entire list in double
 quotes. E.g. "name=Java;name=Shop"
+
+=== tag.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagCriterion will only identify tag strings whose cases match exactly with the values in
+tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
 
 === tag.criterion.kvps
 

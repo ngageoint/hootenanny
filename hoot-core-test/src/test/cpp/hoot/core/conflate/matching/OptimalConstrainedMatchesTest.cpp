@@ -123,7 +123,7 @@ class OptimalConstrainedFakeCreator : public MergerCreator
 {
 public:
 
-  virtual bool createMergers(const MatchSet&, vector<Merger*>&) const
+  virtual bool createMergers(const MatchSet&, vector<MergerPtr>&) const override
   {
     assert(false);
     return false;
@@ -190,13 +190,14 @@ public:
 
   virtual void setUp()
   {
-    MergerFactory::getInstance().clear();
-    MergerFactory::getInstance().registerCreator(new OptimalConstrainedFakeCreator());
+    MergerFactory::getInstance().reset();
+    MergerFactory::getInstance().registerCreator(
+          MergerCreatorPtr(new OptimalConstrainedFakeCreator()));
   }
 
   virtual void tearDown()
   {
-    MergerFactory::getInstance().clear();
+    MergerFactory::getInstance().reset();
     MergerFactory::getInstance().registerDefaultCreators();
   }
 };

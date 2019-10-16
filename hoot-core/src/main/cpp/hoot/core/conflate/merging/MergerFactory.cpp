@@ -49,27 +49,22 @@ MergerFactory::MergerFactory()
 
 MergerFactory::~MergerFactory()
 {
-  clear();
+  reset();
 }
 
-void MergerFactory::clear()
+void MergerFactory::reset()
 {
-  // delete all creators.
-  for (size_t i = 0; i < _creators.size(); ++i)
-  {
-    delete _creators[i];
-  }
   _creators.clear();
 }
 
 void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
-  vector<Merger*>& result) const
+  vector<MergerPtr>& result) const
 {
   for (size_t i = 0; i < _creators.size(); i++)
   {
     PROGRESS_DEBUG("Creating merger " << i + 1 << " / " << _creators.size() << "...");
 
-    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i]);
+    OsmMapConsumer* omc = dynamic_cast<OsmMapConsumer*>(_creators[i].get());
     if (omc)
     {
       omc->setOsmMap(map.get());
@@ -91,7 +86,6 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
   if (logWarnCount < Log::getWarnMessageLimit())
   {
     LOG_WARN("Unable to create merger for the provided set of matches: " << matches);
-    LOG_DEBUG("Creators: " << _creators);
   }
   else if (logWarnCount == Log::getWarnMessageLimit())
   {
@@ -165,7 +159,7 @@ void MergerFactory::registerDefaultCreators()
     if (className.length() > 0)
     {
       args.removeFirst();
-      MergerCreator* mc = Factory::getInstance().constructObject<MergerCreator>(className);
+      MergerCreatorPtr mc(Factory::getInstance().constructObject<MergerCreator>(className));
       registerCreator(mc);
 
       if (args.size() > 0)

@@ -35,8 +35,12 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ManualMatchValidator)
 
 ManualMatchValidator::ManualMatchValidator() :
-_requireRef1(true)
+_requireRef1(true),
+_allowUuidManualMatchIds(false),
+_fullDebugOutput(false)
 {
+  _uuidRegEx.setPattern(
+    "\\{[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\}");
 }
 
 void ManualMatchValidator::apply(const OsmMapPtr& map)
@@ -75,6 +79,9 @@ void ManualMatchValidator::apply(const OsmMapPtr& map)
 
 void ManualMatchValidator::_validate(const ConstElementPtr& element)
 {
+  LOG_VARD(_requireRef1);
+  LOG_VARD(_allowUuidManualMatchIds);
+
   // Just recording one error for each element for performance reasons, even if there are multiple.
 
   const Tags& tags = element->getTags();
@@ -97,8 +104,11 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   Tags::const_iterator tagRef2Itr = tags.find(MetadataTags::Ref2());
   if (tagRef2Itr != tags.end())
   {
-    ref2 = tagRef2Itr.value().trimmed().toLower().split(";");
-    if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).isEmpty()))
+    // use SkipEmptyParts to get past trailing semicolons
+    ref2 =
+      tagRef2Itr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    ref2.removeAll(";");
+    if (ref2.isEmpty() || (ref2.size() == 1 && ref2.at(0).trimmed().isEmpty()))
     {
       _recordIssue(element, "Empty REF2 tag");
       return;
@@ -110,8 +120,10 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   Tags::const_iterator tagReviewItr = tags.find(MetadataTags::Review());
   if (tagReviewItr != tags.end())
   {
-    review = tagReviewItr.value().trimmed().toLower().split(";");
-    if (review.isEmpty() || (review.size() == 1 && review.at(0).isEmpty()))
+    review =
+      tagReviewItr.value().trimmed().toLower().split(";", QString::SplitBehavior::SkipEmptyParts);
+    review.removeAll(";");
+    if (review.isEmpty() || (review.size() == 1 && review.at(0).trimmed().isEmpty()))
     {
       _recordIssue(element, "Empty REVIEW tag");
       return;
@@ -159,11 +171,15 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
   // check for dupes
   else if (!ref2.isEmpty() && ref2.toSet().size() != ref2.size() )
   {
-    _recordIssue(element, "Duplicate ID found in REF2=" + ref2.join(";"));
+    const QStringList duplicates = StringUtils::getDuplicates(ref2).toList();
+    assert(duplicates.size() > 0);
+    _recordIssue(element, "Duplicate IDs found in REF2: " + duplicates.join(";"));
   }
   else if (!review.isEmpty() && review.toSet().size() != review.size())
   {
-    _recordIssue(element, "Duplicate ID found in REVIEW=" + review.join(";"));
+    const QStringList duplicates = StringUtils::getDuplicates(review).toList();
+    assert(duplicates.size() > 0);
+    _recordIssue(element, "Duplicate IDs found in REVIEW: " + duplicates.join(";"));
   }
   else if (!ref2.isEmpty())
   {
@@ -227,17 +243,31 @@ void ManualMatchValidator::_validate(const ConstElementPtr& element)
 void ManualMatchValidator::_recordIssue(const ConstElementPtr& element, QString message,
                                         const bool isError)
 {
+  // It can be tough to track down problems in elements without unique tags, since the source file
+  // element IDs won't necessarily match the element IDs here.
   Tags tags = element->getTags();
-  Tags::const_iterator tagItr = tags.find(MetadataTags::Uuid());
-  if (tagItr != tags.end())
+  tags.remove(MetadataTags::Ref1());
+  tags.remove(MetadataTags::Ref2());
+  tags.remove(MetadataTags::Review());
+  if (!_fullDebugOutput)
   {
-    // It can be rough to track down problems in elements without unique tags, so we'll take
-    // advantage here if an element has a uuid. score-matches adds uuids, but that's done after
-    // reading the source file, so not much help when its time to find the problem in the source
-    // file itself.
+    Tags::const_iterator tagItr = tags.find(MetadataTags::Uuid());
+    if (tagItr != tags.end())
+    {
+      // We'll take advantage here if an element has a uuid. score-matches adds uuids, but that's
+      // done after reading the source file, so not much help when its time to find the problem in
+      // the source file itself.
 
-    message += "; uuid=" + tagItr.value();
+      message += "; uuid=" + tagItr.value();
+    }
   }
+  else
+  {
+    // Here we'll just add all the tags.
+
+    message += "; tags: " + tags.toString();
+  }
+
   LOG_VART(message);
   if (isError)
   {
@@ -267,8 +297,11 @@ bool ManualMatchValidator::_isValidRef1Id(const QString& matchId) const
 
 bool ManualMatchValidator::_isValidUniqueMatchId(const QString& matchId) const
 {
-  // This corresponds with how AddRef1Visitor creates the ids.
-  return matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6));
+  return
+    // backward compatibility with the original uuid ids
+    (_allowUuidManualMatchIds && _uuidRegEx.exactMatch(matchId)) ||
+    // This corresponds with how AddRef1Visitor creates the ids.
+    (matchId.size() >= 6 && StringUtils::isAlphaNumeric(matchId.right(6)));
 }
 
 bool ManualMatchValidator::_isValidNonUniqueMatchId(const QString& matchId) const

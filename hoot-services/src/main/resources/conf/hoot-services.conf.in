@@ -102,9 +102,9 @@ httpTimeout=600000
 # Max feature count for grail operations
 grailMaxFeatureCount=1000000
 
-# Code name we assign for the rails and overpass pull data
-grailRailsCodename=reference
-grailOverpassCodename=secondary
+# Label we assign for the rails and overpass pull data
+grailRailsLabel=Reference
+grailOverpassLabel=Secondary
 
 # Grail pull overpass query file
 grailOverpassQueryPath=conf/services/grailOverpassQuery.oql

@@ -47,7 +47,7 @@ public:
   virtual QString getName() const override { return "conflate-cumulative"; }
 
   virtual QString getDescription() const override
-  { return "Conflates three or more maps into a single map, retaining feature provenance (experimental)"; }
+  { return "Conflates three or more maps into a single map while retaining feature provenance (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 

@@ -38,7 +38,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/util/UuidHelper.h>
 
 namespace hoot
 {

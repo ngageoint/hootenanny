@@ -43,7 +43,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
@@ -256,6 +256,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  LOG_INFO("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -456,8 +457,10 @@ int ConflateCmd::runSimple(QStringList& args)
 
   progress.set(
     1.0, Progress::JobState::Successful,
-    "Conflation job completed for reference: ..." + input1.right(maxFilePrintLength) +
-    " and secondary: ..." + input2.right(maxFilePrintLength) + " and written to output: ..." +
+    "Conflation job completed in " +
+    StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)) + " for reference map: ..." +
+    input1.right(maxFilePrintLength) + " and secondary map: ..." +
+    input2.right(maxFilePrintLength) + " and written to output: ..." +
     output.right(maxFilePrintLength));
 
   return 0;

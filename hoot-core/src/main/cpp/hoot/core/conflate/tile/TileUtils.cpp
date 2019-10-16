@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/tile/TileBoundsCalculator.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Tgs
@@ -45,7 +46,7 @@ namespace hoot
 
 std::vector<std::vector<geos::geom::Envelope>> TileUtils::calculateTiles(
   const long maxNodesPerTile, const double pixelSize, OsmMapPtr map, long& minNodeCountInOneTile,
-  long& maxNodeCountInOneTile)
+  long& maxNodeCountInOneTile, std::vector<std::vector<long>>& nodeCounts)
 {
   TileBoundsCalculator tileBoundsCalculator(pixelSize);
   tileBoundsCalculator.setMaxNodesPerBox(maxNodesPerTile);
@@ -55,9 +56,14 @@ std::vector<std::vector<geos::geom::Envelope>> TileUtils::calculateTiles(
   //we're calculating for unknown1 only, so fill the second matrix with all zeroes
   cv::Mat zeros = cv::Mat::zeros(r1.size(), r1.type());
   tileBoundsCalculator.setImages(r1, zeros);
-  std::vector<std::vector<geos::geom::Envelope>> tiles =  tileBoundsCalculator.calculateTiles();
+
+  const std::vector<std::vector<geos::geom::Envelope>> tiles =
+    tileBoundsCalculator.calculateTiles();
+
   minNodeCountInOneTile = tileBoundsCalculator.getMinNodeCountInOneTile();
   maxNodeCountInOneTile = tileBoundsCalculator.getMaxNodeCountInOneTile();
+  nodeCounts = tileBoundsCalculator.getNodeCounts();
+
   return tiles;
 }
 
@@ -104,10 +110,13 @@ geos::geom::Envelope TileUtils::getRandomTile(
 }
 
 void TileUtils::writeTilesToGeoJson(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles, const QString& outputPath,
+  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
   const bool selectSingleRandomTile, int randomSeed)
 {
-  //write out to temp osm and then use ogr2ogr to convert to geojson
+  // write out to temp osm and then use ogr2ogr to convert to geojson; trying to remember, but I
+  // believe our geojson writer wouldn't quite give the geometry output format needed for this,
+  // which is why ogr2ogr is used here...but that's worth verifying now.
 
   QTemporaryFile osmTempFile("/tmp/tiles-calculate-temp-XXXXXX.osm");
   if (!osmTempFile.open())
@@ -116,7 +125,20 @@ void TileUtils::writeTilesToGeoJson(
       "Unable to open OSM temp file: " + osmTempFile.fileName() + " for GeoJSON output.");
   }
   LOG_VARD(osmTempFile.fileName());
-  writeTilesToOsm(tiles, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
+  writeTilesToOsm(tiles, nodeCounts, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
+
+  // hack - To get around having to modify osmconf.ini, arbitrarily hijacking the "amenity" field
+  // here since its supported in the default ogr configuration. Doing this allows the ogr2ogr select
+  // to bring back the node counts. We can get away with this b/c there's no actual element data
+  // that could actually have an amenity tag...only tiles outlines in this file. If we decide we
+  // want to modify the default osmconf.ini as part of the build process to include a "node_count"
+  // tag, then all of this "amenity" related logic can go away. These full file  text replacements
+  // are inefficient, but the tile files aren't generally going to get huge. Ideally, our geojson
+  // I/O class could be used, but it munges the output (see above).
+
+  // replace "node_count" in the osm file with "amenity", so ogr can read it
+  FileUtils::replaceFully(
+    osmTempFile.fileName(), QStringList("node_count"), QStringList("amenity"));
 
   QFile outFile(outputPath);
   if (outFile.exists() && !outFile.remove())
@@ -125,9 +147,10 @@ void TileUtils::writeTilesToGeoJson(
   }
   LOG_VARD(outputPath);
 
-  //exporting as multipolygons, as that's what the Tasking Manager expects
+  // exporting as multipolygons, as that's what the Tasking Manager expects; The fields available
+  // to select are configured in osmconf.ini. See note about "amenity" above.
   const QString cmd =
-    "ogr2ogr -f GeoJSON -select \"name,boundary,osm_way_id\" " + outputPath + " " +
+    "ogr2ogr -f GeoJSON -select \"amenity,osm_way_id\" " + outputPath + " " +
     osmTempFile.fileName() + " multipolygons";
   LOG_VARD(cmd);
   LOG_INFO("Writing output to " << outputPath);
@@ -138,11 +161,24 @@ void TileUtils::writeTilesToGeoJson(
       "Failed converting " + osmTempFile.fileName() + " to GeoJSON: " + outputPath +
       ".  Status: " + QString::number(retval));
   }
+
+  // restore the "node_count" tag key in place of the "amenity" tag key
+  QStringList textsToReplace;
+  textsToReplace.append("amenity");
+  // for this one, just wanted to see it shown as "task" instead of "osm_way_id"; we could make this
+  // configurable, if needed; alternatively could have hacked another ogr field for this purpose,
+  // but we're not really gaining anything by doing that
+  textsToReplace.append("osm_way_id");
+  QStringList replacementTexts;
+  replacementTexts.append("node_count");
+  replacementTexts.append("task");
+  FileUtils::replaceFully(outputPath, textsToReplace, replacementTexts);
 }
 
-void TileUtils::writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
-                                const QString& outputPath, const bool selectSingleRandomTile,
-                                int randomSeed)
+void TileUtils::writeTilesToOsm(
+  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+  const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
+  const bool selectSingleRandomTile, int randomSeed)
 {
   LOG_VARD(outputPath);
 
@@ -197,11 +233,18 @@ void TileUtils::writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelo
       bbox->addNode(upperRight->getId());
       bbox->addNode(lowerRight->getId());
       bbox->addNode(lowerLeft->getId());
-      //gdal will recognize any closed way with the boundary tag as a polygon (tags
-      //for features recognized as polys configurable in osmconf.ini), which is the type of
-      //output we want
+
+      // If you want any tags added here to be seen in the geojson output, update the select
+      // statement in writeTilesToGeoJson, if the field is already supported in osmconf.ini OR if
+      // its not supported in osmconfi.ini, add custom handling as a workaround (see related note
+      // in writeTilesToGeoJson).
+
+      // gdal will recognize any closed way with the boundary tag as a polygon (tags
+      // for features recognized as polys configurable in osmconf.ini), which is the type of
+      // output we want...so we have to output this tag (can be removed after the fact)
       bbox->setTag("boundary", "task_grid_cell");
-      bbox->setTag("name", "Task Grid Cell #" + QString::number(bboxCtr));
+      bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
+
       if (!selectSingleRandomTile ||
           (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
       {
@@ -212,6 +255,7 @@ void TileUtils::writeTilesToOsm(const std::vector<std::vector<geos::geom::Envelo
   }
 
   OsmMapWriterFactory::write(boundaryMap, outputPath);
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
 }
 
 }

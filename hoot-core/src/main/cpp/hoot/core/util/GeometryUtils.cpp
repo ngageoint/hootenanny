@@ -226,7 +226,8 @@ Geometry* GeometryUtils::validateGeometryCollection(
 
   for (size_t i = 0; i < gc->getNumGeometries(); i++)
   {
-    Geometry* tmp = result->Union(validateGeometry(gc->getGeometryN(i)));
+    std::shared_ptr<Geometry> geometry(validateGeometry(gc->getGeometryN(i)));
+    Geometry* tmp = result->Union(geometry.get());
     delete result;
     result = tmp;
   }
@@ -268,7 +269,7 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   {
     const LineString* oldShell = p->getExteriorRing();
     std::shared_ptr<LinearRing> oldLinearRing(
-      GeometryFactory::getDefaultInstance()->createLinearRing(*oldShell->getCoordinates()));
+      GeometryFactory::getDefaultInstance()->createLinearRing(oldShell->getCoordinates()));
     LinearRing* shell = validateLinearRing(oldLinearRing.get());
     std::vector<Geometry*>* holes = new vector<Geometry*>();
     holes->reserve(p->getNumInteriorRing());

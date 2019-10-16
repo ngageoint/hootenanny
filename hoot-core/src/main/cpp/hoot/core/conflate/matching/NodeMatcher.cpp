@@ -37,7 +37,7 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Factory.h>
 
 // Tgs

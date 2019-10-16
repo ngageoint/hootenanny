@@ -48,6 +48,7 @@
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/util/StringUtils.h>
 using namespace hoot::elements;
 
 // Qt
@@ -127,9 +128,11 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     char* wkt1 = 0;
     getProjection()->exportToPrettyWkt(&wkt1);
     QString proj1 = QString::fromLatin1(wkt1);
+    CPLFree(wkt1);
     char* wkt2 = 0;
     appendFromMap->getProjection()->exportToPrettyWkt(&wkt2);
     QString proj2 = QString::fromLatin1(wkt2);
+    CPLFree(wkt2);
     throw HootException(
       "Incompatible maps.  Map being appended to has projection:\n" + proj1 +
       "\nMap being appended from has projection:\n" + proj2);
@@ -731,11 +734,21 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
 
   // make a copy so we can iterate through even if there are changes.
   const NodeMap& allNodes = getNodes();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
     if (containsNode(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Node>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
     }
   }
 }
@@ -750,11 +763,21 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
 
   // make a copy so we can iterate through even if there are changes.
   const WayMap& allWays = getWays();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allWays.size()) << " ways.");
     }
   }
 }
@@ -769,11 +792,21 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
 
   // make a copy so we can iterate through even if there are changes.
   const RelationMap& allRelations = getRelations();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     if (containsRelation(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allRelations.size()) << " relations.");
     }
   }
 }
@@ -788,31 +821,59 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
 
   // make a copy so we can iterate through even if there are changes.
   const NodeMap allNodes = getNodes();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
     if (containsNode(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Node>(it->second));
     }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
+    }
   }
 
   // make a copy so we can iterate through even if there are changes.
   const WayMap allWays = getWays();
+  numVisited = 0;
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
     }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allWays.size()) << " ways.");
+    }
   }
 
   // make a copy so we can iterate through even if there are changes.
   const RelationMap allRelations = getRelations();
+  numVisited = 0;
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     if (containsRelation(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allRelations.size()) << " relations.");
     }
   }
 }
@@ -827,31 +888,59 @@ void OsmMap::visitRw(ElementVisitor& visitor)
 
   // make a copy so we can iterate through even if there are changes.
   const NodeMap allNodes = getNodes();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
   {
     if (containsNode(it->first))
     {
       visitor.visit(it->second);
     }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
+    }
   }
 
   // make a copy so we can iterate through even if there are changes.
   const WayMap allWays = getWays();
+  numVisited = 0;
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
     {
       visitor.visit(it->second);
     }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allWays.size()) << " ways.");
+    }
   }
 
   // make a copy so we can iterate through even if there are changes.
   const RelationMap allRelations = getRelations();
+  numVisited = 0;
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
     if (containsRelation(it->first))
     {
       visitor.visit(it->second);
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allRelations.size()) << " relations.");
     }
   }
 }
@@ -866,11 +955,21 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
 
   // make a copy so we can iterate through even if there are changes.
   const WayMap allWays = getWays();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allWays.size()) << " ways.");
     }
   }
 }
@@ -885,11 +984,21 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
 
   // make a copy so we can iterate through even if there are changes.
   const WayMap allWays = getWays();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
     if (containsWay(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<Way>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allWays.size()) << " ways.");
     }
   }
 }
@@ -904,11 +1013,21 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
 
   // make a copy so we can iterate through even if there are changes.
   const RelationMap allRs = getRelations();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
   {
     if (containsRelation(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allRs.size()) << " relations.");
     }
   }
 }
@@ -923,11 +1042,21 @@ void OsmMap::visitRelationsRw(ElementVisitor& visitor)
 
   // make a copy so we can iterate through even if there are changes.
   const RelationMap allRs = getRelations();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (RelationMap::const_iterator it = allRs.begin(); it != allRs.end(); ++it)
   {
     if (containsRelation(it->first))
     {
       visitor.visit(std::dynamic_pointer_cast<Relation>(it->second));
+    }
+
+    numVisited++;
+    if (numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allRs.size()) << " relations.");
     }
   }
 }

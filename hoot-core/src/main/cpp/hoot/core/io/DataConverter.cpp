@@ -38,7 +38,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>

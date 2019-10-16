@@ -32,10 +32,27 @@ See the User Guide for more details on command usage.
     hoot conflate --differential input1.osm input2.osm output.osm
 -----
 
-===== Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples):
+===== Conflate only buildings:
 
 -----
-    hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      input1.osm input2.osm output.osm
+-----
+
+===== Conflate only restaurant buildings:
+
+-----
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+      input1.osm input2.osm output.osm
+-----
+
+===== Conflate only restaurant buildings with "Subway" in the name:
+
+-----
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+      -D conflate.pre.ops="hoot::TagCriterion" -D tag.criterion.kvps="name;Subway" \
       input1.osm input2.osm output.osm
 -----
 
@@ -672,6 +689,26 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 
 -----
     hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
+-----
+
+===== Count all features which have a name:
+
+-----
+    hoot count input.osm hoot::HasNameCriterion
+-----
+
+===== Count all features which have the name, "Old Town Tavern":
+
+-----
+    hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
+      input.osm hoot::NameCriterion
+-----
+
+===== Count all features whose name contains "subway":
+
+-----
+    hoot count -D name.contains.criterion.names="subway" -D name.contains.criterion.case.sensitive=false \
+      input.osm hoot::NameContainsCriterion
 -----
 
 ===== Calculate the area of all features in a map:

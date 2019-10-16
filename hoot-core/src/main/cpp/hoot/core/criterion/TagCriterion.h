@@ -54,6 +54,7 @@ public:
   void setConfiguration(const Settings& s);
 
   void setKvps(const QStringList kvps);
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
 
@@ -65,6 +66,7 @@ public:
 private:
 
   QStringList _kvps;
+  bool _caseSensitive;
 };
 
 }

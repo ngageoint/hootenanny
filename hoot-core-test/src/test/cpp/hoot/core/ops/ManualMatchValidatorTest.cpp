@@ -48,11 +48,13 @@ class ManualMatchValidatorTest : public HootTestFixture
   CPPUNIT_TEST(runMissingRef1Test);
   CPPUNIT_TEST(runMissingRef1NotRequiredTest);
   CPPUNIT_TEST(runInvalidIdTest);
+  CPPUNIT_TEST(runUuidTest);
   CPPUNIT_TEST(runRepeatedIdTest);
   CPPUNIT_TEST(runStatusTest);
   CPPUNIT_TEST(runMultipleRef1Test);
   CPPUNIT_TEST(runInvalidMultipleIdTest);
   CPPUNIT_TEST(runDuplicateIdTest);
+  CPPUNIT_TEST(runFullDebugOutputTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -224,6 +226,52 @@ public:
     CPPUNIT_ASSERT(uut.getWarnings().size() == 1);
     warningItr = uut.getWarnings().find(ref2->getElementId());
     HOOT_STR_EQUALS("No REF1 exists for REF2=002da0", warningItr.value().toStdString());
+  }
+
+  void runUuidTest()
+  {
+    // in backward compatibility mode, uuid's are allowed for all types of manual match ids
+
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
+    QMap<ElementId, QString> errors;
+
+    uut.setAllowUuidManualMatchIds(true);
+
+    tags.set(MetadataTags::Ref1(), "{1c745d1e-39e5-4926-a2d3-8f87af39e037}");
+    NodePtr node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(!uut.hasErrors());
+
+    map->clear();
+    node->getTags().clear();
+    const QString badUuid = "{1c745d1e-3e5-4926-a2d3-8f87af39e037}";
+    tags.set(MetadataTags::Ref1(), badUuid);
+    node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errors = uut.getErrors();
+    errorItr = errors.find(node->getElementId());
+    const QString expectedErrorMsg = "Invalid REF1=" + badUuid;
+    HOOT_STR_EQUALS(expectedErrorMsg.toStdString(), errorItr.value().toStdString());
+
+    // regular ids should be allowed in compatibility mode as well
+
+    map->clear();
+    node->getTags().clear();
+    tags.set(MetadataTags::Ref1(), "002c75");
+    node = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(!uut.hasErrors());
   }
 
   void runInvalidIdTest()
@@ -516,7 +564,7 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());;
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
-    HOOT_STR_EQUALS("Duplicate ID found in REF2=002da0;002da0", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Duplicate IDs found in REF2: 002da0", errorItr.value().toStdString());
 
     tags.clear();
     map->clear();
@@ -528,7 +576,30 @@ public:
     CPPUNIT_ASSERT(uut.hasErrors());;
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
-    HOOT_STR_EQUALS("Duplicate ID found in REVIEW=002da0;002da0", errorItr.value().toStdString());
+    HOOT_STR_EQUALS("Duplicate IDs found in REVIEW: 002da0", errorItr.value().toStdString());
+  }
+
+  void runFullDebugOutputTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    Tags tags;
+    ManualMatchValidator uut;
+    QMap<ElementId, QString>::const_iterator errorItr;
+
+    uut.setFullDebugOutput(true);
+
+    tags.set(MetadataTags::Ref2(), "002da0;002da0");
+    tags.set("blah", "bleh");
+    ConstNodePtr invalidRef2 = TestUtils::createNode(map, Status::Unknown2, 0.0, 0.0, 15.0, tags);
+
+    uut.apply(map);
+
+    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.getErrors().size() == 1);
+    errorItr = uut.getErrors().find(invalidRef2->getElementId());
+    HOOT_STR_EQUALS(
+      "Duplicate IDs found in REF2: 002da0; tags: blah = bleh\n",
+      errorItr.value().toStdString());
   }
 };
 

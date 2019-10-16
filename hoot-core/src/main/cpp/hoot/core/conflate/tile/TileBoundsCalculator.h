@@ -147,7 +147,20 @@ public:
 
   TileBoundsCalculator(double pixelSize);
 
+  /**
+   * Calculates a set of rectangular bounding boxes that at most contain a configured set of nodes;
+   * strives to return a set of tiles with the most balanced number of nodes possible
+   *
+   * @return a grid of tile bounding boxes
+   */
   std::vector<std::vector<geos::geom::Envelope>> calculateTiles();
+
+  /**
+   * Returns the node counts for each computed tile bounding box
+   *
+   * @return a grid of node counts
+   */
+  std::vector<std::vector<long>> getNodeCounts() const { return _nodeCounts; }
 
   void renderImage(const std::shared_ptr<OsmMap>& map);
 
@@ -189,6 +202,7 @@ private:
   int32_t _maxValue;
   long _maxNodeCountInOneTile;
   long _minNodeCountInOneTile;
+  std::vector<std::vector<long>> _nodeCounts;
 
   void _calculateMin();
 

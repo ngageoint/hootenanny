@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/rnd/util/TileUtils.h>
+#include <hoot/core/conflate/tile/TileUtils.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -53,9 +53,7 @@ public:
   virtual QString getName() const override { return "node-density-tiles"; }
 
   virtual QString getDescription() const override
-  { return "Calculates geospatial bounding box partitions based on a map's node density (experimental) "; }
-
-  virtual QString getType() const override { return "rnd"; }
+  { return "Calculates bounding box partitions based on a map's node density"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -130,18 +128,23 @@ public:
     conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
 
     OsmMapPtr inputMap = _readInputs(inputs);
+
     long minNodeCountInOneTile = 0;
     long maxNodeCountInOneTile = 0;
+    std::vector<std::vector<long>> nodeCounts;
     const std::vector<std::vector<geos::geom::Envelope>> tiles =
       TileUtils::calculateTiles(
-        maxNodesPerTile, pixelSize, inputMap, minNodeCountInOneTile, maxNodeCountInOneTile);
+        maxNodesPerTile, pixelSize, inputMap, minNodeCountInOneTile, maxNodeCountInOneTile,
+        nodeCounts);
+
     if (output.toLower().endsWith(".geojson"))
     {
-      TileUtils::writeTilesToGeoJson(tiles, output, args.contains("--random"), randomSeed);
+      TileUtils::writeTilesToGeoJson(
+        tiles, nodeCounts, output, args.contains("--random"), randomSeed);
     }
     else
     {
-      TileUtils::writeTilesToOsm(tiles, output, args.contains("--random"), randomSeed);
+      TileUtils::writeTilesToOsm(tiles, nodeCounts, output, args.contains("--random"), randomSeed);
     }
 
     return 0;

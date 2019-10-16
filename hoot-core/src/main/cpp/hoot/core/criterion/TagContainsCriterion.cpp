@@ -37,7 +37,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagContainsCriterion)
 
-TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
+TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring) :
+_caseSensitive(false)
 {
   _keys.append(key);
   _valueSubstrings.append(valueSubstring);
@@ -45,7 +46,8 @@ TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
 
 TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
 _keys(keys),
-_valueSubstrings(valueSubstrings)
+_valueSubstrings(valueSubstrings),
+_caseSensitive(false)
 {
 }
 
@@ -53,6 +55,7 @@ void TagContainsCriterion::setConfiguration(const Settings &s)
 {
   ConfigOptions config = ConfigOptions(s);
   setKvps(config.getTagContainsCriterionKvps());
+  setCaseSensitive(config.getTagContainsCriterionCaseSensitive());
 }
 
 void TagContainsCriterion::setKvps(const QStringList kvps)
@@ -77,11 +80,16 @@ bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
       "No tag keys or values specified for: " + QString::fromStdString(className()));
   }
 
-  LOG_VART(e);
   bool matches = false;
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  LOG_VART(_keys);
+  LOG_VART(_valueSubstrings);
+  LOG_VART(e->getTags());
   for (int i = 0; i < _keys.size(); i++)
   {
-    if (e->getTags().contains(_keys[i]) && e->getTags()[_keys[i]].contains(_valueSubstrings[i]))
+    if (e->getTags().contains(_keys[i]) &&
+        e->getTags()[_keys[i]].contains(_valueSubstrings[i], caseSensitivity))
     {
       matches = true;
       break;  //  Only one match is required
