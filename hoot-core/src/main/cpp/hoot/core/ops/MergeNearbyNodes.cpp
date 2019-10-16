@@ -174,7 +174,7 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
     if (processedCount % 10000 == 0)
     {
       PROGRESS_INFO(
-        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " node groups / " <<
+        "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " node groups from " <<
         StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
   }

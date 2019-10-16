@@ -29,16 +29,17 @@
 #define NODES_PER_WAY_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic,
-  public OperationStatusInfo
+class NodesPerWayVisitor : public MultipleCriterionConsumerVisitor, public NumericStatistic,
+  public OperationStatusInfo, public Configurable
 {
 public:
 
@@ -47,6 +48,8 @@ public:
   NodesPerWayVisitor();
 
   virtual void visit(const ConstElementPtr& e) override;
+
+  virtual void setConfiguration(const Settings& conf);
 
   virtual QString getDescription() const { return "Calculates way node statistics"; }
 
@@ -68,7 +71,7 @@ public:
 
 private:
 
-  WayCriterion _crit;
+  WayCriterion _wayCrit;
 
   int _totalWayNodes;
   int _minNodesPerWay;

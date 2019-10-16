@@ -502,9 +502,10 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         try
         {
-          pVisitor = shared_ptr<ConstElementVisitor>(
-                static_cast<ConstElementVisitor *>(
-                  Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+          pVisitor =
+            shared_ptr<ConstElementVisitor>(
+              static_cast<ConstElementVisitor *>(
+                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
         }
         catch (...)
         {

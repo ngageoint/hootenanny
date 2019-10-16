@@ -31,6 +31,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -153,7 +154,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   QTextStream ts(&buffer);
   if (apiEntityType == "operators")
   {
-    msg += "; * = implements SingleStatistic):";
+    msg += "; * = implements SingleStatistic, ** = NumericStatistic):";
     msg.prepend("Operators");
     ts << msg << endl;
     ts << _getApiEntities<ElementCriterion, ElementCriterion>(
@@ -338,9 +339,21 @@ QString ApiEntityDisplayInfo::_getApiEntities(
         supportsSingleStat = true;
       }
 
+      bool supportsNumericStat = false;
+      std::shared_ptr<NumericStatistic> numericStat =
+        std::dynamic_pointer_cast<NumericStatistic>(apiEntity);
+      if (numericStat.get())
+      {
+        supportsNumericStat = true;
+      }
+
       QString name = QString::fromStdString(className).replace("hoot::", "");
       //append '*' to the names of visitors that support the SingleStatistic interface
-      if (supportsSingleStat)
+      if (supportsNumericStat)
+      {
+        name += "**";
+      }
+      else if (supportsSingleStat)
       {
         name += "*";
       }
