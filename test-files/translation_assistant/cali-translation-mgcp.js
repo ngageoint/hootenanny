@@ -1,4 +1,3 @@
-hoot.require('SchemaTools')
 hoot.require('translation_assistant')
 
 var attributeMapping = {
@@ -8,19 +7,19 @@ var attributeMapping = {
         "COUNTRY": "IGNORED",
         "ET_ID": "IGNORED",
         "FCC": {
-            "Thoroughfare Class": {
+            "HCT::Thoroughfare Class": {
                 "A20": "National Motorway",
                 "A30": "Secondary Route",
                 "A40": "Local Route"
             },
-            "Feature Code": "AP030"
+            "FCODE::Feature Code": "AP030"
         },
         "ID": "IGNORED",
         "LEN": "IGNORED",
         "LEN_KM": "IGNORED",
         "LEN_MILES": "IGNORED",
         "NAME": {
-            "Name": "NAME"
+            "NAM::Name": "NAME"
         },
         "NAME_ALT": "IGNORED",
         "ONE_WAY": "IGNORED",
@@ -31,11 +30,10 @@ var attributeMapping = {
     }
 };
 var fcode;
-// var fcode = 'AP030: Road';
-
 var schema = 'MGCP';
 
 var translateToOsm = function(attrs, layerName) {
     return translation_assistant.translateAttributes(attrs, layerName, attributeMapping, fcode, schema);
 };
+
 

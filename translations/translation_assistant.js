@@ -54,7 +54,6 @@ translation_assistant = {
                 }
             }
         }
-
         // Don't translate feature if no matching attribute mapping could be found
         if (!l) {
             return null;
@@ -98,7 +97,8 @@ translation_assistant = {
         }
 
         // If necessary, convert from English TDS to OSM+
-        if (tags['Feature Code'] || tags['F_CODE::Feature Code'] || fcode) {
+        // Raw tag, TDS/GGDM, MGCP or specified
+        if (tags['Feature Code'] || tags['F_CODE::Feature Code'] || tags['FCODE::Feature Code'] || fcode) {
 
             // First, clean up the English names. To make it easier for the user, the short name for the attribute got
             // added to the attribute name. This needs to be removed prior to translation
@@ -106,6 +106,7 @@ translation_assistant = {
             // E.g.  FSC::Flight Strip Capable
             for (var i in tags) {
                 if (i.indexOf('::') > -1) {
+                console.log('Replaceing:' + i + '   with:' + i.replace(/.*::/,''));
                     tags[i.replace(/.*::/,'')] = tags[i];
                     delete tags[i]
                 }
@@ -123,19 +124,19 @@ translation_assistant = {
 
             var osmplus;
             switch(schema) {
-            case 'TDSv40':
-            default:
-                osmplus = etds40_osm.toOSM(tags, '', '');
-                break;
-            case 'TDSv61':
-                osmplus = etds61_osm.toOSM(tags, '', '');
-                break;
-            case 'TDSv70':
-                osmplus = etds70_osm.toOSM(tags, '', '');
-                break;
-            case 'MGCP':
-                osmplus = emgcp_osm.toOSM(tags, '', '');
-                break;
+                case 'TDSv40':
+                default:
+                    osmplus = etds40_osm.toOSM(tags, '', '');
+                    break;
+                case 'TDSv61':
+                    osmplus = etds61_osm.toOSM(tags, '', '');
+                    break;
+                case 'TDSv70':
+                    osmplus = etds70_osm.toOSM(tags, '', '');
+                    break;
+                case 'MGCP':
+                    osmplus = emgcp_osm.toOSM(tags, '', '');
+                    break;
             }
             if (osmplus) {
                 return osmplus.attrs;
