@@ -12,7 +12,7 @@ the output. Also, additional filtering may be applied to the reference input to 
  
 The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing a specified lenient bounds) and stitches up 
 areas where features must be clipped (e.g. roads crossing a specified strict bounds). The output changeset file can be applied directly to an 
-OSM API database or the Rails Port API with the  +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
+OSM API database or the Rails Port API with the +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
 data store, like an OSM API database, and the secondary source can be any type of data. Element IDs for the reference dataset are retained, 
 while element IDs for the secondary data are not retained and the elements treated as completely new data. 
 
