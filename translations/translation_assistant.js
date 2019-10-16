@@ -3,6 +3,8 @@
 if (typeof hoot !== 'undefined') {
     hoot.require('etds40_osm')
     hoot.require('etds61_osm')
+    hoot.require('etds70_osm')
+    hoot.require('emgcp_osm')
 }
 
 
@@ -16,7 +18,7 @@ translation_assistant = {
         }
         return diff;
     },
-    //Set the tag `tagKey=value` or append it unless `replace` is `true`
+    // Set the tag `tagKey=value` or append it unless `replace` is `true`
     setTag: function(tags, tagKey, value, replace)
     {
         if (replace) { //force the tag value replacement, order is not possible to define in translation mapping :(
@@ -36,15 +38,14 @@ translation_assistant = {
             tags[tagKey] = value;
         }
     },
-    //Takes 'attrs' and returns OSM 'tags'
+    // Takes 'attrs' and returns OSM 'tags'
     translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema, replace)
     {
         var tags = {};
         var extras = []
         var l = attributeMapping[layerName];
 
-        //If layerName has no match in the mapping
-        //compare columns for a match
+        //If layerName has no match in the mapping, compare columns for a match
         if (!l) {
             for (var lyr in attributeMapping) {
                 if (translation_assistant.difference(Object.keys(attrs), Object.keys(attributeMapping[lyr])).length === 0) {
@@ -53,8 +54,7 @@ translation_assistant = {
                 }
             }
         }
-
-        //Don't translate feature if no matching attribute mapping could be found
+        // Don't translate feature if no matching attribute mapping could be found
         if (!l) {
             return null;
         }
@@ -96,20 +96,47 @@ translation_assistant = {
             }
         }
 
-        //If necessary, convert from English TDS to OSM+
-        if (tags['Feature Code'] || fcode) {
+        // If necessary, convert from English TDS to OSM+
+        // Raw tag, TDS/GGDM, MGCP or specified
+        if (tags['Feature Code'] || tags['F_CODE::Feature Code'] || tags['FCODE::Feature Code'] || fcode) {
+
+            // First, clean up the English names. To make it easier for the user, the short name for the attribute got
+            // added to the attribute name. This needs to be removed prior to translation
+            // Structure: <short name>::<long name>
+            // E.g.  FSC::Flight Strip Capable
+            for (var i in tags) {
+                if (i.indexOf('::') > -1) {
+                console.log('Replaceing:' + i + '   with:' + i.replace(/.*::/,''));
+                    tags[i.replace(/.*::/,'')] = tags[i];
+                    delete tags[i]
+                }
+            }
+
+            // With the F_CODE value, we want to keep the short name not the longer text
+            // E.g. AJ030::Holding Pen
+            if (tags['Feature Code'] && tags['Feature Code'].indexOf('::') > -1) {
+                tags['Feature Code'] = tags['Feature Code'].replace(/::.*/,'');
+            }
+
             if (!tags['Feature Code'] && fcode) {
                 tags['Feature Code'] = fcode;
             }
+
             var osmplus;
             switch(schema) {
-            case 'TDSv40':
-            default:
-                osmplus = etds40_osm.toOSM(tags, '', '');
-                break;
-            case 'TDSv61':
-                osmplus = etds61_osm.toOSM(tags, '', '');
-                break;
+                case 'TDSv40':
+                default:
+                    osmplus = etds40_osm.toOSM(tags, '', '');
+                    break;
+                case 'TDSv61':
+                    osmplus = etds61_osm.toOSM(tags, '', '');
+                    break;
+                case 'TDSv70':
+                    osmplus = etds70_osm.toOSM(tags, '', '');
+                    break;
+                case 'MGCP':
+                    osmplus = emgcp_osm.toOSM(tags, '', '');
+                    break;
             }
             if (osmplus) {
                 return osmplus.attrs;
@@ -117,8 +144,7 @@ translation_assistant = {
                 return null;
             }
         }
-
-        //Don't translate feature if no attrs were translated to tags
+        // Don't translate feature if no attrs were translated to tags
         if (Object.keys(tags).length === 0) {
             return null;
         }
