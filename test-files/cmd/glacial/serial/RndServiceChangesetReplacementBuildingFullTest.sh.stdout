@@ -1,4 +1,4 @@
-test name:  ServiceChangesetReplacementBuildingFullTest
+test name:  RndServiceChangesetReplacementBuildingFullTest
 source file 1:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
 source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
 replacement aoi:  -71.4698,42.4866,-71.4657,42.4902
@@ -24,25 +24,25 @@ Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm
       1
 (1 row)
 
-16:36:44.661 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
-16:36:44.661 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
-16:36:44.662 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
-16:36:44.662 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+18:32:36.930 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+18:32:36.930 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+18:32:36.930 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+18:32:36.931 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
-Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingFullTest/ref-perturbed-original.osm (contains features to be replaced)...
-
-
-Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingFullTest/sec-original.osm (contains features to replace with)...
-
-16:36:48.443 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
-16:36:48.443 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
-16:36:48.444 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
-16:36:48.444 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
-
-Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingFullTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingFullTest/sec-original.osm over: -71.4698,42.4866,-71.4657,42.4902, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingFullTest/ServiceChangesetReplacementBuildingFullTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/RndServiceChangesetReplacementBuildingFullTest/ref-perturbed-original.osm (contains features to be replaced)...
 
 
-Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingFullTest/ServiceChangesetReplacementBuildingFullTest-changeset-xml.osc.sql to the reference data in the osm api db...
+Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/RndServiceChangesetReplacementBuildingFullTest/sec-original.osm (contains features to replace with)...
+
+18:32:42.013 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+18:32:42.013 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+18:32:42.013 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+18:32:42.013 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Deriving a changeset between test-output/cmd/glacial/serial/RndServiceChangesetReplacementBuildingFullTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/RndServiceChangesetReplacementBuildingFullTest/sec-original.osm over: -71.4698,42.4866,-71.4657,42.4902, to file: test-output/cmd/glacial/serial/RndServiceChangesetReplacementBuildingFullTest/RndServiceChangesetReplacementBuildingFullTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+
+Applying the changeset: test-output/cmd/glacial/serial/RndServiceChangesetReplacementBuildingFullTest/RndServiceChangesetReplacementBuildingFullTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
 Changeset Details: min_lat=42.4864641, max_lat=42.4903656, min_lon=-71.4699777, max_lon=-71.46546119999999, num_changes=1294
@@ -56,5 +56,5 @@ Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
 
-Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementBuildingFullTest-xml-replaced.osm for verification...
+Reading the entire reference dataset out of the osm api db to: RndServiceChangesetReplacementBuildingFullTest-xml-replaced.osm for verification...
 

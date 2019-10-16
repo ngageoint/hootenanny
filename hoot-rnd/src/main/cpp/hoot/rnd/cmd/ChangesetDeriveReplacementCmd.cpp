@@ -53,6 +53,8 @@ public:
   virtual QString getDescription() const
   { return "Creates an OSM changeset that replaces features in a map (experimental)"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList& args) override
   {
     const QString boundsStr = args[2].trimmed();
