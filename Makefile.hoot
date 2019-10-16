@@ -219,26 +219,26 @@ translations/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/tra
 #### TDSv70
 # TDSv70 schema is built from an XML file made from a sample FGDB
 #translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz conf/translations/TDSv70.xml.gz
-translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
 # TDSv70 full schema is built from an XML file made from a sample FGDB
 # This one has all of the Text Enumerations
 #translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS70 "To English" rules
 #translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS70 "From English" rules
 #translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
