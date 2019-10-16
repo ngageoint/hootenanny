@@ -1102,7 +1102,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     f = 0;
 
     _count++;
-    if (_progress.getState() != Progress::JobState::Pending && _count % 10000 == 0)
+    if (_count % 1000 == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);
