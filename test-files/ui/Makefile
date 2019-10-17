@@ -124,7 +124,7 @@ load-data: clean
 	    \
 	    now(), \
 	    now(), \
-	    now(),
+	    now(), \
 	    '\"advanced\"=>\"true\"')"
 
 	# Add a spring session for our test user
