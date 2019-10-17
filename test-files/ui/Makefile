@@ -111,7 +111,8 @@ load-data: clean
 	    \
 	    hootservices_last_authorize, \
 	    hootservices_created_at, \
-	    provider_created_at) \
+	    provider_created_at, \
+	    privileges) \
 	    \
 	    VALUES ( \
 	    'test@test.com', \
@@ -123,7 +124,8 @@ load-data: clean
 	    \
 	    now(), \
 	    now(), \
-	    now())"
+	    now(),
+	    '"advanced"=>"true"')"
 
 	# Add a spring session for our test user
 	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c \
