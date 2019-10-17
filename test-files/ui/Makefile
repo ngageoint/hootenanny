@@ -125,7 +125,7 @@ load-data: clean
 	    now(), \
 	    now(), \
 	    now(),
-	    '"advanced"=>"true"')"
+	    '\"advanced\"=>\"true\"')"
 
 	# Add a spring session for our test user
 	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c \
