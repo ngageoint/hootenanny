@@ -134,7 +134,7 @@ hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.a
 conf/core/ConfigOptions.json: scripts/core/CreateConfigAsJSON.py conf/core/ConfigOptions.asciidoc
 	python $^ $@ || (rm -f $@ ; exit -1)
 
-conf/services/conflationHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json 
+conf/services/conflationHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json
 	python $^ $@ || (rm -f $@ ; exit -1)
 
 translations/config.js: conf/core/ConfigOptions.asciidoc scripts/core/CreateJsConfigCode.py
@@ -372,8 +372,8 @@ endif
 ui2x-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
-	scripts/database/AddKarmaTestUser.sh
 	cd $$HOOT_HOME/hoot-ui-2x && \
+	scripts/jenkins/AddKarmaTestUser.sh && \
 	npm i && \
 	npm test
 else
