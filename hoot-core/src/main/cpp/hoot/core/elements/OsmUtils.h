@@ -143,8 +143,7 @@ public:
 
   /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
-   * criterion type
-   * Only objects of type ElementCriterion are allowed, all others will return false
+   * criterion type. Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param map the map to examine
    * @param minCount the minmal count of elements required (if exactCount == false)
@@ -152,23 +151,11 @@ public:
    * @return true if the map meets the specified criteria; false otherwise
    */
   template<class C> static bool contains(const ConstOsmMapPtr& map, int minCount = 1,
-                                         bool exactCount = false)
-  {
-    if (!std::is_base_of<ElementCriterion,C>::value) return false;
-
-    const long count =
-      (long)FilteredVisitor::getStat(
-        ElementCriterionPtr(new C()),
-        ConstElementVisitorPtr(new ElementCountVisitor()),
-        map);
-    LOG_VART(count);
-    return exactCount ? (count == minCount) : (count >= minCount);
-  }
+                                         bool exactCount = false);
 
   /**
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
-   * times
-   * Only objects of type ElementCriterion are allowed, all others will return false
+   * times. Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param element the element to examine
    * @param minCount the minmal count of elements required (if exactCount == false)
@@ -176,25 +163,7 @@ public:
    * @return true if the elements meet the specified criterion the specified number of times
    */
   template<class C> static bool isSatisfied(const std::vector<ConstElementPtr>& elements,
-                                            int minCount = 1, bool exactCount = false)
-  {
-    if (!std::is_base_of<ElementCriterion,C>::value) return false;
-
-    int count = 0;
-    ElementCriterionPtr crit(new C());
-    for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
-         ++itr)
-    {
-      if (crit->isSatisfied(*itr))
-      {
-        count++;
-      }
-    }
-
-    LOG_VART(count);
-    return exactCount ? (count == minCount) : (count >= minCount);
-  }
-
+                                            int minCount = 1, bool exactCount = false);
   /**
    * Get a more detailed string representation of a relation
    *
@@ -364,6 +333,15 @@ public:
    * @return true if any way in the map contains the node; false otherwise
    */
   static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @return
+   */
+  static bool nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
    * Determines if an element is contained by any relation in a map

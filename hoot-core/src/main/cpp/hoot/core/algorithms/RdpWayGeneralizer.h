@@ -80,8 +80,9 @@ public:
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
 
     @param way the way whose points are to be reduced
+    @return the number of nodes removed
     */
-  void generalize(const std::shared_ptr<Way>& way);
+  int generalize(const std::shared_ptr<Way>& way);
 
   /**
     Sets the distance parameter that determines to what degree the way is generalized; higher
@@ -89,13 +90,20 @@ public:
     */
   void setEpsilon(double epsilon);
 
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
 private:
 
   friend class RdpWayGeneralizerTest;
 
+  // distance in meters that determines to what degree a way is generalized; higher values result in
+  // more generalization (more nodes removed).
   double _epsilon;
+
+  // TODO
+  bool _removeNodesSharedByWays;
 
   OsmMapPtr _map;
 

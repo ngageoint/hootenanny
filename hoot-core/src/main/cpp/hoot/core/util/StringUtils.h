@@ -136,6 +136,15 @@ public:
    * @return a collection of duplicated strings
    */
   static QSet<QString> getDuplicates(const QStringList& input);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param substring
+   * @return
+   */
+  static bool containsSubstring(const QStringList& input, const QString& substring);
 };
 
 }

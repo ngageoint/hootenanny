@@ -49,6 +49,7 @@
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/visitors/WayGeneralizeVisitor.h>
 
 // std
 #include <vector>
@@ -546,6 +547,16 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   return layers;
 }
 
+void DataConverter::_setWayGeneralizerOptions()
+{
+  conf().set("way.generalizer.epsilon", "1.0");
+  // TODO: This could reverse the incoming element.criterion.negate for another crit. Probably
+  // time to think about not sharing that option across multiple crits anymore.
+  conf().set("element.criterion.negate", "false");
+  conf().set("way.generalizer.remove.nodes.shared.by.ways", "false");
+  conf().set("way.generalizer.criterion", "hoot::BuildingCriterion");
+}
+
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
@@ -577,6 +588,8 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
+  // If any of these ops gets added here, then we never have a streaming OGR read...don't love that.
+
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
   // to avoid unnecessary processing time.
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
@@ -590,14 +603,20 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   {
     // Building outline updating needs to happen after building part merging, or we can end up with
     // role verification warnings in JOSM.
-      if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
-      {
-        _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
-      }
+    if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
+    {
+      _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
+    }
     if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
     {
       _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
     }
+  }
+  if (ConfigOptions().getOgr2osmSimplifyWays() && StringUtils::containsSubstring(inputs, "shp") &&
+      !_convertOps.contains(QString::fromStdString(WayGeneralizeVisitor::className())))
+  {
+    _setWayGeneralizerOptions();
+    _convertOps.append(QString::fromStdString(WayGeneralizeVisitor::className()));
   }
   // Inclined to do this, but there could be some workflows where the same op needs to be called
   // more than once.
@@ -736,6 +755,14 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
+
+  // see comment in _convertFromOgr
+  if (ConfigOptions().getOgr2osmSimplifyWays() && StringUtils::containsSubstring(inputs, "shp") &&
+      !_convertOps.contains(QString::fromStdString(WayGeneralizeVisitor::className())))
+  {
+    _setWayGeneralizerOptions();
+    _convertOps.prepend(QString::fromStdString(WayGeneralizeVisitor::className()));
+  }
 
   _handleGeneralConvertTranslationOpts(output);
 

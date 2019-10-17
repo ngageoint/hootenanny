@@ -37,7 +37,7 @@ namespace hoot
 static const QString input = "test-files/ToyTestA.osm";
 
 /*
- * The custom criteria functionality is getting tested in StatCmdTest.
+ * TODO: update for custom crit
  */
 class NodesPerWayVisitorTest : public HootTestFixture
 {

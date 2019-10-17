@@ -1094,6 +1094,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
 
   LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...");
 
+  const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   OGRFeature* f;
   while ((f = _layer->GetNextFeature()) != NULL && (_limit == -1 || _count < _limit))
   {
@@ -1102,7 +1103,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     f = 0;
 
     _count++;
-    if (_count % 1000 == 0)
+    if (_count % (statusUpdateInterval * 10) == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);

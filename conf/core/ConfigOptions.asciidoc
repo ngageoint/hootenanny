@@ -1029,8 +1029,10 @@ Size of the in memory way cache used when streaming I/O is used with ways.
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterions passed to an ElementCriterionConsumer will be negated.  Not honored by
-all ElementCriterionConsumers.
+If true, element criterions passed to an ElementCriterionConsumer will be negated. Not honored by
+all ElementCriterionConsumers. Since this configuration option is shared across all
+ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
+ElementCriterionConsumers.
 
 === element.sorter.element.buffer.size
 
@@ -2655,6 +2657,13 @@ Merges nearby nodes together when converting from an OGR format to OSM.
 
 Implicitly merges certain individual building parts into a single part when converting from an OGR
 format to OSM.
+
+=== ogr2osm.simplify.ways
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
 
 === osmapidb.bulk.inserter.disable.database.constraints.during.write
 
@@ -4527,14 +4536,30 @@ The way subline matcher to use when determining matching sublines.
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
+=== way.generalizer.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Criterion class used for filtering by WayGeneralizeVisitor. All filtered elements must be ways, so
+any filters contradicting that will be ignored.
+
 === way.generalizer.epsilon
 
 * Data Type: double
 * Default Value: `1.0`
 
 Distance parameter, in meters, that determines to what degree a way is generalized by
-RdpWayGeneralizer, which is available standalone or as a part of PERTY. Higher values result in more
-generalization (more nodes removed).
+WayGeneralizeVisitor, which is available standalone or as a part of PERTY. Higher values result in
+more generalization (more nodes removed).
+
+=== way.generalizer.remove.nodes.shared.by.ways
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, WayGeneralizeVisitor disregards nodes shared by ways when removing them. If false, it won't
+remove them.
 
 === way.joiner
 

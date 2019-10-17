@@ -158,6 +158,8 @@ private:
   QStringList _getOgrLayersFromPath(OgrReader& reader, QString& input);
 
   bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
+
+  void _setWayGeneralizerOptions();
 };
 
 }

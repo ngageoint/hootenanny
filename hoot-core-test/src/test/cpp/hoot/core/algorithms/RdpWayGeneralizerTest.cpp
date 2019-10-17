@@ -47,6 +47,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
+/*
+ * TODO: update for generalize returning an int
+ */
 class RdpWayGeneralizerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(RdpWayGeneralizerTest);

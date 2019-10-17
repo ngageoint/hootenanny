@@ -39,13 +39,15 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 using namespace std;
 
 namespace hoot
 {
 
-RdpWayGeneralizer::RdpWayGeneralizer(double epsilon)
+RdpWayGeneralizer::RdpWayGeneralizer(double epsilon) :
+_removeNodesSharedByWays(true)   // maybe the default for this should be false
 {
   setEpsilon(epsilon);
 }
@@ -60,13 +62,15 @@ void RdpWayGeneralizer::setEpsilon(double epsilon)
   LOG_VART(_epsilon);
 }
 
-void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
+int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
 {
   if (!_map)
   {
     throw IllegalArgumentException("No map passed to way generalizer.");
   }
 
+  //LOG_TRACE("Generalizing " << way->getElementId() << "...");
+  LOG_TRACE("Generalizing way: " << way << "...");
   LOG_VART(way->getNodeIds().size());
   LOG_VART(QVector<long>::fromStdVector(way->getNodeIds()).toList());
 
@@ -107,10 +111,23 @@ void RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   // with SuperfluousNodeRemover, but that might be a little more intrusive)
   const QSet<long> nodeIdsToRemove =
     wayNodeIdsBeforeFiltering.toSet().subtract(wayNodeIdsAfterGeneralization.toSet());
+  LOG_VART(nodeIdsToRemove.size());
+  int nodesRemoved = 0;
   for (QSet<long>::const_iterator it = nodeIdsToRemove.begin(); it != nodeIdsToRemove.end(); ++it)
   {
-    RemoveNodeByEid::removeNode(_map, *it, true);
+    const long nodeId = *it;
+    LOG_VART(nodeId);
+    LOG_VART(_removeNodesSharedByWays);
+    LOG_VART(OsmUtils::nodeContainedByMoreThanOneWay(nodeId, _map));
+    if (_removeNodesSharedByWays || !OsmUtils::nodeContainedByMoreThanOneWay(nodeId, _map))
+    {
+      RemoveNodeByEid::removeNode(_map, nodeId, true);
+      nodesRemoved++;
+    }
   }
+
+  LOG_VART(nodesRemoved);
+  return nodesRemoved;
 }
 
 QList<std::shared_ptr<const Node>> RdpWayGeneralizer::_getGeneralizedPoints(
