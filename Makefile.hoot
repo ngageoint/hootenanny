@@ -372,8 +372,8 @@ endif
 ui2x-test: services-build build
 ifeq ($(BUILD_UI_TESTS),uitests)
 ifeq ($(BUILD_SERVICES),services)
+	scripts/database/AddKarmaTestUser.sh
 	cd $$HOOT_HOME/hoot-ui-2x && \
-	scripts/jenkins/AddKarmaTestUser.sh && \
 	npm i && \
 	npm test
 else
