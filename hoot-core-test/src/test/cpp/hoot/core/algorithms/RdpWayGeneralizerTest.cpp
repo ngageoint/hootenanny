@@ -61,6 +61,7 @@ class RdpWayGeneralizerTest : public HootTestFixture
   CPPUNIT_TEST(runGeneralizeWayInput1NoInformationNodesTest);
   CPPUNIT_TEST(runGeneralizeWayInput1WithInformationNodesTest);
   CPPUNIT_TEST(runInvalidEpsilonTest);
+  // TODO: add unallowed node removal test
   CPPUNIT_TEST_SUITE_END();
 
 public:

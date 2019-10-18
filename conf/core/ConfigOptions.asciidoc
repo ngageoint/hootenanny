@@ -2661,7 +2661,7 @@ format to OSM.
 === ogr2osm.simplify.ways
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 TODO
 
@@ -4556,7 +4556,7 @@ more generalization (more nodes removed).
 === way.generalizer.remove.nodes.shared.by.ways
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, WayGeneralizeVisitor disregards nodes shared by ways when removing them. If false, it won't
 remove them.

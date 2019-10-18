@@ -58,40 +58,6 @@ using namespace std;
 namespace hoot
 {
 
-template<class C> bool OsmUtils::contains(
-  const ConstOsmMapPtr& map, int minCount, bool exactCount)
-{
-  if (!std::is_base_of<ElementCriterion,C>::value) return false;
-
-  const long count =
-    (long)FilteredVisitor::getStat(
-      ElementCriterionPtr(new C()),
-      ConstElementVisitorPtr(new ElementCountVisitor()),
-      map);
-  LOG_VART(count);
-  return exactCount ? (count == minCount) : (count >= minCount);
-}
-
-template<class C> bool OsmUtils::isSatisfied(
-  const std::vector<ConstElementPtr>& elements, int minCount, bool exactCount)
-{
-  if (!std::is_base_of<ElementCriterion,C>::value) return false;
-
-  int count = 0;
-  ElementCriterionPtr crit(new C());
-  for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
-       ++itr)
-  {
-    if (crit->isSatisfied(*itr))
-    {
-      count++;
-    }
-  }
-
-  LOG_VART(count);
-  return exactCount ? (count == minCount) : (count >= minCount);
-}
-
 void OsmUtils::printNodes(const QString& nodeCollectionName,
                           const QList<std::shared_ptr<const Node>>& nodes)
 {
@@ -591,6 +557,50 @@ bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
     }
   }
   return false;
+}
+
+bool OsmUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return allElementsHaveAnyTagKey(tagKeys, elements);
+}
+
+bool OsmUtils::allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return allElementsHaveAnyKvp(kvps, elements);
+}
+
+bool OsmUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return anyElementsHaveAnyTagKey(tagKeys, elements);
+}
+
+bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return anyElementsHaveAnyKvp(kvps, elements);
 }
 
 }

@@ -64,7 +64,23 @@ public:
    */
   static bool isSupportedOgrFormat(const QString& input, const bool allowDir = false);
 
+  /**
+   * TODO
+   *
+   * @param inputs
+   * @param allowDir
+   * @return
+   */
   static bool areSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
+
+  /**
+   * TODO
+   *
+   * @param inputs
+   * @param allowDir
+   * @return
+   */
+  static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir);
 
   /**
     Loads an OSM map into an OsmMap object

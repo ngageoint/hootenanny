@@ -143,7 +143,8 @@ public:
 
   /**
    * Determines whether a map contains a minimum or a fixed amount of elements matching the
-   * criterion type. Only objects of type ElementCriterion are allowed, all others will return false
+   * criterion type
+   * Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param map the map to examine
    * @param minCount the minmal count of elements required (if exactCount == false)
@@ -151,11 +152,23 @@ public:
    * @return true if the map meets the specified criteria; false otherwise
    */
   template<class C> static bool contains(const ConstOsmMapPtr& map, int minCount = 1,
-                                         bool exactCount = false);
+                                         bool exactCount = false)
+  {
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+
+    const long count =
+      (long)FilteredVisitor::getStat(
+        ElementCriterionPtr(new C()),
+        ConstElementVisitorPtr(new ElementCountVisitor()),
+        map);
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
 
   /**
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
-   * times. Only objects of type ElementCriterion are allowed, all others will return false
+   * times
+   * Only objects of type ElementCriterion are allowed, all others will return false
    *
    * @param element the element to examine
    * @param minCount the minmal count of elements required (if exactCount == false)
@@ -163,7 +176,25 @@ public:
    * @return true if the elements meet the specified criterion the specified number of times
    */
   template<class C> static bool isSatisfied(const std::vector<ConstElementPtr>& elements,
-                                            int minCount = 1, bool exactCount = false);
+                                            int minCount = 1, bool exactCount = false)
+  {
+    if (!std::is_base_of<ElementCriterion,C>::value) return false;
+
+    int count = 0;
+    ElementCriterionPtr crit(new C());
+    for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
+         ++itr)
+    {
+      if (crit->isSatisfied(*itr))
+      {
+        count++;
+      }
+    }
+
+    LOG_VART(count);
+    return exactCount ? (count == minCount) : (count >= minCount);
+  }
+
   /**
    * Get a more detailed string representation of a relation
    *
@@ -384,6 +415,8 @@ public:
    */
   static bool mapIsPointsOnly(const OsmMapPtr& map);
 
+  // This group of allElements* methods really should probably be passing const elements and maps.
+
   /**
    * Determines if all elements in a specified collection have any tag key from a specified set of
    * keys
@@ -431,6 +464,54 @@ public:
    */
   static bool anyElementsHaveAnyKvp(const QStringList& kvps,
                                     const std::vector<ElementPtr>& elements);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key from a specified set of
+   * keys - TODO
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elements the elements to examine
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps - TODO
+   *
+   * @param kvp the tag key/value pairs to search for
+   * @param elements the elements to examine
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key from a specified set of
+   * keys - TODO
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elements the elements to examine
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps - TODO
+   *
+   * @param kvps the tag key/value pairs to search for
+   * @param elements the elements to examine
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
 };
 
 }

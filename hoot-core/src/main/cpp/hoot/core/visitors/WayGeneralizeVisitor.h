@@ -89,7 +89,6 @@ private:
 
   std::shared_ptr<RdpWayGeneralizer> _generalizer;
   ElementCriterionPtr _crit;
-  bool _negateCriterion;
   // see RdpWayGeneralizer
   bool _removeNodesSharedByWays;
   int _totalNodesRemoved;

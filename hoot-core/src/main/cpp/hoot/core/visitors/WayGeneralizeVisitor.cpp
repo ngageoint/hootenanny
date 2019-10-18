@@ -40,7 +40,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, WayGeneralizeVisitor)
 
 WayGeneralizeVisitor::WayGeneralizeVisitor() :
 _epsilon(1.0),
-_negateCriterion(false),
 _removeNodesSharedByWays(true), // maybe the default for this should be false
 _totalNodesRemoved(0)
 {
@@ -50,7 +49,6 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setEpsilon(configOptions.getWayGeneralizerEpsilon());
-  _negateCriterion = configOptions.getElementCriterionNegate();
   _removeNodesSharedByWays = configOptions.getWayGeneralizerRemoveNodesSharedByWays();
   const QString critClass = configOptions.getWayGeneralizerCriterion().trimmed();
   if (!critClass.isEmpty())

@@ -33,10 +33,10 @@
 #include <hoot/core/index/ClosePointHash.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QTime>
@@ -48,7 +48,6 @@
 #include <tgs/StreamUtils.h>
 #include <tgs/RStarTree/HilbertRTree.h>
 
-using namespace std;
 using namespace Tgs;
 
 namespace hoot
@@ -127,7 +126,7 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
   cph.resetIterator();
   while (cph.next())
   {
-    const vector<long>& v = cph.getMatch();
+    const std::vector<long>& v = cph.getMatch();
 
     for (size_t i = 0; i < v.size(); i++)
     {
@@ -135,14 +134,16 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
 
       for (size_t j = 0; j < v.size(); j++)
       {
+        bool replace = false;
+        double calcdDistanceSquared = -1.0;
         if (v[i] != v[j] && map->containsNode(v[j]))
         {
           const NodePtr& n1 = planar->getNode(v[i]);
           const NodePtr& n2 = planar->getNode(v[j]);
 
-          if (distanceSquared > calcDistanceSquared(n1, n2) && n1->getStatus() == n2->getStatus())
+          double calcdDistanceSquared = calcDistanceSquared(n1, n2);
+          if (distanceSquared > calcdDistanceSquared && n1->getStatus() == n2->getStatus())
           {
-            bool replace = false;
             // if the geographic bounds are not specified.
             if (_bounds.isNull() == true)
             {
@@ -162,9 +163,27 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
 
             if (replace)
             {
+              LOG_TRACE(
+                "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
+                ElementId(ElementType::Node, v[i]) << "...");
+
               map->replaceNode(v[j], v[i]);
               _numAffected++;
             }
+          }
+        }
+
+        if (Log::getInstance().getLevel() <= Log::Trace)
+        {
+          if (calcdDistanceSquared != -1.0)
+          {
+            _logMergeResult(
+              v[i], v[j], map, replace, std::sqrt(distanceSquared),
+              std::sqrt(calcdDistanceSquared));
+          }
+          else
+          {
+            _logMergeResult(v[i], v[j], map, replace);
           }
         }
       }
@@ -177,6 +196,70 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
         "\tMerged " << StringUtils::formatLargeNumber(_numAffected) << " node groups from " <<
         StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
+  }
+}
+
+bool MergeNearbyNodes::_passesLogMergeFilter(const long nodeId1, const long nodeId2,
+                                             OsmMapPtr& map) const
+{
+  // can add various filtering criteria here for debugging purposes...
+
+  QStringList kvps;
+  kvps.append("OBJECTID=168008");
+  kvps.append("OBJECTID=76174");
+
+  std::set<ElementId> wayIdsOwning1;
+  const std::set<long> waysOwning1 = OsmUtils::getContainingWayIdsByNodeId(nodeId1, map);
+  for (std::set<long>::const_iterator it = waysOwning1.begin(); it != waysOwning1.end(); ++it)
+  {
+    wayIdsOwning1.insert(ElementId(ElementType::Way, *it));
+  }
+  if (OsmUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning1, map))
+  {
+    return true;
+  }
+
+  std::set<ElementId> wayIdsOwning2;
+  const std::set<long> waysOwning2 = OsmUtils::getContainingWayIdsByNodeId(nodeId2, map);
+  for (std::set<long>::const_iterator it = waysOwning2.begin(); it != waysOwning2.end(); ++it)
+  {
+    wayIdsOwning2.insert(ElementId(ElementType::Way, *it));
+  }
+  if (OsmUtils::anyElementsHaveAnyKvp(kvps, wayIdsOwning2, map))
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void MergeNearbyNodes::_logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map,
+                                       const bool replaced, const double distance,
+                                       const double calcdDistance)
+{
+  if (_passesLogMergeFilter(nodeId1, nodeId2, map))
+  {
+    QString msg = "merging nodes: ";
+    if (!replaced)
+    {
+      msg.prepend("not ");
+    }
+    msg += QString::number(nodeId1) + " and " + QString::number(nodeId2);
+    if (calcdDistance != -1.0)
+    {
+      msg +=
+        " at a distance of: " + QString::number(calcdDistance) +
+        " where the distance threshold is: " + QString::number(distance);
+    }
+    msg += "...";
+    LOG_TRACE(msg);
+    LOG_TRACE(
+      "Node " << nodeId1 << " belongs to ways: " <<
+      OsmUtils::getContainingWayIdsByNodeId(nodeId1, map));
+    LOG_TRACE(
+      "Node " << nodeId2 << " belongs to ways: " <<
+      OsmUtils::getContainingWayIdsByNodeId(nodeId2, map));
+    LOG_VART(OsmUtils::nodesAreContainedInTheSameWay(nodeId1, nodeId2, map));
   }
 }
 

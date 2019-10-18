@@ -352,6 +352,7 @@ void OsmMap::addRelation(const RelationPtr& r)
 
 void OsmMap::addWay(const WayPtr& w)
 {
+  LOG_TRACE("Adding: " << w->getElementId());
   _idGen->ensureWayBounds(w->getId());
   _ways[w->getId()] = w;
   w->registerListener(_index.get());
@@ -616,6 +617,7 @@ void OsmMap::replaceNode(long oldId, long newId)
   for (set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = getWay(*it);
+    LOG_VART(w->getElementId());
 
 #   ifdef DEBUG
       if (w.get() == NULL)

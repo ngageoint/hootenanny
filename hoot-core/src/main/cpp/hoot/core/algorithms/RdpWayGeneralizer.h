@@ -102,7 +102,7 @@ private:
   // more generalization (more nodes removed).
   double _epsilon;
 
-  // TODO
+  // TODO - arguable that this shouldn't be an option and shared nodes should never be removed
   bool _removeNodesSharedByWays;
 
   OsmMapPtr _map;
@@ -130,6 +130,13 @@ private:
     const std::shared_ptr<const Node> splitPoint,
     const std::shared_ptr<const Node> lineToBeReducedStartPoint,
     const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
+
+  /*
+   * TODO
+   */
+  QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
+    const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
+    const QList<long>& generalizedNodeIds);
 };
 
 }

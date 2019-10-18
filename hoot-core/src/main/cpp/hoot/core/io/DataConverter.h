@@ -160,6 +160,7 @@ private:
   bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
 
   void _setWayGeneralizerOptions();
+  void _setFromOgrOptions(const QStringList& inputs);
 };
 
 }
