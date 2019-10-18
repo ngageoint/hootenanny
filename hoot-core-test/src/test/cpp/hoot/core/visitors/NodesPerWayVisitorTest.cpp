@@ -58,7 +58,9 @@ public:
     OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
 
     NodesPerWayVisitor uut;
-    map->visitRo(uut);
+    // rw here b/c MultipleCriterionConsumerVisitor inherits from ElementVisitor and not
+    // ConstElementVisitor
+    map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(40, (int)uut.getStat());
     CPPUNIT_ASSERT_EQUAL(3, (int)uut.getMin());

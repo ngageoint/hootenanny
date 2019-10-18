@@ -47,7 +47,8 @@ public:
 
   NodesPerWayVisitor();
 
-  virtual void visit(const ConstElementPtr& e) override;
+  //virtual void visit(const ConstElementPtr& e) override;
+  virtual void visit(const ElementPtr& e) override;
 
   virtual void setConfiguration(const Settings& conf);
 

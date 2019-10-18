@@ -75,7 +75,7 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
   LOG_VARD(_criteria.size());
 }
 
-void NodesPerWayVisitor::visit(const ConstElementPtr& e)
+void NodesPerWayVisitor::visit(const /*Const*/ElementPtr& e)
 {
   if (_wayCrit.isSatisfied(e) && (_criteria.size() == 0 || _criteriaSatisfied(e)))
   {

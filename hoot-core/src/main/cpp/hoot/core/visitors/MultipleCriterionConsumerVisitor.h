@@ -28,7 +28,7 @@
 #define MULTIPLE_CRITERION_CONSUMER_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
@@ -38,8 +38,10 @@ class Settings;
 
 /**
  * Base class for a visitor that consumes multiple element criteria
+ *
+ * TODO: Would like to make this inherit ConstElementVisitor instead, if that's possible.
  */
-class MultipleCriterionConsumerVisitor : public ConstElementVisitor,
+class MultipleCriterionConsumerVisitor : public ElementVisitor,
   public ElementCriterionConsumer
 {
 public:
@@ -48,8 +50,6 @@ public:
 
   MultipleCriterionConsumerVisitor();
   virtual ~MultipleCriterionConsumerVisitor() {}
-
-  virtual void visit(const ConstElementPtr& /*e*/) {}
 
   virtual void addCriterion(const ElementCriterionPtr& crit) override;
 
