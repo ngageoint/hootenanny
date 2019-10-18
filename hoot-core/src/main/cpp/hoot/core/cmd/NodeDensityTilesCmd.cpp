@@ -139,8 +139,8 @@ public:
 
     if (output.toLower().endsWith(".geojson"))
     {
-      TileUtils::writeTilesToGeoJson(
-        tiles, nodeCounts, output, args.contains("--random"), randomSeed);
+      TileUtils::writeTilesToGeoJson(tiles, nodeCounts, output, inputMap->getSource(),
+                                     args.contains("--random"), randomSeed);
     }
     else
     {

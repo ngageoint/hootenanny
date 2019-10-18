@@ -28,12 +28,13 @@
 #include "TileUtils.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/tile/TileBoundsCalculator.h>
-#include <hoot/core/util/RandomNumberUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/io/OsmGeoJsonWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/RandomNumberUtils.h>
 
 // Tgs
 #include <tgs/Statistics/Random.h>
@@ -109,70 +110,31 @@ geos::geom::Envelope TileUtils::getRandomTile(
   return geos::geom::Envelope();
 }
 
-void TileUtils::writeTilesToGeoJson(
-  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+void TileUtils::writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
   const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
-  const bool selectSingleRandomTile, int randomSeed)
+  const QString& fileSource, const bool selectSingleRandomTile, int randomSeed)
 {
-  // write out to temp osm and then use ogr2ogr to convert to geojson; trying to remember, but I
-  // believe our geojson writer wouldn't quite give the geometry output format needed for this,
-  // which is why ogr2ogr is used here...but that's worth verifying now.
-
-  QTemporaryFile osmTempFile("/tmp/tiles-calculate-temp-XXXXXX.osm");
-  if (!osmTempFile.open())
-  {
-    throw HootException(
-      "Unable to open OSM temp file: " + osmTempFile.fileName() + " for GeoJSON output.");
-  }
-  LOG_VARD(osmTempFile.fileName());
-  writeTilesToOsm(tiles, nodeCounts, osmTempFile.fileName(), selectSingleRandomTile, randomSeed);
-
-  // hack - To get around having to modify osmconf.ini, arbitrarily hijacking the "amenity" field
-  // here since its supported in the default ogr configuration. Doing this allows the ogr2ogr select
-  // to bring back the node counts. We can get away with this b/c there's no actual element data
-  // that could actually have an amenity tag...only tiles outlines in this file. If we decide we
-  // want to modify the default osmconf.ini as part of the build process to include a "node_count"
-  // tag, then all of this "amenity" related logic can go away. These full file  text replacements
-  // are inefficient, but the tile files aren't generally going to get huge. Ideally, our geojson
-  // I/O class could be used, but it munges the output (see above).
-
-  // replace "node_count" in the osm file with "amenity", so ogr can read it
-  FileUtils::replaceFully(
-    osmTempFile.fileName(), QStringList("node_count"), QStringList("amenity"));
-
-  QFile outFile(outputPath);
-  if (outFile.exists() && !outFile.remove())
-  {
-    throw HootException("Unable to open GeoJSON file: " + outputPath + " for writing.");
-  }
   LOG_VARD(outputPath);
 
-  // exporting as multipolygons, as that's what the Tasking Manager expects; The fields available
-  // to select are configured in osmconf.ini. See note about "amenity" above.
-  const QString cmd =
-    "ogr2ogr -f GeoJSON -select \"amenity,osm_way_id\" " + outputPath + " " +
-    osmTempFile.fileName() + " multipolygons";
-  LOG_VARD(cmd);
-  LOG_INFO("Writing output to " << outputPath);
-  const int retval = std::system(cmd.toStdString().c_str());
-  if (retval != 0)
-  {
-    throw HootException(
-      "Failed converting " + osmTempFile.fileName() + " to GeoJSON: " + outputPath +
-      ".  Status: " + QString::number(retval));
-  }
+  int randomTileIndex = -1;
+  if (selectSingleRandomTile)
+    randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
 
-  // restore the "node_count" tag key in place of the "amenity" tag key
-  QStringList textsToReplace;
-  textsToReplace.append("amenity");
-  // for this one, just wanted to see it shown as "task" instead of "osm_way_id"; we could make this
-  // configurable, if needed; alternatively could have hacked another ogr field for this purpose,
-  // but we're not really gaining anything by doing that
-  textsToReplace.append("osm_way_id");
-  QStringList replacementTexts;
-  replacementTexts.append("node_count");
-  replacementTexts.append("task");
-  FileUtils::replaceFully(outputPath, textsToReplace, replacementTexts);
+  OsmMapPtr boundaryMap = tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
+  boundaryMap->appendSource(fileSource);
+
+  OsmGeoJsonWriter writer;
+  Settings s;
+  //  Output the source tags in the geojson writer
+  s.set(ConfigOptions::getJsonOutputTaskingManagerAoiKey(), true);
+  s.set(ConfigOptions::getWriterPrecisionKey(), 9);
+  writer.setConfiguration(s);
+  writer.open(outputPath);
+  writer.write(boundaryMap);
+
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+
+  return;
 }
 
 void TileUtils::writeTilesToOsm(
@@ -184,78 +146,42 @@ void TileUtils::writeTilesToOsm(
 
   int randomTileIndex = -1;
   if (selectSingleRandomTile)
-  {
     randomTileIndex = TileUtils::getRandomTileIndex(tiles, randomSeed);
-  }
 
+  OsmMapPtr boundaryMap = tilesToOsmMap(tiles, nodeCounts, randomTileIndex, selectSingleRandomTile);
+
+  OsmMapWriterFactory::write(boundaryMap, outputPath);
+  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+}
+
+OsmMapPtr TileUtils::tilesToOsmMap(
+  const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+  const std::vector<std::vector<long>>& nodeCounts,
+  int randomTileIndex, const bool selectSingleRandomTile)
+{
   OsmMapPtr boundaryMap(new OsmMap());
   int bboxCtr = 1;
   for (size_t tx = 0; tx < tiles.size(); tx++)
   {
     for (size_t ty = 0; ty < tiles[tx].size(); ty++)
     {
-      // TODO: This code could possibly be replaced by GeometryUtils::createMapFromBounds.
-      const geos::geom::Envelope env = tiles[tx][ty];
-      const double circularError = ConfigOptions().getCircularErrorDefaultValue();
-
-      NodePtr lowerLeft(
-        new Node(
-          Status::Unknown1,
-          boundaryMap->createNextNodeId(),
-          geos::geom::Coordinate(env.getMinX(), env.getMinY()),
-          circularError));
-      boundaryMap->addNode(lowerLeft);
-      NodePtr upperRight(
-        new Node(
-          Status::Unknown1,
-          boundaryMap->createNextNodeId(),
-          geos::geom::Coordinate(env.getMaxX(), env.getMaxY()),
-          circularError));
-      boundaryMap->addNode(upperRight);
-      NodePtr upperLeft(
-        new Node(
-          Status::Unknown1,
-          boundaryMap->createNextNodeId(),
-          geos::geom::Coordinate(env.getMinX(), env.getMaxY()),
-          circularError));
-      boundaryMap->addNode(upperLeft);
-      NodePtr lowerRight(
-        new Node(
-          Status::Unknown1,
-          boundaryMap->createNextNodeId(),
-          geos::geom::Coordinate(env.getMaxX(), env.getMinY()),
-          circularError));
-      boundaryMap->addNode(lowerRight);
-
-      WayPtr bbox(new Way(Status::Unknown1, boundaryMap->createNextWayId(), circularError));
-      bbox->addNode(lowerLeft->getId());
-      bbox->addNode(upperLeft->getId());
-      bbox->addNode(upperRight->getId());
-      bbox->addNode(lowerRight->getId());
-      bbox->addNode(lowerLeft->getId());
-
-      // If you want any tags added here to be seen in the geojson output, update the select
-      // statement in writeTilesToGeoJson, if the field is already supported in osmconf.ini OR if
-      // its not supported in osmconfi.ini, add custom handling as a workaround (see related note
-      // in writeTilesToGeoJson).
-
-      // gdal will recognize any closed way with the boundary tag as a polygon (tags
-      // for features recognized as polys configurable in osmconf.ini), which is the type of
-      // output we want...so we have to output this tag (can be removed after the fact)
-      bbox->setTag("boundary", "task_grid_cell");
-      bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
-
+      //  Only create the bounding tile if we want all of them or
+      //  if this is the randomly selected tile
       if (!selectSingleRandomTile ||
           (selectSingleRandomTile && (bboxCtr - 1) == randomTileIndex))
       {
-        boundaryMap->addWay(bbox);
+        //  Create the way in the map
+        const geos::geom::Envelope env = tiles[tx][ty];
+        ElementId eid = GeometryUtils::createBoundsInMap(boundaryMap, env);
+        //  Update the tags on the bounding rectangle
+        WayPtr bbox = boundaryMap->getWay(eid.getId());
+        bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
+        bbox->setTag("task", QString::number(bboxCtr));
       }
       bboxCtr++;
     }
   }
-
-  OsmMapWriterFactory::write(boundaryMap, outputPath);
-  OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
+  return boundaryMap;
 }
 
 }

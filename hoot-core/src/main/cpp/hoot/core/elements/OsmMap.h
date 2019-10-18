@@ -296,8 +296,8 @@ public:
   QString getName() const { return _name; }
   void setName(const QString& name) { _name = name; }
 
-  QString getSource() const { return _sources.join(";"); }
-  void appendSource(const QString& url) { _sources.append(url); }
+  QString getSource() const;
+  void appendSource(const QString& url);
 
   int numNodesAppended() const { return _numNodesAppended; }
   int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
@@ -339,7 +339,7 @@ protected:
   // useful during debugging
   QString _name;
   /** List of source URLs of map data */
-  QStringList _sources;
+  std::set<QString> _sources;
 
   int _numNodesAppended;
   int _numWaysAppended;

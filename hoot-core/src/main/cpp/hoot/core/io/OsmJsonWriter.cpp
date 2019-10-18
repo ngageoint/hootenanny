@@ -31,15 +31,15 @@
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -57,15 +57,26 @@ HOOT_FACTORY_REGISTER(OsmMapWriter, OsmJsonWriter)
 
 OsmJsonWriter::OsmJsonWriter(int precision)
   : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
-    _includeCompatibilityTags(true),
+    _includeCompatibilityTags(ConfigOptions().getJsonFormatHootenanny()),
     _precision(precision),
     _out(0),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
     _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
-    _writeHootFormat(true),
+    _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
     _numWritten(0),
     _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
+}
+
+void OsmJsonWriter::setConfiguration(const Settings& conf)
+{
+  ConfigOptions options(conf);
+  _precision = options.getWriterPrecision();
+  _includeDebug = options.getWriterIncludeDebugTags();
+  _writeHootFormat = options.getJsonFormatHootenanny();
+  _pretty = options.getJsonPrettyPrint();
+  _writeEmptyTags = options.getJsonPerserveEmptyTags();
+  _statusUpdateInterval = options.getTaskStatusUpdateInterval() * 10;
 }
 
 QString OsmJsonWriter::markupString(const QString& str)
