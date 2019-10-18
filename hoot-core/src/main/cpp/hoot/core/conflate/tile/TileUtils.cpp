@@ -133,8 +133,6 @@ void TileUtils::writeTilesToGeoJson(const std::vector<std::vector<geos::geom::En
   writer.write(boundaryMap);
 
   OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
-
-  return;
 }
 
 void TileUtils::writeTilesToOsm(

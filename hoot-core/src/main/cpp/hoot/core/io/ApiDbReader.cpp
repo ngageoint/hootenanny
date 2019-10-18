@@ -598,6 +598,7 @@ void ApiDbReader::initializePartial()
 
 void ApiDbReader::read(const OsmMapPtr& map)
 {
+  //  Set the map source
   map->appendSource(_url);
 
   if (!_hasBounds())
@@ -626,8 +627,6 @@ void ApiDbReader::read(const OsmMapPtr& map)
     LOG_DEBUG("Executing API bounded read query with bounds " << bounds.toString() << "...");
     _readByBounds(map, bounds);
   }
-  //  Set the map source
-  map->appendSource(_url);
 }
 
 void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
