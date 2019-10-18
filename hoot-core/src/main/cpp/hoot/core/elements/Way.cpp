@@ -285,6 +285,9 @@ void Way::removeNode(long id)
 
 void Way::replaceNode(long oldId, long newId)
 {
+  if (oldId == newId)
+    return;
+
   LOG_TRACE("Replacing node: " << oldId << " with: " << newId << "...");
 
   const vector<long>& ids = getNodeIds();

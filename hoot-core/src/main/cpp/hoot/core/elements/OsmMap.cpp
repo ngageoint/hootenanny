@@ -422,7 +422,7 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   WayMap::const_iterator it = from->_ways.begin();
   while (it != from->_ways.end())
   {
-    WayPtr w = WayPtr(new Way(*(it->second)));
+    WayPtr w(new Way(*(it->second)));
     w->registerListener(_index.get());
     _ways[it->first] = w;
     // no need to add it to the index b/c the index is created in a lazy fashion.

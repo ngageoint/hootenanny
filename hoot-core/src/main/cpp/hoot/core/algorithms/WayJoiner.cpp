@@ -185,7 +185,15 @@ void WayJoiner::_joinAtNode()
           //  Check for equivalent tags
           if (pTags == cTags || pTags.dataOnlyEqual(cTags))
           {
-            _joinWays(way, child);
+            long wid = way->getId();
+            long cid = child->getId();
+            //  Decide which ID to keep
+            if ((wid > 0 && cid < 0) ||               //  Way is the only positive ID
+                (wid < 0 && cid < 0 && wid > cid) ||  //  Larger of the two negative IDs
+                (wid > 0 && cid > 0 && wid < cid))    //  Smaller of the two positive IDs
+              _joinWays(way, child);
+            else
+              _joinWays(child, way);
             break;
           }
         }

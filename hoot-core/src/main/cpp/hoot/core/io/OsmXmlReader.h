@@ -30,9 +30,9 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/util/Units.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>

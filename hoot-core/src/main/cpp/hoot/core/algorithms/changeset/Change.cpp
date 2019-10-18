@@ -31,7 +31,8 @@
 namespace hoot
 {
 
-Change::Change()
+Change::Change() :
+_type(Unknown)
 {
 }
 
