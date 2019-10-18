@@ -84,6 +84,26 @@ public class GrailParams {
 
     private String conflationType;
 
+    public GrailParams() {}
+
+    public GrailParams(GrailParams params) {
+        this.bounds = params.getBounds();
+        this.applyTags = params.getApplyTags();
+        this.user = params.getUser();
+        this.input1 = params.getInput1();
+        this.input2 = params.getInput2();
+        this.output = params.getOutput();
+        this.parentId = params.getParentId();
+        this.pullUrl = params.getPullUrl();
+        this.pushUrl = params.getPushUrl();
+        this.maxSize = params.getMaxBBoxSize();
+        this.customQuery = params.getCustomQuery();
+        this.consumerKey = params.getConsumerKey();
+        this.consumerSecret = params.getConsumerSecret();
+        this.workDir = params.getWorkDir();
+        this.conflationType = params.getConflationType();
+    }
+
     public String getConflationType() {
         return conflationType;
     }

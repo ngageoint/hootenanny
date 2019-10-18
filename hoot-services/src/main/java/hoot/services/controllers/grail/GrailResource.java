@@ -142,12 +142,7 @@ public class GrailResource {
 
     public GrailResource() {}
 
-    private Command getRailsPortApiCommand(String jobId, Users user, String bounds, String output) throws UnavailableException {
-        GrailParams params = new GrailParams();
-        params.setUser(user);
-        params.setBounds(bounds);
-        params.setOutput(output);
-
+    private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
         // Checks to see that the sensitive data was actually replaced meaning there was a value
         if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
             params.setPullUrl(PRIVATE_OVERPASS_URL);
@@ -226,9 +221,11 @@ public class GrailResource {
 
         // Pull reference data from Rails port OSM API
         File referenceOSMFile = new File(workDir, REFERENCE + ".osm");
+        reqParams.setOutput(referenceOSMFile.getAbsolutePath());
+
         if (referenceOSMFile.exists()) referenceOSMFile.delete();
         try {
-            workflow.add(getRailsPortApiCommand(jobId, user, bbox, referenceOSMFile.getAbsolutePath()));
+            workflow.add(getRailsPortApiCommand(jobId, reqParams));
         } catch (UnavailableException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
@@ -611,7 +608,7 @@ public class GrailResource {
         try {
             String customQuery = reqParams.getCustomQuery();
             if (customQuery == null || customQuery.equals("")) {
-            url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
+                url = "'" + PullOverpassCommand.getOverpassUrl(bbox) + "'";
             } else {
                 url = "'" + PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), bbox, "json", customQuery) + "'";
             }
@@ -764,6 +761,7 @@ public class GrailResource {
         params.setOutput(layerName);
         params.setBounds(bbox);
         params.setParentId(folderName);
+        params.setCustomQuery(reqParams.getCustomQuery());
 
         List<Command> workflow;
         try {
@@ -791,13 +789,16 @@ public class GrailResource {
         File referenceOSMFile = new File(params.getWorkDir(), REFERENCE +".osm");
         if (referenceOSMFile.exists()) { referenceOSMFile.delete(); }
 
-        params.setInput1(referenceOSMFile.getAbsolutePath());
+        GrailParams getRailsParams = new GrailParams(params);
+        getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
 
         try {
-            workflow.add(getRailsPortApiCommand(jobId, user, params.getBounds(), referenceOSMFile.getAbsolutePath()));
+            workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
         } catch (UnavailableException exc) {
             throw new UnavailableException("The Rails port API is offline.");
         }
+
+        params.setInput1(referenceOSMFile.getAbsolutePath());
 
         // Write the data to the hoot db
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
