@@ -33,11 +33,11 @@ namespace hoot
 {
 
 AddExportTagsVisitor::AddExportTagsVisitor()
-{  
-  _includeIds = false,
-  _textStatus = ConfigOptions().getWriterTextStatus();
-  _includeDebug = ConfigOptions().getWriterIncludeDebugTags();
-  _includeCircularError = ConfigOptions().getWriterIncludeCircularErrorTags();
+  : _includeIds(false),
+    _textStatus(ConfigOptions().getWriterTextStatus()),
+    _includeCircularError(ConfigOptions().getWriterIncludeCircularErrorTags()),
+    _includeDebug(ConfigOptions().getWriterIncludeDebugTags())
+{
 }
 
 void AddExportTagsVisitor::visit(const ElementPtr& pElement)
@@ -91,7 +91,7 @@ void AddExportTagsVisitor::visit(const ElementPtr& pElement)
   }
 
   // HootId
-  if (_includeIds)
+  if (_includeDebug || _includeIds)
   {
     tags[MetadataTags::HootId()] = QString::number(pElement->getId());
   }
@@ -107,7 +107,7 @@ void AddExportTagsVisitor::overrideDebugSettings()
 {
   _includeIds = true;
   _textStatus = false;
-  _includeCircularError= true;
+  _includeCircularError = true;
   _includeDebug = true;
 }
 
