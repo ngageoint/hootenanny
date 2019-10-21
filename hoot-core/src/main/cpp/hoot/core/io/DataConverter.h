@@ -141,8 +141,7 @@ private:
   // If specific columns were specified for export to a shape file, then this is called.
   void _exportToShapeWithCols(const QString& output, const QStringList& cols, const OsmMapPtr& map);
 
-  void _fillElementCache(const QString& inputUrl,
-                         ElementCachePtr cachePtr,
+  void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
                          QQueue<ElementPtr>& workQ);
   // _convertToOgr will call this to run the translator in a separate thread for a performance
   // increase if certain pre-conditions are met.
@@ -159,7 +158,6 @@ private:
 
   bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
 
-  void _setWayGeneralizerOptions();
   void _setFromOgrOptions(const QStringList& inputs);
 };
 

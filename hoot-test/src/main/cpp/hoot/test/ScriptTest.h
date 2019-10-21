@@ -44,13 +44,16 @@ class ScriptTest : public CppUnit::TestCase
 {
 public:
 
-  ScriptTest(QString script, bool printDiff, int waitToFinishTime = 30000);
+  ScriptTest(QString script, bool printDiff, bool suppressFailureDetail = false,
+             int waitToFinishTime = 30000);
 
   virtual void runTest();
 
 private:
 
   bool _printDiff;
+  // TODO
+  bool _suppressFailureDetail;
   QString _script;
   QString _stderr, _baseStderr;
   QString _stdout, _baseStdout;

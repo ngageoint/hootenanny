@@ -43,6 +43,12 @@ RemoveDuplicateWayNodesVisitor::RemoveDuplicateWayNodesVisitor()
 {
 }
 
+void RemoveDuplicateWayNodesVisitor::removeDuplicates(const WayPtr& way)
+{
+  RemoveDuplicateWayNodesVisitor vis;
+  vis.visit(way);
+}
+
 void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 {
   if (e->getElementType() == ElementType::Way)

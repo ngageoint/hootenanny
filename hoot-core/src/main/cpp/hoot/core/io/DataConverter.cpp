@@ -50,6 +50,7 @@
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 // std
 #include <vector>
@@ -552,20 +553,13 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   return layers;
 }
 
-void DataConverter::_setWayGeneralizerOptions()
+void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
 {
-  conf().set("way.generalizer.epsilon", "0.1");
-  conf().set("way.generalizer.remove.nodes.shared.by.ways", "false");
-  conf().set("way.generalizer.criterion", "hoot::BuildingCriterion");
-}
-
-void DataConverter::_setFromOgrOptions(const QStringList& inputs)
-{
-  // If any of these ops gets added here, then we never have a streaming OGR read, since they all
-  // require a full map...don't love that.
-
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
-  // to avoid unnecessary processing time.
+  // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
+  // have a streaming OGR read, since they all require a full map...don't love that...but not sure
+  // what can be done about it.
+
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
     if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
@@ -573,6 +567,7 @@ void DataConverter::_setFromOgrOptions(const QStringList& inputs)
       _convertOps.append(QString::fromStdString(MergeNearbyNodes::className()));
     }
   }
+
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
     // Building outline updating needs to happen after building part merging, or we can end up with
@@ -586,11 +581,21 @@ void DataConverter::_setFromOgrOptions(const QStringList& inputs)
       _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
     }
   }
+
+  // TODO
+  if (!_convertOps.contains(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className())))
+  {
+    _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
+  }
+
+  // TODO
   if (ConfigOptions().getOgr2osmSimplifyWays() &&
-      StringUtils::containsSubstring(inputs, "shp") &&
+      // passes unit tests off (after fixes); ? regression
+      //StringUtils::containsSubstring(inputs, "shp") &&
       !_convertOps.contains(QString::fromStdString(WayGeneralizeVisitor::className())))
   {
-    _setWayGeneralizerOptions();
+    // fails unit tests off; ? regression
+    conf().set("way.generalizer.criterion", ConfigOptions().getOgr2osmSimplifyWaysCriterion());
     _convertOps.append(QString::fromStdString(WayGeneralizeVisitor::className()));
   }
 }

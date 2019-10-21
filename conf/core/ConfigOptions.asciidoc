@@ -1029,7 +1029,7 @@ Size of the in memory way cache used when streaming I/O is used with ways.
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterions passed to an ElementCriterionConsumer will be negated. Not honored by
+If true, element criterion passed to an ElementCriterionConsumer will be negated. Not honored by
 all ElementCriterionConsumers. Since this configuration option is shared across all
 ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
 ElementCriterionConsumers.
@@ -2649,7 +2649,14 @@ format to OSM.
 === ogr2osm.simplify.ways
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
+
+TODO
+
+=== ogr2osm.simplify.ways.criterion
+
+* Data Type: string
+* Default Value: `hoot::BuildingCriterion`
 
 TODO
 
@@ -3489,6 +3496,15 @@ random.tag.modifier.subsitution.values.
 
 A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
 list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
+
+=== random.way.generalizer.epsilon
+
+* Data Type: double
+* Default Value: `1.0`
+
+Distance parameter, in meters, that determines to what degree a way is generalized by
+RandomWayGeneralizer, which isa part of PERTY. Higher values result in more generalization (more
+nodes removed).
 
 === random.way.generalizer.probability
 
@@ -4535,11 +4551,10 @@ any filters contradicting that will be ignored.
 === way.generalizer.epsilon
 
 * Data Type: double
-* Default Value: `1.0`
+* Default Value: `0.1`
 
 Distance parameter, in meters, that determines to what degree a way is generalized by
-WayGeneralizeVisitor, which is available standalone or as a part of PERTY. Higher values result in
-more generalization (more nodes removed).
+WayGeneralizeVisitor. Higher values result in more generalization (more nodes removed).
 
 === way.generalizer.remove.nodes.shared.by.ways
 

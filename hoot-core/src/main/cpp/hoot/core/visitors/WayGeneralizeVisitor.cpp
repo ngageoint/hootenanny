@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, WayGeneralizeVisitor)
 
 WayGeneralizeVisitor::WayGeneralizeVisitor() :
 _epsilon(1.0),
-_removeNodesSharedByWays(true), // maybe the default for this should be false
+_removeNodesSharedByWays(false),
 _totalNodesRemoved(0)
 {
 }
@@ -76,15 +76,6 @@ void WayGeneralizeVisitor::addCriterion(const ElementCriterionPtr& crit)
 
 void WayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
 {
-  //MapProjector::projectToPlanar(_map->shared_from_this());
-
-  LOG_VART(element);
-  LOG_VART(element->getElementType() == ElementType::Way);
-  LOG_VART(_crit.get());
-  if (_crit)
-  {
-    LOG_VART(_crit->isSatisfied(element));
-  }
   if (element->getElementType() == ElementType::Way && (!_crit || _crit->isSatisfied(element)))
   {
     if (!_map)

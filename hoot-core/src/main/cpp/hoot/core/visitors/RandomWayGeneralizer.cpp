@@ -54,7 +54,7 @@ void RandomWayGeneralizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setWayGeneralizeProbability(configOptions.getRandomWayGeneralizerProbability());
-  setEpsilon(configOptions.getWayGeneralizerEpsilon());
+  setEpsilon(configOptions.getRandomWayGeneralizerEpsilon());
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)

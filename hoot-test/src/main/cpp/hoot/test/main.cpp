@@ -368,13 +368,17 @@ void runSingleTest(CppUnit::Test* pTest, QStringList& args, CppUnit::TextTestRes
 }
 
 void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
-                   bool hideDisableTests = false)
+                   bool suppressFailureDetail, bool hideDisableTests = false)
 {
   //  Current tests are included in CURRENT, QUICK, SLOW, and GLACIAL
   //  Add current tests if the bit flag is set
   if (t & CURRENT)
   {
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/current/", printDiff, QUICK_WAIT, hideDisableTests,
+          suppressFailureDetail)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("current").makeTest()));
   }
   //  Quick tests are included in QUICK, SLOW, and GLACIAL
@@ -382,7 +386,10 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
   if (t & QUICK_ONLY)
   {
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry().makeTest()));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/quick/", printDiff, QUICK_WAIT, hideDisableTests, suppressFailureDetail)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("quick").makeTest()));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("TgsTest").makeTest()));
   }
@@ -390,23 +397,46 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
   //  Add slow tests if the bit flag is set
   if (t & SLOW_ONLY)
   {
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/slow/", printDiff, SLOW_WAIT, hideDisableTests, suppressFailureDetail)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
+          suppressFailureDetail)));
     vTests.push_back(TestPtr(new ConflateCaseTestSuite("test-files/cases", hideDisableTests)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("slow").makeTest()));
   }
   //  Add glacial tests if the bit flag is set
   if (t & GLACIAL_ONLY)
   {
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/glacial/", printDiff, GLACIAL_WAIT, hideDisableTests,
+          suppressFailureDetail)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests,
+          suppressFailureDetail)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("glacial").makeTest()));
   }
   //  Add serial tests if the bit flag is set
   if (t == SERIAL)
   {
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests)));
-    vTests.push_back(TestPtr(new ScriptTestSuite("test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/glacial/serial/", printDiff, GLACIAL_WAIT, hideDisableTests,
+          suppressFailureDetail)));
+    vTests.push_back(
+      TestPtr(
+        new ScriptTestSuite(
+          "test-files/cmd/slow/serial/", printDiff, SLOW_WAIT, hideDisableTests,
+          suppressFailureDetail)));
     vTests.push_back(TestPtr(CppUnit::TestFactoryRegistry::getRegistry("serial").makeTest()));
   }
 
@@ -441,7 +471,7 @@ void usage(char* argv)
           "  --slow                     - Run the 'slow' level tests and above.\n"
           "  --slow-only                - Run the 'slow' level tests only.\n"
           "  --status                   - Show status log level messages and above.\n"
-          "  --suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
+          "  --suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message. Disables --diff for script tests.\n"
           "  --trace                    - Show trace log level messages and above.\n"
           "  --verbose                  - Show verbose log level messages and above.\n"
           "  --warn                     - Show warning log level messages and above.\n"
@@ -520,22 +550,22 @@ int main(int argc, char* argv[])
 
     bool printDiff = args.contains("--diff");
 
-    // Print all names & exit without running anything
-    if (args.contains("--all-names"))
-    {
-      populateTests(getTestType(args), vAllTests, printDiff);
-      getTestVector(vAllTests, vTestsToRun);
-      includeExcludeTests(args, vTestsToRun);
-      cout << "Test count: " << vTestsToRun.size() << endl;
-      printNames(vTestsToRun);
-      return 0;
-    }
-
     bool suppressFailureDetail = false;
     if (args.contains("--suppress-failure-detail"))
     {
       suppressFailureDetail = true;
       Log::getInstance().setLevel(Log::Error);
+    }
+
+    // Print all names & exit without running anything
+    if (args.contains("--all-names"))
+    {
+      populateTests(getTestType(args), vAllTests, printDiff, suppressFailureDetail);
+      getTestVector(vAllTests, vTestsToRun);
+      includeExcludeTests(args, vTestsToRun);
+      cout << "Test count: " << vTestsToRun.size() << endl;
+      printNames(vTestsToRun);
+      return 0;
     }
 
     // Run a single test
@@ -551,7 +581,7 @@ int main(int argc, char* argv[])
       listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
-      populateTests(ALL, vAllTests, printDiff);
+      populateTests(ALL, vAllTests, printDiff, suppressFailureDetail);
       CppUnit::Test* t = findTest(vAllTests, testName.toStdString());
       if (t == NULL)
       {
@@ -578,7 +608,7 @@ int main(int argc, char* argv[])
       cin >> testName;
       while (testName != HOOT_TEST_FINISHED)
       {
-        populateTests(ALL, vAllTests, printDiff, true);
+        populateTests(ALL, vAllTests, printDiff, suppressFailureDetail, true);
         CppUnit::Test* t = findTest(vAllTests, testName);
         if (t != 0)
         {
@@ -606,7 +636,7 @@ int main(int argc, char* argv[])
       else
         listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));
       //  Populate the list of tests
-      populateTests(type, vAllTests, printDiff);
+      populateTests(type, vAllTests, printDiff, suppressFailureDetail);
 
       vector<CppUnit::Test*> vTests;
       getTestVector(vAllTests, vTestsToRun);
@@ -654,7 +684,7 @@ int main(int argc, char* argv[])
 
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       vector<TestPtr> serialTests;
-      populateTests(SERIAL, serialTests, printDiff, true);
+      populateTests(SERIAL, serialTests, printDiff, suppressFailureDetail, true);
       vector<CppUnit::Test*> vSerialTests;
       getTestVector(serialTests, vSerialTests);
       vector<string> serialNames;

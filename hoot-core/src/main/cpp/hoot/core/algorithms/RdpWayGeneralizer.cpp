@@ -70,7 +70,6 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   }
 
   LOG_TRACE("Attempting to generalize: " << way->getElementId() << "...");
-  //LOG_TRACE("Attempting to generalize: " << way << "...");
 
   const QList<long> wayNodeIdsBeforeFiltering =
     QVector<long>::fromStdVector(way->getNodeIds()).toList();

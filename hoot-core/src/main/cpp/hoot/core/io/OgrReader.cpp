@@ -1108,7 +1108,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
       LOG_VART(_count);
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
-      // TODO: This isn't clearing out the current line before each new log statement.
+      // TODO: This isn't clearing out the current line before each new log statement...fix
       _progress.setFromRelative(
         (float)_count / (float)_featureCount, Progress::JobState::Running,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +

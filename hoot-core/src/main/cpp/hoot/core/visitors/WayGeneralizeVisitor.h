@@ -42,7 +42,7 @@ class Way;
 class RdpWayGeneralizer;
 
 /**
- * Performs generalization of a map's ways.
+ * Performs generalization (simplification) of a map's ways.
  *
  * @see RdpWayGeneralizer
  */
@@ -88,6 +88,7 @@ private:
   double _epsilon;
 
   std::shared_ptr<RdpWayGeneralizer> _generalizer;
+  // TODO: could extend this to multiple criteria?
   ElementCriterionPtr _crit;
   // see RdpWayGeneralizer
   bool _removeNodesSharedByWays;
