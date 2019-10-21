@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
@@ -40,10 +41,9 @@ HOOT_FACTORY_REGISTER(ElementVisitor, NodesPerWayVisitor)
 NodesPerWayVisitor::NodesPerWayVisitor() :
 _totalWayNodes(0),
 _minNodesPerWay(0),
-_maxNodesPerWay(0)
+_maxNodesPerWay(0),
+_negateCriterion(false)
 {
-  _negateCriteria = false;
-  _chainCriteria = false;
 }
 
 void NodesPerWayVisitor::setConfiguration(const Settings& conf)
@@ -52,34 +52,40 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
   // Can we move some of the logic up to the parent? Do the same in the other children as well.
 
   ConfigOptions configOptions(conf);
-
-  _negateCriteria = configOptions.getElementCriterionNegate();
-  _chainCriteria = configOptions.getNodesPerWayVisitorChainElementCriteria();
-  const QStringList critNames = configOptions.getNodesPerWayVisitorElementCriteria();
-  LOG_VART(critNames);
-  _addCriteria(critNames);
-  if (_configureChildren)
-  {
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
-    {
-      ElementCriterionPtr crit = *it;
-      Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
-      {
-        c->setConfiguration(conf);
-      }
-    }
-  }
-  LOG_VARD(_negateCriteria);
-  LOG_VARD(_chainCriteria);
-  LOG_VARD(_criteria.size());
+  _negateCriterion = configOptions.getElementCriterionNegate();
+  LOG_VARD(_negateCriterion);
+  const QString critName = configOptions.getNodesPerWayVisitorElementCriterion();
+  LOG_VARD(critName);
+  _setCriterion(critName);
 }
 
-void NodesPerWayVisitor::visit(const ElementPtr& e)
+void NodesPerWayVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  if (!_negateCriterion)
+  {
+    _customCrit = e;
+  }
+  else
+  {
+    _customCrit.reset(new NotCriterion(e));
+  }
+}
+
+void NodesPerWayVisitor::_setCriterion(const QString& criterionName)
+{
+  if (!criterionName.trimmed().isEmpty())
+  {
+    LOG_VART(criterionName);
+    addCriterion(
+      std::shared_ptr<ElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+  }
+}
+
+void NodesPerWayVisitor::visit(const ConstElementPtr& e)
 {
   LOG_VART(e->getElementId());
-  if (_wayCrit.isSatisfied(e) && (_criteria.size() == 0 || _criteriaSatisfied(e)))
+  if (_wayCrit.isSatisfied(e) && (!_customCrit || _customCrit->isSatisfied(e)))
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->getElementId());

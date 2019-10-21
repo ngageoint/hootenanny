@@ -2350,25 +2350,13 @@ Determines how strictly the angle should be considered when calculating intersec
 rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more
 strict.
 
-=== nodes.per.way.visitor.chain.element.criteria
+=== nodes.per.way.visitor.element.criterion
 
-* Data Type: bool
-* Default Value: `false`
-
-If set to true and multiple criterion are specified in nodes.per.way.visitor.element.criteria,
-the node counts of elements will be collected only if they satisfy all of the criteria.  If set to
-false, then only one of the specified criteria must be met in order to collect the node counts of a
-way.
-
-=== nodes.per.way.visitor.element.criteria
-
-* Data Type: list
+* Data Type: string
 * Default Value: ``
 
-One or more element criteria used for filtering ways whose nodes are counted. The elements must be
-ways for their nodes to be counted, otherwise these criteria will be ignored. Delimit criterion
-names with '='. From the command line, names with ';' and surround the entire list in double quotes.
-E.g. "hoot::BuildingCriterion;hoot::AreaCriterion"
+An element criterion to be used for filtering ways whose nodes are counted. The elements must be
+ways for their nodes to be counted, otherwise the criterion will be ignored.
 
 === tags.visitor.keys
 

@@ -29,17 +29,25 @@
 #define NODES_PER_WAY_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
 
-class NodesPerWayVisitor : public MultipleCriterionConsumerVisitor, public NumericStatistic,
-  public OperationStatusInfo, public Configurable
+/*
+ * Making this inherit from MultipleCriterionConsumerVisitor worked for some situations but caused
+ * incorrect output when this was used with CalculateStats op, so implementing single crierion
+ * support without inheritance. It appears the incorrect behavior has something to do with
+ * MultipleCriterionConsumerVisitor inheriting from ElementVisitor and not ConstElementVisitor but
+ * not exactly sure why yet. See related note in MultipleCriterionConsumerVisitor.
+ */
+class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic,
+  public OperationStatusInfo, public Configurable, public ElementCriterionConsumer
 {
 public:
 
@@ -47,7 +55,9 @@ public:
 
   NodesPerWayVisitor();
 
-  virtual void visit(const ElementPtr& e) override;
+  virtual void addCriterion(const ElementCriterionPtr& e);
+
+  virtual void visit(const ConstElementPtr& e) override;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -72,10 +82,15 @@ public:
 private:
 
   WayCriterion _wayCrit;
+  std::shared_ptr<ElementCriterion> _customCrit;
 
   int _totalWayNodes;
   int _minNodesPerWay;
   int _maxNodesPerWay;
+
+  bool _negateCriterion;
+
+  void _setCriterion(const QString& criterionName);
 };
 
 }
