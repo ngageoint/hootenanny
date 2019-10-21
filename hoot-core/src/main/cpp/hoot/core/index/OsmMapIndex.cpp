@@ -71,11 +71,8 @@ void OsmMapIndex::addWay(ConstWayPtr w)
   if (_nodeToWayMap != 0)
   {
     LOG_TRACE("Adding way to index: " << w->getElementId());
-    //LOG_TRACE("Adding way to index: " << w);
     _nodeToWayMap->addWay(w);
-    //getNodeToWayMap()->addWay(w);
     VALIDATE(_nodeToWayMap->validate(_map));
-    //VALIDATE(getNodeToWayMap()->validate(_map));
   }
 
   // rather than manipulate the R-Tree (expensive) we'll just keep track of what changed.
@@ -640,8 +637,6 @@ void OsmMapIndex::removeWay(ConstWayPtr w)
   {
     VALIDATE(_nodeToWayMap->validate(_map));
     _nodeToWayMap->removeWay(w);
-    //VALIDATE(getNodeToWayMap()->validate(_map));
-    //getNodeToWayMap()->removeWay(w);
   }
 
   if (_wayTree != 0 &&
