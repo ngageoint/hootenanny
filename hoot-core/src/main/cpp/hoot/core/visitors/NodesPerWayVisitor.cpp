@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -48,7 +49,7 @@ _maxNodesPerWay(0)
 void NodesPerWayVisitor::setConfiguration(const Settings& conf)
 {
   // TODO: This setConfiguration is kind of bulky for MultipleCriterionConsumerVisitor children.
-  // Can we move some of the logic up to the parent?
+  // Can we move some of the logic up to the parent? Do the same in the other children as well.
 
   ConfigOptions configOptions(conf);
 
@@ -75,20 +76,26 @@ void NodesPerWayVisitor::setConfiguration(const Settings& conf)
   LOG_VARD(_criteria.size());
 }
 
-void NodesPerWayVisitor::visit(const /*Const*/ElementPtr& e)
+void NodesPerWayVisitor::visit(const ElementPtr& e)
 {
+  LOG_VART(e->getElementId());
   if (_wayCrit.isSatisfied(e) && (_criteria.size() == 0 || _criteriaSatisfied(e)))
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+    LOG_VART(way->getElementId());
+
     const int numWayNodes = way->getNodeCount();
     _totalWayNodes += numWayNodes;
+    LOG_VART(_totalWayNodes);
     if (_minNodesPerWay == 0 || numWayNodes < _minNodesPerWay)
     {
       _minNodesPerWay = numWayNodes;
+      LOG_VART(_minNodesPerWay);
     }
     if (numWayNodes > _maxNodesPerWay)
     {
       _maxNodesPerWay = numWayNodes;
+      LOG_VART(_maxNodesPerWay);
     }
     _numAffected++;
   }
