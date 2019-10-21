@@ -2074,7 +2074,7 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 === merge.nearby.nodes.distance
 
 * Data Type: double
-* Default Value: `0.0001`
+* Default Value: `0.01`
 
 When merging nodes during convert, determines what tolerance should be used for deciding if two
 nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of

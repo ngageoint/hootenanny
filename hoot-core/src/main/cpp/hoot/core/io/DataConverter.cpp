@@ -588,16 +588,16 @@ void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
     _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
   }
 
-  // TODO
-  if (ConfigOptions().getOgr2osmSimplifyWays() &&
-      // passes unit tests off (after fixes); ? regression
-      //StringUtils::containsSubstring(inputs, "shp") &&
-      !_convertOps.contains(QString::fromStdString(WayGeneralizeVisitor::className())))
-  {
-    // fails unit tests off; ? regression
-    conf().set("way.generalizer.criterion", ConfigOptions().getOgr2osmSimplifyWaysCriterion());
-    _convertOps.append(QString::fromStdString(WayGeneralizeVisitor::className()));
-  }
+//  // TODO
+//  if (ConfigOptions().getOgr2osmSimplifyWays() &&
+//      // passes unit tests off (after fixes); ? regression
+//      //StringUtils::containsSubstring(inputs, "shp") &&
+//      !_convertOps.contains(QString::fromStdString(WayGeneralizeVisitor::className())))
+//  {
+//    // fails unit tests off; ? regression
+//    conf().set("way.generalizer.criterion", ConfigOptions().getOgr2osmSimplifyWaysCriterion());
+//    _convertOps.append(QString::fromStdString(WayGeneralizeVisitor::className()));
+//  }
 }
 
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
