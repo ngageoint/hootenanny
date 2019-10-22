@@ -426,6 +426,7 @@ long OgrReader::getFeatureCount(const QString& path, const QString& layer)
 
 void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map)
 {
+  map->appendSource(path);
   _d->open(path, layer);
   _d->read(map);
   _d->close();
@@ -488,6 +489,7 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
 
 void OgrReader::open(const QString& url)
 {
+  OsmMapReader::open(url);
   _d->open(url, "");
 }
 

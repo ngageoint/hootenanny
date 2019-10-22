@@ -1640,7 +1640,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 === json.format.hootenanny
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
 including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
@@ -1712,6 +1712,14 @@ vs
 },
 ...
 -----
+
+=== json.output.tasking.manager.aoi
+
+* Data Type: bool
+* Default Value: `false`
+
+Output the GeoJSON in a format readable in Tasking Manager.  This includes
+per file or per feature `source` tags and compatible geometries.
 
 === json.perserve.empty.tags
 

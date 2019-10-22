@@ -27,9 +27,9 @@
 #include "GeoNamesReader.h"
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/elements/OsmMap.h>
 
 // qt
 #include <QDir>
@@ -101,6 +101,7 @@ bool GeoNamesReader::isSupported(const QString& url)
 
 void GeoNamesReader::open(const QString& url)
 {
+  OsmMapReader::open(url);
   _fp.close();
   _fp.setFileName(QDir().absoluteFilePath(url));
   _elementsRead = 0;

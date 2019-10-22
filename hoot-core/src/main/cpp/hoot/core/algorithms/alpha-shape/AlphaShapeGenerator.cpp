@@ -61,6 +61,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   OsmMapPtr result;
 
   result.reset(new OsmMap(inputMap->getProjection()));
+  result->appendSource(inputMap->getSource());
   // add the resulting alpha shape for debugging.
   GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 

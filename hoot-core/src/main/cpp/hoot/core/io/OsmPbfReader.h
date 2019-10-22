@@ -233,7 +233,6 @@ private:
   long _partialWaysRead;
   long _partialRelationsRead;
 
-  QString _urlStr;
   bool _firstPartialReadCompleted;
 
   void _readFile(const QString& path, const OsmMapPtr& map);

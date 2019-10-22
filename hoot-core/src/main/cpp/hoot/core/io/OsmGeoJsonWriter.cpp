@@ -42,8 +42,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -61,17 +61,19 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapWriter, OsmGeoJsonWriter)
 
 OsmGeoJsonWriter::OsmGeoJsonWriter(int precision)
-  : OsmJsonWriter(precision)
+  : OsmJsonWriter(precision),
+    _useTaskingManagerFormat(ConfigOptions().getJsonOutputTaskingManagerAoi())
 {
-  _writeHootFormat = ConfigOptions().getJsonFormatHootenanny();
+  if (_useTaskingManagerFormat)
+    _writeHootFormat = false;
 }
 
 void OsmGeoJsonWriter::setConfiguration(const Settings& conf)
 {
-  _includeDebug = ConfigOptions(conf).getWriterIncludeDebugTags();
-  _pretty = ConfigOptions(conf).getJsonPrettyPrint();
-  _writeEmptyTags = ConfigOptions(conf).getJsonPerserveEmptyTags();
-  _writeHootFormat = ConfigOptions(conf).getJsonFormatHootenanny();
+  OsmJsonWriter::setConfiguration(conf);
+  _useTaskingManagerFormat = ConfigOptions(conf).getJsonOutputTaskingManagerAoi();
+  if (_useTaskingManagerFormat)
+    _writeHootFormat = false;
 }
 
 void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
@@ -86,6 +88,11 @@ void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
   _writeKvp("generator", "Hootenanny"); _write(",");
   _writeKvp("type", "FeatureCollection"); _write(",");
   _write("\"bbox\": "); _write(_getBbox()); _write(",");
+  if (_useTaskingManagerFormat && map->getSource() != "")
+  {
+    _writeKvp(MetadataTags::ImportUrl(), map->getSource());
+    _write(",");
+  }
   _write("\"features\": [", true);
   _firstElement = true;
   _writeNodes();
@@ -141,9 +148,12 @@ void OsmGeoJsonWriter::_writeGeometry(ConstNodePtr n)
 void OsmGeoJsonWriter::_writeGeometry(ConstWayPtr w)
 {
   const vector<long>& nodes = w->getNodeIds();
-  bool isPolygon = AreaCriterion().isSatisfied(w) ||
-                   (nodes.size() > 0 && nodes[0] == nodes[nodes.size() - 1]);
-  _writeGeometry(nodes, (isPolygon) ? "Polygon" : "LineString");
+  string geoType = "LineString";
+  if (_useTaskingManagerFormat)
+    geoType = "MultiPolygon";
+  else if (AreaCriterion().isSatisfied(w) || (nodes.size() > 0 && nodes[0] == nodes[nodes.size() - 1]))
+    geoType = "Polygon";
+  _writeGeometry(nodes, geoType);
 }
 
 void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
@@ -215,10 +225,13 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
   _write("\"coordinates\": ");
   bool point = (type.compare("Point") == 0);
   bool polygon = (type.compare("Polygon") == 0);
+  bool multipoly = (type.compare("MultiPolygon") == 0);
   if (!point)
     _write("[");
   if (polygon)
     _write("[");
+  if (multipoly)
+    _write("[[");
   bool first = true;
   for (vector<long>::const_iterator it = temp_nodes.begin(); it != temp_nodes.end(); ++it)
   {
@@ -229,6 +242,8 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
     ConstNodePtr n = _map->getNode(*it);
     _write(QString("[%1, %2]").arg(QString::number(n->getX(), 'g', _precision)).arg(QString::number(n->getY(), 'g', _precision)));
   }
+  if (multipoly)
+    _write("]]");
   if (polygon)
     _write("]");
   if (!point)

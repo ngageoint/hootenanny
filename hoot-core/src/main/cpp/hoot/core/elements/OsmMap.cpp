@@ -1105,4 +1105,30 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   }
 }
 
+QString OsmMap::getSource() const
+{
+  QString buffer;
+  QTextStream ts(&buffer);
+  bool first = true;
+  for (std::set<QString>::iterator it = _sources.begin(); it != _sources.end(); ++it)
+  {
+    if (first)
+      first = false;
+    else
+      ts << ";";
+    ts << *it;
+  }
+  return ts.readAll();
+}
+
+void OsmMap::appendSource(const QString& url)
+{
+  QStringList urls = url.split(";");
+  for (int i = 0; i < urls.size(); ++i)
+  {
+    QUrl src(urls[i]);
+    _sources.insert(src.toDisplayString());
+  }
+}
+
 }
