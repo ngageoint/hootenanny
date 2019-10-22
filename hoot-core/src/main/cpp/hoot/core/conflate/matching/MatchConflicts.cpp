@@ -45,8 +45,7 @@ MatchConflicts::MatchConflicts(const ConstOsmMapPtr& map) :
 {
 }
 
-MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
-  const vector<const Match*>& matches) const
+MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(const std::vector<ConstMatchPtr>& matches) const
 {
   LOG_TRACE("Calculating element ID to index map...");
   EidIndexMap eidToMatches;
@@ -70,7 +69,7 @@ MatchConflicts::EidIndexMap MatchConflicts::calculateEidIndexMap(
   return eidToMatches;
 }
 
-void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches,
+void MatchConflicts::calculateMatchConflicts(const std::vector<ConstMatchPtr>& matches,
   ConflictMap& conflicts)
 {
   LOG_VART(matches.size());
@@ -111,7 +110,7 @@ void MatchConflicts::calculateMatchConflicts(const vector<const Match*>& matches
   calculateSubsetConflicts(matches, conflicts, matchSet);
 }
 
-void MatchConflicts::calculateSubsetConflicts(const vector<const Match*>& matches,
+void MatchConflicts::calculateSubsetConflicts(const std::vector<ConstMatchPtr>& matches,
                                               ConflictMap& conflicts, const vector<int>& matchSet)
 {
   LOG_VART(matches.size());

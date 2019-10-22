@@ -11,11 +11,11 @@
 {"type":"node","id":-86,"lat":-0.001556,"lon":-0.002628},
 {"type":"node","id":-85,"lat":-0.001944,"lon":-0.002616},
 {"type":"node","id":-84,"lat":-0.001932,"lon":-0.003431},
-{"type":"way","id":-10,"nodes":[-95,-94,-93,-92,-95],"tags":{"building:part":"yes","error:circular":"15"}},
-{"type":"way","id":-9,"nodes":[-91,-90,-89,-88,-91],"tags":{"building:part":"yes","error:circular":"15"}},
-{"type":"way","id":-8,"nodes":[-87,-86,-85,-84,-87],"tags":{"building:part":"yes","error:circular":"15"}},
+{"type":"way","id":-10,"nodes":[-95,-94,-93,-92,-95],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-9,"nodes":[-91,-90,-89,-88,-91],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-8,"nodes":[-87,-86,-85,-84,-87],"tags":{"building":"yes","error:circular":"15"}},
 {"type":"relation","id":-1,"members":[
-{"type":"way","ref":-10,"role":"part"},
-{"type":"way","ref":-9,"role":"part"},
-{"type":"way","ref":-8,"role":"part"}],"tags":{"hoot:poipolygon:poismerged":"2","name":"G","alt_name":"A;B;C;E;F;bar;foo","note":"Toy Scenario 4","building":"yes","poi":"yes","error:circular":"15"}}]
+{"type":"way","ref":-10,"role":"outer"},
+{"type":"way","ref":-9,"role":"outer"},
+{"type":"way","ref":-8,"role":"outer"}],"tags":{"hoot:poipolygon:poismerged":"2","name":"G","alt_name":"A;B;C;E;F;bar;foo","note":"Toy Scenario 4","building":"yes","poi":"yes","error:circular":"15"}}]
 }

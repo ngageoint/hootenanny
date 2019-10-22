@@ -32,10 +32,27 @@ See the User Guide for more details on command usage.
     hoot conflate --differential input1.osm input2.osm output.osm
 -----
 
-===== Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples):
+===== Conflate only buildings:
 
 -----
-    hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      input1.osm input2.osm output.osm
+-----
+
+===== Conflate only restaurant buildings:
+
+-----
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+      input1.osm input2.osm output.osm
+-----
+
+===== Conflate only restaurant buildings with "Subway" in the name:
+
+-----
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+      -D conflate.pre.ops="hoot::TagCriterion" -D tag.criterion.kvps="name;Subway" \
       input1.osm input2.osm output.osm
 -----
 
@@ -43,6 +60,12 @@ See the User Guide for more details on command usage.
 
 -----
     hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
+-----
+
+===== Conflate over a bounding box (not supported by all input formats):
+
+-----
+    hoot conflate -D convert.bounding.box="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
 -----
 
 ==== Applying Changes
@@ -567,6 +590,12 @@ See the User Guide for more details on command usage.
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
 -----
 
+===== Put out a random subset of data with a maximum node size from a large input dataset (useful during conflation testing):
+
+-----
+    hoot crop-random input.osm output.osm 5000
+-----
+
 ===== Sort data to the OSM standard that is too large to fit in memory:
 
 -----
@@ -594,7 +623,7 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:
 
 -----
-    hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7 input.osm \
+    hoot perty -D perty.search.distance=20 -D way.generalize.probability=0.7 input.osm \
       perturbed.osm
     hoot perty --score input.osm perturbed.osm
 -----
@@ -641,6 +670,12 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
       input1.osm input2.osm output.osm
 -----
 
+===== Simplify ways in a map by removing unnecessary nodes from them:
+
+-----
+    hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
+-----
+
 ==== Statistics
 
 ===== Count all elements that are not POIs:
@@ -654,6 +689,26 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 
 -----
     hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
+-----
+
+===== Count all features which have a name:
+
+-----
+    hoot count input.osm hoot::HasNameCriterion
+-----
+
+===== Count all features which have the name, "Old Town Tavern":
+
+-----
+    hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
+      input.osm hoot::NameCriterion
+-----
+
+===== Count all features whose name contains "subway":
+
+-----
+    hoot count -D name.contains.criterion.names="subway" -D name.contains.criterion.case.sensitive=false \
+      input.osm hoot::NameContainsCriterion
 -----
 
 ===== Calculate the area of all features in a map:
@@ -942,6 +997,12 @@ Requires language translation server installation.  See the Hootenanny Install G
 
 -----
     hoot info --operators
+-----
+
+===== List all entities that can filter data (a subset of --operators):
+
+-----
+    hoot info --filters
 -----
 
 ===== List all entities that can compare strings:

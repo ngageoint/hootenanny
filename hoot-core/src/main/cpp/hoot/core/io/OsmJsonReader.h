@@ -107,7 +107,8 @@ namespace hoot
  * Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable, private ParallelBoundedApiReader
+class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable,
+  private ParallelBoundedApiReader
 {
 public:
 
@@ -254,7 +255,6 @@ protected:
   QString _timestamp_base;
   QString _copyright;
 
-  QUrl _url;
   bool _isFile;
   bool _isWeb;
   QFile _file;
@@ -278,7 +278,6 @@ protected:
 
   int _missingNodeCount;
   int _missingWayCount;
-  QString _path;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree

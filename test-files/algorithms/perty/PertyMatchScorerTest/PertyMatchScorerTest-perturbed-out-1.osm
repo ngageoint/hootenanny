@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="38.85323889314078" minlon="-104.9025335227636" maxlat="38.85496003199213" maxlon="-104.8961855584039"/>
-    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539206403870949" lon="-104.8996802925414613"/>
-    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539931170162376" lon="-104.8996651751417772"/>
-    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8536262326639488" lon="-104.8998434705389542"/>
-    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535445215721396" lon="-104.8998301009274314"/>
-    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539694955880677" lon="-104.9023849965972488"/>
-    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540204802312914" lon="-104.9025335227636475"/>
+    <bounds minlat="38.85323889314078" minlon="-104.9024273478708" maxlat="38.85496003199213" maxlon="-104.8961855584039"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542304526290962" lon="-104.8997146930819184"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543029292626727" lon="-104.8996995756514394"/>
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8539538949494769" lon="-104.8998359474119155"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8538721838568080" lon="-104.8998225777474431"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540447591657312" lon="-104.9022601248199180"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540957439671004" lon="-104.9024086510539604"/>
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543325194999127" lon="-104.9000627208942689"/>
     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541459510504765" lon="-104.8999248969310969"/>
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542572211965194" lon="-104.9001012212052615"/>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549586975449941" lon="-104.8995518966212330"/>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549362491907360" lon="-104.8979053407437618"/>
-    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549520669615234" lon="-104.8987398928910721"/>
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540534547689020" lon="-104.9024273478708125"/>
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541287183916708" lon="-104.9023024759909077"/>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543290249303865" lon="-104.9017840929884784"/>
@@ -50,34 +49,34 @@
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-38"/>
         <nd ref="-7"/>
-        <tag k="REF2" v="000000"/>
-        <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+        <tag k="REF2" v="000000"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="-36"/>
-        <tag k="REF2" v="000007"/>
-        <tag k="note" v="1"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+        <tag k="REF2" v="000007"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-37"/>
-        <tag k="REF2" v="000007"/>
-        <tag k="note" v="1"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="1"/>
+        <tag k="REF2" v="000007"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-29"/>
         <nd ref="-30"/>
-        <tag k="REF2" v="000006"/>
-        <tag k="note" v="3"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="3"/>
+        <tag k="REF2" v="000006"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -86,26 +85,26 @@
         <nd ref="-32"/>
         <nd ref="-31"/>
         <nd ref="-30"/>
-        <tag k="REF2" v="000005"/>
-        <tag k="note" v="0"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+        <tag k="REF2" v="000005"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <tag k="REF2" v="000004"/>
-        <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+        <tag k="REF2" v="000004"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-5"/>
-        <tag k="REF2" v="000003"/>
-        <tag k="note" v="0"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+        <tag k="REF2" v="000003"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -132,26 +131,26 @@
         <nd ref="-26"/>
         <nd ref="-27"/>
         <nd ref="-28"/>
-        <tag k="REF2" v="000002"/>
-        <tag k="note" v="0"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+        <tag k="REF2" v="000002"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
-        <tag k="REF2" v="000001"/>
-        <tag k="note" v="0"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="0"/>
+        <tag k="REF2" v="000001"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-38"/>
-        <tag k="REF2" v="000000"/>
-        <tag k="note" v="2"/>
         <tag k="highway" v="road"/>
+        <tag k="note" v="2"/>
+        <tag k="REF2" v="000000"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

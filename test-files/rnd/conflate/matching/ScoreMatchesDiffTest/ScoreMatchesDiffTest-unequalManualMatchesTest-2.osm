@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.77259999999998" minlon="-122.42035" maxlat="37.78593" maxlon="-122.41369"/>
+    <node visible="true" id="-1995" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7793999999999883" lon="-122.4171999999999798">
+        <tag k="hoot:status" v="2"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:state" v="CA"/>
+        <tag k="name" v="Joe Alioto Piazza Children�s Play Area"/>
+        <tag k="address" v="Grove &amp; Larkin"/>
+        <tag k="addr:postcode" v="94102"/>
+        <tag k="uuid" v="{697fd29c-f267-54e1-b21a-a531d7ab8b9c}"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="playground"/>
+        <tag k="hoot:mismatch" v="2"/>
+        <tag k="phone" v="(415) 254-8030"/>
+        <tag k="hoot:actual" v="Review"/>
+        <tag k="REF2" v="none"/>
+        <tag k="hoot:expected" v="Miss"/>
+        <tag k="hoot:implicitTags:tagsAdded" v="Added 1 implicitly derived tag(s) based on: play area; tags added: leisure = playground"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1992" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7846999999999866" lon="-122.4151999999999845">
+        <tag k="hoot:status" v="2"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:state" v="CA"/>
+        <tag k="name" v="Tenderloin Children�s Play Area"/>
+        <tag k="address" v="570 Ellis St"/>
+        <tag k="addr:postcode" v="94102"/>
+        <tag k="uuid" v="{42c9c88e-9828-5623-9bb6-65ae7f3434d2}"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="playground"/>
+        <tag k="hoot:mismatch" v="2"/>
+        <tag k="phone" v="(415) 254-8030"/>
+        <tag k="hoot:actual" v="Review"/>
+        <tag k="REF2" v="005b4c"/>
+        <tag k="hoot:expected" v="Match"/>
+        <tag k="hoot:implicitTags:tagsAdded" v="Added 1 implicitly derived tag(s) based on: play area; tags added: leisure = playground"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1991" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7826999999999984" lon="-122.4159999999999968">
+        <tag k="hoot:status" v="2"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:state" v="CA"/>
+        <tag k="name" v="Turk &amp; Hyde Mini Park"/>
+        <tag k="address" v="Hyde &amp; Vallejo"/>
+        <tag k="addr:postcode" v="94102"/>
+        <tag k="uuid" v="{d60adefe-fc56-5db1-8b9a-7e129bf70e16}"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="park"/>
+        <tag k="hoot:mismatch" v="2"/>
+        <tag k="hoot:actual" v="Review"/>
+        <tag k="REF2" v="008722"/>
+        <tag k="hoot:expected" v="Match"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

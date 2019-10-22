@@ -4,6 +4,7 @@ var mgcp_schema = require('./mgcp_schema.js').getDbSchema();
 var ggdm30_schema = require('./ggdm30_full_schema.js').getDbSchema();
 var tds40_schema = require('./tds40_full_schema.js').getDbSchema();
 var tds61_schema = require('./tds61_full_schema.js').getDbSchema();
+var tds70_schema = require('./tds70_full_schema.js').getDbSchema();
 var fs = require('fs');
 var builder = require('xmlbuilder');
 var crypto = require('crypto');
@@ -21,6 +22,11 @@ const objs = {
     tds61: {
         schema: tds61_schema,
         name: 'TDSv61',
+        icon: 'presets/misc/nga_logo.png'
+    },
+    tds70: {
+        schema: tds70_schema,
+        name: 'TDSv70',
         icon: 'presets/misc/nga_logo.png'
     },
     mgcp: {
@@ -153,7 +159,7 @@ Object.keys(objs).forEach(s => {
         };
 
         let combo = chunk.ele('combo', attrs);
-        combo.ele('reference', 
+        combo.ele('reference',
             {
                 ref: col.enumHash
             });
@@ -200,7 +206,7 @@ Object.keys(objs).forEach(s => {
 
         items[i].columns.forEach((col, j) => {
             if (col.name !== 'FCODE' && col.name !== 'F_CODE') { //FCODE is set as a key above
-                it.ele('reference', 
+                it.ele('reference',
                     {
                         ref: items[i].hashes[j]
                     });

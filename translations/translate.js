@@ -305,25 +305,27 @@ translate = {
                     if (row[0])
                     {
                         // Make sure that we don't stomp on already assigned values
+                        // unless the first n-1 characters are identical then we replace with the higher value
+                        // (used for cases of where the more specific ffn code is a higher value)
                         // NOTE: we could add a verify step to this to make sure that the XXX2, XXX3 values
                         // are valid
-                        if (! outList[row[0]])
+                        if (! outList[row[0]] || outList[row[0]].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            outList[row[0]] = row[1];
+                            outList[row[0]] = this.getMaxAsString(outList[row[0]], row[1]);
                             // Debug
                             // print('Used:' + key + ' = ' + inList[key]);
                             delete inList[key];
                         }
-                        else if (! outList[row[0] + '2'])
+                        else if (! outList[row[0] + '2'] || outList[row[0] + '2'].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            outList[row[0] + '2'] = row[1];
+                            outList[row[0] + '2'] = this.getMaxAsString(outList[row[0] + '2'], row[1]);
                             // Debug
                             // print('Used:' + key + ' = ' + inList[key] + ' as 2nd');
                             delete inList[key];
                         }
-                        else if (! outList[row[0] + '3'])
+                        else if (! outList[row[0] + '3'] || outList[row[0] + '3'].slice(0, -1) === row[1].slice(0, -1))
                         {
-                            outList[row[0] + '3'] = row[1];
+                            outList[row[0] + '3'] = this.getMaxAsString(outList[row[0] + '3'], row[1]);
                             // Debug
                             // print('Used:' + key + ' = ' + inList[key] + ' as 3rd');
                             delete inList[key];
@@ -801,7 +803,7 @@ translate = {
     {
         // If we have an English name, make it the main "name"
         // This is run after a check for the existance of "name"
-        if (tags['name:en']) 
+        if (tags['name:en'])
         {
             tags.name = tags['name:en'];
             delete tags['name:en'];
@@ -1385,5 +1387,21 @@ translate = {
         }
 
         return values;
-    } // End overrideValues
-} // End of translate
+    }, // End overrideValues
+
+    getMaxAsString: function(value1, value2) {
+        var maxVal;
+        var val1 = parseInt(value1);
+        var val2 = parseInt(value2);
+
+        if (!val1) {
+            maxVal = value2;
+        } else if (!val2) {
+            maxVal = value1;
+        } else {
+            maxVal = Math.max(val1, val2)
+        }
+
+        return maxVal + '';
+    }
+}; // End of translate

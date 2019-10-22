@@ -138,8 +138,8 @@ void IntersectionSplitter::splitIntersections()
   _mapNodesToWays();
 
   // go through all the nodes
-  int totalNodes = _todoNodes.size();
   int numProcessed = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   while (_todoNodes.isEmpty() == false)
   {
     long nodeId = *_todoNodes.begin();
@@ -147,11 +147,12 @@ void IntersectionSplitter::splitIntersections()
     _todoNodes.remove(nodeId);
     numProcessed++;
 
-    if (_todoNodes.size() % 1000 == 0 && _todoNodes.size() > 0)
+    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && _todoNodes.size() > 0)
     {
       PROGRESS_INFO(
-        "\tProcessed intersection splits for: " << StringUtils::formatLargeNumber(numProcessed) <<
-        " / " << StringUtils::formatLargeNumber(totalNodes) << " nodes.");
+        "\tCreated  " <<  StringUtils::formatLargeNumber(numProcessed) <<
+        " intersection splits. " << StringUtils::formatLargeNumber(_todoNodes.size()) <<
+        " remaining nodes to process.");
     }
 
     // if the node is part of two or more ways

@@ -24,5 +24,5 @@ hoot write-name-counts test-files/DcGisRoads.osm output.osm
 
 === See Also
 
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

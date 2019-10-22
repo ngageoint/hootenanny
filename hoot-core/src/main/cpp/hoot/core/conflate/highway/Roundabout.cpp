@@ -42,6 +42,8 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 
+using geos::geom::CoordinateSequence;
+
 namespace hoot
 {
 
@@ -94,10 +96,9 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   return pNewNode;
 }
 
-RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr &pMap,
-                                         WayPtr pWay)
+RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr &pMap, WayPtr pWay)
 {
-  RoundaboutPtr rnd(new Roundabout);
+  RoundaboutPtr rnd(new Roundabout());
 
   // Add the way to the roundabout
   rnd->setRoundaboutWay(pWay);
@@ -153,8 +154,8 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
     {
       // Make list of waylocations
       std::vector<WayLocation> splitPoints;
-      geos::geom::Geometry * pIntersect = pRndGeo->intersection(pWayGeo.get());
-      geos::geom::CoordinateSequence *pCoords = pIntersect->getCoordinates();
+      GeomPtr pIntersect(pRndGeo->intersection(pWayGeo.get()));
+      std::shared_ptr<CoordinateSequence> pCoords(pIntersect->getCoordinates());
 
       // We are only interested in ways that intersect the geometry once or
       // twice. More than that is situation we are not prepared to handle.
@@ -231,6 +232,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
         if (newWays.size() > 0 && replace)
         {
           // Remove pWay
+          LOG_TRACE("Removing original way: " << pWay->getElementId() << "...");
           RemoveWayByEid::removeWayFully(pMap, pWay->getId());
           pMap->addNode(pCenterNode);
         }
@@ -265,17 +267,23 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
       extraNodeIDs.insert(_roundaboutNodes[i]->getId());
     }
   }
+  LOG_VART(connectingNodeIDs.size());
+  LOG_VART(extraNodeIDs.size());
 
   // Find our center coord...
   if (!_pCenterNode)
     _pCenterNode = getNewCenter(pMap);
 
   // Remove roundabout way & extra nodes
+  LOG_TRACE("Removing roundabout: " << _roundaboutWay->getElementId() << "...");
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin();
        it != extraNodeIDs.end(); ++it)
   {
-    RemoveNodeByEid::removeNode(pMap, *it);
+    LOG_TRACE("Removing extra node with ID: " << *it << "...");
+    // There may be something off with the map index, as I found situation where one of these extra
+    // nodes was still in use. So, changed the removal to only if unused here.
+    RemoveNodeByEid::removeNode(pMap, *it, true);
   }
 
   // Add center node
@@ -424,11 +432,18 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     // Need to remove temp parts no matter what
     // Delete temp ways we added
     for (size_t i = 0; i < _tempWays.size(); i++)
-      RemoveWayByEid::removeWayFully(pMap, _tempWays[i]->getId());
+    {
+      ConstWayPtr tempWay = _tempWays[i];
+      LOG_TRACE("Removing temp way: " << tempWay->getElementId() << "...");
+      RemoveWayByEid::removeWayFully(pMap, tempWay->getId());
+    }
 
     // Remove center node if no other ways are using it
     if (pMap->getIndex().getNodeToWayMap()->getWaysByNode(_pCenterNode->getId()).size() < 1)
+    {
+      LOG_TRACE("Removing center node: " << _pCenterNode->getElementId() << "...");
       RemoveNodeByEid::removeNodeFully(pMap, _pCenterNode->getId());
+    }
   }
 }
 

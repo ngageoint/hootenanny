@@ -93,21 +93,20 @@ public:
    * @param t1 - Tags that are given preference
    * @param t2 - These names/tags get demoted to alt_name
    * @param result Tags w/names merged
+   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    */
-  void mergeNames(Tags& t1, Tags& t2, Tags& result);
+  void mergeNames(Tags& t1, Tags& t2, Tags& result,
+                  const QStringList& overwriteExcludeTagKeys = QStringList());
 
   /**
    * Keep all names. If there is a conflict in tags between t1 and t2 then use the value in t1.
+   *
+   * @param t1 tags to keep
+   * @param t2 tags to be overwritten
+   * @param overwriteExcludeTagKeys optional keys of tags to exclude being overwritten in t2
+   * @return merged tags
    */
-  Tags overwriteMerge(Tags t1, Tags t2);
-
-  /**
-   * Merges tags. If there is a conflict in tags between t1 and t2 then use the value in t1.
-   * EVEN FOR NAMES.
-   */
-  Tags overwriteAllMerge(Tags t1, Tags t2);
-
-  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
+  Tags overwriteMerge(Tags t1, Tags t2, const QStringList& overwriteExcludeTagKeys = QStringList());
 
   /**
    * Determines whether two tag sets have identical non-name, non-metadata tags.  Case sensitivity
@@ -126,14 +125,20 @@ public:
    * @param t1 first set of tags to merge
    * @param t2 second set of tags to merge
    * @param result merged tags
+   * @param overwriteExcludeTagKeys keys of tags which should not be overwritten in t2
    */
-  void mergeText(Tags& t1, Tags& t2, Tags& result);
+  void mergeText(Tags& t1, Tags& t2, Tags& result,
+                 const QStringList& overwriteExcludeTagKeys = QStringList());
+
+  void setCaseSensitive(bool caseSensitive) { _caseSensitive = caseSensitive; }
 
 private:
 
-  TagComparator();
+  bool _caseSensitive;
 
   static std::shared_ptr<TagComparator> _theInstance;
+
+  TagComparator();
 
   void _addDefaults(Tags& t);
 
@@ -161,7 +166,8 @@ private:
    * Write t2 tags to result, then write t1 tags. If there are conflicts then the t1 tags will
    * overwrite the t2 values. t1 & t2 will be cleared when this is done.
    */
-  void _overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result);
+  void _overwriteRemainingTags(Tags& t1, Tags& t2, Tags& result,
+                               const QStringList& overwriteExcludeTagKeys = QStringList());
 
   void _overwriteUnrecognizedTags(Tags& t1, Tags& t2, Tags& result);
 
@@ -172,8 +178,6 @@ private:
   void _promoteToCommonAncestor(Tags& t1, Tags& t2, Tags& result);
 
   QSet<QString> _toSet(const Tags& t, const QString& k);
-
-  bool _caseSensitive;
 };
 
 }

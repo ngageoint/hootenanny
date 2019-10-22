@@ -29,7 +29,10 @@ package hoot.services.controllers.osm.user;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -46,15 +49,22 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.querydsl.core.Tuple;
+
+import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
 import hoot.services.models.osm.User;
+import hoot.services.utils.PostgresUtils;
 import hoot.services.utils.XmlDocumentBuilder;
 
 
@@ -65,6 +75,11 @@ import hoot.services.utils.XmlDocumentBuilder;
 @Path("/api/0.6/user")
 @Transactional
 public class UserResource {
+    private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
+
+    @Autowired
+    UserManager userManager;
+
     public UserResource() {
     }
 
@@ -152,7 +167,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Deprecated
-    public Response getSaveUser(@Context HttpServletRequest request, @QueryParam("userEmail") String userEmail) {
+    public Response getSaveUser(@QueryParam("userEmail") String userEmail) {
         Users user;
         try {
             user = getOrSaveByEmail(userEmail);
@@ -167,27 +182,148 @@ public class UserResource {
     /**
      * This rest end point retrieves all users based on user email.
      * <p>
-     * GET hoot-services/osm/user/1/all
+     * GET hoot-services/osm/user/all
      *
      * @return JSONArray Object containing users detail
      */
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllUsers() {
-        List<Users> users;
+    public Response getAllUsers(@Context HttpServletRequest request) {
+        Users currentUser = Users.fromRequest(request);
+
         try {
-            users = retrieveAllUsers();
-            return Response.ok().entity(users).build();
+            List<Tuple> userInfo;
+
+            // Run the proper query to retrieve user data based on the request users privileges
+            // Admin user gets extra info on other users
+            if (adminUserCheck(currentUser)) {
+                userInfo = createQuery()
+                        .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges)
+                        .from(users)
+                        .orderBy(users.displayName.asc())
+                        .fetch();
+            } else {
+                userInfo = createQuery()
+                        .select(users.id, users.displayName)
+                        .from(users)
+                        .orderBy(users.displayName.asc())
+                        .fetch();
+            }
+
+            List<Users> userList = new LinkedList<>();
+
+            for (Tuple tuple : userInfo) {
+                Users user = new Users();
+                user.setId(tuple.get(users.id));
+                user.setDisplayName(tuple.get(users.displayName));
+
+                if (adminUserCheck(currentUser)) {
+                    user.setHootservicesLastAuthorize(tuple.get(users.hootservices_last_authorize));
+                    user.setPrivileges(tuple.get(users.privileges));
+                }
+
+                userList.add(user);
+            }
+
+            return Response.ok().entity(userList).build();
         }
         catch (Exception e) {
+            logger.error("Failed to get all users", e);
+
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                     .type(MediaType.TEXT_PLAIN)
                     .entity("failed to list users")
                     .build();
         }
+    }
 
+    /**
+     *
+     * Saves the privileges for the specified users list
+     *
+     * POST hoot-services/osm/api/0.6/user/savePrivileges
+     *
+     * @param request
+     * @param userList list of objects containing the users id and privileges
+     *  looks like:
+     *      [
+     *        { id:1, privileges: { admin: false, advanced: true } },
+     *        { id:2, privileges: { admin: true, advanced: true } }
+     *      ]
+     * @return success status if everything is updated.
+     *      forbidden status if the user trying to save the privileges isn't an admin
+     */
+    @POST
+    @Path("/savePrivileges")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response savePrivileges(@Context HttpServletRequest request,
+            List<LinkedHashMap> userList) {
+        Users currentUser = Users.fromRequest(request);
 
+        if (!adminUserCheck(currentUser)) {
+            return Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to save privileges").build();
+        }
+
+        for (LinkedHashMap user : userList) {
+            Long userId = Long.valueOf(user.get("id").toString());
+
+            createQuery().update(users)
+                .where(users.id.eq(userId))
+                .set(users.privileges, user.get("privileges"))
+                .execute();
+
+            userManager.clearCachedUser(userId);
+
+        }
+
+        return Response.ok().build();
+    }
+
+    /**
+     * Gets the current users privileges
+     *
+     * GET hoot-services/osm/api/0.6/user/getPrivileges
+     *
+     * @param request
+     * @return the current users privileges
+     */
+    @GET
+    @Path("/getPrivileges")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPrivileges(@Context HttpServletRequest request) {
+        Users user = Users.fromRequest(request);
+        Map<String, String> json = PostgresUtils.postgresObjToHStore(user.getPrivileges());
+
+        return Response.ok(json).build();
+    }
+
+    /**
+     * Gets all types of privileges a user can have
+     *
+     * GET hoot-services/osm/api/0.6/user/getPrivilegeOptions
+     *
+     * @param request
+     * @return list of privileges a user can have
+     */
+    @GET
+    @Path("/getPrivilegeOptions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPrivilegeOptions(@Context HttpServletRequest request) {
+        String[] privilegeOptions = { "admin", "advanced" };
+
+        return Response.ok().entity(privilegeOptions).build();
+    }
+
+    /**
+     * Checks if the specified user is an admin user
+     *
+     * @param user
+     * @return true if user has admin privileges, else false
+     */
+    private static boolean adminUserCheck(Users user) {
+        Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
+        return privileges != null && ("true").equals(privileges.get("admin"));
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {
@@ -198,10 +334,6 @@ public class UserResource {
         responseDoc.appendChild(osmElement);
 
         return responseDoc;
-    }
-
-    private static List<Users> retrieveAllUsers() {
-        return createQuery().select(QUsers.users).from(QUsers.users).orderBy(QUsers.users.displayName.asc()).fetch();
     }
 
     private static Users getOrSaveByEmail(String userEmail) {

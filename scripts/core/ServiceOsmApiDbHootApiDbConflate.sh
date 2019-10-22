@@ -228,10 +228,10 @@ echo ""
 echo "STEP 15: Cleaning up database..."
 echo ""
 if [ "$LOAD_SEC_DATA" == "true" ]; then
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$CONFLATE_DATA" == "true" ]; then
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi

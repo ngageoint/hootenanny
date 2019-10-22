@@ -30,7 +30,6 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {

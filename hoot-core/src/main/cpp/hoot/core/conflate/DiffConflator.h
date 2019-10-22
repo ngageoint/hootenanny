@@ -28,17 +28,18 @@
 #define DIFFCONFLATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchGraph.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Boundable.h>
-#include <hoot/core/info/SingleStat.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ProgressReporter.h>
+#include <hoot/core/util/Settings.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -49,7 +50,6 @@
 namespace hoot
 {
 
-class Match;
 class MatchFactory;
 class MatchThreshold;
 
@@ -189,7 +189,7 @@ private:
   bool _conflateTags = false;
 
   // Stores the matches we found
-  std::vector<const Match*> _matches;
+  std::vector<ConstMatchPtr> _matches;
 
   // Stores stats calcuated during conflation
   QList<SingleStat> _stats;
@@ -205,16 +205,7 @@ private:
   OsmMapPtr _pOriginalMap;
 
   Progress _progress;
-
-  template <typename InputCollection>
-  void _deleteAll(InputCollection& ic)
-  {
-    for (typename InputCollection::const_iterator it = ic.begin(); it != ic.end(); ++it)
-    {
-      delete *it;
-    }
-    ic.clear();
-  }
+  int _taskStatusUpdateInterval;
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -222,10 +213,10 @@ private:
    */
   void _reset();
 
-  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<const Match*> matches);
+  void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
 
-  void _printMatches(std::vector<const Match*> matches);
-  void _printMatches(std::vector<const Match*> matches, const MatchType& typeFilter);
+  void _printMatches(std::vector<ConstMatchPtr> matches);
+  void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);
 
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
 

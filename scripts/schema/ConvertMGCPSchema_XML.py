@@ -415,8 +415,9 @@ if __name__ == "__main__":
     parser.add_argument('--dumpenum', help='Dump out the enumerated attributes, one file per FCODE into a directory called enum',action='store_true')
     parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
     parser.add_argument('--fcodelist', help='Dump out a list of FCODEs',action='store_true')
-    parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
+    parser.add_argument('--fieldvalues', help='Dump out the schema as a JSON object for the Translation Assistant',action='store_true')
     parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
+    parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
     parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
     parser.add_argument('--rules', help='Dump out one2one rules',action='store_true')
     parser.add_argument('--toenglish', help='Dump out To English translation rules',action='store_true')
@@ -486,6 +487,9 @@ if __name__ == "__main__":
 
     elif args.dumpenum:
         dumpEnumerations(schema,'enumMGCP')
+
+    elif args.fieldvalues:
+        printFieldValues(schema,'mgcpFieldValues')
 
     else:
         printCopyright()

@@ -50,13 +50,12 @@ namespace hoot
 class ServiceHootApiDbTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceHootApiDbTest);
-
-  // standard hoot services tests
   CPPUNIT_TEST(runDbVersionTest);
   CPPUNIT_TEST(runOpenTest);
   CPPUNIT_TEST(runDropMapTest);
   CPPUNIT_TEST(runInsertTest);
   CPPUNIT_TEST(runMapExistsTest);
+  CPPUNIT_TEST(runMapUrlWithNameTest);
   CPPUNIT_TEST(runChangesetExistsTest);
   CPPUNIT_TEST(runNumElementsTest);
   CPPUNIT_TEST(runSelectAllElementsTest);
@@ -66,6 +65,7 @@ class ServiceHootApiDbTest : public HootTestFixture
   CPPUNIT_TEST(runSelectMembersForRelationTest);
   CPPUNIT_TEST(runUpdateNodeTest);
   CPPUNIT_TEST(runUnescapeTags);
+  CPPUNIT_TEST(runAvailableMapNamesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -111,12 +111,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(false, db.getDB().isOpen());
   }
 
-  /***********************************************************************************************
-   * Purpose: Print the current Services DB version
-   * To see the version from this test, type the following:
-   *   bin/HootTest --debug --single hoot::ServicesDbTest::runDbVersionTest
-   * *********************************************************************************************
-   */
   void runDbVersionTest()
   {
     setUpTest("runDbVersionTest");
@@ -136,8 +130,6 @@ public:
     const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
 
     mapId = ids->at(0);
-
-    //LOG_WARN("Map ID out of ITM1: " << mapId);
 
     CPPUNIT_ASSERT(database.mapExists(mapId));
 
@@ -174,6 +166,19 @@ public:
 
     mapId = ids->at(0);
     CPPUNIT_ASSERT(database.mapExists(mapId));
+  }
+
+  void runMapUrlWithNameTest()
+  {
+    setUpTest("runMapUrlWithNameTest");
+    HootApiDb database;
+    QUrl dbModifyUrl = ServicesDbTestUtils::getDbModifyUrl(testName);
+    database.open(dbModifyUrl);
+    const std::shared_ptr<QList<long>> ids = insertTestMap1(database);
+
+    // Should recognize that the URL refers to a db layer by name and not by numerical ID.
+    const long requestedMapId = database.getMapIdFromUrl(dbModifyUrl);
+    CPPUNIT_ASSERT_EQUAL(ids->at(0), requestedMapId);
   }
 
   void runChangesetExistsTest()
@@ -452,6 +457,74 @@ public:
                     HootApiDb::unescapeTags("\"to\"=>\"München Hbf\", \"ref\"=>\"ICE11\", \"via\"=>\"Braunschweig Hbf;Frankfurt (Main) Hbf;Mannheim;Stuttgart\", \"from\"=>\"Berlin Ostbahnhof\", \"name\"=>\"ICE 11: Berlin => Frankfurt => München\", \"type\"=>\"route\", \"route\"=>\"train\", \"network\"=>\"DB\", \"service\"=>\"high_speed\", \"alt_name\"=>\"ICE11 München\", \"interval\"=>\"120\", \"operator\"=>\"DB Fernverkehr AG\", \"" + MetadataTags::HootStatus() + "\"=>\"1\", \"" + MetadataTags::ErrorCircular() + "\"=>\"15\", \"public_transport:version\"=>\"2\""));
 
     QTextCodec::setCodecForLocale(oldCodec);
+  }
+
+  void runAvailableMapNamesTest()
+  {
+    setUpTest("runAvailableMapNamesTest");
+    const QString differentUserEmail = userEmail().replace(testName, testName + "-different-user");
+    ServicesDbTestUtils::deleteUser(differentUserEmail);
+
+    HootApiDb database;
+    database.open(QUrl(HootApiDb::getBaseUrl().toString()));
+
+    // Note that determination of a map being public is based of its folder public setting and not
+    // the value of the public attribute in the maps table. Therefore, we'll put all of these test
+    // maps into a folder.
+
+    // insert a couple of private maps owned by this user; these should be returned by
+    // selectMapNamesAvailableToCurrentUser
+
+    const long currentUserId = database.getOrCreateUser(userEmail(), userName());
+    LOG_VART(currentUserId);
+    database.setUserId(currentUserId);
+    const long currentUserPrivateFolderId =
+      database.insertFolder(
+        testName.replace(testName, testName + "-current-user"), -1, currentUserId, false);
+    long testMapId = database.insertMap("runAvailableMapNamesTest-1");
+    database.insertFolderMapMapping(testMapId, currentUserPrivateFolderId);
+    testMapId = database.insertMap("runAvailableMapNamesTest-2");
+    database.insertFolderMapMapping(testMapId, currentUserPrivateFolderId);
+
+    // insert a couple of public maps owned by a different user; these should be returned by
+    // selectMapNamesAvailableToCurrentUser
+    const long differentUserId =
+      database.getOrCreateUser(
+        differentUserEmail, userName().replace(testName, testName + "-different-user"));
+    LOG_VART(differentUserId);
+    database.setUserId(differentUserId);
+    const long differentUserPublicFolderId =
+      database.insertFolder(
+        testName.replace(testName, testName + "-different-user-1"), -1, differentUserId, true);
+    testMapId = database.insertMap("runAvailableMapNamesTest-3");
+    database.insertFolderMapMapping(testMapId, differentUserPublicFolderId);
+    testMapId = database.insertMap("runAvailableMapNamesTest-4");
+    database.insertFolderMapMapping(testMapId, differentUserPublicFolderId);
+
+    // insert a couple of private maps owned by a different user; these should *not* be returned by
+    // selectMapNamesAvailableToCurrentUser
+
+    const long differentUserPrivateFolderId =
+      database.insertFolder(
+        testName.replace(testName, testName + "-different-user-2"), -1, differentUserId, false);
+    testMapId = database.insertMap("runAvailableMapNamesTest-5");
+    database.insertFolderMapMapping(testMapId, differentUserPrivateFolderId);
+    testMapId = database.insertMap("runAvailableMapNamesTest-6");
+    database.insertFolderMapMapping(testMapId, differentUserPrivateFolderId);
+
+    // set the current user ID back to the original user
+    database.setUserId(currentUserId);
+    const QStringList mapNames = database.selectMapNamesAvailableToCurrentUser();
+    LOG_VART(mapNames);
+
+    database.close();
+    ServicesDbTestUtils::deleteUser(differentUserEmail);
+
+    CPPUNIT_ASSERT_EQUAL(4, mapNames.size());
+    HOOT_STR_EQUALS("runAvailableMapNamesTest-1", mapNames[0]);
+    HOOT_STR_EQUALS("runAvailableMapNamesTest-2", mapNames[1]);
+    HOOT_STR_EQUALS("runAvailableMapNamesTest-3", mapNames[2]);
+    HOOT_STR_EQUALS("runAvailableMapNamesTest-4", mapNames[3]);
   }
 
   const std::shared_ptr<QList<long>> insertTestMap1(HootApiDb& database)

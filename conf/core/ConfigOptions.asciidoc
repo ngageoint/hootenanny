@@ -263,6 +263,14 @@ reference dataset will be lost.
 If true, all reviews outside of the score range established by the configuration options
 review.score.criterion.max/min.threshold will be removed.
 
+=== attribute.conflation.suppress.building.tag.on.multipoly.relation.constituents
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, any buildings that are part of a multipolygon relation will have their building=yes tags
+removed during Attribute Conflation.
+
 === attribute.score.extractor.use.weight
 
 * Data Type: bool
@@ -378,15 +386,6 @@ The threshold at which a miss is called a miss for buildings.
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== building.outline.update.op.remove.building.relations
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, when building outlines are updated the updater will remove the source building relations
-used to create the outline multipolygon relation.  If false, both source building relations and
-outline multipolygon relations will remain.
 
 === building.part.merger.thread.count
 
@@ -560,7 +559,7 @@ local path and then `$HOOT_HOME/conf/`.
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a match is called a match.
+The default threshold at which a match is called a match. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -571,7 +570,7 @@ See also:
 * Data Type: double
 * Default Value: `0.6`
 
-The default threshold at which a miss is called a miss.
+The default threshold at which a miss is called a miss. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -620,7 +619,7 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 * Default Value: `0.6`
 
 The default threshold at which a review is called a review. Reviews are also declared in some
-other situations when the relationship is not clear.
+other situations when the relationship is not clear. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -859,6 +858,21 @@ If true, will not break apart features crossing the crop bounds. Ignored if crop
 If true, will throw out any features that do not fall completely within the crop bounds. Ignored if
 crop.invert is enabled.
 
+=== crop.random.max.node.count
+
+* Data Type: int
+* Default Value: `-1`
+
+The maximum number of nodes to be cropped out when running either the `crop-random` command or
+`RandomMapCropper`.
+
+=== crop.random.pixel.size
+
+* Data Type: double
+* Default Value: `0.001`
+
+The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
+
 === debug.maps.filename
 
 * Data Type: string
@@ -882,6 +896,14 @@ significantly.
 
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
+
+=== differential.remove.unconflatable.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true Differential Conflation will remove all elements from output which Hootenanny is unable to
+match. If false, the unconflatable data will pass through to the output.
 
 === differential.snap.unconnected.roads
 
@@ -1185,7 +1207,7 @@ is required for unit tests, but shouldn't be used in normal operation.
 * Data Type: double
 * Default Value: `0.161`
 
-The threshold at which a match is called a match for roads.
+The threshold at which a match is called a match for roads. Valid values are between 0.0 and 1.0.
 
 See also:
 
@@ -1616,7 +1638,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 === json.format.hootenanny
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
 including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
@@ -1688,6 +1710,14 @@ vs
 },
 ...
 -----
+
+=== json.output.tasking.manager.aoi
+
+* Data Type: bool
+* Default Value: `false`
+
+Output the GeoJSON in a format readable in Tasking Manager.  This includes
+per file or per feature `source` tags and compatible geometries.
 
 === json.perserve.empty.tags
 
@@ -2050,10 +2080,11 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 === merge.nearby.nodes.distance
 
 * Data Type: double
-* Default Value: `1.0`
+* Default Value: `0.0001`
 
-When merging nodes during convert, determines what tolerance should be used for deciding two nodes
-are identical. Units in meters and defaults to 1.0m.
+When merging nodes during convert, determines what tolerance should be used for deciding if two
+nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of
+each other. The units are in meters, and the value must be greater than zero.
 
 [[merger.creators]]
 === merger.creators
@@ -2072,6 +2103,38 @@ are identical. Units in meters and defaults to 1.0m.
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 'hoot info --mergers' displays information about the available mergers.
+
+=== name.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameContainsCriterion will only identify partial names whose case matches exactly with the
+name values in name.contains.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.contains.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameContainsCriterion. From the command line, delimit multiple entries
+with ';' and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
+=== name.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameCriterion will only identify names whose case matches exactly with the name values in
+name.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
+and surround the entire list in double quotes. E.g. "Subway;Jimmys"
 
 === network.conflicts.aggression
 
@@ -2707,31 +2770,6 @@ If true, the data is rubbersheeted before conflation, moving perturbed data clos
 The PERTY D value. D is used in e ^ (-perty.grid.spacing / D). Defaults to 1000. Larger values
 result in a more correlated permutation grid.
 
-=== perty.duplicate.poi.duplicate.sigma
-
-* Data Type: double
-* Default Value: `1.0`
-
-The number of duplicate POIs is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
-guarantee that there will always be exactly one duplicate.
-
-=== perty.duplicate.poi.move.multiplier
-
-* Data Type: double
-* Default Value: `1.0`
-
-The distance that a feature is moved is based on the circular error of the source point. The
-new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
-sigma is the standard deviation associated with the source point.
-
-=== perty.duplicate.poi.probability
-
-* Data Type: double
-* Default Value: `0.10`
-
-The probability of at least one duplicate being created. See setDuplicateSigma to determine
-how many duplicates will be created.
-
 === perty.grid.spacing
 
 * Data Type: double
@@ -2739,79 +2777,19 @@ how many duplicates will be created.
 
 The size of the PERTY grid spacing in meters.
 
-=== perty.name.change.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability of a change to each character in the name. The expected number of changes is
-`perty.name.change.probability` * str.size().
-
-=== perty.name.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability that a name will be modified.
-
 === perty.ops
 
 * Data Type: list
 * Default Value:
-** `hoot::PertyWaySplitVisitor`
-** `hoot::PertyWayGeneralizeVisitor`
-** `hoot::PertyRemoveRandomElementVisitor`
-** `hoot::PertyDuplicatePoiOp`
-** `hoot::PertyRemoveTagVisitor`
-** `hoot::PertyNameVisitor`
+** `hoot::RandomWaySplitter`
+** `hoot::RandomWayGeneralizer`
+** `hoot::RandomElementRemover`
+** `hoot::RandomNodeDuplicator`
+** `hoot::RandomTagModifier`
+** `hoot::RandomElementRenamer`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
 'hoot info --operators | grep Perty' displays information about the available operations.
-
-=== perty.remove.random.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-The probability that a feature will be removed.
-
-=== perty.remove.tag.probability
-
-* Data Type: double
-* Default Value: `0.05`
-
-Set the probability that a tag will be removed.
-
-=== perty.remove.tag.visitor.exempt.tag.keys
-
-* Data Type: list
-* Default Value:
-** `REF1`
-** `REF2`
-** `hoot:status`
-** `uuid`
-
-A list of tag keys which are exempt from the tag removal done by PertyRemoveTagsVisitor.  This is
-useful for preventing the removal of tags Hootenanny relies on during conflation.
-
-=== perty.remove.tag.visitor.substitution.keys
-
-* Data Type: list
-* Default Value:
-** `highway`
-
-A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
-values replaced instead.  The tag keys in the list match one to one with the replacement values in
-perty.remove.tag.visitor.subsitution.values.
-
-=== perty.remove.tag.visitor.substitution.values
-
-* Data Type: list
-* Default Value:
-** `road`
-
-A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
-list match one to one with the replacement values in perty.remove.tag.visitor.subsitution.keys.
 
 === perty.search.distance
 
@@ -2822,16 +2800,6 @@ Distance parameter (in meters) that determines how far out to search when trying
 during conflation of reference and perturbed datasets.  This is equivalent in nature to the
 'error:circular' tag used in Hootenanny conflation, however this setting is used instead for
 PERTY scoring only.
-
-=== perty.seed
-
-* Data Type: int
-* Default Value: `-1`
-
-A random seed integer passed to the random number generator accessed by PERTY to give consistent
-results over multiple runs. A value of -1 will generate a seed based on the time to provide
-pseudo-random results in the output.  Other seed values will yield repeatable results when the
-same seed is used in consecutive calls to the PERTY related commands.
 
 === perty.systematic.error.x
 
@@ -2935,35 +2903,6 @@ perty.test.dynamic.variable.start.value), is/are altered by an increment during 
 The number of simulations per test run executed by `perty-test`.  A test run is made up of
 multiple simulations.  Scores all simulation executed by the test run are averaged to give the
 final PERTY score for the test run.
-
-=== perty.way.generalize.epsilon
-
-* Data Type: double
-* Default Value: `1`
-
-Distance parameter, in meters, that determines to what degree a way is generalized by PERTY.
-Higher values result in more generalization (more nodes removed).
-
-=== perty.way.generalize.probability
-
-* Data Type: double
-* Default Value: `0.1`
-
-The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
-
-=== perty.way.split.min.node.spacing
-
-* Data Type: double
-* Default Value: `1`
-
-The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
-
-=== perty.way.split.probability
-
-* Data Type: double
-* Default Value: `0.1`
-
-The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
 
 === phone.number.additional.tag.keys
 
@@ -3174,28 +3113,6 @@ features will be classified as a review or miss, depending on the value of
 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
 
-=== poi.polygon.match.threshold
-
-* Data Type: double
-* Default Value: `${conflate.match.threshold.default}`
-
-The threshold at which a match is called a match when comparing POIs to polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
-=== poi.polygon.miss.threshold
-
-* Data Type: double
-* Default Value: `${conflate.miss.threshold.default}`
-
-The threshold at which a miss is called a miss when comparing POIs to polygons.
-
-See also:
-
- * _Estimate Pairwise Relationships_, <<hootalgo>>
-
 === poi.polygon.name.score.threshold
 
 * Data Type: double
@@ -3298,14 +3215,6 @@ the command line, surround the entire value string in double quotes.
 If true, POI to polygon conflation always marks matches between POIs and polygons where multi-use
 building polygons are present as needing review.  The definition of multi-use buildings is
 controlled by the Hootenanny schema.
-
-=== poi.polygon.review.threshold
-
-* Data Type: double
-* Default Value: `${conflate.review.threshold.default}`
-
-The threshold at which a review is called a review for PoiPolygon. See
-`conflate.review.threshold.default`.
 
 === poi.polygon.source.tag.key
 
@@ -3470,12 +3379,128 @@ See also:
 
 The way subline matcher to use when determining matching sublines.
 
+=== random.element.remover.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a feature will be removed.
+
+=== random.element.renamer.change.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability of a change to each character in the name. The expected number of changes is
+`perty.name.change.probability` * str.size().
+
+=== random.element.renamer.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+The probability that a name will be modified.
+
 === random.forest.model.trees
 
 * Data Type: int
 * Default Value: `40`
 
 The number of trees used to train a random forest conflation model.
+
+=== random.node.duplicator.move.multiplier
+
+* Data Type: double
+* Default Value: `1.0`
+
+The distance that a feature is moved is based on the circular error of the source point. The
+new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
+sigma is the standard deviation associated with the source point.
+
+=== random.node.duplicator.probability
+
+* Data Type: double
+* Default Value: `0.10`
+
+The probability of at least one duplicate node being created. See `random.node.duplicator.sigma` to
+determine how many duplicates will be created.
+
+=== random.node.duplicator.sigma
+
+* Data Type: double
+* Default Value: `1.0`
+
+The number of duplicate nodes is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
+guarantee that there will always be exactly one duplicate.
+
+=== random.seed
+
+* Data Type: int
+* Default Value: `-1`
+
+A random seed integer passed to the random number generator accessed by map operations and 
+visitors that modify elements randomly (used by PERTY, RandomMapCropper, etc.). to give consistent
+results over multiple runs. A value of -1 will generate a seed based on the time to provide
+pseudo-random results in the output.
+
+=== random.tag.modifier.exempt.tag.keys
+
+* Data Type: list
+* Default Value:
+** `REF1`
+** `REF2`
+** `hoot:status`
+** `uuid`
+
+A list of tag keys which are exempt from the tag removal done by RandomTagModifier.  This is
+useful for preventing the removal of tags Hootenanny relies on during conflation.
+
+=== random.tag.modifier.probability
+
+* Data Type: double
+* Default Value: `0.05`
+
+Set the probability that a tag will be removed.
+
+=== random.tag.modifier.substitution.keys
+
+* Data Type: list
+* Default Value:
+** `highway`
+
+A list of tag keys which, rather than being removed by the PertyRemoveTagVisitor, will have their
+values replaced instead.  The tag keys in the list match one to one with the replacement values in
+random.tag.modifier.subsitution.values.
+
+=== random.tag.modifier.substitution.values
+
+* Data Type: list
+* Default Value:
+** `road`
+
+A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
+list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
+
+=== random.way.generalizer.probability
+
+* Data Type: double
+* Default Value: `0.1`
+
+The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
+
+=== random.way.splitter.min.node.spacing
+
+* Data Type: double
+* Default Value: `1`
+
+The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
+
+=== random.way.splitter.probability
+
+* Data Type: double
+* Default Value: `0.1`
+
+The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
 
 === reader.add.source.datetime
 
@@ -3761,12 +3786,38 @@ the "Translation" section of the Hootenanny User Guide.
 Export some of the images used when evaluating the graph connections between two maps (`score`
 command).
 
+=== score.matches.allow.uuids.as.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+The current manual match ID format is a 6 character hex string created by the AddRef*Visitor
+classes. This option allows backward compatibilty support for UUID ID formats that exist in some
+older manually matched input files.
+
+=== score.matches.full.debug.output
+
+* Data Type: bool
+* Default Value: `false`
+
+Adds more detail to manual match validation warning/error messages.
+
 === score.matches.remove.nodes
 
 * Data Type: bool
 * Default Value: `false`
 
 Remove REF tags from nodes before match scoring when using the score-matches command.
+
+=== score.matches.require.ref1
+
+* Data Type: bool
+* Default Value: `true`
+
+In some situations manually matched input data may need to be cropped to allow for smaller test
+runtimes. When this is done, sometimes REF1 features will be removed from the input. Disabling this
+option allows for score-matches to run when there are missing REF1 features. Warnings will be logged
+for any that are found.
 
 === script.test.max.exec.time
 
@@ -4106,6 +4157,15 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagContainsCriterion will only identify partial tag values whose case matches exactly with
+the tag key values in tag.contains.criterion.kvps. If false, the cases of the tag values do not have
+to match.
+
 === tag.contains.criterion.kvps
 
 * Data Type: list
@@ -4114,6 +4174,14 @@ Primarily, this is useful within the node.js interface.
 Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
 command line, delimit multiple key/value pairs with ';' and surround the entire list in double
 quotes. E.g. "name=Java;name=Shop"
+
+=== tag.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagCriterion will only identify tag strings whose cases match exactly with the values in
+tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
 
 === tag.criterion.kvps
 
@@ -4156,6 +4224,15 @@ key/value pairs with ';' and surround the entire list in double quotes.
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
 depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
 available mergers.
+
+=== tag.merger.overwrite.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of tags not to be overwritten on target features during tag merging when using
+OverwriteTagMerger only. Please keep alphabetized.
 
 === tag.printing.format
 
@@ -4438,6 +4515,15 @@ The way subline matcher to use when determining matching sublines.
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
+=== way.generalizer.epsilon
+
+* Data Type: double
+* Default Value: `1.0`
+
+Distance parameter, in meters, that determines to what degree a way is generalized by
+RdpWayGeneralizer, which is available standalone or as a part of PERTY. Higher values result in more
+generalization (more nodes removed).
+
 === way.joiner
 
 * Data Type: string
@@ -4553,7 +4639,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
+https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 

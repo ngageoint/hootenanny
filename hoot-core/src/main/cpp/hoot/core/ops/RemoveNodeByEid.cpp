@@ -53,13 +53,13 @@ _removeOnlyUnused(removeOnlyUnused)
 {
 }
 
-void RemoveNodeByEid::_removeNodeNoCheck(OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNodeNoCheck(const OsmMapPtr& map, long nId)
 {
   map->_index->removeNode(map->getNode(_nodeIdToRemove));
   map->_nodes.erase(nId);
 }
 
-void RemoveNodeByEid::_removeNode(OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
 {
   const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
@@ -71,12 +71,14 @@ void RemoveNodeByEid::_removeNode(OsmMapPtr& map, long nId)
       return;
     }
     else
-      throw HootException("Removing a node, but it is still part of one or more ways.");
+      throw HootException(
+        "Attempting to remove: " + ElementId(ElementType::Node, nId).toString() +
+        ", but it is still part of one or more ways.");
   }
   _removeNodeNoCheck(map, nId);
 }
 
-void RemoveNodeByEid::_removeNodeFully(OsmMapPtr& map, long nId)
+void RemoveNodeByEid::_removeNodeFully(const OsmMapPtr& map, long nId)
 {
   // copy the set because we may modify it later.
   set<long> rid = map->getIndex().getElementToRelationMap()->
@@ -100,7 +102,7 @@ void RemoveNodeByEid::_removeNodeFully(OsmMapPtr& map, long nId)
   VALIDATE(map->validate());
 }
 
-void RemoveNodeByEid::apply(OsmMapPtr& map)
+void RemoveNodeByEid::apply(const OsmMapPtr& map)
 {
   if (_nodeIdToRemove == -std::numeric_limits<int>::max())
   {
@@ -115,19 +117,19 @@ void RemoveNodeByEid::apply(OsmMapPtr& map)
     _removeNode(map, _nodeIdToRemove);
 }
 
-void RemoveNodeByEid::removeNode(OsmMapPtr map, long nId, bool removeOnlyUnused)
+void RemoveNodeByEid::removeNode(const OsmMapPtr& map, long nId, bool removeOnlyUnused)
 {
   RemoveNodeByEid nodeRemover(nId, true, false, removeOnlyUnused);
   nodeRemover.apply(map);
 }
 
-void RemoveNodeByEid::removeNodeNoCheck(OsmMapPtr map, long nId)
+void RemoveNodeByEid::removeNodeNoCheck(const OsmMapPtr& map, long nId)
 {
   RemoveNodeByEid nodeRemover(nId, false);
   nodeRemover.apply(map);
 }
 
-void RemoveNodeByEid::removeNodeFully(OsmMapPtr map, long nId)
+void RemoveNodeByEid::removeNodeFully(const OsmMapPtr& map, long nId)
 {
   RemoveNodeByEid nodeRemover(nId, true, true);
   nodeRemover.apply(map);

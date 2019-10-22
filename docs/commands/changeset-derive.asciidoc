@@ -45,17 +45,13 @@ hoot changeset-derive inputData.osm "" outputChangeset.osc.sql osmapidb://userna
 
 === Configuration Options
 
-Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the "Configuration Options" section
-of the `convert` command documentation for details.
+Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations[Conversion Operations] section of the `convert` command documentation for details.
 
 === Sorting
 
-Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To
-perform sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value
-greater than zero.
+Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To perform sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value greater than zero.
 
-Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an
-OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
+Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
 
 === See Also
 

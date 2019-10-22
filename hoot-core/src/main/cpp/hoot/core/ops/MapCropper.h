@@ -104,6 +104,7 @@ public:
   void setKeepEntireFeaturesCrossingBounds(bool keep);
   void setKeepOnlyFeaturesInsideBounds(bool keep);
   void setInclusionCriterion(const ElementCriterionPtr& crit) { _inclusionCrit = crit; }
+  void setRemoveSuperflousFeatures(bool remove) { _removeSuperfluousFeatures = remove; }
 
 private:
 
@@ -122,6 +123,8 @@ private:
   ElementCriterionPtr _inclusionCrit;
   // tracks all ways satisfying _inclusionCrit
   std::set<long> _explicitlyIncludedWayIds;
+  // removes useful features created after cropping
+  bool _removeSuperfluousFeatures;
 
   int _statusUpdateInterval;
 

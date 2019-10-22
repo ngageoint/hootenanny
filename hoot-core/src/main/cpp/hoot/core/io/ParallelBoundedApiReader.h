@@ -98,6 +98,20 @@ public:
    */
   void setMaxThreads(int max_threads) { _threadCount = max_threads; }
 
+  /**
+   * @brief setCoordGridSize
+   * @param gridSize Grid division size (0.25 degrees lat/lon default)
+   */
+  void setCoordGridSize(double gridSize)
+  { if (gridSize > 0.0) _coordGridSize = gridSize; }
+
+  /**
+   * @brief setMaxGridSize
+   * @param maxSize Maximum size of an area that can be downloaded
+   */
+  void setMaxGridSize(double maxSize)
+  { if (maxSize >= _coordGridSize) _maxGridSize = maxSize; }
+
   bool isError() { return _fatalError; }
 
 protected:
@@ -127,7 +141,7 @@ protected:
   };
   DataType _dataType;
   /** URL of the API endpoint to query */
-  QUrl _url;
+  QUrl _sourceUrl;
   /** List of result strings, one for each HTTP response */
   QStringList _resultsList;
   /** Total number of results received, should match _totalEnvelopes at the end to ensure all data has arrived */

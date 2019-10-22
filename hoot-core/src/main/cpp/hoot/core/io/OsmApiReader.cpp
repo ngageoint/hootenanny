@@ -72,6 +72,9 @@ void OsmApiReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   //  Get the bounds of the query
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
+  setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
+  setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
@@ -93,7 +96,7 @@ bool OsmApiReader::isSupported(const QString& url)
   //  Support HTTP and HTTPS URLs to OSM API servers
   for (int i = 0; i < validPrefixes.size(); ++i)
   {
-    if (checkString.startsWith(validPrefixes[i]))
+    if (checkString.startsWith(validPrefixes[i]) && checkString.endsWith("/api/0.6/map"))
       return true;
   }
   //  If we fall out of loop, no dice
@@ -122,6 +125,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   _numRead = 0;
   finalizePartial();
   _map = map;
+  _map->appendSource(_url);
 
   //  Spin up the threads
   beginRead(_url, _bounds);

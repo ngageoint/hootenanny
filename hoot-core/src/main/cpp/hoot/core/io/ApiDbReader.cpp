@@ -33,7 +33,7 @@
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -598,6 +598,9 @@ void ApiDbReader::initializePartial()
 
 void ApiDbReader::read(const OsmMapPtr& map)
 {
+  //  Set the map source
+  map->appendSource(_url);
+
   if (!_hasBounds())
   {
     LOG_DEBUG("Executing API read query...");

@@ -75,4 +75,4 @@ hoot type-tagger-rules --db-stats implicitTagRules.sqlite
 * <<hootuser, ImplicitTypeTaggingUser>>
 * <<hootalgo, ImplicitTypeTaggingAlg>>
 * <<hootDevGuide, ImplicitTagRulesDatabaseGeneration>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

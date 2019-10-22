@@ -47,7 +47,8 @@ OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
 _multipleChangesetsWritten(false),
 _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
   _stats.resize(Change::Unknown, ElementType::Unknown);
   vector<QString> rows( {"Create", "Modify", "Delete"} );
@@ -375,6 +376,9 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 {
   ConfigOptions co(conf);
   _precision = co.getWriterPrecision();
+  _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
@@ -405,11 +409,13 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
       writer.writeEndElement();
     }
   }
-  //  Non-nodes always report circular error when requested but nodes only report circular error
-  //  when there are other tags that aren't debug tags
-  if (ConfigOptions().getWriterIncludeCircularErrorTags() && element->hasCircularError() &&
+  //  Only report the circular error for changesets when debug tags are turned on, circular error
+  //  tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is because
+  //  changesets are meant for non-hoot related databases and circular error is a hoot tag
+  if (_includeCircularErrorTags && element->hasCircularError() &&
       (element->getElementType() != ElementType::Node ||
-      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)))
+      (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)) &&
+      _includeDebugTags)
   {
     writer.writeStartElement("tag");
     writer.writeAttribute("k", MetadataTags::ErrorCircular());

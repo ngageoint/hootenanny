@@ -48,6 +48,14 @@ public:
   TagMerger() {}
   virtual ~TagMerger() {}
 
+  /**
+   * Merges two sets of tags into one set.
+   *
+   * @param t1 the first set of tags to merge
+   * @param t2 the second set of tags to merge
+   * @param et the type of element owning the tags being merged
+   * @return a merged set of tags
+   */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 };
 

@@ -98,7 +98,6 @@ public:
   std::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s, OGRSpatialReference* srs);
 
   Meters getDefaultCircularError() const { return _defaultCircularError; }
-
   Status getDefaultStatus() const { return _status; }
 
   QString getTranslationFile() const { return _translatePath; }
@@ -124,9 +123,7 @@ public:
   void readNext(const OsmMapPtr& map);
 
   void setDefaultCircularError(Meters circularError) { _defaultCircularError = circularError; }
-
   void setDefaultStatus(Status s) { _status = s; }
-
   void setLimit(long limit) { _limit = limit; }
 
   void setSchemaTranslationScript(const QString& translate)
@@ -137,7 +134,6 @@ public:
   void setUseDataSourceIds(bool useIds);
 
   ElementPtr readNextElement();
-
   bool hasMoreElements();
 
   std::shared_ptr<OGRSpatialReference> getProjection() const;
@@ -176,17 +172,11 @@ protected:
   Progress _progress;
 
   void _addFeature(OGRFeature* f);
-
   void _addGeometry(OGRGeometry* g, Tags& t);
-
   void _addLineString(OGRLineString* ls, Tags& t);
-
   void _addMultiPolygon(OGRMultiPolygon* mp, Tags& t);
-
   void _addPolygon(OGRPolygon* p, Tags& t);
-
   void _addPoint(OGRPoint* p, Tags& t);
-
   void _addPolygon(OGRPolygon* p, RelationPtr r, Meters circularError);
 
   WayPtr _createWay(OGRLinearRing* lr, Meters circularError);
@@ -202,7 +192,6 @@ protected:
   void _initTranslate();
 
   void _openLayer(const QString& path, const QString& layer);
-
   void _openNextLayer();
 
   Meters _parseCircularError(Tags& t);
@@ -260,7 +249,6 @@ private:
   OsmMapPtr _map;
   OgrReaderInternal* _d;
 };
-
 
 OgrReader::OgrReader()
 {
@@ -408,7 +396,7 @@ QStringList OgrReader::getFilteredLayerNames(const QString& path)
   QStringList result;
 
   QStringList allLayers = _d->getLayersWithGeometry(path);
-  LOG_VART(allLayers);
+  LOG_VARD(allLayers);
 
   for (int i = 0; i < allLayers.size(); i++)
   {
@@ -438,6 +426,7 @@ long OgrReader::getFeatureCount(const QString& path, const QString& layer)
 
 void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map)
 {
+  map->appendSource(path);
   _d->open(path, layer);
   _d->read(map);
   _d->close();
@@ -500,6 +489,7 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
 
 void OgrReader::open(const QString& url)
 {
+  OsmMapReader::open(url);
   _d->open(url, "");
 }
 
@@ -578,7 +568,6 @@ QRegExp OgrReaderInternal::getNameFilter()
 
   return result;
 }
-
 
 void OgrReaderInternal::_addFeature(OGRFeature* f)
 {
@@ -969,7 +958,7 @@ void OgrReaderInternal::open(const QString& path, const QString& layer)
   {
     _pendingLayers = getLayersWithGeometry(path);
   }
-  LOG_VART(_pendingLayers);
+  LOG_VARD(_pendingLayers);
 }
 
 void OgrReaderInternal::_openLayer(const QString& path, const QString& layer)
@@ -1105,6 +1094,8 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
       "layer name?");
   }
 
+  LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...");
+
   OGRFeature* f;
   while ((f = _layer->GetNextFeature()) != NULL && (_limit == -1 || _count < _limit))
   {
@@ -1113,11 +1104,12 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     f = 0;
 
     _count++;
-    if (_progress.getState() != Progress::JobState::Pending && _count % 1000 == 0)
+    if (_progress.getState() != Progress::JobState::Pending && _count % 10000 == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
+      // TODO: This isn't clearing out the current line before each new log statement.
       _progress.setFromRelative(
         (float)_count / (float)_featureCount, Progress::JobState::Running,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +
@@ -1230,6 +1222,7 @@ void OgrReaderInternal::_translate(Tags& t)
       throw HootException("Unsupported geometry type.");
     }
 
+    LOG_TRACE("Translating tags of size: " << t.size() << " to OSM...");
     _translator->translateToOsm(t, _layer->GetLayerDefn()->GetName(), geomType);
   }
   else
@@ -1327,7 +1320,6 @@ std::shared_ptr<OGRSpatialReference> OgrReaderInternal::getProjection() const
   {
     throw HootException("Error creating EPSG:4326 projection.");
   }
-
   return wgs84;
 }
 

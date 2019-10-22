@@ -44,11 +44,11 @@ public:
   /**
    * If all the matches are BuildingMatches, a single BuildingMerge will be created and returned.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const override;
+  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override;
 };
 
 }

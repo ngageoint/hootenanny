@@ -63,12 +63,16 @@ public:
 
   void runAllDataTypesTest()
   {
-    runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.geojson");
+    Settings s;
+    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
+    runTest("test-files/conflate/unified/AllDataTypesA.osm", "AllDataTypes.geojson", &s);
   }
 
   void runDcTigerTest()
   {
-    runTest("test-files/DcTigerRoads.osm", "DcTigerRoads.geojson");
+    Settings s;
+    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
+    runTest("test-files/DcTigerRoads.osm", "DcTigerRoads.geojson", &s);
   }
 
   void runBostonSubsetRoadBuildingTest()
@@ -78,21 +82,23 @@ public:
     Log::WarningLevel logLevel = Log::getInstance().getLevel();
     if (Log::getInstance().getLevel() >= Log::Info)
       Log::getInstance().setLevel(Log::Error);
-    runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson");
+    Settings s;
+    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
+    runTest("test-files/BostonSubsetRoadBuilding_FromOsm.osm", "BostonSubsetRoadBuilding.geojson", &s);
     Log::getInstance().setLevel(logLevel);
   }
 
   void runObjectGeoJsonTest()
   {
-    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriter.geojson");
+    Settings s;
+    s.set(ConfigOptions::getJsonFormatHootenannyKey(), false);
+    runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriter.geojson", &s);
   }
 
   void runObjectGeoJsonHootTest()
   {
     Settings s;
     s.set(ConfigOptions::getJsonPrettyPrintKey(), true);
-    s.set(ConfigOptions::getJsonFormatHootenannyKey(), true);
-
     runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
   }
 

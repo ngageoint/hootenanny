@@ -1,22 +1,22 @@
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
-Ways	14	12	17	
+Ways	14	12	16	
 Relations	0	0	9	
 Least Nodes in a Way	3	4	3	
 Most Nodes in a Way	33	41	33	
 Average Nodes Per Way	8	10	9	
-Total Way Nodes	121	126	162	
+Total Way Nodes	121	126	145	
 Least Members in a Relation	0	0	2	
-Most Members in a Relation	0	0	3	
+Most Members in a Relation	0	0	2	
 Average Members Per Relation	0	0	2	
-Total Relation Members	0	0	19	
+Total Relation Members	0	0	18	
 Least Tags on a Feature	2	1	0	
 Most Tags on a Feature	4	4	6	
 Average Tags Per Feature	3	2	3	
 Least Information Tags on a Feature	2	1	0	
 Most Information Tags on a Feature	4	4	6	
-Average Information Tags Per Feature	3.08	2.818181818181818	3.235294117647059	
-Features with Names	20	17	27	
+Average Information Tags Per Feature	3.08	2.818181818181818	3.242424242424242	
+Features with Names	20	17	26	
 Bridges	0	0	0	
 Tunnels	0	0	0	
 One-Way Streets	0	0	0	
@@ -30,12 +30,12 @@ Buildings With Level Info	0	0	0
 Least Levels in a Building	0	0	0	
 Most Levels in a Building	0	0	0	
 Average Levels Per Building	0	0	0	
-Non-Building Areas	0	0	2	
+Non-Building Areas	0	0	0	
 Features with Addresses	1	0	1	
 Total Addresses	1	0	1	
 Features with Phone Numbers	0	0	0	
 Total Phone Numbers	0	0	0	
-Total Features	25	22	34	
+Total Features	25	22	33	
 Total Conflatable Features	24	20	0	
 Percentage of Total Features Conflatable	96	90.90909090909091	0	
 Untagged Features	0	0	0	
@@ -48,13 +48,13 @@ Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0
 POIs Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
 Features Conflatable by: hoot::PoiPolygonMatchCreator	20	16	0	
 Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10		
-Total Conflated Features	0	0	13	
-Percentage of Total Features Conflated	0	0	38.23529411764706	
+Total Conflated Features	0	0	12	
+Percentage of Total Features Conflated	0	0	36.36363636363637	
 Total Features Marked for Review	0	0	11	
-Percentage of Total Features Marked for Review	0	0	32.35294117647059	
+Percentage of Total Features Marked for Review	0	0	33.33333333333333	
 Total Reviews to be Made	0	0	8	
 Total Unmatched Features	25	22	21	
-Percentage of Total Features Unmatched	100	100	61.76470588235294	
+Percentage of Total Features Unmatched	100	100	63.63636363636363	
 POIs	11	10	16	
 Conflatable POIs	11	10	0	
 Conflated POIs	0	0	5	
@@ -101,25 +101,25 @@ Unmatched Polygon Conflatable POIs	10	8	10
 Percentage of Polygon Conflatable POIs Conflated	0	0	28.57142857142857	
 Percentage of Polygon Conflatable POIs Marked for Review	0	0	71.42857142857143	
 Percentage of Unmatched Polygon Conflatable POIs	100	100	71.42857142857143	
-Polygons	10	8	9	
+Polygons	10	8	8	
 Conflatable Polygons	30	24	0	
-Conflated Polygons	0	0	5	
+Conflated Polygons	0	0	4	
 Polygons Marked for Review	0	0	0	
 Polygon Reviews to be Made	0	0	0	
 Unmatched Polygons	10	8	4	
-Percentage of Polygons Conflated	0	0	55.55555555555556	
+Percentage of Polygons Conflated	0	0	50	
 Percentage of Polygons Marked for Review	0	0	0	
-Percentage of Unmatched Polygons	100	100	44.44444444444444	
-Areas	0	0	2	
+Percentage of Unmatched Polygons	100	100	50	
+Areas	0	0	0	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
-Unmatched Areas	0	0	2	
+Unmatched Areas	0	0	0	
 Meters Squared of Areas Processed by Conflation	0	0	0	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
-Percentage of Unmatched Areas	0	0	100	
+Percentage of Unmatched Areas	0	0	0	
 Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	
@@ -140,14 +140,13 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
-Translated Populated Tags	169	144	220	
-Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
-Difference Between Total Features in Output and Total Features in Inputs			-13	
-Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.65957446808511	
-Calculate Stats for Input 1 Time (sec)				4.416643857955933
-Calculate Stats for Input 2 Time (sec)				0.7790350914001465
-Apply Pre-Conflate Ops Time (sec)				0.008771896362304688
-Apply Post-Conflate Ops Time (sec)				0.004724025726318359
-Calculate Stats for Output Time (sec)				0.929394006729126
+Translated Populated Tags	169	143	224	
+Difference Between Total Features in Output and Total Features in Inputs			-14	
+Percentage Difference Between Total Features in Output and Total Features in Inputs			-29.78723404255319	
+Calculate Stats for Input 1 Time (sec)				26.32266306877136
+Calculate Stats for Input 2 Time (sec)				4.764386892318726
+Apply Pre-Conflate Ops Time (sec)				0.05815696716308594
+Apply Post-Conflate Ops Time (sec)				0.018280029296875
+Calculate Stats for Output Time (sec)				3.622927904129028
 
-19:27:50.271 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...late/unified/AllDataTypesA.osm and secondary: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+19:34:06.972 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed for reference: ...late/unified/AllDataTypesA.osm and secondary: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

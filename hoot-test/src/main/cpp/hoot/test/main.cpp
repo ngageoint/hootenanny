@@ -78,16 +78,17 @@ typedef std::shared_ptr<CppUnit::Test> TestPtr;
 
 enum _TestType
 {
+  NONE          = 0x00,
   CURRENT       = 0x01,
   QUICK_ONLY    = 0x02,
   QUICK         = 0x03,
-  SLOW_ONLY     = 0x04,
-  SLOW          = 0x07,
-  GLACIAL_ONLY  = 0x08,
-  GLACIAL       = 0x0f,
-  SERIAL        = 0x10,
-  CASE_ONLY     = 0x11,
-  ALL           = 0x1f
+  CASE_ONLY     = 0x04,
+  SLOW_ONLY     = 0x08,
+  SLOW          = 0x0f,
+  GLACIAL_ONLY  = 0x10,
+  GLACIAL       = 0x1f,
+  SERIAL        = 0x20,
+  ALL           = 0x3f
 };
 
 enum _TimeOutValue
@@ -101,9 +102,11 @@ class HootTestListener : public CppUnit::TestListener
 {
 public:
 
-  HootTestListener(bool showTestName, double testTimeout = QUICK_WAIT, bool showElapsed = true)
+  HootTestListener(bool showTestName, bool suppressFailureDetail = false,
+                   double testTimeout = QUICK_WAIT, bool showElapsed = true)
     : _success(true),
       _showTestName(showTestName),
+      _suppressFailureDetail(suppressFailureDetail),
       _showElapsed(showElapsed),
       _start(Tgs::Time::getTime()),
       _allStart(_start),
@@ -113,12 +116,16 @@ public:
 
   virtual void addFailure(const CppUnit::TestFailure& failure)
   {
-    cout << endl << "Failure: " << failure.failedTest()->getName() << endl
-      << "  " << failure.sourceLine().fileName() << "(" << failure.sourceLine().lineNumber() << ") ";
-    CppUnit::Exception* e = failure.thrownException();
-    if (e != NULL && QString::fromStdString(e->message().details()).trimmed() != "")
+    cout << endl << "Failure: " << failure.failedTest()->getName() << endl;
+    if (!_suppressFailureDetail)
     {
-      cout << "  " << e->message().details();
+      cout  << "  " << failure.sourceLine().fileName() << "(" <<
+        failure.sourceLine().lineNumber() << ") ";
+      CppUnit::Exception* e = failure.thrownException();
+      if (e != NULL && QString::fromStdString(e->message().details()).trimmed() != "")
+      {
+        cout << "  " << e->message().details();
+      }
     }
     cout.flush();
     _success = false;
@@ -171,6 +178,7 @@ private:
 
   bool _success;
   bool _showTestName;
+  bool _suppressFailureDetail;
   bool _showElapsed;
 
   double _start;
@@ -214,6 +222,41 @@ void filterPattern(const std::vector<CppUnit::Test*>& from, std::vector<CppUnit:
     if (regex.exactMatch(name) == includeOnMatch)
       to.push_back(child);
   }
+}
+
+void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests)
+{
+  vector<CppUnit::Test*> vTestsToRun;
+  bool filtered = false;
+
+  for (int i = 0; i < args.size(); i++)
+  {
+    if (args[i].startsWith("--exclude="))
+    {
+      if (vTestsToRun.size() > 0)
+      {
+        //  On the second (or more) time around exclude from the excluded list
+        vTests.swap(vTestsToRun);
+        vTestsToRun.clear();
+      }
+      int equalsPos = args[i].indexOf('=');
+      QString regex = args[i].mid(equalsPos + 1);
+      LOG_INFO("Excluding pattern: " << regex);
+      filterPattern(vTests, vTestsToRun, regex, false);
+      filtered = true;
+    }
+    else if (args[i].startsWith("--include="))
+    {
+      int equalsPos = args[i].indexOf('=');
+      QString regex = args[i].mid(equalsPos + 1);
+      LOG_INFO("Including only tests that match: " << regex);
+      filterPattern(vTests, vTestsToRun, regex, true);
+      filtered = true;
+    }
+  }
+  //  Swap the filtered tests into the test list
+  if (filtered)
+    vTests.swap(vTestsToRun);
 }
 
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
@@ -285,12 +328,12 @@ void getNames(vector<string>& names, CppUnit::Test* t)
   }
 }
 
-void getNames(vector<string>& names, const std::vector<TestPtr>& vTests)
+void getNames(vector<string>& names, const std::vector<CppUnit::Test*>& vTests)
 {
   for (size_t i = 0; i < vTests.size(); i++)
   {
     // See if our test is really a suite
-    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i].get());
+    CppUnit::TestSuite* suite = dynamic_cast<CppUnit::TestSuite*>(vTests[i]);
     if (suite != 0)
     {
       vector<CppUnit::Test*> children = suite->getTests();
@@ -306,13 +349,7 @@ void getNames(vector<string>& names, const std::vector<TestPtr>& vTests)
   }
 }
 
-void getNames(std::vector<string>& names, const std::vector<CppUnit::Test*>& vTests)
-{
-  for (size_t i = 0; i < vTests.size(); i++)
-    names.push_back(vTests[i]->getName());
-}
-
-void printNames(const std::vector<TestPtr>& vTests)
+void printNames(const std::vector<CppUnit::Test*>& vTests)
 {
   vector<string> names;
   getNames(names, vTests);
@@ -379,6 +416,72 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
   }
 }
 
+void usage(char* argv)
+{
+  // keep this alphabetized
+  cout << argv << " Usage:\n"
+          "  --all                      - Run all the tests.\n"
+          "  --all-names                - Print the names of all the tests without running them.\n"
+          "  --case-only                - Run the conflate case tests only.\n"
+          "  --current                  - Run the 'current' level tests.\n"
+          "  --debug                    - Show debug level log messages and above.\n"
+          "  --diff                     - Print a diff when a script test fails.\n"
+          "  --error                    - Show error log level messages and above.\n"
+          "  --exclude=[regex]          - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
+          "  --fatal                    - Show fatal error log level messages only.\n"
+          "  --glacial                  - Run 'glacial' level tests and below.\n"
+          "  --glacial-only             - Run the 'glacial' level tests only.\n"
+          "  --include=[regex]          - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
+          "  --info                     - Show info log level messages and above.\n"
+          "  --quick                    - Run the 'quick' level' tests.\n"
+          "  --quick-only               - Run the 'quick' level tests only.\n"
+          "  --names                    - Show the names of all the tests as they run.\n"
+          "  --parallel [process count] - Run the specified tests in parallel with the specified number of processes. With no process count specified, all available CPU cores are used to launch processes.\n"
+          "  --single [test name]       - Run only the test specified.\n"
+          "  --slow                     - Run the 'slow' level tests and above.\n"
+          "  --slow-only                - Run the 'slow' level tests only.\n"
+          "  --status                   - Show status log level messages and above.\n"
+          "  --suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message.\n"
+          "  --trace                    - Show trace log level messages and above.\n"
+          "  --verbose                  - Show verbose log level messages and above.\n"
+          "  --warn                     - Show warning log level messages and above.\n"
+          "\n"
+          "See the Hootenanny Developer Guide for more information.\n"
+          ;
+}
+
+_TestType getTestType(const QStringList& args)
+{
+  if (args.contains("--current"))
+    return CURRENT;
+  else if (args.contains("--quick"))
+    return QUICK;
+  else if (args.contains("--quick-only"))
+    return QUICK_ONLY;
+  else if (args.contains("--slow"))
+    return SLOW;
+  else if (args.contains("--slow-only"))
+    return SLOW_ONLY;
+  else if (args.contains("--all") || args.contains("--glacial"))
+    return GLACIAL;
+  else if (args.contains("--glacial-only"))
+    return GLACIAL_ONLY;
+  else if (args.contains("--case-only"))
+    return CASE_ONLY;
+  else
+    return ALL;
+}
+
+_TimeOutValue getTimeoutValue(_TestType type)
+{
+  if (type & GLACIAL)
+      return GLACIAL_WAIT;
+  else if (type & SLOW)
+    return SLOW_WAIT;
+  else
+    return QUICK_WAIT;
+}
+
 int main(int argc, char* argv[])
 {
   // set the Qt hash seed to 0 for consistent test results
@@ -387,34 +490,8 @@ int main(int argc, char* argv[])
 
   if (argc == 1)
   {
-    cout << argv[0] << " Usage:\n"
-            "--current - Run the 'current' tests.\n"
-            "--quick - Run the quick (unnamed) tests and all above.\n"
-            "--slow - Run the 'slow' tests and all above.\n"
-            "--glacial - Run the 'glacial' tests and all above.\n"
-            "--all - Run all the above tests.\n"
-            "--quick-only - Run the quick (unnamed) tests only.\n"
-            "--slow-only - Run the 'slow' tests only.\n"
-            "--glacial-only - Run the 'glacial' tests only.\n"
-            "--case-only - Run the case tests only.\n"
-            "--single [test name] - Run only the test specified.\n"
-            "--names - Show the names of all the tests as they run.\n"
-            "--all-names - Only print the names of all the tests.\n"
-            "--fatal - Show fatal error messages only.\n"
-            "--error - Show error messages and above.\n"
-            "--status - Show status messages and above.\n"
-            "--warn - Show warning messages and above.\n"
-            "--info - Show info messages and above.\n"
-            "--verbose - Show verbose messages and above.\n"
-            "--debug - Show debug messages and above.\n"
-            "--trace - Show trace messages and above.\n"
-            "--diff - Print diff when a script test fails.\n"
-            "--include=[regex] - Include only tests that match the specified regex.\n"
-            "--exclude=[regex] - Exclude tests that match the specified regex.\n"
-            "--parallel [process count] - Run the specified tests in parallel.\n"
-            "\n"
-            "See the Hootenanny Developer Guide for more information.\n"
-            ;
+    usage(argv[0]);
+    return 1;
   }
   else
   {
@@ -446,9 +523,19 @@ int main(int argc, char* argv[])
     // Print all names & exit without running anything
     if (args.contains("--all-names"))
     {
-      populateTests(ALL, vAllTests, printDiff);
-      printNames(vAllTests);
+      populateTests(getTestType(args), vAllTests, printDiff);
+      getTestVector(vAllTests, vTestsToRun);
+      includeExcludeTests(args, vTestsToRun);
+      cout << "Test count: " << vTestsToRun.size() << endl;
+      printNames(vTestsToRun);
       return 0;
+    }
+
+    bool suppressFailureDetail = false;
+    if (args.contains("--suppress-failure-detail"))
+    {
+      suppressFailureDetail = true;
+      Log::getInstance().setLevel(Log::Error);
     }
 
     // Run a single test
@@ -461,7 +548,7 @@ int main(int argc, char* argv[])
       }
       QString testName = args[i];
 
-      listener.reset(new HootTestListener(false, -1));
+      listener.reset(new HootTestListener(false, suppressFailureDetail, -1));
       result.addListener(listener.get());
       Log::getInstance().setLevel(Log::Info);
       populateTests(ALL, vAllTests, printDiff);
@@ -482,7 +569,7 @@ int main(int argc, char* argv[])
       if (i < args.size())
         slowTest = args[i].toDouble();
 
-      listener.reset(new HootTestListener(false, slowTest, false));
+      listener.reset(new HootTestListener(false, suppressFailureDetail, slowTest, false));
       if (args.contains("--names"))
         listener->showTestNames(true);
       result.addListener(listener.get());
@@ -509,81 +596,31 @@ int main(int argc, char* argv[])
     }
     else
     {
-      if (args.contains("--current"))
+      _TestType type = getTestType(args);
+      _TimeOutValue timeout = getTimeoutValue(type);
+      if (type == CURRENT)
       {
-        listener.reset(new HootTestListener(true));
+        listener.reset(new HootTestListener(true, suppressFailureDetail, timeout));
         Log::getInstance().setLevel(Log::Info);
-        populateTests(CURRENT, vAllTests, printDiff);
       }
-      else if (args.contains("--quick"))
-      {
-        listener.reset(new HootTestListener(false, QUICK_WAIT));
-        populateTests(QUICK, vAllTests, printDiff);
-      }
-      else if (args.contains("--quick-only"))
-      {
-        listener.reset(new HootTestListener(false, QUICK_WAIT));
-        populateTests(QUICK_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--slow"))
-      {
-        listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(SLOW, vAllTests, printDiff);
-      }
-      else if (args.contains("--slow-only"))
-      {
-        listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(SLOW_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--all") || args.contains("--glacial"))
-      {
-        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
-        populateTests(GLACIAL, vAllTests, printDiff);
-      }
-      else if (args.contains("--glacial-only"))
-      {
-        listener.reset(new HootTestListener(false, GLACIAL_WAIT));
-        populateTests(GLACIAL_ONLY, vAllTests, printDiff);
-      }
-      else if (args.contains("--case-only"))
-      {
-        listener.reset(new HootTestListener(false, SLOW_WAIT));
-        populateTests(CASE_ONLY, vAllTests, printDiff);
-      }
+      else
+        listener.reset(new HootTestListener(false, suppressFailureDetail, timeout));
+      //  Populate the list of tests
+      populateTests(type, vAllTests, printDiff);
 
       vector<CppUnit::Test*> vTests;
-      getTestVector(vAllTests, vTests);
-      bool filtered = false;
+      getTestVector(vAllTests, vTestsToRun);
+      //  Include or exclude tests
+      includeExcludeTests(args, vTestsToRun);
 
-      for (int i = 0; i < args.size(); i++)
-      {
-        if (args[i].startsWith("--exclude="))
-        {
-          if (vTestsToRun.size() > 0)
-          {
-            //  On the second (or more) time around exclude from the excluded list
-            vTests.swap(vTestsToRun);
-            vTestsToRun.clear();
-          }
-          int equalsPos = args[i].indexOf('=');
-          QString regex = args[i].mid(equalsPos + 1);
-          LOG_WARN("Excluding pattern: " << regex);
-          filterPattern(vTests, vTestsToRun, regex, false);
-          filtered = true;
-        }
-        else if (args[i].startsWith("--include="))
-        {
-          int equalsPos = args[i].indexOf('=');
-          QString regex = args[i].mid(equalsPos + 1);
-          LOG_WARN("Including only tests that match: " << regex);
-          filterPattern(vTests, vTestsToRun, regex, true);
-          filtered = true;
-        }
-      }
-
-      if (!filtered) // Do all tests
-        vTestsToRun.swap(vTests);
       cout << "Running core tests.  Test count: " << vTestsToRun.size() << endl;
+    }
+
+    //  Error out here is there is no HootTestListener created by this point
+    if (!listener)
+    {
+      usage(argv[0]);
+      return 1;
     }
 
     if (args.contains("--parallel"))
@@ -605,6 +642,7 @@ int main(int argc, char* argv[])
       }
       ProcessPool pool(nproc, listener->getTestTimeout(),
                        (bool)args.contains("--names"),
+                       (bool)args.contains("--suppress-failure-detail"),
                        (bool)args.contains("--diff"));
 
       //  Get the names of all of the tests to run
@@ -617,8 +655,10 @@ int main(int argc, char* argv[])
       //  Add all of the jobs that must be done serially and are a part of the selected tests
       vector<TestPtr> serialTests;
       populateTests(SERIAL, serialTests, printDiff, true);
+      vector<CppUnit::Test*> vSerialTests;
+      getTestVector(serialTests, vSerialTests);
       vector<string> serialNames;
-      getNames(serialNames, serialTests);
+      getNames(serialNames, vSerialTests);
       for (vector<string>::iterator it = serialNames.begin(); it != serialNames.end(); ++it)
       {
         if (nameCheck.find(*it) != nameCheck.end())

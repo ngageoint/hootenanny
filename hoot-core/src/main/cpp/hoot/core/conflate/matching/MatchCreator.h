@@ -28,6 +28,7 @@
 #define MATCHCREATOR_H
 
 // Hoot
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/info/CreatorDescription.h>
 
@@ -41,8 +42,6 @@
 namespace hoot
 {
 
-class Match;
-
 class MatchCreator
 {
 public:
@@ -55,12 +54,12 @@ public:
    * Given two elements, create a match if it is appropriate. If it is not appropriate then return
    * null.
    */
-  virtual Match* createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) = 0;
+  virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) = 0;
 
   /**
    * Search the provided map for building matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) = 0;
 
   /**

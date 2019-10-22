@@ -123,7 +123,7 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         String command = null;
         if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {

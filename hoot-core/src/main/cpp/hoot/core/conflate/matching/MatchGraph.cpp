@@ -68,7 +68,7 @@ class MatchEdge
 public:
 
   MatchEdge() : match(0) {}
-  MatchEdge(const Match* m) : match(m) {}
+  MatchEdge(ConstMatchPtr m) : match(m) {}
 
   typedef enum
   {
@@ -76,7 +76,7 @@ public:
     MatchWith
   } MatchType;
 
-  const Match* match;
+  ConstMatchPtr match;
   MatchType type;
 };
 
@@ -108,7 +108,7 @@ class MatchGraphInternal
 {
 public:
 
-  MatchGraphInternal(const vector<const Match*>& matches) : _matches(matches) {}
+  MatchGraphInternal(const vector<ConstMatchPtr>& matches) : _matches(matches) {}
 
   /**
    * Only return true for edges that are matches and meet the specified threshold.
@@ -128,7 +128,7 @@ public:
     bool operator()(const MatchEdgeId& edgeId) const
     {
       MatchEdge::MatchType type = (*_graph)[edgeId].type;
-      const Match* m = (*_graph)[edgeId].match;
+      ConstMatchPtr m = (*_graph)[edgeId].match;
       return (type == MatchEdge::MatchWith && m->getProbability() >= _threshold);
     }
 
@@ -161,7 +161,7 @@ public:
 
     for (size_t i = 0; i < _matches.size(); i++)
     {
-      const Match* m = _matches[i];
+      ConstMatchPtr m = _matches[i];
       MatchType type = m->getType();
       // if this is a solid match, then add it into the group.
       if (type == MatchType::Match)
@@ -200,10 +200,10 @@ public:
       // while this is O(n^2) matches should generally be pretty small.
       for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
       {
-        const Match* m1 = *it;
+        ConstMatchPtr m1 = *it;
         for (MatchSet::const_iterator jt = matches.begin(); jt != matches.end(); ++jt)
         {
-          const Match* m2 = *jt;
+          ConstMatchPtr m2 = *jt;
           if (m1 != m2)
           {
             if (checkForConflicts && MergerFactory::getInstance().isConflicting(map, m1, m2))
@@ -231,7 +231,7 @@ public:
     {
       for (size_t i = 0; i < _matches.size(); i++)
       {
-        const Match* m = _matches[i];
+        ConstMatchPtr m = _matches[i];
         _addMatchWith(m);
       }
     }
@@ -247,9 +247,9 @@ private:
 
   MatchBoostGraph _graph;
   QHash<ElementId, MatchVertexId> _eid2Vertex;
-  const vector<const Match*>& _matches;
+  const vector<ConstMatchPtr>& _matches;
 
-  void _addMatchWith(const Match* m)
+  void _addMatchWith(ConstMatchPtr m)
   {
     MatchEdge matchWith(m);
     matchWith.type = MatchEdge::MatchWith;
@@ -282,7 +282,7 @@ private:
     for (boost::tie(ei, eend) = out_edges(mvi, _graph); ei != eend; ++ei)
     {
       const MatchEdge& edge = _graph[*ei];
-      const Match* match = edge.match;
+      ConstMatchPtr match = edge.match;
       if (match->getType() == MatchType::Match)
       {
         matches.insert(match);

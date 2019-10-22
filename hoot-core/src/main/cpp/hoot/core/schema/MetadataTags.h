@@ -61,8 +61,6 @@ public:
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
-  /// These tags are used when evaluating multiary conflation results.
-  /// See MultiaryMatchComparator
   inline static const QString HootActual()              { return "hoot:actual"; }
   inline static const QString HootExpected()            { return "hoot:expected"; }
   inline static const QString HootMismatch()            { return "hoot:mismatch"; }
@@ -127,11 +125,15 @@ public:
 
   inline static const QString Ref1()                    { return "REF1"; }
   inline static const QString Ref2()                    { return "REF2"; }
+  inline static const QString Review()                  { return "REVIEW"; }
+  inline static const QString Uuid()                    { return "uuid"; }
 
   inline static const QString Unknown1()                { return "Unknown1"; }
   inline static const QString Unknown2()                { return "Unknown2"; }
 
   inline static const QString BuildingPart()            { return "building:part"; }
+  inline static const QString BuildingHeight()          { return "height"; }
+  inline static const QString BuildingLevels()          { return "building:levels"; }
 
   inline static const QString RelationBoundary()        { return "boundary"; }
   inline static const QString RelationBuilding()        { return "building"; }
@@ -155,9 +157,12 @@ public:
   inline static const QString RoleOutline()             { return "outline"; }
   inline static const QString RolePart()                { return "part"; }
   inline static const QString RoleReviewee()            { return "reviewee"; }
+  // temp tag used by BuildingMerger
+  inline static const QString HootMultiPolyRole()       { return "hoot:multi_poly:role"; }
 
   inline static const QString Length()                  { return "length"; }
 
+  inline static const QString ImportUrl()               { return "import_url"; }
   /**
    * Identifies features snapped with UnconnectedWaySnapper
    */

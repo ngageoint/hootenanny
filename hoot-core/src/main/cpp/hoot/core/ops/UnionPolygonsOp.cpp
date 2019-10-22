@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // geos

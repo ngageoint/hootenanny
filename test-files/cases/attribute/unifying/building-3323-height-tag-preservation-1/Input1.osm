@@ -51,7 +51,7 @@
     <nd ref='-1031831' />
     <tag k='name' v='Building 1' />
     <tag k='building' v='yes' />
-    <tag k='ele' v='169' />
+    <tag k='height' v='169' />
   </way>
   <way id='-1031876' visible='true' version='1'>
     <nd ref='-1031841' />
@@ -61,7 +61,7 @@
     <nd ref='-1031841' />
     <tag k='name' v='Building 2' />
     <tag k='building' v='yes' />
-    <tag k='ele' v='171' />
+    <tag k='height' v='171' />
   </way>
   <way id='-1031877' visible='true' version='1'>
     <nd ref='-1031849' />
@@ -71,7 +71,7 @@
     <nd ref='-1031849' />
     <tag k='name' v='Building 3' />
     <tag k='building' v='yes' />
-    <tag k='ele' v='169' />
+    <tag k='height' v='169' />
   </way>
   <way id='-1031878' visible='true' version='1'>
     <nd ref='-1031857' />
@@ -81,7 +81,7 @@
     <nd ref='-1031857' />
     <tag k='name' v='Building 4' />
     <tag k='building' v='yes' />
-    <tag k='ele' v='170' />
+    <tag k='height' v='170' />
   </way>
   <way id='-1031879' visible='true' version='1'>
     <nd ref='-1031865' />
@@ -91,7 +91,7 @@
     <nd ref='-1031865' />
     <tag k='name' v='Building 5' />
     <tag k='building' v='yes' />
-    <tag k='ele' v='172' />
+    <tag k='height' v='172' />
   </way>
   <way id='-1031880' visible='true' version='1'>
     <nd ref='-1031873' />
@@ -101,6 +101,6 @@
     <nd ref='-1031873' />
     <tag k='name' v='Building 6' />
     <tag k='building' v='yes' />
-    <tag k='ele' v='171' />
+    <tag k='height' v='171' />
   </way>
 </osm>

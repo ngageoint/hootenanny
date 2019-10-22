@@ -29,7 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
@@ -49,9 +49,8 @@ class OsmXmlReaderTest : public HootTestFixture
 
 public:
 
-  OsmXmlReaderTest()
-    : HootTestFixture("test-files/io/OsmXmlReaderTest/",
-                      "test-output/io/OsmXmlReaderTest/")
+  OsmXmlReaderTest() :
+  HootTestFixture("test-files/io/OsmXmlReaderTest/", "test-output/io/OsmXmlReaderTest/")
   {
     setResetType(ResetAll);
   }
@@ -214,6 +213,8 @@ public:
     // This will leave any ways in the output which are outside of the bounds but are directly
     // connected to ways which cross the bounds.
 
+    const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
+
     OsmXmlReader uut;
     uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
@@ -225,11 +226,9 @@ public:
     OsmMapPtr map(new OsmMap());
     uut.read("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", map);
     uut.close();
-    //OsmMapWriterFactory::write(
-      //map, _outputPath + "/runBoundsLeaveConnectedOobWaysTest.osm", false, true);
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
 
-    CPPUNIT_ASSERT_EQUAL(17, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 };
 

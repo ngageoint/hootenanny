@@ -466,6 +466,7 @@ void Settings::parseCommonArguments(QStringList& args)
 
   bool foundOne = true;
 
+  // TODO: This list really should be fed from the options defined in main.cpp in hoot-core-test.
   QStringList hootTestCmdsIgnore;
   hootTestCmdsIgnore.append("--quick");
   hootTestCmdsIgnore.append("--slow");

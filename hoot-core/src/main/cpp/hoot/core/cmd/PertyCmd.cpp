@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/perty/PertyOp.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/algorithms/perty/PertyMatchScorer.h>
 #include <hoot/core/scoring/MapMatchScoringUtils.h>
 #include <hoot/core/algorithms/perty/PertyTestRunner.h>

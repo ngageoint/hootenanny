@@ -71,6 +71,8 @@ public:
    */
   virtual ElementPtr readNextElement();
 
+  ElementVisitorPtr getVisitor() const { return _visitor; }
+
 private:
 
   ElementInputStreamPtr _elementSource;

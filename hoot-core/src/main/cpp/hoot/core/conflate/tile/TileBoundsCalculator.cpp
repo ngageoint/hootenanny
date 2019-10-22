@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QImage>
@@ -48,12 +49,14 @@ namespace hoot
 
 int TileBoundsCalculator::logWarnCount = 0;
 
-TileBoundsCalculator::TileBoundsCalculator(double pixelSize)
+TileBoundsCalculator::TileBoundsCalculator(double pixelSize) :
+_pixelSize(pixelSize),
+_maxNodesPerBox(1000),
+_slop(0.1),
+_maxNodeCountInOneTile(0),
+_minNodeCountInOneTile(LONG_MAX)
 {
-  _pixelSize = pixelSize;
   LOG_VARD(_pixelSize);
-  _slop = 0.1;
-  setMaxNodesPerBox(1000);
 }
 
 void TileBoundsCalculator::_calculateMin()
@@ -84,7 +87,21 @@ void TileBoundsCalculator::_calculateMin()
   }
 }
 
-vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
+QString TileBoundsCalculator::tilesToString(const vector<vector<Envelope>>& tiles)
+{
+  QString str;
+  for (size_t tx = 0; tx < tiles.size(); tx++)
+  {
+    for (size_t ty = 0; ty < tiles[tx].size(); ty++)
+    {
+      str += GeometryUtils::toConfigString(tiles[tx][ty]) + "\n";
+    }
+  }
+  str.chop(1);
+  return str;
+}
+
+vector<vector<Envelope>> TileBoundsCalculator::calculateTiles()
 {
   size_t width = 1;
   vector<PixelBox> boxes;
@@ -95,7 +112,7 @@ vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
   LOG_DEBUG("w: " << _r1.cols << " h: " << _r1.rows);
   LOG_DEBUG("Total node count: " << nodeCount);
 
-  LOG_VART(_maxNodesPerBox);
+  LOG_VARD(_maxNodesPerBox);
   while (!_isDone(boxes))
   {
     width *= 2;
@@ -129,28 +146,50 @@ vector<vector<Envelope>>  TileBoundsCalculator::calculateTiles()
   }
 
   vector<vector<Envelope>> result;
-
-  long maxNodeCount = 0;
-  long minNodeCount = LONG_MAX;
+  _maxNodeCountInOneTile = 0;
+  _minNodeCountInOneTile = LONG_MAX;
+  LOG_VARD(width);
   result.resize(width);
+  _nodeCounts.clear();
+  _nodeCounts.resize(width);
+
   for (size_t tx = 0; tx < width; tx++)
   {
     result[tx].resize(width);
+    _nodeCounts[tx].resize(width);
     for (size_t ty = 0; ty < width; ty++)
     {
       PixelBox& pb = boxes[tx + ty * width];
-      const long nodeCount = _sumPixels(pb);
-      maxNodeCount = std::max(maxNodeCount, nodeCount);
-      minNodeCount = std::min(minNodeCount, nodeCount);
+      LOG_VARD(pb.getWidth());
+      LOG_VARD(pb.getHeight());
+
       if (pb.getWidth() < 3 || pb.getHeight() < 3)
       {
-        throw HootException("PixelBox must be at least 3 pixels wide and tall.");
+        throw HootException(
+          QString("PixelBox must be at least 3 pixels wide and tall. Try reducing the pixel ") +
+          QString("size or increasing the max nodes per pixel value. Current pixel box width: ") +
+          QString::number(pb.getWidth()) + "; height: " + QString::number(pb.getHeight()));
       }
+
+      const long nodeCount = _sumPixels(pb);
+      _nodeCounts[tx][ty] = nodeCount;
+      _maxNodeCountInOneTile = std::max(_maxNodeCountInOneTile, nodeCount);
+      _minNodeCountInOneTile = std::min(_minNodeCountInOneTile, nodeCount);
+
       result[tx][ty] = _toEnvelope(pb);
     }
   }
-  LOG_DEBUG("Max node count in one tile: " << maxNodeCount);
-  LOG_DEBUG("Min node count in one tile: " << minNodeCount);
+  if (_maxNodeCountInOneTile == 0)
+  {
+    throw HootException(
+      "_maxNodeCountInOneTile == 0; Try reducing the pixel size or increasing the max nodes "
+      "per pixel value.");
+  }
+  LOG_DEBUG("Tiles size: " << result.size());
+  LOG_DEBUG("Max node count in one tile: " << _maxNodeCountInOneTile);
+  LOG_DEBUG("Min node count in one tile: " << _minNodeCountInOneTile);
+  LOG_TRACE("Tiles: " + tilesToString(result));
+
   _exportResult(boxes, "tmp/result.png");
 
   return result;
@@ -173,7 +212,9 @@ int TileBoundsCalculator::_calculateSplitX(PixelBox& b)
   LOG_VART(b.getWidth());
   if (b.getWidth() < 6)
   {
-    throw HootException("The input box must be at least six pixels high.");
+    throw HootException(
+      "The input box must be at least six pixels wide. Try reducing the pixel size or "
+      "increasing the max nodes per pixel value. Width: " + QString::number(b.getWidth()));
   }
 
   for (int c = b.minX + 2; c < b.maxX - 2; c++)
@@ -229,7 +270,9 @@ int TileBoundsCalculator::_calculateSplitY(const PixelBox& b)
 
   if (b.getHeight() < 6)
   {
-    throw HootException("The input box must be at least six pixels high.");
+    throw HootException(
+      "The input box must be at least six pixels high. Try reducing the pixel size or "
+      "increasing the max nodes per pixel value.Height: " + QString::number(b.getHeight()));
   }
 
   for (int r = b.minY + 2; r < b.maxY - 2; r++)
@@ -447,8 +490,9 @@ bool TileBoundsCalculator::_isDone(vector<PixelBox> &boxes)
 
   if (minSize == true && smallEnough == false)
   {
-    throw HootException("Could not find a solution. Try reducing the pixel size or increasing the "
-      "max nodes per pixel value.");
+    throw HootException(
+      "Could not find a solution. Try reducing the pixel size or increasing the max nodes "
+      "per pixel value.");
   }
   else
   {
@@ -477,13 +521,13 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
     std::shared_ptr<geos::geom::Envelope> tempEnv(GeometryUtils::toEnvelope(_envelope));
     LOG_VARD(tempEnv->toString());
   }
-  LOG_VART(_pixelSize);
-  LOG_VART(map->getNodeCount());
+  LOG_VARD(_pixelSize);
+  LOG_VARD(StringUtils::formatLargeNumber(map->getNodeCount()));
 
   int w = ceil((_envelope.MaxX - _envelope.MinX) / _pixelSize) + 1;
-  LOG_VART(w);
+  LOG_VARD(w);
   int h = ceil((_envelope.MaxY - _envelope.MinY) / _pixelSize) + 1;
-  LOG_VART(h)
+  LOG_VARD(h)
 
   _r1 = cv::Mat(cvSize(w, h), CV_32SC1);
   _r2 = cv::Mat(cvSize(w, h), CV_32SC1);
@@ -501,11 +545,21 @@ void TileBoundsCalculator::renderImage(const std::shared_ptr<OsmMap>& map, cv::M
   }
 
   const NodeMap& nm = map->getNodes();
-  LOG_VART(nm.size());
+  LOG_VARD(nm.size());
+  long nodeCtr = 0;
+  const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
   {
     const std::shared_ptr<Node>& n = it->second;
     _countNode(n);
+
+    nodeCtr++;
+    if (nodeCtr % statusUpdateInterval == 0)
+    {
+      PROGRESS_INFO(
+        "Counted " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        StringUtils::formatLargeNumber(nm.size()) << " nodes.");
+    }
   }
 
   r1 = _r1;

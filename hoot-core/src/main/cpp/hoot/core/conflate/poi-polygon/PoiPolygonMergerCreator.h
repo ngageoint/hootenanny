@@ -28,10 +28,10 @@
 #define POIPOLYGONMERGERCREATOR_H
 
 // hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 
 namespace hoot
 {
@@ -53,13 +53,13 @@ public:
    * appended. If there is more than one match and at least one is a PoiPolygonMatch then a
    * MarkForReviewMerger is created.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const;
+  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
-  virtual std::vector<CreatorDescription> getAllCreators() const;
+  virtual std::vector<CreatorDescription> getAllCreators() const override;
 
-  virtual bool isConflicting(const ConstOsmMapPtr& map, const Match* m1, const Match* m2) const;
+  virtual bool isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1, ConstMatchPtr m2) const override;
 
-  virtual void setOsmMap(const OsmMap* map) { _map = map; }
+  virtual void setOsmMap(const OsmMap* map) override { _map = map; }
 
   void setAllowCrossConflationMerging(bool allow) { _allowCrossConflationMerging = allow; }
 
@@ -77,7 +77,7 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  Match* _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
+  MatchPtr _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 
   /**
    * Returns true if one or more matches are conflicting matches.

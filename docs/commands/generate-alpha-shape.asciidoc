@@ -44,5 +44,5 @@ hoot generate-alpha-shape CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.
 
 * `cookie.cutter.*` configuration options
 * _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

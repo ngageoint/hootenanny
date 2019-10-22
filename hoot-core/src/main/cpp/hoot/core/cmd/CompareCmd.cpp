@@ -35,7 +35,7 @@
 #include <hoot/core/scoring/RasterComparator.h>
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -56,7 +56,7 @@ public:
   virtual QString getName() const override { return "compare"; }
 
   virtual QString getDescription() const override
-  { return "Compares maps using score metrics"; }
+  { return "Compares maps using metrics"; }
 
   void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,
                         int& mean, int& confidence)

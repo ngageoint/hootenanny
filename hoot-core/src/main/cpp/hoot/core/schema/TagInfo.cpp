@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -48,7 +49,8 @@ _tagValuesPerKeyLimit(tagValuesPerKeyLimit),
 _keys(keys),
 _keysOnly(keysOnly),
 _caseSensitive(caseSensitive),
-_exactKeyMatch(exactKeyMatch)
+_exactKeyMatch(exactKeyMatch),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
 }
 
@@ -119,6 +121,7 @@ QString TagInfo::_getInfo(const QString& input)
       LOG_DEBUG("Reading: " << inputInfo + " " << layers[i] << "...");
 
       TagInfoHash result;
+      int numElementsProcessed = 0;
       std::shared_ptr<ElementIterator> iterator(ogrReader->createIterator(inputInfo, layers[i]));
       while (iterator->hasNext())
       {
@@ -133,6 +136,13 @@ QString TagInfo::_getInfo(const QString& input)
         //        }
 
         _parseElement(e, result);
+
+        numElementsProcessed++;
+        if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
+        {
+          PROGRESS_INFO(
+            "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
+        }
       }
 
       const QString tmpText = _printJSON(layers[i], result);
@@ -166,6 +176,7 @@ QString TagInfo::_getInfo(const QString& input)
       std::dynamic_pointer_cast<ElementInputStream>(reader);
 
     TagInfoHash result;
+    int numElementsProcessed = 0;
     while (streamReader->hasMoreElements())
     {
       ElementPtr e = streamReader->readNextElement();
@@ -173,6 +184,13 @@ QString TagInfo::_getInfo(const QString& input)
       {
         LOG_VART(e);
         _parseElement(e, result);
+      }
+
+      numElementsProcessed++;
+      if (numElementsProcessed % (_taskStatusUpdateInterval * 10) == 0)
+      {
+        PROGRESS_INFO(
+          "Processed " << StringUtils::formatLargeNumber(numElementsProcessed) << " elements.");
       }
     }
     std::shared_ptr<PartialOsmMapReader> partialReader =

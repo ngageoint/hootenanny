@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::TagKeyContainsCriterion"; }
 
-  TagKeyContainsCriterion() {}
+  TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;

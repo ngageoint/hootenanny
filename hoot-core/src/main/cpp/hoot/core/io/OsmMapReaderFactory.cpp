@@ -198,7 +198,7 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
   VALIDATE(map->validate(true));
   LOG_INFO(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

@@ -55,16 +55,7 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.0795390480900018" lon="-69.3107096061600032">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-4"/>
-        <nd ref="-3"/>
-        <nd ref="-2"/>
-        <nd ref="-1"/>
-        <nd ref="-4"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="building:part" v="yes"/>
-    </way>
-    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-6"/>
         <nd ref="-5"/>
         <nd ref="-14"/>
@@ -80,12 +71,21 @@
         <nd ref="-16"/>
         <nd ref="-15"/>
         <nd ref="-6"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="building:part" v="yes"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
     </way>
-    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3" role="outer"/>
-        <member type="way" ref="-4" role="outer"/>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <nd ref="-2"/>
+        <nd ref="-1"/>
+        <nd ref="-4"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-2" role="outer"/>
+        <member type="way" ref="-1" role="outer"/>
         <tag k="feature_area" v="23056.3"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="C.C. Arca"/>

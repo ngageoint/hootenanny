@@ -167,11 +167,12 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
   const std::shared_ptr<const Element>& e) const
 {
   std::shared_ptr<Geometry> result;
-  vector<Geometry*> lines;
 
   if (e->getElementType() != ElementType::Node)
   {
-    LinesWaysVisitor v(lines);
+    //  Create a new vector to pass ownership to multilinestring
+    vector<Geometry*>* lines = new vector<Geometry*>();
+    LinesWaysVisitor v(*lines);
     v.setOsmMap(&map);
     e->visitRo(map, v);
     result.reset(GeometryFactory::getDefaultInstance()->createMultiLineString(lines));

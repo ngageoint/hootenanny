@@ -28,11 +28,9 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BoundedCommand.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -56,7 +54,7 @@ public:
 
   virtual QString getName() const override { return "crop"; }
 
-  virtual QString getDescription() const override { return "Crops a map to a geospatial bounds"; }
+  virtual QString getDescription() const override { return "Crops a map to a bounds"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -78,8 +76,6 @@ public:
     MapCropper cropper(*_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
-    SuperfluousWayRemover::removeWays(map);
-    SuperfluousNodeRemover().apply(map);
 
     IoUtils::saveMap(map, out);
 

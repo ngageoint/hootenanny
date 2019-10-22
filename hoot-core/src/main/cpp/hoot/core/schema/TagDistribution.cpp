@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 
 #include <QTextStream>
 
@@ -73,13 +74,14 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
   QString buffer;
   QTextStream ts(&buffer);
   QLocale locale(QLocale::English);
+
   if (tagCounts.size() == 0)
   {
     ts << "No tags with keys: " << _tagKeys.join(",") << " were found." << endl;
   }
   else
   {
-    ts << "Total tag count: " << _total << endl;
+    ts << "Total tag count: " << StringUtils::formatLargeNumber(_total) << endl;
 
     int ctr = 0;
     if (!_sortByFrequency)
@@ -90,8 +92,8 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
         const QString tagValue = itr->first;
         const int count = itr->second;
         const double percentageOfTotal = (double)count / (double)_total;
-        ts << QString::number(count) << "\t(" << _getPercentageStr(percentageOfTotal) << "%)\t"
-           << tagValue << endl;
+        ts << StringUtils::formatLargeNumber(count) << "\t(" <<
+              _getPercentageStr(percentageOfTotal) << "%)\t" << tagValue << endl;
 
         ctr++;
         if (ctr == _limit)
@@ -109,8 +111,8 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
         const QString tagValue = itr->second;
         const int count = itr->first;
         const double percentageOfTotal = (double)count / (double)_total;
-        ts << QString::number(count) << "\t(" << _getPercentageStr(percentageOfTotal) << "%)\t"
-           << tagValue << endl;
+        ts << StringUtils::formatLargeNumber(count) << "\t(" <<
+           _getPercentageStr(percentageOfTotal) << "%)\t" << tagValue << endl;
 
         ctr++;
         if (ctr == _limit)
@@ -120,6 +122,8 @@ QString TagDistribution::getTagCountsString(const std::map<QString, int>& tagCou
       }
     }
   }
+
+  // See related note towards the end of TagDistributionCmd::runSimple.
   return ts.readAll();
 }
 
@@ -205,7 +209,7 @@ void TagDistribution::_countTags(const QString& input, std::map<QString, int>& t
 
   if (_total > 0)
   {
-    LOG_INFO("Processed " << QString::number(_total) << " elements.");
+    LOG_INFO("Processed " << StringUtils::formatLargeNumber(_total) << " elements.");
   }
 
   LOG_VART(inputTotal);

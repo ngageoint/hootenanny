@@ -30,6 +30,7 @@
 
 // Qt
 #include <QStringList>
+#include <QSet>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -52,7 +53,7 @@ public:
    * @param durationInMilliseconds seconds to convert
    * @return a DD:MM:SS string
    */
-  static QString secondsToDhms(const qint64 durationInMilliseconds);
+  static QString millisecondsToDhms(const qint64 durationInMilliseconds);
 
   /**
    * Converts a large number to a more human readable format
@@ -119,6 +120,22 @@ public:
    * @param strings the strings to modify
    */
   static void removeEmptyStrings(QStringList& strings);
+
+  /**
+   * Determines if a string is made up of entirely alphanumeric characters
+   *
+   * @param input string to examine
+   * @return true if the string contains only alphanumeric characters; false otherwise
+   */
+  static bool isAlphaNumeric(const QString& input);
+
+  /**
+   * Finds duplicate strings in a list
+   *
+   * @param input the list to search
+   * @return a collection of duplicated strings
+   */
+  static QSet<QString> getDuplicates(const QStringList& input);
 };
 
 }

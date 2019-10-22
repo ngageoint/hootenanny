@@ -62,7 +62,7 @@ endif
 	#Remove test datasets from db
 	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
 	| while read mapname; do \
- 	   echo hoot delete-db-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+ 	   echo hoot db-delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 	done; \
 	true
 
@@ -71,7 +71,7 @@ clean:
 	@if [[ `PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='maps');"` = 't' ]]; then \
 		PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
 		| while read mapname; do \
-			echo hoot delete-db-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+			echo hoot db-delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 		done; \
 		true; \
 	fi
@@ -111,7 +111,8 @@ load-data: clean
 	    \
 	    hootservices_last_authorize, \
 	    hootservices_created_at, \
-	    provider_created_at) \
+	    provider_created_at, \
+	    privileges) \
 	    \
 	    VALUES ( \
 	    'test@test.com', \
@@ -123,7 +124,8 @@ load-data: clean
 	    \
 	    now(), \
 	    now(), \
-	    now())"
+	    now(), \
+	    '\"advanced\"=>\"true\"')"
 
 	# Add a spring session for our test user
 	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -c \
@@ -137,8 +139,8 @@ load-data: clean
 		\
 		VALUES ( \
 		'ff47f751-c831-41ee-800f-5ef8b9371ee3', \
-		1536767268854, \
-		1536774108752, \
+		1568933324000, \
+		1568933325000, \
 		31536000, \
 		'', \
 		-1541432234)"

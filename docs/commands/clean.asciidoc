@@ -9,6 +9,11 @@ in the `map.cleaner.transforms` configuration option.
 * +input+  - Input; may be any supported input format (e.g. .osm file).
 * +output+ - Output file; may be any supported output format (e.g. .osm file).
 
+To see a list of available cleaning operations:
+-----
+hoot info --cleaning-operations
+-----
+
 === Usage
 
 --------------------------------------
@@ -26,5 +31,4 @@ hoot clean JustHighways.osm Cleaned.osm
 * `map.cleaner.transforms` configuration option
 * `convert` command
 * <<hootalgo, IngestAndClean>>
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
-
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

@@ -22,9 +22,9 @@ crop (input.osm) (output.osm) (bounds) [--write-bounds]
 
 === Configuration Options
 
-The configuration options `crop.*` control the behavior of map cropping. See their descriptions for more detail.
+The configuration options `crop.*` control the behavior of map cropping. See their descriptions in the Hootenanny User Guide for more detail.
 
-==== Examples
+=== Examples
 
 --------------------------------------
 # regular crop
@@ -42,4 +42,4 @@ hoot crop -D crop.invert=true data/dc-roads/dcgis-cropped.osm "-77.0551,38.8845,
 
 === See Also
 
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

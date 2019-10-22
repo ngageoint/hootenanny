@@ -38,7 +38,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ProjectToGeographicVisitor.h>
@@ -453,7 +453,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+      " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 }
 
@@ -577,25 +577,26 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
-  // The ordering for these added ops matters.
-  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
-  {
-    // Building outline updating needs to happen after building part merging, or we can end up with
-    // role verification warnings in JOSM.
-    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
-    {
-      _convertOps.prepend(QString::fromStdString(BuildingOutlineUpdateOp::className()));
-    }
-    if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
-    {
-      _convertOps.prepend(QString::fromStdString(BuildingPartMergeOp::className()));
-    }
-  }
+  // The ordering for these added ops matters. Let's run them after any user specified convert ops
+  // to avoid unnecessary processing time.
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
     if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
     {
-      _convertOps.prepend(QString::fromStdString(MergeNearbyNodes::className()));
+      _convertOps.append(QString::fromStdString(MergeNearbyNodes::className()));
+    }
+  }
+  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+  {
+    // Building outline updating needs to happen after building part merging, or we can end up with
+    // role verification warnings in JOSM.
+      if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
+      {
+        _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
+      }
+    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
+    {
+      _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
     }
   }
   // Inclined to do this, but there could be some workflows where the same op needs to be called
@@ -648,10 +649,11 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   LOG_INFO(
     "Read " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements from input in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements from input in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  // turn this on for debugging only
+  //OsmMapWriterFactory::writeDebugMap(map, "after-convert-from-ogr");
   currentTask++;
 
-  MapProjector::projectToPlanar(map);
   if (_convertOps.size() > 0)
   {
     NamedOp convertOps(_convertOps);
@@ -839,7 +841,7 @@ void DataConverter::_exportToShapeWithCols(const QString& output, const QStringL
 
   LOG_INFO(
     "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-    " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+    " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

@@ -137,6 +137,68 @@ def openFile(path, mode):
         return open(path, mode)
 
 
+# Print JSON field values
+# This prints out the schema as a JSON lookup table for the Translation Assistant
+def printFieldValues(schema,variableName):
+    tList = {}
+    for i in schema:
+        for j in schema[i]['columns']:
+            # Turn the name into this structure: <short name>::<long name>
+            # E.g.  FSC::Flight Strip Capable
+            # The Translation Assistant keeps the part AFTER the "::" for translation
+            eName = schema[i]['columns'][j]['name'] + "::" + schema[i]['columns'][j]['desc']
+            if eName not in tList:
+                tList[eName] = {}
+
+            # Manually add the FCode to the list if required
+            if eName == 'F_CODE::Feature Code':
+                # Turn the F_CODE into this structure:  <short name>::<long name>
+                # E.g. AJ030::Holding Pen
+                # The Translation Assistant keeps the part BEFORE the "::" for translation - the F_CODE in this case
+                tList['F_CODE::Feature Code'][schema[i]['fcode'] + "::" + schema[i]['desc']] = 0 
+                continue
+
+            # Add enumerated values
+            if schema[i]['columns'][j]['type'].find('numeration') > -1:
+
+                for k in schema[i]['columns'][j]['enum']:
+                    if k['name'] not in tList[eName]:
+                        tList[eName][k['name']] = 0
+
+                continue
+
+    # Now start printing
+    print '{'
+    print '  "%s":[' % (variableName)
+    numKeys = len(tList.keys())
+    for i in sorted(tList.keys()):
+        print '  {'
+        print '    "key":"%s",' % (i)
+        print '    "value":['
+
+        numVals = len(tList[i].keys())
+        if  numVals == 0:
+            print '      "Value"'
+        else:
+            for j in sorted(tList[i].keys()):
+                if numVals == 1: # Are we at the last feature? yes = no trailing comma
+                    print '      "%s"' % (j)
+                else:
+                    print '      "%s",' % (j)
+                    numVals -= 1
+        print '    ]'
+
+        if numKeys == 1: # Are we at the last feature? yes = no trailing comma
+            print '  }'
+        else:
+            print '  },'
+            numKeys -= 1
+
+    print '  ]'
+    print '}'
+# End printFieldValues
+
+
 # Print Attribute List
 def printAttrList(schema):
     tList = {}

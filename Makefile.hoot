@@ -134,7 +134,7 @@ hoot-core/src/main/cpp/hoot/core/util/ConfigOptions.h: conf/core/ConfigOptions.a
 conf/core/ConfigOptions.json: scripts/core/CreateConfigAsJSON.py conf/core/ConfigOptions.asciidoc
 	python $^ $@ || (rm -f $@ ; exit -1)
 
-conf/services/conflationHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json
+conf/services/conflationHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/conflationTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json 
 	python $^ $@ || (rm -f $@ ; exit -1)
 
 conf/services/importHoot2Ops.json: scripts/services/CreateConflationTypeGroups.py conf/services/importTypes.json conf/core/ConfigOptions.json conf/services/conflationTypeDefaults.json
@@ -222,26 +222,26 @@ translations/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/tra
 #### TDSv70
 # TDSv70 schema is built from an XML file made from a sample FGDB
 #translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz conf/translations/TDSv70.xml.gz
-translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$^ > $@ || (rm -f $@ ; exit -1)
 
 # TDSv70 full schema is built from an XML file made from a sample FGDB
 # This one has all of the Text Enumerations
 #translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS70 "To English" rules
 #translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
 # Build the TDS70 "From English" rules
 #translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv conf/translations/TDSv70_Values.csv
+translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
 	mkdir -p $(@D)
 	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
 
@@ -538,12 +538,12 @@ conf/dictionary/words1.sqlite:
 	([ -e /tmp/words1.sqlite.bz2 ] && \
 	 test "`sha1sum /tmp/words1.sqlite.bz2`" == 'cdf47302fec4c8ec6c576849ae877feb1a9cf220  /tmp/words1.sqlite.bz2' && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
-	(wget --quiet -N -P /tmp/ https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2 && \
+	(wget --quiet -N -P /tmp/ https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2 && \
 	 bzcat /tmp/words1.sqlite.bz2 > conf/dictionary/words1.sqlite) || \
 	echo "Failure downloading words1.sqlite. Build will continue, but conflation accuracy may suffer."
 
 hoot-services/src/main/resources/language-translation/langdetect-183.bin:
-	if [ ! -f $@ ]; then echo "Downloading OpenNLP language detection model..."; wget --quiet -O $@ https://s3.amazonaws.com/hoot-support/langdetect-183.bin; fi
+	if [ ! -f $@ ]; then echo "Downloading OpenNLP language detection model..."; wget --quiet -O $@ https://hoot-support.s3.amazonaws.com/langdetect-183.bin; fi
 	echo '2ddf585fac2e02a9dcfb9a4a9cc9417562eaac351be2efb506a2eaa87f19e9d4  hoot-services/src/main/resources/language-translation/langdetect-183.bin' | sha256sum -c || echo "OpenNLP language detection not available due to failure downloading model."
 
 bin/HootEnv.sh: scripts/HootEnv.sh

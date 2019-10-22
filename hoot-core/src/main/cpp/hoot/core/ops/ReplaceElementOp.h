@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPLACEELEMENTOP_H
 #define REPLACEELEMENTOP_H
@@ -78,15 +78,16 @@ public:
    * If the elements aren't specified in the constructor this must be called exactly two times. Once
    * for 'from' and a second time for 'to'.
    */
-  virtual void addElement(const ConstElementPtr& e);
+  virtual void addElement(const ConstElementPtr& e) override;
 
-  virtual void apply(const OsmMapPtr& map);
+  virtual void apply(const OsmMapPtr& map) override;
 
-  virtual QString getDescription() const { return "Replaces one element with another"; }
+  virtual QString getDescription() const override { return "Replaces one element with another"; }
 
 private:
 
-  ElementId _from, _to;
+  ElementId _from;
+  ElementId _to;
   bool _clearAndRemove;
 };
 

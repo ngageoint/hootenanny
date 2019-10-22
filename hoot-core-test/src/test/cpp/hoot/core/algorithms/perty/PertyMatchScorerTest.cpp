@@ -72,7 +72,7 @@ public:
   void runLoadPerturbedMapTest()
   {
     Settings testSettings = conf();
-    testSettings.set("perty.seed", QString::number(1));
+    testSettings.set("random.seed", QString::number(1));
     testSettings.set("perty.systematic.error.x", QString::number(1));
     testSettings.set("perty.systematic.error.y", QString::number(1));
     PertyMatchScorer matchScorer;
@@ -107,7 +107,7 @@ public:
 
     //can't do a file comparison on the output here since the UUID's added to the file will be
     //different with each run
-    CPPUNIT_ASSERT_EQUAL(100, (int)combinedMap->getElementCount());
+    CPPUNIT_ASSERT_EQUAL(99, (int)combinedMap->getElementCount());
     std::shared_ptr<TagKeyCountVisitor> tagKeyCountVisitorRef1(new TagKeyCountVisitor(MetadataTags::Ref1()));
     combinedMap->visitRo(*tagKeyCountVisitorRef1);
     CPPUNIT_ASSERT_EQUAL(8, (int)tagKeyCountVisitorRef1->getStat());

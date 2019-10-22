@@ -30,24 +30,24 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/aggregator/RmseAggregator.h>
 #include <hoot/core/algorithms/aggregator/SigmaAggregator.h>
-#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EdgeDistanceExtractor.h>
+#include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/elements/ElementId.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryConverter.h>
 
 using namespace std;
 
@@ -178,9 +178,9 @@ double HighwayMatch::getProbability() const
   return _c.getMatchP();
 }
 
-bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) const
+bool HighwayMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const
 {
-  const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(&other);
+  const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(other.get());
   // if the other match isn't a highway match then this is a conflict.
   if (hm == 0)
   {
@@ -190,7 +190,7 @@ bool HighwayMatch::isConflicting(const Match& other, const ConstOsmMapPtr& map) 
   else
   {
     // See ticket #5272
-    if (getClassification().getReviewP() == 1.0 || other.getClassification().getReviewP() == 1.0)
+    if (getClassification().getReviewP() == 1.0 || other->getClassification().getReviewP() == 1.0)
     {
       return true;
     }

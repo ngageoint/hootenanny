@@ -144,6 +144,14 @@ public:
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a bounding rectangle within the specified map
+   * @param map the map to insert the bounding rectangle in
+   * @param bounds bounding box
+   * @return ElementId of the way created
+   */
+  static ElementId createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds);
 };
 
 }

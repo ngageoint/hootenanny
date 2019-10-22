@@ -12,8 +12,7 @@ The +tag-info+ command prints out unique feature tag values grouped by tag key.
 * +--keys+             - Prints unique tag values for the specified keys only.  Delimit multiple keys with a semicolon (e.g. "key1;key2").
                          This option is ignored if --keys-only is specified.
 * +--keys-only+        - Prints tag keys only and does not print any associated values.
-* +--case-insensitive+ - If this option is specified, tag key comparisons are not case sensitive.  By default the
-                         comparisons are case sensitive.
+* +--case-insensitive+ - If this option is specified, tag key comparisons are not case sensitive.  By default the comparisons are case sensitive.
 * +--partial-key-match - If this option is specified, then any key in a feature which partially matches the given set of keys in --keys
                          will have its tag value added to the output.  By default, keys must be an exact match with each other for the
                          tag value to be written to output.
@@ -78,5 +77,5 @@ This command works on streamable inputs only.
 
 === See Also
 
-* "Supported Input Formats":https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

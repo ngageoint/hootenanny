@@ -12,7 +12,7 @@ the output. Also, additional filtering may be applied to the reference input to 
  
 The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing a specified lenient bounds) and stitches up 
 areas where features must be clipped (e.g. roads crossing a specified strict bounds). The output changeset file can be applied directly to an 
-OSM API database or the Rails Port API with the  +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
+OSM API database or the Rails Port API with the +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
 data store, like an OSM API database, and the secondary source can be any type of data. Element IDs for the reference dataset are retained, 
 while element IDs for the secondary data are not retained and the elements treated as completely new data. 
 
@@ -59,8 +59,8 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 
 === Examples
 
-* https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
-* https://github.com/ngageoint/hootenanny/blob/3360/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
 
 === Input Data
 
@@ -156,7 +156,11 @@ executes a different replacement changeset generation workflow dependent upon th
 The command option, +--replacement-filters+, allows for further restricting the features from the secondary dataset added to the output beyond 
 geometry type. One or more criterion class names can be added to +--replacement-filters+ to further filter features that are used for 
 replacement from the secondary dataset. The criteria specified in +--replacement-filters+ may not be geometry type element criteria. When 
-populating the option value from the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes. 
+populating the option value from the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes.
+To see a list of available filtering criteria:
+-----
+hoot info --filters
+----- 
 
 The behavior of +--replacement-filters+ is further configurable by the +--chain-replacement-filters+ option. If the 
 +--chain-retainment-filters+ is used, then a feature must pass all criteria specified in +--replacement-filters+ in order to be included in the changeset output.
@@ -171,7 +175,11 @@ prepended by "-D" may override these filtering configuration options.
 The command option, +--retainment-filters+, allows for further restricting the features from the reference dataset that are replaced in the 
 output beyond geometry type. One or more criterion class names can be added to +--retainment-filters+ to further restrict the features that are 
 replaced in the reference dataset. The criteria specified in +--retainment-filters+ may not be geometry type element criteria. When populating 
-the option value from the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes. 
+the option value from the command line, combine multiple criteria with a semicolon and surround the entire value string with quotes. To see a 
+list of available filtering criteria:
+-----
+hoot info --filters
+----- 
 
 The behavior of +--retainment-filters+ is further configurable by the +--chain-retainment-filters+ option. If the +--chain-retainment-filters+ 
 option is used, then a feature must pass all criteria specified in +--retainment-filters+ in order to prevent it from potentially being 

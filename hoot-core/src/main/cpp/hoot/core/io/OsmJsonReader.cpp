@@ -35,7 +35,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -73,7 +73,6 @@ OsmJsonReader::OsmJsonReader()
     _generator(""),
     _timestamp_base(""),
     _copyright(""),
-    _url(""),
     _isFile(false),
     _isWeb(false),
     _numRead(0),
@@ -120,25 +119,25 @@ bool OsmJsonReader::isSupported(const QString& url)
 
 void OsmJsonReader::open(const QString& url)
 {
+  OsmMapReader::open(url);
   try
   {
     _isFile = false;
     _isWeb = false;
-    _path = url;
 
     // Bail out if unsupported
     if (!isSupported(url))
       return;
 
     // Handle files or URLs
-    _url = QUrl(url);
+    _sourceUrl = QUrl(url);
 
-    bool isRelativeUrl = _url.isRelative();
-    bool isLocalFile =  _url.isLocalFile();
+    bool isRelativeUrl = _sourceUrl.isRelative();
+    bool isLocalFile =  _sourceUrl.isLocalFile();
 
     if (isRelativeUrl || isLocalFile)
     {
-      QString filename = isRelativeUrl ? _url.toString() : _url.toLocalFile();
+      QString filename = isRelativeUrl ? _sourceUrl.toString() : _sourceUrl.toLocalFile();
       _isFile = true;
       _file.setFileName(filename);
       _file.open(QFile::ReadOnly | QFile::Text);
@@ -172,6 +171,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   _wayIdMap.clear();
 
   _map = map;
+  _map->appendSource(_url);
   if (_isFile)
   {
     QTextStream instream(&_file);
@@ -368,7 +368,7 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
     }
     else
       throw HootException(
-        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
+        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
   }
 
   long newId;
@@ -445,7 +445,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
     }
     else
       throw HootException(
-        QString("Duplicate way id %1 in map %2 encountered.").arg(id).arg(_path));
+        QString("Duplicate way id %1 in map %2 encountered.").arg(id).arg(_url));
   }
 
   long newId;
@@ -786,20 +786,20 @@ void OsmJsonReader::scrubBigInts(QString& jsonStr)
 
 void OsmJsonReader::_readFromHttp()
 {
-  if (!_url.isValid())
-    throw HootException("Invalid URL: " + _url.toString(QUrl::RemoveUserInfo));
+  if (!_sourceUrl.isValid())
+    throw HootException("Invalid URL: " + _sourceUrl.toString(QUrl::RemoveUserInfo));
   //  When reading in from the Overpass there won't be duplicates unless we are
   //  dividing up the bounds into smaller quadrants that fit below the 0.25 degrees
   //  squared limits, when we do it is safe to ignore duplicate elements
   setIgnoreDuplicates(true);
   //  Update the `srsname` parameter to use EPSG:4326
-  QUrlQuery urlQuery(_url);
+  QUrlQuery urlQuery(_sourceUrl);
   if (urlQuery.hasQueryItem("srsname"))
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
-  _url.setQuery(urlQuery);
+  _sourceUrl.setQuery(urlQuery);
   //  Spin up the threads
-  beginRead(_url, _bounds);
+  beginRead(_sourceUrl, _bounds);
   //  Iterate all of the XML results
   while (hasMoreResults())
   {

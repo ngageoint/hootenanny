@@ -123,6 +123,7 @@ public:
     {
       MapCropper uut(g);
       uut.setInvert(false);
+      uut.setRemoveSuperflousFeatures(false);
       uut.apply(map);
 
       CPPUNIT_ASSERT_EQUAL(insideCount, (int)map->getNodes().size());
@@ -133,6 +134,7 @@ public:
 
       MapCropper uut(g);
       uut.setInvert(true);
+      uut.setRemoveSuperflousFeatures(false);
       uut.apply(map);
       CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }

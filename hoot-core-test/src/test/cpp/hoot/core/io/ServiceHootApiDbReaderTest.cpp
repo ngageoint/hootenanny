@@ -58,7 +58,6 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceHootApiDbReaderTest);
   CPPUNIT_TEST(runCalculateBoundsTest);
   CPPUNIT_TEST(runElementIdTest);
-  CPPUNIT_TEST(runUrlMissingMapIdTest);
   CPPUNIT_TEST(runUrlInvalidMapIdTest);
   CPPUNIT_TEST(runReadTest);
   CPPUNIT_TEST(runPartialReadTest);
@@ -208,31 +207,6 @@ public:
     HOOT_STR_EQUALS("[1]{Entry: role: n2, eid: Node(-2)}", map->getRelation(-2)->getMembers());
     HOOT_STR_EQUALS("[2]{Entry: role: n1, eid: Node(-1), Entry: role: w1, eid: Way(-1)}",
       map->getRelation(-1)->getMembers());
-  }
-
-  void runUrlMissingMapIdTest()
-  {
-    setUpTest("runUrlMissingMapIdTest");
-    // temporarily disable logging to avoid isValid warning
-    DisableLog dl;
-
-    HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
-    QString exceptionMsg("");
-    try
-    {
-      reader.open(
-        ServicesDbTestUtils::getDbReadUrl(_mapId).toString()
-          .replace("/" + QString::number(_mapId), ""));
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-
-    //I would rather this return: "URL does not contain valid map ID." from
-    //HootApiDbReader::open
-    CPPUNIT_ASSERT(exceptionMsg.contains("An unsupported URL was passed in"));
   }
 
   void runUrlInvalidMapIdTest()
@@ -937,7 +911,7 @@ public:
     }
     catch (const HootException& e)
     {
-      exceptionMsg = e.what();\
+      exceptionMsg = e.what();
 
       reader.close();
 

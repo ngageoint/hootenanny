@@ -74,7 +74,6 @@ public:
 static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
 
-
 QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 {
   LOG_TRACE("getDisplayInfoOps: " << optName);
@@ -164,7 +163,16 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts << _getApiEntities<ElementVisitor, ElementVisitor>(
       ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
   }
-  // All of this from here on down is pretty repetitive :-(
+  // All of this from here on down is pretty repetitive :-( Maybe we can make it better.
+  else if (apiEntityType == "filters")
+  {
+    // This is the criterion portion of --operators only.
+    msg += "):";
+    msg.prepend("Filters");
+    ts << msg << endl;
+    ts << _getApiEntities<ElementCriterion, ElementCriterion>(
+      ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
+  }
   else if (apiEntityType == "feature-extractors")
   {
     msg += "):";

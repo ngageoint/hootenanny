@@ -863,6 +863,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/capabilities'
             });
+            assert.equal(capas.TDSv70.isavailable, true);
             assert.equal(capas.TDSv61.isavailable, true);
             assert.equal(capas.TDSv40.isavailable, true);
             assert.equal(capas.MGCP.isavailable, true);
@@ -875,7 +876,7 @@ describe('TranslationServer', function () {
                 method: 'GET',
                 path: '/translations'
             });
-            assert.equal(4, trans.length);
+            assert.equal(5, trans.length);
         });
 
         it('should handle /schema GET', function() {

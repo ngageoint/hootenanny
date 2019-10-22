@@ -43,7 +43,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
@@ -696,7 +696,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
 
   if (_printStats)
   {
-    LOG_INFO("Changeset Stats:\n" << stats);
+    LOG_STATUS("Changeset Stats:\n" << stats);
   }
   else
   {

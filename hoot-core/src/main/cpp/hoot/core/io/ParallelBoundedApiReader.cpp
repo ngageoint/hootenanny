@@ -69,7 +69,7 @@ void ParallelBoundedApiReader::beginRead(const QUrl& endpoint, const geos::geom:
                                QString::number(_maxGridSize, 'f', 4) + " square degrees.");
   }
   //  Save the endpoint URL to query
-  _url = endpoint;
+  _sourceUrl = endpoint;
   //  Split the envelope if it is bigger than the prescribed max
   int lon_div = 1;
   int lat_div = 1;
@@ -182,8 +182,8 @@ void ParallelBoundedApiReader::_process()
     if (!envelope.isNull())
     {
       //  Add the bbox to the query string
-      QUrl url = _url;
-      QUrlQuery query(_url);
+      QUrl url = _sourceUrl;
+      QUrlQuery query(_sourceUrl);
       if (query.hasQueryItem("bbox"))
         query.removeQueryItem("bbox");
       //  Use the correct type of bbox for this query

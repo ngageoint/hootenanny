@@ -126,6 +126,7 @@ private:
   double _changesetUserId;
 
   bool _includeDebugTags;
+  bool _includeCircularErrorTags;
 
   // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;
