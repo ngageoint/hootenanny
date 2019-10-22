@@ -553,13 +553,15 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   return layers;
 }
 
-void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
+void DataConverter::_setFromOgrOptions()
 {
   // The ordering for these added ops matters. Let's run them after any user specified convert ops
   // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
   // have a streaming OGR read, since they all require a full map...don't love that...but not sure
   // what can be done about it.
 
+  // Nodes that are very close together but with different IDs present a problem from OGR sources,
+  // so let's merge them together.
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
     if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
@@ -568,6 +570,8 @@ void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
     }
   }
 
+  // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR
+  // sources.
   if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
   {
     // Building outline updating needs to happen after building part merging, or we can end up with
@@ -582,23 +586,12 @@ void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
     }
   }
 
-  // OGR reads are adding duplicate nodes. This fixes that. Maybe we can fix at the source when its
-  // found.
+  // OGR reads sometimes add duplicated nodes with the same ID. This fixes that. Maybe we can fix
+  // at the source at some point when its identified.
   if (!_convertOps.contains(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className())))
   {
     _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
   }
-
-//  // TODO
-//  if (ConfigOptions().getOgr2osmSimplifyWays() &&
-//      // passes unit tests off (after fixes); ? regression
-//      //StringUtils::containsSubstring(inputs, "shp") &&
-//      !_convertOps.contains(QString::fromStdString(WayGeneralizeVisitor::className())))
-//  {
-//    // fails unit tests off; ? regression
-//    conf().set("way.generalizer.criterion", ConfigOptions().getOgr2osmSimplifyWaysCriterion());
-//    _convertOps.append(QString::fromStdString(WayGeneralizeVisitor::className()));
-//  }
 }
 
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
@@ -632,7 +625,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
-  _setFromOgrOptions(inputs);
+  _setFromOgrOptions();
   // Inclined to do this: _convertOps.removeDuplicates();, but there could be some workflows where
   // the same op needs to be called more than once.
   //
@@ -774,7 +767,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   // see note in convert; an OGR format could still be processed here
   if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
   {
-    _setFromOgrOptions(inputs);
+    _setFromOgrOptions();
   }
 
   _handleGeneralConvertTranslationOpts(output);

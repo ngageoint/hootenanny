@@ -158,7 +158,7 @@ private:
 
   bool _shapeFileColumnsSpecified() { return !_shapeFileColumns.isEmpty(); }
 
-  void _setFromOgrOptions(const QStringList& inputs);
+  void _setFromOgrOptions();
 };
 
 }
