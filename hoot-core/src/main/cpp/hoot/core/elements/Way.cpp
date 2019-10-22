@@ -328,6 +328,8 @@ void Way::_makeWritable()
 
 void Way::removeNode(long id)
 {
+  LOG_TRACE("Removing node: " << id << " in way: " << getId() << "...");
+
   std::vector<long>& nodes = _wayData->getNodeIds();
   size_t newCount = 0;
 
@@ -344,12 +346,14 @@ void Way::removeNode(long id)
   nodes.resize(newCount);
 }
 
+bool Way::isFirstAndLastNode(const long nodeId) const
+{
+  return nodeId == getFirstNodeId() && nodeId == getLastNodeId();
+}
+
 void Way::replaceNode(long oldId, long newId)
 {
-  LOG_TRACE("Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
-
   const vector<long>& ids = getNodeIds();
-  const vector<long> oldIdsCopy = ids;  // for debugging only
 
   bool change = false;
   bool newIdAlreadyPresent = false;
@@ -367,26 +371,36 @@ void Way::replaceNode(long oldId, long newId)
 
   if (change)
   {
+    LOG_TRACE("Old IDs: " << getNodeIds());
+
+    // for debugging only; see _nodeIdsAreDuplicated call below
+    //const vector<long> oldIdsCopy = ids;
+
     _preGeometryChange();
     _makeWritable();
 
+    // If the id we're replacing with already exists, we need to remove it first before trying to
+    // replace the old id with it.
     if (newIdAlreadyPresent)
     {
-      removeNode(oldId);
+      removeNode(newId);
     }
-    else
+
+    LOG_TRACE(
+      "Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
+
+    vector<long>& newIds = _wayData->getNodeIds();
+    for (size_t i = 0; i < newIds.size(); i++)
     {
-      vector<long>& newIds = _wayData->getNodeIds();
-      for (size_t i = 0; i < newIds.size(); i++)
+      if (newIds[i] == oldId)
       {
-        if (newIds[i] == oldId)
-        {
-          newIds[i] = newId;
-        }
+        newIds[i] = newId;
       }
     }
 
     _postGeometryChange();
+
+    LOG_TRACE("New IDs: " << getNodeIds());
 
 //    // for debugging only; SLOW
 //    if (_nodeIdsAreDuplicated(getNodeIds()))

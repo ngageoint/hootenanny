@@ -37,6 +37,7 @@ class WayTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayTest);
   CPPUNIT_TEST(runRemoveTest);
+  // TODO: update for 3495 added logic
   CPPUNIT_TEST_SUITE_END();
 
 public:
