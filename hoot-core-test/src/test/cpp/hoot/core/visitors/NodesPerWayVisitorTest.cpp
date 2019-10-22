@@ -36,13 +36,11 @@ namespace hoot
 
 static const QString input = "test-files/ToyTestA.osm";
 
-/*
- * TODO: update for custom crit
- */
 class NodesPerWayVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodesPerWayVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  // TODO: add custom crit test
   CPPUNIT_TEST_SUITE_END();
 
 public:

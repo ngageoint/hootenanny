@@ -83,6 +83,8 @@ public:
 
   virtual void addCriterion(const ElementCriterionPtr& crit);
 
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+
 private:
 
   double _epsilon;

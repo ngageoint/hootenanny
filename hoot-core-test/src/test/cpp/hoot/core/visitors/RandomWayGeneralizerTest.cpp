@@ -114,6 +114,7 @@ public:
     wayGeneralizeVisitor.setRng(rng);
     wayGeneralizeVisitor.setWayGeneralizeProbability(generalizeProbability);
     wayGeneralizeVisitor.setEpsilon(epsilon);
+    wayGeneralizeVisitor.setRemoveNodesSharedByWays(true);
     map->visitRw(wayGeneralizeVisitor);
     MapProjector::projectToWgs84(map);
 
