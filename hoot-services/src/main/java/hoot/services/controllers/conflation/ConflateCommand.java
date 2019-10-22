@@ -53,7 +53,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.models.db.Users;
 
 
-class ConflateCommand extends ExternalCommand {
+public class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
 

@@ -30,12 +30,12 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.SCRIPT_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
+import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 import static hoot.services.controllers.ingest.UploadClassification.OSM;
 import static hoot.services.controllers.ingest.UploadClassification.SHP;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
-import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
-import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
+import hoot.services.controllers.conflation.ConflateCommand;
 import hoot.services.models.db.Users;
 
 
@@ -59,6 +60,7 @@ class ImportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ImportCommand.class);
 
     private final File workDir;
+    private String advUploadOpts;
 
     ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
@@ -95,21 +97,19 @@ class ImportCommand extends ExternalCommand {
           options.add("schema.translation.script=" + translationPath);
         }
 
-        if (advUploadOpts != null && (classification == SHP)) {
 
-            final boolean simplifyBuildings = getAdvOpts.stream().anyMatch("Ogr2osmSimplifyComplexBuildings"::equalsIgnoreCase);
+        if (getAdvOpts != null && !getAdvOpts.isEmpty()) {
+            Map<String, Map<String, String>> configOptions = ConflateCommand.getConfigOptions();
+            for (String option: getAdvOpts) {
+                String[] opt = option.split("=");
+                String key = opt[0];
+                String value = (opt.length == 2) ? "=" + opt[1] : "";
 
-            if (simplifyBuildings) {
-                options.add("ogr2osm.simplify.complex.buildings=true");
+                if (configOptions.containsKey(key)) { // if option key in possible values, add new option command
+                    Map<String, String> optionConfig = configOptions.get(key);
+                    options.add(optionConfig.get("key") + value);
+                }
             }
-        }
-        
-        if (advUploadOpts != null && (classification == SHP)) {
-        	
-        	final boolean mergeNearbyNodes  = getAdvOpts.stream().anyMatch("Ogr2osmMergeNearbyNodes"::equalsIgnoreCase);
-        	if (mergeNearbyNodes) {
-        		options.add("ogr2osm.merge.nearby.nodes=true");
-        	}
         }
 
         List<String> hootOptions = toHootOptions(options);
@@ -153,5 +153,13 @@ class ImportCommand extends ExternalCommand {
         }
 
         return commandResult;
+    }
+
+    public void setAdvUploadOpts(String advUploadOpts) {
+        this.advUploadOpts = advUploadOpts;
+    }
+
+    public String getAdvUploadOpts() {
+        return advUploadOpts;
     }
 }
