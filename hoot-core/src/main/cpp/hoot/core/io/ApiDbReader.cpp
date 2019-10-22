@@ -598,6 +598,9 @@ void ApiDbReader::initializePartial()
 
 void ApiDbReader::read(const OsmMapPtr& map)
 {
+  //  Set the map source
+  map->appendSource(_url);
+
   if (!_hasBounds())
   {
     LOG_DEBUG("Executing API read query...");

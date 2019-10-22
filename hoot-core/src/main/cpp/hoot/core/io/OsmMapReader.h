@@ -54,7 +54,7 @@ public:
   /**
    * Opens the specified URL for reading.
    */
-  virtual void open(const QString& url) = 0;
+  virtual void open(const QString& url) { _url = url; }
 
   /**
    * Reads the specified map. When this method is complete the input will likely be closed.
@@ -102,6 +102,8 @@ protected:
    * Ignore the duplicate IDs or throw an error
    */
   bool _ignoreDuplicates;
+  /** Url of the map to open and read */
+  QString _url;
 };
 
 }

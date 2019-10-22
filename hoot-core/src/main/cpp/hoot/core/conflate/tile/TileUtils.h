@@ -96,6 +96,7 @@ public:
   static void writeTilesToGeoJson(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
                                   const std::vector<std::vector<long>>& nodeCounts,
                                   const QString& outputPath,
+                                  const QString& fileSource = "",
                                   const bool selectSingleRandomTile = false, int randomSeed = -1);
 
   /**
@@ -113,6 +114,20 @@ public:
     const std::vector<std::vector<geos::geom::Envelope>>& tiles,
     const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
     const bool selectSingleRandomTile = false, int randomSeed = -1);
+
+private:
+
+  /**
+   * Convert boundary tiles to an OsmMap object
+   *
+   * @param tiles the collection of tiles to write
+   * @param nodeCounts a collection of the number of node counts for each computed tile
+   * @param randomTileIndex index of the random tile to use
+   * @param selectSingleRandomTile
+   */
+  static OsmMapPtr tilesToOsmMap(const std::vector<std::vector<geos::geom::Envelope>>& tiles,
+    const std::vector<std::vector<long>>& nodeCounts,
+    int randomTileIndex, const bool selectSingleRandomTile = false);
 };
 
 }

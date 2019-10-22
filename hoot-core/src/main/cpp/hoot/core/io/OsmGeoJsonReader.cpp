@@ -101,6 +101,7 @@ bool OsmGeoJsonReader::isSupported(const QString& url)
 void OsmGeoJsonReader::read(const OsmMapPtr& map)
 {
   _map = map;
+  _map->appendSource(_url);
   if (_isFile)
   {
     QTextStream instream(&_file);
