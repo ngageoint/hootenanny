@@ -44,7 +44,6 @@ public abstract class ExternalCommand implements Command {
     private Map<String, ?> substitutionMap;
     private File workDir;
     private Boolean trackable;
-    private String advUploadOpts;
     protected String jobId;
 
     protected ExternalCommand() {}
@@ -141,12 +140,6 @@ public abstract class ExternalCommand implements Command {
     public void setTrackable(Boolean trackable) {
         this.trackable = trackable;
     }
-    public void setAdvUploadOpts(String advUploadOpts) {
-    	this.advUploadOpts = advUploadOpts;
-    }
-    public String getAdvUploadOpts() {
-    	return advUploadOpts;
-    }
 
     @Override
     public CommandResult execute() {
@@ -179,7 +172,6 @@ public abstract class ExternalCommand implements Command {
                 "caller='" + caller + '\'' +
                 ", command='" + command + '\'' +
                 ", substitutionMap=" + substitutionMap +
-                ", advUploadOpts=" + advUploadOpts +
                 ", workDir=" + workDir +
                 ", trackable=" + trackable +
                 ", jobId='" + jobId + '\'' +
