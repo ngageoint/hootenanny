@@ -52,7 +52,6 @@ import org.slf4j.LoggerFactory;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.ExternalCommand;
-import hoot.services.controllers.conflation.ConflateCommand;
 import hoot.services.models.db.Users;
 
 
@@ -99,7 +98,6 @@ class ImportCommand extends ExternalCommand {
 
 
         if (getAdvOpts != null && !getAdvOpts.isEmpty()) {
-            Map<String, Map<String, String>> configOptions = ConflateCommand.getConfigOptions();
             for (String option: getAdvOpts) {
                 String[] opt = option.split("=");
                 String key = opt[0];

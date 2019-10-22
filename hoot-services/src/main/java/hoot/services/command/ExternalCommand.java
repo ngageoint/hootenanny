@@ -27,11 +27,21 @@
 package hoot.services.command;
 
 
+import static hoot.services.HootProperties.CONFIG_OPTIONS;
+import static hoot.services.HootProperties.HOME_FOLDER;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.HootProperties;
@@ -44,6 +54,20 @@ public abstract class ExternalCommand implements Command {
     private Map<String, ?> substitutionMap;
     private File workDir;
     private Boolean trackable;
+    protected static Map<String, Map<String, String>> configOptions = null;
+
+    static {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<?> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
+            // get json of all config options...
+            String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
+            configOptions = mapper.readValue(file, schema);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected String jobId;
 
     protected ExternalCommand() {}

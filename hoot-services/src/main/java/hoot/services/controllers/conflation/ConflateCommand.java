@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.CONFIG_OPTIONS;
 import static hoot.services.HootProperties.CONFLATION_TYPES_PATH;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
@@ -53,7 +52,7 @@ import hoot.services.command.ExternalCommand;
 import hoot.services.models.db.Users;
 
 
-public class ConflateCommand extends ExternalCommand {
+class ConflateCommand extends ExternalCommand {
 
     private final ConflateParams conflateParams;
 
@@ -64,7 +63,6 @@ public class ConflateCommand extends ExternalCommand {
     private static List<String> cleaningOptions = new ArrayList<>();
 
     private static Map<String, Map<String, Object>> conflationFeatures = null;
-    private static Map<String, Map<String, String>> configOptions = null;
 
     static {
         try {
@@ -73,15 +71,9 @@ public class ConflateCommand extends ExternalCommand {
             TypeReference<?> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
             conflationFeatures = mapper.readValue(file, schema);
 
-            // get json of all config options...
-            schema = new TypeReference<Map<String, Map<String, String>>>(){};
-            file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
-            configOptions = mapper.readValue(file, schema);
-
             // use default options for map cleaners list...
             cleaningOptions.addAll(Arrays.asList(configOptions.get("MapCleanerTransforms").get("default")
                 .replaceAll("hoot::","").split(";")));
-
 
         } catch (IOException e) {
             e.printStackTrace();
