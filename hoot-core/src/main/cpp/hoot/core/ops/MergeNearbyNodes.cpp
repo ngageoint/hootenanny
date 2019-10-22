@@ -141,38 +141,41 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
           const NodePtr& n1 = planar->getNode(v[i]);
           const NodePtr& n2 = planar->getNode(v[j]);
 
-          double calcdDistanceSquared = calcDistanceSquared(n1, n2);
-          if (distanceSquared > calcdDistanceSquared && n1->getStatus() == n2->getStatus())
+          if (n1->getStatus() == n2->getStatus())
           {
-            // if the geographic bounds are not specified.
-            if (_bounds.isNull() == true)
+            calcdDistanceSquared = calcDistanceSquared(n1, n2);
+            if (distanceSquared > calcdDistanceSquared)
             {
-              replace = true;
-            }
-            // if the geographic bounds are specified, then make sure both points are inside.
-            else
-            {
-              const NodePtr& g1 = wgs84->getNode(v[i]);
-              const NodePtr& g2 = wgs84->getNode(v[j]);
-              if (_bounds.contains(g1->getX(), g1->getY()) &&
-                  _bounds.contains(g2->getX(), g2->getY()))
+              // if the geographic bounds are not specified.
+              if (_bounds.isNull() == true)
               {
                 replace = true;
               }
-            }
+              // if the geographic bounds are specified, then make sure both points are inside.
+              else
+              {
+                const NodePtr& g1 = wgs84->getNode(v[i]);
+                const NodePtr& g2 = wgs84->getNode(v[j]);
+                if (_bounds.contains(g1->getX(), g1->getY()) &&
+                    _bounds.contains(g2->getX(), g2->getY()))
+                {
+                  replace = true;
+                }
+              }
 
-            if (replace)
-            {
-              LOG_TRACE(
-                "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
-                ElementId(ElementType::Node, v[i]) << "...");
-
-              map->replaceNode(v[j], v[i]);
-              _numAffected++;
+              if (replace)
+              {
+                LOG_TRACE(
+                  "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
+                  ElementId(ElementType::Node, v[i]) << "...");
+                map->replaceNode(v[j], v[i]);
+                _numAffected++;
+              }
             }
           }
         }
 
+        // custom logging for debugging purposes
         if (Log::getInstance().getLevel() <= Log::Trace)
         {
           if (calcdDistanceSquared != -1.0)
