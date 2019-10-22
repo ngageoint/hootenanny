@@ -52,7 +52,6 @@ public:
 private:
 
   bool _printDiff;
-  // TODO
   bool _suppressFailureDetail;
   QString _script;
   QString _stderr, _baseStderr;

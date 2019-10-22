@@ -88,7 +88,7 @@ private:
   double _epsilon;
 
   std::shared_ptr<RdpWayGeneralizer> _generalizer;
-  // TODO: could extend this to multiple criteria?
+  // a criterion used to further filter the ways to be generalized
   ElementCriterionPtr _crit;
   // see RdpWayGeneralizer
   bool _removeNodesSharedByWays;

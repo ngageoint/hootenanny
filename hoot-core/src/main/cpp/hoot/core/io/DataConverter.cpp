@@ -582,7 +582,8 @@ void DataConverter::_setFromOgrOptions(const QStringList& /*inputs*/)
     }
   }
 
-  // TODO
+  // OGR reads are adding duplicate nodes. This fixes that. Maybe we can fix at the source when its
+  // found.
   if (!_convertOps.contains(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className())))
   {
     _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));

@@ -102,7 +102,9 @@ private:
   // more generalization (more nodes removed).
   double _epsilon;
 
-  // TODO - arguable that this shouldn't be an option and shared nodes should never be removed
+  // If true, the any node shared by ways will not be removed by generalization. Its arguable that
+  // this shouldn't be an option and shared nodes should never be removed, but leaving it optional
+  // for now in case there is a use case where they should be removed.
   bool _removeNodesSharedByWays;
 
   OsmMapPtr _map;
@@ -132,7 +134,11 @@ private:
     const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
 
   /*
-   * TODO
+   * Takes in the way node IDs before the way was generalized and after it was generalized and
+   * constructs a final set of node IDs with the IDs that aren't allowed to be removed added back
+   * in (shared node IDs). This is necessary because it was too difficult to inject the logic to
+   * keep shared nodes into the recursive generalization function, so we run the logic after the
+   * generalization instead.
    */
   QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
     const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,

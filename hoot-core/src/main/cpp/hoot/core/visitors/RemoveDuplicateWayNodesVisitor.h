@@ -55,9 +55,9 @@ public:
   virtual void visit(const ElementPtr& e);
 
   /**
-   * TODO
+   * Removes duplicates nodes from a way
    *
-   * @param way
+   * @param way the way to remove duplicate nodes from
    */
   static void removeDuplicates(const WayPtr& way);
 

@@ -2088,6 +2088,9 @@ When merging nodes during convert, determines what tolerance should be used for 
 nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of
 each other. The units are in meters, and the value must be greater than zero.
 
+Note: This value was found experimentally with the building data from #3446 and #3495 and validated
+with JOSM validation. Further tweaks may be required to the default value for other datasets.
+
 [[merger.creators]]
 === merger.creators
 

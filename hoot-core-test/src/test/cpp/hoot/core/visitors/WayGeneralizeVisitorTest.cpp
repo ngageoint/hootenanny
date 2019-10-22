@@ -45,6 +45,7 @@ class WayGeneralizeVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayGeneralizeVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  // TODO: update for custom crit
   CPPUNIT_TEST_SUITE_END();
 
 public:

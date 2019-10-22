@@ -138,11 +138,11 @@ public:
   static QSet<QString> getDuplicates(const QStringList& input);
 
   /**
-   * TODO
+   * Determines whether any string in a list of strings contains a substring
    *
-   * @param input
-   * @param substring
-   * @return
+   * @param input a list of strings to examine
+   * @param substring the substring to search for
+   * @return true if any string in the input list contains the given substring; false otherwise
    */
   static bool containsSubstring(const QStringList& input, const QString& substring);
 };

@@ -60,27 +60,27 @@ public:
    *
    * @param input input path
    * @param allowDir if true; then a directory can be passed as an input
-   * @return true if all inputs passed in are OGR and supported; false otherwise
+   * @return true if the input is supported by OGR; false otherwise
    */
   static bool isSupportedOgrFormat(const QString& input, const bool allowDir = false);
 
   /**
-   * TODO
+   * Determines if a set of inputs paths are all OGR supported formats
    *
-   * @param inputs
-   * @param allowDir
-   * @return
+   * @param inputs input paths
+   * @param allowDir if true; then a directory can be passed as an input
+   * @return true if all inputs passed in are supported by OGR; false otherwise
    */
   static bool areSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
-   * TODO
+   * Determines if any in a set of inputs paths are OGR supported formats
    *
-   * @param inputs
-   * @param allowDir
-   * @return
+   * @param inputs input paths
+   * @param allowDir if true; then a directory can be passed as an input
+   * @return true if any of the inputs passed in are supported by OGR; false otherwise
    */
-  static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir);
+  static bool anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir = false);
 
   /**
     Loads an OSM map into an OsmMap object
