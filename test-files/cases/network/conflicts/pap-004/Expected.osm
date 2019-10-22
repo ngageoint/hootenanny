@@ -4,10 +4,10 @@
     <node visible="true" id="-514" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5486976693356986" lon="-72.3207641242250503">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-75" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5490267214600024" lon="-72.3208411239100002">
+    <node visible="true" id="-75" timestamp="2017-06-07T14:42:49Z" version="1" lat="18.5490267214600024" lon="-72.3208411239100002">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-74" timestamp="2017-06-07T14:42:49Z" version="1" changeset="112" lat="18.5489967123499966" lon="-72.3208337394700038">
+    <node visible="true" id="-74" timestamp="2017-06-07T14:42:49Z" version="1" lat="18.5489967123499966" lon="-72.3208337394700038">
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="23" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113" lat="18.5471511999999983" lon="-72.3224088000000052">
@@ -1487,52 +1487,6 @@
         <tag k="source" v="mgcp"/>
         <tag k="highway" v="road"/>
     </way>
-    <way visible="true" id="-953" timestamp="2017-06-07T14:42:50Z" version="1">
-        <nd ref="763"/>
-        <nd ref="257"/>
-        <nd ref="758"/>
-        <nd ref="256"/>
-        <nd ref="-514"/>
-        <nd ref="255"/>
-        <nd ref="254"/>
-        <nd ref="253"/>
-        <nd ref="252"/>
-        <nd ref="251"/>
-        <nd ref="250"/>
-        <nd ref="249"/>
-        <nd ref="248"/>
-        <nd ref="247"/>
-        <nd ref="246"/>
-        <nd ref="628"/>
-        <nd ref="245"/>
-        <nd ref="244"/>
-        <nd ref="243"/>
-        <nd ref="242"/>
-        <nd ref="241"/>
-        <nd ref="240"/>
-        <nd ref="753"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Rue Coquillo"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="lanes" v="2"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48};{{90d8985c-d68e-4a86-ada5-0bbeb1ab4686}}"/>
-        <tag k="width:minimum_traveled_way" v="5"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="attribution" v="osm"/>
-        <tag k="median" v="no"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.130Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="Google Aerial;osm;mgcp"/>
-        <tag k="highway" v="residential"/>
-    </way>
     <way visible="true" id="-44" timestamp="2017-06-07T14:42:50Z" version="1">
         <nd ref="574"/>
         <nd ref="396"/>
@@ -1819,6 +1773,52 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="attribution" v="osm"/>
         <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="45" timestamp="2017-06-07T14:42:50Z" version="1">
+        <nd ref="763"/>
+        <nd ref="257"/>
+        <nd ref="758"/>
+        <nd ref="256"/>
+        <nd ref="-514"/>
+        <nd ref="255"/>
+        <nd ref="254"/>
+        <nd ref="253"/>
+        <nd ref="252"/>
+        <nd ref="251"/>
+        <nd ref="250"/>
+        <nd ref="249"/>
+        <nd ref="248"/>
+        <nd ref="247"/>
+        <nd ref="246"/>
+        <nd ref="628"/>
+        <nd ref="245"/>
+        <nd ref="244"/>
+        <nd ref="243"/>
+        <nd ref="242"/>
+        <nd ref="241"/>
+        <nd ref="240"/>
+        <nd ref="753"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Rue Coquillo"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{3d0a1849-adb5-40c8-bc77-de0398292d48};{{90d8985c-d68e-4a86-ada5-0bbeb1ab4686}}"/>
+        <tag k="width:minimum_traveled_way" v="5"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.130Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="Google Aerial;osm;mgcp"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="46" timestamp="2017-06-07T14:42:50Z" version="1" changeset="113">
         <nd ref="258"/>
