@@ -168,8 +168,7 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
 
               if (replace)
               {
-                // TODO: move back to trace
-                LOG_INFO(
+                LOG_TRACE(
                   "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
                   ElementId(ElementType::Node, v[i]) << "...");
                 map->replaceNode(v[j], v[i]);

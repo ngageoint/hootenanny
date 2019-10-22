@@ -99,14 +99,14 @@ void Way::insertNode(long index, long id)
 
 void Way::addNodes(const vector<long>& ids)
 {
-//  // for debugging only; SLOW
-//  if (_nodeIdsAreDuplicated(ids))
-//  {
-//    LOG_VARE(ids);
-//    throw IllegalArgumentException("Duplicate way node IDs: addNodes");
-//  }
-
   addNodes(ids.begin(), ids.end());
+
+  //  // for debugging only; SLOW
+  //  if (_nodeIdsAreDuplicated(getNodeIds()))
+  //  {
+  //    LOG_VARE(getNodeIds());
+  //    throw IllegalArgumentException("Duplicate way node IDs: addNodes");
+  //  }
 }
 
 bool Way::_nodeIdsAreDuplicated(const vector<long>& ids) const
@@ -235,19 +235,19 @@ const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProv
 
 void Way::setNodes(const vector<long>& newNodes)
 {
-//  // for debugging only; SLOW
-//  if (_nodeIdsAreDuplicated(newNodes))
-//  {
-//    LOG_VARE(newNodes);
-//    throw IllegalArgumentException("Duplicate way node IDs: setNodes");
-//  }
-
   _preGeometryChange();
   _makeWritable();
 
   _wayData->getNodeIds() = newNodes;
 
   _postGeometryChange();
+
+  //  // for debugging only; SLOW
+  //  if (_nodeIdsAreDuplicated(getNodeIds()))
+  //  {
+  //    LOG_VARE(getNodeIds());
+  //    throw IllegalArgumentException("Duplicate way node IDs: setNodes");
+  //  }
 }
 
 int Way::getNodeIndex(long nodeId) const
@@ -346,16 +346,22 @@ void Way::removeNode(long id)
 
 void Way::replaceNode(long oldId, long newId)
 {
-  LOG_TRACE("Replacing node: " << oldId << " with: " << newId << "in way: " << getId() << "...");
+  LOG_TRACE("Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
 
   const vector<long>& ids = getNodeIds();
+  const vector<long> oldIdsCopy = ids;  // for debugging only
 
   bool change = false;
+  bool newIdAlreadyPresent = false;
   for (size_t i = 0; i < ids.size(); i++)
   {
     if (ids[i] == oldId)
     {
       change = true;
+    }
+    if (ids[i] == newId)
+    {
+      newIdAlreadyPresent = true;
     }
   }
 
@@ -363,20 +369,33 @@ void Way::replaceNode(long oldId, long newId)
   {
     _preGeometryChange();
     _makeWritable();
-    vector<long>& newIds = _wayData->getNodeIds();
-    for (size_t i = 0; i < newIds.size(); i++)
+
+    if (newIdAlreadyPresent)
     {
-      if (newIds[i] == oldId)
+      removeNode(oldId);
+    }
+    else
+    {
+      vector<long>& newIds = _wayData->getNodeIds();
+      for (size_t i = 0; i < newIds.size(); i++)
       {
-        newIds[i] = newId;
+        if (newIds[i] == oldId)
+        {
+          newIds[i] = newId;
+        }
       }
     }
+
     _postGeometryChange();
 
 //    // for debugging only; SLOW
-//    if (_nodeIdsAreDuplicated(newIds))
+//    if (_nodeIdsAreDuplicated(getNodeIds()))
 //    {
-//      LOG_VARE(newIds);
+//      LOG_ERROR(
+//        "Attempting to replace node: " << oldId << " with: " << newId << " in way: " << getId() <<
+//        "...");
+//      LOG_ERROR("Original IDs: " << oldIdsCopy);
+//      LOG_ERROR("New IDs: " << getNodeIds());
 //      throw IllegalArgumentException("Duplicate way node IDs: replaceNode");
 //    }
   }

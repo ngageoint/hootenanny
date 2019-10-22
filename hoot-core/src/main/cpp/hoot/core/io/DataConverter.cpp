@@ -585,13 +585,6 @@ void DataConverter::_setFromOgrOptions()
       _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
     }
   }
-
-  // OGR reads sometimes add duplicated nodes with the same ID. This fixes that. Maybe we can fix
-  // at the source at some point when its identified.
-  if (!_convertOps.contains(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className())))
-  {
-    _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
-  }
 }
 
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
