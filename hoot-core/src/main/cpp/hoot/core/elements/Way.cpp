@@ -32,6 +32,7 @@
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 // Geos
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -72,6 +73,13 @@ void Way::addNode(long id)
   _makeWritable();
   _wayData->addNode(id);
   _postGeometryChange();
+
+//  // for debugging only; SLOW
+//  if (_nodeIdsAreDuplicated(getNodeIds()))
+//  {
+//    LOG_VARE(getNodeIds());
+//    throw IllegalArgumentException("Duplicate way node IDs: addNode");
+//  }
 }
 
 void Way::insertNode(long index, long id)
@@ -80,11 +88,57 @@ void Way::insertNode(long index, long id)
   _makeWritable();
   _wayData->insertNode(index, id);
   _postGeometryChange();
+
+//  // for debugging only; SLOW
+//  if (_nodeIdsAreDuplicated(getNodeIds()))
+//  {
+//    LOG_VARE(getNodeIds());
+//    throw IllegalArgumentException("Duplicate way node IDs: insertNode");
+//  }
 }
 
 void Way::addNodes(const vector<long>& ids)
 {
+//  // for debugging only; SLOW
+//  if (_nodeIdsAreDuplicated(ids))
+//  {
+//    LOG_VARE(ids);
+//    throw IllegalArgumentException("Duplicate way node IDs: addNodes");
+//  }
+
   addNodes(ids.begin(), ids.end());
+}
+
+bool Way::_nodeIdsAreDuplicated(const vector<long>& ids) const
+{
+  if (ids.size() == 1)
+  {
+    return false;
+  }
+
+  LOG_VART(ids);
+
+  QList<long> idsCopy;
+  for (size_t i = 0; i < ids.size(); i++)
+  {
+    const long id = ids[i];
+    LOG_VART(id);
+    LOG_VART(i);
+    LOG_VART(idsCopy.lastIndexOf(id));
+    if (!idsCopy.contains(id))
+    {
+      idsCopy.append(id);
+    }
+    else if (i == ids.size() - 1 && idsCopy.lastIndexOf(id) != 0)
+    {
+      return true;
+    }
+    else if (i != ids.size() - 1)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 void Way::clear()
@@ -181,6 +235,13 @@ const Envelope& Way::getEnvelopeInternal(const std::shared_ptr<const ElementProv
 
 void Way::setNodes(const vector<long>& newNodes)
 {
+//  // for debugging only; SLOW
+//  if (_nodeIdsAreDuplicated(newNodes))
+//  {
+//    LOG_VARE(newNodes);
+//    throw IllegalArgumentException("Duplicate way node IDs: setNodes");
+//  }
+
   _preGeometryChange();
   _makeWritable();
 
@@ -311,6 +372,13 @@ void Way::replaceNode(long oldId, long newId)
       }
     }
     _postGeometryChange();
+
+//    // for debugging only; SLOW
+//    if (_nodeIdsAreDuplicated(newIds))
+//    {
+//      LOG_VARE(newIds);
+//      throw IllegalArgumentException("Duplicate way node IDs: replaceNode");
+//    }
   }
 }
 

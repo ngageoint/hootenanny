@@ -67,6 +67,9 @@ MergeNearbyNodes::MergeNearbyNodes(Meters distance)
   _distance = distance;
   if (_distance < 0.0)
   {
+    // This default value was found experimentally with the building data from #3446 and #3495 and
+    // validated with JOSM validation. Further tweaks may be required to the default value for other
+    // datasets.
     _distance = ConfigOptions().getMergeNearbyNodesDistance();
     if (_distance <= 0.0)
     {
@@ -165,7 +168,8 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
 
               if (replace)
               {
-                LOG_TRACE(
+                // TODO: move back to trace
+                LOG_INFO(
                   "Merging nodes: " << ElementId(ElementType::Node, v[j]) << " and " <<
                   ElementId(ElementType::Node, v[i]) << "...");
                 map->replaceNode(v[j], v[i]);

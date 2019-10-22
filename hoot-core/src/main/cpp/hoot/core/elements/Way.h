@@ -217,6 +217,9 @@ private:
    * This envelope may be cached, but it also may not be exact.
    */
   mutable geos::geom::Envelope _cachedEnvelope;
+
+  // for debugging only; SLOW
+  bool _nodeIdsAreDuplicated(const std::vector<long>& ids) const;
 };
 
 typedef std::shared_ptr<Way> WayPtr;
