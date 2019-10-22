@@ -65,7 +65,7 @@ public:
       "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");
 
     WayGeneralizeVisitor wayGeneralizeVisitor;
-    wayGeneralizeVisitor.setEpsilon(1.0);
+    wayGeneralizeVisitor.setEpsilon(5.0);
     wayGeneralizeVisitor.setRemoveNodesSharedByWays(true);
     map->visitRw(wayGeneralizeVisitor);
 
