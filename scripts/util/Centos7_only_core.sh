@@ -29,8 +29,8 @@
 #
 # American-english-insane dictionary & words.sqlite. There isn't a package available for these so we use our own
 # copy stored on S3
-# https://s3.amazonaws.com/hoot-support/american-english-insane.bz2
-# https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
+# https://hoot-support.s3.amazonaws.com/american-english-insane.bz2
+# https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2
 #
 # Alternate Maven mirror for packages
 # https://repo.maven.apache.org/maven2
@@ -246,7 +246,7 @@ if [ ! -f /usr/share/dict/american-english-insane ]; then
     if [ -f /home/centos/hoot-deps/american-english-insane.bz2 ]
         sudo bash -c "bzcat /home/centos/hoot-deps/american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     else
-        wget --quiet -N https://s3.amazonaws.com/hoot-support/american-english-insane.bz2
+        wget --quiet -N https://hoot-support.s3.amazonaws.com/american-english-insane.bz2
         sudo bash -c "bzcat american-english-insane.bz2 > /usr/share/dict/american-english-insane"
     fi
 fi
