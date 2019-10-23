@@ -37,7 +37,7 @@ class WayTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayTest);
   CPPUNIT_TEST(runRemoveTest);
-  // TODO: update for 3495 added logic
+  CPPUNIT_TEST(runReplaceTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -58,6 +58,55 @@ public:
     HOOT_STR_EQUALS("[6]{1, 2, 2, 3, 2, 5}", w.getNodeIds());
     w.removeNode(2);
     HOOT_STR_EQUALS("[3]{1, 3, 5}", w.getNodeIds());
+  }
+
+  void runReplaceTest()
+  {
+    Way w(Status::Unknown1, -1, 10);
+
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(5);
+    w.replaceNode(2, 4);
+    HOOT_STR_EQUALS("[3]{1, 4, 5}", w.getNodeIds());
+
+    // closed ways
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(1);
+    w.replaceNode(2, 4);
+    HOOT_STR_EQUALS("[3]{1, 4, 1}", w.getNodeIds());
+
+    // replacement node already exists
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(3);
+    w.addNode(4);
+    w.addNode(1);
+    w.replaceNode(2, 4);
+    HOOT_STR_EQUALS("[4]{1, 4, 3, 1}", w.getNodeIds());
+
+    // start/end node replaced
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(1);
+    w.replaceNode(1, 3);
+    HOOT_STR_EQUALS("[3]{3, 2, 3}", w.getNodeIds());
+
+    // This is non-sensical, but the original node with the replacement ID should be removed before
+    // doing the replacement, which is why we end up with two nodes instead of three. No way should
+    // ever have duplicate nodes, but we don't check that at runtime outside of debugging due to
+    // the performance hit.
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(1);
+    w.replaceNode(1, 2);
+    HOOT_STR_EQUALS("[2]{2, 2}", w.getNodeIds());
   }
 };
 

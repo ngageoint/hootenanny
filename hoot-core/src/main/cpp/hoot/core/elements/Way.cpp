@@ -353,6 +353,11 @@ bool Way::isFirstAndLastNode(const long nodeId) const
 
 void Way::replaceNode(long oldId, long newId)
 {
+  if (oldId == newId)
+  {
+    return;
+  }
+
   const vector<long>& ids = getNodeIds();
 
   bool change = false;
@@ -384,6 +389,7 @@ void Way::replaceNode(long oldId, long newId)
     if (newIdAlreadyPresent)
     {
       removeNode(newId);
+      LOG_TRACE("Old IDs after new ID removal: " << getNodeIds());
     }
 
     LOG_TRACE(
