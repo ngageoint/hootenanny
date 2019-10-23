@@ -2,7 +2,8 @@
   "Import": {
     "members": {
       "ogr2osm.simplify.complex.buildings": "Simplify Complex Buildings",
-      "ogr2osm.merge.nearby.nodes": "Merge Nearby Nodes"
+      "ogr2osm.merge.nearby.nodes": "Merge Nearby Nodes",
+      "merge.nearby.nodes.distance": "Merge Nearby Nodes Distance (meters)"
     }
   }
 }

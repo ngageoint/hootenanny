@@ -79,7 +79,6 @@ class ImportCommand extends ExternalCommand {
         List<String> inputs = filesToImport.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
         List<String> options = new LinkedList<>();
-        List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
         //options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         //TODO: always set remap ids to false??
         options.add("hootapi.db.writer.overwrite.map=true");
@@ -96,8 +95,8 @@ class ImportCommand extends ExternalCommand {
           options.add("schema.translation.script=" + translationPath);
         }
 
-
-        if (getAdvOpts != null && !getAdvOpts.isEmpty()) {
+        if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
+            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
             for (String option: getAdvOpts) {
                 String[] opt = option.split("=");
                 String key = opt[0];
@@ -117,7 +116,6 @@ class ImportCommand extends ExternalCommand {
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("ADV_UPLOAD_OPTS", advUploadOpts);
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
