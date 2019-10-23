@@ -61,7 +61,7 @@ MatchPtr PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, Elemen
   return MatchFactory::getInstance().createMatch(map, eid1, eid2);
 }
 
-bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -121,15 +121,16 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     if (_isConflictingSet(matches))
     {
       mergers.push_back(
-        new MarkForReviewMerger(
-          eids,
-          QString("Conflicting information: multiple features have been matched to the same ") +
-          QString("feature and require review."),
-          matchTypes.join(";"), 1));
+        MergerPtr(
+          new MarkForReviewMerger(
+            eids,
+            QString("Conflicting information: multiple features have been matched to the same ") +
+            QString("feature and require review."),
+            matchTypes.join(";"), 1)));
     }
     else
     {
-      mergers.push_back(new PoiPolygonMerger(eids));
+      mergers.push_back(MergerPtr(new PoiPolygonMerger(eids)));
     }
 
     result = true;

@@ -331,6 +331,9 @@ def processFile(fileName,enValues):
         # Drop the "_<geometry>" from the end of the name, add spaces and Title Case
         fDescription = fName[:-2].replace("_"," ").title()
 
+        # Swap "< >" for "[ ]" so that they don't get interpreted as HTML
+        fieldValue = fieldValue.replace("<","[").replace(">","]")
+
         if fName not in tschema:  # New feature
             #print "Name:%s  fCode:%s  Geom:%s  Desc:%s" % (fName,fCode,fGeometry,fDescription)  # Debug
             tschema[fName] = {}
@@ -430,6 +433,7 @@ parser.add_argument('--dumpenum', help='Dump out the enumerated attributes, one 
 parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
 parser.add_argument('--fcodelist', help='Dump out a list of fcodes',action='store_true')
 parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
+parser.add_argument('--fieldvalues', help='Dump out the schema as a JSON object for the Translation Assistant',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
 parser.add_argument('--intattr', help='Dump out all attributes that are integers',action='store_true')
@@ -529,6 +533,9 @@ elif args.fullschema:
 
 elif args.dumpenum:
     dumpEnumerations(schema,'enumGGDM30')
+
+elif args.fieldvalues:
+    printFieldValues(schema,'ggdmFieldValues')
 
 else: # The default is to dump out a basic schema with no text enumerations
     schema = convertTextEnumerations(schema)

@@ -288,7 +288,7 @@ bool ScriptMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sha
     new ScriptMatch(_script, _plugin, copiedMap, copiedMapJs, eid11, eid12, _threshold));
   MatchSet ms;
   ms.insert(m1);
-  vector<Merger*> mergers;
+  vector<MergerPtr> mergers;
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);
   m1.reset();

@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/io/OsmMapWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
 
 // Qt
@@ -57,7 +58,7 @@ namespace hoot
  * This is being used for unit testing only as of 3/24/2014 and has not been tested for
  * interoperability with any other tools.
  */
-class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter
+class OsmJsonWriter : public QXmlDefaultHandler, public OsmMapWriter, public Configurable
 {
 public:
 
@@ -104,6 +105,8 @@ public:
 
   virtual QString supportedFormats() override { return ".json"; }
 
+  virtual void setConfiguration(const Settings& conf) override;
+
 protected:
 
   ConstOsmMapPtr _map;
@@ -139,7 +142,6 @@ protected:
 private:
 
   AddExportTagsVisitor _addExportTagsVisitor;
-
 };
 
 }

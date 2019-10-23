@@ -457,8 +457,10 @@ int ConflateCmd::runSimple(QStringList& args)
 
   progress.set(
     1.0, Progress::JobState::Successful,
-    "Conflation job completed for reference: ..." + input1.right(maxFilePrintLength) +
-    " and secondary: ..." + input2.right(maxFilePrintLength) + " and written to output: ..." +
+    "Conflation job completed in " +
+    StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)) + " for reference map: ..." +
+    input1.right(maxFilePrintLength) + " and secondary map: ..." +
+    input2.right(maxFilePrintLength) + " and written to output: ..." +
     output.right(maxFilePrintLength));
 
   return 0;

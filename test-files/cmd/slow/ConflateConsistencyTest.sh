@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-HOOT_OPTS="-C Testing.conf -D uuid.helper.repeatable=true"
+HOOT_OPTS="-C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D uuid.helper.repeatable=true"
 
 export INPUTS="test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm"
 export OUTPUT_DIR=test-output/cmd/slow/ConflateConsistencyTest

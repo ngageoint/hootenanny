@@ -58,7 +58,7 @@ void MergerFactory::reset()
 }
 
 void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
-  vector<Merger*>& result) const
+  vector<MergerPtr>& result) const
 {
   for (size_t i = 0; i < _creators.size(); i++)
   {

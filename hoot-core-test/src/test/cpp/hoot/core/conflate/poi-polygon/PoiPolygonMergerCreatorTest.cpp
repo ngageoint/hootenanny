@@ -102,12 +102,12 @@ public:
 
     MatchSet matches;
     matches.insert(match1);
-    vector<Merger*> mergers;
+    vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
-    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
+    HOOT_STR_EQUALS(1, (dynamic_pointer_cast<PoiPolygonMerger>(mergers[0]) != 0));
   }
 
   void reviewTest()
@@ -164,14 +164,14 @@ public:
 
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
-    vector<Merger*> mergers;
+    vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
 
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VART(*mergers[0]);
-    HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
+    HOOT_STR_EQUALS(1, (dynamic_pointer_cast<MarkForReviewMerger>(mergers[0]) != 0));
   }
 
   void crossConflateMergeTest()
@@ -195,7 +195,7 @@ public:
 
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
-    vector<Merger*> mergers;
+    vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     // Neither of the match types used here actually require a map to calculate isConflicting, but
     // since the merger creator requires a map we'll pass in an empty one.
@@ -206,7 +206,7 @@ public:
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VART(*mergers[0]);
-    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
+    HOOT_STR_EQUALS(1, (dynamic_pointer_cast<PoiPolygonMerger>(mergers[0]) != 0));
   }
 };
 

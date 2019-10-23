@@ -897,6 +897,14 @@ significantly.
 If false, when running Differential Conflation the reference elements will not be dropped from the
 output. Setting this to false is primarily useful when debugging unconnected way snapping issues.
 
+=== differential.remove.unconflatable.data
+
+* Data Type: bool
+* Default Value: `true`
+
+If true Differential Conflation will remove all elements from output which Hootenanny is unable to
+match. If false, the unconflatable data will pass through to the output.
+
 === differential.snap.unconnected.roads
 
 * Data Type: bool
@@ -1630,7 +1638,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 === json.format.hootenanny
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 Output JSON in a more Hootenanny specific way that includes Hootenanny-specific tags
 including `hoot:*`, `error:circluar`, `type=node/way/relation`, tags in the `tags`
@@ -1702,6 +1710,14 @@ vs
 },
 ...
 -----
+
+=== json.output.tasking.manager.aoi
+
+* Data Type: bool
+* Default Value: `false`
+
+Output the GeoJSON in a format readable in Tasking Manager.  This includes
+per file or per feature `source` tags and compatible geometries.
 
 === json.perserve.empty.tags
 
@@ -2087,6 +2103,38 @@ each other. The units are in meters, and the value must be greater than zero.
 List of merger creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in match.creators.
 'hoot info --mergers' displays information about the available mergers.
+
+=== name.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameContainsCriterion will only identify partial names whose case matches exactly with the
+name values in name.contains.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.contains.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameContainsCriterion. From the command line, delimit multiple entries
+with ';' and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
+=== name.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, NameCriterion will only identify names whose case matches exactly with the name values in
+name.criterion.names. If false, the cases of the names do not have to match.
+
+=== name.criterion.names
+
+* Data Type: list
+* Default Value: ``
+
+A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
+and surround the entire list in double quotes. E.g. "Subway;Jimmys"
 
 === network.conflicts.aggression
 
@@ -4109,6 +4157,15 @@ Primarily, this is useful within the node.js interface.
 The default category to use when using the hoot::TagCategoryDifferencer class for comparing tags.
 Primarily, this is useful within the node.js interface.
 
+=== tag.contains.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagContainsCriterion will only identify partial tag values whose case matches exactly with
+the tag key values in tag.contains.criterion.kvps. If false, the cases of the tag values do not have
+to match.
+
 === tag.contains.criterion.kvps
 
 * Data Type: list
@@ -4117,6 +4174,14 @@ Primarily, this is useful within the node.js interface.
 Key/value pairs to use with TagContainsCriterion. Delimit keys and values with '='.  From the
 command line, delimit multiple key/value pairs with ';' and surround the entire list in double
 quotes. E.g. "name=Java;name=Shop"
+
+=== tag.criterion.case.sensitive
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, TagCriterion will only identify tag strings whose cases match exactly with the values in
+tag.criterion.kvps. If false, the cases of the tag strings do not have to match.
 
 === tag.criterion.kvps
 
@@ -4574,7 +4639,7 @@ Location of the word frequency dictionary. If the absolute file path isn't found
 the local `conf` and `$HOOT_HOME/conf` directories will be searched.
 
 This file is typically downloaded from:
-https://s3.amazonaws.com/hoot-support/words1.sqlite.bz2
+https://hoot-support.s3.amazonaws.com/words1.sqlite.bz2
 
 === weighted.word.distance.probability
 

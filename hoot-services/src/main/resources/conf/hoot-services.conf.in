@@ -124,6 +124,9 @@ advOptTemplate=conf/services/conflateAdvOps.json
 # Advanced options hoot2 template
 advOptHoot2Override=conf/services/conflationHoot2Ops.json
 
+# Advanced options hoot2 import Options
+importOptions=conf/services/importHoot2Ops.json
+
 # Advanced options reference override
 advOptRefOverride=conf/services/conflationRefOps.json
 

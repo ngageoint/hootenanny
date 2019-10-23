@@ -214,7 +214,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _checkForMatch(e);
 
     _numMatchCandidatesVisited++;
-    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval /** 10*/) == 0)
+    if (_numMatchCandidatesVisited % (_taskStatusUpdateInterval * 10) == 0)
     {
       PROGRESS_DEBUG(
         "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
@@ -226,7 +226,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   _numElementsVisited++;
   // poi/poly matching can be a little slow at times compared to the others, so keep the log update
   // interval a little lower.
-  if (_numElementsVisited % _taskStatusUpdateInterval == 0)
+  if (_numElementsVisited % (_taskStatusUpdateInterval * 10) == 0)
   {
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<

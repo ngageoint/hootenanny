@@ -9,7 +9,7 @@ var attributeMapping = {
         },
         "NAME_ALT": "IGNORED",
         "FCC": {
-            "Route Identification <route designation type>": {
+            "Route Identification [route designation type]": {
                 "A20": "National",
                 "A40": "Local",
                 "A30": "Secondary"

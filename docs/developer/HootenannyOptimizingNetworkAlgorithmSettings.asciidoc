@@ -1,0 +1,72 @@
+
+[[OptimizeNetworkAlgorithmSettings]]
+== Optimizing Network Algorithm Setting Values
+
+Hootenanny includes a utility to determine the optimal configurable settings for the Network Road Conflation Algorithm. This document 
+describes the process involved in using it.
+
+Generally, the two use cases for running a new optimization search are 1) you have some Network conflate case tests which do not pass and you
+want to see if some configuration option tweaks can fix them or 2) you have some regression tests scores that are lower than desired and you
+want to see if if some configuration option tweaks can raise them.
+
+To determine the optimal configuration of Network Algorithm settings, the process of Simulated Annealing is used. Simulated Annealing is
+a probalistic technique that allows for finding the best value for a variable in an optimization problem. In this situation, we are trying
+to optimize the quality of conflated output, so we use the pass/fail status of existing conflate case and regression tests as our metric. The 
+configuration of options with the highest number of passing tests is deemed the best one. Alternatively for regression tests, you could imagine
+a metric that measures test score differentials instead of just looking at the pass/fail result of the test. However, that capability does not 
+exist but could be looked into in the future.
+
+To aid in determining deriving the optimal configuration, Hootenanny exposes a command called +optimize-network-conf+. The command documentation 
+describes specifics on how to use, but at high level, we 1) define a configuration file with the options we want to determine the optimal 
+values for along with a range for their allowed values, 2) point +optimize-network-conf+ to one or more sets of conflate case or regression 
+tests 3) pick a number of iterations we want to run and let the command determine an optimal configuration for us.
+
+An example of a configuration file for +optimize-network-conf+:
+
+------
+{
+  "settings":
+  [
+    {
+      "name": "network.conflicts.aggression",
+      "min": 4.0,
+      "max": 10.0
+    },
+    {
+      "name": "network.conflicts.partial.handicap",
+      "min": 0.1,
+      "max": 0.3
+    },
+    ...
+}
+------
+
+In this example file, we have defined two configuration options and a min/max range for each. The configuration options must reside in
++ConfigOptions.asciidoc+ and be prefixed with "network.".
+
+An example of +optimize-network-conf+ execution:
+
+-----
+hoot optimize-network-conf test-files/cases/hoot-rnd/network/conflicts case settings.json 50 output Config.conf
+-----
+
+In this example, we have pointed the command to a directory called "conflicts" which contains conflate case tests, a configuration file 
+called "settings.json", have told it to run 50 test iterations, write the results to a file called "ouput", and optionally specified a
+Hootenanny configuration file called "Config.conf" with configuration options for the conflation runs. Note that only one type of test
+(case, PERTY, or regression) can be tested against at a time currently.
+
+Obviously, the runtime of +optimize-network-conf+ increases drastically as you increase the number of tests, Network configuration options,
+and value min/max ranges for those options. Some sets of Network options may be dependent upon each other, so testing them individually may
+not give you a desired result. You can, however, limit the range of configuration option values in which you have some certainty are already
+close to their optimal value. Also, you may reduce the number of tests you run the utility command against but at the end of the day you 
+will need all Hootenanny tests to passing against the configuration you derive. There isn't any good rule of thumb about how many iterations
+to run +optimize-network-conf+ yet. After some experimentation you may find that past a certain number of iterations, very long amounts of time
+pass without another optimal configuration being found, and you can use that number of iterations.
+
+After you have determined a new optimal configuration that increases the quality of the Network Algorithm as evidenced by an increased number
+of passing case tests or higher scores for regression tests, you can permanently update Hootenanny's Network Algorithm settings with the new 
+values. 
+
+
+
+

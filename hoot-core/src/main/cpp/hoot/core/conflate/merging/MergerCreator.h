@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/CreatorDescription.h>
 
@@ -40,8 +41,6 @@
 
 namespace hoot
 {
-
-class Merger;
 
 /**
  * Abstract base class for creating conflation feature mergers
@@ -64,7 +63,7 @@ public:
    * @return Returns true if one or more mergers were created and added to the provided mergers
    *  vector.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<Merger*>& mergers) const = 0;
+  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const = 0;
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take

@@ -1137,6 +1137,7 @@ void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
 // TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
 void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 {
+  map->appendSource(path);
   if (_status == Status::Invalid)
   {
     _useFileStatus = true;
@@ -1178,6 +1179,7 @@ void OsmPbfReader::_readFile(const QString& path, const OsmMapPtr& map)
 void OsmPbfReader::read(const OsmMapPtr& map)
 {
   assert(map.get());
+  map->appendSource(_url);
   if (_status == Status::Invalid)
   {
     _useFileStatus = true;
@@ -1230,6 +1232,7 @@ bool OsmPbfReader::isSorted(const QString& file)
 
 void OsmPbfReader::open(const QString& urlStr)
 {
+  OsmMapReader::open(urlStr);
   fstream* fp = new fstream();
   fp->open(urlStr.toUtf8().data(), ios::in | ios::binary);
   if (fp->is_open() == false)

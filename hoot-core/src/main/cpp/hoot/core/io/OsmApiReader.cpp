@@ -125,6 +125,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   _numRead = 0;
   finalizePartial();
   _map = map;
+  _map->appendSource(_url);
 
   //  Spin up the threads
   beginRead(_url, _bounds);

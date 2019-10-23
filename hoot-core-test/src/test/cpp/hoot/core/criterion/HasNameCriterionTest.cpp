@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -51,6 +51,10 @@ public:
     NodePtr node2(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
     node2->getTags().set("blah", "blah");
     CPPUNIT_ASSERT(!uut.isSatisfied(node2));
+
+    NodePtr node3(new Node(Status::Unknown1, -1, geos::geom::Coordinate(0.0, 0.0), 15.0));
+    node3->getTags().set("alt_name", "blah");
+    CPPUNIT_ASSERT(uut.isSatisfied(node3));
   }
 };
 

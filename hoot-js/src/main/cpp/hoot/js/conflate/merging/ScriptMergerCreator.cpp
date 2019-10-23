@@ -44,7 +44,7 @@ ScriptMergerCreator::ScriptMergerCreator()
 {
 }
 
-bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -62,7 +62,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
   {
     ConstMatchPtr m = *it;
     LOG_VART(m->toString());
-    const ScriptMatch* sm = dynamic_cast<const ScriptMatch*>(m.get());
+    std::shared_ptr<const ScriptMatch> sm = dynamic_pointer_cast<const ScriptMatch>(m);
     // check to make sure all the input matches are script matches.
     if (sm == 0)
     {
@@ -89,7 +89,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     }
   }
 
-  ScriptMerger* sm = new ScriptMerger(script, plugin, eids);
+  std::shared_ptr<ScriptMerger> sm(new ScriptMerger(script, plugin, eids));
   // only add the merge if there are elements to merge.
   if (sm->hasFunction("mergeSets"))
   {
@@ -97,10 +97,6 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     {
       mergers.push_back(sm);
       result = true;
-    }
-    else
-    {
-      delete sm;
     }
   }
   else
@@ -112,14 +108,10 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>
     }
     else if (eids.size() > 1)
     {
-      delete sm;
       mergers.push_back(
-        new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0));
+        MergerPtr(
+          new MarkForReviewMerger(eids, "Overlapping matches", matchType.join(";"), 1.0)));
       result = true;
-    }
-    else
-    {
-      delete sm;
     }
   }
 

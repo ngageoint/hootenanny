@@ -29,13 +29,14 @@
 #include <geos/geom/GeometryFactory.h>
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmGeoJsonWriter.h>
+#include <hoot/core/io/ShapefileWriter.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
@@ -81,10 +82,21 @@ public:
       ShapefileWriter writer;
       writer.writePolygons(result, outputPath);
     }
+    else if (outputPath.toLower().endsWith(".geojson"))
+    {
+      OsmGeoJsonWriter writer;
+      Settings s;
+      //  Output the source tags in the geojson writer
+      s.set(ConfigOptions::getJsonOutputTaskingManagerAoiKey(), true);
+      writer.setConfiguration(s);
+      writer.open(outputPath);
+      writer.write(result);
+    }
     else
     {
       IoUtils::saveMap(result, outputPath);
     }
+    LOG_INFO("Alpha-shape writen to " << outputPath);
 
     return 0;
   }

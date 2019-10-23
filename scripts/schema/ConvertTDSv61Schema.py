@@ -1270,6 +1270,9 @@ def processFile(fileName):
         fDesc = fDesc.strip()
         fCode = fCode[2:-1]
 
+        # Swap "< >" for "[ ]" so that they don't get interpreted as HTML
+        fieldValue = fieldValue.replace("<","[").replace(">","]")
+
         # Sort out a feature vs a codelist, enumeration etc
         if fieldName.find(':') == -1:
             aName = fieldName
@@ -1439,6 +1442,7 @@ parser.add_argument('--dumpenum', help='Dump out the enumerated attributes, one 
 parser.add_argument('--fcodeattrlist', help='Dump out a list of FCODE attributes',action='store_true')
 parser.add_argument('--fcodelist', help='Dump out a list of FCODEs',action='store_true')
 parser.add_argument('--fcodeschema', help='Dump out a list of fcodes in the internal OSM schema format',action='store_true')
+parser.add_argument('--fieldvalues', help='Dump out the schema as a JSON object for the Translation Assistant',action='store_true')
 parser.add_argument('--fromenglish', help='Dump out From English translation rules',action='store_true')
 parser.add_argument('--fullschema', help='Dump out a schema with text enumerations',action='store_true')
 parser.add_argument('--numrules', help='Dump out number rules',action='store_true')
@@ -1530,6 +1534,9 @@ elif args.fullschema:
 
 elif args.dumpenum:
     dumpEnumerations(schema,'enumTDSv61')
+
+elif args.fieldvalues:
+    printFieldValues(schema,'tdsv61FieldValues')
 
 else:
     convertTextEnumerations(schema)
