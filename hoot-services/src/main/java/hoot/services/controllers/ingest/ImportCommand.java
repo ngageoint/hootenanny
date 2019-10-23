@@ -59,7 +59,6 @@ class ImportCommand extends ExternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(ImportCommand.class);
 
     private final File workDir;
-    private String advUploadOpts;
 
     ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
@@ -149,13 +148,5 @@ class ImportCommand extends ExternalCommand {
         }
 
         return commandResult;
-    }
-
-    public void setAdvUploadOpts(String advUploadOpts) {
-        this.advUploadOpts = advUploadOpts;
-    }
-
-    public String getAdvUploadOpts() {
-        return advUploadOpts;
     }
 }

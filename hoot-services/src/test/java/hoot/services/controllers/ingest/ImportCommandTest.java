@@ -30,11 +30,13 @@ package hoot.services.controllers.ingest;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
-import static hoot.services.controllers.ingest.UploadClassification.*;
+import static hoot.services.controllers.ingest.UploadClassification.FGDB;
+import static hoot.services.controllers.ingest.UploadClassification.OSM;
+import static hoot.services.controllers.ingest.UploadClassification.SHP;
+import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -75,7 +77,7 @@ public class ImportCommandTest {
                                       etlName, isNoneTranslation, debugLevel, SHP, caller, null);
 
         String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
-        
+
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
         assertNotNull(importCommand.getSubstitutionMap());
@@ -94,8 +96,7 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNotNull(importCommand.getAdvUploadOpts());
-        
+
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -134,7 +135,6 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -189,7 +189,6 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
@@ -209,7 +208,6 @@ public class ImportCommandTest {
 
         assertEquals(jobId, importCommand.getJobId());
         assertEquals(true, importCommand.getTrackable());
-        assertNotNull(importCommand.getAdvUploadOpts());
         assertNotNull(importCommand.getSubstitutionMap());
         assertNotNull(importCommand.getWorkDir());
         assertNotNull(importCommand.getCommand());
