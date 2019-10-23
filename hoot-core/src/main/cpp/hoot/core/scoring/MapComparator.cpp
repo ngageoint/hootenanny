@@ -41,10 +41,10 @@
   { \
     _matches = false; \
     _errorCount++; \
-    if (_errorCount <= 10) \
+    if (_errorCount <= _errorLimit) \
       LOG_WARN("Check failed."); \
-    if (_errorCount == 10) \
-      LOG_WARN("More than 10 errors, suppressing errors."); \
+    if (_errorCount == _errorLimit) \
+      LOG_WARN("More than " << _errorLimit << " errors, suppressing errors."); \
     return; \
   }
 
@@ -53,10 +53,10 @@
   { \
     _matches = false; \
     _errorCount++; \
-    if (_errorCount <= 10) \
+    if (_errorCount <= _errorLimit) \
       LOG_WARN(msg); \
-    if (_errorCount == 10) \
-      LOG_WARN("More than 10 errors, suppressing errors."); \
+    if (_errorCount == _errorLimit) \
+      LOG_WARN("More than " << _errorLimit << " errors, suppressing errors."); \
     return; \
   }
 
@@ -65,10 +65,10 @@
   { \
     _matches = false; \
     _errorCount++; \
-    if (_errorCount <= 10) \
+    if (_errorCount <= _errorLimit) \
       LOG_WARN("Check Double failed. " << v1 << " vs. " << v2); \
-    if (_errorCount == 10) \
-      LOG_WARN("More than 10 errors, suppressing errors."); \
+    if (_errorCount == _errorLimit) \
+      LOG_WARN("More than " << _errorLimit << " errors, suppressing errors."); \
     return; \
   }
 
@@ -83,7 +83,8 @@ public:
    * Defaults to 5cm threshold
    */
   CompareVisitor(
-    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, int errorLimit = 10,
+    Meters threshold = 0.05)
   {
     _refMap = refMap;
     _threshold = threshold;
@@ -91,6 +92,7 @@ public:
     _errorCount = 0;
     _ignoreUUID = ignoreUUID;
     _useDateTime = useDateTime;
+    _errorLimit = errorLimit;
   }
 
   bool isMatch() { return _matches; }
@@ -251,11 +253,13 @@ private:
   bool _ignoreUUID;
   bool _useDateTime;
   int _errorCount;
+  int _errorLimit;
 };
 
 MapComparator::MapComparator():
   _ignoreUUID(false),
-  _useDateTime(false)
+  _useDateTime(false),
+  _errorLimit(10)
 {
 }
 
@@ -357,7 +361,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     return false;
   }
 
-  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime);
+  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime, _errorLimit);
   testMap->visitRo(compareVis);
   return compareVis.isMatch();
 }

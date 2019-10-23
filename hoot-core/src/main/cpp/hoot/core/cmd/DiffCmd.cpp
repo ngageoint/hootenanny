@@ -69,6 +69,20 @@ public:
       mapCompare.setUseDateTime();
     }
 
+    if (args.contains("--error-limit"))
+    {
+      const int errorLimitIndex = args.indexOf("--error-limit");
+      bool ok = false;
+      const int errorLimit = args.at(errorLimitIndex + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException("Invalid error limit: " + args.at(errorLimitIndex + 1));
+      }
+      args.removeAt(errorLimitIndex + 1);
+      args.removeAt(errorLimitIndex);
+      mapCompare.setErrorLimit(errorLimit);
+    }
+
     if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
