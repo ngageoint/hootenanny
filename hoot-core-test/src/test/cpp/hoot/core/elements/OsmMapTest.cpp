@@ -756,15 +756,22 @@ public:
     {
       relations[i]->addElement("correlated_streetlight", ElementId::node(-10 - i));
       relations[i]->addElement("correlated_streetlight", ElementId::node(-11 - i));
-
-      // LOG_DEBUG(relations[i]->toString());
-
+      LOG_TRACE(relations[i]->toString());
       map->addRelation(relations[i]);
+    }
+
+    WayMap waysBeforeReplacement = map->getWays();
+    LOG_TRACE("Ways before replacement:");
+    for (WayMap::const_iterator iterator = waysBeforeReplacement.begin();
+         iterator != waysBeforeReplacement.end(); ++iterator)
+    {
+      LOG_VART(iterator->second->getNodeIds());
     }
 
     // Replace selected nodes
     for (int i = -2; i > -22; i -= 2)
     {
+      LOG_TRACE("Replacing node: " << i << " with: " << (-10 + i) << "...");
       map->replaceNode(i, -10 + i);
     }
 
@@ -776,13 +783,13 @@ public:
     for (NodeMap::const_iterator nodeIter = nodes.begin(); nodeIter != nodes.end(); ++nodeIter)
     {
       const ConstNodePtr n = nodeIter->second;
-      //LOG_DEBUG("Node: " << n->getId());
+      LOG_TRACE("Node: " << n->getId());
       CPPUNIT_ASSERT((n->getId() >= -36) && (n->getId() <= -1));
 
       // If it's in the range where nodes were replaced, make sure only ones left are odd IDs
       if (n->getId() >= -21)
       {
-        //LOG_DEBUG("Even test on negative number: " << (n->getId() % 2) );
+        LOG_TRACE("Even test on negative number: " << (n->getId() % 2) );
         CPPUNIT_ASSERT((n->getId() % 2) == -1);
       }
     }
@@ -795,7 +802,7 @@ public:
     for (WayMap::const_iterator iterator = ways.begin(); iterator != ways.end(); ++iterator)
     {
       WayPtr way = iterator->second;
-      //LOG_DEBUG(way->toString());
+      LOG_TRACE(way->toString());
       std::vector<long> nodeIds = way->getNodeIds();
       CPPUNIT_ASSERT((-5 + i) == way->getId());
       if (i == 1)
@@ -808,13 +815,11 @@ public:
       }
       else if (i == 2)
       {
-        const size_t correctSize = 30;
-        // TODO: re-enable
-        //CPPUNIT_ASSERT(nodeIds.size() == correctSize);
-        LOG_VART(nodeIds.size());
-        long correctIds[correctSize] = { -3, -24, -5, -26, -7, -32, -31, -30, -36, -29, -28, -27, -26,
-                                -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
-                                -13, -22, -11, -30, -9 };
+        const size_t correctSize = 22;
+        CPPUNIT_ASSERT(nodeIds.size() == correctSize);
+        LOG_VART(nodeIds);
+        long correctIds[correctSize] =
+          { -3, -24, -5, -26, -7, -32, -31, -36, -29, -27, -25, -23, -21, -19, -28, -17, -15, -13, -22, -11, -30, -9 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
         LOG_VART(correctIdVector);
         CPPUNIT_ASSERT(correctIdVector == nodeIds);

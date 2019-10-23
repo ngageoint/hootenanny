@@ -226,7 +226,8 @@ private:
    */
   mutable geos::geom::Envelope _cachedEnvelope;
 
-  // for debugging only; SLOW
+  // for debugging only; SLOW - We don't check for duplicated nodes (outside of start/end) at
+  // runtime due to the performance hit. So, use this to debug when that occurs.
   bool _nodeIdsAreDuplicated(const std::vector<long>& ids) const;
 };
 
