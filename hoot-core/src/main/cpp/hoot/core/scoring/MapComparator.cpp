@@ -256,6 +256,54 @@ MapComparator::MapComparator():
 {
 }
 
+void MapComparator::_printIdDiff(
+  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
+  const ElementType& elementType, const int limit)
+{
+  QSet<long> ids1;
+  QSet<long> ids2;
+
+  switch (elementType.getEnum())
+  {
+    case ElementType::Node:
+    {
+      ids1 = map1->getNodeIds();
+      ids2 = map2->getNodeIds();
+    }
+    break;
+
+    case ElementType::Way:
+    {
+      ids1 = map1->getWayIds();
+      ids2 = map2->getWayIds();
+    }
+    break;
+
+    case ElementType::Relation:
+    {
+      ids1 = map1->getRelationIds();
+      ids2 = map2->getRelationIds();
+    }
+    break;
+
+    default:
+      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+  }
+
+  QSet<long> ids1Copy = ids1;
+  const QSet<long> idsIn1AndNotIn2 = ids1Copy.subtract(ids2);
+
+  QSet<long> ids2Copy = ids2;
+  const QSet<long> idsIn2AndNotIn1 = ids2Copy.subtract(ids1);
+
+  LOG_WARN(
+    "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
+    idsIn1AndNotIn2);
+  LOG_WARN(
+    "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<
+    idsIn2AndNotIn1);
+}
+
 bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
                             const std::shared_ptr<OsmMap>& testMap)
 {
@@ -265,6 +313,10 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     LOG_WARN(
       "Number of nodes does not match (1: " << refMap->getNodes().size() << "; 2: " <<
       testMap->getNodes().size() << ")");
+    // Yes, the two map could have the same number of the same type of elements and they still
+    // might not completely match up, but we'll let CompareVisitor educate us on that. This gives
+    // us a quick rundown of element ID diffs if count discrepancy is detected.
+    _printIdDiff(refMap, testMap, ElementType::Node);
     mismatch = true;
   }
   else if (refMap->getWays().size() != testMap->getWays().size())
@@ -272,6 +324,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     LOG_WARN(
       "Number of ways does not match (1: " << refMap->getWays().size() << "; 2: " <<
       testMap->getWays().size() << ")");
+    _printIdDiff(refMap, testMap, ElementType::Way);
     mismatch = true;
   }
   else if (refMap->getRelations().size() != testMap->getRelations().size())
@@ -279,6 +332,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     LOG_WARN(
       "Number of relations does not match (1: " << refMap->getRelations().size() << "; 2: " <<
       testMap->getRelations().size() << ")");
+    _printIdDiff(refMap, testMap, ElementType::Relation);
     mismatch = true;
   }
 

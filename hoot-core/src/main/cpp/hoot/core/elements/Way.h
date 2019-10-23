@@ -177,7 +177,7 @@ public:
 
   /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
-   * no action is taken.
+   * no action is taken. If newId already exists in the way, it is first removed before replacement.
    */
   void replaceNode(long oldId, long newId);
 

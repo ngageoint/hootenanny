@@ -1131,4 +1131,34 @@ void OsmMap::appendSource(const QString& url)
   }
 }
 
+QSet<long> OsmMap::getNodeIds() const
+{
+  QSet<long> ids;
+  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+  {
+    ids.insert(it->first);
+  }
+  return ids;
+}
+
+QSet<long> OsmMap::getWayIds() const
+{
+  QSet<long> ids;
+  for (WayMap::const_iterator it = _ways.begin(); it != _ways.end(); ++it)
+  {
+    ids.insert(it->first);
+  }
+  return ids;
+}
+
+QSet<long> OsmMap::getRelationIds() const
+{
+  QSet<long> ids;
+  for (RelationMap::const_iterator it = _relations.begin(); it != _relations.end(); ++it)
+  {
+    ids.insert(it->first);
+  }
+  return ids;
+}
+
 }
