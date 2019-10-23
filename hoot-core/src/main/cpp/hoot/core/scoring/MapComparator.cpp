@@ -204,8 +204,11 @@ public:
     ConstWayPtr refWay = std::dynamic_pointer_cast<const Way>(refElement);
     ConstWayPtr testWay = std::dynamic_pointer_cast<const Way>(testElement);
 
-    CHECK_MSG(refWay->getNodeIds().size() == testWay->getNodeIds().size(),
-              "Node count does not match.");
+    CHECK_MSG(
+      refWay->getNodeIds().size() == testWay->getNodeIds().size(),
+      "Node count does not match. " << refWay->getElementId() << ": " <<
+      refWay->getNodeIds().size() << ", " << testWay->getElementId() << ": " <<
+      testWay->getNodeIds().size());
     for (size_t i = 0; i < refWay->getNodeIds().size(); ++i)
     {
       CHECK_MSG(refWay->getNodeIds()[i] == testWay->getNodeIds()[i],

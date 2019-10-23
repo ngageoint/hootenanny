@@ -37,6 +37,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -45,7 +46,8 @@ class WayGeneralizeVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(WayGeneralizeVisitorTest);
   CPPUNIT_TEST(runBasicTest);
-  // TODO: update for custom crit
+  CPPUNIT_TEST(runCritTest);
+  CPPUNIT_TEST(runRemoveSharedNodeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,15 +66,64 @@ public:
       map,
       "test-files/visitors/RandomWayGeneralizerTest/RandomWayGeneralizerTest-in-1.osm");
 
-    WayGeneralizeVisitor wayGeneralizeVisitor;
-    wayGeneralizeVisitor.setEpsilon(5.0);
-    wayGeneralizeVisitor.setRemoveNodesSharedByWays(true);
-    map->visitRw(wayGeneralizeVisitor);
+    WayGeneralizeVisitor uut;
+    uut.setEpsilon(5.0);
+    uut.setRemoveNodesSharedByWays(true);
+    map->visitRw(uut);
 
     const QString outputFile = _outputPath + "runBasicTest.osm";
     OsmMapWriterFactory::write(map, outputFile);
 
     HOOT_FILE_EQUALS(_inputPath + "runBasicTest.osm", outputFile);
+  }
+
+  void runCritTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
+
+    WayGeneralizeVisitor uut;
+    uut.setEpsilon(0.1);
+    uut.setRemoveNodesSharedByWays(true);
+    uut.addCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion()));
+    map->visitRw(uut);
+
+    const QString outputFile = _outputPath + "runCritTest.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+
+    HOOT_FILE_EQUALS(_inputPath + "runCritTest.osm", outputFile);
+  }
+
+  void runRemoveSharedNodeTest()
+  {
+    // It would probably be better to test this from RdpWayGeneralizerTest.
+
+    WayGeneralizeVisitor uut;
+    uut.setEpsilon(1.0);
+
+    uut.setRemoveNodesSharedByWays(true);
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runRemoveSharedNodeTest.osm");
+    map->visitRw(uut);
+
+    // In this output, you'll see a shared node between the bottom two buildings that got
+    // simplified out and which disrupts the geometries.
+    QString outputFile = _outputPath + "runRemoveSharedNodeTest-removed.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "runRemoveSharedNodeTest-removed.osm", outputFile);
+
+    uut.setRemoveNodesSharedByWays(false);
+    map.reset(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "runRemoveSharedNodeTest.osm");
+    map->visitRw(uut);
+
+    // In this output, the same node previously in question will not be removed. However, you will
+    // see a node removed in the bottom-most building that distorts its geometry...but its not a
+    // shared node.
+    outputFile = _outputPath + "runRemoveSharedNodeTest-not-removed.osm";
+    OsmMapWriterFactory::write(map, outputFile);
+    HOOT_FILE_EQUALS(_inputPath + "runRemoveSharedNodeTest-not-removed.osm", outputFile);
   }
 };
 

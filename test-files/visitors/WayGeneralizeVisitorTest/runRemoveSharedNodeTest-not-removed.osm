@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="10.15269143489227" minlon="-64.67553602300001" maxlat="10.15298619989207" maxlon="-64.675221393"/>
+    <node visible="true" id="-62035355" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528147018921864" lon="-64.6754346309999875"/>
+    <node visible="true" id="-62035353" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528644998921287" lon="-64.6754349840000060"/>
+    <node visible="true" id="-62035301" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528690508921287" lon="-64.6755352090000031"/>
+    <node visible="true" id="-62035299" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1529840188920613" lon="-64.6755360230000065"/>
+    <node visible="true" id="-62034955" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1526914348922741" lon="-64.6753755839999940"/>
+    <node visible="true" id="-62034947" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1527730628922139" lon="-64.6752397540000032"/>
+    <node visible="true" id="-62034945" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1526923828922619" lon="-64.6752391830000022"/>
+    <node visible="true" id="-62033837" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528712318921297" lon="-64.6752213930000011"/>
+    <node visible="true" id="-62033835" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528700558921230" lon="-64.6753905959999997"/>
+    <node visible="true" id="-62033833" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1529850238920485" lon="-64.6753914100000031"/>
+    <node visible="true" id="-62033831" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1529861998920676" lon="-64.6752222069999902"/>
+    <node visible="true" id="-62033521" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528151028921787" lon="-64.6753768250000007"/>
+    <node visible="true" id="-62033519" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528649008921352" lon="-64.6753771780000051"/>
+    <node visible="true" id="-62033517" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528701488921254" lon="-64.6753772149999975"/>
+    <node visible="true" id="-62033515" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1528707048921341" lon="-64.6752971739999936"/>
+    <node visible="true" id="-62033513" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1527745208921978" lon="-64.6752964930000047"/>
+    <node visible="true" id="-62033511" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.1527739648922246" lon="-64.6753765339999944"/>
+    <way visible="true" id="-62036184" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-62033519"/>
+        <nd ref="-62033521"/>
+        <nd ref="-62035355"/>
+        <nd ref="-62035353"/>
+        <nd ref="-62033519"/>
+        <tag k="building" v="house"/>
+        <tag k="height" v="2.5579800000000001"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-62036179" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-62033833"/>
+        <nd ref="-62033835"/>
+        <nd ref="-62035301"/>
+        <nd ref="-62035299"/>
+        <nd ref="-62033833"/>
+        <tag k="building" v="house"/>
+        <tag k="height" v="3.8701500000000002"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-62036149" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-62034955"/>
+        <nd ref="-62033511"/>
+        <nd ref="-62033513"/>
+        <nd ref="-62034947"/>
+        <nd ref="-62034945"/>
+        <nd ref="-62034955"/>
+        <tag k="building" v="house"/>
+        <tag k="height" v="0.35763000000400003"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-62036050" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-62033837"/>
+        <nd ref="-62033835"/>
+        <nd ref="-62033833"/>
+        <nd ref="-62033831"/>
+        <nd ref="-62033837"/>
+        <tag k="building" v="house"/>
+        <tag k="height" v="2.7389700000000001"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-62036021" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-62033521"/>
+        <nd ref="-62033519"/>
+        <nd ref="-62033517"/>
+        <nd ref="-62033515"/>
+        <nd ref="-62033513"/>
+        <nd ref="-62033511"/>
+        <nd ref="-62033521"/>
+        <tag k="building" v="house"/>
+        <tag k="height" v="1.9190199999999999"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

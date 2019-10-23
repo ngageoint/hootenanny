@@ -59,14 +59,6 @@ private:
   bool _ignoreUUID;
   bool _useDateTime;
 
-  /*
-   * TODO
-   *
-   * @param map1
-   * @param map2
-   * @param elementType
-   * @param limit
-   */
   void _printIdDiff(
     const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
     const ElementType& elementType, const int limit = 5);
