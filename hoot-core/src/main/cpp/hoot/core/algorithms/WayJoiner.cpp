@@ -38,6 +38,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/UpdateWayParentVisitor.h>
 
 #include <unordered_set>
 #include <vector>
@@ -354,6 +355,10 @@ bool WayJoiner::_joinWays(const WayPtr &parent, const WayPtr &child)
   //  Update any relations that contain the child to use the parent
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
   child->getTags().clear();
+  //  Update any ways that have the child's ID as their parent to the parent's ID
+  UpdateWayParentVisitor visitor(child->getId(), parent->getId());
+  _map->visitWaysRw(visitor);
+  //  Delete the child
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
   _numJoined++;
