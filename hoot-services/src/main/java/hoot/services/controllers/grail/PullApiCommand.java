@@ -110,7 +110,7 @@ class PullApiCommand implements InternalCommand {
             InputStream responseStream = null;
             // Checks to see the set pull url is for the private overpass url
             if (params.getPullUrl().equals(PRIVATE_OVERPASS_URL)) {
-                url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), boundingBox.toServicesString(), "xml");
+                url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), boundingBox.toServicesString(), "xml", params.getCustomQuery());
 
                 // if cert path and phrase are specified then we assume to use them for the request
                 if (!replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
@@ -141,7 +141,7 @@ class PullApiCommand implements InternalCommand {
 
     }
 
-    private InputStream getHttpResponseWithSSL(String url) throws Exception {
+    public static InputStream getHttpResponseWithSSL(String url) throws Exception {
         String certPath = replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH);
         String keyPassphrase = replaceSensitiveData(PRIVATE_OVERPASS_CERT_PHRASE);
 
