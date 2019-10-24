@@ -68,7 +68,7 @@ class ConflateCommand extends ExternalCommand {
         try {
             String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFLATION_TYPES_PATH), Charset.defaultCharset());
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<?> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
+            TypeReference<Map<String, Map<String, Object>>> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
             conflationFeatures = mapper.readValue(file, schema);
 
             // use default options for map cleaners list...

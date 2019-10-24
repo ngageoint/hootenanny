@@ -59,7 +59,7 @@ public abstract class ExternalCommand implements Command {
     static {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<?> schema = new TypeReference<Map<String, Map<String, String>>>(){};
+            TypeReference<Map<String, Map<String, String>>> schema = new TypeReference<Map<String, Map<String, String>>>(){};
             // get json of all config options...
             String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
             configOptions = mapper.readValue(file, schema);
