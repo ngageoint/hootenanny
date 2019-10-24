@@ -41,10 +41,10 @@
   { \
     _matches = false; \
     _errorCount++; \
-    if (_errorCount <= 10) \
+    if (_errorCount <= _errorLimit) \
       LOG_WARN("Check failed."); \
-    if (_errorCount == 10) \
-      LOG_WARN("More than 10 errors, suppressing errors."); \
+    if (_errorCount == _errorLimit) \
+      LOG_WARN("More than " << _errorLimit << " errors, suppressing errors."); \
     return; \
   }
 
@@ -53,10 +53,10 @@
   { \
     _matches = false; \
     _errorCount++; \
-    if (_errorCount <= 10) \
+    if (_errorCount <= _errorLimit) \
       LOG_WARN(msg); \
-    if (_errorCount == 10) \
-      LOG_WARN("More than 10 errors, suppressing errors."); \
+    if (_errorCount == _errorLimit) \
+      LOG_WARN("More than " << _errorLimit << " errors, suppressing errors."); \
     return; \
   }
 
@@ -65,10 +65,10 @@
   { \
     _matches = false; \
     _errorCount++; \
-    if (_errorCount <= 10) \
+    if (_errorCount <= _errorLimit) \
       LOG_WARN("Check Double failed. " << v1 << " vs. " << v2); \
-    if (_errorCount == 10) \
-      LOG_WARN("More than 10 errors, suppressing errors."); \
+    if (_errorCount == _errorLimit) \
+      LOG_WARN("More than " << _errorLimit << " errors, suppressing errors."); \
     return; \
   }
 
@@ -83,7 +83,8 @@ public:
    * Defaults to 5cm threshold
    */
   CompareVisitor(
-    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, Meters threshold = 0.05)
+    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, int errorLimit = 10,
+    Meters threshold = 0.05)
   {
     _refMap = refMap;
     _threshold = threshold;
@@ -91,6 +92,7 @@ public:
     _errorCount = 0;
     _ignoreUUID = ignoreUUID;
     _useDateTime = useDateTime;
+    _errorLimit = errorLimit;
   }
 
   bool isMatch() { return _matches; }
@@ -204,8 +206,11 @@ public:
     ConstWayPtr refWay = std::dynamic_pointer_cast<const Way>(refElement);
     ConstWayPtr testWay = std::dynamic_pointer_cast<const Way>(testElement);
 
-    CHECK_MSG(refWay->getNodeIds().size() == testWay->getNodeIds().size(),
-              "Node count does not match.");
+    CHECK_MSG(
+      refWay->getNodeIds().size() == testWay->getNodeIds().size(),
+      "Node count does not match. " << refWay->getElementId() << ": " <<
+      refWay->getNodeIds().size() << ", " << testWay->getElementId() << ": " <<
+      testWay->getNodeIds().size());
     for (size_t i = 0; i < refWay->getNodeIds().size(); ++i)
     {
       CHECK_MSG(refWay->getNodeIds()[i] == testWay->getNodeIds()[i],
@@ -248,12 +253,62 @@ private:
   bool _ignoreUUID;
   bool _useDateTime;
   int _errorCount;
+  int _errorLimit;
 };
 
 MapComparator::MapComparator():
   _ignoreUUID(false),
-  _useDateTime(false)
+  _useDateTime(false),
+  _errorLimit(10)
 {
+}
+
+void MapComparator::_printIdDiff(
+  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2,
+  const ElementType& elementType, const int limit)
+{
+  QSet<long> ids1;
+  QSet<long> ids2;
+
+  switch (elementType.getEnum())
+  {
+    case ElementType::Node:
+    {
+      ids1 = map1->getNodeIds();
+      ids2 = map2->getNodeIds();
+    }
+    break;
+
+    case ElementType::Way:
+    {
+      ids1 = map1->getWayIds();
+      ids2 = map2->getWayIds();
+    }
+    break;
+
+    case ElementType::Relation:
+    {
+      ids1 = map1->getRelationIds();
+      ids2 = map2->getRelationIds();
+    }
+    break;
+
+    default:
+      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+  }
+
+  QSet<long> ids1Copy = ids1;
+  const QSet<long> idsIn1AndNotIn2 = ids1Copy.subtract(ids2);
+
+  QSet<long> ids2Copy = ids2;
+  const QSet<long> idsIn2AndNotIn1 = ids2Copy.subtract(ids1);
+
+  LOG_WARN(
+    "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
+    idsIn1AndNotIn2);
+  LOG_WARN(
+    "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<
+    idsIn2AndNotIn1);
 }
 
 bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
@@ -265,6 +320,10 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     LOG_WARN(
       "Number of nodes does not match (1: " << refMap->getNodes().size() << "; 2: " <<
       testMap->getNodes().size() << ")");
+    // Yes, the two map could have the same number of the same type of elements and they still
+    // might not completely match up, but we'll let CompareVisitor educate us on that. This gives
+    // us a quick rundown of element ID diffs if count discrepancy is detected.
+    _printIdDiff(refMap, testMap, ElementType::Node);
     mismatch = true;
   }
   else if (refMap->getWays().size() != testMap->getWays().size())
@@ -272,6 +331,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     LOG_WARN(
       "Number of ways does not match (1: " << refMap->getWays().size() << "; 2: " <<
       testMap->getWays().size() << ")");
+    _printIdDiff(refMap, testMap, ElementType::Way);
     mismatch = true;
   }
   else if (refMap->getRelations().size() != testMap->getRelations().size())
@@ -279,6 +339,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     LOG_WARN(
       "Number of relations does not match (1: " << refMap->getRelations().size() << "; 2: " <<
       testMap->getRelations().size() << ")");
+    _printIdDiff(refMap, testMap, ElementType::Relation);
     mismatch = true;
   }
 
@@ -300,7 +361,7 @@ bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,
     return false;
   }
 
-  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime);
+  CompareVisitor compareVis(refMap, _ignoreUUID, _useDateTime, _errorLimit);
   testMap->visitRo(compareVis);
   return compareVis.isMatch();
 }

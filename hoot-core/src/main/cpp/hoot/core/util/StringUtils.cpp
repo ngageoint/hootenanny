@@ -180,4 +180,9 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
   return duplicateStrings;
 }
 
+bool StringUtils::containsSubstring(const QStringList& input, const QString& substring)
+{
+  return input.filter(substring, Qt::CaseInsensitive).size() > 0;
+}
+
 }

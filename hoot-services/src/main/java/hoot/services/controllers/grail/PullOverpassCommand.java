@@ -87,7 +87,11 @@ class PullOverpassCommand implements InternalCommand {
     private void getOverpass() {
         String url = "";
         try {
-            url = replaceSensitiveData(getOverpassUrl(params.getBounds(), "xml"));
+            if (params.getCustomQuery().equals("")) {
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", null));
+            } else {
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", params.getCustomQuery()));
+            }
 
             URL requestUrl = new URL(url);
             File outputFile = new File(params.getOutput());
@@ -116,30 +120,39 @@ class PullOverpassCommand implements InternalCommand {
      * @return
      */
     static String getOverpassUrl(String bbox, String outputFormat) {
-        return getOverpassUrl(PUBLIC_OVERPASS_URL, bbox, outputFormat);
+        return getOverpassUrl(PUBLIC_OVERPASS_URL, bbox, outputFormat, null);
     }
 
     /**
      * Returns the overpass query, with the expected output format set to json
      * @param bbox
      * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
-     * @return
+     * @param query optional custom overpass query
+     *
+     * @return overpass query url
      */
-    static String getOverpassUrl(String overpassUrl, String bbox, String outputFormat) {
+    static String getOverpassUrl(String overpassUrl, String bbox, String outputFormat, String query) {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
-        File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
-        try {
-            overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
-        } catch(Exception exc) {
-            throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+
+        if (query == null || query.equals("")) {
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
+            try {
+                overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
+            } catch(Exception exc) {
+                throw new IllegalArgumentException("Grail pull overpass error. Couldn't read overpass query file: " + overpassQueryFile.getName());
+        }
+        } else {
+            overpassQuery = query;
         }
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
 
-        if (outputFormat.equals("xml")) {
+        if (outputFormat.equals("xml") && overpassQuery.contains("out:json")) {
             overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
+        } else if (outputFormat.equals("json") && overpassQuery.contains("out:xml")) {
+            overpassQuery = overpassQuery.replace("out:xml", "out:json");
         }
 
         try {

@@ -39,6 +39,7 @@ import static hoot.services.controllers.ingest.UploadClassification.ZIP;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +60,7 @@ class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
-    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
+    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
         super(jobId);
@@ -91,6 +92,20 @@ class ImportCommand extends ExternalCommand {
         if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP))
         {
           options.add("schema.translation.script=" + translationPath);
+        }
+
+        if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
+            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
+            for (String option: getAdvOpts) {
+                String[] opt = option.split("=");
+                String key = opt[0];
+                String value = (opt.length == 2) ? "=" + opt[1] : "";
+
+                if (configOptions.containsKey(key)) { // if option key in possible values, add new option command
+                    Map<String, String> optionConfig = configOptions.get(key);
+                    options.add(optionConfig.get("key") + value);
+                }
+            }
         }
 
         List<String> hootOptions = toHootOptions(options);

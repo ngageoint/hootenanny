@@ -40,7 +40,8 @@ class ScriptTestSuite : public CppUnit::TestSuite
 {
 public:
 
-  ScriptTestSuite(QString dir, bool printDiff, double waitTime, bool hideDisableTests);
+  ScriptTestSuite(QString dir, bool printDiff, double waitTime, bool hideDisableTests,
+                  bool suppressFailureDetail);
 
 private:
 

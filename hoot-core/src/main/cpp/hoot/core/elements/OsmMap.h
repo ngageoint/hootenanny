@@ -97,6 +97,163 @@ public:
 
   ~OsmMap();
 
+  // GENERIC ELEMENT
+
+  void addElement(const std::shared_ptr<Element>& e);
+  template<class T>
+  void addElements(T it, T end);
+
+  virtual ConstElementPtr getElement(const ElementId& id) const;
+  ConstElementPtr getElement(ElementType type, long id) const;
+  ElementPtr getElement(const ElementId& id);
+  ElementPtr getElement(ElementType type, long id);
+
+  size_t getElementCount() const;
+  size_t size() const { return getElementCount(); }
+
+  /**
+   * Returns true if an element with the specified type/id exists.
+   * Throws an exception if the type is unrecognized.
+   */
+  virtual bool containsElement(const ElementId& eid) const;
+  bool containsElement(ElementType type, long id) const;
+  bool containsElement(const std::shared_ptr<const Element>& e) const;
+
+  /**
+   * Calls the visitRo method on all elements. See Element::visitRo for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
+   *  - Unlike Element::visitRo, elements will not be visited multiple times.
+   *  - Modifying the OsmMap while traversing will result in undefined behaviour.
+   *  - This should be slightly faster than visitRw.
+   *
+   * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
+   * elements.
+   */
+  void visitRo(ConstElementVisitor& visitor) const;
+
+  /**
+   * Calls the visitRw method on all elements. See Element::visitRw for a more
+   * thorough description.
+   *  - The order will always be nodes, ways, relations, but the IDs will not
+   *    be in any specific order.
+   *  - Elements that are added during the traversal may or may not be visited.
+   *  - Elements may be deleted during traversal.
+   *  - The visitor is guaranteed to not visit deleted elements.
+   *
+   * If the visitor implements OsmMapConsumer then setOsmMap will be called before
+   * visiting any elements.
+   */
+  void visitRw(ElementVisitor& visitor);
+  void visitRw(ConstElementVisitor& visitor);
+
+  /**
+   * Replace the all instances of from with instances of to. In some cases this may be an invalid
+   * operation and an exception will be throw. E.g. replacing a node with a way where the node
+   * is part of another way.
+   */
+  void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to);
+  /**
+   * Similar to above, but from is replaced with a collection of elements. This makes sense in the
+   * context of a relation, but may not make sense in other cases (e.g. replace a single node
+   * that is part of a way with multiple nodes).
+   */
+  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
+
+  //NODE///////////////////////////////////////////////////////////////////////////////////
+
+  virtual const ConstNodePtr getNode(long id) const;
+  virtual const NodePtr getNode(long id);
+  ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
+  const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
+  const NodeMap& getNodes() const { return _nodes; }
+  QSet<long> getNodeIds() const;
+
+  long getNodeCount() const { return _nodes.size(); }
+
+  /**
+   * Returns true if the node is in this map.
+   */
+  virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
+
+  void addNode(const NodePtr& n);
+  /**
+   * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
+   * times.
+   */
+  void addNodes(const std::vector<NodePtr>& nodes);
+
+  /**
+   * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
+   * for references to oldNode and replaces those references with newNode. Finally, oldNode is
+   * removed from this OsmMap entirely.
+   */
+  void replaceNode(long oldId, long newId);
+
+  long createNextNodeId() const { return _idGen->createNodeId(); }
+
+  void visitNodesRo(ConstElementVisitor& visitor) const;
+
+  int numNodesAppended() const { return _numNodesAppended; }
+  int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
+
+  //WAY///////////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * Return the way with the specified id or null if it doesn't exist.
+   */
+  virtual const WayPtr getWay(long id);
+  const WayPtr getWay(ElementId eid);
+  /**
+   * Similar to above but const'd.
+   *
+   * We can't return these values by reference b/c the conversion from non-const to const requires
+   * a copy. The copy would be a temporary variable if we returned a reference which creates some
+   * weirdness and a warning.
+   */
+  const ConstWayPtr getWay(long id) const;
+  const ConstWayPtr getWay(ElementId eid) const;
+  const WayMap& getWays() const { return _ways; }
+  QSet<long> getWayIds() const;
+  long getWayCount() const { return _ways.size(); }
+
+  void addWay(const WayPtr& w);
+
+  virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
+
+  long createNextWayId() const { return _idGen->createWayId(); }
+
+  void visitWaysRo(ConstElementVisitor& visitor) const;
+  void visitWaysRw(ConstElementVisitor& visitor);
+  void visitWaysRw(ElementVisitor& visitor);
+
+  int numWaysAppended() const { return _numWaysAppended; }
+  int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
+
+  //RELATION///////////////////////////////////////////////////////////////////////////////////
+
+  virtual const ConstRelationPtr getRelation(long id) const;
+  virtual const RelationPtr getRelation(long id);
+  const RelationMap& getRelations() const { return _relations; }
+  QSet<long> getRelationIds() const;
+   long getRelationCount() const { return _relations.size(); }
+
+  void addRelation(const RelationPtr& r);
+
+  virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
+
+  long createNextRelationId() const { return _idGen->createRelationId(); }
+
+  void visitRelationsRo(ConstElementVisitor& visitor) const;
+  void visitRelationsRw(ConstElementVisitor& visitor);
+  void visitRelationsRw(ElementVisitor& visitor);
+
+  int numRelationsAppended() const { return _numRelationsAppended; }
+  int numRelationsSkippedForAppending() const { return _numRelationsSkippedForAppending; }
+
+  /////////////////////////////////////////////////////////////////////////////////////
+
   /**
    * Append all the elements in input map to this map.
    *
@@ -115,50 +272,6 @@ public:
    */
   void append(const std::shared_ptr<const OsmMap>& map, const bool throwOutDupes = false);
 
-  void addElement(const std::shared_ptr<Element>& e);
-  template<class T>
-  void addElements(T it, T end);
-
-  void addNode(const NodePtr& n);
-  /**
-   * Add all the nodes in the provided vector. This can be faster than calling addNode multiple
-   * times.
-   */
-  void addNodes(const std::vector<NodePtr>& nodes);
-
-  void addRelation(const RelationPtr& r);
-
-  void addWay(const WayPtr& w);
-
-  void clear();
-
-  /**
-   * Returns true if an element with the specified type/id exists.
-   * Throws an exception if the type is unrecognized.
-   */
-  virtual bool containsElement(const ElementId& eid) const;
-  bool containsElement(ElementType type, long id) const;
-  bool containsElement(const std::shared_ptr<const Element>& e) const;
-
-  /**
-   * Returns true if the node is in this map.
-   */
-  virtual bool containsNode(long id) const { return _nodes.find(id) != _nodes.end(); }
-  virtual bool containsRelation(long id) const { return _relations.find(id) != _relations.end(); }
-  virtual bool containsWay(long id) const { return _ways.find(id) != _ways.end(); }
-
-  long createNextNodeId() const { return _idGen->createNodeId(); }
-  long createNextRelationId() const { return _idGen->createRelationId(); }
-  long createNextWayId() const { return _idGen->createWayId(); }
-
-  virtual ConstElementPtr getElement(const ElementId& id) const;
-  ConstElementPtr getElement(ElementType type, long id) const;
-  ElementPtr getElement(const ElementId& id);
-  ElementPtr getElement(ElementType type, long id);
-
-  size_t getElementCount() const;
-  size_t size() const { return getElementCount(); }
-
   const std::vector<std::shared_ptr<OsmMapListener>>& getListeners() const { return _listeners; }
 
   /**
@@ -167,12 +280,6 @@ public:
    */
   const OsmMapIndex& getIndex() const { return *_index; }
 
-  virtual const ConstNodePtr getNode(long id) const;
-  virtual const NodePtr getNode(long id);
-  ConstNodePtr getNode(const ElementId& eid) const { return getNode(eid.getId()); }
-  const NodePtr getNode(const ElementId& eid) { return getNode(eid.getId()); }
-  const NodeMap& getNodes() const { return _nodes; }
-
   std::set<ElementId> getParents(ElementId eid) const;
 
   /**
@@ -180,48 +287,11 @@ public:
    */
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const { return _srs; }
 
-  virtual const ConstRelationPtr getRelation(long id) const;
-  virtual const RelationPtr getRelation(long id);
-  const RelationMap& getRelations() const { return _relations; }
-
-  /**
-   * Return the way with the specified id or null if it doesn't exist.
-   */
-  virtual const WayPtr getWay(long id);
-  const WayPtr getWay(ElementId eid);
-  /**
-   * Similar to above but const'd.
-   *
-   * We can't return these values by reference b/c the conversion from non-const to const requires
-   * a copy. The copy would be a temporary variable if we returned a reference which creates some
-   * weirdness and a warning.
-   */
-  const ConstWayPtr getWay(long id) const;
-  const ConstWayPtr getWay(ElementId eid) const;
-  const WayMap& getWays() const { return _ways; }
+  void clear();
 
   bool isEmpty() const { return getElementCount() == 0; }
 
   void registerListener(const std::shared_ptr<OsmMapListener>& l) { _listeners.push_back(l); }
-
-  /**
-   * Replace the all instances of from with instances of to. In some cases this may be an invalid
-   * operation and an exception will be throw. E.g. replacing a node with a way where the node
-   * is part of another way.
-   */
-  void replace(const std::shared_ptr<const Element>& from, const std::shared_ptr<Element>& to);
-  /**
-   * Similar to above, but from is replaced with a collection of elements. This makes sense in the
-   * context of a relation, but may not make sense in other cases (e.g. replace a single node
-   * that is part of a way with multiple nodes).
-   */
-  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
-  /**
-   * Intelligently replaces all instances of oldNode with newNode. This looks at all the ways
-   * for references to oldNode and replaces those references with newNode. Finally, oldNode is
-   * removed from this OsmMap entirely.
-   */
-  void replaceNode(long oldId, long newId);
 
   /**
    * Resets the way and node counters. This should ONLY BE CALLED BY UNIT TESTS.
@@ -245,46 +315,6 @@ public:
    */
   bool validate(bool strict = true) const;
 
-  /**
-   * Calls the visitRo method on all elements. See Element::visitRo for a more
-   * thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not
-   *    be in any specific order.
-   *  - Unlike Element::visitRo, elements will not be visited multiple times.
-   *  - Modifying the OsmMap while traversing will result in undefined behaviour.
-   *  - This should be slightly faster than visitRw.
-   *
-   * If the visitor implements OsmMapConsumer then setOsmMap will be called before visiting any
-   * elements.
-   */
-  void visitRo(ConstElementVisitor& visitor) const;
-  void visitNodesRo(ConstElementVisitor& visitor) const;
-  void visitWaysRo(ConstElementVisitor& visitor) const;
-  void visitRelationsRo(ConstElementVisitor& visitor) const;
-
-  /**
-   * Calls the visitRw method on all elements. See Element::visitRw for a more
-   * thorough description.
-   *  - The order will always be nodes, ways, relations, but the IDs will not
-   *    be in any specific order.
-   *  - Elements that are added during the traversal may or may not be visited.
-   *  - Elements may be deleted during traversal.
-   *  - The visitor is guaranteed to not visit deleted elements.
-   *
-   * If the visitor implements OsmMapConsumer then setOsmMap will be called before
-   * visiting any elements.
-   */
-  void visitRw(ElementVisitor& visitor);
-  void visitRw(ConstElementVisitor& visitor);
-  void visitWaysRw(ConstElementVisitor& visitor);
-  void visitWaysRw(ElementVisitor& visitor);
-  void visitRelationsRw(ConstElementVisitor& visitor);
-  void visitRelationsRw(ElementVisitor& visitor);
-
-  long getNodeCount() const { return _nodes.size(); }
-  long getWayCount() const { return _ways.size(); }
-  long getRelationCount() const { return _relations.size(); }
-
   // Helps us handle roundabouts
   void setRoundabouts(const std::vector<std::shared_ptr<Roundabout>>& rnd) { _roundabouts = rnd; }
   std::vector<std::shared_ptr<Roundabout>> getRoundabouts() const { return _roundabouts; }
@@ -296,12 +326,8 @@ public:
   QString getName() const { return _name; }
   void setName(const QString& name) { _name = name; }
 
-  int numNodesAppended() const { return _numNodesAppended; }
-  int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }
-  int numWaysAppended() const { return _numWaysAppended; }
-  int numWaysSkippedForAppending() const { return _numWaysSkippedForAppending; }
-  int numRelationsAppended() const { return _numRelationsAppended; }
-  int numRelationsSkippedForAppending() const { return _numRelationsSkippedForAppending; }
+  QString getSource() const;
+  void appendSource(const QString& url);
 
 protected:
 
@@ -335,6 +361,8 @@ protected:
 
   // useful during debugging
   QString _name;
+  /** List of source URLs of map data */
+  std::set<QString> _sources;
 
   int _numNodesAppended;
   int _numWaysAppended;

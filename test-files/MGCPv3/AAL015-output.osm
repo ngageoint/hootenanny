@@ -1,50 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="-25.44178528573166" minlon="153.0711096159979" maxlat="-25.4100812007622" maxlon="153.1502724838575"/>
+    <bounds minlat="-25.44178528573167" minlon="153.0711096159979" maxlat="-25.4100812007622" maxlon="153.1502724838575"/>
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1358865193191434"/>
-    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690118" lon="153.1485752907798314"/>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690189" lon="153.1485752907798314"/>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1487422482990439"/>
-    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545742" lon="153.1357195617999309"/>
-    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124386" lon="153.1374167548776200"/>
-    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4417852857316618" lon="153.1501055263383080"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545778" lon="153.1357195617999309"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124457" lon="153.1374167548776200"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4417852857316653" lon="153.1501055263383080"/>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4275938965980046" lon="153.1502724838575205"/>
-    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4277608541172206" lon="153.1372497973584075"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4277608541172242" lon="153.1372497973584075"/>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4409382235197938" lon="153.1052818081497833"/>
-    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4411051810390099" lon="153.1179705796104713"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4411051810390134" lon="153.1179705796104713"/>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4269137919053527" lon="153.1181375371296838"/>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270807494245723" lon="153.1051148506305708"/>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4404281450003040" lon="153.0884492170066267"/>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405951025195236" lon="153.1011379884673147"/>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4264037133858629" lon="153.1013049459865272"/>
-    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265706709050789" lon="153.0882822594874142"/>
-    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808178" lon="153.0712765735171388"/>
-    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4400850240000302" lon="153.0839653449778268"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265706709050825" lon="153.0882822594874142"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808142" lon="153.0712765735171388"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4400850240000338" lon="153.0839653449778268"/>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4258936348663731" lon="153.0841323024970393"/>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4260605923855891" lon="153.0711096159979263"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4260605923855927" lon="153.0711096159979263"/>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1165035355785449"/>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690224" lon="153.1291923070392329"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690189" lon="153.1291923070392329"/>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1293592645584454"/>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545778" lon="153.1163365780593324"/>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734626" lon="153.1210942422539745"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407651286926786" lon="153.1337830137146625"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265737395590214" lon="153.1339499712338750"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734661" lon="153.1210942422539745"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407651286926857" lon="153.1337830137146625"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265737395590250" lon="153.1339499712338750"/>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267406970782446" lon="153.1209272847347620"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766337" lon="153.1003510491280508"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242725898958604" lon="153.1130398205887388"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766372" lon="153.1003510491280508"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242725898958568" lon="153.1130398205887388"/>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4100812007621961" lon="153.1132067781079513"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102481582814121" lon="153.1001840916088383"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102481582814157" lon="153.1001840916088383"/>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="-37"/>
         <nd ref="-38"/>
-        <nd ref="-40"/>
         <nd ref="-40"/>
         <nd ref="-36"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="area" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.050Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.130Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="name" v="Barracks"/>
         <tag k="military" v="barracks"/>
@@ -60,12 +59,11 @@
         <nd ref="-32"/>
         <nd ref="-33"/>
         <nd ref="-35"/>
-        <nd ref="-35"/>
         <nd ref="-31"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.050Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.129Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="product" v="petroleum"/>
         <tag k="name" v="Petroleum Facility"/>
@@ -82,13 +80,12 @@
         <nd ref="-27"/>
         <nd ref="-28"/>
         <nd ref="-30"/>
-        <nd ref="-30"/>
         <nd ref="-26"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="amenity" v="place_of_worship"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.049Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.128Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="uuid" v="{21b59de9-1a5c-4afd-a235-36740d8c7b2a}"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -104,12 +101,11 @@
         <nd ref="-22"/>
         <nd ref="-23"/>
         <nd ref="-25"/>
-        <nd ref="-25"/>
         <nd ref="-21"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.048Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.128Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="uuid" v="{21acae65-f5e3-417a-a1bc-4765a030c507}"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -125,13 +121,12 @@
         <nd ref="-17"/>
         <nd ref="-18"/>
         <nd ref="-20"/>
-        <nd ref="-20"/>
         <nd ref="-16"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="amenity" v="bank"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.048Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.127Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="uuid" v="{2167f8ac-6eb9-419e-bbd0-83249f186b1c}"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -147,13 +142,12 @@
         <nd ref="-12"/>
         <nd ref="-13"/>
         <nd ref="-15"/>
-        <nd ref="-15"/>
         <nd ref="-11"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="amenity" v="prison"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.047Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.126Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="uuid" v="{2144e43d-52f7-439b-a7af-0f87139c196b}"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -170,12 +164,11 @@
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-10"/>
-        <nd ref="-10"/>
         <nd ref="-6"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:33.047Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.125Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="uuid" v="{2101f750-eb73-4c93-85bc-1193f8522ec0}"/>
         <tag k="source:accuracy:horizontal" v="25"/>
@@ -192,13 +185,12 @@
         <nd ref="-2"/>
         <nd ref="-3"/>
         <nd ref="-5"/>
-        <nd ref="-5"/>
         <nd ref="-1"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
         <tag k="source" v="mgcp:aal015"/>
         <tag k="amenity" v="community_centre"/>
-        <tag k="source:ingest:datetime" v="2019-08-07T15:29:32.988Z"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:23:25.047Z"/>
         <tag k="source:accuracy:vertical:evaluation" v="fzd_evaluation_deferred"/>
         <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
         <tag k="source:accuracy:horizontal" v="25"/>

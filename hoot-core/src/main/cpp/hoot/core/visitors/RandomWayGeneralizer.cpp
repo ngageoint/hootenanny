@@ -44,7 +44,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, RandomWayGeneralizer)
 
 RandomWayGeneralizer::RandomWayGeneralizer() :
-_epsilon(1.0)
+_epsilon(1.0),
+_removeNodesSharedByWays(false)
 {
   _localRng.reset(new boost::minstd_rand());
   _rng = _localRng.get();
@@ -54,7 +55,7 @@ void RandomWayGeneralizer::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setWayGeneralizeProbability(configOptions.getRandomWayGeneralizerProbability());
-  setEpsilon(configOptions.getWayGeneralizerEpsilon());
+  setEpsilon(configOptions.getRandomWayGeneralizerEpsilon());
   const int seed = configOptions.getRandomSeed();
   LOG_VARD(seed);
   if (seed == -1)
@@ -75,6 +76,7 @@ void RandomWayGeneralizer::setOsmMap(OsmMap* map)
   assert(_epsilon != -1.0);
   _generalizer.reset(new RdpWayGeneralizer(_epsilon));
   _generalizer->setOsmMap(_map);
+  _generalizer->setRemoveNodesSharedByWays(_removeNodesSharedByWays);
 }
 
 void RandomWayGeneralizer::visit(const std::shared_ptr<Element>& element)

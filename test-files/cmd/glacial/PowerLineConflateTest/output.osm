@@ -5473,33 +5473,6 @@
         <tag k="REF2" v="todo"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2382255" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2346669"/>
-        <nd ref="-2347109"/>
-        <nd ref="-2347107"/>
-        <nd ref="-2347105"/>
-        <nd ref="-2347103"/>
-        <nd ref="-2346919"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1294"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="ref" v="Sobrante - East Portal"/>
-        <tag k="REF1" v="000036"/>
-        <tag k="REF2" v="todo"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="12893.72789489"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.038454877708572997"/>
-    </way>
     <way visible="true" id="-2382234" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346847"/>
         <nd ref="-2346683"/>
@@ -6060,27 +6033,6 @@
         <tag k="REF1" v="00003d"/>
         <tag k="Type" v="OH"/>
         <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2368017" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-2347111"/>
-        <nd ref="-2346669"/>
-        <tag k="owner" v="PG&amp;E"/>
-        <tag k="OBJECTID" v="1294"/>
-        <tag k="Length_Mil" v="2"/>
-        <tag k="status" v="operational"/>
-        <tag k="voltage" v="115000"/>
-        <tag k="Legend" v="PG&amp;E_115kV"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="PG&amp;E 115kV"/>
-        <tag k="REF1" v="000036"/>
-        <tag k="power" v="line"/>
-        <tag k="kV_Sort" v="115"/>
-        <tag k="source:ingest:datetime" v="2018-06-08T20:48:49.101Z"/>
-        <tag k="circuits" v="2"/>
-        <tag k="location" v="overhead"/>
-        <tag k="Length_Fee" v="12893.72789489"/>
-        <tag k="Type" v="OH"/>
-        <tag k="Shape__Len" v="0.038454877708572997"/>
     </way>
     <way visible="true" id="-2367998" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2346831"/>
@@ -9605,6 +9557,12 @@
         <nd ref="-2347115"/>
         <nd ref="-2347113"/>
         <nd ref="-2347111"/>
+        <nd ref="-2346669"/>
+        <nd ref="-2347109"/>
+        <nd ref="-2347107"/>
+        <nd ref="-2347105"/>
+        <nd ref="-2347103"/>
+        <nd ref="-2346919"/>
         <tag k="owner" v="PG&amp;E"/>
         <tag k="OBJECTID" v="1294"/>
         <tag k="Length_Mil" v="2"/>

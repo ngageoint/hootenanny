@@ -434,6 +434,7 @@ std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 {
   if (_nodeToWayMap == 0)
   {
+    LOG_TRACE("Initializing node to way map...");
     _nodeToWayMap.reset(new NodeToWayMap(_map));
   }
   return _nodeToWayMap;

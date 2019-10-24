@@ -38,8 +38,11 @@ class Settings;
 
 /**
  * Base class for a visitor that consumes multiple element criteria
+ *
+ * Should we make this inherit ConstElementVisitor instead, if that's possible.
  */
-class MultipleCriterionConsumerVisitor : public ElementVisitor, public ElementCriterionConsumer
+class MultipleCriterionConsumerVisitor : public ElementVisitor,
+  public ElementCriterionConsumer
 {
 public:
 

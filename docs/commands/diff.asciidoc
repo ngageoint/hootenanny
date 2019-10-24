@@ -10,11 +10,12 @@ significantly. If they differ significantly, warnings will be printed with more 
 * +intpu2+          - Input 2; may be any supported input format (e.g. OSM file).
 * +--ignore-uuid+   - Ignore UUID's in the map comparison
 * +--use-datetime+  - Do not ignore source:datetime & source:ingest:datetime
+* +--error-limit+   - Increase the compare error limit from the defaule value of 10
 
 === Usage
 
 --------------------------------------
-diff [--ignore-uuid] [--use-datetime] (input1) (input2)
+diff [--ignore-uuid] [--use-datetime] [--error-limit limit] (input1) (input2)
 --------------------------------------
 
 === See Also

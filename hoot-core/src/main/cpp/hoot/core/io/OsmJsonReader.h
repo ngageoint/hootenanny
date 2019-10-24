@@ -255,7 +255,6 @@ protected:
   QString _timestamp_base;
   QString _copyright;
 
-  QUrl _url;
   bool _isFile;
   bool _isWeb;
   QFile _file;
@@ -279,7 +278,6 @@ protected:
 
   int _missingNodeCount;
   int _missingWayCount;
-  QString _path;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree

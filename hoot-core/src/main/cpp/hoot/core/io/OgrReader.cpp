@@ -426,6 +426,7 @@ long OgrReader::getFeatureCount(const QString& path, const QString& layer)
 
 void OgrReader::read(const QString& path, const QString& layer, const OsmMapPtr& map)
 {
+  map->appendSource(path);
   _d->open(path, layer);
   _d->read(map);
   _d->close();
@@ -488,6 +489,7 @@ void OgrReader::setUseDataSourceIds(bool useDataSourceIds)
 
 void OgrReader::open(const QString& url)
 {
+  OsmMapReader::open(url);
   _d->open(url, "");
 }
 
@@ -1094,6 +1096,7 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
 
   LOG_INFO("Reading: " << _layerName.toLatin1().data() << "...");
 
+  const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   OGRFeature* f;
   while ((f = _layer->GetNextFeature()) != NULL && (_limit == -1 || _count < _limit))
   {
@@ -1102,12 +1105,13 @@ void OgrReaderInternal::read(const OsmMapPtr& map)
     f = 0;
 
     _count++;
-    if (_progress.getState() != Progress::JobState::Pending && _count % 10000 == 0)
+    if (_count % (statusUpdateInterval * 10) == 0)
     {
       LOG_VART(_count);
       LOG_VART(_featureCount);
       LOG_VART(_layerName.toLatin1().data());
-      // TODO: This isn't clearing out the current line before each new log statement.
+      // This isn't clearing out the current line before each new log statement...it seems like it
+      // was at one point...
       _progress.setFromRelative(
         (float)_count / (float)_featureCount, Progress::JobState::Running,
         "Read " + StringUtils::formatLargeNumber(_count) + " / " +

@@ -39,7 +39,9 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, WayGeneralizeVisitor)
 
 WayGeneralizeVisitor::WayGeneralizeVisitor() :
-_epsilon(1.0)
+_epsilon(1.0),
+_removeNodesSharedByWays(false),
+_totalNodesRemoved(0)
 {
 }
 
@@ -47,22 +49,34 @@ void WayGeneralizeVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   setEpsilon(configOptions.getWayGeneralizerEpsilon());
+  _removeNodesSharedByWays = configOptions.getWayGeneralizerRemoveNodesSharedByWays();
+  const QString critClass = configOptions.getWayGeneralizerCriterion().trimmed();
+  if (!critClass.isEmpty())
+  {
+    addCriterion(
+      ElementCriterionPtr(Factory::getInstance().constructObject<ElementCriterion>(critClass)));
+  }
 }
 
 void WayGeneralizeVisitor::setOsmMap(OsmMap* map)
 {
   _map = map;
+  MapProjector::projectToPlanar(_map->shared_from_this());
 
   assert(_epsilon != -1.0);
   _generalizer.reset(new RdpWayGeneralizer(_epsilon));
   _generalizer->setOsmMap(_map);
+  _generalizer->setRemoveNodesSharedByWays(_removeNodesSharedByWays);
+}
+
+void WayGeneralizeVisitor::addCriterion(const ElementCriterionPtr& crit)
+{
+  _crit = crit;
 }
 
 void WayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
 {
-  MapProjector::projectToPlanar(_map->shared_from_this());
-
-  if (element->getElementType() == ElementType::Way)
+  if (element->getElementType() == ElementType::Way && (!_crit || _crit->isSatisfied(element)))
   {
     if (!_map)
     {
@@ -73,8 +87,14 @@ void WayGeneralizeVisitor::visit(const std::shared_ptr<Element>& element)
       throw IllegalArgumentException("Input map must be projected to planar.");
     }
 
-    _generalizer->generalize(std::dynamic_pointer_cast<Way>(element));
+    const int numNodesRemoved = _generalizer->generalize(std::dynamic_pointer_cast<Way>(element));
+    if (numNodesRemoved > 0)
+    {
+      _totalNodesRemoved += numNodesRemoved;
+      _numAffected++;
+    }
   }
+  _numProcessed++;
 }
 
 }
