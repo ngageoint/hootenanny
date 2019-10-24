@@ -446,70 +446,83 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
   }
 }
 
-void usage(char* argv)
-{
-  // keep this alphabetized; add any options to those in getAllowedOptions as well
-  cout << argv << " Usage:\n"
-          "  --all                      - Run all the tests.\n"
-          "  --all-names                - Print the names of all the tests without running them.\n"
-          "  --case-only                - Run the conflate case tests only.\n"
-          "  --current                  - Run the 'current' level tests.\n"
-          "  --debug                    - Show debug level log messages and above.\n"
-          "  --diff                     - Print a diff when a script test fails.\n"
-          "  --error                    - Show error log level messages and above.\n"
-          "  --exclude=[regex]          - Exclude tests that match the specified regex. e.g. HootTest '--exclude=.*building.*'\n"
-          "  --fatal                    - Show fatal error log level messages only.\n"
-          "  --glacial                  - Run 'glacial' level tests and below.\n"
-          "  --glacial-only             - Run the 'glacial' level tests only.\n"
-          "  --include=[regex]          - Include only tests that match the specified regex. e.g. HootTest '--include=.*building.*'\n"
-          "  --info                     - Show info log level messages and above.\n"
-          "  --quick                    - Run the 'quick' level' tests.\n"
-          "  --quick-only               - Run the 'quick' level tests only.\n"
-          "  --names                    - Show the names of all the tests as they run.\n"
-          "  --parallel [process count] - Run the specified tests in parallel with the specified number of processes. With no process count specified, all available CPU cores are used to launch processes.\n"
-          "  --single [test name]       - Run only the test specified.\n"
-          "  --slow                     - Run the 'slow' level tests and above.\n"
-          "  --slow-only                - Run the 'slow' level tests only.\n"
-          "  --status                   - Show status log level messages and above.\n"
-          "  --suppress-failure-detail  - If a test fails, only show the tests' name and do not show a detailed failure message. Disables --diff for script tests.\n"
-          "  --trace                    - Show trace log level messages and above.\n"
-          "  --verbose                  - Show verbose log level messages and above.\n"
-          "  --warn                     - Show warning log level messages and above.\n"
-          "\n"
-          "See the Hootenanny Developer Guide for more information.\n"
-          ;
-}
-
-QStringList getAllowedOptions()
+QMap<QString, QString> getAllowedOptions()
 {
   // keep this list alphabetized
-  QStringList options;
-  options.append("--all");
-  options.append("--all-names");
-  options.append("--case-only");
-  options.append("--current");
-  options.append("--debug");
-  options.append("--diff");
-  options.append("--error");
-  options.append("--exclude");
-  options.append("--fatal");
-  options.append("--glacial");
-  options.append("--glacial-only");
-  options.append("--include");
-  options.append("--info");
-  options.append("--quick");
-  options.append("--quick-only");
-  options.append("--names");
-  options.append("--parallel");
-  options.append("--single");
-  options.append("--slow");
-  options.append("--slow-only");
-  options.append("--status");
-  options.append("--suppress-failure-detail");
-  options.append("--trace");
-  options.append("--verbose");
-  options.append("--warn");
+  QMap<QString, QString> options;
+  options["--all"] = "Run all the tests";
+  options["--all-names"] = "Print the names of all the tests without running them";
+  options["--case-only"] = "Run the conflate case tests only";
+  options["--current"] = "Run the 'current' level tests";
+  options["--debug"] = "Show debug level log messages and above";
+  options["--diff"] = "Print a diff when a script test fails";
+  options["--error"] = "Show error log level messages and above";
+  options["--exclude=[regex]"] =
+    "Exclude tests that match the specified regex; e.g. HootTest '--exclude=.*building.*'";
+  options["--fatal"] = "Show fatal error log level messages only";
+  options["--glacial"] = "Run 'glacial' level tests and below";
+  options["--glacial-only"] = "Run the 'glacial' level tests only";
+  options["--include=[regex]"] =
+    "Include only tests that match the specified regex; e.g. HootTest '--include=.*building.*'";
+  options["--info"] = "Show info log level messages and above";
+  options["--quick"] = "Run the 'quick' level' tests";
+  options["--quick-only"] = "Run the 'quick' level tests only";
+  options["--names"] = "Show the names of all the tests as they run";
+  options["--parallel [process count]"] =
+    "Run the specified tests in parallel with the specified number of processes";
+  options["--single [test name]"] = "Run only the test specified";
+  options["--slow"] = "Run the 'slow' level tests and above";
+  options["--slow-only"] = "Run the 'slow' level tests only";
+  options["--status"] = "Show status log level messages and above";
+  options["--suppress-failure-detail"] =
+    "Do not show test failure detailed messages; disables --diff for script tests";
+  options["--trace"] = "Show trace log level messages and abov";
+  options["--verbose"] = "Show verbose log level messages and above";
+  options["--warn"] = "Show warning log level messages and above";
   return options;
+}
+
+QStringList getAllowedOptionNames()
+{
+  QStringList optionNames;
+  const QMap<QString, QString> options = getAllowedOptions();
+  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  {
+    optionNames.append(it.key().split(QRegExp("\\s+|="))[0]);
+  }
+  return optionNames;
+}
+
+int largestOptionNameSize()
+{
+  int largest = 0;
+  const QMap<QString, QString> options = getAllowedOptions();
+  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  {
+    if (it.key().size() > largest)
+    {
+      largest = it.key().size();
+    }
+  }
+  return largest;
+}
+
+void usage(char* argv)
+{
+  cout << argv << " Usage:" << endl;
+  const QMap<QString, QString> options = getAllowedOptions();
+  const int largestSize = largestOptionNameSize();
+  for (QMap<QString, QString>::const_iterator it = options.begin(); it != options.end(); ++it)
+  {
+    cout << "  " << it.key();
+    const int numSpaces = largestSize - it.key().size();
+    for (int i = 0; i < numSpaces; i++)
+    {
+      cout << " ";
+    }
+    cout << " - " << it.value() << endl;
+  }
+  cout << endl << "See the Hootenanny Developer Guide for more information." << endl;
 }
 
 _TestType getTestType(const QStringList& args)
@@ -570,7 +583,7 @@ int main(int argc, char* argv[])
       args << argv[i];
     }
 
-    const QStringList allowedOptions = getAllowedOptions();
+    const QStringList allowedOptions = getAllowedOptionNames();
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i).split("=")[0];
