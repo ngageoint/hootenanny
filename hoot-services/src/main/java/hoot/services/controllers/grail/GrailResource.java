@@ -161,13 +161,9 @@ public class GrailResource {
         return command;
     }
 
-    private Command getPublicOverpassCommand(String jobId, Users user, String bounds, String output) {
-        //TODO: is there an availability check for overpass?
-        GrailParams params = new GrailParams();
-        params.setUser(user);
-        params.setBounds(bounds);
+    private Command getPublicOverpassCommand(String jobId, GrailParams params) {
         params.setPullUrl(PUBLIC_OVERPASS_URL);
-        params.setOutput(output);
+
         InternalCommand command = overpassCommandFactory.build(jobId, params, this.getClass());
         return command;
     }
@@ -201,6 +197,7 @@ public class GrailResource {
 
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
+        reqParams.setUser(user);
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
@@ -214,26 +211,29 @@ public class GrailResource {
         }
 
         List<Command> workflow = new LinkedList<>();
-        String bbox = reqParams.getBounds();
 
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("jobid", jobId);
 
         // Pull reference data from Rails port OSM API
         File referenceOSMFile = new File(workDir, REFERENCE + ".osm");
-        reqParams.setOutput(referenceOSMFile.getAbsolutePath());
+        GrailParams getRailsParams = new GrailParams(reqParams);
+        getRailsParams.setOutput(referenceOSMFile.getAbsolutePath());
 
         if (referenceOSMFile.exists()) referenceOSMFile.delete();
         try {
-            workflow.add(getRailsPortApiCommand(jobId, reqParams));
+            workflow.add(getRailsPortApiCommand(jobId, getRailsParams));
         } catch (UnavailableException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(ex.getMessage()).build();
         }
 
         // Pull secondary data from the Public Overpass API
         File secondaryOSMFile = new File(workDir, SECONDARY + ".osm");
+        GrailParams getOverpassParams = new GrailParams(reqParams);
+        getOverpassParams.setOutput(secondaryOSMFile.getAbsolutePath());
+
         if (secondaryOSMFile.exists()) secondaryOSMFile.delete();
-        workflow.add(getPublicOverpassCommand(jobId, user, bbox, secondaryOSMFile.getAbsolutePath()));
+        workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
 
         // Run the differential conflate command.
         GrailParams params = new GrailParams();
@@ -437,6 +437,7 @@ public class GrailResource {
             if(resourceId != null) {
                 // Setup workflow to refresh rails data after the push
                 long referenceId = DbUtils.getMergedReference(resourceId);
+                Long parentFolderId = DbUtils.getParentFolder(referenceId);
                 Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
 
                 GrailParams refreshParams = new GrailParams();
@@ -444,10 +445,9 @@ public class GrailResource {
                 refreshParams.setWorkDir(workDir);
                 refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
                 refreshParams.setBounds(mapTags.get("bbox"));
-                refreshParams.setParentId("grail_" + mapTags.get("bbox").replace(",", "_"));
 
                 try {
-                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams);
+                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams, parentFolderId);
                     workflow.addAll(refreshWorkflow);
                 }
                 catch(UnavailableException exc) {
@@ -576,6 +576,7 @@ public class GrailResource {
     @Path("/pulloverpasstodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullOverpassToDb(@Context HttpServletRequest request,
+            @QueryParam("folderId") Long folderId,
             GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
@@ -584,7 +585,6 @@ public class GrailResource {
         String bbox = reqParams.getBounds();
         String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
-        String folderName = "grail_" + bbox.replace(",", "_");
 
         if (DbUtils.mapExists(layerName)) {
             throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
@@ -595,9 +595,6 @@ public class GrailResource {
         json.put("jobid", jobId);
 
         List<Command> workflow = new LinkedList<>();
-
-        // Create the folder if it doesn't exist
-        Long folderId = DbUtils.createFolder(folderName, 0L, user.getId(), false);
 
         // Write the data to the hoot db
         GrailParams params = new GrailParams();
@@ -736,6 +733,7 @@ public class GrailResource {
     @Path("/pullrailsporttodb")
     @Produces(MediaType.APPLICATION_JSON)
     public Response pullRailsPortToDb(@Context HttpServletRequest request,
+            @QueryParam("folderId") Long folderId,
             GrailParams reqParams) {
 
         Users user = Users.fromRequest(request);
@@ -745,7 +743,6 @@ public class GrailResource {
         String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
-        String folderName = "grail_" + bbox.replace(",", "_");
 
         if (DbUtils.mapExists(layerName)) {
             throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
@@ -760,12 +757,11 @@ public class GrailResource {
         params.setWorkDir(workDir);
         params.setOutput(layerName);
         params.setBounds(bbox);
-        params.setParentId(folderName);
         params.setCustomQuery(reqParams.getCustomQuery());
 
         List<Command> workflow;
         try {
-            workflow = setupRailsPull(jobId, params);
+            workflow = setupRailsPull(jobId, params, folderId);
         }
         catch(UnavailableException exc) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
@@ -779,7 +775,7 @@ public class GrailResource {
         return response;
     }
 
-    private List<Command> setupRailsPull(String jobId, GrailParams params) throws UnavailableException {
+    private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {
         List<Command> workflow = new LinkedList<>();
 
         Users user = params.getUser();
@@ -811,11 +807,8 @@ public class GrailResource {
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
 
-        // Create the folder if it doesn't exist
-        Long folderId = DbUtils.createFolder(params.getParentId(), 0L, user.getId(), false);
-
         // Move the data to the folder
-        InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, params.getOutput(), user, this.getClass());
+        InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, params.getOutput(), user, this.getClass());
         workflow.add(setFolder);
 
         return workflow;
