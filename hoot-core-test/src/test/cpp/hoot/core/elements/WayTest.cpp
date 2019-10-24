@@ -79,7 +79,10 @@ public:
     w.replaceNode(2, 4);
     HOOT_STR_EQUALS("[3]{1, 4, 1}", w.getNodeIds());
 
-    // replacement node already exists
+    // replacement node already exists - Note that Way::replaceNode does allow duplicated way nodes
+    // to be introduced. Its currently the responsibility of the caller to clean up after the
+    // replacement. See notes in Way::replaceNode. If we decide we want to change that behavior,
+    // the the correct output here becomes: [4]{1, 4, 3, 1}
     w.clear();
     w.addNode(1);
     w.addNode(2);
@@ -87,7 +90,7 @@ public:
     w.addNode(4);
     w.addNode(1);
     w.replaceNode(2, 4);
-    HOOT_STR_EQUALS("[4]{1, 4, 3, 1}", w.getNodeIds());
+    HOOT_STR_EQUALS("[5]{1, 4, 3, 4, 1}", w.getNodeIds());
 
     // start/end node replaced
     w.clear();
@@ -97,8 +100,8 @@ public:
     w.replaceNode(1, 3);
     HOOT_STR_EQUALS("[3]{3, 2, 3}", w.getNodeIds());
 
-    // This is non-sensical, but the original node with the replacement ID should be removed before
-    // doing the replacement, which is why we end up with two nodes instead of three. No way should
+    // This is non-sensical, and mostly here for documentation purposes. If we didn't allow dupe
+    // nodes in Way::replaceNode, we would end up with two nodes instead of three. No way should
     // ever have duplicate nodes, but we don't check that at runtime outside of debugging due to
     // the performance hit.
     w.clear();
@@ -106,7 +109,25 @@ public:
     w.addNode(2);
     w.addNode(1);
     w.replaceNode(1, 2);
-    HOOT_STR_EQUALS("[2]{2, 2}", w.getNodeIds());
+    HOOT_STR_EQUALS("[3]{2, 2, 2}", w.getNodeIds());
+
+    // Replace a middle node with an end node that matches with the ID of what we're replacing with
+    // We end up with two consecutive nodes with the same ID due to dupes being allowed.
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(3);
+    w.replaceNode(2, 3);
+    HOOT_STR_EQUALS("[3]{1, 3, 3}", w.getNodeIds());
+
+    // Replace an end node with the ID from the end node on the other side. We should end up with
+    // the way having identical end nodes that both have the replacement ID.
+    w.clear();
+    w.addNode(1);
+    w.addNode(2);
+    w.addNode(3);
+    w.replaceNode(1, 3);
+    HOOT_STR_EQUALS("[3]{3, 2, 3}", w.getNodeIds());
   }
 };
 

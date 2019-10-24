@@ -37,6 +37,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 // Qt
 #include <QTime>
@@ -203,6 +204,13 @@ void MergeNearbyNodes::apply(std::shared_ptr<OsmMap>& map)
         StringUtils::formatLargeNumber(startNodeCount) << " total nodes.");
     }
   }
+
+  // Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
+  // let's remove those here.
+  RemoveDuplicateWayNodesVisitor dupeNodesRemover;
+  LOG_INFO("\t" << dupeNodesRemover.getInitStatusMessage());
+  map->visitWaysRw(dupeNodesRemover);
+  LOG_DEBUG("\t" << dupeNodesRemover.getCompletedStatusMessage());
 }
 
 bool MergeNearbyNodes::_passesLogMergeFilter(const long nodeId1, const long nodeId2,

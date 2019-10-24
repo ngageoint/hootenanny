@@ -815,13 +815,14 @@ public:
       }
       else if (i == 2)
       {
-        const size_t correctSize = 22;
-        CPPUNIT_ASSERT(nodeIds.size() == correctSize);
-        LOG_VART(nodeIds);
-        long correctIds[correctSize] =
-          { -3, -24, -5, -26, -7, -32, -31, -36, -29, -27, -25, -23, -21, -19, -28, -17, -15, -13, -22, -11, -30, -9 };
+        const size_t correctSize = 30;
+        CPPUNIT_ASSERT( nodeIds.size() == correctSize );
+        // really there shouldn't be duplicated way nodes in the way; see comments in
+        // Way::replaceNode
+        long correctIds[correctSize] = { -3, -24, -5, -26, -7, -32, -31, -30, -36, -29, -28, -27, -26,
+                                         -25, -24, -23, -22, -21, -30, -19, -28, -17, -26, -15, -24,
+                                         -13, -22, -11, -30, -9 };
         std::vector<long> correctIdVector(correctIds, correctIds + sizeof(correctIds) / sizeof(long));
-        LOG_VART(correctIdVector);
         CPPUNIT_ASSERT(correctIdVector == nodeIds);
       }
       else if (i == 3)

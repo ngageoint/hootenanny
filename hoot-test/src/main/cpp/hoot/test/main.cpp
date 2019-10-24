@@ -448,7 +448,7 @@ void populateTests(_TestType t, std::vector<TestPtr>& vTests, bool printDiff,
 
 void usage(char* argv)
 {
-  // keep this alphabetized
+  // keep this alphabetized; add any options to those in getAllowedOptions as well
   cout << argv << " Usage:\n"
           "  --all                      - Run all the tests.\n"
           "  --all-names                - Print the names of all the tests without running them.\n"
@@ -478,6 +478,38 @@ void usage(char* argv)
           "\n"
           "See the Hootenanny Developer Guide for more information.\n"
           ;
+}
+
+QStringList getAllowedOptions()
+{
+  // keep this list alphabetized
+  QStringList options;
+  options.append("--all");
+  options.append("--all-names");
+  options.append("--case-only");
+  options.append("--current");
+  options.append("--debug");
+  options.append("--diff");
+  options.append("--error");
+  options.append("--exclude");
+  options.append("--fatal");
+  options.append("--glacial");
+  options.append("--glacial-only");
+  options.append("--include");
+  options.append("--info");
+  options.append("--quick");
+  options.append("--quick-only");
+  options.append("--names");
+  options.append("--parallel");
+  options.append("--single");
+  options.append("--slow");
+  options.append("--slow-only");
+  options.append("--status");
+  options.append("--suppress-failure-detail");
+  options.append("--trace");
+  options.append("--verbose");
+  options.append("--warn");
+  return options;
 }
 
 _TestType getTestType(const QStringList& args)
@@ -536,6 +568,17 @@ int main(int argc, char* argv[])
     for (int i = 1; i < argc; i++)
     {
       args << argv[i];
+    }
+
+    const QStringList allowedOptions = getAllowedOptions();
+    for (int i = 0; i < args.size(); i++)
+    {
+      const QString arg = args.at(i).split("=")[0];
+      if (arg.startsWith("--") && arg != "--listen" && !allowedOptions.contains(arg))
+      {
+        LOG_ERROR("Invalid HootTest option: " << arg);
+        return 1;
+      }
     }
 
     Log::getInstance().setLevel(Log::Warn);

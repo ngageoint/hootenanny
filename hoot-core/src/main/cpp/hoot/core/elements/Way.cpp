@@ -353,47 +353,43 @@ bool Way::isFirstAndLastNode(const long nodeId) const
 
 void Way::replaceNode(long oldId, long newId)
 {
+  // Note: Noticed that duplicate way nodes were being introduced here when called by
+  // MergeNearbyNodes. Initially made some attempts in here to clean that up, but it introduced
+  // unwanted logic and runtime complexity. Ultimately since the problem was only seen with
+  // MergeNearbyNodes, it was updated to remove the duplicated way nodes at the end of its run and
+  // this logic was left alone. The argument can be made that this method allows you to replace
+  // whatever is desired, but its the caller's responsbility to make sure the result of the
+  // replacement is valid.
+
   if (oldId == newId)
   {
     return;
   }
 
+  LOG_TRACE(
+    "Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
+
   const vector<long>& ids = getNodeIds();
 
   bool change = false;
-  bool newIdAlreadyPresent = false;
   for (size_t i = 0; i < ids.size(); i++)
   {
-    if (ids[i] == oldId)
+    const long id = ids[i];
+    if (id == oldId)
     {
       change = true;
-    }
-    if (ids[i] == newId)
-    {
-      newIdAlreadyPresent = true;
     }
   }
 
   if (change)
   {
-    LOG_TRACE("Old IDs: " << getNodeIds());
+    LOG_TRACE("IDs before replacement: " << getNodeIds());
 
     // for debugging only; see _nodeIdsAreDuplicated call below
     //const vector<long> oldIdsCopy = ids;
 
     _preGeometryChange();
     _makeWritable();
-
-    // If the id we're replacing with already exists, we need to remove it first before trying to
-    // replace the old id with it.
-    if (newIdAlreadyPresent)
-    {
-      removeNode(newId);
-      LOG_TRACE("Old IDs after new ID removal: " << getNodeIds());
-    }
-
-    LOG_TRACE(
-      "Replacing node: " << oldId << " with: " << newId << " in way: " << getId() << "...");
 
     vector<long>& newIds = _wayData->getNodeIds();
     for (size_t i = 0; i < newIds.size(); i++)
@@ -406,7 +402,7 @@ void Way::replaceNode(long oldId, long newId)
 
     _postGeometryChange();
 
-    LOG_TRACE("New IDs: " << getNodeIds());
+    LOG_TRACE("IDs after replacement: " << getNodeIds());
 
 //    // for debugging only; SLOW
 //    if (_nodeIdsAreDuplicated(getNodeIds()))
@@ -457,12 +453,12 @@ QString Way::toString() const
 
 bool Way::isFirstLastNodeIdentical() const
 {
-  if ( getNodeCount() < 2 )
+  if (getNodeCount() < 2)
   {
     return false;
   }
 
-  return ( getFirstNodeId() == getLastNodeId() );
+  return (getFirstNodeId() == getLastNodeId());
 }
 
 bool Way::isClosedArea() const
