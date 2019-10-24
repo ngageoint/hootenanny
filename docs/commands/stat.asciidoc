@@ -5,25 +5,32 @@
 
 The +stat+ command displays a statistic calculated from the features in a map.
 
-* +input+  -  Input; may be any supported input format (e.g. OSM file).
-* +visitor+ - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the
-              SingleStatistic interface.  Use the +info --operators+ command to obtain a list of available Hootenanny visitors.
+* +input+    - Input; may be any supported input format (e.g. OSM file).
+* +visitor+  - The stat visitor must be the single class name of a Hootenanny visitor that inherits from ElementVisitor and supports the
+               SingleStatistic or NumericStatistic interfaces. Use the +info --operators+ command to obtain a list of available Hootenanny 
+               visitors.
+* +statType+ - If +visitor+ supports NumericStatistic, this optional parameter allows for specifying the statistic type to collect. Supported
+               types are 'total', 'min', 'max', and 'average'. If +visitor+ just supports SingleStatistic, this parameter is ignored and 
+               'total' is automatically used.
 
 === Usage
 
 --------------------------------------
-hoot stat (input) (visitor)
+hoot stat (input) (visitor) [statType]
 --------------------------------------
 
 === Examples
 
 --------------------------------------
 # calculate the numerical average of all values for a specific tag
-hoot stat -D tags.visitor.keys="accuracy" input1.osm hoot::AverageNumericTagsVisitor
+hoot stat -D tags.visitor.keys="accuracy" input.osm hoot::AverageNumericTagsVisitor
 
 # count all manual matches made on features in a map
 # Note: This could also be done in a more straight forward manner with the +count+ command if a "ManualMatchCriterion" existed.
-hoot stat input1.osm hoot::CountManualMatchesVisitor
+hoot stat input.osm hoot::CountManualMatchesVisitor
+
+# calculate the average number of nodes across all buildings
+hoot stat -D nodes.per.way.visitor.element.criteria="hoot::BuildingCriterion" input.osm hoot::NodesPerWayVisitor average
 --------------------------------------
 
 === See Also

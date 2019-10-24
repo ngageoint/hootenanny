@@ -35,14 +35,13 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
 
 namespace hoot
 {
-
-class OsmMap;
 
 /**
  * This class works with four pass as long as distance is less than the four pass buffer.
@@ -84,6 +83,10 @@ protected:
   std::shared_ptr<OsmMap> _map;
   Meters _distance;
   geos::geom::Envelope _bounds;
+
+  void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
+                       const double distance = -1.0, const double calcdDistance = -1.0);
+  bool _passesLogMergeFilter(const long nodeId1, const long nodeId2, OsmMapPtr& map) const;
 };
 
 }

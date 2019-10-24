@@ -352,6 +352,7 @@ void OsmMap::addRelation(const RelationPtr& r)
 
 void OsmMap::addWay(const WayPtr& w)
 {
+  LOG_TRACE("Adding: " << w->getElementId());
   _idGen->ensureWayBounds(w->getId());
   _ways[w->getId()] = w;
   w->registerListener(_index.get());
@@ -616,6 +617,7 @@ void OsmMap::replaceNode(long oldId, long newId)
   for (set<long>::iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& w = getWay(*it);
+    LOG_VART(w->getElementId());
 
 #   ifdef DEBUG
       if (w.get() == NULL)
@@ -1127,6 +1129,36 @@ void OsmMap::appendSource(const QString& url)
     QUrl src(urls[i]);
     _sources.insert(src.toDisplayString());
   }
+}
+
+QSet<long> OsmMap::getNodeIds() const
+{
+  QSet<long> ids;
+  for (NodeMap::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+  {
+    ids.insert(it->first);
+  }
+  return ids;
+}
+
+QSet<long> OsmMap::getWayIds() const
+{
+  QSet<long> ids;
+  for (WayMap::const_iterator it = _ways.begin(); it != _ways.end(); ++it)
+  {
+    ids.insert(it->first);
+  }
+  return ids;
+}
+
+QSet<long> OsmMap::getRelationIds() const
+{
+  QSet<long> ids;
+  for (RelationMap::const_iterator it = _relations.begin(); it != _relations.end(); ++it)
+  {
+    ids.insert(it->first);
+  }
+  return ids;
 }
 
 }

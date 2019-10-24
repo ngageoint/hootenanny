@@ -1029,8 +1029,10 @@ Size of the in memory way cache used when streaming I/O is used with ways.
 * Data Type: bool
 * Default Value: `false`
 
-If true, element criterions passed to an ElementCriterionConsumer will be negated.  Not honored by
-all ElementCriterionConsumers.
+If true, element criterion passed to an ElementCriterionConsumer will be negated. Not honored by
+all ElementCriterionConsumers. Since this configuration option is shared across all
+ElementCriterionConsumers, there may be undesirable effects in invocations involving multiple
+ElementCriterionConsumers.
 
 === element.sorter.element.buffer.size
 
@@ -2080,7 +2082,7 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 === merge.nearby.nodes.distance
 
 * Data Type: double
-* Default Value: `0.0001`
+* Default Value: `0.01`
 
 When merging nodes during convert, determines what tolerance should be used for deciding if two
 nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of
@@ -2355,6 +2357,14 @@ aforementioned situation.
 Determines how strictly the angle should be considered when calculating intersection tie points for
 rubber sheeting. A value of 0 will ignore angle entirely. Large will make the angle comparison more
 strict.
+
+=== nodes.per.way.visitor.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+An element criterion to be used for filtering ways whose nodes are counted. The elements must be
+ways for their nodes to be counted, otherwise the criterion will be ignored.
 
 === tags.visitor.keys
 
@@ -3481,6 +3491,15 @@ random.tag.modifier.subsitution.values.
 A list of tag values which, should be substituted by PertyRemoveTagVisitor.  The tag values in the
 list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
 
+=== random.way.generalizer.epsilon
+
+* Data Type: double
+* Default Value: `1.0`
+
+Distance parameter, in meters, that determines to what degree a way is generalized by
+RandomWayGeneralizer, which isa part of PERTY. Higher values result in more generalization (more
+nodes removed).
+
 === random.way.generalizer.probability
 
 * Data Type: double
@@ -4515,14 +4534,29 @@ The way subline matcher to use when determining matching sublines.
 Distance, in meters, used for sampling way data during angle histogram extraction with the
 SampledAngleHistogramExtractor
 
+=== way.generalizer.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Criterion class used for filtering by WayGeneralizeVisitor. All filtered elements must be ways, so
+any filters contradicting that will be ignored.
+
 === way.generalizer.epsilon
 
 * Data Type: double
-* Default Value: `1.0`
+* Default Value: `0.1`
 
 Distance parameter, in meters, that determines to what degree a way is generalized by
-RdpWayGeneralizer, which is available standalone or as a part of PERTY. Higher values result in more
-generalization (more nodes removed).
+WayGeneralizeVisitor. Higher values result in more generalization (more nodes removed).
+
+=== way.generalizer.remove.nodes.shared.by.ways
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, WayGeneralizeVisitor disregards nodes shared by ways when removing them. If false, it won't
+remove them.
 
 === way.joiner
 

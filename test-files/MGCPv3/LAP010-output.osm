@@ -1,62 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.40496307012695" minlon="153.1252317151277" maxlat="-25.39281558847703" maxlon="153.1337087346963"/>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049630701269535" lon="153.1252317151276543"/>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934273321572483" lon="153.1252317151276543"/>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4045261103553806" lon="153.1337087346963131"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3929903723856683" lon="153.1337087346963131"/>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4043513264467329" lon="153.1294265289348004"/>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3928155884770383" lon="153.1294265289348004"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4045261103553770" lon="153.1337087346963131"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3929903723856718" lon="153.1337087346963131"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4043513264467400" lon="153.1294265289348004"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3928155884770348" lon="153.1294265289348004"/>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-9"/>
-        <nd ref="-9"/>
-        <tag k="width" v="3"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T18:48:15.965Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:25:23.549Z"/>
+        <tag k="name" v="Dirt"/>
+        <tag k="uuid" v="{1d717c8a-7883-47a2-befe-7e18a2fe3a72}"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="seasonal" v="fair"/>
-        <tag k="uuid" v="{1d717c8a-7883-47a2-befe-7e18a2fe3a72}"/>
-        <tag k="source" v="mgcp:lap010"/>
-        <tag k="name" v="Dirt"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="track"/>
+        <tag k="width" v="3"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-6"/>
-        <nd ref="-6"/>
-        <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T18:48:15.965Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap010"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:25:23.548Z"/>
+        <tag k="name" v="Kokoda"/>
+        <tag k="uuid" v="{1d1127be-1934-40af-9e2d-af265f9405ad}"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="seasonal" v="no"/>
-        <tag k="uuid" v="{1d1127be-1934-40af-9e2d-af265f9405ad}"/>
-        <tag k="source" v="mgcp:lap010"/>
-        <tag k="name" v="Kokoda"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="track"/>
+        <tag k="width" v="4"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-3"/>
-        <nd ref="-3"/>
-        <tag k="width" v="2.5"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T18:48:15.965Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="2.5"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>
-        <tag k="source" v="mgcp:lap010"/>
-        <tag k="name" v="Jinglemoney"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap010"/>
         <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T19:25:23.548Z"/>
+        <tag k="name" v="Jinglemoney"/>
+        <tag k="uuid" v="{1c362077-a802-41f3-97e5-193db7df1a0b}"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="width" v="2.5"/>
         <tag k="error:circular" v="28.65"/>
     </way>
 </osm>

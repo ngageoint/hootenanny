@@ -752,6 +752,12 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
       -D attribute.value.criterion.comparison.value="username" input.osm hoot::AttributeValueCriterion
 -----
 
+===== Calculate the average number of nodes for a set of buildings:
+
+-----
+hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm hoot::NodesPerWayVisitor average
+-----
+
 ===== Calculate the numerical average of all "accuracy" tags:
 
 -----

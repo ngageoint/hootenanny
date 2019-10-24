@@ -131,7 +131,7 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
     if (((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator))) &&
         (readonly || it->_is_rw))
     {
-        return *it;
+      return *it;
     }
   }
   return OgrDriverInfo();

@@ -44,9 +44,11 @@ using namespace std;
 namespace hoot
 {
 
-ScriptTest::ScriptTest(QString script, bool printDiff, int waitToFinishTime)
+ScriptTest::ScriptTest(QString script, bool printDiff, bool suppressFailureDetail,
+                       int waitToFinishTime)
   : CppUnit::TestCase(script.toStdString()),
     _printDiff(printDiff),
+    _suppressFailureDetail(suppressFailureDetail),
     _script(script),
     _waitToFinishTime(waitToFinishTime)
 {
@@ -161,28 +163,32 @@ void ScriptTest::runTest()
     _writeFile(_script + ".stdout.failed.stripped", _removeIgnoredSubstrings(_stdout));
     _writeFile(_script + ".stdout.stripped", _removeIgnoredSubstrings(_baseStdout));
 
-    if (_printDiff)
+    QString msg =
+      "STDOUT does not match for:\n" + _script + ".stdout" + " " + _script + ".stdout.failed";
+    if (_suppressFailureDetail)
     {
-      LOG_WARN("STDOUT does not match for:\n" +
-        _script + ".stdout" + " " + _script + ".stdout.failed");
+      LOG_WARN(msg);
+    }
+    else if (_printDiff)
+    {
+      LOG_WARN(msg);
       _runDiff(_script + ".stdout.stripped", _script + ".stdout.failed.stripped");
     }
     else
     {
-      LOG_WARN("STDOUT does not match for:\n" +
-               _script + ".stdout.failed" + " " + _script + ".stdout\n"
-               "\n*************************\n"
-               "  This can be resolved by reviewing the output for correctness and then \n"
-               "  creating a new baseline. E.g.\n"
-               "  verify: \n"
-               "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
-               "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-               "  ### then it may be better to update that file. You'll have to look at\n"
-               "  ### the source files to be sure.\n"
-               "  Make a new baseline:\n"
-               "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
-               "*************************\n"
-               );
+      msg += "\n"
+             "\n*************************\n"
+             "  This can be resolved by reviewing the output for correctness and then \n"
+             "  creating a new baseline. E.g.\n"
+             "  verify: \n"
+             "    diff " + _script + ".stdout.stripped " + _script + ".stdout.failed.stripped\n"
+             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
+             "  ### then it may be better to update that file. You'll have to look at\n"
+             "  ### the source files to be sure.\n"
+             "  Make a new baseline:\n"
+             "    mv " + _script + ".stdout.failed " + _script + ".stdout\n"
+             "*************************\n";
+      LOG_WARN(msg);
     }
 
     failed = true;
@@ -194,28 +200,32 @@ void ScriptTest::runTest()
     _writeFile(_script + ".stderr.failed.stripped", _removeIgnoredSubstrings(_stderr));
     _writeFile(_script + ".stderr.stripped", _removeIgnoredSubstrings(_baseStderr));
 
-    if (_printDiff)
+    QString msg =
+      "STDERR does not match for:\n" + _script + ".stderr" + " " + _script + ".stderr.failed";
+    if (_suppressFailureDetail)
     {
-      LOG_WARN("STDERR does not match for:\n" +
-        _script + ".stderr" + " " + _script + ".stderr.failed");
+      LOG_WARN(msg);
+    }
+    else if (_printDiff)
+    {
+      LOG_WARN(msg);
       _runDiff(_script + ".stderr.stripped", _script + ".stderr.failed.stripped");
     }
     else
     {
-      LOG_WARN("STDERR does not match for:\n" +
-               _script + ".stderr.failed" + " " + _script + ".stderr\n"
-               "\n*************************\n"
-               "  This can be resolved by reviewing the output for correctness and then \n"
-               "  creating a new baseline. E.g.\n"
-               "  verify: \n"
-               "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
-               "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
-               "  ### then it may be better to update that file. You'll have to look at\n"
-               "  ### the source files to be sure.\n"
-               "  Make a new baseline:\n"
-               "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
-               "*************************\n"
-               );
+      msg += "\n"
+             "\n*************************\n"
+             "  This can be resolved by reviewing the output for correctness and then \n"
+             "  creating a new baseline. E.g.\n"
+             "  verify: \n"
+             "    diff " + _script + ".stderr.stripped " + _script + ".stderr.failed.stripped\n"
+             "  ### NOTE: If the test is comparing against a known good file (e.g. .osm\n"
+             "  ### then it may be better to update that file. You'll have to look at\n"
+             "  ### the source files to be sure.\n"
+             "  Make a new baseline:\n"
+             "    mv " + _script + ".stderr.failed " + _script + ".stderr\n"
+             "*************************\n";
+      LOG_WARN(msg);
     }
 
     failed = true;

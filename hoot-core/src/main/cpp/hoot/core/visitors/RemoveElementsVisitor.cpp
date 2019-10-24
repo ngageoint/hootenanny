@@ -53,6 +53,9 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
 
+  // TODO: need to separate element.criterion.negate out in to separate options for each consumer
+  // of it; otherwise we may end up with conflicts with certain combinations of config option inputs
+  // to certain command invocations
   _negateCriteria = configOptions.getElementCriterionNegate();
   _chainCriteria = configOptions.getRemoveElementsVisitorChainElementCriteria();
   LOG_VARD(_chainCriteria);

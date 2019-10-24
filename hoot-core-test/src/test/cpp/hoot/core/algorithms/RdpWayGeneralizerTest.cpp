@@ -164,6 +164,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.3);
+    generalizer.setRemoveNodesSharedByWays(true);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       2.53015,
       generalizer._getPerpendicularDistanceBetweenSplitNodeAndImaginaryLine(
@@ -178,6 +179,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.1);
+    generalizer.setRemoveNodesSharedByWays(true);
     const QList<ConstNodePtr>& outputPoints =
       generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(148, outputPoints.size());
@@ -193,6 +195,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(197, inputPoints.size());
 
     RdpWayGeneralizer generalizer(5.9);
+    generalizer.setRemoveNodesSharedByWays(true);
     const QList<ConstNodePtr>& outputPoints =
       generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(22, outputPoints.size());
@@ -208,6 +211,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
 
     RdpWayGeneralizer generalizer(0.1);
+    generalizer.setRemoveNodesSharedByWays(true);
     const QList<ConstNodePtr>& outputPoints =
       generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(48, outputPoints.size());
@@ -223,6 +227,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(77, inputPoints.size());
 
     RdpWayGeneralizer generalizer(5.9);
+    generalizer.setRemoveNodesSharedByWays(true);
     const QList<ConstNodePtr>& outputPoints =
       generalizer._getGeneralizedPoints(inputPoints);
     CPPUNIT_ASSERT_EQUAL(4, outputPoints.size());
@@ -242,6 +247,7 @@ public:
     CPPUNIT_ASSERT_EQUAL((size_t)197, way->getNodeIds().size());
 
     RdpWayGeneralizer generalizer(0.1);
+    generalizer.setRemoveNodesSharedByWays(true);
     generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
@@ -280,6 +286,7 @@ public:
     }
 
     RdpWayGeneralizer generalizer(0.1);
+    generalizer.setRemoveNodesSharedByWays(true);
     generalizer.setOsmMap(map.get());
     generalizer.generalize(way);
 
@@ -305,7 +312,6 @@ public:
       QString("Invalid epsilon value: 0").toStdString(),
       exceptionMsg.toStdString());
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RdpWayGeneralizerTest, "quick");

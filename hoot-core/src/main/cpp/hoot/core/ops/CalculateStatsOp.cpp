@@ -443,7 +443,8 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       try
       {
         // create criterion
-        pCrit = shared_ptr<ElementCriterion>(
+        pCrit =
+          shared_ptr<ElementCriterion>(
             static_cast<ElementCriterion *>(
               Factory::getInstance().constructObject<ElementCriterion>(d.criterion)));
 
@@ -475,9 +476,10 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       try
       {
         // create visitor to set in FilteredVisitor
-        pCriterionVisitor = shared_ptr<ConstElementVisitor>(
-              static_cast<ConstElementVisitor *>(
-                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+        pCriterionVisitor =
+          shared_ptr<ConstElementVisitor>(
+            static_cast<ConstElementVisitor *>(
+              Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
       }
       catch (...)
       {
@@ -502,9 +504,10 @@ void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, St
       {
         try
         {
-          pVisitor = shared_ptr<ConstElementVisitor>(
-                static_cast<ConstElementVisitor *>(
-                  Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
+          pVisitor =
+            shared_ptr<ConstElementVisitor>(
+              static_cast<ConstElementVisitor *>(
+                Factory::getInstance().constructObject<ElementVisitor>(d.visitor)));
         }
         catch (...)
         {
