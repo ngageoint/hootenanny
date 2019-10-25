@@ -53,6 +53,7 @@ using namespace hoot::elements;
 
 // Qt
 #include <QDebug>
+#include <QFileInfo>
 
 using namespace std;
 
@@ -1125,7 +1126,17 @@ void OsmMap::appendSource(const QString& url)
   for (int i = 0; i < urls.size(); ++i)
   {
     QUrl src(urls[i]);
-    _sources.insert(src.toDisplayString());
+    QString source;
+    if (src.scheme() == "")
+      source = QFileInfo(src.toString()).fileName();
+    else if (src.isLocalFile())
+      source = QFileInfo(src.toLocalFile()).fileName();
+    else if (src.scheme().toLower() == MetadataTags::HootApiDbScheme() ||
+             src.scheme().toLower() == MetadataTags::OsmApiDbScheme())
+      source = src.scheme() + ":" + src.path().split("/").last();
+    else
+      source = src.toDisplayString();
+    _sources.insert(source);
   }
 }
 

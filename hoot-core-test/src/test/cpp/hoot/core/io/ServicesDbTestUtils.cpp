@@ -131,7 +131,7 @@ QUrl ServicesDbTestUtils::getOsmApiDbUrl()
   // read the DB values from the DB config file.
   Settings s = ApiDb::readDbConfig();
   QUrl result;
-  result.setScheme("osmapidb");
+  result.setScheme(MetadataTags::OsmApiDbScheme());
   result.setHost(s.get("DB_HOST_OSMAPI").toString());
   result.setPort(s.get("DB_PORT_OSMAPI").toInt());
   result.setUserName(s.get("DB_USER_OSMAPI").toString());

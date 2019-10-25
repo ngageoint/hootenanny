@@ -428,7 +428,7 @@ void OsmApiDbBulkInserter::finalizePartial()
 
 bool OsmApiDbBulkInserter::_destinationIsDatabase() const
 {
-  return _outputUrl.toLower().startsWith("osmapidb://");
+  return _outputUrl.toLower().startsWith(MetadataTags::OsmApiDbScheme() + "://");
 }
 
 void OsmApiDbBulkInserter::_writeDataToDbPsql()

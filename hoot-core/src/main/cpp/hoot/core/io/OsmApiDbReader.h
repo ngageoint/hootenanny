@@ -49,7 +49,7 @@ public:
 
   virtual void setConfiguration(const Settings &conf) override;
 
-  virtual QString supportedFormats() override { return "osmapidb://"; }
+  virtual QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 

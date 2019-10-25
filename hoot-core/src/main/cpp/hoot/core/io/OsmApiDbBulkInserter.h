@@ -193,7 +193,7 @@ public:
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
 
-  virtual QString supportedFormats() { return "osmapidb://"; }
+  virtual QString supportedFormats() { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 

@@ -88,7 +88,7 @@ public:
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() override { return "hootapidb://"; }
+  virtual QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 

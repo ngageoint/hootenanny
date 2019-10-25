@@ -1,3 +1,3 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-77.051, 38.899, -77.048, 38.905],"import_url":"test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm","features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-77.051, 38.899, -77.048, 38.905],"source":"DcGisRoads.osm;DcTigerRoads.osm","features": [
 {"type":"Feature","properties":{"task":"8","node_count":"505"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0511, 38.8985],[-77.0511, 38.9045],[-77.0481, 38.9045],[-77.0481, 38.8985],[-77.0511, 38.8985]]]]}}]
 }

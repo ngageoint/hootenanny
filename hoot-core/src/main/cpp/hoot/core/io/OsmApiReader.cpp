@@ -106,7 +106,7 @@ bool OsmApiReader::isSupported(const QString& url)
 void OsmApiReader::open(const QString& url)
 {
   //  Save off the URL
-  _url = url;
+  OsmMapReader::open(url);
 }
 
 void OsmApiReader::read(const OsmMapPtr& map)
