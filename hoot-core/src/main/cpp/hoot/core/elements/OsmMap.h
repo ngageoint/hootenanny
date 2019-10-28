@@ -298,6 +298,7 @@ public:
 
   QString getSource() const;
   void appendSource(const QString& url);
+  void replaceSource(const QString& url);
 
   int numNodesAppended() const { return _numNodesAppended; }
   int numNodesSkippedForAppending() const { return _numNodesSkippedForAppending; }

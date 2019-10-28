@@ -77,6 +77,8 @@ public:
 
     OsmMapPtr map1(new OsmMap());
     IoUtils::loadMap(map1, args[0], true, Status::Unknown1);
+    //  Some maps that don't have IDs cooked in will fail comparison if the IDs aren't reset
+    OsmMap::resetCounters();
     OsmMapPtr map2(new OsmMap());
     IoUtils::loadMap(map2, args[1], true, Status::Unknown1);
 

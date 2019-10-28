@@ -1140,4 +1140,10 @@ void OsmMap::appendSource(const QString& url)
   }
 }
 
+void OsmMap::replaceSource(const QString &url)
+{
+  _sources.clear();
+  appendSource(url);
+}
+
 }
