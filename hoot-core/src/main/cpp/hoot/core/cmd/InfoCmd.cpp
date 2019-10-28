@@ -52,7 +52,7 @@ public:
 
   static std::string className() { return "hoot::InfoCmd"; }
 
-  InfoCmd() { }
+  InfoCmd() {}
 
   virtual QString getName() const override { return "info"; }
 
@@ -70,17 +70,16 @@ public:
       if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(QString("%1 takes a single option.").arg(getName()));
+        throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
       }
       specifiedOpts.append(arg);
     }
     if (specifiedOpts.size() == 0)
     {
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes a single option.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
     }
     LOG_VARD(specifiedOpts.size());
-    //assert(specifiedOpts.size() == 1);
 
     if (specifiedOpts.contains("--config-options"))
     {
@@ -103,14 +102,14 @@ public:
       if (getNamesOnly && getDetails)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
+        throw IllegalArgumentException(
           "Only one option can be used, either --option-names or --option-details.");
       }
 
       if (args.size() > 1)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
+        throw IllegalArgumentException(
           QString("%1 with the --config-options option takes zero to one parameters.")
             .arg(getName()));
       }
@@ -130,7 +129,7 @@ public:
       if (args.size() > 2)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
+        throw IllegalArgumentException(
           QString("%1 with the --formats option takes between zero and two parameters.")
             .arg(getName()));
       }
@@ -141,6 +140,7 @@ public:
       formatSubOptions.append("--input-bounded");
       formatSubOptions.append("--output");
       formatSubOptions.append("--output-streamable");
+      formatSubOptions.append("--ogr");
       for (int i = 0; i < args.size(); i++)
       {
         const QString arg = args.at(i);
@@ -149,6 +149,13 @@ public:
           std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException("Invalid parameter: " + arg + " passed to " + getName());
         }
+      }
+
+      bool displayOgrOnly = false;
+      if (args.contains("--ogr"))
+      {
+        displayOgrOnly = true;
+        args.removeAt(args.indexOf("--ogr"));
       }
 
       bool displayInputs = false;
@@ -186,10 +193,11 @@ public:
         args.removeAt(args.indexOf("--output-streamable"));
       }
 
-      // If none were specified, show them all.
+      // If none were specified, show them all, except OGR.
       // This is getting a little messy...maybe pass in an object with the settings instead...
       if (!displayInputs && !displayInputsSupportingBounds && !displayInputsSupportingStreaming &&
-          !displayOutputs && !displayOutputsSupportingStreaming && args.size() == 0)
+          !displayOutputs && !displayOutputsSupportingStreaming &&
+          (args.size() == 0 || (args.size() == 1 && displayOgrOnly)))
       {
         displayInputs = true;
         displayInputsSupportingStreaming = true;
@@ -201,7 +209,7 @@ public:
       std::cout <<
         FormatsDisplayer::display(
           displayInputs, displayInputsSupportingStreaming, displayInputsSupportingBounds,
-          displayOutputs, displayOutputsSupportingStreaming)
+          displayOutputs, displayOutputsSupportingStreaming, displayOgrOnly)
         .toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
@@ -210,7 +218,7 @@ public:
       if (args.size() != 1)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
+        throw IllegalArgumentException(
           QString("%1 with the --languages option takes one parameter.").arg(getName()));
       }
 
@@ -224,14 +232,14 @@ public:
             (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
         {
           std::cout << getHelp() << std::endl << std::endl;
-          throw HootException(QString("%1 takes a single option.").arg(getName()));
+          throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
         }
         specifiedOpts.append(arg);
       }
       if (specifiedOpts.size() == 0)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
+        throw IllegalArgumentException(
           QString("%1 with the --languages option takes a single option.").arg(getName()));
       }
       LOG_VARD(specifiedOpts.size());
@@ -276,7 +284,6 @@ public:
     }
     else if (specifiedOpts.contains("--cleaning-operations"))
     {
-      LOG_VART("test1");
       std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("map.cleaner.transforms").toStdString();
     }
     else if (specifiedOpts.contains("--conflate-post-operations"))
@@ -305,7 +312,7 @@ public:
       if (args.size() != 0)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(
+        throw IllegalArgumentException(
           QString("%1 with the --operators option takes zero parameters.").arg(getName()));
       }
 
