@@ -7,76 +7,76 @@
     <node visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1" lat="18.5353701521525522" lon="-72.3108243069201251">
         <tag k="hoot:status" v="1"/>
     </node>
-    <node visible="true" id="-80" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5365136853899983" lon="-72.3098430395099996">
+    <node visible="true" id="-80" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5365136853899983" lon="-72.3098430395099996">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-79" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5353642759499948" lon="-72.3107361399599995">
+    <node visible="true" id="-79" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5353642759499948" lon="-72.3107361399599995">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-78" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5355525179199994" lon="-72.3106933577000035">
+    <node visible="true" id="-78" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5355525179199994" lon="-72.3106933577000035">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-77" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5356712068999983" lon="-72.3106511124699978">
+    <node visible="true" id="-77" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5356712068999983" lon="-72.3106511124699978">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-76" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5357207948299951" lon="-72.3106334625299922">
+    <node visible="true" id="-76" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5357207948299951" lon="-72.3106334625299922">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-75" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5360174185399948" lon="-72.3104880028199943">
+    <node visible="true" id="-75" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5360174185399948" lon="-72.3104880028199943">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-74" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5361160321999989" lon="-72.3104286333699804">
+    <node visible="true" id="-74" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5361160321999989" lon="-72.3104286333699804">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-73" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5362969293399971" lon="-72.3103197259100057">
+    <node visible="true" id="-73" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5362969293399971" lon="-72.3103197259100057">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-72" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5365308057199982" lon="-72.3101999355699974">
+    <node visible="true" id="-72" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5365308057199982" lon="-72.3101999355699974">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-71" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5365792922899999" lon="-72.3101514490000028">
+    <node visible="true" id="-71" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5365792922899999" lon="-72.3101514490000028">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-70" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5366106659500005" lon="-72.3100915538300058">
+    <node visible="true" id="-70" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5366106659500005" lon="-72.3100915538300058">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-69" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5366135180999976" lon="-72.3099803199399958">
+    <node visible="true" id="-69" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5366135180999976" lon="-72.3099803199399958">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-68" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5365992573500051" lon="-72.3099346855200054">
+    <node visible="true" id="-68" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5365992573500051" lon="-72.3099346855200054">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-67" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5365593272300053" lon="-72.3098747903499941">
+    <node visible="true" id="-67" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5365593272300053" lon="-72.3098747903499941">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-36" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5340634496000014" lon="-72.3130369681600058">
+    <node visible="true" id="-36" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5340634496000014" lon="-72.3130369681600058">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-35" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5340742123899993" lon="-72.3130315867600046">
+    <node visible="true" id="-35" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5340742123899993" lon="-72.3130315867600046">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-34" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5340871356400072" lon="-72.3130251251400011">
+    <node visible="true" id="-34" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5340871356400072" lon="-72.3130251251400011">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-32" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5338603010699963" lon="-72.3133809752600030">
+    <node visible="true" id="-32" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5338603010699963" lon="-72.3133809752600030">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-31" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5338374838600011" lon="-72.3132526284699964">
+    <node visible="true" id="-31" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5338374838600011" lon="-72.3132526284699964">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-30" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5338517446099971" lon="-72.3131613596299871">
+    <node visible="true" id="-30" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5338517446099971" lon="-72.3131613596299871">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-29" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5339068479799991" lon="-72.3131172769400052">
+    <node visible="true" id="-29" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5339068479799991" lon="-72.3131172769400052">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-28" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5339230483900010" lon="-72.3131043166099943">
+    <node visible="true" id="-28" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5339230483900010" lon="-72.3131043166099943">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-27" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5339800914099975" lon="-72.3130786472499949">
+    <node visible="true" id="-27" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5339800914099975" lon="-72.3130786472499949">
         <tag k="hoot:status" v="2"/>
     </node>
-    <node visible="true" id="-2" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124" lat="18.5338698913200020" lon="-72.3133959999999973">
+    <node visible="true" id="-2" timestamp="2017-06-07T15:24:10Z" version="1" lat="18.5338698913200020" lon="-72.3133959999999973">
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="8" timestamp="2017-06-07T15:24:11Z" version="1" changeset="125" lat="18.5323712999999977" lon="-72.3033022000000045">
@@ -250,69 +250,7 @@
     <node visible="true" id="66" timestamp="2017-06-07T15:24:11Z" version="1" changeset="125" lat="18.5369042186100010" lon="-72.3133959999999973">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-150" timestamp="2017-06-07T15:24:11Z" version="1">
-        <nd ref="66"/>
-        <nd ref="36"/>
-        <nd ref="61"/>
-        <nd ref="37"/>
-        <nd ref="35"/>
-        <nd ref="34"/>
-        <nd ref="33"/>
-        <nd ref="32"/>
-        <nd ref="31"/>
-        <nd ref="30"/>
-        <nd ref="29"/>
-        <nd ref="28"/>
-        <nd ref="27"/>
-        <nd ref="26"/>
-        <nd ref="25"/>
-        <nd ref="-158"/>
-        <nd ref="24"/>
-        <nd ref="23"/>
-        <nd ref="22"/>
-        <nd ref="21"/>
-        <nd ref="20"/>
-        <nd ref="19"/>
-        <nd ref="18"/>
-        <nd ref="-159"/>
-        <nd ref="17"/>
-        <nd ref="16"/>
-        <nd ref="15"/>
-        <nd ref="14"/>
-        <nd ref="13"/>
-        <nd ref="12"/>
-        <nd ref="11"/>
-        <nd ref="10"/>
-        <nd ref="9"/>
-        <nd ref="8"/>
-        <nd ref="65"/>
-        <tag k="alt_name" v="Avenue John Brown"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Route de Bourdon"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
-        <tag k="lanes" v="2"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="type:haiti" v="Autre Route"/>
-        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="median" v="no"/>
-        <tag k="source:haiti" v="CNIGS and CartONG"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
-        <tag k="location" v="surface"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="osm;mgcp"/>
-        <tag k="highway" v="secondary"/>
-    </way>
-    <way visible="true" id="-5" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124">
+    <way visible="true" id="-5" timestamp="2017-06-07T15:24:10Z" version="1">
         <nd ref="-2"/>
         <nd ref="-32"/>
         <nd ref="-31"/>
@@ -339,7 +277,7 @@
         <tag k="source" v="mgcp"/>
         <tag k="highway" v="road"/>
     </way>
-    <way visible="true" id="-3" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124">
+    <way visible="true" id="-3" timestamp="2017-06-07T15:24:10Z" version="1">
         <nd ref="-158"/>
         <nd ref="-79"/>
         <nd ref="-78"/>
@@ -374,7 +312,7 @@
         <tag k="source" v="mgcp"/>
         <tag k="highway" v="road"/>
     </way>
-    <way visible="true" id="-1" timestamp="2017-06-07T15:24:10Z" version="1" changeset="124">
+    <way visible="true" id="-1" timestamp="2017-06-07T15:24:10Z" version="1">
         <nd ref="-27"/>
         <nd ref="-36"/>
         <nd ref="-35"/>
@@ -467,5 +405,67 @@
         <tag k="operational_status_quality" v="confirmed"/>
         <tag k="attribution" v="osm"/>
         <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="7" timestamp="2017-06-07T15:24:11Z" version="1">
+        <nd ref="66"/>
+        <nd ref="36"/>
+        <nd ref="61"/>
+        <nd ref="37"/>
+        <nd ref="35"/>
+        <nd ref="34"/>
+        <nd ref="33"/>
+        <nd ref="32"/>
+        <nd ref="31"/>
+        <nd ref="30"/>
+        <nd ref="29"/>
+        <nd ref="28"/>
+        <nd ref="27"/>
+        <nd ref="26"/>
+        <nd ref="25"/>
+        <nd ref="-158"/>
+        <nd ref="24"/>
+        <nd ref="23"/>
+        <nd ref="22"/>
+        <nd ref="21"/>
+        <nd ref="20"/>
+        <nd ref="19"/>
+        <nd ref="18"/>
+        <nd ref="-159"/>
+        <nd ref="17"/>
+        <nd ref="16"/>
+        <nd ref="15"/>
+        <nd ref="14"/>
+        <nd ref="13"/>
+        <nd ref="12"/>
+        <nd ref="11"/>
+        <nd ref="10"/>
+        <nd ref="9"/>
+        <nd ref="8"/>
+        <nd ref="65"/>
+        <tag k="alt_name" v="Avenue John Brown"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="surface" v="paved"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de Bourdon"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="type:haiti" v="Autre Route"/>
+        <tag k="uuid" v="{31b011c0-0cc8-46ef-9381-24e38cc7358d};{{00b2b754-a805-42fe-a7c0-60fe86d05092}}"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="fixme" v="find out what part of Ave. John brown is Lalue?"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="median" v="no"/>
+        <tag k="source:haiti" v="CNIGS and CartONG"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.114Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="osm;mgcp"/>
+        <tag k="highway" v="secondary"/>
     </way>
 </osm>

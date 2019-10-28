@@ -3817,6 +3817,7 @@
         <nd ref="-4346"/>
         <nd ref="-595"/>
         <nd ref="-563"/>
+        <nd ref="-564"/>
         <tag k="alt_name" v="Av. Urdaneta"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
@@ -3828,14 +3829,14 @@
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{781d71a3-4c17-4f7d-baf4-87a70049cb08}"/>
+        <tag k="uuid" v="{781d71a3-4c17-4f7d-baf4-87a70049cb08};{739e9fb0-22ec-4f89-977d-7dd397f89fd0}"/>
         <tag k="bridge" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.664Z;2019-01-17T19:50:05.668Z"/>
         <tag k="sidewalk" v="right"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
@@ -3847,22 +3848,26 @@
     <way visible="true" id="-7843" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-4344"/>
         <nd ref="-612"/>
-        <tag k="z_order" v="-999999"/>
+        <nd ref="-647"/>
+        <nd ref="-648"/>
+        <nd ref="-625"/>
         <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Av. Urdaneta"/>
-        <tag k="source:datetime" v="2015-06-12T14:47:40.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="source:datetime" v="2015-06-12T14:47:40.000Z;2019-01-17T19:50:06Z;2014-06-24T05:28:44.000Z"/>
         <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{89d3f564-9ee7-483b-8618-a571d9a2c921}"/>
+        <tag k="uuid" v="{89d3f564-9ee7-483b-8618-a571d9a2c921};{8bdee643-f6c6-4bcf-a2ab-662da78e442c}"/>
+        <tag k="motor_vehicle:conditional" v="no @ (21:00-05:59)"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.663Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.663Z;2019-01-17T19:50:05.662Z"/>
         <tag k="sidewalk" v="right"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
@@ -3902,6 +3907,7 @@
         <tag k="hoot:id" v="-7842"/>
         <tag k="highway" v="primary"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-7836" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-563"/>
         <nd ref="-564"/>
@@ -3932,6 +3938,9 @@
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7832" timestamp="1970-01-01T00:00:00Z" version="1">
+=======
+    <way visible="true" id="-7836" timestamp="1970-01-01T00:00:00Z" version="1">
+>>>>>>> master
         <nd ref="-596"/>
         <nd ref="-606"/>
         <nd ref="-4339"/>
@@ -3995,6 +4004,7 @@
         <nd ref="-4337"/>
         <nd ref="-615"/>
         <nd ref="-607"/>
+        <nd ref="-596"/>
         <tag k="alt_name" v="Av. Urdaneta"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
@@ -4006,14 +4016,14 @@
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{6d8e0da5-9629-4040-a4d3-a8f3e0c1e784}"/>
+        <tag k="uuid" v="{6d8e0da5-9629-4040-a4d3-a8f3e0c1e784};{58dcbcff-fbf6-4501-b66a-ab5f0e880694}"/>
         <tag k="bridge" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.663Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.663Z;2019-01-17T19:50:05.664Z"/>
         <tag k="sidewalk" v="right"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
@@ -4023,6 +4033,7 @@
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7822" timestamp="2019-01-17T19:50:06Z" version="1">
+<<<<<<< HEAD
         <nd ref="-607"/>
         <nd ref="-596"/>
         <tag k="z_order" v="-999999"/>
@@ -4050,6 +4061,8 @@
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="-7818" timestamp="2019-01-17T19:50:06Z" version="1">
+=======
+>>>>>>> master
         <nd ref="-4331"/>
         <nd ref="-840"/>
         <nd ref="-841"/>
@@ -4145,6 +4158,7 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-7816" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-4330"/>
         <nd ref="-837"/>
@@ -4172,6 +4186,9 @@
         <tag k="highway" v="tertiary"/>
     </way>
     <way visible="true" id="-7813" timestamp="2019-01-17T19:50:06Z" version="1">
+=======
+    <way visible="true" id="-7817" timestamp="2019-01-17T19:50:06Z" version="1">
+>>>>>>> master
         <nd ref="-4327"/>
         <nd ref="-754"/>
         <nd ref="-753"/>
@@ -4214,33 +4231,45 @@
         <tag k="hoot:id" v="-7813"/>
         <tag k="highway" v="primary"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-7811" timestamp="2019-01-17T19:50:06Z" version="1">
+=======
+    <way visible="true" id="-7816" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-105"/>
+        <nd ref="-787"/>
+        <nd ref="-786"/>
+        <nd ref="-785"/>
+        <nd ref="-784"/>
+        <nd ref="-783"/>
+        <nd ref="-782"/>
+        <nd ref="-781"/>
+        <nd ref="-780"/>
+        <nd ref="-779"/>
+        <nd ref="-778"/>
+        <nd ref="-777"/>
+        <nd ref="-776"/>
+        <nd ref="-775"/>
+        <nd ref="-774"/>
+        <nd ref="-773"/>
+        <nd ref="-772"/>
+        <nd ref="-771"/>
+        <nd ref="-770"/>
+        <nd ref="-769"/>
+        <nd ref="-768"/>
+        <nd ref="-767"/>
+        <nd ref="-766"/>
+>>>>>>> master
         <nd ref="-4326"/>
-        <nd ref="-765"/>
-        <nd ref="-764"/>
-        <nd ref="-763"/>
-        <nd ref="-762"/>
-        <nd ref="-761"/>
-        <nd ref="-760"/>
-        <nd ref="-759"/>
-        <nd ref="-758"/>
-        <nd ref="-757"/>
-        <nd ref="-756"/>
-        <nd ref="-755"/>
-        <nd ref="-4327"/>
-        <tag k="alt_name" v="Av. Sucre"/>
         <tag k="surface" v="asphalt"/>
         <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="3"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Viaducto: Nueva República"/>
-        <tag k="source:datetime" v="2015-06-12T14:51:40.000Z;2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="name" v="Av. Sucre"/>
+        <tag k="source:datetime" v="2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z;2019-01-17T19:50:06Z;2015-06-12T14:51:44.000Z"/>
         <tag k="bicycle" v="yes"/>
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
         <tag k="maxspeed" v="40"/>
         <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
-        <tag k="bridge" v="yes"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
@@ -4364,6 +4393,7 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-151" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-203"/>
         <nd ref="-212"/>
@@ -4396,6 +4426,8 @@
         <tag k="hoot:id" v="-151"/>
         <tag k="highway" v="primary"/>
     </way>
+=======
+>>>>>>> master
     <way visible="true" id="-147" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-105"/>
         <nd ref="-122"/>
@@ -4413,6 +4445,7 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="-146" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-105"/>
         <nd ref="-787"/>
@@ -4462,6 +4495,8 @@
         <tag k="hoot:id" v="-146"/>
         <tag k="highway" v="primary"/>
     </way>
+=======
+>>>>>>> master
     <way visible="true" id="-144" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-649"/>
         <nd ref="-667"/>
@@ -6554,6 +6589,37 @@
         <tag k="hoot:id" v="218"/>
         <tag k="highway" v="primary"/>
     </way>
+    <way visible="true" id="223" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
+        <nd ref="-203"/>
+        <nd ref="-212"/>
+        <nd ref="-213"/>
+        <nd ref="-214"/>
+        <nd ref="-215"/>
+        <nd ref="-216"/>
+        <nd ref="-211"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Av. Universidad"/>
+        <tag k="source:datetime" v="2013-12-19T16:34:21.000Z;2014-09-04T14:24:37.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="1"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="uuid" v="{fb707a34-dd57-41b3-b236-7d7c6de3cd29}"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.677Z"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="old_name" v="Avenida Este 4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="highway" v="primary"/>
+    </way>
     <way visible="true" id="224" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-297"/>
         <nd ref="-300"/>
@@ -6633,6 +6699,46 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:id" v="229"/>
+        <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="299" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4326"/>
+        <nd ref="-765"/>
+        <nd ref="-764"/>
+        <nd ref="-763"/>
+        <nd ref="-762"/>
+        <nd ref="-761"/>
+        <nd ref="-760"/>
+        <nd ref="-759"/>
+        <nd ref="-758"/>
+        <nd ref="-757"/>
+        <nd ref="-756"/>
+        <nd ref="-755"/>
+        <nd ref="-4327"/>
+        <tag k="alt_name" v="Av. Sucre"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="layer" v="3"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Viaducto: Nueva República"/>
+        <tag k="source:datetime" v="2015-06-12T14:51:40.000Z;2015-06-12T14:51:52.000Z;2014-04-25T15:54:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="yes"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="3"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="motor_vehicle" v="permissive"/>
         <tag k="highway" v="primary"/>
     </way>
     <way visible="true" id="343" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -7016,6 +7122,7 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
+<<<<<<< HEAD
     <way visible="true" id="523" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-612"/>
         <nd ref="-647"/>
@@ -7046,6 +7153,8 @@
         <tag k="hoot:id" v="523"/>
         <tag k="highway" v="primary"/>
     </way>
+=======
+>>>>>>> master
     <way visible="true" id="525" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-381"/>
         <nd ref="-614"/>
@@ -7249,5 +7358,30 @@
         <tag k="attribution" v="osm"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
+    </way>
+    <way visible="true" id="613" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-4330"/>
+        <nd ref="-837"/>
+        <nd ref="-838"/>
+        <nd ref="-839"/>
+        <nd ref="-4331"/>
+        <tag k="alt_name" v="Av. Oeste 4"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="layer" v="1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Puente: Unión"/>
+        <tag k="source:datetime" v="2014-04-25T15:14:46.000Z;2015-04-23T16:51:25.000Z;2015-08-17T18:05:50.000Z;2015-04-23T16:51:23.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="2"/>
+        <tag k="uuid" v="{83a0d5bc-776b-49a6-b6ad-023eea7b8490}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="highway" v="tertiary"/>
     </way>
 </osm>

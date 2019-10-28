@@ -131,26 +131,27 @@ public:
     ElementConverter ec(map);
     HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
-      ec.convertToLineString(map->getWay(-4))->toString());
+      ec.convertToLineString(map->getWay(-1))->toString());
     HOOT_STR_EQUALS("LINESTRING (100.0000000000000000 0.0000000000000000, 150.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-5))->toString());
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-7))->toString());
-    HOOT_STR_EQUALS("way(-4)\n"
+    HOOT_STR_EQUALS("way(-1)\n"
                     "nodes: [2]{-1, -6}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: conflated\n"
                     "version: 0\n"
                     "visible: 1\n"
                     "circular error: 15\n",
-                    map->getWay(-4)->toString());
+                    map->getWay(-1)->toString());
     HOOT_STR_EQUALS("way(-5)\n"
                     "nodes: [2]{-6, -2}\n"
                     "tags: cached envelope: 0.0000000000000000,-1.0000000000000000,0.0000000000000000,-1.0000000000000000\n"
                     "status: unknown1\n"
                     "version: 0\n"
                     "visible: 1\n"
-                    "circular error: 15\n",
+                    "circular error: 15\n"
+                    "parent id: (-1)\n",
                     map->getWay(-5)->toString());
     HOOT_STR_EQUALS("way(-7)\n"
                     "nodes: [2]{-1, -4}\n"

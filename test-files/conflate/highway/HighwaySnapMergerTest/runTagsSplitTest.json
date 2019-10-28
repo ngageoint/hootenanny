@@ -7,7 +7,7 @@
 {"type":"node","id":-1,"lat":0.500044915764206,"lon":0.5},
 {"type":"way","id":-6,"nodes":[-8,-2],"tags":{"error:circular":"15"}},
 {"type":"way","id":-5,"nodes":[-1,-7],"tags":{"error:circular":"15"}},
-{"type":"way","id":-4,"nodes":[-7,-8],"tags":{"highway":"road","uuid":"w1;w2","error:circular":"15"}},
+{"type":"way","id":-1,"nodes":[-7,-8],"tags":{"highway":"road","uuid":"w1;w2","error:circular":"15"}},
 {"type":"relation","id":-1,"members":[
 {"type":"way","ref":-5,"role":""},
 {"type":"way","ref":-6,"role":""}],"tags":{"highway":"road","uuid":"w1","error:circular":"15"}}]

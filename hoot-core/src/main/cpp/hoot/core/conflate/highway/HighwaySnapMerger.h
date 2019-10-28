@@ -104,6 +104,8 @@ private:
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 
+  void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
+
   // for white box testing.
   friend class HighwaySnapMergerTest;
 };
