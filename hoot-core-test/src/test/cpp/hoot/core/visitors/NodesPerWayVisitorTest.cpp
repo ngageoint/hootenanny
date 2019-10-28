@@ -30,16 +30,16 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/visitors/NodesPerWayVisitor.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
 {
-
-static const QString input = "test-files/ToyTestA.osm";
 
 class NodesPerWayVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(NodesPerWayVisitorTest);
   CPPUNIT_TEST(runBasicTest);
+  CPPUNIT_TEST(runCritTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -52,15 +52,33 @@ public:
   void runBasicTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, input, false, Status::Unknown1);
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", false, Status::Unknown1);
 
     NodesPerWayVisitor uut;
-    map->visitRo(uut);
+    // rw here b/c MultipleCriterionConsumerVisitor inherits from ElementVisitor and not
+    // ConstElementVisitor
+    map->visitRw(uut);
 
     CPPUNIT_ASSERT_EQUAL(40, (int)uut.getStat());
     CPPUNIT_ASSERT_EQUAL(3, (int)uut.getMin());
     CPPUNIT_ASSERT_EQUAL(30, (int)uut.getMax());
     CPPUNIT_ASSERT_EQUAL(10.0, uut.getAverage());
+  }
+
+  void runCritTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map, "test-files/conflate/unified/AllDataTypesA.osm", false, Status::Unknown1);
+
+    NodesPerWayVisitor uut;
+    uut.addCriterion(std::shared_ptr<BuildingCriterion>(new BuildingCriterion()));
+    map->visitRw(uut);
+
+    CPPUNIT_ASSERT_EQUAL(81, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL(5, (int)uut.getMin());
+    CPPUNIT_ASSERT_EQUAL(33, (int)uut.getMax());
+    CPPUNIT_ASSERT_EQUAL(8.0, uut.getAverage());
   }
 };
 

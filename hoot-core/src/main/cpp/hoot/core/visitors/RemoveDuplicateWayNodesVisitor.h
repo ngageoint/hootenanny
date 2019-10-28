@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/elements/Way.h>
 
 namespace hoot
 {
@@ -52,6 +53,13 @@ public:
   RemoveDuplicateWayNodesVisitor();
 
   virtual void visit(const ElementPtr& e);
+
+  /**
+   * Removes duplicates nodes from a way
+   *
+   * @param way the way to remove duplicate nodes from
+   */
+  static void removeDuplicates(const WayPtr& way);
 
   virtual QString getInitStatusMessage() const { return "Removing duplicate way nodes..."; }
 

@@ -366,6 +366,15 @@ public:
   static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
+   * Determines if a node is contained by more than one way in a map
+   *
+   * @param nodeId the ID of the node to search for
+   * @param map the map containing the nodes/ways
+   * @return true if more than one way contains the node; false otherwise
+   */
+  static bool nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
    * Determines if an element is contained by any relation in a map
    *
    * @param elementId the ID of the element to search for
@@ -405,6 +414,8 @@ public:
    * @return true if the map is made up of non-way node points only; false otherwise
    */
   static bool mapIsPointsOnly(const OsmMapPtr& map);
+
+  // This group of allElements* methods really should probably be passing const elements and maps.
 
   /**
    * Determines if all elements in a specified collection have any tag key from a specified set of
@@ -453,6 +464,58 @@ public:
    */
   static bool anyElementsHaveAnyKvp(const QStringList& kvps,
                                     const std::vector<ElementPtr>& elements);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key from a specified set of
+   * keys
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if all elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvp the tag key/value pairs to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if all elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key from a specified set of
+   * keys
+   *
+   * @param tagKeys the tag keys to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * tag keys specified in tagKeys; false otherwise
+   */
+  static bool anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * Determines if any elements in a specified collection have any tag key/value pair from a
+   * specified set of kvps
+   *
+   * @param kvps the tag key/value pairs to search for
+   * @param elementIds IDs of the elements to examine
+   * @param map the map containing the elements
+   * @return true if any elements from the input collection of elements contain at least one of the
+   * key/value pairs specified in kvps; false otherwise
+   */
+  static bool anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
 };
 
 }

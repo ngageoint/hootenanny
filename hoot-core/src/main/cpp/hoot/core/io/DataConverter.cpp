@@ -49,6 +49,8 @@
 #include <hoot/core/ops/BuildingPartMergeOp.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
 
 // std
 #include <vector>
@@ -206,10 +208,10 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
     output.right(_printLengthMax) + "...");
 
   // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and
-  // writing do their translations inline (don't use SchemaTranslationOp or SchemaTranslationVisitor),
-  // and OGR reading support for layer names, conversions involving OGR data must follow a separate
-  // logic path from non-OGR data. It would be nice at some point to be able to do everything
-  // generically from within the _convert method.
+  // writing do their translations inline (don't use SchemaTranslationOp or
+  // SchemaTranslationVisitor), and OGR reading support for layer names, conversions involving OGR
+  // data must follow a separate logic path from non-OGR data. It would be nice at some point to be
+  // able to do everything generically from within the _convert method.
 
   // We require that a translation be present when converting to OGR, the translation direction be
   // to OGR or unspecified, and that only one input is specified.
@@ -231,6 +233,11 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
   // direction different than what was expected for the input/output formats was specified, just
   // call the generic convert routine. If no translation direction was specified, we'll try to guess
   // it and let the user know that we did.
+  //
+  // Note that it still is possible an OGR format can go in here, if you didn't specify a
+  // translation. That seems a little odd and maybe worth rethinking. Most the time you are going to
+  // be specifying a translation when dealing with OGR formats, but if you're doing an additional
+  // conversion on a data file after an initial one you might not specify a translation.
   else
   {
     _convert(inputs, output);
@@ -546,6 +553,40 @@ QStringList DataConverter::_getOgrLayersFromPath(OgrReader& reader, QString& inp
   return layers;
 }
 
+void DataConverter::_setFromOgrOptions()
+{
+  // The ordering for these added ops matters. Let's run them after any user specified convert ops
+  // to avoid unnecessary processing time. Also, if any of these ops gets added here, then we never
+  // have a streaming OGR read, since they all require a full map...don't love that...but not sure
+  // what can be done about it.
+
+  // Nodes that are very close together but with different IDs present a problem from OGR sources,
+  // so let's merge them together.
+  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
+  {
+    if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
+    {
+      _convertOps.append(QString::fromStdString(MergeNearbyNodes::className()));
+    }
+  }
+
+  // Complex building simplification is primarily meant for UFD buildings, commonly read from OGR
+  // sources.
+  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
+  {
+    // Building outline updating needs to happen after building part merging, or we can end up with
+    // role verification warnings in JOSM.
+    if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
+    {
+      _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
+    }
+    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
+    {
+      _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
+    }
+  }
+}
+
 void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_convertFromOgr (formerly known as ogr2osm)");
@@ -577,31 +618,10 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
   LOG_VARD(_convertOps);
 
-  // The ordering for these added ops matters. Let's run them after any user specified convert ops
-  // to avoid unnecessary processing time.
-  if (ConfigOptions().getOgr2osmMergeNearbyNodes())
-  {
-    if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
-    {
-      _convertOps.append(QString::fromStdString(MergeNearbyNodes::className()));
-    }
-  }
-  if (ConfigOptions().getOgr2osmSimplifyComplexBuildings())
-  {
-    // Building outline updating needs to happen after building part merging, or we can end up with
-    // role verification warnings in JOSM.
-      if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
-      {
-        _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
-      }
-    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
-    {
-      _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
-    }
-  }
-  // Inclined to do this, but there could be some workflows where the same op needs to be called
-  // more than once.
-  //_convertOps.removeDuplicates();
+  _setFromOgrOptions();
+  // Inclined to do this: _convertOps.removeDuplicates();, but there could be some workflows where
+  // the same op needs to be called more than once.
+  //
   LOG_VARD(_convertOps);
 
   // The number of task steps here must be updated as you add/remove job steps in the logic.
@@ -736,6 +756,12 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
   // This keeps the status and the tags.
   conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
   conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
+
+  // see note in convert; an OGR format could still be processed here
+  if (IoUtils::anyAreSupportedOgrFormats(inputs, true))
+  {
+    _setFromOgrOptions();
+  }
 
   _handleGeneralConvertTranslationOpts(output);
 

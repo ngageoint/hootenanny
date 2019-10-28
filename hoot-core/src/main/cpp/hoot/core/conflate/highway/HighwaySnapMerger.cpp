@@ -37,23 +37,25 @@
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/IdSwapOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/WaysVisitor.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSet>
@@ -251,6 +253,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
 
+  bool swapWayIds = false;
+
   if (e1Match->getElementType() == ElementType::Way)
   {
     if (e1->getElementType() == ElementType::Way && e2->getElementType() == ElementType::Way)
@@ -266,6 +270,9 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       wMatch->setPid(pid);
       LOG_TRACE("Set PID: " << pid << " on: " << wMatch->getElementId() << " (e1Match).");
 
+      //  Keep the original ID from e1 for e1Match
+      swapWayIds = true;
+
       if (scraps1)
       {
         if (scraps1->getElementType() == ElementType::Way)
@@ -274,13 +281,44 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
           LOG_TRACE(
             "Set PID: " << w1->getPid() << " on: " << scraps1->getElementId() << " (scraps1).");
         }
+        else if (scraps1->getElementType() == ElementType::Relation)
+        {
+          RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps1);
+          for (size_t i = 0; i < r->getMembers().size(); ++i)
+          {
+            ElementId eid = r->getMembers()[i].getElementId();
+            if (eid.getType() == ElementType::Way)
+            {
+              map->getWay(eid)->setPid(w1->getPid());
+              LOG_TRACE(
+                "Set PID: " << w1->getPid() << " on: " << eid << " (scraps1).");
+            }
+          }
+        }
       }
 
-      if (scraps2 && scraps2->getElementType() == ElementType::Way)
+      if (scraps2)
       {
-        std::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
-        LOG_TRACE(
-          "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
+        if (scraps2->getElementType() == ElementType::Way)
+        {
+          std::dynamic_pointer_cast<Way>(scraps2)->setPid(w2->getPid());
+          LOG_TRACE(
+            "Set PID: " << w2->getPid() << " on: " << scraps2->getElementId() << " (scraps2).");
+        }
+        else if (scraps2->getElementType() == ElementType::Relation)
+        {
+          RelationPtr r = std::dynamic_pointer_cast<Relation>(scraps2);
+          for (size_t i = 0; i < r->getMembers().size(); ++i)
+          {
+            ElementId eid = r->getMembers()[i].getElementId();
+            if (eid.getType() == ElementType::Way)
+            {
+              map->getWay(eid)->setPid(w2->getPid());
+              LOG_TRACE(
+                "Set PID: " << w2->getPid() << " on: " << eid << " (scraps2).");
+            }
+          }
+        }
       }
 
       // Reverse the way if w2 is one way and w1 isn't the similar direction as w2
@@ -334,7 +372,26 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // remove the old way that was split and snapped
   if (e1 != e1Match && scraps1)
   {
-    ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(result);
+    if (swapWayIds)
+    {
+      ElementId eidm1 = e1Match->getElementId();
+      //  Swap the old way ID back into the match element
+      IdSwapOp(eid1, eidm1).apply(result);
+      //  Remove the old way with a new swapped out ID
+      RemoveElementByEid(eidm1).apply(result);
+      //  Add the scraps element to all the relations that the match is in
+      if (scraps1)
+      {
+        QList<ElementPtr> list;
+        list.append(e1Match);
+        list.append(scraps1);
+        result->replace(e1Match, list);
+        //  Update the scraps
+        _updateScrapParent(result, e1Match->getId(), scraps1);
+      }
+    }
+    else if (scraps1)
+      ReplaceElementOp(eid1, scraps1->getElementId(), true).apply(result);
   }
   else
   {
@@ -348,6 +405,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     map->addElement(scraps2);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
+//    _updateScrapParent(result, e2Match->getId(), scraps2);
   }
   // if there is nothing to review against, drop the reviews.
   else
@@ -690,6 +748,22 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
 
     replaced.push_back(
       std::pair<ElementId, ElementId>(splitee->getElementId(), scrap->getElementId()));
+  }
+}
+
+void HighwaySnapMerger::_updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap)
+{
+  if (!scrap)
+    return;
+  if (scrap->getElementType() == ElementType::Way)
+    std::dynamic_pointer_cast<Way>(scrap)->setPid(id);
+  else if (scrap->getElementType() == ElementType::Relation)
+  {
+    RelationPtr relation = std::dynamic_pointer_cast<Relation>(scrap);
+    const vector<RelationData::Entry>& members = relation->getMembers();
+    //  Iterate all of the members and update the parent id recursively
+    for (size_t i = 0; i < members.size(); ++i)
+      _updateScrapParent(map, id, map->getElement(members[i].getElementId()));
   }
 }
 

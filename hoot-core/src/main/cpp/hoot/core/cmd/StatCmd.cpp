@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/elements/ElementVisitor.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/io/OsmMapReader.h>
@@ -38,6 +39,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -60,24 +62,39 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() != 2)
+    if (args.size() < 2 || args.size() > 3)
     {
       LOG_VAR(args);
       std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two or three parameters.").arg(getName()));
     }
 
-    const QString input = args[0];
+    const QString input = args[0].trimmed();
     LOG_VART(input);
 
-    const QString visClassName = args[1];
+    const QString visClassName = args[1].trimmed();
     LOG_VARD(visClassName);
 
-    const double stat = _calcStat(input, visClassName);
+    QString statType = "total";
+    if (args.size() == 3)
+    {
+      statType = args[2].trimmed();
+    }
+    LOG_VARD(statType);
+    if (!_isValidStatType(statType))
+    {
+      throw IllegalArgumentException("Invalid statistic type: " + statType);
+    }
+
+    LOG_INFO(
+      "Calculating statistic of type: " << statType << ", with visitor: " << visClassName <<
+      ", for input: " << input.right(25) << "...")
+    const double stat = _calcStat(input, visClassName, statType);
     LOG_VART(stat);
 
     // see note in CountCmd about the preceding endline
-    std::cout << std::endl << "Calculated statistic: " << stat << std::endl;
+    std::cout << std::endl << "Calculated statistic: " <<
+                 QString::number(stat, 'g', 3) << std::endl;
 
     return 0;
   }
@@ -85,6 +102,11 @@ public:
 private:
 
   int _taskStatusUpdateInterval;
+
+  bool _isValidStatType(const QString& statType) const
+  {
+    return statType == "total" || statType == "min" || statType == "max" || statType == "average";
+  }
 
   std::shared_ptr<PartialOsmMapReader> _getReader(const QString& input)
   {
@@ -124,7 +146,7 @@ private:
     return statsCollector;
   }
 
-  double _calcStat(const QString& input, const QString& visClassName)
+  double _calcStat(const QString& input, const QString& visClassName, const QString& statType)
   {
     double stat;
 
@@ -136,9 +158,25 @@ private:
       new ElementVisitorInputStream(
         std::dynamic_pointer_cast<ElementInputStream>(reader), statCollector));
 
-    std::shared_ptr<SingleStatistic> counter =
+    std::shared_ptr<SingleStatistic> singleStatCtr =
       std::dynamic_pointer_cast<SingleStatistic>(statCollector);
-    LOG_VART(counter.get());
+    LOG_VART(singleStatCtr.get());
+    if (!singleStatCtr.get())
+    {
+      throw IllegalArgumentException(
+        "Visitors passed to the stat command must support the SingleStatistic interface.");
+    }
+    std::shared_ptr<NumericStatistic> numericStatCtr;
+    if (statType != "total")
+    {
+      numericStatCtr = std::dynamic_pointer_cast<NumericStatistic>(singleStatCtr);
+      if (!numericStatCtr.get())
+      {
+        throw IllegalArgumentException(
+          "Visitors passed to the stat command with a statistic type other than \"total\" must "
+           "support the NumericStatistic interface.");
+      }
+    }
 
     LOG_TRACE("Calculating statistic...");
     long numElementsParsed = 0;
@@ -147,13 +185,38 @@ private:
       /*ConstElementPtr element = */filteredInputStream->readNextElement();
       numElementsParsed++;
 
-      if (numElementsParsed % _taskStatusUpdateInterval == 0)
+      if (numElementsParsed % (_taskStatusUpdateInterval * 10) == 0)
       {
-        PROGRESS_INFO("Calculated statistic for: " << numElementsParsed << " elements.");
+        PROGRESS_INFO(
+          "Calculated statistic for: " << StringUtils::formatLargeNumber(numElementsParsed) <<
+          " elements.");
       }
     }
 
-    stat = counter->getStat();
+    if (numericStatCtr)
+    {
+      if (statType == "min")
+      {
+        stat = numericStatCtr->getMin();
+      }
+      else if (statType == "max")
+      {
+        stat = numericStatCtr->getMax();
+      }
+      else if (statType == "average")
+      {
+        stat = numericStatCtr->getAverage();
+      }
+      else
+      {
+        // won't get here
+        throw HootException("");
+      }
+    }
+    else
+    {
+      stat = singleStatCtr->getStat();
+    }
 
     reader->finalizePartial();
     reader->close();

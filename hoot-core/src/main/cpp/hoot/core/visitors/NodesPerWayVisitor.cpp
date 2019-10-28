@@ -30,6 +30,8 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
@@ -39,24 +41,67 @@ HOOT_FACTORY_REGISTER(ElementVisitor, NodesPerWayVisitor)
 NodesPerWayVisitor::NodesPerWayVisitor() :
 _totalWayNodes(0),
 _minNodesPerWay(0),
-_maxNodesPerWay(0)
+_maxNodesPerWay(0),
+_negateCriterion(false)
 {
+}
+
+void NodesPerWayVisitor::setConfiguration(const Settings& conf)
+{
+  // TODO: This setConfiguration is kind of bulky for MultipleCriterionConsumerVisitor children.
+  // Can we move some of the logic up to the parent? Do the same in the other children as well.
+
+  ConfigOptions configOptions(conf);
+  _negateCriterion = configOptions.getElementCriterionNegate();
+  LOG_VARD(_negateCriterion);
+  const QString critName = configOptions.getNodesPerWayVisitorElementCriterion();
+  LOG_VARD(critName);
+  _setCriterion(critName);
+}
+
+void NodesPerWayVisitor::addCriterion(const ElementCriterionPtr& e)
+{
+  if (!_negateCriterion)
+  {
+    _customCrit = e;
+  }
+  else
+  {
+    _customCrit.reset(new NotCriterion(e));
+  }
+}
+
+void NodesPerWayVisitor::_setCriterion(const QString& criterionName)
+{
+  if (!criterionName.trimmed().isEmpty())
+  {
+    LOG_VART(criterionName);
+    addCriterion(
+      std::shared_ptr<ElementCriterion>(
+        Factory::getInstance().constructObject<ElementCriterion>(criterionName.trimmed())));
+  }
 }
 
 void NodesPerWayVisitor::visit(const ConstElementPtr& e)
 {
-  if (_crit.isSatisfied(e))
+  LOG_VART(e->getElementId());
+  if (_wayCrit.isSatisfied(e) && (!_customCrit || _customCrit->isSatisfied(e)))
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
+    LOG_VART(way->getElementId());
+
     const int numWayNodes = way->getNodeCount();
     _totalWayNodes += numWayNodes;
+    LOG_VART(_totalWayNodes);
     if (_minNodesPerWay == 0 || numWayNodes < _minNodesPerWay)
     {
       _minNodesPerWay = numWayNodes;
+      LOG_VART(_minNodesPerWay);
     }
     if (numWayNodes > _maxNodesPerWay)
     {
       _maxNodesPerWay = numWayNodes;
+      LOG_VART(_maxNodesPerWay);
     }
     _numAffected++;
   }

@@ -410,6 +410,11 @@ bool OsmUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
   return commonWayIds.size() > 0;
 }
 
+bool OsmUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map)
+{
+  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 1;
+}
+
 bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
 {
   if (elementContainedByAnyRelation(elementId, map))
@@ -552,6 +557,50 @@ bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
     }
   }
   return false;
+}
+
+bool OsmUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return allElementsHaveAnyTagKey(tagKeys, elements);
+}
+
+bool OsmUtils::allElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return allElementsHaveAnyKvp(kvps, elements);
+}
+
+bool OsmUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
+                                       const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return anyElementsHaveAnyTagKey(tagKeys, elements);
+}
+
+bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
+                                    const std::set<ElementId>& elementIds, OsmMapPtr& map)
+{
+  std::vector<ElementPtr> elements;
+  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
+  {
+    elements.push_back(map->getElement(*it));
+  }
+  return anyElementsHaveAnyKvp(kvps, elements);
 }
 
 }

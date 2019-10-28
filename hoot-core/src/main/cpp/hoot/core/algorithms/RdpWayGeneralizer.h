@@ -80,8 +80,9 @@ public:
     Generalizes a way to a set of reduced points.  The map the way belongs to is modified.
 
     @param way the way whose points are to be reduced
+    @return the number of nodes removed
     */
-  void generalize(const std::shared_ptr<Way>& way);
+  int generalize(const std::shared_ptr<Way>& way);
 
   /**
     Sets the distance parameter that determines to what degree the way is generalized; higher
@@ -89,13 +90,22 @@ public:
     */
   void setEpsilon(double epsilon);
 
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
 private:
 
   friend class RdpWayGeneralizerTest;
 
+  // distance in meters that determines to what degree a way is generalized; higher values result in
+  // more generalization (more nodes removed).
   double _epsilon;
+
+  // If true, the any node shared by ways will not be removed by generalization. Its arguable that
+  // this shouldn't be an option and shared nodes should never be removed, but leaving it optional
+  // for now in case there is a use case where they should be removed.
+  bool _removeNodesSharedByWays;
 
   OsmMapPtr _map;
 
@@ -122,6 +132,17 @@ private:
     const std::shared_ptr<const Node> splitPoint,
     const std::shared_ptr<const Node> lineToBeReducedStartPoint,
     const std::shared_ptr<const Node> lineToBeReducedEndPoint) const;
+
+  /*
+   * Takes in the way node IDs before the way was generalized and after it was generalized and
+   * constructs a final set of node IDs with the IDs that aren't allowed to be removed added back
+   * in (shared node IDs). This is necessary because it was too difficult to inject the logic to
+   * keep shared nodes into the recursive generalization function, so we run the logic after the
+   * generalization instead.
+   */
+  QList<long> _getUpdatedWayNodeIdsForThoseNotAllowedToBeRemoved(
+    const QSet<long>& nodeIdsNotAllowedToBeRemoved, const QList<long>& nodeIdsBeforeGeneralization,
+    const QList<long>& generalizedNodeIds);
 };
 
 }

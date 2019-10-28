@@ -94,6 +94,8 @@ public:
 
   virtual QString getDescription() const { return "Randomly simplifies ways by removing nodes"; }
 
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+
 private:
 
   boost::minstd_rand* _rng;
@@ -101,6 +103,8 @@ private:
 
   double _wayGeneralizeProbability;
   double _epsilon;
+  // see RdpWayGeneralizer
+  bool _removeNodesSharedByWays;
 
   std::shared_ptr<RdpWayGeneralizer> _generalizer;
 

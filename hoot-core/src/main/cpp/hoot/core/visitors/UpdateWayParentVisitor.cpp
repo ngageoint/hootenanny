@@ -22,28 +22,30 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef __ELEMENT_CRITERIONCONSUMER_H
-#define __ELEMENT_CRITERIONCONSUMER_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include "UpdateWayParentVisitor.h"
+
+using namespace std;
 
 namespace hoot
 {
 
-class ElementCriterionConsumer
+UpdateWayParentVisitor::UpdateWayParentVisitor(long oldParentId, long newParentId)
+  : _oldParentId(oldParentId),
+    _newParentId(newParentId)
 {
-public:
-
-  static std::string className() { return "hoot::ElementCriterionConsumer"; }
-
-  virtual ~ElementCriterionConsumer() {}
-
-  virtual void addCriterion(const ElementCriterionPtr& crit) = 0;
-};
-
 }
 
+void UpdateWayParentVisitor::visit(const ElementPtr& e)
+{
+  if (e->getElementType() == ElementType::Way)
+  {
+    WayPtr w = std::dynamic_pointer_cast<Way>(e);
+    if (w->getPid() == _oldParentId)
+      w->setPid(_newParentId);
+  }
+}
 
-#endif // __ELEMENT_CRITERIONCONSUMER_H
+}

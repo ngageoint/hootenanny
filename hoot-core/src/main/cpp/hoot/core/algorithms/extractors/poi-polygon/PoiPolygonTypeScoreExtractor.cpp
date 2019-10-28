@@ -27,15 +27,15 @@
 #include "PoiPolygonTypeScoreExtractor.h"
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
-#include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 // Qt
 #include <QSet>
 
@@ -52,7 +52,11 @@ QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTa
 QMultiHash<QString, QString> PoiPolygonTypeScoreExtractor::_typeToNames;
 
 PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor() :
-_translateTagValuesToEnglish(false)
+_typeScoreThreshold(-1.0),
+_featureDistance(-1.0),
+_printMatchDistanceTruth(false),
+_translateTagValuesToEnglish(false),
+_noTypeFound(false)
 {
   _readTypeToNames();
 }

@@ -137,6 +137,14 @@ public:
   bool isOneWay() const;
 
   /**
+   * Determines if a node ID represents the start and end node
+   *
+   * @param nodeId ID of the node to search for
+   * @return true if the node ID maps to the start and end node; false otherwise
+   */
+  bool isFirstAndLastNode(const long nodeId) const;
+
+  /**
    * @brief isSimpleLoop - checks to see if the way starts and ends at the same
    *                       node. If it does, return true.
    * @return true if the way starts and ends at the same node
@@ -169,7 +177,7 @@ public:
 
   /**
    * Replaces any node instance with oldId with newId. If oldId isn't referenced by this way then
-   * no action is taken.
+   * no action is taken. If newId already exists in the way, it is first removed before replacement.
    */
   void replaceNode(long oldId, long newId);
 
@@ -217,6 +225,10 @@ private:
    * This envelope may be cached, but it also may not be exact.
    */
   mutable geos::geom::Envelope _cachedEnvelope;
+
+  // for debugging only; SLOW - We don't check for duplicated nodes (outside of start/end) at
+  // runtime due to the performance hit. So, use this to debug when that occurs.
+  bool _nodeIdsAreDuplicated(const std::vector<long>& ids) const;
 };
 
 typedef std::shared_ptr<Way> WayPtr;

@@ -31,6 +31,9 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -39,13 +42,13 @@ class Way;
 class RdpWayGeneralizer;
 
 /**
- * Performs generalization of a map's ways.
+ * Performs generalization (simplification) of a map's ways.
  *
  * @see RdpWayGeneralizer
  */
-class WayGeneralizeVisitor : public ElementOsmMapVisitor, public Configurable
+class WayGeneralizeVisitor : public ElementOsmMapVisitor, public Configurable,
+  public ElementCriterionConsumer, public OperationStatusInfo
 {
-
 public:
 
   static std::string className() { return "hoot::WayGeneralizeVisitor"; }
@@ -70,11 +73,28 @@ public:
 
   virtual QString getDescription() const { return "Simplifies ways by removing nodes"; }
 
+  virtual QString getInitStatusMessage() const
+  { return "Generalizing ways..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Generalized " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+            StringUtils::formatLargeNumber(_numProcessed) + " ways. Removed " +
+            StringUtils::formatLargeNumber(_totalNodesRemoved) + " total nodes."; }
+
+  virtual void addCriterion(const ElementCriterionPtr& crit);
+
+  void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
+
 private:
 
   double _epsilon;
 
   std::shared_ptr<RdpWayGeneralizer> _generalizer;
+  // a criterion used to further filter the ways to be generalized
+  ElementCriterionPtr _crit;
+  // see RdpWayGeneralizer
+  bool _removeNodesSharedByWays;
+  int _totalNodesRemoved;
 
   void _generalize(const WayPtr& way);
 };

@@ -22,28 +22,33 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef __ELEMENT_CRITERIONCONSUMER_H
-#define __ELEMENT_CRITERIONCONSUMER_H
+#ifndef UPDATE_WAY_PARENT_VISITOR_H
+#define UPDATE_WAY_PARENT_VISITOR_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class ElementCriterionConsumer
+class UpdateWayParentVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::ElementCriterionConsumer"; }
+  UpdateWayParentVisitor(long oldParentId, long newParentId);
 
-  virtual ~ElementCriterionConsumer() {}
+  virtual void visit(const ElementPtr& e) override;
 
-  virtual void addCriterion(const ElementCriterionPtr& crit) = 0;
+  virtual QString getDescription() const override { return "Updates all way parent IDs to a new ID"; }
+
+private:
+  long _oldParentId;
+  long _newParentId;
+
 };
 
 }
 
-
-#endif // __ELEMENT_CRITERIONCONSUMER_H
+#endif // UPDATE_WAY_PARENT_VISITOR_H
