@@ -96,7 +96,7 @@ void IntersectionSplitter::_mapNodesToWays()
     {
       const set<long>& relations =
         _map->getIndex().getElementToRelationMap()->getRelationByElement(w->getElementId());
-
+      LOG_VART(relations.size());
       foreach (long rid, relations)
       {
         ElementPtr r = _map->getRelation(rid);
@@ -107,6 +107,8 @@ void IntersectionSplitter::_mapNodesToWays()
       }
     }
 
+    LOG_VART(w->getElementId());
+    LOG_VART(isNetworkType);
     if (isNetworkType)
     {
       _mapNodesToWay(w);

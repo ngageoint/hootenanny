@@ -61,31 +61,12 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     result = false;
     LOG_VART(result);
   }
-  else
-  {
-    /*
-     * I don't think this is a good idea. A date isn't enough to identify a road. You could end up
-     * with false positive matches. The runtime performance could also be hurt by checking for
-     * highway matches against non-roads (although I haven't seen that in practice yet). Road tags
-     * should be added to the feature before conflation, if necessary.
-     *
-     * Tried removing this and three case tests fail. One is just an element ID reordering, so ok.
-     * The other two are legit failures. Interestingly enough if I turn off hash.seed.zero, then
-     * those tests pass. Unfortunately, doing that isn't really an option for the tests. This else
-     * statement can probably be removed and have the tests passing as well but will just take a
-     * ton of debugging to figure out what's going on with the hash ordering.
-     */
 
-    // Maybe it's a way with nothing but a time tag...
-    it = tags.find(MetadataTags::SourceDateTime());
-    if (type == ElementType::Way && tags.keys().size() < 2 && it != tags.end())
-    {
-      // We can treat it like a highway
-      result = true;
-      LOG_VART(result);
-    }
-  }
-  // Make sure this isn't an area highway section!
+  // At one point we were allowing any way with a date tag to pass here as well, but that can lead
+  // to false positive highway matches, so it was removed. Its better to tag the way as a highway
+  // before conflation.
+
+  // Make sure this isn't an area highway section.
   if (result)
   {
     result = !AreaCriterion().isSatisfied(element);
