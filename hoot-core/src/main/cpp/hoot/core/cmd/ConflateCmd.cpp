@@ -163,13 +163,21 @@ int ConflateCmd::runSimple(QStringList& args)
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Conflating ..." + input1.right(maxFilePrintLength) + " with ..." +
-    input2.right(maxFilePrintLength) + " and writing the output to ..." +
+    "Conflating " + input1.right(maxFilePrintLength) + " with " +
+    input2.right(maxFilePrintLength) + " and writing the output to " +
     output.right(maxFilePrintLength);
   if (isDiffConflate)
   {
-    msg = msg.prepend("Differentially ");
+    if (diffConflator.conflatingTags())
+    {
+      msg = msg.replace("Conflating", "Differentially conflating (tags only) ");
+    }
+    else
+    {
+      msg = msg.replace("Conflating", "Differentially conflating ");
+    }
   }
+
   progress.set(0.0, msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
