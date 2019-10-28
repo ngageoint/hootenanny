@@ -53,7 +53,7 @@ namespace hoot
 {
 
 int NodeMatcher::logWarnCount = 0;
-QList<std::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriterion;
+QList<std::shared_ptr<ElementCriterion>> NodeMatcher::_networkFeatureTypeCriteria;
 
 NodeMatcher::NodeMatcher() :
 _strictness(ConfigOptions().getNodeMatcherStrictness()),
@@ -63,7 +63,7 @@ _delta(ConfigOptions().getNodeMatcherAngleCalcDelta())
 
 bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
 {
-  if (_networkFeatureTypeCriterion.isEmpty())
+  if (_networkFeatureTypeCriteria.isEmpty())
   {
     QStringList critClasses;
     critClasses.append("hoot::HighwayCriterion");
@@ -73,16 +73,19 @@ bool NodeMatcher::isNetworkFeatureType(ConstElementPtr element)
 
     for (int i = 0; i < critClasses.size(); i++)
     {
-      _networkFeatureTypeCriterion.append(
+      _networkFeatureTypeCriteria.append(
         std::shared_ptr<ElementCriterion>(
           Factory::getInstance().constructObject<ElementCriterion>(critClasses.at(i))));
     }
   }
 
-  for (int i = 0; i < _networkFeatureTypeCriterion.size(); i++)
+  for (int i = 0; i < _networkFeatureTypeCriteria.size(); i++)
   {
-    if (_networkFeatureTypeCriterion.at(i)->isSatisfied(element))
+    if (_networkFeatureTypeCriteria.at(i)->isSatisfied(element))
     {
+      LOG_TRACE(
+        element/*->getElementId()*/ << " recognized as network feature types by " <<
+        _networkFeatureTypeCriteria.at(i)->toString() << ".");
       return true;
     }
   }
