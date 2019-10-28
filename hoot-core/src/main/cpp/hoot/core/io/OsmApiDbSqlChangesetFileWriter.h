@@ -64,9 +64,17 @@ public:
    * Write a SQL changeset to the specified output path
    *
    * @param path SQL file output path
-   * @param changesetProvider changeset data
+   * @param changesetProvider changeset provider to stream the changes from
    */
   void write(const QString& path, ChangesetProviderPtr changesetProvider);
+
+  /**
+   * Write a SQL changeset to the specified output path
+   *
+   * @param path SQL file output path
+   * @param changesetProviders changeset providers to stream the changes from
+   */
+  void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
 
   /**
    * Set the configuration settings
@@ -118,6 +126,7 @@ private:
   double _changesetUserId;
 
   bool _includeDebugTags;
+  bool _includeCircularErrorTags;
 
   // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;

@@ -5,14 +5,14 @@
 
 The +tag-compare+ command reads from inputs and outputs a co-occurrence matrix based on tag values.
 
+* +input1+ -     Input 1; may be any supported input format (e.g. OSM file).
+* +input2+ -     Input 2; may be any supported input format (e.g. OSM file).
 * +--no-table+ - print the matrix as a list.  The default is to print out as a table.
-* +input1+ -     Input 1 (e.g. .osm file).
-* +input2+ -     Input 2 (e.g. .osm file).
 
 === Usage
 
 --------------------------------------
-tag-compare [--no-table] (input1 input2)
+tag-compare (input1 input2) [--no-table]
 --------------------------------------
 
 === Example Output
@@ -24,4 +24,8 @@ tag-compare [--no-table] (input1 input2)
 |        name=<NULL> |                    |              |           4 |                |
 |     name=<SIMILAR> |                    |              |             |             24 |
 ------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

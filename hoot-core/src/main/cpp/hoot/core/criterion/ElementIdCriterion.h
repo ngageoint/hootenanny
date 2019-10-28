@@ -52,6 +52,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements by type and ID"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   ElementId _id;

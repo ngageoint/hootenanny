@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Identifies elements in a list of IDs
  *
- * TODO: We could probably replace this with ElementIdCriterion.
+ * @todo We could probably replace this with ElementIdCriterion.
  */
 class ElementInIdListCriterion : public ElementCriterion
 {
@@ -56,6 +56,9 @@ public:
   { return ElementCriterionPtr(new ElementInIdListCriterion()); }
 
   virtual QString getDescription() const { return "Filters elements with a list of IDs"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
 

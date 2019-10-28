@@ -43,13 +43,14 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -64,7 +65,10 @@ _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
 _printStats(printStats),
-_singleInput(false)
+_singleInput(false),
+_numCreateChanges(0),
+_numModifyChanges(0),
+_numDeleteChanges(0)
 {
 }
 
@@ -198,51 +202,77 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
 
 void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& output)
 {
-  LOG_DEBUG(
-    "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
-    " to output: " << output << "...");
-  OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
-  OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
+  QList<OsmMapPtr> map1Inputs;
+  map1Inputs.append(map1);
+  QList<OsmMapPtr> map2Inputs;
+  map2Inputs.append(map2);
+  create(map1Inputs, map2Inputs, output);
+}
 
-  // don't want to include review relations - may need to remove this depending on what happens
-  // with #3361
-  std::shared_ptr<TagKeyCriterion> elementCriterion(
-    new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
-  RemoveElementsVisitor removeElementsVisitor;
-  removeElementsVisitor.setRecursive(false);
-  removeElementsVisitor.addCriterion(elementCriterion);
-  map1->visitRw(removeElementsVisitor);
-  map2->visitRw(removeElementsVisitor);
-
-  // Truncate tags over 255 characters to push into OSM API.
-  ApiTagTruncateVisitor truncateTags;
-  map1->visitRw(truncateTags);
-  map2->visitRw(truncateTags);
-
-  LOG_VARD(MapProjector::toWkt(map1->getProjection()));
-  LOG_VARD(MapProjector::toWkt(map2->getProjection()));
-
-  //sortedElements1 is the former state of the data
-  ElementInputStreamPtr sortedElements1;
-  //sortedElements2 is the newer state of the data
-  ElementInputStreamPtr sortedElements2;
-
-  // no need to implement application of ops for this logic path
-
-  if (map2)
+void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
+                              const QList<OsmMapPtr>& map2Inputs, const QString& output)
+{
+  if (map1Inputs.size() != map2Inputs.size())
   {
-    sortedElements1 = _sortElementsInMemory(map1);
-    sortedElements2 = _sortElementsInMemory(map2);
+    throw IllegalArgumentException("Changeset input data inputs are not the same size.");
   }
-  else
+
+  QList<ElementInputStreamPtr> sortedInputs1;
+  QList<ElementInputStreamPtr> sortedInputs2;
+  for (int i = 0; i < map1Inputs.size(); i++)
   {
-    sortedElements1 = _getEmptyInputStream();
-    sortedElements2 = _sortElementsInMemory(map1);
+    OsmMapPtr map1 = map1Inputs.at(i);
+    OsmMapPtr map2 = map2Inputs.at(i);
+    if (map2->isEmpty())
+    {
+      // An empty map2 makes no sense, b/c you would just have an empty changeset.
+      LOG_INFO(
+        "Second map is empty. Skipping changeset generation for maps at index: " << i + 1 << "...");
+      continue;
+    }
+    LOG_DEBUG(
+      "Creating changeset from inputs: " << map1->getName() << " and " << map2->getName() <<
+      " to output: " << output << "...");
+    OsmMapWriterFactory::writeDebugMap(map1, "map1-before-changeset-derivation");
+    OsmMapWriterFactory::writeDebugMap(map2, "map2-before-changeset-derivation");
+
+    // don't want to include review relations - may need to remove this depending on what happens
+    // with #3361
+    std::shared_ptr<TagKeyCriterion> elementCriterion(
+      new TagKeyCriterion(MetadataTags::HootReviewNeeds()));
+    RemoveElementsVisitor removeElementsVisitor;
+    removeElementsVisitor.setRecursive(false);
+    removeElementsVisitor.addCriterion(elementCriterion);
+    map1->visitRw(removeElementsVisitor);
+    map2->visitRw(removeElementsVisitor);
+
+    // Truncate tags over 255 characters to push into OSM API.
+    ApiTagTruncateVisitor truncateTags;
+    map1->visitRw(truncateTags);
+    map2->visitRw(truncateTags);
+
+    LOG_VART(MapProjector::toWkt(map1->getProjection()));
+    LOG_VART(MapProjector::toWkt(map2->getProjection()));
+
+    // no need to implement application of ops for this logic path
+
+    // sortedInputs1 is the former state of the data
+    if (map1->isEmpty())
+    {
+      // An empty former map, means the changeset will be made up of entirely statements based on
+      // map2.
+      sortedInputs1.append(_getEmptyInputStream());
+    }
+    else
+    {
+      sortedInputs1.append(_sortElementsInMemory(map1));
+    }
+    // sortedInputs2 is the newer state of the data
+    sortedInputs2.append(_sortElementsInMemory(map2));
   }
 
   // write out the changeset file
-  assert(sortedElements1.get() && sortedElements2.get());;
-  _streamChangesetOutput(sortedElements1, sortedElements2, output);
+  _streamChangesetOutput(sortedInputs1, sortedInputs2, output);
 }
 
 bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
@@ -587,59 +617,103 @@ ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& i
   return sorted;
 }
 
-void ChangesetCreator::_streamChangesetOutput(ElementInputStreamPtr input1,
-                                              ElementInputStreamPtr input2, const QString& output)
+void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>& inputs1,
+                                              const QList<ElementInputStreamPtr>& inputs2,
+                                              const QString& output)
 {
+  if (inputs1.size() != inputs2.size())
+  {
+    throw IllegalArgumentException(
+      "Changeset input data inputs are not the same size for streaming to output.");
+  }
+
   LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
 
   QString stats;
-  LOG_VARD(output);
+  _numCreateChanges = 0;
+  _numModifyChanges = 0;
+  _numDeleteChanges = 0;
 
   // Could this eventually be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
   // instead?
-  _changesetDeriver.reset(new ChangesetDeriver(input1, input2));
+
+  QList<ChangesetProviderPtr> changesetProviders;
+  for (int i = 0; i < inputs1.size(); i++)
+  {
+    changesetProviders.append(
+      ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
+  }
+
   if (output.endsWith(".osc"))
   {
     OsmXmlChangesetFileWriter writer;
-    writer.write(output, _changesetDeriver);
+    writer.write(output, changesetProviders);
     stats = writer.getStatsTable();
   }
   else if (output.endsWith(".osc.sql"))
   {
     assert(!_osmApiDbUrl.isEmpty());
-    OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, _changesetDeriver);
+    OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetProviders);
   }
 
-  LOG_VARD(_changesetDeriver->getNumCreateChanges());
-  LOG_VARD(_changesetDeriver->getNumModifyChanges());
-  LOG_VARD(_changesetDeriver->getNumDeleteChanges());
-  LOG_VARD(_changesetDeriver->getNumFromElementsParsed());
-  LOG_VARD(_changesetDeriver->getNumToElementsParsed());
-  if (_changesetDeriver->getNumChanges() == 0)
+  assert(inputs1.size() == changesetProviders.size());
+  for (int i = 0; i < inputs1.size(); i++)
   {
-    LOG_WARN("No changes written to changeset.");
-  }
+    ChangesetDeriverPtr changesetDeriver =
+      std::dynamic_pointer_cast<ChangesetDeriver>(changesetProviders.at(i));
+    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << inputs1.size() << ": ");
+    LOG_VARD(changesetDeriver->getNumCreateChanges());
+    _numCreateChanges += changesetDeriver->getNumCreateChanges();
+    LOG_VARD(changesetDeriver->getNumModifyChanges());
+    _numModifyChanges += changesetDeriver->getNumModifyChanges();
+    LOG_VARD(changesetDeriver->getNumDeleteChanges());
+    _numDeleteChanges += changesetDeriver->getNumDeleteChanges();
+    LOG_VARD(changesetDeriver->getNumFromElementsParsed());
+    LOG_VARD(changesetDeriver->getNumToElementsParsed());
+    if (changesetDeriver->getNumChanges() == 0)
+    {
+      LOG_WARN("No changes written to changeset.");
+    }
 
-  // close the output stream
-  std::shared_ptr<PartialOsmMapReader> partialReader1 =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
-  if (partialReader1)
-  {
-    partialReader1->finalizePartial();
+    // close the output stream
+    ElementInputStreamPtr input1 = inputs1.at(i);
+    std::shared_ptr<PartialOsmMapReader> partialReader1 =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
+    if (partialReader1)
+    {
+      partialReader1->finalizePartial();
+    }
+    input1->close();
+    ElementInputStreamPtr input2 = inputs2.at(i);
+    std::shared_ptr<PartialOsmMapReader> partialReader2 =
+      std::dynamic_pointer_cast<PartialOsmMapReader>(input2);
+    if (partialReader2)
+    {
+      partialReader2->finalizePartial();
+    }
+    input2->close();
   }
-  input1->close();
-  std::shared_ptr<PartialOsmMapReader> partialReader2 =
-    std::dynamic_pointer_cast<PartialOsmMapReader>(input2);
-  if (partialReader2)
-  {
-    partialReader2->finalizePartial();
-  }
-  input2->close();
 
   if (_printStats)
   {
-    LOG_INFO("Changeset Stats:\n" << stats);
+    LOG_STATUS("Changeset Stats:\n" << stats);
   }
+  else
+  {
+    LOG_VARD(_numCreateChanges);
+    LOG_VARD(_numModifyChanges);
+    LOG_VARD(_numDeleteChanges);
+  }
+}
+
+void ChangesetCreator::_streamChangesetOutput(ElementInputStreamPtr input1,
+                                              ElementInputStreamPtr input2, const QString& output)
+{
+  QList<ElementInputStreamPtr> input1List;
+  input1List.append(input1);
+  QList<ElementInputStreamPtr> input2List;
+  input2List.append(input2);
+  _streamChangesetOutput(input1List, input2List, output);
 }
 
 }

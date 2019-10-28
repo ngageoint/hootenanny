@@ -1,0 +1,15 @@
+[[db-delete-map]]
+== db-delete-map
+
+=== Description
+
+The +db-delete-map+ command deletes a map from the Hootenanny Web Services database.
+
+* +Map Name+  - The name of the map database layer.
+
+=== Usage
+
+--------------------------------------
+db-delete-map (Map Name)
+--------------------------------------
+

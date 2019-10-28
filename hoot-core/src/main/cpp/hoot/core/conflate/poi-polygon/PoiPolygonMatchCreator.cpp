@@ -45,10 +45,16 @@ PoiPolygonMatchCreator::PoiPolygonMatchCreator()
 {
 }
 
-Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
                                            ElementId eid2)
 {
-  PoiPolygonMatch* result = 0;
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonCache(map));
+  }
+
+  std::shared_ptr<PoiPolygonMatch> result;
 
   if (eid1.getType() != eid2.getType())
   {
@@ -59,7 +65,7 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
     const bool foundPoly = _polyCrit.isSatisfied(e1) || _polyCrit.isSatisfied(e2);
     if (foundPoi && foundPoly)
     {
-      result = new PoiPolygonMatch(map, getMatchThreshold(), _getRf());
+      result.reset(new PoiPolygonMatch(map, getMatchThreshold(), _getRf(), _infoCache));
       result->setConfiguration(conf());
       result->calculateMatch(eid1, eid2);
     }
@@ -69,19 +75,28 @@ Match* PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
 }
 
 void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
-                                           std::vector<const Match*>& matches,
+                                           std::vector<ConstMatchPtr>& matches,
                                            ConstMatchThresholdPtr threshold)
 {
-  LOG_DEBUG("Creating matches with: " << className() << "...");
+  LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
+
+  if (!_infoCache)
+  {
+    LOG_TRACE("Initializing info cache...");
+    _infoCache.reset(new PoiPolygonCache(map));
+  }
 
   PoiPolygonMatch::resetMatchDistanceInfo();
 
-  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _filter);
+  QElapsedTimer timer;
+  timer.start();
+  PoiPolygonMatchVisitor v(map, matches, threshold, _getRf(), _infoCache, _filter);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " POI to Polygon match candidates.");
+    " POI to Polygon match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+    ".");
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
   {
@@ -120,6 +135,10 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_DEBUG(
     "POI/Polygon convex polygon distance matches: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::convexPolyDistanceMatches));
+  LOG_DEBUG(
+    "POI/Polygon review reductions: " <<
+    StringUtils::formatLargeNumber(PoiPolygonMatch::numReviewReductions));
+  _infoCache->printCacheInfo();
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
@@ -146,13 +165,9 @@ bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
 
 std::shared_ptr<MatchThreshold> PoiPolygonMatchCreator::getMatchThreshold()
 {
+  //  Since the POI to Poly matcher is an additive model, all thresholds are 1.0
   if (!_matchThreshold.get())
-  {
-    ConfigOptions config;
-    _matchThreshold.reset(
-      new MatchThreshold(config.getPoiPolygonMatchThreshold(), config.getPoiPolygonMissThreshold(),
-                         config.getPoiPolygonReviewThreshold()));
-  }
+    _matchThreshold.reset(new MatchThreshold(1.0, 1.0, 1.0));
   return _matchThreshold;
 }
 

@@ -40,6 +40,48 @@ namespace hoot
 {
 
 /**
+ * @brief The HttpResponse class encapsulates an HTTP response for writing out to a socket
+ */
+class HttpResponse
+{
+public:
+  /**
+   * @brief Constructor
+   * @param status - HTTP status code
+   * @param response - Response body
+   */
+  HttpResponse(int status, const std::string& response = "");
+  /**
+   * @brief add_header Add an HTTP header to the reponse message
+   * @param header HTTP header text
+   * @param value HTTP header value
+   */
+  void add_header(const std::string& header, const std::string& value);
+  /**
+   * @brief to_string Converts the object to an HTTP response string
+   * @return Complete HTTP response
+   */
+  std::string to_string();
+
+private:
+  /**
+   * @brief get_status_text Get the "OK" part of the "HTTP/1.1 200 OK" HTTP response
+   * @return HTTP status code text
+   */
+  std::string get_status_text();
+  /** HTTP status code */
+  int _status;
+  /** HTTP response body */
+  std::string _response;
+  /** Vector of HTTP header strings */
+  std::vector<std::string> _headers;
+  /** Key value pairs for HTTP headers */
+  std::map<std::string, std::string> _header_values;
+};
+
+typedef std::shared_ptr<HttpResponse> HttpResponsePtr;
+
+/**
  * @brief The HttpConnection class encapsulates an HTTP connection on a socket
  */
 class HttpConnection : public std::enable_shared_from_this<HttpConnection>
@@ -73,9 +115,6 @@ class HttpTestServer
 public:
   /** Static constants for use in the HttpTestServer class */
   static const int DEFAULT_SERVER_PORT = 8910;
-  static const std::string HTTP_200_OK;
-  static const std::string HTTP_404_NOT_FOUND;
-  static const std::string HTTP_409_CONFLICT;
   /** Constructor */
   HttpTestServer(int port = DEFAULT_SERVER_PORT);
   /** Function to start the HTTP server */
@@ -97,6 +136,8 @@ protected:
   std::string read_request_headers(HttpConnection::HttpConnectionPtr& connection);
   /** Write the response back to the requestor, called by the overridden respond() function */
   void write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response);
+  /** Get the value of the interupt flag */
+  bool get_interupt() { return _interupt; }
 
 private:
   /** Function that starts the server listening and accepting connections */
@@ -113,8 +154,46 @@ private:
   std::shared_ptr<std::thread> _thread;
   /** HTTP listening port */
   int _port;
+  /** Interupt flag */
+  bool _interupt;
+};
+
+/**
+ * @brief The HttpSequencedServer class is a base class for a test server that runs a sequence of steps that the
+ *    server must keep track of and respond differently to.
+ */
+class HttpSequencedServer : public HttpTestServer
+{
+public:
+  /**
+   * @brief HttpSequencedServer constructor
+   * @param num Number of sequences or stages in the test server
+   * @param port Listening port for the test server
+   */
+  HttpSequencedServer(int num, int port = DEFAULT_SERVER_PORT)
+    : HttpTestServer(port),
+      _max(num),
+      _current(0)
+  { }
+
+protected:
+  /**
+   * @brief get_sequence_response Return the HttpResponse object corresponding to the
+   *    _current sequence number and the HTTP headers passed in
+   * @param headers String value of the HTTP headers from the request object
+   * @return HttpResponse object (cached or created)
+   */
+  virtual HttpResponsePtr get_sequence_response(const std::string& headers) = 0;
+
+protected:
+  /** Number of sequences in the test server */
+  int _max;
+  /** Current sequence number of the test server */
+  int _current;
+  /** Cache of responses to HTTP headers requested */
+  std::map<std::string, HttpResponsePtr> _sequence_responses;
 };
 
 }
 
-#endif  //  OSM_API_WRITER_TEST_SERVER_H
+#endif  //  HTTP_TEST_SERVER_H

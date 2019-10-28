@@ -118,6 +118,9 @@ bool Log::notFiltered(const string& prettyFunction)
   nameParts = nameParts[0].split("::");
   int listLen = nameParts.length();
 
+  // Is there any way we can throw here if the class name isn't recognized, so we don't wonder
+  // why a typo caused us not to get the logging we thought we were going to get?
+
   return (listLen > 1 && _classFilter.contains(nameParts[listLen - 2]));
 }
 

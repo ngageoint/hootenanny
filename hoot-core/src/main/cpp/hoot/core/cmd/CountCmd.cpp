@@ -40,6 +40,7 @@
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementVisitorInputStream.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -89,14 +90,18 @@ public:
     }
     LOG_VARD(criterionClassName);
 
+    const QString dataType = countFeaturesOnly ? "features" : "elements";
     for (int i = 0; i < inputs.size(); i++)
     {
+      LOG_INFO(
+        "Counting " << dataType << " satisfying " << criterionClassName << " from " <<
+        inputs.at(i).right(25) << "...");
       _total += _count(inputs.at(i), countFeaturesOnly, criterionClassName);
     }
     LOG_VART(_total);
 
     //putting a preceding endline in here since PROGRESS_INFO doesn't clear itself out at the end
-    std::cout << std::endl << "Total: " << _total << std::endl;
+    std::cout << std::endl << "Total: " << StringUtils::formatLargeNumber(_total) << std::endl;
 
     return 0;
   }
@@ -181,6 +186,8 @@ private:
 
   ElementVisitorPtr _getCountVis(const bool countFeaturesOnly)
   {
+    LOG_TRACE("Getting count vis...");
+
     ElementVisitorPtr countVis;
     if (countFeaturesOnly)
     {
@@ -218,12 +225,12 @@ private:
       inputTotal = (int)counter->getStat();
 
       // It would be nice if we could display information on the total elements processed, as well
-      // as the ones counted, but since the element stream is already filtered by this point would
-      // take some extra work.
+      // as the ones counted, but since the element stream is already filtered by this point that
+      // would take some extra work.
       const long runningTotal = _total + inputTotal;
-      if (runningTotal > 0 && runningTotal % _taskStatusUpdateInterval == 0)
+      if (runningTotal > 0 && runningTotal % (_taskStatusUpdateInterval * 10) == 0)
       {
-        QString msg = "Counted " + QString::number(runningTotal);
+        QString msg = "Counted " + StringUtils::formatLargeNumber(runningTotal);
         if (countFeaturesOnly)
         {
           msg += " features.";

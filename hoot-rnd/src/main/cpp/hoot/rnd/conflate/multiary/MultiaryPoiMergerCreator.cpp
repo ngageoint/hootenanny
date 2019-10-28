@@ -39,7 +39,7 @@ MultiaryPoiMergerCreator::MultiaryPoiMergerCreator()
 {
 }
 
-bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vector<Merger*>& mergers)
+bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers)
   const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
@@ -52,14 +52,14 @@ bool MultiaryPoiMergerCreator::createMergers(const MatchSet& matches, std::vecto
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m = *it;
+    ConstMatchPtr m = *it;
     set<pair<ElementId, ElementId>> s = m->getMatchPairs();
     eids.insert(s.begin(), s.end());
   }
 
   if (eids.size() >= 1)
   {
-    mergers.push_back(new MultiaryPoiMerger(eids));
+    mergers.push_back(MergerPtr(new MultiaryPoiMerger(eids)));
     result = true;
   }
 
@@ -79,8 +79,8 @@ std::vector<CreatorDescription> MultiaryPoiMergerCreator::getAllCreators() const
   return result;
 }
 
-bool MultiaryPoiMergerCreator::isConflicting(const ConstOsmMapPtr&, const Match*,
-  const Match*) const
+bool MultiaryPoiMergerCreator::isConflicting(const ConstOsmMapPtr&, ConstMatchPtr,
+  ConstMatchPtr) const
 {
   // Any relevant matches that contain conflicts will be resolved during the clustering phase.
   return false;

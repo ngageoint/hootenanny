@@ -3602,10 +3602,18 @@ Listing a format that is both input and output...
 hootapidb://
 hootapidb://
 hootapidb://
+hootapidb://
+hootapidb://
 
 Listing an input format...
 
 .osm.bz2
+
+Listing an input format supporting streamable reads...
+
+.osm
+.osm.bz2
+.osm.gz
 
 Listing an input format supporting bounded reads...
 
@@ -3614,6 +3622,11 @@ hootapidb://
 Listing an output format...
 
 .shp
+
+Listing an output format supporting streamable reads...
+
+.osm
+.osm.pbf
 
 Listing detectable languages...
 
@@ -3750,4 +3763,8 @@ Listing way joiners...
 Listing conflatable criteria...
 
   BuildingCriterion                  Identifies buildings
+
+Listing filters...
+
+  NonBuildingAreaCriterion                     criterion         Identifies features that are areas but not buildings
 

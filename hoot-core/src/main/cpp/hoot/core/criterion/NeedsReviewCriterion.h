@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NEEDSREVIEWCRITERION_H
 #define NEEDSREVIEWCRITERION_H
@@ -56,6 +56,10 @@ public:
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
   virtual QString getDescription() const { return "Identifies features that need to be reviewed"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 
 private:
 

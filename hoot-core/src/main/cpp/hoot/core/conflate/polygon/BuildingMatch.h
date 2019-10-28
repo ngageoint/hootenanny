@@ -28,11 +28,11 @@
 #define BUILDINGMATCH_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -55,32 +55,32 @@ public:
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
-  virtual const MatchClassification& getClassification() const { return _p; }
+  virtual const MatchClassification& getClassification() const override { return _p; }
 
-  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const;
+  virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
-  virtual MatchMembers getMatchMembers() const { return MatchMembers::Polygon; }
+  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const { return _matchName; }
+  virtual QString getMatchName() const override { return _matchName; }
 
-  virtual double getProbability() const;
+  virtual double getProbability() const override;
 
   /**
    * Building matches never conflict other building matches, but conflict with everything else.
    */
-  virtual bool isConflicting(const Match& other, const ConstOsmMapPtr& map) const;
+  virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& map) const override;
 
   /**
    * Simply returns the two elements that were matched.
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const;
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual QString explain() const { return _explainText; }
+  virtual QString explain() const override { return _explainText; }
   virtual void setExplain(const QString& explainText) override { _explainText = explainText; }
 
-  virtual QString getDescription() const { return "Matches buildings"; }
+  virtual QString getDescription() const override { return "Matches buildings"; }
 
 private:
 

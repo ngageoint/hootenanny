@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QString>
@@ -44,7 +43,7 @@ namespace hoot
  *
  *
  */
-class OsmGeoJsonWriter : public OsmJsonWriter, public Configurable
+class OsmGeoJsonWriter : public OsmJsonWriter
 {
 public:
   static std::string className() { return "hoot::OsmGeoJsonWriter"; }
@@ -71,6 +70,8 @@ public:
   virtual void setConfiguration(const Settings& conf) override;
 
   virtual QString supportedFormats() override { return ".geojson"; }
+
+  virtual QString toString(const ConstOsmMapPtr& map);
 
 protected:
 
@@ -176,6 +177,8 @@ private:
    * @return Semicolon separated list of roles
    */
   std::string _buildRoles(ConstRelationPtr relation, bool& first);
+
+  bool _useTaskingManagerFormat;
 
 };
 

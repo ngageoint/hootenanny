@@ -71,7 +71,9 @@ public:
       "]                                      \n"
       "}                                      \n";
 
-    OsmMapPtr map = OsmJsonReader().loadFromString(testJsonStr);
+    OsmMapPtr map(new OsmMap());
+    OsmJsonReader().loadFromString(testJsonStr, map);
+
     map->setProjection(MapProjector::createOrthographic(0, 0));
 
     map->getNode(-1)->setStatus(Status::fromInput(0));

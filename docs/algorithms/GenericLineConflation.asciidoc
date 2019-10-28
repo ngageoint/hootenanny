@@ -29,7 +29,7 @@ matches.
 
 [[conflation-flow]]
 .Conflation Flow
-[graphviz]
+[graphviz, images/__ConflationFlow.png]
 ---------------------------------------------------------------------
 digraph G
 {

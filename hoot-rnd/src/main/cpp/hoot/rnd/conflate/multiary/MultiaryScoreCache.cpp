@@ -26,12 +26,9 @@
  */
 #include "MultiaryScoreCache.h"
 
-// boost
-#include <boost/scoped_ptr.hpp>
-
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -70,8 +67,7 @@ MatchClassification MultiaryScoreCache::getScore(ConstElementPtr e1, ConstElemen
   tmp->addElement(ElementPtr(e1->clone()));
   tmp->addElement(ElementPtr(e2->clone()));
 
-  const std::unique_ptr<Match> m(
-    _matchCreator->createMatch(tmp, e1->getElementId(), e2->getElementId()));
+  ConstMatchPtr m(_matchCreator->createMatch(tmp, e1->getElementId(), e2->getElementId()));
 
   // default to a hard miss.
   MatchClassification result(0, 1, 0);

@@ -111,7 +111,7 @@ Change MultiaryIngestChangesetReader::readNextChange()
   if (lineParts[1].startsWith("{"))
   {
     //json - don't use this until #1772 is fixed
-    tmpMap = _jsonReader.loadFromString(lineParts[1]);
+    _jsonReader.loadFromString(lineParts[1], tmpMap);
   }
   else
   {

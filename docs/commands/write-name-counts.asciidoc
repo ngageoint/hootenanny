@@ -3,12 +3,12 @@
 
 === Description
 
-The +write-name-counts+ writes tokenized name counts to a database file.  This data can be used as input to conflation routines to aid in
-matching features.
+The +write-name-counts+ writes tokenized unique feature name counts to a database file.  This data can be used as input to conflation routines 
+to aid in matching features.
 
-* +inputs+ - One or more supported data inputs; specify multiple inputs by separating them with a semicolon and surrounding them
-             with quotes
-* +output+ - A Sqlite database file
+* +inputs+ - One or more supported data inputs; may be any supported input format (e.g. OSM file). specify multiple inputs by separating 
+             them with a semicolon and surrounding them with quotes.
+* +output+ - A Sqlite database file (*.db).
 
 === Usage
 
@@ -21,4 +21,8 @@ write-name-counts (input1;input2...) (output)
 --------------------------------------
 hoot write-name-counts test-files/DcGisRoads.osm output.osm
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

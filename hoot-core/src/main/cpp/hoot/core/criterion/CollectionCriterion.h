@@ -49,6 +49,9 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new CollectionCriterion()); }
 
   virtual QString getDescription() const { return "Identifies relation collections"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }

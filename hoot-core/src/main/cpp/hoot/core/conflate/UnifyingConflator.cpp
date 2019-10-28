@@ -91,13 +91,13 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
   tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
 }
 
-void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const vector<const Match*>& matches)
+void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
 {
   if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
   {
     for (size_t i = 0; i < matches.size(); i++)
     {
-      const Match* m = matches[i];
+      ConstMatchPtr m = matches[i];
       const MatchClassification& mc = m->getClassification();
       set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
       for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
@@ -174,7 +174,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(
     SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 
-  vector<const Match*> allMatches = _matches;
+  vector<ConstMatchPtr> allMatches = _matches;
 
   // add review tags to all matches that have some review component
   _addReviewTags(map, allMatches);
@@ -197,7 +197,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // Globally optimize the set of matches to maximize the conflation score.
   {
     OptimalConstrainedMatches cm(map);
-    vector<const Match*> cmMatches;
+    vector<ConstMatchPtr> cmMatches;
 
     if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
     {
@@ -220,7 +220,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     GreedyConstrainedMatches gm(map);
     gm.addMatches(_matches.begin(), _matches.end());
     double gmStart = Time::getTime();
-    vector<const Match*> gmMatches = gm.calculateSubset();
+    vector<ConstMatchPtr> gmMatches = gm.calculateSubset();
     LOG_TRACE("GM took: " << Time::getTime() - gmStart << "s.");
     LOG_DEBUG("GM Score: " << gm.getScore());
 
@@ -254,7 +254,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
-    vector<set<const Match*, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
+    vector<set<ConstMatchPtr, MatchPtrComparator>> tmpMatchSets = mg.findSubgraphs(map);
     matchSets.insert(matchSets.end(), tmpMatchSets.begin(), tmpMatchSets.end());
     LOG_TRACE(SystemInfo::getMemoryUsageString());
   }
@@ -276,7 +276,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   // don't need the matches any more
-  _deleteAll(allMatches);
+  allMatches.clear();
   _matches.clear();
 
   LOG_TRACE(SystemInfo::getMemoryUsageString());
@@ -299,11 +299,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _replaceElementIds(replaced);
     replaced.clear();
 
-    // Enabling this may result in a lot of files being generated.
-//    if (i % 10 == 0)
-//    {
-//      OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
-//    }
+    // WARNING: Enabling this could result in a lot of files being generated.
+    //OsmMapWriterFactory::writeDebugMap(map, "after-merging-" + _mergers[i]->toString().right(50));
   }
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
@@ -342,10 +339,10 @@ void UnifyingConflator::_mapElementIdsToMergers()
 QString UnifyingConflator::_matchSetToString(const MatchSet& matchSet) const
 {
   QString str;
-  for (std::set<const Match*, MatchPtrComparator>::const_iterator itr = matchSet.begin();
+  for (std::set<ConstMatchPtr, MatchPtrComparator>::const_iterator itr = matchSet.begin();
        itr != matchSet.end(); ++itr)
   {
-    const Match* match = *itr;
+    ConstMatchPtr match = *itr;
     set<pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
     for (std::set<pair<ElementId, ElementId>>::const_iterator itr2 = matchPairs.begin();
          itr2 != matchPairs.end(); ++itr2)
@@ -358,7 +355,7 @@ QString UnifyingConflator::_matchSetToString(const MatchSet& matchSet) const
   return str;
 }
 
-void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
+void UnifyingConflator::_removeWholeGroups(std::vector<ConstMatchPtr>& matches,
   MatchSetVector& matchSets, const OsmMapPtr& map)
 {
   LOG_DEBUG("Removing whole group matches...");
@@ -371,7 +368,7 @@ void UnifyingConflator::_removeWholeGroups(vector<const Match*>& matches,
   MatchSetVector tmpMatchSets = mg.findSubgraphs(map);
 
   matchSets.reserve(matchSets.size() + tmpMatchSets.size());
-  vector<const Match*> leftovers;
+  vector<ConstMatchPtr> leftovers;
 
   for (size_t i = 0; i < tmpMatchSets.size(); i++)
   {
@@ -402,10 +399,10 @@ void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementI
 {
   for (size_t i = 0; i < replaced.size(); ++i)
   {
-    HashMap<ElementId, vector<Merger*>>::const_iterator it = _e2m.find(replaced[i].first);
+    HashMap<ElementId, vector<MergerPtr>>::const_iterator it = _e2m.find(replaced[i].first);
     if (it != _e2m.end())
     {
-      const vector<Merger*>& mergers = it->second;
+      const vector<MergerPtr>& mergers = it->second;
       // replace the element id in all mergers.
       for (size_t i = 0; i < mergers.size(); ++i)
       {
@@ -434,17 +431,17 @@ void UnifyingConflator::_reset()
     _mergerFactory.reset(new MergerFactory());
     // register the mark for review merger first so all reviews get tagged before another merger
     // gets a chance.
-    _mergerFactory->registerCreator(new MarkForReviewMergerCreator());
+    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
     _mergerFactory->registerDefaultCreators();
   }
 
   _e2m.clear();
-  _deleteAll(_matches);
-  _deleteAll(_mergers);
+  _matches.clear();
+  _mergers.clear();
 }
 
 void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
-                                                vector<const Match*> matches)
+                                                std::vector<ConstMatchPtr> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
@@ -460,7 +457,7 @@ void UnifyingConflator::_validateConflictSubset(const ConstOsmMapPtr& map,
   }
 }
 
-void UnifyingConflator::_printMatches(vector<const Match*> matches)
+void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
@@ -468,11 +465,11 @@ void UnifyingConflator::_printMatches(vector<const Match*> matches)
   }
 }
 
-void UnifyingConflator::_printMatches(vector<const Match*> matches, const MatchType& typeFilter)
+void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
-    const Match* match = matches[i];
+    ConstMatchPtr match = matches[i];
     if (match->getType() == typeFilter)
     {
       LOG_DEBUG(match);

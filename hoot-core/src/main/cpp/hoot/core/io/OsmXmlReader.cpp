@@ -34,17 +34,17 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -63,10 +63,14 @@ int OsmXmlReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
+_osmFound(false),
 _status(Status::Invalid),
 _missingNodeCount(0),
 _missingWayCount(0),
+_badAccuracyCount(0),
 _useDataSourceId(false),
+_wayId(0),
+_relationId(0),
 _inputCompressed(false),
 _numRead(0),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
@@ -106,13 +110,21 @@ void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
 
 void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 {
+  _element.reset();
+
   long id = _parseLong(attributes.value("id"));
   //LOG_VART(id);
 
   if (_nodeIdMap.contains(id))
   {
-    throw HootException(
-      QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_path));
+    if (_ignoreDuplicates)
+    {
+      LOG_TRACE("Ignoring node id " << id << " already exists");
+      return;
+    }
+    else
+      throw HootException(
+        QString("Duplicate node id %1 in map %2 encountered.").arg(id).arg(_url));
   }
 
   long newId;
@@ -170,13 +182,23 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
 
 void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 {
-  _wayId = _parseLong(attributes.value("id"));
+  _element.reset();
 
-  if (_wayIdMap.contains(_wayId))
+  long id = _parseLong(attributes.value("id"));
+
+  if (_wayIdMap.contains(id))
   {
-    throw HootException(
-      QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_path));
+    if (_ignoreDuplicates)
+    {
+      LOG_TRACE("Ignoring way id " << id << " already exists");
+      return;
+    }
+    else
+      throw HootException(
+        QString("Duplicate way id %1 in map %2 encountered.").arg(_wayId).arg(_url));
   }
+
+  _wayId = id;
 
   long newId;
   if (_useDataSourceId)
@@ -225,14 +247,23 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
 
 void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
 {
-  _relationId = _parseLong(attributes.value("id"));
+  _element.reset();
 
-  // Adding this in causes issues with the tests...worth looking into at some point.
+  long id = _parseLong(attributes.value("id"));
+
+  if (_relationIdMap.contains(id) && _ignoreDuplicates)
+  {
+    LOG_TRACE("Ignoring relation id " << id << " already exists");
+    return;
+  }
+// Adding this in causes issues with the tests...worth looking into at some point.
 //  if (_relationIdMap.contains(_relationId))
 //  {
 //    throw HootException(
-//      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_path));
+//      QString("Duplicate relation id %1 in map %2 encountered.").arg(_relationId).arg(_url));
 //  }
+
+  _relationId = id;
 
   long newId = _getRelationId(_relationId);
 
@@ -283,19 +314,14 @@ bool OsmXmlReader::fatalError(const QXmlParseException &exception)
 
 bool OsmXmlReader::isSupported(const QString& url)
 {
-  const int numExtensions = 3;
-  const QString validExtensions[numExtensions] = { ".osm", ".osm.bz2", ".osm.gz" };
+  QStringList validExtensions = supportedFormats().split(";");
   const QString checkString(url.toLower());
-
   // support compressed osm files
-  for (int i = 0; i < numExtensions; ++i)
+  for (int i = 0; i < validExtensions.size(); ++i)
   {
-    if (checkString.endsWith(validExtensions[i]) == true)
-    {
+    if (checkString.endsWith(validExtensions[i]))
       return true;
-    }
   }
-
   // If we fall out of loop, no dice
   return false;
 }
@@ -326,11 +352,6 @@ long OsmXmlReader::_parseLong(const QString& s)
   return result;
 }
 
-void OsmXmlReader::open(const QString& url)
-{
-  _path = url;
-}
-
 void OsmXmlReader::read(const OsmMapPtr& map)
 {
   LOG_VART(_status);
@@ -347,8 +368,9 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _numRead = 0;
   finalizePartial();
   _map = map;
+  _map->appendSource(_url);
 
-  if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
+  if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
   {
     _inputCompressed = true;
     _uncompressInput();
@@ -359,12 +381,12 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   reader.setContentHandler(this);
   reader.setErrorHandler(this);
 
-  QFile file(_path);
+  QFile file(_url);
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
-    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
+    throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
   }
-  LOG_DEBUG("File " << _path << " opened for read");
+  LOG_DEBUG("File " << _url << " opened for read");
 
   QXmlInputSource xmlInputSource(&file);
   if (reader.parse(xmlInputSource) == false)
@@ -802,10 +824,10 @@ void OsmXmlReader::_uncompressInput()
   // uncompress .osm.bz2 or .osm.gz files before processing
 
   QString originalFile;
-  if (_path.endsWith(".osm.bz2") == true)
+  if (_url.endsWith(".osm.bz2") == true)
   {
-    originalFile = _path;
-    _path.chop(std::strlen(".bz2"));
+    originalFile = _url;
+    _url.chop(std::strlen(".bz2"));
 
     // "man bunzip2" confirms success return code is zero
     // -f option decompresses file even if decompressed file is already there
@@ -823,17 +845,17 @@ void OsmXmlReader::_uncompressInput()
 
     LOG_DEBUG("Uncompress succeeded!");
   }
-  else if (_path.endsWith(".osm.gz") == true)
+  else if (_url.endsWith(".osm.gz") == true)
   {
-    originalFile = _path;
-    _path.chop(std::strlen(".gz"));
+    originalFile = _url;
+    _url.chop(std::strlen(".gz"));
 
     // "man gzip" confirms success return code is zero
     //  -d option is "decompress"
     //  -c option is "write on standard output, keep original files unchanged" meaning won't delete input .osm.gz
     const std::string cmd(std::string("gzip -dc ")
                           + originalFile.toStdString()
-                          + " > " + _path.toStdString());
+                          + " > " + _url.toStdString());
     LOG_DEBUG("Running uncompress command: " << cmd);
 
     int retVal;
@@ -871,16 +893,16 @@ bool OsmXmlReader::hasMoreElements()
     //are read into this map, since this is the partial reading logic)
     _map.reset(new OsmMap());
 
-    if (_path.endsWith(".osm.bz2") || _path.endsWith(".osm.gz"))
+    if (_url.endsWith(".osm.bz2") || _url.endsWith(".osm.gz"))
     {
       _inputCompressed = true;
       _uncompressInput();
     }
 
-    _inputFile.setFileName(_path);
+    _inputFile.setFileName(_url);
     if (!_inputFile.open(QFile::ReadOnly | QFile::Text))
     {
-      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_path));
+      throw Exception(QObject::tr("Error opening OSM file for parsing: %1").arg(_url));
     }
     _streamReader.setDevice(&_inputFile);
 
@@ -891,7 +913,7 @@ bool OsmXmlReader::hasMoreElements()
     }
     if (!_osmFound)
     {
-      throw HootException(_path + " is not an OSM file.");
+      throw HootException(_url + " is not an OSM file.");
     }
   }
 
@@ -998,8 +1020,8 @@ void OsmXmlReader::close()
   if (_inputCompressed)
   {
     // Delete the temp file
-    std::remove(_path.toStdString().c_str());
-    LOG_DEBUG("Removed decompressed file " << _path);
+    std::remove(_url.toStdString().c_str());
+    LOG_DEBUG("Removed decompressed file " << _url);
   }
 
   _map.reset();

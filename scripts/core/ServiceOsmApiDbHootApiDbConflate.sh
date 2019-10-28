@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# THIS SCRIPT WAS USED BY THE OLD STYLE HOLY GRAIL TESTS THAT ARE NO LONGER IN USE. ITS KEPT HERE AS REFERENCE FOR OTHER TESTS ONLY
+# THIS SCRIPT WAS USED BY THE OLD STYLE HOLY GRAIL TESTS THAT ARE NO LONGER IN USE. ITS KEPT HERE AS REFERENCE ONLY
 #
 # This is a base test script for conflating datasets where one dataset comes from an osm api database and the other 
 # from a hoot api database.  It simulates end to end at the command line level what one possible conflation workflow 
@@ -228,10 +228,10 @@ echo ""
 echo "STEP 15: Cleaning up database..."
 echo ""
 if [ "$LOAD_SEC_DATA" == "true" ]; then
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/5-secondary-complete-$TEST_NAME"
 fi
 
 if [ "$CONFLATE_DATA" == "true" ]; then
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
-  hoot delete-db-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
+  hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi

@@ -32,10 +32,27 @@ See the User Guide for more details on command usage.
     hoot conflate --differential input1.osm input2.osm output.osm
 -----
 
-===== Conflate only restaurants (see the User Guide Feature Filtering section for more filter examples):
+===== Conflate only buildings:
 
 -----
-    hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      input1.osm input2.osm output.osm
+-----
+
+===== Conflate only restaurant buildings:
+
+-----
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+      input1.osm input2.osm output.osm
+-----
+
+===== Conflate only restaurant buildings with "Subway" in the name:
+
+-----
+    hoot conflate -D match.creators="hoot::BuildingMatchCreator" -D merger.creators="hoot::BuildingMergerCreator" \ 
+      -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" \
+      -D conflate.pre.ops="hoot::TagCriterion" -D tag.criterion.kvps="name;Subway" \
       input1.osm input2.osm output.osm
 -----
 
@@ -45,6 +62,12 @@ See the User Guide for more details on command usage.
     hoot conflate -D conflate.tag.filter=myFilter.json input1.osm input2.osm output.osm
 -----
 
+===== Conflate over a bounding box (not supported by all input formats):
+
+-----
+    hoot conflate -D convert.bounding.box="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
+-----
+
 ==== Applying Changes
 
 ===== Derive a changeset between two maps and write the result back to a Rails Port instance:
@@ -52,6 +75,34 @@ See the User Guide for more details on command usage.
 -----
     hoot changeset-derive input1.osm input2.osm changeset.osc
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
+-----
+
+===== Replace all features in a first dataset with overlapping features from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc
+-----
+
+===== Completely replace all features in a first dataset with features from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc --full-replacement
+-----
+
+===== Replace all buildings in a first dataset with overlapping buildings from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc -geometry-filters "hoot::BuildingCriterion"
+-----
+
+===== Completely replace all buildings in a first dataset with buildings from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
+      output.osc -geometry-filters "hoot::BuildingCriterion" --full-replacement
 -----
 
 ==== MetaInfo
@@ -72,6 +123,12 @@ See the User Guide for more details on command usage.
 
 -----
     hoot info --formats --output
+-----
+
+===== List all available cleaning operations:
+
+-----
+    hoot info --cleaning-operations
 -----
 
 ==== Data Transformation
@@ -334,11 +391,30 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 
-===== Create a changeset that completely replaces a set of buildings in one dataset with those in another over an AOI:
+===== Replace all buildings and POIs in a first dataset with overlapping buildings and POIs from a second dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      hoot::BuildingCriterion output.osc
+      output.osc -geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
+-----
+
+===== Completely replace all POIs in a first dataset, except those with "Staunton" in the name, with schools from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc \
+      --geometry-filters "hoot::PoiCriterion --replacement-filters "hoot::TagCriterion" \
+      --replacement-filter-options "tag.criterion.kvps='amenity=school'" \
+      --retainment-filters "hoot::TagContainsCriterion" \
+      --retainment-filter-options "tag.criterion.kvps='name=Staunton' --full-replacement
+-----
+
+===== Replace all POIs in a first dataset with overlapping cafes having "Java" in the name from a second dataset within a specified bounds:
+
+-----
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm \
+      "-122.43204,37.7628,-122.4303457,37.76437" output.osc --geometry-filters "hoot::PoiCriterion" \
+      --replacement-filters "hoot::TagContainsCriterion;hoot::TagCriterion" --chain-replacement-filters \
+      --replacement-filter-options "tag.criterion.kvps='amenity=cafe' tag.contains.criterion.kvps='name=Java'"
 -----
 
 ==== Data Transformation
@@ -380,6 +456,14 @@ See the User Guide for more details on command usage.
 -----
     hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
       -D remove.elements.visitor.element.criteria="hoot::RelationCriterion;hoot::WayCriterion" input.osm output.osm
+-----
+
+===== Remove everything but polygon geometries and their constituent features from a map:
+
+-----
+    hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
+      -D remove.elements.visitor.element.criteria="hoot::PolygonCriterion" -D element.criterion.negate=true \ 
+      input.osm output.osm
 -----
 
 ===== Remove all duplicate ways from a map:
@@ -506,6 +590,12 @@ See the User Guide for more details on command usage.
     hoot crop -D crop.invert=true input.osm output.osm "-77.0551,38.8845,-77.0281,38.9031"
 -----
 
+===== Put out a random subset of data with a maximum node size from a large input dataset (useful during conflation testing):
+
+-----
+    hoot crop-random input.osm output.osm 5000
+-----
+
 ===== Sort data to the OSM standard that is too large to fit in memory:
 
 -----
@@ -524,10 +614,16 @@ See the User Guide for more details on command usage.
     hoot node-density-plot input.osm output.png 100
 -----
 
+===== Detect railway intersections:
+
+-----
+hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.osm
+-----
+
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:
 
 -----
-    hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7 input.osm \
+    hoot perty -D perty.search.distance=20 -D way.generalize.probability=0.7 input.osm \
       perturbed.osm
     hoot perty --score input.osm perturbed.osm
 -----
@@ -574,6 +670,12 @@ See the User Guide for more details on command usage.
       input1.osm input2.osm output.osm
 -----
 
+===== Simplify ways in a map by removing unnecessary nodes from them:
+
+-----
+    hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
+-----
+
 ==== Statistics
 
 ===== Count all elements that are not POIs:
@@ -587,6 +689,26 @@ See the User Guide for more details on command usage.
 
 -----
     hoot count -D tag.key.contains.criterion.text="phone" input.osm hoot::TagKeyContainsCriterion
+-----
+
+===== Count all features which have a name:
+
+-----
+    hoot count input.osm hoot::HasNameCriterion
+-----
+
+===== Count all features which have the name, "Old Town Tavern":
+
+-----
+    hoot count -D name.criterion.names="Old Town Tavern" -D name.criterion.case.sensitive=false \
+      input.osm hoot::NameCriterion
+-----
+
+===== Count all features whose name contains "subway":
+
+-----
+    hoot count -D name.contains.criterion.names="subway" -D name.contains.criterion.case.sensitive=false \
+      input.osm hoot::NameContainsCriterion
 -----
 
 ===== Calculate the area of all features in a map:
@@ -628,6 +750,12 @@ See the User Guide for more details on command usage.
     hoot count -D attribute.value.criterion.type=user \
       -D attribute.value.criterion.comparison.type=TextEqualTo \
       -D attribute.value.criterion.comparison.value="username" input.osm hoot::AttributeValueCriterion
+-----
+
+===== Calculate the average number of nodes for a set of buildings:
+
+-----
+hoot stat -D nodes.per.way.visitor.element.criterion=hoot::BuildingCriterion input.osm hoot::NodesPerWayVisitor average
 -----
 
 ===== Calculate the numerical average of all "accuracy" tags:
@@ -781,19 +909,55 @@ Requires language translation server installation.  See the Hootenanny Install G
     hoot info --config-options poi.polygon --option-names
 -----
 
-===== List all available feature extractors:
+===== List all criteria that identify conflatable features:
+
+-----
+    hoot info --conflatable-criteria
+-----
+
+===== List all operators configured to run after conflation:
+
+-----
+    hoot info --conflate-post-operations
+-----
+
+===== List all operators configured to run before conflation:
+
+-----
+    hoot info --conflate-pre-operations
+-----
+
+===== List all operators that can take an element criterion as input:
+
+-----
+    hoot info --criterion-consumers
+-----
+
+===== List all extractors used to score feature properties:
 
 -----
     hoot info --feature-extractors:
 -----
 
-===== List all available language detectors:
+===== List all input formats that support reading by geospatial bounds:
+
+-----
+    hoot info --formats --input-bounded
+-----
+
+===== List all criteria that can be used to identify a feature's geometry type:
+
+-----
+    hoot info --geometry-type-criteria
+-----
+
+===== List all language detectors:
 
 -----
     hoot info --languages --detectors
 -----
 
-===== List all available language translators:
+===== List all language translators:
 
 -----
     hoot info --languages --translators
@@ -811,63 +975,75 @@ Requires language translation server installation.  See the Hootenanny Install G
     hoot info --languages --translatable
 -----
 
-===== List all available feature matchers:
+===== List all entities that can match features:
 
 -----
     hoot info --matchers
 -----
 
-===== List all available feature match creators:
+===== List all entities that can create feature matchers:
 
 -----
     hoot info --match-creators
 -----
 
-===== List all available feature mergers:
+===== List all entities that can merge features:
 
 -----
     hoot info --mergers
 -----
 
-===== List all available feature merger creators:
+===== List all entities that can create feature mergers:
 
 -----
     hoot info --merger-creators
 -----
 
-===== List all available data operators:
+===== List all entities that can operate on data:
 
 -----
     hoot info --operators
 -----
 
-===== List all available string comparators:
+===== List all entities that can filter data (a subset of --operators):
+
+-----
+    hoot info --filters
+-----
+
+===== List all entities that can compare strings:
 
 -----
     hoot info --string-comparators
 -----
 
-===== List all available tag value aggregators:
-
------
-    hoot info --value-aggregators
------
-
-===== List all available subline matchers:
+===== List all entities capable of subline matching:
 
 -----
     hoot info --subline-matchers
 -----
 
-===== List all available subline string matchers:
+===== List all entities capable of subline string matching:
 
 -----
     hoot info --subline-string-matchers
 -----
 
-===== List all available tag mergers:
+===== List all entities capable of tag merging:
 
 -----
     hoot info --tag-mergers
+-----
+
+===== List all entities capable of aggregating tag values:
+
+-----
+    hoot info --value-aggregators
+-----
+
+===== List all way joiners:
+
+-----
+    hoot info --way-joiners
 -----
 

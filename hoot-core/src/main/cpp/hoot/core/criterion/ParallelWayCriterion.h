@@ -34,14 +34,14 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
 
 class Way;
 
-class ParallelWayCriterion : public ElementCriterion
+class ParallelWayCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -64,6 +64,13 @@ public:
 
   virtual QString getDescription() const
   { return "Identifies ways that are parallel to each other"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 
 private:
 

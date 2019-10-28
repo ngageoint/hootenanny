@@ -13,24 +13,18 @@ can be found in the _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorith
 There is a brief PowerPoint available on the subject
 https://insightcloud.digitalglobe.com/redmine/attachments/download/1144/Hootenanny%20-%20Alpha%20Shape%202013-03-07.pptx[here].
 
-* +points+ - The input data to use for deriving the alpha shape. The alpha shape
-             algorithm is used to derive a polygon representing the bounds. The inputs may
-             be a +.osm.pbf+, +.osm+ or +.shp+ file
-* +alpha+  - The size in meters used for alpha. A larger value makes a smoother
-             shape and a smaller value will create a rough shape with more holes. Value in
-             meters.
-* +buffer+ - The buffer to add to the alpha shape before cutting. A negative
-             value will make the shape smaller. Value in meters. Generally a buffer of zero
-             will be used. If using the alpha shape command with cookie cutter it is a good
-             idea to use a larger negative value on complex data shapes. This will limit
-             the number of holes in the data. A negative value equal to the alpha value is
-             a good rule of thumb.
-* +output+ - The output +.osm.pbf+ or +.shp+ data path.
+* +points+ - The input data to use for deriving the alpha shape; may be any supported input format (e.g. OSM file). The alpha shape algorithm 
+             is used to derive a polygon representing the bounds.
+* +alpha+  - The size in meters used for alpha. A larger value makes a smoother shape and a smaller value will create a rough shape with more 
+             holes. Value in meters.
+* +buffer+ - The buffer to add to the alpha shape before cutting. A negative value will make the shape smaller. Value in meters. Generally a 
+             buffer of zero will be used. If using the alpha shape command with cookie cutter it is a good idea to use a larger negative value 
+             on complex data shapes. This will limit the number of holes in the data. A negative value equal to the alpha value is a good rule 
+             of thumb.
+* +output+ - The output; may be any supported output format (e.g. OSM file).
 
-When output to a +.osm+ file the alpha shape will always be a multi-polygon with
-one attribute +area=yes+. When output as a Shapefile it will be a multipolygon
-shapefile with a single record. Hootenanny doesn't support relations in
-+.osm.pbf+ files.
+When output to a +.osm+ file the alpha shape will always be a multi-polygon with one attribute +area=yes+. When output as a Shapefile it will 
+be a multipolygon shapefile with a single record. Hootenanny doesn't support relations in +.osm.pbf+ files.
 
 === Usage
 
@@ -50,4 +44,5 @@ hoot generate-alpha-shape CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.
 
 * `cookie.cutter.*` configuration options
 * _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

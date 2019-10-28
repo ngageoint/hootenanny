@@ -192,6 +192,28 @@ public class DbUtils {
     }
 
     /**
+     * Gets the job type for the specified jobId
+     * @param jobId
+     * @return
+     */
+    public static Integer getJobTypeByJobId(String jobId) {
+        return createQuery()
+                .select(jobStatus.jobType)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId)).fetchOne();
+    }
+
+    /**
+     * Deletes the specified mapId
+     * @param mapId
+     */
+    public static void deleteMap(Long mapId) {
+        createQuery().delete(maps)
+                .where(maps.id.eq(mapId))
+                .execute();
+    }
+
+    /**
      * Creates a new folder under the parent directory
      * if not already present and returns it's id
      *
@@ -226,18 +248,15 @@ public class DbUtils {
         return sql.fetchFirst();
     }
 
-    public static void setFolderMapping(Long mapId, Long folderId) {
-        Long newId = createQuery()
-            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-            .from()
-            .fetchOne();
+    public static List<Long> getChildrenFolders(Long folderId) {
+        List<Long> childrenFolders = createQuery()
+                .select(folders.id)
+                .from(folders)
+                .where(folders.parentId.eq(folderId))
+                .fetch();
 
-        createQuery()
-            .insert(folderMapMappings)
-            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-            .values(newId, mapId, folderId).execute();
+        return childrenFolders;
     }
-
 
     /**
      * Sets the parent directory for the specified folder

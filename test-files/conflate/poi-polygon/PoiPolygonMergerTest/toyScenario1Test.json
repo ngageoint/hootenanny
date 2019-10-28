@@ -15,13 +15,13 @@
 {"type":"node","id":-131,"lat":0.00247,"lon":-0.003632},
 {"type":"node","id":-130,"lat":0.001743,"lon":-0.003632},
 {"type":"node","id":-129,"lat":0.00173,"lon":-0.004071},
-{"type":"way","id":-22,"nodes":[-144,-143,-142,-141,-144],"tags":{"building:part":"yes","error:circular":"15"}},
-{"type":"way","id":-21,"nodes":[-140,-139,-138,-137,-140],"tags":{"building:part":"yes","error:circular":"15"}},
-{"type":"way","id":-20,"nodes":[-136,-135,-134,-133,-136],"tags":{"building:part":"yes","error:circular":"15"}},
-{"type":"way","id":-19,"nodes":[-132,-131,-130,-129,-132],"tags":{"building:part":"yes","error:circular":"15"}},
+{"type":"way","id":-22,"nodes":[-144,-143,-142,-141,-144],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-21,"nodes":[-140,-139,-138,-137,-140],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-20,"nodes":[-136,-135,-134,-133,-136],"tags":{"building":"yes","error:circular":"15"}},
+{"type":"way","id":-19,"nodes":[-132,-131,-130,-129,-132],"tags":{"building":"yes","error:circular":"15"}},
 {"type":"relation","id":-1,"members":[
-{"type":"way","ref":-22,"role":"part"},
-{"type":"way","ref":-21,"role":"part"},
-{"type":"way","ref":-20,"role":"part"},
-{"type":"way","ref":-19,"role":"part"}],"tags":{"hoot:poipolygon:poismerged":"1","name":"A","alt_name":"B;C;D;E;F","note":"Toy Scenario 1","building":"yes","poi":"yes","error:circular":"15"}}]
+{"type":"way","ref":-22,"role":"outer"},
+{"type":"way","ref":-21,"role":"outer"},
+{"type":"way","ref":-20,"role":"outer"},
+{"type":"way","ref":-19,"role":"outer"}],"tags":{"hoot:poipolygon:poismerged":"1","name":"A","alt_name":"B;C;D;E;F","note":"Toy Scenario 1","building":"yes","poi":"yes","error:circular":"15"}}]
 }

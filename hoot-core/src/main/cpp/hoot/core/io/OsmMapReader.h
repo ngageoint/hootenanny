@@ -40,7 +40,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapReader"; }
 
-  OsmMapReader() {}
+  OsmMapReader() : _ignoreDuplicates(false) {}
 
   virtual ~OsmMapReader() {}
 
@@ -54,7 +54,7 @@ public:
   /**
    * Opens the specified URL for reading.
    */
-  virtual void open(const QString& url) = 0;
+  virtual void open(const QString& url) { _url = url; }
 
   /**
    * Reads the specified map. When this method is complete the input will likely be closed.
@@ -84,6 +84,26 @@ public:
    * @return a formats string
    */
   virtual QString supportedFormats() = 0;
+
+  /**
+   * Gets the ignore duplicates flag
+   */
+  bool getIgnoreDuplicates() { return _ignoreDuplicates; }
+
+  /**
+   * Set the ignore duplicates flag, when set to true, derived classes will ignore any element
+   * who's ID is already being used.  This is useful when elements cross bounding box boundaries
+   * and multiple bounding boxes are being merged together.
+   */
+  void setIgnoreDuplicates(bool ignore) { _ignoreDuplicates = ignore; }
+
+protected:
+  /**
+   * Ignore the duplicate IDs or throw an error
+   */
+  bool _ignoreDuplicates;
+  /** Url of the map to open and read */
+  QString _url;
 };
 
 }

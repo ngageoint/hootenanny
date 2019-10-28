@@ -6,11 +6,10 @@
 The +multiary-poi-ingest+ command ingests POI data for use by the +multiary-conflate+ command by calculating the difference between
 new and existing data.
 
-* +newInput+          - path to a supported Hootenanny data format
-* +translationScript+ - path to a translation script used to translate the input data to OSM
-* +referenceOutput+   - path to reference data; must be a Hootenanny API database layer; if the layer does not exist,
-                        it will be created
-* +changesetOutput+   - path to write the resulting changeset changes to; must be a Spark changeset
+* +newInput+          - Input; may be any supported input format (e.g. OSM file).
+* +translationScript+ - Path to a translation script used to translate the input data to OSM
+* +referenceOutput+   - Path to reference data; must be a Hootenanny API database layer; If the layer does not exist, it will be created.
+* +changesetOutput+   - Path to write the resulting changeset changes to; must be a Spark changeset (*.spark.1).
 
 === Usage
 
@@ -25,3 +24,7 @@ hoot multiary-poi-ingest newData.geonames translations/GeoNames.js hootapidb://h
 
 hoot multiary-poi-ingest planet.osm.pbf translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

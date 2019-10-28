@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QDir>
@@ -54,7 +55,8 @@ class OsmJsonReaderTest : public HootTestFixture
 
 public:
 
-  OsmJsonReaderTest() : HootTestFixture("test-files/io/OsmJsonReaderTest/")
+  OsmJsonReaderTest() :
+  HootTestFixture("test-files/io/OsmJsonReaderTest/", "test-output/io/OsmJsonReaderTest/")
   {
   }
 
@@ -100,7 +102,8 @@ public:
      "}                                      \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Need to test read from file, too
     OsmMapPtr pMap2 = uut.loadFromFile("test-files/nodes.json");
@@ -138,7 +141,8 @@ public:
                           "{\"type\":\"way\",\"id\":-1,\"nodes\":[-1,-2,-3,-4,-5],\"tags\":{\"note\":\"w1\",\"alt_name\":\"bar\",\"name\":\"foo\",\"area\":\"yes\",\"amenity\":\"bar\",\"" + MetadataTags::ErrorCircular() + "\":\"5\"}}]\n"
                           "}\n";
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Test against osm xml
     QString testOsmStr =
@@ -271,7 +275,8 @@ public:
       "}                                       \n";
 
     OsmJsonReader uut;
-    OsmMapPtr pMap = uut.loadFromString(testJsonStr);
+    OsmMapPtr pMap(new OsmMap());
+    uut.loadFromString(testJsonStr, pMap);
 
     // Useful for debug
     //OsmXmlWriter writer;
@@ -602,6 +607,8 @@ public:
     // This will leave any ways in the output which are outside of the bounds but are directly
     // connected to ways which cross the bounds.
 
+    const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
+
     OsmJsonReader uut;
     uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
@@ -614,11 +621,9 @@ public:
     uut.open(_inputPath + "runBoundsLeaveConnectedOobWaysTest-in.json");
     uut.read(map);
     uut.close();
-    //OsmMapWriterFactory::write(
-      //map, _outputPath + "/runBoundsLeaveConnectedOobWaysTest.osm", false, true);
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
 
-    CPPUNIT_ASSERT_EQUAL(17, (int)map->getNodes().size());
-    CPPUNIT_ASSERT_EQUAL(3, (int)map->getWays().size());
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 };
 }

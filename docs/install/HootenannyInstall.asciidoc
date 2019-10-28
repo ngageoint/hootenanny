@@ -22,8 +22,8 @@ The recommended and easiest installation method is to install from RPMs.  This c
 
 --------------------------------------
 sudo yum install -y epel-release yum-utils
-sudo yum-config-manager --add-repo https://s3.amazonaws.com/hoot-repo/el7/pgdg95.repo
-sudo yum-config-manager --add-repo https://s3.amazonaws.com/hoot-repo/el7/release/hoot.repo
+sudo yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/pgdg95.repo
+sudo yum-config-manager --add-repo https://hoot-repo.s3.amazonaws.com/el7/release/hoot.repo
 sudo yum makecache -y
 sudo yum install -y hootenanny-autostart
 --------------------------------------

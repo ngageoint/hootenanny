@@ -28,7 +28,7 @@
 #define OSMMAPWRITERFACTORY_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+//#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/network/NetworkMatcher.h>
 #include <hoot/core/io/ElementInputStream.h>
 
@@ -40,7 +40,9 @@
 
 namespace hoot
 {
+
 class OsmMapWriter;
+class OsmMap;
 
 /**
  * A factory for constructing writers based on the URL
@@ -53,14 +55,14 @@ public:
 
   static bool hasElementOutputStream(const QString& url);
 
-  static void write(const std::shared_ptr<const OsmMap>& map, const QString& url,
+  static void write(const std::shared_ptr<OsmMap>& map, const QString& url,
                     const bool silent = false, const bool is_debug = false);
 
   static QString getWriterName(const QString& url);
 
   static bool isSupportedFormat(const QString& url);
 
-  static void writeDebugMap(const ConstOsmMapPtr& map, const QString& title = "",
+  static void writeDebugMap(const std::shared_ptr<const OsmMap>& map, const QString& title = "",
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
 private:

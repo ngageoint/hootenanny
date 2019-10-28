@@ -98,6 +98,8 @@ double RasterComparator::compareMaps()
   _saveImage(image1, "test-output/image1.png", max);
   _saveImage(image2, "test-output/image2.png", max);
 
+  cvReleaseImage(&diffImage);
+
   return 1 - error;
 }
 

@@ -22,429 +22,223 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
+#include <hoot/rnd/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/io/DataConverter.h>
-#include <hoot/core/util/IoUtils.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/rnd/perty/PertyOp.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/PositiveIdGenerator.h>
-#include <hoot/core/util/DefaultIdGenerator.h>
-//#include <hoot/core/visitors/AddUuidVisitor.h>
+#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/criterion/TagCriterion.h>
 
 namespace hoot
 {
 
 /*
- * These tests are very similar to the tests in Service*ReplacementTest.sh, which test the
- * replacement changeset workflow against API DB data sources. Differences here are that these
- * tests test against file data sources only, don't interact with a database, and don't try to
- * apply the output changeset.
- *
- * This test file is in hoot-rnd since it needs to use PertyOp.
+ * This only tests some input validation checks, as its easier to test the actual changeset
+ * generation from command line tests (ServiceChangesetReplacement*Test.sh), as you can see the
+ * results of applying the changesets back to the source data.
  */
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ChangesetReplacementCreatorTest);
-  CPPUNIT_TEST(runPolyLenientOsmTest);
-  CPPUNIT_TEST(runPolyStrictOsmTest);
-  CPPUNIT_TEST(runPoiStrictOsmTest);
-  CPPUNIT_TEST(runLinearLenientOsmTest);
-  CPPUNIT_TEST(runLinearStrictOsmTest);
-  CPPUNIT_TEST(runPolyLenientJsonTest);
-  CPPUNIT_TEST(runPolyStrictJsonTest);
-  CPPUNIT_TEST(runPoiStrictJsonTest);
-  CPPUNIT_TEST(runLinearLenientJsonTest);
-  CPPUNIT_TEST(runLinearStrictJsonTest);
+  CPPUNIT_TEST(runInvalidGeometryFilterTest);
+  CPPUNIT_TEST(runInvalidReplacementFilterTest);
+  CPPUNIT_TEST(runInvalidRetainmentFilterTest);
+  CPPUNIT_TEST(runNonBoundableReaderTest);
+  CPPUNIT_TEST(runGeoJsonTest);
+  CPPUNIT_TEST(runInvalidFilterConfigOptsTest);
+  CPPUNIT_TEST(runConvertOpsTest);
+  CPPUNIT_TEST(runFullReplacmentWithRetainmentFilterTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   ChangesetReplacementCreatorTest() :
-  HootTestFixture(
-    "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/"),
-  _goldFileDirBase("test-files/cmd/glacial/serial/")
+  HootTestFixture(UNUSED_PATH, UNUSED_PATH)
   {
-    setResetType(ResetAll);
-
-    conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
-    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
-    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
-    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-//    conf().set(
-//      ConfigOptions::getLogClassFilterKey(),
-//      "ChangesetReplacementCreatorTest");
   }
 
-  void runPolyLenientOsmTest()
-  {     
-    // This is here to avoid seeing the missing element warnings from the readers after cropping.
-    DisableLog dl;
-
-    const QString testName = "runPolyLenientOsmTest";
-    LOG_DEBUG("Running test: " << testName << "...");
-    const GeometryType geometryType = GeometryType::Polygon;
-//    const QString goldTestName = "ServiceBuildingReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 632, 0, 583, "");
-  }
-
-  void runPolyStrictOsmTest()
+  void runInvalidGeometryFilterTest()
   {
-    DisableLog dl;
-
-    const QString testName = "runPolyStrictOsmTest";
-    const GeometryType geometryType = GeometryType::Polygon;
-/*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
-    const QString goldFile =
-      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
-
-    _prepInputData(testName, geometryType);
-    _runTest(
-      testName, "osm", geometryType, false, 529, 1, 517, "");
-  }
-
-  void runPoiStrictOsmTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runPoiStrictOsmTest";
-    const GeometryType geometryType = GeometryType::Point;
-//    const QString goldTestName = "ServicePoiStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 3, 1, 1, "");
-  }
-
-  void runLinearLenientOsmTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runLinearLenientOsmTest";
-    const GeometryType geometryType = GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, true, 146, 7, 141, "");
-  }
-
-  void runLinearStrictOsmTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runLinearStrictOsmTest";
-    const GeometryType geometryType = GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "osm", geometryType, false, 47, 5, 36, "");
-  }
-
-  void runPolyLenientJsonTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runPolyLenientJsonTest";
-    LOG_DEBUG("Running test: " << testName << "...");
-    const GeometryType geometryType = GeometryType::Polygon;
-//    const QString goldTestName = "ServiceBuildingReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true, 632, 0, 583, "");
-  }
-
-  void runPolyStrictJsonTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runPolyStrictJsonTest";
-    const GeometryType geometryType = GeometryType::Polygon;
-/*    const QString goldTestName = "ServiceBuildingStrictReplacementTest";
-    const QString goldFile =
-      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc"*/;
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 529, 1, 517, "");
-  }
-
-  void runPoiStrictJsonTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runPoiStrictJsonTest";
-    const GeometryType geometryType = GeometryType::Point;
-//    const QString goldTestName = "ServicePoiStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 3, 1, 1, "");
-  }
-
-  void runLinearLenientJsonTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runLinearLenientJsonTest";
-    const GeometryType geometryType = GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, true, 146, 7, 141, "");
-  }
-
-  void runLinearStrictJsonTest()
-  {
-    DisableLog dl;
-
-    const QString testName = "runLinearStrictJsonTest";
-    const GeometryType geometryType = GeometryType::Line;
-//    const QString goldTestName = "ServiceRoadStrictReplacementTest";
-//    const QString goldFile =
-//      _goldFileDirBase + goldTestName + "/" + goldTestName + "-changeset-1.osc";
-
-    _prepInputData(testName, geometryType);
-    _runTest(testName, "json", geometryType, false, 47, 5, 36, "");
-  }
-
-private:
-
-  QString _goldFileDirBase;
-
-  enum GeometryType
-  {
-    Point = 0,
-    Line,
-    Polygon
-  };
-
-  ChangesetDeriverPtr _getChangesetDeriver(
-    const ChangesetReplacementCreator& changesetReplacementCreator) const
-  {
-    return changesetReplacementCreator._changesetCreator->_changesetDeriver;
-  }
-
-  void _prepInputData(const QString& testName, const GeometryType& geometryType)
-  {
-    LOG_DEBUG("Preparing input data...");
-
-    QString customTagKey = "";
-    QString customTagVal = "";
-    QString refSourceFile = "test-files/BostonSubsetRoadBuilding_FromOsm.osm";
-    QString secSourceFile = refSourceFile;
-    switch (geometryType)
-    {
-      case GeometryType::Point:
-        refSourceFile = "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm";
-        secSourceFile = "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm";
-        break;
-      case GeometryType::Line:
-        customTagKey = "note";
-        customTagVal = "Highway";
-        break;
-      case GeometryType::Polygon:
-        customTagKey = "name";
-        customTagVal = "Building";
-        break;
-      default:
-        throw IllegalArgumentException("Invalid geometry type.");
-    }
-
-    QString modifiedCustomTagVal = "";
-    if (!customTagVal.isEmpty())
-    {
-      modifiedCustomTagVal = customTagVal + " 1";
-    }
-    const bool perturbRef = geometryType != GeometryType::Point;
-    OsmMapPtr refMap =
-      _getTestMap(
-        refSourceFile, std::shared_ptr<IdGenerator>(new PositiveIdGenerator()), customTagKey,
-        modifiedCustomTagVal, perturbRef);
-    QString outFile = _outputPath + testName + "-ref-in.";
-    if (testName.toLower().contains("osm"))
-    {
-      outFile += "osm";
-    }
-    else
-    {
-      outFile += "json";
-    }
-    IoUtils::saveMap(refMap, outFile);
-
-    if (!customTagVal.isEmpty())
-    {
-      modifiedCustomTagVal = customTagVal + " 2";
-    }
-    OsmMapPtr secMap =
-      _getTestMap(
-        secSourceFile, std::shared_ptr<IdGenerator>(new DefaultIdGenerator()), customTagKey,
-        modifiedCustomTagVal, false);
-    outFile = outFile.replace("ref", "sec");
-    IoUtils::saveMap(secMap, outFile);
-
-    // TODO: This is very strange... If I don't call this method at the end, a couple of tests fail.
-    // The only thing I can imagine is that DataConverter is setting some global config that happens
-    // to be needed by the tests. I've tried what's commented out below and none of them do the
-    // trick.
-    _copyJson(outFile, _outputPath + "temp-do-not-use.json");
-    //conf().set(ConfigOptions::getReaderUseFileStatusKey(), true);
-    //conf().set(ConfigOptions::getReaderKeepStatusTagKey(), true);
-  }
-
-  OsmMapPtr _getTestMap(const QString& sourceFile, const std::shared_ptr<IdGenerator>& idGen,
-                        const QString& customTagKey, const QString& customTagVal,
-                        const bool perturb)
-  {
-    LOG_DEBUG("Preparing map from: " << sourceFile << "...");
-
-    OsmMapPtr map(new OsmMap());
-    map->setIdGenerator(idGen);
-    IoUtils::loadMap(map, sourceFile, false);
-
-    if (!customTagKey.isEmpty() && !customTagVal.isEmpty())
-    {
-      LOG_DEBUG("Setting custom tag: " << customTagKey << "=" << customTagVal << "...");
-      QString criterionName = "";
-      if (customTagVal.toLower().contains("building"))
-      {
-        criterionName = QString::fromStdString(BuildingCriterion::className());
-      }
-      else
-      {
-        criterionName = QString::fromStdString(HighwayCriterion::className());
-      }
-      SetTagValueVisitor tagSetter(customTagKey, customTagVal, false, criterionName);
-      map->visitRw(tagSetter);
-    }
-
-    if (perturb)
-    {
-      LOG_DEBUG("Perturbing map...");
-      PertyOp perturber;
-      perturber.setSystematicError(15.0, 15.0);
-      perturber.setSeed(1);
-      perturber.setNamedOps(QStringList());
-      perturber.apply(map);
-      MapProjector::projectToWgs84(map);  // perty works in planar
-    }
-
-    //AddUuidVisitor uuidAdder("uuid");
-    //map->visitRw(uuidAdder);
-
-    return map;
-  }
-
-  void _copyJson(const QString& inXmlFile, const QString& outFile)
-  {
-    LOG_DEBUG("Converting xml: " << inXmlFile << " to json: " << outFile << "...");
-    DataConverter().convert(inXmlFile, outFile);
-  }
-
-  void _runTest(const QString& testName, const QString& fileExtension,
-                const GeometryType& geometryType, const bool lenientBounds,
-                const int numExpectedCreateStatements, const int numExpectedModifyStatements,
-                const int numExpectedDeleteStatements, const QString goldChangesetFile)
-  {
-    if (geometryType == GeometryType::Line)
-    {
-      double existingWayNodeTolerance = 45.0;
-      double snapTolerance = 45.0;
-      if (lenientBounds)
-      {
-        existingWayNodeTolerance = 20.0;
-        snapTolerance = 20.0;
-      }
-      conf().set(
-        ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(),
-        existingWayNodeTolerance);
-      conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), snapTolerance);
-    }
-
-    const QString outFile = _outputPath + testName + "-out.osc";
-
+    QString exceptionMsg;
     ChangesetReplacementCreator changesetCreator;
-    changesetCreator.create(
-      _outputPath + testName + "-ref-in." + fileExtension,
-      _outputPath + testName + "-sec-in." + fileExtension, _getBounds(geometryType),
-      _getFilterCrit(geometryType), lenientBounds, outFile);
-
-    // Going only with this level of checking for now. We could extend this to diff the actual
-    // changeset files.
-    CPPUNIT_ASSERT_EQUAL(
-      numExpectedCreateStatements, _getChangesetDeriver(changesetCreator)->getNumCreateChanges());
-    CPPUNIT_ASSERT_EQUAL(
-      numExpectedModifyStatements, _getChangesetDeriver(changesetCreator)->getNumModifyChanges());
-    CPPUNIT_ASSERT_EQUAL(
-      numExpectedDeleteStatements, _getChangesetDeriver(changesetCreator)->getNumDeleteChanges());
-    // ignoring this for now
-    if (!goldChangesetFile.isEmpty())
+    try
     {
-      HOOT_FILE_EQUALS(goldChangesetFile, outFile);
+      changesetCreator.setGeometryFilters(QStringList("hoot::TagCriterion"));
     }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid feature geometry type filter"));
   }
 
-  QString _getFilterCrit(const GeometryType& geometryType) const
+  void runInvalidReplacementFilterTest()
   {
-    std::string className;
-    switch (geometryType)
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+
+    try
     {
-      case GeometryType::Point:
-        className = PoiCriterion::className();
-        break;
-      case GeometryType::Line:
-        className = HighwayCriterion::className();
-        break;
-      case GeometryType::Polygon:
-        className = BuildingCriterion::className();
-        break;
-      default:
-        throw IllegalArgumentException("Invalid geometry type.");
+      changesetCreator.setReplacementFilters(QStringList("hoot::AddAttributesVisitor"));
     }
-    return QString::fromStdString(className);
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
+
+    try
+    {
+      changesetCreator.setReplacementFilters(QStringList("hoot::PoiCriterion"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
   }
 
-  geos::geom::Envelope _getBounds(const GeometryType& geometryType) const
+  void runInvalidRetainmentFilterTest()
   {
-    switch (geometryType)
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+
+    try
     {
-      case GeometryType::Point:
-        return geos::geom::Envelope(-122.43204, -122.4303457, 37.7628, 37.76437);
-      case GeometryType::Line:
-        return geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902);
-      case GeometryType::Polygon:
-        return geos::geom::Envelope(-71.4698, -71.4657, 42.4866, 42.4902);
-      default:
-        throw IllegalArgumentException("Invalid geometry type.");
+      changesetCreator.setRetainmentFilters(QStringList("hoot::AddAttributesVisitor"));
     }
-    return geos::geom::Envelope();
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
+
+    try
+    {
+      changesetCreator.setRetainmentFilters(QStringList("hoot::PoiCriterion"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid additional input filter"));
+  }
+
+  void runNonBoundableReaderTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    try
+    {
+      changesetCreator.create(
+        "test-files/cmd/quick/ConvertGeoNames.geonames", "test2.osm", geos::geom::Envelope(),
+        "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+
+    CPPUNIT_ASSERT(
+      exceptionMsg.endsWith("must implement Boundable for replacement changeset derivation."));
+  }
+
+  void runGeoJsonTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    try
+    {
+      changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("GeoJSON inputs are not supported by replacement changeset derivation.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runInvalidFilterConfigOptsTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+
+    // the filter can be any non-geometry crit here
+    changesetCreator.setReplacementFilters(
+      QStringList(QString::fromStdString(TagCriterion::className())));
+    try
+    {
+      changesetCreator.setReplacementFilterOptions(QStringList("blah"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
+
+    // the filter can be any non-geometry crit here
+    changesetCreator.setRetainmentFilters(
+      QStringList(QString::fromStdString(TagCriterion::className())));
+    try
+    {
+      changesetCreator.setRetainmentFilterOptions(QStringList("blah"));
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
+  }
+
+  void runConvertOpsTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    // the convert ops added here can contain any op
+    conf().set(
+      ConfigOptions::getConvertOpsKey(),
+      QStringList(QString::fromStdString(MergeNearbyNodes::className())));
+    try
+    {
+      changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Replacement changeset derivation does not support convert operations.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runFullReplacmentWithRetainmentFilterTest()
+  {
+    QString exceptionMsg;
+    ChangesetReplacementCreator changesetCreator;
+    changesetCreator.setFullReplacement(true);
+    // the filter can be any non-geometry crit here
+    changesetCreator.setRetainmentFilters(
+      QStringList(QString::fromStdString(TagCriterion::className())));
+    try
+    {
+      changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Both full reference data replacement and a reference data retainment filter may not "
+              "be specified for replacement changeset derivation.").toStdString(),
+      exceptionMsg.toStdString());
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetReplacementCreatorTest, "glacial");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ChangesetReplacementCreatorTest, "quick");
 
 }

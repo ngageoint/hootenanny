@@ -1203,57 +1203,13 @@
     <node visible="true" id="6517545920" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2798059999999953" lon="-16.5237392000000014"/>
     <node visible="true" id="6517545921" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2797399999999968" lon="-16.5237406000000000"/>
     <node visible="true" id="6517545922" timestamp="2019-06-03T05:49:37Z" version="1" changeset="70872680" user="LakeComo" uid="9446673" lat="15.2812692999999946" lon="-16.5258931999999987"/>
-    <way visible="true" id="-2984" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-16"/>
-        <nd ref="-1381"/>
-        <tag k="source" v="estimated"/>
-        <tag k="gauge" v="1000"/>
-        <tag k="railway" v="disused"/>
-        <tag k="electrified" v="no"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="source:datetime" v="2015-07-27T16:17:43Z"/>
-        <tag k="usage" v="main"/>
-        <tag k="admin_level" v="3"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2983" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1381"/>
+    <way visible="true" id="-2965" timestamp="2017-11-05T19:13:24Z" version="5">
         <nd ref="3668939756"/>
-        <tag k="source" v="estimated"/>
-        <tag k="gauge" v="1000"/>
-        <tag k="railway" v="disused"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2015-07-27T16:17:43Z;2015-07-27T16:17:43.000Z"/>
-        <tag k="admin_level" v="3"/>
-        <tag k="usage" v="main"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2981" timestamp="2017-11-05T19:13:24Z" version="5">
-        <nd ref="3668939756"/>
-        <nd ref="5189643477"/>
-        <tag k="gauge" v="1000"/>
-        <tag k="railway" v="disused"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2017-11-05T19:13:24Z;2015-07-27T16:17:42.000Z"/>
-        <tag k="usage" v="main"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2979" timestamp="2017-11-05T19:13:24Z" version="5">
         <nd ref="5189643477"/>
         <nd ref="5189643479"/>
         <nd ref="5189643480"/>
         <nd ref="3668857771"/>
         <nd ref="1977199753"/>
-        <nd ref="5192494444"/>
-        <tag k="gauge" v="1000"/>
-        <tag k="railway" v="disused"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2017-11-05T19:13:24Z;2015-07-27T16:17:42.000Z"/>
-        <tag k="usage" v="main"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2961" timestamp="2017-11-05T19:13:24Z" version="5">
         <nd ref="5192494444"/>
         <nd ref="5192493418"/>
         <nd ref="5189643518"/>
@@ -1288,41 +1244,6 @@
         <tag k="noname" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-2946" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-22"/>
-        <nd ref="6364306828"/>
-        <nd ref="6364306827"/>
-        <nd ref="5189643525"/>
-        <nd ref="5189643526"/>
-        <nd ref="5189641957"/>
-        <nd ref="6517545916"/>
-        <nd ref="281183768"/>
-        <nd ref="3668869268"/>
-        <nd ref="5189643550"/>
-        <nd ref="5240226654"/>
-        <nd ref="5294730928"/>
-        <nd ref="5192494421"/>
-        <nd ref="5189643495"/>
-        <nd ref="5189643472"/>
-        <nd ref="1977199876"/>
-        <nd ref="2142498121"/>
-        <nd ref="3668857778"/>
-        <nd ref="-1341"/>
-        <nd ref="3668857781"/>
-        <nd ref="-23"/>
-        <tag k="is_in:country_code" v="SN"/>
-        <tag k="source" v="Microsoft Bing orbital imagery"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="oneway" v="no"/>
-        <tag k="highway" v="trunk"/>
-        <tag k="name" v="Route de Saint-Louis"/>
-        <tag k="int_ref" v="TAH 1"/>
-        <tag k="nat_ref" v="N 2"/>
-        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-09-11T12:28:29.000Z"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lanes" v="2"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-2939" timestamp="2019-06-03T05:49:37Z" version="3">
         <nd ref="3668874734"/>
         <nd ref="6517545919"/>
@@ -1354,36 +1275,6 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-07-27T15:27:54.000Z"/>
         <tag k="surface" v="unpaved"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-2901" timestamp="2019-06-03T05:49:37Z" version="5">
-        <nd ref="5189643532"/>
-        <nd ref="5189643530"/>
-        <nd ref="3668874740"/>
-        <nd ref="5189643531"/>
-        <nd ref="5189643523"/>
-        <nd ref="5189643529"/>
-        <nd ref="5189643528"/>
-        <nd ref="5189643527"/>
-        <nd ref="5189641954"/>
-        <nd ref="3668874738"/>
-        <nd ref="3668874739"/>
-        <nd ref="5189643548"/>
-        <nd ref="6517545922"/>
-        <nd ref="5294730927"/>
-        <nd ref="5294730922"/>
-        <nd ref="5294730934"/>
-        <nd ref="5192493420"/>
-        <nd ref="5189643494"/>
-        <nd ref="5189643499"/>
-        <nd ref="3668874732"/>
-        <nd ref="-1181"/>
-        <nd ref="5189643474"/>
-        <tag k="oneway" v="no"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-07-27T15:27:54.000Z"/>
-        <tag k="surface" v="unpaved"/>
-        <tag k="noname" v="yes"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2885" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1481,6 +1372,41 @@
         <tag k="source:datetime" v="2017-03-18T17:06:23Z"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="6364306828"/>
+        <nd ref="6364306827"/>
+        <nd ref="5189643525"/>
+        <nd ref="5189643526"/>
+        <nd ref="5189641957"/>
+        <nd ref="6517545916"/>
+        <nd ref="281183768"/>
+        <nd ref="3668869268"/>
+        <nd ref="5189643550"/>
+        <nd ref="5240226654"/>
+        <nd ref="5294730928"/>
+        <nd ref="5192494421"/>
+        <nd ref="5189643495"/>
+        <nd ref="5189643472"/>
+        <nd ref="1977199876"/>
+        <nd ref="2142498121"/>
+        <nd ref="3668857778"/>
+        <nd ref="-1341"/>
+        <nd ref="3668857781"/>
+        <nd ref="-23"/>
+        <tag k="is_in:country_code" v="SN"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="oneway" v="no"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="name" v="Route de Saint-Louis"/>
+        <tag k="int_ref" v="TAH 1"/>
+        <tag k="nat_ref" v="N 2"/>
+        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-09-11T12:28:29.000Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="lanes" v="2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="5212967917"/>
@@ -1547,6 +1473,20 @@
         <tag k="postal_code" v="30600"/>
         <tag k="source:datetime" v="2017-11-20T23:15:24Z"/>
         <tag k="place" v="town"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="-1381"/>
+        <nd ref="3668939756"/>
+        <tag k="source" v="estimated"/>
+        <tag k="gauge" v="1000"/>
+        <tag k="railway" v="disused"/>
+        <tag k="electrified" v="no"/>
+        <tag k="boundary" v="administrative"/>
+        <tag k="source:datetime" v="2015-07-27T16:17:43Z;2015-07-27T16:17:43.000Z"/>
+        <tag k="usage" v="main"/>
+        <tag k="admin_level" v="3"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1987,6 +1927,36 @@
         <tag k="oneway" v="no"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2017-10-28T13:41:08Z;2015-07-27T15:26:15.000Z"/>
+        <tag k="surface" v="unpaved"/>
+        <tag k="noname" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="362615238" timestamp="2019-06-03T05:49:37Z" version="5">
+        <nd ref="5189643532"/>
+        <nd ref="5189643530"/>
+        <nd ref="3668874740"/>
+        <nd ref="5189643531"/>
+        <nd ref="5189643523"/>
+        <nd ref="5189643529"/>
+        <nd ref="5189643528"/>
+        <nd ref="5189643527"/>
+        <nd ref="5189641954"/>
+        <nd ref="3668874738"/>
+        <nd ref="3668874739"/>
+        <nd ref="5189643548"/>
+        <nd ref="6517545922"/>
+        <nd ref="5294730927"/>
+        <nd ref="5294730922"/>
+        <nd ref="5294730934"/>
+        <nd ref="5192493420"/>
+        <nd ref="5189643494"/>
+        <nd ref="5189643499"/>
+        <nd ref="3668874732"/>
+        <nd ref="-1181"/>
+        <nd ref="5189643474"/>
+        <tag k="oneway" v="no"/>
+        <tag k="highway" v="residential"/>
+        <tag k="source:datetime" v="2019-06-03T05:49:37Z;2015-07-27T15:27:54.000Z"/>
         <tag k="surface" v="unpaved"/>
         <tag k="noname" v="yes"/>
         <tag k="error:circular" v="15"/>
@@ -3588,7 +3558,7 @@
     </way>
     <relation visible="true" id="-335" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="281183768" role="reviewee"/>
-        <member type="way" ref="-2946" role="reviewee"/>
+        <member type="way" ref="-17" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:review:sort_order" v="1"/>
         <tag k="hoot:review:note" v="Ambiguous intersection match. Possible dogleg? Very short segment? Please verify merge and fix as needed."/>
@@ -3610,14 +3580,14 @@
     <relation visible="true" id="-17" timestamp="2016-02-03T11:12:44Z" version="1">
         <member type="way" ref="-2885" role=""/>
         <member type="way" ref="535381757" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
         <tag k="source" v="Microsoft Bing orbital imagery"/>
         <tag k="to" v="Kidira"/>
         <tag k="from" v="Pout"/>
@@ -3850,7 +3820,6 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="2906477" timestamp="2019-02-06T09:46:07Z" version="16" changeset="66958490" user="mOlind" uid="53540">
-        <member type="way" ref="-2984" role="outer"/>
         <member type="way" ref="362621591" role="outer"/>
         <member type="way" ref="-19" role="outer"/>
         <tag k="wikipedia" v="en:Thiès Region"/>
@@ -3872,7 +3841,6 @@
     <relation visible="true" id="2908172" timestamp="2019-02-06T09:46:07Z" version="19" changeset="66958490" user="mOlind" uid="53540">
         <member type="way" ref="-19" role="outer"/>
         <member type="way" ref="362621591" role="outer"/>
-        <member type="way" ref="-2984" role="outer"/>
         <tag k="wikipedia" v="en:Louga Region"/>
         <tag k="source" v="http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/"/>
         <tag k="ISO3166-2" v="SN-LG"/>
@@ -3889,20 +3857,20 @@
         <tag k="type" v="boundary"/>
     </relation>
     <relation visible="true" id="4828569" timestamp="2019-07-13T01:47:04Z" version="114" changeset="72201144" user="geo_roads" uid="6849512">
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
         <tag k="to" v="Kidira"/>
         <tag k="from" v="Pout"/>
         <tag k="route" v="road"/>
@@ -3913,20 +3881,20 @@
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="6134983" timestamp="2019-04-17T01:34:32Z" version="48" changeset="69291497" user="dancingVJL" uid="8392762">
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
-        <member type="way" ref="-2946" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
+        <member type="way" ref="-17" role=""/>
         <tag k="int_name" v="TAH 1-SN"/>
         <tag k="is_in:country_code" v="SN"/>
         <tag k="wikidata" v="Q1506411"/>

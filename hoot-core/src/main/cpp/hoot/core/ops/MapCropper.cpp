@@ -56,6 +56,8 @@
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 // Standard
 #include <limits>
@@ -78,6 +80,7 @@ MapCropper::MapCropper() :
 _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
+_removeSuperfluousFeatures(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -94,6 +97,7 @@ _envelopeG(GeometryFactory::getDefaultInstance()->toGeometry(&_envelope)),
 _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
+_removeSuperfluousFeatures(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -109,6 +113,7 @@ _envelopeG(g),
 _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
+_removeSuperfluousFeatures(true),
 _statusUpdateInterval(1000),
 _numWaysInBounds(0),
 _numWaysOutOfBounds(0),
@@ -238,6 +243,7 @@ void MapCropper::apply(OsmMapPtr& map)
     const std::shared_ptr<Way>& w = it->second;
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
     LOG_VART(w->getNodeIds());
+    LOG_VART(w);
 
     std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
     if (!ls.get())
@@ -334,7 +340,8 @@ void MapCropper::apply(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     NodePtr node = it->second;
-    LOG_VART(node->getElementId());
+    LOG_TRACE("Checking " << node->getElementId() << " for cropping...");
+    LOG_VART(node);
 
     bool nodeInside = false;
 
@@ -422,7 +429,9 @@ void MapCropper::apply(OsmMapPtr& map)
     _numProcessed++;
     if (nodeCtr % _statusUpdateInterval == 0)
     {
-      PROGRESS_INFO("Cropped " << nodeCtr << " / " << nodes.size() << " nodes.");
+      PROGRESS_INFO(
+        "Cropped " << StringUtils::formatLargeNumber(nodeCtr) << " / " <<
+        StringUtils::formatLargeNumber(nodes.size()) << " nodes.");
     }
   }
 
@@ -431,12 +440,24 @@ void MapCropper::apply(OsmMapPtr& map)
   emptyRelationRemover.apply(map);
   LOG_DEBUG(emptyRelationRemover.getCompletedStatusMessage());
 
+  // Remove dangling features here now, which used to be done in CropCmd only. Haven't seen any
+  // bad side effects yet.
+  long numSuperfluousWaysRemoved = 0;
+  long numSuperfluousNodesRemoved = 0;
+  if (_removeSuperfluousFeatures)
+  {
+    numSuperfluousWaysRemoved = SuperfluousWayRemover::removeWays(map);
+    numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
+  }
+
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysInBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysOutOfBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysCrossingThreshold));
   LOG_VARD(StringUtils::formatLargeNumber(_numCrossingWaysKept));
   LOG_VARD(StringUtils::formatLargeNumber(_numCrossingWaysRemoved));
   LOG_VARD(StringUtils::formatLargeNumber(_numNodesRemoved));
+  LOG_VARD(numSuperfluousWaysRemoved);
+  LOG_VARD(numSuperfluousNodesRemoved);
 }
 
 void MapCropper::_cropWay(const OsmMapPtr& map, long wid)

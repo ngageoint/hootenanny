@@ -33,12 +33,61 @@
 namespace hoot
 {
 
-const std::string HttpTestServer::HTTP_200_OK =         "HTTP/1.1 200 OK\r\n\r\n";
-const std::string HttpTestServer::HTTP_404_NOT_FOUND =  "HTTP/1.1 404 Not Found\r\n\r\n";
-const std::string HttpTestServer::HTTP_409_CONFLICT =   "HTTP/1.1 409 Conflict\r\n\r\n";
+HttpResponse::HttpResponse(int status, const std::string& response)
+  : _status(status),
+    _response(response)
+{
+  //  Add some default HTTP headers
+  add_header("Host", "localhost");
+  add_header("Connection", "closed");
+  if (response != "")
+    add_header("Content-Type", "text/xml");
+}
+
+void HttpResponse::add_header(const std::string& header, const std::string& value)
+{
+  //  Add the header to the list of headers we are using if it doesn't already exist
+  if (_header_values.find(header) == _header_values.end())
+    _headers.push_back(header);
+  //  Add the key/value to the map
+  _header_values[header] = value;
+}
+
+std::string HttpResponse::to_string()
+{
+  std::string end_line = "\r\n";
+  std::stringstream ss;
+  //  Add the HTTP status header
+  ss << "HTTP/1.1 " << _status << " " << get_status_text() << end_line;
+  //  Followed by all the other headers added
+  for (std::vector<std::string>::iterator it = _headers.begin(); it != _headers.end(); ++it)
+    ss << *it << ": " << _header_values[*it] << end_line;
+  //  Responses with response text are given the `Content-Length` header
+  if (_response != "")
+    ss << "Content-Length: " << _response.size() << end_line;
+  //  Output the response body (even if it is an empty string)
+  ss << end_line << _response;
+  return ss.str();
+}
+
+std::string HttpResponse::get_status_text()
+{
+  //  Convert the HTTP status code to status text
+  switch (_status)
+  {
+  case 200:   return "OK";
+  case 400:   return "Bad Request";
+  case 404:
+  default:    return "Not Found";
+  case 405:   return "Method Not Allowed";
+  case 409:   return "Conflict";
+  }
+}
+
 
 HttpTestServer::HttpTestServer(int port)
-  : _port(port)
+  : _port(port),
+    _interupt(false)
 {
 }
 
@@ -56,6 +105,10 @@ void HttpTestServer::wait()
 
 void HttpTestServer::shutdown()
 {
+  //  Interupt the threads
+  _interupt = true;
+  //  Cancel the acceptor
+  _acceptor->cancel();
   //  Stop the IO service and wait for the server to stop
   _io_service.stop();
   wait();
@@ -76,11 +129,15 @@ void HttpTestServer::run_server(int port)
   catch (std::exception& e)
   {
     LOG_ERROR(e.what());
+    shutdown();
   }
 }
 
 void HttpTestServer::start_accept()
 {
+  //  Service the interupt
+  if (_interupt)
+    return;
   //  Creat the connection
   HttpConnection::HttpConnectionPtr new_connection(new HttpConnection(_acceptor->get_io_service()));
   //  Accept connections async
@@ -91,27 +148,29 @@ void HttpTestServer::start_accept()
 void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connection, const boost::system::error_code& error)
 {
   //  Call the overridden respond() function
-  bool continue_processing = true;
+  bool continue_processing = !error;
   if (!error)
-    continue_processing = respond(new_connection);
+    continue_processing = respond(new_connection) && !_interupt;
   //  Continue processing connections
   if (continue_processing)
     start_accept();
+  else
+  {
+    _interupt = true;
+    _io_service.stop();
+  }
 }
 
 bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
 {
-  //  Stop processing by setting this to false
-  bool continue_processing = true;
   //  Read the HTTP request, and ignore them
   read_request_headers(connection);
   //  Respond with HTTP 200 OK
-  std::string message;
-  message = std::string(HTTP_200_OK);
+  HttpResponse response(200);
   //  Write out the response
-  write_response(connection, message);
+  write_response(connection, response.to_string());
   //  Return true if we should continue listening and processing requests
-  return continue_processing;
+  return !_interupt;
 }
 
 std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr &connection)
@@ -124,10 +183,10 @@ std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionP
 
 void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)
 {
+  LOG_TRACE("Response:\n" << response);
   //  Write the response to the socket synchronously
   boost::asio::write(connection->socket(), boost::asio::buffer(response));
   connection->socket().close();
 }
-
 
 }

@@ -27,7 +27,8 @@
 #ifndef MULTILINESTRING_CRITERION_H
 #define MULTILINESTRING_CRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -35,7 +36,7 @@ namespace hoot
 /**
  * Identifies multi-line string features
  */
-class MultiLineStringCriterion : public ElementCriterion
+class MultiLineStringCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -49,6 +50,13 @@ public:
   { return ElementCriterionPtr(new MultiLineStringCriterion()); }
 
   virtual QString getDescription() const { return "Identifies multi-line string features"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

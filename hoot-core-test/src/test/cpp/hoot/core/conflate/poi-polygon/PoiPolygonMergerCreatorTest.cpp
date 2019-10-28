@@ -92,20 +92,22 @@ public:
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
-    PoiPolygonMatch match1(map, std::shared_ptr<MatchThreshold>(),
-                           std::shared_ptr<PoiPolygonRfClassifier>());
-    match1.setMatchEvidenceThreshold(3);
-    match1.setReviewEvidenceThreshold(1);
-    match1.calculateMatch(w1->getElementId(), n1->getElementId());
+    std::shared_ptr<PoiPolygonMatch> match1(
+          new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
+                              std::shared_ptr<PoiPolygonRfClassifier>(),
+                              PoiPolygonCachePtr(new PoiPolygonCache(map))));
+    match1->setMatchEvidenceThreshold(3);
+    match1->setReviewEvidenceThreshold(1);
+    match1->calculateMatch(w1->getElementId(), n1->getElementId());
 
     MatchSet matches;
-    matches.insert(&match1);
-    vector<Merger*> mergers;
+    matches.insert(match1);
+    vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
-    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
+    HOOT_STR_EQUALS(1, (dynamic_pointer_cast<PoiPolygonMerger>(mergers[0]) != 0));
   }
 
   void reviewTest()
@@ -137,35 +139,39 @@ public:
     n1->getTags()["amenity"] = "cafe";
     map->addNode(n1);
 
-    vector<const Match*> matchesV;
+    vector<ConstMatchPtr> matchesV;
 
-    PoiPolygonMatch match1(
-      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
-    match1.setMatchEvidenceThreshold(3);
-    match1.setReviewEvidenceThreshold(1);
-    match1.calculateMatch(w1->getElementId(), n1->getElementId());
-    matchesV.push_back(&match1);
+    std::shared_ptr<PoiPolygonMatch> match1(
+          new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
+                              std::shared_ptr<PoiPolygonRfClassifier>(),
+                              PoiPolygonCachePtr(new PoiPolygonCache(map))));
+    match1->setMatchEvidenceThreshold(3);
+    match1->setReviewEvidenceThreshold(1);
+    match1->calculateMatch(w1->getElementId(), n1->getElementId());
+    matchesV.push_back(match1);
     std::shared_ptr<const MatchThreshold> threshold(new MatchThreshold(0.5, 0.5, 0.5));
     BuildingMatchCreator().createMatches(map, matchesV, threshold);
 
-    PoiPolygonMatch match2(
-      map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>());
-    match2.setMatchEvidenceThreshold(3);
-    match2.setReviewEvidenceThreshold(1);
-    match2.calculateMatch(w2->getElementId(), n1->getElementId());
-    matchesV.push_back(&match2);
+    std::shared_ptr<PoiPolygonMatch> match2(
+          new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
+                              std::shared_ptr<PoiPolygonRfClassifier>(),
+                              PoiPolygonCachePtr(new PoiPolygonCache(map))));
+    match2->setMatchEvidenceThreshold(3);
+    match2->setReviewEvidenceThreshold(1);
+    match2->calculateMatch(w2->getElementId(), n1->getElementId());
+    matchesV.push_back(match2);
     LOG_VAR(match2);
 
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
-    vector<Merger*> mergers;
+    vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     uut.setOsmMap(map.get());
 
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VART(*mergers[0]);
-    HOOT_STR_EQUALS(1, (dynamic_cast<MarkForReviewMerger*>(mergers[0]) != 0));
+    HOOT_STR_EQUALS(1, (dynamic_pointer_cast<MarkForReviewMerger>(mergers[0]) != 0));
   }
 
   void crossConflateMergeTest()
@@ -173,23 +179,23 @@ public:
     // Create a building and poi/poly match with feature overlap and ensure they all merge together
     // when cross feature conflate merging is allowed.
 
-    vector<const Match*> matchesV;
+    vector<ConstMatchPtr> matchesV;
 
-    BuildingMatch match1(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5)));
-    match1._p.setMatch();
-    match1._eid1 = ElementId(ElementType::Way, 1);
-    match1._eid2 = ElementId(ElementType::Node, 1);
-    matchesV.push_back(&match1);
+    std::shared_ptr<BuildingMatch> match1(new BuildingMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.5, 0.5, 0.5))));
+    match1->_p.setMatch();
+    match1->_eid1 = ElementId(ElementType::Way, 1);
+    match1->_eid2 = ElementId(ElementType::Node, 1);
+    matchesV.push_back(match1);
 
-    PoiPolygonMatch match2(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6)));
-    match2._class.setMatch();
-    match2._eid1 = ElementId(ElementType::Way, 2);
-    match2._eid2 = ElementId(ElementType::Node, 1);
-    matchesV.push_back(&match2);
+    std::shared_ptr<PoiPolygonMatch> match2(new PoiPolygonMatch(std::shared_ptr<const MatchThreshold>(new MatchThreshold(0.6, 0.6, 0.6))));
+    match2->_class.setMatch();
+    match2->_eid1 = ElementId(ElementType::Way, 2);
+    match2->_eid2 = ElementId(ElementType::Node, 1);
+    matchesV.push_back(match2);
 
     MatchSet matches;
     matches.insert(matchesV.begin(), matchesV.end());
-    vector<Merger*> mergers;
+    vector<MergerPtr> mergers;
     PoiPolygonMergerCreator uut;
     // Neither of the match types used here actually require a map to calculate isConflicting, but
     // since the merger creator requires a map we'll pass in an empty one.
@@ -200,7 +206,7 @@ public:
     HOOT_STR_EQUALS(1, uut.createMergers(matches, mergers));
     HOOT_STR_EQUALS(1, mergers.size());
     LOG_VART(*mergers[0]);
-    HOOT_STR_EQUALS(1, (dynamic_cast<PoiPolygonMerger*>(mergers[0]) != 0));
+    HOOT_STR_EQUALS(1, (dynamic_pointer_cast<PoiPolygonMerger>(mergers[0]) != 0));
   }
 };
 

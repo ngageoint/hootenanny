@@ -84,6 +84,10 @@ public:
   void setMustCompletelyContain(bool mustCompletelyContain)
   { _mustCompletelyContain = mustCompletelyContain; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
+
 private:
 
   std::shared_ptr<const geos::geom::Geometry> _boundsGeom;

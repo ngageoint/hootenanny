@@ -31,6 +31,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/info/SingleStatistic.h>
+#include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementVisitor.h>
@@ -73,7 +74,6 @@ public:
 
 static const int MAX_NAME_SIZE = 45;
 static const int MAX_TYPE_SIZE = 18;
-
 
 QString ApiEntityDisplayInfo::getDisplayInfoOps(const QString& optName)
 {
@@ -154,7 +154,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
   QTextStream ts(&buffer);
   if (apiEntityType == "operators")
   {
-    msg += "; * = implements SingleStatistic):";
+    msg += "; * = implements SingleStatistic, ** = NumericStatistic):";
     msg.prepend("Operators");
     ts << msg << endl;
     ts << _getApiEntities<ElementCriterion, ElementCriterion>(
@@ -164,7 +164,16 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts << _getApiEntities<ElementVisitor, ElementVisitor>(
       ElementVisitor::className(), "visitor", true, MAX_NAME_SIZE);
   }
-  // All of this from here on down is pretty repetitive :-(
+  // All of this from here on down is pretty repetitive :-( Maybe we can make it better.
+  else if (apiEntityType == "filters")
+  {
+    // This is the criterion portion of --operators only.
+    msg += "):";
+    msg.prepend("Filters");
+    ts << msg << endl;
+    ts << _getApiEntities<ElementCriterion, ElementCriterion>(
+      ElementCriterion::className(), "criterion", true, MAX_NAME_SIZE);
+  }
   else if (apiEntityType == "feature-extractors")
   {
     msg += "):";
@@ -266,6 +275,14 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
     ts << _getApiEntities<ElementCriterionConsumer, ElementCriterionConsumer>(
       ElementCriterionConsumer::className(), "criterion consumer", false, MAX_NAME_SIZE - 10);
   }
+  else if (apiEntityType == "geometry-type-criteria")
+  {
+    msg += "):";
+    msg.prepend("Geometry Type Criteria");
+    ts << msg << endl;
+    ts << _getApiEntities<ElementCriterion, GeometryTypeCriterion>(
+      ElementCriterion::className(), "geometry type criteria", false, MAX_NAME_SIZE - 10);
+  }
   return ts.readAll();
 }
 
@@ -322,9 +339,21 @@ QString ApiEntityDisplayInfo::_getApiEntities(
         supportsSingleStat = true;
       }
 
+      bool supportsNumericStat = false;
+      std::shared_ptr<NumericStatistic> numericStat =
+        std::dynamic_pointer_cast<NumericStatistic>(apiEntity);
+      if (numericStat.get())
+      {
+        supportsNumericStat = true;
+      }
+
       QString name = QString::fromStdString(className).replace("hoot::", "");
       //append '*' to the names of visitors that support the SingleStatistic interface
-      if (supportsSingleStat)
+      if (supportsNumericStat)
+      {
+        name += "**";
+      }
+      else if (supportsSingleStat)
       {
         name += "*";
       }

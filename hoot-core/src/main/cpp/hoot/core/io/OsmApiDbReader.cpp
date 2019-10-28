@@ -60,7 +60,7 @@ OsmApiDbReader::~OsmApiDbReader()
 
 void OsmApiDbReader::open(const QString& urlStr)
 {
-  _url = urlStr;
+  OsmMapReader::open(urlStr);
   if (!isSupported(_url))
   {
     throw HootException("An unsupported URL was passed into OsmApiDbReader: " + _url);

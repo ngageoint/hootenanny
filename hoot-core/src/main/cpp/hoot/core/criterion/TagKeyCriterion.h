@@ -62,6 +62,9 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 protected:
 
   explicit TagKeyCriterion(QStringList keys);

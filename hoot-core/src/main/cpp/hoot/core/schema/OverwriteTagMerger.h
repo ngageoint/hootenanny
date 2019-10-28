@@ -27,7 +27,9 @@
 #ifndef OVERWRITETAGMERGER_H
 #define OVERWRITETAGMERGER_H
 
+// Hoot
 #include <hoot/core/schema/TagMerger.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -36,7 +38,7 @@ namespace hoot
  * Combine all names in a fashion where no unique names will be lost and then favor t1 tags over
  * t2 tags. See TagComparator::overwriteMerge.
  */
-class OverwriteTagMerger : public TagMerger
+class OverwriteTagMerger : public TagMerger, public Configurable
 {
 public:
 
@@ -54,9 +56,16 @@ public:
   // leave empty to avoid duplicate tag mergers displayed by the info command
   virtual QString getDescription() const { return ""; }
 
+  virtual void setConfiguration(const Settings& conf);
+
+  void setOverwriteExcludeTagKeys(const QStringList& overwriteExcludeTagKeys)
+  { _overwriteExcludeTagKeys = overwriteExcludeTagKeys; }
+
 protected:
 
   bool _swap;
+  // keys of tags not to be overwritten
+  QStringList _overwriteExcludeTagKeys;
 };
 
 /**

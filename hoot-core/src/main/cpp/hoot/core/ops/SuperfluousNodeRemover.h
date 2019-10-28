@@ -74,8 +74,9 @@ public:
    * @param map map from which to remove the nodes
    * @param ignoreInformationTags if true, will remove nodes even if they have an info tag
    * @param e bounds within which to remove nodes
+   * @return the number of nodes removed
    */
-  static void removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+  static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
                           const geos::geom::Envelope& e = geos::geom::Envelope());
 
   virtual void setBounds(const geos::geom::Envelope &bounds);

@@ -97,7 +97,7 @@ private:
   std::shared_ptr<const OsmMap> _map;
   double _strictness;
   double _delta;
-  static QList<std::shared_ptr<ElementCriterion>> _networkFeatureTypeCriterion;
+  static QList<std::shared_ptr<ElementCriterion>> _networkFeatureTypeCriteria;
 
   double _calculateAngleScore(const std::vector<Radians>& theta1,
                               const std::vector<Radians>& theta2, std::vector<bool>& exclude,

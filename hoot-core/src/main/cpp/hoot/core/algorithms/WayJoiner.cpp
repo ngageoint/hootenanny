@@ -37,6 +37,8 @@
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/UpdateWayParentVisitor.h>
 
 #include <unordered_set>
 #include <vector>
@@ -78,6 +80,8 @@ void WayJoiner::join(const OsmMapPtr& map)
 
 void WayJoiner::_joinParentChild()
 {
+  LOG_INFO("\tJoining parent ways to children...");
+
   WayMap ways = _map->getWays();
   vector<long> ids;
   //  Find all ways that have a split parent id
@@ -103,12 +107,14 @@ void WayJoiner::_joinParentChild()
 
 void WayJoiner::_joinSiblings()
 {
-  LOG_TRACE("Joining siblings...");
+  LOG_INFO("\tJoining way siblings...");
 
   WayMap ways = _map->getWays();
   // Get a list of ways that still have a parent
   map<long, deque<long>> w;
   //  Find all ways that have a split parent id
+  int numWaysProcessed = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
@@ -117,19 +123,39 @@ void WayJoiner::_joinSiblings()
       long parent_id = way->getPid();
       w[parent_id].push_back(way->getId());
     }
+
+    numWaysProcessed++;
+    if (numWaysProcessed % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tParsed " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
+            StringUtils::formatLargeNumber(ways.size()) << " way IDs.");
+    }
   }
+
   //  Rejoin any sibling ways where the parent id no longer exists
+  numWaysProcessed = 0;
   for (map<long, deque<long>>::iterator map_it = w.begin(); map_it != w.end(); ++map_it)
   {
     deque<long>& way_ids = map_it->second;
     LOG_VART(way_ids);
     while (way_ids.size() > 1)
       _rejoinSiblings(way_ids);
+
+    numWaysProcessed++;
+    if (numWaysProcessed % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tRejoined " << StringUtils::formatLargeNumber(numWaysProcessed) << " / " <<
+            StringUtils::formatLargeNumber(w.size()) << " ways.");
+    }
   }
 }
 
 void WayJoiner::_joinAtNode()
 {
+  LOG_INFO("\tJoining ways at shared nodes...");
+
   WayMap ways = _map->getWays();
   unordered_set<long> ids;
   //  Find all ways that have a split parent id
@@ -160,7 +186,15 @@ void WayJoiner::_joinAtNode()
           //  Check for equivalent tags
           if (pTags == cTags || pTags.dataOnlyEqual(cTags))
           {
-            _joinWays(way, child);
+            long wid = way->getId();
+            long cid = child->getId();
+            //  Decide which ID to keep
+            if ((wid > 0 && cid < 0) ||               //  Way is the only positive ID
+                (wid < 0 && cid < 0 && wid > cid) ||  //  Larger of the two negative IDs
+                (wid > 0 && cid > 0 && wid < cid))    //  Smaller of the two positive IDs
+              _joinWays(way, child);
+            else
+              _joinWays(child, way);
             break;
           }
         }
@@ -329,6 +363,10 @@ bool WayJoiner::_joinWays(const WayPtr &parent, const WayPtr &child)
   //  Update any relations that contain the child to use the parent
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
   child->getTags().clear();
+  //  Update any ways that have the child's ID as their parent to the parent's ID
+  UpdateWayParentVisitor visitor(child->getId(), parent->getId());
+  _map->visitWaysRw(visitor);
+  //  Delete the child
   RecursiveElementRemover(child->getElementId()).apply(_map);
 
   _numJoined++;

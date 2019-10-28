@@ -43,7 +43,7 @@ MarkForReviewMergerCreator::MarkForReviewMergerCreator()
 }
 
 bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
-                                               vector<Merger*>& mergers) const
+                                               vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -59,7 +59,7 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* match = *it;
+    ConstMatchPtr match = *it;
     LOG_VART(match->toString());
     MatchType type = match->getType();
     LOG_VART(type);
@@ -89,7 +89,8 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
   if (eids.size() > 0)
   {
     mergers.push_back(
-      new MarkForReviewMerger(eids, matchStrings.join(","), reviewType.join(";"), score));
+      MergerPtr(
+        new MarkForReviewMerger(eids, matchStrings.join(","), reviewType.join(";"), score)));
     result = true;
   }
   else
@@ -107,7 +108,7 @@ vector<CreatorDescription> MarkForReviewMergerCreator::getAllCreators() const
   return vector<CreatorDescription>();
 }
 
-bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtr&, const Match*, const Match*)
+bool MarkForReviewMergerCreator::isConflicting(const ConstOsmMapPtr&, ConstMatchPtr, ConstMatchPtr)
   const
 {
   return false;

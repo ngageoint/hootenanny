@@ -37,8 +37,6 @@
 namespace hoot
 {
 
-class OsmMapReader;
-
 /**
  * Streams elements to output
  */

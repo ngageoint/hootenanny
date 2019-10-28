@@ -43,7 +43,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Progress.h>
@@ -107,7 +107,7 @@ int ConflateCmd::runSimple(QStringList& args)
       //remove "--stats" from args list
       args.pop_back();
     }
-    else if (args[args.size() - 1] == "--stats")
+    else if (args[args.size() - 2] == "--stats")
     {
       displayStats = true;
       outputStatsFile = args[args.size() - 1];
@@ -256,6 +256,7 @@ int ConflateCmd::runSimple(QStringList& args)
       map, input2, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
     currentTask++;
   }
+  LOG_INFO("Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -352,7 +353,9 @@ int ConflateCmd::runSimple(QStringList& args)
   progress.set(_getJobPercentComplete(currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
-  LOG_INFO("Generated " << countReviewsVis.getStat() << " feature reviews.");
+  LOG_INFO(
+    "Generated " << StringUtils::formatLargeNumber(countReviewsVis.getStat()) <<
+    " feature reviews.");
   currentTask++;
 
   MapProjector::projectToWgs84(result);
@@ -454,8 +457,10 @@ int ConflateCmd::runSimple(QStringList& args)
 
   progress.set(
     1.0, Progress::JobState::Successful,
-    "Conflation job completed for reference: ..." + input1.right(maxFilePrintLength) +
-    " and secondary: ..." + input2.right(maxFilePrintLength) + " and written to output: ..." +
+    "Conflation job completed in " +
+    StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)) + " for reference map: ..." +
+    input1.right(maxFilePrintLength) + " and secondary map: ..." +
+    input2.right(maxFilePrintLength) + " and written to output: ..." +
     output.right(maxFilePrintLength));
 
   return 0;
@@ -481,36 +486,8 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
   // we have a better solution for changing these opts in place.
   if (ConfigOptions().getHighwayMergeTagsOnly())
   {
-    // If we're running Attribute Conflation and removing building relations, we need to remove them
-    // after the review relations have been removed or some building relations may still remain that
-    // are involved in reviews.
-
-    const QString buildingOutlineUpdateOpName =
-      QString::fromStdString(BuildingOutlineUpdateOp::className());
-    const QString removeElementsVisitorName =
-      QString::fromStdString(RemoveElementsVisitor::className());
     const QString reviewRelationCritName =
       QString::fromStdString(ReviewRelationCriterion::className());
-
-    QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-    LOG_DEBUG("Post conflate ops before Attribute Conflation adjustment: " << postConflateOps);
-    // Currently, all these things will be true if we're running Attribute Conflation, but I'm
-    // specifying them anyway to harden this a bit.
-    if (ConfigOptions().getBuildingOutlineUpdateOpRemoveBuildingRelations() &&
-        postConflateOps.contains(removeElementsVisitorName) &&
-        ConfigOptions().getRemoveElementsVisitorElementCriteria().contains(
-          reviewRelationCritName) &&
-        postConflateOps.contains(buildingOutlineUpdateOpName))
-    {
-      const int removeElementsVisIndex = postConflateOps.indexOf(removeElementsVisitorName);
-      const int buildingOutlineOpIndex = postConflateOps.indexOf(buildingOutlineUpdateOpName);
-      if (removeElementsVisIndex > buildingOutlineOpIndex)
-      {
-        postConflateOps.removeAll(buildingOutlineUpdateOpName);
-        postConflateOps.append(buildingOutlineUpdateOpName);
-        conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-      }
-    }
 
     // This swaps the logic that removes all reviews with the logic that removes them based on score
     // thresholding.
@@ -523,10 +500,6 @@ void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
       conf().set(
         ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
     }
-
-    LOG_DEBUG(
-      "Post conflate ops after Attribute Conflation adjustment: " <<
-      conf().get("conflate.post.ops").toStringList());
   }
 }
 

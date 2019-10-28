@@ -63,11 +63,9 @@ namespace hoot
 /**
  * UFD Data frequently has buildings mapped out as individual parts where each part has a different
  * height. While they may represent a single building they're presented in the Shapefile as
- * individual rows.
- *
- * I would like to maintain the richness available in the data they've collected (gabled roofs,
- * heights on sections of buildings, etc). This is very applicable to the 3D mapping being done
- * in OSM. [1]
+ * individual rows. We would like to maintain the richness available in the data they've collected
+ * (gabled roofs, heights on sections of buildings, etc). This is very applicable to the 3D mapping
+ * being done in OSM. [1]
  *
  * This class implicitly merges the individual building parts into a single part. If two buildings
  * share two or more contiguous nodes and the relevant tags match then the parts will be merged
@@ -83,7 +81,7 @@ namespace hoot
  * 1. http://wiki.openstreetmap.org/wiki/OSM-3D
  *
  * This class has been updated to process building parts in parallel. The bottleneck in the original
- * merging logic haf mostly to do with the geometry calls to GEOS to check for building part
+ * merging logic had mostly to do with the geometry calls to GEOS to check for building part
  * containment within buildings, and to a lesser degree, the inserts into the disjoint set map for
  * the building part groups. This class now collects all building parts beforehand and sends them
  * off to threads for parallel processing. As of 3/15/19, this resulted in a ~78% performance
@@ -91,6 +89,10 @@ namespace hoot
  * part level, and not at the building level, because a single building relation may have far more
  * building parts than others, which would cause an imbalance with paralleization made at the
  * building level.
+ *
+ * TODO: Should this class be renamed since it merges not only building:part now but also multipoly
+ * buildings? Or should we change it only to be more strict and only merge building:part features
+ * (if that's possible; or maybe its already doing that)?
  */
 class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public OperationStatusInfo,
   public Configurable
@@ -111,15 +113,6 @@ public:
 
   virtual void readObject(QDataStream& /*is*/) {}
   virtual void writeObject(QDataStream& /*os*/) const {}
-
-  /**
-   * Combines building parts into a building relation added to the map
-   *
-   * @param map the map to add the building relation to
-   * @param parts the building parts to combine
-   * @return the added building
-   */
-  RelationPtr combineBuildingParts(const OsmMapPtr& map, std::vector<ElementPtr>& parts);
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
@@ -148,8 +141,6 @@ private:
 
   OsmMapPtr _map;
 
-  // building tag keys that need to be ignored during merging
-  std::set<QString> _buildingPartTagNames;
   BuildingCriterion _buildingCrit;
   std::shared_ptr<ElementConverter> _elementConverter;
 
@@ -162,7 +153,6 @@ private:
   bool _preserveTypes;
 
   void _init(OsmMapPtr& map);
-  void _initBuildingPartTagNames();
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element) const;
 

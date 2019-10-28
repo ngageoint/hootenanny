@@ -1,0 +1,1453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+<!--
+    <bounds minlat="47.4740351" minlon="8.261611800000001" maxlat="47.4890063" maxlon="8.307858100000001"/>
+-->
+    <node visible="true" id="708856" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801106000000033" lon="8.3060381000000003">
+        <tag k="railway" v="buffer_stop"/>
+    </node>
+    <node visible="true" id="708860" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4764636999999965" lon="8.3075606000000004">
+        <tag k="local_ref" v="1"/>
+        <tag k="train" v="yes"/>
+        <tag k="uic_name" v="Baden"/>
+        <tag k="uic_ref" v="8503504"/>
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="railway" v="stop"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="network" v="A-Welle"/>
+        <tag k="name" v="Baden"/>
+    </node>
+    <node visible="true" id="708880" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4765145000000004" lon="8.3071535999999995">
+        <tag k="local_ref" v="5"/>
+        <tag k="train" v="yes"/>
+        <tag k="uic_name" v="Baden"/>
+        <tag k="uic_ref" v="8503504"/>
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="railway" v="stop"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="network" v="A-Welle"/>
+        <tag k="name" v="Baden"/>
+    </node>
+    <node visible="true" id="708891" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783383999999984" lon="8.3078581000000007">
+        <tag k="railway" v="buffer_stop"/>
+    </node>
+    <node visible="true" id="708894" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4764966999999984" lon="8.3072967999999996">
+        <tag k="local_ref" v="4"/>
+        <tag k="train" v="yes"/>
+        <tag k="uic_name" v="Baden"/>
+        <tag k="uic_ref" v="8503504"/>
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="railway" v="stop"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="network" v="A-Welle"/>
+        <tag k="name" v="Baden"/>
+    </node>
+    <node visible="true" id="708895" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4803557999999981" lon="8.3021239999999992">
+        <tag k="railway" v="buffer_stop"/>
+    </node>
+    <node visible="true" id="708896" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4764704999999978" lon="8.3075057999999995">
+        <tag k="local_ref" v="2"/>
+        <tag k="train" v="yes"/>
+        <tag k="uic_name" v="Baden"/>
+        <tag k="uic_ref" v="8503504"/>
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="railway" v="stop"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="network" v="A-Welle"/>
+        <tag k="name" v="Baden"/>
+    </node>
+    <node visible="true" id="708900" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4764886000000033" lon="8.3073616000000001">
+        <tag k="local_ref" v="3"/>
+        <tag k="train" v="yes"/>
+        <tag k="uic_name" v="Baden"/>
+        <tag k="uic_ref" v="8503504"/>
+        <tag k="public_transport" v="stop_position"/>
+        <tag k="railway" v="stop"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="network" v="A-Welle"/>
+        <tag k="name" v="Baden"/>
+    </node>
+    <node visible="true" id="708901" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795311999999967" lon="8.3064286000000003">
+        <tag k="railway" v="turntable"/>
+    </node>
+    <node visible="true" id="708902" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4809318000000005" lon="8.3038331999999997">
+        <tag k="railway" v="buffer_stop"/>
+    </node>
+    <node visible="true" id="708905" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4742789000000016" lon="8.3065957000000008"/>
+    <node visible="true" id="708906" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4748997000000017" lon="8.3068202000000007"/>
+    <node visible="true" id="708907" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4754014999999967" lon="8.3069843999999993"/>
+    <node visible="true" id="708908" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4756004999999988" lon="8.3070430000000002"/>
+    <node visible="true" id="708909" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4776675000000026" lon="8.3076238000000000"/>
+    <node visible="true" id="708910" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798021000000006" lon="8.3066840000000006"/>
+    <node visible="true" id="708911" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4797593999999989" lon="8.3067419000000005"/>
+    <node visible="true" id="708912" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783930999999981" lon="8.3077901000000001"/>
+    <node visible="true" id="708913" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4786073000000002" lon="8.3077342999999999"/>
+    <node visible="true" id="708914" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4780234999999990" lon="8.3076314000000000"/>
+    <node visible="true" id="708915" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4781935999999973" lon="8.3076308999999995"/>
+    <node visible="true" id="708916" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783769000000007" lon="8.3076111000000008"/>
+    <node visible="true" id="708917" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4750257000000033" lon="8.3069390999999992"/>
+    <node visible="true" id="708918" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4754043000000010" lon="8.3070515999999994"/>
+    <node visible="true" id="708919" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4776130999999992" lon="8.3076758999999996"/>
+    <node visible="true" id="708920" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4778663000000023" lon="8.3077270999999993"/>
+    <node visible="true" id="708921" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4780123999999972" lon="8.3077438000000008"/>
+    <node visible="true" id="708922" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4781779999999998" lon="8.3077492999999993"/>
+    <node visible="true" id="708923" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783642000000015" lon="8.3077348999999998"/>
+    <node visible="true" id="708925" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4810975999999982" lon="8.3025734000000000"/>
+    <node visible="true" id="708926" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4812104000000019" lon="8.3020739999999993"/>
+    <node visible="true" id="708927" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4813195999999991" lon="8.3016491000000006"/>
+    <node visible="true" id="708928" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4814398999999980" lon="8.3012659000000006"/>
+    <node visible="true" id="708929" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4815876999999986" lon="8.3008953000000005"/>
+    <node visible="true" id="708930" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4817505999999980" lon="8.3005408999999997"/>
+    <node visible="true" id="708931" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4820115999999999" lon="8.3000354999999999"/>
+    <node visible="true" id="708932" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823274000000026" lon="8.2994374000000004"/>
+    <node visible="true" id="708933" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4825534000000005" lon="8.2989572000000003"/>
+    <node visible="true" id="708934" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4827123999999969" lon="8.2985530999999995"/>
+    <node visible="true" id="708935" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4828463999999997" lon="8.2981204000000002"/>
+    <node visible="true" id="708936" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4829687000000007" lon="8.2976255999999999"/>
+    <node visible="true" id="708937" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4830546999999967" lon="8.2971248000000006"/>
+    <node visible="true" id="708938" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4833052999999978" lon="8.2953355999999996"/>
+    <node visible="true" id="708939" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4833957999999967" lon="8.2945276999999997"/>
+    <node visible="true" id="708940" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4834673000000009" lon="8.2937157999999993"/>
+    <node visible="true" id="708941" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840215999999984" lon="8.2864386000000003"/>
+    <node visible="true" id="708942" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840660999999997" lon="8.2857198000000007"/>
+    <node visible="true" id="708943" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840841999999981" lon="8.2851753000000006"/>
+    <node visible="true" id="708944" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840777000000003" lon="8.2848504999999992"/>
+    <node visible="true" id="708945" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840676000000030" lon="8.2845321999999992"/>
+    <node visible="true" id="708946" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840487000000024" lon="8.2842213999999998"/>
+    <node visible="true" id="708947" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840219000000019" lon="8.2839191000000003"/>
+    <node visible="true" id="708948" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4839466000000030" lon="8.2833649999999999"/>
+    <node visible="true" id="708949" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4838438000000025" lon="8.2828066000000007"/>
+    <node visible="true" id="708950" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4837285999999992" lon="8.2823028999999995"/>
+    <node visible="true" id="708951" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4826175000000035" lon="8.2777787000000007"/>
+    <node visible="true" id="708952" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4825246999999990" lon="8.2773543000000007"/>
+    <node visible="true" id="708953" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824638999999991" lon="8.2769802000000006"/>
+    <node visible="true" id="708954" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824225999999996" lon="8.2766148000000008"/>
+    <node visible="true" id="708955" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823943999999969" lon="8.2762288999999996"/>
+    <node visible="true" id="708956" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823828000000034" lon="8.2757862000000006"/>
+    <node visible="true" id="708957" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823965000000001" lon="8.2753554000000005"/>
+    <node visible="true" id="708958" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824241000000029" lon="8.2749834999999994"/>
+    <node visible="true" id="708959" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824610000000007" lon="8.2746189999999995"/>
+    <node visible="true" id="708960" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4825639000000024" lon="8.2738002000000002"/>
+    <node visible="true" id="708961" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4826935000000034" lon="8.2729899000000007"/>
+    <node visible="true" id="708962" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4827854999999985" lon="8.2725311999999995"/>
+    <node visible="true" id="708963" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4828855000000019" lon="8.2721195999999999"/>
+    <node visible="true" id="708964" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4830187000000024" lon="8.2716984000000000"/>
+    <node visible="true" id="708965" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4831506000000019" lon="8.2713424999999994"/>
+    <node visible="true" id="708966" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4832954000000029" lon="8.2710112999999996"/>
+    <node visible="true" id="708967" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4834706999999980" lon="8.2706651000000004"/>
+    <node visible="true" id="708968" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4836474999999965" lon="8.2703703999999991"/>
+    <node visible="true" id="708969" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4838610999999986" lon="8.2700487999999996"/>
+    <node visible="true" id="708970" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840676000000030" lon="8.2697809000000007"/>
+    <node visible="true" id="708971" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4842435999999992" lon="8.2695814999999993"/>
+    <node visible="true" id="708972" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4844557999999992" lon="8.2693724999999993"/>
+    <node visible="true" id="708973" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4846724000000009" lon="8.2691795999999993"/>
+    <node visible="true" id="708974" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4848874999999992" lon="8.2690113000000007"/>
+    <node visible="true" id="708975" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4856357000000031" lon="8.2684508000000001"/>
+    <node visible="true" id="708976" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4859253999999993" lon="8.2682161000000001"/>
+    <node visible="true" id="708977" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4861529000000004" lon="8.2679866999999998"/>
+    <node visible="true" id="708978" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4863722999999993" lon="8.2677434000000005"/>
+    <node visible="true" id="708979" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4865628000000015" lon="8.2674936999999993"/>
+    <node visible="true" id="708980" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4867380999999966" lon="8.2672311000000001"/>
+    <node visible="true" id="708981" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4869423000000026" lon="8.2668827000000000"/>
+    <node visible="true" id="708982" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4871241000000026" lon="8.2665226000000001"/>
+    <node visible="true" id="708983" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4872980000000027" lon="8.2661152999999992"/>
+    <node visible="true" id="708984" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4874623999999983" lon="8.2656972999999994"/>
+    <node visible="true" id="708985" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4890062999999998" lon="8.2616118000000007"/>
+    <node visible="true" id="708986" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4740869999999973" lon="8.3064961999999998"/>
+    <node visible="true" id="708987" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4744237999999967" lon="8.3065920000000002"/>
+    <node visible="true" id="708988" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4749485000000035" lon="8.3067209000000002"/>
+    <node visible="true" id="708989" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4766198000000017" lon="8.3071850999999999"/>
+    <node visible="true" id="708990" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4767769999999985" lon="8.3072508999999997"/>
+    <node visible="true" id="708991" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4769581999999986" lon="8.3073259999999998"/>
+    <node visible="true" id="708992" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4771190000000018" lon="8.3073961999999995"/>
+    <node visible="true" id="708993" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4810403999999977" lon="8.3028476999999992"/>
+    <node visible="true" id="708996" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4803213000000000" lon="8.3057801999999992"/>
+    <node visible="true" id="708997" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4803575999999978" lon="8.3056774999999998"/>
+    <node visible="true" id="708998" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4804916000000006" lon="8.3052962000000008"/>
+    <node visible="true" id="708999" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4805858000000001" lon="8.3049163000000004"/>
+    <node visible="true" id="709000" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4806736000000029" lon="8.3045427000000007"/>
+    <node visible="true" id="709001" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795798999999974" lon="8.3069745000000008"/>
+    <node visible="true" id="709002" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4793687000000020" lon="8.3072023999999995"/>
+    <node visible="true" id="709003" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4791896999999992" lon="8.3073624000000006"/>
+    <node visible="true" id="709004" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4789815999999973" lon="8.3075048999999996"/>
+    <node visible="true" id="709005" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4787765000000022" lon="8.3076211000000004"/>
+    <node visible="true" id="709006" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4785992999999991" lon="8.3076787000000003"/>
+    <node visible="true" id="709007" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4785855000000012" lon="8.3076182999999997"/>
+    <node visible="true" id="709008" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4787609999999987" lon="8.3075504999999996"/>
+    <node visible="true" id="709009" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4789717999999965" lon="8.3074408999999996"/>
+    <node visible="true" id="709010" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4779847000000004" lon="8.3076954000000001"/>
+    <node visible="true" id="709011" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4781728000000030" lon="8.3076965999999999"/>
+    <node visible="true" id="709012" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783832999999973" lon="8.3076716000000008"/>
+    <node visible="true" id="709013" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4772762999999998" lon="8.3074505999999992"/>
+    <node visible="true" id="709014" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4773572000000001" lon="8.3074785999999996"/>
+    <node visible="true" id="709015" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4777325000000019" lon="8.3075886000000008"/>
+    <node visible="true" id="709016" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4778902999999985" lon="8.3076147999999996"/>
+    <node visible="true" id="709017" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4778031000000027" lon="8.3076650999999995"/>
+    <node visible="true" id="709018" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4744092999999978" lon="8.3067507000000003"/>
+    <node visible="true" id="709019" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4746948000000017" lon="8.3069171999999991"/>
+    <node visible="true" id="709020" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4750566000000020" lon="8.3071026999999997"/>
+    <node visible="true" id="709021" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4753900999999985" lon="8.3071929999999998"/>
+    <node visible="true" id="709022" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4770107000000010" lon="8.3076527000000002"/>
+    <node visible="true" id="709023" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4771940999999984" lon="8.3077086999999992"/>
+    <node visible="true" id="709024" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4740351000000018" lon="8.3065903999999993"/>
+    <node visible="true" id="709025" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4746966000000015" lon="8.3069708999999996"/>
+    <node visible="true" id="709026" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4750498000000007" lon="8.3071380000000001"/>
+    <node visible="true" id="709027" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4757509000000013" lon="8.3073607000000003"/>
+    <node visible="true" id="709028" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4768708000000004" lon="8.3076738999999993"/>
+    <node visible="true" id="709029" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4771592000000027" lon="8.3077529999999999"/>
+    <node visible="true" id="709030" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4774300999999994" lon="8.3078198000000008"/>
+    <node visible="true" id="709031" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4776571000000018" lon="8.3078520000000005"/>
+    <node visible="true" id="709032" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4778536000000031" lon="8.3078527999999991"/>
+    <node visible="true" id="709033" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4780990000000003" lon="8.3078374000000004"/>
+    <node visible="true" id="709034" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783609999999996" lon="8.3077936000000001"/>
+    <node visible="true" id="709035" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4775855000000035" lon="8.3077968000000002"/>
+    <node visible="true" id="709036" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4778583000000012" lon="8.3078299999999992"/>
+    <node visible="true" id="709037" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4780931000000024" lon="8.3078254000000005"/>
+    <node visible="true" id="709038" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4797533999999999" lon="8.3069235999999993"/>
+    <node visible="true" id="709039" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798630000000017" lon="8.3067750999999994"/>
+    <node visible="true" id="709040" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799574000000035" lon="8.3066399999999998"/>
+    <node visible="true" id="709041" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801371000000003" lon="8.3063316000000000"/>
+    <node visible="true" id="709042" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4803203999999965" lon="8.3059609000000005"/>
+    <node visible="true" id="709043" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4805186000000035" lon="8.3054666000000008"/>
+    <node visible="true" id="709044" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4806701999999987" lon="8.3049836999999993"/>
+    <node visible="true" id="709045" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4807162000000034" lon="8.3047690000000003"/>
+    <node visible="true" id="709046" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799205999999998" lon="8.3060895000000006"/>
+    <node visible="true" id="709047" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4797150999999999" lon="8.3062895000000001"/>
+    <node visible="true" id="709048" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4791740000000004" lon="8.3066735999999999"/>
+    <node visible="true" id="709049" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798387000000019" lon="8.3063173999999993"/>
+    <node visible="true" id="709050" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798717999999980" lon="8.3062252999999995"/>
+    <node visible="true" id="709051" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4785652999999996" lon="8.3075645999999992"/>
+    <node visible="true" id="709052" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4782081000000034" lon="8.3076130999999993"/>
+    <node visible="true" id="709053" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783734000000024" lon="8.3075676000000005"/>
+    <node visible="true" id="709054" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4785424000000020" lon="8.3074917999999993"/>
+    <node visible="true" id="709055" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4792210000000026" lon="8.3070471000000001"/>
+    <node visible="true" id="709056" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4793996000000007" lon="8.3069012000000004"/>
+    <node visible="true" id="709057" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795901000000029" lon="8.3066814000000004"/>
+    <node visible="true" id="709058" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4791525999999990" lon="8.3073168000000006"/>
+    <node visible="true" id="709059" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4792910000000035" lon="8.3071797000000007"/>
+    <node visible="true" id="709060" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795486000000011" lon="8.3069015999999998"/>
+    <node visible="true" id="709061" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4797156999999999" lon="8.3066901000000009"/>
+    <node visible="true" id="709062" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798259000000016" lon="8.3065364000000006"/>
+    <node visible="true" id="709063" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799496999999988" lon="8.3063219999999998"/>
+    <node visible="true" id="709064" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4786205999999993" lon="8.3077892000000002"/>
+    <node visible="true" id="709065" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4787908999999999" lon="8.3077287999999996"/>
+    <node visible="true" id="709066" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4790125999999972" lon="8.3076191999999995"/>
+    <node visible="true" id="709067" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4792326000000031" lon="8.3074680000000001"/>
+    <node visible="true" id="709068" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4794454999999971" lon="8.3072779000000008"/>
+    <node visible="true" id="709069" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795987999999980" lon="8.3071210000000004"/>
+    <node visible="true" id="709070" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4793479000000005" lon="8.3070435000000007"/>
+    <node visible="true" id="709071" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4810737999999972" lon="8.3025032000000003"/>
+    <node visible="true" id="709072" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4811766999999989" lon="8.3020569000000002"/>
+    <node visible="true" id="709073" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4812864000000019" lon="8.3016317999999991"/>
+    <node visible="true" id="709074" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4814101999999991" lon="8.3012408999999998"/>
+    <node visible="true" id="709075" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4815560999999988" lon="8.3008652000000005"/>
+    <node visible="true" id="709076" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4817216000000002" lon="8.3005087999999994"/>
+    <node visible="true" id="709077" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4819852999999981" lon="8.3000024999999997"/>
+    <node visible="true" id="709078" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4822993000000011" lon="8.2994158000000002"/>
+    <node visible="true" id="709079" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4825276999999986" lon="8.2989239999999995"/>
+    <node visible="true" id="709080" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4826812000000018" lon="8.2985287999999997"/>
+    <node visible="true" id="709081" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4828126999999967" lon="8.2981072999999999"/>
+    <node visible="true" id="709082" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4829324000000028" lon="8.2976104999999993"/>
+    <node visible="true" id="709083" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4830248000000026" lon="8.2971132999999995"/>
+    <node visible="true" id="709084" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4832727000000006" lon="8.2953261999999999"/>
+    <node visible="true" id="709085" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4833584000000002" lon="8.2945183000000000"/>
+    <node visible="true" id="709086" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4834317999999982" lon="8.2937080999999999"/>
+    <node visible="true" id="709087" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4839891000000023" lon="8.2864319000000002"/>
+    <node visible="true" id="709088" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840354999999974" lon="8.2857222999999998"/>
+    <node visible="true" id="709089" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840518999999972" lon="8.2851716999999994"/>
+    <node visible="true" id="709090" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840465999999992" lon="8.2848483999999996"/>
+    <node visible="true" id="709091" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840356999999997" lon="8.2845364000000004"/>
+    <node visible="true" id="709092" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840169000000003" lon="8.2842257000000004"/>
+    <node visible="true" id="709093" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4839891000000023" lon="8.2839270000000003"/>
+    <node visible="true" id="709094" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4839139999999986" lon="8.2833761999999993"/>
+    <node visible="true" id="709095" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4838134000000025" lon="8.2828248000000002"/>
+    <node visible="true" id="709096" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4836973000000029" lon="8.2823238000000003"/>
+    <node visible="true" id="709097" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4825854999999990" lon="8.2777899999999995"/>
+    <node visible="true" id="709098" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824921000000018" lon="8.2773669000000005"/>
+    <node visible="true" id="709099" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824295000000021" lon="8.2769872000000007"/>
+    <node visible="true" id="709100" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823864000000029" lon="8.2766131000000005"/>
+    <node visible="true" id="709101" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823590000000024" lon="8.2762308000000004"/>
+    <node visible="true" id="709102" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823491000000004" lon="8.2757833000000005"/>
+    <node visible="true" id="709103" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823610999999985" lon="8.2753522999999998"/>
+    <node visible="true" id="709104" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4823907000000034" lon="8.2749793999999994"/>
+    <node visible="true" id="709105" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4824267999999989" lon="8.2746144000000008"/>
+    <node visible="true" id="709106" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4825317999999967" lon="8.2737876999999997"/>
+    <node visible="true" id="709107" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4826582999999971" lon="8.2729812999999996"/>
+    <node visible="true" id="709108" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4827514999999991" lon="8.2725141000000004"/>
+    <node visible="true" id="709109" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4828565999999981" lon="8.2720946000000009"/>
+    <node visible="true" id="709110" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4829884999999976" lon="8.2716723000000005"/>
+    <node visible="true" id="709111" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4831209000000030" lon="8.2713186000000007"/>
+    <node visible="true" id="709112" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4832698000000022" lon="8.2709741000000001"/>
+    <node visible="true" id="709113" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4834430000000012" lon="8.2706368999999995"/>
+    <node visible="true" id="709114" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4836232999999979" lon="8.2703386000000005"/>
+    <node visible="true" id="709115" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4838377000000023" lon="8.2700107999999997"/>
+    <node visible="true" id="709116" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4840455000000006" lon="8.2697420000000008"/>
+    <node visible="true" id="709117" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4842281999999969" lon="8.2695372999999996"/>
+    <node visible="true" id="709118" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4844385999999972" lon="8.2693288999999996"/>
+    <node visible="true" id="709119" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4846548000000013" lon="8.2691396000000008"/>
+    <node visible="true" id="709120" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4848740999999990" lon="8.2689658999999995"/>
+    <node visible="true" id="709121" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4856231999999991" lon="8.2684075999999997"/>
+    <node visible="true" id="709122" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4859098000000017" lon="8.2681743999999995"/>
+    <node visible="true" id="709123" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4861331000000035" lon="8.2679487999999992"/>
+    <node visible="true" id="709124" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4863519000000025" lon="8.2677115000000008"/>
+    <node visible="true" id="709125" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4865380000000030" lon="8.2674569000000009"/>
+    <node visible="true" id="709126" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4867159000000001" lon="8.2672003000000007"/>
+    <node visible="true" id="709127" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4869190000000003" lon="8.2668566999999999"/>
+    <node visible="true" id="709128" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4871003000000016" lon="8.2664989999999996"/>
+    <node visible="true" id="709129" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4872738999999982" lon="8.2660882000000004"/>
+    <node visible="true" id="709130" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4874331999999981" lon="8.2656714999999998"/>
+    <node visible="true" id="709131" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4884550000000019" lon="8.2629632999999991"/>
+    <node visible="true" id="709132" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4796021000000010" lon="8.3070913999999991"/>
+    <node visible="true" id="709133" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4794760999999994" lon="8.3072087999999997"/>
+    <node visible="true" id="709134" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4791828999999979" lon="8.3074338000000001"/>
+    <node visible="true" id="709135" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799962000000022" lon="8.3063660000000006"/>
+    <node visible="true" id="709136" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801720000000032" lon="8.3060343000000003"/>
+    <node visible="true" id="709137" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4803281000000013" lon="8.3056584000000004"/>
+    <node visible="true" id="709138" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4804608999999971" lon="8.3052743000000007"/>
+    <node visible="true" id="709139" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4805536000000004" lon="8.3049011999999998"/>
+    <node visible="true" id="709140" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4806397999999987" lon="8.3045326999999993"/>
+    <node visible="true" id="709141" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4810146000000017" lon="8.3027931000000006"/>
+    <node visible="true" id="709142" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4774207999999973" lon="8.3075363000000007"/>
+    <node visible="true" id="709143" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798991999999984" lon="8.3062140000000007"/>
+    <node visible="true" id="709144" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4800208999999995" lon="8.3060057000000000"/>
+    <node visible="true" id="709145" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4800375000000017" lon="8.3059773999999997"/>
+    <node visible="true" id="709146" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801616999999965" lon="8.3057268999999998"/>
+    <node visible="true" id="709147" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4780678999999992" lon="8.3077799999999993"/>
+    <node visible="true" id="709148" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4778866999999991" lon="8.3077869000000000"/>
+    <node visible="true" id="709149" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4775800000000032" lon="8.3077795999999999"/>
+    <node visible="true" id="709150" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799324999999968" lon="8.3060670999999999"/>
+    <node visible="true" id="709151" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4800053000000020" lon="8.3059297000000001"/>
+    <node visible="true" id="709152" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801321999999999" lon="8.3056902000000008"/>
+    <node visible="true" id="709153" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795887000000008" lon="8.3067747000000001"/>
+    <node visible="true" id="709154" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4796043999999995" lon="8.3067507999999997"/>
+    <node visible="true" id="709155" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4796724999999995" lon="8.3066470999999993"/>
+    <node visible="true" id="709156" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798122999999990" lon="8.3064415000000000"/>
+    <node visible="true" id="709157" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4800218999999970" lon="8.3061083000000000"/>
+    <node visible="true" id="709158" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4802168000000009" lon="8.3056962999999993"/>
+    <node visible="true" id="709159" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4803574000000026" lon="8.3053156000000001"/>
+    <node visible="true" id="709160" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4804723000000024" lon="8.3049295999999995"/>
+    <node visible="true" id="709161" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4805498999999998" lon="8.3045825999999998"/>
+    <node visible="true" id="709162" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4806229000000002" lon="8.3042288000000006"/>
+    <node visible="true" id="709163" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4806827000000027" lon="8.3039433000000002"/>
+    <node visible="true" id="709164" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4807014000000009" lon="8.3037247999999995"/>
+    <node visible="true" id="709165" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4806260000000009" lon="8.3033555999999997"/>
+    <node visible="true" id="709166" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4805545999999978" lon="8.3030109999999997"/>
+    <node visible="true" id="709167" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783973999999986" lon="8.3078436000000000"/>
+    <node visible="true" id="709168" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4787577000000027" lon="8.3074893000000003"/>
+    <node visible="true" id="709169" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4789923000000016" lon="8.3073467999999995"/>
+    <node visible="true" id="709170" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4792096999999984" lon="8.3071722000000001"/>
+    <node visible="true" id="709171" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4787924999999973" lon="8.3076673999999997"/>
+    <node visible="true" id="709172" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4789889999999986" lon="8.3075661000000007"/>
+    <node visible="true" id="709173" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4793331999999992" lon="8.3073122000000001"/>
+    <node visible="true" id="709174" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4794661999999974" lon="8.3071830000000002"/>
+    <node visible="true" id="709175" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4796209000000005" lon="8.3070088999999996"/>
+    <node visible="true" id="709176" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4797742000000014" lon="8.3068112000000003"/>
+    <node visible="true" id="709177" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799207000000010" lon="8.3065867000000004"/>
+    <node visible="true" id="709178" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4800603999999993" lon="8.3063500000000001"/>
+    <node visible="true" id="709179" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801928999999987" lon="8.3060817000000000"/>
+    <node visible="true" id="709180" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4791586999999993" lon="8.3073270000000008"/>
+    <node visible="true" id="709181" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4793197999999990" lon="8.3071985999999995"/>
+    <node visible="true" id="709182" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795658000000032" lon="8.3069728999999999"/>
+    <node visible="true" id="709183" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4797160000000034" lon="8.3065066000000005"/>
+    <node visible="true" id="709184" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4795166999999978" lon="8.3063737000000000"/>
+    <node visible="true" id="709185" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4794734999999974" lon="8.3062035999999999"/>
+    <node visible="true" id="709186" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4801845000000000" lon="8.3060817000000000"/>
+    <node visible="true" id="709187" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4800084999999967" lon="8.3063739000000005"/>
+    <node visible="true" id="709188" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4798280999999989" lon="8.3051522000000002"/>
+    <node visible="true" id="709189" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799576999999999" lon="8.3057960000000008"/>
+    <node visible="true" id="709190" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799612999999994" lon="8.3059059000000008"/>
+    <node visible="true" id="709191" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4799450000000007" lon="8.3059957999999998"/>
+    <node visible="true" id="709192" timestamp="1970-01-01T00:00:00Z" version="1" lat="47.4783939000000004" lon="8.3077278999999997"/>
+    <way visible="true" id="708841" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708905"/>
+        <nd ref="708906"/>
+        <nd ref="708907"/>
+        <nd ref="708908"/>
+        <nd ref="708894"/>
+        <nd ref="708909"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="railway:track_ref" v="4"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="385.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708842" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708910"/>
+        <nd ref="708911"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="6.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708843" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708912"/>
+        <nd ref="708913"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="3"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="24.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708844" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708914"/>
+        <nd ref="708915"/>
+        <nd ref="708916"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="39.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708846" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708905"/>
+        <nd ref="708917"/>
+        <nd ref="708918"/>
+        <nd ref="708900"/>
+        <nd ref="708919"/>
+        <nd ref="708920"/>
+        <nd ref="708921"/>
+        <nd ref="708922"/>
+        <nd ref="708923"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="railway:track_ref" v="3"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="464.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708848" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708925"/>
+        <nd ref="708926"/>
+        <nd ref="708927"/>
+        <nd ref="708928"/>
+        <nd ref="708929"/>
+        <nd ref="708930"/>
+        <nd ref="708931"/>
+        <nd ref="708932"/>
+        <nd ref="708933"/>
+        <nd ref="708934"/>
+        <nd ref="708935"/>
+        <nd ref="708936"/>
+        <nd ref="708937"/>
+        <nd ref="708938"/>
+        <nd ref="708939"/>
+        <nd ref="708940"/>
+        <nd ref="708941"/>
+        <nd ref="708942"/>
+        <nd ref="708943"/>
+        <nd ref="708944"/>
+        <nd ref="708945"/>
+        <nd ref="708946"/>
+        <nd ref="708947"/>
+        <nd ref="708948"/>
+        <nd ref="708949"/>
+        <nd ref="708950"/>
+        <nd ref="708951"/>
+        <nd ref="708952"/>
+        <nd ref="708953"/>
+        <nd ref="708954"/>
+        <nd ref="708955"/>
+        <nd ref="708956"/>
+        <nd ref="708957"/>
+        <nd ref="708958"/>
+        <nd ref="708959"/>
+        <nd ref="708960"/>
+        <nd ref="708961"/>
+        <nd ref="708962"/>
+        <nd ref="708963"/>
+        <nd ref="708964"/>
+        <nd ref="708965"/>
+        <nd ref="708966"/>
+        <nd ref="708967"/>
+        <nd ref="708968"/>
+        <nd ref="708969"/>
+        <nd ref="708970"/>
+        <nd ref="708971"/>
+        <nd ref="708972"/>
+        <nd ref="708973"/>
+        <nd ref="708974"/>
+        <nd ref="708975"/>
+        <nd ref="708976"/>
+        <nd ref="708977"/>
+        <nd ref="708978"/>
+        <nd ref="708979"/>
+        <nd ref="708980"/>
+        <nd ref="708981"/>
+        <nd ref="708982"/>
+        <nd ref="708983"/>
+        <nd ref="708984"/>
+        <nd ref="708985"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="3464.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708849" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708986"/>
+        <nd ref="708987"/>
+        <nd ref="708988"/>
+        <nd ref="708880"/>
+        <nd ref="708989"/>
+        <nd ref="708990"/>
+        <nd ref="708991"/>
+        <nd ref="708992"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="railway:track_ref" v="5"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="344.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708850" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708993"/>
+        <nd ref="708925"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="21.6"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708853" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708996"/>
+        <nd ref="708997"/>
+        <nd ref="708998"/>
+        <nd ref="708999"/>
+        <nd ref="709000"/>
+        <nd ref="708993"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="235.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708855" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708911"/>
+        <nd ref="709001"/>
+        <nd ref="709002"/>
+        <nd ref="709003"/>
+        <nd ref="709004"/>
+        <nd ref="709005"/>
+        <nd ref="709006"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="3"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="149.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708857" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709007"/>
+        <nd ref="709008"/>
+        <nd ref="709009"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="45.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708858" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709010"/>
+        <nd ref="709011"/>
+        <nd ref="709012"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="44.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708859" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708992"/>
+        <nd ref="709013"/>
+        <nd ref="709014"/>
+        <nd ref="709015"/>
+        <nd ref="709016"/>
+        <nd ref="708914"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="102.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708861" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708909"/>
+        <nd ref="709017"/>
+        <nd ref="709010"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="35.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708862" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709018"/>
+        <nd ref="709019"/>
+        <nd ref="709020"/>
+        <nd ref="709021"/>
+        <nd ref="708896"/>
+        <nd ref="709022"/>
+        <nd ref="709023"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="railway:track_ref" v="2"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="319.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708863" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709024"/>
+        <nd ref="709025"/>
+        <nd ref="709026"/>
+        <nd ref="709027"/>
+        <nd ref="708860"/>
+        <nd ref="709028"/>
+        <nd ref="709029"/>
+        <nd ref="709030"/>
+        <nd ref="709031"/>
+        <nd ref="709032"/>
+        <nd ref="709033"/>
+        <nd ref="709034"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="railway:track_ref" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="494.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708864" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709034"/>
+        <nd ref="708912"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="3"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="3.6"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708865" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709023"/>
+        <nd ref="709035"/>
+        <nd ref="709036"/>
+        <nd ref="709037"/>
+        <nd ref="709034"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="130.6"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708866" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709038"/>
+        <nd ref="709039"/>
+        <nd ref="709040"/>
+        <nd ref="709041"/>
+        <nd ref="709042"/>
+        <nd ref="709043"/>
+        <nd ref="709044"/>
+        <nd ref="709045"/>
+        <nd ref="708902"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="yard"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="271.0"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708867" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709046"/>
+        <nd ref="709047"/>
+        <nd ref="708901"/>
+        <nd ref="709048"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="fixme" v="resurvey"/>
+        <tag k="length" v="94.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708868" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709049"/>
+        <nd ref="709050"/>
+        <nd ref="709046"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="fixme" v="resurvey"/>
+        <tag k="length" v="19.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708869" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708916"/>
+        <nd ref="709051"/>
+        <tag k="disused" v="rail"/>
+        <tag k="service" v="spur"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="length" v="21.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708870" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708914"/>
+        <nd ref="709052"/>
+        <nd ref="709053"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="39.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708871" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709054"/>
+        <nd ref="709055"/>
+        <nd ref="709056"/>
+        <nd ref="709057"/>
+        <tag k="disused" v="rail"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="132.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708872" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709009"/>
+        <nd ref="709058"/>
+        <nd ref="709059"/>
+        <nd ref="709060"/>
+        <nd ref="709061"/>
+        <nd ref="709062"/>
+        <nd ref="709063"/>
+        <nd ref="708856"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="yard"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="166.7"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708873" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709064"/>
+        <nd ref="709065"/>
+        <nd ref="709066"/>
+        <nd ref="709067"/>
+        <nd ref="709068"/>
+        <nd ref="709069"/>
+        <nd ref="709038"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="yard"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="143.7"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708874" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709070"/>
+        <nd ref="709057"/>
+        <tag k="disused" v="rail"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="38.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708875" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709071"/>
+        <nd ref="709072"/>
+        <nd ref="709073"/>
+        <nd ref="709074"/>
+        <nd ref="709075"/>
+        <nd ref="709076"/>
+        <nd ref="709077"/>
+        <nd ref="709078"/>
+        <nd ref="709079"/>
+        <nd ref="709080"/>
+        <nd ref="709081"/>
+        <nd ref="709082"/>
+        <nd ref="709083"/>
+        <nd ref="709084"/>
+        <nd ref="709085"/>
+        <nd ref="709086"/>
+        <nd ref="709087"/>
+        <nd ref="709088"/>
+        <nd ref="709089"/>
+        <nd ref="709090"/>
+        <nd ref="709091"/>
+        <nd ref="709092"/>
+        <nd ref="709093"/>
+        <nd ref="709094"/>
+        <nd ref="709095"/>
+        <nd ref="709096"/>
+        <nd ref="709097"/>
+        <nd ref="709098"/>
+        <nd ref="709099"/>
+        <nd ref="709100"/>
+        <nd ref="709101"/>
+        <nd ref="709102"/>
+        <nd ref="709103"/>
+        <nd ref="709104"/>
+        <nd ref="709105"/>
+        <nd ref="709106"/>
+        <nd ref="709107"/>
+        <nd ref="709108"/>
+        <nd ref="709109"/>
+        <nd ref="709110"/>
+        <nd ref="709111"/>
+        <nd ref="709112"/>
+        <nd ref="709113"/>
+        <nd ref="709114"/>
+        <nd ref="709115"/>
+        <nd ref="709116"/>
+        <nd ref="709117"/>
+        <nd ref="709118"/>
+        <nd ref="709119"/>
+        <nd ref="709120"/>
+        <nd ref="709121"/>
+        <nd ref="709122"/>
+        <nd ref="709123"/>
+        <nd ref="709124"/>
+        <nd ref="709125"/>
+        <nd ref="709126"/>
+        <nd ref="709127"/>
+        <nd ref="709128"/>
+        <nd ref="709129"/>
+        <nd ref="709130"/>
+        <nd ref="709131"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="3343.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708876" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709038"/>
+        <nd ref="709132"/>
+        <nd ref="709133"/>
+        <nd ref="709134"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="yard"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="74.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708877" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708910"/>
+        <nd ref="709135"/>
+        <nd ref="709136"/>
+        <nd ref="709137"/>
+        <nd ref="709138"/>
+        <nd ref="709139"/>
+        <nd ref="709140"/>
+        <nd ref="709141"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="326.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708878" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708992"/>
+        <nd ref="709142"/>
+        <nd ref="708909"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="63.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708879" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709141"/>
+        <nd ref="709071"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="95"/>
+        <tag k="length" v="22.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708881" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709049"/>
+        <nd ref="709143"/>
+        <nd ref="709144"/>
+        <nd ref="709145"/>
+        <nd ref="709146"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="fixme" v="resurvey"/>
+        <tag k="length" v="57.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708882" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708923"/>
+        <nd ref="709147"/>
+        <nd ref="709148"/>
+        <nd ref="709149"/>
+        <nd ref="709023"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="5"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="130.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708883" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709046"/>
+        <nd ref="709150"/>
+        <nd ref="709151"/>
+        <nd ref="709152"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="fixme" v="resurvey"/>
+        <tag k="length" v="38.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708884" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709070"/>
+        <nd ref="709153"/>
+        <nd ref="709154"/>
+        <nd ref="709155"/>
+        <nd ref="709156"/>
+        <nd ref="709157"/>
+        <nd ref="709158"/>
+        <nd ref="709159"/>
+        <nd ref="709160"/>
+        <nd ref="709161"/>
+        <nd ref="709162"/>
+        <nd ref="709163"/>
+        <nd ref="709164"/>
+        <nd ref="709165"/>
+        <nd ref="709166"/>
+        <nd ref="708895"/>
+        <tag k="disused" v="rail"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="fixme" v="resurvey"/>
+        <tag k="length" v="426.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708885" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709012"/>
+        <nd ref="709007"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="22.9"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708886" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709167"/>
+        <nd ref="709064"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="yard"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="25.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708887" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709051"/>
+        <nd ref="709168"/>
+        <nd ref="709169"/>
+        <nd ref="709170"/>
+        <nd ref="709070"/>
+        <tag k="disused" v="rail"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="96.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708888" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708913"/>
+        <nd ref="709171"/>
+        <nd ref="709172"/>
+        <nd ref="709134"/>
+        <nd ref="709173"/>
+        <nd ref="709174"/>
+        <nd ref="709175"/>
+        <nd ref="709176"/>
+        <nd ref="709177"/>
+        <nd ref="709178"/>
+        <nd ref="709179"/>
+        <nd ref="708996"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="3"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="248.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708889" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709009"/>
+        <nd ref="709180"/>
+        <nd ref="709181"/>
+        <nd ref="709182"/>
+        <nd ref="708911"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="102.8"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708890" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709053"/>
+        <nd ref="709054"/>
+        <tag k="disused" v="rail"/>
+        <tag k="service" v="spur"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="length" v="19.7"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708892" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709057"/>
+        <nd ref="709183"/>
+        <nd ref="709049"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="fixme" v="resurvey"/>
+        <tag k="length" v="38.9"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708893" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708901"/>
+        <nd ref="709184"/>
+        <nd ref="709185"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="18.1"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708898" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="708996"/>
+        <nd ref="709186"/>
+        <nd ref="709187"/>
+        <nd ref="708910"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="service" v="siding"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="2"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="89.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708899" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709188"/>
+        <nd ref="709189"/>
+        <nd ref="709190"/>
+        <nd ref="709191"/>
+        <nd ref="709150"/>
+        <tag k="service" v="spur"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="disused"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="length" v="71.4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708903" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709006"/>
+        <nd ref="709192"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="3"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="layer" v="1"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="maxspeed" v="70"/>
+        <tag k="length" v="23.2"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="708904" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="709192"/>
+        <nd ref="708923"/>
+        <tag k="railway:etcs" v="1"/>
+        <tag k="usage" v="main"/>
+        <tag k="frequency" v="16.7"/>
+        <tag k="tracks" v="1"/>
+        <tag k="railway" v="rail"/>
+        <tag k="voltage" v="15000"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="passenger_lines" v="3"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="length" v="3.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <relation visible="true" id="708845" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="708875" role=""/>
+        <member type="way" ref="708848" role=""/>
+        <member type="way" ref="708879" role=""/>
+        <member type="way" ref="708850" role=""/>
+        <member type="way" ref="708853" role=""/>
+        <member type="way" ref="708877" role=""/>
+        <member type="way" ref="708888" role=""/>
+        <member type="way" ref="708842" role=""/>
+        <member type="way" ref="708855" role=""/>
+        <member type="way" ref="708843" role=""/>
+        <member type="way" ref="708903" role=""/>
+        <member type="way" ref="708863" role=""/>
+        <member type="way" ref="708882" role=""/>
+        <member type="way" ref="708846" role=""/>
+        <member type="way" ref="708862" role=""/>
+        <member type="way" ref="708841" role=""/>
+        <member type="way" ref="708849" role=""/>
+        <tag k="note:ref" v="Ref according to RADN SBB"/>
+        <tag k="route" v="railway"/>
+        <tag k="to" v="Brugg"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="from" v="Zürich"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="ref" v="161"/>
+        <tag k="length" v="8340.6"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="708854" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="708848" role=""/>
+        <member type="way" ref="708875" role=""/>
+        <member type="way" ref="708879" role=""/>
+        <member type="way" ref="708850" role=""/>
+        <member type="way" ref="708853" role=""/>
+        <member type="way" ref="708877" role=""/>
+        <member type="way" ref="708888" role=""/>
+        <member type="way" ref="708842" role=""/>
+        <member type="way" ref="708855" role=""/>
+        <member type="way" ref="708843" role=""/>
+        <member type="way" ref="708903" role=""/>
+        <member type="way" ref="708863" role=""/>
+        <member type="way" ref="708882" role=""/>
+        <member type="way" ref="708846" role=""/>
+        <member type="way" ref="708862" role=""/>
+        <member type="way" ref="708841" role=""/>
+        <member type="way" ref="708849" role=""/>
+        <tag k="note:ref" v="Ref according to RADN SBB"/>
+        <tag k="route" v="railway"/>
+        <tag k="to" v="Waldshut"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="from" v="Stein - Säckingen / RBL"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="ref" v="601"/>
+        <tag k="description" v="Stein-S. - Laufenburg - / RBL - Wettingen - Waldshut"/>
+        <tag k="length" v="15993.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="708897" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="708860" role="stop"/>
+        <member type="node" ref="708896" role="stop"/>
+        <member type="node" ref="708900" role="stop"/>
+        <member type="node" ref="708894" role="stop"/>
+        <member type="node" ref="708880" role="stop"/>
+        <tag k="train" v="yes"/>
+        <tag k="uic_name" v="Baden"/>
+        <tag k="uic_ref" v="8503504"/>
+        <tag k="public_transport" v="stop_area"/>
+        <tag k="railway" v="station"/>
+        <tag k="operator" v="SBB"/>
+        <tag k="network" v="A-Welle"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="ele" v="385"/>
+        <tag k="name" v="Baden"/>
+        <tag k="feature_area" v="1423.6"/>
+        <tag k="length" v="465.3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="type" v="public_transport"/>
+    </relation>
+</osm>

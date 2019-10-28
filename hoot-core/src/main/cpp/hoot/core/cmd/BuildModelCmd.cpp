@@ -46,7 +46,7 @@ public:
   virtual QString getName() const override { return "build-model"; }
 
   virtual QString getDescription() const override
-  { return "Creates a random forest model for conflation"; }
+  { return "Builds a random forest model to be used in conflation"; }
 
   virtual int runSimple(QStringList& args) override
   {

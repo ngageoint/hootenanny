@@ -1,0 +1,50 @@
+[[crop-random]]
+== crop-random
+
+=== Description
+
+The +crop-random+ command randomly crops a section of map data to an output with a specified maximum node count. This is useful if you have a 
+very large file dataset and need a smaller subset of data to test conflation against.
+
+* +input(s)+      - One or more input paths; may be any supported input format (e.g. OSM file). Specify multiple inputs by separating them 
+                    with a semicolon.
+* +output+        - The output data path; may be any supported output format (e.g. OSM file)
+* +maxNodeCount+  - The maximum number of nodes to include in the output. If the number of nodes in the entire dataset is less than the 
+                    specified number, no cropping will occur.
+* +pixelSize+     - Size of the pixel used in the calculation in degrees. A good starting default is 0.001.
+* +randomSeed+    - Optionally seeds the random number generator for consistent output; useful during testing; use -1 for no seeding
+* +--write-tiles+ - Optionally writes the calculated tile footprints to a separate OSM file in the same output directory as +output+.
+
+If too low a value is specified for maxNodeCount or too high a value is specified for pixelSize, the algorithm used may not be able
+to find a solution.
+
+=== Usage
+
+--------------------------------------
+crop-random (input1.osm)[;input2.osm...] (output.osm) (maxNodeCount) (pixelSize) [randomSeed]
+--------------------------------------
+
+=== Configuration Options
+
+The following cropping configuration options are not supported:
+
+* +crop.bounds+ - This is unnecessary since the command calculates the crop bounds automatically based on maximum node count.
+* +crop.invert+
+
+See the +crop+ command for details on the remaining supported cropping configuration options.
+
+If you need to run random map cropping inline, use the hoot::RandomMapCropper OSM map operation along with crop.random.* configuration options.
+
+=== Examples
+
+--------------------------------------
+# pseudo random selection
+hoot crop-random -D crop.keep.only.features.inside.bounds=true "input1.osm;input2.osm" output.osm 1000 0.001
+
+# seed the random selection for testing
+hoot crop-random -D crop.keep.only.features.inside.bounds=true "input1.osm;input2.osm" output.osm 1000 0.001 3
+--------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

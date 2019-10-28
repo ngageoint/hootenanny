@@ -55,13 +55,13 @@ _allowCrossConflationMerging(ConfigOptions().getPoiPolygonAllowCrossConflationMe
   LOG_VARD(_allowCrossConflationMerging);
 }
 
-Match* PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+MatchPtr PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementId eid1,
   ElementId eid2) const
 {
   return MatchFactory::getInstance().createMatch(map, eid1, eid2);
 }
 
-bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merger*>& mergers) const
+bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -74,7 +74,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
   // go through all the matches
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m = *it;
+    ConstMatchPtr m = *it;
     LOG_VART(m->toString());
     if (m->getMatchMembers() & MatchMembers::Poi)
     {
@@ -105,7 +105,7 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     // go through all the matches
     for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
     {
-      const Match* m = *it;
+      ConstMatchPtr m = *it;
       LOG_VART(m->toString());
 
       //All of the other merger creators check the type of the match and do nothing if it isn't
@@ -121,15 +121,16 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
     if (_isConflictingSet(matches))
     {
       mergers.push_back(
-        new MarkForReviewMerger(
-          eids,
-          QString("Conflicting information: multiple features have been matched to the same ") +
-          QString("feature and require review."),
-          matchTypes.join(";"), 1));
+        MergerPtr(
+          new MarkForReviewMerger(
+            eids,
+            QString("Conflicting information: multiple features have been matched to the same ") +
+            QString("feature and require review."),
+            matchTypes.join(";"), 1)));
     }
     else
     {
-      mergers.push_back(new PoiPolygonMerger(eids));
+      mergers.push_back(MergerPtr(new PoiPolygonMerger(eids)));
     }
 
     result = true;
@@ -146,8 +147,8 @@ vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
   return result;
 }
 
-bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Match* m1,
-  const Match* m2) const
+bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatchPtr m1,
+  ConstMatchPtr m2) const
 {
   LOG_VART(m1);
   LOG_VART(m2);
@@ -248,7 +249,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, const Mat
   // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
   else if (typeid(*m1) == typeid(*m2))
   {
-    result = m1->isConflicting(*m2, map);
+    result = m1->isConflicting(m2, map);
     LOG_TRACE("type ids match; conflict=" << result);
   }
   else
@@ -269,11 +270,11 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
 
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    const Match* m1 = *it;
+    ConstMatchPtr m1 = *it;
     LOG_VART(m1);
     for (MatchSet::const_iterator jt = matches.begin(); jt != matches.end(); ++jt)
     {
-      const Match* m2 = *jt;
+      ConstMatchPtr m2 = *jt;
       LOG_VART(m2);
 
       if (m1 != m2)

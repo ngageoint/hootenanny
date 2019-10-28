@@ -8,9 +8,9 @@ score metrics. This operation is most commonly used to compare manually conflate
 The scores provided give an idea of similarity between maps. A score of 1000 means they're exactly the same. A score of
 0 means the maps are very different.
 
-* +base1+ - The first base file to compare against.
-* +base2+ - (optional) The second base file to compare against.
-* +uut+   - The file being evaluated.
+* +base1+ - The first map file to compare; may be any supported input format.
+* +base2+ - (optional) The second base map file to compare; may be any supported input format.
+* +uut+   - The map file being evaluated; may be any supported input format.
 
 The following variables are provided in the score result:
 
@@ -24,7 +24,7 @@ The following variables are provided in the score result:
 compare (base1) [base2] (uut)
 --------------------------------------
 
-==== Example
+=== Example
 
 --------------------------------------
 hoot compare manual1.osm manual2.osm conflated.osm
@@ -39,4 +39,8 @@ Graph Score 2: 996 +/-0 (996 to 996)
 Graph Score: 970 +/-10 (960 to 980)
 Overall: 981 +/-4 (977 to 985)
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

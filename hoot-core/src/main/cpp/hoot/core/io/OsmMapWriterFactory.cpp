@@ -123,7 +123,7 @@ bool OsmMapWriterFactory::hasElementOutputStream(const QString& url)
   return result;
 }
 
-void OsmMapWriterFactory::write(const std::shared_ptr<const OsmMap>& map, const QString& url,
+void OsmMapWriterFactory::write(const std::shared_ptr<OsmMap>& map, const QString& url,
                                 const bool silent, const bool is_debug)
 {
   bool skipEmptyMap = map->isEmpty() && ConfigOptions().getOsmMapWriterSkipEmptyMap();
@@ -139,14 +139,16 @@ void OsmMapWriterFactory::write(const std::shared_ptr<const OsmMap>& map, const 
     QElapsedTimer timer;
     timer.start();
 
-    // We could pass a progress in here to get more granular write status feedback.
+    MapProjector::projectToWgs84(map);
+
     std::shared_ptr<OsmMapWriter> writer = createWriter(url);
     writer->setIsDebugMap(is_debug);
     writer->open(url);
+    // We could pass a progress in here to get more granular write status feedback.
     writer->write(map);
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
-      " elements to output in: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+      " elements to output in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 }
 

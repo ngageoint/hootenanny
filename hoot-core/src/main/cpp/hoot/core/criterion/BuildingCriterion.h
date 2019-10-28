@@ -53,14 +53,17 @@ public:
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
-  virtual ConflatableGeometryType getGeometryType() const
-  { return ConflatableGeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Polygon; }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new BuildingCriterion(_map)); }
 
   virtual QString getDescription() const { return "Identifies buildings"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
 private:
 

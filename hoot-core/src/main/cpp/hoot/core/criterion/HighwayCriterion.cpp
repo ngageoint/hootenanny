@@ -41,6 +41,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   LOG_VART(element->getElementId());
+  //LOG_VART(element);
   bool result = false;
   const Tags& tags = element->getTags();
   const ElementType type = element->getElementType();
@@ -60,18 +61,12 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
     result = false;
     LOG_VART(result);
   }
-  else
-  {
-    // Maybe it's a way with nothing but a time tag...
-    it = tags.find(MetadataTags::SourceDateTime());
-    if (type == ElementType::Way && tags.keys().size() < 2 && it != tags.end())
-    {
-      // We can treat it like a highway
-      result = true;
-      LOG_VART(result);
-    }
-  }
-  // Make sure this isn't an area highway section!
+
+  // At one point we were allowing any way with a date tag to pass here as well, but that can lead
+  // to false positive highway matches, so it was removed. Its better to tag the way as a highway
+  // before conflation.
+
+  // Make sure this isn't an area highway section.
   if (result)
   {
     result = !AreaCriterion().isSatisfied(element);

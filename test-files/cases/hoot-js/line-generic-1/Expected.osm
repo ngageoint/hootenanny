@@ -60,7 +60,30 @@
     <node visible="true" id="-27567" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542146741700023" lon="-104.9020934340999958"/>
     <node visible="true" id="-27566" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541136621199996" lon="-104.9023412753199977"/>
     <node visible="true" id="-27565" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540360991899973" lon="-104.9024200286000053"/>
-    <way visible="true" id="-27643" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-27641" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27565"/>
+        <nd ref="-27566"/>
+        <nd ref="-27567"/>
+        <nd ref="-27568"/>
+        <nd ref="-27569"/>
+        <nd ref="-27570"/>
+        <nd ref="-27571"/>
+        <nd ref="-27572"/>
+        <nd ref="-27573"/>
+        <nd ref="-27574"/>
+        <nd ref="-27575"/>
+        <nd ref="-27576"/>
+        <nd ref="-27577"/>
+        <nd ref="-27578"/>
+        <nd ref="-27579"/>
+        <nd ref="-27580"/>
+        <nd ref="-27581"/>
+        <nd ref="-27582"/>
+        <tag k="highway" v="road"/>
+        <tag k="note" v="0b 1;0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-27564" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27582"/>
         <nd ref="-27583"/>
         <nd ref="-27584"/>
@@ -105,29 +128,6 @@
         <nd ref="-27622"/>
         <tag k="highway" v="road"/>
         <tag k="note" v="0b 2;0"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-27641" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-27565"/>
-        <nd ref="-27566"/>
-        <nd ref="-27567"/>
-        <nd ref="-27568"/>
-        <nd ref="-27569"/>
-        <nd ref="-27570"/>
-        <nd ref="-27571"/>
-        <nd ref="-27572"/>
-        <nd ref="-27573"/>
-        <nd ref="-27574"/>
-        <nd ref="-27575"/>
-        <nd ref="-27576"/>
-        <nd ref="-27577"/>
-        <nd ref="-27578"/>
-        <nd ref="-27579"/>
-        <nd ref="-27580"/>
-        <nd ref="-27581"/>
-        <nd ref="-27582"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="0b 1;0"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

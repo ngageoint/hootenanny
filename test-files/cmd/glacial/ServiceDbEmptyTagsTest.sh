@@ -20,4 +20,4 @@ export TB_COUNT=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "
 echo "Tunnel or bridge count (should be zero): " $TB_COUNT
 
 # Clean up the map from the database
-hoot delete-db-map -D api.db.email=ApiDbTest@hoottestcpp.org $DB_URL/HootApiDbEmptyTagTest
+hoot db-delete-map -D api.db.email=ApiDbTest@hoottestcpp.org $DB_URL/HootApiDbEmptyTagTest

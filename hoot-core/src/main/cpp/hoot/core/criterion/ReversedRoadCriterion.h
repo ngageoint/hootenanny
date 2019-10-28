@@ -27,7 +27,8 @@
 #ifndef REVERSED_ROAD_CRITERION_H
 #define REVERSED_ROAD_CRITERION_H
 
-#include <hoot/core/criterion/ElementCriterion.h>
+// Hoot
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 namespace hoot
 {
@@ -37,7 +38,7 @@ class Element;
 /**
  * Identifies reversed roads
  */
-class ReversedRoadCriterion : public ElementCriterion
+class ReversedRoadCriterion : public GeometryTypeCriterion
 {
 public:
 
@@ -50,6 +51,13 @@ public:
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ReversedRoadCriterion()); }
 
   virtual QString getDescription() const { return "Identifies reversed roads"; }
+
+  virtual GeometryType getGeometryType() const
+  { return GeometryType::Line; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 };
 
 }

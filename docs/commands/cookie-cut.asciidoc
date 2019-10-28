@@ -10,9 +10,9 @@ high quality roads back in.  The +cookie-cut+ command functions by reading in a 
 removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries are written to 'output'.
 The dough input is limited by the available RAM.
 
-* +cutter-shape+ - The input Polygons to use as the cutter shape.
-* +dough+        - The input OSM data to cut from.
-* +output+       - The output OSM data path.
+* +cutter-shape+ - The input Polygons to use as the cutter shape; may be any supported input format (e.g. .osm file).
+* +dough+        - The input OSM data to cut from; may be any supported input format (e.g. .osm file).
+* +output+       - The output OSM data path; may be any supported output format (e.g. .osm file).
 * +buffer+       - Optional buffer value, if the buffer value is provided then the
                    shape is buffered by this many meters before cutting. The buffer may be
                    positive or negative.
@@ -42,4 +42,5 @@ hoot conflate DcSmall.osm DcBigCut.osm ConflatedDc.osm
 
 * `cookie.cutter.*` configuration options
 * _Horizontal Conflation_, <<hootalgo,Hootenanny - Algorithms>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

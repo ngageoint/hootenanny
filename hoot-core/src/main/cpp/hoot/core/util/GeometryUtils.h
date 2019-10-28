@@ -94,7 +94,15 @@ public:
 
   static OGREnvelope* toOGREnvelope(const geos::geom::Envelope& e);
 
+  /** Creates a bounds string in the format (minx,maxx,miny,maxy)
+   *  from an envelope using the `writer.precision` value
+   */
   static QString toString(const geos::geom::Envelope& e);
+
+  /** Creates a bounds string in the format (minx,maxx,miny,maxy)
+   *  from an envelope using the `writer.precision` value
+   */
+  static QString toConfigString(const geos::geom::Envelope& e);
 
   static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry *g);
 
@@ -136,6 +144,14 @@ public:
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a bounding rectangle within the specified map
+   * @param map the map to insert the bounding rectangle in
+   * @param bounds bounding box
+   * @return ElementId of the way created
+   */
+  static ElementId createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds);
 };
 
 }

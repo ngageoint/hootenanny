@@ -43,10 +43,8 @@ namespace hoot
 {
 
 /*
- * Although, the types of things this command display aren't expected to grow in regular fashion
- * from this point forward, Some time should probably be spent exploring ways to make the classes
- * containing the information printed out by this command auto-register themselves in a more
- * extensible way.
+ * Some time needs to be spent exploring ways to make the classes containing the information
+ * printed out by this command auto-register themselves in a more extensible way.
  */
 class InfoCmd : public BaseCommand
 {
@@ -139,8 +137,10 @@ public:
 
       QStringList formatSubOptions;
       formatSubOptions.append("--input");
-      formatSubOptions.append("--output");
+      formatSubOptions.append("--input-streamable");
       formatSubOptions.append("--input-bounded");
+      formatSubOptions.append("--output");
+      formatSubOptions.append("--output-streamable");
       for (int i = 0; i < args.size(); i++)
       {
         const QString arg = args.at(i);
@@ -158,13 +158,6 @@ public:
         args.removeAt(args.indexOf("--input"));
       }
 
-      bool displayOutputs = false;
-      if (args.contains("--output"))
-      {
-        displayOutputs = true;
-        args.removeAt(args.indexOf("--output"));
-      }
-
       bool displayInputsSupportingBounds = false;
       if (args.contains("--input-bounded"))
       {
@@ -172,16 +165,44 @@ public:
         args.removeAt(args.indexOf("--input-bounded"));
       }
 
-      if (!displayInputs && !displayOutputs && !displayInputsSupportingBounds && args.size() == 0)
+      bool displayInputsSupportingStreaming = false;
+      if (args.contains("--input-streamable"))
+      {
+        displayInputsSupportingStreaming = true;
+        args.removeAt(args.indexOf("--input-streamable"));
+      }
+
+      bool displayOutputs = false;
+      if (args.contains("--output"))
+      {
+        displayOutputs = true;
+        args.removeAt(args.indexOf("--output"));
+      }
+
+      bool displayOutputsSupportingStreaming = false;
+      if (args.contains("--output-streamable"))
+      {
+        displayOutputsSupportingStreaming = true;
+        args.removeAt(args.indexOf("--output-streamable"));
+      }
+
+      // If none were specified, show them all.
+      // This is getting a little messy...maybe pass in an object with the settings instead...
+      if (!displayInputs && !displayInputsSupportingBounds && !displayInputsSupportingStreaming &&
+          !displayOutputs && !displayOutputsSupportingStreaming && args.size() == 0)
       {
         displayInputs = true;
-        displayOutputs = true;
+        displayInputsSupportingStreaming = true;
         displayInputsSupportingBounds = true;
+        displayOutputs = true;
+        displayOutputsSupportingStreaming = true;
       }
 
       std::cout <<
-        FormatsDisplayer::display(displayInputs, displayOutputs, displayInputsSupportingBounds)
-          .toStdString();
+        FormatsDisplayer::display(
+          displayInputs, displayInputsSupportingStreaming, displayInputsSupportingBounds,
+          displayOutputs, displayOutputsSupportingStreaming)
+        .toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
     {
@@ -320,7 +341,9 @@ private:
     options.append("--conflate-pre-operations");
     options.append("--criterion-consumers");
     options.append("--feature-extractors");
+    options.append("--filters");
     options.append("--formats");
+    options.append("--geometry-type-criteria");
     options.append("--languages");
     options.append("--matchers");
     options.append("--match-creators");

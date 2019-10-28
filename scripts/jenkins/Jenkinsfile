@@ -13,7 +13,7 @@ pipeline {
 
     triggers {
         // Set nightly trigger
-        cron((BRANCH_NAME == "master" || BRANCH_NAME == "develop") ? "H H(1-2) * * 1-5" : "")
+        cron((BRANCH_NAME == "master") ? "H H(4-5) * * 1-5" : "")
     }
 
     // Configurable parameters for users to skip steps and control pipeline behavior
@@ -86,12 +86,12 @@ pipeline {
         stage("Sonar Config") {
             when {
                 anyOf {
-                    // Configure for sonar if user selected it, pull-request, or nightly run of develop
+                    // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
                     changeRequest()
                     allOf {
                         triggeredBy 'TimerTrigger'
-                        branch 'develop'
+                        branch 'master'
                     }
                 }
             }
@@ -100,8 +100,8 @@ pipeline {
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 script {
-                    if (env.BRANCH_NAME == "develop") {
-                        // Compile instrumented code for develop branch which allows for calculating coverage
+                    if (env.BRANCH_NAME == "master") {
+                        // Compile instrumented code for master branch which allows for calculating coverage
                         sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
                     }
                 }
@@ -151,7 +151,7 @@ pipeline {
                     changeRequest()
                     allOf {
                         triggeredBy 'TimerTrigger'
-                        branch 'develop'
+                        branch 'master'
                     }
                 }
             }
@@ -169,7 +169,7 @@ pipeline {
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
                     }
                     else {
-                        if (env.BRANCH_NAME == "develop") {
+                        if (env.BRANCH_NAME == "master") {
                             sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
                         }
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"

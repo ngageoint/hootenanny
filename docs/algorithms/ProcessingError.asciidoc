@@ -164,7 +164,7 @@ services such as Google and Bing.
 
 [[ui-interactions]]
 .User Interface Interactions
-[graphviz, images/UiInteractions.png, fdp]
+[graphviz, images/__UiInteractions.png, fdp]
 --------------------------------------------------------------------
 digraph G
 {

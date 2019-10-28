@@ -54,15 +54,19 @@ public:
   void setConfiguration(const Settings& s);
 
   void setKvps(const QStringList kvps);
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new TagCriterion()); }
 
   virtual QString getDescription() const
   { return "Identifies elements containing a specified tag key/value combination"; }
 
+  virtual QString toString() const override;
+
 private:
 
   QStringList _kvps;
+  bool _caseSensitive;
 };
 
 }

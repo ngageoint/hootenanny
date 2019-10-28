@@ -29,8 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/criterion/ElementCriterionConsumer.h>
+#include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/util/StringUtils.h>
@@ -40,20 +39,15 @@ namespace hoot
 
 /**
  * Removes any elements where that satisfy a criterion
- *
- * TODO: the criterion related code in this class is kind of duplicated in other classes
- * (e.g. AddAttributesVisitor)...may want to look into consolidating
  */
-class RemoveElementsVisitor : public ElementVisitor, public OsmMapConsumer,
-    public ElementCriterionConsumer, public Configurable, public OperationStatusInfo
+class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public OsmMapConsumer,
+  public Configurable, public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
-
-  virtual void addCriterion(const ElementCriterionPtr& crit);
 
   virtual void visit(const ElementPtr& e);
 
@@ -63,7 +57,6 @@ public:
   virtual void setOsmMap(const OsmMap* /*map*/) { assert(false); }
 
   void setRecursive(bool recursive) { _recursive = recursive; }
-  void setChainCriteria(bool chain) { _chainCriteria = chain; }
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
@@ -82,15 +75,9 @@ public:
 private:
 
   OsmMap* _map;
-  std::vector<ElementCriterionPtr> _criteria;
   bool _recursive;
   int _count;
-  //This allows for negating the criterion as an option sent in from the command line.
-  bool _negateCriteria;
-  bool _chainCriteria;
   long _startElementCount;
-
-  bool _criteriaSatisfied(const ConstElementPtr& e) const;
 };
 
 

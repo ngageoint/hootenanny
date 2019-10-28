@@ -32,110 +32,52 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementAttributeType.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementVisitor, AddAttributesVisitor)
 
-AddAttributesVisitor::AddAttributesVisitor() :
-_negateCriteria(false),
-_chainCriteria(false)
+AddAttributesVisitor::AddAttributesVisitor()
 {
   setConfiguration(conf());
 }
 
 AddAttributesVisitor::AddAttributesVisitor(const QStringList attributes, const bool negateCriteria) :
 _attributes(attributes),
-_addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty()),
-_negateCriteria(negateCriteria),
-_chainCriteria(false)
+_addOnlyIfEmpty(ConfigOptions().getAddAttributesVisitorAddOnlyIfEmpty())
 {
+  _negateCriteria = negateCriteria;
+  _chainCriteria = false;
 }
 
 void AddAttributesVisitor::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
+
   _attributes = configOptions.getAddAttributesVisitorKvps();
   LOG_VARD(_attributes);
   _addOnlyIfEmpty = configOptions.getAddAttributesVisitorAddOnlyIfEmpty();
   LOG_VARD(_addOnlyIfEmpty);
+
   _negateCriteria = configOptions.getElementCriterionNegate();
   _chainCriteria = configOptions.getAddAttributesVisitorChainElementCriteria();
-
   const QStringList critNames = configOptions.getAddAttributesVisitorElementCriteria();
   LOG_VART(critNames);
-  if (critNames.size() > 0)
+  _addCriteria(critNames);
+  if (_configureChildren)
   {
-    _criteria.clear();
-    for (int i = 0; i < critNames.size(); i++)
-    {
-      const QString critName = critNames.at(i);
-      if (!critName.trimmed().isEmpty())
-      {
-        LOG_VARD(critName);
-        ElementCriterionPtr crit =
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
-        addCriterion(crit);
-        Configurable* c = dynamic_cast<Configurable*>(crit.get());
-        if (c != 0)
-        {
-          c->setConfiguration(conf);
-        }
-      }
-    }
-  }
-}
-
-void AddAttributesVisitor::addCriterion(const ElementCriterionPtr& crit)
-{
-  LOG_VART(_negateCriteria);
-  LOG_VART(crit.get());
-  if (_negateCriteria)
-  {
-    _criteria.push_back(ElementCriterionPtr(new NotCriterion(crit)));
-  }
-  else
-  {
-    _criteria.push_back(ElementCriterionPtr(crit));
-  }
-  LOG_VART(_criteria.size());
-}
-
-bool AddAttributesVisitor::_criteriaSatisfied(const ConstElementPtr& e) const
-{
-  bool criteriaSatisfied;
-  if (!_chainCriteria)
-  {
-    criteriaSatisfied = false;
     for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
          it != _criteria.end(); ++it)
     {
       ElementCriterionPtr crit = *it;
-      if (crit->isSatisfied(e))
+      Configurable* c = dynamic_cast<Configurable*>(crit.get());
+      if (c != 0)
       {
-        criteriaSatisfied = true;
-        break;
+        c->setConfiguration(conf);
       }
     }
   }
-  else
-  {
-    criteriaSatisfied = true;
-    for (std::vector<ElementCriterionPtr>::const_iterator it = _criteria.begin();
-         it != _criteria.end(); ++it)
-    {
-      ElementCriterionPtr crit = *it;
-      if (!crit->isSatisfied(e))
-      {
-        criteriaSatisfied = false;
-        break;
-      }
-    }
-  }
-  return criteriaSatisfied;
 }
 
 void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
@@ -143,10 +85,6 @@ void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
   if (_criteria.size() > 0 && !_criteriaSatisfied(e))
   {
     LOG_TRACE("Element did not satisfy criteria: " << e->getElementId() << ". Skipping...");
-    //if (e->getElementId() == ElementId(ElementType::Way, -373462))
-    //{
-      LOG_VART(e->getStatus());
-    //}
     return;
   }
 

@@ -39,13 +39,13 @@ bool CapabilitiesTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   //  Read the HTTP request headers
   std::string headers = read_request_headers(connection);
   //  Make sure that the capabilities were requested
-  std::string message;
+  HttpResponsePtr response;
   if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
   else
-    message = HTTP_404_NOT_FOUND;
+    response.reset(new HttpResponse(404));
   //  Write out the response
-  write_response(connection, message);
+  write_response(connection, response->to_string());
   //  Only respond once to the client
   return false;
 }
@@ -55,13 +55,13 @@ bool PermissionsTestServer::respond(HttpConnection::HttpConnectionPtr &connectio
   //  Read the HTTP request headers
   std::string headers = read_request_headers(connection);
   //  Make sure that the permissions were requested
-  std::string message;
+  HttpResponsePtr response;
   if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   else
-    message = HTTP_404_NOT_FOUND;
+    response.reset(new HttpResponse(404));
   //  Write out the response
-  write_response(connection, message);
+  write_response(connection, response->to_string());
   //  Only respond once to the client
   return false;
 }
@@ -73,30 +73,33 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
   //  Read the HTTP request headers
   std::string headers = read_request_headers(connection);
   //  Determine the response message's HTTP header
-  std::string message;
+  HttpResponsePtr response;
   if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
   else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
-    message = HTTP_200_OK + "1\r\n";
+    response.reset(new HttpResponse(200, "1"));
   else if (headers.find("POST") != std::string::npos)
-    message = std::string("HTTP/1.1 405 Method Not Allowed\r\nAllow: GET\r\n\r\n");
+  {
+    response.reset(new HttpResponse(405));
+    response->add_header("Allow", "GET");
+  }
   else if (headers.find("/close/"))
   {
-    message = HTTP_200_OK;
+    response.reset(new HttpResponse(200));
     continue_processing = false;
   }
   else
   {
     //  Error out here
-    message = HTTP_404_NOT_FOUND;
+    response.reset(new HttpResponse(404));
     continue_processing = false;
   }
   //  Write out the response
-  write_response(connection, message);
+  write_response(connection, response->to_string());
   //  Return true if we should continue listening and processing requests
-  return continue_processing;
+  return continue_processing && !get_interupt();
 }
 
 bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connection)
@@ -114,48 +117,48 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   bool continue_processing = true;
   //  Read the HTTP request headers
   std::string headers = read_request_headers(connection);
-  //  Determine the response message's HTTP header
-  std::string message;
+  //  Determine the response message's HTTP response
+  HttpResponsePtr response;
   //  Capabilities
   if (headers.find(OsmApiWriter::API_PATH_CAPABILITIES) != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
   //  Permissions
   else if (headers.find(OsmApiWriter::API_PATH_PERMISSIONS) != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
   //  Create changeset
   else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
-    message = HTTP_200_OK + "1\r\n";
+    response.reset(new HttpResponse(200, "1"));
   //  Upload changeset 1
   else if (headers.find("/api/0.6/changeset/1/upload/") != std::string::npos)
   {
     //  The first time through, the 'version' of element 1 should fail.
     if (!_has_error)
     {
-      message = HTTP_409_CONFLICT + "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Way 1";
+      response.reset(new HttpResponse(409, "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Way 1"));
       _has_error = true;
     }
     else
-      message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE + "\r\n";
+      response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE));
   }
   //  Get way 1's updated version
   else if (headers.find("/api/0.6/way/1") != std::string::npos)
-    message = HTTP_200_OK + OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE + "\r\n";
+    response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE));
   //  Close changeset
   else if (headers.find("/close/"))
   {
-    message = HTTP_200_OK;
+    response.reset(new HttpResponse(200));
     continue_processing = false;
   }
   else
   {
     //  Error out here
-    message = HTTP_404_NOT_FOUND;
+    response.reset(new HttpResponse(404));
     continue_processing = false;
   }
   //  Write out the response
-  write_response(connection, message);
+  write_response(connection, response->to_string());
   //  Return true if we should continue listening and processing requests
-  return continue_processing;
+  return continue_processing && !get_interupt();
 }
 
 const char* OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE =

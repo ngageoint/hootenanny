@@ -55,42 +55,6 @@ public:
   }
 };
 
-/**
- * Delete the MatchSet structure in a safe way.
- */
-struct ScopedMatchDeleter
-{
-  ScopedMatchDeleter(MatchSet& ms) : _ms(ms) {}
-
-  ~ScopedMatchDeleter()
-  {
-    foreach (const Match* m, _ms)
-    {
-      delete m;
-    }
-  }
-
-  MatchSet _ms;
-};
-
-/**
- * Delete the Merger vector in a safe way.
- */
-struct ScopedMergerDeleter
-{
-  ScopedMergerDeleter(std::vector<Merger*>& ms) : _ms(ms) {}
-
-  ~ScopedMergerDeleter()
-  {
-    foreach (Merger* m, _ms)
-    {
-      delete m;
-    }
-  }
-
-  std::vector<Merger*>& _ms;
-};
-
 MultiaryPoiMergeCache::MultiaryPoiMergeCache(const ConstOsmMapPtr& map,
     const std::shared_ptr<MatchCreator>& matchCreator,
     const std::shared_ptr<MergerCreator>& mergerCreator) :
@@ -120,14 +84,12 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
 
   // create a match set that we can populate with the provided match creator.
   MatchSet ms;
-  // clean up the matches in a safe way.
-  ScopedMatchDeleter deleteMatches(ms);
 
   // go through the 2nd through the last element
   for (int i = 1; i < result->size(); ++i)
   {
     // create a match between the ith element and the first element.
-    Match* m = _matchCreator->createMatch(_map, result->at(0)->getElementId(),
+    MatchPtr m = _matchCreator->createMatch(_map, result->at(0)->getElementId(),
         result->at(i)->getElementId());
 
     // if the match isn't valid then this isn't a valid cluster the merge.
@@ -140,9 +102,8 @@ MultiaryClusterPtr MultiaryPoiMergeCache::merge(const MultiaryClusterPtr& c1, co
     ms.insert(m);
   }
 
-  // create a merge vector and a clean way to clean it up.
-  std::vector<Merger*> mergers;
-  ScopedMergerDeleter deleteMergers(mergers);
+  // create a merge vector
+  std::vector<MergerPtr> mergers;
 
   // create a merger with the provided merge creator.
   _mergerCreator->createMergers(ms, mergers);

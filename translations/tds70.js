@@ -565,7 +565,7 @@ tds70 = {
     }, // End manyFeatures
 
     // Doesn't do much but saves typing the same code out a few times in the to TDS Pre Processing
-    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
+    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these
     fixTransType : function(tags,geometry)
     {
         if (tags.railway)
@@ -1207,7 +1207,7 @@ tds70 = {
         // See ToOsmPostProcessing for more details about rulesList.
             var rulesList = [
             ["t.amenity == 'bus_station'","t.public_transport = 'station'; t['transport:type'] = 'bus'"],
-            ["t.amenity == 'marketplace'","t.facility = 'yes'"],
+            ["t.amenity == 'marketplace'  && !(t.building)","t.facility = 'yes'"],
             ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
             ["t.communication == 'line'","t['cable:type'] = 'communication'"],
             ["t.content && !(t.product)","t.product = t.content; delete t.content"],
@@ -1248,7 +1248,7 @@ tds70 = {
             ["t.railway == 'crossing'","t['transport:type'] = 'railway'; a.F_CODE = 'AQ062'; delete t.railway"],
             ["t.resource","t.raw_material = t.resource; delete t.resource"],
             ["t.route == 'road' && !(t.highway)","t.highway = 'road'; delete t.route"],
-            ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
+            ["(t.shop || t.office) && !(t.facility) && !(t.building)","a.F_CODE = 'AL013'"],
             ["t.social_facility == 'shelter'","t.social_facility = t['social_facility:for']; delete t.amenity; delete t['social_facility:for']"],
             ["t['tower:type'] == 'minaret' && t.man_made == 'tower'","delete t.man_made"],
             ["t.tunnel == 'building_passage'","t.tunnel = 'yes'"],
@@ -1331,7 +1331,7 @@ tds70 = {
         }
 
         // Adding a custom rule for malls to override the rules above.
-        // All of the other "shops" are buildings 
+        // All of the other "shops" are buildings
         if (tags.shop == 'mall') attrs.F_CODE = 'AG030';
 
         // Churches etc
@@ -1496,7 +1496,7 @@ tds70 = {
                     if (geometryType == 'Point')
                     {
                         attrs.F_CODE = 'AL020'; // Built Up Area
-                        delete tags.place;                        
+                        delete tags.place;
                     }
                     break;
 
@@ -1820,7 +1820,7 @@ tds70 = {
 
         // Names. Sometimes we don't have a name but we do have language ones
         if (!tags.name) translate.swapName(tags);
-    
+
     }, // End applyToTdsPreProcessing
 
 // #####################################################################################################
@@ -2084,11 +2084,11 @@ tds70 = {
             attrs.ZI001_SDV = tags['source:imagery:datetime'];
             // delete notUsedTags['source:imagery:datetime'];
         }
-        
+
         // Now try using tags from Taginfo
         if (! attrs.ZI001_SDV)
         {
-            if (tags['source:date']) 
+            if (tags['source:date'])
             {
                 attrs.ZI001_SDV = tags['source:date'];
                 // delete notUsedTags['source:date'];

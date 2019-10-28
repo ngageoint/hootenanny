@@ -5,8 +5,7 @@
         ],
         "dataType": "enumeration",
         "geometries": [
-            "node",
-            "area"
+            "node"
         ],
         "influence": 1,
         "name": "poi",

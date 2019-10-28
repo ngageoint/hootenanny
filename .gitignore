@@ -2,6 +2,7 @@ hoot-services/src/main/resources/conf/local.conf
 translations/config.js
 conf/core/ConfigOptions.json
 conf/services/conflationHoot2Ops.json
+conf/services/importHoot2Ops.json
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
 *.pyc
@@ -34,6 +35,7 @@ docs/*.epub
 docs/*.pdf
 docs/*-docinfo.xml
 docs/*.png
+docs/**/__*.png
 docs/.*
 docs/*.html
 docs/*.xml

@@ -27,19 +27,19 @@
 #include "ElementStreamer.h"
 
 // Hoot
+#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/ElementOutputStream.h>
+#include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/io/PartialOsmMapWriter.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/io/ElementVisitorInputStream.h>
-#include <hoot/core/io/ElementOutputStream.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -269,7 +269,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
     partialWriter->finalizePartial();
   }
 
-  LOG_INFO("Streaming element I/O took: " << StringUtils::secondsToDhms(timer.elapsed()) << ".");
+  LOG_INFO("Streaming element I/O took: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 }

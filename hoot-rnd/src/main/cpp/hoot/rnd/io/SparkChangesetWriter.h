@@ -32,7 +32,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/AddExportTagsVisitor.h>
-#include <hoot/rnd/conflate/multiary/SearchBoundsCalculator.h>
+#include <hoot/core/conflate/SearchBoundsCalculator.h>
 
 // Qt
 #include <QFile>

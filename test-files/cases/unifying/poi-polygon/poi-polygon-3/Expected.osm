@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="-0.3493510609999362" minlon="42.55138219700007" maxlat="-0.3490478039999517" maxlon="42.55163231300003"/>
-    <node visible="true" id="-24975" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3490907189999460" lon="42.5516323130000274"/>
-    <node visible="true" id="-24974" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493510609999362" lon="42.5515746450000663"/>
-    <node visible="true" id="-24973" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493262099999583" lon="42.5514636400000654"/>
-    <node visible="true" id="-24972" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493079779999562" lon="42.5513821970000663"/>
     <node visible="true" id="-24971" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3490478039999517" lon="42.5514396970000348"/>
     <node visible="true" id="-24970" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3490852669999641" lon="42.5516078410000773"/>
+    <node visible="true" id="-24969" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493262099999583" lon="42.5514636400000654"/>
+    <node visible="true" id="-24967" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493079779999562" lon="42.5513821970000663"/>
     <node visible="true" id="-24966" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3492685831374159" lon="42.5515572110446385">
         <tag k="uuid" v="b"/>
         <tag k="man_made" v="tower"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <way visible="true" id="-24971" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-24975"/>
-        <nd ref="-24974"/>
-        <nd ref="-24973"/>
-        <nd ref="-24972"/>
+    <node visible="true" id="-24965" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3493510609999362" lon="42.5515746450000663"/>
+    <node visible="true" id="-24964" timestamp="1970-01-01T00:00:00Z" version="1" lat="-0.3490907189999460" lon="42.5516323130000274"/>
+    <way visible="true" id="-24970" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-24964"/>
+        <nd ref="-24965"/>
+        <nd ref="-24969"/>
+        <nd ref="-24967"/>
         <nd ref="-24971"/>
         <nd ref="-24970"/>
-        <nd ref="-24975"/>
+        <nd ref="-24964"/>
         <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="uuid" v="c;a;d"/>
@@ -28,10 +28,10 @@
     </way>
     <relation visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-24966" role="reviewee"/>
-        <member type="way" ref="-24971" role="reviewee"/>
+        <member type="way" ref="-24970" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="hoot:review:sort_order" v="0"/>
-        <tag k="hoot:review:note" v="Features had an additive similarity score of 2, which is less than the required score of 3. Matches: distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, max distance allowed for review: 146.213m."/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
         <tag k="hoot:review:score" v="1"/>

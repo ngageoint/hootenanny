@@ -30,9 +30,9 @@
 // Hoot
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/util/Units.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QHash>
@@ -83,8 +83,6 @@ public:
 
   virtual bool isSupported(const QString& url) override;
 
-  virtual void open(const QString& url) override;
-
   virtual void read(const OsmMapPtr& map) override;
 
   void readFromString(const QString& xml, const OsmMapPtr& map);
@@ -126,7 +124,7 @@ public:
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
 
-private:
+protected:
 
   bool _osmFound;
 
@@ -145,7 +143,6 @@ private:
   int _missingNodeCount;
   int _missingWayCount;
   int _badAccuracyCount;
-  QString _path;
 
   bool _keepStatusTag;
   bool _useFileStatus;

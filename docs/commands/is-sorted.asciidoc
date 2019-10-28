@@ -9,7 +9,7 @@ This operation is fast for OSM PBF file, since their headers can simply be check
 data is read in one feature at a time and negative result is returned as soon as an unsorted element is found.  If the data is sorted, but
 entire contents of the input will be read through.
 
-* +input+ - path to a map file
+* +input+ - Input; may be any supported input format (e.g. OSM file).
 
 === Usage
 
@@ -22,3 +22,7 @@ is-sorted (input)
 --------------------------------------
 hoot is-sorted myInput.osm.pbf
 --------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

@@ -344,7 +344,150 @@ var tagsStatic = {
                 maxspeed: "56"
             };
 
-describe('translateAttributes', function(){
+var attrsRegex = {
+    ID: "12345",
+    NAME: "Whole Foods",
+    TYPE: "grocery"
+};
+var tagsRegex = {
+    name: "Whole Foods",
+    shop: "supermarket"
+};
+var attrsRegex2 = {
+    ID: "789",
+    NAME: "Big Lots",
+    TYPE: "Commercial"
+};
+var tagsRegex2 = {
+    name: "Big Lots",
+    building: "commercial"
+};
+var mappingRegex = {
+    "Regex": {
+        "ID": "IGNORED",
+        "NAME": {
+            "name": "NAME"
+        },
+        "TYPE": {
+            "building": {
+                "/.*[Cc]ommercial.*/": "commercial",
+                "/.*store.*/": "yes"
+            },
+            "shop": {
+                "/.*general.*/": "general",
+                "/.*grocery.*/": "supermarket"
+            }
+        }
+    }
+};
+
+
+var mappingMultiRule = {
+    "Building_Polygons": {
+        "COUNTYOFFI": {
+            "building": {
+                "No": "yes",
+                "Yes": "government"
+            },
+            "foo": "bar"
+        },
+        "FIRESTATIO": {
+            "amenity": {
+                "No": "",
+                "Yes": "fire_station"
+            },
+            "foo": "biz"
+        },
+        "LIBRARY": {
+            "amenity": {
+                "No": "",
+                "Yes": "library"
+            },
+            "foo": "bar"
+        },
+        "OBJECTID": {
+            "building": "yes"
+        },
+        "SCHOOL": {
+            "building": {
+                "No": "yes",
+                "Yes": "school"
+            }
+        }
+    }
+};
+var attrsMultiRule = {
+    OBJECTID: "12345",
+    COUNTYOFFI: "No",
+    FIRESTATIO: "No",
+    SCHOOL: "Yes",
+    LIBRARY: "No"
+};
+var tagsMultiRule = {
+    building: "school",
+    foo: "bar;biz"
+};
+var attrsMultiRule2 = {
+    OBJECTID: "1234",
+    COUNTYOFFI: "No",
+    FIRESTATIO: "Yes",
+    SCHOOL: "No",
+    LIBRARY: "No"
+};
+var tagsMultiRule2 = {
+    building: "yes",
+    foo: "bar;biz",
+    amenity: "fire_station"
+};
+
+var attrsMultiRule3 = {
+    OBJECTID: "1234",
+    COUNTYOFFI: "No",
+    FIRESTATIO: "No",
+    SCHOOL: "No",
+    LIBRARY: "Yes"
+};
+var tagsMultiRule3 = {
+    building: "yes",
+    foo: "bar;biz",
+    amenity: "library"
+};
+
+
+var mappingAppend = {
+    "Trails": {
+        "LENGTH": {
+            "highway": "footway"
+        },
+        "IMAGERY": {
+            "source": {
+                "false": "",
+                "true": "Maxar"
+            }
+        },
+        "SURVEY": {
+            "source": {
+                "false": "",
+                "true": "GPS"
+            }
+        }
+    }
+};
+var attrsAppend = {
+    LENGTH: "100",
+    IMAGERY: "true",
+    SURVEY: "true"
+};
+var tagsAppend = {
+    highway: "footway",
+    source: "Maxar;GPS"
+};
+var tagsAppend2 = {
+    highway: "footway",
+    source: "GPS"
+};
+
+describe('translateAttributes', function() {
     it('should translate shapefile attributes to osm tags', function(){
         assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mapping)), JSON.stringify(tags));
     })
@@ -380,14 +523,29 @@ describe('translateAttributes', function(){
         assert.equal(JSON.stringify(translation.translateAttributes(attrsMissingNull, "foo", mappingMultipleLayers)), JSON.stringify(tags));
         assert.equal(JSON.stringify(translation.translateAttributes(attrsLayer2, "bar", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
     })
+    it('allows mapping to regex tag keys', function(){
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsRegex, layerName, mappingRegex)), JSON.stringify(tagsRegex));
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsRegex2, layerName, mappingRegex)), JSON.stringify(tagsRegex2));
+    })
+    it('overwrites "yes" keys with more specific values', function(){
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsMultiRule, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule));
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsMultiRule2, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule2));
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsMultiRule3, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule3));
+    })
+    it('will append multiple tag values', function(){
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsAppend, layerName, mappingAppend)), JSON.stringify(tagsAppend));
+    })
+    it('will replace instead of append when told', function(){
+        assert.equal(JSON.stringify(translation.translateAttributes(attrsAppend, layerName, mappingAppend, null, null, true)), JSON.stringify(tagsAppend2));
+    })
 })
 
 var a = [1, 2, 'a', 'b'],
     b = [2, 'b', 'c'],
     d = [1, 'a'];
 
-describe('difference', function(){
-    it('should return elements in a not in b', function(){
+describe('difference', function() {
+    it('should return elements in a not in b', function() {
         assert.deepEqual(translation.difference(a, b), d);
     })
 })

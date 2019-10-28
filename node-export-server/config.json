@@ -19,6 +19,7 @@
     "OSM": "translations/RenderDb.js",
     "TDSv40": "translations/TDSv40.js",
     "TDSv61": "translations/TDSv61.js",
+    "TDSv70": "translations/TDSv70.js",
     "MGCP": "translations/MGCP_TRD4.js",
     "DNC": "translations/DNC.js",
     "GGDMv30": "translations/GGDMv30.js"

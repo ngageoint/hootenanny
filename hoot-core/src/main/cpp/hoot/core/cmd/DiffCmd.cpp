@@ -33,7 +33,7 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 
@@ -67,6 +67,20 @@ public:
     {
       args.removeAll("--use-datetime");
       mapCompare.setUseDateTime();
+    }
+
+    if (args.contains("--error-limit"))
+    {
+      const int errorLimitIndex = args.indexOf("--error-limit");
+      bool ok = false;
+      const int errorLimit = args.at(errorLimitIndex + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException("Invalid error limit: " + args.at(errorLimitIndex + 1));
+      }
+      args.removeAt(errorLimitIndex + 1);
+      args.removeAt(errorLimitIndex);
+      mapCompare.setErrorLimit(errorLimit);
     }
 
     if (args.size() != 2)

@@ -27,8 +27,8 @@
 #ifndef SCRIPTMATCHCREATOR_H
 #define SCRIPTMATCHCREATOR_H
 
-#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/SearchRadiusProvider.h>
+#include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/util/NotImplementedException.h>
 
 #include <hoot/js/PluginContext.h>
@@ -54,17 +54,17 @@ public:
   /**
    * @see SearchRadiusProvider
    */
-  virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e);
+  virtual Meters calculateSearchRadius(const ConstOsmMapPtr& map, const ConstElementPtr& e) override;
 
   /**
    * Not implemented.
    */
-  virtual Match* createMatch(const ConstOsmMapPtr&, ElementId, ElementId);
+  virtual MatchPtr createMatch(const ConstOsmMapPtr&, ElementId, ElementId) override;
 
   /**
    * Search the provided map for POI matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<const Match*>& matches,
+  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;

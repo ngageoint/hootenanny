@@ -30,15 +30,16 @@ import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 import static hoot.services.HootProperties.SCRIPT_FOLDER;
 import static hoot.services.controllers.ingest.UploadClassification.FGDB;
+import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
 import static hoot.services.controllers.ingest.UploadClassification.GEONAMES;
+import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 import static hoot.services.controllers.ingest.UploadClassification.OSM;
 import static hoot.services.controllers.ingest.UploadClassification.SHP;
 import static hoot.services.controllers.ingest.UploadClassification.ZIP;
-import static hoot.services.controllers.ingest.UploadClassification.GEOJSON;
-import static hoot.services.controllers.ingest.UploadClassification.GPKG;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +60,7 @@ class ImportCommand extends ExternalCommand {
 
     private final File workDir;
 
-    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation,
+    ImportCommand(String jobId, File workDir, List<File> filesToImport, List<File> zipsToImport, String translation, String advUploadOpts,
                   String etlName, Boolean isNoneTranslation, String debugLevel, UploadClassification classification,
                   Class<?> caller, Users user) {
         super(jobId);
@@ -88,9 +89,23 @@ class ImportCommand extends ExternalCommand {
             //options.add("schema.translation.script=" + translationPath);
         //}
 
-        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP)) 
+        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP))
         {
           options.add("schema.translation.script=" + translationPath);
+        }
+
+        if (advUploadOpts != null && !advUploadOpts.isEmpty()) {
+            List<String> getAdvOpts = Arrays.asList(advUploadOpts.split(","));
+            for (String option: getAdvOpts) {
+                String[] opt = option.split("=");
+                String key = opt[0];
+                String value = (opt.length == 2) ? "=" + opt[1] : "";
+
+                if (configOptions.containsKey(key)) { // if option key in possible values, add new option command
+                    Map<String, String> optionConfig = configOptions.get(key);
+                    options.add(optionConfig.get("key") + value);
+                }
+            }
         }
 
         List<String> hootOptions = toHootOptions(options);
@@ -103,7 +118,7 @@ class ImportCommand extends ExternalCommand {
         substitutionMap.put("INPUT_NAME", inputName);
         substitutionMap.put("INPUTS", inputs);
 
-        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
+        String hootConvertCommand = "hoot convert --${DEBUG_LEVEL} -C Import.conf ${HOOT_OPTIONS} ${INPUTS} ${INPUT_NAME}";
 
         String command = null;
         if ((classification == SHP) || (classification == FGDB) || (classification == ZIP)) {

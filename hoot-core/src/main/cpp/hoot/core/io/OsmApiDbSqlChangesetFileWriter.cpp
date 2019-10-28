@@ -44,7 +44,8 @@ namespace hoot
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
 _changesetUserId(ConfigOptions().getChangesetUserId()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags())
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
   _db.open(url);
 }
@@ -57,10 +58,15 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
 void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
                                            ChangesetProviderPtr changesetProvider)
 {
-  LOG_DEBUG("Writing changeset to " << path);
+  QList<ChangesetProviderPtr> changesetProviders;
+  changesetProviders.append(changesetProvider);
+  write(path, changesetProviders);
+}
 
-  LOG_VARD(path);
-  LOG_VARD(changesetProvider->hasMoreChanges());
+void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
+                                           const QList<ChangesetProviderPtr>& changesetProviders)
+{
+  LOG_DEBUG("Writing changeset to: " << path << "...");
 
   _remappedIds.clear();
   _changesetBounds.init();
@@ -74,37 +80,46 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
   int changes = 0;
   _createChangeSet();
 
-  while (changesetProvider->hasMoreChanges())
+  for (int i = 0; i < changesetProviders.size(); i++)
   {
-    LOG_TRACE("Reading next SQL change...");
-    Change change = changesetProvider->readNextChange();
-    switch (change.getType())
-    {
-      case Change::Create:
-        _createNewElement(change.getElement());
-        break;
-      case Change::Modify:
-        _updateExistingElement(change.getElement());
-        break;
-      case Change::Delete:
-        _deleteExistingElement(change.getElement());
-        break;
-      case Change::Unknown:
-        //see comment in ChangesetDeriver::_nextChange() when
-        //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
-        break;
-      default:
-        throw IllegalArgumentException("Unexpected change type.");
-    }
+    LOG_DEBUG(
+      "Derving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "...");
 
-    if (change.getType() != Change::Unknown)
+    ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
+    LOG_VARD(changesetProvider->hasMoreChanges());
+    while (changesetProvider->hasMoreChanges())
     {
-      if (change.getElement()->getElementType().getEnum() == ElementType::Node)
+      LOG_TRACE("Reading next SQL change...");
+      Change change = changesetProvider->readNextChange();
+      switch (change.getType())
       {
-        ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
-        _changesetBounds.expandToInclude(node->getX(), node->getY());
+        case Change::Create:
+          _createNewElement(change.getElement());
+          break;
+        case Change::Modify:
+          _updateExistingElement(change.getElement());
+          break;
+        case Change::Delete:
+          _deleteExistingElement(change.getElement());
+          break;
+        case Change::Unknown:
+          //see comment in ChangesetDeriver::_nextChange() when
+          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+          break;
+        default:
+          throw IllegalArgumentException("Unexpected change type.");
       }
-      changes++;
+
+      if (change.getType() != Change::Unknown)
+      {
+        if (change.getElement()->getElementType().getEnum() == ElementType::Node)
+        {
+          ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
+          _changesetBounds.expandToInclude(node->getX(), node->getY());
+        }
+        changes++;
+      }
     }
   }
 
@@ -491,7 +506,10 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
     QString k = it.key();
     QString v = it.value();
 
-    if (k != MetadataTags::HootHash())
+    //  Don't include the hoot hash, also don't include the circular error tag
+    //  unless circular error tags AND debug tags are turned on
+    if (k != MetadataTags::HootHash() &&
+       (k != MetadataTags::ErrorCircular() || (_includeCircularErrorTags && _includeDebugTags)))
     {
       const QString currentTagValues =
       QString("(%1_id, k, v) VALUES (%2, '%3', '%4');\n")
@@ -628,6 +646,7 @@ void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
   ConfigOptions co(conf);
   _changesetUserId = co.getChangesetUserId();
   _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 }

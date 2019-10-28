@@ -27,7 +27,6 @@
 #include "ScriptMatchCreator.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
@@ -37,16 +36,19 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/IndexElementsVisitor.h>
+
+#include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/conflate/matching/ScriptMatch.h>
-#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QFileInfo>
 #include <qnumeric.h>
+#include <QElapsedTimer>
 
 // Standard
 #include <deque>
@@ -75,7 +77,7 @@ class ScriptMatchVisitor : public ConstElementVisitor
 
 public:
 
-  ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<const Match*>& result,
+  ScriptMatchVisitor(const ConstOsmMapPtr& map, vector<ConstMatchPtr>& result,
     ConstMatchThresholdPtr mt, std::shared_ptr<PluginContext> script,
                      ElementCriterionPtr filter = ElementCriterionPtr()) :
     _map(map),
@@ -155,14 +157,10 @@ public:
       if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
-        ScriptMatch* m = new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt);
+        std::shared_ptr<ScriptMatch> m(new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
         // if we're confident this is a miss
-        if (m->getType() == MatchType::Miss)
+        if (m->getType() != MatchType::Miss)
         {
-          delete m;
-        }
-        else
-        {;
           _result.push_back(m);
         }
       }
@@ -503,7 +501,7 @@ private:
   // don't hold on to the map.
   std::weak_ptr<const OsmMap> _map;
   Persistent<Object> _mapJs;
-  vector<const Match*>& _result;
+  vector<ConstMatchPtr>& _result;
   set<ElementId> _empty;
   int _neighborCountMax;
   int _neighborCountSum;
@@ -570,7 +568,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   LOG_DEBUG("Set arguments for: " << className() << " - rules: " << scriptFileInfo.fileName());
 }
 
-Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
 {
   if (isMatchCandidate(map->getElement(eid1), map) && isMatchCandidate(map->getElement(eid2), map))
   {
@@ -581,12 +579,12 @@ Match* ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1
     Handle<Object> mapJs = OsmMapJs::create(map);
     Persistent<Object> plugin(current, ScriptMatchVisitor::getPlugin(_script));
 
-    return new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold());
+    return MatchPtr(new ScriptMatch(_script, plugin, map, mapJs, eid1, eid2, getMatchThreshold()));
   }
-  return 0;
+  return MatchPtr();
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const Match*> &matches,
+void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
                                        ConstMatchThresholdPtr threshold)
 {
   if (!_script)
@@ -605,14 +603,16 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, vector<const M
   LOG_VART(_cachedCustomSearchRadii[_scriptPath]);
   QFileInfo scriptFileInfo(_scriptPath);
 
-  LOG_DEBUG(
-    "Creating matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
+  QElapsedTimer timer;
+  timer.start();
+  LOG_INFO(
+    "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
-    " match candidates.");
+    " match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
@@ -665,7 +665,7 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     QFileInfo scriptFileInfo(_scriptPath);
     LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
 
-    vector<const Match*> emptyMatches;
+    vector<ConstMatchPtr> emptyMatches;
     _cachedScriptVisitor.reset(
       new ScriptMatchVisitor(map, emptyMatches, ConstMatchThresholdPtr(), _script, _filter));
     _cachedScriptVisitor->setScriptPath(scriptPath);

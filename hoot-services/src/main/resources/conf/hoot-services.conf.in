@@ -100,7 +100,11 @@ exportSizeThreshold=400000000
 httpTimeout=600000
 
 # Max feature count for grail operations
-grailMaxFeatureCount=300000
+grailMaxFeatureCount=1000000
+
+# Label we assign for the rails and overpass pull data
+grailRailsLabel=Reference
+grailOverpassLabel=Secondary
 
 # Grail pull overpass query file
 grailOverpassQueryPath=conf/services/grailOverpassQuery.oql
@@ -119,6 +123,9 @@ advOptTemplate=conf/services/conflateAdvOps.json
 
 # Advanced options hoot2 template
 advOptHoot2Override=conf/services/conflationHoot2Ops.json
+
+# Advanced options hoot2 import Options
+importOptions=conf/services/importHoot2Ops.json
 
 # Advanced options reference override
 advOptRefOverride=conf/services/conflationRefOps.json

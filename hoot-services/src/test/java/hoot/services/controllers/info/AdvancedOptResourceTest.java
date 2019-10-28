@@ -50,8 +50,9 @@ public class AdvancedOptResourceTest extends HootServicesJerseyTestAbstract {
                     .request(MediaType.APPLICATION_JSON)
                     .get();
 
+        // BuildingKeepMoreComplexGeometryWhenAutoMerging is one of the settings that Attribute Conflation customizes. That's unlikely to change.
         String jsonStr = responseData.readEntity(String.class);
-         assertThat(jsonStr, CoreMatchers.containsString("AttributeConflationAggressiveHighwayJoining"));
+         assertThat(jsonStr, CoreMatchers.containsString("BuildingKeepMoreComplexGeometryWhenAutoMerging"));
     }
 
     @Test

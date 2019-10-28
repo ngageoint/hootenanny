@@ -86,10 +86,11 @@ public:
   /**
    * @brief loadFromString - Builds a map from the JSON string. Throws a
    *        HootException with error and line number if JSON parsing fails
-   * @param jsonStr - input string
-   * @return Smart pointer to the OSM map
+   *        This is the GeoJson version of OsmXmlReader::readFromString(QString, Map)
+   * @param jsonStr - input string, map - the map to load the JSON into
+   * @return
    */
-  virtual OsmMapPtr loadFromString(const QString& jsonStr);
+  virtual void loadFromString(const QString& jsonStr, const OsmMapPtr& map);
 
   /**
    * @brief loadFromFile - Reads the whole file as a string, passes it

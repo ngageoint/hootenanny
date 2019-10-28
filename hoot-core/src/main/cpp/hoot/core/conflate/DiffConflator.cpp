@@ -27,36 +27,36 @@
 #include "DiffConflator.h"
 
 // hoot
-#include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
+#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
+#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/elements/ElementId.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/AddRef1Visitor.h>
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 // standard
 #include <algorithm>
@@ -78,14 +78,16 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
 DiffConflator::DiffConflator() :
   _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance())
+  _settings(Settings::getInstance()),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _reset();
 }
 
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance())
+  _settings(Settings::getInstance()),
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -123,11 +125,15 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
-  LOG_DEBUG("\tDiscarding unconflatable elements...");
-  NonConflatableElementRemover().apply(_pMap);
-  _stats.append(
-    SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+  // If we don't do this, then any non-matchable data will simply pass through to output.
+  if (ConfigOptions().getDifferentialRemoveUnconflatableData())
+  {
+    LOG_INFO("Discarding unconflatable elements...");
+    NonConflatableElementRemover().apply(_pMap);
+    _stats.append(
+      SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
+    OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+  }
 
   // will reproject only if necessary
   MapProjector::projectToPlanar(_pMap);
@@ -144,7 +150,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   LOG_INFO(
-    "\tFound: " << StringUtils::formatLargeNumber(_matches.size()) <<
+    "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation matches.");
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -212,7 +218,7 @@ void DiffConflator::_snapSecondaryRoadsBackToRef()
 void DiffConflator::_removeMatches(const Status& status)
 {
   LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
-  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
     for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
@@ -351,7 +357,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
 
 void DiffConflator::_calcAndStoreTagChanges()
 {
-  LOG_DEBUG("\tStoring tag changes...");
+  LOG_INFO("Storing tag changes...");
 
   MapProjector::projectToWgs84(_pMap);
 
@@ -361,9 +367,10 @@ void DiffConflator::_calcAndStoreTagChanges()
     _pTagChanges.reset(new MemChangesetProvider(_pMap->getProjection()));
   }
 
-  for (std::vector<const Match*>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  int numMatchesProcessed = 0;
+  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    const Match* match = *mit;
+    ConstMatchPtr match = *mit;
     LOG_VART(match);
     std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
 
@@ -425,6 +432,14 @@ void DiffConflator::_calcAndStoreTagChanges()
         _pTagChanges->addChange(newChange);
       }
     }
+
+    numMatchesProcessed++;
+    if (numMatchesProcessed % (_taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tStored " << StringUtils::formatLargeNumber(numMatchesProcessed) << " / " <<
+            StringUtils::formatLargeNumber(_matches.size()) << " match tag changes.");
+    }
   }
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
@@ -469,12 +484,12 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
 
 void DiffConflator::_reset()
 {
-  _deleteAll(_matches);
+  _matches.clear();
   _pMap.reset();
   _pTagChanges.reset();
 }
 
-void DiffConflator::_printMatches(vector<const Match*> matches)
+void DiffConflator::_printMatches(vector<ConstMatchPtr> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
@@ -482,11 +497,11 @@ void DiffConflator::_printMatches(vector<const Match*> matches)
   }
 }
 
-void DiffConflator::_printMatches(vector<const Match*> matches, const MatchType& typeFilter)
+void DiffConflator::_printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
-    const Match* match = matches[i];
+    ConstMatchPtr match = matches[i];
     if (match->getType() == typeFilter)
     {
       LOG_DEBUG(match);

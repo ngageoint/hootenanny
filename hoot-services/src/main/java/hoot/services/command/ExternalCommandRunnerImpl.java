@@ -28,6 +28,7 @@ package hoot.services.command;
 
 
 import static hoot.services.HootProperties.replaceSensitiveData;
+import static hoot.services.models.db.QMaps.maps;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hoot.services.HootProperties;
+import hoot.services.job.JobType;
 import hoot.services.utils.DbUtils;
 
 
@@ -205,6 +207,13 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         catch (Exception e) {
             exitCode = CommandResult.FAILURE;
             exception = e;
+
+            // Need to perform cleanup for import jobs
+            Long mapId = DbUtils.getMapIdByJobId(jobId);
+            if (mapId != null) {
+                DbUtils.deleteMapRelatedTablesByMapId(mapId);
+                DbUtils.deleteMap(mapId);
+            }
         }
         finally {
             try {

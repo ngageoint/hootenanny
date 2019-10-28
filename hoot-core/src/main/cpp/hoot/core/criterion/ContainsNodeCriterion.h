@@ -56,6 +56,9 @@ public:
 
   virtual void setConfiguration(const Settings& s);
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
 private:
 
   long _nodeId;

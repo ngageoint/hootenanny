@@ -40,7 +40,7 @@ public:
 
   virtual ~ElementCriterionConsumer() {}
 
-  virtual void addCriterion(const ElementCriterionPtr& e) = 0;
+  virtual void addCriterion(const ElementCriterionPtr& crit) = 0;
 };
 
 }

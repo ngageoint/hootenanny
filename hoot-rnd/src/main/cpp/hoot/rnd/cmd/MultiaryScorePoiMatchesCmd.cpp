@@ -39,7 +39,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/CalculateHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 using namespace Tgs;
@@ -103,7 +103,7 @@ public:
   virtual QString getName() const override { return "multiary-score-poi-matches"; }
 
   virtual QString getDescription() const override
-  { return "Scores the performance of multiary-conflate (experimental) "; }
+  { return "Scores the performance of multiary-conflate against a manually matched map (experimental) "; }
 
   virtual QString getType() const override { return "rnd"; }
 
@@ -163,7 +163,6 @@ public:
     for (int i = 0; i < args.size() - 1; i++)
     {
       Status s = Status::fromInput(i);
-
       IoUtils::loadMap(map, args[i], false, s);
     }
 

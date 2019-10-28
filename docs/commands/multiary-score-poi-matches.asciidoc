@@ -9,9 +9,9 @@ scores the matches. The command will return  an error if the first input file co
 tags or the second input file contains any REF1 tags.
 
 * +--confusion+ - print the confusion matrix
-* +input1+      - Input 1 (e.g. .osm file).
-* +input2+      - Input 2 (e.g. .osm file).
-* +output+      - Output file for debugging (e.g. .osm file). Only the first conflation will be output.
+* +input1+      - Input 1; may be any supported input format (e.g. OSM file).
+* +input2+      - Input 2; may be any supported input format (e.g. OSM file).
+* +output+      - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first conflation will be output.
 
 === Usage
 
@@ -22,3 +22,4 @@ multiary-score-poi-matches [--confusion] (input1 input2) [input1 input2 ...] (ou
 === See Also
 
 * <<hootDevGuide, ManualMultiaryConflation>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

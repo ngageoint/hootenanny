@@ -713,7 +713,7 @@ void HootApiDb::endChangeset()
   LOG_DEBUG("Successfully closed changeset " << QString::number(_currChangesetId));
 
   // NOTE: do *not* alter _currChangesetId or _changesetEnvelope yet.  We haven't written data to
-  //database yet!   they will be refreshed upon opening a new database, so leave them alone!
+  // database yet!   they will be refreshed upon opening a new database, so leave them alone!
   _changesetChangeCount = 0;
 }
 
@@ -1032,25 +1032,34 @@ bool HootApiDb::isSupported(const QUrl& url)
       if (plist[1] == "")
       {
         LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
-                 "postgresql://myhost:5432/mydb/mylayer");
+                 "hootapidb://myhost:5432/mydb/mylayer");
         valid = false;
       }
       else if (plist[2] == "")
       {
         LOG_WARN("Looks like a DB path, but a layer name was expected. E.g. "
-                 "postgresql://myhost:5432/mydb/mylayer");
+                 "hootapidb://myhost:5432/mydb/mylayer");
         valid = false;
       }
     }
     else if ((plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")))
     {
       LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
-               "postgresql://myhost:5432/mydb/mylayer/1");
+               "hootapidb://myhost:5432/mydb/mylayer/1");
       valid = false;
+    }
+    // need this for a base db connection; like used by db-list-maps
+    else if (plist.size() == 2)
+    {
+      if (plist[1] == "")
+      {
+        LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
+                 "hootapidb://myhost:5432/mydb");
+        valid = false;
+      }
     }
     else
     {
-      //It might be OsmApiDb url. postgresql://myhost:5432/osmapi_test
       valid = false;
     }
   }
@@ -1091,7 +1100,8 @@ void HootApiDb::open(const QUrl& url)
 
   if (!isSupported(url))
   {
-    throw HootException("An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
+    throw HootException(
+      "An unsupported URL was passed into HootApiDb: " + url.toString(QUrl::RemoveUserInfo));
   }
 
   _resetQueries();
@@ -1127,6 +1137,8 @@ void HootApiDb::_resetQueries()
   _selectNodeIdsForWay.reset();
   _selectMapIdsForCurrentUser.reset();
   _selectPublicMapIds.reset();
+  _selectPublicMapNames.reset();
+  _selectMapNamesOwnedByCurrentUser.reset();
   _selectMembersForRelation.reset();
   _updateNode.reset();
   _updateRelation.reset();
@@ -1172,13 +1184,16 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
   LOG_TRACE("Retrieving map ID from url: " << url);
   LOG_VART(_currUserId);
 
-  QStringList urlParts = url.path().split("/");
+  const QStringList urlParts = url.path().split("/");
   bool ok;
   long mapId = urlParts[urlParts.size() - 1].toLong(&ok);
   LOG_VART(ok);
   LOG_VART(mapId);
 
-  // if parsed map string is a name (not an id)
+  // If the ID was a valid number, treat it like an ID first.
+  ok = mapExists(mapId);
+
+  // If a map with the parsed ID doesn't exist, let's try it as a map name.
   if (!ok)
   {
     mapId = -1;
@@ -1197,8 +1212,6 @@ long HootApiDb::getMapIdFromUrl(const QUrl& url)
       // try for public maps
       const std::set<long> mapIds = selectPublicMapIds(mapName);
       LOG_VART(mapIds);
-      // Here, we don't handle the situation where multiple maps across different users have the
-      // same name.
       if (mapIds.size() > 1)
       {
         throw HootException(
@@ -1366,6 +1379,77 @@ set<long> HootApiDb::selectPublicMapIds(QString name)
     }
     result.insert(id);
   }
+
+  return result;
+}
+
+QStringList HootApiDb::selectMapNamesAvailableToCurrentUser()
+{
+  QStringList result;
+  result.append(selectMapNamesOwnedByCurrentUser());
+  result.append(selectPublicMapNames());
+  result.removeDuplicates();
+  result.sort();
+  return result;
+}
+
+QStringList HootApiDb::selectMapNamesOwnedByCurrentUser()
+{
+  QStringList result;
+
+  LOG_VART(_currUserId);
+
+  if (_selectMapNamesOwnedByCurrentUser == 0)
+  {
+    _selectMapNamesOwnedByCurrentUser.reset(new QSqlQuery(_db));
+    _selectMapNamesOwnedByCurrentUser->prepare(
+      "SELECT display_name FROM " + getMapsTableName() +
+      " WHERE user_id = :user_id");
+  }
+  _selectMapNamesOwnedByCurrentUser->bindValue(":user_id", (qlonglong)_currUserId);
+  LOG_VART(_selectMapNamesOwnedByCurrentUser->lastQuery());
+
+  if (_selectMapNamesOwnedByCurrentUser->exec() == false)
+  {
+    throw HootException(_selectMapNamesOwnedByCurrentUser->lastError().text());
+  }
+
+  while (_selectMapNamesOwnedByCurrentUser->next())
+  {
+    result.append(_selectMapNamesOwnedByCurrentUser->value(0).toString());
+  }
+  LOG_VART(result.size());
+
+  return result;
+}
+
+QStringList HootApiDb::selectPublicMapNames()
+{
+  QStringList result;
+
+  if (_selectPublicMapNames == 0)
+  {
+    _selectPublicMapNames.reset(new QSqlQuery(_db));
+    const QString sql =
+      QString("SELECT m.display_name from " + getMapsTableName() + " m ") +
+        QString("LEFT JOIN " + getFolderMapMappingsTableName() + " fmm ON (fmm.map_id = m.id) ") +
+        QString("LEFT JOIN " + getFoldersTableName() + " f ON (f.id = fmm.folder_id) ") +
+        QString("WHERE f.public = TRUE");
+    LOG_VART(sql);
+    _selectPublicMapNames->prepare(sql);
+  }
+  LOG_VART(_selectPublicMapNames->lastQuery());
+
+  if (_selectPublicMapNames->exec() == false)
+  {
+    throw HootException(_selectPublicMapNames->lastError().text());
+  }
+
+  while (_selectPublicMapNames->next())
+  {
+    result.append(_selectPublicMapNames->value(0).toString());
+  }
+  LOG_VART(result.size());
 
   return result;
 }

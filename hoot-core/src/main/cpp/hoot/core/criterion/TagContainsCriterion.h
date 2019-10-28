@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/Configurable.h>
 
 // Qt
 #include <QStringList>
@@ -40,7 +41,7 @@ namespace hoot
 /**
  * Identifies elements by tag key and tag value substring
  */
-class TagContainsCriterion : public ElementCriterion
+class TagContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
@@ -51,6 +52,8 @@ public:
   TagContainsCriterion(QStringList keys, QStringList valueSubstrings);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  void setConfiguration(const Settings& s);
 
  /**
    * Adds an additional pair to the search list. If any one of the pairs matches then it is
@@ -63,10 +66,16 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements having a particular tag key and tag value substring"; }
 
+  void setKvps(const QStringList kvps);
+  void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
+
+  virtual QString toString() const override;
+
 private:
 
-  QStringList _key;
-  QStringList _valueSubstring;
+  QStringList _keys;
+  QStringList _valueSubstrings;
+  bool _caseSensitive;
 };
 
 }

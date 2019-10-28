@@ -45,12 +45,16 @@ public:
    * Displays supported IO formats
    *
    * @param displayInputs if true, displays input formats
-   * @param displayOutputs if true, displays output formats
+   * @param displayInputsSupportingStreaming if true, displays streamable input formats
    * @param displayInputsSupportingBounds if true, displays input formats that supported bounded
    * reading
+   * @param displayOutputs if true, displays output formats
+   * @param displayOutputsSupportingStreaming if true, displays streamable output formats
+   * @return a string describing the requested formats
    */
-  static QString display(const bool displayInputs, const bool displayOutputs,
-                         const bool displayInputsSupportingBounds);
+  static QString display(const bool displayInputs, const bool displayInputsSupportingStreaming,
+                         const bool displayInputsSupportingBounds, const bool displayOutputs,
+                         const bool displayOutputsSupportingStreaming);
 
 private:
 
@@ -63,6 +67,9 @@ private:
     const std::string& className, const QStringList extraFormats = QStringList());
 
   static QString _getFormatsSupportingBoundsString();
+
+  static QString _getInputFormatsSupportingStreamingString();
+  static QString _getOutputFormatsSupportingStreamingString();
 
   static  QString _getPrintableString(const QStringList& items);
 };

@@ -31,7 +31,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/util/IoUtils.h>
+#include <hoot/core/io/IoUtils.h>
 
 using namespace std;
 
@@ -49,8 +49,7 @@ public:
 
   virtual QString getName() const override { return "extent"; }
 
-  virtual QString getDescription() const override
-  { return "Calculates the geospatial bounds of a map"; }
+  virtual QString getDescription() const override { return "Calculates the bounds of a map"; }
 
   virtual int runSimple(QStringList& args) override
   {

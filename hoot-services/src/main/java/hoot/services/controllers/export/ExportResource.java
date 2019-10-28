@@ -32,11 +32,14 @@ import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
 import static hoot.services.models.db.QMaps.maps;
 
 import java.io.File;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +71,7 @@ import com.querydsl.core.Tuple;
 
 import hoot.services.command.Command;
 import hoot.services.command.common.ZIPDirectoryContentsCommand;
+import hoot.services.command.common.ZIPFileCommand;
 import hoot.services.controllers.osm.map.FolderResource;
 import hoot.services.controllers.osm.map.MapResource;
 import hoot.services.job.Job;
@@ -92,8 +96,10 @@ public class ExportResource {
 
     private Class<? extends ExportCommand> getCommand(String outputType) {
         Class<? extends ExportCommand> exportCommand = null;
-        if (outputType.equals("tiles")) {
+        if (outputType.startsWith("tiles")) {
             exportCommand = CalculateTilesCommand.class;
+        } else if (outputType.startsWith("alpha")) {
+            exportCommand = AlphaShapeCommand.class;
         } else {
             exportCommand = ExportCommand.class;
         }
@@ -134,8 +140,9 @@ public class ExportResource {
     @Path("/execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response export(ExportParams params, @Context HttpServletRequest request,
-                           @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
+    public Response export(ExportParams params,
+            @Context HttpServletRequest request,
+            @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
         Users user = Users.fromRequest(request);
         params.setUserEmail(user.getEmail());
         String jobId = "ex_" + UUID.randomUUID().toString().replace("-", "");
@@ -152,16 +159,37 @@ public class ExportResource {
             List<Command> workflow = new LinkedList<>();
 
             if (inputType.equalsIgnoreCase("folder")) {
-                Long folder_id = Long.parseLong(params.getInput());
                 params.setInputType("db"); // make folder input really a db input...
+                Long rootfolder = Long.parseLong(params.getInput());
 
-                for (Tuple mapInfo: FolderResource.getFolderMaps(user, folder_id)) { // get all maps in folder...
-                    params.setInput(Long.toString(mapInfo.get(maps.id)));
-                    params.setOutputName(mapInfo.get(maps.displayName));
-                    workflow.add(getCommand(user, jobId, params, debugLevel));
+                // create stack with the folder id and output path as values starting with main export folder
+                // Having the output path is helpful for making the child directories since you can just take parent path
+                // and append child directory name to it
+                Stack<Map.Entry<Long, String>> folderList = new Stack<Map.Entry<Long, String>>(){{
+                    push(new AbstractMap.SimpleEntry(rootfolder, workDir.getPath()));
+                }};
+
+                while(!folderList.empty()) {
+                    Map.Entry<Long, String> currentFolder = folderList.pop();
+                    Long currentId = currentFolder.getKey();
+
+                    // get all maps in folder...
+                    for (Tuple mapInfo: FolderResource.getFolderMaps(user, currentId)) {
+                        params.setInput(Long.toString(mapInfo.get(maps.id)));
+                        params.setOutputName(mapInfo.get(maps.displayName));
+                        params.setOutputPath(currentFolder.getValue());
+                        workflow.add(getCommand(user, jobId, params, debugLevel));
+                    }
+
+                    // get all children folders
+                    for (long folderId : DbUtils.getChildrenFolders(currentId)) {
+                        File childDir = new File(currentFolder.getValue(), FolderResource.getFolderName(folderId));
+                        FileUtils.forceMkdir(childDir);
+                        folderList.push(new AbstractMap.SimpleEntry(folderId, childDir.getPath()));
+                    }
                 }
 
-                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(folder_id));
+                Command zipCommand = getZIPCommand(workDir, FolderResource.getFolderName(rootfolder));
                 workflow.add(zipCommand);
                 params.setInputType("folder");
 
@@ -178,6 +206,21 @@ public class ExportResource {
                 }
 
                 Command zipCommand = getZIPCommand(workDir, outputName); // zip maps into single folder...
+                workflow.add(zipCommand);
+
+            //generates density tiles and alpha shape and clips the first with the second
+            } else if (params.getOutputType().startsWith("alpha.tiles")) {
+                params.setOutputType("tiles.geojson");
+                workflow.add(getCommand(user, jobId, params, debugLevel));
+                params.setOutputType("alpha.shp");
+                workflow.add(getCommand(user, jobId, params, debugLevel));
+                params.setInputType("file");
+                params.setInput(workDir.getAbsolutePath() + "/" + params.getOutputName());
+                Command ogrClipCommand = new OgrClipCommand(jobId, params, this.getClass());
+                workflow.add(ogrClipCommand);
+                Command ogrFormatCommand = new OgrFormatCommand(jobId, params, this.getClass());
+                workflow.add(ogrFormatCommand);
+                Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
                 workflow.add(zipCommand);
 
             } else {
@@ -330,11 +373,12 @@ public class ExportResource {
     @Path("/geojson/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGeoJsonOutput(@PathParam("id") String jobId,
+                                 @QueryParam("outputname") String outputname,
                                  @QueryParam("ext") String ext) {
         Response response;
 
         try {
-            File out = getExportFile(jobId, jobId, StringUtils.isEmpty(ext) ? "geojson" : ext);
+            File out = getExportFile(jobId, StringUtils.isEmpty(outputname) ? jobId : outputname, StringUtils.isEmpty(ext) ? "geojson" : ext);
             response = Response.ok(FileUtils.readFileToString(out, "UTF-8")).build();
         }
         catch (WebApplicationException e) {

@@ -51,30 +51,37 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   bool result = false;
 
   // don't process if a node
+  LOG_VART(elementType);
   if (elementType == ElementType::Node)
   {
     return false;
   }
 
+  LOG_VART( BuildingCriterion().isSatisfied(tags, elementType));
+  LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
+  LOG_VART(tags.isTrue("area"));
+
   result |= BuildingCriterion().isSatisfied(tags, elementType);
-  LOG_VART(result);
   result |= tags.isTrue(MetadataTags::BuildingPart());
-  LOG_VART(result);
   result |= tags.isTrue("area");
-  LOG_VART(result);
 
   // if at least one of the tags is marked as an area, but not a linestring tag then we consider
   // this to be an area feature.
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+    LOG_VART(tv.toString());
+
     uint16_t g = tv.geometries;
+
     LOG_VART(g);
+    LOG_VART(g & OsmGeometries::Area);
+    LOG_VART(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay));
+
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
-      //LOG_TRACE("Area: " << it.key() << "=" << it.value());
+      LOG_TRACE("Area: " << it.key() << "=" << it.value());
       result = true;
-      LOG_VART(result);
       break;
     }
   }

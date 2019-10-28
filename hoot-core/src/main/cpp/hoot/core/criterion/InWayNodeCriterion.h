@@ -59,6 +59,10 @@ public:
   virtual QString getDescription() const
   { return "Identifies nodes contained in a specified set of ways"; }
 
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+
+
 private:
 
   std::set<long> _nids;

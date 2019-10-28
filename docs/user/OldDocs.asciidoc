@@ -13,6 +13,25 @@ See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny 
 [[OldDocsConflation]]
 == Conflation Supported Feature Types
 
+=== Road Conflation
+
+<<hootalgo, RoadConflation>>
+
+==== Conflation Road Algorithms
+
+===== 2nd Generation (aka Unifying)
+
+<<hootalgo, UnifyingConflation>>
+
+===== Network
+
+<<hootalgo, NetworkConflation>>
+
+==== Configuration
+
+Road Conflation can further be customized with the highway.* configuration options. See the "Configuration Options" section of User Guide 
+for more detail.
+
 [[PoiToPoi]]
 === POI Conflation
 
@@ -20,7 +39,7 @@ Hootenanny provides the ability to perform point to point, i.e. POI to POI, conf
 to find, label and merge match candidate features. Because this code deals with a broader range of POI conditions, conflating POI
 datasets using Unify will invariably produce reviews that the user must manually confirm using the workflow described in the
 <<hootUI>>, _Reviewing Conflicts_.  Further background on Unifying POI conflation can be found in <<hootalgo>>, _Unifying
-POI Conflation_.
+POI Conflation_. For more details on the POI to POI conflation algorithm, see <<hootalgo, PoiToPoi>>
 
 There are a number of configurable distance thresholds that can be specified if
 you are comfortable making changes to JavaScript. Please see
@@ -34,57 +53,38 @@ configuration options:
 * `match.creators` - <<match.creators>>
 * `merger.creators` - <<merger.creators>>
 
-For background on leveraging the Hootenanny JavaScript interface to call
-functions using Node.js, see <<HootJavaScriptOverview>>.
+For background on leveraging the Hootenanny JavaScript interface to call functions using Node.js, see <<HootJavaScriptOverview>>.
 
 [[Building-Conflation]]
 === Building Conflation
 
-Building conflation supports multiple forms:
-
-* One to one
-* One to many
-* Many to many
-
-The attribute merging in the one to one case when each building is made up of a
-single part is very simple and controlled through the typical
-+tag.merger.default+ configuration setting.
-
-If one of the buildings contains multiple parts, each with their own attributes such as building height, roof type, etc. The problem becomes more complex. Additional complexity is added when you're conflating one multi-part building with multiple multi-part buildings, or in the worse case, multiple multi-part buildings all being conflated into a single building.
-
-Obviously, combining n records into a single record requires that some attributes are merged or dropped, but the question is, which ones? At this point in time the attribute merging occurs in two steps:
-
-* Multi-part building tags are combined together incrementally to create a parent relation that minimizes conflicts with child buildings. A write up on the specifics will come in the future.
-* Multiple buildings on each side of the pairwise merger are combined further into a single building with minimal conflicting tags.
-* Two building groups are merged together using the +tag.merger.default+ merging method to create a new building. Only the building parts from the more complex building are kept.
-
-The approach described above generally provides good results. There is no getting around it, the approach will drop information during conflation in some situations. As new business rules are defined we expect to revisit the above attribute merging approach to create something that addresses specific user concerns and needs. Please contact the developers if you have any specific needs or concerns.
+<<hootalgo, BuildingConflation>>
 
 [[PoiToPolygonConflation]]
 === POI to Polygon Conflation
 
 Hootenanny conflates POIs with both building and area polygons.  It uses the following criteria for matching features: distance between
 the two features, name similarity, type similarity, address similarity, and phone number similarity.  See
-<<hootalgo, Hootenanny - Algorithms>>, POI to Polygon Conflation section for specific algorithm details.
+<<hootalgo, PoiToPolygonConflation>> for specific algorithm details.
 
 [[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options
 
-See the User Guide Command Line Documentation section for all configuration options beginning with the text "poi.polygon".
+POI to POlygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of 
+User Guide for more detail.
 
 [[PoiToPolygonStatistics]]
 ==== Statistics
 
 Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a
-different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section
-<<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
 
 [[AreaToAreaConflation]]
 === Area to Area Conflation
 
 Hootenanny makes Area to Area Conflation available, which is turned on by default when using command line conflation.  Hootenanny
 defines an area as a non-building polygon that possesses the OSM `area=yes` tag or equivalent.  Examples: parks, parking lots.
-To read more information on Area to Area Conflation, see the "Area to Area Conflation" section in the Hootenanny Algorithm Guide.
+To read more information on Area to Area Conflation, see <<hootalgo, AreaToAreaConflation>>.
 
 [[River-Conflation]]
 === River Conflation
@@ -114,8 +114,8 @@ hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
 All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc+.  Tweaking the settings can
-result in better conflation performance depending on the datasets being conflated.  See the configuration options for details on the
-settings that may be modified (search for "waterway").
+result in better conflation performance depending on the datasets being conflated. See the "Configuration Options" section of User Guide for 
+more detail.
 
 [[Power-Line-Conflation]]
 === Power Line Conflation
@@ -130,15 +130,15 @@ this conflation.
 [width="65%"]
 |======
 | *Location* | *Description*
-| `conf/schema/Power.json` | attribute schema definitions
+| `conf/schema/power.json` | attribute schema definitions
 | `rules/PowerLine.js` | custom rule based conflation model
 |======
 
 ==== Usage
 
 Power line conflation can be done from the command line or the web user interface.  Conflating in both environments is similar as described
-in the above River Conflation section.  Power line conflation settings start with "power.line" and exist in
-+conf/core/ConfigOptions.asciidoc+.
+in the above River Conflation section.  Railway Conflation can further be customized with the power.line.* configuration options. See the 
+"Configuration Options" section of User Guide for more detail.
 
 [[Feature-Review]]
 === Feature Review
@@ -159,15 +159,25 @@ are listed the possible solutions where Hootenanny may request a manual review f
 | When matching sublines expected a multilinestring relation not a <osm feature type>. | When conflating linear features, Hootenanny expects all relations to be of the type multilinestring. | Review this feature manually. This is invalid input data for Hootenanny conflation purposes and cannot be conflated.
 |======
 
-== Conflation Road Algorithms
+[[RailwayConflation]]
+=== Railway Conflation
 
-=== 2nd Generation (aka Unifying)
+Railways may be conflated using the Javascript generic conflation capability.  For more information on generic conflation, see the
+related sections in this document.  See the algorithms documentation for more details on the algorithms and techniques used in
+this conflation.
 
-<<hootalgo, UnifyingConflation>>
+==== Configurable Files
 
-=== Network
+.*Railway Conflation Related Files*
+[width="65%"]
+|======
+| *Location* | *Description*
+| `conf/schema/railway.json` | attribute schema definitions
+| `rules/Railway.js` | custom rule based conflation model
+|======
 
-<<hootalgo, NetworkConflation>>
+Railway Conflation can further be customized with the railway.* configuration options. See the "Configuration Options" section of User Guide 
+for more detail.
 
 [[Translation]]
 == Translation

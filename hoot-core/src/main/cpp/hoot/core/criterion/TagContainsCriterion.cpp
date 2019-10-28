@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagContainsCriterion.h"
@@ -37,36 +37,82 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, TagContainsCriterion)
 
-TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring)
+TagContainsCriterion::TagContainsCriterion(QString key, QString valueSubstring) :
+_caseSensitive(false)
 {
-  _key.append(key);
-  _valueSubstring.append(valueSubstring);
+  _keys.append(key);
+  _valueSubstrings.append(valueSubstring);
 }
 
 TagContainsCriterion::TagContainsCriterion(QStringList keys, QStringList valueSubstrings) :
-_key(keys),
-_valueSubstring(valueSubstrings)
+_keys(keys),
+_valueSubstrings(valueSubstrings),
+_caseSensitive(false)
 {
+}
+
+void TagContainsCriterion::setConfiguration(const Settings &s)
+{
+  ConfigOptions config = ConfigOptions(s);
+  setKvps(config.getTagContainsCriterionKvps());
+  setCaseSensitive(config.getTagContainsCriterionCaseSensitive());
+}
+
+void TagContainsCriterion::setKvps(const QStringList kvps)
+{
+  for (int i = 0; i < kvps.size(); i++)
+  {
+    const QString kvp = kvps.at(i);
+    const QStringList kvpParts = kvp.split("=");
+    if (kvpParts.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid TagCriterion KVP: " + kvp);
+    }
+    addPair(kvpParts.at(0), kvpParts.at(1));
+  }
 }
 
 bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  bool matches = false;
-  for (int i = 0; i < _key.size(); i++)
+  if (_keys.size() == 0 || _valueSubstrings.size() == 0)
   {
-    if (e->getTags().contains(_key[i]) && e->getTags()[_key[i]].contains(_valueSubstring[i]))
+    throw IllegalArgumentException(
+      "No tag keys or values specified for: " + QString::fromStdString(className()));
+  }
+
+  bool matches = false;
+  const Qt::CaseSensitivity caseSensitivity =
+    _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+  LOG_VART(_keys);
+  LOG_VART(_valueSubstrings);
+  LOG_VART(e->getTags());
+  for (int i = 0; i < _keys.size(); i++)
+  {
+    if (e->getTags().contains(_keys[i]) &&
+        e->getTags()[_keys[i]].contains(_valueSubstrings[i], caseSensitivity))
     {
       matches = true;
       break;  //  Only one match is required
     }
+  }
+  if (matches)
+  {
+    LOG_TRACE("crit satisfied");
   }
   return matches;
 }
 
 void TagContainsCriterion::addPair(QString key, QString valueSubstring)
 {
-  _key.append(key);
-  _valueSubstring.append(valueSubstring);
+  _keys.append(key);
+  _valueSubstrings.append(valueSubstring);
+}
+
+QString TagContainsCriterion::toString() const
+{
+  return
+    QString::fromStdString(className()).remove("hoot::") + ":keys:" + _keys.join(",") + ":vals:" +
+    _valueSubstrings.join(",");
 }
 
 }

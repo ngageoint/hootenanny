@@ -5,7 +5,6 @@
             <nd ref="1"/>
             <nd ref="2"/>
             <tag k="key1" v="value1"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <node id="3" version="1" lat="-89.0000000000000000" lon="69.0000000000000000" timestamp=""/>
     </modify>
@@ -14,7 +13,6 @@
             <nd ref="4"/>
             <nd ref="5"/>
             <tag k="key1" v="value1"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </delete>
     <create>
@@ -25,13 +23,11 @@
             <member type="node" ref="7" role="role1"/>
             <member type="way" ref="3" role="role2"/>
             <tag k="key2" v="value2"/>
-            <tag k="error:circular" v="15"/>
         </relation>
         <way id="4" version="1" timestamp="">
             <nd ref="9"/>
             <nd ref="10"/>
             <tag k="key1" v="value1"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </delete>
     <create>
@@ -42,7 +38,6 @@
             <nd ref="12"/>
             <nd ref="13"/>
             <tag k="key1" v="value1"/>
-            <tag k="error:circular" v="15"/>
         </way>
     </modify>
     <create>
@@ -50,7 +45,6 @@
             <member type="node" ref="14" role="role1"/>
             <member type="way" ref="6" role="role2"/>
             <tag k="key2" v="value2"/>
-            <tag k="error:circular" v="15"/>
         </relation>
     </create>
     <delete>

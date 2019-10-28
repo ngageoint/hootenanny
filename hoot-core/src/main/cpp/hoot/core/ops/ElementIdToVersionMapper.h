@@ -52,7 +52,7 @@ public:
   { return "Mapping element IDs to changeset versions..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Mapped " +  StringUtils::formatLargeNumber(_numAffected) + " IDs to versions."; }
+  { return "Mapped " +  StringUtils::formatLargeNumber(_numAffected) + " element IDs to versions."; }
 
   virtual QString getDescription() const
   { return "Maintains a mapping of element IDs to changeset versions"; }

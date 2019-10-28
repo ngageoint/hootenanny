@@ -9,7 +9,6 @@
             <nd ref="-369028"/>
             <tag k="building" v="yes"/>
             <tag k="source:datetime" v="2015-07-23T09:37:45Z;2015-07-23T09:37:45.000Z"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-373997" version="1" timestamp="">
             <nd ref="-374004"/>
@@ -46,14 +45,12 @@
             <tag k="building" v="yes"/>
             <tag k="source:datetime" v="2018-11-24T11:37:37Z;2015-07-23T12:08:35.000Z"/>
             <tag k="building:use" v="hotel"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-373999" version="1" timestamp="">
             <nd ref="-374010"/>
             <nd ref="-365724"/>
             <tag k="highway" v="footway"/>
             <tag k="source:datetime" v="2015-07-23T11:34:40Z;2015-07-23T11:34:40.000Z"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370347" version="1" timestamp="">
             <nd ref="-367059"/>
@@ -63,7 +60,6 @@
             <tag k="source:datetime" v="2016-01-22T23:57:14Z;2015-01-22T16:14:20.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-371705" version="1" timestamp="">
             <nd ref="-367052"/>
@@ -76,7 +72,6 @@
             <tag k="source:datetime" v="2016-01-22T23:59:52Z;2015-01-22T16:14:43.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374011" version="1" timestamp="">
             <nd ref="-367005"/>
@@ -88,7 +83,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:57Z;2015-07-23T10:27:50.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370365" version="1" timestamp="">
             <nd ref="-367777"/>
@@ -99,7 +93,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:57Z;2015-07-23T10:27:52.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-365297" version="1" timestamp="">
             <nd ref="-367006"/>
@@ -111,7 +104,6 @@
             <tag k="source:datetime" v="2016-01-22T23:58:58Z;2015-01-22T16:14:40.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370359" version="1" timestamp="">
             <nd ref="-367040"/>
@@ -123,7 +115,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:55Z;2015-07-23T10:22:02.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-365314" version="1" timestamp="">
             <nd ref="-365938"/>
@@ -134,7 +125,6 @@
             <tag k="source:datetime" v="2016-01-22T23:57:50Z;2015-01-22T16:14:37.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374013" version="1" timestamp="">
             <nd ref="-374034"/>
@@ -147,7 +137,6 @@
             <tag k="source:datetime" v="2018-11-12T07:54:40Z;2015-07-23T11:22:30.000Z"/>
             <tag k="surface" v="paved"/>
             <tag k="lanes" v="2"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370236" version="1" timestamp="">
             <nd ref="-367730"/>
@@ -160,7 +149,6 @@
             <tag k="surface" v="asphalt"/>
             <tag k="covered" v="yes"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374003" version="1" timestamp="">
             <nd ref="-374017"/>
@@ -170,7 +158,6 @@
             <tag k="source:datetime" v="2018-11-06T08:34:24Z;2015-07-23T08:41:51.000Z"/>
             <tag k="surface" v="paved"/>
             <tag k="access" v="yes"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-365383" version="1" timestamp="">
             <nd ref="-366957"/>
@@ -187,7 +174,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:55Z;2015-07-23T10:22:01.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374010" version="1" timestamp="">
             <nd ref="-374030"/>
@@ -199,7 +185,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:58Z;2015-07-23T10:27:50.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374017" version="1" timestamp="">
             <nd ref="-374039"/>
@@ -219,7 +204,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:54Z;2015-07-23T10:27:51.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374001" version="1" timestamp="">
             <nd ref="-374013"/>
@@ -237,7 +221,6 @@
             <tag k="source:datetime" v="2018-11-12T06:38:20Z;2015-07-23T10:27:51.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="lanes" v="2"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-371703" version="1" timestamp="">
             <nd ref="-366937"/>
@@ -249,7 +232,6 @@
             <tag k="source:datetime" v="2016-01-23T00:00:43Z;2015-01-22T16:14:42.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-371706" version="1" timestamp="">
             <nd ref="-366955"/>
@@ -262,7 +244,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:55Z;2015-01-22T16:14:45.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370231" version="1" timestamp="">
             <nd ref="-366953"/>
@@ -273,7 +254,6 @@
             <tag k="source:datetime" v="2018-11-08T04:31:55Z;2015-07-23T10:27:52.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370211" version="1" timestamp="">
             <nd ref="-367729"/>
@@ -285,7 +265,6 @@
             <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
             <tag k="surface" v="concrete"/>
             <tag k="leisure" v="pitch"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-370210" version="1" timestamp="">
             <nd ref="-367449"/>
@@ -297,7 +276,6 @@
             <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
             <tag k="surface" v="concrete"/>
             <tag k="leisure" v="pitch"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374016" version="1" timestamp="">
             <nd ref="-374037"/>
@@ -309,7 +287,6 @@
             <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
             <tag k="surface" v="concrete"/>
             <tag k="leisure" v="pitch"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374012" version="1" timestamp="">
             <nd ref="-367987"/>
@@ -321,7 +298,6 @@
             <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
             <tag k="surface" v="concrete"/>
             <tag k="leisure" v="pitch"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <way id="-374002" version="1" timestamp="">
             <nd ref="-368566"/>
@@ -337,7 +313,6 @@
             <tag k="source:datetime" v="2017-06-17T09:11:41Z;2015-07-23T09:38:19.000Z"/>
             <tag k="surface" v="paved"/>
             <tag k="access" v="customers"/>
-            <tag k="error:circular" v="15"/>
         </way>
         <node id="-367097" version="1" lat="14.7453713999999998" lon="-17.5238422999999983" timestamp="">
             <tag k="name:eu" v="Cap-Vert"/>
@@ -382,7 +357,6 @@
             <tag k="name:pl" v="Przylądek Zielony"/>
             <tag k="name:es" v="Cabo Verde"/>
             <tag k="name:et" v="Roheneem"/>
-            <tag k="error:circular" v="15"/>
         </node>
         <node id="-369025" version="1" lat="14.7450989000000003" lon="-17.5241983999999995" timestamp="">
             <tag k="amenity" v="taxi"/>
@@ -394,7 +368,6 @@
             <tag k="shelter" v="no"/>
             <tag k="name:fr" v="47"/>
             <tag k="source:datetime" v="2015-07-23T09:37:44.000Z"/>
-            <tag k="error:circular" v="15"/>
         </node>
     </modify>
 </osmChange>

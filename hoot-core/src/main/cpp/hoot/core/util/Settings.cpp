@@ -150,7 +150,6 @@ Settings::Settings() :
   _dynamicRegex("\\$\\{([\\w\\.]+)\\}"),
   _staticRegex("\\$\\(([\\w\\.]+)\\)")
 {
-
 }
 
 void Settings::prepend(const QString& key, const QStringList& values)
@@ -250,18 +249,17 @@ double Settings::getDouble(const QString& key, double defaultValue) const
   return v.toDouble();
 }
 
-double Settings::getDouble(const QString& key, double defaultValue, double min, double max ) const
+double Settings::getDouble(const QString& key, double defaultValue, double min, double max) const
 {
   double retVal = getDouble(key, defaultValue);
-  if ( retVal < min )
+  if (retVal < min)
   {
     retVal = min;
   }
-  else if ( retVal > max )
+  else if (retVal > max)
   {
     retVal = max;
   }
-
   return retVal;
 }
 
@@ -361,7 +359,6 @@ long Settings::getLong(const QString& key, long defaultValue, long min, long max
 
   return retVal;
 }
-
 
 QStringList Settings::getList(const QString& key) const
 {
@@ -469,6 +466,7 @@ void Settings::parseCommonArguments(QStringList& args)
 
   bool foundOne = true;
 
+  // TODO: This list really should be fed from the options defined in main.cpp in hoot-core-test.
   QStringList hootTestCmdsIgnore;
   hootTestCmdsIgnore.append("--quick");
   hootTestCmdsIgnore.append("--slow");
@@ -546,13 +544,14 @@ void Settings::parseCommonArguments(QStringList& args)
         throw HootException(optionInputFormatErrorMsg);
       }
       QString kv = args[1];
+      // '++=' prepends an option to an option list
       QStringList kvl = kv.split("++=");
       bool append = false;
       bool remove = false;
       bool prepend = true;
       if (kvl.size() != 2)
       {
-        // split on the first '+='
+        // '+=' appends an option to an option list
         int sep = kv.indexOf("+=");
         kvl.clear();
         if (sep != -1)
@@ -566,7 +565,7 @@ void Settings::parseCommonArguments(QStringList& args)
       }
       if (kvl.size() != 2)
       {
-        // split on the first '-='
+        // '-=' removes an option from an option list
         int sep = kv.indexOf("-=");
         kvl.clear();
         if (sep != -1)

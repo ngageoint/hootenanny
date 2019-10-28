@@ -147,6 +147,7 @@ protected:
   std::shared_ptr<GDALDataset> _ds;
   /** Hash of layer names and corresponding layer objects that are owned by the GDALDataset */
   QHash<QString, OGRLayer*> _layers;
+  QHash<QString, std::shared_ptr<OGRSpatialReference>> _projections;
   QString _prependLayerName;
   std::shared_ptr<const Schema> _schema;
   StrictChecking _strictChecking;

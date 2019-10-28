@@ -59,6 +59,7 @@ var distances = [
     {k:'leisure',                             match:250,      review:500},
     {k:'man_made',                            match:100,      review:200},
     {k:'natural',                             match:500,      review:1000},
+    {k:'natural',   v:'tree',                 match:5,        review:5},
     {k:'place',                               match:500,      review:1000},
     {k:'place',     v:'built_up_area',        match:2000,     review:3000},
     {k:'place',     v:'locality',             match:2000,     review:3000},

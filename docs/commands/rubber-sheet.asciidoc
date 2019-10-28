@@ -7,9 +7,9 @@ The +rubber-sheet+ command finds common high confidence road intersection matche
 into alignment.  It reads from inputs, matches nodes, transforms input2, and writes the combined data to output.  The input
 parameters are:
 
-* +input1+ - Input 1 (e.g. .osm file).
-* +input2+ - Input 2 (e.g. .osm file).
-* +output+ - Output file (e.g. .osm file).
+* +input1+ - Input 1; may be any supported input format (e.g. OSM file).
+* +input2+ - Input 2; may be any supported input format (e.g. OSM file).
+* +output+ - Output file; may be any supported output format (e.g. OSM file).
 
 The following optional defines can be set:
 
@@ -37,12 +37,11 @@ option, the input parameters are:
 
 * +--ref +           - If specified, treat input1 as a reference layer and only produce one
                        output transform.
-* +input1+           - Input 1 (e.g. .osm file).
-* +input2+           - Input 2 (e.g. .osm file).
-* +transform2to1.rs+ - Output transform rubber sheet spec. provides a transform
-                       for moving input 2 towards input 1.
-* +transform1to2.rs+ - Output transform rubber sheet spec. Provides a transform
-                       for moving input 1 towards input 2. Required if --ref is not specified.
+* +input1+           - Input 1; may be any supported input format (e.g. OSM file).
+* +input2+           - Input 2; may be any supported input format (e.g. OSM file).
+* +transform2to1.rs+ - Output transform rubber sheet spec. provides a transform for moving input 2 towards input 1.
+* +transform1to2.rs+ - Output transform rubber sheet spec. Provides a transform for moving input 1 towards input 2. Required if --ref is not 
+                       specified.
 
 === Usage With Derive Option
 
@@ -62,8 +61,8 @@ To apply a rubber sheet created with the --derive option, use the --apply option
 are:
 
 * +transform.rs+ - Transform rubber sheet spec for moving the input.
-* +input+        - Input (e.g. .osm file).
-* +output+       - Write transformed result to this file. (e.g. .osm file).
+* +input+        - Input; may be any supported input format (e.g. OSM file).
+* +output+       - Write transformed result to this file; may be any supported output format (e.g. OSM file).
 
 === Usage With Apply Option
 
@@ -80,3 +79,4 @@ hoot rubber-sheet --apply TigerToDcGis.rs TigerRoads.osm TigerRoadsWarped.osm
 === See Also
 
 * <<hootalgo, RubberSheeting>>
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

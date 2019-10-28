@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.conflation;
 
-import static hoot.services.HootProperties.CONFIG_OPTIONS;
 import static hoot.services.HootProperties.CONFLATION_TYPES_PATH;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
@@ -64,7 +63,6 @@ class ConflateCommand extends ExternalCommand {
     private static List<String> cleaningOptions = new ArrayList<>();
 
     private static Map<String, Map<String, Object>> conflationFeatures = null;
-    private static Map<String, Map<String, String>> configOptions = null;
 
     static {
         try {
@@ -73,15 +71,9 @@ class ConflateCommand extends ExternalCommand {
             TypeReference<?> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
             conflationFeatures = mapper.readValue(file, schema);
 
-            // get json of all config options...
-            schema = new TypeReference<Map<String, Map<String, String>>>(){};
-            file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
-            configOptions = mapper.readValue(file, schema);
-
             // use default options for map cleaners list...
             cleaningOptions.addAll(Arrays.asList(configOptions.get("MapCleanerTransforms").get("default")
                 .replaceAll("hoot::","").split(";")));
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,6 +142,11 @@ class ConflateCommand extends ExternalCommand {
             stats = "--stats";
         }
 
+        if (params.getBounds() != null) {
+            //Add TASK_BBOX as a convert.bounding.box
+            options.add("convert.bounding.box=" + params.getBounds());
+        }
+
         Map<String, Object> substitutionMap = new HashMap<>();
 
         // Detect Differential Conflation
@@ -193,9 +190,13 @@ class ConflateCommand extends ExternalCommand {
                 for (String feature: conflationFeatures.keySet()) {
                     // ignore the road matcher/mergers not relevant conflation type/algorithm confs...
                     if (feature.equals(roadType)) continue;
-                    if (!disabledFeatures.contains(feature)) {
-                        matchers.add((String) conflationFeatures.get(feature).get("matcher"));
-                        mergers.add((String) conflationFeatures.get(feature).get("merger"));
+                    // ignore conflationFeatures that don't have a matcher and merger
+                    Map<String, Object> conflationFeature = conflationFeatures.get(feature);
+                    String conflationMatcher = (String) conflationFeature.get("matcher");
+                    String conflationMerger = (String) conflationFeature.get("merger");
+                    if (conflationMatcher != null && conflationMerger != null && !disabledFeatures.contains(feature)) {
+                        matchers.add(conflationMatcher);
+                        mergers.add(conflationMerger);
                     }
                 }
                 options.add("match.creators=" + String.join(";", matchers));

@@ -50,6 +50,7 @@ class SetTagValueVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runFilterTest);
   CPPUNIT_TEST(runOverwriteDisabledTest);
   CPPUNIT_TEST(runNegatedFilterTest);
+  // TODO: chained filter test
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -112,7 +113,7 @@ public:
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagValueVisitor visitor("key3", "value3", false, "hoot::NodeCriterion");
+    SetTagValueVisitor visitor("key3", "value3", false, QStringList("hoot::NodeCriterion"));
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunFilterTest.osm");
@@ -130,7 +131,7 @@ public:
     //We've disabled overwriting existing tags, so the tag with key="key2" should not be updated
     //on any element that already has a tag with the key.  It should only be added to elements
     //that don't have a tag with that key.
-    SetTagValueVisitor visitor("key2", "updatedValue", false, "", false);
+    SetTagValueVisitor visitor("key2", "updatedValue", false, QStringList(), false);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunOverwriteDisabledTest.osm");
@@ -145,7 +146,8 @@ public:
     OsmMapReaderFactory::read(
       map, _inputPath + "SetTagValueVisitorTest.osm", false, Status::Unknown1);
 
-    SetTagValueVisitor visitor("key3", "value3", false, "hoot::NodeCriterion", false, true);
+    SetTagValueVisitor visitor(
+      "key3", "value3", false, QStringList("hoot::NodeCriterion"), false, true);
     map->visitRw(visitor);
 
     OsmMapWriterFactory::write(map, _outputPath + "RunNegatedFilterTest.osm");
@@ -153,7 +155,6 @@ public:
     HOOT_FILE_EQUALS( _inputPath + "RunNegatedFilterTest.osm",
                      _outputPath + "RunNegatedFilterTest.osm");
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SetTagValueVisitorTest, "quick");

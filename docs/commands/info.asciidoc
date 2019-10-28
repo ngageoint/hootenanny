@@ -18,7 +18,9 @@ Only one of the following options can be passed to the command:
                                  `conflate.pre.ops` configuration option)
 * +--criterion-consumers+      - Displays operations capable of taking in an ElementCriterion as input
 * +--feature-extractors+       - Displays available feature extractors used in conflation model building
+* +--filters+                  - Displays a list of all criteria that can be used for element filtering
 * +--formats+                  - Displays supported data input/output formats
+* +--geometry-type-criteria+   - Displays criteria that identify a feature geometry type
 * +--languages+                - Displays information about translatable/detectable spoken languages
 * +--matchers+                 - Displays available feature matchers used during conflation
 * +--match-creators+           - Displays available feature match creators used during conflation
@@ -177,6 +179,23 @@ info --feature-extractors
 hoot info --feature-extractors
 --------------------------------------
 
+=== Filters
+
+The +--filters++ option prints out all the element criteria classes, which are a subset of what is displayed with the +--operators+ option. 
+Element criteria can be used to filter elements during a conversion or conflation job.
+
+==== Usage
+
+--------------------------------------
+info --filters
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --filters
+--------------------------------------
+
 === Formats
 
 The +--formats+ option prints out supported data formats. The --input-bounded sub-option prints out input formats that support bounded reads
@@ -191,14 +210,39 @@ info --formats [--input] [--output] [--input-bounded]
 ==== Example
 
 --------------------------------------
-# prints all
+# prints all supported input and output formats
 hoot info --formats
 
+# prints supported input formats
 hoot info --formats --input
 
+# prints streamable supported input formats
+hoot info --formats --input-streamable
+
+# prints supported input formats that support bounded reading
+hoot info --formats --input-bounded
+
+# prints supported output formats
 hoot info --formats --output
 
-hoot info --formats --input-bounded
+# prints streamable supported input formats
+hoot info --formats --output-streamable
+--------------------------------------
+
+=== Geometry Type Criteria
+
+The +--geometry-type-crieria++ option prints out all element criteria classes that can be used to identify an element's geometry.
+
+==== Usage
+
+--------------------------------------
+info --geometry-type-crieria
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --geometry-type-crieria
 --------------------------------------
 
 === Languages

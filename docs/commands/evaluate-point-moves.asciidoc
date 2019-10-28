@@ -8,8 +8,7 @@ introduced by various operations. A pair of points is created and checked to mak
 
 * +point-count+ - Number of points.
 * +bounds+      - Comma delimited bounds minx,miny,maxx,maxy.
-* +working-dir+ - Local directory to store temporary files. If it doesn't exist
-                  it will be created.
+* +working-dir+ - Local directory to store temporary files. If it doesn't exist it will be created.
 
 === Usage
 

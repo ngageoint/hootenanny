@@ -68,8 +68,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
 {
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
 
-  vector<Geometry*> polygons;
-  vector<Geometry*>& tmpPolygons = polygons;
+  vector<Geometry*>* polygons = new vector<Geometry*>();
+  vector<Geometry*>& tmpPolygons = *polygons;
   tmpPolygons.reserve(outers.size());
 
   vector<double> outerArea;

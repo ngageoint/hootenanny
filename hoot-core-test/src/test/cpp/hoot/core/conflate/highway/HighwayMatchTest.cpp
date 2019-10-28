@@ -32,15 +32,15 @@
 #include <cppunit/TestFixture.h>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSublineMatcher.h>
 #include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -108,17 +108,17 @@ public:
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
-    HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
-      mt);
+    MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
+      mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.129353 miss: 0.870647 review: 0",
-                    match12.toString());
+                    match12->toString());
 
-    HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
-      mt);
+    MatchPtr match23(new HighwayMatch(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
+      mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.129353 miss: 0.870647 review: 0",
-                    match23.toString());
+                    match23->toString());
 
-    CPPUNIT_ASSERT_EQUAL(true, match12.isConflicting(match23, map));
+    CPPUNIT_ASSERT_EQUAL(true, match12->isConflicting(match23, map));
   }
 
   /**
@@ -158,17 +158,17 @@ public:
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
-    HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
-                         mt);
+    MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
+                         mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.0921884 miss: 0.907812 review: 0",
-                    match12.toString());
+                    match12->toString());
 
-    HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
-                         mt);
+    MatchPtr match23(new HighwayMatch(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
+                         mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.0921884 miss: 0.907812 review: 0",
-                    match23.toString());
+                    match23->toString());
 
-    CPPUNIT_ASSERT_EQUAL(false, match12.isConflicting(match23, map));
+    CPPUNIT_ASSERT_EQUAL(false, match12->isConflicting(match23, map));
   }
 
   /**
@@ -206,17 +206,17 @@ public:
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
-    HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
-                         mt);
+    MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
+                         mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.101976 miss: 0.898024 review: 0",
-                    match12.toString());
+                    match12->toString());
 
-    HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
-                         mt);
+    MatchPtr match23(new HighwayMatch(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
+                         mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.101976 miss: 0.898024 review: 0",
-                    match23.toString());
+                    match23->toString());
 
-    CPPUNIT_ASSERT_EQUAL(false, match12.isConflicting(match23, map));
+    CPPUNIT_ASSERT_EQUAL(false, match12->isConflicting(match23, map));
   }
 
   /**
@@ -252,17 +252,17 @@ public:
     std::shared_ptr<MaximalSublineStringMatcher> sublineMatcher(new MaximalSublineStringMatcher());
     sublineMatcher->setMinSplitSize(5.0);
     sublineMatcher->setMaxRelevantAngle(toRadians(60.0));
-    HighwayMatch match12(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
-                         mt);
+    MatchPtr match12(new HighwayMatch(classifier, sublineMatcher, map, w1->getElementId(), w2->getElementId(),
+                         mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-1) Way(-2) P: match: 0.138093 miss: 0.861907 review: 0",
-                    match12.toString());
+                    match12->toString());
 
-    HighwayMatch match23(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
-                         mt);
+    MatchPtr match23(new HighwayMatch(classifier, sublineMatcher, map, w2->getElementId(), w3->getElementId(),
+                         mt));
     HOOT_STR_EQUALS("HighwayMatch Way(-2) Way(-3) P: match: 0.138093 miss: 0.861907 review: 0",
-                    match23.toString());
+                    match23->toString());
 
-    CPPUNIT_ASSERT_EQUAL(true, match12.isConflicting(match23, map));
+    CPPUNIT_ASSERT_EQUAL(true, match12->isConflicting(match23, map));
   }
 
   /**
@@ -326,14 +326,14 @@ public:
 
     WaySublineMatchString m = sublineMatcher->findMatch(map, w218, w948);
 
-    HighwayMatch match218v948(classifier, sublineMatcher, map, w218->getElementId(),
-      w948->getElementId(), mt);
-    HighwayMatch match218v582(classifier, sublineMatcher, map, w218->getElementId(),
-      w582->getElementId(), mt);
+    std::shared_ptr<HighwayMatch> match218v948(new HighwayMatch(classifier, sublineMatcher, map, w218->getElementId(),
+      w948->getElementId(), mt));
+    std::shared_ptr<HighwayMatch> match218v582(new HighwayMatch(classifier, sublineMatcher, map, w218->getElementId(),
+      w582->getElementId(), mt));
 
-    LOG_VAR(match218v948.getSublineMatch());
-    LOG_VAR(match218v582.getSublineMatch());
-    HOOT_STR_EQUALS(false, match218v948.isConflicting(match218v582, map));
+    LOG_VAR(match218v948->getSublineMatch());
+    LOG_VAR(match218v582->getSublineMatch());
+    HOOT_STR_EQUALS(false, match218v948->isConflicting(match218v582, map));
   }
 
 };
