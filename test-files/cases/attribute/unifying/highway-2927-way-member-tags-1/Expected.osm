@@ -856,71 +856,28 @@
     <node visible="true" id="725" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4963607999999979" lon="-66.8996161999999970">
         <tag k="hoot:status" v="2"/>
     </node>
-    <way visible="true" id="-3142" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1707"/>
-        <nd ref="-172"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="destination:ref" v="A-01"/>
-        <tag k="layer" v="2"/>
-        <tag k="destination:symbol" v="motorway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{d6301467-078a-4887-9721-e695c7326c60}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
-    </way>
-    <way visible="true" id="-3139" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-3139" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-22"/>
         <nd ref="-165"/>
         <nd ref="-164"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="-1"/>
-        <tag k="destination:symbol" v="motorway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-09-05T04:44:06.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{0b879342-4f8f-4441-bac0-749e8971415a}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
-    </way>
-    <way visible="true" id="-3138" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-173"/>
+        <nd ref="-176"/>
+        <nd ref="-175"/>
+        <nd ref="-174"/>
         <nd ref="-1705"/>
         <tag k="z_order" v="-999999"/>
+        <tag k="layer" v="-1"/>
         <tag k="destination:ref" v="A-01"/>
-        <tag k="layer" v="2"/>
         <tag k="destination:symbol" v="motorway"/>
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2014-09-05T04:44:06.000Z;2019-01-17T19:50:06Z"/>
         <tag k="way_area" v="-999999"/>
         <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
-        <tag k="bridge" v="yes"/>
+        <tag k="uuid" v="{0b879342-4f8f-4441-bac0-749e8971415a};{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.713Z"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
@@ -973,11 +930,15 @@
         <tag k="highway" v="motorway"/>
         <tag k="maxweight" v="20"/>
     </way>
-    <way visible="true" id="-3133" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1703"/>
-        <nd ref="-286"/>
-        <nd ref="-287"/>
-        <nd ref="-288"/>
+    <way visible="true" id="-3134" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="-294"/>
+        <nd ref="-293"/>
+        <nd ref="-292"/>
+        <nd ref="-291"/>
+        <nd ref="-290"/>
+        <nd ref="-289"/>
+        <nd ref="-103"/>
         <nd ref="-1702"/>
         <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
         <tag k="surface" v="asphalt"/>
@@ -987,17 +948,16 @@
         <tag k="hoot:status" v="3"/>
         <tag k="name" v="Autopista: Francisco Fajardo"/>
         <tag k="ref" v="L-07"/>
-        <tag k="source:datetime" v="2015-12-15T02:06:57.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z;2015-12-15T02:06:58.000Z;2019-01-17T19:50:06Z"/>
         <tag k="bicycle" v="no"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
         <tag k="maxheight" v="5"/>
         <tag k="lanes" v="4"/>
-        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
         <tag k="maxspeed" v="90"/>
         <tag k="bus:lanes" v="no|no|no|yes"/>
         <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
         <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
-        <tag k="bridge" v="yes"/>
         <tag k="maxspeed:lanes" v="90|70|40|40"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
@@ -1016,54 +976,27 @@
         <tag k="highway" v="motorway"/>
         <tag k="maxweight" v="20"/>
     </way>
-    <way visible="true" id="-3128" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1702"/>
-        <nd ref="-103"/>
-        <nd ref="-104"/>
-        <nd ref="-105"/>
-        <nd ref="-106"/>
-        <nd ref="-107"/>
-        <nd ref="-108"/>
-        <nd ref="-109"/>
-        <nd ref="-110"/>
-        <nd ref="-111"/>
-        <nd ref="-112"/>
+    <way visible="true" id="-3129" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-1698"/>
-        <tag k="alt_name" v="Av. Este 10 bis"/>
-        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
-        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z;2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="no"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="maxheight" v="5"/>
-        <tag k="incline" v="10%"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="bus:lanes" v="no|yes"/>
-        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="maxspeed:lanes" v="50|30"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|yes"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
+        <nd ref="-113"/>
+        <nd ref="-114"/>
+        <nd ref="-115"/>
+        <nd ref="-30"/>
         <tag k="source" v="osm:line"/>
-        <tag k="destination" v="San Agustín del Norte"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="maxweight" v="20"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.652Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Av. Este 10 bis"/>
+        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38};{a83901bd-313c-47d3-8568-691619ebbd2d}"/>
+        <tag k="source:datetime" v="2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="lanes" v="2"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-3125" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1696"/>
@@ -1113,6 +1046,49 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+    </way>
+    <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1703"/>
+        <nd ref="-286"/>
+        <nd ref="-287"/>
+        <nd ref="-288"/>
+        <nd ref="-1702"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="lit" v="yes"/>
+        <tag k="toll" v="no"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:57.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="lanes" v="4"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
+        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="foot" v="no"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="maxweight" v="20"/>
     </way>
     <way visible="true" id="-52" timestamp="2019-01-10T17:16:06Z" version="1">
         <nd ref="-129"/>
@@ -1202,6 +1178,54 @@
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
     </way>
+    <way visible="true" id="-44" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-173"/>
+        <nd ref="-1705"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="layer" v="2"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="3"/>
+        <tag k="uuid" v="{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+    </way>
+    <way visible="true" id="-43" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-1707"/>
+        <nd ref="-172"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="layer" v="2"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="lanes" v="3"/>
+        <tag k="uuid" v="{d6301467-078a-4887-9721-e695c7326c60}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+    </way>
     <way visible="true" id="-39" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-113"/>
         <nd ref="-119"/>
@@ -1219,28 +1243,6 @@
         <tag k="way_area" v="-999999"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
-        <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="-36" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-1698"/>
-        <nd ref="-113"/>
-        <nd ref="-114"/>
-        <nd ref="-115"/>
-        <nd ref="-30"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z;2019-01-17T19:50:05.652Z"/>
-        <tag k="highway" v="tertiary"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="Av. Este 10 bis"/>
-        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38};{a83901bd-313c-47d3-8568-691619ebbd2d}"/>
-        <tag k="source:datetime" v="2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1316,52 +1318,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-18"/>
-        <nd ref="-294"/>
-        <nd ref="-293"/>
-        <nd ref="-292"/>
-        <nd ref="-291"/>
-        <nd ref="-290"/>
-        <nd ref="-289"/>
-        <nd ref="-103"/>
-        <nd ref="-1702"/>
-        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Autopista: Francisco Fajardo"/>
-        <tag k="ref" v="L-07"/>
-        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z;2015-12-15T02:06:58.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="no"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
-        <tag k="maxheight" v="5"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="bus:lanes" v="no|no|no|yes"/>
-        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
-        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
-        <tag k="maxspeed:lanes" v="90|70|40|40"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|no|no|yes"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="maxweight" v="20"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-233"/>
@@ -1450,6 +1406,55 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
         <tag k="highway" v="motorway"/>
+        <tag k="maxweight" v="20"/>
+    </way>
+    <way visible="true" id="-14" timestamp="2019-01-17T19:50:06Z" version="1">
+        <nd ref="-1702"/>
+        <nd ref="-103"/>
+        <nd ref="-104"/>
+        <nd ref="-105"/>
+        <nd ref="-106"/>
+        <nd ref="-107"/>
+        <nd ref="-108"/>
+        <nd ref="-109"/>
+        <nd ref="-110"/>
+        <nd ref="-111"/>
+        <nd ref="-112"/>
+        <nd ref="-1698"/>
+        <tag k="alt_name" v="Av. Este 10 bis"/>
+        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="z_order" v="-999999"/>
+        <tag k="lit" v="yes"/>
+        <tag k="toll" v="no"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
+        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z;2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="incline" v="10%"/>
+        <tag k="lanes" v="2"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="bus:lanes" v="no|yes"/>
+        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="maxspeed:lanes" v="50|30"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="no"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="hgv:lanes" v="no|yes"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="destination" v="San Agustín del Norte"/>
+        <tag k="highway" v="motorway_link"/>
         <tag k="maxweight" v="20"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1658,24 +1663,24 @@
         <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-129"/>
-        <nd ref="-161"/>
-        <nd ref="-160"/>
-        <nd ref="-159"/>
-        <nd ref="-158"/>
-        <nd ref="-157"/>
-        <nd ref="-156"/>
-        <nd ref="-155"/>
-        <nd ref="-154"/>
-        <nd ref="-153"/>
-        <nd ref="-152"/>
-        <nd ref="-151"/>
-        <nd ref="-150"/>
-        <nd ref="-149"/>
-        <nd ref="-148"/>
-        <nd ref="-147"/>
-        <nd ref="-146"/>
         <nd ref="-25"/>
+        <nd ref="-146"/>
+        <nd ref="-147"/>
+        <nd ref="-148"/>
+        <nd ref="-149"/>
+        <nd ref="-150"/>
+        <nd ref="-151"/>
+        <nd ref="-152"/>
+        <nd ref="-153"/>
+        <nd ref="-154"/>
+        <nd ref="-155"/>
+        <nd ref="-156"/>
+        <nd ref="-157"/>
+        <nd ref="-158"/>
+        <nd ref="-159"/>
+        <nd ref="-160"/>
+        <nd ref="-161"/>
+        <nd ref="-129"/>
         <tag k="source" v="osm:line"/>
         <tag k="hoot:status" v="3"/>
         <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
@@ -1688,32 +1693,6 @@
         <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
         <tag k="z_order" v="-999999"/>
-    </way>
-    <way visible="true" id="5" timestamp="2019-01-17T19:50:06Z" version="1">
-        <nd ref="-164"/>
-        <nd ref="-176"/>
-        <nd ref="-175"/>
-        <nd ref="-174"/>
-        <nd ref="-1705"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="-1"/>
-        <tag k="destination:ref" v="A-01"/>
-        <tag k="destination:symbol" v="motorway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2014-09-05T04:44:06.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{0b879342-4f8f-4441-bac0-749e8971415a};{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.713Z"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
     </way>
     <way visible="true" id="6" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-80"/>

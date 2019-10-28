@@ -262,44 +262,6 @@
         <tag k="width" v="2.5"/>
         <tag k="error:circular" v="10.08"/>
     </way>
-    <way visible="true" id="-306596" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-306157"/>
-        <nd ref="-306180"/>
-        <nd ref="-306174"/>
-        <nd ref="-306179"/>
-        <nd ref="-306519"/>
-        <nd ref="-306520"/>
-        <nd ref="-306521"/>
-        <nd ref="-306182"/>
-        <nd ref="-306522"/>
-        <nd ref="-306158"/>
-        <nd ref="-306178"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="DARUL KHAEROT"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="2.5"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-306593" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-306168"/>
-        <nd ref="-306165"/>
-        <nd ref="-306172"/>
-        <nd ref="-306514"/>
-        <nd ref="-306183"/>
-        <nd ref="-306515"/>
-        <nd ref="-306159"/>
-        <nd ref="-306175"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="2.5"/>
-        <tag k="error:circular" v="15"/>
-    </way>
     <way visible="true" id="-306590" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306204"/>
         <nd ref="-306205"/>
@@ -548,11 +510,49 @@
         <tag k="width" v="2.5"/>
         <tag k="error:circular" v="15"/>
     </way>
+    <way visible="true" id="-306190" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306157"/>
+        <nd ref="-306180"/>
+        <nd ref="-306174"/>
+        <nd ref="-306179"/>
+        <nd ref="-306519"/>
+        <nd ref="-306520"/>
+        <nd ref="-306521"/>
+        <nd ref="-306182"/>
+        <nd ref="-306522"/>
+        <nd ref="-306158"/>
+        <nd ref="-306178"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="DARUL KHAEROT"/>
+        <tag k="surface" v="paved"/>
+        <tag k="lanes" v="1"/>
+        <tag k="width" v="2.5"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-306189" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306175"/>
         <nd ref="-306167"/>
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-306188" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306168"/>
+        <nd ref="-306165"/>
+        <nd ref="-306172"/>
+        <nd ref="-306514"/>
+        <nd ref="-306183"/>
+        <nd ref="-306515"/>
+        <nd ref="-306159"/>
+        <nd ref="-306175"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="residential"/>
+        <tag k="all_weather" v="yes"/>
+        <tag k="surface" v="paved"/>
+        <tag k="lanes" v="1"/>
+        <tag k="width" v="2.5"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-306187" timestamp="1970-01-01T00:00:00Z" version="1">

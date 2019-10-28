@@ -34,17 +34,17 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Qt
 #include <QBuffer>
@@ -63,10 +63,14 @@ int OsmXmlReader::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapReader, OsmXmlReader)
 
 OsmXmlReader::OsmXmlReader() :
+_osmFound(false),
 _status(Status::Invalid),
 _missingNodeCount(0),
 _missingWayCount(0),
+_badAccuracyCount(0),
 _useDataSourceId(false),
+_wayId(0),
+_relationId(0),
 _inputCompressed(false),
 _numRead(0),
 _keepImmediatelyConnectedWaysOutsideBounds(false)

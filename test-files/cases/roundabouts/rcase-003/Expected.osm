@@ -139,7 +139,7 @@
     <node visible="true" id="142" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5465998999999968" lon="-72.3472215000000034">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-148" timestamp="2017-06-07T15:16:56Z" version="1">
+    <way visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
         <nd ref="18"/>
         <nd ref="6"/>
         <nd ref="5"/>

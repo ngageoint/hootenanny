@@ -118,24 +118,6 @@
     <node visible="true" id="-105164" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022387999999992" lon="-77.0533079467499959">
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-105439" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-105168"/>
-        <nd ref="-105214"/>
-        <nd ref="-105212"/>
-        <nd ref="-105210"/>
-        <nd ref="-105208"/>
-        <nd ref="-105206"/>
-        <nd ref="-105286"/>
-        <nd ref="-105204"/>
-        <nd ref="-105202"/>
-        <nd ref="-105200"/>
-        <nd ref="-105166"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="24TH ST NW"/>
-        <tag k="alt_name" v="24th St NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-105244" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-105194"/>
         <nd ref="-105233"/>
@@ -213,6 +195,24 @@
         <tag k="highway" v="road"/>
         <tag k="name" v="25TH ST NW"/>
         <tag k="alt_name" v="25th St NW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-105222" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-105168"/>
+        <nd ref="-105214"/>
+        <nd ref="-105212"/>
+        <nd ref="-105210"/>
+        <nd ref="-105208"/>
+        <nd ref="-105206"/>
+        <nd ref="-105286"/>
+        <nd ref="-105204"/>
+        <nd ref="-105202"/>
+        <nd ref="-105200"/>
+        <nd ref="-105166"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="24TH ST NW"/>
+        <tag k="alt_name" v="24th St NW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-105220" timestamp="1970-01-01T00:00:00Z" version="1">
