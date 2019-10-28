@@ -57,6 +57,13 @@ echo "Listing an output format supporting streamable reads..."
 echo ""
 hoot info --formats --output-streamable | grep ".osm"
 echo ""
+echo "Listing input formats read by OGR..."
+echo ""
+hoot info --formats --input --ogr | grep ".shp"
+echo ""
+echo "Listing output formats written by OGR..."
+echo ""
+hoot info --formats --output --ogr | grep ".shp"
 
 # LANGUAGES
 echo "Listing detectable languages..."
@@ -182,4 +189,18 @@ echo ""
 echo "Listing filters..."
 echo ""
 hoot info --filters | grep "NonBuildingAreaCriterion"
+echo ""
+
+# ERROR HANDLING
+echo "Names and details..."
+echo ""
+hoot info --option-names --option-details
+echo ""
+echo "OGR without input or output..."
+echo ""
+hoot info --ogr
+echo ""
+echo "OGR with unsupported sub-option..."
+echo ""
+hoot info --input --input-streamable --ogr
 echo ""

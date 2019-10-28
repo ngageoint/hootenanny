@@ -56,15 +56,26 @@ public:
                          const bool displayInputsSupportingBounds, const bool displayOutputs,
                          const bool displayOutputsSupportingStreaming);
 
+  /**
+   * TODO
+   *
+   * @param displayInputs
+   * @param displayOutputs
+   * @return
+   */
+  static QString displayOgr(const bool displayInputs, const bool displayOutputs);
+
 private:
 
   template<typename IoClass>
   static QString _getFormatsString(
-    const std::string& className, const QStringList extraFormats = QStringList());
+    const std::string& className, const QStringList extraFormats = QStringList(),
+    const bool ogrOnly = false);
 
   template<typename IoClass>
   static QStringList _getFormats(
-    const std::string& className, const QStringList extraFormats = QStringList());
+    const std::string& className, const QStringList extraFormats = QStringList(),
+    const bool ogrOnly = false);
 
   static QString _getFormatsSupportingBoundsString();
 

@@ -93,35 +93,64 @@ QString FormatsDisplayer::display(
   return ts.readAll();
 }
 
+QString FormatsDisplayer::displayOgr(const bool displayInputs, const bool displayOutputs)
+{
+  DisableLog dl;
+
+  QString buffer;
+  QTextStream ts(&buffer);
+  ts.setCodec("UTF-8");
+
+  if (displayInputs)
+  {
+    ts << "Input formats read with OGR:" << endl << endl;
+    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className(), QStringList(), true) << endl;
+  }
+
+  if (displayOutputs)
+  {
+    ts << "Output formats written by OGR:" << endl << endl;
+    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), QStringList(), true) << endl;
+  }
+
+  return ts.readAll();
+}
+
 template<typename IoClass>
 QString FormatsDisplayer::_getFormatsString(
-  const std::string& className, const QStringList extraFormats)
+  const std::string& className, const QStringList extraFormats, const bool ogrOnly)
 {
-  return _getPrintableString(_getFormats<IoClass>(className, extraFormats));
+  return _getPrintableString(_getFormats<IoClass>(className, extraFormats, ogrOnly));
 }
 
 template<typename IoClass>
 QStringList FormatsDisplayer::_getFormats(
-  const std::string& className, const QStringList extraFormats)
+  const std::string& className, const QStringList extraFormats, const bool ogrOnly)
 {
-  std::vector<std::string> classNames =
-    Factory::getInstance().getObjectNamesByBase(className);
   QSet<QString> formats;
-  for (size_t i = 0; i < classNames.size(); i++)
+
+  if (!ogrOnly)
   {
-    std::shared_ptr<IoClass> ioClass(
-      Factory::getInstance().constructObject<IoClass>(classNames[i]));
-    const QString supportedFormats = ioClass->supportedFormats();
-    if (!supportedFormats.isEmpty())
+    std::vector<std::string> classNames =
+      Factory::getInstance().getObjectNamesByBase(className);
+    for (size_t i = 0; i < classNames.size(); i++)
     {
-      QStringList supportedFormatsList = supportedFormats.split(";");
-      for (int j = 0; j < supportedFormatsList.size(); j++)
+      std::shared_ptr<IoClass> ioClass(
+        Factory::getInstance().constructObject<IoClass>(classNames[i]));
+      const QString supportedFormats = ioClass->supportedFormats();
+      if (!supportedFormats.isEmpty())
       {
-        formats.insert(supportedFormatsList.at(j));
+        QStringList supportedFormatsList = supportedFormats.split(";");
+        for (int j = 0; j < supportedFormatsList.size(); j++)
+        {
+          formats.insert(supportedFormatsList.at(j));
+        }
       }
     }
   }
+
   formats += OgrUtilities::getInstance().getSupportedFormats(true);
+
   QStringList formatsList = formats.toList();
   formatsList.append(extraFormats);
   formatsList.sort();
