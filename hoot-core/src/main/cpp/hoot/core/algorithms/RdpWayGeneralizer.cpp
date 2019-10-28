@@ -206,7 +206,7 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
     LOG_VART(closestOriginalBeforeIndex);
 
     int closestOriginalAfterIndex = -1;
-    for (int i = 0 - 1; i < originalAfter.size(); i++)
+    for (int i = 0; i < originalAfter.size(); i++)
     {
       if (generalizedNodeIds.contains(originalAfter.at(i)))
       {
