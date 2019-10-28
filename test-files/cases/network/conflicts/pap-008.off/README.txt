@@ -1,5 +1,7 @@
-Roads Lalue and Rue Fernand should conflate between the maps. They do in some parts but unfortunately not in all. Zoom in very closely when 
-checking for merges, otherwise its not obvious two of the roads didn't merge.
+Avenue John Brown in the reference should conflate cleanly with the corresponding unnamed road in the secondary. Avenue Lamartinière and Rue 
+Fernand in the reference should conflate cleanly with the corresponding unnamed roads in the secondary. 
+
+Zoom in very closely when checking for merges, otherwise its not obvious two of the roads didn't merge.
 
 Notes: 
 

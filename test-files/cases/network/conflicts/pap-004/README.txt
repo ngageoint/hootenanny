@@ -1,3 +1,1 @@
-The Southern bit of the t-shape formed by the MGCP should conflate cleanly... but does not for some reason.
-
-Update: applying the corner splitter made this behave SOOOO much better.
+The secondary road should conflate cleanly with all parts of the corresponding reference road. 
