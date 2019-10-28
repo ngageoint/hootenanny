@@ -57,7 +57,8 @@ QString FormatsDisplayer::display(
   if (displayInputs)
   {
     ts << "Input formats:" << endl << endl;
-    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className()) << endl;
+    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className(), QStringList(), false, true)
+       << endl;
   }
 
   if (displayInputsSupportingStreaming)
@@ -81,7 +82,8 @@ QString FormatsDisplayer::display(
     // OsmMapReader/OsmMapwriter with the supportedFormats method to make this better.
     formatsList.append(".osc");
     formatsList.append(".osc.sql");
-    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), formatsList) << endl;
+    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), formatsList, false, false)
+       << endl;
   }
 
   if (displayOutputsSupportingStreaming)
@@ -104,13 +106,15 @@ QString FormatsDisplayer::displayOgr(const bool displayInputs, const bool displa
   if (displayInputs)
   {
     ts << "Input formats read with OGR:" << endl << endl;
-    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className(), QStringList(), true) << endl;
+    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className(), QStringList(), true, true)
+       << endl;
   }
 
   if (displayOutputs)
   {
     ts << "Output formats written by OGR:" << endl << endl;
-    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), QStringList(), true) << endl;
+    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), QStringList(), true, false)
+       << endl;
   }
 
   return ts.readAll();
@@ -118,14 +122,16 @@ QString FormatsDisplayer::displayOgr(const bool displayInputs, const bool displa
 
 template<typename IoClass>
 QString FormatsDisplayer::_getFormatsString(
-  const std::string& className, const QStringList extraFormats, const bool ogrOnly)
+  const std::string& className, const QStringList extraFormats, const bool ogrOnly,
+  const bool ogrReadOnly)
 {
-  return _getPrintableString(_getFormats<IoClass>(className, extraFormats, ogrOnly));
+  return _getPrintableString(_getFormats<IoClass>(className, extraFormats, ogrOnly, ogrReadOnly));
 }
 
 template<typename IoClass>
 QStringList FormatsDisplayer::_getFormats(
-  const std::string& className, const QStringList extraFormats, const bool ogrOnly)
+  const std::string& className, const QStringList extraFormats, const bool ogrOnly,
+  const bool ogrReadOnly)
 {
   QSet<QString> formats;
 
@@ -149,7 +155,7 @@ QStringList FormatsDisplayer::_getFormats(
     }
   }
 
-  formats += OgrUtilities::getInstance().getSupportedFormats(true);
+  formats += OgrUtilities::getInstance().getSupportedFormats(ogrReadOnly);
 
   QStringList formatsList = formats.toList();
   formatsList.append(extraFormats);
