@@ -55,7 +55,8 @@ bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();
   return inputLower.endsWith(".osm") || inputLower.endsWith(".osm.pbf") ||
-         inputLower.startsWith("hootapidb://") || inputLower.startsWith("osmapidb://");
+         inputLower.startsWith(MetadataTags::HootApiDbScheme() + "://") ||
+         inputLower.startsWith(MetadataTags::OsmApiDbScheme() + "://");
 }
 
 bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)

@@ -78,7 +78,7 @@ public:
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() override { return "hootapidb://"; }
+  virtual QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 

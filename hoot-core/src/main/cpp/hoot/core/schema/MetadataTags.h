@@ -162,11 +162,13 @@ public:
 
   inline static const QString Length()                  { return "length"; }
 
-  inline static const QString ImportUrl()               { return "import_url"; }
+  inline static const QString Source()                  { return "source"; }
+  inline static const QString OsmApiDbScheme()          { return "osmapidb"; }
+  inline static const QString HootApiDbScheme()         { return "hootapidb"; }
   /**
    * Identifies features snapped with UnconnectedWaySnapper
    */
-  inline static const QString HootSnapped()      { return "hoot:snapped"; }
+  inline static const QString HootSnapped()             { return "hoot:snapped"; }
 
   /**
    * Identifies ways outside of convert.bounding.box that are immediately connected to other ways

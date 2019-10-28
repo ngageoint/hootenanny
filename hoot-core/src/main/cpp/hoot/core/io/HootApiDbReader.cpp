@@ -95,6 +95,14 @@ void HootApiDbReader::open(const QString& urlStr)
   _open = true;
 }
 
+void HootApiDbReader::read(const OsmMapPtr &map)
+{
+  //  Update the URL added to the map
+  _url = MetadataTags::HootApiDbScheme() + ":" + QString::number(_database->getMapId());
+  //  Continue with the base class read operation
+  ApiDbReader::read(map);
+}
+
 NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   long nodeId = _mapElementId(map, ElementId::node(resultIterator.value(0).toLongLong())).getId();

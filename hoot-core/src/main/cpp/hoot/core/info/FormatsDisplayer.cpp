@@ -148,11 +148,11 @@ QString FormatsDisplayer::_getFormatsSupportingBoundsString()
   {
     QString format = formats[i];
     QString formatTemp = format;
-    if (formatTemp.startsWith("hootapidb://"))
+    if (formatTemp.startsWith(MetadataTags::HootApiDbScheme() + "://"))
     {
       formatTemp += "myhost:5432/mydb/mylayer";
     }
-    else if (formatTemp.startsWith("osmapidb://"))
+    else if (formatTemp.startsWith(MetadataTags::OsmApiDbScheme() + "://"))
     {
       formatTemp += "myhost:5432/osmapi_test";
     }
@@ -185,11 +185,11 @@ QString FormatsDisplayer::_getInputFormatsSupportingStreamingString()
   {
     QString format = formats[i];
     QString formatTemp = format;
-    if (formatTemp.startsWith("hootapidb://"))
+    if (formatTemp.startsWith(MetadataTags::HootApiDbScheme() + "://"))
     {
       formatTemp += "myhost:5432/mydb/mylayer";
     }
-    else if (formatTemp.startsWith("osmapidb://"))
+    else if (formatTemp.startsWith(MetadataTags::OsmApiDbScheme() + "://"))
     {
       formatTemp += "myhost:5432/osmapi_test";
     }
@@ -221,11 +221,11 @@ QString FormatsDisplayer::_getOutputFormatsSupportingStreamingString()
   {
     QString format = formats[i];
     QString formatTemp = format;
-    if (formatTemp.startsWith("hootapidb://"))
+    if (formatTemp.startsWith(MetadataTags::HootApiDbScheme() + "://"))
     {
       formatTemp += "myhost:5432/mydb/mylayer";
     }
-    else if (formatTemp.startsWith("osmapidb://"))
+    else if (formatTemp.startsWith(MetadataTags::OsmApiDbScheme() + "://"))
     {
       formatTemp += "myhost:5432/osmapi_test";
     }
