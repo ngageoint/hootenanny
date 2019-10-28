@@ -50,20 +50,12 @@ public:
    * reading
    * @param displayOutputs if true, displays output formats
    * @param displayOutputsSupportingStreaming if true, displays streamable output formats
+   * @param displayOgrOnly TODO
    * @return a string describing the requested formats
    */
   static QString display(const bool displayInputs, const bool displayInputsSupportingStreaming,
                          const bool displayInputsSupportingBounds, const bool displayOutputs,
-                         const bool displayOutputsSupportingStreaming);
-
-  /**
-   * TODO
-   *
-   * @param displayInputs
-   * @param displayOutputs
-   * @return
-   */
-  static QString displayOgr(const bool displayInputs, const bool displayOutputs);
+                         const bool displayOutputsSupportingStreaming, const bool displayOgrOnly);
 
 private:
 
@@ -77,10 +69,10 @@ private:
     const std::string& className, const QStringList extraFormats = QStringList(),
     const bool ogrOnly = false, const bool ogrReadOnly = false);
 
-  static QString _getFormatsSupportingBoundsString();
+  static QString _getFormatsSupportingBoundsString(const bool ogrOnly = false);
 
-  static QString _getInputFormatsSupportingStreamingString();
-  static QString _getOutputFormatsSupportingStreamingString();
+  static QString _getInputFormatsSupportingStreamingString(const bool ogrOnly = false);
+  static QString _getOutputFormatsSupportingStreamingString(const bool ogrOnly = false);
 
   static  QString _getPrintableString(const QStringList& items);
 };

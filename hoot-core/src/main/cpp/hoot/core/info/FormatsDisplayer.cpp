@@ -46,7 +46,7 @@ namespace hoot
 QString FormatsDisplayer::display(
   const bool displayInputs, const bool displayInputsSupportingStreaming,
   const bool displayInputsSupportingBounds, const bool displayOutputs,
-  const bool displayOutputsSupportingStreaming)
+  const bool displayOutputsSupportingStreaming, const bool displayOgrOnly)
 {
   DisableLog dl;
 
@@ -57,20 +57,21 @@ QString FormatsDisplayer::display(
   if (displayInputs)
   {
     ts << "Input formats:" << endl << endl;
-    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className(), QStringList(), false, true)
+    ts << _getFormatsString<OsmMapReader>(
+            OsmMapReader::className(), QStringList(), displayOgrOnly, true)
        << endl;
   }
 
   if (displayInputsSupportingStreaming)
   {
     ts << "Input formats supporting streaming:" << endl << endl;
-    ts << _getInputFormatsSupportingStreamingString() << endl;
+    ts << _getInputFormatsSupportingStreamingString(displayOgrOnly) << endl;
   }
 
   if (displayInputsSupportingBounds)
   {
     ts << "Input formats supporting bounded reading:" << endl << endl;
-    ts << _getFormatsSupportingBoundsString() << endl;
+    ts << _getFormatsSupportingBoundsString(displayOgrOnly) << endl;
   }
 
   if (displayOutputs)
@@ -82,39 +83,15 @@ QString FormatsDisplayer::display(
     // OsmMapReader/OsmMapwriter with the supportedFormats method to make this better.
     formatsList.append(".osc");
     formatsList.append(".osc.sql");
-    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), formatsList, false, false)
+    ts << _getFormatsString<OsmMapWriter>(
+            OsmMapWriter::className(), formatsList, displayOgrOnly, false)
        << endl;
   }
 
   if (displayOutputsSupportingStreaming)
   {
     ts << "Output formats supporting streaming:" << endl << endl;
-    ts << _getOutputFormatsSupportingStreamingString() << endl;
-  }
-
-  return ts.readAll();
-}
-
-QString FormatsDisplayer::displayOgr(const bool displayInputs, const bool displayOutputs)
-{
-  DisableLog dl;
-
-  QString buffer;
-  QTextStream ts(&buffer);
-  ts.setCodec("UTF-8");
-
-  if (displayInputs)
-  {
-    ts << "Input formats read with OGR:" << endl << endl;
-    ts << _getFormatsString<OsmMapReader>(OsmMapReader::className(), QStringList(), true, true)
-       << endl;
-  }
-
-  if (displayOutputs)
-  {
-    ts << "Output formats written by OGR:" << endl << endl;
-    ts << _getFormatsString<OsmMapWriter>(OsmMapWriter::className(), QStringList(), true, false)
-       << endl;
+    ts << _getOutputFormatsSupportingStreamingString(displayOgrOnly) << endl;
   }
 
   return ts.readAll();
@@ -174,9 +151,10 @@ QString FormatsDisplayer::_getPrintableString(const QStringList& items)
   return ts.readAll();
 }
 
-QString FormatsDisplayer::_getFormatsSupportingBoundsString()
+QString FormatsDisplayer::_getFormatsSupportingBoundsString(const bool ogrOnly)
 {
-  const QStringList formats = _getFormats<OsmMapReader>(OsmMapReader::className());
+  const QStringList formats =
+    _getFormats<OsmMapReader>(OsmMapReader::className(), QStringList(), ogrOnly, true);
   LOG_VART(formats);
   QStringList boundableFormats;
   for (int i = 0; i < formats.size(); i++)
@@ -211,9 +189,10 @@ QString FormatsDisplayer::_getFormatsSupportingBoundsString()
 
 // TODO: consolidate these two streaming supported methods
 
-QString FormatsDisplayer::_getInputFormatsSupportingStreamingString()
+QString FormatsDisplayer::_getInputFormatsSupportingStreamingString(const bool ogrOnly)
 {
-  const QStringList formats = _getFormats<OsmMapReader>(OsmMapReader::className());
+  const QStringList formats =
+    _getFormats<OsmMapReader>(OsmMapReader::className(), QStringList(), ogrOnly, true);
   LOG_VART(formats);
   QStringList streamableFormats;
   for (int i = 0; i < formats.size(); i++)
@@ -247,9 +226,10 @@ QString FormatsDisplayer::_getInputFormatsSupportingStreamingString()
   return _getPrintableString(streamableFormats);
 }
 
-QString FormatsDisplayer::_getOutputFormatsSupportingStreamingString()
+QString FormatsDisplayer::_getOutputFormatsSupportingStreamingString(const bool ogrOnly)
 {
-  const QStringList formats = _getFormats<OsmMapWriter>(OsmMapWriter::className());
+  const QStringList formats =
+    _getFormats<OsmMapWriter>(OsmMapWriter::className(), QStringList(), ogrOnly, false);
   LOG_VART(formats);
   QStringList streamableFormats;
   for (int i = 0; i < formats.size(); i++)

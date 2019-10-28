@@ -156,13 +156,6 @@ public:
       {
         displayOgrOnly = true;
         args.removeAt(args.indexOf("--ogr"));
-
-        if (!args.contains("--input") && !args.contains("--output"))
-        {
-          throw IllegalArgumentException(
-            getName() + " requires that --ogr be using in conjunction with either or both of "
-            "--input or --output.");
-        }
       }
 
       bool displayInputs = false;
@@ -175,28 +168,14 @@ public:
       bool displayInputsSupportingBounds = false;
       if (args.contains("--input-bounded"))
       {
-        if (displayOgrOnly)
-        {
-          LOG_WARN("--ogr specified: --input-bounded will be ignored.")
-        }
-        else
-        {
-          displayInputsSupportingBounds = true;
-        }
+        displayInputsSupportingBounds = true;
         args.removeAt(args.indexOf("--input-bounded"));
       }
 
       bool displayInputsSupportingStreaming = false;
       if (args.contains("--input-streamable"))
       {
-        if (displayOgrOnly)
-        {
-          LOG_WARN("--ogr specified: --input-streamable will be ignored.")
-        }
-        else
-        {
-          displayInputsSupportingStreaming = true;
-        }
+        displayInputsSupportingStreaming = true;
         args.removeAt(args.indexOf("--input-streamable"));
       }
 
@@ -210,22 +189,15 @@ public:
       bool displayOutputsSupportingStreaming = false;
       if (args.contains("--output-streamable"))
       {
-        if (displayOgrOnly)
-        {
-          LOG_WARN("--ogr specified: --output-streamable will be ignored.")
-        }
-        else
-        {
-          displayOutputsSupportingStreaming = true;
-        }
+        displayOutputsSupportingStreaming = true;
         args.removeAt(args.indexOf("--output-streamable"));
       }
 
       // If none were specified, show them all, except OGR.
       // This is getting a little messy...maybe pass in an object with the settings instead...
       if (!displayInputs && !displayInputsSupportingBounds && !displayInputsSupportingStreaming &&
-          !displayOutputs && !displayOutputsSupportingStreaming && !displayOgrOnly &&
-          args.size() == 0)
+          !displayOutputs && !displayOutputsSupportingStreaming &&
+          (args.size() == 0 || (args.size() == 1 && displayOgrOnly)))
       {
         displayInputs = true;
         displayInputsSupportingStreaming = true;
@@ -234,18 +206,11 @@ public:
         displayOutputsSupportingStreaming = true;
       }
 
-      if (!displayOgrOnly)
-      {
-        std::cout <<
-          FormatsDisplayer::display(
-            displayInputs, displayInputsSupportingStreaming, displayInputsSupportingBounds,
-            displayOutputs, displayOutputsSupportingStreaming)
-          .toStdString();
-      }
-      else
-      {
-        std::cout << FormatsDisplayer::displayOgr(displayInputs, displayOutputs).toStdString();
-      }
+      std::cout <<
+        FormatsDisplayer::display(
+          displayInputs, displayInputsSupportingStreaming, displayInputsSupportingBounds,
+          displayOutputs, displayOutputsSupportingStreaming, displayOgrOnly)
+        .toStdString();
     }
     else if (specifiedOpts.contains("--languages"))
     {
