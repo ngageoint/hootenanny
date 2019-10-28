@@ -44,6 +44,7 @@ var availableTranslations = Object.keys(schemaMap);
 var fcodeLookup = {
     TDSv40: require(HOOT_HOME + '/translations/etds40_osm.js'),
     TDSv61: require(HOOT_HOME + '/translations/etds61_osm.js'),
+    TDSv70: require(HOOT_HOME + '/translations/etds70_osm.js'),
     MGCP: require(HOOT_HOME + '/translations/emgcp_osm.js'),
     GGDMv30: require(HOOT_HOME + '/translations/eggdm30_osm.js')
 };
