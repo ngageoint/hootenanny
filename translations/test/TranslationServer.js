@@ -141,6 +141,16 @@ describe('TranslationServer', function () {
             assert.equal(intersection, true);
         })
 
+        it('should handle translateFrom GET for TDSv70', function() {
+            var attrs = server.handleInputs({
+                fcode: 'AL013',
+                translation: 'TDSv70',
+                method: 'GET',
+                path: '/translateFrom'
+            }).attrs;
+            assert.equal(attrs.building, 'yes')
+        })
+
         it('should handle translateFrom GET for TDSv61', function() {
             //http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
             var attrs = server.handleInputs({
@@ -207,6 +217,22 @@ describe('TranslationServer', function () {
 
             assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv61");
 
+            var tags = gj.features[0].properties;
+            assert.equal(tags["F_CODE"], "AL013");
+            assert.equal(tags["UFI"], "bfd3f222-8e04-4ddc-b201-476099761302");
+        }).timeout(3000);
+
+        it('should handle translateTo TDSv70 POST', function() {
+            var output = server.handleInputs({
+                osm: '<osm version="0.6" upload="true" generator="JOSM"><node id="-1" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                method: 'POST',
+                translation: 'TDSv70',
+                path: '/translateTo'
+            });
+
+            var xml = parser.parseFromString(output);
+            var gj = osmtogeojson(xml);
+            assert.equal(xml.getElementsByTagName("osm")[0].getAttribute("schema"), "TDSv70");
             var tags = gj.features[0].properties;
             assert.equal(tags["F_CODE"], "AL013");
             assert.equal(tags["UFI"], "bfd3f222-8e04-4ddc-b201-476099761302");
