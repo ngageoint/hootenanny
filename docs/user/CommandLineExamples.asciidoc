@@ -77,28 +77,28 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
 -----
 
-===== Replace all features in a first dataset with overlapping features from a second dataset within a specified bounds:
+===== Create a changeset that replaces all features in a dataset with overlapping features from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc
 -----
 
-===== Completely replace all features in a first dataset with features from a second dataset within a specified bounds:
+===== Create a changeset that completely replaces all features in a dataset with features from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc --full-replacement
 -----
 
-===== Replace all buildings in a first dataset with overlapping buildings from a second dataset within a specified bounds:
+===== Create a changeset that replaces all buildings in a dataset with overlapping buildings from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc -geometry-filters "hoot::BuildingCriterion"
 -----
 
-===== Completely replace all buildings in a first dataset with buildings from a second dataset within a specified bounds:
+===== Create a changeset that completely replaces all buildings in a dataset with buildings from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
@@ -391,14 +391,14 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 
-===== Replace all buildings and POIs in a first dataset with overlapping buildings and POIs from a second dataset within a specified bounds:
+===== Create a changeset that replaces all buildings and POIs in a dataset with overlapping buildings and POIs from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc -geometry-filters "hoot::BuildingCriterion;hoot::PoiCriterion"
 -----
 
-===== Completely replace all POIs in a first dataset, except those with "Staunton" in the name, with schools from a second dataset within a specified bounds:
+===== Create a changeset that replaces all POIs in a dataset, except those with "Staunton" in the name, with schools from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement input1.osm input2.osm "38,-105,39,-104" outputChangeset.osc \
@@ -408,7 +408,7 @@ See the User Guide for more details on command usage.
       --retainment-filter-options "tag.criterion.kvps='name=Staunton' --full-replacement
 -----
 
-===== Replace all POIs in a first dataset with overlapping cafes having "Java" in the name from a second dataset within a specified bounds:
+===== Create a changeset that replaces all POIs in a dataset with overlapping cafes having "Java" in the name from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm \
