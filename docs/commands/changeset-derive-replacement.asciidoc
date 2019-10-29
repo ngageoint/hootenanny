@@ -12,7 +12,7 @@ the output. Also, additional filtering may be applied to the reference input to 
  
 The changeset derivation algorithm avoids unnecessary clipping of features (e.g. buildings crossing a specified lenient bounds) and stitches up 
 areas where features must be clipped (e.g. roads crossing a specified strict bounds). The output changeset file can be applied directly to an 
-OSM API database or the Rails Port API with the +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
+OSM API database or via the Rails Port API with the +changeset-apply+ command. Generally, the reference data is sourced from an authoritative 
 data store, like an OSM API database, and the secondary source can be any type of data. Element IDs for the reference dataset are retained, 
 while element IDs for the secondary data are not retained and the elements treated as completely new data. 
 
@@ -73,7 +73,7 @@ Unless the reference data is being read from a direct connection to an OSM API d
 linear data should be slightly larger than the replacement AOI, so as not to drop linear features in the changeset output 
 (osmapidb:// reference inputs handle this issue automatically).
 
-GeoJSON output from the Overpass API is not supported by this command, since it does not contain way nodes.
+GeoJSON output from the Overpass API is not supported as input to this command, since it does not contain way nodes.
 
 === Full vs Overlapping Only Replacement
 
@@ -193,15 +193,10 @@ features in the reference layer to be replaced in the changeset output, thus ove
 
 === Versioning
 
-If the target of the resulting changeset is an OSM API database, all input features from the reference dataset must be populated with the 
-correct changeset versions or application of the resulting changeset will fail. 
+If the final target of the resulting changeset is an OSM API data store (direct connect or via Rails Port, all input features from the 
+reference dataset must be populated with the correct changeset versions or application of the resulting changeset will fail. 
 
-For Overpass API queries, add "out meta" to the query retrieving the reference data.
-
-=== Notes
-
-As part of "this issue":https://github.com/ngageoint/hootenanny/issues/3429 , we'll look into providing the option to replace all reference
-data within the specified bounds rather than just the reference data that overlaps secondary data.
+To ensure this for the output from Overpass API queries, add "out meta" to the query retrieving the reference data.
 
 === See Also
 
