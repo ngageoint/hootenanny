@@ -220,9 +220,9 @@ QList<long> RdpWayGeneralizer::_getUpdatedWayNodeIdsForThoseNotAllowedToBeRemove
     }
     LOG_VART(closestOriginalAfterIndex);
 
-    assert(closestOriginalBeforeIndex != closestOriginalAfterIndex);
-    assert(closestOriginalBeforeIndex < closestOriginalAfterIndex);
-    assert((closestOriginalAfterIndex - closestOriginalBeforeIndex) >= 2);
+    //assert(closestOriginalBeforeIndex != closestOriginalAfterIndex);
+    //assert(closestOriginalBeforeIndex < closestOriginalAfterIndex);
+    //assert((closestOriginalAfterIndex - closestOriginalBeforeIndex) >= 2);
     const int newNodeInsertIndex = closestOriginalBeforeIndex + 1;
     LOG_VART(newNodeInsertIndex);
     newNodeIds.insert(newNodeInsertIndex, nodeIdToAddBack);
