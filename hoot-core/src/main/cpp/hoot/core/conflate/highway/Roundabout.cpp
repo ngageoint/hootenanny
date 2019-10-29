@@ -206,6 +206,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               pWay->setTag("highway", "unclassified");
               pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
               //  Also add in the connector ways to later remove
+              LOG_TRACE("Adding temp way: " << pWay->getId() << "...");
               _tempWays.push_back(pWay);
 
               // Take the new way. Whichever is closest, first node or last,
@@ -480,27 +481,27 @@ QString Roundabout::toString() const
       .arg(_overrideStatus);
 }
 
-QString Roundabout::toDetailedString(OsmMapPtr /*map*/) const
+QString Roundabout::toDetailedString(OsmMapPtr map) const
 {
   QString str = toString();
 
   str += ", Original nodes size: " + QString::number(_roundaboutNodes.size());
-  //str += ", Original nodes: " + getOriginalNodesString();
   str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeIds().size());
-  //str += ", Current nodes: " + getCurrentNodesString(map);
 
   std::vector<long> originalNodeIds;
   for (size_t i = 0; i < _roundaboutNodes.size(); i++)
   {
     originalNodeIds.push_back(_roundaboutNodes[i]->getId());
   }
-  if (originalNodeIds != _roundaboutWay->getNodeIds())
+  if (originalNodeIds == _roundaboutWay->getNodeIds())
   {
-    str += ", original and current node IDs match";
+    str += ", original and current node IDs match.";
   }
   else
   {
-    str += ", original and current node IDs do not match";
+    str +=
+      ", original and current node IDs do not match. original nodes: " + getOriginalNodesString();
+    str += "; current nodes: " + getCurrentNodesString(map);
   }
 
   return str;
@@ -514,6 +515,7 @@ QString Roundabout::getOriginalNodesString() const
     ConstNodePtr node = _roundaboutNodes[i];
     str += QString::number(node->getId()) + ",";
   }
+  str.chop(1);
   return str;
 }
 
@@ -526,13 +528,14 @@ QString Roundabout::getCurrentNodesString(OsmMapPtr map) const
     ConstNodePtr node = map->getNode(nodeIds[i]);
     if (node)
     {
-      str += QString::number(node->getId()) + ",";
+      str += QString::number(node->getId()) + ", ";
     }
     else
     {
-      str += "ID: " + QString::number(nodeIds[i]) + " not found;\n";
+      str += "ID: " + QString::number(nodeIds[i]) + " not found, ";
     }
   }
+  str.chop(1);
   return str;
 }
 
