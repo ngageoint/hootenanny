@@ -945,6 +945,30 @@ Requires language translation server installation.  See the Hootenanny Install G
     hoot info --formats --input-bounded
 -----
 
+===== List all input formats that support streamable reading:
+
+-----
+    hoot info --formats --input-streamable
+-----
+
+===== List all output formats that support streamable writing:
+
+-----
+    hoot info --formats --output-streamable
+-----
+
+===== List all input formats that Hootenanny uses OGR to read:
+
+-----
+    hoot info --formats --input --ogr
+-----
+
+===== List all output formats that Hootenanny uses OGR to write:
+
+-----
+    hoot info --formats --output --ogr
+-----
+
 ===== List all criteria that can be used to identify a feature's geometry type:
 
 -----

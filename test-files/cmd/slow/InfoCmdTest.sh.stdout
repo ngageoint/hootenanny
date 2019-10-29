@@ -3628,6 +3628,35 @@ Listing an output format supporting streamable reads...
 .osm
 .osm.pbf
 
+Listing a format used with OGR...
+
+.shp
+.shp
+.shp
+
+Listing an input format read by OGR...
+
+.shp
+
+Listing an output format written by OGR...
+
+.shp
+
+Listing a streamable input format read by OGR...
+
+.shp
+
+Listing a streamable output format written by OGR...
+
+.sql
+.sqlite
+
+Listing input formats supported bounded reads that are read by OGR...
+
+Input formats supporting bounded reading:
+
+
+
 Listing detectable languages...
 
 detectable languages:

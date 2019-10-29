@@ -90,7 +90,7 @@ void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
   _write("\"bbox\": "); _write(_getBbox()); _write(",");
   if (_useTaskingManagerFormat && map->getSource() != "")
   {
-    _writeKvp(MetadataTags::ImportUrl(), map->getSource());
+    _writeKvp(MetadataTags::Source(), map->getSource());
     _write(",");
   }
   _write("\"features\": [", true);

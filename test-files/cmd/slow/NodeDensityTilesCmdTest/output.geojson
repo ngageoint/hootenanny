@@ -1,4 +1,4 @@
-{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-77.055, 38.885, -77.026, 38.905],"import_url":"test-files/DcGisRoads.osm;test-files/DcTigerRoads.osm","features": [
+{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-77.055, 38.885, -77.026, 38.905],"source":"DcGisRoads.osm;DcTigerRoads.osm","features": [
 {"type":"Feature","properties":{"task":"1","node_count":"74"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0551, 38.8845],[-77.0551, 38.8895],[-77.0521, 38.8895],[-77.0521, 38.8845],[-77.0551, 38.8845]]]]}},
 {"type":"Feature","properties":{"task":"2","node_count":"675"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0551, 38.8895],[-77.0551, 38.8945],[-77.0521, 38.8945],[-77.0521, 38.8895],[-77.0551, 38.8895]]]]}},
 {"type":"Feature","properties":{"task":"3","node_count":"819"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-77.0551, 38.8945],[-77.0551, 38.8985],[-77.0511, 38.8985],[-77.0511, 38.8945],[-77.0551, 38.8945]]]]}},

@@ -1017,7 +1017,7 @@ bool HootApiDb::isSupported(const QUrl& url)
   bool valid = ApiDb::isSupported(url);
 
   //postgresql is deprecated but still supported
-  if (url.scheme() != "hootapidb" && url.scheme() != "postgresql")
+  if (url.scheme() != MetadataTags::HootApiDbScheme() && url.scheme() != "postgresql")
   {
     valid = false;
   }
@@ -1032,20 +1032,20 @@ bool HootApiDb::isSupported(const QUrl& url)
       if (plist[1] == "")
       {
         LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
-                 "hootapidb://myhost:5432/mydb/mylayer");
+                 << MetadataTags::HootApiDbScheme() << "://myhost:5432/mydb/mylayer");
         valid = false;
       }
       else if (plist[2] == "")
       {
         LOG_WARN("Looks like a DB path, but a layer name was expected. E.g. "
-                 "hootapidb://myhost:5432/mydb/mylayer");
+                 << MetadataTags::HootApiDbScheme() << "://myhost:5432/mydb/mylayer");
         valid = false;
       }
     }
     else if ((plist.size() == 4) && ((plist[1] == "") || (plist[2 ] == "") || (plist[3] == "")))
     {
       LOG_WARN("Looks like a DB path, but a valid DB name, layer, and element was expected. E.g. "
-               "hootapidb://myhost:5432/mydb/mylayer/1");
+               << MetadataTags::HootApiDbScheme() << "://myhost:5432/mydb/mylayer/1");
       valid = false;
     }
     // need this for a base db connection; like used by db-list-maps
@@ -1054,7 +1054,7 @@ bool HootApiDb::isSupported(const QUrl& url)
       if (plist[1] == "")
       {
         LOG_WARN("Looks like a DB path, but a DB name was expected. E.g. "
-                 "hootapidb://myhost:5432/mydb");
+                 << MetadataTags::HootApiDbScheme() << "://myhost:5432/mydb");
         valid = false;
       }
     }
@@ -2369,7 +2369,7 @@ QUrl HootApiDb::getBaseUrl()
   // read the DB values from the DB config file.
   Settings s = readDbConfig();
   QUrl result;
-  result.setScheme("hootapidb");
+  result.setScheme(MetadataTags::HootApiDbScheme());
   result.setHost(s.get("DB_HOST").toString());
   result.setPort(s.get("DB_PORT").toInt());
   result.setUserName(s.get("DB_USER").toString());

@@ -198,13 +198,14 @@ hoot info --filters
 
 === Formats
 
-The +--formats+ option prints out supported data formats. The --input-bounded sub-option prints out input formats that support bounded reads
-with the `convert.bounding.box` configuration option.
+The +--formats+ option prints out supported data formats. 
+
+The --input-bounded sub-option prints out input formats that support bounded reads with the `convert.bounding.box` configuration option.
 
 ==== Usage
 
 --------------------------------------
-info --formats [--input] [--output] [--input-bounded]
+info --formats [--input] [--output] [--input-bounded] [--input-streamable] [--output-streamable] [--ogr]
 --------------------------------------
 
 ==== Example
@@ -227,6 +228,12 @@ hoot info --formats --output
 
 # prints streamable supported input formats
 hoot info --formats --output-streamable
+
+# prints input formats for which Hootenanny uses OGR to read
+hoot info --formats --input --ogr
+
+# prints input formats for which Hootenanny uses OGR to write
+hoot info --formats --output --ogr
 --------------------------------------
 
 === Geometry Type Criteria

@@ -328,6 +328,7 @@ public:
 
   QString getSource() const;
   void appendSource(const QString& url);
+  void replaceSource(const QString& url);
 
 protected:
 

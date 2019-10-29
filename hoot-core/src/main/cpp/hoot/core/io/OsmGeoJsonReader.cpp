@@ -30,10 +30,10 @@
 // hoot
 #include <hoot/core/Hoot.h>
 #include <hoot/core/io/HootNetworkRequest.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Boost
@@ -149,6 +149,10 @@ void OsmGeoJsonReader::_parseGeoJson()
   if (_propTree.not_found() != _propTree.find("bbox"))
   {
     /*Envelope env = */_parseBbox(_propTree.get_child("bbox"));
+  }
+  if (_propTree.not_found() != _propTree.find(MetadataTags::Source().toStdString()))
+  {
+    _map->replaceSource(QString(_propTree.get_child(MetadataTags::Source().toStdString()).data().c_str()));
   }
 
   // If we don't have a "features" child then we should just have a single feature

@@ -82,8 +82,8 @@ void MultiaryIngester::_doInputErrorChecking(const QString& newInput,
   if (!HootApiDbReader().isSupported(referenceOutput))
   {
     throw IllegalArgumentException(
-      QString("Multiary ingest only supports a Hootenanny API database data source ") +
-      QString("(hootapidb://) as the reference output.  Specified reference layer: ") +
+      "Multiary ingest only supports a Hootenanny API database data source (" +
+      MetadataTags::HootApiDbScheme() + "://) as the reference output.  Specified reference layer: " +
       referenceOutput);
   }
 
