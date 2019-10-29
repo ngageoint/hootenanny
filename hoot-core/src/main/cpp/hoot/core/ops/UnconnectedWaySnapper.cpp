@@ -753,6 +753,10 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap)
 bool UnconnectedWaySnapper::snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
                                                      const WayPtr& connectTo)
 {
+  LOG_TRACE(
+    "Attempting to snap " << disconnected->getElementId() << " to " << connectTo->getElementId() <<
+    "...");
+
   //  Create object for static call
   UnconnectedWaySnapper uws;
   uws._map = map;

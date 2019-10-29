@@ -281,7 +281,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
     _pCenterNode = getNewCenter(pMap);
 
   // Remove roundabout way & extra nodes
-  LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getElementId() << "...");
+  LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getId() << "...");
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
   {
@@ -292,15 +292,16 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   }
 
   // Add center node
+  LOG_VART(_pCenterNode);
   pMap->addNode(_pCenterNode);
 
   // Connect it up
-  for (std::set<long>::iterator it = connectingNodeIDs.begin();
-       it != connectingNodeIDs.end(); ++it)
+  for (std::set<long>::iterator it = connectingNodeIDs.begin(); it != connectingNodeIDs.end(); ++it)
   {
     WayPtr pWay(new Way(_status, pMap->createNextWayId(), 15));
     pWay->addNode(_pCenterNode->getId());
     pWay->addNode(*it);
+    LOG_VART(pWay->getNodeIds());
     pWay->setTag("highway", "unclassified");
 
     // Add special hoot tag
@@ -309,6 +310,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
     pMap->addWay(pWay);
     _tempWays.push_back(pWay);
   }
+  LOG_VART(_tempWays.size());
 }
 
 void Roundabout::replaceRoundabout(OsmMapPtr pMap)
@@ -349,6 +351,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         {
           NodePtr pNewNode(new Node(*thisNode));
           pNewNode->setId(pMap->createNextNodeId());
+          LOG_TRACE("Adding found node: " << pNewNode->getId() << "...");
           pMap->addNode(pNewNode);
           wayNodes.push_back(pNewNode);
           found = true;
@@ -359,6 +362,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       if (!found)
       {
         NodePtr pNewNode(new Node(*(_roundaboutNodes[i])));
+        LOG_TRACE("Adding not found node: " << pNewNode->getId() << "...");
         pMap->addNode(pNewNode);
         wayNodes.push_back(pNewNode);
       }
@@ -372,6 +376,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     for (size_t i = 0; i < wayNodes.size(); i++)
       nodeIds.push_back(wayNodes[i]->getId());
     pRoundabout->setNodes(nodeIds);
+    LOG_VART(pRoundabout->getNodeIds());
     pMap->addWay(pRoundabout);
 
     //  Convert the roundabout to a geometry for distance checking later
@@ -382,7 +387,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     {
       WayPtr way = _connectingWays[i];
       bool foundValidWay = pMap->containsWay(way->getId());
-      //  If the way doesn't exist anymore check for ways with its ID as the parent ID before
+      // If the way doesn't exist anymore check for ways with its ID as the parent ID before
       // ignoring it
       if (!foundValidWay)
       {
@@ -401,7 +406,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
           endpoint = node1;
         else
           endpoint = node2;
-        //  If the way doesn't exist anymore because of splitting, find the ways with the right endpoint
+        // If the way doesn't exist anymore because of splitting, find the ways with the right
+        // endpoint
         std::vector<long> waysWithNode =
           ElementIdsVisitor::findWaysByNode(pMap, endpoint->getId());
         if (waysWithNode.size() < 1)

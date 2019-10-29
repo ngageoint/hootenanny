@@ -77,7 +77,10 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
       pMap, ElementType::Node, MetadataTags::HootSpecial(), "roundabout_center");
   LOG_VART(centers.size());
   foreach (long id, centers)
+  {
+    LOG_TRACE("Removing center node: " << id << "...");
     RemoveNodeByEid::removeNode(pMap, id, true);
+  }
 }
 
 void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)
