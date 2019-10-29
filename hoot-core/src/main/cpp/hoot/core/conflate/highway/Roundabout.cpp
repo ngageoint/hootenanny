@@ -113,6 +113,7 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr &pMap, WayPtr pWay)
   // Calculate and set center
   rnd->setRoundaboutCenter(rnd->getNewCenter(pMap));
 
+  LOG_TRACE("Created roundabout: " << rnd->toString());
   return rnd;
 }
 
@@ -129,6 +130,8 @@ namespace // Anonymous
 
 void Roundabout::handleCrossingWays(OsmMapPtr pMap)
 {
+  LOG_TRACE("Handling crossing ways...");
+
   // Get a center point
   NodePtr pCenterNode = getNewCenter(pMap);
   pCenterNode->setStatus(_otherStatus);
@@ -241,17 +244,20 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
   }
 }
 
-/* Get all the nodes in the roundabout way.
- * Iterate through them, and see if they belong to another way.
- * If they do, keep them.
- *
- * Remove the roundabout from the map (way + leftover nodes)
- *
- * Iterate through the nodes that were kept, and connect them to
- * the centerpoint with temp ways.
- */
 void Roundabout::removeRoundabout(OsmMapPtr pMap)
 {
+  /* Get all the nodes in the roundabout way.
+   * Iterate through them, and see if they belong to another way.
+   * If they do, keep them.
+   *
+   * Remove the roundabout from the map (way + leftover nodes)
+   *
+   * Iterate through the nodes that were kept, and connect them to
+   * the centerpoint with temp ways.
+   */
+
+  LOG_TRACE("Removing roundabout: " << toString() << "...");
+
   // Find our connecting nodes & extra nodes.
   std::set<long> connectingNodeIDs;
   std::set<long> extraNodeIDs;
@@ -275,10 +281,9 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
     _pCenterNode = getNewCenter(pMap);
 
   // Remove roundabout way & extra nodes
-  LOG_TRACE("Removing roundabout: " << _roundaboutWay->getElementId() << "...");
+  LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getElementId() << "...");
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
-  for (std::set<long>::iterator it = extraNodeIDs.begin();
-       it != extraNodeIDs.end(); ++it)
+  for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
   {
     LOG_TRACE("Removing extra node with ID: " << *it << "...");
     // There may be something off with the map index, as I found situation where one of these extra
@@ -293,9 +298,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   for (std::set<long>::iterator it = connectingNodeIDs.begin();
        it != connectingNodeIDs.end(); ++it)
   {
-    WayPtr pWay(new Way(_status,
-                        pMap->createNextWayId(),
-                        15));
+    WayPtr pWay(new Way(_status, pMap->createNextWayId(), 15));
     pWay->addNode(_pCenterNode->getId());
     pWay->addNode(*it);
     pWay->setTag("highway", "unclassified");
@@ -308,22 +311,26 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   }
 }
 
-/*
- * Go through our nodes... if they are still there, check location.
- * If they are in the same place, fine. Otherwise, add nodes back as new.
- *
- * Then put the original way back. Modify the nodes it contains, to make
- * sure its correct
- *
- * See if center node is still there, if so, use it to get the ways that need
- * to connect to the roundabout.
- *
- * MAYBE: our roundabout nodes might need to be copies, so they don't get moved
- * around during conflation & merging
- */
 void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 {
-  // Re-add roundabout from the ref dataset or the secondary dataset if it has no match in the reference
+  /*
+   * Go through our nodes... if they are still there, check location.
+   * If they are in the same place, fine. Otherwise, add nodes back as new.
+   *
+   * Then put the original way back. Modify the nodes it contains, to make
+   * sure its correct
+   *
+   * See if center node is still there, if so, use it to get the ways that need
+   * to connect to the roundabout.
+   *
+   * MAYBE: our roundabout nodes might need to be copies, so they don't get moved
+   * around during conflation & merging
+   */
+
+  LOG_TRACE("Replacing roundabout: " << toString() << "...");
+
+  // Re-add roundabout from the ref dataset or the secondary dataset if it has no match in the
+  // reference
   if (_status == Status::Unknown1 || _overrideStatus)
   {
     std::vector<ConstNodePtr> wayNodes;
@@ -337,7 +344,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         ConstNodePtr otherNode = pMap->getNodes().find(nodeId)->second;
 
         // If nodes differ by more than circular error, add the node as new
-        if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) > thisNode->getCircularError())
+        if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) >
+            thisNode->getCircularError())
         {
           NodePtr pNewNode(new Node(*thisNode));
           pNewNode->setId(pMap->createNextNodeId());
@@ -374,7 +382,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     {
       WayPtr way = _connectingWays[i];
       bool foundValidWay = pMap->containsWay(way->getId());
-      //  If the way doesn't exist anymore check for ways with its ID as the parent ID before ignoring it
+      //  If the way doesn't exist anymore check for ways with its ID as the parent ID before
+      // ignoring it
       if (!foundValidWay)
       {
         //  Check the endpoints against the roundabout
@@ -423,7 +432,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       if (!endpoint1 || !endpoint2)
         continue;
       //  Check if either of the endpoints are already part of the roundabout
-      if (pRoundabout->containsNodeId(endpoint1->getId()) || pRoundabout->containsNodeId(endpoint2->getId()))
+      if (pRoundabout->containsNodeId(endpoint1->getId()) ||
+          pRoundabout->containsNodeId(endpoint2->getId()))
         continue;
       //  Snap the closest
       UnconnectedWaySnapper::snapClosestEndpointToWay(pMap, way, pRoundabout);
@@ -445,6 +455,20 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       RemoveNodeByEid::removeNodeFully(pMap, _pCenterNode->getId());
     }
   }
+}
+
+QString Roundabout::toString() const
+{
+  return QString("Way: %1, Status: %2, Other Status: %3, Nodes size: %4, Center node: %5, "
+          "Temp ways size: %6, Connecting ways size: %7, Override status: %8")
+    .arg(_roundaboutWay->getId())
+    .arg(_status.toString())
+    .arg(_otherStatus.toString())
+    .arg(QString::number(_roundaboutNodes.size()))
+    .arg(_pCenterNode->getId())
+    .arg(QString::number(_tempWays.size()))
+    .arg(QString::number(_connectingWays.size()))
+    .arg(_overrideStatus);
 }
 
 }

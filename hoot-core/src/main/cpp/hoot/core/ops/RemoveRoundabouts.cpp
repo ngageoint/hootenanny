@@ -52,8 +52,10 @@ RemoveRoundabouts::RemoveRoundabouts()
 {
 }
 
-void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
+void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 {
+  LOG_TRACE("Removing roundabouts...");
+
   // Get a list of roundabouts in the map
   RoundaboutCriterion roundaboutCrit;
   for (WayMap::const_iterator it = _pMap->getWays().begin(); it != _pMap->getWays().end(); ++it)
@@ -72,6 +74,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr> &removed)
     RoundaboutPtr rnd = Roundabout::makeRoundabout(_pMap, pWay);
     removed.push_back(rnd);
   }
+  LOG_VART(removed.size());
 
   //  Exit if there are no roundabouts removed
   if (removed.size() == 0)
