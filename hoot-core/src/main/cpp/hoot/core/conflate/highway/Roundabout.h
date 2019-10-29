@@ -111,7 +111,7 @@ public:
    * @param pWay - The roundabout way
    * @return - A newly constructed roundabout object
    */
-  static std::shared_ptr<Roundabout> makeRoundabout(const OsmMapPtr &pMap, WayPtr pWay);
+  static std::shared_ptr<Roundabout> makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay);
 
   /**
    * @brief removeRoundabout - Removes this roundabout from the map, and
@@ -144,6 +144,9 @@ public:
   void overrideRoundabout() { _overrideStatus = true; }
 
   QString toString() const;
+  QString toDetailedString(OsmMapPtr map) const;
+  QString getOriginalNodesString() const;
+  QString getCurrentNodesString(OsmMapPtr map) const;
 
 private:
 

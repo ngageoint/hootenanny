@@ -187,6 +187,15 @@ public:
   void reverseOrder();
 
   /**
+   * Determines if two ways have the same node IDs
+   *
+   * @param other way to compare node IDs with
+   * @return true if the other way has the same node IDs in the same order as this way; false
+   * otherwise
+   */
+  bool hasSameNodeIds(const Way& other) const;
+
+  /**
    * This is rarely used. Primarily it is useful when loading the way from a file that does
    * cache way envelope bounds (see .osm.pbf).
    */

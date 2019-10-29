@@ -96,7 +96,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   return pNewNode;
 }
 
-RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr &pMap, WayPtr pWay)
+RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
 {
   RoundaboutPtr rnd(new Roundabout());
 
@@ -113,7 +113,7 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr &pMap, WayPtr pWay)
   // Calculate and set center
   rnd->setRoundaboutCenter(rnd->getNewCenter(pMap));
 
-  LOG_TRACE("Created roundabout: " << rnd->toString());
+  LOG_TRACE("Created roundabout: " << rnd->toDetailedString(pMap));
   return rnd;
 }
 
@@ -256,7 +256,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
    * the centerpoint with temp ways.
    */
 
-  LOG_TRACE("Removing roundabout: " << toString() << "...");
+  LOG_TRACE("Removing roundabout: " << toDetailedString(pMap) << "...");
 
   // Find our connecting nodes & extra nodes.
   std::set<long> connectingNodeIDs;
@@ -329,7 +329,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
    * around during conflation & merging
    */
 
-  LOG_TRACE("Replacing roundabout: " << toString() << "...");
+  LOG_TRACE("Replacing roundabout: " << toDetailedString(pMap) << "...");
 
   // Re-add roundabout from the ref dataset or the secondary dataset if it has no match in the
   // reference
@@ -465,16 +465,75 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
 
 QString Roundabout::toString() const
 {
-  return QString("Way: %1, Status: %2, Other Status: %3, Nodes size: %4, Center node: %5, "
-          "Temp ways size: %6, Connecting ways size: %7, Override status: %8")
-    .arg(_roundaboutWay->getId())
-    .arg(_status.toString())
-    .arg(_otherStatus.toString())
-    .arg(QString::number(_roundaboutNodes.size()))
-    .arg(_pCenterNode->getId())
-    .arg(QString::number(_tempWays.size()))
-    .arg(QString::number(_connectingWays.size()))
-    .arg(_overrideStatus);
+  return
+    QString(
+      "Way: %1, Status: %2, Other Status: %3, Original nodes size: %4, Current nodes size: %5: "
+      "Center node: %6, Temp ways size: %7, Connecting ways size: %8, Override status: %9")
+      .arg(_roundaboutWay->getId())
+      .arg(_status.toString())
+      .arg(_otherStatus.toString())
+      .arg(QString::number(_roundaboutNodes.size()))
+      .arg(QString::number(_roundaboutWay->getNodeIds().size()))
+      .arg(_pCenterNode->getId())
+      .arg(QString::number(_tempWays.size()))
+      .arg(QString::number(_connectingWays.size()))
+      .arg(_overrideStatus);
+}
+
+QString Roundabout::toDetailedString(OsmMapPtr /*map*/) const
+{
+  QString str = toString();
+
+  str += ", Original nodes size: " + QString::number(_roundaboutNodes.size());
+  //str += ", Original nodes: " + getOriginalNodesString();
+  str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeIds().size());
+  //str += ", Current nodes: " + getCurrentNodesString(map);
+
+  std::vector<long> originalNodeIds;
+  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  {
+    originalNodeIds.push_back(_roundaboutNodes[i]->getId());
+  }
+  if (originalNodeIds != _roundaboutWay->getNodeIds())
+  {
+    str += ", original and current node IDs match";
+  }
+  else
+  {
+    str += ", original and current node IDs do not match";
+  }
+
+  return str;
+}
+
+QString Roundabout::getOriginalNodesString() const
+{
+  QString str;
+  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  {
+    ConstNodePtr node = _roundaboutNodes[i];
+    str += QString::number(node->getId()) + ",";
+  }
+  return str;
+}
+
+QString Roundabout::getCurrentNodesString(OsmMapPtr map) const
+{
+  QString str;
+  const std::vector<long> nodeIds = _roundaboutWay->getNodeIds();
+  for (size_t i = 0; i < nodeIds.size(); i++)
+  {
+    ConstNodePtr node = map->getNode(nodeIds[i]);
+    if (node)
+    {
+      str += QString::number(node->getId()) + ",";
+    }
+    else
+    {
+      str += "ID: " + QString::number(nodeIds[i]) + " not found;\n";
+    }
+  }
+  return str;
 }
 
 }
