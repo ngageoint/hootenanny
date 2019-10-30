@@ -117,7 +117,6 @@ class ConflateCommand extends ExternalCommand {
         this.conflateParams = params;
 
         List<String> options = new LinkedList<>();
-        options.add("convert.ops=hoot::DecomposeBuildingRelationsVisitor");
         options.add("writer.include.conflate.score.tags=false");
         options.add("hootapi.db.writer.overwrite.map=true");
         options.add("writer.text.status=true");

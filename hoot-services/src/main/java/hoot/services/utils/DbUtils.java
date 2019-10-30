@@ -423,15 +423,16 @@ public class DbUtils {
     }
 
     /**
-     * Deletes the folder mapping matching the specified map id
+     * Gets the parent folder id for the specified map
      *
-     * @param mapId map id which we are deleting
+     * @param mapId map id which we are retrieving the parent for
      */
-    public static void deleteFolderMapping(Long mapId) {
-        createQuery()
-            .delete(folderMapMappings)
+    public static Long getParentFolder(Long mapId) {
+        return createQuery()
+            .select(folderMapMappings.folderId)
+            .from(folderMapMappings)
             .where(folderMapMappings.mapId.eq(mapId))
-            .execute();
+            .fetchFirst();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId) {

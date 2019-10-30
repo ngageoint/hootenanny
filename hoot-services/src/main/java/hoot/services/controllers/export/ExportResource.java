@@ -215,11 +215,14 @@ public class ExportResource {
                 params.setOutputType("alpha.shp");
                 workflow.add(getCommand(user, jobId, params, debugLevel));
                 params.setInputType("file");
+                params.setTagOverrides(params.getInput());
                 params.setInput(workDir.getAbsolutePath() + "/" + params.getOutputName());
                 Command ogrClipCommand = new OgrClipCommand(jobId, params, this.getClass());
                 workflow.add(ogrClipCommand);
                 Command ogrFormatCommand = new OgrFormatCommand(jobId, params, this.getClass());
                 workflow.add(ogrFormatCommand);
+                Command sedSourceCommand = new SedSourceCommand(jobId, params, this.getClass());
+                workflow.add(sedSourceCommand);
                 Command zipCommand = new ZIPFileCommand(new File(workDir, params.getOutputName() + ".zip"), workDir, outputName + ".alpha.tiles.geojson", this.getClass());
                 workflow.add(zipCommand);
 
