@@ -924,6 +924,13 @@ secondary road endpoint nodes to the nearest reference road.
 
 List of tags to ignore when performing differential conflation with tags.
 
+=== differential.treat.reviews.as.matches
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === direction.finder.angle.threshold
 
 * Data Type: double

@@ -557,41 +557,4 @@
         <tag k="error:circular" v="15"/>
         <tag k="source:imagery" v="Unknown"/>
     </way>
-    <relation visible="true" id="-373402" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-374011" role=""/>
-        <member type="way" ref="-374012" role=""/>
-        <tag k="service" v="driveway"/>
-        <tag k="access" v="permissive"/>
-        <tag k="highway" v="service"/>
-        <tag k="source:datetime" v="2015-07-23T10:27:51.000Z"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-373401" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-374003" role=""/>
-        <member type="way" ref="-374004" role=""/>
-        <tag k="barrier" v="wall"/>
-        <tag k="source:datetime" v="2015-07-23T10:43:07.000Z"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="type" v="multilinestring"/>
-    </relation>
-    <relation visible="true" id="-371552" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="relation" ref="-373401" role="outer"/>
-        <tag k="addr:postcode" v="8181"/>
-        <tag k="area" v="yes"/>
-        <tag k="name" v="King Fahd Palace Hôtel"/>
-        <tag k="stars" v="5"/>
-        <tag k="landuse" v="commercial"/>
-        <tag k="addr:street" v="Route des Almadies"/>
-        <tag k="contact:facebook" v="https://www.facebook.com/KingFahdPalace"/>
-        <tag k="tourism" v="hotel"/>
-        <tag k="source:datetime" v="2015-07-23T12:07:17.000Z"/>
-        <tag k="contact:fax" v="+221 33 8696924"/>
-        <tag k="contact:phone" v="+221 33 8696969"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="contact:website" v="http://www.kingfahdpalacehotels.com/"/>
-        <tag k="addr:city" v="Dakar"/>
-        <tag k="type" v="multipolygon"/>
-    </relation>
 </osm>

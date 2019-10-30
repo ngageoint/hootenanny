@@ -269,6 +269,7 @@ void MapComparator::_printIdDiff(
 {
   QSet<long> ids1;
   QSet<long> ids2;
+  LOG_VARD(limit);
 
   switch (elementType.getEnum())
   {
@@ -299,16 +300,60 @@ void MapComparator::_printIdDiff(
 
   QSet<long> ids1Copy = ids1;
   const QSet<long> idsIn1AndNotIn2 = ids1Copy.subtract(ids2);
+  QSet<long> idsIn1AndNotIn2Limited;
+  if (limit < idsIn1AndNotIn2.size())
+  {
+     int ctr = 0;
+     for (QSet<long>::const_iterator it = idsIn1AndNotIn2.begin(); it != idsIn1AndNotIn2.end(); ++it)
+     {
+       idsIn1AndNotIn2Limited.insert(*it);
+       ctr++;
+
+       if (ctr == limit)
+       {
+         break;
+       }
+     }
+  }
+  else
+  {
+    idsIn1AndNotIn2Limited = idsIn1AndNotIn2;
+  }
 
   QSet<long> ids2Copy = ids2;
   const QSet<long> idsIn2AndNotIn1 = ids2Copy.subtract(ids1);
+  QSet<long> idsIn2AndNotIn1Limited;
+  if (limit < idsIn2AndNotIn1.size())
+  {
+     int ctr = 0;
+     for (QSet<long>::const_iterator it = idsIn2AndNotIn1.begin(); it != idsIn2AndNotIn1.end(); ++it)
+     {
+       idsIn2AndNotIn1Limited.insert(*it);
+       ctr++;
 
-  LOG_WARN(
-    "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
-    idsIn1AndNotIn2);
-  LOG_WARN(
-    "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<
-    idsIn2AndNotIn1);
+       if (ctr == limit)
+       {
+         break;
+       }
+     }
+  }
+  else
+  {
+    idsIn2AndNotIn1Limited = idsIn2AndNotIn1;
+  }
+
+  if (idsIn1AndNotIn2Limited.size() > 0)
+  {
+    LOG_WARN(
+      "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
+      idsIn1AndNotIn2Limited);
+  }
+  if (idsIn2AndNotIn1Limited.size() > 0)
+  {
+    LOG_WARN(
+      "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<
+      idsIn2AndNotIn1Limited);
+  }
 }
 
 bool MapComparator::isMatch(const std::shared_ptr<OsmMap>& refMap,

@@ -186,6 +186,12 @@ int ConflateCmd::runSimple(QStringList& args)
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
 
+  _updateConfigOptionsForAttributeConflation();
+  if (isDiffConflate)
+  {
+    _updateConfigOptionsForDifferentialConflation();
+  }
+
   // The number of steps here must be updated as you add/remove job steps in the logic.
   _numTotalTasks = 5;
   if (displayStats)
@@ -301,9 +307,6 @@ int ConflateCmd::runSimple(QStringList& args)
   size_t initialElementCount = map->getElementCount();
   stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
-
-  _updateConfigOptionsForAttributeConflation();
-  _updateConfigOptionsForDifferentialConflation();
 
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {

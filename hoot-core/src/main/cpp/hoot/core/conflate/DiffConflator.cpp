@@ -125,7 +125,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
-  // If we don't do this, then any non-matchable data will simply pass through to output.
+  // If we skip this part, then any non-matchable data will simply pass through to output.
   if (ConfigOptions().getDifferentialRemoveUnconflatableData())
   {
     LOG_INFO("Discarding unconflatable elements...");
@@ -218,33 +218,40 @@ void DiffConflator::_snapSecondaryRoadsBackToRef()
 void DiffConflator::_removeMatches(const Status& status)
 {
   LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
+
+  const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+  LOG_VARD(treatReviewsAsMatches);
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-         pit != pairs.end(); ++pit)
-    {
-      if (!pit->first.isNull())
+    ConstMatchPtr match = *mit;
+    //if (treatReviewsAsMatches || match->getType() != MatchType::Review)
+    //{
+      std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
+           pit != pairs.end(); ++pit)
       {
-        LOG_VART(pit->first);
-        ElementPtr e = _pMap->getElement(pit->first);
-        if (e && e->getStatus() == status)
+        if (!pit->first.isNull())
         {
-          //LOG_VART(e->getTags().get("name"));
-          RecursiveElementRemover(pit->first).apply(_pMap);
+          LOG_VART(pit->first);
+          ElementPtr e = _pMap->getElement(pit->first);
+          if (e && e->getStatus() == status)
+          {
+            //LOG_VART(e->getTags().get("name"));
+            RecursiveElementRemover(pit->first).apply(_pMap);
+          }
+        }
+        if (!pit->second.isNull())
+        {
+          LOG_VART(pit->second);
+          ElementPtr e = _pMap->getElement(pit->second);
+          if (e && e->getStatus() == status)
+          {
+            //LOG_VART(e->getTags().get("name"));
+            RecursiveElementRemover(pit->second).apply(_pMap);
+          }
         }
       }
-      if (!pit->second.isNull())
-      {
-        LOG_VART(pit->second);
-        ElementPtr e = _pMap->getElement(pit->second);
-        if (e && e->getStatus() == status)
-        {
-          //LOG_VART(e->getTags().get("name"));
-          RecursiveElementRemover(pit->second).apply(_pMap);
-        }
-      }
-    }
+    //}
   }
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
