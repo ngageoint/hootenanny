@@ -82,6 +82,8 @@ void IntegerProgrammingSolver::solve()
 
 void IntegerProgrammingSolver::solveBranchAndCut()
 {
+  LOG_DEBUG("solveBranchAndCut");
+
   glp_iocp iocp;
   glp_init_iocp(&iocp);
   //  Turn on the presolver so that glp_intopt works correctly
@@ -133,6 +135,8 @@ void IntegerProgrammingSolver::solveBranchAndCut()
 
 void IntegerProgrammingSolver::solveSimplex()
 {
+  LOG_DEBUG("solveSimplex");
+
   glp_smcp smcp;
   glp_init_smcp(&smcp);
   //  Setup the time limit if necessary
