@@ -56,6 +56,7 @@ RemoveRoundabouts::RemoveRoundabouts()
 void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
 {
   LOG_TRACE("Removing roundabouts...");
+  LOG_VART(MapProjector::toWkt(_pMap->getProjection()));
 
   // Get a list of roundabouts in the map
   RoundaboutCriterion roundaboutCrit;
@@ -125,13 +126,16 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
     OsmMapWriterFactory::writeDebugMap(
       _pMap, "after-removing-roundabout-" + QString::number(i + 1));
   }
+
+  LOG_VART(MapProjector::toWkt(_pMap->getProjection()));
 }
 
-void RemoveRoundabouts::apply(OsmMapPtr &pMap)
+void RemoveRoundabouts::apply(OsmMapPtr& pMap)
 {
   _numAffected = 0;
   _pMap = pMap;
 
+  LOG_VART(MapProjector::toWkt(pMap->getProjection()));
   MapProjector::projectToPlanar(_pMap);
 
   std::vector<RoundaboutPtr> removed;

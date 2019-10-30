@@ -276,8 +276,10 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
       extraNodeIDs.insert(_roundaboutNodes[i]->getId());
     }
   }
-  LOG_VART(connectingNodeIDs.size());
-  LOG_VART(extraNodeIDs.size());
+  //LOG_VART(connectingNodeIDs.size());
+ // LOG_VART(extraNodeIDs.size());
+  LOG_VART(connectingNodeIDs);
+  LOG_VART(extraNodeIDs);
 
   // Find our center coord...
   if (!_pCenterNode)
@@ -285,6 +287,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
 
   // Remove roundabout way & extra nodes
   LOG_TRACE("Removing roundabout way: " << _roundaboutWay->getId() << "...");
+  LOG_VART(OsmUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
   RemoveWayByEid::removeWayFully(pMap, _roundaboutWay->getId());
   for (std::set<long>::iterator it = extraNodeIDs.begin(); it != extraNodeIDs.end(); ++it)
   {
@@ -295,10 +298,11 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
   }
 
   // Add center node
-  LOG_VART(_pCenterNode);
+  LOG_TRACE("Adding center node: " << _pCenterNode << "...");
   pMap->addNode(_pCenterNode);
 
   // Connect it up
+  LOG_TRACE("Connecting center node: " << _pCenterNode << "...");
   for (std::set<long>::iterator it = connectingNodeIDs.begin(); it != connectingNodeIDs.end(); ++it)
   {
     WayPtr pWay(new Way(_status, pMap->createNextWayId(), 15));
@@ -311,6 +315,8 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
     pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
 
     pMap->addWay(pWay);
+    LOG_TRACE("Adding temp way: " << pWay->getId());
+    LOG_VART(OsmUtils::getWayNodesDetailedString(_roundaboutWay, pMap));
     _tempWays.push_back(pWay);
   }
   LOG_VART(_tempWays.size());
@@ -345,7 +351,6 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       bool found = false;
       ConstNodePtr thisNode = _roundaboutNodes[i];
       long nodeId = thisNode->getId();
-      LOG_VART(nodeId);
       if (pMap->getNodes().end() != pMap->getNodes().find(nodeId))
       {
         ConstNodePtr otherNode = pMap->getNodes().find(nodeId)->second;
@@ -359,7 +364,9 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         {
           NodePtr pNewNode(new Node(*thisNode));
           pNewNode->setId(pMap->createNextNodeId());
-          LOG_TRACE("Adding found node: " << pNewNode->getId() << "...");
+          LOG_TRACE(
+            "Node with ID: " << nodeId << " found. Adding it with ID: " << pNewNode->getId() <<
+            "...");
           pMap->addNode(pNewNode);
           wayNodes.push_back(pNewNode);
           found = true;
@@ -370,7 +377,9 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       if (!found)
       {
         NodePtr pNewNode(new Node(*(_roundaboutNodes[i])));
-        LOG_TRACE("Adding not found node: " << pNewNode->getId() << "...");
+        LOG_TRACE(
+          "Node with ID: " << nodeId << " not found. Adding new node: " << pNewNode->getId() <<
+          "...");
         pMap->addNode(pNewNode);
         wayNodes.push_back(pNewNode);
       }
@@ -386,13 +395,17 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     pRoundabout->setNodes(nodeIds);
     LOG_VART(pRoundabout->getNodeIds());
     pMap->addWay(pRoundabout);
-
-    OsmUtils::logElementDetail(pRoundabout, pMap);
+//    OsmUtils::logElementDetail(
+//      pRoundabout, pMap, Log::Trace,
+//      "Roundabout::replaceRoundabout: roundabout after updating nodes");
+    LOG_VART(OsmUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later
     ElementConverter converter(pMap);
     std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(pRoundabout);
     //  Check all of the connecting ways (if they exist) for an endpoint on or near the roundabout
+    LOG_VART(_connectingWays.size());
+    int numAttemptedSnaps = 0;
     for (size_t i = 0; i < _connectingWays.size(); ++i)
     {
       WayPtr way = _connectingWays[i];
@@ -453,9 +466,12 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
         continue;
       //  Snap the closest
       UnconnectedWaySnapper::snapClosestEndpointToWay(pMap, way, pRoundabout);
+      numAttemptedSnaps++;
     }
+    LOG_VART(numAttemptedSnaps);
 
     // Need to remove temp parts no matter what; delete temp ways we added
+    LOG_VART(_tempWays.size());
     for (size_t i = 0; i < _tempWays.size(); i++)
     {
       ConstWayPtr tempWay = _tempWays[i];

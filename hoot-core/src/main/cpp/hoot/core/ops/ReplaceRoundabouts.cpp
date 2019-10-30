@@ -58,9 +58,11 @@ ReplaceRoundabouts::ReplaceRoundabouts()
 void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
 {
   LOG_TRACE("Replacing roundabouts...");
+  LOG_VART(MapProjector::toWkt(pMap->getProjection()));
 
   // Make sure we are planar
   MapProjector::projectToPlanar(pMap);
+  LOG_VART(MapProjector::toWkt(pMap->getProjection()));
 
   // Get a list of roundabouts from the map, go through & process them
   std::vector<RoundaboutPtr> roundabouts = pMap->getRoundabouts();
@@ -87,6 +89,8 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     RemoveNodeByEid::removeNode(pMap, id, true);
   }
   OsmMapWriterFactory::writeDebugMap(pMap, "roundabout-replacement-after-removing-center-nodes");
+
+  LOG_VART(MapProjector::toWkt(pMap->getProjection()));
 }
 
 void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)
