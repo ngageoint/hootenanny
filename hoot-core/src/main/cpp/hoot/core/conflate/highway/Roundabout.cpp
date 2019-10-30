@@ -37,6 +37,7 @@
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -486,22 +487,44 @@ QString Roundabout::toDetailedString(OsmMapPtr map) const
   QString str = toString();
 
   str += ", Original nodes size: " + QString::number(_roundaboutNodes.size());
-  str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeIds().size());
-
-  std::vector<long> originalNodeIds;
-  for (size_t i = 0; i < _roundaboutNodes.size(); i++)
+  if (_roundaboutWay)
   {
-    originalNodeIds.push_back(_roundaboutNodes[i]->getId());
+    str += ", Current nodes size: " + QString::number(_roundaboutWay->getNodeIds().size());
   }
-  if (originalNodeIds == _roundaboutWay->getNodeIds())
+
+  bool nodeIdsMatch = false;
+  const std::vector<ConstNodePtr> originalNodes = _roundaboutNodes;
+  const std::vector<long> originalNodeIds = OsmUtils::nodesToNodeIds(originalNodes);
+  if (_roundaboutWay)
   {
-    str += ", original and current node IDs match.";
+    nodeIdsMatch = (originalNodeIds == _roundaboutWay->getNodeIds());
+  }
+  if (nodeIdsMatch)
+  {
+    str += ", original and current node IDs match";
   }
   else
   {
     str +=
-      ", original and current node IDs do not match. original nodes: " + getOriginalNodesString();
+      ", original and current node IDs do not match, original nodes: " + getOriginalNodesString();
     str += "; current nodes: " + getCurrentNodesString(map);
+  }
+
+  if (nodeIdsMatch)
+  {
+    const std::vector<ConstNodePtr> currentNodes =
+      OsmUtils::nodeIdsToNodes(_roundaboutWay->getNodeIds(), map);
+    if (OsmUtils::nodeCoordsMatch(originalNodes, currentNodes))
+    {
+      str += ", original and current node coordinates match.";
+    }
+    else
+    {
+      str +=
+        ", original and current node coordinates do not match. original node coords: " +
+        OsmUtils::nodeCoordsToString(originalNodes) + ", current node coords: " +
+        OsmUtils::nodeCoordsToString(currentNodes);
+    }
   }
 
   return str;
@@ -513,7 +536,14 @@ QString Roundabout::getOriginalNodesString() const
   for (size_t i = 0; i < _roundaboutNodes.size(); i++)
   {
     ConstNodePtr node = _roundaboutNodes[i];
-    str += QString::number(node->getId()) + ",";
+    if (node)
+    {
+      str += QString::number(node->getId()) + ",";
+    }
+    else
+    {
+      str += "null node,";
+    }
   }
   str.chop(1);
   return str;

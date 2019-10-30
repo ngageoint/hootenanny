@@ -74,7 +74,7 @@ void OsmUtils::printNodes(const QString& nodeCollectionName,
   }
 }
 
-const QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes)
+QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes)
 {
   QList<long> nodeIds;
   for (QList<std::shared_ptr<const Node>>::const_iterator it = nodes.constBegin();
@@ -82,6 +82,21 @@ const QList<long> OsmUtils::nodesToNodeIds(const QList<std::shared_ptr<const Nod
   {
     std::shared_ptr<const Node> node = *it;
     nodeIds.append(node->getElementId().getId());
+  }
+  return nodeIds;
+}
+
+std::vector<long> OsmUtils::nodesToNodeIds(const std::vector<std::shared_ptr<const Node>>& nodes)
+{
+  std::vector<long> nodeIds;
+  for (std::vector<std::shared_ptr<const Node>>::const_iterator it = nodes.begin();
+       it != nodes.end(); ++it)
+  {
+    std::shared_ptr<const Node> node = *it;
+    if (node)
+    {
+      nodeIds.push_back(node->getElementId().getId());
+    }
   }
   return nodeIds;
 }
@@ -95,6 +110,75 @@ QList<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(
     nodes.append(std::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
   }
   return nodes;
+}
+
+std::vector<std::shared_ptr<const Node>> OsmUtils::nodeIdsToNodes(
+  const std::vector<long>& nodeIds, const std::shared_ptr<const OsmMap>& map)
+{
+  std::vector<std::shared_ptr<const Node>> nodes;
+  for (std::vector<long>::const_iterator it = nodeIds.begin(); it != nodeIds.end(); ++it)
+  {
+    nodes.push_back(std::dynamic_pointer_cast<const Node>(map->getElement(ElementType::Node, *it)));
+  }
+  return nodes;
+}
+
+bool OsmUtils::nodeCoordsMatch(std::vector<std::shared_ptr<const Node>> nodes1,
+                               std::vector<std::shared_ptr<const Node>> nodes2)
+{
+  if (nodes1.size() != nodes2.size())
+  {
+    return false;
+  }
+
+  for (size_t i = 0; i < nodes1.size(); i++)
+  {
+    ConstNodePtr node1 = nodes1[i];
+    ConstNodePtr node2 = nodes2[i];
+
+    if (!node1 || !node2)
+    {
+      return false;
+    }
+
+    if (!node1->coordsMatch(*node2))
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+QString OsmUtils::nodeCoordsToString(const std::vector<ConstNodePtr>& nodes)
+{
+  QString str;
+  const int comparisonSensitivity = ConfigOptions().getNodeComparisonCoordinateSensitivity();
+  for (size_t i = 0; i < nodes.size(); i++)
+  {
+    ConstNodePtr node = nodes[i];
+    if (node)
+    {
+      str +=
+        "ID: " + QString::number(node->getId()) + ", X: " +
+        QString::number(node->getX(), 'f', comparisonSensitivity) + ", Y: " +
+        QString::number(node->getY(), 'f', comparisonSensitivity) + "; ";
+    }
+    else
+    {
+      str += "null coord; ";
+    }
+  }
+  str.chop(2);
+  return str;
+}
+
+bool OsmUtils::nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
+                               const ConstOsmMapPtr& map)
+{
+  return
+    nodeCoordsMatch(
+      nodeIdsToNodes(way1->getNodeIds(), map), nodeIdsToNodes(way2->getNodeIds(), map));
 }
 
 Coordinate OsmUtils::nodeToCoord(const std::shared_ptr<const Node>& node)

@@ -70,7 +70,15 @@ public:
     @param nodes a collection of nodes
     @return a collection of node ID's
     */
-  static const QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
+  static QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
+
+  /**
+   * TODO
+   *
+   * @param nodes
+   * @return
+   */
+  static std::vector<long> nodesToNodeIds(const std::vector<std::shared_ptr<const Node>>& nodes);
 
   /**
     Retrieves a collection of nodes given a collection of node ID's
@@ -81,6 +89,45 @@ public:
     */
   static QList<std::shared_ptr<const Node>> nodeIdsToNodes(
     const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
+
+  /**
+   * TODO
+   *
+   * @param nodeIds
+   * @param map
+   * @return
+   */
+  static std::vector<std::shared_ptr<const Node>> nodeIdsToNodes(
+    const std::vector<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
+
+  /**
+   * TODO
+   *
+   * @param nodes1
+   * @param nodes2
+   * @return
+   */
+  static bool nodeCoordsMatch(std::vector<std::shared_ptr<const Node>> nodes1,
+                              std::vector<std::shared_ptr<const Node>> nodes2);
+
+  /**
+   * TODO
+   *
+   * @param way1
+   * @param way2
+   * @param map
+   * @return
+   */
+  static bool nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
+                              const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param nodes
+   * @return
+   */
+  static QString nodeCoordsToString(const std::vector<ConstNodePtr>& nodes);
 
   /**
     Converts a OSM node to a coordinate

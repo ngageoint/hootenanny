@@ -37,6 +37,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QDebug>
@@ -119,6 +120,10 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
   {
     removed[i]->removeRoundabout(_pMap);
     _numAffected++;
+
+    // This could be very expensive...enable for debugging only.
+    OsmMapWriterFactory::writeDebugMap(
+      _pMap, "after-removing-roundabout-" + QString::number(i + 1));
   }
 }
 

@@ -126,6 +126,14 @@ public:
 
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool coordsMatch(const Node& other) const;
+
 protected:
 
   friend class SharedPtrPool<Node>;
