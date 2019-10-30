@@ -258,6 +258,7 @@ void Roundabout::removeRoundabout(OsmMapPtr pMap)
    * the centerpoint with temp ways.
    */
 
+  //LOG_TRACE("Removing roundabout: " << _roundaboutWay->getElementId() << "...");
   LOG_TRACE("Removing roundabout: " << toDetailedString(pMap) << "...");
 
   // Find our connecting nodes & extra nodes.
@@ -331,6 +332,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
    * around during conflation & merging
    */
 
+  //LOG_TRACE("Replacing roundabout: " << _roundaboutWay->getElementId() << "...");
   LOG_TRACE("Replacing roundabout: " << toDetailedString(pMap) << "...");
 
   // Re-add roundabout from the ref dataset or the secondary dataset if it has no match in the
@@ -343,11 +345,15 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       bool found = false;
       ConstNodePtr thisNode = _roundaboutNodes[i];
       long nodeId = thisNode->getId();
+      LOG_VART(nodeId);
       if (pMap->getNodes().end() != pMap->getNodes().find(nodeId))
       {
         ConstNodePtr otherNode = pMap->getNodes().find(nodeId)->second;
+        LOG_VART(otherNode->getId());
 
         // If nodes differ by more than circular error, add the node as new
+        LOG_VART(thisNode->toCoordinate().distance(otherNode->toCoordinate()));
+        LOG_VART(thisNode->getCircularError());
         if (thisNode->toCoordinate().distance(otherNode->toCoordinate()) >
             thisNode->getCircularError())
         {
@@ -380,6 +386,8 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     pRoundabout->setNodes(nodeIds);
     LOG_VART(pRoundabout->getNodeIds());
     pMap->addWay(pRoundabout);
+
+    OsmUtils::logElementDetail(pRoundabout, pMap);
 
     //  Convert the roundabout to a geometry for distance checking later
     ElementConverter converter(pMap);
@@ -447,8 +455,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
       UnconnectedWaySnapper::snapClosestEndpointToWay(pMap, way, pRoundabout);
     }
 
-    // Need to remove temp parts no matter what
-    // Delete temp ways we added
+    // Need to remove temp parts no matter what; delete temp ways we added
     for (size_t i = 0; i < _tempWays.size(); i++)
     {
       ConstWayPtr tempWay = _tempWays[i];

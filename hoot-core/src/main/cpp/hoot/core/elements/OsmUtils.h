@@ -263,6 +263,15 @@ public:
                                                   const ConstOsmMapPtr& map);
 
   /**
+   * TODO
+   *
+   * @param way
+   * @param map
+   * @return
+   */
+  static QString getWayNodesDetailedString(const ConstWayPtr& way, const ConstOsmMapPtr& map);
+
+  /**
    * Returns the first way ID from a set of relation members
    *
    * @param relation relation to check way ID for

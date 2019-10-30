@@ -246,6 +246,11 @@ QString OsmUtils::getRelationMembersDetailedString(const ConstRelationPtr& relat
   return str;
 }
 
+QString OsmUtils::getWayNodesDetailedString(const ConstWayPtr& way, const ConstOsmMapPtr& map)
+{
+  return nodeCoordsToString(nodeIdsToNodes(way->getNodeIds(), map));
+}
+
 long OsmUtils::getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map)
 {
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
@@ -276,7 +281,12 @@ void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMa
   {
     LOG_VAR(message);
     LOG_VAR(element);
-    if (element->getElementType() == ElementType::Relation)
+    if (element->getElementType() == ElementType::Way)
+    {
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+      LOG_VAR(OsmUtils::getWayNodesDetailedString(way, map));
+    }
+    else if (element->getElementType() == ElementType::Relation)
     {
       ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
       LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
@@ -655,7 +665,7 @@ bool OsmUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
 }
 
 bool OsmUtils::allElementsHaveAnyKvp(const QStringList& kvps,
-                                    const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
@@ -666,7 +676,7 @@ bool OsmUtils::allElementsHaveAnyKvp(const QStringList& kvps,
 }
 
 bool OsmUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
-                                       const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                        const std::set<ElementId>& elementIds, OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
@@ -677,7 +687,7 @@ bool OsmUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
 }
 
 bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
-                                    const std::set<ElementId>& elementIds, OsmMapPtr& map)
+                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
 {
   std::vector<ElementPtr> elements;
   for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
