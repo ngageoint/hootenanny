@@ -50,9 +50,9 @@ namespace hoot
 
 typedef std::shared_ptr<geos::geom::Geometry> GeomPtr;
 
-Roundabout::Roundabout()
-  :  _status(Status::Invalid),
-    _overrideStatus(false)
+Roundabout::Roundabout() :
+_status(Status::Invalid),
+_overrideStatus(false)
 {
 }
 
@@ -89,9 +89,7 @@ NodePtr Roundabout::getNewCenter(OsmMapPtr pMap)
   lat = lat / count;
   lon = lon / count;
 
-  NodePtr pNewNode(new Node(_status,
-                   pMap->createNextNodeId(),
-                   lon, lat, 15));
+  NodePtr pNewNode(new Node(_status, pMap->createNextNodeId(), lon, lat, 15));
   pNewNode->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutCenter());
 
   return pNewNode;
@@ -113,8 +111,10 @@ RoundaboutPtr Roundabout::makeRoundabout(const OsmMapPtr& pMap, WayPtr pWay)
 
   // Calculate and set center
   rnd->setRoundaboutCenter(rnd->getNewCenter(pMap));
+  LOG_VART(rnd->getCenter());
 
   LOG_TRACE("Created roundabout: " << rnd->toDetailedString(pMap));
+  LOG_VART(OsmUtils::getWayNodesDetailedString(rnd->getRoundaboutWay(), pMap));
   return rnd;
 }
 
@@ -200,9 +200,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               _connectingWays.push_back(newWays[j]);
 
               // Now make connector way
-              WayPtr pWay(new Way(_otherStatus,
-                                  pMap->createNextWayId(),
-                                  15));
+              WayPtr pWay(new Way(_otherStatus, pMap->createNextWayId(), 15));
               pWay->addNode(pCenterNode->getId());
               pWay->setTag("highway", "unclassified");
               pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
@@ -210,8 +208,8 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               LOG_TRACE("Adding temp way: " << pWay->getId() << "...");
               _tempWays.push_back(pWay);
 
-              // Take the new way. Whichever is closest, first node or last,
-              // connect it to our center point.
+              // Take the new way. Whichever is closest, first node or last, connect it to our
+              // center point.
               NodePtr pFirstNode = pMap->getNode(newWays[j]->getFirstNodeId());
               NodePtr pLastNode = pMap->getNode(newWays[j]->getLastNodeId());
 

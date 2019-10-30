@@ -39,13 +39,11 @@ namespace hoot
 {
 
 /**
- * This is a class for storing & maniuplating representations of roundabouts.
- * It holds nodes/ways that are part of the roundabout, and nodes/ways
- * used to replace the roundabout.
+ * This is a class for storing & manipulating representations of roundabouts. It holds nodes/ways
+ * that are part of the roundabout, and nodes/ways used to replace the roundabout.
  *
- * This is a work in progress, but for now the class contains methods to extract
- * roundabout info from a map, replace a roundabout with a bunch of ways
- * connected to a center point, and put the roundabout back to the way it was
+ * The class contains methods to extract roundabout info from a map, replace a roundabout with a
+ * bunch of ways connected to a center point, and put the roundabout back to the way it was
  */
 class Roundabout
 {

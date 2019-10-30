@@ -75,8 +75,13 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
     WayPtr pWay = _pMap->getWay(_todoWays[i]);
     RoundaboutPtr rnd = Roundabout::makeRoundabout(_pMap, pWay);
     removed.push_back(rnd);
+
+    // This could be very expensive...enable for debugging only.
+    OsmMapWriterFactory::writeDebugMap(
+      _pMap, "after-making-roundabout-" + QString::number(i + 1));
   }
   LOG_VART(removed.size());
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-making-roundabouts");
 
   //  Exit if there are no roundabouts removed
   if (removed.size() == 0)
@@ -107,6 +112,10 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
         removed[i]->overrideRoundabout();
       }
     }
+
+    // This could be very expensive...enable for debugging only.
+    OsmMapWriterFactory::writeDebugMap(
+      _pMap, "after-handline-crossing-ways-" + QString::number(i + 1));
   }
 
   //  Mangle the last way if it doesn't have a sibling
@@ -115,6 +124,8 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
     removed[removed.size() - 1]->handleCrossingWays(_pMap);
     removed[removed.size() - 1]->overrideRoundabout();
   }
+
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-handline-crossing-ways");
 
   // Now remove roundabouts
   for (size_t i = 0; i < removed.size(); i++)
