@@ -28,8 +28,8 @@
 
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 using namespace std;
 
@@ -70,17 +70,24 @@ public:
         _from->getElement(eid)->visitRo(*_from, v);
         // finally, add this element to the map.
         _to->addElement(ee);
+        //  Add all of the elements affected
+        _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
       }
+      //  Add this element to the list
+      _elementsAdded.insert(eid);
     }
   }
 
   virtual QString getDescription() const { return ""; }
+
+  std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 
 private:
 
   ConstOsmMapPtr _from;
   OsmMapPtr _to;
   ElementId _exempt;
+  std::set<ElementId> _elementsAdded;
 };
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
@@ -100,6 +107,12 @@ CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>&
       _eids.insert(ElementId(ElementType::Way, *it));
     }
   }
+}
+
+CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid)
+  : _from(from)
+{
+  _eids.insert(eid);
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
@@ -134,6 +147,16 @@ void CopyMapSubsetOp::apply(OsmMapPtr &map)
     }
     _from->getElement(*it)->visitRo(*_from, v);
   }
+  std::set<ElementId> eids = v.getElementsAdded();
+  _eidsCopied.insert(eids.begin(), eids.end());
+}
+/*
+QString CopyMapSubsetOp::getInitStatusMessage() const
+{
 }
 
+QString CopyMapSubsetOp::getCompletedStatusMessage() const
+{
+}
+*/
 }

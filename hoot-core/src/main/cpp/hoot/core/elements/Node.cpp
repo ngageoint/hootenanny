@@ -84,6 +84,12 @@ Envelope* Node::getEnvelope(const std::shared_ptr<const ElementProvider>& /*ep*/
   return new Envelope(getX(), getX(), getY(), getY());
 }
 
+const Envelope& Node::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& /*ep*/) const
+{
+  _cachedEnvelope = Envelope(getX(), getX(), getY(), getY());
+  return _cachedEnvelope;
+}
+
 void Node::setX(double x)
 {
   _nodeData.setX(x);

@@ -104,15 +104,15 @@ public:
   /**
    * Returns the same result as getEnvelopeInternal, but copied so the caller gets ownership.
    */
-  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const
+  virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const override
   { return new geos::geom::Envelope(getEnvelopeInternal(ep)); }
 
   /**
    * Returns the envelope for this way. This is guaranteed to be exact. If any of the nodes for
    * this way are not loaded into RAM then the behavior is undefined (probably an assert).
    */
-  const geos::geom::Envelope& getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const;
+  virtual const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   /**
    * Returns the index of the first time this node occurs in the way. It is possible that the node
@@ -220,11 +220,6 @@ protected:
 private:
 
   std::shared_ptr<WayData> _wayData;
-
-  /**
-   * This envelope may be cached, but it also may not be exact.
-   */
-  mutable geos::geom::Envelope _cachedEnvelope;
 
   // for debugging only; SLOW - We don't check for duplicated nodes (outside of start/end) at
   // runtime due to the performance hit. So, use this to debug when that occurs.

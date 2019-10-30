@@ -151,12 +151,11 @@ Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep
   return new Envelope(getEnvelopeInternal(ep));
 }
 
-Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
+const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
 {
   LOG_VART(ep.get());
 
-  Envelope result;
-  result.init();
+  _cachedEnvelope.init();
 
   const vector<RelationData::Entry>& members = getMembers();
 
@@ -169,8 +168,8 @@ Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvid
     if (ep->containsElement(m.getElementId()) == false)
     {
       LOG_TRACE(m.getElementId() << " missing.  Returning empty envelope...");
-      result.setToNull();
-      return result;
+      _cachedEnvelope.setToNull();
+      return _cachedEnvelope;
     }
 
     const std::shared_ptr<const Element> e = ep->getElement(m.getElementId());
@@ -180,15 +179,15 @@ Envelope Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvid
     if (childEnvelope->isNull())
     {
       LOG_TRACE("Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
-      result.setToNull();
-      return result;
+      _cachedEnvelope.setToNull();
+      return _cachedEnvelope;
     }
 
-    result.expandToInclude(childEnvelope.get());
+    _cachedEnvelope.expandToInclude(childEnvelope.get());
   }
 
-  LOG_VART(result);
-  return result;
+  LOG_VART(_cachedEnvelope);
+  return _cachedEnvelope;
 }
 
 void Relation::_makeWritable()

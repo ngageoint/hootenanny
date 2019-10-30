@@ -28,9 +28,10 @@
 #define COPYMAPSUBSETOP_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
 {
@@ -40,7 +41,7 @@ namespace hoot
  *
  * TODO: implement OperationStatusInfo
  */
-class CopyMapSubsetOp : public OsmMapOperation
+class CopyMapSubsetOp : public OsmMapOperation//, public OperationStatusInfo
 {
 public:
 
@@ -48,6 +49,7 @@ public:
 
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& wayIds);
+  CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit);
 
@@ -62,11 +64,16 @@ public:
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
+//  virtual QString getInitStatusMessage() const override;
+//  virtual QString getCompletedStatusMessage() const override;
+
+  std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 private:
 
   std::set<ElementId> _eids;
   ConstOsmMapPtr _from;
   ElementCriterionPtr _crit;
+  std::set<ElementId> _eidsCopied;
 };
 
 }

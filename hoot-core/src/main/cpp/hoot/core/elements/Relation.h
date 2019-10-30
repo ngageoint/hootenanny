@@ -94,10 +94,10 @@ public:
   { return _relationData->getElements(); }
 
   virtual geos::geom::Envelope* getEnvelope(
-    const std::shared_ptr<const ElementProvider>& ep) const;
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
-  geos::geom::Envelope getEnvelopeInternal(
-    const std::shared_ptr<const ElementProvider>& ep) const;
+  virtual const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const override;
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Relation); }
 

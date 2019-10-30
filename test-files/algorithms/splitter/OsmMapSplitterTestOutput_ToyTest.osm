@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="39.59349717330424" minlon="-104.8050061945212" maxlat="39.59441940337849" maxlon="-104.8039041912926"/>
+    <node visible="true" id="-18968486" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5934971733042431" lon="-104.8050061945212263"/>
+    <node visible="true" id="-18968484" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5934971733042431" lon="-104.8048403015620806"/>
+    <node visible="true" id="-18968482" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937003389047391" lon="-104.8048343768135453"/>
+    <node visible="true" id="-18968480" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937026216609027" lon="-104.8049113985445473"/>
+    <node visible="true" id="-18968478" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937665388031519" lon="-104.8049143609188434"/>
+    <node visible="true" id="-18968477" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5937642560490914" lon="-104.8050032321469587"/>
+    <node visible="true" id="-18968468" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5935816354801773" lon="-104.8043811335501374"/>
+    <node visible="true" id="-18968466" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5935793527200275" lon="-104.8041352564856936"/>
+    <node visible="true" id="-18968464" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5938121938686507" lon="-104.8041234069886087"/>
+    <node visible="true" id="-18968463" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5938099111160895" lon="-104.8043722464273344"/>
+    <node visible="true" id="-18968393" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5940359032546780" lon="-104.8041411812342432"/>
+    <node visible="true" id="-18968391" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942459154902124" lon="-104.8039041912925882"/>
+    <node visible="true" id="-18968389" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5944194033784882" lon="-104.8041559931055815"/>
+    <node visible="true" id="-18968388" timestamp="1970-01-01T00:00:00Z" version="1" lat="39.5942139571476162" lon="-104.8043781711758697"/>
+    <way visible="true" id="-18968479" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18968477"/>
+        <nd ref="-18968478"/>
+        <nd ref="-18968480"/>
+        <nd ref="-18968482"/>
+        <nd ref="-18968484"/>
+        <nd ref="-18968486"/>
+        <nd ref="-18968477"/>
+        <tag k="name" v="Freddy's"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Freddy's"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-18968465" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18968463"/>
+        <nd ref="-18968464"/>
+        <nd ref="-18968466"/>
+        <nd ref="-18968468"/>
+        <nd ref="-18968463"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Biondi"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-18968390" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18968388"/>
+        <nd ref="-18968389"/>
+        <nd ref="-18968391"/>
+        <nd ref="-18968393"/>
+        <nd ref="-18968388"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="Cheddar's Casual Cafe"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="Cheddar's"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>
