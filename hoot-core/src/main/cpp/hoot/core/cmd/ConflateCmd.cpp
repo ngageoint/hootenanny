@@ -55,6 +55,8 @@
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
 
 // Standard
 #include <fstream>
@@ -300,6 +302,9 @@ int ConflateCmd::runSimple(QStringList& args)
   stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
+  _updateConfigOptionsForAttributeConflation();
+  _updateConfigOptionsForDifferentialConflation();
+
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     // apply any user specified pre-conflate operations
@@ -342,7 +347,6 @@ int ConflateCmd::runSimple(QStringList& args)
   stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
   currentTask++;
 
-  _updatePostConfigOptionsForAttributeConflation();
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
     // apply any user specified post-conflate operations
@@ -484,7 +488,32 @@ float ConflateCmd::_getJobPercentComplete(const int currentTaskNum) const
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void ConflateCmd::_updatePostConfigOptionsForAttributeConflation()
+void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
+{
+  // Since Differential throws out all matches, there's no way we can have a bad merge between
+  // ref/secondary roundabouts. Therefore, no need to replace/remove them. If there's a match, we'll
+  // end with no secondary roundabout in the diff output and only the ref roundabout when the diff
+  // is applied back to the ref.
+
+  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
+  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
+  if (preConflateOps.contains(removeRoundaboutsClassName))
+  {
+    preConflateOps.removeAll(removeRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
+  }
+
+  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+  const QString replaceRoundaboutsClassName =
+    QString::fromStdString(ReplaceRoundabouts::className());
+  if (postConflateOps.contains(replaceRoundaboutsClassName))
+  {
+    postConflateOps.removeAll(replaceRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
+  }
+}
+
+void ConflateCmd::_updateConfigOptionsForAttributeConflation()
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.

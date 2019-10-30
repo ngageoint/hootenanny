@@ -72,6 +72,22 @@ void ConflateCaseTest::_runConflateCmd()
   args << in1.absoluteFilePath();
   args << in2.absoluteFilePath();
   args << testOutput;
+  bool differential = ConfigOptions().getTestCaseConflateDifferential();
+  const bool differentialWithTags = ConfigOptions().getTestCaseConflateDifferentialIncludeTags();
+  if (differentialWithTags)
+  {
+    // let this override and correct what would otherwise be an invalid config
+    differential = true;
+  }
+  if (differential)
+  {
+    args << "--differential";
+  }
+  if (differentialWithTags)
+  {
+    args << "--include-tags";
+  }
+
   int result = -1;
   try
   {
@@ -85,8 +101,8 @@ void ConflateCaseTest::_runConflateCmd()
   QFileInfo expected(_d, "Expected.osm");
   if (expected.exists() == false)
   {
-    throw IllegalArgumentException("Unable to find Expected.osm in conflate case: " +
-      _d.absolutePath());
+    throw IllegalArgumentException(
+      "Unable to find Expected.osm in conflate case: " + _d.absolutePath());
   }
 
   if (result != 0)
@@ -176,11 +192,11 @@ void ConflateCaseTest::runTest()
   // configures and cleans up the conf() environment
   TestSetup st(_confs);
 
-  if (ConfigOptions().getTestCaseCmd().toStdString() == ConflateCmd::className())
+  if (ConfigOptions().getTestCaseConflateCmd().toStdString() == ConflateCmd::className())
   {
     _runConflateCmd();
   }
-  else if (ConfigOptions().getTestCaseCmd() == multiaryConflateClass)
+  else if (ConfigOptions().getTestCaseConflateCmd() == multiaryConflateClass)
   {
     _runMultiaryConflateCmd();
   }
