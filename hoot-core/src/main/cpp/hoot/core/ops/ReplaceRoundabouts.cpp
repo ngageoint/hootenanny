@@ -72,7 +72,7 @@ void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
     _numAffected++;
 
     // This could be very expensive...enable for debugging only.
-    OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabout-" + QString::number(i + 1));
+    //OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabout-" + QString::number(i + 1));
   }
   OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts");
 

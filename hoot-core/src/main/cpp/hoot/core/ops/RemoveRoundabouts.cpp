@@ -108,8 +108,8 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
     }
 
     // This could be very expensive...enable for debugging only.
-    OsmMapWriterFactory::writeDebugMap(
-      _pMap, "after-handline-crossing-ways-" + QString::number(i + 1));
+    //OsmMapWriterFactory::writeDebugMap(
+      //_pMap, "after-handline-crossing-ways-" + QString::number(i + 1));
   }
 
   //  Mangle the last way if it doesn't have a sibling
@@ -128,8 +128,8 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
     _numAffected++;
 
     // This could be very expensive...enable for debugging only.
-    OsmMapWriterFactory::writeDebugMap(
-      _pMap, "after-removing-roundabout-" + QString::number(i + 1));
+    //OsmMapWriterFactory::writeDebugMap(
+      //_pMap, "after-removing-roundabout-" + QString::number(i + 1));
   }
 }
 
