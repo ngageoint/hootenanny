@@ -41,6 +41,8 @@ class OsmChangesetFileWriterFactory
 {
 public:
 
+  static std::string className() { return "hoot::OsmChangesetFileWriterFactory"; }
+
   /**
    * TODO
    *

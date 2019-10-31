@@ -54,14 +54,15 @@ OsmChangesetFileWriterFactory& OsmChangesetFileWriterFactory::getInstance()
 std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWriter(
   const QString& url, const QString& osmApiDbUrl)
 {
-  LOG_VART(url);
+  LOG_VARD(url);
+  LOG_VARD(osmApiDbUrl);
 
   std::vector<std::string> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangesetFileWriter::className());
   std::shared_ptr<OsmChangesetFileWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
-    LOG_VART(names[i]);
+    LOG_VARD(names[i]);
     writer.reset(Factory::getInstance().constructObject<OsmChangesetFileWriter>(names[i]));
     if (writer->isSupported(url))
     {
@@ -81,6 +82,10 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
           dbWriter->setOsmApiDbUrl(osmApiDbUrl);
         }
       }
+    }
+    else
+    {
+      writer.reset();
     }
   }
 

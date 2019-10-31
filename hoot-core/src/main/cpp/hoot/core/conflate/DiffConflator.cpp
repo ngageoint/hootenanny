@@ -539,6 +539,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
   LOG_VARD(output);
   LOG_VARD(separateOutput);
   LOG_VARD(osmApiDbUrl);
+  LOG_VARD(_conflateTags);
 
   // It seems like our tag changes should be sorted by element type before passing them along to the
   // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
@@ -550,14 +551,17 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
 
   std::shared_ptr<OsmChangesetFileWriter> writer =
     OsmChangesetFileWriterFactory::getInstance().createWriter(output, osmApiDbUrl);
+  LOG_VARD(writer.get());
   if (!_conflateTags)
   {
     // only one changeset to write
+    LOG_DEBUG("Writing single changeset...");
     writer->write(output, pGeoChanges);
   }
   else if (separateOutput)
   {
     // write two changesets
+    LOG_DEBUG("Writing separate changesets...");
     writer->write(output, pGeoChanges);
 
     QString outFileName = output;
@@ -572,11 +576,13 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
       outFileName.replace(".osc.sql", "");
       outFileName.append(".tags.osc.sql");
     }
+    LOG_VARD(outFileName);
     writer->write(outFileName, _pTagChanges);
   }
   else
   {
     // write unified output
+    LOG_DEBUG("Writing unified changesets...");
     MultipleChangesetProviderPtr pChanges(
       new MultipleChangesetProvider(pResultMap->getProjection()));
     pChanges->addChangesetProvider(pGeoChanges);
