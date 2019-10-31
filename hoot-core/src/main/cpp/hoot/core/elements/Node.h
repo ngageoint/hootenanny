@@ -127,10 +127,11 @@ public:
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
   /**
-   * TODO
+   * Determines if the coordinates from this node match with that of another given a configurable
+   * tolerance
    *
-   * @param other
-   * @return
+   * @param other the node to compare coordinates with
+   * @return true if the coordinates match; false otherwise
    */
   bool coordsMatch(const Node& other) const;
 

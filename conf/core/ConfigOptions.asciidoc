@@ -929,7 +929,9 @@ List of tags to ignore when performing differential conflation with tags.
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If true reviews are treated as matches by Differential Conflation and removed from the output if
+differential.remove.reference.data is enabled. If set to false, reviews are not treated as matches
+and will pass through to the differential output.
 
 === direction.finder.angle.threshold
 
@@ -4336,14 +4338,16 @@ test cases (`test-files/cases/`) and was originally added to support the Multiar
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+When activated, this runs the conflate case test conflate command with the --differential option.
 
 === test.case.conflate.differential.include.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+When activated, this runs the conflate case test conflate command with both the --differential
+and --include-tags options (setting this to true automatically sets test.case.conflate.differential
+to true).
 
 === test.force.orthographic.projection
 

@@ -65,67 +65,69 @@ public:
                          const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
-    Retrieves a collection of node ID's for a collection of nodes
+    Retrieves a collection of node IDs for a collection of nodes
 
     @param nodes a collection of nodes
-    @return a collection of node ID's
+    @return a collection of node IDs
     */
   static QList<long> nodesToNodeIds(const QList<std::shared_ptr<const Node>>& nodes);
 
   /**
-   * TODO
+   * Retrieves a collection of node IDs for a collection of nodes
    *
-   * @param nodes
-   * @return
+   * @param nodes a collection of nodes
+   * @return a collection of node IDs
    */
   static std::vector<long> nodesToNodeIds(const std::vector<std::shared_ptr<const Node>>& nodes);
 
   /**
-    Retrieves a collection of nodes given a collection of node ID's
+    Retrieves a collection of nodes given a collection of node IDs
 
-    @param nodeIds a collection of node ID's
-    @param map the map owning the nodes with the given ID's
+    @param nodeIds a collection of node IDs
+    @param map the map owning the nodes with the given IDs
     @return a collection of nodes
     */
   static QList<std::shared_ptr<const Node>> nodeIdsToNodes(
     const QList<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
 
   /**
-   * TODO
+   * Retrieves a collection of nodes given a collection of node IDs
    *
-   * @param nodeIds
-   * @param map
-   * @return
+   * @param nodeIds a collection of node IDs
+   * @param map the map owning the nodes with the given IDs
+   * @return a collection of nodes
    */
   static std::vector<std::shared_ptr<const Node>> nodeIdsToNodes(
     const std::vector<long>& nodeIds, const std::shared_ptr<const OsmMap>& map);
 
   /**
-   * TODO
+   * Determines if the coordinates from two collection of nodes match, given a configurable
+   * tolerance
    *
-   * @param nodes1
-   * @param nodes2
-   * @return
+   * @param nodes1 the first collection of nodes to compare
+   * @param nodes2 the second collection of nodes to compare
+   * @return true if the coordinates match; false otherwise
    */
   static bool nodeCoordsMatch(std::vector<std::shared_ptr<const Node>> nodes1,
                               std::vector<std::shared_ptr<const Node>> nodes2);
 
   /**
-   * TODO
+   * Determines if the way node coordinates from two ways match, given a configurable
+   * tolerance
    *
-   * @param way1
-   * @param way2
-   * @param map
-   * @return
+   * @param way1 the first way with nodes to compare
+   * @param way2 the second way with nodes to compare
+   * @param map the map owning the ways
+   * @return true if the way node coordinates match; false otherwise
    */
   static bool nodeCoordsMatch(const ConstWayPtr& way1, const ConstWayPtr& way2,
                               const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Returns a printable string for a collection of nodes
    *
-   * @param nodes
-   * @return
+   * @param nodes the nodes for which to create a string
+   * @return a string
    */
   static QString nodeCoordsToString(const std::vector<ConstNodePtr>& nodes);
 
@@ -263,11 +265,11 @@ public:
                                                   const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Get a detailed string respresenting a way's nodes
    *
-   * @param way
-   * @param map
-   * @return
+   * @param way way to get info from
+   * @param map map owning the way
+   * @return a detailed way nodes string
    */
   static QString getWayNodesDetailedString(const ConstWayPtr& way, const ConstOsmMapPtr& map);
 

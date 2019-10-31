@@ -27,7 +27,7 @@
         "members": {
             "differential.remove.unconflatable.data": "Pass unconflatable data from the secondary input to output",
             "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
-	    "differential.treat.reviews.as.matches": "TODO",
+	    "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from output",
             "snap.unconnected.ways.snap.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to neighboring roads",
             "snap.unconnected.ways.use.existing.way.nodes": "Reuse highway nodes when snapping unconnected roads",
             "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected highway nodes to neighboring roads"
