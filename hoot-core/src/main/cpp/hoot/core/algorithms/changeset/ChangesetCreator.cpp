@@ -83,6 +83,11 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     throw IllegalArgumentException(
       "Output to SQL changeset requires an OSM API database URL be specified.");
   }
+  else if (!output.endsWith(".osc.sql") && !_osmApiDbUrl.isEmpty())
+  {
+    LOG_WARN(
+      "Ignoring OSM API database URL: " << _osmApiDbUrl << " for non-SQL changeset output...");
+  }
 
   LOG_DEBUG(
     "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
@@ -634,8 +639,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   _numModifyChanges = 0;
   _numDeleteChanges = 0;
 
-  // Could this eventually be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
-  // instead?
+  // TODO: This can be cleaned up to use OsmChangesetFileWriter
 
   QList<ChangesetProviderPtr> changesetProviders;
   for (int i = 0; i < inputs1.size(); i++)

@@ -51,8 +51,8 @@ OsmChangeWriterFactory& OsmChangeWriterFactory::getInstance()
   return *_theInstance;
 }
 
-std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(const QString& url,
-                                                                      const QString& elementPayloadFormat)
+std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(
+  const QString& url, const QString& elementPayloadFormat)
 {
   LOG_VART(url);
   LOG_VART(elementPayloadFormat);

@@ -15,9 +15,9 @@ dataset and the second should be the newer dataset.
 * +input2+            - OSM data input 2; may be any supported input format (e.g. .osm file or empty string ("") to derive changeset from one 
                         input only).
 * +output+            - Output location; may be an .osc or .osc.sql file.
-* +osmApiDatabaseUrl+ - Target OSM API database the changeset is to be applied to.  Used to maintain
-                        element ID continuity with a particular database instance when generating SQL
-                        changesets only.  Required only if the changeset output format is .osc.sql.
+* +osmApiDatabaseUrl+ - Target OSM API database a derived changeset is to be applied to used to maintain element ID continuity. Required only if 
+                        the changeset output format is .osc.sql. 
+                        Used to maintain element ID continuity with the database target for a derived changeset. 
 * +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
                         node, way, relation (only valid for .osc output files)
 * +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
@@ -49,9 +49,12 @@ Changeset deriviation supports inline conversion operations with the `convert.op
 
 === Sorting
 
-Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To perform sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value greater than zero.
+Element sorting, required by changeset derivation, is performed in memory by default. This may cause problems with larger datasets.  To perform 
+sorting in a non-memory bound fashion (to external disk), set the configuration option element.sorter.element.buffer.size to a value greater 
+than zero.
 
-Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
+Also, if inline conversion operations are specified in `convert.ops` and any of them do not support streaming (either operations that are an 
+OsmMapOperation or an OsmMapConsumer), in-memory sorting will always occur.
 
 === See Also
 

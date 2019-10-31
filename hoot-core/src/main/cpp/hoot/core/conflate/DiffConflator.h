@@ -172,7 +172,16 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
+  /**
+   * TODO
+   *
+   * @param pResultMap
+   * @param output
+   * @param separateOutput
+   * @param osmApiDbUrl
+   */
+  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
+                      const QString& osmApiDbUrl = "");
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 

@@ -22,22 +22,22 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OSMCHANGEWRITERFACTORY_H
-#define OSMCHANGEWRITERFACTORY_H
+#ifndef OSM_CHANGESET_FILE_WRITER_FACTORY_H
+#define OSM_CHANGESET_FILE_WRITER_FACTORY_H
 
 // Qt
 #include <QString>
 
 namespace hoot
 {
-class OsmChangeWriter;
+class OsmChangesetFileWriter;
 
 /**
- * A factory for constructing changeset writers based on the URL (Singleton).
+ * A factory for constructing changeset file writers based on the URL (Singleton).
  */
-class OsmChangeWriterFactory
+class OsmChangesetFileWriterFactory
 {
 public:
 
@@ -45,34 +45,26 @@ public:
    * TODO
    *
    * @param url
-   * @param elementPayloadFormat
+   * @param osmApiDbUrl
    * @return
    */
-  std::shared_ptr<OsmChangeWriter> createWriter(const QString& url,
-                                                const QString& elementPayloadFormat = "json");
-
-  /**
-   * TODO
-   *
-   * @param output
-   * @return
-   */
-  bool isSupported(const QString& output);
+  std::shared_ptr<OsmChangesetFileWriter> createWriter(const QString& url,
+                                                       const QString& osmApiDbUrl = "");
 
   /**
    * TODO
    *
    * @return
    */
-  static OsmChangeWriterFactory& getInstance();
+  static OsmChangesetFileWriterFactory& getInstance();
 
 private:
 
-  OsmChangeWriterFactory();
+  OsmChangesetFileWriterFactory();
 
-  static std::shared_ptr<OsmChangeWriterFactory> _theInstance;
+  static std::shared_ptr<OsmChangesetFileWriterFactory> _theInstance;
 };
 
 }
 
-#endif // OSMCHANGEWRITERFACTORY_H
+#endif // OSM_CHANGESET_FILE_WRITER_FACTORY_H

@@ -78,9 +78,16 @@ public:
       if (args.size() != 4)
       {
         std::cout << getHelp() << std::endl << std::endl;
-        throw HootException(QString("%1 with SQL output takes four parameters.").arg(getName()));
+        throw IllegalArgumentException(
+          QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
       }
       osmApiDbUrl = args[3];
+    }
+    else if (args.size() > 3)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
     ChangesetCreator(printStats, osmApiDbUrl).create(output, input1, input2);

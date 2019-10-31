@@ -57,6 +57,7 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 
 // standard
 #include <algorithm>
@@ -521,8 +522,20 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
   return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
 }
 
-void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
+void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
+                                   const QString& osmApiDbUrl)
 {
+  if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(
+      "Output to SQL changeset requires an OSM API database URL be specified.");
+  }
+  else if (!output.endsWith(".osc.sql") && !osmApiDbUrl.trimmed().isEmpty())
+  {
+    LOG_WARN(
+      "Ignoring OSM API database URL: " << osmApiDbUrl << " for non-SQL changeset output...");
+  }
+
   // It seems like our tag changes should be sorted by element type before passing them along to the
   // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
   // call changeset-derive. However, doing that here would require some refactoring so not worrying
@@ -531,23 +544,31 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
   // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
+  std::shared_ptr<OsmChangesetFileWriter> writer =
+    OsmChangesetFileWriterFactory::getInstance().createWriter(output, osmApiDbUrl);
   if (!_conflateTags)
   {
     // only one changeset to write
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, pGeoChanges);
+    writer->write(output, pGeoChanges);
   }
   else if (separateOutput)
   {
     // write two changesets
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, pGeoChanges);
+    writer->write(output, pGeoChanges);
 
     QString outFileName = output;
-    outFileName.replace(".osc", "");
-    outFileName.append(".tags.osc");
-    OsmXmlChangesetFileWriter tagChangeWriter;
-    tagChangeWriter.write(outFileName, _pTagChanges);
+    if (outFileName.endsWith(".osc"))
+    {
+      outFileName.replace(".osc", "");
+      outFileName.append(".tags.osc");
+    }
+    // There are only two changeset writers right now, so this works.
+    else
+    {
+      outFileName.replace(".osc.sql", "");
+      outFileName.append(".tags.osc.sql");
+    }
+    writer->write(outFileName, _pTagChanges);
   }
   else
   {
@@ -556,8 +577,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
       new MultipleChangesetProvider(pResultMap->getProjection()));
     pChanges->addChangesetProvider(pGeoChanges);
     pChanges->addChangesetProvider(_pTagChanges);
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, pChanges);
+    writer->write(output, pChanges);
   }
 }
 

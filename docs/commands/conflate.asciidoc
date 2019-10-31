@@ -6,15 +6,17 @@
 The +conflate+ command conflates two maps into a single map.  If the specified output file name ends with the extension .osc, an OSM
 changeset will be written, instead of an OSM map.
 
-* +input1+         - First input; may be any supported input format (e.g. OSM file).
-* +input2+         - Second input; may be any supported input format (e.g. OSM file, XML changeset file (.osc)).
-* +output+         - The output path; may be any supported output format
-* +--differential+ - Calculates the the differential between two conflation inputs.  The output will be all elements in input2 that do
-                     not conflict with any elements in input1.
-* +--include-tags+ - Include a check for modified tags when doing differential conflation.  The output will include unmodified geometries
-                     from Input1, with new/updated tags from Input2 applied, using an overwrite-merge.
-* +--stats+        - Hootenanny map statistics such as node and way count; must be the last option entered and may be optionally followed
-                     by an output JSON file name
+* +input1+            - First input; may be any supported input format (e.g. OSM file).
+* +input2+            - Second input; may be any supported input format (e.g. OSM file).
+* +output+            - The output path; may be any supported output format include changeset formats (.osc, .osc.sql)
+* +osmApiDatabaseUrl+ - Target OSM API database a derived changeset is to be applied to used to maintain element ID continuity. Required only 
+                        if the --differential option is specified and the changeset output format is .osc.sql.
+* +--differential+    - Calculates the the differential between two conflation inputs.  The output will be all elements in input2 that do
+                        not conflict with any elements in input1.
+* +--include-tags+    - Include a check for modified tags when doing differential conflation.  The output will include unmodified geometries
+                        from Input1, with new/updated tags from Input2 applied, using an overwrite-merge.
+* +--stats+           - Hootenanny map statistics such as node and way count; must be the last option entered and may be optionally followed
+                        by an output JSON file name
 
 === Feature Filtering
 
@@ -40,6 +42,8 @@ hoot conflate input1.osm input2.osm output.osm --differential
 hoot conflate input1.osm input2.osm output.osc --differential
 
 hoot conflate input1.osm input2.osm output.osc --differential --stats
+
+hoot conflate input1.osm input2.osm output.osc.sql osmapidb://username:password@localhost:5432/osmApiDatabaseName --differential
 
 # Conflate only restaurants (see the User Guide for more filter examples)
 hoot conflate -D conflate.tag.filter="{ \"must\": [ { \"tag\": \"amenity=restaurant\" } ] }" input1.osm input2.osm output.osm

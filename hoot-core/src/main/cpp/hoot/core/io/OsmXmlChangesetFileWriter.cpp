@@ -32,6 +32,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QFile>
@@ -43,17 +44,14 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
+
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
 _precision(ConfigOptions().getWriterPrecision()),
-_multipleChangesetsWritten(false),
 _addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
 _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
 _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
-  _stats.resize(Change::Unknown, ElementType::Unknown);
-  vector<QString> rows( {"Create", "Modify", "Delete"} );
-  vector<QString> columns( {"Node", "Way", "Relation"} );
-  _stats.setLabels(rows, columns);
 }
 
 void OsmXmlChangesetFileWriter::_initIdCounters()
@@ -67,6 +65,15 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Node] = QMap<long, long>();
   _newElementIdMappings[ElementType::Way] = QMap<long, long>();
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
+}
+
+void OsmXmlChangesetFileWriter::_initStats()
+{
+  _stats.reset(new ScoreMatrix<long>());
+  _stats->resize(Change::Unknown, ElementType::Unknown);
+  vector<QString> rows( {"Create", "Modify", "Delete"} );
+  vector<QString> columns( {"Node", "Way", "Relation"} );
+  _stats->setLabels(rows, columns);
 }
 
 void OsmXmlChangesetFileWriter::write(const QString& path,
@@ -84,6 +91,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
   QString filepath = path;
 
+  _initStats();
   _initIdCounters();
 
   long changesetProgress = 1;
@@ -167,7 +175,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         }
         changesetProgress++;
         //  Update the stats
-        _stats(last, type)++;
+        _stats->operator ()(last, type)++;
       }
     }
 

@@ -29,11 +29,10 @@
 
 // Hoot
 #include <hoot/core/io/OsmApiDb.h>
-#include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Configurable.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // Qt
 #include <QUrl>
@@ -52,13 +51,16 @@ namespace hoot
  * TODO: add a method that tells you whether sql output from this is equivalent to that in an xml
  * changeset
  */
-class OsmApiDbSqlChangesetFileWriter : public Configurable
+class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 {
 
 public:
 
+  static std::string className() { return "hoot::OsmApiDbSqlChangesetFileWriter"; }
+
+  OsmApiDbSqlChangesetFileWriter();
   OsmApiDbSqlChangesetFileWriter(const QUrl& url);
-  ~OsmApiDbSqlChangesetFileWriter();
+  virtual ~OsmApiDbSqlChangesetFileWriter();
 
   /**
    * Write a SQL changeset to the specified output path
@@ -66,7 +68,7 @@ public:
    * @param path SQL file output path
    * @param changesetProvider changeset provider to stream the changes from
    */
-  void write(const QString& path, ChangesetProviderPtr changesetProvider);
+  virtual void write(const QString& path, const ChangesetProviderPtr& changesetProvider);
 
   /**
    * Write a SQL changeset to the specified output path
@@ -74,14 +76,19 @@ public:
    * @param path SQL file output path
    * @param changesetProviders changeset providers to stream the changes from
    */
-  void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
+  virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
 
   /**
-   * Set the configuration settings
-   *
-   * @param conf Settings object containing updated value for changeset.max.size setting
+   * @see ChangesetFileWriter
+   */
+  virtual bool isSupported(const QString& output) const { return output.endsWith(".osc.sql"); }
+
+  /**
+   * @see Configurable
    */
   virtual void setConfiguration(const Settings &conf);
+
+  void setOsmApiDbUrl(const QString& url) { _db.open(url); }
 
 private:
 

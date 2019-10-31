@@ -148,11 +148,11 @@ int ConflateCmd::runSimple(QStringList& args)
     args.removeAt(args.indexOf("--separate-output"));
   }
 
-  if (args.size() != 3)
+  if (args.size() < 3 || args.size() > 4)
   {
     cout << getHelp() << endl << endl;
     throw IllegalArgumentException(
-      QString("%1 takes three parameters. You provided %2: %3")
+      QString("%1 takes three or four parameters. You provided %2: %3")
         .arg(getName())
         .arg(args.size())
         .arg(args.join(",")));
@@ -161,6 +161,24 @@ int ConflateCmd::runSimple(QStringList& args)
   const QString input1 = args[0];
   const QString input2 = args[1];
   QString output = args[2];
+
+  QString osmApiDbUrl;
+  if (output.endsWith(".osc.sql"))
+  {
+    if (args.size() != 4)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      throw IllegalArgumentException(
+        QString("%1 with SQL changeset output takes four parameters.").arg(getName()));
+    }
+    osmApiDbUrl = args[3];
+  }
+  else if (args.size() > 3)
+  {
+    std::cout << getHelp() << std::endl << std::endl;
+    throw IllegalArgumentException(
+      QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
+  }
 
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
@@ -252,7 +270,7 @@ int ConflateCmd::runSimple(QStringList& args)
 
     if (isDiffConflate)
     {
-      if (output.endsWith(".osc"))
+      if (output.endsWith(".osc") || output.endsWith(".osc.sql"))
       {
         OsmUtils::checkVersionLessThanOneCountAndLogWarning(map);
       }
@@ -381,9 +399,9 @@ int ConflateCmd::runSimple(QStringList& args)
   progress.set(
     _getJobPercentComplete(currentTask - 1),
     "Writing conflated output: ..." + output.right(maxFilePrintLength) + "...");
-  if (isDiffConflate && output.endsWith(".osc"))
+  if (isDiffConflate && (output.endsWith(".osc") || output.endsWith(".osc.sql")))
   {
-    diffConflator.writeChangeset(result, output, separateOutput);
+    diffConflator.writeChangeset(result, output, separateOutput, osmApiDbUrl);
   }
   else
   {
