@@ -224,8 +224,8 @@ void DiffConflator::_removeMatches(const Status& status)
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
-    //if (treatReviewsAsMatches || match->getType() != MatchType::Review)
-    //{
+    if (treatReviewsAsMatches || match->getType() != MatchType::Review)
+    {
       std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
            pit != pairs.end(); ++pit)
@@ -251,7 +251,7 @@ void DiffConflator::_removeMatches(const Status& status)
           }
         }
       }
-    //}
+    }
   }
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="14.744209" minlon="-17.5289701" maxlat="14.746175" maxlon="-17.527223"/>
+    <node visible="true" id="-374024" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5284814551058545"/>
+    <node visible="true" id="-374023" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5284422362126264"/>
+    <node visible="true" id="-374022" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5286624394957968"/>
+    <node visible="true" id="-374021" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5284814551058545"/>
+    <node visible="true" id="-374020" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374019" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442884090135529" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374018" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5272483965493571"/>
+    <node visible="true" id="-374017" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7458149493781114" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374016" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5289193123487799"/>
+    <node visible="true" id="-374015" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7461749999999991" lon="-17.5285621028430825"/>
+    <node visible="true" id="-374014" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5277384336363653"/>
+    <node visible="true" id="-374013" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5283461991916845"/>
+    <node visible="true" id="-374012" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5287971074937943"/>
+    <node visible="true" id="-374011" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5273537376470578"/>
+    <node visible="true" id="-374010" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442555859887001" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374009" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7460348764663678" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374008" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7461749999999991" lon="-17.5282371292516999"/>
+    <node visible="true" id="-374007" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5278484883501804"/>
+    <node visible="true" id="-374006" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7460785601498827" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374005" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7460322711595833" lon="-17.5272229999999993"/>
+    <node visible="true" id="-374004" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459220798373050" lon="-17.5272229999999993"/>
+    <node visible="true" id="-372922" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459079000000006" lon="-17.5273165000000013">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-372658" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454523999999996" lon="-17.5282893999999985">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-371912" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449577000000005" lon="-17.5279832999999989">
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="La Pointe des Almadies"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="source:datetime" v="2015-07-23T08:47:30.000Z"/>
+    </node>
+    <node visible="true" id="-371880" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459392999999999" lon="-17.5281762000000008"/>
+    <node visible="true" id="-371494" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459889000000004" lon="-17.5281018999999993"/>
+    <node visible="true" id="-371251" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7447906999999994" lon="-17.5284948000000007"/>
+    <node visible="true" id="-371247" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457373000000000" lon="-17.5274460999999988">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-371243" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456039000000008" lon="-17.5275429000000003">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-371242" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454789000000002" lon="-17.5276217999999986">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-371194" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7447012999999991" lon="-17.5277880999999986"/>
+    <node visible="true" id="-371110" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7458428999999995" lon="-17.5277312000000016"/>
+    <node visible="true" id="-371109" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457954000000004" lon="-17.5281015999999994"/>
+    <node visible="true" id="-369836" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7461400000000005" lon="-17.5285408999999994"/>
+    <node visible="true" id="-369835" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7461649999999995" lon="-17.5288755999999992"/>
+    <node visible="true" id="-369818" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7444758999999994" lon="-17.5285812000000014"/>
+    <node visible="true" id="-369703" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456917999999995" lon="-17.5289700999999987"/>
+    <node visible="true" id="-369509" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7447426999999998" lon="-17.5287892999999997"/>
+    <node visible="true" id="-369508" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7443253999999992" lon="-17.5288953999999997"/>
+    <node visible="true" id="-369507" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7451118000000001" lon="-17.5286365999999987"/>
+    <node visible="true" id="-369506" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7448452000000003" lon="-17.5288070000000005"/>
+    <node visible="true" id="-369504" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456448000000009" lon="-17.5287278999999998"/>
+    <node visible="true" id="-369503" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454076999999995" lon="-17.5286358000000000"/>
+    <node visible="true" id="-367298" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454563000000007" lon="-17.5286916999999995"/>
+    <node visible="true" id="-367099" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454563000000007" lon="-17.5286422000000002"/>
+    <node visible="true" id="-367096" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7452614000000004" lon="-17.5286122000000013"/>
+    <node visible="true" id="-366546" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7450583999999996" lon="-17.5277115999999999"/>
+    <node visible="true" id="-366537" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456391999999994" lon="-17.5274192999999983"/>
+    <node visible="true" id="-366536" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7452386999999998" lon="-17.5276914999999995"/>
+    <node visible="true" id="-366535" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457487000000000" lon="-17.5281856000000005"/>
+    <node visible="true" id="-366529" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7448051000000007" lon="-17.5286359999999988"/>
+    <node visible="true" id="-366528" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449536000000005" lon="-17.5277300999999994"/>
+    <node visible="true" id="-366527" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449850999999992" lon="-17.5285444999999989"/>
+    <node visible="true" id="-366526" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456762999999995" lon="-17.5282295999999995"/>
+    <node visible="true" id="-366521" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454426000000005" lon="-17.5284562000000008"/>
+    <node visible="true" id="-366519" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442907999999999" lon="-17.5287815999999985"/>
+    <node visible="true" id="-366398" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7453585000000000" lon="-17.5276642000000002"/>
+    <node visible="true" id="-366141" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442506000000009" lon="-17.5286536999999996">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-366135" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442163999999991" lon="-17.5284799000000007">
+        <tag k="error:circular" v="15"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+    </node>
+    <node visible="true" id="-365158" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442740000000008" lon="-17.5273812000000007"/>
+    <node visible="true" id="-365152" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7443442999999998" lon="-17.5277296000000007"/>
+    <node visible="true" id="-365151" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7454955000000005" lon="-17.5275409999999994"/>
+    <node visible="true" id="-365150" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7452397000000008" lon="-17.5276278999999988"/>
+    <node visible="true" id="-365146" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7457729999999998" lon="-17.5272964000000009"/>
+    <node visible="true" id="-365127" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442224000000000" lon="-17.5273508999999983"/>
+    <node visible="true" id="-365115" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442428999999997" lon="-17.5273313000000002"/>
+    <node visible="true" id="-365030" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7453795999999997" lon="-17.5275952000000004"/>
+    <way visible="true" id="-374008" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-366135"/>
+        <nd ref="-374023"/>
+        <nd ref="-374024"/>
+        <nd ref="-366135"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-01-22T16:14:17.000Z"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+        <tag k="leisure" v="pitch"/>
+    </way>
+    <way visible="true" id="-374007" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-366141"/>
+        <nd ref="-366135"/>
+        <nd ref="-374021"/>
+        <nd ref="-374022"/>
+        <nd ref="-366141"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-01-22T16:14:17.000Z"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="source" v="Microsoft Bing orbital imagery"/>
+        <tag k="leisure" v="pitch"/>
+    </way>
+    <way visible="true" id="-374006" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374018"/>
+        <nd ref="-365152"/>
+        <nd ref="-365158"/>
+        <nd ref="-374019"/>
+        <nd ref="-374020"/>
+        <nd ref="-374018"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ambassade des États Unis d'Amérique"/>
+        <tag k="amenity" v="embassy"/>
+        <tag k="source:datetime" v="2015-07-23T09:12:37.000Z"/>
+        <tag k="landuse" v="construction"/>
+        <tag k="country" v="US"/>
+    </way>
+    <way visible="true" id="-374005" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-365152"/>
+        <nd ref="-365150"/>
+        <nd ref="-365030"/>
+        <nd ref="-365151"/>
+        <nd ref="-366537"/>
+        <nd ref="-365146"/>
+        <nd ref="-374017"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-374004" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374015"/>
+        <nd ref="-369836"/>
+        <nd ref="-369835"/>
+        <nd ref="-369703"/>
+        <nd ref="-369504"/>
+        <nd ref="-367298"/>
+        <nd ref="-367099"/>
+        <nd ref="-369503"/>
+        <nd ref="-367096"/>
+        <nd ref="-369507"/>
+        <nd ref="-369506"/>
+        <nd ref="-369509"/>
+        <nd ref="-369508"/>
+        <nd ref="-374016"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-07-23T09:12:39.000Z"/>
+        <tag k="natural" v="coastline"/>
+    </way>
+    <way visible="true" id="-374003" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374014"/>
+        <nd ref="-365152"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-374002" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374012"/>
+        <nd ref="-366519"/>
+        <nd ref="-374013"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-374001" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374010"/>
+        <nd ref="-365115"/>
+        <nd ref="-365127"/>
+        <nd ref="-374011"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="source:datetime" v="2015-07-23T09:34:31.000Z"/>
+        <tag k="access" v="permissive"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="-374000" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374008"/>
+        <nd ref="-371880"/>
+        <nd ref="-374009"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-07-23T10:43:07.000Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-373999" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-372922"/>
+        <nd ref="-371247"/>
+        <nd ref="-371243"/>
+        <nd ref="-371242"/>
+        <nd ref="-366398"/>
+        <nd ref="-366536"/>
+        <nd ref="-366546"/>
+        <nd ref="-366528"/>
+        <nd ref="-371194"/>
+        <nd ref="-374007"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="source:datetime" v="2015-07-23T09:12:39.000Z"/>
+    </way>
+    <way visible="true" id="-373998" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374005"/>
+        <nd ref="-371494"/>
+        <nd ref="-374006"/>
+        <nd ref="-374005"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-07-23T10:46:04.000Z"/>
+        <tag k="natural" v="tree_row"/>
+    </way>
+    <way visible="true" id="-373997" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-374004"/>
+        <nd ref="-372922"/>
+        <nd ref="-371110"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de King Fakhd"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lit" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T10:27:51.000Z"/>
+        <tag k="oneway" v="no"/>
+        <tag k="lanes" v="2"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="-373968" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-366519"/>
+        <nd ref="-369508"/>
+        <nd ref="-369509"/>
+        <nd ref="-369506"/>
+        <nd ref="-369507"/>
+        <nd ref="-367096"/>
+        <nd ref="-369503"/>
+        <nd ref="-366521"/>
+        <nd ref="-366527"/>
+        <nd ref="-366529"/>
+        <nd ref="-366519"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Plage de la Pointe des Almadies"/>
+        <tag k="source:datetime" v="2015-07-23T08:47:54.000Z"/>
+        <tag k="natural" v="beach"/>
+    </way>
+    <way visible="true" id="-367291" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-371110"/>
+        <nd ref="-371109"/>
+        <nd ref="-366535"/>
+        <nd ref="-366526"/>
+        <nd ref="-372658"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de King Fakhd"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lit" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T09:12:37.000Z"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="-367282" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-372658"/>
+        <nd ref="-371110"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de King Fakhd"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lit" v="yes"/>
+        <tag k="source:datetime" v="2015-07-23T09:12:37.000Z"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="asphalt"/>
+    </way>
+    <way visible="true" id="-366512" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-372658"/>
+        <nd ref="-371251"/>
+        <nd ref="-369818"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="service" v="driveway"/>
+        <tag k="highway" v="service"/>
+        <tag k="source:datetime" v="2015-07-23T08:47:11.000Z"/>
+        <tag k="access" v="permissive"/>
+        <tag k="noexit" v="yes"/>
+        <tag k="oneway" v="no"/>
+        <tag k="surface" v="paved"/>
+    </way>
+    <way visible="true" id="-366489" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-371251"/>
+        <nd ref="-371194"/>
+        <tag k="created_by" v="Potlatch 0.10f"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="footway"/>
+        <tag k="source:datetime" v="2009-03-16T11:57:35.000Z"/>
+    </way>
+</osm>

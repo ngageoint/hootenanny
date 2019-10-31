@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="14.744209" minlon="-17.5289701" maxlat="14.746175" maxlon="-17.527223"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7460348764663678" lon="-17.5272229999999993"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7461749999999991" lon="-17.5282371292516999"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7460785601498827" lon="-17.5272229999999993"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7460322711595833" lon="-17.5272229999999993"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449310020736135" lon="-17.5272229999999993"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7445473398884008" lon="-17.5272229999999993"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7448311361798599" lon="-17.5272229999999993"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7445867706349212" lon="-17.5272229999999993"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7449777970881595" lon="-17.5272229999999993"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7455526449239827" lon="-17.5272229999999993"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442766469122439" lon="-17.5272229999999993"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5277384336363653"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5283461991916845"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5287971074937943"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5286624394957968"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5284814551058545"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5284814551058545"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5284422362126264"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7458676999999998" lon="-17.5272229999999993"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5289193123487799"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7461749999999991" lon="-17.5286448903259178"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7456974327102817" lon="-17.5272229999999993"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442766469122439" lon="-17.5272229999999993"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7442089999999997" lon="-17.5278455259208279"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="14.7459219803738311" lon="-17.5272229999999993"/>
+    <node visible="true" id="281407494" timestamp="2019-04-25T16:52:34Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456448000000009" lon="-17.5287278999999998"/>
+    <node visible="true" id="281407495" timestamp="2019-04-25T16:52:34Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454076999999995" lon="-17.5286358000000000"/>
+    <node visible="true" id="281407496" timestamp="2019-04-25T16:52:34Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451118000000001" lon="-17.5286365999999987"/>
+    <node visible="true" id="281407497" timestamp="2019-04-25T16:52:34Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7448452000000003" lon="-17.5288070000000005"/>
+    <node visible="true" id="281407498" timestamp="2019-04-25T16:52:34Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7447426999999998" lon="-17.5287892999999997"/>
+    <node visible="true" id="281407499" timestamp="2019-04-25T16:52:34Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7443253999999992" lon="-17.5288953999999997"/>
+    <node visible="true" id="281407861" timestamp="2019-04-25T16:52:34Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456917999999995" lon="-17.5289700999999987"/>
+    <node visible="true" id="281408174" timestamp="2019-04-25T16:52:34Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461295999999997" lon="-17.5286428000000001"/>
+    <node visible="true" id="281408175" timestamp="2019-04-25T16:52:34Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7461649999999995" lon="-17.5288755999999992"/>
+    <node visible="true" id="352589870" timestamp="2019-04-25T16:52:37Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7442907999999999" lon="-17.5287815999999985"/>
+    <node visible="true" id="352589882" timestamp="2019-04-25T16:52:37Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454426000000005" lon="-17.5284562000000008"/>
+    <node visible="true" id="352589888" timestamp="2019-04-25T16:52:37Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449850999999992" lon="-17.5285444999999989"/>
+    <node visible="true" id="352589890" timestamp="2019-04-25T16:52:37Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7448051000000007" lon="-17.5286359999999988"/>
+    <node visible="true" id="361082265" timestamp="2019-04-25T16:52:38Z" version="13" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455154000000004" lon="-17.5282440000000008"/>
+    <node visible="true" id="361084889" timestamp="2019-04-25T16:52:38Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7446639000000008" lon="-17.5284860000000009"/>
+    <node visible="true" id="361085147" timestamp="2019-04-25T16:52:38Z" version="8" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457320999999997" lon="-17.5273925000000013"/>
+    <node visible="true" id="361085148" timestamp="2019-04-25T16:52:38Z" version="8" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455922000000008" lon="-17.5275308000000010"/>
+    <node visible="true" id="361085149" timestamp="2019-04-25T16:52:38Z" version="8" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454815000000004" lon="-17.5276002999999996"/>
+    <node visible="true" id="361085181" timestamp="2019-04-25T16:52:38Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7448534000000002" lon="-17.5284441999999991"/>
+    <node visible="true" id="361085280" timestamp="2019-04-25T16:52:38Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7446985999999995" lon="-17.5277695999999992"/>
+    <node visible="true" id="1125036446" timestamp="2019-04-25T16:52:40Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449577000000005" lon="-17.5279832999999989">
+        <tag k="cuisine" v="steak_house;fish;lebanese;pizza;vietnamese;seafood"/>
+        <tag k="opening_hours" v="Mo-Su 12:00-00:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="La Pointe des Almadies"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="338200140"/>
+    </node>
+    <node visible="true" id="2531038607" timestamp="2019-04-25T16:52:44Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7442668999999995" lon="-17.5273147999999992"/>
+    <node visible="true" id="2531038609" timestamp="2019-04-25T16:52:44Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7443442999999998" lon="-17.5277296000000007"/>
+    <node visible="true" id="2531038612" timestamp="2019-04-25T16:52:44Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451126000000006" lon="-17.5275688999999986"/>
+    <node visible="true" id="2531038614" timestamp="2019-04-25T16:52:44Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455032999999993" lon="-17.5274605000000001"/>
+    <node visible="true" id="3304378055" timestamp="2019-04-25T16:53:01Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7442163999999991" lon="-17.5284799000000007"/>
+    <node visible="true" id="3304378056" timestamp="2019-04-25T16:53:01Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7442506000000009" lon="-17.5286536999999996"/>
+    <node visible="true" id="3504112637" timestamp="2019-04-25T16:53:06Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452614000000004" lon="-17.5286122000000013"/>
+    <node visible="true" id="3504112640" timestamp="2019-04-25T16:53:06Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453882000000007" lon="-17.5286970999999987"/>
+    <node visible="true" id="3558488096" timestamp="2019-04-25T16:53:07Z" version="7" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457942000000006" lon="-17.5281051999999988"/>
+    <node visible="true" id="3558488097" timestamp="2019-04-25T16:53:07Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458694000000001" lon="-17.5276566000000003"/>
+    <node visible="true" id="3662747358" timestamp="2019-04-25T16:53:22Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453585000000000" lon="-17.5276642000000002"/>
+    <node visible="true" id="3662747413" timestamp="2019-04-25T16:53:23Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457221999999994" lon="-17.5282178000000002"/>
+    <node visible="true" id="3662747418" timestamp="2019-04-25T16:53:23Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457676000000006" lon="-17.5281702000000017"/>
+    <node visible="true" id="3662747420" timestamp="2019-04-25T16:53:23Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456600000000009" lon="-17.5272906000000006"/>
+    <node visible="true" id="3662747421" timestamp="2019-04-25T16:53:23Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452386999999998" lon="-17.5276914999999995"/>
+    <node visible="true" id="3662747734" timestamp="2019-04-25T16:53:23Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453769999999995" lon="-17.5275227999999998"/>
+    <node visible="true" id="3662817335" timestamp="2019-04-25T16:53:32Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459392999999999" lon="-17.5281762000000008"/>
+    <node visible="true" id="3662837105" timestamp="2019-04-25T16:53:33Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459889000000004" lon="-17.5281018999999993"/>
+    <node visible="true" id="4046415215" timestamp="2019-04-25T16:53:55Z" version="5" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455648000000004" lon="-17.5281014000000006"/>
+    <node visible="true" id="4046415217" timestamp="2019-04-25T16:53:55Z" version="6" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456548000000005" lon="-17.5282400000000003"/>
+    <node visible="true" id="4046415218" timestamp="2019-04-25T16:53:55Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456329999999998" lon="-17.5279546000000011"/>
+    <node visible="true" id="4046415219" timestamp="2019-04-25T16:53:55Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457217000000007" lon="-17.5278291999999993"/>
+    <node visible="true" id="4741882124" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454930999999991" lon="-17.5283379000000004">
+        <tag k="cuisine" v="fish;chicken;seafood"/>
+        <tag k="name:fr" v="Chez Awa Dione"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez Awa Dione"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="775608949"/>
+    </node>
+    <node visible="true" id="4741882125" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454172000000003" lon="-17.5282271999999999">
+        <tag k="name:fr" v="Le jardin"/>
+        <tag k="opening_hours" v="Mo-Sa 19:00-01:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Le jardin"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="338207703"/>
+    </node>
+    <node visible="true" id="4741882126" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456206999999999" lon="-17.5282921000000016">
+        <tag k="name:fr" v="Boutique"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boutique"/>
+        <tag k="shop" v="convenience"/>
+    </node>
+    <node visible="true" id="4741882127" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456600000000009" lon="-17.5282790000000013">
+        <tag k="name:fr" v="Boutique"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Boutique"/>
+        <tag k="shop" v="convenience"/>
+    </node>
+    <node visible="true" id="4741882128" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455953999999991" lon="-17.5285106000000006">
+        <tag k="cuisine" v="fish;seafood"/>
+        <tag k="name:fr" v="La Marée"/>
+        <tag k="opening_hours" v="Mo-Su 12:00-01:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="La Marée"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="775507358"/>
+    </node>
+    <node visible="true" id="4741882129" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458212999999994" lon="-17.5286121000000001">
+        <tag k="cuisine" v="chicken;fish;seafood"/>
+        <tag k="name:fr" v="Chez dally"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez dally"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4741882130" timestamp="2019-04-25T16:54:00Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457951000000005" lon="-17.5283441999999994">
+        <tag k="cuisine" v="fish;seafood;asian"/>
+        <tag k="opening_hours" v="Mo-Su 12:00-00:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="email" v="lerecifdesalmadies@yahoo.fr"/>
+        <tag k="name" v="Le récif des Almadies"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="338201160"/>
+    </node>
+    <node visible="true" id="4741883325" timestamp="2019-04-25T16:54:01Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445336000000005" lon="-17.5285234000000010">
+        <tag k="name:fr" v="Marché artisanal"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Marché artisanal"/>
+        <tag k="shop" v="gift"/>
+    </node>
+    <node visible="true" id="4741883326" timestamp="2019-04-25T16:54:01Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451881999999994" lon="-17.5284541999999988">
+        <tag k="cuisine" v="chicken;fish;seafood"/>
+        <tag k="name:fr" v="Le rivage"/>
+        <tag k="opening_hours" v="Mo-Su 09:00-01:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Le rivage"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="775364549"/>
+    </node>
+    <node visible="true" id="4741883327" timestamp="2019-04-25T16:54:01Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451991000000007" lon="-17.5282394000000004">
+        <tag k="cuisine" v="burger;sandwich;lebanese;ice_cream"/>
+        <tag k="name:fr" v="Le snack de la pointe"/>
+        <tag k="opening_hours" v="Mo-Su 11:00-23:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Le snack de la pointe"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="301192423"/>
+    </node>
+    <node visible="true" id="4741883328" timestamp="2019-04-25T16:54:01Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453512000000000" lon="-17.5283908000000004">
+        <tag k="cuisine" v="fish;seafood"/>
+        <tag k="name:fr" v="Chez coba"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez coba"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4741883329" timestamp="2019-04-25T16:54:01Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7454423999999999" lon="-17.5283115000000009">
+        <tag k="cuisine" v="fish;chicken;seafood"/>
+        <tag k="name:fr" v="Chez Gilles"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez Gilles"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="776482028"/>
+    </node>
+    <node visible="true" id="4741883330" timestamp="2019-04-25T16:54:01Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457581999999991" lon="-17.5285909999999987">
+        <tag k="cuisine" v="fish;seafood"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="GIE Ostreicole Huitres de la Sokone"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="776482471"/>
+    </node>
+    <node visible="true" id="4741883331" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457695999999991" lon="-17.5284210000000016">
+        <tag k="cuisine" v="fish;crepe"/>
+        <tag k="name:fr" v="La crêpe bretonne"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="La crêpe bretonne"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="338681826"/>
+    </node>
+    <node visible="true" id="4741886921" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445629000000000" lon="-17.5285772999999985">
+        <tag k="name:fr" v="Bijouterie la merveille"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Bijouterie la merveille"/>
+        <tag k="shop" v="jewelry"/>
+    </node>
+    <node visible="true" id="4741886922" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450895000000006" lon="-17.5284334999999984">
+        <tag k="cuisine" v="chicken;fish;seafood"/>
+        <tag k="name:fr" v="Chez seynabou"/>
+        <tag k="opening_hours" v="Mo-Su 09:00-02:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez seynabou"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4741886923" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452459999999999" lon="-17.5283988999999991">
+        <tag k="cuisine" v="chicken;fish;seafood"/>
+        <tag k="name:fr" v="Chez Mamy"/>
+        <tag k="opening_hours" v="Mo-Su 09:00-01:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez Mamy"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4741887121" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7447610000000005" lon="-17.5285094000000008">
+        <tag k="cuisine" v="fish;seafood"/>
+        <tag k="name:fr" v="Chez siny"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez siny"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4741887122" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449741999999997" lon="-17.5284477000000010">
+        <tag k="name:fr" v="Dibiterie tefessegui"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Dibiterie tefessegui"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="338209426"/>
+    </node>
+    <node visible="true" id="4741887221" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7446974999999991" lon="-17.5283863000000011">
+        <tag k="name:fr" v="Le dionevar"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Le dionevar"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="phone" v="338200911"/>
+    </node>
+    <node visible="true" id="4741887222" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7456758000000008" lon="-17.5284012000000011">
+        <tag k="cuisine" v="fish;seafood"/>
+        <tag k="name:fr" v="Chez Awa"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez Awa"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4741887921" timestamp="2019-04-25T16:54:02Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7457033000000006" lon="-17.5283340000000010">
+        <tag k="cuisine" v="fish;seafood"/>
+        <tag k="name:fr" v="Chez Astou"/>
+        <tag k="opening_hours" v="Mo-Su 08:00-02:00"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Chez Astou"/>
+        <tag k="amenity" v="restaurant"/>
+    </node>
+    <node visible="true" id="4868142221" timestamp="2019-04-25T16:54:06Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452392999999997" lon="-17.5285286000000013">
+        <tag k="error:circular" v="15"/>
+        <tag k="amenity" v="bench"/>
+    </node>
+    <node visible="true" id="5040889935" timestamp="2019-04-25T16:54:18Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7455269999999992" lon="-17.5272649999999999"/>
+    <node visible="true" id="5040889936" timestamp="2019-04-25T16:54:18Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453429000000007" lon="-17.5273642000000009"/>
+    <node visible="true" id="5040889937" timestamp="2019-04-25T16:54:18Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7452027999999995" lon="-17.5273776000000012"/>
+    <node visible="true" id="5040889938" timestamp="2019-04-25T16:54:18Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451146000000008" lon="-17.5272998000000015"/>
+    <node visible="true" id="5040889939" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7450939000000005" lon="-17.5272328000000002"/>
+    <node visible="true" id="5040889940" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449797000000000" lon="-17.5272435000000009"/>
+    <node visible="true" id="5040889941" timestamp="2019-04-25T16:54:19Z" version="4" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7453856999999999" lon="-17.5283030000000011"/>
+    <node visible="true" id="5040889950" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445903999999999" lon="-17.5272587000000009"/>
+    <node visible="true" id="5040889951" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7448321000000000" lon="-17.5272325000000002"/>
+    <node visible="true" id="5040889975" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7443053000000006" lon="-17.5272690000000004"/>
+    <node visible="true" id="5040889977" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445503999999996" lon="-17.5272514999999984"/>
+    <node visible="true" id="5040889978" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445699000000001" lon="-17.5272985000000006"/>
+    <node visible="true" id="5040889979" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445918999999996" lon="-17.5273119000000008"/>
+    <node visible="true" id="5040889980" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449239999999993" lon="-17.5272809999999986"/>
+    <node visible="true" id="5040889981" timestamp="2019-04-25T16:54:19Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449329999999996" lon="-17.5272435000000009"/>
+    <node visible="true" id="5040889996" timestamp="2019-04-25T16:54:20Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451042000000001" lon="-17.5275010000000009"/>
+    <node visible="true" id="5040889997" timestamp="2019-04-25T16:54:20Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445284000000001" lon="-17.5275223999999987"/>
+    <node visible="true" id="5040889998" timestamp="2019-04-25T16:54:20Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7445070999999999" lon="-17.5272983999999994"/>
+    <node visible="true" id="6041114433" timestamp="2019-04-25T16:54:22Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7451962999999999" lon="-17.5283699999999989"/>
+    <node visible="true" id="6044703234" timestamp="2019-04-25T16:54:22Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7449344999999994" lon="-17.5272651000000010"/>
+    <node visible="true" id="6045450925" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7459056999999998" lon="-17.5273569999999985"/>
+    <node visible="true" id="6045450926" timestamp="2019-04-25T16:54:25Z" version="3" changeset="69573370" user="Jean-Marc Liotier" uid="160042" lat="14.7458200999999995" lon="-17.5273749000000016"/>
+    <way visible="true" id="-350033" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-24"/>
+        <nd ref="3662817335"/>
+        <nd ref="-25"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-07-23T10:43:07Z"/>
+        <tag k="barrier" v="wall"/>
+    </way>
+    <way visible="true" id="-350032" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="3662837105"/>
+        <nd ref="-23"/>
+        <nd ref="-22"/>
+        <tag k="natural" v="tree_row"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2015-07-23T10:46:04Z"/>
+    </way>
+    <way visible="true" id="-350031" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="5040889981"/>
+        <nd ref="6044703234"/>
+        <nd ref="5040889980"/>
+        <nd ref="5040889979"/>
+        <nd ref="5040889978"/>
+        <nd ref="5040889977"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="private"/>
+        <tag k="source:datetime" v="2018-11-07T19:02:32Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="-350030" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-20"/>
+        <nd ref="5040889977"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="private"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="-350029" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="5040889950"/>
+        <nd ref="5040889951"/>
+        <nd ref="-19"/>
+        <nd ref="-18"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="building" v="yes"/>
+    </way>
+    <way visible="true" id="-350028" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5040889940"/>
+        <nd ref="5040889939"/>
+        <nd ref="5040889938"/>
+        <nd ref="5040889937"/>
+        <nd ref="5040889936"/>
+        <nd ref="5040889935"/>
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="5040889940"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:15Z"/>
+        <tag k="landuse" v="grass"/>
+    </way>
+    <way visible="true" id="-350027" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-14"/>
+        <nd ref="2531038609"/>
+        <nd ref="2531038607"/>
+        <nd ref="-15"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350026" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-12"/>
+        <nd ref="352589870"/>
+        <nd ref="-13"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-350025" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3304378056"/>
+        <nd ref="3304378055"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="3304378056"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2016-01-22T23:53:52Z"/>
+        <tag k="sport" v="tennis"/>
+    </way>
+    <way visible="true" id="-350024" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3304378055"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="3304378055"/>
+        <tag k="leisure" v="pitch"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2016-01-22T23:53:52Z"/>
+        <tag k="sport" v="tennis"/>
+    </way>
+    <way visible="true" id="-350023" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="361085147"/>
+        <nd ref="-7"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:51Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+    <way visible="true" id="-350022" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="281408174"/>
+        <nd ref="281408175"/>
+        <nd ref="281407861"/>
+        <nd ref="281407494"/>
+        <nd ref="3504112640"/>
+        <nd ref="281407495"/>
+        <nd ref="3504112637"/>
+        <nd ref="281407496"/>
+        <nd ref="281407497"/>
+        <nd ref="281407498"/>
+        <nd ref="281407499"/>
+        <nd ref="-6"/>
+        <tag k="natural" v="coastline"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:18Z"/>
+    </way>
+    <way visible="true" id="-350021" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-3"/>
+        <nd ref="2531038607"/>
+        <nd ref="5040889998"/>
+        <nd ref="5040889997"/>
+        <nd ref="5040889996"/>
+        <nd ref="2531038612"/>
+        <nd ref="3662747734"/>
+        <nd ref="2531038614"/>
+        <nd ref="3662747420"/>
+        <nd ref="-4"/>
+        <nd ref="-3"/>
+        <tag k="name:en" v="Embassy of the United States of America"/>
+        <tag k="country" v="US"/>
+        <tag k="target" v="SN"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Ambassade des États Unis d'Amérique"/>
+        <tag k="amenity" v="embassy"/>
+        <tag k="source:datetime" v="2017-08-17T11:14:27Z"/>
+        <tag k="alt_name" v="US Embassy"/>
+        <tag k="barrier" v="fence"/>
+        <tag k="diplomatic" v="embassy"/>
+    </way>
+    <way visible="true" id="-350020" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="361085147"/>
+        <nd ref="361085148"/>
+        <nd ref="361085149"/>
+        <nd ref="3662747358"/>
+        <nd ref="3662747421"/>
+        <nd ref="361085280"/>
+        <nd ref="-2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:54Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="-350019" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="6045450925"/>
+        <nd ref="3558488097"/>
+        <tag k="lit" v="yes"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de King Fahd"/>
+        <tag k="source:datetime" v="2018-11-12T06:38:20Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="no"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way visible="true" id="31506004" timestamp="2015-07-23T08:47:54Z" version="3" changeset="32818604" user="ulilu" uid="16881">
+        <nd ref="352589870"/>
+        <nd ref="281407499"/>
+        <nd ref="281407498"/>
+        <nd ref="281407497"/>
+        <nd ref="281407496"/>
+        <nd ref="3504112637"/>
+        <nd ref="281407495"/>
+        <nd ref="352589882"/>
+        <nd ref="352589888"/>
+        <nd ref="352589890"/>
+        <nd ref="352589870"/>
+        <tag k="natural" v="beach"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Plage de la Pointe des Almadies"/>
+        <tag k="source:datetime" v="2015-07-23T08:47:54Z"/>
+    </way>
+    <way visible="true" id="32197866" timestamp="2018-11-06T08:34:25Z" version="6" changeset="64222105" user="bikey2" uid="8484018">
+        <nd ref="361082265"/>
+        <nd ref="5040889941"/>
+        <nd ref="6041114433"/>
+        <nd ref="361085181"/>
+        <nd ref="361084889"/>
+        <tag k="surface" v="paved"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="permissive"/>
+        <tag k="noexit" v="yes"/>
+        <tag k="source:datetime" v="2018-11-06T08:34:25Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="driveway"/>
+        <tag k="oneway" v="no"/>
+    </way>
+    <way visible="true" id="32197888" timestamp="2009-03-16T11:57:35Z" version="1" changeset="818715" user="Jufur" uid="88123">
+        <nd ref="361085181"/>
+        <nd ref="361085280"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2009-03-16T11:57:35Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="created_by" v="Potlatch 0.10f"/>
+    </way>
+    <way visible="true" id="361857327" timestamp="2019-04-24T01:49:22Z" version="4" changeset="69508738" user="chan_man" uid="7918455">
+        <nd ref="3558488097"/>
+        <nd ref="3558488096"/>
+        <nd ref="3662747418"/>
+        <nd ref="3662747413"/>
+        <nd ref="4046415217"/>
+        <nd ref="361082265"/>
+        <tag k="lit" v="yes"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de King Fakhd"/>
+        <tag k="source:datetime" v="2019-04-24T01:49:22Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="lanes" v="1"/>
+    </way>
+    <way visible="true" id="361857332" timestamp="2019-04-24T01:49:23Z" version="5" changeset="69508738" user="chan_man" uid="7918455">
+        <nd ref="361082265"/>
+        <nd ref="4046415215"/>
+        <nd ref="4046415218"/>
+        <nd ref="4046415219"/>
+        <nd ref="3558488097"/>
+        <tag k="lit" v="yes"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Route de King Fakhd"/>
+        <tag k="source:datetime" v="2019-04-24T01:49:23Z"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="lanes" v="1"/>
+    </way>
+    <way visible="true" id="516365942" timestamp="2017-08-17T11:09:16Z" version="1" changeset="51201629" user="Jean-Marc Liotier" uid="160042">
+        <nd ref="5040889975"/>
+        <nd ref="5040889977"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="access" v="private"/>
+        <tag k="source:datetime" v="2017-08-17T11:09:16Z"/>
+        <tag k="highway" v="service"/>
+    </way>
+    <way visible="true" id="642059351" timestamp="2018-11-08T04:31:51Z" version="1" changeset="64280601" user="bikey2" uid="8484018">
+        <nd ref="6045450925"/>
+        <nd ref="6045450926"/>
+        <nd ref="361085147"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2018-11-08T04:31:51Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="oneway" v="yes"/>
+    </way>
+</osm>
