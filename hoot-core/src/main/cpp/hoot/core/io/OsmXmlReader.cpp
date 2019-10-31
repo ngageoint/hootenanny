@@ -95,7 +95,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
   setKeepImmediatelyConnectedWaysOutsideBounds(
-    ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+    configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
