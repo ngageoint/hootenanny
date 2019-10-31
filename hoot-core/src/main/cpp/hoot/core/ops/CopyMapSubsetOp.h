@@ -30,7 +30,6 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/OperationStatusInfo.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
@@ -41,7 +40,7 @@ namespace hoot
  *
  * TODO: implement OperationStatusInfo
  */
-class CopyMapSubsetOp : public OsmMapOperation//, public OperationStatusInfo
+class CopyMapSubsetOp : public OsmMapOperation
 {
 public:
 
@@ -63,9 +62,6 @@ public:
   void setEids(const std::set<ElementId>& eids) { _eids = eids; }
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
-
-//  virtual QString getInitStatusMessage() const override;
-//  virtual QString getCompletedStatusMessage() const override;
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 private:

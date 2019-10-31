@@ -66,6 +66,8 @@ private:
   std::vector<OsmMapPtr> _tileMaps;
 
   std::set<ElementId> _eidsCompleted;
+
+  long _statusUpdateInterval;
 };
 
 }

@@ -150,13 +150,5 @@ void CopyMapSubsetOp::apply(OsmMapPtr &map)
   std::set<ElementId> eids = v.getElementsAdded();
   _eidsCopied.insert(eids.begin(), eids.end());
 }
-/*
-QString CopyMapSubsetOp::getInitStatusMessage() const
-{
-}
 
-QString CopyMapSubsetOp::getCompletedStatusMessage() const
-{
-}
-*/
 }

@@ -30,8 +30,10 @@
 //  Hoot
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/util/StringUtils.h>
 
 //  Qt
+#include <QElapsedTimer>
 #include <QFileInfo>
 
 using geos::geom::Envelope;
@@ -42,16 +44,21 @@ namespace hoot
 
 OsmMapSplitter::OsmMapSplitter(const OsmMapPtr &map, const OsmMapPtr &tiles)
   : _map(map),
-    _tiles(tiles)
+    _tiles(tiles),
+    _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
 {
 }
 
-void OsmMapSplitter::setConfiguration(const Settings& /*conf*/)
+void OsmMapSplitter::setConfiguration(const Settings& conf)
 {
+  ConfigOptions configOptions(conf);
+  _statusUpdateInterval = configOptions.getTaskStatusUpdateInterval() * 10;
 }
 
 void OsmMapSplitter::apply()
 {
+  QElapsedTimer timer;
+  timer.start();
   //  First build up the tile map
   const WayMap& tiles = _tiles->getWays();
   for (WayMap::const_iterator tile_it = tiles.begin(); tile_it != tiles.end(); ++tile_it)
@@ -74,6 +81,10 @@ void OsmMapSplitter::apply()
   const NodeMap& nodes = _map->getNodes();
   for (NodeMap::const_iterator node_it = nodes.begin(); node_it != nodes.end(); ++node_it)
     _placeElementInMap(node_it->second);
+
+  LOG_INFO(
+    "Sorted " << StringUtils::formatLargeNumber(_eidsCompleted.size()) <<
+    " elements in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 void OsmMapSplitter::_placeElementInMap(const ElementPtr& element)
@@ -127,6 +138,11 @@ void OsmMapSplitter::_placeElementInMap(const ElementPtr& element)
   //  Update the list of elements already copied to maps
   std::set<ElementId>& eids = op.getEidsCopied();
   _eidsCompleted.insert(eids.begin(), eids.end());
+
+  if (_eidsCompleted.size() % _statusUpdateInterval == 0)
+  {
+    PROGRESS_INFO("Sorted " << StringUtils::formatLargeNumber(_eidsCompleted.size()) << " elements.");
+  }
 }
 
 void OsmMapSplitter::writeMaps(const QString& filename)
