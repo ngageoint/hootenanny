@@ -170,7 +170,7 @@ public:
    * @param pMap - Map to add the changes to
    * @param pChanges - Changeset provider
    */
-  void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
+  void addTagChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
   void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
 

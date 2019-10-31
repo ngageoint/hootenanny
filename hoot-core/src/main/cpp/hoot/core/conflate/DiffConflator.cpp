@@ -307,14 +307,6 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
   {
     Change c = pChanges->readNextChange();
     LOG_VART(c);
-//    if (c.getElement())
-//    {
-//      LOG_VART(c.getElement()->getTags().get("name"));
-//    }
-//    if (c.getPreviousElement())
-//    {
-//      LOG_VART(c.getPreviousElement()->getTags().get("name"));
-//    }
 
     // Need to add children
     if (ElementType::Way == c.getElement()->getElementType().getEnum())
