@@ -334,21 +334,18 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation doesn't do relations yet
+      // Diff conflation w/ tags doesn't handle relations. Changed this to silently log that the
+      // relations are being skipped for now. #3449 was created to deal with adding relation support
+      // and then closed since we lack a use case currently that requires it. If we ever get one,
+      // then we can re-open that issue.
 
-      if (logWarnCount < Log::getWarnMessageLimit())
+      LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
+      if (Log::getInstance().getLevel() <= Log::Trace)
       {
-        LOG_WARN("Relation handling not implemented with differential conflation: " << c);
-        LOG_VART(c);
         ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
         LOG_VART(relation->getElementId());
         LOG_VART(OsmUtils::getRelationDetailedString(relation, _pOriginalMap));
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
     }
   }
   OsmMapWriterFactory::writeDebugMap(pMap, "after-adding-diff-tag-changes");
