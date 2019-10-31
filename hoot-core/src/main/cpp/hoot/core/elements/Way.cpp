@@ -479,4 +479,9 @@ long Way::getPid(long p, long c)
   else                                  return WayData::PID_EMPTY;
 }
 
+bool Way::hasSameNodeIds(const Way& other) const
+{
+  return getNodeIds() == other.getNodeIds();
+}
+
 }

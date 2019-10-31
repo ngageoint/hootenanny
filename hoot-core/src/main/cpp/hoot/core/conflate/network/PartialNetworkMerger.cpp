@@ -66,6 +66,7 @@ PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>
 void PartialNetworkMerger::_appendSublineMappings(
   QList<WayMatchStringMerger::SublineMappingPtr> mappings) const
 {
+  LOG_TRACE("Appending subline mappings...");
   foreach (WayMatchStringMerger::SublineMappingPtr sm, mappings)
   {
     foreach (WayMatchStringMerger::SublineMappingPtr other, _allSublineMappings)
@@ -80,6 +81,7 @@ void PartialNetworkMerger::_appendSublineMappings(
     }
     _allSublineMappings.append(sm);
   }
+  LOG_VART(_allSublineMappings.size());
 }
 
 void PartialNetworkMerger::apply(const OsmMapPtr& map,
@@ -142,10 +144,22 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const Osm
   vector<pair<ElementId, ElementId>>& replaced, ConstEdgeMatchPtr edgeMatch) const
 {
   // convert the EdgeStrings into WaySublineStrings
-  WayStringPtr str1 = _details->toWayString(edgeMatch->getString1(), *this);
-  WayStringPtr str2 = _details->toWayString(edgeMatch->getString2(), *this);
+  WayStringPtr str1;
+  WayStringPtr str2;
+  try
+  {
+    str1 = _details->toWayString(edgeMatch->getString1(), *this);
+    str2 = _details->toWayString(edgeMatch->getString2(), *this);
+  }
+  catch (const IllegalArgumentException& /*e*/)
+  {
+    return WayMatchStringMergerPtr();
+  }
+  LOG_VARD(str1);
+  LOG_VARD(str2);
 
   WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
+  LOG_VARD(mapping->toString());
 
   /******************
    * At the beginning, the merger should identify where the primary way should be broken into bits
@@ -206,15 +220,20 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   LOG_DEBUG("Calculating mappings and split points for matches...");
   foreach (ConstEdgeMatchPtr em, _edgeMatches)
   {
-    _mergerList.append(_createMatchStringMerger(map, replaced, em));
-
-    // Put all split points and mappings into a single structure that can be used to split ways
-    _appendSublineMappings(_mergerList.back()->getAllSublineMappings());
+    WayMatchStringMergerPtr merger = _createMatchStringMerger(map, replaced, em);
+    if (merger)
+    {
+      _mergerList.append(merger);
+      // Put all split points and mappings into a single structure that can be used to split ways
+      _appendSublineMappings(_mergerList.back()->getAllSublineMappings());
+    }
   }
+  LOG_VART(_mergerList.size());
 
   try
   {
     // split the ways in such a way that the mappings are updated appropriately.
+    LOG_DEBUG("Applying way splits...");
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);
 

@@ -137,9 +137,9 @@ public:
   virtual QString getDescription() const
   { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
-  // Gets the tag differential between the maps. To do this, we look through all
-  // of the matches, and compare tags. A set of newer tags is returned as a
-  // changeset (because updating the tags requires a modify operation)
+  // Gets the tag differential between the maps. To do this, we look through all of the matches,
+  // and compare tags. A set of newer tags is returned as a changeset (because updating the tags
+  // requires a modify operation)
 
   /**
    * @brief getTagDiff - Gets the tag differential that was calculated during the
@@ -197,10 +197,9 @@ private:
   // Stores the changes we calculate when doing the tag differential
   MemChangesetProviderPtr _pTagChanges;
 
-  // A copy of the "Input1" map. This is used when calculating the tag
-  // differential. It's important, because elements get modified by map
-  // cleaning operations prior to conflation - and we need this as a reference
-  // for original IDs and original geometry, so that we can generate a clean
+  // A copy of the "Input1" map. This is used when calculating the tag differential. It's important,
+  // because elements get modified by map cleaning operations prior to conflation - and we need this
+  // as a reference for original IDs and original geometry, so that we can generate a clean
   // changeset output for the tag diff.
   OsmMapPtr _pOriginalMap;
 
@@ -223,8 +222,8 @@ private:
   // Calculates and stores the tag differential as a set of change objects
   void _calcAndStoreTagChanges();
 
-  // Decides if the newTags should replace the oldTags. Among other things,
-  // it checks the differential.tag.ignore.list
+  // Decides if the newTags should replace the oldTags. Among other things, it checks the
+  // differential.tag.ignore.list
   bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags);
 
   // Creates a change object using the original element and new tags

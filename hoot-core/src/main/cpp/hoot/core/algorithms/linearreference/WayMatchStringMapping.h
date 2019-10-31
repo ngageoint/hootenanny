@@ -87,6 +87,9 @@ public:
   virtual void setWayString2(const WayStringPtr& ws2) = 0;
   void setWayString(WayNumber way, const WayStringPtr& ws)
   { (way == WayNumber::Way1) ? setWayString1(ws) : setWayString2(ws); }
+
+  QString toString()
+  { return "1: " + getWayString1()->toString() + "; 2: " + getWayString2()->toString(); }
 };
 
 typedef std::shared_ptr<WayMatchStringMapping> WayMatchStringMappingPtr;

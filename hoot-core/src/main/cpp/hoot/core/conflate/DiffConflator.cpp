@@ -125,7 +125,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Matching features...");
 
-  // If we don't do this, then any non-matchable data will simply pass through to output.
+  // If we skip this part, then any non-matchable data will simply pass through to output.
   if (ConfigOptions().getDifferentialRemoveUnconflatableData())
   {
     LOG_INFO("Discarding unconflatable elements...");
@@ -161,9 +161,8 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
-  // Use matches to calculate and store tag diff. We must do this before we
-  // create the map diff, because that operation deletes all of the info needed
-  // for calculating the tag diff.
+  // Use matches to calculate and store tag diff. We must do this before we create the map diff,
+  // because that operation deletes all of the info needed for calculating the tag diff.
   _updateProgress(currentStep - 1, "Storing tag differentials...");
   _calcAndStoreTagChanges();
   currentStep++;
@@ -219,28 +218,37 @@ void DiffConflator::_snapSecondaryRoadsBackToRef()
 void DiffConflator::_removeMatches(const Status& status)
 {
   LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
+
+  const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+  LOG_VARD(treatReviewsAsMatches);
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
-    std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
-    for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-         pit != pairs.end(); ++pit)
+    ConstMatchPtr match = *mit;
+    if (treatReviewsAsMatches || match->getType() != MatchType::Review)
     {
-      if (!pit->first.isNull())
+      std::set<std::pair<ElementId, ElementId>> pairs = (*mit)->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
+           pit != pairs.end(); ++pit)
       {
-        LOG_VART(pit->first);
-        ElementPtr e = _pMap->getElement(pit->first);
-        if (e && e->getStatus() == status)
+        if (!pit->first.isNull())
         {
-          RecursiveElementRemover(pit->first).apply(_pMap);
+          LOG_VART(pit->first);
+          ElementPtr e = _pMap->getElement(pit->first);
+          if (e && e->getStatus() == status)
+          {
+            //LOG_VART(e->getTags().get("name"));
+            RecursiveElementRemover(pit->first).apply(_pMap);
+          }
         }
-      }
-      if (!pit->second.isNull())
-      {
-        LOG_VART(pit->second);
-        ElementPtr e = _pMap->getElement(pit->second);
-        if (e && e->getStatus() == status)
+        if (!pit->second.isNull())
         {
-          RecursiveElementRemover(pit->second).apply(_pMap);
+          LOG_VART(pit->second);
+          ElementPtr e = _pMap->getElement(pit->second);
+          if (e && e->getStatus() == status)
+          {
+            //LOG_VART(e->getTags().get("name"));
+            RecursiveElementRemover(pit->second).apply(_pMap);
+          }
         }
       }
     }
@@ -326,21 +334,18 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     }
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
-      // Diff conflation doesn't do relations yet
+      // Diff conflation w/ tags doesn't handle relations. Changed this to silently log that the
+      // relations are being skipped for now. #3449 was created to deal with adding relation support
+      // and then closed since we lack a use case currently that requires it. If we ever get one,
+      // then we can re-open that issue.
 
-      if (logWarnCount < Log::getWarnMessageLimit())
+      LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
+      if (Log::getInstance().getLevel() <= Log::Trace)
       {
-        LOG_WARN("Relation handling not implemented with differential conflation: " << c);
-        LOG_VART(c);
         ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(c.getElement());
         LOG_VART(relation->getElementId());
         LOG_VART(OsmUtils::getRelationDetailedString(relation, _pOriginalMap));
       }
-      else if (logWarnCount == Log::getWarnMessageLimit())
-      {
-        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-      }
-      logWarnCount++;
     }
   }
   OsmMapWriterFactory::writeDebugMap(pMap, "after-adding-diff-tag-changes");
@@ -394,13 +399,16 @@ void DiffConflator::_calcAndStoreTagChanges()
       }
 
       LOG_VART(pOldElement->getElementId());
+      //LOG_VART(pOldElement->getTags().get("name"));
       LOG_VART(pNewElement->getElementId());
+      //LOG_VART(pNewElement->getTags().get("name"));
 
-      // Apparently a NetworkMatch can be a node/way pair. See note in
+      // Apparently, a NetworkMatch can be a node/way pair. See note in
       // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
       // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
-      // other conflation type other than poi/poly which matches differing geometry types then this
-      // will need to be updated.
+      // a conflation type other than poi/poly which matches differing geometry types then this will
+      // need to be updated.
+
       if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
       {

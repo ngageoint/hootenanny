@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IntegerProgrammingSolver.h"
 
@@ -82,6 +82,8 @@ void IntegerProgrammingSolver::solve()
 
 void IntegerProgrammingSolver::solveBranchAndCut()
 {
+  LOG_DEBUG("solveBranchAndCut");
+
   glp_iocp iocp;
   glp_init_iocp(&iocp);
   //  Turn on the presolver so that glp_intopt works correctly
@@ -133,6 +135,8 @@ void IntegerProgrammingSolver::solveBranchAndCut()
 
 void IntegerProgrammingSolver::solveSimplex()
 {
+  LOG_DEBUG("solveSimplex");
+
   glp_smcp smcp;
   glp_init_smcp(&smcp);
   //  Setup the time limit if necessary

@@ -46,6 +46,50 @@
             <tag k="source:datetime" v="2018-11-24T11:37:37Z;2015-07-23T12:08:35.000Z"/>
             <tag k="building:use" v="hotel"/>
         </way>
+        <way id="-370236" version="1" timestamp="">
+            <nd ref="-367730"/>
+            <nd ref="-367744"/>
+            <tag k="oneway" v="yes"/>
+            <tag k="service" v="driveway"/>
+            <tag k="highway" v="service"/>
+            <tag k="layer" v="-1"/>
+            <tag k="source:datetime" v="2015-07-23T10:27:52Z;2015-07-23T10:27:52.000Z"/>
+            <tag k="surface" v="asphalt"/>
+            <tag k="covered" v="yes"/>
+            <tag k="access" v="permissive"/>
+        </way>
+        <way id="-370359" version="1" timestamp="">
+            <nd ref="-367040"/>
+            <nd ref="-371886"/>
+            <nd ref="-367025"/>
+            <tag k="source" v="Microsoft Bing orbital imagery"/>
+            <tag k="oneway" v="yes"/>
+            <tag k="highway" v="service"/>
+            <tag k="source:datetime" v="2018-11-08T04:31:51Z;2015-07-23T10:22:02.000Z"/>
+            <tag k="surface" v="asphalt"/>
+            <tag k="access" v="permissive"/>
+        </way>
+        <way id="-374011" version="1" timestamp="">
+            <nd ref="-367005"/>
+            <nd ref="-367592"/>
+            <nd ref="-374031"/>
+            <tag k="oneway" v="yes"/>
+            <tag k="service" v="driveway"/>
+            <tag k="highway" v="service"/>
+            <tag k="source:datetime" v="2018-11-08T04:31:57Z;2015-07-23T10:27:50.000Z"/>
+            <tag k="surface" v="asphalt"/>
+            <tag k="access" v="permissive"/>
+        </way>
+        <way id="-370365" version="1" timestamp="">
+            <nd ref="-367777"/>
+            <nd ref="-367005"/>
+            <tag k="oneway" v="yes"/>
+            <tag k="service" v="driveway"/>
+            <tag k="highway" v="service"/>
+            <tag k="source:datetime" v="2018-11-08T04:31:58Z;2015-07-23T10:27:52.000Z"/>
+            <tag k="surface" v="asphalt"/>
+            <tag k="access" v="permissive"/>
+        </way>
         <way id="-373999" version="1" timestamp="">
             <nd ref="-374010"/>
             <nd ref="-365724"/>
@@ -73,26 +117,17 @@
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
         </way>
-        <way id="-374011" version="1" timestamp="">
-            <nd ref="-367005"/>
-            <nd ref="-367592"/>
-            <nd ref="-374031"/>
-            <tag k="oneway" v="yes"/>
-            <tag k="service" v="driveway"/>
-            <tag k="highway" v="service"/>
-            <tag k="source:datetime" v="2018-11-08T04:31:57Z;2015-07-23T10:27:50.000Z"/>
-            <tag k="surface" v="asphalt"/>
-            <tag k="access" v="permissive"/>
-        </way>
-        <way id="-370365" version="1" timestamp="">
-            <nd ref="-367777"/>
-            <nd ref="-367005"/>
-            <tag k="oneway" v="yes"/>
-            <tag k="service" v="driveway"/>
-            <tag k="highway" v="service"/>
-            <tag k="source:datetime" v="2018-11-08T04:31:57Z;2015-07-23T10:27:52.000Z"/>
-            <tag k="surface" v="asphalt"/>
-            <tag k="access" v="permissive"/>
+        <way id="-374013" version="1" timestamp="">
+            <nd ref="-374034"/>
+            <nd ref="-369023"/>
+            <nd ref="-372254"/>
+            <tag k="oneway" v="no"/>
+            <tag k="highway" v="unclassified"/>
+            <tag k="name" v="Corniche des Almadies"/>
+            <tag k="lit" v="yes"/>
+            <tag k="source:datetime" v="2018-11-12T07:54:40Z;2015-07-23T11:22:30.000Z"/>
+            <tag k="surface" v="paved"/>
+            <tag k="lanes" v="2"/>
         </way>
         <way id="-365297" version="1" timestamp="">
             <nd ref="-367006"/>
@@ -105,14 +140,22 @@
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
         </way>
-        <way id="-370359" version="1" timestamp="">
-            <nd ref="-367040"/>
-            <nd ref="-371886"/>
-            <nd ref="-367025"/>
+        <way id="-374017" version="1" timestamp="">
+            <nd ref="-374039"/>
+            <nd ref="-366142"/>
+            <nd ref="-367005"/>
+            <nd ref="-367017"/>
+            <nd ref="-367021"/>
+            <nd ref="-366954"/>
+            <nd ref="-366933"/>
+            <nd ref="-367011"/>
+            <nd ref="-367592"/>
+            <nd ref="-366143"/>
+            <nd ref="-374040"/>
             <tag k="source" v="Microsoft Bing orbital imagery"/>
             <tag k="oneway" v="yes"/>
             <tag k="highway" v="service"/>
-            <tag k="source:datetime" v="2018-11-08T04:31:55Z;2015-07-23T10:22:02.000Z"/>
+            <tag k="source:datetime" v="2018-11-08T04:31:54Z;2015-07-23T10:27:51.000Z"/>
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
         </way>
@@ -126,28 +169,14 @@
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
         </way>
-        <way id="-374013" version="1" timestamp="">
-            <nd ref="-374034"/>
-            <nd ref="-369023"/>
-            <nd ref="-372254"/>
-            <tag k="oneway" v="no"/>
-            <tag k="highway" v="unclassified"/>
-            <tag k="name" v="Corniche des Almadies"/>
-            <tag k="lit" v="yes"/>
-            <tag k="source:datetime" v="2018-11-12T07:54:40Z;2015-07-23T11:22:30.000Z"/>
-            <tag k="surface" v="paved"/>
-            <tag k="lanes" v="2"/>
-        </way>
-        <way id="-370236" version="1" timestamp="">
-            <nd ref="-367730"/>
-            <nd ref="-367744"/>
+        <way id="-370231" version="1" timestamp="">
+            <nd ref="-366953"/>
+            <nd ref="-367785"/>
             <tag k="oneway" v="yes"/>
             <tag k="service" v="driveway"/>
             <tag k="highway" v="service"/>
-            <tag k="layer" v="-1"/>
-            <tag k="source:datetime" v="2015-07-23T10:27:52Z;2015-07-23T10:27:52.000Z"/>
+            <tag k="source:datetime" v="2018-11-08T04:31:51Z;2015-07-23T10:27:52.000Z"/>
             <tag k="surface" v="asphalt"/>
-            <tag k="covered" v="yes"/>
             <tag k="access" v="permissive"/>
         </way>
         <way id="-374003" version="1" timestamp="">
@@ -186,42 +215,6 @@
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
         </way>
-        <way id="-374017" version="1" timestamp="">
-            <nd ref="-374039"/>
-            <nd ref="-366142"/>
-            <nd ref="-367005"/>
-            <nd ref="-367017"/>
-            <nd ref="-367021"/>
-            <nd ref="-366954"/>
-            <nd ref="-366933"/>
-            <nd ref="-367011"/>
-            <nd ref="-367592"/>
-            <nd ref="-366143"/>
-            <nd ref="-374040"/>
-            <tag k="source" v="Microsoft Bing orbital imagery"/>
-            <tag k="oneway" v="yes"/>
-            <tag k="highway" v="service"/>
-            <tag k="source:datetime" v="2018-11-08T04:31:54Z;2015-07-23T10:27:51.000Z"/>
-            <tag k="surface" v="asphalt"/>
-            <tag k="access" v="permissive"/>
-        </way>
-        <way id="-374001" version="1" timestamp="">
-            <nd ref="-374013"/>
-            <nd ref="-367025"/>
-            <nd ref="-369025"/>
-            <nd ref="-367960"/>
-            <nd ref="-372254"/>
-            <nd ref="-373498"/>
-            <nd ref="-374014"/>
-            <tag k="oneway" v="no"/>
-            <tag k="highway" v="tertiary"/>
-            <tag k="name" v="Route de King Fahd"/>
-            <tag k="lit" v="yes"/>
-            <tag k="alt_name" v="Route de King Fakhd"/>
-            <tag k="source:datetime" v="2018-11-12T06:38:20Z;2015-07-23T10:27:51.000Z"/>
-            <tag k="surface" v="asphalt"/>
-            <tag k="lanes" v="2"/>
-        </way>
         <way id="-371703" version="1" timestamp="">
             <nd ref="-366937"/>
             <nd ref="-367059"/>
@@ -245,16 +238,6 @@
             <tag k="surface" v="asphalt"/>
             <tag k="access" v="permissive"/>
         </way>
-        <way id="-370231" version="1" timestamp="">
-            <nd ref="-366953"/>
-            <nd ref="-367785"/>
-            <tag k="oneway" v="yes"/>
-            <tag k="service" v="driveway"/>
-            <tag k="highway" v="service"/>
-            <tag k="source:datetime" v="2018-11-08T04:31:55Z;2015-07-23T10:27:52.000Z"/>
-            <tag k="surface" v="asphalt"/>
-            <tag k="access" v="permissive"/>
-        </way>
         <way id="-370211" version="1" timestamp="">
             <nd ref="-367729"/>
             <nd ref="-367731"/>
@@ -272,28 +255,6 @@
             <nd ref="-367729"/>
             <nd ref="-367987"/>
             <nd ref="-367449"/>
-            <tag k="sport" v="tennis"/>
-            <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
-            <tag k="surface" v="concrete"/>
-            <tag k="leisure" v="pitch"/>
-        </way>
-        <way id="-374016" version="1" timestamp="">
-            <nd ref="-374037"/>
-            <nd ref="-367749"/>
-            <nd ref="-367987"/>
-            <nd ref="-374038"/>
-            <nd ref="-374037"/>
-            <tag k="sport" v="tennis"/>
-            <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
-            <tag k="surface" v="concrete"/>
-            <tag k="leisure" v="pitch"/>
-        </way>
-        <way id="-374012" version="1" timestamp="">
-            <nd ref="-367987"/>
-            <nd ref="-367449"/>
-            <nd ref="-374032"/>
-            <nd ref="-374033"/>
-            <nd ref="-367987"/>
             <tag k="sport" v="tennis"/>
             <tag k="source:datetime" v="2015-07-23T10:33:13Z;2015-07-23T10:33:13.000Z"/>
             <tag k="surface" v="concrete"/>

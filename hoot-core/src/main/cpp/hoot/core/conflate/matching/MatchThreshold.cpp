@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchThreshold.h"
 
@@ -69,13 +69,15 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
 {
   if (mc.getReviewP() >= _reviewThreshold)
   {
-    return QString("The feature pair with a review score of %1 was marked for review because it met the review threshold of %2.")
+    return QString("The feature pair with a review score of %1 was marked for review because it "
+                   "met the review threshold of %2.")
              .arg(mc.getReviewP())
              .arg(_reviewThreshold);
   }
   else if (mc.getMatchP() >= _matchThreshold && mc.getMissP() >= _missThreshold)
   {
-    return QString("The feature pair with a match score of %1 and a miss score of %2 was marked for review because it met neither the threshold for a match at %3 nor that for a miss at %4.")
+    return QString("The feature pair with a match score of %1 and a miss score of %2 was marked "
+                   "for review because it met neither the threshold for a match at %3 nor that for a miss at %4.")
              .arg(mc.getMatchP())
              .arg(mc.getMissP())
              .arg(_matchThreshold)
@@ -84,19 +86,23 @@ QString MatchThreshold::getTypeDetail(const MatchClassification& mc) const
   }
   else if (mc.getMatchP() >= _matchThreshold)
   {
-    return QString("The feature pair with a match score of %1 was matched because it met the threshold for a match at %2.")
+    return QString("The feature pair with a match score of %1 was matched because it met the "
+                   "threshold for a match at %2.")
              .arg(mc.getMatchP())
              .arg(_matchThreshold);
   }
   else if (mc.getMissP() >= _missThreshold)
   {
-    return QString("The feature pair with a miss score of %1 was not matched because it met the threshold for a miss at %2.")
+    return QString("The feature pair with a miss score of %1 was not matched because it met "
+                   "the threshold for a miss at %2.")
              .arg(mc.getMissP())
              .arg(_missThreshold);
   }
   else
   {
-    return QString("The feature pair with match score: %1, miss score: %2, and review score: %3 was marked for review because it met neither the threshold for a match (%4), miss (%5), nor review (%6).")
+    return QString("The feature pair with match score: %1, miss score: %2, and review score: "
+                   "%3 was marked for review because it met neither the threshold for a match "
+                   "(%4), miss (%5), nor review (%6).")
              .arg(mc.getMatchP())
              .arg(mc.getMissP())
              .arg(mc.getReviewP())

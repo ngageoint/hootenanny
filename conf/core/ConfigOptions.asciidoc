@@ -924,6 +924,15 @@ secondary road endpoint nodes to the nearest reference road.
 
 List of tags to ignore when performing differential conflation with tags.
 
+=== differential.treat.reviews.as.matches
+
+* Data Type: bool
+* Default Value: `true`
+
+If true reviews are treated as matches by Differential Conflation and removed from the output if
+differential.remove.reference.data is enabled. If set to false, reviews are not treated as matches
+and will pass through to the differential output.
+
 === direction.finder.angle.threshold
 
 * Data Type: double
@@ -4316,13 +4325,29 @@ Minimum tag numeric value that will allow the TagValueNumericRangeCriterion to b
 For commands supporting it, the iteration count at which a status message should be logged. This
 setting may have a negative impact on performance if set to a very low value.
 
-=== test.case.cmd
+=== test.case.conflate.cmd
 
 * Data Type: string
 * Default Value: `hoot::ConflateCmd`
 
 Set the conflate command that should be used in a test case. This is only useful when writing
 test cases (`test-files/cases/`) and was originally added to support the MultiaryPoiConflateCmd.
+
+=== test.case.conflate.differential
+
+* Data Type: bool
+* Default Value: `false`
+
+When activated, this runs the conflate case test conflate command with the --differential option.
+
+=== test.case.conflate.differential.include.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+When activated, this runs the conflate case test conflate command with both the --differential
+and --include-tags options (setting this to true automatically sets test.case.conflate.differential
+to true).
 
 === test.force.orthographic.projection
 

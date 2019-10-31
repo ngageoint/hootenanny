@@ -39,6 +39,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Qt
 #include <QDebug>
@@ -56,24 +57,36 @@ ReplaceRoundabouts::ReplaceRoundabouts()
 
 void ReplaceRoundabouts::replaceRoundabouts(const std::shared_ptr<OsmMap>& pMap)
 {
+  LOG_TRACE("Replacing roundabouts...");
+
   // Make sure we are planar
   MapProjector::projectToPlanar(pMap);
 
   // Get a list of roundabouts from the map, go through & process them
   std::vector<RoundaboutPtr> roundabouts = pMap->getRoundabouts();
+  LOG_VART(roundabouts.size());
   for (size_t i = 0; i < roundabouts.size(); i++)
   {
     RoundaboutPtr pRoundabout = roundabouts[i];
     pRoundabout->replaceRoundabout(pMap);
     _numAffected++;
+
+    // This could be very expensive...enable for debugging only.
+    //OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabout-" + QString::number(i + 1));
   }
+  OsmMapWriterFactory::writeDebugMap(pMap, "after-replacing-roundabouts");
 
   //  Clean up any roundabout centers that didn't clean themselves up earlier
   std::vector<long> centers =
     ElementIdsVisitor::findElementsByTag(
       pMap, ElementType::Node, MetadataTags::HootSpecial(), "roundabout_center");
+  LOG_VART(centers.size());
   foreach (long id, centers)
+  {
+    LOG_TRACE("Removing center node: " << id << "...");
     RemoveNodeByEid::removeNode(pMap, id, true);
+  }
+  OsmMapWriterFactory::writeDebugMap(pMap, "roundabout-replacement-after-removing-center-nodes");
 }
 
 void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)

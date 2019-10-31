@@ -1121,7 +1121,13 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
       ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
+
       ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_map->getWay(eid));
+      if (!w)
+      {
+        LOG_VART(eid);
+        throw IllegalArgumentException("Way: " + eid.toString() + " does not exist in the map.");
+      }
 
       Meters l = calculateLength(e);
       double startP = subline->getStart()->getPortion();
@@ -1133,6 +1139,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
     }
   }
 
+  LOG_VARD(ws);
   return ws;
 }
 
