@@ -1139,7 +1139,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
     }
   }
 
-  LOG_VARD(ws);
+  LOG_VART(ws);
   return ws;
 }
 

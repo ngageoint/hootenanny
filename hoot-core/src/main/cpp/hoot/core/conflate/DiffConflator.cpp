@@ -536,6 +536,10 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
       "Ignoring OSM API database URL: " << osmApiDbUrl << " for non-SQL changeset output...");
   }
 
+  LOG_VARD(output);
+  LOG_VARD(separateOutput);
+  LOG_VARD(osmApiDbUrl);
+
   // It seems like our tag changes should be sorted by element type before passing them along to the
   // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
   // call changeset-derive. However, doing that here would require some refactoring so not worrying

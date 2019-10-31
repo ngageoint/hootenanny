@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-# This test creates a diff between two road datasets and snaps unconnected secondary roads back to reference roads before the changeset output
-# with just the secondary data is created. It then writes the changeset back to the reference data store after which we may check to see that 
-# all the snapped secondary roads remain connected to reference roads.
+# This test creates a diff between two road datasets and snaps unconnected secondary roads back to reference roads just before the diff 
+# changeset output, which only contains secondary data. It then applies the diff changeset back to the reference data store, after which we 
+# may check to see that all the snapped secondary roads remain connected to the reference roads.
 
 TEST_NAME=ServiceDiffRoadSnapTest
 INPUT_DIR=test-files/cmd/slow/DiffConflateCmdTest
@@ -28,12 +28,13 @@ scripts/database/CleanAndInitializeOsmApiDb.sh
 hoot convert $GENERAL_OPTS $DB_OPTS $INPUT_DIR/input3.osm $OSM_API_DB_URL
 
 # write sec to hootapidb
-hoot convert $GENERAL_OPTS $DB_OPTS $INPUT_DIR/input4.osm $HOOT_DB_URL/$TEST_NAME-sec
+SEC_LAYER=$HOOT_DB_URL/$TEST_NAME-sec
+hoot convert $GENERAL_OPTS $DB_OPTS $INPUT_DIR/input4.osm $SEC_LAYER
 
 # run diff conflate to changeset w/ road snapping - can only directly apply the .osc.sql file, so that's required, but let's output the .osc as 
-# well, as its easier to read during debugging
-hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $HOOT_DB_URL/DiffHgTest-sec $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential
-hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $HOOT_DB_URL/DiffHgTest-sec $OUTPUT_DIR/diff.osc --differential
+# well, since its easier to read during debugging
+hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential
+#hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential
 
 # apply changeset back to ref
 hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
