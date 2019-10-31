@@ -55,7 +55,7 @@ public:
     {
       LOG_VARD(args);
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").
+      throw HootException(QString("%1 takes three parameters.").
                           arg(getName()));
     }
     //  Load the tile map ignoring the file IDs
