@@ -44,14 +44,9 @@ _threshold(threshold)
 
 void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 {
-  // Should we remove metadata (hoot:*) tags here instead?
-
-  tags.remove(MetadataTags::HootStatus());
+  tags.removeMetadata();
   // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
   tags.remove("status");
-  //this is ok b/c we have the actual id to compare to, but it should still probably be fixed to
-  //carry along the hoot:id tag for consistency's sake when that is desired
-  tags.remove(MetadataTags::HootId());
   tags.remove(MetadataTags::SourceDateTime());
 }
 

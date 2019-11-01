@@ -253,7 +253,7 @@ void PreserveTypesTagMerger::_removeRedundantAltTypeTags(Tags& tags) const
       tags.set(ALT_TYPES_TAG_KEY, altTypesCopy.join(";"));
     }
   }
-  //tags.removeEmptyTags(); // why does this crash?
+  //tags.removeEmpty(); // why does this crash?
   if (tags[ALT_TYPES_TAG_KEY].trimmed().isEmpty())
   {
     tags.remove(ALT_TYPES_TAG_KEY);

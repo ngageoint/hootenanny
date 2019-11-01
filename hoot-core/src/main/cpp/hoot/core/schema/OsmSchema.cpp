@@ -1541,7 +1541,7 @@ Tags OsmSchema::getAliasTags(const Tags& tags)
        itr != schemaVertices.end(); ++itr)
   {
     SchemaVertex vertex = *itr;
-    tagsToReturn.addTags(Tags::kvpListToTags(vertex.aliases));
+    tagsToReturn.add(Tags::kvpListToTags(vertex.aliases));
   }
   return tagsToReturn;
 }

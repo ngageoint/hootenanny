@@ -2,8 +2,8 @@
 set -e
 
 mkdir -p $HOOT_HOME/tmp/
-INPUT_DIR=test-files/cmd/glacial/DiffConflateCmdTest
-OUTPUT_DIR=test-output/cmd/glacial/DiffConflateCmdTest
+INPUT_DIR=test-files/cmd/slow/DiffConflateCmdTest
+OUTPUT_DIR=test-output/cmd/slow/DiffConflateCmdTest
 mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 
@@ -70,8 +70,8 @@ hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output_unified.osm $INPUT_DIR/o
 
 # Check to make sure we don't bomb out on empty files
 echo "Checking conflation of empty files..."
-hoot conflate $LOG_LEVEL -C Testing.conf -C DifferentialConflation.conf -C NetworkAlgorithm.conf --warn test-files/Empty.osm test-files/Empty.osm tmp/DiffConflateCmdTest.osm
-hoot diff -C Testing.conf test-files/Empty.osm tmp/DiffConflateCmdTest.osm || cat tmp/DiffConflateCmdTest.osm
+hoot conflate $LOG_LEVEL -C Testing.conf -C DifferentialConflation.conf -C NetworkAlgorithm.conf --warn test-files/Empty.osm test-files/Empty.osm $OUTPUT_DIR/Empty.osm
+hoot diff -C Testing.conf test-files/Empty.osm $OUTPUT_DIR/Empty.osm || cat $OUTPUT_DIR/Empty.osm
 
 # Run with the road snapper
 echo "Checking conflation with road snapping..."

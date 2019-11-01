@@ -68,7 +68,7 @@ public:
   /**
    * Adds all the tags in t into this set of tags. Tags in t overwrite tags in this.
    */
-  void addTags(const Tags& t);
+  void add(const Tags& t);
 
   /**
    * Appends a value to a key. If the key already has a value then the values are semi-colon
@@ -206,7 +206,7 @@ public:
   /**
    * Get a list of all non-'hoot::*' tags
    */
-  QStringList dataOnlyTags(const Tags& tags) const;
+  QStringList getDataOnlyValues(const Tags& tags) const;
 
   void readValues(const QString& k, QStringList& list) const;
 
@@ -215,7 +215,28 @@ public:
   /**
    * Remove all tags with empty strings as values.
    */
-  void removeEmptyTags();
+  void removeEmpty();
+
+  /**
+   * TODO
+   */
+  void removeMetadata();
+
+  // You can use the QHash::remove for removal by key equal to.
+
+  /**
+   * TODO
+   *
+   * @param tagKeySubstring
+   */
+  void removeByTagKeyContains(const QString& tagKeySubstring);
+
+  /**
+   * TODO
+   *
+   * @param tagKeySubstring
+   */
+  void removeByTagKeyStartsWith(const QString& tagKeySubstring);
 
   /**
    * Sets the area tag to either true (is an area element), or false (is not an area element)

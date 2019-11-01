@@ -93,7 +93,7 @@ NodePtr TestUtils::createNode(OsmMapPtr map, Status status, double x, double y,
 {
   NodePtr result(new Node(status, map->createNextNodeId(), x, y, circularError));
   map->addNode(result);
-  result->getTags().addTags(tags);
+  result->getTags().add(tags);
   return result;
 }
 

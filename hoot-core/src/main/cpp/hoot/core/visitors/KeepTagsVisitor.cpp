@@ -56,7 +56,7 @@ void KeepTagsVisitor::visit(const std::shared_ptr<Element>& e)
 
   //get a copy of the tags for modifying
   Tags tags;
-  tags.addTags(e->getTags());
+  tags.add(e->getTags());
   for (Tags::const_iterator it = e->getTags().begin(); it != e->getTags().end(); ++it)
   {
     if (!_keys.contains(it.key()))

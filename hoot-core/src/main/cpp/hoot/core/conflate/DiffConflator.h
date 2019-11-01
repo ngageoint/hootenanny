@@ -211,9 +211,13 @@ private:
   // as a reference for original IDs and original geometry, so that we can generate a clean
   // changeset output for the tag diff.
   OsmMapPtr _pOriginalMap;
+  // TODO
+  OsmMapPtr _pOriginalRef1Map;
 
   Progress _progress;
   int _taskStatusUpdateInterval;
+
+  long _numSnappedWays;
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -242,7 +246,7 @@ private:
 
   void _removeMatches(const Status& status);
 
-  void _snapSecondaryRoadsBackToRef();
+  long _snapSecondaryRoadsBackToRef();
 
   void _updateProgress(const int currentStep, const QString message);
 };

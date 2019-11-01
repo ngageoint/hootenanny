@@ -78,19 +78,21 @@ int DiffConflator::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
 DiffConflator::DiffConflator() :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_matchFactory(MatchFactory::getInstance()),
+_settings(Settings::getInstance()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_numSnappedWays(0)
 {
   _reset();
 }
 
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_matchFactory(MatchFactory::getInstance()),
+_matchThreshold(matchThreshold),
+_settings(Settings::getInstance()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_numSnappedWays(0)
 {
-  _matchThreshold = matchThreshold;
   _reset();
 }
 
@@ -117,6 +119,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
+  _numSnappedWays = 0;
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
@@ -185,10 +188,10 @@ void DiffConflator::apply(OsmMapPtr& map)
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
-    _snapSecondaryRoadsBackToRef();
+    _numSnappedWays = _snapSecondaryRoadsBackToRef();
   }
 
-  if (ConfigOptions().getDifferentialRemoveReferenceData())
+  if (/*_numSnappedWays == 0 &&*/ ConfigOptions().getDifferentialRemoveReferenceData())
   {
     // _pMap at this point contains all of input1, we are going to delete everything left that
     // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
@@ -206,7 +209,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
 }
 
-void DiffConflator::_snapSecondaryRoadsBackToRef()
+long DiffConflator::_snapSecondaryRoadsBackToRef()
 {
   UnconnectedWaySnapper roadSnapper;
   roadSnapper.setConfiguration(conf());
@@ -214,6 +217,7 @@ void DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+  return roadSnapper.getNumAffected();
 }
 
 void DiffConflator::_removeMatches(const Status& status)
@@ -289,6 +293,13 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 
   // Use the copy constructor
   _pOriginalMap.reset(new OsmMap(pMap));
+
+  _pOriginalRef1Map.reset(new OsmMap(pMap));
+  ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref2()));
+  RemoveElementsVisitor removeRef2Visitor;
+  removeRef2Visitor.setRecursive(true);
+  removeRef2Visitor.addCriterion(pTagKeyCrit);
+  _pOriginalRef1Map->visitRw(removeRef2Visitor);
 }
 
 void DiffConflator::markInputElements(OsmMapPtr pMap)
@@ -398,10 +409,8 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      LOG_VART(pOldElement->getElementId());
-      //LOG_VART(pOldElement->getTags().get("name"));
+      LOG_VART(pOldElement->getElementId());;
       LOG_VART(pNewElement->getElementId());
-      //LOG_VART(pNewElement->getTags().get("name"));
 
       // Apparently, a NetworkMatch can be a node/way pair. See note in
       // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
@@ -423,6 +432,8 @@ void DiffConflator::_calcAndStoreTagChanges()
         // Make new change
         Change newChange = _getChange(pOldElement, pNewElement);
         LOG_VART(newChange);
+        //OsmUtils::logElementDetail(pOldElement, _pMap, Log::Trace, "Old element: ");
+        //OsmUtils::logElementDetail(pNewElement, _pMap, Log::Trace, "New element: ");
 
         // Add it to our list
         _pTagChanges->addChange(newChange);
@@ -483,6 +494,7 @@ void DiffConflator::_reset()
   _matches.clear();
   _pMap.reset();
   _pTagChanges.reset();
+  _numSnappedWays = 0;
 }
 
 void DiffConflator::_printMatches(vector<ConstMatchPtr> matches)
@@ -518,7 +530,14 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, Os
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 {
-  return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
+  if (_numSnappedWays == 0 /*&& ConfigOptions().getDifferentialRemoveReferenceData()*/)
+  {
+    return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
+  }
+  else
+  {
+    return _sortInputs(_pOriginalRef1Map, pMap);
+  }
 }
 
 void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
