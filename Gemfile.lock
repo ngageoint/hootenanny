@@ -80,7 +80,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
-    rubyzip (1.2.3)
+    rubyzip (1.3.0)
     selenium-cucumber (3.1.5)
       appium_lib (>= 8.0.2)
       chunky_png (>= 1.3.5)
