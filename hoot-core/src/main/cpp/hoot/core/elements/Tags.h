@@ -218,23 +218,23 @@ public:
   void removeEmpty();
 
   /**
-   * TODO
+   * Removes all metadata tags (hoot::*)
    */
   void removeMetadata();
 
-  // You can use the QHash::remove for removal by key equal to.
+  // QHash::remove can be used for removal by key equal to.
 
   /**
-   * TODO
+   * Removes all tags with keys that contain the input substring
    *
-   * @param tagKeySubstring
+   * @param tagKeySubstring a substring to match
    */
   void removeByTagKeyContains(const QString& tagKeySubstring);
 
   /**
-   * TODO
+   * Removes all tags with keys that start with the input substring
    *
-   * @param tagKeySubstring
+   * @param tagKeySubstring a substring to match
    */
   void removeByTagKeyStartsWith(const QString& tagKeySubstring);
 

@@ -42,25 +42,25 @@ class OsmChangeWriterFactory
 public:
 
   /**
-   * TODO
+   * Creates a writer capable of streaming OSM changes
    *
-   * @param url
-   * @param elementPayloadFormat
-   * @return
+   * @param url the path the writer writes to
+   * @param elementPayloadFormat TODO
+   * @return an OSM change writer
    */
   std::shared_ptr<OsmChangeWriter> createWriter(const QString& url,
                                                 const QString& elementPayloadFormat = "json");
 
   /**
-   * TODO
+   * Determines if the output location is supported by any OsmChangeWriter
    *
-   * @param output
-   * @return
+   * @param output the output path to validate
+   * @return true if the output path is supported by any writer; false otherwise
    */
   bool isSupported(const QString& output);
 
   /**
-   * TODO
+   * Returns a Singleton instance of OsmChangeWriterFactory
    *
    * @return
    */

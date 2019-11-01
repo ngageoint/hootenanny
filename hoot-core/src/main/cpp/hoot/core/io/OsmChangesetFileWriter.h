@@ -64,10 +64,10 @@ public:
   virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders) = 0;
 
   /**
-   * TODO
+   * Determines if the output location is supported by this writer
    *
-   * @param output
-   * @return
+   * @param output the output path to validate
+   * @return true if the output path is supported by this writer; false otherwise
    */
   virtual bool isSupported(const QString& output) const = 0;
 

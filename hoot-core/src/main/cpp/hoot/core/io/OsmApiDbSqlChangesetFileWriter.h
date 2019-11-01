@@ -49,7 +49,7 @@ namespace hoot
  * an OSM API database with an OSM changeset.
  *
  * TODO: add a method that tells you whether sql output from this is equivalent to that in an xml
- * changeset
+ * changeset - see #3372
  */
 class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 {

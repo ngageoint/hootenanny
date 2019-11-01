@@ -294,6 +294,8 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   // Use the copy constructor
   _pOriginalMap.reset(new OsmMap(pMap));
 
+  // We're storing this off for potential use later on if any roads get snapped after conflation.
+  // See additional comments in _getChangesetFromMap.
   _pOriginalRef1Map.reset(new OsmMap(pMap));
   ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref2()));
   RemoveElementsVisitor removeRef2Visitor;
@@ -536,6 +538,13 @@ ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
   }
   else
   {
+    // If any secondary ways were snapped back to reference ways, we need to generate a changeset
+    // against the original reference data (which may have been dropped by the output map by this
+    // point) instead of against an empty map. If we don't, then we could end up generating create
+    // statements for elements which already exist in the ref dataset. Its arguable that we could
+    // use this approach regardless whether roads are snapped or not. This approach has also not
+    // been tested with much data, so may not pan out in the long run.
+
     return _sortInputs(_pOriginalRef1Map, pMap);
   }
 }
