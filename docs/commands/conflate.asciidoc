@@ -8,9 +8,10 @@ changeset will be written, instead of an OSM map.
 
 * +input1+            - First input; may be any supported input format (e.g. OSM file).
 * +input2+            - Second input; may be any supported input format (e.g. OSM file).
-* +output+            - The output path; may be any supported output format include changeset formats (.osc, .osc.sql)
-* +osmApiDatabaseUrl+ - Target OSM API database a derived changeset is to be applied to used to maintain element ID continuity. Required only 
-                        if the --differential option is specified and the changeset output format is .osc.sql.
+* +output+            - The output path; may be any supported output format or a changeset format if the +--differential+ option is specified 
+                        (.osc, .osc.sql)
+* +osmApiDatabaseUrl+ - Target OSM API database the derived changeset is to be applied, used to maintain element ID continuity. Required only 
+                        if the +--differential+ option is specified and the changeset output format is .osc.sql.
 * +--differential+    - Calculates the the differential between two conflation inputs.  The output will be all elements in input2 that do
                         not conflict with any elements in input1.
 * +--include-tags+    - Include a check for modified tags when doing differential conflation.  The output will include unmodified geometries

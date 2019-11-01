@@ -20,7 +20,7 @@ export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 # 'DiffConflator;OsmApiDbSqlChangesetFileWriter;OsmXmlChangesetFileWriter;OsmChangesetFileWriterFactory'
-GENERAL_OPTS="--warn -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
+GENERAL_OPTS="--trace -C DifferentialConflation.conf -C NetworkAlgorithm.conf -C Testing.conf -D log.class.filter='DiffConflator;ChangesetDeriver;OsmApiDbSqlChangesetFileWriter' -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1"
 
@@ -37,11 +37,10 @@ hoot convert -D reader.use.data.source.ids=false $GENERAL_OPTS $DB_OPTS $INPUT_D
 # debugging only
 hoot convert -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUTPUT_DIR/sec-original.osm
 
-# run diff conflate to changeset w/ road snapping - can only directly apply the .osc.sql file, so that's required, but let's output the .osc as 
-# well, since its easier to read during debugging
+# run diff conflate to changeset w/ road snapping
 hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential
-
-hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential
+# debugging only
+#hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential
 
 # apply changeset back to ref
 hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL

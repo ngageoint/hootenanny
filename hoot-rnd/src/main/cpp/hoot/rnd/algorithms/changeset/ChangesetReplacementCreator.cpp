@@ -1042,7 +1042,9 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
 void ChangesetReplacementCreator::_parseConfigOpts(
   const bool lenientBounds, const GeometryTypeCriterion::GeometryType& geometryType)
 {
-  // only one of these should ever be true
+  // These settings have been are customized for each geometry type and bounds handling preference.
+  // They were derived from small test cases, so we may need to do some tweaking as we encounter
+  // real world data.
 
   if (geometryType == GeometryTypeCriterion::GeometryType::Point)
   {

@@ -42,7 +42,6 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
@@ -58,6 +57,7 @@
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // standard
 #include <algorithm>
@@ -543,7 +543,7 @@ void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool s
   // It seems like our tag changes should be sorted by element type before passing them along to the
   // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
   // call changeset-derive. However, doing that here would require some refactoring so not worrying
-  // about it unless not being sorted actually causes problems.
+  // about it unless not being sorted actually ends up causing any problems.
 
   // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);

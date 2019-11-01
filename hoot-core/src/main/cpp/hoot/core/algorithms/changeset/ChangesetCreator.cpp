@@ -33,11 +33,9 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementStreamer.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -51,6 +49,8 @@
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -632,14 +632,12 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
       "Changeset input data inputs are not the same size for streaming to output.");
   }
 
-  LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
+  LOG_INFO("Streaming changeset output to " << output.right(25) << "...");
 
   QString stats;
   _numCreateChanges = 0;
   _numModifyChanges = 0;
   _numDeleteChanges = 0;
-
-  // TODO: This can be cleaned up to use OsmChangesetFileWriter
 
   QList<ChangesetProviderPtr> changesetProviders;
   for (int i = 0; i < inputs1.size(); i++)
@@ -648,17 +646,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
       ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
   }
 
-  if (output.endsWith(".osc"))
-  {
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, changesetProviders);
-    stats = writer.getStatsTable();
-  }
-  else if (output.endsWith(".osc.sql"))
-  {
-    assert(!_osmApiDbUrl.isEmpty());
-    OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetProviders);
-  }
+  OsmChangesetFileWriterFactory::getInstance()
+    .createWriter(output, _osmApiDbUrl)->write(output, changesetProviders);
 
   assert(inputs1.size() == changesetProviders.size());
   for (int i = 0; i < inputs1.size(); i++)

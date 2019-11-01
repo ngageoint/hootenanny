@@ -136,6 +136,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
   SEC_DB_INPUT="$HOOT_DB_URL/$TEST_NAME-sec"
   CHANGESET_DB=$OUT_DIR/$TEST_NAME-changeset-db.osc.sql
+  CHANGESET_DB_DEBUG=$OUT_DIR/$TEST_NAME-changeset-db.osc
   OUT_DB=$TEST_NAME-db-replaced.osm
 
   # DATA PREP
@@ -160,6 +161,8 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo "Deriving a changeset between the osm api db and the hoot api db layers over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
   hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  # debug only
+  # hoot changeset-derive-replacement $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -190,6 +193,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   fi
   SEC_XML_INPUT=$OUT_DIR/sec-original.osm
   CHANGESET_XML=$OUT_DIR/$TEST_NAME-changeset-xml.osc.sql
+  CHANGESET_XML_DEBUG=$OUT_DIR/$TEST_NAME-changeset-xml.osc
   OUT_XML=$TEST_NAME-xml-replaced.osm
 
   # DATA PREP
@@ -214,6 +218,8 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
   hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  # debug only
+  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 
@@ -241,6 +247,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   fi
   SEC_JSON_INPUT=$OUT_DIR/sec-original.json
   CHANGESET_JSON=$OUT_DIR/$TEST_NAME-changeset-json.osc.sql
+  CHANGESET_JSON_DEBUG=$OUT_DIR/$TEST_NAME-changeset-json.osc
   OUT_JSON=$TEST_NAME-json-replaced.osm
 
   # DATA PREP
@@ -265,6 +272,8 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
   hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  # debug only
+  # hoot changeset-derive-replacement $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON_DEBUG $REF_DB_INPUT $FULL_REPLACEMENT $STRICT_BOUNDS $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
 
   # CHANGESET APPLICATION
 

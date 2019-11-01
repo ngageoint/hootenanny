@@ -94,7 +94,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     LOG_DEBUG(
-      "Derving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);

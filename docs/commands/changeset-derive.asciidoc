@@ -14,9 +14,9 @@ dataset and the second should be the newer dataset.
 * +input1+            - OSM data input 1; may be any supported input format (e.g. .osm file).
 * +input2+            - OSM data input 2; may be any supported input format (e.g. .osm file or empty string ("") to derive changeset from one 
                         input only).
-* +output+            - Output location; may be an .osc or .osc.sql file.
-* +osmApiDatabaseUrl+ - Target OSM API database a derived changeset is to be applied to used to maintain element ID continuity. Required only if 
-                        the changeset output format is .osc.sql. 
+* +output+            - Output location; must be a changeset .osc or .osc.sql file.
+* +osmApiDatabaseUrl+ - Target OSM API database the derived changeset is to be applied, used to maintain element ID continuity. Required only 
+                        if the changeset output format is .osc.sql. 
                         Used to maintain element ID continuity with the database target for a derived changeset. 
 * +--stats+           - Stats flag, when turned on a table of create, modify, delete for each of the types
                         node, way, relation (only valid for .osc output files)
