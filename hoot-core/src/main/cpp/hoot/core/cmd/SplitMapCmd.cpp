@@ -61,12 +61,16 @@ public:
     //  Load the tile map ignoring the file IDs
     OsmMapPtr tile_map(new OsmMap());
     IoUtils::loadMap(tile_map, args[0], false);
+    //  Don't introduce source:datetime or source:ingest:datetime
+    conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     //  Load the actual map and use the file IDs
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, args[1], true, Status::Unknown1);
     //  Split the map up into smaller maps
     OsmMapSplitter mapSplitter(map, tile_map);
     mapSplitter.apply();
+    //  Don't include error:circular
+    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
     //  Write the maps out to disk
     mapSplitter.writeMaps(args[2]);
 

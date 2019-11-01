@@ -42,8 +42,11 @@
 namespace hoot
 {
 
-typedef QMap<geos::geom::Envelope, OsmMapPtr> TileMap;
-
+/**
+ * @brief The OsmMapSplitter class splits a map up into multiple maps based on preprocessed
+ * tile boundaries.  Elements that span tiles will only be assigned to one tile output map
+ * so that they aren't duplicated in conflation campaigns.
+ */
 class OsmMapSplitter : public Configurable
 {
 public:
@@ -52,19 +55,34 @@ public:
   virtual void setConfiguration(const Settings& conf) override;
 
   void apply();
-
+  /**
+   * @brief writeMaps Write all maps to disk with only their corresponding elements
+   * @param filename Base filename for all files in the format:
+   *   output-00001.osm
+   *   ...
+   *   output-0000n.osm
+   */
   void writeMaps(const QString& filename);
 
 private:
 
+  /**
+   * @brief _placeElementInMap Take an element from the original map and find the tile map that
+   *  that it falls into and then copy it to the new map
+   * @param element Element to copy into tile map
+   */
   void _placeElementInMap(const ElementPtr& element);
 
+  typedef QMap<geos::geom::Envelope, OsmMapPtr> TileMap;
+  /** Original map to split up */
   OsmMapPtr _map;
+  /** Map of polygon ways that indicate tile divisions */
   OsmMapPtr _tiles;
-
+  /** Vector of tile envelopes to check new elements against */
   std::vector<geos::geom::Envelope> _tileEnvelopes;
+  /** Vector of maps whose index corresponds to the tile envelopes above */
   std::vector<OsmMapPtr> _tileMaps;
-
+  /** Set of all elements that have already been processed so that no elements are repeated */
   std::set<ElementId> _eidsCompleted;
 
   long _statusUpdateInterval;
