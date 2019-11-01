@@ -191,7 +191,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _numSnappedWays = _snapSecondaryRoadsBackToRef();
   }
 
-  if (/*_numSnappedWays == 0 &&*/ ConfigOptions().getDifferentialRemoveReferenceData())
+  if (ConfigOptions().getDifferentialRemoveReferenceData())
   {
     // _pMap at this point contains all of input1, we are going to delete everything left that
     // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
@@ -530,7 +530,7 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, Os
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 {
-  if (_numSnappedWays == 0 /*&& ConfigOptions().getDifferentialRemoveReferenceData()*/)
+  if (_numSnappedWays == 0)
   {
     return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
   }
