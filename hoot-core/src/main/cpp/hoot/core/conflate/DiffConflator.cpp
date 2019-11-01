@@ -282,9 +282,8 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   {
     // Not something a user can generally cause - more likely it's a misuse of this class.
     throw IllegalArgumentException(
-      "Map elements with Status::Unknown2 found when storing "
-      "original map for diff conflation. This can cause unpredictable "
-      "results. The original map should contain only Status::Unknown1 "
+      "Map elements with Status::Unknown2 found when storing original map for diff conflation. "
+      "This can cause unpredictable results. The original map should contain only Status::Unknown1 "
       "elements. ");
   }
 
@@ -406,9 +405,9 @@ void DiffConflator::_calcAndStoreTagChanges()
 
       // Apparently, a NetworkMatch can be a node/way pair. See note in
       // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
-      // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
-      // a conflation type other than poi/poly which matches differing geometry types then this will
-      // need to be updated.
+      // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we end
+      // up adding a conflation type other than poi/poly which matches differing geometry types at
+      // some point then this will need to be updated.
 
       if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
