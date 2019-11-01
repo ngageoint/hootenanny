@@ -405,14 +405,9 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     // having to scroll around looking for the change type for each element.
     tags.set(MetadataTags::HootChangeType(), Change::changeTypeToString(_change.getType()));
   }
-  LOG_VART(tags.size());
 
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    LOG_VART(it.key());
-    LOG_VART(it.value());
-    LOG_VART(it.key().isEmpty());
-    LOG_VART(it.value().isEmpty());
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
     {
       //  Ignore 'hoot:hash' for nodes
@@ -426,7 +421,6 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
       writer.writeEndElement();
     }
   }
-  LOG_TRACE("test1");
 
   // Only report the circular error for changesets when debug tags are turned on, circular error
   // tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is
@@ -441,7 +435,6 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     writer.writeAttribute("v", QString("%1").arg(element->getCircularError()));
     writer.writeEndElement();
   }
-  LOG_TRACE("test2");
 }
 
 }

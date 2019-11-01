@@ -79,13 +79,9 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   {
     //create modified copies of the tags for comparing, as we don't care if some tags are identical
     Tags tags1 = e1->getTags();
-    LOG_VART(tags1.size());
-    _removeTagsNotImportantForComparison(tags1);
-    LOG_VART(tags1.size());
+    _removeTagsNotImportantForComparison(tags1);;
     Tags tags2 = e2->getTags();
-    LOG_VART(tags2.size());
     _removeTagsNotImportantForComparison(tags2);
-    LOG_VART(tags2.size());
 
     // not checking status here b/c if only the status changed on the element and no other tags or
     // geometries, there's no point in detecting a change
