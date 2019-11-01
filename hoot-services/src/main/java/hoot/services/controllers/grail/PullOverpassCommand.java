@@ -87,10 +87,11 @@ class PullOverpassCommand implements InternalCommand {
     private void getOverpass() {
         String url = "";
         try {
-            if (params.getCustomQuery().equals("")) {
+            String customQuery = params.getCustomQuery();
+            if (customQuery == null || customQuery.equals("")) {
                 url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", null));
             } else {
-                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", params.getCustomQuery()));
+                url = replaceSensitiveData(getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", customQuery));
             }
 
             URL requestUrl = new URL(url);
