@@ -124,6 +124,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
     LOG_VARD(changesetProvider->hasMoreChanges());
     while (changesetProvider->hasMoreChanges())
     {
+      LOG_VART(changesetProvider->hasMoreChanges());
       LOG_TRACE("Reading next XML change...");
       _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
@@ -189,6 +190,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   writer.writeEndDocument();
 
   f.close();
+
+  LOG_DEBUG("Changeset written to: " << path << "...");
 }
 
 void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstNodePtr n)
@@ -392,6 +395,8 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
 void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
                                            const Element* element)
 {
+  LOG_TRACE("Writing " << tags.size() << " tags for: " << element->getElementId() << "...");
+
   if (_includeDebugTags)
   {
     tags.set(MetadataTags::HootStatus(), QString::number(element->getStatus().getEnum()));
@@ -400,8 +405,14 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     // having to scroll around looking for the change type for each element.
     tags.set(MetadataTags::HootChangeType(), Change::changeTypeToString(_change.getType()));
   }
+  LOG_VART(tags.size());
+
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
+    LOG_VART(it.key());
+    LOG_VART(it.value());
+    LOG_VART(it.key().isEmpty());
+    LOG_VART(it.value().isEmpty());
     if (it.key().isEmpty() == false && it.value().isEmpty() == false)
     {
       //  Ignore 'hoot:hash' for nodes
@@ -409,17 +420,17 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
         continue;
       writer.writeStartElement("tag");
       writer.writeAttribute(
-        "k",
-        _invalidCharacterHandler.removeInvalidCharacters(it.key()));
+        "k", _invalidCharacterHandler.removeInvalidCharacters(it.key()));
       writer.writeAttribute(
-        "v",
-        _invalidCharacterHandler.removeInvalidCharacters(it.value()));
+        "v", _invalidCharacterHandler.removeInvalidCharacters(it.value()));
       writer.writeEndElement();
     }
   }
-  //  Only report the circular error for changesets when debug tags are turned on, circular error
-  //  tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is because
-  //  changesets are meant for non-hoot related databases and circular error is a hoot tag
+  LOG_TRACE("test1");
+
+  // Only report the circular error for changesets when debug tags are turned on, circular error
+  // tags are turned on, and (for nodes) there are other tags that aren't debug tags.  This is
+  // because changesets are meant for non-hoot related databases and circular error is a hoot tag.
   if (_includeCircularErrorTags && element->hasCircularError() &&
       (element->getElementType() != ElementType::Node ||
       (element->getElementType() == ElementType::Node && tags.getNonDebugCount() > 0)) &&
@@ -430,6 +441,7 @@ void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,
     writer.writeAttribute("v", QString("%1").arg(element->getCircularError()));
     writer.writeEndElement();
   }
+  LOG_TRACE("test2");
 }
 
 }

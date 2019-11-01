@@ -589,7 +589,7 @@ void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
     const QString key = it.key();
-    if (key.contains(tagKeySubstring))
+    if (get(key).contains(tagKeySubstring))
     {
       remove(key);
     }
@@ -601,7 +601,7 @@ void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
     const QString key = it.key();
-    if (key.startsWith(tagKeySubstring))
+    if (get(key).startsWith(tagKeySubstring))
     {
       remove(key);
     }
