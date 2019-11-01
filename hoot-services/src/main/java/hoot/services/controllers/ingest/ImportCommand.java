@@ -88,8 +88,7 @@ class ImportCommand extends ExternalCommand {
             //options.add("schema.translation.script=" + translationPath);
         //}
 
-        if (!isNoneTranslation && (classification == SHP) || (classification == FGDB) || (classification == ZIP))
-        {
+        if (!isNoneTranslation) {
           options.add("schema.translation.script=" + translationPath);
         }
 
