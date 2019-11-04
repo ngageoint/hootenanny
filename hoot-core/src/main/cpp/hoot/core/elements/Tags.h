@@ -52,6 +52,13 @@ namespace hoot
  * is an issue, I'm not going to worry about it at this time.
  *
  * 1. http://wiki.openstreetmap.org/wiki/Semi-colon_value_separator
+ *
+ * Its interesting to note that if you add a copy constructor to this class, you'll blow up a lot
+ * of the code that isn't intending to copy tags but then does after the change (understandable).
+ * If you try to add a copy constructor delete to disable it (or just make it private), you'll blow
+ * up ElementData's inline constructor, which apparently is using the copy constructor to set its
+ * tags. It seems like a copy constructor could be useful in certain situations...so may be worth
+ * looking into at some point.
  */
 class Tags : public QHash<QString, QString>
 {
