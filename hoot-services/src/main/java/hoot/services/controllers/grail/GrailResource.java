@@ -681,8 +681,8 @@ public class GrailResource {
             // first line that lists columns which are counts for each feature type
             overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
 
-            // last row that lists output format
-            overpassQuery = overpassQuery.replace("out meta", "out count");
+            // overpass query can have multiple "out *" lines so need to replace all
+            overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
         }
 
 
@@ -912,8 +912,16 @@ public class GrailResource {
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
             String inputLine;
+
+            boolean firstLine = true;
             while ((inputLine = br.readLine()) != null) {
-                statsInfo.append(inputLine + "\n");
+                //Prevents newline from being printed for last line
+                if(!firstLine){
+                    statsInfo.append("\n");
+                }
+                firstLine = false;
+
+                statsInfo.append(inputLine);
             }
 
             br.close();
