@@ -155,11 +155,11 @@ WayMatchStringMergerPtr PartialNetworkMerger::_createMatchStringMerger(const Osm
   {
     return WayMatchStringMergerPtr();
   }
-  LOG_VARD(str1);
-  LOG_VARD(str2);
+  LOG_VART(str1);
+  LOG_VART(str2);
 
   WayMatchStringMappingPtr mapping(new NaiveWayMatchStringMapping(str1, str2));
-  LOG_VARD(mapping->toString());
+  LOG_VART(mapping->toString());
 
   /******************
    * At the beginning, the merger should identify where the primary way should be broken into bits
@@ -185,7 +185,7 @@ ElementId PartialNetworkMerger::mapEid(const ElementId &oldEid) const
 void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   vector<pair<ElementId, ElementId>>& replaced)
 {
-  LOG_DEBUG("Processing full match...");
+  LOG_TRACE("Processing full match...");
 
   foreach (ConstEdgeMatchPtr e, _edgeMatches)
   {
@@ -217,7 +217,7 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   ///
 
   // calculate all the mappings and split points for all matches.
-  LOG_DEBUG("Calculating mappings and split points for matches...");
+  LOG_TRACE("Calculating mappings and split points for matches...");
   foreach (ConstEdgeMatchPtr em, _edgeMatches)
   {
     WayMatchStringMergerPtr merger = _createMatchStringMerger(map, replaced, em);
@@ -233,12 +233,12 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
   try
   {
     // split the ways in such a way that the mappings are updated appropriately.
-    LOG_DEBUG("Applying way splits...");
+    LOG_TRACE("Applying way splits...");
     WayMatchStringSplitter splitter;
     splitter.applySplits(map, replaced, _allSublineMappings);
 
     // apply merge operations on the split ways.
-    LOG_DEBUG("Merging split ways...");
+    LOG_TRACE("Merging split ways...");
     foreach (WayMatchStringMergerPtr merger, _mergerList)
     {
       _applyMerger(map, merger);
@@ -276,12 +276,12 @@ void PartialNetworkMerger::_processFullMatch(const OsmMapPtr& map,
 void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
   vector<pair<ElementId, ElementId>>& /*replaced*/, ConstEdgeMatchPtr edgeMatch)
 {
-  LOG_DEBUG("Processing stub match...");
+  LOG_TRACE("Processing stub match...");
   LOG_VART(edgeMatch);
 
   if (edgeMatch->getString1()->isStub())
   {
-    LOG_DEBUG("Removing secondary features...");
+    LOG_TRACE("Removing secondary features...");
     LOG_VART(edgeMatch->getString2()->getMembers());
 
     // If the feature we're merging into is a stub, then just delete the secondary feature.
@@ -331,7 +331,7 @@ void PartialNetworkMerger::_processStubMatch(const OsmMapPtr& map,
 
 void PartialNetworkMerger::replace(ElementId oldEid, ElementId newEid)
 {
-  LOG_DEBUG("Replacing " << oldEid << " with " << newEid);
+  LOG_TRACE("Replacing " << oldEid << " with " << newEid);
   MergerBase::replace(oldEid, newEid);
   _substitions[oldEid] = newEid;
 }

@@ -160,8 +160,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // there are for the external sorting (e.g. pre-sorted PBF file).
 
     progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-      "Sorting input elements; task #" + QString::number(_currentTaskNum) + "...");
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting input elements...");
     if (!_singleInput)
     {
       sortedElements1 = _sortElementsInMemory(map1);
