@@ -60,11 +60,11 @@ namespace hoot
 
 const QString ChangesetCreator::JOB_SOURCE = "Derive Changeset";
 
-ChangesetCreator::ChangesetCreator(const bool printStats, const QString osmApiDbUrl) :
+ChangesetCreator::ChangesetCreator(const bool printDetailedStats, const QString osmApiDbUrl) :
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
-_printStats(printStats),
+_printDetailedStats(printDetailedStats),
 _singleInput(false),
 _numCreateChanges(0),
 _numModifyChanges(0),
@@ -634,7 +634,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
 
   LOG_INFO("Streaming changeset output to " << output.right(25) << "...");
 
-  QString stats;
+  QString detailedStats;
   _numCreateChanges = 0;
   _numModifyChanges = 0;
   _numDeleteChanges = 0;
@@ -646,8 +646,21 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
       ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
   }
 
-  OsmChangesetFileWriterFactory::getInstance()
-    .createWriter(output, _osmApiDbUrl)->write(output, changesetProviders);
+  std::shared_ptr<OsmChangesetFileWriter> writer =
+    OsmChangesetFileWriterFactory::getInstance()
+      .createWriter(output, _osmApiDbUrl);
+  writer->write(output, changesetProviders);
+  if (_printDetailedStats)
+  {
+    if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
+    {
+      detailedStats = writer->getStatsTable();
+    }
+    else
+    {
+      LOG_WARN("Changeset statistics not implemented for output: " << output);
+    }
+  }
 
   assert(inputs1.size() == changesetProviders.size());
   for (int i = 0; i < inputs1.size(); i++)
@@ -687,9 +700,10 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     input2->close();
   }
 
-  if (_printStats)
+  LOG_VARD(_printDetailedStats);
+  if (_printDetailedStats && !detailedStats.isEmpty())
   {
-    LOG_STATUS("Changeset Stats:\n" << stats);
+    LOG_STATUS("Changeset Stats:\n" << detailedStats);
   }
   else
   {

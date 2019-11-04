@@ -40,8 +40,8 @@ namespace hoot
 {
 
 /**
- * Removes relations members that have cross references between relations as well as well as
- * relation members that reference themselves
+ * Removes relations members that have cross references between relations as well as relation
+ * members that reference themselves
  */
 class RelationCircularRefRemover : public OsmMapOperation, public OperationStatusInfo
 {
@@ -61,7 +61,7 @@ public:
            " relation members involved in circular references"; }
 
   virtual QString getDescription() const
-  { return "Removes half of a relation pair, that reference each other, from a map"; }
+  { return "Removes half of a relation pair that reference each other from a map"; }
 
 private:
 

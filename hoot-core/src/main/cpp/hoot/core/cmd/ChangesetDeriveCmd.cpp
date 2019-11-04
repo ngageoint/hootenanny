@@ -62,6 +62,7 @@ public:
       printStats = true;
       args.removeAll("--stats");
     }
+    LOG_VARD(printStats);
 
     if (args.size() < 3 || args.size() > 4)
     {

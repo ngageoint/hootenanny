@@ -64,6 +64,13 @@ public:
   virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders) = 0;
 
   /**
+   * Returns a changeset statistics as a table string
+   *
+   * @return a changeset statistics string
+   */
+  virtual QString getStatsTable() const = 0;
+
+  /**
    * Determines if the output location is supported by this writer
    *
    * @param output the output path to validate

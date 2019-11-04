@@ -3,18 +3,15 @@ set -e
 
 mkdir -p test-output/cmd/glacial/NonDestructiveTest/
 
-LOG_LEVEL="--info"
-LOG_FILTER="-D log.class.filter= "
-
 # First run the Congo network conflation
-hoot conflate $LOG_LEVEL -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
- $LOG_FILTER -D writer.include.debug.tags=true \
+hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.conf \
+ -D writer.include.debug.tags=true \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-files/Congo_OSM_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonDestructiveTest/output.osm
 
 # Derive the changeset for the Congo conflation
-hoot changeset-derive $LOG_LEVEL -C Testing.conf $LOG_FILTER --stats \
+hoot changeset-derive -C Testing.conf --stats \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonDestructiveTest/output.osm \
  test-output/cmd/glacial/NonDestructiveTest/changeset.osc
@@ -85,4 +82,3 @@ hoot diff \
 # | Delete |    1 |        1 |  17 |
 # | Modify |    0 |        0 |   9 |
 #
-

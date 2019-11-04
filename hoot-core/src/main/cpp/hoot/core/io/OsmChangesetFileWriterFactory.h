@@ -44,19 +44,20 @@ public:
   static std::string className() { return "hoot::OsmChangesetFileWriterFactory"; }
 
   /**
-   * TODO
+   * Creates a writer capable of writing OSM changesets to a file
    *
-   * @param url
-   * @param osmApiDbUrl
-   * @return
+   * @param url the path the writer writes to
+   * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
+   * the output changeset is of type .osc.sql
+   * @return an OsmChangesetFileWriter
    */
   std::shared_ptr<OsmChangesetFileWriter> createWriter(const QString& url,
                                                        const QString& osmApiDbUrl = "");
 
   /**
-   * TODO
+   * Returns a Singleton instance of the factory
    *
-   * @return
+   * @return an OsmChangesetFileWriterFactory Singleton instance
    */
   static OsmChangesetFileWriterFactory& getInstance();
 

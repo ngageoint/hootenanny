@@ -71,11 +71,15 @@ public:
   /**
    * @see ChangesetFileWriter
    */
+  //virtual QString getStatsTable() const { return _stats->toTableString(); }
+  virtual QString getStatsTable() const { return _stats.toTableString(); }
+
+  /**
+   * @see ChangesetFileWriter
+   */
   virtual bool isSupported(const QString& output) const { return output.endsWith(".osc"); }
 
   virtual void setConfiguration(const Settings &conf);
-
-  QString getStatsTable() const { return _stats->toTableString(); }
 
 private:
 
@@ -97,7 +101,8 @@ private:
   QMap<ElementType::Type, QMap<long, long>> _newElementIdMappings;
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
-  std::shared_ptr<ScoreMatrix<long>> _stats;
+  //std::shared_ptr<ScoreMatrix<long>> _stats;
+  ScoreMatrix<long> _stats;
 
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstNodePtr n);
@@ -106,7 +111,7 @@ private:
   void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
-  void _initStats();
+  //void _initStats();
 };
 
 }

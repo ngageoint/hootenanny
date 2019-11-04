@@ -63,20 +63,21 @@ public:
   virtual ~OsmApiDbSqlChangesetFileWriter();
 
   /**
-   * Write a SQL changeset to the specified output path
-   *
-   * @param path SQL file output path
-   * @param changesetProvider changeset provider to stream the changes from
+   * @see ChangesetFileWriter
    */
   virtual void write(const QString& path, const ChangesetProviderPtr& changesetProvider);
 
   /**
-   * Write a SQL changeset to the specified output path
-   *
-   * @param path SQL file output path
-   * @param changesetProviders changeset providers to stream the changes from
+   * @see ChangesetFileWriter
    */
   virtual void write(const QString& path, const QList<ChangesetProviderPtr>& changesetProviders);
+
+  /**
+   * @see ChangesetFileWriter
+   *
+   * not currently implemented
+   */
+  virtual QString getStatsTable() const { return ""; }
 
   /**
    * @see ChangesetFileWriter
