@@ -79,7 +79,7 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
   {
     //create modified copies of the tags for comparing, as we don't care if some tags are identical
     Tags tags1 = e1->getTags();
-    _removeTagsNotImportantForComparison(tags1);;
+    _removeTagsNotImportantForComparison(tags1);
     Tags tags2 = e2->getTags();
     _removeTagsNotImportantForComparison(tags2);
 
