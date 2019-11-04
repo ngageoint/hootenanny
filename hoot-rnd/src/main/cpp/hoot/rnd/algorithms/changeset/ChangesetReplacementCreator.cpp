@@ -823,7 +823,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
         "No cut shape generated from secondary data. Is your secondary data empty or have you " <<
         "filtered it to be empty?");
     }
-    throw e;
+    //  Rethrow the original exception
+    throw;
   }
 
   // not exactly sure yet why this projection needs to be done
