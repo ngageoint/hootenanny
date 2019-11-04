@@ -92,6 +92,8 @@ public:
    */
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const = 0;
+  virtual const geos::geom::Envelope& getEnvelopeInternal(
+    const std::shared_ptr<const ElementProvider>& ep) const = 0;
 
   long getId() const { return _getElementData().getId(); }
   void setId(long id) { _getElementData().setId(id); }
@@ -194,6 +196,11 @@ protected:
 
   void _postGeometryChange();
   void _preGeometryChange();
+
+  /**
+   * This envelope may be cached, but it also may not be exact.
+   */
+  mutable geos::geom::Envelope _cachedEnvelope;
 };
 
 typedef std::shared_ptr<Element> ElementPtr;
