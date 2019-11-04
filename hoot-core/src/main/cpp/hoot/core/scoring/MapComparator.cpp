@@ -137,22 +137,25 @@ public:
         LOG_WARN(
           "Tags do not match (ref: " << refElement->getElementId() << ", test: " <<
           e->getElementId() << ":");
-        QStringList keys = refTags.keys();
-        keys.append(testTags.keys());
-        keys.removeDuplicates();
-        keys.sort();
 
         if (_errorCount < 10)
         {
-          for (int i = 0; i < keys.size(); i++)
-          {
-            QString k = keys[i];
-            if (refTags[k] != testTags[k])
-            {
-              LOG_WARN("< " + k + " = " + refTags[k]);
-              LOG_WARN("> " + k + " = " + testTags[k]);
-            }
-          }
+          // TODO: remove
+//          QStringList keys = refTags.keys();
+//          keys.append(testTags.keys());
+//          keys.removeDuplicates();
+//          keys.sort();
+
+//          for (int i = 0; i < keys.size(); i++)
+//          {
+//            QString k = keys[i];
+//            if (refTags[k] != testTags[k])
+//            {
+//              LOG_WARN("< " + k + " = " + refTags[k]);
+//              LOG_WARN("> " + k + " = " + testTags[k]);
+//            }
+//          }
+          LOG_WARN(refTags.getDiffString(testTags));
         }
       }
       return;

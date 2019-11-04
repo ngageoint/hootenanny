@@ -41,6 +41,7 @@ fi
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
 # write ref to osmapidb
+# There's a mix of positive/negative IDs in the source file, so let's treat this like an authoritative data store and give it all positive IDs.
 hoot convert -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $INPUT_DIR/input3.osm $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot convert -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
@@ -48,12 +49,14 @@ fi
 
 # write sec to hootapidb
 SEC_LAYER=$HOOT_DB_URL/$TEST_NAME-sec
+# Also a mix of positive/negative IDs here, and we'll treat it like shoebox data and give it all negative IDs.
 hoot convert -D reader.use.data.source.ids=false $GENERAL_OPTS $DB_OPTS $INPUT_DIR/input4.osm $SEC_LAYER
 if [ "$DEBUG" == "true" ]; then
   hoot convert -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $SEC_LAYER $OUTPUT_DIR/sec-original.osm
 fi
 
 # run diff conflate to changeset w/ road snapping
+# retain both sets of IDs during conflate
 hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL --differential
 if [ "$DEBUG" == "true" ]; then
   hoot conflate $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osc --differential

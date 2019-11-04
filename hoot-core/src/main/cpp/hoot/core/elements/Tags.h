@@ -341,6 +341,14 @@ public:
    */
   bool hasName() const;
 
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  QString getDiffString(const Tags& other) const;
+
 private:
 
   void _valueRegexParser(const QString& str, QString& num, QString& units) const;

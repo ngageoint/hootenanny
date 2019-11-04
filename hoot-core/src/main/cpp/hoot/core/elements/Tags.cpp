@@ -586,25 +586,37 @@ void Tags::removeMetadata()
 
 void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
 {
+  QStringList keysToRemove;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
     const QString key = it.key();
-    if (get(key).contains(tagKeySubstring))
+    if (key.contains(tagKeySubstring))
     {
-      remove(key);
+      keysToRemove.append(key);
     }
+  }
+
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    remove(keysToRemove.at(i));
   }
 }
 
 void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
 {
+  QStringList keysToRemove;
   for (Tags::const_iterator it = begin(); it != end(); ++it)
   {
     const QString key = it.key();
-    if (get(key).startsWith(tagKeySubstring))
+    if (key.startsWith(tagKeySubstring))
     {
-      remove(key);
+      keysToRemove.append(key);
     }
+  }
+
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    remove(keysToRemove.at(i));
   }
 }
 
@@ -856,6 +868,31 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
     tags.appendValue(vertex.key, vertex.value);
   }
   return tags;
+}
+
+QString Tags::getDiffString(const Tags& other) const
+{
+  if (this->operator ==(other))
+  {
+    return "";
+  }
+
+  QStringList keys = this->keys();
+  keys.append(other.keys());
+  keys.removeDuplicates();
+  keys.sort();
+
+  QString diffStr;
+  for (int i = 0; i < keys.size(); i++)
+  {
+    QString k = keys[i];
+    if (this->operator [](k) != other[k])
+    {
+      diffStr += "< " + k + " = " + this->operator [](k) + "\n";
+      diffStr += "> " + k + " = " + other[k] + "\n";
+    }
+  }
+  return diffStr.trimmed();
 }
 
 }

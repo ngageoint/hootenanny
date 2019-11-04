@@ -106,11 +106,9 @@ public:
   virtual geos::geom::Envelope* getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const;
 
   double getX() const { return _nodeData.getX(); }
-
   double getY() const { return _nodeData.getY(); }
 
   void setX(double y);
-
   void setY(double x);
 
   virtual ElementType getElementType() const { return ElementType(ElementType::Node); }
@@ -123,7 +121,6 @@ public:
   QString toString() const;
 
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const;
-
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
 
   /**
