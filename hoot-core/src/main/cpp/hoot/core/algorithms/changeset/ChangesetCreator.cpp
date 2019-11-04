@@ -355,7 +355,8 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
           QString("(OsmMapOperation) on two data sources with overlapping element IDs: ") +
           e.what());
       }
-      throw e;
+      //  Rethrow the original exception
+      throw;
     }
   }
   else
