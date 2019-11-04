@@ -138,13 +138,13 @@ public:
           "Tags do not match (ref: " << refElement->getElementId() << ", test: " <<
           e->getElementId() << ":");
 
+        QStringList keys = refTags.keys();
+        keys.append(testTags.keys());
+        keys.removeDuplicates();
+        keys.sort();
+
         if (_errorCount < 10)
         {
-          QStringList keys = refTags.keys();
-          keys.append(testTags.keys());
-          keys.removeDuplicates();
-          keys.sort();
-
           for (int i = 0; i < keys.size(); i++)
           {
             QString k = keys[i];
