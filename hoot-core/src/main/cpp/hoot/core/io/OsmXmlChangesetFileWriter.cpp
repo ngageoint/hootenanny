@@ -71,15 +71,6 @@ void OsmXmlChangesetFileWriter::_initIdCounters()
   _newElementIdMappings[ElementType::Relation] = QMap<long, long>();
 }
 
-//void OsmXmlChangesetFileWriter::_initStats()
-//{
-//  _stats.reset(new ScoreMatrix<long>());
-//  _stats->resize(Change::Unknown, ElementType::Unknown);
-//  vector<QString> rows( {"Create", "Modify", "Delete"} );
-//  vector<QString> columns( {"Node", "Way", "Relation"} );
-//  _stats->setLabels(rows, columns);
-//}
-
 void OsmXmlChangesetFileWriter::write(const QString& path,
                                       const ChangesetProviderPtr& changesetProvider)
 {
@@ -95,7 +86,6 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
   QString filepath = path;
 
-  //_initStats();
   _initIdCounters();
 
   long changesetProgress = 1;
@@ -121,7 +111,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     LOG_DEBUG(
-      "Derving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
@@ -180,7 +170,6 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         }
         changesetProgress++;
         //  Update the stats
-        //_stats->operator ()(last, type)++;
         _stats(last, type)++;
       }
     }

@@ -71,7 +71,6 @@ public:
   /**
    * @see ChangesetFileWriter
    */
-  //virtual QString getStatsTable() const { return _stats->toTableString(); }
   virtual QString getStatsTable() const { return _stats.toTableString(); }
 
   /**
@@ -88,8 +87,6 @@ private:
 
   Change _change;
 
-  bool _multipleChangesetsWritten;
-
   bool _addTimestamp;
   bool _includeDebugTags;
   bool _includeCircularErrorTags;
@@ -101,7 +98,6 @@ private:
   QMap<ElementType::Type, QMap<long, long>> _newElementIdMappings;
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
-  //std::shared_ptr<ScoreMatrix<long>> _stats;
   ScoreMatrix<long> _stats;
 
   /** Helper functions to write nodes, ways, and relations. */
@@ -111,7 +107,6 @@ private:
   void _writeTags(QXmlStreamWriter& writer, Tags& tags, const Element* element);
 
   void _initIdCounters();
-  //void _initStats();
 };
 
 }
