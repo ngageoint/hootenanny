@@ -44,6 +44,7 @@ class IntersectionOverUnionExtractorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(IntersectionOverUnionExtractorTest);
   CPPUNIT_TEST(runBuildingsTest);
+  CPPUNIT_TEST(runUnsupportedGeometriesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -78,6 +79,27 @@ public:
     ConstElementPtr building7 = TestUtils::getElementWithTag(map, "name", "Building 7");
     ConstElementPtr building8 = TestUtils::getElementWithTag(map, "name", "Building 8");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.185, uut.extract(*map, building7, building8), 1e-3);
+  }
+
+  void runUnsupportedGeometriesTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    IntersectionOverUnionExtractor uut;
+
+    NodePtr point1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    map->addNode(point1);
+    NodePtr point2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    map->addNode(point2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, point1, point2), 1e-1);
+
+    map->clear();
+    QList<ElementPtr> elements1;
+    elements1.append(point1);
+    ConstRelationPtr relation1 = TestUtils::createRelation(map, elements1);
+    QList<ElementPtr> elements2;
+    elements2.append(point2);
+    ConstRelationPtr relation2 = TestUtils::createRelation(map, elements2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, relation1, relation2), 1e-1);
   }
 };
 

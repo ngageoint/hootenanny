@@ -38,28 +38,34 @@ double IntersectionOverUnionExtractor::extract(
   const OsmMap& map, const std::shared_ptr<const Element>& target,
   const std::shared_ptr<const Element>& candidate) const
 {
-  ElementConverter elementConverter(map.shared_from_this());
-  std::shared_ptr<geos::geom::Geometry> targetGeom = elementConverter.convertToGeometry(target);
-  std::shared_ptr<geos::geom::Geometry> candidateGeom =
-    elementConverter.convertToGeometry(candidate);
-
-  if (targetGeom->isEmpty() || candidateGeom->isEmpty())
+  if (target->getElementType() == ElementType::Way &&
+      candidate->getElementType() == ElementType::Way)
   {
-    return nullValue();
-  }
+    ElementConverter elementConverter(map.shared_from_this());
+    std::shared_ptr<geos::geom::Geometry> targetGeom = elementConverter.convertToGeometry(target);
+    std::shared_ptr<geos::geom::Geometry> candidateGeom =
+      elementConverter.convertToGeometry(candidate);
 
-  std::shared_ptr<geos::geom::Geometry> intersectionGeom(
-    targetGeom->intersection(candidateGeom.get()));
-  std::shared_ptr<geos::geom::Geometry> unionGeom(
-    targetGeom->Union(candidateGeom.get()));
-
-  if (intersectionGeom && unionGeom)
-  {
-    const double intersectionArea = intersectionGeom->getArea();
-    const double unionArea = unionGeom->getArea();
-    if (unionArea > 0.0 && intersectionArea >= 0.0)
+    if (targetGeom->isEmpty() || candidateGeom->isEmpty())
     {
-      return intersectionArea / unionArea;
+      return -1.0;
+    }
+
+    // TODO: handle circular error?
+
+    std::shared_ptr<geos::geom::Geometry> intersectionGeom(
+      targetGeom->intersection(candidateGeom.get()));
+    std::shared_ptr<geos::geom::Geometry> unionGeom(
+      targetGeom->Union(candidateGeom.get()));
+
+    if (intersectionGeom && unionGeom)
+    {
+      const double intersectionArea = intersectionGeom->getArea();
+      const double unionArea = unionGeom->getArea();
+      if (unionArea > 0.0 && intersectionArea >= 0.0)
+      {
+        return intersectionArea / unionArea;
+      }
     }
   }
 
