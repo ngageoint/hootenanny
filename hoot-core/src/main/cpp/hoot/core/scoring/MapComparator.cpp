@@ -140,22 +140,20 @@ public:
 
         if (_errorCount < 10)
         {
-          // TODO: remove
-//          QStringList keys = refTags.keys();
-//          keys.append(testTags.keys());
-//          keys.removeDuplicates();
-//          keys.sort();
+          QStringList keys = refTags.keys();
+          keys.append(testTags.keys());
+          keys.removeDuplicates();
+          keys.sort();
 
-//          for (int i = 0; i < keys.size(); i++)
-//          {
-//            QString k = keys[i];
-//            if (refTags[k] != testTags[k])
-//            {
-//              LOG_WARN("< " + k + " = " + refTags[k]);
-//              LOG_WARN("> " + k + " = " + testTags[k]);
-//            }
-//          }
-          LOG_WARN(refTags.getDiffString(testTags));
+          for (int i = 0; i < keys.size(); i++)
+          {
+            QString k = keys[i];
+            if (refTags[k] != testTags[k])
+            {
+              LOG_WARN("< " + k + " = " + refTags[k]);
+              LOG_WARN("> " + k + " = " + testTags[k]);
+            }
+          }
         }
       }
       return;

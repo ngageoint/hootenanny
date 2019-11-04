@@ -342,10 +342,10 @@ public:
   bool hasName() const;
 
   /**
-   * TODO
+   * Returns a string showing the difference between this set of tags and another
    *
-   * @param other
-   * @return
+   * @param other set of tags to compare these tags to
+   * @return a tag diff string
    */
   QString getDiffString(const Tags& other) const;
 
