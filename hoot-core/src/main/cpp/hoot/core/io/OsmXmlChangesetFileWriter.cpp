@@ -53,8 +53,8 @@ _includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
 _includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
 {
   _stats.resize(Change::Unknown, ElementType::Unknown);
-  vector<QString> rows( {"Create", "Modify", "Delete"} );
-  vector<QString> columns( {"Node", "Way", "Relation"} );
+  vector<QString> rows({"Create", "Modify", "Delete"});
+  vector<QString> columns({"Node", "Way", "Relation"});
   _stats.setLabels(rows, columns);
 }
 

@@ -45,7 +45,8 @@ public:
    * Creates a writer capable of streaming OSM changes
    *
    * @param url the path the writer writes to
-   * @param elementPayloadFormat TODO
+   * @param elementPayloadFormat determines the format the elements are stored in; options are
+   * 'json' or 'xml'
    * @return an OSM change writer
    */
   std::shared_ptr<OsmChangeWriter> createWriter(const QString& url,
