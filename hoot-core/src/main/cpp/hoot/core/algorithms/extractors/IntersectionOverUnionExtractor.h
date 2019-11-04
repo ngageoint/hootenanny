@@ -22,47 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FEATUREEXTRACTORBASE_H
-#define FEATUREEXTRACTORBASE_H
+#ifndef INTERSECTION_OVER_UNION_EXTRACTOR_H
+#define INTERSECTION_OVER_UNION_EXTRACTOR_H
 
-#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/info/ApiEntityInfo.h>
+// geos
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Point.h>
+
+// hoot
+#include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 
 namespace hoot
 {
 
+class Element;
+class OsmMap;
+
 /**
- * Similar to Shape Distance as described in [1].
- * 1. Savary & Zeitouni, 2005
+ * TODO
  */
-class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
+class IntersectionOverUnionExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::FeatureExtractorBase"; }
+  static std::string className() { return "hoot::IntersectionOverUnionExtractor"; }
 
-  FeatureExtractorBase() {}
-  virtual ~FeatureExtractorBase() {}
+  virtual std::string getClassName() const override
+  { return IntersectionOverUnionExtractor::className(); }
 
-  static double nullValue() { return -999999999; }
+  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+    const std::shared_ptr<const Element>& candidate) const override;
 
-  /**
-   * Returns the factor type for this feature/factor (Nominal or Numeric).
-   */
-  virtual Tgs::DataFrame::FactorType getFactorType() const override
-  { return Tgs::DataFrame::Numerical; }
-
-  /**
-   * Returns the null treatment for this feature/factor (NullAsValue or NullAsMissingValue).
-   */
-  virtual Tgs::DataFrame::NullTreatment getNullTreatment() const override
-  {
-    return Tgs::DataFrame::NullAsMissingValue;
-  }
+  virtual QString getDescription() const { return "TODO"; }
 };
 
 }
 
-#endif // FEATUREEXTRACTORBASE_H
+#endif // INTERSECTION_OVER_UNION_EXTRACTOR_H
