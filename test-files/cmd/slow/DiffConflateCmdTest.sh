@@ -70,8 +70,8 @@ hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output_unified.osm $INPUT_DIR/o
 
 # Check to make sure we don't bomb out on empty files
 echo "Checking conflation of empty files..."
-hoot conflate $LOG_LEVEL -C Testing.conf -C DifferentialConflation.conf -C NetworkAlgorithm.conf --warn test-files/Empty.osm test-files/Empty.osm tmp/DiffConflateCmdTest.osm
-hoot diff -C Testing.conf test-files/Empty.osm tmp/DiffConflateCmdTest.osm || cat tmp/DiffConflateCmdTest.osm
+hoot conflate $LOG_LEVEL -C Testing.conf -C DifferentialConflation.conf -C NetworkAlgorithm.conf --warn test-files/Empty.osm test-files/Empty.osm $OUTPUT_DIR/Empty.osm
+hoot diff -C Testing.conf test-files/Empty.osm $OUTPUT_DIR/Empty.osm || cat $OUTPUT_DIR/Empty.osm
 
 # Run with the road snapper
 echo "Checking conflation with road snapping..."

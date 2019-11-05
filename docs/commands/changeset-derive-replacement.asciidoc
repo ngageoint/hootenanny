@@ -21,9 +21,9 @@ while element IDs for the secondary data are not retained and the elements treat
 * +input2+                       - Secondary input with the features used for replacement; may be any supported input format that supports 
                                    bounded reading (e.g. OSM file). See the "Bounds Handling" section for more detail.
 * +bounds+                       - Comma delimited bounds: minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902"
-* +output+                       - Output location; must be an .osc or .osc.sql file.
-* +osmApiDatabaseUrl+            - Target OSM API database the changeset is to be applied to. Used to maintain element ID continuity with a 
-                                   particular database instance when generating SQL changesets only (.osc.sql).
+* +output+                       - Output location; must be a changeset .osc or .osc.sql file.
+* +osmApiDatabaseUrl+            - Target OSM API database the derived changeset is to be applied, used to maintain element ID continuity. 
+                                   Required only if the changeset output format is .osc.sql. 
 * +--full-replacement+           - Determines how much of the reference data is replaced. The default behavior replaces reference feature with
                                    overlap with secondary features only. The option is incompatible with the +--retainment-filters+ option and 
                                    will result in an error when combined with it. See the  "Bounds Handling" section for more detail.

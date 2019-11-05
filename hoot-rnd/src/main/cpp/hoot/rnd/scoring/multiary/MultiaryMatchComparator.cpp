@@ -159,10 +159,10 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
         if (foundCategory == false)
         {
           _addToConfusionTable(conf, confusionTables[noCategory]);
-          LOG_VAR(tags);
+          LOG_VART(tags);
           foreach (const ScriptToOgrSchemaTranslator::TranslatedFeature& tf, translated)
           {
-            LOG_VAR(tf);
+            LOG_VART(tf);
           }
         }
       }

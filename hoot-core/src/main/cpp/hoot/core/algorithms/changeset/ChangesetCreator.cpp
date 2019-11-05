@@ -33,11 +33,9 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementStreamer.h>
-#include <hoot/core/io/OsmApiDbSqlChangesetFileWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -51,6 +49,8 @@
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -60,11 +60,11 @@ namespace hoot
 
 const QString ChangesetCreator::JOB_SOURCE = "Derive Changeset";
 
-ChangesetCreator::ChangesetCreator(const bool printStats, const QString osmApiDbUrl) :
+ChangesetCreator::ChangesetCreator(const bool printDetailedStats, const QString osmApiDbUrl) :
 _osmApiDbUrl(osmApiDbUrl),
 _numTotalTasks(0),
 _currentTaskNum(0),
-_printStats(printStats),
+_printDetailedStats(printDetailedStats),
 _singleInput(false),
 _numCreateChanges(0),
 _numModifyChanges(0),
@@ -82,6 +82,11 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   {
     throw IllegalArgumentException(
       "Output to SQL changeset requires an OSM API database URL be specified.");
+  }
+  else if (!output.endsWith(".osc.sql") && !_osmApiDbUrl.isEmpty())
+  {
+    LOG_WARN(
+      "Ignoring OSM API database URL: " << _osmApiDbUrl << " for non-SQL changeset output...");
   }
 
   LOG_DEBUG(
@@ -155,8 +160,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // there are for the external sorting (e.g. pre-sorted PBF file).
 
     progress.set(
-      (float)(_currentTaskNum - 1) / (float)_numTotalTasks,
-      "Sorting input elements; task #" + QString::number(_currentTaskNum) + "...");
+      (float)(_currentTaskNum - 1) / (float)_numTotalTasks, "Sorting input elements...");
     if (!_singleInput)
     {
       sortedElements1 = _sortElementsInMemory(map1);
@@ -628,15 +632,12 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
       "Changeset input data inputs are not the same size for streaming to output.");
   }
 
-  LOG_INFO("Streaming changeset output to " << output.right(25) << "...")
+  LOG_INFO("Streaming changeset output to " << output.right(25) << "...");
 
-  QString stats;
+  QString detailedStats;
   _numCreateChanges = 0;
   _numModifyChanges = 0;
   _numDeleteChanges = 0;
-
-  // Could this eventually be cleaned up to use OsmChangeWriterFactory and the OsmChange interface
-  // instead?
 
   QList<ChangesetProviderPtr> changesetProviders;
   for (int i = 0; i < inputs1.size(); i++)
@@ -645,16 +646,20 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
       ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
   }
 
-  if (output.endsWith(".osc"))
+  std::shared_ptr<OsmChangesetFileWriter> writer =
+    OsmChangesetFileWriterFactory::getInstance()
+      .createWriter(output, _osmApiDbUrl);
+  writer->write(output, changesetProviders);
+  if (_printDetailedStats)
   {
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, changesetProviders);
-    stats = writer.getStatsTable();
-  }
-  else if (output.endsWith(".osc.sql"))
-  {
-    assert(!_osmApiDbUrl.isEmpty());
-    OsmApiDbSqlChangesetFileWriter(QUrl(_osmApiDbUrl)).write(output, changesetProviders);
+    if (output.endsWith(".osc")) // detailed stats currently only implemented for xml output
+    {
+      detailedStats = writer->getStatsTable();
+    }
+    else
+    {
+      LOG_WARN("Changeset statistics not implemented for output: " << output);
+    }
   }
 
   assert(inputs1.size() == changesetProviders.size());
@@ -695,9 +700,10 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     input2->close();
   }
 
-  if (_printStats)
+  LOG_VARD(_printDetailedStats);
+  if (_printDetailedStats && !detailedStats.isEmpty())
   {
-    LOG_STATUS("Changeset Stats:\n" << stats);
+    LOG_STATUS("Changeset Stats:\n" << detailedStats);
   }
   else
   {

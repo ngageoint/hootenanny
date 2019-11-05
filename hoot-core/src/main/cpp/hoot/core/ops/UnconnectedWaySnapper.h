@@ -64,6 +64,10 @@ namespace hoot
  * - If there ends up being a way node fairly close to the selected snap point on the way and that
  * way node was skipped over due to being outside of the way snap threshold, it still might make
  * sense to snap to it instead.  Have only seen one instance of this so far...
+ *
+ * TODO: This class doesn't pay attention to the direction of the ways being snapped. Not sure
+ * yet if/whether that can be addressed or not. Technically, the way joiner (I think) run later on
+ * could fix the problem.
  */
 class UnconnectedWaySnapper : public OsmMapOperation, public OperationStatusInfo,
   public Configurable

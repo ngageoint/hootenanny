@@ -129,8 +129,8 @@ double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstW
   // The rational here is that we can calculate the
   double p = 1 - (Normal::phi(distanceMean, sigma) - 0.5) * 2.0;
 
-  LOG_DEBUG("distanceMean: " << distanceMean);
-  LOG_DEBUG("  s1: " << s1 << " s2: " << s2 << " sigma: " << sigma << " p: " << p);
+  LOG_TRACE("distanceMean: " << distanceMean);
+  LOG_TRACE("  s1: " << s1 << " s2: " << s2 << " sigma: " << sigma << " p: " << p);
 
   return p;
 }
@@ -175,11 +175,11 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
   double zs = zipperScore(w1, w2);
   double ls = lengthScore(map, w1, w2);
 
-  LOG_DEBUG("  ds2 " << distanceScore(map, w2, w1));
-  LOG_DEBUG("  l1 " << ElementConverter(map).convertToLineString(w1)->getLength());
-  LOG_DEBUG("  l2 " << ElementConverter(map).convertToLineString(w2)->getLength());
-  LOG_DEBUG("probability of match " << ds << " " << ps << " " << as << " " << zs << " " << ls);
-  LOG_DEBUG("  " << ds * ps * as * zs * ls);
+  LOG_TRACE("  ds2 " << distanceScore(map, w2, w1));
+  LOG_TRACE("  l1 " << ElementConverter(map).convertToLineString(w1)->getLength());
+  LOG_TRACE("  l2 " << ElementConverter(map).convertToLineString(w2)->getLength());
+  LOG_TRACE("probability of match " << ds << " " << ps << " " << as << " " << zs << " " << ls);
+  LOG_TRACE("  " << ds * ps * as * zs * ls);
 
   return ds * ps * as * zs * ls;
 }

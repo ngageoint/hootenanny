@@ -52,6 +52,13 @@ namespace hoot
  * is an issue, I'm not going to worry about it at this time.
  *
  * 1. http://wiki.openstreetmap.org/wiki/Semi-colon_value_separator
+ *
+ * Its interesting to note that if you add a copy constructor to this class, you'll blow up a lot
+ * of the code that isn't intending to copy tags but then does after the change (understandable).
+ * If you try to add a copy constructor delete to disable it (or just make it private), you'll blow
+ * up ElementData's inline constructor, which apparently is using the copy constructor to set its
+ * tags. It seems like a copy constructor could be useful in certain situations...so may be worth
+ * looking into at some point.
  */
 class Tags : public QHash<QString, QString>
 {
@@ -68,7 +75,7 @@ public:
   /**
    * Adds all the tags in t into this set of tags. Tags in t overwrite tags in this.
    */
-  void addTags(const Tags& t);
+  void add(const Tags& t);
 
   /**
    * Appends a value to a key. If the key already has a value then the values are semi-colon
@@ -206,7 +213,7 @@ public:
   /**
    * Get a list of all non-'hoot::*' tags
    */
-  QStringList dataOnlyTags(const Tags& tags) const;
+  QStringList getDataOnlyValues(const Tags& tags) const;
 
   void readValues(const QString& k, QStringList& list) const;
 
@@ -215,7 +222,28 @@ public:
   /**
    * Remove all tags with empty strings as values.
    */
-  void removeEmptyTags();
+  void removeEmpty();
+
+  /**
+   * Removes all metadata tags (hoot::*)
+   */
+  void removeMetadata();
+
+  // QHash::remove can be used for removal by key equal to.
+
+  /**
+   * Removes all tags with keys that contain the input substring
+   *
+   * @param tagKeySubstring a substring to match
+   */
+  void removeByTagKeyContains(const QString& tagKeySubstring);
+
+  /**
+   * Removes all tags with keys that start with the input substring
+   *
+   * @param tagKeySubstring a substring to match
+   */
+  void removeByTagKeyStartsWith(const QString& tagKeySubstring);
 
   /**
    * Sets the area tag to either true (is an area element), or false (is not an area element)
@@ -319,6 +347,14 @@ public:
    * @return true if at least one name exists; false otherwise
    */
   bool hasName() const;
+
+  /**
+   * Returns a string showing the difference between this set of tags and another
+   *
+   * @param other set of tags to compare these tags to
+   * @return a tag diff string
+   */
+  QString getDiffString(const Tags& other) const;
 
 private:
 

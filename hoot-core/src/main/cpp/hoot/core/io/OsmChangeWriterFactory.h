@@ -41,10 +41,30 @@ class OsmChangeWriterFactory
 {
 public:
 
-  std::shared_ptr<OsmChangeWriter> createWriter(const QString& url, const QString& elementPayloadFormat = "json");
+  /**
+   * Creates a writer capable of streaming OSM changes
+   *
+   * @param url the path the writer writes to
+   * @param elementPayloadFormat determines the format the elements are stored in; options are
+   * 'json' or 'xml'
+   * @return an OSM change writer
+   */
+  std::shared_ptr<OsmChangeWriter> createWriter(const QString& url,
+                                                const QString& elementPayloadFormat = "json");
 
+  /**
+   * Determines if the output location is supported by any OsmChangeWriter
+   *
+   * @param output the output path to validate
+   * @return true if the output path is supported by any writer; false otherwise
+   */
   bool isSupported(const QString& output);
 
+  /**
+   * Returns a Singleton instance of OsmChangeWriterFactory
+   *
+   * @return
+   */
   static OsmChangeWriterFactory& getInstance();
 
 private:

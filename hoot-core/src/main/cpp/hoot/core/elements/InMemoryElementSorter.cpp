@@ -26,7 +26,9 @@
  */
 #include "InMemoryElementSorter.h"
 
+// Hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Standard
 #include <algorithm>
@@ -47,7 +49,9 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
     // log that.
     if (source->getElementCount() > 0)
     {
-      LOG_INFO("Sorting " << source->getElementCount() << " elements in-memory...");
+      LOG_INFO(
+        "Sorting " << StringUtils::formatLargeNumber(source->getElementCount()) <<
+        " elements in-memory...");
     }
 
     _source = source;

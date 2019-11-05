@@ -640,6 +640,12 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
 -----
 
+===== Split a map into multiple maps corresponding to irregular shaped tiles produced above:
+
+-----
+    hoot split-map output.geojson input.osm output.osm
+-----
+
 ===== Normalize all the element address tags in a map:
 
 -----

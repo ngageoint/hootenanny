@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/ElementType.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSqlError>
@@ -40,6 +41,16 @@ using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmApiDbSqlChangesetFileWriter)
+
+OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter() :
+_changesetId(0),
+_changesetUserId(ConfigOptions().getChangesetUserId()),
+_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
+_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags())
+{
+}
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
@@ -56,7 +67,7 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
 }
 
 void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
-                                           ChangesetProviderPtr changesetProvider)
+                                           const ChangesetProviderPtr& changesetProvider)
 {
   QList<ChangesetProviderPtr> changesetProviders;
   changesetProviders.append(changesetProvider);
@@ -83,7 +94,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
   for (int i = 0; i < changesetProviders.size(); i++)
   {
     LOG_DEBUG(
-      "Derving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
+      "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);

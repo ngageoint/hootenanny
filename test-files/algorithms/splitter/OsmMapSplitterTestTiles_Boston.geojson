@@ -1,0 +1,6 @@
+{"generator":"Hootenanny","type":"FeatureCollection","bbox": [-71.485, 42.472, -71.445, 42.507],"source":"BostonSubsetRoadBuilding_FromOsm.osm","features": [
+{"type":"Feature","properties":{"task":"1","node_count":"5753"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-71.4851969, 42.4718004],[-71.4851969, 42.4868004],[-71.4701969, 42.4868004],[-71.4701969, 42.4718004],[-71.4851969, 42.4718004]]]]}},
+{"type":"Feature","properties":{"task":"2","node_count":"2678"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-71.4851969, 42.4868004],[-71.4851969, 42.5068004],[-71.4701969, 42.5068004],[-71.4701969, 42.4868004],[-71.4851969, 42.4868004]]]]}},
+{"type":"Feature","properties":{"task":"3","node_count":"6109"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-71.4701969, 42.4718004],[-71.4701969, 42.4868004],[-71.4451969, 42.4868004],[-71.4451969, 42.4718004],[-71.4701969, 42.4718004]]]]}},
+{"type":"Feature","properties":{"task":"4","node_count":"3948"},"geometry": {"type":"MultiPolygon","coordinates": [[[[-71.4701969, 42.4868004],[-71.4701969, 42.5068004],[-71.4451969, 42.5068004],[-71.4451969, 42.4868004],[-71.4701969, 42.4868004]]]]}}]
+}

@@ -397,8 +397,8 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     Tags tags = pElem->getTags();
     while (tagIterator.hasNext())
     {
-        tagIterator.next();
-        tags[tagIterator.key()] = tagIterator.value();
+      tagIterator.next();
+      tags[tagIterator.key()] = tagIterator.value();
     }
 
     pElem->setTags(tags);

@@ -56,7 +56,7 @@ QHash<QString, QString>()
   set(key, value);
 }
 
-void Tags::addTags(const Tags& t)
+void Tags::add(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
   {
@@ -579,7 +579,48 @@ bool Tags::operator==(const Tags& other) const
   return true;
 }
 
-QStringList Tags::dataOnlyTags(const Tags& tags) const
+void Tags::removeMetadata()
+{
+  removeByTagKeyStartsWith(MetadataTags::HootTagPrefix());
+}
+
+void Tags::removeByTagKeyContains(const QString& tagKeySubstring)
+{
+  QStringList keysToRemove;
+  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  {
+    const QString key = it.key();
+    if (key.contains(tagKeySubstring))
+    {
+      keysToRemove.append(key);
+    }
+  }
+
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    remove(keysToRemove.at(i));
+  }
+}
+
+void Tags::removeByTagKeyStartsWith(const QString& tagKeySubstring)
+{
+  QStringList keysToRemove;
+  for (Tags::const_iterator it = begin(); it != end(); ++it)
+  {
+    const QString key = it.key();
+    if (key.startsWith(tagKeySubstring))
+    {
+      keysToRemove.append(key);
+    }
+  }
+
+  for (int i = 0; i < keysToRemove.size(); i++)
+  {
+    remove(keysToRemove.at(i));
+  }
+}
+
+QStringList Tags::getDataOnlyValues(const Tags& tags) const
 {
   QStringList t;
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
@@ -592,8 +633,8 @@ QStringList Tags::dataOnlyTags(const Tags& tags) const
 
 bool Tags::dataOnlyEqual(const Tags& other) const
 {
-  QStringList l1 = dataOnlyTags(*this);
-  QStringList l2 = dataOnlyTags(other);
+  QStringList l1 = getDataOnlyValues(*this);
+  QStringList l2 = getDataOnlyValues(other);
 
   if (l1.size() != l2.size())
   {
@@ -649,7 +690,7 @@ void Tags::readValues(const QString &k, QStringList& list) const
   }
 }
 
-void Tags::removeEmptyTags()
+void Tags::removeEmpty()
 {
   // remove all the empty tags.
   for (Tags::const_iterator it = begin(); it != end(); ++it)
@@ -827,6 +868,31 @@ Tags Tags::schemaVerticesToTags(const std::vector<SchemaVertex>& schemaVertices)
     tags.appendValue(vertex.key, vertex.value);
   }
   return tags;
+}
+
+QString Tags::getDiffString(const Tags& other) const
+{
+  if (this->operator ==(other))
+  {
+    return "";
+  }
+
+  QStringList keys = this->keys();
+  keys.append(other.keys());
+  keys.removeDuplicates();
+  keys.sort();
+
+  QString diffStr;
+  for (int i = 0; i < keys.size(); i++)
+  {
+    QString k = keys[i];
+    if (this->operator [](k) != other[k])
+    {
+      diffStr += "< " + k + " = " + this->operator [](k) + "\n";
+      diffStr += "> " + k + " = " + other[k] + "\n";
+    }
+  }
+  return diffStr.trimmed();
 }
 
 }
