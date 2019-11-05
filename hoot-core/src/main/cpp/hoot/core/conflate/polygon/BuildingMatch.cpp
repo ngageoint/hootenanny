@@ -89,7 +89,7 @@ _matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
   if (type != MatchType::Match)
   { 
     // If we have a review and one of the buildings completely contains the other (smaller
-    // overlap = 1), then let's convert to a match if the associted config options was enabled.
+    // overlap = 1), then let's convert to a match if the associated config options was enabled.
     const double smallerOverlap = SmallerOverlapExtractor().extract(*map, element1, element2);
     LOG_VART(smallerOverlap);
     if (type == MatchType::Review && _matchReviewsWithContainment && smallerOverlap == 1.0)
