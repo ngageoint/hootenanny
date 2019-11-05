@@ -94,21 +94,21 @@ public:
 
     ConstElementPtr way1 = TestUtils::getElementWithTag(map, "name", "Way 1");
     ConstElementPtr way2 = TestUtils::getElementWithTag(map, "name", "Way 2");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way1, way2), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(
+      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way1, way2));
 
     ConstElementPtr way3 = TestUtils::getElementWithTag(map, "name", "Way 3");
     ConstElementPtr way4 = TestUtils::getElementWithTag(map, "name", "Way 4");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way3, way4), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(
+      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, way3, way4));
 
     map->clear();
     NodePtr point1 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     map->addNode(point1);
     NodePtr point2 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     map->addNode(point2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, point1, point2), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(
+      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, point1, point2));
 
     map->clear();
     QList<ElementPtr> elements1;
@@ -117,8 +117,8 @@ public:
     QList<ElementPtr> elements2;
     elements2.append(point2);
     ConstRelationPtr relation2 = TestUtils::createRelation(map, elements2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, relation1, relation2), 1e-1);
+    CPPUNIT_ASSERT_EQUAL(
+      IntersectionOverUnionExtractor::nullValue(), uut.extract(*map, relation1, relation2));
   }
 };
 

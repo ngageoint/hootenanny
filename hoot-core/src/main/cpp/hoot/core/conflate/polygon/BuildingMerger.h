@@ -120,6 +120,10 @@ private:
   bool _mergeManyToManyMatches;
   // set to true if the current building merge involves two buildings, each part of multiple matches
   bool _manyToManyMatch;
+  // TODO
+  bool _useChangedReview;
+  // TODO
+  double _changedReviewIotThreshold;
 
   /*
    * Creates a building out of the current set of building element IDs
@@ -130,6 +134,14 @@ private:
    * @return a building element
    */
   std::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
+
+  /*
+   * TODO
+   */
+  ElementId _getIdOfMoreComplexBuilding(
+    const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const;
+
+  Tags _getMergedTags(const ElementPtr& e1, const ElementPtr& e2);
 
   QSet<ElementId> _getMultiPolyMemberIds(const ConstElementPtr& element) const;
   void _removeRedundantAltTypeTags(Tags& tags);

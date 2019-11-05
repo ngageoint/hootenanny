@@ -325,6 +325,20 @@ Output location for a bounds file when the `--write-bounds` option is selected f
 
 The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
 
+=== building.changed.review
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
+=== building.changed.review.iou.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+TODO
+
 === building.date.format
 
 * Data Type: string
