@@ -52,7 +52,6 @@ public:
 
   virtual QString toString(QString indent = QString()) const  = 0;
 
-private:
 };
 
 #define LEAF_NODE_SIZE 2
