@@ -411,7 +411,7 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      LOG_VART(pOldElement->getElementId());;
+      LOG_VART(pOldElement->getElementId());
       LOG_VART(pNewElement->getElementId());
 
       // Apparently, a NetworkMatch can be a node/way pair. See note in
