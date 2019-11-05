@@ -42,7 +42,6 @@
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/io/OsmXmlChangesetFileWriter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/NonConflatableElementRemover.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
@@ -57,6 +56,8 @@
 #include <hoot/core/visitors/CriterionCountVisitor.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // standard
 #include <algorithm>
@@ -77,19 +78,21 @@ int DiffConflator::logWarnCount = 0;
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
 DiffConflator::DiffConflator() :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_matchFactory(MatchFactory::getInstance()),
+_settings(Settings::getInstance()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_numSnappedWays(0)
 {
   _reset();
 }
 
 DiffConflator::DiffConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_matchFactory(MatchFactory::getInstance()),
+_matchThreshold(matchThreshold),
+_settings(Settings::getInstance()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+_numSnappedWays(0)
 {
-  _matchThreshold = matchThreshold;
   _reset();
 }
 
@@ -116,6 +119,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
+  _numSnappedWays = 0;
 
   // Store the map - we might need it for tag diff later.
   _pMap = map;
@@ -184,7 +188,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
-    _snapSecondaryRoadsBackToRef();
+    _numSnappedWays = _snapSecondaryRoadsBackToRef();
   }
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())
@@ -205,7 +209,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
 }
 
-void DiffConflator::_snapSecondaryRoadsBackToRef()
+long DiffConflator::_snapSecondaryRoadsBackToRef()
 {
   UnconnectedWaySnapper roadSnapper;
   roadSnapper.setConfiguration(conf());
@@ -213,6 +217,7 @@ void DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+  return roadSnapper.getNumAffected();
 }
 
 void DiffConflator::_removeMatches(const Status& status)
@@ -281,14 +286,22 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   {
     // Not something a user can generally cause - more likely it's a misuse of this class.
     throw IllegalArgumentException(
-      "Map elements with Status::Unknown2 found when storing "
-      "original map for diff conflation. This can cause unpredictable "
-      "results. The original map should contain only Status::Unknown1 "
+      "Map elements with Status::Unknown2 found when storing original map for diff conflation. "
+      "This can cause unpredictable results. The original map should contain only Status::Unknown1 "
       "elements. ");
   }
 
   // Use the copy constructor
   _pOriginalMap.reset(new OsmMap(pMap));
+
+  // We're storing this off for potential use later on if any roads get snapped after conflation.
+  // See additional comments in _getChangesetFromMap.
+  _pOriginalRef1Map.reset(new OsmMap(pMap));
+  ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref2()));
+  RemoveElementsVisitor removeRef2Visitor;
+  removeRef2Visitor.setRecursive(true);
+  removeRef2Visitor.addCriterion(pTagKeyCrit);
+  _pOriginalRef1Map->visitRw(removeRef2Visitor);
 }
 
 void DiffConflator::markInputElements(OsmMapPtr pMap)
@@ -398,16 +411,14 @@ void DiffConflator::_calcAndStoreTagChanges()
         continue;
       }
 
-      LOG_VART(pOldElement->getElementId());
-      //LOG_VART(pOldElement->getTags().get("name"));
+      LOG_VART(pOldElement->getElementId());;
       LOG_VART(pNewElement->getElementId());
-      //LOG_VART(pNewElement->getTags().get("name"));
 
       // Apparently, a NetworkMatch can be a node/way pair. See note in
       // NetworkMatch::_discoverWayPairs as to why its allowed. However, tag changes between
-      // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we add
-      // a conflation type other than poi/poly which matches differing geometry types then this will
-      // need to be updated.
+      // node/way match pairs other than poi/poly don't seem to make any sense. Clearly, if we end
+      // up adding a conflation type other than poi/poly which matches differing geometry types at
+      // some point then this will need to be updated.
 
       if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
@@ -423,6 +434,8 @@ void DiffConflator::_calcAndStoreTagChanges()
         // Make new change
         Change newChange = _getChange(pOldElement, pNewElement);
         LOG_VART(newChange);
+        //OsmUtils::logElementDetail(pOldElement, _pMap, Log::Trace, "Old element: ");
+        //OsmUtils::logElementDetail(pNewElement, _pMap, Log::Trace, "New element: ");
 
         // Add it to our list
         _pTagChanges->addChange(newChange);
@@ -483,6 +496,7 @@ void DiffConflator::_reset()
   _matches.clear();
   _pMap.reset();
   _pTagChanges.reset();
+  _numSnappedWays = 0;
 }
 
 void DiffConflator::_printMatches(vector<ConstMatchPtr> matches)
@@ -518,46 +532,89 @@ std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, Os
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
 {
-  return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
+  if (_numSnappedWays == 0)
+  {
+    return _sortInputs(OsmMapPtr(new OsmMap()), pMap);
+  }
+  else
+  {
+    // If any secondary ways were snapped back to reference ways, we need to generate a changeset
+    // against the original reference data (which may have been dropped by the output map by this
+    // point) instead of against an empty map. If we don't, then we could end up generating create
+    // statements for elements which already exist in the ref dataset. Its arguable that we could
+    // use this approach regardless whether roads are snapped or not. This approach has also not
+    // been tested with much data, so may not pan out in the long run.
+
+    return _sortInputs(_pOriginalRef1Map, pMap);
+  }
 }
 
-void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput)
+void DiffConflator::writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
+                                   const QString& osmApiDbUrl)
 {
+  if (output.endsWith(".osc.sql") && osmApiDbUrl.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(
+      "Output to SQL changeset requires an OSM API database URL be specified.");
+  }
+  else if (!output.endsWith(".osc.sql") && !osmApiDbUrl.trimmed().isEmpty())
+  {
+    LOG_WARN(
+      "Ignoring OSM API database URL: " << osmApiDbUrl << " for non-SQL changeset output...");
+  }
+
+  LOG_VARD(output);
+  LOG_VARD(separateOutput);
+  LOG_VARD(osmApiDbUrl);
+  LOG_VARD(_conflateTags);
+
   // It seems like our tag changes should be sorted by element type before passing them along to the
   // changeset writer, as is done in for the geo changeset and also via ChangesetCreator when you
   // call changeset-derive. However, doing that here would require some refactoring so not worrying
-  // about it unless not being sorted actually causes problems.
+  // about it unless not being sorted actually ends up causing any problems.
 
   // get the changeset
   ChangesetProviderPtr pGeoChanges = _getChangesetFromMap(pResultMap);
 
+  std::shared_ptr<OsmChangesetFileWriter> writer =
+    OsmChangesetFileWriterFactory::getInstance().createWriter(output, osmApiDbUrl);
+  LOG_VARD(writer.get());
   if (!_conflateTags)
   {
     // only one changeset to write
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, pGeoChanges);
+    LOG_DEBUG("Writing single changeset...");
+    writer->write(output, pGeoChanges);
   }
   else if (separateOutput)
   {
     // write two changesets
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, pGeoChanges);
+    LOG_DEBUG("Writing separate changesets...");
+    writer->write(output, pGeoChanges);
 
     QString outFileName = output;
-    outFileName.replace(".osc", "");
-    outFileName.append(".tags.osc");
-    OsmXmlChangesetFileWriter tagChangeWriter;
-    tagChangeWriter.write(outFileName, _pTagChanges);
+    if (outFileName.endsWith(".osc"))
+    {
+      outFileName.replace(".osc", "");
+      outFileName.append(".tags.osc");
+    }
+    // There are only two changeset writers right now, so this works.
+    else
+    {
+      outFileName.replace(".osc.sql", "");
+      outFileName.append(".tags.osc.sql");
+    }
+    LOG_VARD(outFileName);
+    writer->write(outFileName, _pTagChanges);
   }
   else
   {
     // write unified output
+    LOG_DEBUG("Writing unified changesets...");
     MultipleChangesetProviderPtr pChanges(
       new MultipleChangesetProvider(pResultMap->getProjection()));
     pChanges->addChangesetProvider(pGeoChanges);
     pChanges->addChangesetProvider(_pTagChanges);
-    OsmXmlChangesetFileWriter writer;
-    writer.write(output, pChanges);
+    writer->write(output, pChanges);
   }
 }
 

@@ -132,6 +132,7 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
 
   HighwayCriterion highwayCrit(_map);
   // if either way is not a highway
+  // TODO: could we gain anything by opening this up to other linear feature types?
   if (highwayCrit.isSatisfied(w1) == false || highwayCrit.isSatisfied(w2) == false)
   {
     return;
@@ -184,10 +185,15 @@ void SmallWayMerger::_mergeWays(const set<long>& ids)
     }
     else
     {
-      LOG_TRACE("w1: " << w1->toString());
-      LOG_TRACE("w2: " << w2->toString());
-      throw HootException("The ends of the ways don't touch. "
-                          "Did you run the intersection splitter first?");
+      //throw HootException("The ends of the ways don't touch. "
+                          //"Did you run the intersection splitter first?");
+      // So far, have only seen this happen due to the UnconnectedWaySplitter connecting two roads
+      // pointing toward each other. That may need to be addressed, but regardless, don't think an
+      // exception is needed here.
+      LOG_TRACE(
+        "The ends of the ways don't touch. Skipping merge of: " << w1->getElementId() << " and " <<
+        w2->getElementId());
+      return;
     }
 
     // if the ways share both ends (circle) then this causes bad weird things to happen so

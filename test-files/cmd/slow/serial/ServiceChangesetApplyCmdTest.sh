@@ -9,12 +9,12 @@ export AUTH="-h $DB_HOST_OSMAPI -p $DB_PORT_OSMAPI -U $DB_USER_OSMAPI"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 psql --quiet $AUTH -d $DB_NAME_OSMAPI -f test-files/servicesdb/users.sql
 
-rm -rf test-output/cmd/slow/serial/ServiceApplyChangesetCmdTest
-mkdir -p test-output/cmd/slow/serial/ServiceApplyChangesetCmdTest
+rm -rf test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest
+mkdir -p test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest
 
 # write the contents
-hoot changeset-apply --debug test-files/cmd/slow/serial/ServiceApplyChangesetCmdTest/changeset.osc.sql $DB_URL
+hoot changeset-apply --debug test-files/cmd/slow/serial/ServiceChangesetApplyCmdTest/changeset.osc.sql $DB_URL
 
 # read the contents back out
-hoot convert $DB_URL test-output/cmd/slow/serial/ServiceApplyChangesetCmdTest/output.osm
-hoot diff test-files/cmd/slow/serial/ServiceApplyChangesetCmdTest/output.osm test-output/cmd/slow/serial/ServiceApplyChangesetCmdTest/output.osm
+hoot convert $DB_URL test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm
+hoot diff test-files/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm test-output/cmd/slow/serial/ServiceChangesetApplyCmdTest/output.osm

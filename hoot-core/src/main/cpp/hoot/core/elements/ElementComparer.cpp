@@ -44,14 +44,19 @@ _threshold(threshold)
 
 void ElementComparer::_removeTagsNotImportantForComparison(Tags& tags) const
 {
-  // Should we remove metadata (hoot:*) tags here instead?
+  LOG_TRACE("Removing tags...");
+
+  // having trouble making this work here in place of the two following lines due to the
+  // ServiceChangesetReplacement* tests...will revisit
+  //tags.removeMetadata();
 
   tags.remove(MetadataTags::HootStatus());
-  // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
-  tags.remove("status");
   //this is ok b/c we have the actual id to compare to, but it should still probably be fixed to
   //carry along the hoot:id tag for consistency's sake when that is desired
   tags.remove(MetadataTags::HootId());
+
+  // not sure where "status" is coming from...should be "hoot:status"...bug somewhere?
+  tags.remove("status");
   tags.remove(MetadataTags::SourceDateTime());
 }
 

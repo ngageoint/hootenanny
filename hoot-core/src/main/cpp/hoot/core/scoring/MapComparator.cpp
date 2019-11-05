@@ -137,6 +137,7 @@ public:
         LOG_WARN(
           "Tags do not match (ref: " << refElement->getElementId() << ", test: " <<
           e->getElementId() << ":");
+
         QStringList keys = refTags.keys();
         keys.append(testTags.keys());
         keys.removeDuplicates();

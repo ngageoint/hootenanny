@@ -172,7 +172,16 @@ public:
    */
   void addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges);
 
-  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput);
+  /**
+   * Writes a changeset with just the data from the input map
+   *
+   * @param pResultMap the input map
+   * @param output the output changeset path
+   * @param separateOutput if true, separates geometry and tag changeset output
+   * @param osmApiDbUrl specifies the target OSM API database, if SQL changeset output is specified
+   */
+  void writeChangeset(OsmMapPtr pResultMap, QString& output, bool separateOutput,
+                      const QString& osmApiDbUrl = "");
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
@@ -202,9 +211,13 @@ private:
   // as a reference for original IDs and original geometry, so that we can generate a clean
   // changeset output for the tag diff.
   OsmMapPtr _pOriginalMap;
+  // keep a copy of the original map with only ref1 data to calc the diff when any roads are snapped
+  OsmMapPtr _pOriginalRef1Map;
 
   Progress _progress;
   int _taskStatusUpdateInterval;
+
+  long _numSnappedWays;
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -233,7 +246,7 @@ private:
 
   void _removeMatches(const Status& status);
 
-  void _snapSecondaryRoadsBackToRef();
+  long _snapSecondaryRoadsBackToRef();
 
   void _updateProgress(const int currentStep, const QString message);
 };

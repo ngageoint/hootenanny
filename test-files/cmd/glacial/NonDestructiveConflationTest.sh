@@ -10,7 +10,6 @@ hoot conflate -C Testing.conf -C ReferenceConflation.conf -C NetworkAlgorithm.co
  test-files/Congo_OSM_Roads_Bridges_subset.osm \
  test-output/cmd/glacial/NonDestructiveTest/output.osm
 
-
 # Derive the changeset for the Congo conflation
 hoot changeset-derive -C Testing.conf --stats \
  test-files/Congo_MGCP_Roads_Bridges_subset.osm \
@@ -83,4 +82,3 @@ hoot diff \
 # | Delete |    1 |        1 |  17 |
 # | Modify |    0 |        0 |   9 |
 #
-

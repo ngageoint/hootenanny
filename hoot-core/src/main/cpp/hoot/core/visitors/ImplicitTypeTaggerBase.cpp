@@ -673,7 +673,7 @@ void ImplicitTypeTaggerBase::_addImplicitTags(const ElementPtr& e, const Tags& t
                                               const QSet<QString>& matchingWords)
 {
   //add implicit tags and associated metadata tags
-  e->getTags().addTags(tagsToAdd);
+  e->getTags().add(tagsToAdd);
   assert(matchingWords.size() != 0);
   QStringList matchingWordsList = matchingWords.toList();
   qSort(matchingWordsList.begin(), matchingWordsList.end(), caseInsensitiveLessThan);

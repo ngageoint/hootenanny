@@ -102,7 +102,7 @@ void DecomposeBuildingRelationsVisitor::_decomposeBuilding(const std::shared_ptr
     std::shared_ptr<Element> e = _map->getElement(members[i].getElementId());
 
     Tags t = baseTags;
-    t.addTags(e->getTags());
+    t.add(e->getTags());
     // don't need the building:part tag anymore.
     t.remove(MetadataTags::BuildingPart());
 

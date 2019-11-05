@@ -27,6 +27,7 @@
 #include "Change.h"
 
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/OsmUtils.h>
 
 namespace hoot
 {
