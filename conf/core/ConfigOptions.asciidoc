@@ -330,14 +330,17 @@ The portion of the sqrt max of the area that the BufferedOverlapExtractor buffer
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If enabled, during building merging conflation will look for a "changed" building defined as a
+matched building pair where their Intersection over Union value is greater than zero but falls below
+the value specified in building.changed.review.iou.threshold. If the pair is classified as "changed"
+they will be marked for review.
 
 === building.changed.review.iou.threshold
 
 * Data Type: double
-* Default Value: `0.9`
+* Default Value: `0.2`
 
-TODO
+See building.changed.review.
 
 === building.date.format
 

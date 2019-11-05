@@ -45,8 +45,14 @@ public:
 
   virtual std::set<ElementId> getImpactedElementIds() const override;
 
+  /**
+   * @see Merger
+   */
   virtual bool isValid(const ConstOsmMapPtr& map) const;
 
+  /**
+   * @see Merger
+   */
   virtual void replace(ElementId oldEid, ElementId newEid);
 
 protected:

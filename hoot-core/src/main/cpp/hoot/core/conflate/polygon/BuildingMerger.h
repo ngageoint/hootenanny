@@ -38,8 +38,6 @@ namespace hoot
 
 /**
  * Merges two or more buildings
- *
- * This guy could maybe use some refactoring now.
  */
 class BuildingMerger : public MergerBase
 {
@@ -102,6 +100,9 @@ public:
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }
   void setMergeManyToManyMatches(bool merge) { _mergeManyToManyMatches = merge; }
+  void setUseChangedReview(bool use) { _useChangedReview = use; }
+  void setChangedReviewIouThreshold(double threshold) { _changedReviewIouThreshold = threshold; }
+  QString getMarkedReviewText() const { return _markedReviewText; }
 
 protected:
 
@@ -109,6 +110,8 @@ protected:
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
 private:
+
+  friend class BuildingMergerTest;
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
@@ -120,10 +123,13 @@ private:
   bool _mergeManyToManyMatches;
   // set to true if the current building merge involves two buildings, each part of multiple matches
   bool _manyToManyMatch;
-  // TODO
+  // This allows for trigger a "changed" review, where if two buildings match but their IoU score
+  // falls below a certain threshold then we'll flag them to be reviewed.
   bool _useChangedReview;
-  // TODO
-  double _changedReviewIotThreshold;
+  // threshold used with _useChangedReview
+  double _changedReviewIouThreshold;
+  // records if this merger marked the input pair for review instead of merging them
+  QString _markedReviewText;
 
   /*
    * Creates a building out of the current set of building element IDs
@@ -136,7 +142,8 @@ private:
   std::shared_ptr<Element> _buildBuilding(const OsmMapPtr& map, const bool unknown1) const;
 
   /*
-   * TODO
+   * Determine which of two buildings is more complex, using node count as a surrogate for
+   * complexity
    */
   ElementId _getIdOfMoreComplexBuilding(
     const ElementPtr& building1, const ElementPtr& building2, const OsmMapPtr& map) const;

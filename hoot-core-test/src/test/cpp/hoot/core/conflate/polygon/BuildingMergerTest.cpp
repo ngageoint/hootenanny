@@ -56,6 +56,8 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/io/OsmJsonReader.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -79,6 +81,7 @@ class BuildingMergerTest : public HootTestFixture
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest1);
   CPPUNIT_TEST(runKeepMoreComplexGeometryWhenAutoMergingTest2);
   CPPUNIT_TEST(runManyToManyMergeTest);
+  CPPUNIT_TEST(runChangedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -254,6 +257,53 @@ public:
     HOOT_STR_EQUALS(
       "[5]{(Way(-5), Relation(-1)), (Way(-4), Relation(-1)), (Way(-3), Relation(-1)), (Way(-2), Relation(-1)), (Way(-1), Relation(-1))}",
       replaced);
+  }
+
+  void runChangedTest()
+  {
+    BuildingMerger uut;
+    uut.setUseChangedReview(true);
+    uut.setChangedReviewIouThreshold(0.2);
+
+    set<pair<ElementId, ElementId>> pairs;
+    vector<pair<ElementId, ElementId>> replaced;
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(
+      map,
+      "test-files/algorithms/extractors/IntersectionOverUnionExtractorTest/IntersectionOverUnionExtractorTest-in.osm");
+
+    pairs.clear();
+    replaced.clear();
+    ConstElementPtr building7 = TestUtils::getElementWithTag(map, "name", "Building 7");
+    ConstElementPtr building8 = TestUtils::getElementWithTag(map, "name", "Building 8");
+    pairs.insert(pair<ElementId, ElementId>(building7->getElementId(), building8->getElementId()));
+    uut._pairs = pairs;
+    uut.apply(map, replaced);
+    CPPUNIT_ASSERT(replaced.size() == 0);
+    CPPUNIT_ASSERT(uut.getMarkedReviewText().startsWith("Identified as changed"));
+
+    pairs.clear();
+    replaced.clear();
+    ConstElementPtr building3 = TestUtils::getElementWithTag(map, "name", "Building 3");
+    ConstElementPtr building4 = TestUtils::getElementWithTag(map, "name", "Building 4");
+    pairs.insert(pair<ElementId, ElementId>(building3->getElementId(), building4->getElementId()));
+    uut._pairs = pairs;
+    uut.apply(map, replaced);
+    CPPUNIT_ASSERT(replaced.size() == 1);
+    CPPUNIT_ASSERT(uut.getMarkedReviewText().isEmpty());
+
+    // These particular buildings likely wouldn't ever be matched in the first place and, therefore,
+    // wouldn't be passed to the merger. However, using them to test the IoU = 0 case.
+    pairs.clear();
+    replaced.clear();
+    ConstElementPtr building9 = TestUtils::getElementWithTag(map, "name", "Building 9");
+    ConstElementPtr building10 = TestUtils::getElementWithTag(map, "name", "Building 10");
+    pairs.insert(pair<ElementId, ElementId>(building9->getElementId(), building10->getElementId()));
+    uut._pairs = pairs;
+    uut.apply(map, replaced);
+    CPPUNIT_ASSERT(replaced.size() == 1);
+    CPPUNIT_ASSERT(uut.getMarkedReviewText().isEmpty());
   }
 
 private:

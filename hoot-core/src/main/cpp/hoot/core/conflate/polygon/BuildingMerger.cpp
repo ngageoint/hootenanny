@@ -52,6 +52,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
+#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 
 using namespace std;
 
@@ -113,7 +114,7 @@ _keepMoreComplexGeometryWhenAutoMerging(
 _mergeManyToManyMatches(ConfigOptions().getBuildingMergeManyToManyMatches()),
 _manyToManyMatch(false),
 _useChangedReview(ConfigOptions().getBuildingChangedReview()),
-_changedReviewIotThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
+_changedReviewIouThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
 {
   LOG_VART(_pairs);
 }
@@ -124,8 +125,9 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   set<ElementId> secondPairs;
   set<ElementId> combined;
   LOG_VART(_pairs);
+  _markedReviewText = "";
 
-  //check if it is many to many
+  // check to see if it is many to many
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
@@ -139,124 +141,147 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   LOG_VART(_manyToManyMatch);
   LOG_VART(_mergeManyToManyMatches);
 
-  bool preserveBuildingId = false;
   ReviewMarker reviewMarker;
+
   if (_manyToManyMatch && !_mergeManyToManyMatches)
   {
-    reviewMarker.mark(
-      map, combined,
-      "Merging multiple buildings from each data source is error prone and requires a human eye.",
-      "Building", 1);
+    // If the corresponding config option is enabled, auto review this many to many match.
+    _markedReviewText =
+      "Merging multiple buildings from each data source is error prone and requires a human eye.";
+    reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
+    return;
   }
-  else
+
+  ElementPtr e1 = _buildBuilding(map, true);
+  if (e1.get())
   {
-    ElementPtr e1 = _buildBuilding(map, true);
-    if (e1.get())
-    {
-      OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
-    }
-    ElementPtr e2 = _buildBuilding(map, false);
-    if (e2.get())
-    {
-      OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
-    }
+    OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
+  }
+  ElementPtr e2 = _buildBuilding(map, false);
+  if (e2.get())
+  {
+    OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
+  }
 
-    LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
-    LOG_VART(_useChangedReview);
+  LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
+  LOG_VART(_useChangedReview);
 
-    ElementPtr keeper;
-    ElementPtr scrap;
-    if (_useChangedReview)
+  double iou = 1.0;
+  if (_useChangedReview)
+  {
+    iou = IntersectionOverUnionExtractor().extract(*map, e1, e2);
+  }
+
+  ElementPtr keeper;
+  ElementPtr scrap;
+
+  if (_useChangedReview &&
+      // doubt iou would ever be <= 0 if these buildings matched in the first place but adding the
+      // check anyway
+      iou > 0.0 && iou < _changedReviewIouThreshold)
+  {
+    // If the corresponding config option is enabled, auto review this "changed" building when the
+    // IoU score falls below the specified threshold.
+    _markedReviewText =
+      "Identified as changed with an IoU score of: " + QString::number(iou) +
+      ", which is less than the specified threshold of: " +
+      QString::number(_changedReviewIouThreshold);
+    reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
+    return;
+  }
+
+  bool preserveBuildingId = false;
+
+  if (_keepMoreComplexGeometryWhenAutoMerging)
+  {
+    // keep the most complex building
+
+    const ElementId moreComplexBuildingId = _getIdOfMoreComplexBuilding(e1, e2, map);
+    if (moreComplexBuildingId.isNull())
     {
-      // TODO
+      // couldn't determine which one is more complex (one or both buildings were missing nodes)
+      return;
     }
-    else if (_keepMoreComplexGeometryWhenAutoMerging)
+    else if (e1->getElementId() == moreComplexBuildingId)
     {
-      const ElementId moreComplexBuildingId = _getIdOfMoreComplexBuilding(e1, e2, map);
-      if (moreComplexBuildingId.isNull())
-      {
-        return;
-      }
-      else if (e1->getElementId() == moreComplexBuildingId)
-      {
-        keeper = e1;
-        scrap = e2;
-      }
-      else
-      {
-        keeper = e2;
-        scrap = e1;
-        //  Keep e2's geometry but keep e1's ID
-        preserveBuildingId = true;
-      }
+      // ref is more complex
+      keeper = e1;
+      scrap = e2;
     }
     else
     {
-      keeper = e1;
-      scrap = e2;
-      LOG_TRACE(
-        "Keeping the first building geometry: " << keeper->getElementId() << "; scrap: " <<
-        scrap->getElementId() << "...");
+      // sec is more complex
+      keeper = e2;
+      scrap = e1;
+      //  Keep e2's geometry but keep e1's ID
+      preserveBuildingId = true;
     }
-
-    keeper->setTags(_getMergedTags(e1, e2));
-    keeper->setStatus(Status::Conflated);
-
-    OsmUtils::logElementDetail(keeper, map, Log::Trace, "BuildingMerger: keeper");
-    OsmUtils::logElementDetail(scrap, map, Log::Trace, "BuildingMerger: scrap");
-
-    //Check to see if we are removing a multipoly building relation.  If so, its multipolygon
-    //relation members, need to be removed as well.
-    const QSet<ElementId> multiPolyMemberIds = _getMultiPolyMemberIds(scrap);
-
-    //  Here is where we are able to reuse node IDs between buildings
-    ReuseNodeIdsOnWayOp(scrap->getElementId(), keeper->getElementId()).apply(map);
-    //  Replace the scrap with the keeper in any parents
-    ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
-    //  Swap the IDs of the two elements if keeper isn't UNKNOWN1
-    if (preserveBuildingId)
-    {
-      ElementId oldKeeperId = keeper->getElementId();
-      ElementId oldScrapId = scrap->getElementId();
-      IdSwapOp swapOp(oldScrapId, oldKeeperId);
-      swapOp.apply(map);
-      //  Now swap the pointers so that the wrong one isn't deleted
-      if (swapOp.getNumAffected() > 0)
-      {
-        scrap = map->getElement(oldKeeperId);
-        keeper = map->getElement(oldScrapId);
-      }
-    }
-
-    // remove the scrap element from the map
-    DeletableBuildingCriterion crit;
-    RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
-    scrap->getTags().clear();
-
-    // delete any pre-existing multipoly members
-    LOG_TRACE("Removing multi-poly members: " << multiPolyMemberIds);
-    for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
-         it != multiPolyMemberIds.end(); ++it)
-    {
-      RecursiveElementRemover(*it).apply(map);
-    }
-
-    set<pair<ElementId, ElementId>> replacedSet;
-    for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-         it != _pairs.end(); ++it)
-    {
-      // if we replaced the second group of buildings
-      if (it->second != keeper->getElementId())
-      {
-        replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
-      }
-      if (it->first != keeper->getElementId())
-      {
-        replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
-      }
-    }
-    replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
   }
+  else
+  {
+    // default merging strategy: keep the reference building
+    keeper = e1;
+    scrap = e2;
+    LOG_TRACE("Keeping the reference building geometry...");
+  }
+
+  keeper->setTags(_getMergedTags(e1, e2));
+  keeper->setStatus(Status::Conflated);
+
+  OsmUtils::logElementDetail(keeper, map, Log::Trace, "BuildingMerger: keeper");
+  OsmUtils::logElementDetail(scrap, map, Log::Trace, "BuildingMerger: scrap");
+
+  // Check to see if we are removing a multipoly building relation.  If so, its multipolygon
+  // relation members, need to be removed as well.
+  const QSet<ElementId> multiPolyMemberIds = _getMultiPolyMemberIds(scrap);
+
+  // Here is where we are able to reuse node IDs between buildings
+  ReuseNodeIdsOnWayOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+  // Replace the scrap with the keeper in any parents
+  ReplaceElementOp(scrap->getElementId(), keeper->getElementId()).apply(map);
+  // Swap the IDs of the two elements if keeper isn't UNKNOWN1
+  if (preserveBuildingId)
+  {
+    ElementId oldKeeperId = keeper->getElementId();
+    ElementId oldScrapId = scrap->getElementId();
+    IdSwapOp swapOp(oldScrapId, oldKeeperId);
+    swapOp.apply(map);
+    // Now swap the pointers so that the wrong one isn't deleted
+    if (swapOp.getNumAffected() > 0)
+    {
+      scrap = map->getElement(oldKeeperId);
+      keeper = map->getElement(oldScrapId);
+    }
+  }
+
+  // remove the scrap element from the map
+  DeletableBuildingCriterion crit;
+  RecursiveElementRemover(scrap->getElementId(), &crit).apply(map);
+  scrap->getTags().clear();
+
+  // delete any pre-existing multipoly members
+  LOG_TRACE("Removing multi-poly members: " << multiPolyMemberIds);
+  for (QSet<ElementId>::const_iterator it = multiPolyMemberIds.begin();
+       it != multiPolyMemberIds.end(); ++it)
+  {
+    RecursiveElementRemover(*it).apply(map);
+  }
+
+  set<pair<ElementId, ElementId>> replacedSet;
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
+       it != _pairs.end(); ++it)
+  {
+    // if we replaced the second group of buildings
+    if (it->second != keeper->getElementId())
+    {
+      replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
+    }
+    if (it->first != keeper->getElementId())
+    {
+      replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
+    }
+  }
+  replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
 
 Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
