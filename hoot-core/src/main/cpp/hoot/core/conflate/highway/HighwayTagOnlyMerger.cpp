@@ -114,10 +114,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
-  //LOG_VART(e1->getElementId());
-  //LOG_VART(e2->getElementId());
-  OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwayTagOnlyMerger: e1");
-  OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwayTagOnlyMerger: e2");
+  LOG_TRACE("HighwayTagOnlyMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
+  LOG_TRACE("HighwayTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If just one of the features is a bridge, we want the bridge feature to separate from the road
   // feature its being merged with.  So, use a geometry AND tag merger.
@@ -201,9 +199,10 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
     mergedTags.remove(MetadataTags::HootMultilineString());
   }
   elementWithTagsToKeep->setTags(mergedTags);
-  elementWithTagsToKeep->setStatus(Status::Conflated);
-  OsmUtils::logElementDetail(
-    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: keeper element");
+  elementWithTagsToKeep->setStatus(Status::Conflated);;
+  LOG_TRACE(
+    "HighwayTagOnlyMerger: keeper element\n" <<
+    OsmUtils::getElementDetailString(elementWithTagsToKeep, map));
 
   map->getIdSwap()->add(elementWithTagsToRemove->getElementId(), elementWithTagsToKeep->getElementId());
   // mark element for replacement

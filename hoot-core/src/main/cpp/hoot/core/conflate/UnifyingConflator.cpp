@@ -85,13 +85,13 @@ UnifyingConflator::~UnifyingConflator()
 void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
 {
   Tags& tags = e->getTags();
-
   tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
   tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
   tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
 }
 
-void UnifyingConflator::_addReviewTags(const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
+void UnifyingConflator::_addReviewTags(const OsmMapPtr& map,
+                                       const std::vector<ConstMatchPtr>& matches)
 {
   if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
   {
@@ -165,6 +165,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(map, _matches, _bounds);
   }
   LOG_DEBUG("Match count: " << _matches.size());
+  LOG_VART(_matches);
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
@@ -188,6 +189,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Number of Whole Groups", matchSets.size()));
   LOG_DEBUG("Number of Whole Groups: " << matchSets.size());
   LOG_DEBUG("Number of Matches After Whole Groups: " << _matches.size());
+  LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(map, "after-whole-group-removal");
 
   currentStep++;
@@ -236,6 +238,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
         "Using matches obtained by the an Integer Programming solution with a higher score of: " <<
         cm.getScore());
     }
+
   }
   double optimizeMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Optimize Matches Time (sec)", optimizeMatchesTime));
@@ -246,7 +249,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   //#warning validateConflictSubset is on, this is slow.
   //_validateConflictSubset(map, _matches);
   // TODO: this stat isn't right for Network
-  LOG_DEBUG("Post constraining match count: " << _matches.size());
+  //LOG_DEBUG("Post constraining match count: " << _matches.size());
+  LOG_VART(_matches);
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {

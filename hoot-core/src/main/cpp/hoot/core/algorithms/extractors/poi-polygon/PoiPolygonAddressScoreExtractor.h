@@ -45,9 +45,9 @@ class Address;
  *
  * Some effort was spent in validating addresses with libaddressinput
  * (https://github.com/googlei18n/libaddressinput).  It was found that yields no utility since the
- * features we are comparing are geographically close, don't need higher level address info
- * (state, city, etc.), and we basically assume feature address are valid anyway...we're just trying
- * to match them to each other.
+ * features we are comparing are geographically close, don't need higher level address info (state,
+ * city, etc.), and we basically assume feature addresses are valid anyway...we're just trying to
+ * match them to each other.
  */
 class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {

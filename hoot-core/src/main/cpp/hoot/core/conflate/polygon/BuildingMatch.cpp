@@ -79,8 +79,8 @@ _matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
   ConstElementPtr element1 = map->getElement(_eid1);
   ConstElementPtr element2 = map->getElement(_eid2);
 
-  OsmUtils::logElementDetail(element1, map, Log::Trace, "BuildingMatch: e1");
-  OsmUtils::logElementDetail(element2, map, Log::Trace, "BuildingMatch: e2");
+  LOG_TRACE("BuildingMatch: e1\n" << OsmUtils::getElementDetailString(element1, map));
+  LOG_TRACE("BuildingMatch: e2\n" << OsmUtils::getElementDetailString(element2, map));
 
   MatchType type = getType();
   LOG_VART(type);
