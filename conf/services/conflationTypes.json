@@ -50,6 +50,8 @@
         "matcher": "hoot::BuildingMatchCreator",
         "merger": "hoot::BuildingMergerCreator",
         "members": {
+            "building.changed.review": "Use the changed review",
+            "building.changed.review.iou.threshold": "Intersection over Union threshold below which the changed review is triggered",
             "building.date.format": "Date format",
             "building.date.tag.key": "Date tag key",
             "building.force.contained.match": "Force matches when one building contains another",

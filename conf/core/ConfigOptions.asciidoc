@@ -325,6 +325,23 @@ Output location for a bounds file when the `--write-bounds` option is selected f
 
 The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
 
+=== building.changed.review
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, during building merging conflation will look for a "changed" building defined as a
+matched building pair where their Intersection over Union value is greater than zero but falls below
+the value specified in building.changed.review.iou.threshold. If the pair is classified as "changed"
+they will be marked for review.
+
+=== building.changed.review.iou.threshold
+
+* Data Type: double
+* Default Value: `0.2`
+
+See building.changed.review.
+
 === building.date.format
 
 * Data Type: string
