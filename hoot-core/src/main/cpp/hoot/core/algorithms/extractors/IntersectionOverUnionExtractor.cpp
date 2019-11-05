@@ -28,16 +28,16 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/ElementConverter.h>
 
 namespace hoot
 {
 
 double IntersectionOverUnionExtractor::extract(
-  const OsmMap& map, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element>& candidate) const
+  const OsmMap& map, const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
+  // only calc'ing this for way polys...not sure it makes sense with anything else
+
   if (target->getElementType() == ElementType::Way &&
       candidate->getElementType() == ElementType::Way)
   {
@@ -45,31 +45,26 @@ double IntersectionOverUnionExtractor::extract(
     std::shared_ptr<geos::geom::Geometry> targetGeom = elementConverter.convertToGeometry(target);
     std::shared_ptr<geos::geom::Geometry> candidateGeom =
       elementConverter.convertToGeometry(candidate);
-
-    if (targetGeom->isEmpty() || candidateGeom->isEmpty())
+    if (!targetGeom->isEmpty() && !candidateGeom->isEmpty())
     {
-      return -1.0;
-    }
+      std::shared_ptr<geos::geom::Geometry> intersectionGeom(
+        targetGeom->intersection(candidateGeom.get()));
+      std::shared_ptr<geos::geom::Geometry> unionGeom(
+        targetGeom->Union(candidateGeom.get()));
 
-    // TODO: handle circular error?
-
-    std::shared_ptr<geos::geom::Geometry> intersectionGeom(
-      targetGeom->intersection(candidateGeom.get()));
-    std::shared_ptr<geos::geom::Geometry> unionGeom(
-      targetGeom->Union(candidateGeom.get()));
-
-    if (intersectionGeom && unionGeom)
-    {
-      const double intersectionArea = intersectionGeom->getArea();
-      const double unionArea = unionGeom->getArea();
-      if (unionArea > 0.0 && intersectionArea >= 0.0)
+      if (intersectionGeom && unionGeom)
       {
-        return intersectionArea / unionArea;
+        const double intersectionArea = intersectionGeom->getArea();
+        const double unionArea = unionGeom->getArea();
+        if (unionArea > 0.0 && intersectionArea >= 0.0)
+        {
+          return intersectionArea / unionArea;
+        }
       }
     }
   }
 
-  return -1.0;
+  return nullValue();
 }
 
 }

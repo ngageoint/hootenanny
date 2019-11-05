@@ -27,21 +27,21 @@
 #ifndef INTERSECTION_OVER_UNION_EXTRACTOR_H
 #define INTERSECTION_OVER_UNION_EXTRACTOR_H
 
-// geos
-#include <geos/geom/Envelope.h>
-#include <geos/geom/Point.h>
-
 // hoot
+#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 
 namespace hoot
 {
 
-class Element;
 class OsmMap;
 
 /**
- * TODO
+ * Calculates Intersection over Union (IoU) for polygons
+ *
+ * https://stackoverflow.com/questions/28723670/intersection-over-union-between-two-detections
+ *
+ * https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
  */
 class IntersectionOverUnionExtractor : public FeatureExtractorBase
 {
@@ -49,13 +49,23 @@ public:
 
   static std::string className() { return "hoot::IntersectionOverUnionExtractor"; }
 
+  /**
+   * @see FeatureExtractor
+   */
   virtual std::string getClassName() const override
   { return IntersectionOverUnionExtractor::className(); }
 
-  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  /**
+   * @see FeatureExtractor
+   */
+  virtual double extract(const OsmMap& map, const ConstElementPtr& target,
+    const ConstElementPtr& candidate) const override;
 
-  virtual QString getDescription() const { return "TODO"; }
+  /**
+   * @see ApiEntityInfo
+   */
+  virtual QString getDescription() const
+  { return "Calculates Intersection over Union (IoU) for polygons"; }
 };
 
 }
