@@ -151,12 +151,13 @@ public:
         }
       }
     }
+    LOG_VART(neighborCount);
 
-    if (ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne() && neighborCount > 1)
+    if (neighborCount > 1 && ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne())
     {
       _markNonOneToOneMatchesAsReview(tempMatches);
-      _adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
     }
+    _adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
 
     for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end();
          ++it)
@@ -302,17 +303,21 @@ private:
   {
     // If we have matches or reviews between townhouses or the like (building=terrace), check for
     // many to one relationships. From the many to one, keep only the match with the highest
-    // overlap. Convert all others to misses.
+    // overlap. Convert all others to misses by removing the matches completely.
 
+    LOG_VART(matches);
+
+    QMap<ElementId, double> highestOverlapScores;
+    QMap<ElementId, MatchPtr> highestOverlapMatches;
     const double tagScoreThreshold = ConfigOptions().getBuildingAdjoiningTagScoreThreshold();
-    for (std::vector<MatchPtr>::iterator matchItr = matches.begin(); matchItr != matches.end();
-         ++matchItr)
+    bool anyMatchRemoved = false;
+
+    for (std::vector<MatchPtr>::const_iterator matchItr = matches.begin();
+         matchItr != matches.end(); ++matchItr)
     {
       MatchPtr match = *matchItr;
       LOG_VART(match->getType());
       assert(match->getType() != MatchType::Miss);
-
-      QMap<ElementId, double> highestOverlapScores;
 
       std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       LOG_VART(matchPairs.size());
@@ -330,30 +335,43 @@ private:
            OsmSchema::getInstance().score(adjoiningBuildingKvp, element2->getTags()) >=
              tagScoreThreshold))
       {
-        LOG_VART(element1->getElementId());
-        LOG_VART(element1->getTags().get("building"));
-        LOG_VART(element2->getElementId());
-        LOG_VART(element2->getTags().get("building"));
+        LOG_TRACE(
+          "one or both is adjoining building: " << element1->getElementId() << ", " <<
+          element2->getElementId());
 
         const double overlap = OverlapExtractor().extract(*_map, element1, element2);
-        LOG_VART(overlap);
-        if (!highestOverlapScores.contains(element1->getElementId()))
+        if (!highestOverlapScores.contains(element1->getElementId()) ||
+            overlap > highestOverlapScores[element1->getElementId()])
         {
           highestOverlapScores[element1->getElementId()] = overlap;
+          highestOverlapMatches[element1->getElementId()] = match;
+          LOG_TRACE(
+            "Updating highest overlap score: " << overlap << " for ref: " <<
+            element1->getElementId() << ", sec: " << element2->getElementId());
         }
-        else if (highestOverlapScores[element1->getElementId()] < overlap)
+        else
         {
-          const QString msg =
-            "building=terrace related match has less overlap than another match with the same element.";
-          LOG_VART(msg + "...");
-          // See related comment in _markNonOneToOneMatchesAsReview
-          MatchClassification& matchClass =
-            const_cast<MatchClassification&>(match->getClassification());
-          matchClass.setMiss();
-          match->setExplain(msg);
+          anyMatchRemoved = true;
+          LOG_TRACE(
+            "Dropping match with lower overlap score: " << overlap <<
+            " compared to highest overlap score: " <<
+            highestOverlapScores[element1->getElementId()] << " for ref: " <<
+            element1->getElementId() << ", sec: " << element2->getElementId());
         }
       }
     }
+    LOG_VART(anyMatchRemoved);
+
+    //if (anyMatchRemoved)
+    //{
+      matches.clear();
+      for (QMap<ElementId, MatchPtr>::const_iterator modifiedMatchItr = highestOverlapMatches.begin();
+           modifiedMatchItr != highestOverlapMatches.end(); ++modifiedMatchItr)
+      {
+        matches.push_back(modifiedMatchItr.value());
+      }
+    //}
+    LOG_VART(matches);
   }
 };
 
