@@ -52,6 +52,7 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
   CPPUNIT_TEST(runRangeTest);
   CPPUNIT_TEST(runAltFormatTest);
   CPPUNIT_TEST(runSubLetterTest);
+  CPPUNIT_TEST(runIntersectionTest);
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
@@ -209,6 +210,13 @@ public:
 
     uut.setAllowLenientHouseNumberMatching(false);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
+  void runIntersectionTest()
+  {
+    // TODO:
+    // 16th &amp; Bryant Streets
+    // 16TH &amp; HOFF ST. PARKING GARAGE
   }
 
   void runWayTest()

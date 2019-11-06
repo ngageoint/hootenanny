@@ -325,6 +325,21 @@ Output location for a bounds file when the `--write-bounds` option is selected f
 
 The portion of the sqrt max of the area that the BufferedOverlapExtractor buffers object by.
 
+=== building.address.match.enabled
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Building Conflation will use building addresses to resolve match conflicts.
+
+=== building.adjoining.tag.score.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+The minimum similarity score required for an adjoining building (building=terrace) to be recognized
+during conflation.
+
 === building.changed.review
 
 * Data Type: bool

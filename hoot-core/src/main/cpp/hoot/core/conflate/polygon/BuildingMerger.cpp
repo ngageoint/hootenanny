@@ -127,7 +127,7 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   LOG_VART(_pairs);
   _markedReviewText = "";
 
-  // check to see if it is many to many
+  // check to see if it is many to many;
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {

@@ -248,13 +248,10 @@ public:
   virtual ~OsmSchema();
 
   void addAssociatedWith(const QString& name1, const QString& name2);
-
   void addIsA(const QString& name1, const QString& name2);
-
   void addSimilarTo(const QString& name1, const QString& name2, double weight, bool oneway = false);
 
   QString average(const QString& kvp1, double w1, const QString& kvp2, double w2, double& best);
-
   QString average(const QString& kvp1, const QString& kvp2, double& best);
 
   /**
@@ -269,7 +266,6 @@ public:
   const SchemaVertex& getFirstCommonAncestor(const QString& kvp1, const QString& kvp2);
 
   std::vector<SchemaVertex> getAssociatedTagsAsVertices(const QString& name);
-
   /**
    * Retrieves a set of tags that are associated with the input tags, as defined by the hoot schema
    *
@@ -399,6 +395,15 @@ public:
 
   double score(const QString& kvp1, const QString& kvp2);
   double score(const SchemaVertex& v1, const SchemaVertex& v2);
+
+  /**
+   * Scores a particular kvp against an element's tags
+   *
+   * @param kvp the key/value pair to compare against
+   * @param tags the tags to compare against
+   * @return the highest similarity score found in tags when compared to kvp
+   */
+  double score(const QString& kvp, const Tags& tags);
 
   /**
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,

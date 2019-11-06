@@ -42,6 +42,8 @@
 #include <hoot/core/visitors/IndexElementsVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Standard
 #include <fstream>
@@ -130,7 +132,6 @@ public:
     int neighborCount = 0;
 
     std::vector<MatchPtr> tempMatches;
-
     for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       const ElementId neighborId = *it;
@@ -154,9 +155,11 @@ public:
     if (ConfigOptions().getBuildingReviewMatchesOtherThanOneToOne() && neighborCount > 1)
     {
       _markNonOneToOneMatchesAsReview(tempMatches);
+      //_adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
     }
 
-    for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end(); ++it)
+    for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end();
+         ++it)
     {
       _result.push_back(*it);
     }
@@ -282,7 +285,7 @@ private:
   int _taskStatusUpdateInterval;
 
   void _markNonOneToOneMatchesAsReview(std::vector<MatchPtr>& matches)
-  {
+  {      
     for (std::vector<MatchPtr>::iterator it = matches.begin(); it != matches.end(); ++it)
     {
       MatchPtr match = *it;
@@ -294,6 +297,64 @@ private:
       match->setExplain("Match involved in multiple building relationships.");
     }
   }
+
+  void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches)
+  {
+    // If we have matches or reviews between townhouses or the like (building=terrace), check for
+    // many to one relationships. From the many to one, keep only the match with the highest
+    // overlap. Convert all others to misses.
+
+    const double tagScoreThreshold = ConfigOptions().getBuildingAdjoiningTagScoreThreshold();
+    for (std::vector<MatchPtr>::iterator matchItr = matches.begin(); matchItr != matches.end();
+         ++matchItr)
+    {
+      MatchPtr match = *matchItr;
+      LOG_VART(match->getType());
+      assert(match->getType() != MatchType::Miss);
+
+      QMap<ElementId, double> highestOverlapScores;
+
+      std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+      LOG_VART(matchPairs.size());
+      assert(matchPairs.size() == 1);
+      std::pair<ElementId, ElementId> matchPair = *matchPairs.begin();
+
+      ConstElementPtr element1 = _map->getElement(matchPair.first);
+      ConstElementPtr element2 = _map->getElement(matchPair.second);
+
+      const QString adjoiningBuildingKvp = "building=terrace";
+      if (element1->getElementType() == ElementType::Way &&
+          element2->getElementType() == ElementType::Way &&
+          (OsmSchema::getInstance().score(adjoiningBuildingKvp, element1->getTags()) >=
+             tagScoreThreshold ||
+           OsmSchema::getInstance().score(adjoiningBuildingKvp, element2->getTags()) >=
+             tagScoreThreshold))
+      {
+        LOG_VART(element1->getElementId());
+        LOG_VART(element1->getTags().get("building"));
+        LOG_VART(element2->getElementId());
+        LOG_VART(element2->getTags().get("building"));
+
+        const double overlap = OverlapExtractor().extract(*_map, element1, element2);
+        LOG_VART(overlap);
+        if (!highestOverlapScores.contains(element1->getElementId()))
+        {
+          highestOverlapScores[element1->getElementId()] = overlap;
+        }
+        else if (highestOverlapScores[element1->getElementId()] < overlap)
+        {
+          const QString msg =
+            "building=terrace related match has less overlap than another match with the same element.";
+          LOG_VART(msg + "...");
+          // See related comment in _markNonOneToOneMatchesAsReview
+          MatchClassification& matchClass =
+            const_cast<MatchClassification&>(match->getClassification());
+          matchClass.setMiss();
+          match->setExplain(msg);
+        }
+      }
+    }
+  }
 };
 
 BuildingMatchCreator::BuildingMatchCreator() :
@@ -301,10 +362,10 @@ _conflateMatchBuildingModel(ConfigOptions().getConflateMatchBuildingModel())
 {
 }
 
-MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2)
+MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId eid1,
+                                           ElementId eid2)
 {
   std::shared_ptr<BuildingMatch> result;
-
   if (eid1.getType() != ElementType::Node && eid2.getType() != ElementType::Node)
   {
     ConstElementPtr e1 = map->getElement(eid1);
@@ -316,7 +377,6 @@ MatchPtr BuildingMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId 
       result.reset(new BuildingMatch(map, _getRf(), eid1, eid2, getMatchThreshold()));
     }
   }
-
   return result;
 }
 
