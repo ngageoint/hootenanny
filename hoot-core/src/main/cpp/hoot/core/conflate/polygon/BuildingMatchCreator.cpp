@@ -310,7 +310,7 @@ private:
     QMap<ElementId, double> highestOverlapScores;
     QMap<ElementId, MatchPtr> highestOverlapMatches;
     const double tagScoreThreshold = ConfigOptions().getBuildingAdjoiningTagScoreThreshold();
-    bool anyMatchRemoved = false;
+    bool adjoiningBuildingEncountered = false;
 
     for (std::vector<MatchPtr>::const_iterator matchItr = matches.begin();
          matchItr != matches.end(); ++matchItr)
@@ -338,6 +338,7 @@ private:
         LOG_TRACE(
           "one or both is adjoining building: " << element1->getElementId() << ", " <<
           element2->getElementId());
+        adjoiningBuildingEncountered = true;
 
         const double overlap = OverlapExtractor().extract(*_map, element1, element2);
         if (!highestOverlapScores.contains(element1->getElementId()) ||
@@ -351,7 +352,6 @@ private:
         }
         else
         {
-          anyMatchRemoved = true;
           LOG_TRACE(
             "Dropping match with lower overlap score: " << overlap <<
             " compared to highest overlap score: " <<
@@ -360,17 +360,17 @@ private:
         }
       }
     }
-    LOG_VART(anyMatchRemoved);
+    LOG_VART(adjoiningBuildingEncountered);
 
-    //if (anyMatchRemoved)
-    //{
+    if (adjoiningBuildingEncountered)
+    {
       matches.clear();
       for (QMap<ElementId, MatchPtr>::const_iterator modifiedMatchItr = highestOverlapMatches.begin();
            modifiedMatchItr != highestOverlapMatches.end(); ++modifiedMatchItr)
       {
         matches.push_back(modifiedMatchItr.value());
       }
-    //}
+    }
     LOG_VART(matches);
   }
 };
