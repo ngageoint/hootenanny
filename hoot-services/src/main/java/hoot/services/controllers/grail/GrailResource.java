@@ -598,7 +598,7 @@ public class GrailResource {
         List<Command> workflow = new LinkedList<>();
 
         // Write the data to the hoot db
-        GrailParams params = new GrailParams();
+        GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
         params.setPullUrl(PUBLIC_OVERPASS_URL);
 
@@ -746,7 +746,6 @@ public class GrailResource {
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
-        String bbox = reqParams.getBounds();
         String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
@@ -759,12 +758,10 @@ public class GrailResource {
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
 
-        GrailParams params = new GrailParams();
+        GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
         params.setWorkDir(workDir);
         params.setOutput(layerName);
-        params.setBounds(bbox);
-        params.setCustomQuery(reqParams.getCustomQuery());
 
         List<Command> workflow;
         try {
