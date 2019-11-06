@@ -33,7 +33,7 @@
         <nd ref="-1383"/>
         <nd ref="-1384"/>
         <nd ref="-1381"/>
-        <tag k="addr:full" v="845 N FREDERICK ST"/>
+        <tag k="addr:full" v="844 N FREDERICK ST"/>
         <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.106Z"/>
         <tag k="building" v="yes"/>
         <tag k="addr:street" v="N FREDERICK ST"/>
@@ -42,7 +42,6 @@
         <tag k="addr:source:date" v="2019/02/20"/>
         <tag k="error:circular" v="15"/>
         <tag k="addr:city" v="Arlington"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
     </way>
     <way visible="true" id="-148" timestamp="2019-09-04T13:12:06Z" version="1">
         <nd ref="-1316"/>
@@ -59,7 +58,6 @@
         <tag k="addr:source:date" v="2019/02/20"/>
         <tag k="error:circular" v="15"/>
         <tag k="addr:city" v="Arlington"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
     </way>
     <way visible="true" id="-140" timestamp="2019-09-04T13:12:06Z" version="1">
         <nd ref="-1267"/>
@@ -68,7 +66,7 @@
         <nd ref="-1270"/>
         <nd ref="-1271"/>
         <nd ref="-1267"/>
-        <tag k="addr:full" v="847 N FREDERICK ST"/>
+        <tag k="addr:full" v="846 N FREDERICK ST"/>
         <tag k="source:ingest:datetime" v="2019-08-30T17:28:59.108Z"/>
         <tag k="building" v="yes"/>
         <tag k="addr:street" v="N FREDERICK ST"/>
@@ -77,7 +75,6 @@
         <tag k="addr:source:date" v="2019/02/20"/>
         <tag k="error:circular" v="15"/>
         <tag k="addr:city" v="Arlington"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
     </way>
     <way visible="true" id="-139" timestamp="2019-09-04T13:12:06Z" version="1">
         <nd ref="-1263"/>
@@ -94,7 +91,6 @@
         <tag k="addr:source:date" v="2019/02/20"/>
         <tag k="error:circular" v="15"/>
         <tag k="addr:city" v="Arlington"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
     </way>
     <way visible="true" id="-123" timestamp="2019-09-04T13:12:06Z" version="1">
         <nd ref="-1141"/>
@@ -111,7 +107,6 @@
         <tag k="addr:source:date" v="2019/02/20"/>
         <tag k="error:circular" v="15"/>
         <tag k="addr:city" v="Arlington"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
     </way>
     <way visible="true" id="-122" timestamp="2019-09-04T13:12:06Z" version="1">
         <nd ref="-1136"/>
@@ -129,6 +124,5 @@
         <tag k="addr:source:date" v="2019/02/20"/>
         <tag k="error:circular" v="15"/>
         <tag k="addr:city" v="Arlington"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
     </way>
 </osm>

@@ -102,18 +102,31 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   }
   // If we have a match, building address matching is enabled, both have addresses, and we have
   // an explicit address mismatch, declare a miss instead.
-  else if (type == MatchType::Match && ConfigOptions().getBuildingAddressMatchEnabled() &&
+  else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled() &&
            // TODO: roll these three checks into 1
            HasAddressCriterion().isSatisfied(element1) &&
-           HasAddressCriterion().isSatisfied(element2) &&
-           _addressScorer.extract(*map, element1, element2) == 0.0)
+           HasAddressCriterion().isSatisfied(element2))
   {
-    LOG_TRACE(
-      "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as match that have an " <<
-      "explicit address conflict. Marking as a miss...");
-    description.append("Explicit address mismatch.");
-    _p.clear();
-    _p.setMissP(1.0);
+    // address scorer only returns 0 or 1 currently
+    const bool addressMatch = _addressScorer.extract(*map, element1, element2) == 1.0;
+    if (type == MatchType::Match && !addressMatch)
+    {
+      LOG_TRACE(
+        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a match with an " <<
+        "explicit address conflict. Marking as a review...");
+      description.append("Address mismatch.");
+      _p.clear();
+      _p.setReviewP(1.0);
+    }
+    else if (type == MatchType::Miss && addressMatch)
+    {
+      LOG_TRACE(
+        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a miss with " <<
+        "matching addresses. Marking as a review...");
+      description.append("Address match.");
+      _p.clear();
+      _p.setReviewP(1.0);
+    }
   }
   // If we have a match, the secondary feature is newer than the reference feature, and the
   // associated config option is enabled, let's review them instead.
