@@ -497,6 +497,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deriveChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("REPLACEMENT") @DefaultValue("false") Boolean replacement,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -520,7 +521,7 @@ public class GrailResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ioe.getMessage()).build();
         }
 
-        GrailParams params = new GrailParams();
+        GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
 
         try {
@@ -533,7 +534,7 @@ public class GrailResource {
 
             params.setOutput(changeSet.getAbsolutePath());
             // Run changeset-derive
-            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, DeriveChangesetCommand.class, this.getClass());
+            ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, (replacement) ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
 
             // Now roll the dice and run everything.....
@@ -546,7 +547,7 @@ public class GrailResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error during conflate differential! Params: " + params;
+            String msg = "Error during derive changeset! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
@@ -618,6 +619,12 @@ public class GrailResource {
         params.setOutput(layerName);
         ExternalCommand importOverpass = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importOverpass);
+
+        // Set map tags marking dataset as eligible for derive changeset
+        Map<String, String> tags = new HashMap<>();
+        tags.put("bbox", params.getBounds());
+        InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
+        workflow.add(setMapTags);
 
         // Move the data to the folder
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());

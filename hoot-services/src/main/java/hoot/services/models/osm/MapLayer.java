@@ -46,6 +46,7 @@ public class MapLayer {
     private long userId;
     private long folderId;
     private long size;
+    private String bbox;
 
     @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -121,5 +122,13 @@ public class MapLayer {
 
     public long getSize() {
         return this.size;
+    }
+
+    public String getBbox() {
+        return bbox;
+    }
+
+    public void setBbox(String bbox) {
+        this.bbox = bbox;
     }
 }

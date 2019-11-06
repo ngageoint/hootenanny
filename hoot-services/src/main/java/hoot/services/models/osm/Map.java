@@ -646,7 +646,8 @@ public class Map extends Maps {
                 mapLayer.setLastAccessed(MapLayer.format.format(mapLayerRecord.getCreatedAt()));
             }
             mapLayer.setGrail(tags.get("grail") != null && tags.get("grail").equals("true"));
-
+            //add bbox if used to create layer
+            if (tags.get("bbox") != null) mapLayer.setBbox(tags.get("bbox"));
             mapLayerList.add(mapLayer);
         }
 
