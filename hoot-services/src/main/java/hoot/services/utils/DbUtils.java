@@ -342,9 +342,9 @@ public class DbUtils {
 
     public static boolean grailEligible(long inputId) {
         Map<String, String> tags = getMapsTableTags(inputId);
-        String sourceInfo = tags.get("source");
+        String grailMerged = tags.get("grailMerged");
 
-        return sourceInfo != null && sourceInfo.equals("rails");
+        return grailMerged != null && grailMerged.equals("true");
     }
 
     public static String getConflationType(long inputId) {

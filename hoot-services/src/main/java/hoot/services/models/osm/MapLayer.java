@@ -41,7 +41,8 @@ public class MapLayer {
     private String name;
     private Timestamp date;
     private String lastAccessed;
-    private boolean grail;
+    private boolean grailReference;
+    private boolean grailMerged;
     private Boolean isPublic;
     private long userId;
     private long folderId;
@@ -85,12 +86,20 @@ public class MapLayer {
         this.date = new Timestamp(date.getTime());
     }
 
-    public boolean getGrail() {
-        return grail;
+    public boolean getGrailMerged() {
+        return grailMerged;
     }
 
-    public void setGrail(boolean canExport) {
-        this.grail = canExport;
+    public void setGrailMerged(boolean grailMerged) {
+        this.grailMerged = grailMerged;
+    }
+
+    public boolean getGrailReference() {
+        return grailReference;
+    }
+
+    public void setGrailReference(boolean grailReference) {
+        this.grailReference = grailReference;
     }
 
     public String getLastAccessed() {
