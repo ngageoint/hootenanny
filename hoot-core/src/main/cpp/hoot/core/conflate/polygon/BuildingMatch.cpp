@@ -37,6 +37,7 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HasAddressCriterion.h>
 
 // Qt
 #include <QDateTime>
@@ -102,6 +103,9 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   // If we have a match, building address matching is enabled, both have addresses, and we have
   // an explicit address mismatch, declare a miss instead.
   else if (type == MatchType::Match && ConfigOptions().getBuildingAddressMatchEnabled() &&
+           // TODO: roll these three checks into 1
+           HasAddressCriterion().isSatisfied(element1) &&
+           HasAddressCriterion().isSatisfied(element2) &&
            _addressScorer.extract(*map, element1, element2) == 0.0)
   {
     LOG_TRACE(

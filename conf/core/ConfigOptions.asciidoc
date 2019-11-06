@@ -328,7 +328,7 @@ The portion of the sqrt max of the area that the BufferedOverlapExtractor buffer
 === building.address.match.enabled
 
 * Data Type: bool
-* Default Value: `false`
+* Default Value: `true`
 
 If true, Building Conflation will use building addresses to resolve match conflicts.
 
