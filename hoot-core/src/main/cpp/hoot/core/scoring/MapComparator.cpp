@@ -85,14 +85,14 @@ public:
   CompareVisitor(
     std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, int errorLimit = 10,
     Meters threshold = 0.05)
+    : _refMap(refMap),
+      _threshold(threshold),
+      _matches(true),
+      _ignoreUUID(ignoreUUID),
+      _useDateTime(useDateTime),
+      _errorCount(0),
+      _errorLimit(errorLimit)
   {
-    _refMap = refMap;
-    _threshold = threshold;
-    _matches = true;
-    _errorCount = 0;
-    _ignoreUUID = ignoreUUID;
-    _useDateTime = useDateTime;
-    _errorLimit = errorLimit;
   }
 
   bool isMatch() { return _matches; }
@@ -249,7 +249,6 @@ private:
 
   std::shared_ptr<OsmMap> _refMap;
   Meters _threshold;
-  Degrees _thresholdDeg;
   bool _matches;
   bool _ignoreUUID;
   bool _useDateTime;
@@ -274,29 +273,20 @@ void MapComparator::_printIdDiff(
 
   switch (elementType.getEnum())
   {
-    case ElementType::Node:
-    {
-      ids1 = map1->getNodeIds();
-      ids2 = map2->getNodeIds();
-    }
+  case ElementType::Node:
+    ids1 = map1->getNodeIds();
+    ids2 = map2->getNodeIds();
     break;
-
-    case ElementType::Way:
-    {
-      ids1 = map1->getWayIds();
-      ids2 = map2->getWayIds();
-    }
+  case ElementType::Way:
+    ids1 = map1->getWayIds();
+    ids2 = map2->getWayIds();
     break;
-
-    case ElementType::Relation:
-    {
-      ids1 = map1->getRelationIds();
-      ids2 = map2->getRelationIds();
-    }
+  case ElementType::Relation:
+    ids1 = map1->getRelationIds();
+    ids2 = map2->getRelationIds();
     break;
-
-    default:
-      throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
+  default:
+    throw HootException(QString("Unexpected element type: %1").arg(elementType.toString()));
   }
 
   QSet<long> ids1Copy = ids1;

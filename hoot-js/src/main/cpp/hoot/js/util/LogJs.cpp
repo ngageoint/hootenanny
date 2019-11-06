@@ -193,7 +193,7 @@ void LogJs::logError(const FunctionCallbackInfo<Value>& args)
 void LogJs::logFatal(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
-  HandleScope scope(current);;
+  HandleScope scope(current);
   log(args, Log::Fatal);
   args.GetReturnValue().SetUndefined();
 }

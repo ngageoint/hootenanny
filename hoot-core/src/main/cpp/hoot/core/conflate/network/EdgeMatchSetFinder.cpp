@@ -423,7 +423,7 @@ bool EdgeMatchSetFinder::_recordMatch(ConstEdgeMatchPtr em)
       {
         LOG_TRACE(
           "Removing similar edge match: " << existingSimilarMatch.match << " with lower score: " <<
-          score << " than found edge match: " << em << "...");;
+          score << " than found edge match: " << em << "...");
         _matchSet->removeEdgeMatch(existingSimilarMatch.match);
       }
     }

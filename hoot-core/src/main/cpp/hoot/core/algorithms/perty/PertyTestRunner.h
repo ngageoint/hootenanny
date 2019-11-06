@@ -106,7 +106,7 @@ public:
         }
         _dynamicVariables.append(var);
       }
-    };
+    }
   }
 
   /**

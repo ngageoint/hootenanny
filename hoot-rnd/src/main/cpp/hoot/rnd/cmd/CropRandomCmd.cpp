@@ -125,7 +125,7 @@ public:
       tileOutputFootprintPath =
         tileOutputFootprintPath.replace(
           outputFileInfo.baseName() + "." + outputFileInfo.completeSuffix(),
-          outputFileInfo.baseName() + "-tiles.osm");;
+          outputFileInfo.baseName() + "-tiles.osm");
     }
     LOG_VARD(tileOutputFootprintPath);
 
