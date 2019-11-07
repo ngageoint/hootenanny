@@ -7,8 +7,8 @@ The +score-matches+ command scores how well conflation performs using manually m
 conflates using unify, and scores the matches created during conflation against the manual matches. The command will return an error if any 
 manual match is invalid.
 
-* +input1+            - Input 1; may be any supported input format (e.g. OSM file).
-* +input2+            - Input 2; may be any supported input format (e.g. OSM file).
+* +input1+            - Input that contains REF1 data (no manual matches); may be any supported input format (e.g. OSM file).
+* +input2+            - Input that contains REF2 or REVIEW data (has manual mathces); may be any supported input format (e.g. OSM file).
 * +output+            - Output file for debugging; may be any supported output format (e.g. OSM file). Only the first conflation will be output.
 * +--confusion+       - print the confusion matrix
 * +--optimize+        - optimizes the scoring function

@@ -1775,7 +1775,8 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
   double maxScore = 0.0;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
-    const double scoreVal = score(kvp, tagItr.key() + "=" + tagItr.value());
+    const QString kvp2 = tagItr.key() + "=" + tagItr.value();
+    const double scoreVal = score(kvp, kvp2);
     if (scoreVal > maxScore)
     {
       maxScore = scoreVal;
