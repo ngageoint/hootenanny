@@ -51,6 +51,7 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(isSupportedTest);
   CPPUNIT_TEST(runBoundsTest);
   CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(elementTypeUnorderedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -335,9 +336,10 @@ public:
     CPPUNIT_ASSERT(TestUtils::compareMaps(pMap, pTestMap));
   }
 
-  // Try hitting the network to get some data...
   void urlTest()
   {
+    // Try hitting the network to get some data...
+
     // needed to suppress map crop missing element warnings
     DisableLog dl;
 
@@ -623,6 +625,24 @@ public:
     uut.close();
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
 
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void elementTypeUnorderedTest()
+  {
+    // This should load the elements even though child elements come after their parents.
+    // TODO: we need some relations in the test input
+
+    const QString testFileName = "elementTypeUnorderedTest.osm";
+
+    OsmJsonReader uut;
+    uut.setRequireStrictTypeOrdering(false);
+
+    OsmMapPtr map(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
   }
 };

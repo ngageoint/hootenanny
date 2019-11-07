@@ -1793,6 +1793,15 @@ vs
 Output the GeoJSON in a format readable in Tasking Manager.  This includes
 per file or per feature `source` tags and compatible geometries.
 
+=== json.reader.require.strict.type.ordering
+
+* Data Type: bool
+* Default Value: `false`
+
+Requires that elements in input files be present in the order nodes --> ways --> relations. Elements
+that do not meet the requirement are not loaded. Temporary tag for changeset replacement support;
+see #3619.
+
 === json.perserve.empty.tags
 
 * Data Type: bool
