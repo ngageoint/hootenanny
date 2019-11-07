@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 namespace hoot
 {
@@ -97,7 +97,7 @@ private:
   // format of a feature's timestamp
   QString _dateFormat;
 
-  PoiPolygonAddressScoreExtractor _addressScorer;
+  AddressScoreExtractor _addressScorer;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
   QStringList _getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,

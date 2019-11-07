@@ -103,7 +103,6 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   // If we have a match, building address matching is enabled, both have addresses, and we have
   // an explicit address mismatch, declare a miss instead.
   else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled() &&
-           // TODO: roll these three checks into 1
            HasAddressCriterion().isSatisfied(element1) &&
            HasAddressCriterion().isSatisfied(element2))
   {

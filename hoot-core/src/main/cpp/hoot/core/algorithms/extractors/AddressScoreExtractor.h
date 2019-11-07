@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POIPOLYGONADDRESSSCOREEXTRACTOR_H
-#define POIPOLYGONADDRESSSCOREEXTRACTOR_H
+#ifndef ADDRESS_SCORE_EXTRACTOR_H
+#define ADDRESS_SCORE_EXTRACTOR_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -40,8 +40,8 @@ namespace hoot
 class Address;
 
 /**
- * Calculates the address similarity score of two features involved in POI/Polygon conflation.
- * Only exact string matches yield a positive score.
+ * Calculates the address similarity score of two features involved in certain types of conflation.
+ * Only exact string matches yield a positive score (no partial matching...for now).
  *
  * Some effort was spent in validating addresses with libaddressinput
  * (https://github.com/googlei18n/libaddressinput).  It was found that yields no utility since the
@@ -49,15 +49,15 @@ class Address;
  * city, etc.), and we basically assume feature addresses are valid anyway...we're just trying to
  * match them to each other.
  */
-class PoiPolygonAddressScoreExtractor : public FeatureExtractorBase, public Configurable
+class AddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonAddressScoreExtractor"; }
+  static std::string className() { return "hoot::AddressScoreExtractor"; }
 
-  PoiPolygonAddressScoreExtractor();
+  AddressScoreExtractor();
 
-  virtual std::string getClassName() const { return PoiPolygonAddressScoreExtractor::className(); }
+  virtual std::string getClassName() const { return AddressScoreExtractor::className(); }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -65,15 +65,15 @@ public:
    * Calculates the address similarity score of two features
    *
    * @param map map containing the elements whose score is to be determined
-   * @param poi a POI element
-   * @param poly a polygon element
+   * @param element1 the first element whose address is to be compared
+   * @param element2 the second element whose address is to be compared
    * @return the address score
    */
-  virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
-                         const ConstElementPtr& poly) const;
+  virtual double extract(const OsmMap& map, const ConstElementPtr& element1,
+                         const ConstElementPtr& element2) const;
 
   virtual QString getDescription() const
-  { return "Scores address similarity for POI/Polygon conflation"; }
+  { return "Scores address similarity for conflation"; }
 
   long getAddressesProcessed() const { return _addressesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
@@ -82,14 +82,22 @@ public:
 
 private:
 
-  friend class PoiPolygonAddressScoreExtractorTest;
+  friend class AddressScoreExtractorTest;
 
   mutable long _addressesProcessed;
   mutable bool _matchAttemptMade;
 
   AddressParser _addressParser;
+
+  /*
+   * Searches for an address on element. Will look also look for address way nodes and address
+   * node relation members. elementBeingComparedWith is passed in so we don't count an address
+   * more than once if element happens to contain elementBeingComparedWith.
+   */
+  QList<Address> _getElementAddresses(const OsmMap& map, const ConstElementPtr& element,
+                                      const ConstElementPtr& elementBeingComparedWith) const;
 };
 
 }
 
-#endif // POIPOLYGONADDRESSSCOREEXTRACTOR_H
+#endif // ADDRESS_SCORE_EXTRACTOR_H

@@ -121,12 +121,43 @@ By default,conflation examines standard OSM tags for address comparisons (see th
 file).  You can expand the tag keys searched by populating this list. From the command line,
 separate list items with a semicolon and surround the entire list in double quotes.
 
+=== address.allow.lenient.house.number.matching
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, conflation that uses address matching will allow house number subletter mismatches for the
+addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
+
 === address.tag.keys.file
 
 * Data Type: string
 * Default Value: `${HOOT_HOME}/conf/core/addressTagKeys`
 
 Flat file containing tag keys that make up feature address components.
+
+=== address.translate.to.english
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
+address before normalizing it during conflation address matching (note that address normalization
+may involve some form of language translation even when this setting is).  This can have significant
+impact on the runtime performance of conflation when enabled and should only be enabled if the
+source data is known to have non-English addresses.  The configuration option,
+'language.translation.translator', controls which translator is used.
+
+=== address.use.default.language.translation.only
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, conflation using address matching will use only libpostal for translating languages in
+addresses, which occurs during address normalization.  If false, and  address.translate.to.english
+is enabled, POI/Polygon conflation will use additional to English language translation before
+address normalization.  Disable this only if libpostal's language translation is not adequate for
+your language translation needs.
 
 === angle.histogram.extractor.bins
 
@@ -3033,14 +3064,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== poi.polygon.address.allow.lenient.house.number.matching
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with
-the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
-
 === poi.polygon.address.match.enabled
 
 * Data Type: bool
@@ -3051,29 +3074,6 @@ If the data being conflated is known to have poor address data, disabling this o
 conflation runtime performance.  This option is left turned off by default due to the small startup
 time required to use libpostal (~5s), which would be wasteful for small datasets known to have no
 addresses in them.  The startup time is incurred only once per Hootenanny command invocation.
-
-=== poi.polygon.address.translate.to.english
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, Hootenanny will attempt to translate to English the value of any tag that is part of an
-address before normalizing it (note that address normalization may involve some form of language
-translation even when this setting is ).  This can have significant impact on the runtime
-performance of conflation when enabled and should only be enabled if the source data is known to
-have non-English addresses.  The configuration option, 'language.translation.translator', controls
-which translator is used.
-
-=== poi.polygon.address.use.default.language.translation.only
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, POI/Polygon conflation will use only libpostal for translating languages in addresses,
-which occurs during address normalization.  If false, and poi.polygon.translate.addresses.to.english
-is enabled, POI/Polygon conflation will use additional to English language translation before
-address normalization.  Disable this only if libpostal's language translation is not adequate for
-your language translation needs.
 
 === poi.polygon.allow.cross.conflation.merging
 

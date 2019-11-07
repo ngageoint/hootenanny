@@ -29,7 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
 
@@ -44,15 +44,20 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
+/*
+ * Its possible we might want to eventually break the parsing and normalization tests out
+ * separately.
+ */
+class AddressScoreExtractorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PoiPolygonAddressScoreExtractorTest);
+  CPPUNIT_TEST_SUITE(AddressScoreExtractorTest);
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
   CPPUNIT_TEST(runAltFormatTest);
   CPPUNIT_TEST(runSubLetterTest);
-  CPPUNIT_TEST(runIntersectionTest);
+  // TODO: fix
+  //CPPUNIT_TEST(runIntersectionTest);
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
@@ -64,13 +69,13 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
 
 public:
 
-  PoiPolygonAddressScoreExtractorTest()
+  AddressScoreExtractorTest()
   {
   }
 
   void runTagTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -93,7 +98,7 @@ public:
 
   void runCombinedTagTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -120,7 +125,7 @@ public:
 
   void runRangeTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -157,7 +162,7 @@ public:
 
   void runAltFormatTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -192,7 +197,7 @@ public:
 
   void runSubLetterTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -214,14 +219,31 @@ public:
 
   void runIntersectionTest()
   {
-    // TODO:
-    // 16th &amp; Bryant Streets
-    // 16TH &amp; HOFF ST. PARKING GARAGE
+    AddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+    OsmMapPtr map(new OsmMap());
+
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Streets");
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "16th and Bryant Street");
+    map->addWay(way1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    NodePtr node2(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    node2->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "6TH &amp; HOFF ST. PARKING GARAGE");
+    map->addNode(node2);
+    WayPtr way2(new Way(Status::Unknown2, -1, 15.0));
+    way2->getTags().set(
+      TestUtils::FULL_ADDRESS_TAG_NAME, "16th street and Hoff Street Parking Garage");
+    map->addWay(way2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
   }
 
   void runWayTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -254,7 +276,7 @@ public:
 
   void runRelationTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -300,13 +322,13 @@ public:
 
   void translateTagValueTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.address.translate.to.english", "true");
+    settings.set("address.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    settings.set("poi.polygon.address.use.default.language.translation.only", "false");
+    settings.set("address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
       std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
@@ -333,14 +355,14 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    settings.set("poi.polygon.address.translate.to.english", "false");
+    settings.set("address.translate.to.english", "false");
     uut.setConfiguration(settings);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void additionalTagsTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     QSet<QString> additionalTagKeys;
     additionalTagKeys.insert("note");
@@ -380,7 +402,7 @@ public:
 
   void invalidFullAddressTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
 
     OsmMapPtr map(new OsmMap());
@@ -414,7 +436,7 @@ public:
 
   void invalidComponentAddressTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
 
     OsmMapPtr map(new OsmMap());
@@ -452,7 +474,7 @@ public:
 
   void addressNormalizationTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
 
     OsmMapPtr map(new OsmMap());
@@ -479,6 +501,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonAddressScoreExtractorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressScoreExtractorTest, "slow");
 
 }

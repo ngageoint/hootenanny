@@ -85,7 +85,7 @@ private:
 
   AddressTagKeys();
 
-  friend class PoiPolygonAddressScoreExtractorTest;
+  friend class AddressScoreExtractorTest;
 
   static AddressTagKeysPtr _theInstance;
 

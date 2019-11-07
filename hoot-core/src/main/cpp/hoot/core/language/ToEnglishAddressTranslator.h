@@ -56,7 +56,7 @@ public:
 
 private:
 
-  friend class PoiPolygonAddressScoreExtractorTest;
+  friend class AddressScoreExtractorTest;
 
   // See comments in PoiPolygonTypeScoreExtractor as to why this is static.
   static std::shared_ptr<ToEnglishTranslator> _translator;
