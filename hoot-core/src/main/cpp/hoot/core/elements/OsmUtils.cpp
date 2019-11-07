@@ -436,7 +436,7 @@ long OsmUtils::closestWayNodeIdToNode(const ConstNodePtr& node, const ConstWayPt
   const vector<long>& wayNodeIds = way->getNodeIds();
   for (size_t i = 0; i < wayNodeIds.size(); i++)
   {
-    ConstNodePtr wayNode = map->getNode(wayNodeIds[i]);;
+    ConstNodePtr wayNode = map->getNode(wayNodeIds[i]);
     const double distanceFromNodeToWayNode =
       Distance::euclidean(node->toCoordinate(), wayNode->toCoordinate());
     if (distanceFromNodeToWayNode < shortestDistance)

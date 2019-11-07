@@ -441,7 +441,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef1->getElementId());
     HOOT_STR_EQUALS("Unknown2 element with REF1 tag", errorItr.value().toStdString());
@@ -485,7 +485,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef1->getElementId());
     HOOT_STR_EQUALS("REF1 ID must be singular. REF1=002da0;002e0f", errorItr.value().toStdString());
@@ -505,7 +505,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS("Invalid many to one REF2=002da0;todo", errorItr.value().toStdString());
@@ -517,7 +517,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS("Invalid many to one REF2=none;002da0", errorItr.value().toStdString());
@@ -529,7 +529,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
     HOOT_STR_EQUALS("Invalid many to one REVIEW=002da0;todo", errorItr.value().toStdString());
@@ -541,7 +541,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
     HOOT_STR_EQUALS("Invalid many to one REVIEW=none;002da0", errorItr.value().toStdString());
@@ -561,7 +561,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS("Duplicate IDs found in REF2: 002da0", errorItr.value().toStdString());
@@ -573,7 +573,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidReview->getElementId());
     HOOT_STR_EQUALS("Duplicate IDs found in REVIEW: 002da0", errorItr.value().toStdString());
@@ -594,7 +594,7 @@ public:
 
     uut.apply(map);
 
-    CPPUNIT_ASSERT(uut.hasErrors());;
+    CPPUNIT_ASSERT(uut.hasErrors());
     CPPUNIT_ASSERT(uut.getErrors().size() == 1);
     errorItr = uut.getErrors().find(invalidRef2->getElementId());
     HOOT_STR_EQUALS(
