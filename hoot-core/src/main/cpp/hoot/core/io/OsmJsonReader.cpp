@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -350,6 +351,11 @@ void OsmJsonReader::_parseOverpassJson()
       logWarnCount++;
     }
   }
+
+  ReportMissingElementsVisitor missingVis;
+  LOG_INFO("\t" << missingVis.getInitStatusMessage());
+  _map->visitRw(missingVis);
+  LOG_DEBUG("\t" << missingVis.getCompletedStatusMessage());
 }
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
@@ -500,25 +506,16 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
       LOG_VART(nodePresent);
       if (!nodePresent)
       {
+        // We can't skip adding if the node isn't already loaded, since nodes aren't guaranteed to
+        // be parsed before ways, as with XML. We report missing refs at the end.
+
         _missingNodeCount++;
-        if (logWarnCount < Log::getWarnMessageLimit())
-        {
-          LOG_WARN(
-            "Missing " << ElementId(ElementType::Node, v) << " in " <<
-            ElementId(ElementType::Way, newId) << ".");
-        }
-        else if (logWarnCount == Log::getWarnMessageLimit())
-        {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-        }
-        logWarnCount++;
+        LOG_TRACE(
+          "Missing " << ElementId(ElementType::Node, v) << " in " <<
+          ElementId(ElementType::Way, newId) << ".");
       }
-      else
-      {
-        long newRef = _nodeIdMap.value(v);
-        LOG_TRACE("Adding way node: " << newRef << "...");
-        pWay->addNode(newRef);
-      }
+      LOG_TRACE("Adding way node: " << v << "...");
+      pWay->addNode(v);
 
       ++nodeIt;
     }
@@ -607,6 +604,9 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       long ref = memberIt->second.get("ref", -1l); // default -1 ?
       string role = memberIt->second.get("role", string(""));
 
+      // We can't skip adding members if they aren't already loaded, since members aren't
+      // guaranteed to be parsed before relations, as with XML. We report missing refs at the end.
+
       bool okToAdd = false;
       if (typeStr == "node")
       {
@@ -614,22 +614,11 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
         if (!memberPresent)
         {
           _missingNodeCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
-          {
-            LOG_WARN(
-              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
-              ElementId(ElementType::Relation, newId) << ".");
-          }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
+           LOG_TRACE(
+            "Missing " << ElementId(ElementType::Node, ref) << " in " <<
+            ElementId(ElementType::Relation, newId) << ".");
         }
-        else
-        {
-          okToAdd = true;
-        }
+        okToAdd = true;
       }
       else if (typeStr == "way")
       {
@@ -637,22 +626,11 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
         if (!memberPresent)
         {
           _missingWayCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
-          {
-            LOG_WARN(
-              "Missing " << ElementId(ElementType::Way, ref) << " in " <<
-              ElementId(ElementType::Relation, newId) << ".");
-          }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
+          LOG_TRACE(
+            "Missing " << ElementId(ElementType::Way, ref) << " in " <<
+            ElementId(ElementType::Relation, newId) << ".");
         }
-        else
-        {
-          okToAdd = true;
-        }
+        okToAdd = true;
       }
       else if (typeStr == "relation")
       {

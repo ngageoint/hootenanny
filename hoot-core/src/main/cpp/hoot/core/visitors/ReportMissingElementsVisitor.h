@@ -75,7 +75,6 @@ public:
 protected:
 
   OsmMap* _map;
-  //const OsmMap* _constMap;
   int _maxReport;
   int _missingCount;
   bool _removeMissing;
