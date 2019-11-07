@@ -497,7 +497,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deriveChangeset(@Context HttpServletRequest request,
             GrailParams reqParams,
-            @QueryParam("REPLACEMENT") @DefaultValue("false") Boolean replacement,
+            @QueryParam("replacement") @DefaultValue("false") Boolean replacement,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
