@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +66,7 @@ class UpdateMapTagsCommand implements InternalCommand {
         // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
         tags.put("input1", params.getInput1());
         tags.put("input2", params.getInput2());
-        tags.put("grail", String.valueOf(DbUtils.grailEligible(Long.parseLong(params.getInput1()))));
+        tags.put("grailMerged", String.valueOf(DbUtils.grailEligible(Long.parseLong(params.getInput1()))));
 
         // Need to reformat the list of hoot command options to json properties
         tags.put("params", JsonUtils.escapeJson(JsonUtils.pojoToJSON(params)));
