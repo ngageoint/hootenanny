@@ -157,7 +157,7 @@ public:
     {
       _markNonOneToOneMatchesAsReview(tempMatches);
     }
-    //_adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
+    _adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
 
     for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end();
          ++it)
