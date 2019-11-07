@@ -301,9 +301,13 @@ private:
 
   void _adjustForOverlappingAdjoiningBuildingMatches(std::vector<MatchPtr>& matches)
   {
-    // If we have matches or reviews between townhouses or the like (building=terrace), check for
-    // many to one relationships. From the many to one, keep only the match with the highest
-    // overlap. Convert all others to misses by removing the matches completely.
+    // If we have matches or reviews between adjoining houses (building=terrace; townhouses and
+    // the like), check for many to one relationships. From the many to one, keep only the match
+    // with the highest overlap. Convert all others to misses by removing the matches completely.
+    //
+    // The argument could be made that this overlap check could be done for all buildings to reduce
+    // bad matches/reviews. Doing that would likely not lead to better overall conflated output but
+    // maybe still worth trying.
 
     LOG_VART(matches);
 
