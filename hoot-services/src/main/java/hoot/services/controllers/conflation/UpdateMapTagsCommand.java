@@ -63,9 +63,9 @@ class UpdateMapTagsCommand implements InternalCommand {
         this.caller = caller;
 
         // add map tags
-        // WILL BE DEPRECATED WHEN CORE IMPLEMENTS THIS
         tags.put("input1", params.getInput1());
         tags.put("input2", params.getInput2());
+        tags.put("bbox", params.getBounds());
         tags.put("grailMerged", String.valueOf(DbUtils.grailEligible(Long.parseLong(params.getInput1()))));
 
         // Need to reformat the list of hoot command options to json properties
