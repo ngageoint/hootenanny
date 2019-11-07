@@ -282,7 +282,7 @@ public:
     while (it != end)
     {
       v = (*it);
-      value += ";" + v.replace(";", ";;");;
+      value += ";" + v.replace(";", ";;");
       ++it;
     }
     insert(key, value);

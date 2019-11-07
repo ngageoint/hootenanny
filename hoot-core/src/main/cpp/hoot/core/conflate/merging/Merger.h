@@ -78,6 +78,9 @@ public:
 
   virtual QString toString() const = 0;
 
+  /**
+   * @see ApiEntityInfo
+   */
   virtual QString getDescription() const = 0;
 };
 
