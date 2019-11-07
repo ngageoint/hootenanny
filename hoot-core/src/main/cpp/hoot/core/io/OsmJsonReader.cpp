@@ -81,7 +81,8 @@ OsmJsonReader::OsmJsonReader()
     _keepImmediatelyConnectedWaysOutsideBounds(
       ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
     _missingNodeCount(0),
-    _missingWayCount(0)
+    _missingWayCount(0),
+    _requireStrictTypeOrdering(ConfigOptions().getJsonReaderRequireStrictTypeOrdering())
 {
 }
 
@@ -496,28 +497,36 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
       long v = nodeIt->second.get_value<long>();
       LOG_VART(v);
 
-      const bool nodePresent = _nodeIdMap.contains(v);
-      LOG_VART(nodePresent);
-      if (!nodePresent)
-      {
-        _missingNodeCount++;
-        if (logWarnCount < Log::getWarnMessageLimit())
+      if (_requireStrictTypeOrdering)  // temporary: see #3619
+      { 
+        const bool nodePresent = _nodeIdMap.contains(v);
+        LOG_VART(nodePresent);
+        if (!nodePresent)
         {
-          LOG_WARN(
-            "Missing " << ElementId(ElementType::Node, v) << " in " <<
-            ElementId(ElementType::Way, newId) << ".");
+          _missingNodeCount++;
+          if (logWarnCount < Log::getWarnMessageLimit())
+          {
+            LOG_WARN(
+              "Missing " << ElementId(ElementType::Node, v) << " in " <<
+              ElementId(ElementType::Way, newId) << ".");
+          }
+          else if (logWarnCount == Log::getWarnMessageLimit())
+          {
+            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          }
+          logWarnCount++;
         }
-        else if (logWarnCount == Log::getWarnMessageLimit())
+        else
         {
-          LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+          long newRef = _nodeIdMap.value(v);
+          LOG_TRACE("Adding way node: " << newRef << "...");
+          pWay->addNode(newRef);
         }
-        logWarnCount++;
       }
       else
       {
-        long newRef = _nodeIdMap.value(v);
-        LOG_TRACE("Adding way node: " << newRef << "...");
-        pWay->addNode(newRef);
+        LOG_TRACE("Adding way node: " << v << "...");
+        pWay->addNode(v);
       }
 
       ++nodeIt;
@@ -611,7 +620,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       if (typeStr == "node")
       {
         const bool memberPresent = _nodeIdMap.contains(ref);
-        if (!memberPresent)
+        if (!memberPresent && _requireStrictTypeOrdering)   // temporary: see #3619
         {
           _missingNodeCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
@@ -634,7 +643,7 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       else if (typeStr == "way")
       {
         const bool memberPresent = _wayIdMap.contains(ref);
-        if (!memberPresent)
+        if (!memberPresent && _requireStrictTypeOrdering)  // temporary: see #3619
         {
           _missingWayCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
@@ -813,4 +822,3 @@ void OsmJsonReader::_readFromHttp()
 }
 
 }
-
