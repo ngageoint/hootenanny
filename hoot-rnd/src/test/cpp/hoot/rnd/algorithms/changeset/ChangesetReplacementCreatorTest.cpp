@@ -56,12 +56,8 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 
 public:
 
-  ChangesetReplacementCreatorTest() :
-  HootTestFixture(
-    "test-files/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/",
-    "test-output/rnd/algorithms/changeset/ChangesetReplacementCreatorTest/")
+  ChangesetReplacementCreatorTest()
   {
-    setResetType(ResetAll);
   }
 
   void runInvalidGeometryFilterTest()

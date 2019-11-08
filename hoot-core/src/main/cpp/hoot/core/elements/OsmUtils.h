@@ -463,10 +463,10 @@ public:
   static bool checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
 
   /**
-   * TODO
+   * Returns the element IDs of all elements with a changeset version less than one
    *
-   * @param map
-   * @return
+   * @param map the map to examine
+   * @return a set of element IDs
    */
   static std::set<ElementId> getIdsOfElementsWithVersionLessThanOne(const OsmMapPtr& map);
 
