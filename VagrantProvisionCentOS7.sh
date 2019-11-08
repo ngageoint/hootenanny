@@ -161,6 +161,7 @@ sudo yum -y install \
     perl-XML-LibXML \
     libpostal-data \
     libpostal-devel \
+    parallel \
     postgresql95 \
     postgresql95-contrib \
     postgresql95-devel \
