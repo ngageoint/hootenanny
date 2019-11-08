@@ -385,10 +385,16 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
   // now to give the chance to back out earlier.
 
+  // TODO: something strange going on here with xml inputs where the ids and version in the ref
+  // aren't being retained. see #3631
   if (OsmUtils::checkVersionLessThanOneCountAndLogWarning(refMap))
   {
-    // TODO: change to LOG_VARD
-    LOG_VARW(OsmUtils::getIdsOfElementsWithVersionLessThanOne(refMap));
+    const std::set<ElementId> ids = OsmUtils::getIdsOfElementsWithVersionLessThanOne(refMap);
+    LOG_VARD(ids);
+    for (std::set<ElementId>::const_iterator itr = ids.begin(); itr != ids.end(); ++itr)
+    {
+      LOG_VART(refMap->getElement(*itr));
+    }
   }
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
