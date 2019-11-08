@@ -758,6 +758,12 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
 {
   // TODO: could use some refactoring here after the addition of _fullReplacement
 
+  // If the passed in dough map is empty, there's nothing to be cut out.
+  if (doughMap->getElementCount() == 0)
+  {
+    return doughMap;
+  }
+
   LOG_VARD(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");
