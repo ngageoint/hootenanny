@@ -31,6 +31,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/ops/MergeNearbyNodes.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
 {
@@ -55,8 +56,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
 
 public:
 
-  ChangesetReplacementCreatorTest() :
-  HootTestFixture(UNUSED_PATH, UNUSED_PATH)
+  ChangesetReplacementCreatorTest()
   {
   }
 

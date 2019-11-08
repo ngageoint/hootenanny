@@ -24,25 +24,24 @@ Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm
       1
 (1 row)
 
-18:34:13.719 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
-18:34:13.720 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
-18:34:13.720 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
-18:34:13.720 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+22:33:41.811 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+22:33:41.812 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+22:33:41.812 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+22:33:41.813 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/RndServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm (contains features to be replaced)...
 
 
 Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/RndServiceChangesetReplacementEmptyGeometryFilterTest/sec-original.osm (contains features to replace with)...
 
-18:34:19.451 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
-18:34:19.452 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
-18:34:19.452 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
-18:34:19.452 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+22:33:46.673 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73301713) in Way(9514937).
+22:33:46.674 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73191975) in Way(9514937).
+22:33:46.674 WARN   .../hoot/core/io/OsmXmlReader.cpp( 544) Missing Node(73238746) in Way(9514937).
+22:33:46.674 WARN   .../hoot/core/io/OsmXmlReader.cpp( 548) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Deriving a changeset between test-output/cmd/glacial/serial/RndServiceChangesetReplacementEmptyGeometryFilterTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/RndServiceChangesetReplacementEmptyGeometryFilterTest/sec-original.osm over: -71.4698,42.4866,-71.4657,42.4902, to file: test-output/cmd/glacial/serial/RndServiceChangesetReplacementEmptyGeometryFilterTest/RndServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
-18:34:20.594 WARN   ...hangesetReplacementCreator.cpp(1051) --lenient-bounds option ignored with point datasets.
-18:34:21.011 WARN   ...oot/core/elements/OsmUtils.cpp( 445) 61 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
+22:33:47.952 WARN   ...oot/core/elements/OsmUtils.cpp( 542) 61 features in the reference map have a version less than one. This could lead to difficulties when applying the resulting changeset back to an authoritative data store. Are the versions on the features being populated correctly?
 
 Applying the changeset: test-output/cmd/glacial/serial/RndServiceChangesetReplacementEmptyGeometryFilterTest/RndServiceChangesetReplacementEmptyGeometryFilterTest-changeset-xml.osc.sql to the reference data in the osm api db...
 

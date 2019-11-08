@@ -155,6 +155,7 @@ private:
   // A set of geometry type filters, organized by core geometry type (point, line, poly) to
   // separately filter the input datasets on.
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
+  bool _geometryFiltersSpecified;
 
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;

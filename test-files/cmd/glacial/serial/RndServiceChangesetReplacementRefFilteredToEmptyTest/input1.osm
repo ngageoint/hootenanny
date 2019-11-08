@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.8837758" minlon="-77.1139141" maxlat="38.8855343" maxlon="-77.11289120000001"/>
+    <node visible="true" id="6096499466" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840776999999989" lon="-77.1136304999999993"/>
+    <node visible="true" id="6096499467" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840677999999969" lon="-77.1137746999999933"/>
+    <node visible="true" id="6096499469" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843999999999994" lon="-77.1132853999999952"/>
+    <node visible="true" id="6096499470" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8844143000000031" lon="-77.1130469999999946"/>
+    <node visible="true" id="6096499471" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843621999999982" lon="-77.1132446999999956"/>
+    <node visible="true" id="6096499472" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843600000000009" lon="-77.1132814999999994"/>
+    <node visible="true" id="6096499473" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843919999999983" lon="-77.1134210999999965"/>
+    <node visible="true" id="6096499474" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843359999999976" lon="-77.1134155999999962"/>
+    <node visible="true" id="6096499475" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843335999999979" lon="-77.1134560999999934"/>
+    <node visible="true" id="6096499476" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842800999999980" lon="-77.1134509000000037"/>
+    <node visible="true" id="6096499477" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843046000000001" lon="-77.1130363000000045"/>
+    <node visible="true" id="6096499478" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841407000000032" lon="-77.1133640000000042"/>
+    <node visible="true" id="6096499479" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841153999999989" lon="-77.1133611000000059"/>
+    <node visible="true" id="6096499480" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841119000000006" lon="-77.1134117999999944"/>
+    <node visible="true" id="6096499481" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840606999999991" lon="-77.1134059000000036"/>
+    <node visible="true" id="6096499482" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840639000000010" lon="-77.1133604999999989"/>
+    <node visible="true" id="6096499483" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840221999999969" lon="-77.1133556999999996"/>
+    <node visible="true" id="6096499484" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840276000000031" lon="-77.1132786000000010"/>
+    <node visible="true" id="6096499485" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840683999999968" lon="-77.1132833000000062"/>
+    <node visible="true" id="6096499486" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840727999999984" lon="-77.1132204000000030"/>
+    <node visible="true" id="6096499487" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842726999999968" lon="-77.1132432999999935"/>
+    <node visible="true" id="6096499488" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842597000000012" lon="-77.1134294000000011"/>
+    <node visible="true" id="6096499489" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841371999999978" lon="-77.1134152999999998"/>
+    <node visible="true" id="6096499490" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841060999999968" lon="-77.1135476999999980"/>
+    <node visible="true" id="6096499491" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841115999999971" lon="-77.1134722999999980"/>
+    <node visible="true" id="6096499492" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840513000000030" lon="-77.1134650999999991"/>
+    <node visible="true" id="6096499493" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840458000000027" lon="-77.1135404999999992"/>
+    <node visible="true" id="6096499495" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8854657999999986" lon="-77.1130971999999986">
+        <tag k="highway" v="stop"/>
+    </node>
+    <node visible="true" id="6096499497" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8844023999999990" lon="-77.1132486999999998"/>
+    <node visible="true" id="6096499498" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8848354000000000" lon="-77.1130146999999937"/>
+    <node visible="true" id="6096499499" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843889999999988" lon="-77.1135110000000026"/>
+    <node visible="true" id="6096499500" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843844000000018" lon="-77.1135782000000063"/>
+    <node visible="true" id="6096499501" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843797999999978" lon="-77.1136453999999958"/>
+    <node visible="true" id="6096499502" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843752000000009" lon="-77.1137125999999995"/>
+    <node visible="true" id="6096499503" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843706999999981" lon="-77.1137798000000032"/>
+    <node visible="true" id="6096499504" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843661000000012" lon="-77.1138470000000069"/>
+    <node visible="true" id="6096499505" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843614999999971" lon="-77.1139141000000023"/>
+    <node visible="true" id="6096499506" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842925000000008" lon="-77.1135000999999960"/>
+    <node visible="true" id="6096499507" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842866000000029" lon="-77.1135665000000046"/>
+    <node visible="true" id="6096499508" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842805999999968" lon="-77.1136328999999989"/>
+    <node visible="true" id="6096499509" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842745999999977" lon="-77.1136994000000016"/>
+    <node visible="true" id="6096499510" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842686999999998" lon="-77.1137657999999959"/>
+    <node visible="true" id="6096499511" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842627000000007" lon="-77.1138322000000045"/>
+    <node visible="true" id="6096499512" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842568000000028" lon="-77.1138985999999989"/>
+    <node visible="true" id="6096499513" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842303999999999" lon="-77.1135907999999972"/>
+    <node visible="true" id="6096499514" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842163999999997" lon="-77.1138226000000060"/>
+    <node visible="true" id="6096499515" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841776000000010" lon="-77.1135852999999969"/>
+    <node visible="true" id="6096499516" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841628999999998" lon="-77.1138171999999997"/>
+    <node visible="true" id="6096499517" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841232999999988" lon="-77.1135795999999942"/>
+    <node visible="true" id="6096499518" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841085999999976" lon="-77.1138114999999971"/>
+    <node visible="true" id="6096499519" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840262000000010" lon="-77.1136245999999943"/>
+    <node visible="true" id="6096499520" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840161999999978" lon="-77.1137688000000026"/>
+    <node visible="true" id="6096499521" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8839776000000015" lon="-77.1136190999999940"/>
+    <node visible="true" id="6096499522" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8839675999999983" lon="-77.1137633000000022"/>
+    <node visible="true" id="6096499533" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840355999999971" lon="-77.1134631999999982"/>
+    <node visible="true" id="6096499534" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840308999999991" lon="-77.1135390000000029"/>
+    <node visible="true" id="6096499535" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8839753999999971" lon="-77.1134571000000051"/>
+    <node visible="true" id="6096499538" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8839706999999990" lon="-77.1135328999999956"/>
+    <node visible="true" id="6096499549" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8851990000000001" lon="-77.1130622999999957"/>
+    <node visible="true" id="6096499550" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8848637999999980" lon="-77.1130184000000014"/>
+    <node visible="true" id="6096499551" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8848277000000024" lon="-77.1135459000000054"/>
+    <node visible="true" id="6096499552" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843523999999974" lon="-77.1129514999999941"/>
+    <node visible="true" id="6096499553" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8843145000000021" lon="-77.1134742999999929"/>
+    <node visible="true" id="6096499554" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842709999999983" lon="-77.1130316999999934"/>
+    <node visible="true" id="6096499555" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842678999999976" lon="-77.1131641999999999"/>
+    <node visible="true" id="6096499556" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842357999999990" lon="-77.1133418000000006"/>
+    <node visible="true" id="6096499557" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842282999999966" lon="-77.1130299999999949"/>
+    <node visible="true" id="6096499558" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8842252000000030" lon="-77.1131625999999955"/>
+    <node visible="true" id="6096499559" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841899000000026" lon="-77.1130284999999986"/>
+    <node visible="true" id="6096499560" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841864999999984" lon="-77.1131615000000039"/>
+    <node visible="true" id="6096499561" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841439999999992" lon="-77.1130263999999954"/>
+    <node visible="true" id="6096499562" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8841397999999998" lon="-77.1131593000000066"/>
+    <node visible="true" id="6096499563" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840951000000032" lon="-77.1130237999999935"/>
+    <node visible="true" id="6096499564" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840904999999992" lon="-77.1131567000000047"/>
+    <node visible="true" id="6096499565" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840862999999999" lon="-77.1133283000000063"/>
+    <node visible="true" id="6096499566" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840800999999985" lon="-77.1134416999999956"/>
+    <node visible="true" id="6096499567" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840415000000021" lon="-77.1130208000000010"/>
+    <node visible="true" id="6096499568" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8840368999999981" lon="-77.1131536000000040"/>
+    <node visible="true" id="6096499569" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8837758000000022" lon="-77.1133966000000015"/>
+    <node visible="true" id="6096499572" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8838156999999995" lon="-77.1128912000000071"/>
+    <node visible="true" id="6096499579" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343" lat="38.8855343000000033" lon="-77.1131062000000043"/>
+    <way visible="true" id="649675220" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499520"/>
+        <nd ref="6096499467"/>
+        <nd ref="6096499466"/>
+        <nd ref="6096499519"/>
+        <nd ref="6096499520"/>
+        <tag k="building" v="detached"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1109"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:53Z"/>
+    </way>
+    <way visible="true" id="649675221" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499477"/>
+        <nd ref="6096499476"/>
+        <nd ref="6096499475"/>
+        <nd ref="6096499474"/>
+        <nd ref="6096499473"/>
+        <nd ref="6096499469"/>
+        <nd ref="6096499472"/>
+        <nd ref="6096499471"/>
+        <nd ref="6096499497"/>
+        <nd ref="6096499470"/>
+        <nd ref="6096499477"/>
+        <tag k="surface" v="concrete"/>
+        <tag k="access" v="private"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="parking" v="surface"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:53Z"/>
+    </way>
+    <way visible="true" id="649675222" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499489"/>
+        <nd ref="6096499488"/>
+        <nd ref="6096499487"/>
+        <nd ref="6096499486"/>
+        <nd ref="6096499485"/>
+        <nd ref="6096499484"/>
+        <nd ref="6096499483"/>
+        <nd ref="6096499482"/>
+        <nd ref="6096499481"/>
+        <nd ref="6096499480"/>
+        <nd ref="6096499479"/>
+        <nd ref="6096499478"/>
+        <nd ref="6096499489"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="access" v="private"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="parking" v="surface"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:53Z"/>
+    </way>
+    <way visible="true" id="649675223" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499490"/>
+        <nd ref="6096499491"/>
+        <nd ref="6096499492"/>
+        <nd ref="6096499493"/>
+        <nd ref="6096499490"/>
+        <tag k="building" v="garage"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:54Z"/>
+    </way>
+    <way visible="true" id="649675225" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499499"/>
+        <nd ref="6096499500"/>
+        <nd ref="6096499507"/>
+        <nd ref="6096499506"/>
+        <nd ref="6096499499"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1119"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:54Z"/>
+    </way>
+    <way visible="true" id="649675226" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499515"/>
+        <nd ref="6096499516"/>
+        <nd ref="6096499518"/>
+        <nd ref="6096499517"/>
+        <nd ref="6096499515"/>
+        <tag k="building" v="residential"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1107"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:54Z"/>
+    </way>
+    <way visible="true" id="649675227" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499503"/>
+        <nd ref="6096499504"/>
+        <nd ref="6096499511"/>
+        <nd ref="6096499510"/>
+        <nd ref="6096499503"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1113"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:54Z"/>
+    </way>
+    <way visible="true" id="649675228" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499501"/>
+        <nd ref="6096499502"/>
+        <nd ref="6096499509"/>
+        <nd ref="6096499508"/>
+        <nd ref="6096499501"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1117"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:55Z"/>
+    </way>
+    <way visible="true" id="649675229" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499514"/>
+        <nd ref="6096499513"/>
+        <nd ref="6096499515"/>
+        <nd ref="6096499516"/>
+        <nd ref="6096499514"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1109"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:55Z"/>
+    </way>
+    <way visible="true" id="649675230" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499500"/>
+        <nd ref="6096499501"/>
+        <nd ref="6096499508"/>
+        <nd ref="6096499507"/>
+        <nd ref="6096499500"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1119"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:55Z"/>
+    </way>
+    <way visible="true" id="649675231" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499520"/>
+        <nd ref="6096499519"/>
+        <nd ref="6096499521"/>
+        <nd ref="6096499522"/>
+        <nd ref="6096499520"/>
+        <tag k="building" v="residential"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1103"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:55Z"/>
+    </way>
+    <way visible="true" id="649675232" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499504"/>
+        <nd ref="6096499505"/>
+        <nd ref="6096499512"/>
+        <nd ref="6096499511"/>
+        <nd ref="6096499504"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1111"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:56Z"/>
+    </way>
+    <way visible="true" id="649675234" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499502"/>
+        <nd ref="6096499503"/>
+        <nd ref="6096499510"/>
+        <nd ref="6096499509"/>
+        <nd ref="6096499502"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1115"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Utah Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:56Z"/>
+    </way>
+    <way visible="true" id="649675240" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499534"/>
+        <nd ref="6096499533"/>
+        <nd ref="6096499535"/>
+        <nd ref="6096499538"/>
+        <nd ref="6096499534"/>
+        <tag k="building" v="garage"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:58Z"/>
+    </way>
+    <way visible="true" id="649675242" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499569"/>
+        <nd ref="6096499566"/>
+        <nd ref="6096499553"/>
+        <nd ref="6096499551"/>
+        <nd ref="6096499550"/>
+        <tag k="access" v="private"/>
+        <tag k="highway" v="service"/>
+        <tag k="service" v="alley"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:59Z"/>
+    </way>
+    <way visible="true" id="649675243" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499566"/>
+        <nd ref="6096499565"/>
+        <nd ref="6096499556"/>
+        <tag k="access" v="private"/>
+        <tag k="highway" v="service"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:59Z"/>
+    </way>
+    <way visible="true" id="649675244" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499558"/>
+        <nd ref="6096499557"/>
+        <nd ref="6096499554"/>
+        <nd ref="6096499555"/>
+        <nd ref="6096499558"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1110"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Taylor Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:59Z"/>
+    </way>
+    <way visible="true" id="649675245" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499560"/>
+        <nd ref="6096499559"/>
+        <nd ref="6096499557"/>
+        <nd ref="6096499558"/>
+        <nd ref="6096499560"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1108"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Taylor Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:59Z"/>
+    </way>
+    <way visible="true" id="649675246" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499561"/>
+        <nd ref="6096499562"/>
+        <nd ref="6096499560"/>
+        <nd ref="6096499559"/>
+        <nd ref="6096499561"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1106"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Taylor Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:47:59Z"/>
+    </way>
+    <way visible="true" id="649675247" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499563"/>
+        <nd ref="6096499564"/>
+        <nd ref="6096499562"/>
+        <nd ref="6096499561"/>
+        <nd ref="6096499563"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1104"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Taylor Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:48:00Z"/>
+    </way>
+    <way visible="true" id="649675248" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499568"/>
+        <nd ref="6096499567"/>
+        <nd ref="6096499563"/>
+        <nd ref="6096499564"/>
+        <nd ref="6096499568"/>
+        <tag k="building" v="residential"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="addr:postcode" v="22201"/>
+        <tag k="addr:city" v="Arlington"/>
+        <tag k="addr:housenumber" v="1102"/>
+        <tag k="addr:state" v="VA"/>
+        <tag k="addr:street" v="North Taylor Street"/>
+        <tag k="source:datetime" v="2019-11-07T19:48:00Z"/>
+    </way>
+    <way visible="true" id="649675250" timestamp="2019-11-07T23:40:11Z" version="1" changeset="343">
+        <nd ref="6096499572"/>
+        <nd ref="6096499552"/>
+        <nd ref="6096499498"/>
+        <nd ref="6096499550"/>
+        <nd ref="6096499549"/>
+        <nd ref="6096499495"/>
+        <nd ref="6096499579"/>
+        <tag k="name" v="North Taylor Street"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tiger:name_base" v="Taylor"/>
+        <tag k="lit" v="yes"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="maxspeed:type" v="sign"/>
+        <tag k="tiger:zip_left" v="22201"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:county" v="Arlington, VA"/>
+        <tag k="maxspeed" v="25 mph"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="yes"/>
+        <tag k="source:datetime" v="2019-11-07T19:48:00Z"/>
+        <tag k="tiger:zip_right" v="22201"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+    </way>
+</osm>

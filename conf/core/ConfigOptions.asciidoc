@@ -2880,7 +2880,7 @@ The size of the PERTY grid spacing in meters.
 ** `hoot::RandomElementRenamer`
 
 A list of operations that should be applied after the geometries have been shifted by PERTY.
-'hoot info --operators | grep Perty' displays information about the available operations.
+'hoot info --operators | grep Random' displays information about the available operations.
 
 === perty.search.distance
 

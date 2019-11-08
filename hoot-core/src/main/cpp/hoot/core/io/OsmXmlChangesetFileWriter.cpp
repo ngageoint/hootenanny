@@ -122,6 +122,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_TRACE("Reading next XML change...");
       _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
+      LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)
       {
         if (last != Change::Unknown)
@@ -131,12 +132,15 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         switch (_change.getType())
         {
           case Change::Create:
+            LOG_TRACE("Writing create start element...");
             writer.writeStartElement("create");
             break;
           case Change::Delete:
+            LOG_TRACE("Writing delete start element...");
             writer.writeStartElement("delete");
             break;
           case Change::Modify:
+            LOG_TRACE("Writing modify start element...");
             writer.writeStartElement("modify");
             break;
           case Change::Unknown:
@@ -174,12 +178,16 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       }
     }
 
+    LOG_VART(Change::changeTypeToString(last));
     if (last != Change::Unknown)
     {
+      LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
+      last = Change::Unknown;
     }
   }
 
+  LOG_TRACE("Writing root end element...");
   writer.writeEndElement();
   writer.writeEndDocument();
 

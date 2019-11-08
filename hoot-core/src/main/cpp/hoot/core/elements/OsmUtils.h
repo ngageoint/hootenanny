@@ -458,8 +458,17 @@ public:
    * Logs a warning if any element in the map has a changeset version less than one
    *
    * @param map the map to examine
+   * @return true if a warning was logged; false otherwise
    */
-  static void checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
+  static bool checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map);
+
+  /**
+   * Returns the element IDs of all elements with a changeset version less than one
+   *
+   * @param map the map to examine
+   * @return a set of element IDs
+   */
+  static std::set<ElementId> getIdsOfElementsWithVersionLessThanOne(const OsmMapPtr& map);
 
   /**
    * Determines if a map contains only nodes that are not way nodes

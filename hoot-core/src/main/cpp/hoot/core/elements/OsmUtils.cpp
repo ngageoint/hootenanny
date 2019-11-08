@@ -45,6 +45,7 @@
 #include <hoot/core/criterion/AttributeValueCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 // Qt
 #include <QDateTime>
@@ -529,7 +530,7 @@ int OsmUtils::versionLessThanOneCount(const OsmMapPtr& map)
       attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
 }
 
-void OsmUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)
+bool OsmUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)
 {
   const int numberOfRefElementsWithVersionLessThan1 = OsmUtils::versionLessThanOneCount(map);
   if (numberOfRefElementsWithVersionLessThan1 > 0)
@@ -538,8 +539,20 @@ void OsmUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)
       StringUtils::formatLargeNumber(numberOfRefElementsWithVersionLessThan1) << " features in " <<
       "the reference map have a version less than one. This could lead to difficulties when " <<
       "applying the resulting changeset back to an authoritative data store. Are the versions " <<
-      "on the features being populated correctly?")
+      "on the features being populated correctly?");
+    return true;
   }
+  return false;
+}
+
+std::set<ElementId> OsmUtils::getIdsOfElementsWithVersionLessThanOne(const OsmMapPtr& map)
+{
+  AttributeValueCriterion attrCrit(
+    ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan);
+  UniqueElementIdVisitor idSetVis;
+  FilteredVisitor filteredVis(attrCrit, idSetVis);
+  map->visitRo(filteredVis);
+  return idSetVis.getElementSet();
 }
 
 bool OsmUtils::mapIsPointsOnly(const OsmMapPtr& map)
