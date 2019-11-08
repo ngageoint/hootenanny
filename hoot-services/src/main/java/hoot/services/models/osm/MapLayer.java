@@ -41,11 +41,13 @@ public class MapLayer {
     private String name;
     private Timestamp date;
     private String lastAccessed;
-    private boolean grail;
+    private boolean grailReference;
+    private boolean grailMerged;
     private Boolean isPublic;
     private long userId;
     private long folderId;
     private long size;
+    private String bbox;
 
     @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -84,12 +86,20 @@ public class MapLayer {
         this.date = new Timestamp(date.getTime());
     }
 
-    public boolean getGrail() {
-        return grail;
+    public boolean getGrailMerged() {
+        return grailMerged;
     }
 
-    public void setGrail(boolean canExport) {
-        this.grail = canExport;
+    public void setGrailMerged(boolean grailMerged) {
+        this.grailMerged = grailMerged;
+    }
+
+    public boolean getGrailReference() {
+        return grailReference;
+    }
+
+    public void setGrailReference(boolean grailReference) {
+        this.grailReference = grailReference;
     }
 
     public String getLastAccessed() {
@@ -121,5 +131,13 @@ public class MapLayer {
 
     public long getSize() {
         return this.size;
+    }
+
+    public String getBbox() {
+        return bbox;
+    }
+
+    public void setBbox(String bbox) {
+        this.bbox = bbox;
     }
 }

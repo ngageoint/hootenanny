@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="root_doc">
+    <Schema id="ROAD_C.schema">
+      <SimpleField name="F_CODE" type="string"/>
+      <SimpleField name="ZI005_FNA" type="string"/>
+      <SimpleField name="ZI006_MEM" type="string"/>
+      <SimpleField name="UFI" type="string"/>
+      <SimpleField name="TYP" type="int"/>
+      <SimpleField name="RTN_ROI" type="int"/>
+    </Schema>
+    <Document id="ROAD_C">
+      <name>ROAD_C</name>
+      <Placemark id="ROAD_C.1">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ROAD_C.schema">
+            <SimpleData name="F_CODE">AP030</SimpleData>
+            <SimpleData name="ZI005_FNA">No Information</SimpleData>
+            <SimpleData name="ZI006_MEM">1</SimpleData>
+            <SimpleData name="UFI">b18057ff-736d-5d20-b873-837f0c172e33</SimpleData>
+            <SimpleData name="TYP">1</SimpleData>
+            <SimpleData name="RTN_ROI">5</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <LineString>
+          <coordinates>
+            -104.899712408626,38.8549614373989,0
+            -104.898738891649,38.8549524185661,0
+            -104.897905033348,38.8549321261881,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="ROAD_C.2">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ROAD_C.schema">
+            <SimpleData name="F_CODE">AP030</SimpleData>
+            <SimpleData name="ZI005_FNA">No Information</SimpleData>
+            <SimpleData name="ZI006_MEM">3</SimpleData>
+            <SimpleData name="UFI">1c3e97f5-7430-5a1f-b030-9ce1e7038682</SimpleData>
+            <SimpleData name="TYP">1</SimpleData>
+            <SimpleData name="RTN_ROI">5</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <LineString>
+          <coordinates>
+            -104.90057951048,38.8542599687747,0
+            -104.900569326432,38.8548514075605,0
+            -104.900525317244,38.8549289695954,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="ROAD_C.3">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ROAD_C.schema">
+            <SimpleData name="F_CODE">AP030</SimpleData>
+            <SimpleData name="ZI005_FNA">No Information</SimpleData>
+            <SimpleData name="ZI006_MEM">0</SimpleData>
+            <SimpleData name="UFI">6117767e-8a0b-5624-a599-fa50f96213a6</SimpleData>
+            <SimpleData name="TYP">1</SimpleData>
+            <SimpleData name="RTN_ROI">5</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <LineString>
+          <coordinates>
+            -104.902431609969,38.8540541370891,0
+            -104.902306531224,38.854129896206,0
+            -104.901787686059,38.854331920123,0
+            -104.900807902556,38.8548207434769,0
+            -104.900525317244,38.8549289695954,0
+            -104.899712408626,38.8549614373989,0
+            -104.899717136844,38.8545785045938,0
+            -104.899717136844,38.8542618470631,0
+            -104.899706987479,38.8541670018908,0
+            -104.899684039316,38.8539525522999,0
+            -104.899693495753,38.8536248456666,0
+            -104.899754292885,38.8532583477841,0
+            -104.899686826397,38.8532424272017,0
+            -104.899452882818,38.8533001490996,0
+            -104.899367180715,38.8533470481072,0
+            -104.899269897247,38.8535166057997,0
+            -104.899056800126,38.8535689160701,0
+            -104.898832121639,38.8535508780501,0
+            -104.898707042894,38.8536194225015,0
+            -104.898723256805,38.8537204352567,0
+            -104.898915507469,38.8539585361836,0
+            -104.898890028466,38.8541335037809,0
+            -104.898707042894,38.8541767946664,0
+            -104.898310960201,38.8542327120212,0
+            -104.898065435257,38.8544293243066,0
+            -104.897775901125,38.8546042907457,0
+            -104.897321911606,38.8547197322843,0
+            -104.896858656995,38.8548604264062,0
+            -104.896439411572,38.8549019130812,0
+            -104.896182305262,38.8549073243849,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="ROAD_C.4">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ROAD_C.schema">
+            <SimpleData name="F_CODE">AP030</SimpleData>
+            <SimpleData name="ZI005_FNA">No Information</SimpleData>
+            <SimpleData name="ZI006_MEM">2</SimpleData>
+            <SimpleData name="UFI">d1012bc9-92bc-5931-aac2-aa5702f42b8b</SimpleData>
+            <SimpleData name="TYP">1</SimpleData>
+            <SimpleData name="RTN_ROI">5</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <LineString>
+          <coordinates>
+            -104.901447664728,38.8540851073631,0
+            -104.901078863703,38.8542471187715,0
+            -104.90057951048,38.8542599687747,0
+            -104.899717136844,38.8542618470631,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Document>
+  </Document>
+</kml>
