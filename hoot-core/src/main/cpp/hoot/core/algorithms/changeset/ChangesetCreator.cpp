@@ -668,12 +668,14 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     ChangesetDeriverPtr changesetDeriver =
       std::dynamic_pointer_cast<ChangesetDeriver>(changesetProviders.at(i));
     LOG_DEBUG("Derived changeset: " << i + 1 << " / " << inputs1.size() << ": ");
-    LOG_VARD(changesetDeriver->getNumCreateChanges());
+
     _numCreateChanges += changesetDeriver->getNumCreateChanges();
-    LOG_VARD(changesetDeriver->getNumModifyChanges());
     _numModifyChanges += changesetDeriver->getNumModifyChanges();
-    LOG_VARD(changesetDeriver->getNumDeleteChanges());
     _numDeleteChanges += changesetDeriver->getNumDeleteChanges();
+
+    LOG_VARD(changesetDeriver->getNumCreateChanges());
+    LOG_VARD(changesetDeriver->getNumModifyChanges());
+    LOG_VARD(changesetDeriver->getNumDeleteChanges());
     LOG_VARD(changesetDeriver->getNumFromElementsParsed());
     LOG_VARD(changesetDeriver->getNumToElementsParsed());
     if (changesetDeriver->getNumChanges() == 0)
