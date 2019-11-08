@@ -247,6 +247,16 @@ public:
   static bool matchesChangesetConflictVersionMismatchFailure(const QString& hint,
                                                       long& element_id, ElementType::Type& element_type,
                                                       long& version_old, long& version_new);
+  /**
+   * @brief setErrorPathname Record the pathname of the error changeset
+   * @param path Pathname
+   */
+  void setErrorPathname(const QString& path) { _errorPathname = path; }
+  /**
+   * @brief writeErrorFile Writes our the error changeset
+   * @return true if the file was written successfully
+   */
+  bool writeErrorFile();
 
 private:
   /**
@@ -459,6 +469,8 @@ private:
   NodeIdToRelationIdMap _nodeIdsToRelations;
   WayIdToRelationIdMap _wayIdsToRelations;
   RelationIdToRelationIdMap _relationIdsToRelations;
+  /** Full pathname of the error file changeset, if any errors occur */
+  QString _errorPathname;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */

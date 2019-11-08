@@ -114,8 +114,15 @@ public:
         changesets.append(args[i]);
       }
 
+      //  Get the error changeset pathname to pass to the writer
+      QFileInfo path(args[0]);
+      QString errorFilename =
+        path.absolutePath() + QDir::separator() +
+        path.baseName() + "-error." + path.completeSuffix();
+
       //  Do the actual splitting and uploading
       OsmApiWriter writer(osm, changesets);
+      writer.setErrorPathname(errorFilename);
       writer.showProgress(showProgress);
       if (showProgress)
       {
@@ -133,13 +140,9 @@ public:
       if (writer.containsFailed())
       {
         //  Output the errors from 'changeset.osc' to 'changeset-error.osc'
-        QFileInfo path(args[0]);
-        QString errorFilename =
-          path.absolutePath() + QDir::separator() +
-          path.baseName() + "-error." + path.completeSuffix();
         LOG_ERROR(
           QString("Some changeset elements failed to upload. Stored in %1.").arg(errorFilename));
-        FileUtils::writeFully(errorFilename, writer.getFailedChangeset());
+        writer.writeErrorFile();
       }
 
       //  Output the stats if requested
