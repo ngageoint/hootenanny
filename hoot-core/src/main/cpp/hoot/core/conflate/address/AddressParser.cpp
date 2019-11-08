@@ -107,7 +107,9 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   else if (element->getElementType() == ElementType::Way)
   {
     addresses = parseAddressesFromWayNodes(*std::dynamic_pointer_cast<const Way>(element), map);
-    addresses.append(parseAddresses(*element));
+    // TODO: Uncommenting this blows up a few of the poi/poly regression tests by forcing some
+    // address comparisons. See #3627.
+    //addresses.append(parseAddresses(*element));
   }
   else if (element->getElementType() == ElementType::Relation)
   {
