@@ -37,6 +37,7 @@
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 // Qt
 #include <QDateTime>
@@ -69,45 +70,75 @@ _eid1(eid1),
 _eid2(eid2),
 _rf(rf),
 _explainText(""),
-_reviewIfSecondaryFeatureNewer(ConfigOptions().getBuildingReviewIfSecondaryNewer()),
 _dateTagKey(ConfigOptions().getBuildingDateTagKey()),
-_dateFormat(ConfigOptions().getBuildingDateFormat()),
-_matchReviewsWithContainment(ConfigOptions().getBuildingForceContainedMatch())
+_dateFormat(ConfigOptions().getBuildingDateFormat())
 {  
-  _p = _rf->classify(map, _eid1, _eid2);
-
   ConstElementPtr element1 = map->getElement(_eid1);
   ConstElementPtr element2 = map->getElement(_eid2);
+  LOG_TRACE("BuildingMatch: e1\n" << OsmUtils::getElementDetailString(element1, map));
+  LOG_TRACE("BuildingMatch: e2\n" << OsmUtils::getElementDetailString(element2, map));
 
-  OsmUtils::logElementDetail(element1, map, Log::Trace, "BuildingMatch: e1");
-  OsmUtils::logElementDetail(element2, map, Log::Trace, "BuildingMatch: e2");
-
+  // classify the pair's matchability given the model
+  _p = _rf->classify(map, _eid1, _eid2);
+  LOG_VART(_p);
   MatchType type = getType();
   LOG_VART(type);
+
   QStringList description;
 
-  if (type != MatchType::Match)
-  { 
-    // If we have a review and one of the buildings completely contains the other (smaller
-    // overlap = 1), then let's convert to a match if the associted config options was enabled.
-    const double smallerOverlap = SmallerOverlapExtractor().extract(*map, element1, element2);
-    LOG_VART(smallerOverlap);
-    if (type == MatchType::Review && _matchReviewsWithContainment && smallerOverlap == 1.0)
+  // Now, we'll do some post model cleanup (checks that could be eventually baked into the model if
+  // we have the appropriate input data).
+
+  // If we have a review and one of the buildings completely contains the other (smaller
+  // overlap = 1), then let's convert to a match if the associated config option was enabled.
+  if (type == MatchType::Review && ConfigOptions().getBuildingForceContainedMatch() &&
+      SmallerOverlapExtractor().extract(*map, element1, element2) == 1.0)
+  {
+    LOG_TRACE(
+      "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked for review where one " <<
+      "building is completely contained inside of the other. Marking as a match...")
+    _p.clear();
+    _p.setMatchP(1.0);
+  }
+  // If we have a match, building address matching is enabled, both have addresses, and we have
+  // an explicit address mismatch, declare a miss instead.
+  else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled())
+  {
+    AddressScoreExtractor addressScorer;
+    addressScorer.setConfiguration((conf()));
+    // address scorer only returns 1.0 for a match...no partial matches
+    const double score = addressScorer.extract(*map, element1, element2);
+    const bool addressMatch = score == 1.0;
+    const bool eitherDoesntHaveAnAddress = score == -1.0;
+    if (type == MatchType::Match && !eitherDoesntHaveAnAddress && !addressMatch)
     {
       LOG_TRACE(
-        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked for review where one " <<
-        "building is completely contained inside of the other. Marking as a match...")
+        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a match with an " <<
+        "explicit address conflict. Marking as a review...");
+      description.append("Address mismatch.");
       _p.clear();
-      _p.setMatchP(1.0);
+      _p.setReviewP(1.0);
     }
-    else
+    else if (type == MatchType::Miss && addressMatch)
     {
-      description = _getMatchDescription(map, type, element1, element2);
+      LOG_TRACE(
+        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a miss with " <<
+        "matching addresses. Marking as a review...");
+      description.append("Address match.");
+      _p.clear();
+      _p.setReviewP(1.0);
     }
   }
-  else if (_reviewIfSecondaryFeatureNewer)
+  // If we have a match, the secondary feature is newer than the reference feature, and the
+  // associated config option is enabled, let's review them instead.
+  else if (type == MatchType::Match && ConfigOptions().getBuildingReviewIfSecondaryNewer())
   {
     description = _createReviewIfSecondaryFeatureNewer(element1, element2);
+  }
+  // Otherwise if we have a miss or review, let's explain why.
+  else
+  {
+    description = _getNonMatchDescription(map, type, element1, element2);
   }
 
   //  Join the string descriptions together or generate the default
@@ -191,9 +222,9 @@ QStringList BuildingMatch::_createReviewIfSecondaryFeatureNewer(const ConstEleme
   return description;
 }
 
-QStringList BuildingMatch::_getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                                const ConstElementPtr& element1,
-                                                const ConstElementPtr& element2)
+QStringList BuildingMatch::_getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                                   const ConstElementPtr& element1,
+                                                   const ConstElementPtr& element2)
 {
   QStringList description;
 

@@ -69,9 +69,11 @@ bool BuildingMergerCreator::createMergers(const MatchSet& matches, vector<Merger
     else
     {
       set<pair<ElementId, ElementId>> s = bm->getMatchPairs();
+      LOG_VART(s);
       eids.insert(s.begin(), s.end());
     }
   }
+  LOG_VART(eids);
 
   // only add the building merge if there are elements to merge.
   if (eids.size() > 0)

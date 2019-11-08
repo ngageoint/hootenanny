@@ -1770,6 +1770,31 @@ double OsmSchema::score(const SchemaVertex& v1, const SchemaVertex& v2)
   return score(v1.name, v2.name);
 }
 
+double OsmSchema::score(const QString& kvp, const Tags& tags)
+{
+  double maxScore = 0.0;
+  for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
+  {
+    const QString key = tagItr.key().trimmed();
+    const QString value = tagItr.value().trimmed();
+    if (!key.isEmpty() && !value.isEmpty())
+    {
+      //QString kvp2 = tagItr.key() + "=" + tagItr.value();
+      QString kvp2 = "";
+      kvp2.append(key);
+      kvp2.append("=");
+      kvp2.append(value);
+      const double scoreVal = score(kvp, kvp2);
+      if (scoreVal > maxScore)
+      {
+        maxScore = scoreVal;
+      }
+    }
+
+  }
+  return maxScore;
+}
+
 double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
 {
   return d->score(kvp1, kvp2);

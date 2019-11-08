@@ -102,16 +102,20 @@ int AddressParser::numAddressesRecursive(const ConstElementPtr& element, const O
   QList<Address> addresses;
   if (element->getElementType() == ElementType::Node)
   {
-    return hasAddress(*std::dynamic_pointer_cast<const Node>(element));
+    return numAddresses(*std::dynamic_pointer_cast<const Node>(element));
   }
   else if (element->getElementType() == ElementType::Way)
   {
     addresses = parseAddressesFromWayNodes(*std::dynamic_pointer_cast<const Way>(element), map);
+    // TODO: Uncommenting this blows up a few of the poi/poly regression tests by forcing some
+    // address comparisons. See #3627.
+    //addresses.append(parseAddresses(*element));
   }
   else if (element->getElementType() == ElementType::Relation)
   {
     addresses =
       parseAddressesFromRelationMembers(*std::dynamic_pointer_cast<const Relation>(element), map);
+    addresses.append(parseAddresses(*element));
   }
   if (translateModified)
   {
@@ -233,6 +237,7 @@ QList<Address> AddressParser::parseAddressesFromRelationMembers(const Relation& 
       {
         ConstWayPtr wayMember = std::dynamic_pointer_cast<const Way>(member);
         addresses = parseAddressesFromWayNodes(*wayMember, map, skipElementId);
+        addresses.append(parseAddresses(*wayMember));
       }
     }
   }
@@ -331,7 +336,7 @@ bool AddressParser::_isValidAddressStr(QString& address, QString& houseNum, QStr
   libpostal_address_parser_response_destroy(parsed);
 
   // intersections won't have numbers; unfortunately this lets through a false positive, like:
-  // "lrv station-church street"
+  // "lrv station-church street" - TODO: should this be re-enabled?
   if (/*!houseNum.isEmpty() &&*/ !street.isEmpty())
   {
     address = houseNum + " " + street;

@@ -192,8 +192,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  OsmUtils::logElementDetail(e1, map, Log::Trace, "HighwaySnapMerger: e1");
-  OsmUtils::logElementDetail(e2, map, Log::Trace, "HighwaySnapMerger: e2");
+  LOG_TRACE("HighwaySnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
+  LOG_TRACE("HighwaySnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // split w2 into sublines
   WaySublineMatchString match;

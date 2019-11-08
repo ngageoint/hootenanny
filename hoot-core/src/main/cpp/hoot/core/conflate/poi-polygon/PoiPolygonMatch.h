@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/matching/MatchDetails.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
-#include <hoot/core/algorithms/extractors/poi-polygon//PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonPhoneNumberScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
@@ -192,7 +192,7 @@ private:
   double _nameScore;
   double _nameScoreThreshold;
 
-  PoiPolygonAddressScoreExtractor _addressScorer;
+  AddressScoreExtractor _addressScorer;
   double _addressScore;
   bool _addressMatchEnabled;
 

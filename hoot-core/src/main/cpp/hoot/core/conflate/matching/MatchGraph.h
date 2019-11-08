@@ -46,7 +46,7 @@ typedef std::vector<MatchSet> MatchSetVector;
 /**
  * Represents a graph of matches. At some point I'd like to extend this to include additional
  * relationships (such as two roads are linked by an intersection). This will enable higher fidelity
- * matching. See #2376 for some musings and references.
+ * matching. See Redmine #2376 for some musings and references.
  *
  * At this point this is useful for identifying many to many matches and one to many matches.
  */

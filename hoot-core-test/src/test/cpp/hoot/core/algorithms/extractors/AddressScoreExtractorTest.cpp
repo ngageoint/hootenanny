@@ -29,7 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/conflate/address/AddressTagKeys.h>
 
@@ -44,14 +44,22 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
+/*
+ * Its possible we might want to eventually break the parsing and normalization tests out
+ * separately.
+ *
+ * This test took a hit in readability when moved from PoiPolygonAddressScoreExtractor to the more
+ * generic AddressScoreExtractor, so could use some simplification.
+ */
+class AddressScoreExtractorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(PoiPolygonAddressScoreExtractorTest);
+  CPPUNIT_TEST_SUITE(AddressScoreExtractorTest);
   CPPUNIT_TEST(runTagTest);
   CPPUNIT_TEST(runCombinedTagTest);
   CPPUNIT_TEST(runRangeTest);
   CPPUNIT_TEST(runAltFormatTest);
   CPPUNIT_TEST(runSubLetterTest);
+  CPPUNIT_TEST(runIntersectionTest);
   CPPUNIT_TEST(runWayTest);
   CPPUNIT_TEST(runRelationTest);
   CPPUNIT_TEST(translateTagValueTest);
@@ -63,13 +71,13 @@ class PoiPolygonAddressScoreExtractorTest : public HootTestFixture
 
 public:
 
-  PoiPolygonAddressScoreExtractorTest()
+  AddressScoreExtractorTest()
   {
   }
 
   void runTagTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -92,7 +100,7 @@ public:
 
   void runCombinedTagTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -119,7 +127,7 @@ public:
 
   void runRangeTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -156,7 +164,7 @@ public:
 
   void runAltFormatTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -191,7 +199,7 @@ public:
 
   void runSubLetterTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -211,9 +219,41 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
+  void runIntersectionTest()
+  {
+    AddressScoreExtractor uut;
+    uut.setConfiguration(conf());
+
+    OsmMapPtr map(new OsmMap());
+    NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node1);
+    WayPtr way1(new Way(Status::Unknown2, -1, 15.0));
+    map->addWay(way1);
+
+    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Street");
+    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "16th and Bryant Street");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+    // Haven't wrapped my head around how to deal with these yet but not worrying too much yet, b/c
+    // haven't found any instances where the inability to match address intersection has kept
+    // something from conflating. If we need it, we should be able to come up with some custom logic
+    // to handle cases like below if there's no way to make libpostal do it. AddressParser may need
+    // some refactoring, though.
+
+//    // sometimes the road type is expressed as plural in this type of intersection naming
+//    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "16th &amp; Bryant Street");
+//    way1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "16th and Bryant Streets");
+//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+
+//    node1->getTags().set(TestUtils::FULL_ADDRESS_TAG_NAME, "6TH &amp; HOFF ST. PARKING GARAGE");
+//    way1->getTags().set(
+//      TestUtils::FULL_ADDRESS_TAG_NAME, "6th street and Hoff Street Parking Garage");
+//    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node1, way1), 0.0);
+  }
+
   void runWayTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -242,11 +282,25 @@ public:
     way2->addNode(node4->getId());
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way2), 0.01);
+
+    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node5);
+    WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
+    way3->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way3->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
+    way3->addNode(node5->getId());
+    map->addWay(way3);
+    WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
+    way4->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way4->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
+    way4->addNode(node5->getId());
+    map->addWay(way4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, way3, way4), 0.01);
   }
 
   void runRelationTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
 
@@ -288,17 +342,46 @@ public:
     relation4->addElement("test", way3->getElementId());
     map->addRelation(relation4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.01);
+
+    NodePtr node7(new Node(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0));
+    node7->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node7->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addNode(node7);
+    RelationPtr relation5(new Relation(Status::Unknown2, -5, 15.0));
+    WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
+    way4->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way4->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addWay(way4);
+    relation5->addElement("test", way4->getElementId());
+    map->addRelation(relation5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node7, relation5), 0.01);
+
+    NodePtr node8(new Node(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node8);
+    WayPtr way5(new Way(Status::Unknown2, -5, 15.0));
+    map->addWay(way5);
+    RelationPtr relation6(new Relation(Status::Unknown2, -6, 15.0));
+    relation6->addElement("test", way5->getElementId());
+    relation6->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    relation6->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addRelation(relation5);
+    RelationPtr relation7(new Relation(Status::Unknown2, -7, 15.0));
+    relation7->addElement("test", node8->getElementId());
+    relation7->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    relation7->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addRelation(relation7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, relation6, relation7), 0.01);
   }
 
   void translateTagValueTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
-    settings.set("poi.polygon.address.translate.to.english", "true");
+    settings.set("address.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    settings.set("poi.polygon.address.use.default.language.translation.only", "false");
+    settings.set("address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
       std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
@@ -325,14 +408,14 @@ public:
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node2, way2), 0.0);
 
-    settings.set("poi.polygon.address.translate.to.english", "false");
+    settings.set("address.translate.to.english", "false");
     uut.setConfiguration(settings);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void additionalTagsTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
     QSet<QString> additionalTagKeys;
     additionalTagKeys.insert("note");
@@ -360,7 +443,7 @@ public:
     node1->getTags().set("blah", "123 Main Street");
     way1->getTags().clear();
     way1->getTags().set("blah", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
 
     // name gets parsed by default
     node1->getTags().clear();
@@ -372,7 +455,7 @@ public:
 
   void invalidFullAddressTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
 
     OsmMapPtr map(new OsmMap());
@@ -406,7 +489,7 @@ public:
 
   void invalidComponentAddressTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
 
     OsmMapPtr map(new OsmMap());
@@ -434,17 +517,17 @@ public:
     way1->getTags().clear();
     way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "");
     way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
 
     way1->getTags().clear();
     way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
     way1->getTags().set(TestUtils::STREET_TAG_NAME, "");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void addressNormalizationTest()
   {
-    PoiPolygonAddressScoreExtractor uut;
+    AddressScoreExtractor uut;
     uut.setConfiguration(conf());
 
     OsmMapPtr map(new OsmMap());
@@ -471,6 +554,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PoiPolygonAddressScoreExtractorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AddressScoreExtractorTest, "slow");
 
 }

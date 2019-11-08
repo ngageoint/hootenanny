@@ -193,7 +193,7 @@ features in the reference layer to be replaced in the changeset output, thus ove
 
 === Versioning
 
-If the final target of the resulting changeset is an OSM API data store (direct connect or via Rails Port, all input features from the 
+If the final target of the resulting changeset is an OSM API data store (direct connect or via Rails Port), all input features from the 
 reference dataset must be populated with the correct changeset versions or application of the resulting changeset will fail. 
 
 To ensure this for the output from Overpass API queries, add "out meta" to the query retrieving the reference data.

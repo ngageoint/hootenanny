@@ -274,24 +274,21 @@ long OsmUtils::getFirstWayIdFromRelation(const ConstRelationPtr& relation, const
   }
 }
 
-void OsmUtils::logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
-                                const Log::WarningLevel& logLevel, const QString& message)
+QString OsmUtils::getElementDetailString(const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
-  if (Log::getInstance().getLevel() <= logLevel)
+  QString str;
+  str += element->toString() + "\n";
+  if (element->getElementType() == ElementType::Way)
   {
-    LOG_VAR(message);
-    LOG_VAR(element);
-    if (element->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-      LOG_VAR(OsmUtils::getWayNodesDetailedString(way, map));
-    }
-    else if (element->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-      LOG_VAR(OsmUtils::getRelationMembersDetailedString(relation, map));
-    }
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+    str += OsmUtils::getWayNodesDetailedString(way, map) + "\n";
   }
+  else if (element->getElementType() == ElementType::Relation)
+  {
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
+    str += OsmUtils::getRelationMembersDetailedString(relation, map) + "\n";
+  }
+  return str;
 }
 
 bool OsmUtils::oneWayConflictExists(const ConstElementPtr& element1,

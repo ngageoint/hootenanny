@@ -145,7 +145,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   if (_manyToManyMatch && !_mergeManyToManyMatches)
   {
-    // If the corresponding config option is enabled, auto review this many to many match.
+    // If the corresponding auto merge config option is not enabled, then auto review this many to
+    // many match.
     _markedReviewText =
       "Merging multiple buildings from each data source is error prone and requires a human eye.";
     reviewMarker.mark(map, combined, _markedReviewText, "Building", 1.0);
@@ -155,12 +156,12 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   ElementPtr e1 = _buildBuilding(map, true);
   if (e1.get())
   {
-    OsmUtils::logElementDetail(e1, map, Log::Trace, "BuildingMerger: built building e1");
+    LOG_TRACE("BuildingMerger: built building e1\n" << OsmUtils::getElementDetailString(e1, map));
   }
   ElementPtr e2 = _buildBuilding(map, false);
   if (e2.get())
   {
-    OsmUtils::logElementDetail(e2, map, Log::Trace, "BuildingMerger: built building e2");
+    LOG_TRACE("BuildingMerger: built building e2\n" << OsmUtils::getElementDetailString(e2, map));
   }
 
   LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
@@ -228,8 +229,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   keeper->setTags(_getMergedTags(e1, e2));
   keeper->setStatus(Status::Conflated);
 
-  OsmUtils::logElementDetail(keeper, map, Log::Trace, "BuildingMerger: keeper");
-  OsmUtils::logElementDetail(scrap, map, Log::Trace, "BuildingMerger: scrap");
+  LOG_TRACE("BuildingMerger: keeper\n" << OsmUtils::getElementDetailString(keeper, map));
+  LOG_TRACE("BuildingMerger: scrap\n" << OsmUtils::getElementDetailString(scrap, map));
 
   // Check to see if we are removing a multipoly building relation.  If so, its multipolygon
   // relation members, need to be removed as well.
@@ -268,8 +269,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 
   set<pair<ElementId, ElementId>> replacedSet;
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-       it != _pairs.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+       ++it)
   {
     // if we replaced the second group of buildings
     if (it->second != keeper->getElementId())
@@ -521,7 +522,8 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
       {
         // If the building wasn't a relation, then just add the way building on the list of
         // buildings to be merged into a relation.
-        OsmUtils::logElementDetail(e, map, Log::Trace, "BuildingMerger: Non-relation building");
+        LOG_TRACE(
+          "BuildingMerger: non-relation building\n" << OsmUtils::getElementDetailString(e, map));
         constituentBuildings.push_back(e);
       }
     }

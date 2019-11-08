@@ -283,16 +283,12 @@ public:
   static long getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map);
 
   /**
-   * Logs a detailed printout for an element
+   * Constructs a detailed string for an element suitable for trace logging
    *
-   * @param element the element to log
+   * @param element the element to create a string for
    * @param map map owning the element
-   * @param logLevel granularity at which to log the element
-   * @param message optional message
    */
-  static void logElementDetail(const ConstElementPtr& element, const ConstOsmMapPtr& map,
-                               const Log::WarningLevel& logLevel = Log::Trace,
-                               const QString& message = "");
+  static QString getElementDetailString(const ConstElementPtr& element, const ConstOsmMapPtr& map);
 
   /**
    * Determines if two elements have conflicting one way street tags

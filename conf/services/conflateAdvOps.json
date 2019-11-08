@@ -961,7 +961,7 @@
         	"defaultvalue":"true",
         	"description":"If true, POI/Polygon conflation will allow house number subletter mismatches for the addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street",
         	"name":"Allow Lenient House Number Matching",
-        	"hoot_key":"poi.polygon.address.allow.lenient.house.number.matching"
+        	"hoot_key":"address.allow.lenient.house.number.matching"
     	    },
             {
         	"id":"poipolygon_address_match_enabled",

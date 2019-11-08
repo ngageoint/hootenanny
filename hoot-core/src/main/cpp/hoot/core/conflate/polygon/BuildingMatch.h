@@ -41,7 +41,7 @@ class BuildingRfClassifier;
 
 /**
  * Matches two building elements. If there is a many to many match it will be resolved by the
- * conflation routines and then merged properly with the BuildingMerge.
+ * conflation routines and then merged properly with the BuildingMerger.
  */
 class BuildingMatch : public Match, public MatchDetails
 {
@@ -50,7 +50,6 @@ public:
   static std::string className() { return "hoot::BuildingMatch"; }
 
   BuildingMatch();
-  // this constructor added primarily for testing purposes
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
                 const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
@@ -92,20 +91,15 @@ private:
   std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;
 
-  // forces a review if features in the secondary layer have a newer timestamp than the feature
-  // being compared to in the ref layer
-  bool _reviewIfSecondaryFeatureNewer;
   // tag key to determine a feature's timestamp
   QString _dateTagKey;
   // format of a feature's timestamp
   QString _dateFormat;
-  // determines whether feature pairs flagged for review should be converted to matches when one
-  // feature in the pair is completely contained by the other
-  bool _matchReviewsWithContainment;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
-  QStringList _getMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
-                                   const ConstElementPtr& element1, const ConstElementPtr& element2);
+  QStringList _getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,
+                                      const ConstElementPtr& element1,
+                                      const ConstElementPtr& element2);
   QStringList _createReviewIfSecondaryFeatureNewer(const ConstElementPtr& element1,
                                                    const ConstElementPtr& element2);
 };

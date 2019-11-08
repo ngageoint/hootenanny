@@ -33,8 +33,8 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonNameScoreExtractor.h>
-#include <hoot/core/algorithms/extractors//poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>

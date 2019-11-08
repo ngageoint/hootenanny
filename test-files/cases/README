@@ -1,14 +1,13 @@
 Test configuration options inherit from each other from the top level parent directory on down.
 
 If you want to base your test configuration off one or more of the default configuration files, add the option "base.config" with the name(s) 
-of the base configuration file(s) as the value. Delimit multiple file names with a comma. If you do not specify any base configuration 
-file(s), the test's settings will be based off of the default option values in ConfigOptions.asciidoc which are set to use Reference 
-Conflation / Unifying Algorithm options.
+of the base configuration file(s) as the value. Delimit multiple file names with a comma. At this time, all conf files should inherit from
+at least Testing.conf and should have uuid.helper.repeatable=true (TODO: we should probably hardcode both of these). Optionally, setting
+writer.include.debug.tags=true may aid in debugging.
 
-To keep the test configuration files manageable, only add configuration options to your test config that differ in value from either those 
-in your base configuration file (if you specified a base configuration), ConfigOptions.asciidoc (if you didn't specify a base configuration),
-or any configuration file being inherited from (those in a parent directory). If your test only needs configuration options from its parent 
-config or ConfigOptions.asciidoc, you don't need to create a configuration file for it.
+To keep the test configuration files manageable, only add configuration options to your test config that differ in value from those in your 
+base or next highest up parent configuration file. If your test only needs configuration options from its parent config, you don't need to 
+create a configuration file for it.
 
 When possible, only use match/merger creators specific to the type of conflation being performed by the test to increase test runtime 
 performance (although, usually not an issue for normal small test files) and reduce dependencies on other matchers/mergers.

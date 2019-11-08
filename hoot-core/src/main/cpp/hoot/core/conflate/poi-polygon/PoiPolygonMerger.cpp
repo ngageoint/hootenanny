@@ -69,6 +69,7 @@ _tagMergerClass("")
 std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
 {
   std::shared_ptr<const TagMerger> tagMerger;
+
   std::string tagMergerClass;
   // Always preserve types when merging many POIs in. This can go away if we stay with defaulting
   // poi/poly merging to use PreserveTypesTagMerger.
@@ -96,6 +97,7 @@ std::shared_ptr<const TagMerger> PoiPolygonMerger::_getTagMerger()
     throw IllegalArgumentException("No tag merger specified for POI/Polygon conflation.");
   }
   LOG_VART(tagMergerClass);
+
   tagMerger.reset(Factory::getInstance().constructObject<TagMerger>(tagMergerClass));
   return tagMerger;
 }
@@ -235,14 +237,14 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s) const
     ElementPtr e2 = map->getElement(p.second);
     if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
-      //LOG_VART(e1->getElementId());
-      LOG_VART(e1);
+      LOG_VART(e1->getElementId());
+      //LOG_VART(e1);
       result = tagMerger->mergeTags(result, e1->getTags(), e1->getElementType());
     }
     if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
-      //LOG_VART(e2->getElementId());
-      LOG_VART(e2);
+      LOG_VART(e2->getElementId());
+      //LOG_VART(e2);
       result = tagMerger->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }

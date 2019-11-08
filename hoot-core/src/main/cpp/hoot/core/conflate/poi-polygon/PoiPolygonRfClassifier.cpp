@@ -27,7 +27,7 @@
 #include "PoiPolygonRfClassifier.h"
 
 // hoot
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAddressScoreExtractor.h>
+#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
@@ -53,8 +53,7 @@ void PoiPolygonRfClassifier::_createExtractors()
     new PoiPolygonAlphaShapeDistanceExtractor()));
   _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
   _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
-  std::shared_ptr<PoiPolygonAddressScoreExtractor> addressExtractor1(
-    new PoiPolygonAddressScoreExtractor());
+  std::shared_ptr<AddressScoreExtractor> addressExtractor1(new AddressScoreExtractor());
   addressExtractor1->setConfiguration(conf());
   _extractors.push_back(addressExtractor1);
 }
