@@ -95,6 +95,9 @@ class ExportCommand extends ExternalCommand {
         else if (translation.equalsIgnoreCase("translations/TDSv40.js")) {
             tdsTemplate = new File(templateHome, "tds40.tgz");
         }
+        else if (translation.equalsIgnoreCase("translations/TDSv70.js")) {
+            tdsTemplate = new File(templateHome, "tds70.tgz");
+        }
 
         if ((tdsTemplate != null) && tdsTemplate.exists()) {
             File outputDir = new File(this.getWorkFolder(), params.getOutputName() + "." + params.getOutputType().toLowerCase());
