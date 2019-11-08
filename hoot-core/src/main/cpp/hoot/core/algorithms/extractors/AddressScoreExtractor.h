@@ -81,7 +81,6 @@ public:
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
   void setAllowLenientHouseNumberMatching(bool allow)
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
-  bool isConfigured() const { return _configured; }
 
 private:
 
