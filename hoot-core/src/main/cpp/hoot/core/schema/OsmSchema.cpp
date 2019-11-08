@@ -1775,12 +1775,22 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
   double maxScore = 0.0;
   for (Tags::const_iterator tagItr = tags.begin(); tagItr != tags.end(); ++tagItr)
   {
-    const QString kvp2 = tagItr.key() + "=" + tagItr.value();
-    const double scoreVal = score(kvp, kvp2);
-    if (scoreVal > maxScore)
+    const QString key = tagItr.key().trimmed();
+    const QString value = tagItr.value().trimmed();
+    if (!key.isEmpty() && !value.isEmpty())
     {
-      maxScore = scoreVal;
+      //QString kvp2 = tagItr.key() + "=" + tagItr.value();
+      QString kvp2 = "";
+      kvp2.append(key);
+      kvp2.append("=");
+      kvp2.append(value);
+      const double scoreVal = score(kvp, kvp2);
+      if (scoreVal > maxScore)
+      {
+        maxScore = scoreVal;
+      }
     }
+
   }
   return maxScore;
 }

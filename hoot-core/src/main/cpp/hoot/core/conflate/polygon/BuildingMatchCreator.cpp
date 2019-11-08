@@ -157,7 +157,7 @@ public:
     {
       _markNonOneToOneMatchesAsReview(tempMatches);
     }
-    //_adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
+    _adjustForOverlappingAdjoiningBuildingMatches(tempMatches);
 
     for (std::vector<MatchPtr>::const_iterator it = tempMatches.begin(); it != tempMatches.end();
          ++it)
@@ -305,9 +305,9 @@ private:
     // the like), check for many to one relationships. From the many to one, keep only the match
     // with the highest overlap. Convert all others to misses by removing the matches completely.
     //
-    // The argument could be made that this overlap check could be done for all buildings to reduce
-    // bad matches/reviews. Doing that would likely not lead to better overall conflated output but
-    // maybe still worth trying.
+    // The argument could be made that this overlap check could be done for all buildings, not just
+    // adjoining buildings, to reduce bad matches/reviews. Not sure how much havoc that might wreak,
+    // but maybe worth trying.
 
     LOG_VART(matches);
 
@@ -364,17 +364,22 @@ private:
         }
       }
     }
+    highestOverlapScores.clear();
     LOG_VART(adjoiningBuildingEncountered);
 
     if (adjoiningBuildingEncountered)
     {
-      matches.clear();
+      std::vector<MatchPtr> modifiedMatches;
+      //matches.clear();
+      //matches.resize(highestOverlapMatches.size());
       for (QMap<ElementId, MatchPtr>::const_iterator modifiedMatchItr = highestOverlapMatches.begin();
            modifiedMatchItr != highestOverlapMatches.end(); ++modifiedMatchItr)
       {
-        matches.push_back(modifiedMatchItr.value());
+        modifiedMatches.push_back(modifiedMatchItr.value());
       }
+      matches = modifiedMatches;
     }
+    highestOverlapMatches.clear();
     LOG_VART(matches);
   }
 };
