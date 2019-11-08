@@ -57,12 +57,9 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
-  bool isConfigured() const { return _configured; }
-
 private:
 
   AddressParser _addressParser;
-  bool _configured;
 };
 
 }

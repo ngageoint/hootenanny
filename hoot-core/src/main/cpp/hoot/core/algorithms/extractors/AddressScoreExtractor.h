@@ -67,7 +67,9 @@ public:
    * @param map map containing the elements whose score is to be determined
    * @param element1 the first element whose address is to be compared
    * @param element2 the second element whose address is to be compared
-   * @return the address score
+   * @return the address score; a score of 1.0 is returned for a match, a score of 0.0 is returned
+   * for a non-match where both input elements have an address, and a score of -1.0 is returned if
+   * either input element does not have an address
    */
   virtual double extract(const OsmMap& map, const ConstElementPtr& element1,
                          const ConstElementPtr& element2) const;
@@ -80,8 +82,6 @@ public:
   void setAllowLenientHouseNumberMatching(bool allow)
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
   bool isConfigured() const { return _configured; }
-  void setReturnNegativeScoreWhenEitherInputHasNoAddress(bool returnNegative)
-  { _returnNegativeScoreWhenEitherInputHasNoAddress = returnNegative; }
 
 private:
 
@@ -91,9 +91,6 @@ private:
   mutable bool _matchAttemptMade;
 
   AddressParser _addressParser;
-
-  bool _configured;
-  bool _returnNegativeScoreWhenEitherInputHasNoAddress;
 
   /*
    * Searches for an address on element. Will look also look for address way nodes and address

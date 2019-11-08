@@ -35,15 +35,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, HasAddressCriterion)
 
-HasAddressCriterion::HasAddressCriterion() :
-_configured(false)
+HasAddressCriterion::HasAddressCriterion()
 {
 }
 
 void HasAddressCriterion::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
-  _configured = true;
 }
 
 bool HasAddressCriterion::isSatisfied(const ConstElementPtr& e) const

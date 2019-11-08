@@ -47,6 +47,9 @@ namespace hoot
 /*
  * Its possible we might want to eventually break the parsing and normalization tests out
  * separately.
+ *
+ * This test took a hit in readability when moved from PoiPolygonAddressScoreExtractor to the more
+ * generic AddressScoreExtractor, so could use some simplification.
  */
 class AddressScoreExtractorTest : public HootTestFixture
 {
@@ -279,6 +282,20 @@ public:
     way2->addNode(node4->getId());
     map->addWay(way2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node3, way2), 0.01);
+
+    NodePtr node5(new Node(Status::Unknown1, -5, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node5);
+    WayPtr way3(new Way(Status::Unknown2, -3, 15.0));
+    way3->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way3->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
+    way3->addNode(node5->getId());
+    map->addWay(way3);
+    WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
+    way4->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way4->getTags().set(TestUtils::STREET_TAG_NAME, "Main Street");
+    way4->addNode(node5->getId());
+    map->addWay(way4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, way3, way4), 0.01);
   }
 
   void runRelationTest()
@@ -325,6 +342,35 @@ public:
     relation4->addElement("test", way3->getElementId());
     map->addRelation(relation4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node6, relation4), 0.01);
+
+    NodePtr node7(new Node(Status::Unknown1, -7, Coordinate(0.0, 0.0), 15.0));
+    node7->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    node7->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addNode(node7);
+    RelationPtr relation5(new Relation(Status::Unknown2, -5, 15.0));
+    WayPtr way4(new Way(Status::Unknown2, -4, 15.0));
+    way4->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    way4->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addWay(way4);
+    relation5->addElement("test", way4->getElementId());
+    map->addRelation(relation5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, node7, relation5), 0.01);
+
+    NodePtr node8(new Node(Status::Unknown1, -8, Coordinate(0.0, 0.0), 15.0));
+    map->addNode(node8);
+    WayPtr way5(new Way(Status::Unknown2, -5, 15.0));
+    map->addWay(way5);
+    RelationPtr relation6(new Relation(Status::Unknown2, -6, 15.0));
+    relation6->addElement("test", way5->getElementId());
+    relation6->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    relation6->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addRelation(relation5);
+    RelationPtr relation7(new Relation(Status::Unknown2, -7, 15.0));
+    relation7->addElement("test", node8->getElementId());
+    relation7->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
+    relation7->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
+    map->addRelation(relation7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, uut.extract(*map, relation6, relation7), 0.01);
   }
 
   void translateTagValueTest()
@@ -397,7 +443,7 @@ public:
     node1->getTags().set("blah", "123 Main Street");
     way1->getTags().clear();
     way1->getTags().set("blah", "123 main St");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
 
     // name gets parsed by default
     node1->getTags().clear();
@@ -471,12 +517,12 @@ public:
     way1->getTags().clear();
     way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "");
     way1->getTags().set(TestUtils::STREET_TAG_NAME, "main street");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
 
     way1->getTags().clear();
     way1->getTags().set(TestUtils::HOUSE_NUMBER_TAG_NAME, "123");
     way1->getTags().set(TestUtils::STREET_TAG_NAME, "");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, uut.extract(*map, node1, way1), 0.0);
   }
 
   void addressNormalizationTest()
