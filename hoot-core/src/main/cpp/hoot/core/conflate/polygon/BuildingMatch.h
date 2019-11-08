@@ -34,7 +34,7 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
-#include <hoot/core/criterion/HasAddressCriterion.h>
+//#include <hoot/core/criterion/HasAddressCriterion.h>
 
 namespace hoot
 {
@@ -98,8 +98,8 @@ private:
   // format of a feature's timestamp
   QString _dateFormat;
 
-  AddressScoreExtractor _addressScorer;
-  HasAddressCriterion _addressCrit;
+  /*static*/ AddressScoreExtractor _addressScorer;
+  /*static*/ //HasAddressCriterion _addressCrit;
 
   void _calculateClassification(const ConstOsmMapPtr& map);
   QStringList _getNonMatchDescription(const ConstOsmMapPtr& map, const MatchType& type,

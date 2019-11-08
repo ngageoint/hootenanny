@@ -49,6 +49,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Match, BuildingMatch)
 
 QString BuildingMatch::_matchName = "Building";
+//AddressScoreExtractor BuildingMatch::_addressScorer;
+//HasAddressCriterion BuildingMatch::_addressCrit;
 
 BuildingMatch::BuildingMatch() :
 Match()
@@ -84,8 +86,6 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   LOG_VART(type);
 
   QStringList description;
-  _addressScorer.setConfiguration((conf()));
-  _addressCrit.setConfiguration(conf());
 
   // Now, we'll do some post model cleanup (checks that could be eventually baked into the model if
   // we have the appropriate input data).
@@ -103,29 +103,42 @@ _dateFormat(ConfigOptions().getBuildingDateFormat())
   }
   // If we have a match, building address matching is enabled, both have addresses, and we have
   // an explicit address mismatch, declare a miss instead.
-  else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled() &&
-           _addressCrit.isSatisfied(element1) && _addressCrit.isSatisfied(element2))
+  else if (type != MatchType::Review && ConfigOptions().getBuildingAddressMatchEnabled())
   {
-    // address scorer only returns 0 or 1 currently
-    const bool addressMatch = _addressScorer.extract(*map, element1, element2) == 1.0;
-    if (type == MatchType::Match && !addressMatch)
-    {
-      LOG_TRACE(
-        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a match with an " <<
-        "explicit address conflict. Marking as a review...");
-      description.append("Address mismatch.");
-      _p.clear();
-      _p.setReviewP(1.0);
-    }
-    else if (type == MatchType::Miss && addressMatch)
-    {
-      LOG_TRACE(
-        "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a miss with " <<
-        "matching addresses. Marking as a review...");
-      description.append("Address match.");
-      _p.clear();
-      _p.setReviewP(1.0);
-    }
+    //if (!_addressCrit.isConfigured())
+    //{
+      //_addressCrit.setConfiguration(conf());
+    //}
+    //if (_addressCrit.isSatisfied(element1) && _addressCrit.isSatisfied(element2))
+    //{
+      //if (!_addressScorer.isConfigured())
+      //{
+        _addressScorer.setConfiguration((conf()));
+      //}
+      _addressScorer.setReturnNegativeScoreWhenEitherInputHasNoAddress(true);
+      // address scorer only returns 0 or 1 currently
+      //const bool addressMatch = _addressScorer.extract(*map, element1, element2) == 1.0;
+      const double score = _addressScorer.extract(*map, element1, element2);
+      const bool addressMatch = score == 1.0;
+      if (score != -1.0 && type == MatchType::Match && !addressMatch)
+      {
+        LOG_TRACE(
+          "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a match with an " <<
+          "explicit address conflict. Marking as a review...");
+        description.append("Address mismatch.");
+        _p.clear();
+        _p.setReviewP(1.0);
+      }
+      else if (type == MatchType::Miss && addressMatch)
+      {
+        LOG_TRACE(
+          "Found building pair: " <<  _eid1 << ", " << _eid2 << " marked as a miss with " <<
+          "matching addresses. Marking as a review...");
+        description.append("Address match.");
+        _p.clear();
+        _p.setReviewP(1.0);
+      }
+   // }
   }
   // If we have a match, the secondary feature is newer than the reference feature, and the
   // associated config option is enabled, let's review them instead.

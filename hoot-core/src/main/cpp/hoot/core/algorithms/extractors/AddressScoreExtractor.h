@@ -79,6 +79,9 @@ public:
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
   void setAllowLenientHouseNumberMatching(bool allow)
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
+  bool isConfigured() const { return _configured; }
+  void setReturnNegativeScoreWhenEitherInputHasNoAddress(bool returnNegative)
+  { _returnNegativeScoreWhenEitherInputHasNoAddress = returnNegative; }
 
 private:
 
@@ -88,6 +91,9 @@ private:
   mutable bool _matchAttemptMade;
 
   AddressParser _addressParser;
+
+  bool _configured;
+  bool _returnNegativeScoreWhenEitherInputHasNoAddress;
 
   /*
    * Searches for an address on element. Will look also look for address way nodes and address

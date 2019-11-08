@@ -370,8 +370,6 @@ private:
     if (adjoiningBuildingEncountered)
     {
       std::vector<MatchPtr> modifiedMatches;
-      //matches.clear();
-      //matches.resize(highestOverlapMatches.size());
       for (QMap<ElementId, MatchPtr>::const_iterator modifiedMatchItr = highestOverlapMatches.begin();
            modifiedMatchItr != highestOverlapMatches.end(); ++modifiedMatchItr)
       {

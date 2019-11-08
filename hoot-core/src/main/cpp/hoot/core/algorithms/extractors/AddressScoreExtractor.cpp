@@ -43,7 +43,9 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, AddressScoreExtractor)
 
 AddressScoreExtractor::AddressScoreExtractor() :
 _addressesProcessed(0),
-_matchAttemptMade(false)
+_matchAttemptMade(false),
+_configured(false),
+_returnNegativeScoreWhenEitherInputHasNoAddress(false)
 {
 }
 
@@ -65,6 +67,8 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
     preTranslateTagValuesToEnglish = false;
   }
   _addressParser.setPreTranslateTagValuesToEnglish(preTranslateTagValuesToEnglish, conf);
+
+  _configured = true;
 }
 
 QList<Address> AddressScoreExtractor::_getElementAddresses(
@@ -109,7 +113,14 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   if (element1Addresses.size() == 0)
   {
     LOG_TRACE("No element 1 addresses.");
-    return 0.0;
+    if (!_returnNegativeScoreWhenEitherInputHasNoAddress)
+    {
+      return 0.0;
+    }
+    else
+    {
+      return -1.0;
+    }
   }
 
   //see if the second element has an address
@@ -118,7 +129,14 @@ double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& 
   if (element2Addresses.size() == 0)
   {
     LOG_TRACE("No element 2 addresses.");
-    return 0.0;
+    if (!_returnNegativeScoreWhenEitherInputHasNoAddress)
+    {
+      return 0.0;
+    }
+    else
+    {
+      return -1.0;
+    }
   }
 
   _matchAttemptMade = true;
