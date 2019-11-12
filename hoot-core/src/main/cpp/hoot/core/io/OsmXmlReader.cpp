@@ -169,6 +169,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  LOG_VART(version);
 
   _element =
     Node::newSp(
@@ -238,6 +239,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  LOG_VART(version);
 
   _element.reset(
     new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
@@ -294,6 +296,7 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  LOG_VART(version);
 
   _element.reset(
     new Relation(

@@ -22,50 +22,39 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#include "IdTagMatchesId.h"
 
-#ifndef IDGENERATOR_H
-#define IDGENERATOR_H
-
-// standard
-#include <memory>
-#include <string>
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-class IdGenerator
+HOOT_FACTORY_REGISTER(ElementCriterion, IdTagMatchesId)
+
+IdTagMatchesId::IdTagMatchesId()
 {
-public:
-
-  static std::string className() { return "hoot::IdGenerator"; }
-
-  IdGenerator() {}
-
-  virtual ~IdGenerator() {}
-
-  virtual std::shared_ptr<IdGenerator> clone() const = 0;
-
-  virtual long createNodeId() = 0;
-  virtual long createRelationId() = 0;
-  virtual long createWayId() = 0;
-
-  virtual void ensureNodeBounds(long nid) = 0;
-  virtual void ensureRelationBounds(long rid) = 0;
-  virtual void ensureWayBounds(long wid) = 0;
-
-  static std::shared_ptr<IdGenerator> getInstance();
-
-  virtual void reset() = 0;
-
-private:
-
-  static std::shared_ptr<IdGenerator> _theInstance;
-};
-
-typedef std::shared_ptr<IdGenerator> IdGeneratorPtr;
-
 }
 
-#endif // IDGENERATOR_H
+bool IdTagMatchesId::isSatisfied(const ConstElementPtr& e) const
+{
+  const QString tagVal = e->getTags().get(MetadataTags::HootId()).trimmed();
+  if (!tagVal.isEmpty())
+  {
+    bool ok = false;
+    const long tagId = tagVal.toLong(&ok);
+    if (ok && tagId != e->getId())
+    {
+      LOG_TRACE(
+        "crit failed for " << e->getElementId() << "; tagId: " << tagId << "; id: " << e->getId());
+      return false;
+    }
+  }
+  return true;
+}
+
+}

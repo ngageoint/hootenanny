@@ -22,50 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef ID_TAG_MATCHES_ID_H
+#define ID_TAG_MATCHES_ID_H
 
-#ifndef IDGENERATOR_H
-#define IDGENERATOR_H
-
-// standard
-#include <memory>
-#include <string>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-class IdGenerator
+class IdTagMatchesId : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::IdGenerator"; }
+  static std::string className() { return "hoot::IdTagMatchesId"; }
 
-  IdGenerator() {}
+  IdTagMatchesId();
 
-  virtual ~IdGenerator() {}
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual std::shared_ptr<IdGenerator> clone() const = 0;
+  virtual QString getDescription() const { return "TODO"; }
 
-  virtual long createNodeId() = 0;
-  virtual long createRelationId() = 0;
-  virtual long createWayId() = 0;
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
 
-  virtual void ensureNodeBounds(long nid) = 0;
-  virtual void ensureRelationBounds(long rid) = 0;
-  virtual void ensureWayBounds(long wid) = 0;
-
-  static std::shared_ptr<IdGenerator> getInstance();
-
-  virtual void reset() = 0;
-
-private:
-
-  static std::shared_ptr<IdGenerator> _theInstance;
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IdTagMatchesId()); }
 };
-
-typedef std::shared_ptr<IdGenerator> IdGeneratorPtr;
 
 }
 
-#endif // IDGENERATOR_H
+#endif // ID_TAG_MATCHES_ID_H

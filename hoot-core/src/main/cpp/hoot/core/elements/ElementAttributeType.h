@@ -54,7 +54,8 @@ public:
     Timestamp = 1,
     User = 2,
     Uid = 3,
-    Version = 4
+    Version = 4,
+    Id = 5
   } Type;
 
   ElementAttributeType() : _type(Changeset) {}
@@ -79,6 +80,8 @@ public:
       return "uid";
     case ElementAttributeType::Version:
       return "version";
+    case ElementAttributeType::Id:
+      return "id";
     default:
       return QString("Unknown (%1)").arg(_type);
     }
@@ -106,6 +109,10 @@ public:
     else if (typeString == "version")
     {
       return Version;
+    }
+    else if (typeString == "id")
+    {
+      return Id;
     }
     else
     {

@@ -579,6 +579,30 @@ public:
    */
   static bool anyElementsHaveAnyKvp(const QStringList& kvps,
                                     const std::set<ElementId>& elementIds, OsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @return
+   */
+  static bool allElementIdsPositive(const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @return
+   */
+  static bool allElementIdsNegative(const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @return
+   */
+  static bool allIdTagsMatchIds(const ConstOsmMapPtr& map);
 };
 
 }

@@ -119,6 +119,8 @@ bool AttributeValueCriterion::isSatisfied(const ConstElementPtr& e) const
       return _satisfiesComparison(QVariant((qlonglong)e->getUid()));
     case ElementAttributeType::Version:
       return _satisfiesComparison(QVariant((qlonglong)e->getVersion()));
+    case ElementAttributeType::Id:
+      return _satisfiesComparison(QVariant((qlonglong)e->getId()));
     default:
       throw IllegalArgumentException("Invalid attribute type: " + _attributeType.toString());
   }
@@ -132,6 +134,8 @@ bool AttributeValueCriterion::_satisfiesComparison(const QVariant& val) const
   {
     bool ok = false;
     const double numericVal = val.toDouble(&ok);
+    LOG_VART(numericVal);
+    LOG_VART(_comparisonVal);
 
     if (!ok)
     {
