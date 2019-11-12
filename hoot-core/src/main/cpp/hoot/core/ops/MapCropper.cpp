@@ -214,6 +214,8 @@ void MapCropper::apply(OsmMapPtr& map)
   }
 
   LOG_DEBUG("Cropping ways...");
+  LOG_VARD(map->size());
+  LOG_VART(OsmUtils::allElementIdsPositive(map));
 
   _numProcessed = 0;
   _numAffected = 0;
@@ -450,6 +452,9 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
 
+  LOG_VARD(_numAffected);
+  LOG_VARD(map->size());
+  LOG_VART(OsmUtils::allElementIdsPositive(map));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysInBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysOutOfBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysCrossingThreshold));

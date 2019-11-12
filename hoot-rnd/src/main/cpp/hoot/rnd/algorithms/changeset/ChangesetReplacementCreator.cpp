@@ -380,26 +380,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   refMap = _loadRefMap(input1);
 
-  // We want to alert the user to the fact their ref versions *could* be being populated incorectly
-  // to avoid difficulties during changeset application at the end. Its likely if they are
-  // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
-  // now to give the chance to back out earlier.
-
-  // TODO: something strange going on here with xml inputs where the ids and version in the ref
-  // aren't being retained. see #3631
-  LOG_VARD(OsmUtils::allElementIdsPositive(refMap));
-  LOG_VARD(OsmUtils::allElementIdsNegative(refMap));
-  LOG_VARD(OsmUtils::allIdTagsMatchIds(refMap));
-  if (OsmUtils::checkVersionLessThanOneCountAndLogWarning(refMap))
-  {
-    const std::set<ElementId> ids = OsmUtils::getIdsOfElementsWithVersionLessThanOne(refMap);
-    LOG_VARD(ids);
-    for (std::set<ElementId>::const_iterator itr = ids.begin(); itr != ids.end(); ++itr)
-    {
-      LOG_VART(refMap->getElement(*itr));
-    }
-  }
-
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
 
@@ -664,9 +644,14 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
 }
 
 OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
-{
+{ 
   LOG_INFO("Loading reference map: " << input << "...");
-  LOG_VARD(ConfigOptions().getIdGenerator());
+
+  // We want to alert the user to the fact their ref versions *could* be being populated incorrectly
+  // to avoid difficulties during changeset application at the end. Its likely if they are incorrect
+  // at this point the changeset derivation will fail at the end anyway, but let's warn now to give
+  // the chance to back out earlier.
+  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -681,6 +666,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
+
+  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
 
   LOG_VART(MapProjector::toWkt(refMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");

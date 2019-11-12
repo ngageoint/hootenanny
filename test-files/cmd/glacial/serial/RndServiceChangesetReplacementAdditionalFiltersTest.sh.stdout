@@ -1,8 +1,10 @@
 test name:  RndServiceChangesetReplacementAdditionalFiltersTest
 source file 1:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm
-source file 2:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm
-replacement aoi:  -122.43204,37.7628,-122.4303457,37.76437
 crop aoi:  -122.43384,37.76069,-122.42742,37.76869
+source file 2:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm
+REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
+SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
+replacement aoi:  -122.43204,37.7628,-122.4303457,37.76437
 full replacement: 
 strict bounds:  --strict-bounds
 geometry filters:  --geometry-filters hoot::PoiCriterion
