@@ -38,6 +38,7 @@
 //  Standard
 #include <array>
 #include <map>
+#include <mutex>
 #include <set>
 #include <vector>
 
@@ -471,6 +472,7 @@ private:
   RelationIdToRelationIdMap _relationIdsToRelations;
   /** Full pathname of the error file changeset, if any errors occur */
   QString _errorPathname;
+  std::mutex _errorMutex;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */

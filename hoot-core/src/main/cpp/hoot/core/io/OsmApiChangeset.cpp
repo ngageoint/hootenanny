@@ -309,6 +309,8 @@ void XmlChangeset::fixMalformedInput()
         failRelation(relation_id, true);
     }
   }
+  //  Output the error file if there are errors
+  writeErrorFile();
 }
 
 void XmlChangeset::updateChangeset(const QString &changes)
@@ -1188,12 +1190,18 @@ bool XmlChangeset::writeErrorFile()
   //  Validate the pathname
   if (_errorPathname.isEmpty())
     return false;
+  if (!hasFailedElements())
+    return false;
   //  Don't write an empty file
   QString errorChangeset = getFailedChangesetString();
   if (errorChangeset.isEmpty())
     return false;
+  //  Lock the mutex for writing
+  _errorMutex.lock();
   //  Write out the file
   FileUtils::writeFully(_errorPathname, errorChangeset);
+  //  Unlock the mutex
+  _errorMutex.unlock();
   return true;
 }
 
