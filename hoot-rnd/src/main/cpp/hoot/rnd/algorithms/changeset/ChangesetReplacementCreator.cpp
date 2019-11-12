@@ -388,6 +388,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // TODO: something strange going on here with xml inputs where the ids and version in the ref
   // aren't being retained. see #3631
   LOG_VARD(OsmUtils::allElementIdsPositive(refMap));
+  LOG_VARD(OsmUtils::allElementIdsNegative(refMap));
   LOG_VARD(OsmUtils::allIdTagsMatchIds(refMap));
   if (OsmUtils::checkVersionLessThanOneCountAndLogWarning(refMap))
   {

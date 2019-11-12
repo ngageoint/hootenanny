@@ -528,7 +528,7 @@ bool OsmUtils::allElementIdsPositive(const ConstOsmMapPtr& map)
       ElementAttributeType(ElementAttributeType::Id), 1, NumericComparisonType::LessThan));
   return
     (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) > 0;
+      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) == 0;
 }
 
 bool OsmUtils::allElementIdsNegative(const ConstOsmMapPtr& map)
@@ -538,7 +538,7 @@ bool OsmUtils::allElementIdsNegative(const ConstOsmMapPtr& map)
       ElementAttributeType(ElementAttributeType::Id), -1, NumericComparisonType::GreaterThan));
   return
     (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) > 0;
+      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) == 0;
 }
 
 bool OsmUtils::allIdTagsMatchIds(const ConstOsmMapPtr& map)
@@ -546,7 +546,7 @@ bool OsmUtils::allIdTagsMatchIds(const ConstOsmMapPtr& map)
   std::shared_ptr<IdTagMatchesId> idCrit(new IdTagMatchesId());
   return
     (int)FilteredVisitor::getStat(
-      idCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) !=
+      idCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) ==
     (int)map->size();
 }
 
