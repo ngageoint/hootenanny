@@ -18,21 +18,39 @@ TEST_NAME=$1
 echo "test name: " $TEST_NAME
 SOURCE_FILE_1=$2
 echo "source file 1: " $SOURCE_FILE_1
+CROP_AOI=$5
+echo "crop aoi: " $CROP_AOI
+CROP_OPTS="-D crop.bounds=$CROP_AOI"
+if [[ "$CROP_AOI" == "-180,-90,180,90" ]]; then # if a global crop bounds was passed in, then don't crop
+  CROP_OPTS=""
+fi
 SOURCE_FILE_2=$3
 # If only one source file was passed in, we'll perturb it and use the original data for the secondary and the perturbed for the ref.
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
-  REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp"
+  if [ "$CROP_OPTS" == "" ]; then
+    REF_CONVERT_OPS="hoot::SetTagValueVisitor;hoot::PertyOp"
+    SEC_CONVERT_OPS="hoot::SetTagValueVisitor"
+  else
+    REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp"
+    SEC_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
+  fi
   PERTURBING_REF="true"
 else
-  REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
+  if [ "$CROP_OPTS" == "" ]; then
+    REF_CONVERT_OPS="hoot::SetTagValueVisitor"
+    SEC_CONVERT_OPS="hoot::SetTagValueVisitor"
+  else
+    REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
+    SEC_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
+  fi
   PERTURBING_REF="false"
 fi 
 echo "source file 2: " $SOURCE_FILE_2
+echo "REF_CONVERT_OPS: " $REF_CONVERT_OPS
+echo "SEC_CONVERT_OPS: " $SEC_CONVERT_OPS
 REPLACEMENT_AOI=$4
 echo "replacement aoi: " $REPLACEMENT_AOI
-CROP_AOI=$5
-echo "crop aoi: " $CROP_AOI
 FULL_REPLACEMENT=$6
 if [ "$FULL_REPLACEMENT" == "true" ]; then
   FULL_REPLACEMENT="--full-replacement"
@@ -125,10 +143,8 @@ REF_DB_INPUT=$OSM_API_DB_URL
 # json.reader.require.strict.type.ordering=true is temporary; see #3619
 GENERAL_OPTS="--warn -C UnifyingAlgorithm.conf -C Testing.conf -D log.class.filter= -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D debug.maps.write=false -D json.reader.require.strict.type.ordering=true"
 DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
-CROP_OPTS="-D crop.bounds=$CROP_AOI"
 PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE "
-#echo "changeset derive opts: " $CHANGESET_DERIVE_OPTS
 
 # DB SOURCE WORKFLOW
 
@@ -143,16 +159,24 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   # DATA PREP
 
   echo ""
-  echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing to an osm api db (contains features to be replaced)..."
+  if [[ "$CROP_OPTS" == "" ]]; then
+    echo "Writing reference dataset from: $SOURCE_FILE_1 to an osm api db (contains features to be replaced)..."
+  else
+    echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing to an osm api db (contains features to be replaced)..."
+  fi
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-db.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT 
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $OUT_DIR/ref-original-tmp.osm
   echo ""
-  echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a hoot api db (contains features to replace with)..."
+  if [[ "$CROP_OPTS" == "" ]]; then
+    echo "Writing the secondary dataset from: $SOURCE_FILE_2 to a hoot api db (contains features to replace with)..."
+  else
+    echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a hoot api db (contains features to replace with)..."
+  fi
   echo ""
-  hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
+  hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-db.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_DB_INPUT
   # needed for debugging only:
   #hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec.osm -D reader.use.data.source.ids=true $SEC_DB_INPUT $OUT_DIR/sec-original-tmp.osm
 
@@ -200,7 +224,11 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   # DATA PREP
 
   echo ""
-  echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db (contains features to be replaced)..."
+  if [[ "$CROP_OPTS" == "" ]]; then
+    echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db (contains features to be replaced)..."
+  else
+    echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db (contains features to be replaced)..."
+  fi
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
@@ -209,9 +237,13 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $REF_XML_INPUT
   echo ""
-  echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
+  if [[ "$CROP_OPTS" == "" ]]; then
+    echo "Writing the secondary dataset from: $SOURCE_FILE_2 to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
+  else
+    echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
+  fi
   echo ""
-  hoot convert $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
+  hoot convert $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
 
   # CHANGESET DERIVATION
 
@@ -254,7 +286,12 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   # DATA PREP
 
   echo ""
-  echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db (contains features to be replaced)..."
+  if [[ "$CROP_OPTS" == "" ]]; then
+    echo "Writing the reference dataset from: $SOURCE_FILE_1 to an osm api db (contains features to be replaced)..."
+  else
+    echo "Cropping the reference dataset from: $SOURCE_FILE_1 to: $CROP_AOI, then writing it to an osm api db (contains features to be replaced)..."
+  fi
+ 
   echo ""
   scripts/database/CleanAndInitializeOsmApiDb.sh
   hoot convert $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
@@ -263,9 +300,13 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   hoot convert $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-json.osm -D reader.use.data.source.ids=true $REF_DB_INPUT $REF_JSON_INPUT
   echo ""
-  echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a json file: $SEC_JSON_INPUT (contains features to replace with)..."
+  if [[ "$CROP_OPTS" == "" ]]; then
+    echo "Writing the secondary dataset from: $SOURCE_FILE_2 to a json file: $SEC_JSON_INPUT (contains features to replace with)..."
+  else
+    echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to a json file: $SEC_JSON_INPUT (contains features to replace with)..."
+  fi
   echo ""
-  hoot convert $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-json.osm -D reader.use.data.source.ids=false -D convert.ops="hoot::MapCropper;hoot::SetTagValueVisitor" -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_JSON_INPUT
+  hoot convert $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-json.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_JSON_INPUT
 
   # CHANGESET DERIVATION
 

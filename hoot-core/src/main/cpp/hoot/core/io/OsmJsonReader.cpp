@@ -308,6 +308,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
   setBounds(GeometryUtils::envelopeFromConfigString(opts.getConvertBoundingBox()));
+  setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
 }
 
 void OsmJsonReader::_parseOverpassJson()
@@ -400,6 +401,19 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
 
   long version = ElementData::VERSION_EMPTY;
   version = item.get("version", version);
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Node, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
   long changeset = ElementData::CHANGESET_EMPTY;
   changeset = item.get("changeset", changeset);
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
@@ -472,6 +486,19 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
 
   long version = ElementData::VERSION_EMPTY;
   version = item.get("version", version);
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Way, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
   long changeset = ElementData::CHANGESET_EMPTY;
   changeset = item.get("changeset", changeset);
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
@@ -590,6 +617,19 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
 
   long version = ElementData::VERSION_EMPTY;
   version = item.get("version", version);
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Relation, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
   long changeset = ElementData::CHANGESET_EMPTY;
   changeset = item.get("changeset", changeset);
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;

@@ -40,7 +40,7 @@ public:
 
   static std::string className() { return "hoot::OsmMapReader"; }
 
-  OsmMapReader() : _ignoreDuplicates(false) {}
+  OsmMapReader() : _ignoreDuplicates(false), _warnOnVersionZeroElement(false) {}
 
   virtual ~OsmMapReader() {}
 
@@ -97,13 +97,20 @@ public:
    */
   void setIgnoreDuplicates(bool ignore) { _ignoreDuplicates = ignore; }
 
+  void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
+
 protected:
+
   /**
    * Ignore the duplicate IDs or throw an error
    */
   bool _ignoreDuplicates;
   /** Url of the map to open and read */
   QString _url;
+  // Its useful to be able to track zero version elements in ref datasets during changeset
+  // derivation debugging. So far have only implemented this on some of the file format readers,
+  // as data read out of an API DB will always have a positive version due to imposed constraints.
+  bool _warnOnVersionZeroElement;
 };
 
 }

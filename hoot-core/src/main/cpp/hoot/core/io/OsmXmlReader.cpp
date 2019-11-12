@@ -96,6 +96,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
   setKeepImmediatelyConnectedWaysOutsideBounds(
     configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+  setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
 }
 
 void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
@@ -169,6 +170,19 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Node, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
 
   _element =
     Node::newSp(
@@ -238,6 +252,19 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Way, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
+  }
 
   _element.reset(
     new Way(_status, newId, _defaultCircularError, changeset, version, timestamp, user, uid));
@@ -293,6 +320,19 @@ void OsmXmlReader::_createRelation(const QXmlAttributes& attributes)
   if (attributes.value("uid") != "")
   {
     uid = _parseDouble(attributes.value("uid"));
+  }
+  LOG_VART(version);
+  if (_warnOnVersionZeroElement && version == 0)
+  {
+    if (logWarnCount < Log::getWarnMessageLimit())
+    {
+      LOG_WARN("Element with version = 0: " << ElementId(ElementType::Relation, newId));
+    }
+    else if (logWarnCount == Log::getWarnMessageLimit())
+    {
+      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+    }
+    logWarnCount++;
   }
 
   _element.reset(

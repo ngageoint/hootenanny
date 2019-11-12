@@ -46,6 +46,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/criterion/IdTagMatchesId.h>
 
 // Qt
 #include <QDateTime>
@@ -518,6 +519,35 @@ bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
     return true;
   }
   return false;
+}
+
+bool OsmUtils::allElementIdsPositive(const ConstOsmMapPtr& map)
+{
+  std::shared_ptr<AttributeValueCriterion> attrCrit(
+    new AttributeValueCriterion(
+      ElementAttributeType(ElementAttributeType::Id), 1, NumericComparisonType::LessThan));
+  return
+    (int)FilteredVisitor::getStat(
+      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) == 0;
+}
+
+bool OsmUtils::allElementIdsNegative(const ConstOsmMapPtr& map)
+{
+  std::shared_ptr<AttributeValueCriterion> attrCrit(
+    new AttributeValueCriterion(
+      ElementAttributeType(ElementAttributeType::Id), -1, NumericComparisonType::GreaterThan));
+  return
+    (int)FilteredVisitor::getStat(
+      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) == 0;
+}
+
+bool OsmUtils::allIdTagsMatchIds(const ConstOsmMapPtr& map)
+{
+  std::shared_ptr<IdTagMatchesId> idCrit(new IdTagMatchesId());
+  return
+    (int)FilteredVisitor::getStat(
+      idCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) ==
+    (int)map->size();
 }
 
 int OsmUtils::versionLessThanOneCount(const OsmMapPtr& map)

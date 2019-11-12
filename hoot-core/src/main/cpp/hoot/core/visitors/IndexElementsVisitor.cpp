@@ -163,13 +163,14 @@ QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
     ConstNodePtr neighborNode = pMap->getNode(*neighborIdsItr);
     if (!neighborNode)
     {
-      // This shouldn't happen unless the geospatial indices were set up improperly for the
-      // query node.
+      // This really shouldn't happen unless the geospatial indices were set up improperly for the
+      // query node. However, it does happen from time to time and haven't been able to track down
+      // the cause yet, so logging as an error instead of throwing for the time being.
       const QString errorMsg =
         QString("Map does not contain neighbor node: %1. Skipping neighbor...")
           .arg((*neighborIdsItr).toString());
-      throw HootException(errorMsg);
-//      LOG_ERROR(errorMsg);
+      //throw HootException(errorMsg);
+      LOG_ERROR(errorMsg);
       continue;
     }
     else

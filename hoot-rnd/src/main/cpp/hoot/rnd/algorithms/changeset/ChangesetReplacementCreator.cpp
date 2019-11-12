@@ -84,7 +84,8 @@ _fullReplacement(false),
 _lenientBounds(true),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
-_chainRetainmentFilters(false)
+_chainRetainmentFilters(false),
+_waySnappingEnabled(true)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -380,23 +381,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   refMap = _loadRefMap(input1);
 
-  // We want to alert the user to the fact their ref versions *could* be being populated incorectly
-  // to avoid difficulties during changeset application at the end. Its likely if they are
-  // incorrect at this point the changeset derivation will fail at the end anyway, but let's warn
-  // now to give the chance to back out earlier.
-
-  // TODO: something strange going on here with xml inputs where the ids and version in the ref
-  // aren't being retained. see #3631
-  if (OsmUtils::checkVersionLessThanOneCountAndLogWarning(refMap))
-  {
-    const std::set<ElementId> ids = OsmUtils::getIdsOfElementsWithVersionLessThanOne(refMap);
-    LOG_VARD(ids);
-    for (std::set<ElementId>::const_iterator itr = ids.begin(); itr != ids.end(); ++itr)
-    {
-      LOG_VART(refMap->getElement(*itr));
-    }
-  }
-
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
 
@@ -461,7 +445,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // TODO: do something with reviews - #3361
   _conflate(conflatedMap, _lenientBounds);
 
-  if (isLinearCrit)
+  if (isLinearCrit && _waySnappingEnabled)
   {
     // Snap secondary features back to reference features if dealing with linear features where
     // ref features may have been cut along the bounds. We're being lenient here by snapping
@@ -514,25 +498,28 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(isLinearCrit);
   if (_lenientBounds && isLinearCrit)
   {
-    // The non-strict way replacement workflow benefits from a second snapping run right before
-    // changeset derivation due to there being ways connected to replacement ways that fall
-    // completely outside of the bounds. However, joining after this snapping caused changeset
-    // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
-    // we're being as lenient as possible with the snapping here, allowing basically anything to
-    // join to anything else, which could end up causing problems...we'll go with it for now.
-
-    QStringList snapWayStatuses("Input2");
-    snapWayStatuses.append("Conflated");
-    snapWayStatuses.append("Input1");
-    QStringList snapToWayStatuses("Input1");
-    snapToWayStatuses.append("Conflated");
-    snapToWayStatuses.append("Input2");
-    LOG_VARD(linearFilterClassNames);
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    if (_waySnappingEnabled)
     {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-        "conflated-snapped-sec-to-ref-2");
+      // The non-strict way replacement workflow benefits from a second snapping run right before
+      // changeset derivation due to there being ways connected to replacement ways that fall
+      // completely outside of the bounds. However, joining after this snapping caused changeset
+      // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
+      // we're being as lenient as possible with the snapping here, allowing basically anything to
+      // join to anything else, which could end up causing problems...we'll go with it for now.
+
+      QStringList snapWayStatuses("Input2");
+      snapWayStatuses.append("Conflated");
+      snapWayStatuses.append("Input1");
+      QStringList snapToWayStatuses("Input1");
+      snapToWayStatuses.append("Conflated");
+      snapToWayStatuses.append("Input2");
+      LOG_VARD(linearFilterClassNames);
+      for (int i = 0; i < linearFilterClassNames.size(); i++)
+      {
+        _snapUnconnectedWays(
+          conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
+          "conflated-snapped-sec-to-ref-2");
+      }
     }
 
     // Combine the conflated map with the immediately connected out of bounds ways.
@@ -543,12 +530,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
 
-    LOG_VARD(linearFilterClassNames);
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    if (_waySnappingEnabled)
     {
-      _snapUnconnectedWays(
-        conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
-        true, "conflated-snapped-immediately-connected-out-of-bounds");
+      LOG_VARD(linearFilterClassNames);
+      for (int i = 0; i < linearFilterClassNames.size(); i++)
+      {
+        _snapUnconnectedWays(
+          conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
+          true, "conflated-snapped-immediately-connected-out-of-bounds");
+      }
     }
 
     // Remove any ways that weren't snapped.
@@ -661,8 +651,14 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
 }
 
 OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
-{
+{ 
   LOG_INFO("Loading reference map: " << input << "...");
+
+  // We want to alert the user to the fact their ref versions *could* be being populated incorrectly
+  // to avoid difficulties during changeset application at the end. Its likely if they are incorrect
+  // at this point the changeset derivation will fail at the end anyway, but let's warn now to give
+  // the chance to back out earlier.
+  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
@@ -677,6 +673,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap(const QString& input)
   OsmMapPtr refMap(new OsmMap());
   refMap->setName("ref");
   IoUtils::loadMap(refMap, input, true, Status::Unknown1);
+
+  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
 
   LOG_VART(MapProjector::toWkt(refMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
