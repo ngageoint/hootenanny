@@ -3649,7 +3649,9 @@ By default should a reader use the file status from the file. Not honored by all
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If true supporting map readers will log a warning when an element is encountered with a version of
+zero. This is useful to track when deriving changesets where the reference data is expected to be
+pre-existing.
 
 === relation.with.most.members.op.member.criterion
 

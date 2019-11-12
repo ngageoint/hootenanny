@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/schema/MetadataTags.h>
 
 namespace hoot
 {
@@ -43,7 +44,8 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const
+  { return "Determines whether an element's " + MetadataTags::HootId() + " tag matches its ID"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }

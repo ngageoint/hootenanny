@@ -183,7 +183,7 @@ private:
   // Configuration options to pass to the filters in _retainmentFilter.
   Settings _retainmentFilterOptions;
 
-  // TODO
+  // turn on/off post conflate way snapping
   bool _waySnappingEnabled;
 
   // controls cropping

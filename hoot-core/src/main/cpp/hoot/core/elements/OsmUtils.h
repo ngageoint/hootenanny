@@ -581,26 +581,26 @@ public:
                                     const std::set<ElementId>& elementIds, OsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines if all element IDs in a map are positive
    *
-   * @param map
-   * @return
+   * @param map the map to examine
+   * @return true if all elements in the input map have a positive ID; false otherwise
    */
   static bool allElementIdsPositive(const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines if all element IDs in a map are negative
    *
-   * @param map
-   * @return
+   * @param map the map to examine
+   * @return true if all elements in the input map have a negative ID; false otherwise
    */
   static bool allElementIdsNegative(const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines if all hoot:id element tags in a map match their element IDs
    *
-   * @param map
-   * @return
+   * @param map the map to examine
+   * @return true if all the hoot:id tag values match the owning element's ID; false otherwise
    */
   static bool allIdTagsMatchIds(const ConstOsmMapPtr& map);
 };
