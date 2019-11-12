@@ -36,7 +36,8 @@ OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../conf/core/*Conflation.conf \
     ../conf/core/*Algorithm.conf \
-    ../scripts/jenkins/Jenkinsfile
+    ../scripts/jenkins/Jenkinsfile \
+    $$files(../scripts/copyright/*, true)
 
 include(../Configure.pri)
 

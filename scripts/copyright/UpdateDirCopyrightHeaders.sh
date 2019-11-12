@@ -1,48 +1,40 @@
 #!/bin/bash
 set -e
-exitCode=0
+updateMode=0
+logFilename=""
+searchDir=""
+LICENSE_TEMPLATE=$HOOT_HOME/scripts/copyright/LicenseTemplate.txt
 
-if [ -a $HOOT_HOME/scripts/copyright/LicenseTemplate.txt ] ; then
-    LICENSE_TEMPLATE=$HOOT_HOME/scripts/copyright/LicenseTemplate.txt
-else
-    echo "Error: LicenseTemplate.txt not found"
-    exit 1
-fi
-
-if [ $# -eq 0 ]; then
-    # Need at least one arg which would be the log filename.
-    exitCode=2
-else
-    # ONE argument - should be the log file name.
-    if [ $# -eq 1 ]; then
-        if [[ $1 == *".log" ]]; then
-            # CHECKS all the copyright headers in the current directory recursively noting all files that have copyright headers that need updating.
-            find . -type f -and \( \( -name \*.js -or -name \*.java -or -name \*.cpp -or -name \*.h \) -and -not \( -wholename \*/db2/\* -or -wholename \*/target/\* -or -wholename \*/tmp/\* -or -name \*.pb.h -or -wholename \*/schema/__init__.js -or -wholename \*/etds\*/__init__.js \) \) -exec $HOOT_HOME/scripts/copyright/UpdateCopyrightHeader.py --copyright-header=$LICENSE_TEMPLATE --file={} --update-mode=0 \; >> $1
-        else
-            # Unrecognized .log file name.
-            exitCode=3
+case $# in
+    0|1)
+        exit 2 # Need at least two args log filename and search directory
+        ;;
+    2|3)
+        if [ ! -d $1 ]; then
+            exit 12 # Search directory not found
         fi
-    else
-        # TWO arguments - should be the log file name and the update switch.
-        if [ $# -eq 2 ]; then
-            if [[ $1 != *".log" ]]; then
-                # Unrecognized .log file name.
-                exitCode=3
+        searchDir=$1
+        if [[ $2 != *".log" ]]; then
+            exit 3  # Unrecognized .log filename
+        fi
+        logFilename=$2
+        if [ $# -eq 3 ]; then
+            if [ $3 != '--update' ] && [ $3 != '-u' ]; then
+                exit 4  # Unrecognized update argument
             else
-                if [ $2 == '--update' ] || [ $2 == '-u' ]; then
-                    # UPDATES all the copyright headers in the current directory recursively.
-                    #echo 'Mode: ' $1
-                    find . -type f -and \( \( -name \*.js -or -name \*.java -or -name \*.cpp -or -name \*.h \) -and -not \( -wholename \*/db2/\* -or -wholename \*/target/\* -or -wholename \*/tmp/\* -or -name \*.pb.h -or -wholename \*/schema/__init__.js -or -wholename \*/etds\*/__init__.js \) \) -exec $HOOT_HOME/scripts/copyright/UpdateCopyrightHeader.py --copyright-header=$LICENSE_TEMPLATE --file={} --update-mode=1 \; >> $1
-                else
-                    # Unrecognized 2nd argument.
-                    exitCode=4
-                fi
+                updateMode=1
             fi
-        else
-            # Too many arguments.
-            exitCode=5
         fi
-    fi
-fi
+        ;;
+    *)
+        exit 5 # Too many arguments
+        ;;
+esac
+
+cd $searchDir
+find . -type f -and \( \( -name \*.js -or -name \*.java -or -name \*.cpp -or -name \*.h \) -and -not \( -wholename \*/db2/\* -or -wholename \*/target/\* -or -wholename \*/tmp/\* -or -name \*.pb.h -or -wholename \*/schema/__init__.js -or -wholename \*/etds\*/__init__.js \) \) -exec $HOOT_HOME/scripts/copyright/UpdateCopyrightHeader.py --copyright-header=$LICENSE_TEMPLATE --file={} --update-mode=$updateMode \; >> $logFilename
+cd ..
+
+echo "Complete: $searchDir"
 
 exit $exitCode
