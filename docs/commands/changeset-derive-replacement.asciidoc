@@ -46,6 +46,8 @@ while element IDs for the secondary data are not retained and the elements treat
                                    section for more detail.
 * +--retainment-filter-options+  - Optional configuration options for the filters specified in +--retainment-filters+. See the 
                                    "Retainment Filtering" section for more detail.
+* +--disable-way-snapping+       - Optional configuration option which disables the snapping of unconnected ways before changeset derivation. 
+                                   By default way snapping is enabled.
 * +--stats+                      - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only 
                                    valid for .osc output files)
 * +--write-bounds+               - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the 

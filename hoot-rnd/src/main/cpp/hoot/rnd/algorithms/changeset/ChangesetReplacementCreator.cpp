@@ -84,7 +84,8 @@ _fullReplacement(false),
 _lenientBounds(true),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
-_chainRetainmentFilters(false)
+_chainRetainmentFilters(false),
+_waySnappingEnabled(true)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -444,7 +445,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // TODO: do something with reviews - #3361
   _conflate(conflatedMap, _lenientBounds);
 
-  if (isLinearCrit)
+  if (isLinearCrit && _waySnappingEnabled)
   {
     // Snap secondary features back to reference features if dealing with linear features where
     // ref features may have been cut along the bounds. We're being lenient here by snapping
@@ -497,25 +498,28 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(isLinearCrit);
   if (_lenientBounds && isLinearCrit)
   {
-    // The non-strict way replacement workflow benefits from a second snapping run right before
-    // changeset derivation due to there being ways connected to replacement ways that fall
-    // completely outside of the bounds. However, joining after this snapping caused changeset
-    // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
-    // we're being as lenient as possible with the snapping here, allowing basically anything to
-    // join to anything else, which could end up causing problems...we'll go with it for now.
-
-    QStringList snapWayStatuses("Input2");
-    snapWayStatuses.append("Conflated");
-    snapWayStatuses.append("Input1");
-    QStringList snapToWayStatuses("Input1");
-    snapToWayStatuses.append("Conflated");
-    snapToWayStatuses.append("Input2");
-    LOG_VARD(linearFilterClassNames);
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    if (_waySnappingEnabled)
     {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-        "conflated-snapped-sec-to-ref-2");
+      // The non-strict way replacement workflow benefits from a second snapping run right before
+      // changeset derivation due to there being ways connected to replacement ways that fall
+      // completely outside of the bounds. However, joining after this snapping caused changeset
+      // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
+      // we're being as lenient as possible with the snapping here, allowing basically anything to
+      // join to anything else, which could end up causing problems...we'll go with it for now.
+
+      QStringList snapWayStatuses("Input2");
+      snapWayStatuses.append("Conflated");
+      snapWayStatuses.append("Input1");
+      QStringList snapToWayStatuses("Input1");
+      snapToWayStatuses.append("Conflated");
+      snapToWayStatuses.append("Input2");
+      LOG_VARD(linearFilterClassNames);
+      for (int i = 0; i < linearFilterClassNames.size(); i++)
+      {
+        _snapUnconnectedWays(
+          conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
+          "conflated-snapped-sec-to-ref-2");
+      }
     }
 
     // Combine the conflated map with the immediately connected out of bounds ways.
@@ -526,12 +530,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
 
-    LOG_VARD(linearFilterClassNames);
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
+    if (_waySnappingEnabled)
     {
-      _snapUnconnectedWays(
-        conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
-        true, "conflated-snapped-immediately-connected-out-of-bounds");
+      LOG_VARD(linearFilterClassNames);
+      for (int i = 0; i < linearFilterClassNames.size(); i++)
+      {
+        _snapUnconnectedWays(
+          conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
+          true, "conflated-snapped-immediately-connected-out-of-bounds");
+      }
     }
 
     // Remove any ways that weren't snapped.

@@ -140,6 +140,7 @@ public:
   void setRetainmentFilters(const QStringList& filterClassNames);
   void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
   void setRetainmentFilterOptions(const QStringList& optionKvps);
+  void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
 
 private:
 
@@ -181,6 +182,9 @@ private:
 
   // Configuration options to pass to the filters in _retainmentFilter.
   Settings _retainmentFilterOptions;
+
+  // TODO
+  bool _waySnappingEnabled;
 
   // controls cropping
   BoundsOptions _boundsOpts;

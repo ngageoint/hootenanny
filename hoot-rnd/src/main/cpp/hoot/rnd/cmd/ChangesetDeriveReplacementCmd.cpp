@@ -153,6 +153,13 @@ public:
       args.removeAll("--stats");
     }
     LOG_VARD(printStats);
+    bool enableWaySnapping = true;
+    if (args.contains("--disable-way-snapping"))
+    {
+      enableWaySnapping = false;
+      args.removeAll("--disable-way-snapping");
+    }
+    LOG_VARD(printStats);
 
     LOG_VARD(args.size());
     LOG_VARD(args);
@@ -199,6 +206,7 @@ public:
     changesetCreator.setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator.setRetainmentFilters(retainmentFilters);
     changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
+    changesetCreator.setWaySnappingEnabled(enableWaySnapping);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;
