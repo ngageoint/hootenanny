@@ -580,8 +580,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN(
-              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
-              ElementId(ElementType::Way, _wayId) << ".");
+              "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+              ElementId(ElementType::Way, _wayId) << "...");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -622,8 +622,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             if (logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN(
-                "Missing " << ElementId(ElementType::Node, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << ".");
+                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << "...");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {
@@ -655,8 +655,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             if (logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN(
-                "Missing " << ElementId(ElementType::Way, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << ".");
+                "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << "...");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {

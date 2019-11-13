@@ -52,6 +52,8 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runBoundsTest);
   CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST(elementTypeUnorderedTest);
+  // TODO: re-enable
+  //CPPUNIT_TEST(elementTypeUnorderedMissingTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -633,17 +635,58 @@ public:
     // This should load the elements even though child elements come after their parents.
     // TODO: we need some relations in the test input
 
-    const QString testFileName = "elementTypeUnorderedTest.osm";
-
+    QString testFileName;
     OsmJsonReader uut;
-    uut.setRequireStrictTypeOrdering(false);
+    OsmMapPtr map;
 
-    OsmMapPtr map(new OsmMap());
+    testFileName = "elementTypeUnorderedTest1.osm";
+    uut.setUseDataSourceIds(true);
+    map.reset(new OsmMap());
     uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
     uut.read(map);
     uut.close();
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+
+    testFileName = "elementTypeUnorderedTest2.osm";
+    uut.setUseDataSourceIds(false);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void elementTypeUnorderedMissingTest()
+  {
+    // There is one node referenced by a way that doesn't exist in the file. That node should first
+    // be added to the way, since it isn't known at the time it doesn't exist in the file. At the
+    // end of the data load a map validation is done and the node should be removed from the way
+    // since it has been verified not to exist in the map.
+    // TODO: we need some relations and way refs in the test input
+
+    QString outputFile;
+    OsmJsonReader uut;
+    OsmMapPtr map;
+
+    outputFile = "elementTypeUnorderedMissingTest1.osm";
+    uut.setUseDataSourceIds(true);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
+
+    outputFile = "elementTypeUnorderedMissingTest2.osm";
+    uut.setUseDataSourceIds(false);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
   }
 };
 }

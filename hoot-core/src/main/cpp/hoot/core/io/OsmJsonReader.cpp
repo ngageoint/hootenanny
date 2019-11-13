@@ -351,6 +351,8 @@ void OsmJsonReader::_parseOverpassJson()
       logWarnCount++;
     }
   }
+
+  // TODO: validation check
 }
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
@@ -520,41 +522,39 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
     pt::ptree::const_iterator nodeIt = nodes.begin();
     while (nodeIt != nodes.end())
     {
-      long v = nodeIt->second.get_value<long>();
-      LOG_VART(v);
+      long nodeId = nodeIt->second.get_value<long>();
+      LOG_VART(nodeId);
 
-      // TODO: fix
-
-      if (_requireStrictTypeOrdering)  // temporary: see #3619
+      bool okToAdd = true;
+      if (!_useDataSourceIds)
       {
-        const bool nodePresent = _nodeIdMap.contains(v);
-        LOG_VART(nodePresent);
-        if (!nodePresent)
+        QHash<long, long>::const_iterator nodeIdItr = _nodeIdMap.find(nodeId);
+        if (nodeIdItr == _nodeIdMap.end())
         {
           _missingNodeCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN(
-              "Missing " << ElementId(ElementType::Node, v) << " in " <<
-              ElementId(ElementType::Way, newId) << ".");
+              "Skipping missing " << ElementId(ElementType::Node, nodeId) << " in " <<
+              ElementId(ElementType::Way, newId) << "...");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
           logWarnCount++;
+          okToAdd = false;
         }
         else
         {
-          long newRef = _nodeIdMap.value(v);
-          LOG_TRACE("Adding way node: " << newRef << "...");
-          pWay->addNode(newRef);
+          nodeId = nodeIdItr.value();
         }
       }
-      else
+
+      if (okToAdd)
       {
-        LOG_TRACE("Adding way node: " << v << "...");
-        pWay->addNode(v);
+        LOG_TRACE("Adding way node: " << nodeId << "...");
+        pWay->addNode(nodeId);
       }
 
       ++nodeIt;
@@ -657,59 +657,61 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       long ref = memberIt->second.get("ref", -1l); // default -1 ?
       string role = memberIt->second.get("role", string(""));
 
-      // TODO: fix
-
-      bool okToAdd = false;
+      bool okToAdd = true;
       if (typeStr == "node")
       {
-        const bool memberPresent = _nodeIdMap.contains(ref);
-        if (!memberPresent && _requireStrictTypeOrdering)   // temporary: see #3619
+        if (!_useDataSourceIds)
         {
-          _missingNodeCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          QHash<long, long>::const_iterator nodeIdItr = _nodeIdMap.find(ref);
+          if (nodeIdItr == _nodeIdMap.end())
           {
-            LOG_WARN(
-              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
-              ElementId(ElementType::Relation, newId) << ".");
+            _missingNodeCount++;
+            if (logWarnCount < Log::getWarnMessageLimit())
+            {
+              LOG_WARN(
+                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Relation, newId) << "...");
+            }
+            else if (logWarnCount == Log::getWarnMessageLimit())
+            {
+              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            }
+            logWarnCount++;
+            okToAdd = false;
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
+          else
           {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+            ref = nodeIdItr.value();
           }
-          logWarnCount++;
-        }
-        else
-        {
-          okToAdd = true;
         }
       }
       else if (typeStr == "way")
       {
-        const bool memberPresent = _wayIdMap.contains(ref);
-        if (!memberPresent && _requireStrictTypeOrdering)  // temporary: see #3619
+        QHash<long, long>::const_iterator wayIdItr = _wayIdMap.find(ref);
+        if (wayIdItr == _wayIdMap.end())
         {
           _missingWayCount++;
           if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN(
-              "Missing " << ElementId(ElementType::Way, ref) << " in " <<
-              ElementId(ElementType::Relation, newId) << ".");
+              "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
+              ElementId(ElementType::Relation, newId) << "...");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
             LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
           }
           logWarnCount++;
+          okToAdd = false;
         }
         else
         {
-          okToAdd = true;
+          ref = wayIdItr.value();
         }
       }
       else if (typeStr == "relation")
       {
         ref = _getRelationId(ref);
-        okToAdd = true;
       }
       else
       {
