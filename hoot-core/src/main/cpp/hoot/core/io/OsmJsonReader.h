@@ -52,14 +52,18 @@ namespace hoot
 {
 
 /**
- * This class is intended to create an OsmMap from a given json string. JSON
- * output from the overpass-api was used as the model for development
+ * This class is intended to create an OsmMap from a given json string. JSON output from the
+ * overpass-api was used as the model for development
  * (http://overpass-api.de/output_formats.html#json).
  *
- * The input string must be well-formed JSON, with the exception that it can
- * be coded using single quotes, rather than double quotes... which makes
- * things a lot cleaner if you are hand-jamming the JSON string into c++ code.
- * If you are using single quotes, you may escape apostrophes with a backslash.
+ * Element type ordering (element children before parents) is not guaranteed with JSON, as it is
+ * with XML.
+ *
+ * The input string must be well-formed JSON, with the exception that it can be coded using single
+ * quotes, rather than double quotes... which makes things a lot cleaner if you are hand-jamming the
+ * JSON string into c++ code. If you are using single quotes, you may escape apostrophes with a
+ * backslash.
+ *
  * Consider this example:
  *
  * QString testJsonStr =
@@ -101,10 +105,10 @@ namespace hoot
  *   "]                                      \n"
  *   "}                                      \n";
  *
- * It's all-or-nothing, though for the quotes - don't mix and match
- * singles and doubles! Also, be aware that this class doesn't do anything
- * clever to handle large datasets - it simply keeps everything in memory.
- * Be careful if you want to use it with large datasets.
+ * It's all-or-nothing, though for the quotes - don't mix and match singles and doubles!
+ *
+ * Also, be aware that this class doesn't do anything clever to handle large datasets - it simply
+ * keeps everything in memory. Be careful if you want to use it with large datasets.
  */
 
 class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable,

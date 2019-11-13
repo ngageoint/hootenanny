@@ -481,34 +481,34 @@ void OsmJsonReader::_updateChildRefs()
     }
   }
 
-//  const QList<long> relationIdsWithRelationMembersNotPresent =
-//    _relationIdsToRelationMemberIdsNotPresent.keys();
-//  for (QList<long>::const_iterator relationIdItr = relationIdsWithRelationMembersNotPresent.begin();
-//       relationIdItr != relationIdsWithRelationMembersNotPresent.end(); ++relationIdItr)
-//  {
-//    const long relationId = *relationIdItr;
-//    RelationPtr relation = _map->getRelation(relationId);
+  const QList<long> relationIdsWithRelationMembersNotPresent =
+    _relationIdsToRelationMemberIdsNotPresent.keys();
+  for (QList<long>::const_iterator relationIdItr = relationIdsWithRelationMembersNotPresent.begin();
+       relationIdItr != relationIdsWithRelationMembersNotPresent.end(); ++relationIdItr)
+  {
+    const long relationId = *relationIdItr;
+    RelationPtr relation = _map->getRelation(relationId);
 
-//    const QList<long> relationMemberIdsNotPresentAtLoad =
-//      _relationIdsToRelationMemberIdsNotPresent.values(relationId);
-//    for (QList<long>::const_iterator relationMemberIdItr = relationMemberIdsNotPresentAtLoad.begin();
-//         relationMemberIdItr != relationMemberIdsNotPresentAtLoad.end(); ++relationMemberIdItr)
-//    {
-//      const long relationMemberId = *relationMemberIdItr;
-//      if (relation->contains(ElementId(ElementType::Relation, relationMemberId)))
-//      {
-//        QHash<long, long>::const_iterator remappedRelationIdItr =
-//          _relationIdMap.find(relationMemberId);
-//        if (remappedRelationIdItr != _relationIdMap.end() &&
-//            remappedRelationIdItr.value() != relationMemberId)
-//        {
-//          relation->replaceElement(
-//            ElementId(ElementType::Relation, relationMemberId),
-//            ElementId(ElementType::Relation, remappedRelationIdItr.value()));
-//        }
-//      }
-//    }
-//  }
+    const QList<long> relationMemberIdsNotPresentAtLoad =
+      _relationIdsToRelationMemberIdsNotPresent.values(relationId);
+    for (QList<long>::const_iterator relationMemberIdItr = relationMemberIdsNotPresentAtLoad.begin();
+         relationMemberIdItr != relationMemberIdsNotPresentAtLoad.end(); ++relationMemberIdItr)
+    {
+      const long relationMemberId = *relationMemberIdItr;
+      if (relation->contains(ElementId(ElementType::Relation, relationMemberId)))
+      {
+        QHash<long, long>::const_iterator remappedRelationIdItr =
+          _relationIdMap.find(relationMemberId);
+        if (remappedRelationIdItr != _relationIdMap.end() &&
+            remappedRelationIdItr.value() != relationMemberId)
+        {
+          relation->replaceElement(
+            ElementId(ElementType::Relation, relationMemberId),
+            ElementId(ElementType::Relation, remappedRelationIdItr.value()));
+        }
+      }
+    }
+  }
 }
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
@@ -908,7 +908,7 @@ long OsmJsonReader::_getRelationId(long fileId)
     {
       newId = _map->createNextRelationId();
       _relationIdMap.insert(fileId, newId);
-      //_relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
+      _relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
     }
     else
     {
