@@ -367,12 +367,17 @@ void OsmJsonReader::_parseOverpassJson()
     }
   }
 
-  // Go back through all child refs and update their IDs with what we remapped them to in case we
-  // parsed their parents before the children the refs point to.
-  _updateChildRefs();
+  if (!_useDataSourceIds)
+  {
+    // Go back through all child refs and update their IDs with what we remapped them to in case we
+    // parsed their parents before the children the refs point to. If we loaded the original element
+    // IDs, then this step isn't needed and gets skipped.
+    _updateChildRefs();
+  }
 
-  // Now that we've corrected all child refs, if we find any remaining missing child refs we're
-  // going to remove them from their parents and log a warning as they never existed in the input.
+  // Now that we've corrected all child refs (or didn't need to), if we find any remaining missing
+  // child refs we're going to remove them from their parents and log a warning as they never
+  // existed in the input.
   RemoveMissingElementsVisitor visitor(Log::Warn);
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
