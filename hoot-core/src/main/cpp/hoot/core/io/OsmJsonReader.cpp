@@ -162,11 +162,17 @@ void OsmJsonReader::open(const QString& url)
 
 void OsmJsonReader::_reset()
 {
-  _propTree.clear();
-  _results.clear();
+  //_propTree.clear();
+  //_results.clear();
+
   _nodeIdMap.clear();
   _relationIdMap.clear();
   _wayIdMap.clear();
+
+  _wayIdsToWayNodeIdsNotPresent.clear();
+  _relationIdsToNodeMemberIdsNotPresent.clear();
+  _relationIdsToWayMemberIdsNotPresent.clear();
+  _relationIdsToRelationMemberIdsNotPresent.clear();
 }
 
 void OsmJsonReader::close()
@@ -175,6 +181,9 @@ void OsmJsonReader::close()
     _file.close();
 
   _reset();
+
+  _propTree.clear();
+  _results.clear();
 }
 
 void OsmJsonReader::read(const OsmMapPtr& map)
@@ -322,10 +331,7 @@ void OsmJsonReader::_parseOverpassJson()
   LOG_VARD(_ignoreDuplicates);
 
   // clear node id maps in case the reader is used for multiple files
-  _nodeIdMap.clear();
-  _relationIdMap.clear();
-  _wayIdMap.clear();
-  LOG_VARD(_wayIdMap.size());
+  _reset();
 
   // Overpass has 4 top level items: version, generator, osm3s, elements
   _version = QString::fromStdString(_propTree.get("version", string("")));
@@ -376,8 +382,8 @@ void OsmJsonReader::_parseOverpassJson()
   }
 
   // Now that we've corrected all child refs (or didn't need to), if we find any remaining missing
-  // child refs we're going to remove them from their parents and log a warning as they never
-  // existed in the input.
+  // child refs we're going to remove them from their parents and log a warning, as they never
+  // actually existed in the input.
   RemoveMissingElementsVisitor visitor(Log::Warn);
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -393,74 +399,116 @@ void OsmJsonReader::_updateChildRefs()
 {
   LOG_DEBUG("Updating child element ID references...");
 
-  // Find any way node refs whose corresponding node child IDs we earlier remapped and update the
-  // way node ref ID if it doesn't the child's ID.
-  const WayMap& ways = _map->getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  // For any ways which added way nodes that weren't validated upon load, let's update those way
+  // node id refs now with what we actually loaded.
+
+  const QList<long> wayIdsWithWayNodesNotPresent = _wayIdsToWayNodeIdsNotPresent.keys();
+  for (QList<long>::const_iterator wayIdItr = wayIdsWithWayNodesNotPresent.begin();
+       wayIdItr != wayIdsWithWayNodesNotPresent.end(); ++wayIdItr)
   {
-    WayPtr way = it->second;
-    const std::vector<long>& wayNodeIds = way->getNodeIds();
-    for (size_t i = 0; i < wayNodeIds.size(); i++)
+    const long wayId = *wayIdItr;
+    WayPtr way = _map->getWay(wayId);
+
+    const QList<long> wayNodeIdsNotPresentAtLoad = _wayIdsToWayNodeIdsNotPresent.values(wayId);
+    for (QList<long>::const_iterator wayNodeIdItr = wayNodeIdsNotPresentAtLoad.begin();
+         wayNodeIdItr != wayNodeIdsNotPresentAtLoad.end(); ++wayNodeIdItr)
     {
-      const long wayNodeId = wayNodeIds.at(i);
-      QHash<long, long>::const_iterator remappedWayNodeIdItr = _nodeIdMap.find(wayNodeId);
-      if (remappedWayNodeIdItr != _nodeIdMap.end() && remappedWayNodeIdItr.value() != wayNodeId)
+      const long wayNodeId = *wayNodeIdItr;
+      if (way->containsNodeId(wayNodeId))
       {
-        way->replaceNode(wayNodeId, remappedWayNodeIdItr.value());
+        QHash<long, long>::const_iterator remappedNodeIdItr = _nodeIdMap.find(wayNodeId);
+        if (remappedNodeIdItr != _nodeIdMap.end() && remappedNodeIdItr.value() != wayNodeId)
+        {
+          way->replaceNode(wayNodeId, remappedNodeIdItr.value());
+        }
       }
     }
   }
 
-  // Find any relation member refs whose corresponding child IDs we earlier remapped and update the
-  // member ref ID if it doesn't the child's ID.
-  const RelationMap& relations = _map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    RelationPtr relation = it->second;
-    const std::vector<RelationData::Entry>& members = relation->getMembers();
-    for (size_t i = 0; i < members.size(); i++)
-    {
-      const ElementId memberElementId = members[i].getElementId();
+  // Do the same as above but for relation member refs
 
-      if (memberElementId.getType() == ElementType::Node)
+  const QList<long> relationIdsWithNodeMembersNotPresent =
+    _relationIdsToNodeMemberIdsNotPresent.keys();
+  for (QList<long>::const_iterator relationIdItr = relationIdsWithNodeMembersNotPresent.begin();
+       relationIdItr != relationIdsWithNodeMembersNotPresent.end(); ++relationIdItr)
+  {
+    const long relationId = *relationIdItr;
+    RelationPtr relation = _map->getRelation(relationId);
+
+    const QList<long> nodeMemberIdsNotPresentAtLoad =
+      _relationIdsToNodeMemberIdsNotPresent.values(relationId);
+    for (QList<long>::const_iterator nodeMemberIdItr = nodeMemberIdsNotPresentAtLoad.begin();
+         nodeMemberIdItr != nodeMemberIdsNotPresentAtLoad.end(); ++nodeMemberIdItr)
+    {
+      const long nodeMemberId = *nodeMemberIdItr;
+      if (relation->contains(ElementId(ElementType::Node, nodeMemberId)))
       {
-        QHash<long, long>::const_iterator remappedNodeMemberIdItr =
-          _nodeIdMap.find(memberElementId.getId());
-        if (remappedNodeMemberIdItr != _nodeIdMap.end() &&
-            remappedNodeMemberIdItr.value() != memberElementId.getId())
+        QHash<long, long>::const_iterator remappedNodeIdItr = _nodeIdMap.find(nodeMemberId);
+        if (remappedNodeIdItr != _nodeIdMap.end() && remappedNodeIdItr.value() != nodeMemberId)
         {
           relation->replaceElement(
-            memberElementId, ElementId(ElementType::Node, remappedNodeMemberIdItr.value()));
+            ElementId(ElementType::Node, nodeMemberId),
+            ElementId(ElementType::Node, remappedNodeIdItr.value()));
         }
-      }
-      else if (memberElementId.getType() == ElementType::Way)
-      {
-        QHash<long, long>::const_iterator remappedWayMemberIdItr =
-          _wayIdMap.find(memberElementId.getId());
-        if (remappedWayMemberIdItr != _wayIdMap.end() &&
-            remappedWayMemberIdItr.value() != memberElementId.getId())
-        {
-          relation->replaceElement(
-            memberElementId, ElementId(ElementType::Way, remappedWayMemberIdItr.value()));
-        }
-      }
-      else if (memberElementId.getType() == ElementType::Relation)
-      {
-        QHash<long, long>::const_iterator remappedRelationMemberIdItr =
-          _relationIdMap.find(memberElementId.getId());
-        if (remappedRelationMemberIdItr != _relationIdMap.end() &&
-            remappedRelationMemberIdItr.value() != memberElementId.getId())
-        {
-          relation->replaceElement(
-            memberElementId, ElementId(ElementType::Relation, remappedRelationMemberIdItr.value()));
-        }
-      }
-      else
-      {
-        throw IllegalArgumentException("Unknown element type.");
       }
     }
   }
+
+  const QList<long> relationIdsWithWayMembersNotPresent =
+    _relationIdsToWayMemberIdsNotPresent.keys();
+  for (QList<long>::const_iterator relationIdItr = relationIdsWithWayMembersNotPresent.begin();
+       relationIdItr != relationIdsWithWayMembersNotPresent.end(); ++relationIdItr)
+  {
+    const long relationId = *relationIdItr;
+    RelationPtr relation = _map->getRelation(relationId);
+
+    const QList<long> wayMemberIdsNotPresentAtLoad =
+      _relationIdsToWayMemberIdsNotPresent.values(relationId);
+    for (QList<long>::const_iterator wayMemberIdItr = wayMemberIdsNotPresentAtLoad.begin();
+         wayMemberIdItr != wayMemberIdsNotPresentAtLoad.end(); ++wayMemberIdItr)
+    {
+      const long wayMemberId = *wayMemberIdItr;
+      if (relation->contains(ElementId(ElementType::Way, wayMemberId)))
+      {
+        QHash<long, long>::const_iterator remappedWayIdItr = _wayIdMap.find(wayMemberId);
+        if (remappedWayIdItr != _wayIdMap.end() && remappedWayIdItr.value() != wayMemberId)
+        {
+          relation->replaceElement(
+            ElementId(ElementType::Way, wayMemberId),
+            ElementId(ElementType::Way, remappedWayIdItr.value()));
+        }
+      }
+    }
+  }
+
+//  const QList<long> relationIdsWithRelationMembersNotPresent =
+//    _relationIdsToRelationMemberIdsNotPresent.keys();
+//  for (QList<long>::const_iterator relationIdItr = relationIdsWithRelationMembersNotPresent.begin();
+//       relationIdItr != relationIdsWithRelationMembersNotPresent.end(); ++relationIdItr)
+//  {
+//    const long relationId = *relationIdItr;
+//    RelationPtr relation = _map->getRelation(relationId);
+
+//    const QList<long> relationMemberIdsNotPresentAtLoad =
+//      _relationIdsToRelationMemberIdsNotPresent.values(relationId);
+//    for (QList<long>::const_iterator relationMemberIdItr = relationMemberIdsNotPresentAtLoad.begin();
+//         relationMemberIdItr != relationMemberIdsNotPresentAtLoad.end(); ++relationMemberIdItr)
+//    {
+//      const long relationMemberId = *relationMemberIdItr;
+//      if (relation->contains(ElementId(ElementType::Relation, relationMemberId)))
+//      {
+//        QHash<long, long>::const_iterator remappedRelationIdItr =
+//          _relationIdMap.find(relationMemberId);
+//        if (remappedRelationIdItr != _relationIdMap.end() &&
+//            remappedRelationIdItr.value() != relationMemberId)
+//        {
+//          relation->replaceElement(
+//            ElementId(ElementType::Relation, relationMemberId),
+//            ElementId(ElementType::Relation, remappedRelationIdItr.value()));
+//        }
+//      }
+//    }
+//  }
 }
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
@@ -653,6 +701,10 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
           wayNodeIdToUse = wayNodeIdItr.value();
           LOG_TRACE("Retrieved mapped way node ID: " << wayNodeIdToUse << " for ID: " << wayNodeId);
         }
+        else
+        {
+          _wayIdsToWayNodeIdsNotPresent.insertMulti(newId, wayNodeIdToUse);
+        }
       }
 
       LOG_TRACE("Adding way node: " << wayNodeIdToUse << "...");
@@ -775,6 +827,10 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
             refIdToUse = nodeMemberIdItr.value();
             LOG_TRACE("Retrieved mapped node member ID: " << refIdToUse << " for ID: " << refId);
           }
+          else
+          {
+            _relationIdsToNodeMemberIdsNotPresent.insertMulti(newId, refIdToUse);
+          }
         }
       }
       else if (typeStr == "way")
@@ -786,6 +842,10 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
           {
             refIdToUse = wayMemberIdItr.value();
             LOG_TRACE("Retrieved mapped way member ID: " << refIdToUse << " for ID: " << refId);
+          }
+          else
+          {
+            _relationIdsToWayMemberIdsNotPresent.insertMulti(newId, refIdToUse);
           }
         }
       }
@@ -848,6 +908,7 @@ long OsmJsonReader::_getRelationId(long fileId)
     {
       newId = _map->createNextRelationId();
       _relationIdMap.insert(fileId, newId);
+      //_relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
     }
     else
     {

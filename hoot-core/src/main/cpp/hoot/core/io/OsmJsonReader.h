@@ -276,6 +276,11 @@ protected:
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
 
+  QMultiHash<long, long> _wayIdsToWayNodeIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToNodeMemberIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToWayMemberIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;   // TODO: use this
+
   int _missingNodeCount;
   int _missingWayCount;
 
