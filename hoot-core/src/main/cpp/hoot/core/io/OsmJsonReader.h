@@ -286,8 +286,8 @@ protected:
   void _loadJSON(const QString& jsonStr);
 
   /**
-   * @brief parseOverpassJson Traverses our property tree and adds
-   *        elements to the map
+   * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
+   * child elements ref'd by parents that don't actually exist
    */
   void _parseOverpassJson();
 
@@ -330,6 +330,14 @@ protected:
   void _readToMap();
 
   long _getRelationId(long fileId);
+
+  /*
+   * This updates child ref ID's owned by ways/relations where the child element was parsed after
+   * the ref ID.
+   */
+  void _updateChildRefs();
+
+  void _reset();
 };
 
 }

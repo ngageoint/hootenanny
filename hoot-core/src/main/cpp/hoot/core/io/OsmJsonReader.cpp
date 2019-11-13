@@ -36,6 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -119,6 +120,8 @@ bool OsmJsonReader::isSupported(const QString& url)
 
 void OsmJsonReader::open(const QString& url)
 {
+  LOG_DEBUG("Opening: " << url << "...");
+
   OsmMapReader::open(url);
   try
   {
@@ -157,18 +160,26 @@ void OsmJsonReader::open(const QString& url)
   }
 }
 
+void OsmJsonReader::_reset()
+{
+  _propTree.clear();
+  _results.clear();
+  _nodeIdMap.clear();
+  _relationIdMap.clear();
+  _wayIdMap.clear();
+}
+
 void OsmJsonReader::close()
 {
   if (_isFile)
     _file.close();
+
+  _reset();
 }
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
-  // clear node id maps in case the reader is used for multiple files
-  _nodeIdMap.clear();
-  _relationIdMap.clear();
-  _wayIdMap.clear();
+  LOG_DEBUG("Reading map...");
 
   _map = map;
   _map->appendSource(_url);
@@ -198,11 +209,6 @@ void OsmJsonReader::read(const OsmMapPtr& map)
 
 void OsmJsonReader::_readToMap()
 {
-  // clear node id maps in case the reader is used for multiple files
-  _nodeIdMap.clear();
-  _relationIdMap.clear();
-  _wayIdMap.clear();
-
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
@@ -312,6 +318,15 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
 
 void OsmJsonReader::_parseOverpassJson()
 {
+  LOG_VARD(_useDataSourceIds);
+  LOG_VARD(_ignoreDuplicates);
+
+  // clear node id maps in case the reader is used for multiple files
+  _nodeIdMap.clear();
+  _relationIdMap.clear();
+  _wayIdMap.clear();
+  LOG_VARD(_wayIdMap.size());
+
   // Overpass has 4 top level items: version, generator, osm3s, elements
   _version = QString::fromStdString(_propTree.get("version", string("")));
   _generator = QString::fromStdString(_propTree.get("generator", string("")));
@@ -352,7 +367,95 @@ void OsmJsonReader::_parseOverpassJson()
     }
   }
 
-  // TODO: validation check
+  // Go back through all child refs and update their IDs with what we remapped them to in case we
+  // parsed their parents before the children the refs point to.
+  _updateChildRefs();
+
+  // Now that we've corrected all child refs, if we find any remaining missing child refs we're
+  // going to remove them from their parents and log a warning as they never existed in the input.
+  RemoveMissingElementsVisitor visitor(Log::Warn);
+  LOG_INFO("\t" << visitor.getInitStatusMessage());
+  _map->visitRw(visitor);
+  LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
+
+  // The previous two final load steps correspond to effectively the same behavior that the XML
+  // reader uses, except with that reader we simply don't add a missing ref in the first place b/c
+  // we're guaranteed element type ordering. Because of that, we know at the time a parent element
+  // is loaded any missing child refs mean the child itself is definitely absent from the input.
+}
+
+void OsmJsonReader::_updateChildRefs()
+{
+  LOG_DEBUG("Updating child element ID references...");
+
+  // Find any way node refs whose corresponding node child IDs we earlier remapped and update the
+  // way node ref ID if it doesn't the child's ID.
+  const WayMap& ways = _map->getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    const std::vector<long>& wayNodeIds = way->getNodeIds();
+    for (size_t i = 0; i < wayNodeIds.size(); i++)
+    {
+      const long wayNodeId = wayNodeIds.at(i);
+      QHash<long, long>::const_iterator remappedWayNodeIdItr = _nodeIdMap.find(wayNodeId);
+      if (remappedWayNodeIdItr != _nodeIdMap.end() && remappedWayNodeIdItr.value() != wayNodeId)
+      {
+        way->replaceNode(wayNodeId, remappedWayNodeIdItr.value());
+      }
+    }
+  }
+
+  // Find any relation member refs whose corresponding child IDs we earlier remapped and update the
+  // member ref ID if it doesn't the child's ID.
+  const RelationMap& relations = _map->getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    RelationPtr relation = it->second;
+    const std::vector<RelationData::Entry>& members = relation->getMembers();
+    for (size_t i = 0; i < members.size(); i++)
+    {
+      const ElementId memberElementId = members[i].getElementId();
+
+      if (memberElementId.getType() == ElementType::Node)
+      {
+        QHash<long, long>::const_iterator remappedNodeMemberIdItr =
+          _nodeIdMap.find(memberElementId.getId());
+        if (remappedNodeMemberIdItr != _nodeIdMap.end() &&
+            remappedNodeMemberIdItr.value() != memberElementId.getId())
+        {
+          relation->replaceElement(
+            memberElementId, ElementId(ElementType::Node, remappedNodeMemberIdItr.value()));
+        }
+      }
+      else if (memberElementId.getType() == ElementType::Way)
+      {
+        QHash<long, long>::const_iterator remappedWayMemberIdItr =
+          _wayIdMap.find(memberElementId.getId());
+        if (remappedWayMemberIdItr != _wayIdMap.end() &&
+            remappedWayMemberIdItr.value() != memberElementId.getId())
+        {
+          relation->replaceElement(
+            memberElementId, ElementId(ElementType::Way, remappedWayMemberIdItr.value()));
+        }
+      }
+      else if (memberElementId.getType() == ElementType::Relation)
+      {
+        QHash<long, long>::const_iterator remappedRelationMemberIdItr =
+          _relationIdMap.find(memberElementId.getId());
+        if (remappedRelationMemberIdItr != _relationIdMap.end() &&
+            remappedRelationMemberIdItr.value() != memberElementId.getId())
+        {
+          relation->replaceElement(
+            memberElementId, ElementId(ElementType::Relation, remappedRelationMemberIdItr.value()));
+        }
+      }
+      else
+      {
+        throw IllegalArgumentException("Unknown element type.");
+      }
+    }
+  }
 }
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
@@ -378,10 +481,12 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   if (_useDataSourceIds)
   {
     newId = id;
+    LOG_TRACE("Using source node id: " << newId << "...");
   }
   else
   {
     newId = _map->createNextNodeId();
+    LOG_TRACE("Created new node id: " << newId << "...");
   }
   LOG_VART(id);
   LOG_VART(newId);
@@ -452,6 +557,7 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   // Get info we need to construct our way
   long id = item.get("id", id);
 
+  LOG_VARD(_wayIdMap.size());
   if (_wayIdMap.contains(id))
   {
     if (_ignoreDuplicates)
@@ -468,10 +574,12 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   if (_useDataSourceIds)
   {
     newId = id;
+    LOG_TRACE("Using source way id: " << newId << "...");
   }
   else
   {
     newId = _map->createNextWayId();
+    LOG_TRACE("Created new way id: " << newId << "...");
   }
   _wayIdMap.insert(id, newId);
 
@@ -522,40 +630,28 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
     pt::ptree::const_iterator nodeIt = nodes.begin();
     while (nodeIt != nodes.end())
     {
-      long nodeId = nodeIt->second.get_value<long>();
-      LOG_VART(nodeId);
+      const long wayNodeId = nodeIt->second.get_value<long>();
+      long wayNodeIdToUse = wayNodeId;
 
-      bool okToAdd = true;
+      // Since the actual nodes referenced by these way node IDs could be found later in the
+      // input file (JSON doesn't require element type ordering like XML does), we will add the way
+      // node to the way whether it has been parsed yet or not. At the very end of the file load,
+      // we'll check for missing child refs.
+
       if (!_useDataSourceIds)
       {
-        QHash<long, long>::const_iterator nodeIdItr = _nodeIdMap.find(nodeId);
-        if (nodeIdItr == _nodeIdMap.end())
+        // If we're not using source element IDs, check to see if we've already mapped this node ID
+        // to a new ID. If so, we'll use that ID instead.
+        QHash<long, long>::const_iterator wayNodeIdItr = _nodeIdMap.find(wayNodeId);
+        if (wayNodeIdItr != _nodeIdMap.end())
         {
-          _missingNodeCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
-          {
-            LOG_WARN(
-              "Skipping missing " << ElementId(ElementType::Node, nodeId) << " in " <<
-              ElementId(ElementType::Way, newId) << "...");
-          }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
-          okToAdd = false;
-        }
-        else
-        {
-          nodeId = nodeIdItr.value();
+          wayNodeIdToUse = wayNodeIdItr.value();
+          LOG_TRACE("Retrieved mapped way node ID: " << wayNodeIdToUse << " for ID: " << wayNodeId);
         }
       }
 
-      if (okToAdd)
-      {
-        LOG_TRACE("Adding way node: " << nodeId << "...");
-        pWay->addNode(nodeId);
-      }
+      LOG_TRACE("Adding way node: " << wayNodeIdToUse << "...");
+      pWay->addNode(wayNodeIdToUse);
 
       ++nodeIt;
     }
@@ -599,10 +695,12 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   if (_useDataSourceIds)
   {
     newId = id;
+    LOG_TRACE("Using source relation id: " << newId << "...");
   }
   else
   {
     newId = _map->createNextRelationId();
+    LOG_TRACE("Created new relation id: " << newId << "...");
   }
   _relationIdMap.insert(id, newId);
 
@@ -654,64 +752,41 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
     while (memberIt != members.end())
     {
       string typeStr = memberIt->second.get("type", string(""));
-      long ref = memberIt->second.get("ref", -1l); // default -1 ?
+      const long refId = memberIt->second.get("ref", -1l); // default -1 ?
+      long refIdToUse = refId;
       string role = memberIt->second.get("role", string(""));
+
+      // See related note in _parseOverpassWay about loading child refs regardless of whether they
+      // have yet been parsed or not.
 
       bool okToAdd = true;
       if (typeStr == "node")
       {
         if (!_useDataSourceIds)
         {
-          QHash<long, long>::const_iterator nodeIdItr = _nodeIdMap.find(ref);
-          if (nodeIdItr == _nodeIdMap.end())
+          QHash<long, long>::const_iterator nodeMemberIdItr = _nodeIdMap.find(refId);
+          if (nodeMemberIdItr != _nodeIdMap.end())
           {
-            _missingNodeCount++;
-            if (logWarnCount < Log::getWarnMessageLimit())
-            {
-              LOG_WARN(
-                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
-                ElementId(ElementType::Relation, newId) << "...");
-            }
-            else if (logWarnCount == Log::getWarnMessageLimit())
-            {
-              LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-            }
-            logWarnCount++;
-            okToAdd = false;
-          }
-          else
-          {
-            ref = nodeIdItr.value();
+            refIdToUse = nodeMemberIdItr.value();
+            LOG_TRACE("Retrieved mapped node member ID: " << refIdToUse << " for ID: " << refId);
           }
         }
       }
       else if (typeStr == "way")
       {
-        QHash<long, long>::const_iterator wayIdItr = _wayIdMap.find(ref);
-        if (wayIdItr == _wayIdMap.end())
+        if (!_useDataSourceIds)
         {
-          _missingWayCount++;
-          if (logWarnCount < Log::getWarnMessageLimit())
+          QHash<long, long>::const_iterator wayMemberIdItr = _wayIdMap.find(refId);
+          if (wayMemberIdItr != _wayIdMap.end())
           {
-            LOG_WARN(
-              "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
-              ElementId(ElementType::Relation, newId) << "...");
+            refIdToUse = wayMemberIdItr.value();
+            LOG_TRACE("Retrieved mapped way member ID: " << refIdToUse << " for ID: " << refId);
           }
-          else if (logWarnCount == Log::getWarnMessageLimit())
-          {
-            LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
-          }
-          logWarnCount++;
-          okToAdd = false;
-        }
-        else
-        {
-          ref = wayIdItr.value();
         }
       }
       else if (typeStr == "relation")
       {
-        ref = _getRelationId(ref);
+        refIdToUse = _getRelationId(refId);
       }
       else
       {
@@ -730,9 +805,9 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
 
       if (okToAdd)
       {
-        LOG_TRACE("Adding relation relation member: " << ref << "...");
+        LOG_TRACE("Adding relation relation member: " << refIdToUse << "...");
         pRelation->addElement(QString::fromStdString(role),
-                              ElementType::fromString(QString::fromStdString(typeStr)), ref);
+                              ElementType::fromString(QString::fromStdString(typeStr)), refIdToUse);
       }
 
       ++memberIt;

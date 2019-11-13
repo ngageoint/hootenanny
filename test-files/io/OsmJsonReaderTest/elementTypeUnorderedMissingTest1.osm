@@ -21,10 +21,6 @@
         <tag k="hoot:status" v="0"/>
         <tag k="hoot:id" v="2442180397"/>
     </node>
-    <node visible="true" id="2442180398" timestamp="1970-01-01T00:00:00Z" version="1" changeset="17629418" user="ElliottPlack" uid="105946" lat="39.0355947999999984" lon="-77.1165775000000053">
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:id" v="2442180398"/>
-    </node>
     <node visible="true" id="2442180399" timestamp="1970-01-01T00:00:00Z" version="1" changeset="17629418" user="ElliottPlack" uid="105946" lat="39.0355662999999993" lon="-77.1166019000000063">
         <tag k="hoot:status" v="0"/>
         <tag k="hoot:id" v="2442180399"/>
@@ -62,7 +58,6 @@
     </way>
     <way visible="true" id="236155437" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="2442180397"/>
-        <nd ref="2442180398"/>
         <nd ref="2442180399"/>
         <nd ref="2442180400"/>
         <nd ref="2442180401"/>

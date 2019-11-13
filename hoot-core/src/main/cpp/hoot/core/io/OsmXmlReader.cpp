@@ -447,6 +447,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
+  // Should we be using RemoveMissingElementsVisitor here instead?
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
