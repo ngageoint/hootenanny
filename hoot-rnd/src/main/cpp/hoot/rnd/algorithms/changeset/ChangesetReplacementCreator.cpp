@@ -911,12 +911,15 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const bool lenientBo
     conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerBasic::className());
   }
   conf().set(ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(), !_isNetworkConflate());
+
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.apply(map);
-  // TODO: restrict conflate matchers to only those relevant based on the filter?
+
   UnifyingConflator().apply(map);
+
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
+
   MapProjector::projectToWgs84(map);  // conflation works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, "conflated");

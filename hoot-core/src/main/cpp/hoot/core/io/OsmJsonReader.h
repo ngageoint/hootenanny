@@ -239,9 +239,6 @@ public:
 
   bool isValidJson(const QString& jsonStr);
 
-  // temporary: see #3619
-  void setRequireStrictTypeOrdering(bool require) { _requireStrictTypeOrdering = require; }
-
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -281,9 +278,6 @@ protected:
 
   int _missingNodeCount;
   int _missingWayCount;
-
-  // requires that elements be type ordering in input; if not, they're skipped; temporary: see #3619
-  bool _requireStrictTypeOrdering;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
