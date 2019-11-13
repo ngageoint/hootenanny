@@ -347,6 +347,7 @@ protected:
   void _updateChildRefs();
 
   void _reset();
+  void _resetIds();
 };
 
 }

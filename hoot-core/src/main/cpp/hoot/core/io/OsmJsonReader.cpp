@@ -162,9 +162,14 @@ void OsmJsonReader::open(const QString& url)
 
 void OsmJsonReader::_reset()
 {
-  //_propTree.clear();
-  //_results.clear();
+  _propTree.clear();
+  _results.clear();
 
+  _resetIds();
+}
+
+void OsmJsonReader::_resetIds()
+{
   _nodeIdMap.clear();
   _relationIdMap.clear();
   _wayIdMap.clear();
@@ -181,9 +186,6 @@ void OsmJsonReader::close()
     _file.close();
 
   _reset();
-
-  _propTree.clear();
-  _results.clear();
 }
 
 void OsmJsonReader::read(const OsmMapPtr& map)
@@ -331,7 +333,7 @@ void OsmJsonReader::_parseOverpassJson()
   LOG_VARD(_ignoreDuplicates);
 
   // clear node id maps in case the reader is used for multiple files
-  _reset();
+  _resetIds();
 
   // Overpass has 4 top level items: version, generator, osm3s, elements
   _version = QString::fromStdString(_propTree.get("version", string("")));
