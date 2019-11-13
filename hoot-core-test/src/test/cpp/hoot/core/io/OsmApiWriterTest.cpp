@@ -55,10 +55,12 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runVersionConflictResolutionTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
+#ifdef RUN_LOCAL_OSM_API_SERVER
   CPPUNIT_TEST(runChangesetTest);
   CPPUNIT_TEST(runChangesetTrottleTest);
   CPPUNIT_TEST(runChangesetConflictTest);
   CPPUNIT_TEST(oauthTest);
+#endif
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -66,8 +68,10 @@ public:
   const QString OSM_API_URL = "https://www.openstreetmap.org";
   const QString LOCAL_TEST_API_URL = "http://localhost:%1";
 #ifdef RUN_LOCAL_OSM_API_SERVER
-  const QString LOCAL_OSM_API_URL = "http://<Enter local OSM API URL here>";
+  //  Replace with local OSM server IP/name
+  const QString LOCAL_OSM_API_URL = "http://local-osm";
 #endif
+  const QString TEST_USER_INFO = "test01:hoottest";
 
   /** Separate port numbers so that tests can run in parallel */
   const int PORT_CAPABILITIES = 9800;
@@ -77,7 +81,7 @@ public:
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
-                      UNUSED_PATH)
+                      "test-output/io/OsmChangesetElementTest/")
   {
     setResetType(ResetBasic);
   }
@@ -142,7 +146,7 @@ public:
   void runPermissionsTest()
   {
     QUrl osm;
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo(TEST_USER_INFO);
 #ifdef RUN_LOCAL_TEST_SERVER
     osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_PERMISSIONS));
     PermissionsTestServer server(PORT_PERMISSIONS);
@@ -166,7 +170,7 @@ public:
 #ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
     osm.setUrl(LOCAL_OSM_API_URL);
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo(TEST_USER_INFO);
 
     QList<QString> changesets;
     changesets.append(_inputPath + "ToyTestA.osc");
@@ -187,7 +191,7 @@ public:
 #ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
     osm.setUrl(LOCAL_OSM_API_URL);
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo(TEST_USER_INFO);
 
     QList<QString> changesets;
     changesets.append(_inputPath + "ToyTestA.osc");
@@ -210,7 +214,7 @@ public:
 #ifdef RUN_LOCAL_OSM_API_SERVER
     QUrl osm;
     osm.setUrl(LOCAL_OSM_API_URL);
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo(TEST_USER_INFO);
 
     //  Load up the all-create ToyTestA
     {
@@ -234,6 +238,7 @@ public:
       changesets.append(_inputPath + "ToyTestAConflicts.osc");
 
       OsmApiWriter writer(osm, changesets);
+      writer.setErrorPathname(_outputPath + "ChangesetConflictOutput-error.osc");
 
       Settings s;
       s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
@@ -255,6 +260,9 @@ public:
         "\t</delete>\n"
         "</osmChange>\n",
         writer.getFailedChangeset());
+      //  Check the changeset error file
+      HOOT_FILE_EQUALS( _inputPath + "ChangesetConflictExpected-error.osc",
+                       _outputPath + "ChangesetConflictOutput-error.osc");
     }
 #endif
   }
@@ -272,7 +280,7 @@ public:
     //  Setup the test
     QUrl osm;
     osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_CONFLICTS));
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo(TEST_USER_INFO);
 
     //  Kick off the conflict test server
     RetryConflictsTestServer server(PORT_CONFLICTS);
@@ -282,6 +290,7 @@ public:
     changesets.append(_inputPath + "ToyTestAConflicts.osc");
 
     OsmApiWriter writer(osm, changesets);
+    writer.setErrorPathname(_outputPath + "RetryConflictOutput-error.osc");
 
     Settings s;
     s.set(ConfigOptions::getChangesetApidbWritersMaxKey(), 1);
@@ -304,6 +313,9 @@ public:
       writer.getFailedChangeset());
     //  Check the stats
     checkStats(writer.getStats(), 3, 2, 0, 2, 1, 2, 5);
+    //  Check the changeset error file
+    HOOT_FILE_EQUALS( _inputPath + "RetryConflictExpected-error.osc",
+                     _outputPath + "RetryConflictOutput-error.osc");
 #endif
   }
 
@@ -320,7 +332,7 @@ public:
     //  Setup the test
     QUrl osm;
     osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_VERSION));
-    osm.setUserInfo("test01:hoottest");
+    osm.setUserInfo(TEST_USER_INFO);
 
     //  Kick off the version conflict test server
     RetryVersionTestServer server(PORT_VERSION);

@@ -130,6 +130,16 @@ public:
    * @see ProgressReporter
    */
   virtual unsigned int getNumSteps() const { return 1; }
+  /**
+   * @brief setErrorPathname Record the pathname of the error changeset
+   * @param path Pathname
+   */
+  void setErrorPathname(const QString& path) { _changeset.setErrorPathname(path); }
+  /**
+   * @brief writeErrorFile Writes our the error changeset
+   * @return true if the file was written successfully
+   */
+  bool writeErrorFile() { return _changeset.writeErrorFile(); }
 
 private:
   /**
@@ -266,6 +276,8 @@ private:
   QString _accessToken;
   /** OAuth 1.0 secret token granted through OAuth authorization */
   QString _secretToken;
+  /** Full pathname of the error file changeset, if any errors occur */
+  QString _errorPathname;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */
