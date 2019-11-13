@@ -85,7 +85,8 @@ _lenientBounds(true),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
-_waySnappingEnabled(true)
+_waySnappingEnabled(true),
+_conflationEnabled(true)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, osmApiDbUrl));
   setGeometryFilters(QStringList());
@@ -442,8 +443,11 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Conflate the cookie cut ref map with the sec map.
 
   conflatedMap = cookieCutRefMap;
-  // TODO: do something with reviews - #3361
-  _conflate(conflatedMap, _lenientBounds);
+  if (_conflationEnabled)
+  {
+    // TODO: do something with reviews - #3361
+    _conflate(conflatedMap, _lenientBounds);
+  }
 
   if (isLinearCrit && _waySnappingEnabled)
   {

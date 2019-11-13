@@ -48,6 +48,8 @@ while element IDs for the secondary data are not retained and the elements treat
                                    "Retainment Filtering" section for more detail.
 * +--disable-way-snapping+       - Optional configuration option which disables the snapping of unconnected ways before changeset derivation. 
                                    By default way snapping is enabled.
+* +--disable-conflation+         - Optional configuration option which disables the conflation of data cut out during replacement and the 
+                                   replacement data. By default conflation is enabled.
 * +--stats+                      - Stats flag, when turned on a table of create, modify, delete for each of the types node, way, relation (only 
                                    valid for .osc output files)
 * +--write-bounds+               - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the 
@@ -56,7 +58,7 @@ while element IDs for the secondary data are not retained and the elements treat
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--stats] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--stats] [--write-bounds]
 --------------------------------------
 
 === Examples
