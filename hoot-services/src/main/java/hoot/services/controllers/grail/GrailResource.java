@@ -51,6 +51,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -918,15 +919,28 @@ public class GrailResource {
             String inputLine;
 
             boolean firstLine = true;
+            ArrayList<Double> statCounts = new ArrayList<>();
             while ((inputLine = br.readLine()) != null) {
-                //Prevents newline from being printed for last line
+                //After the first line it is all stat numbers
                 if(!firstLine){
-                    statsInfo.append("\n");
-                }
-                firstLine = false;
+                    String[] rowCounts = inputLine.split("\t");
+                    for(int i = 0; i < rowCounts.length; i++) {
+                        statCounts.set(i, statCounts.get(i) + Double.parseDouble(rowCounts[i]));
+                    }
+                } else {
+                    // This else is only entered for the first line which contains the column names so we initialize arraylist with that many elements
+                    int numColumns = inputLine.split("\t").length;
+                    for(int i = 0; i < numColumns; i++) {
+                        statCounts.add(0.0);
+                    }
 
-                statsInfo.append(inputLine);
+                    statsInfo.append(inputLine + "\n");
+                }
+
+                firstLine = false;
             }
+
+            statsInfo.append(StringUtils.join(statCounts, "\t"));
 
             br.close();
         }
