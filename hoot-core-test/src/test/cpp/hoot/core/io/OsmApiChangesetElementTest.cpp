@@ -36,15 +36,15 @@ namespace hoot
 class OsmApiChangesetElementTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmApiChangesetElementTest);
-  CPPUNIT_TEST(runXmlNodeTest);
-  CPPUNIT_TEST(runNonAsciiXmlNodeTest);
-  CPPUNIT_TEST(runXmlWayTest);
-  CPPUNIT_TEST(runXmlRelationTest);
+  CPPUNIT_TEST(runChangesetNodeTest);
+  CPPUNIT_TEST(runNonAsciiChangesetNodeTest);
+  CPPUNIT_TEST(runChangesetWayTest);
+  CPPUNIT_TEST(runChangesetRelationTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  void runXmlNodeTest()
+  void runChangesetNodeTest()
   {
     QXmlStreamAttributes attributes;
     attributes.append("id", "-1");
@@ -54,7 +54,7 @@ public:
     XmlObject n;
     n.first = "node";
     n.second = attributes;
-    XmlNode node(n, NULL);
+    ChangesetNode node(n, NULL);
 
     HOOT_STR_EQUALS("\t\t<node id=\"-1\" version=\"0\" "
                     "lat=\"38.8549321261880536\" lon=\"-104.8979050333482093\" changeset=\"1\"/>\n",
@@ -75,7 +75,7 @@ public:
                     node.toString(1));
   }
 
-  void runNonAsciiXmlNodeTest()
+  void runNonAsciiChangesetNodeTest()
   {
     QXmlStreamAttributes attributes;
     attributes.append("id", "-1");
@@ -85,7 +85,7 @@ public:
     XmlObject n;
     n.first = "node";
     n.second = attributes;
-    XmlNode node(n, NULL);
+    ChangesetNode node(n, NULL);
     //  Name tags taken from OSM node in Djibouti
     QXmlStreamAttributes tagAttributesAr;
     tagAttributesAr.append("k", "name:ar");
@@ -118,7 +118,7 @@ public:
                     node.toString(1));
   }
 
-  void runXmlWayTest()
+  void runChangesetWayTest()
   {
     QXmlStreamAttributes attributes;
     attributes.append("id", "-1");
@@ -127,7 +127,7 @@ public:
     XmlObject w;
     w.first = "way";
     w.second = attributes;
-    XmlWay way(w, NULL);
+    ChangesetWay way(w, NULL);
 
     HOOT_STR_EQUALS("\t\t<way id=\"-1\" version=\"0\" timestamp=\"\" changeset=\"1\">\n\t\t</way>\n",
                     way.toString(1));
@@ -157,7 +157,7 @@ public:
                     way.toString(1));
   }
 
-  void runXmlRelationTest()
+  void runChangesetRelationTest()
   {
     QXmlStreamAttributes attributes;
     attributes.append("id", "-1");
@@ -166,7 +166,7 @@ public:
     XmlObject w;
     w.first = "relation";
     w.second = attributes;
-    XmlRelation relation(w, NULL);
+    ChangesetRelation relation(w, NULL);
 
     HOOT_STR_EQUALS("\t\t<relation id=\"-1\" version=\"0\" timestamp=\"\" changeset=\"1\">\n\t\t</relation>\n",
                     relation.toString(1));

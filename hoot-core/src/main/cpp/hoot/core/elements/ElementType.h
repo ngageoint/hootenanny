@@ -48,8 +48,8 @@ public:
     Unknown
   } Type;
 
-  ElementType() { _type = Unknown; }
-  ElementType(Type type) { _type = type; }
+  ElementType() : _type(Unknown) { }
+  ElementType(Type type) : _type(type) { }
 
   bool operator==(ElementType t) const { return t._type == _type; }
   bool operator!=(ElementType t) const { return t._type != _type; }

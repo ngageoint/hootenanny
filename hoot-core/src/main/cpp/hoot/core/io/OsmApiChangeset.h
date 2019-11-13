@@ -53,8 +53,8 @@ namespace hoot
 class ChangesetInfo;
 /** Helpful typedefs for pointers and vectors of maps */
 typedef std::shared_ptr<ChangesetInfo> ChangesetInfoPtr;
-typedef std::map<long, XmlElementPtr, osm_id_sort> XmlElementMap;
-typedef QVector<XmlElementMap> ChangesetTypeMap;
+typedef std::map<long, ChangesetElementPtr, osm_id_sort> ChangesetElementMap;
+typedef std::vector<ChangesetElementMap> ChangesetTypeMap;
 typedef std::map<long, std::set<long>> NodeIdToWayIdMap;
 typedef std::map<long, std::set<long>> NodeIdToRelationIdMap;
 typedef std::map<long, std::set<long>> WayIdToRelationIdMap;
@@ -329,9 +329,9 @@ private:
    * @param node/way/relation Pointer to the element that is being added
    * @return success
    */
-  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, XmlNode* node);
-  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, XmlWay* way);
-  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, XmlRelation* relation);
+  bool addNode(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetNode* node);
+  bool addWay(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetWay* way);
+  bool addRelation(ChangesetInfoPtr& changeset, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief addParentWays/Relations Add any parents (ways, relations) to the changeset if needed
    *  by a modify or delete operation.  For example, to delete a node, any way or relation parent
@@ -351,9 +351,9 @@ private:
    * @param node/way/relation Pointer to the element to be moved
    * @return
    */
-  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
-  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
-  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  bool moveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  bool moveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool moveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief moveOrRemoveNode/Way/Relation Move an element from one subset to another, or if all related elements aren't
    *   able to be moved, the element is removed from the subset and returned to the `available` state
@@ -362,9 +362,9 @@ private:
    * @param type Type of operation (create/modify/delete)
    * @param node/way/relation Pointer to the element to be moved
    */
-  void moveOrRemoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
-  void moveOrRemoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
-  void moveOrRemoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  void moveOrRemoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  void moveOrRemoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  void moveOrRemoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief canMoveNode/Way/Relation Query if a node/way/relation can be moved.  This checks downstream relations, ways,
    *  and nodes to see if they can also be moved.
@@ -374,37 +374,37 @@ private:
    * @param node/way/relation Pointer to the element to be checked
    * @return
    */
-  bool canMoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlNode* node);
-  bool canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlWay* way);
-  bool canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, XmlRelation* relation);
+  bool canMoveNode(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node);
+  bool canMoveWay(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way);
+  bool canMoveRelation(ChangesetInfoPtr& source, ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation);
   /**
    * @brief getObjectCount Get the number of elements affected by this node/way/relation
    * @param changeset Subset containing the element
    * @param node/way/relation Pointer to the element to count
    * @return total number of elements within this element
    */
-  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlNode* node);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlWay* way);
-  size_t getObjectCount(ChangesetInfoPtr& changeset, XmlRelation* relation);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetNode* node);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetWay* way);
+  size_t getObjectCount(ChangesetInfoPtr& changeset, ChangesetRelation* relation);
   /**
    * @brief isSent Check if this element's status is buffering, sent, or finalized
    * @param element Pointer to the element to check
    * @return true if the element has been sent to the API
    */
-  bool isSent(XmlElement* element);
+  bool isSent(ChangesetElement* element);
   /**
    * @brief canSend Check if the node/way/relation can be sent (if it is available) along with all of its downstream elements
    * @param node/way/relation Pointer to the element to check
    * @return true if element and all downstream elements are available to send
    */
-  bool canSend(XmlNode* node);
-  bool canSend(XmlWay* way);
-  bool canSend(XmlRelation* relation);
+  bool canSend(ChangesetNode* node);
+  bool canSend(ChangesetWay* way);
+  bool canSend(ChangesetRelation* relation);
   /**
    * @brief markBuffered Mark the element as buffered
    * @param element Pointer to the element to mark
    */
-  void markBuffered(XmlElement* element);
+  void markBuffered(ChangesetElement* element);
   /**
    * @brief getNextNode/Way/RelationId searches the Create section of the changeset to find the next available ID
    *  for the desired element type
@@ -440,11 +440,11 @@ private:
   void getWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
   void getRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
-  XmlElementMap _allNodes;
+  ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
-  XmlElementMap _allWays;
+  ChangesetElementMap _allWays;
   /** Sorted map of all relations, original node ID and a pointer to the element object */
-  XmlElementMap _allRelations;
+  ChangesetElementMap _allRelations;
   /** Three element (create/modify/delete) vector of node IDs */
   ChangesetTypeMap _nodes;
   /** Three element (create/modify/delete) vector of way IDs */
@@ -462,7 +462,7 @@ private:
   /** Count of elements that failed to upload */
   long _failedCount;
   /** Buffer of elements that are about to be pushed into a subset */
-  std::vector<XmlElement*> _sendBuffer;
+  std::vector<ChangesetElement*> _sendBuffer;
   /** Negative ID generator */
   DefaultIdGenerator _idGen;
   /** Reverse ID to ID maps for deleting elements validation */
