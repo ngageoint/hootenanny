@@ -269,10 +269,21 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
     LOG_VART(ids[i]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
     LOG_VART(n.get());
-//    if (!n)
-//    {
-//      throw HootException("Node " + QString::number(ids[i]) + " does not exist.");
-//    }
+    if (!n.get())
+    {
+      if (logWarnCount < Log::getWarnMessageLimit())
+      {
+        LOG_WARN(
+          "Node " << QString::number(ids[i]) << " does not exist. Skipping conversion of " <<
+          w->getElementId() << " to polygon...");
+      }
+      else if (logWarnCount == Log::getWarnMessageLimit())
+      {
+        LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      }
+      logWarnCount++;
+      return std::shared_ptr<Polygon>();
+    }
     cs->setAt(n->toCoordinate(), i);
   }
 

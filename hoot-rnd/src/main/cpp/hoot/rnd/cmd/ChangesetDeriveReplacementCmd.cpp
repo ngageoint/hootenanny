@@ -159,7 +159,14 @@ public:
       enableWaySnapping = false;
       args.removeAll("--disable-way-snapping");
     }
-    LOG_VARD(printStats);
+    LOG_VARD(enableWaySnapping);
+    bool enableConflation = true;
+    if (args.contains("--disable-conflation"))
+    {
+      enableConflation = false;
+      args.removeAll("--disable-conflation");
+    }
+    LOG_VARD(enableConflation);
 
     LOG_VARD(args.size());
     LOG_VARD(args);
@@ -207,6 +214,7 @@ public:
     changesetCreator.setRetainmentFilters(retainmentFilters);
     changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator.setWaySnappingEnabled(enableWaySnapping);
+    changesetCreator.setConflationEnabled(enableConflation);
     changesetCreator.create(input1, input2, bounds, output);
 
     return 0;

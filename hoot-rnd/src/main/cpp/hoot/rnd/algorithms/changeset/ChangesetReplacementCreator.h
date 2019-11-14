@@ -141,6 +141,7 @@ public:
   void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
   void setRetainmentFilterOptions(const QStringList& optionKvps);
   void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
+  void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
 
 private:
 
@@ -185,6 +186,9 @@ private:
 
   // turn on/off post conflate way snapping
   bool _waySnappingEnabled;
+
+  // turn on/off conflation of cookie cut data being replaced with replacement data
+  bool _conflationEnabled;
 
   // controls cropping
   BoundsOptions _boundsOpts;

@@ -52,6 +52,8 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runBoundsTest);
   CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST(elementTypeUnorderedTest);
+  CPPUNIT_TEST(elementTypeUnorderedMissingTest);
+  // TODO: add duplicates test
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -59,6 +61,7 @@ public:
   OsmJsonReaderTest() :
   HootTestFixture("test-files/io/OsmJsonReaderTest/", "test-output/io/OsmJsonReaderTest/")
   {
+    setResetType(ResetBasic);
   }
 
   void nodeTest()
@@ -631,19 +634,72 @@ public:
   void elementTypeUnorderedTest()
   {
     // This should load the elements even though child elements come after their parents.
+
     // TODO: we need some relations in the test input
 
-    const QString testFileName = "elementTypeUnorderedTest.osm";
-
+    QString testFileName;
     OsmJsonReader uut;
-    uut.setRequireStrictTypeOrdering(false);
+    OsmMapPtr map;
 
-    OsmMapPtr map(new OsmMap());
+    TestUtils::resetBasic();
+    testFileName = "elementTypeUnorderedTest1.osm";
+    uut.setUseDataSourceIds(true);
+    map.reset(new OsmMap());
     uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
     uut.read(map);
     uut.close();
     OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
     HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+
+    // same as above except we create our own element ids this time
+
+    TestUtils::resetBasic();
+    testFileName = "elementTypeUnorderedTest2.osm";
+    uut.setUseDataSourceIds(false);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+  }
+
+  void elementTypeUnorderedMissingTest()
+  {
+    // There is one node referenced by a way that doesn't exist in the file (id=2442180398). That
+    // node should not be present in the output way.
+
+    // TODO: we need some relations and way refs in the test input
+
+    // The default behavior is to log missing elements as warnings, and we don't want to see that in
+    // this test;
+    DisableLog dl;
+
+    QString outputFile;
+    OsmJsonReader uut;
+    OsmMapPtr map;
+
+    TestUtils::resetBasic();
+    outputFile = "elementTypeUnorderedMissingTest1.osm";
+    uut.setUseDataSourceIds(true);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
+
+    // same as above except we create our own element ids this time
+
+    TestUtils::resetBasic();
+    outputFile = "elementTypeUnorderedMissingTest2.osm";
+    uut.setUseDataSourceIds(false);
+    map.reset(new OsmMap());
+    uut.open(_inputPath + "elementTypeUnorderedMissingTest-in.json");
+    uut.read(map);
+    uut.close();
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outputFile, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outputFile, _outputPath + "/" + outputFile);
   }
 };
 }

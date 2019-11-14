@@ -58,6 +58,7 @@ int Relation::logWarnCount = 0;
 class AddToVisitedRelationsList
 {
 public:
+
   AddToVisitedRelationsList(QList<long>& relationIds, long thisId) :
     _relationIds(relationIds),
     _thisId(thisId)
@@ -73,6 +74,7 @@ public:
   }
 
 private:
+
   QList<long>& _relationIds;
   long _thisId;
 };
@@ -221,11 +223,19 @@ void Relation::removeElement(ElementId eid)
 }
 
 void Relation::replaceElement(const std::shared_ptr<const Element>& from,
-  const std::shared_ptr<const Element> &to)
+  const std::shared_ptr<const Element>& to)
 {
   _preGeometryChange();
   _makeWritable();
   _relationData->replaceElement(from->getElementId(), to->getElementId());
+  _postGeometryChange();
+}
+
+void Relation::replaceElement(const ElementId& from, const ElementId& to)
+{
+  _preGeometryChange();
+  _makeWritable();
+  _relationData->replaceElement(from, to);
   _postGeometryChange();
 }
 
