@@ -421,34 +421,80 @@ void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType
        relationIdItr != relationIdsWithChildrenNotPresent.end(); ++relationIdItr)
   {
     const long relationId = *relationIdItr;
+    LOG_VART(relationId);
     RelationPtr relation = _map->getRelation(relationId);
-
-    QList<long> childIdsNotPresentAtLoad;
-    if (childElementType == ElementType::Node)
+    LOG_VART(relation.get());
+    if (relation)   // not completely sure why the relation wouldn't exist at this point
     {
-      childIdsNotPresentAtLoad = _relationIdsToNodeMemberIdsNotPresent.values(relationId);
-    }
-    else if (childElementType == ElementType::Way)
-    {
-      childIdsNotPresentAtLoad = _relationIdsToWayMemberIdsNotPresent.values(relationId);
-    }
-    else if (childElementType == ElementType::Relation)
-    {
-      childIdsNotPresentAtLoad = _relationIdsToRelationMemberIdsNotPresent.values(relationId);
-    }
-
-    for (QList<long>::const_iterator memberIdItr = childIdsNotPresentAtLoad.begin();
-         memberIdItr != childIdsNotPresentAtLoad.end(); ++memberIdItr)
-    {
-      const long memberId = *memberIdItr;
-      if (relation->contains(ElementId(childElementType, memberId)))
+      QList<long> childIdsNotPresentAtLoad;
+      if (childElementType == ElementType::Node)
       {
-        QHash<long, long>::const_iterator remappedMemberIdItr = originalIdMap.find(memberId);
-        if (remappedMemberIdItr != originalIdMap.end() && remappedMemberIdItr.value() != memberId)
+        childIdsNotPresentAtLoad = _relationIdsToNodeMemberIdsNotPresent.values(relationId);
+      }
+      else if (childElementType == ElementType::Way)
+      {
+        childIdsNotPresentAtLoad = _relationIdsToWayMemberIdsNotPresent.values(relationId);
+      }
+      else if (childElementType == ElementType::Relation)
+      {
+        childIdsNotPresentAtLoad = _relationIdsToRelationMemberIdsNotPresent.values(relationId);
+      }
+
+      for (QList<long>::const_iterator memberIdItr = childIdsNotPresentAtLoad.begin();
+           memberIdItr != childIdsNotPresentAtLoad.end(); ++memberIdItr)
+      {
+        const long memberId = *memberIdItr;
+        LOG_VART(memberId);
+        ElementId idToReplace = ElementId(childElementType, memberId);
+        LOG_VART(idToReplace);
+        LOG_VART(relation->getElementId() != idToReplace);
+        LOG_VART(relation->contains(idToReplace));
+        if (relation->getElementId() != idToReplace && relation->contains(idToReplace))
         {
-          relation->replaceElement(
-            ElementId(childElementType, memberId),
-            ElementId(childElementType, remappedMemberIdItr.value()));
+          QHash<long, long>::const_iterator remappedMemberIdItr = originalIdMap.find(memberId);
+          LOG_VART(remappedMemberIdItr.value());
+          if (remappedMemberIdItr != originalIdMap.end() && remappedMemberIdItr.value() != memberId)
+          {
+            ElementId idToReplaceWith = ElementId(childElementType, remappedMemberIdItr.value());
+            LOG_TRACE(
+              "Replacing element ID: " << idToReplace << " with: " << idToReplaceWith << "...");
+            relation->replaceElement(idToReplace, idToReplaceWith);
+          }
+        }
+      }
+    }
+  }
+}
+
+void OsmJsonReader::_updateWayChildRefs()
+{
+  const QList<long> wayIdsWithWayNodesNotPresent = _wayIdsToWayNodeIdsNotPresent.keys();
+  for (QList<long>::const_iterator wayIdItr = wayIdsWithWayNodesNotPresent.begin();
+       wayIdItr != wayIdsWithWayNodesNotPresent.end(); ++wayIdItr)
+  {
+    const long wayId = *wayIdItr;
+    LOG_VART(wayId);
+    WayPtr way = _map->getWay(wayId);
+    // haven't seen a null one yet but adding this to stay consistent with the behavior for
+    // relations
+    if (way)
+    {
+      const QList<long> wayNodeIdsNotPresentAtLoad = _wayIdsToWayNodeIdsNotPresent.values(wayId);
+      for (QList<long>::const_iterator wayNodeIdItr = wayNodeIdsNotPresentAtLoad.begin();
+           wayNodeIdItr != wayNodeIdsNotPresentAtLoad.end(); ++wayNodeIdItr)
+      {
+        const long wayNodeId = *wayNodeIdItr;
+        LOG_VART(wayNodeId);
+        if (way->containsNodeId(wayNodeId))
+        {
+          QHash<long, long>::const_iterator remappedNodeIdItr = _nodeIdMap.find(wayNodeId);
+          LOG_VART(remappedNodeIdItr.value());
+          if (remappedNodeIdItr != _nodeIdMap.end() && remappedNodeIdItr.value() != wayNodeId)
+          {
+            LOG_TRACE(
+              "Replacing way ID: " << wayNodeId << " with: " << remappedNodeIdItr.value() << "...");
+            way->replaceNode(wayNodeId, remappedNodeIdItr.value());
+          }
         }
       }
     }
@@ -461,32 +507,9 @@ void OsmJsonReader::_updateChildRefs()
 
   // For any ways which added way nodes that weren't validated upon load, let's update those way
   // node id refs now with what we actually loaded.
-
-  const QList<long> wayIdsWithWayNodesNotPresent = _wayIdsToWayNodeIdsNotPresent.keys();
-  for (QList<long>::const_iterator wayIdItr = wayIdsWithWayNodesNotPresent.begin();
-       wayIdItr != wayIdsWithWayNodesNotPresent.end(); ++wayIdItr)
-  {
-    const long wayId = *wayIdItr;
-    WayPtr way = _map->getWay(wayId);
-
-    const QList<long> wayNodeIdsNotPresentAtLoad = _wayIdsToWayNodeIdsNotPresent.values(wayId);
-    for (QList<long>::const_iterator wayNodeIdItr = wayNodeIdsNotPresentAtLoad.begin();
-         wayNodeIdItr != wayNodeIdsNotPresentAtLoad.end(); ++wayNodeIdItr)
-    {
-      const long wayNodeId = *wayNodeIdItr;
-      if (way->containsNodeId(wayNodeId))
-      {
-        QHash<long, long>::const_iterator remappedNodeIdItr = _nodeIdMap.find(wayNodeId);
-        if (remappedNodeIdItr != _nodeIdMap.end() && remappedNodeIdItr.value() != wayNodeId)
-        {
-          way->replaceNode(wayNodeId, remappedNodeIdItr.value());
-        }
-      }
-    }
-  }
+  _updateWayChildRefs();
 
   // Do the same as above but for relation member refs
-
   _updateRelationChildRefs(ElementType::Node);
   _updateRelationChildRefs(ElementType::Way);
   _updateRelationChildRefs(ElementType::Relation);
@@ -575,7 +598,8 @@ void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)
   // Add node to map
   _map->addNode(pNode);
 
-  LOG_TRACE("Loaded node: " << pNode);
+  LOG_TRACE("Loaded node: " << pNode->getElementId());
+  //LOG_TRACE("Loaded node: " << pNode);
 
   _numRead++;
   if (_numRead % _statusUpdateInterval == 0)
@@ -591,7 +615,6 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   // Get info we need to construct our way
   long id = item.get("id", id);
 
-  LOG_VARD(_wayIdMap.size());
   if (_wayIdMap.contains(id))
   {
     if (_ignoreDuplicates)
@@ -701,7 +724,8 @@ void OsmJsonReader::_parseOverpassWay(const pt::ptree& item)
   // Add way to map
   _map->addWay(pWay);
 
-  LOG_TRACE("Loaded way: " << pWay);
+  LOG_TRACE("Loaded way: " << pWay->getElementId());
+  //LOG_TRACE("Loaded way: " << pWay);
 
   _numRead++;
   if (_numRead % _statusUpdateInterval == 0)
@@ -838,8 +862,9 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Found a relation member with unexpected type: " << typeStr << " in relation ("
-                     << id << ")");
+          LOG_WARN(
+            "Found a relation member with unexpected type: " << typeStr << " in relation (" <<
+            id << ")");
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -866,7 +891,8 @@ void OsmJsonReader::_parseOverpassRelation(const pt::ptree& item)
   // Add relation to map
   _map->addRelation(pRelation);
 
-  LOG_TRACE("Loaded relation: " << pRelation);
+  LOG_TRACE("Loaded relation: " << pRelation->getElementId());
+  //LOG_TRACE("Loaded relation: " << pRelation);
 
   _numRead++;
   if (_numRead % _statusUpdateInterval == 0)
@@ -889,8 +915,7 @@ long OsmJsonReader::_getRelationId(long fileId)
     {
       newId = _map->createNextRelationId();
       _relationIdMap.insert(fileId, newId);
-      // TODO: fix - why is this breaking two changeset replacement tests?
-      //_relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
+      _relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
     }
     else
     {

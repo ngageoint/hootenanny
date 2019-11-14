@@ -280,10 +280,13 @@ protected:
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
 
+  // If we aren't using element source IDs and a child element hasn't been parsed yet, map the
+  // parent element to the missing child element's ID so that we may later update the child ID
+  // with the newer remapped ID.
   QMultiHash<long, long> _wayIdsToWayNodeIdsNotPresent;
   QMultiHash<long, long> _relationIdsToNodeMemberIdsNotPresent;
   QMultiHash<long, long> _relationIdsToWayMemberIdsNotPresent;
-  QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;   // TODO: use this
+  QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;
 
   int _missingNodeCount;
   int _missingWayCount;
@@ -345,10 +348,11 @@ protected:
    * the ref ID.
    */
   void _updateChildRefs();
+  void _updateWayChildRefs();
+  void _updateRelationChildRefs(const ElementType& childElementType);
 
   void _reset();
   void _resetIds();
-  void _updateRelationChildRefs(const ElementType& childElementType);
 };
 
 }
