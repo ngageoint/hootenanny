@@ -700,22 +700,35 @@ public class GrailResource {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
+        Map<String, Map<String, Double>> allStats = new HashMap<>();
+
         // Get public overpass data
         String publicUrl = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
-        String publicStats = retrieveOverpassStats(publicUrl, false);
-
-        // Get private overpass data if private overpass url was provided
-        String privateStats = null;
-        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
-            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
-            privateStats = retrieveOverpassStats(privateUrl, true);
+        ArrayList<Double> publicStats = retrieveOverpassStats(publicUrl, false);
+        if(publicStats.size() != 0) {
+            allStats.put("publicStats", mapOverpassStats(publicStats));
         }
 
-        JSONObject jobInfo = new JSONObject();
-        jobInfo.put("publicStats", publicStats);
-        jobInfo.put("privateStats", privateStats);
+        // Get private overpass data if private overpass url was provided
+        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
+            ArrayList<Double> privateStats = retrieveOverpassStats(privateUrl, true);
+            if(privateStats.size() != 0) {
+                allStats.put("privateStats", mapOverpassStats(privateStats));
+            }
+        }
 
-        return Response.ok(jobInfo.toJSONString()).build();
+        return Response.ok().entity(allStats).build();
+    }
+
+    private Map<String, Double> mapOverpassStats(ArrayList<Double> stats) {
+        Map<String, Double> statsMap = new HashMap<>();
+        statsMap.put("total", stats.get(0));
+        statsMap.put("node", stats.get(1));
+        statsMap.put("way", stats.get(2));
+        statsMap.put("relation", stats.get(3));
+
+        return statsMap;
     }
 
     /**
@@ -898,8 +911,8 @@ public class GrailResource {
      *          If false then no cert will need to be used for the request
      * @return
      */
-    private static String retrieveOverpassStats(String url, boolean usePrivateOverpass) {
-        StringBuilder statsInfo = new StringBuilder();
+    private static ArrayList<Double> retrieveOverpassStats(String url, boolean usePrivateOverpass) {
+        ArrayList<Double> statCounts = new ArrayList<>();
 
         try {
             InputStream inputStream;
@@ -919,7 +932,6 @@ public class GrailResource {
             String inputLine;
 
             boolean firstLine = true;
-            ArrayList<Double> statCounts = new ArrayList<>();
             while ((inputLine = br.readLine()) != null) {
                 //After the first line it is all stat numbers
                 if(!firstLine){
@@ -933,14 +945,10 @@ public class GrailResource {
                     for(int i = 0; i < numColumns; i++) {
                         statCounts.add(0.0);
                     }
-
-                    statsInfo.append(inputLine + "\n");
                 }
 
                 firstLine = false;
             }
-
-            statsInfo.append(StringUtils.join(statCounts, "\t"));
 
             br.close();
         }
@@ -949,7 +957,7 @@ public class GrailResource {
             throw new WebApplicationException(exc, Response.status(Response.Status.NOT_FOUND).entity(msg).build());
         }
 
-        return statsInfo.toString();
+        return statCounts;
     }
 
 }
