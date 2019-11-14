@@ -397,6 +397,64 @@ void OsmJsonReader::_parseOverpassJson()
   // is loaded any missing child refs mean the child itself is definitely absent from the input.
 }
 
+void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType)
+{
+  QList<long> relationIdsWithChildrenNotPresent;
+  QHash<long, long> originalIdMap;
+  if (childElementType == ElementType::Node)
+  {
+    relationIdsWithChildrenNotPresent = _relationIdsToNodeMemberIdsNotPresent.keys();
+    originalIdMap = _nodeIdMap;
+  }
+  else if (childElementType == ElementType::Way)
+  {
+    relationIdsWithChildrenNotPresent = _relationIdsToWayMemberIdsNotPresent.keys();
+    originalIdMap = _wayIdMap;
+  }
+  else if (childElementType == ElementType::Relation)
+  {
+    relationIdsWithChildrenNotPresent = _relationIdsToRelationMemberIdsNotPresent.keys();
+    originalIdMap = _relationIdMap;
+  }
+
+  for (QList<long>::const_iterator relationIdItr = relationIdsWithChildrenNotPresent.begin();
+       relationIdItr != relationIdsWithChildrenNotPresent.end(); ++relationIdItr)
+  {
+    const long relationId = *relationIdItr;
+    RelationPtr relation = _map->getRelation(relationId);
+
+    QList<long> childIdsNotPresentAtLoad;
+    if (childElementType == ElementType::Node)
+    {
+      childIdsNotPresentAtLoad = _relationIdsToNodeMemberIdsNotPresent.values(relationId);
+    }
+    else if (childElementType == ElementType::Way)
+    {
+      childIdsNotPresentAtLoad = _relationIdsToWayMemberIdsNotPresent.values(relationId);
+    }
+    else if (childElementType == ElementType::Relation)
+    {
+      childIdsNotPresentAtLoad = _relationIdsToRelationMemberIdsNotPresent.values(relationId);
+    }
+
+    for (QList<long>::const_iterator memberIdItr = childIdsNotPresentAtLoad.begin();
+         memberIdItr != childIdsNotPresentAtLoad.end(); ++memberIdItr)
+    {
+      const long memberId = *memberIdItr;
+      if (relation->contains(ElementId(childElementType, memberId)))
+      {
+        QHash<long, long>::const_iterator remappedMemberIdItr = originalIdMap.find(memberId);
+        if (remappedMemberIdItr != originalIdMap.end() && remappedMemberIdItr.value() != memberId)
+        {
+          relation->replaceElement(
+            ElementId(childElementType, memberId),
+            ElementId(childElementType, remappedMemberIdItr.value()));
+        }
+      }
+    }
+  }
+}
+
 void OsmJsonReader::_updateChildRefs()
 {
   LOG_DEBUG("Updating child element ID references...");
@@ -429,88 +487,9 @@ void OsmJsonReader::_updateChildRefs()
 
   // Do the same as above but for relation member refs
 
-  const QList<long> relationIdsWithNodeMembersNotPresent =
-    _relationIdsToNodeMemberIdsNotPresent.keys();
-  for (QList<long>::const_iterator relationIdItr = relationIdsWithNodeMembersNotPresent.begin();
-       relationIdItr != relationIdsWithNodeMembersNotPresent.end(); ++relationIdItr)
-  {
-    const long relationId = *relationIdItr;
-    RelationPtr relation = _map->getRelation(relationId);
-
-    const QList<long> nodeMemberIdsNotPresentAtLoad =
-      _relationIdsToNodeMemberIdsNotPresent.values(relationId);
-    for (QList<long>::const_iterator nodeMemberIdItr = nodeMemberIdsNotPresentAtLoad.begin();
-         nodeMemberIdItr != nodeMemberIdsNotPresentAtLoad.end(); ++nodeMemberIdItr)
-    {
-      const long nodeMemberId = *nodeMemberIdItr;
-      if (relation->contains(ElementId(ElementType::Node, nodeMemberId)))
-      {
-        QHash<long, long>::const_iterator remappedNodeIdItr = _nodeIdMap.find(nodeMemberId);
-        if (remappedNodeIdItr != _nodeIdMap.end() && remappedNodeIdItr.value() != nodeMemberId)
-        {
-          relation->replaceElement(
-            ElementId(ElementType::Node, nodeMemberId),
-            ElementId(ElementType::Node, remappedNodeIdItr.value()));
-        }
-      }
-    }
-  }
-
-  const QList<long> relationIdsWithWayMembersNotPresent =
-    _relationIdsToWayMemberIdsNotPresent.keys();
-  for (QList<long>::const_iterator relationIdItr = relationIdsWithWayMembersNotPresent.begin();
-       relationIdItr != relationIdsWithWayMembersNotPresent.end(); ++relationIdItr)
-  {
-    const long relationId = *relationIdItr;
-    RelationPtr relation = _map->getRelation(relationId);
-
-    const QList<long> wayMemberIdsNotPresentAtLoad =
-      _relationIdsToWayMemberIdsNotPresent.values(relationId);
-    for (QList<long>::const_iterator wayMemberIdItr = wayMemberIdsNotPresentAtLoad.begin();
-         wayMemberIdItr != wayMemberIdsNotPresentAtLoad.end(); ++wayMemberIdItr)
-    {
-      const long wayMemberId = *wayMemberIdItr;
-      if (relation->contains(ElementId(ElementType::Way, wayMemberId)))
-      {
-        QHash<long, long>::const_iterator remappedWayIdItr = _wayIdMap.find(wayMemberId);
-        if (remappedWayIdItr != _wayIdMap.end() && remappedWayIdItr.value() != wayMemberId)
-        {
-          relation->replaceElement(
-            ElementId(ElementType::Way, wayMemberId),
-            ElementId(ElementType::Way, remappedWayIdItr.value()));
-        }
-      }
-    }
-  }
-
-  const QList<long> relationIdsWithRelationMembersNotPresent =
-    _relationIdsToRelationMemberIdsNotPresent.keys();
-  for (QList<long>::const_iterator relationIdItr = relationIdsWithRelationMembersNotPresent.begin();
-       relationIdItr != relationIdsWithRelationMembersNotPresent.end(); ++relationIdItr)
-  {
-    const long relationId = *relationIdItr;
-    RelationPtr relation = _map->getRelation(relationId);
-
-    const QList<long> relationMemberIdsNotPresentAtLoad =
-      _relationIdsToRelationMemberIdsNotPresent.values(relationId);
-    for (QList<long>::const_iterator relationMemberIdItr = relationMemberIdsNotPresentAtLoad.begin();
-         relationMemberIdItr != relationMemberIdsNotPresentAtLoad.end(); ++relationMemberIdItr)
-    {
-      const long relationMemberId = *relationMemberIdItr;
-      if (relation->contains(ElementId(ElementType::Relation, relationMemberId)))
-      {
-        QHash<long, long>::const_iterator remappedRelationIdItr =
-          _relationIdMap.find(relationMemberId);
-        if (remappedRelationIdItr != _relationIdMap.end() &&
-            remappedRelationIdItr.value() != relationMemberId)
-        {
-          relation->replaceElement(
-            ElementId(ElementType::Relation, relationMemberId),
-            ElementId(ElementType::Relation, remappedRelationIdItr.value()));
-        }
-      }
-    }
-  }
+  _updateRelationChildRefs(ElementType::Node);
+  _updateRelationChildRefs(ElementType::Way);
+  _updateRelationChildRefs(ElementType::Relation);
 }
 
 void OsmJsonReader::_parseOverpassNode(const pt::ptree& item)

@@ -348,6 +348,7 @@ protected:
 
   void _reset();
   void _resetIds();
+  void _updateRelationChildRefs(const ElementType& childElementType);
 };
 
 }
