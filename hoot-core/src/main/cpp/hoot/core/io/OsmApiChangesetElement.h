@@ -349,14 +349,13 @@ private:
 typedef std::shared_ptr<ChangesetRelation> ChangesetRelationPtr;
 
 /** Custom sorting function to sort IDs from -1 to -n followed by 1 to m */
+bool id_sort_order(long lhs, long rhs);
 class osm_id_sort
 {
 public:
   bool operator() (long lhs, long rhs) const
   {
-    if (lhs > 0 && rhs > 0)       return lhs < rhs; //  Positive numbers count up
-    else if (lhs < 0 && rhs < 0)  return lhs > rhs; //  Negative numbers count down
-    else                          return lhs < rhs; //  Negative numbers come before positive
+    return id_sort_order(lhs, rhs);
   }
 };
 /** Handy typedef for a vector of sorted ID maps */
@@ -414,6 +413,8 @@ public:
     else
       return _newIdToOld[type][new_id];
   }
+  bool containsOldId(ElementType::Type type, long new_id)
+  { return _newIdToOld[type].find(new_id) != _newIdToOld[type].end(); }
   /**
    * @brief getNewId Get the new ID from the old ID
    * @param type Element type (node/way/relation)
@@ -427,6 +428,8 @@ public:
     else
       return _oldIdToNew[type][old_id];
   }
+  bool containsNewId(ElementType::Type type, long old_id)
+  { return _oldIdToNew[type].find(old_id) != _oldIdToNew[type].end(); }
   /**
    * @brief begin Get beginning iterator
    * @param type Element type (node/way/relation)

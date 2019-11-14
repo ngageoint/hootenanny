@@ -34,6 +34,7 @@
 #include <hoot/core/util/Log.h>
 
 //  Standard
+#include <algorithm>
 #include <vector>
 
 //  Qt
@@ -1483,20 +1484,20 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     if (type != ChangesetType::TypeDelete)
     {
       //  Nodes go first in each category
-      getNodes(changeset, ts, type, changeset_id);
+      writeNodes(changeset, ts, type, changeset_id);
       //  Followed by ways
-      getWays(changeset, ts, type, changeset_id);
+      writeWays(changeset, ts, type, changeset_id);
       //  Relations bring up the rear
-      getRelations(changeset, ts, type, changeset_id);
+      writeRelations(changeset, ts, type, changeset_id);
     }
     else
     {
       //  Relations first for deletes
-      getRelations(changeset, ts, type, changeset_id);
+      writeRelations(changeset, ts, type, changeset_id);
       //  Followed by ways
-      getWays(changeset, ts, type, changeset_id);
+      writeWays(changeset, ts, type, changeset_id);
       //  Nodes go last
-      getNodes(changeset, ts, type, changeset_id);
+      writeNodes(changeset, ts, type, changeset_id);
     }
     ts << "\t</" << category << ">\n";
   }
@@ -1657,34 +1658,33 @@ void XmlChangeset::failRelation(long id, bool beforeSend)
   LOG_TRACE("Failed relation (" << id << ")");
 }
 
-void XmlChangeset::getNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+void XmlChangeset::writeElements(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id,
+                                 ElementType::Type elementType, const ChangesetElementMap& elements)
 {
-  ChangesetElementMap& nodes = _nodes[type];
-  for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Node); it != _idMap.end(ElementType::Node); ++it)
+  vector<long> outputElements;
+  for (ChangesetInfo::iterator it = changeset->begin(elementType, type); it != changeset->end(elementType, type); ++it)
   {
-    if (nodes.find(it->second) != nodes.end() && changeset->contains(ElementType::Node, type, it->second))
-      ts << nodes.at(it->second)->toString(changeset_id);
+    if (elements.find(*it) != elements.end() && _idMap.containsNewId(elementType, *it))
+      outputElements.push_back(_idMap.getNewId(elementType, *it));
   }
+  std::sort(outputElements.begin(), outputElements.end(), id_sort_order);
+  for (vector<long>::iterator it = outputElements.begin(); it != outputElements.end(); ++it)
+    ts << elements.at(_idMap.getOldId(elementType, *it))->toString(changeset_id);
 }
 
-void XmlChangeset::getWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+void XmlChangeset::writeNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
 {
-  ChangesetElementMap& ways = _ways[type];
-  for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Way); it != _idMap.end(ElementType::Way); ++it)
-  {
-    if (ways.find(it->second) != ways.end() && changeset->contains(ElementType::Way, type, it->second))
-      ts << ways.at(it->second)->toString(changeset_id);
-  }
+  writeElements(changeset, ts, type, changeset_id, ElementType::Node, _nodes[type]);
 }
 
-void XmlChangeset::getRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+void XmlChangeset::writeWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
 {
-  ChangesetElementMap& relations = _relations[type];
-  for (ElementIdToIdMap::iterator it = _idMap.begin(ElementType::Relation); it != _idMap.end(ElementType::Relation); ++it)
-  {
-    if (relations.find(it->second) != relations.end() && changeset->contains(ElementType::Relation, type, it->second))
-      ts << relations.at(it->second)->toString(changeset_id);
-  }
+  writeElements(changeset, ts, type, changeset_id, ElementType::Way, _ways[type]);
+}
+
+void XmlChangeset::writeRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)
+{
+  writeElements(changeset, ts, type, changeset_id, ElementType::Relation, _relations[type]);
 }
 
 ChangesetInfo::ChangesetInfo()

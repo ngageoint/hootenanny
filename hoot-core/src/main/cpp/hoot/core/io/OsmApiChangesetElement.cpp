@@ -36,6 +36,14 @@
 namespace hoot
 {
 
+/** Custom ID sort order */
+bool id_sort_order(long lhs, long rhs)
+{
+  if (lhs > 0 && rhs > 0)       return lhs < rhs; //  Positive numbers count up
+  else if (lhs < 0 && rhs < 0)  return lhs > rhs; //  Negative numbers count down
+  else                          return lhs < rhs; //  Negative numbers come before positive
+}
+
 ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap)
   : _type(ElementType::Unknown),
     _id(object.second.value("id").toString().toLong()),

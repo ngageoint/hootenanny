@@ -430,15 +430,18 @@ private:
   void failWay(long id, bool beforeSend = false);
   void failRelation(long id, bool beforeSend = false);
   /**
-   * @brief getNodes/Ways/Relations Output node/way/relation text to the text stream
+   * @brief writeNodes/Ways/Relations Output node/way/relation text to the text stream
    * @param changeset Pointer to the changeset to output
    * @param ts TextStream to output the element to
    * @param type Changeset type (create, modify, delete)
    * @param changeset_id ID of the changeset to write to the element attribute
    */
-  void getNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
-  void getWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
-  void getRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeWays(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeRelations(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id);
+  void writeElements(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id,
+                     ElementType::Type elementType, const ChangesetElementMap& elements);
+
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
