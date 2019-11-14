@@ -889,7 +889,8 @@ long OsmJsonReader::_getRelationId(long fileId)
     {
       newId = _map->createNextRelationId();
       _relationIdMap.insert(fileId, newId);
-      _relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
+      // TODO: fix - why is this breaking two changeset replacement tests?
+      //_relationIdsToRelationMemberIdsNotPresent.insertMulti(fileId, newId);
     }
     else
     {
