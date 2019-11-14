@@ -126,6 +126,10 @@ LIBPHONENUMBER_INIT()
 m4_include([m4/liboauthcpp.m4])
 LIBOAUTHCPP_INIT()
 
+# JNI
+m4_include([m4/jni.m4])
+JNI_INIT()
+
 ##
 # Optional
 ##
