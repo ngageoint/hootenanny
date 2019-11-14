@@ -452,7 +452,7 @@ bool XmlChangeset::addNode(ChangesetInfoPtr& changeset, ChangesetType type, Chan
   if (canSend(node))
   {
     //  Add create nodes if the ID map's ID is negative, modify IDs don't matter
-    if ((type == ChangesetType::TypeCreate && _idMap.getNewId(ElementType::Node, node->id()) < 0) ||
+    if ((type == ChangesetType::TypeCreate && _idMap.getId(ElementType::Node, node->id()) < 0) ||
          type != ChangesetType::TypeDelete)
     {
       //  Add the node
@@ -542,7 +542,7 @@ bool XmlChangeset::addWay(ChangesetInfoPtr& changeset, ChangesetType type, Chang
       for (int i = 0; i < way->getNodeCount(); ++i)
       {
         //  Negative IDs from the ID map are for created nodes
-        if (_idMap.getNewId(ElementType::Node, way->getNode(i)) < 0)
+        if (_idMap.getId(ElementType::Node, way->getNode(i)) < 0)
         {
           ChangesetNode* node = dynamic_cast<ChangesetNode*>(_allNodes[way->getNode(i)].get());
           addNode(changeset, ChangesetType::TypeCreate, node);
@@ -693,7 +693,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
           if (member.isNode())
           {
             //  Make sure that the ID is negative (create) in the ID map
-            if (_idMap.getNewId(ElementType::Node, member.getRef()) < 0)
+            if (_idMap.getId(ElementType::Node, member.getRef()) < 0)
             {
               ChangesetNode* node = dynamic_cast<ChangesetNode*>(_allNodes[member.getRef()].get());
               addNode(changeset, type, node);
@@ -702,7 +702,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
           else if (member.isWay())
           {
             //  Make sure that the ID is negative (create) in the ID map
-            if (_idMap.getNewId(ElementType::Way, member.getRef()) < 0)
+            if (_idMap.getId(ElementType::Way, member.getRef()) < 0)
             {
               ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[member.getRef()].get());
               addWay(changeset, type, way);
@@ -711,7 +711,7 @@ bool XmlChangeset::addRelation(ChangesetInfoPtr& changeset, ChangesetType type, 
           else if (member.isRelation())
           {
             //  Make sure that the ID is negative (create) in the ID map
-            if (_idMap.getNewId(ElementType::Relation, member.getRef()) < 0)
+            if (_idMap.getId(ElementType::Relation, member.getRef()) < 0)
             {
               ChangesetRelation* relation_member = dynamic_cast<ChangesetRelation*>(_allRelations[member.getRef()].get());
               //  Don't re-add self referencing relations
@@ -1662,14 +1662,17 @@ void XmlChangeset::writeElements(const ChangesetInfoPtr& changeset, QTextStream&
                                  ElementType::Type elementType, const ChangesetElementMap& elements)
 {
   vector<long> outputElements;
+  //  Iterate only those elements that are in the small changeset to be sent and not all of the elements in entire changeset
   for (ChangesetInfo::iterator it = changeset->begin(elementType, type); it != changeset->end(elementType, type); ++it)
   {
-    if (elements.find(*it) != elements.end() && _idMap.containsNewId(elementType, *it))
-      outputElements.push_back(_idMap.getNewId(elementType, *it));
+    if (elements.find(*it) != elements.end() && _idMap.containsId(elementType, *it))
+      outputElements.push_back(_idMap.getId(elementType, *it));
   }
+  //  Sort the elements by ID
   std::sort(outputElements.begin(), outputElements.end(), id_sort_order);
+  //  Iterate the elements again, writing them to the output stream
   for (vector<long>::iterator it = outputElements.begin(); it != outputElements.end(); ++it)
-    ts << elements.at(_idMap.getOldId(elementType, *it))->toString(changeset_id);
+    ts << elements.at(_idMap.getId(elementType, *it))->toString(changeset_id);
 }
 
 void XmlChangeset::writeNodes(const ChangesetInfoPtr& changeset, QTextStream& ts, ChangesetType type, long changeset_id)

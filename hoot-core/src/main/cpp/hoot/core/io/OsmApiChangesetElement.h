@@ -361,7 +361,8 @@ public:
 /** Handy typedef for a vector of sorted ID maps */
 typedef std::vector<std::map<long, long, osm_id_sort>> ChangesetElementIdMap;
 
-/** Class for storing ID to ID associations, this is required because elements that are created in
+/**
+ *  Class for storing ID to ID associations, this is required because elements that are created in
  *  a changeset have negative IDs until they are processed by the OSM API.  If a node is used in a
  *  way that is in the same changeset then the negative ID is used.  If they are split across two
  *  different changesets then the node ID must be the updated ID from the API.  The object keeps
@@ -375,8 +376,7 @@ public:
   typedef typename std::map<long, long, osm_id_sort>::const_iterator const_iterator;
   /** Constructor */
   ElementIdToIdMap()
-    : _oldIdToNew(ElementType::Unknown),
-      _newIdToOld(ElementType::Unknown)
+    : _idToId(ElementType::Unknown)
   {}
   /**
    * @brief addId Add ID to the map
@@ -385,8 +385,7 @@ public:
    */
   void addId(ElementType::Type type, long id)
   {
-    _oldIdToNew[type][id] = id;
-    _newIdToOld[type][id] = id;
+    _idToId[type][id] = id;
   }
   /**
    * @brief updateId Set the new ID
@@ -396,58 +395,48 @@ public:
    */
   void updateId(ElementType::Type type, long old_id, long new_id)
   {
-    _oldIdToNew[type][old_id] = new_id;
-    _newIdToOld[type][new_id] = _newIdToOld[type][old_id];
-    _newIdToOld[type].erase(old_id);
+    _idToId[type][old_id] = new_id;
+    _idToId[type][new_id] = old_id;
   }
   /**
-   * @brief getOldId Get the old ID from the new ID
+   * @brief getId Get the new or old ID from the ID passed in
    * @param type Element type (node/way/relation)
-   * @param new_id Updated (new) ID
-   * @return old ID
+   * @param id ID
+   * @return new or old ID
    */
-  long getOldId(ElementType::Type type, long new_id)
+  long getId(ElementType::Type type, long id)
   {
-    if (_newIdToOld[type].find(new_id) == _newIdToOld[type].end())
-      return new_id;
+    if (_idToId[type].find(id) == _idToId[type].end())
+      return id;
     else
-      return _newIdToOld[type][new_id];
+      return _idToId[type][id];
   }
-  bool containsOldId(ElementType::Type type, long new_id)
-  { return _newIdToOld[type].find(new_id) != _newIdToOld[type].end(); }
   /**
-   * @brief getNewId Get the new ID from the old ID
-   * @param type Element type (node/way/relation)
-   * @param old_id Original (old) ID
-   * @return new ID
+   * @brief containsId
+   * @param type
+   * @param id
+   * @return
    */
-  long getNewId(ElementType::Type type, long old_id)
+  bool containsId(ElementType::Type type, long id)
   {
-    if (_oldIdToNew[type].find(old_id) == _oldIdToNew[type].end())
-      return old_id;
-    else
-      return _oldIdToNew[type][old_id];
+    return _idToId[type].find(id) != _idToId[type].end();
   }
-  bool containsNewId(ElementType::Type type, long old_id)
-  { return _oldIdToNew[type].find(old_id) != _oldIdToNew[type].end(); }
   /**
    * @brief begin Get beginning iterator
    * @param type Element type (node/way/relation)
    * @return begin iterator
    */
-  iterator begin(ElementType::Type type)  { return _newIdToOld[type].begin(); }
+  iterator begin(ElementType::Type type)  { return _idToId[type].begin(); }
   /**
    * @brief end Get ending iterator
    * @param type Element type (node/way/relation)
    * @return end iterator
    */
-  iterator end(ElementType::Type type)    { return _newIdToOld[type].end(); }
+  iterator end(ElementType::Type type)    { return _idToId[type].end(); }
 
 private:
   /** Old ID to new ID mapping */
-  ChangesetElementIdMap _oldIdToNew;
-  /** New ID to old ID mapping */
-  ChangesetElementIdMap _newIdToOld;
+  ChangesetElementIdMap _idToId;
 };
 
 }

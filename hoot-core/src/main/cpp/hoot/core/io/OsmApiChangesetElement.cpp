@@ -119,7 +119,7 @@ QString ChangesetElement::toString(const ElementAttributes& attributes, long cha
       hasChangeset = true;
     }
     else if (name == "id")      //  Element ID could be different than provided in the file, could be from the API
-      ts << (_idMap ? _idMap->getNewId(_type, _id) : _id);
+      ts << (_idMap ? _idMap->getId(_type, _id) : _id);
     else if (name == "version") //  Versions are updated by the API
       ts << _version;
     else
@@ -221,7 +221,7 @@ QString ChangesetWay::toString(long changesetId) const
   ts.setCodec("UTF-8");
   ts << "\t\t<way " << ChangesetElement::toString(_object, changesetId) << ">\n";
   for (QVector<long>::const_iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-    ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getNewId(ElementType::Node, *it) : *it) << "\"/>\n";
+    ts << "\t\t\t<nd ref=\"" << (_idMap ? _idMap->getId(ElementType::Node, *it) : *it) << "\"/>\n";
   if (_tags.size() > 0)
   {
     for (ElementTags::const_iterator it = _tags.begin(); it != _tags.end(); ++it)
@@ -304,7 +304,7 @@ QString ChangesetRelationMember::toString() const
   QTextStream ts(&buffer);
   ts.setCodec("UTF-8");
   ts << "\t\t\t<member type=\"" << ElementType(_type).toString().toLower() << "\" ref=\""
-     << (_idMap ? _idMap->getNewId(_type, _ref) : _ref)
+     << (_idMap ? _idMap->getId(_type, _ref) : _ref)
      << "\" role=\"" << _role << "\"/>\n";
   return ts.readAll();
 }
