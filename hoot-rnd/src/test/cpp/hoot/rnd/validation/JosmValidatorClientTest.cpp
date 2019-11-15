@@ -35,20 +35,21 @@
 namespace hoot
 {
 
-class JavaInteropTest : public HootTestFixture
+class JosmValidatorClientTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(JavaInteropTest);
+  CPPUNIT_TEST_SUITE(JosmValidatorClientTest);
   //CPPUNIT_TEST(runJniTest1); // works
   //CPPUNIT_TEST(runJniTest2); // works
   //CPPUNIT_TEST(runJniTest3); // works
   //CPPUNIT_TEST(runJniTest4); // works
   //CPPUNIT_TEST(runJniTest5); // works
   //CPPUNIT_TEST(runJniTest6); // works
+  CPPUNIT_TEST(runValidationTest1);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  JavaInteropTest()
+  JosmValidatorClientTest()
   {
   }
 
@@ -237,6 +238,11 @@ public:
     vm->DestroyJavaVM();
   }
 
+  void runValidationTest1()
+  {
+
+  }
+
 private:
 
   // doesn't work yet
@@ -264,6 +270,6 @@ private:
 //  }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JavaInteropTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorClientTest, "quick");
 
 }
