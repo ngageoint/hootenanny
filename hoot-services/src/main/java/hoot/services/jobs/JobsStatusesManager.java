@@ -35,7 +35,6 @@ import hoot.services.models.db.Users;
 
 @Service
 public interface JobsStatusesManager {
-    List<JobStatusResponse> getRecentJobs(Users user, int limit);
     List<JobStatusResponse> getRunningJobs();
-    List<JobStatusResponse> getJobsHistory(Users user);
+    List<JobStatusResponse> getJobsHistory(Users user, String sort, long offset, long limit, String type, String status);
 }

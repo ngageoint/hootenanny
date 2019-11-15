@@ -26,17 +26,22 @@
  */
 package hoot.services.controllers.jobs;
 
+import static hoot.services.job.JobStatus.CANCELLED;
 import static hoot.services.job.JobStatus.COMPLETE;
+import static hoot.services.job.JobStatus.FAILED;
 import static hoot.services.job.JobStatus.RUNNING;
 import static hoot.services.utils.DbUtils.createQuery;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -61,178 +66,374 @@ import hoot.services.models.db.Users;
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
 public class JobsResourceTest extends HootServicesJerseyTestAbstract {
+    public final String prefix = "test-JobsResourceTest-";
 
-    @Test
-    @Category(UnitTest.class)
-    public void testRecent() throws Exception {
+    @Before
+    public void before() throws Exception {
         // Truncate job status table:
-        createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith("test")).execute();
+        createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith(prefix)).execute();
+
         final long now = System.currentTimeMillis();
-        final String jobIdPrefix = "test-JobsResourceTest-testRecent-" + now + "-";
-        try {
-            for(int i = 0; i < 20; i++) {
+        final String jobIdPrefix = prefix + now + "-";
 
-                    JobStatus jobStatus = new JobStatus();
-                    jobStatus.setJobId(jobIdPrefix + i);
-                    jobStatus.setJobType(JobType.UNKNOWN.ordinal());
-                    jobStatus.setStatus(COMPLETE.ordinal());
-                    jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                    jobStatus.setPercentComplete(100);
-                    jobStatus.setUserId(Users.TEST_USER.getId());
+        for(int i = 0; i < 50; i++) {
 
-                    Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    jobStatus.setStart(ts);
-                    jobStatus.setEnd(new Timestamp(System.currentTimeMillis() + 1000));
-
-                    createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
-            }
-
-            Response response = target("/recent")
-                    .request(MediaType.APPLICATION_JSON)
-                    .get();
-            String actualResult = response.readEntity(String.class);
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
-            Assert.assertEquals(20, jobs.size());
-            for(JobStatusResponse j : jobs) {
-                Assert.assertTrue(j.getJobId().startsWith(jobIdPrefix));
-            }
-        } finally {
-            createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith("test")).execute();
-        }
-
-
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testRecentOlder() throws Exception {
-        // Truncate job status table:
-        createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith("test")).execute();
-        final long now = System.currentTimeMillis();
-        final long old = System.currentTimeMillis() - 3600000 * 72;
-        final String jobIdPrefix = "test-JobsResourceTest-testRecentOlder-" + now + "-";
-        try {
-            for(int i = 0; i < 5; i++) {
-
-                    JobStatus jobStatus = new JobStatus();
-                    jobStatus.setJobId(jobIdPrefix + i);
-                    jobStatus.setJobType(JobType.UNKNOWN.ordinal());
-                    jobStatus.setStatus(COMPLETE.ordinal());
-                    jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                    jobStatus.setPercentComplete(100);
-                    jobStatus.setUserId(Users.TEST_USER.getId());
-
-                    Timestamp ts = new Timestamp(now);
-                    jobStatus.setStart(ts);
-                    jobStatus.setEnd(new Timestamp(now + 1000));
-
-                    createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
-            }
-            // Add 15 jobs that are older than 12 hours:
-            for(int i = 5; i < 20; i++) {
-
-                JobStatus jobStatus = new JobStatus();
-                jobStatus.setJobId(jobIdPrefix + i);
-                jobStatus.setJobType(JobType.UNKNOWN.ordinal());
+            JobStatus jobStatus = new JobStatus();
+            jobStatus.setJobId(jobIdPrefix + i);
+            jobStatus.setJobType(i % JobType.values().length);
+            jobStatus.setUserId(Users.TEST_USER.getId());
+            if (i % 10 == 0) {
+                jobStatus.setStatus(RUNNING.ordinal());
+                jobStatus.setStatusDetail("RUNNING");
+                jobStatus.setPercentComplete(50);
+                //make two running jobs owned by someone else
+                if (i <= 20 ) jobStatus.setUserId(-13L);
+            } else {
                 jobStatus.setStatus(COMPLETE.ordinal());
                 jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
                 jobStatus.setPercentComplete(100);
-                jobStatus.setUserId(Users.TEST_USER.getId());
-
-                Timestamp ts = new Timestamp(old);
-                jobStatus.setStart(ts);
-                jobStatus.setEnd(new Timestamp(old + 1000));
-
-                createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+                //make 5 history jobs owned by someone else
+                if (i % 9 == 0) jobStatus.setUserId(-13L);
+                //make 3 history jobs cancelled
+                if (i % 13 == 0) jobStatus.setStatus(CANCELLED.ordinal());
+                //make 3 history jobs failed
+                if (i % 14 == 0) jobStatus.setStatus(FAILED.ordinal());
             }
 
+            Timestamp ts = new Timestamp(now + i);
+            jobStatus.setStart(ts);
+            jobStatus.setEnd(new Timestamp(now + i + (jobStatus.getJobType() * 1000)));
 
-            Response response = target("/recent")
-                    .request(MediaType.APPLICATION_JSON)
-                    .get();
-            String actualResult = response.readEntity(String.class);
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
-            Assert.assertEquals(10, jobs.size());
-            for(JobStatusResponse j : jobs) {
-                Assert.assertTrue(j.getJobId().startsWith(jobIdPrefix));
+            createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+        }
+
+    }
+
+    @After
+    public void after() throws Exception {
+        createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith(prefix)).execute();
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryDefaults() throws Exception {
+        Response response = target("/history")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(25, jobs.size()); //default limit
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue(j.getStart() <= previous.getStart());
             }
-        } finally {
-            createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith("test")).execute();
+            previous = j;
         }
     }
 
     @Test
     @Category(UnitTest.class)
-    public void testRecentOlderRunning() throws Exception {
-        // Truncate job status table:
-        createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith("test")).execute();
-        final long now = System.currentTimeMillis();
-        final long old = System.currentTimeMillis() - 3600000 * 72;
-        final String jobIdPrefix = "test-JobsResourceTest-testRecentOlder-" + now + "-";
-        try {
-            for(int i = 0; i < 5; i++) {
-
-                    JobStatus jobStatus = new JobStatus();
-                    jobStatus.setJobId(jobIdPrefix + i);
-                    jobStatus.setJobType(JobType.UNKNOWN.ordinal());
-                    jobStatus.setUserId(Users.TEST_USER.getId());
-                    if (i % 2 == 0) {
-                        jobStatus.setStatus(COMPLETE.ordinal());
-                        jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                        jobStatus.setPercentComplete(100);
-                    } else {
-                        jobStatus.setStatus(RUNNING.ordinal());
-                        jobStatus.setStatusDetail("RUNNING");
-                        jobStatus.setPercentComplete(50);
-                    }
-
-                    Timestamp ts = new Timestamp(now);
-                    jobStatus.setStart(ts);
-                    jobStatus.setEnd(new Timestamp(now + 1000));
-
-                    createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+    public void testHistoryLimit() throws Exception {
+        Response response = target("/history")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(40, jobs.size());
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue(j.getStart() <= previous.getStart());
             }
-            // Add 15 jobs that are older than 12 hours but 6 are still running:
-            for(int i = 5; i < 20; i++) {
+            previous = j;
+        }
+    }
 
-                JobStatus jobStatus = new JobStatus();
-                jobStatus.setJobId(jobIdPrefix + i);
-                jobStatus.setJobType(JobType.UNKNOWN.ordinal());
-                jobStatus.setUserId(Users.TEST_USER.getId());
-                if (i % 2 == 0) {
-                    jobStatus.setStatus(COMPLETE.ordinal());
-                    jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
-                    jobStatus.setPercentComplete(100);
-                } else {
-                    jobStatus.setStatus(RUNNING.ordinal());
-                    jobStatus.setStatusDetail("RUNNING");
-                    jobStatus.setPercentComplete(50);
-                }
-
-                Timestamp ts = new Timestamp(old);
-                jobStatus.setStart(ts);
-                jobStatus.setEnd(new Timestamp(old + 1000));
-
-                createQuery().insert(QJobStatus.jobStatus).populate(jobStatus).execute();
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryLimitOffset() throws Exception {
+        Response response = target("/history")
+                .queryParam("limit", 50)
+                .queryParam("offset", 25)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(15, jobs.size());
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue(j.getStart() <= previous.getStart());
             }
+            previous = j;
+        }
+    }
 
-
-            Response response = target("/recent")
-                    .request(MediaType.APPLICATION_JSON)
-                    .get();
-            String actualResult = response.readEntity(String.class);
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
-            Assert.assertEquals(13, jobs.size());
-            for(JobStatusResponse j : jobs) {
-                Assert.assertTrue(j.getJobId().startsWith(jobIdPrefix));
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryOffset() throws Exception {
+        Response response = target("/history")
+                .queryParam("offset", 25)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(15, jobs.size());
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue(j.getStart() <= previous.getStart());
             }
-        } finally {
-            createQuery().delete(QJobStatus.jobStatus).where(QJobStatus.jobStatus.jobId.startsWith("test")).execute();
+            previous = j;
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortStartAsc() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "+start")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(25, jobs.size());
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue(j.getStart() >= previous.getStart());
+            }
+            previous = j;
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortDurationDesc() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "-duration")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(25, jobs.size());
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue((j.getEnd() - j.getStart()) <= (previous.getEnd() - previous.getStart()));
+            }
+            previous = j;
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortDurationAsc() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "+duration")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(25, jobs.size());
+        JobStatusResponse previous = null;
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            if (previous != null) {
+                Assert.assertTrue((j.getEnd() - j.getStart()) >= (previous.getEnd() - previous.getStart()));
+            }
+            previous = j;
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortTypeAscWithLimit() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "+type")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(40, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+        }
+        //IMPORT is the first job type enum but those are all set to RUNNING
+        Assert.assertEquals(JobType.EXPORT.toString(), jobs.get(0).getJobType());
+        Assert.assertEquals(JobType.UPLOAD_CHANGESET.toString(), jobs.get(jobs.size() - 1).getJobType());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortTypeDescWithLimit() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "-type")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(40, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+        }
+        //IMPORT is the first job type enum but those are all set to RUNNING
+        Assert.assertEquals(JobType.UPLOAD_CHANGESET.toString(), jobs.get(0).getJobType());
+        Assert.assertEquals(JobType.EXPORT.toString(), jobs.get(jobs.size() - 1).getJobType());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortStatusAscWithLimit() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "+status")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(40, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+        }
+        //RUNNING is the first job status enum but those filtered out in job history
+        Assert.assertEquals(hoot.services.job.JobStatus.COMPLETE.toString(), jobs.get(0).getStatus());
+        Assert.assertEquals(hoot.services.job.JobStatus.CANCELLED.toString(), jobs.get(jobs.size() - 1).getStatus());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistorySortStatusDescWithLimit() throws Exception {
+        Response response = target("/history")
+                .queryParam("sort", "-status")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(40, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+        }
+        //RUNNING is the first job status enum but those filtered out in job history
+        Assert.assertEquals(hoot.services.job.JobStatus.CANCELLED.toString(), jobs.get(0).getStatus());
+        Assert.assertEquals(hoot.services.job.JobStatus.COMPLETE.toString(), jobs.get(jobs.size() - 1).getStatus());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryFilterType() throws Exception {
+        Response response = target("/history")
+                .queryParam("type", "conflate")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(5, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
+            Assert.assertTrue(("conflate").equalsIgnoreCase(j.getJobType()));
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryFilterStatus() throws Exception {
+        Response response = target("/history")
+                .queryParam("status", "cancelled")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(3, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertTrue(("cancelled").equalsIgnoreCase(j.getStatus()));
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryFilterTypeStatus() throws Exception {
+        Response response = target("/history")
+                .queryParam("type", "export,conflate,clip")
+                .queryParam("status", "complete")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(13, jobs.size());
+        List<String> expectedJobTypes = new ArrayList<>();
+        expectedJobTypes.add("export");
+        expectedJobTypes.add("conflate");
+        expectedJobTypes.add("clip");
+        for (JobStatusResponse j : jobs) {
+            Assert.assertTrue(("complete").equalsIgnoreCase(j.getStatus()));
+            Assert.assertTrue((expectedJobTypes).contains(j.getJobType()));
+        }
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryFilterStatusBad() throws Exception {
+        Response response = target("/history")
+                .queryParam("status", "foo")
+                .queryParam("limit", 50)
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        Assert.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testHistoryFilterTypeBad() throws Exception {
+        Response response = target("/history")
+                .queryParam("type", "bar")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        Assert.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testRunning() throws Exception {
+        Response response = target("/running")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
+        String actualResult = response.readEntity(String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
+        Assert.assertEquals(5, jobs.size());
+        for (JobStatusResponse j : jobs) {
+            Assert.assertNull(j.getStatus());
+            Assert.assertNotNull(j.getPercentComplete());
         }
     }
 
 }
-

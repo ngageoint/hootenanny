@@ -161,6 +161,7 @@ public class JobStatusResponse {
     public String toString() {
         return "JobStatus{" +
                 "jobId='" + jobId + '\'' +
+                ", jobType='" + jobType + '\'' +
                 ", status='" + status + '\'' +
                 ", statusDetail='" + statusDetail + '\'' +
                 ", percentComplete=" + percentComplete +
