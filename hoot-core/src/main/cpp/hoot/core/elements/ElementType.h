@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPE_H
 #define ELEMENTTYPE_H
@@ -48,8 +48,8 @@ public:
     Unknown
   } Type;
 
-  ElementType() { _type = Unknown; }
-  ElementType(Type type) { _type = type; }
+  ElementType() : _type(Unknown) { }
+  ElementType(Type type) : _type(type) { }
 
   bool operator==(ElementType t) const { return t._type == _type; }
   bool operator!=(ElementType t) const { return t._type != _type; }
