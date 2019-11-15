@@ -40,9 +40,10 @@ class JavaInteropTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(JavaInteropTest);
   //CPPUNIT_TEST(runJniTest1); // works
   //CPPUNIT_TEST(runJniTest2); // works
-  //CPPUNIT_TEST(runJniTest3);    //works
-  //CPPUNIT_TEST(runJniTest4);    //works
-  //CPPUNIT_TEST(runJniTest5);    //works
+  //CPPUNIT_TEST(runJniTest3); // works
+  //CPPUNIT_TEST(runJniTest4); // works
+  //CPPUNIT_TEST(runJniTest5); // works
+  //CPPUNIT_TEST(runJniTest6); // works
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -147,13 +148,9 @@ public:
     LOG_VARW(res);
 
     jclass cls = env->FindClass("org/openstreetmap/josm/tools/WikiReader");
-    LOG_VARW(cls == 0);
     jobject wikiReader = env->AllocObject(cls);
-    LOG_VARW(wikiReader == 0);
     jmethodID methodId = env->GetMethodID(cls, "getBaseUrlWiki", "()Ljava/lang/String;");
-    LOG_VARW(methodId == 0);
     jobject result = env->CallObjectMethod(wikiReader, methodId);
-    LOG_VARW(result == 0);
     const char* str = env->GetStringUTFChars((jstring)result, NULL);
     LOG_VARW(QString(str));
 
@@ -186,6 +183,56 @@ public:
     jobject result = env->CallObjectMethod(wikiReader, methodId);
     const char* str = env->GetStringUTFChars((jstring)result, NULL);
     LOG_VARW(QString(str));
+
+    vm->DestroyJavaVM();
+  }
+
+  void runJniTest6()
+  {
+    // pass a custom object into an object's method and then retrieve it
+
+    JavaVM* vm = 0;
+    JNIEnv* env = 0;
+    JavaVMInitArgs vm_args;
+    JavaVMOption options[2];
+    options[0].optionString = (char*)"-Djava.class.path=.";
+    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
+    vm_args.version = JNI_VERSION_1_8;
+    vm_args.nOptions = 2;
+    vm_args.options = options;
+    vm_args.ignoreUnrecognized = 1;;
+    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
+    LOG_VARW(res);
+
+    // create two nodes
+    jclass nodeCls = env->FindClass("org/openstreetmap/josm/data/osm/Node");
+    jmethodID nodeConstructorMethodId = env->GetMethodID(nodeCls, "<init>", "(J)V");
+    jobject node1 = env->NewObject(nodeCls, nodeConstructorMethodId, 1L);
+    jobject node2 = env->NewObject(nodeCls, nodeConstructorMethodId, 2L);
+
+    // create a node pair and add both nodes
+    jclass nodePairCls = env->FindClass("org/openstreetmap/josm/data/osm/NodePair");
+    jmethodID nodePairConstructorMethodId =
+      env->GetMethodID(nodePairCls, "<init>",
+      "(Lorg/openstreetmap/josm/data/osm/Node;Lorg/openstreetmap/josm/data/osm/Node;)V");
+    jobject nodePair = env->NewObject(nodePairCls, nodePairConstructorMethodId, node1, node2);
+
+    // get the first node
+    jmethodID getNodeAMethodId =
+      env->GetMethodID(nodePairCls, "getA", "()Lorg/openstreetmap/josm/data/osm/Node;");
+    jobject node1Returned = env->CallObjectMethod(nodePair, getNodeAMethodId);
+
+    // print the node's id and latitude
+
+    jmethodID getLatMethodId = env->GetMethodID(nodeCls, "lat", "()D");
+    jdouble node1Lat = env->CallDoubleMethod(node1Returned, getLatMethodId);
+    double lat = (double)node1Lat;
+    LOG_VARW(lat);
+
+    jmethodID getIdMethodId = env->GetMethodID(nodeCls, "getId", "()J");
+    jlong node1Id = env->CallLongMethod(node1Returned, getIdMethodId);
+    long id = (long)node1Id;
+    LOG_VARW(id);
 
     vm->DestroyJavaVM();
   }
