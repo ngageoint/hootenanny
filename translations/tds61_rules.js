@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -325,7 +325,7 @@ tds61.rules = {
     'ZVH_AVA':'source:accuracy:highest_elevation', // Highest Elevation <absolute vertical accuracy>
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     // taken from TDSv60 with the NGA TDSv61 additions
@@ -3919,13 +3919,13 @@ tds61.rules = {
 
     // OTH Filler.  These are to build OTH values
     ['RTY','999','highway','other'],
-    ['FFN','999','amenity','other'], 
-    ['FFN','999','building','other'], 
-    ['FFN','999','camp:type','other'], 
-    ['FFN','999','craft','other'], 
-    ['FFN','999','landuse','other'], 
-    ['FFN','999','leisure','other'], 
-    ['FFN','999','military','other'], 
+    ['FFN','999','amenity','other'],
+    ['FFN','999','building','other'],
+    ['FFN','999','camp:type','other'],
+    ['FFN','999','craft','other'],
+    ['FFN','999','landuse','other'],
+    ['FFN','999','leisure','other'],
+    ['FFN','999','military','other'],
     ['FFN','999','office','other'],
     ['FFN','999','repair','other'],
     ['FFN','999','shop','other'],
@@ -4048,7 +4048,7 @@ tds61.rules = {
     ['FFN','558','building','dependents_housing'], // Dependents Housing
     ['FFN','610','office','telecommunication'], // telecommunication
     ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services 
+    ['FFN','760','amenity','office'], // Business and Personal Support Services
     ['FFN','815','building','palace'], // Palace
 
     // Added to give something for the OTH value to use
@@ -4058,7 +4058,7 @@ tds61.rules = {
 
     // ##### End of One2One Rules #####
 
-   
+
     // ##### Start of fuzzyTable #####
     // This list uses the new IsA, IsSimilar etc functions to map a number of input values to a single output
     fuzzyTable : [

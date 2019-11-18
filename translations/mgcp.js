@@ -1040,7 +1040,7 @@ mgcp = {
                 }
                 else
                 {
-                    tags.highway = 'road';                    
+                    tags.highway = 'road';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1070,7 +1070,7 @@ mgcp = {
                 }
                 else
                 {
-                    tags.railway = 'rail';                    
+                    tags.railway = 'rail';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1105,7 +1105,7 @@ mgcp = {
                 }
                 else
                 {
-                    tags.building = 'yes';                    
+                    tags.building = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1140,7 +1140,7 @@ mgcp = {
                 }
                 else
                 {
-                    tags.bridge = 'yes';                    
+                    tags.bridge = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1324,7 +1324,7 @@ mgcp = {
             case 'fuel_storage':
                 attrs.F_CODE = 'AM010'; // Storage Depot
                 attrs.PPO = '46'; // Petrol - close but not great
-                                  // Other options are: Petroleum:83, Oil:75 
+                                  // Other options are: Petroleum:83, Oil:75
                 delete tags.amenity;
                 break;
         } // End switch Amenity
@@ -1868,7 +1868,7 @@ mgcp = {
                 break;
 
             case 'AH050': // Fortification
-                if (tags['bunker_type'] == 'munitions') 
+                if (tags['bunker_type'] == 'munitions')
                 {
                     attrs.F_CODE = 'AM060'; // Surface bunker
                     if (! attrs.PPO) attrs.PPO = '3'; // Ammunition
@@ -2016,7 +2016,7 @@ mgcp = {
         // A little cleaning before we try to untangle stuff
         delete attrs.SHAPE_Length;
         delete attrs.SHAPE_Area;
-        
+
         // Untangle MGCP attributes & OSM tags
         // NOTE: This could get wrapped with an ENV variable so it only gets called during import
         mgcp.untangleAttributes(attrs, tags);
