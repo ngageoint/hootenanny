@@ -86,6 +86,7 @@ private:
   int _precision;
 
   Change _change;
+  QList<Change> _parsedChanges;
 
   bool _addTimestamp;
   bool _includeDebugTags;

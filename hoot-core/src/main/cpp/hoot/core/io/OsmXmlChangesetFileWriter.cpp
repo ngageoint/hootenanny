@@ -87,6 +87,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
   QString filepath = path;
 
   _initIdCounters();
+  _parsedChanges.clear();
 
   long changesetProgress = 1;
 
@@ -122,12 +123,24 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_TRACE("Reading next XML change...");
       _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
+
+      // When multiple changeset providers are passed in sometimes a duplicated change might exist
+      // between them, so we're skipping those dupes here. You could make the argument to prevent
+      // dupes from occurring before outputting this changeset file, but not quite sure how to do
+      // that yet, due to the fact that the changeset providers have a streaming interface.
+      if (_parsedChanges.contains(_change))
+      {
+        LOG_TRACE("Skipping adding duplicated change: " << _change << "...");
+        continue;
+      }
+
       LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)
       {
         if (last != Change::Unknown)
         {
           writer.writeEndElement();
+          _parsedChanges.append(_change);
         }
         switch (_change.getType())
         {
@@ -184,6 +197,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
       last = Change::Unknown;
+      _parsedChanges.append(_change);
     }
   }
 

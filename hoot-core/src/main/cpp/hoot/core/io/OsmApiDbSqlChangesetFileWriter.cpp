@@ -81,6 +81,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
 
   _remappedIds.clear();
   _changesetBounds.init();
+  _parsedChanges.clear();
 
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
@@ -103,6 +104,14 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
     {
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
+
+      // See related note in OsmXmlChangesetFileWriter::write.
+      if (_parsedChanges.contains(change))
+      {
+        LOG_TRACE("Skipping adding duplicated change: " << change << "...");
+        continue;
+      }
+
       switch (change.getType())
       {
         case Change::Create:
@@ -129,6 +138,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
           ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
           _changesetBounds.expandToInclude(node->getX(), node->getY());
         }
+        _parsedChanges.append(change);
         changes++;
       }
     }
@@ -204,10 +214,6 @@ ElementPtr OsmApiDbSqlChangesetFileWriter::_getChangeElement(ConstElementPtr ele
   }
   return changeElement;
 }
-
-// These create methods assume you've already set the ID correctly in terms of preventing
-// conflicts with the OSM API target db for the element to be created.  The one exception is
-// for new elements with negative ids.
 
 void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
 {
