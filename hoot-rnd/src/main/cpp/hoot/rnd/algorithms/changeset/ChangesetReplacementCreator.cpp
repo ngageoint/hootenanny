@@ -852,8 +852,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(OsmMapPtr doughMap, OsmM
     if (e.getWhat().contains("Alpha Shape area is zero"))
     {
       LOG_ERROR(
-        "No cut shape generated from secondary data. Is your secondary data empty or have you " <<
-        "filtered it to be empty?");
+        "No cut shape generated from secondary data. " << e.getWhat() <<
+        " Is your secondary data empty or have you filtered it to be empty?");
     }
     //  Rethrow the original exception
     throw;
