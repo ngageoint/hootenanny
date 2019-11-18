@@ -101,6 +101,10 @@ private:
   //clones the input so local element version tracking can be done
   ElementPtr _getChangeElement(ConstElementPtr element);
 
+  // All of the create methods here assume you've already set the ID correctly in terms of
+  // preventing conflicts with the OSM API target db for the element to be created.  The one
+  // exception is for new elements with negative ids.
+
   void _createNewElement(ConstElementPtr newElement);
   QString _getInsertValuesStr(ConstElementPtr element) const;
   QString _getInsertValuesNodeStr(ConstNodePtr node) const;
@@ -138,6 +142,8 @@ private:
 
   // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;
+
+  QList<Change> _parsedChanges;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };
