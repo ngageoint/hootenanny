@@ -49,12 +49,11 @@ public:
 
   static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
 
-  ReportMissingElementsVisitor(bool removeMissing = false,
-                               int maxReport = Log::getWarnMessageLimit());
+  ReportMissingElementsVisitor(const bool removeMissing = false,
+                               const Log::WarningLevel& logLevel = Log::Trace,
+                               const int maxReport = Log::getWarnMessageLimit());
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }
-
-  //virtual void setOsmMap(const OsmMap* map) { assert(!_removeMissing); _constMap = map; }
 
   virtual void visit(const ConstElementPtr& e);
 
@@ -75,6 +74,7 @@ public:
 protected:
 
   OsmMap* _map;
+  Log::WarningLevel _logLevel;
   int _maxReport;
   int _missingCount;
   bool _removeMissing;

@@ -63,11 +63,16 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
     _ec.reset(new ElementConverter(_map->shared_from_this()));
   }
 
+  LOG_VART(AreaCriterion().isSatisfied(e));
   if (AreaCriterion().isSatisfied(e))
   {
     std::shared_ptr<Geometry> g = _ec->convertToGeometry(e);
-
-    if (g->getArea() == 0.0)
+    LOG_VART(g.get());
+    if (g.get())
+    {
+      LOG_VART(g->getArea());
+    }
+    if (g.get() && g->getArea() == 0.0)
     {
       RecursiveElementRemover(e->getElementId()).apply(_map->shared_from_this());
       _numAffected++;

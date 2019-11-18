@@ -133,6 +133,7 @@ public:
   void replaceElement(const std::shared_ptr<const Element>& from,
                       const std::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
+  void replaceElement(const ElementId& from, const ElementId& to);
 
   /**
    * Replaces all instances of old with the values in the collection defined by start/end. Order is

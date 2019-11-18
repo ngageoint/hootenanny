@@ -1096,7 +1096,7 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   {
     RelationPtr currRelation = it->second;
 
-    if ( currRelation->contains(oldNodeId) == true )
+    if (currRelation->contains(oldNodeId) == true)
     {
       LOG_TRACE("Trying to replace node " << oldNode->getId() << " with node " <<
                 newNode->getId() << " in relation " << currRelation->getId());

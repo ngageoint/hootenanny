@@ -266,6 +266,7 @@ public:
   static const QString UNUSED_PATH;
 
 private:
+
   /** Reset flag on setup to reset nothing, basic IDs, or everything */
   HootTestReset _reset;
 };

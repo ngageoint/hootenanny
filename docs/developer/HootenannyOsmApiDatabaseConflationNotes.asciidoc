@@ -1,7 +1,7 @@
 
 == Hootenanny OSM API Database Conflation Testing Notes
 
-Testing Hootenanny conflation with OSM API database (MapEdit) data without access to a complete, production OSM API database is a little
+Testing Hootenanny conflation with OSM API database data without access to a complete, production OSM API database is a little
 cumbersome, but possible.  First, read the "Conflating OSM API Database Data" in the web user interface document for details on the workflow and
 limitations involved with conflating this type of data.
 
