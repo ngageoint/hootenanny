@@ -80,7 +80,7 @@
                   <resource>
                     <directory>localDependencies</directory>
                     <includes>
-                      <include>**/*.jar</include>
+                      <include></include>
                     </includes>
                     <targetPath>WEB-INF/lib</targetPath>
                   </resource>
@@ -736,6 +736,14 @@
           <groupId>com.google.guava</groupId>
           <artifactId>guava</artifactId>
           <version>${guava.version}</version>
+        </dependency>
+
+       <!-- josm -->
+
+        <dependency>
+          <groupId>org.openstreetmap.josm</groupId>
+          <artifactId>me-josm</artifactId>
+          <version>4.4.4</version>
         </dependency>
 
         <!-- test -->

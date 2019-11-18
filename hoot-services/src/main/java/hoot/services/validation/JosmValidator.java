@@ -32,6 +32,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openstreetmap.josm.data.osm.Node;
+
 /**
  * 
  */
@@ -39,8 +41,10 @@ public class JosmValidator
 {
   private static final Logger logger = LoggerFactory.getLogger(JosmValidator.class);
 
-  public static String test1()
+  public static long test1()
   {
-    return "test";
+    Node node = new Node();
+    return node.getId();
+    //return 0;
   }
 }
