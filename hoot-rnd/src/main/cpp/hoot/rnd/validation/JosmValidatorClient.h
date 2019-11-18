@@ -30,6 +30,9 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 
+// JNI
+#include <jni.h>
+
 namespace hoot
 {
 
@@ -43,6 +46,8 @@ class JosmValidatorClient : public Configurable
 public:
 
   JosmValidatorClient();
+
+  long getNodeId(JNIEnv* env) const;
 
   virtual void setConfiguration(const Settings& conf);
 

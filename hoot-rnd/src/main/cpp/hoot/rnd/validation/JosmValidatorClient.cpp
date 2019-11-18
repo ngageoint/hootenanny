@@ -41,4 +41,14 @@ void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 
 }
 
+long JosmValidatorClient::getNodeId(JNIEnv* env) const
+{
+  jclass validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
+  jobject validator = env->AllocObject(validatorClass);
+  jmethodID getNodeIdMethodId = env->GetMethodID(validatorClass, "getNodeId", "()J;");
+  jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
+  const long nodeId = (long)nodeIdResult;
+  return nodeId;
+}
+
 }

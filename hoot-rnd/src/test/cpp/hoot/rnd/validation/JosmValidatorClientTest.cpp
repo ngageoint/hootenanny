@@ -28,6 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/rnd/validation/JosmValidatorClient.h>
 
 // JNI
 #include <jni.h>
@@ -240,9 +241,22 @@ public:
 
   void runValidationTest1()
   {
-    //JosmValidator::test1
+    JavaVM* vm = 0;
+    JNIEnv* env = 0;
+    JavaVMInitArgs vm_args;
+    JavaVMOption options[2];
+    options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
+    options[1].optionString =
+      (char*)"-Djava.class.path=/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/hoot/services/validation/JosmValidator.class";
+    vm_args.version = JNI_VERSION_1_8;
+    vm_args.nOptions = 2;
+    vm_args.options = options;
+    vm_args.ignoreUnrecognized = 1;
+    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
+    LOG_VARW(res);
 
-
+    JosmValidatorClient uut;
+    LOG_VARW(uut.getNodeId(env));
   }
 
 private:

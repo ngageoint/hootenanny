@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-package hoot.services.utils;
+package hoot.services.validation;
 
 import java.io.IOException;
 import java.util.Map;
@@ -41,10 +41,9 @@ public class JosmValidator
 {
   private static final Logger logger = LoggerFactory.getLogger(JosmValidator.class);
 
-  public static long test1()
+  public long getNodeId()
   {
     Node node = new Node();
     return node.getId();
-    //return 0;
   }
 }
