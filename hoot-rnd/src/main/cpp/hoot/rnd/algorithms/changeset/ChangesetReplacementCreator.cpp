@@ -411,11 +411,13 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   LOG_VARD(refMap->getElementCount());
   LOG_VARD(secMap->getElementCount());
-  // If we're empty here, then the filtering must have removed everything...no changeset to
-  // calculate.
-  if (refMap->getElementCount() == 0 && secMap->getElementCount() == 0)
+  // If the secondary dataset is empty here, then the filtering must have removed everything from
+  // it...no changeset to calculate. Note, the ref map could be empty by this point, and that will
+  // just result in an all add changeset with secondary features in it for the current geometry
+  // type being replaced
+  if (secMap->getElementCount() == 0)
   {
-    LOG_INFO("Both input maps empty after filtering. Skipping changeset generation...");
+    LOG_INFO("Secondary input map empty after filtering. Skipping changeset generation...");
     return;
   }
 
@@ -425,7 +427,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap);
 
-  // At one point it was necessary to renumber the relations in the sec map, as they could have ID
+  // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
   // fact that relations in the two maps had been added independently of each other during cropping.
   // However, after some refactoring this doesn't seem to be the case anymore. If we run into this
