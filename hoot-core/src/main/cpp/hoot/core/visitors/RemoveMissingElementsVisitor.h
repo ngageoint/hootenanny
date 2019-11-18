@@ -44,7 +44,8 @@ public:
 
   static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
 
-  RemoveMissingElementsVisitor(int maxReport = Log::getWarnMessageLimit());
+  RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
+                               const int maxReport = Log::getWarnMessageLimit());
 
   virtual void setOsmMap(OsmMap* map) { _v->setOsmMap(map);}
 

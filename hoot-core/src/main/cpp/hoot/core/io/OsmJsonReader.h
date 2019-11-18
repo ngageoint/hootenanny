@@ -52,14 +52,18 @@ namespace hoot
 {
 
 /**
- * This class is intended to create an OsmMap from a given json string. JSON
- * output from the overpass-api was used as the model for development
+ * This class is intended to create an OsmMap from a given json string. JSON output from the
+ * overpass-api was used as the model for development
  * (http://overpass-api.de/output_formats.html#json).
  *
- * The input string must be well-formed JSON, with the exception that it can
- * be coded using single quotes, rather than double quotes... which makes
- * things a lot cleaner if you are hand-jamming the JSON string into c++ code.
- * If you are using single quotes, you may escape apostrophes with a backslash.
+ * Element type ordering (element children before parents) is not guaranteed with JSON, as it is
+ * with XML.
+ *
+ * The input string must be well-formed JSON, with the exception that it can be coded using single
+ * quotes, rather than double quotes... which makes things a lot cleaner if you are hand-jamming the
+ * JSON string into c++ code. If you are using single quotes, you may escape apostrophes with a
+ * backslash.
+ *
  * Consider this example:
  *
  * QString testJsonStr =
@@ -101,10 +105,10 @@ namespace hoot
  *   "]                                      \n"
  *   "}                                      \n";
  *
- * It's all-or-nothing, though for the quotes - don't mix and match
- * singles and doubles! Also, be aware that this class doesn't do anything
- * clever to handle large datasets - it simply keeps everything in memory.
- * Be careful if you want to use it with large datasets.
+ * It's all-or-nothing, though for the quotes - don't mix and match singles and doubles!
+ *
+ * Also, be aware that this class doesn't do anything clever to handle large datasets - it simply
+ * keeps everything in memory. Be careful if you want to use it with large datasets.
  */
 
 class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable,
@@ -239,9 +243,6 @@ public:
 
   bool isValidJson(const QString& jsonStr);
 
-  // temporary: see #3619
-  void setRequireStrictTypeOrdering(bool require) { _requireStrictTypeOrdering = require; }
-
 protected:
 
   // Items to conform to OsmMapReader ifc
@@ -279,11 +280,16 @@ protected:
   QHash<long, long> _relationIdMap;
   QHash<long, long> _wayIdMap;
 
+  // If we aren't using element source IDs and a child element hasn't been parsed yet, map the
+  // parent element to the missing child element's ID so that we may later update the child ID
+  // with the newer remapped ID.
+  QMultiHash<long, long> _wayIdsToWayNodeIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToNodeMemberIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToWayMemberIdsNotPresent;
+  QMultiHash<long, long> _relationIdsToRelationMemberIdsNotPresent;
+
   int _missingNodeCount;
   int _missingWayCount;
-
-  // requires that elements be type ordering in input; if not, they're skipped; temporary: see #3619
-  bool _requireStrictTypeOrdering;
 
   /**
    * @brief _loadJSON Loads JSON into a boost property tree
@@ -292,8 +298,8 @@ protected:
   void _loadJSON(const QString& jsonStr);
 
   /**
-   * @brief parseOverpassJson Traverses our property tree and adds
-   *        elements to the map
+   * @brief parseOverpassJson Traverses our property tree and adds elements to the map. Removes
+   * child elements ref'd by parents that don't actually exist
    */
   void _parseOverpassJson();
 
@@ -336,6 +342,17 @@ protected:
   void _readToMap();
 
   long _getRelationId(long fileId);
+
+  /*
+   * This updates child ref ID's owned by ways/relations where the child element was parsed after
+   * the ref ID.
+   */
+  void _updateChildRefs();
+  void _updateWayChildRefs();
+  void _updateRelationChildRefs(const ElementType& childElementType);
+
+  void _reset();
+  void _resetIds();
 };
 
 }

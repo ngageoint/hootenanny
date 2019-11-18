@@ -447,6 +447,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 
+  // Should we be using RemoveMissingElementsVisitor here instead?
   ReportMissingElementsVisitor visitor;
   LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
@@ -580,8 +581,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
           if (logWarnCount < Log::getWarnMessageLimit())
           {
             LOG_WARN(
-              "Missing " << ElementId(ElementType::Node, ref) << " in " <<
-              ElementId(ElementType::Way, _wayId) << ".");
+              "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+              ElementId(ElementType::Way, _wayId) << "...");
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
@@ -622,8 +623,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             if (logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN(
-                "Missing " << ElementId(ElementType::Node, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << ".");
+                "Skipping missing " << ElementId(ElementType::Node, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << "...");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {
@@ -655,8 +656,8 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             if (logWarnCount < Log::getWarnMessageLimit())
             {
               LOG_WARN(
-                "Missing " << ElementId(ElementType::Way, ref) << " in " <<
-                ElementId(ElementType::Relation, _relationId) << ".");
+                "Skipping missing " << ElementId(ElementType::Way, ref) << " in " <<
+                ElementId(ElementType::Relation, _relationId) << "...");
             }
             else if (logWarnCount == Log::getWarnMessageLimit())
             {

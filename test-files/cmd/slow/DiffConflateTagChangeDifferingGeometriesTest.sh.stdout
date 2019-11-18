@@ -1,7 +1,7 @@
 Running diff changeset with tags, separate outputs...
-20:16:03.661 WARN   .../hoot/core/io/OsmXmlReader.cpp( 564) Missing Node(1809418644) in Relation(4297669).
-20:16:03.661 WARN   .../hoot/core/io/OsmXmlReader.cpp( 564) Missing Node(323146921) in Relation(4297670).
-20:16:04.402 WARN   ...etwork/OsmNetworkExtractor.cpp( 206) Found a non-contiguous relation when extracting a network. Ignoring: Relation(-373401)
-20:16:04.404 WARN   ...etwork/OsmNetworkExtractor.cpp( 206) Found a non-contiguous relation when extracting a network. Ignoring: Relation(-373402)
+17:24:27.594 WARN   .../hoot/core/io/OsmXmlReader.cpp( 626) Skipping missing Node(1809418644) in Relation(4297669)...
+17:24:27.595 WARN   .../hoot/core/io/OsmXmlReader.cpp( 626) Skipping missing Node(323146921) in Relation(4297670)...
+17:24:29.359 WARN   ...etwork/OsmNetworkExtractor.cpp( 206) Found a non-contiguous relation when extracting a network. Ignoring: Relation(-373401)
+17:24:29.361 WARN   ...etwork/OsmNetworkExtractor.cpp( 206) Found a non-contiguous relation when extracting a network. Ignoring: Relation(-373402)
 Checking tag diff
 Tag Changeset Files Match

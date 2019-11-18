@@ -38,7 +38,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementVisitor, ReportMissingElementsVisitor)
 
-ReportMissingElementsVisitor::ReportMissingElementsVisitor(bool removeMissing, int maxReport) :
+ReportMissingElementsVisitor::ReportMissingElementsVisitor(const bool removeMissing,
+                                                           const Log::WarningLevel& logLevel,
+                                                           const int maxReport) :
+_logLevel(logLevel),
 _maxReport(maxReport),
 _missingCount(0),
 _removeMissing(removeMissing)
@@ -64,7 +67,7 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
 
   if (_missingCount < _maxReport)
   {
-    LOG_DEBUG(msg);
+    LOG_LEVEL(_logLevel, msg);
   }
   else
   {
@@ -73,7 +76,8 @@ void ReportMissingElementsVisitor::_reportMissing(ElementId referer, ElementId m
   _missingCount++;
   if (_missingCount == _maxReport)
   {
-    LOG_INFO(
+    LOG_LEVEL(
+      _logLevel,
       "Reached maximum number of missing element reports (" << _maxReport <<
       "). No longer reporting.");
   }
