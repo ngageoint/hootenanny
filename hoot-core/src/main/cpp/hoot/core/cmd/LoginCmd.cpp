@@ -62,7 +62,7 @@ public:
     const QString requestToken = loginManager.getRequestToken(authUrl);
     std::cout << std::endl << "Authorization URL: " << authUrl << std::endl << std::endl;
 
-    // prompt user to auth through the 3rd party (OpenStreetMap, MapEdit, etc.)
+    // prompt user to auth through the 3rd party (OpenStreetMap, etc.)
     const QString verifier = loginManager.promptForAuthorizationVerifier();
 
     // verify the user's login, create the user, and get their id and user name

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version='0.6' generator='JOSM'>
-  <bounds minlat='15.2700474' minlon='-16.5355611' maxlat='15.2919677' maxlon='-16.5067864' origin='MapEdit server' />
+  <bounds minlat='15.2700474' minlon='-16.5355611' maxlat='15.2919677' maxlon='-16.5067864' origin='' />
   <node id='-3251246' action='modify' visible='true' lat='15.27315242741' lon='-16.53412344217' />
   <node id='-3251322' action='modify' visible='true' lat='15.2948240063' lon='-16.51382448435' />
   <node id='-3251356' action='modify' visible='true' lat='15.278223819' lon='-16.50481226206' />

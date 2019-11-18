@@ -241,7 +241,7 @@ describe('TranslationServer', function () {
         it('should handle translateTo POST and preserve bounds tag and ids', function() {
             //http://localhost:8094/osmtotds
             var osm2trans = server.handleInputs({
-                osm: '<osm version="0.6" upload="true" generator="JOSM"><bounds minlat="39.35643172777992" minlon="-105.21811763904256" maxlat="39.35643172777992" maxlon="-105.21811763904256" origin="MapEdit server" /><node id="777" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
+                osm: '<osm version="0.6" upload="true" generator="JOSM"><bounds minlat="39.35643172777992" minlon="-105.21811763904256" maxlat="39.35643172777992" maxlon="-105.21811763904256" origin="" /><node id="777" lon="-105.21811763904256" lat="39.35643172777992" version="0"><tag k="building" v="yes"/><tag k="uuid" v="{bfd3f222-8e04-4ddc-b201-476099761302}"/></node></osm>',
                 method: 'POST',
                 translation: 'TDSv61',
                 path: '/translateTo'
