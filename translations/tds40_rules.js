@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -256,7 +256,7 @@ tds40.rules = {
     'ZVA':'ele', // Aerodrome Elevation
     'ZVH':'ele:max' // Highest Elevation
     }, // End numBiased
-    
+
 
     // Common one2one rules. Used for both import and export
     // taken from TDS v40 and semi-auto generated
@@ -599,10 +599,10 @@ tds40.rules = {
     ['BOT','999','bridge:movable','other'],
 
     // BPWHAC - Waterbody Bank 1 height interval closure
-    ['BPWHAC','2','waterway:bank1:height:closure','open_interval'], 
+    ['BPWHAC','2','waterway:bank1:height:closure','open_interval'],
     ['BPWHAC','3','waterway:bank1:height:closure','greater-than_or_equal_to_less-than_interval'],
     ['BPWHAC','4','waterway:bank1:height:closure','greater-than_to_less-than_or_equal_interval'],
-    ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'], 
+    ['BPWHAC','5','waterway:bank1:height:closure','closed_interval'],
     ['BPWHAC','6','waterway:bank1:height:closure','greater-than_semi-interval'],
     ['BPWHAC','7','waterway:bank1:height:closure','greater-than_or_equal_semi-interval'],
     ['BPWHAC','8','waterway:bank1:height:closure','less-than_semi-interval'],
@@ -658,7 +658,7 @@ tds40.rules = {
     ['BSC','31','bridge:structure','arch'], // Arch
     ['BSC','32','bridge:structure','trestle'], // Trestle
     ['BSC','999','bridge:structure','other'], // Other
-    
+
     // BSU - Building Superstructure Type
     // ['BSU','-999999',undefined,undefined], // No Information
     ['BSU','1','building:superstructure:type','chimney'], // Chimney
@@ -1433,7 +1433,7 @@ tds40.rules = {
     ['FFN','970','use','meeting_place'], // Meeting Place
     ['FFN','980','amenity','death_care_services'], // Death Care Services
     ['FFN','999','use','other'], // Other
-    
+
     // FHC - Harbour Facility Function
     // ['FHC','-999999',undefined,undefined], // No Information
     ['FHC','1','harbour:use','ro-ro_terminal'], // Ro-Ro Terminal
@@ -2685,8 +2685,8 @@ tds40.rules = {
 
     // SBB - Supported by Bridge Span
     // ['SBB','-999999',undefined,undefined], // No Information
-    ['SBB','1000','on_bridge','no'], // Do we need this?? 
-    ['SBB','1001','on_bridge','yes'], 
+    ['SBB','1000','on_bridge','no'], // Do we need this??
+    ['SBB','1001','on_bridge','yes'],
 
     // SBC - Shelter Belt
     // ['SBC','-999999',undefined,undefined], // No Information
@@ -3132,7 +3132,7 @@ tds40.rules = {
     ['TYP','47','ref:road:type','limited_access_motorway'], // Limited Access Motorway
     ['TYP','48','junction','roundabout'], // Roundabout from AP020 Road Interchange
     ['TYP','50','link_road','yes'], // Ramp, from AP020 Road Interchange
-    ['TYP','999','ref:road:type','other'], 
+    ['TYP','999','ref:road:type','other'],
 
     // TXP - Taxiway Type
     // ['TXP','-999999',undefined,undefined], // No Information
@@ -3192,7 +3192,7 @@ tds40.rules = {
     ['VCA','16','void_collection:reason','no_available_survey'], // No Available Survey
     ['VCA','999','void_collection:reason','other'], // Other
 
-    // VCM - Vertical Construction Material 
+    // VCM - Vertical Construction Material
     // ['VCM','-999999',undefined,undefined], // No Information
     ['VCM','1','material:vertical','adobe_brick'], // Adobe Brick
     ['VCM','2','material:vertical','aluminium'], // Aluminum
@@ -3711,15 +3711,15 @@ tds40.rules = {
     // ZI016_ROC - Route Pavement Information : Route Surface Composition
     // ['ZI016_ROC','-999999','surface','unknown'], // Trying this instead of undefined
     ['ZI016_ROC','-999999',undefined,undefined], // No Information
-    ['ZI016_ROC','1','surface','ground'], // Unimproved 
+    ['ZI016_ROC','1','surface','ground'], // Unimproved
     ['ZI016_ROC','2','surface','compacted'], // Stabilized earth
     ['ZI016_ROC','3','surface','flexible_pavement'], // Flexible Pavement
-    ['ZI016_ROC','4','surface','gravel'], // Aggregate 
+    ['ZI016_ROC','4','surface','gravel'], // Aggregate
     ['ZI016_ROC','5','surface','macadam'], // Macadam
     ['ZI016_ROC','6','surface','bound_surface'], // Bound Surface
     ['ZI016_ROC','7','surface','ridgid_pavement'], // Rigid Pavement
     ['ZI016_ROC','8','surface','concrete'], // Concrete
-    ['ZI016_ROC','9','surface','asphalt'], // Asphalt 
+    ['ZI016_ROC','9','surface','asphalt'], // Asphalt
     ['ZI016_ROC','10','surface','asphalt_over_concrete'], // Asphalt over Concrete
     ['ZI016_ROC','11','surface','cobblestone'], // Cebble-stone
     ['ZI016_ROC','12','surface','brick'], // Brick
@@ -3736,7 +3736,7 @@ tds40.rules = {
     ['ZI016_WTC','1','seasonal','no'], // All-weather
     ['ZI016_WTC','2','seasonal','fair'], // possibly seasonal // Fair-weather
     ['ZI016_WTC','3','seasonal','winter'], // Winter Only
-    ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather 
+    ['ZI016_WTC','4','seasonal','limited'], // Limited all-weather
     ['ZI016_WTC','5','seasonal','not_winter'], // Closed in Winter
     ['ZI016_WTC','999','seasonal','other'], // Other
 
@@ -3775,7 +3775,7 @@ tds40.rules = {
     // ['ZI017_TRT','12','railway','monorail'], // We used this in MGCP // Monorail
     ['ZI017_TRT','13','railway:track','maglev'], // Maglev
     ['ZI017_TRT','999','railway:track','other'], // Other
-    
+
     // ZI018_WIT - Wireless Telecommunication Information : Wireless Telecommunication Type
     // ['ZI018_WIT','-999999',undefined,undefined], // No Information
     ['ZI018_WIT','1','communication:cellular_phone','yes'], // Cellular Phone
@@ -3989,7 +3989,7 @@ tds40.rules = {
     ['ZI071_UAO','5','direction','vertical_up'], // Vertical Up
 
 //   #######################
-    // Text Enumerations - We swapped them for strings in the Schema. 
+    // Text Enumerations - We swapped them for strings in the Schema.
     // Some of these are ugly and will probably cause problems with dirty-word checkers
 
     // ZSAX_RS0 - Restriction Information : Security Attributes Group (resource classification)
@@ -4361,7 +4361,7 @@ tds40.rules = {
     ['FFN','558','building','dependents_housing'], // Dependents Housing
     ['FFN','610','office','telecommunication'], // telecommunication
     ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services 
+    ['FFN','760','amenity','office'], // Business and Personal Support Services
     ['FFN','815','building','palace'], // Palace
 
    ], // End one2oneOut
@@ -4584,7 +4584,7 @@ tds40.rules = {
     'ZI031':{'ZI006_MEM':'MEM', 'ZI004_RCG':'RCG'}
     },
     // ##### End of swapListOut #####
-    
+
    // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
     txtLength : {

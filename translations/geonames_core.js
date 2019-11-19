@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,7 +55,7 @@ geonames = {
     // toOsm - Translate Attrs to Tags
     // This is the main routine to convert TO OSM
     toOsm : function(attrs, layerName, geometryType)
-    { 
+    {
         tags = {};  // The final output Tag list
 
         if (config.getOgrDebugDumptags() == 'true') for (var i in attrs) print('In Attrs:' + i + ': :' + attrs[i] + ':');

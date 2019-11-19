@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,7 +55,7 @@ geonames.rules = {
         'AIRF':{'aeroway':'aerodrome'}, //  airfield: a place on land where aircraft land and take off; no facilities provided for the commercial handling of passengers and cargo
         'AIRH':{'aeroway':'heliport'}, //  heliport: a place where helicopters land and take off
         'AIRP':{'aeroway':'aerodrome'}, //  airport: a place where aircraft regularly land and take off, with runways, navigational aids, and major facilities for the commercial handling of passengers and cargo
-        'AIRQ':{'abandoned:aeroway':'aerodrome'}, //  abandoned airfield: 
+        'AIRQ':{'abandoned:aeroway':'aerodrome'}, //  abandoned airfield:
         'AIRS':{'seamark:type':'seaplane_landing_area'}, //  seaplane landing area: a place on a waterbody where floatplanes land and take off
         'AMTH':{'amenity':'theatre','theatre:type':'amphi'}, //  amphitheater: an oval or circular structure with rising tiers of seats about a stage or open space
         'AMUS':{'tourism':'theme_park'}, //  amusement park: Amusement Park are theme parks, adventure parks offering entertainment, similar to funfairs but with a fix location
@@ -71,9 +71,9 @@ geonames.rules = {
         'ASTR':{'man_made':'survey_point'}, //  astronomical station: a point on the earth whose position has been determined by observations of celestial bodies
         'ASYL':{'amenity':'social_facility','social_facility:for':'mental_health'}, //  asylum: a facility where the insane are cared for and protected
         'ATHF':{'leisure':'pitch'}, //  athletic field: a tract of land used for playing team sports, and athletic track and field events
-        'ATM':{'amenity':'atm'}, //  automatic teller machine: An unattended electronic machine in a public place, connected to a data system and related equipment and activated by a bank customer to obtain cash withdrawals and other banking services. 
+        'ATM':{'amenity':'atm'}, //  automatic teller machine: An unattended electronic machine in a public place, connected to a data system and related equipment and activated by a bank customer to obtain cash withdrawals and other banking services.
         'ATOL':{'place':'atoll'}, //  atoll(s): a ring-shaped coral reef which has closely spaced islands on it encircling a lagoon
-        'BANK':{'amenity':'bank'}, //  bank: A business establishment in which money is kept for saving or commercial purposes or is invested, supplied for loans, or exchanged. 
+        'BANK':{'amenity':'bank'}, //  bank: A business establishment in which money is kept for saving or commercial purposes or is invested, supplied for loans, or exchanged.
         'BAR':{'poi':'underwater_bar'}, //  bar: a shallow ridge or mound of coarse unconsolidated material in a stream channel, at the mouth of a stream, estuary, or lagoon and in the wave-break zone along coasts
         'BAY':{'natural':'bay'}, //  bay: a coastal indentation between two capes or headlands, larger than a cove but smaller than a gulf
         'BAYS':{'natural':'bay'}, //  bays: coastal indentations between two capes or headlands, larger than a cove but smaller than a gulf
@@ -95,7 +95,7 @@ geonames.rules = {
         'BNK':{'poi':'bank_shallow_water'}, //  bank(s): an elevation, typically located on a shelf, over which the depth of water is relatively shallow but sufficient for most surface navigation
         'BNKR':{'poi':'stream_bank'}, //  stream bank: a sloping margin of a stream channel which normally confines the stream to its channel on land
         'BNKU':{'geological':'undersea_bank'}, //  bank: an elevation, typically located on a shelf, over which the depth of water is relatively shallow but sufficient for safe surface navigation
-        'BNKX':{'geological':'bank'}, //  section of bank: 
+        'BNKX':{'geological':'bank'}, //  section of bank:
         'BOG':{'wetland':'bog'}, //  bog(s): a wetland characterized by peat forming sphagnum moss, sedge, and other acid-water plants
         'BP':{'historic':'boundary_stone'}, //  boundary marker: a fixture marking a point along a boundary
         'BRKS':{'millitary':'barracks'}, //  barracks: a building for lodging military personnel
@@ -108,7 +108,7 @@ geonames.rules = {
         'BTYD':{'waterway':'boatyard'}, //  boatyard: a waterside facility for servicing, repairing, and building small vessels
         'BUR':{'tomb':'cave'}, //  burial cave(s): a cave used for human burials
         'BUSH':{'natural':'bush'}, //  bush(es): a small clump of conspicuous bushes in an otherwise bare area
-        'BUSTN':{'amenity':'bus_station'}, //  bus station: a facility comprising ticket office, platforms, etc. for loading and unloading passengers 
+        'BUSTN':{'amenity':'bus_station'}, //  bus station: a facility comprising ticket office, platforms, etc. for loading and unloading passengers
         'BUSTP':{'highway':'bus_stop'}, //  bus stop: a place lacking station facilities
         'BUTE':{'geological':'butte'}, //  butte(s): a small, isolated, usually flat-topped hill with steep sides
         'CAPE':{'natural':'cape'}, //  cape: a land area, more prominent than a point, projecting into the sea and marking a notable change in coastal direction
@@ -131,7 +131,7 @@ geonames.rules = {
         'CMPMN':{'camp':'yes','camp:type':'mining'}, //  mining camp: a camp used by miners
         'CMPO':{'camp':'yes','camp:type':'oil'}, //  oil camp: a camp used by oilfield workers
         'CMP':{'tourism':'camp_site'}, //  camp(s): a site occupied by tents, huts, or other shelters for temporary use
-        'CMPQ':{'abandoned:tourism':'camp_site'}, //  abandoned camp: 
+        'CMPQ':{'abandoned:tourism':'camp_site'}, //  abandoned camp:
         'CMPRF':{'refugee':'yes','tourism':'camp_site',}, //  refugee camp: a camp used by refugees
         'CMTY':{'landuse':'cemetery'}, //  cemetery: a burial place or ground
         'CNFL':{'poi':'confluence'}, //  confluence: a place where two or more streams or intermittent streams flow together
@@ -141,7 +141,7 @@ geonames.rules = {
         'CNLI':{'waterway':'canal','service':'irrigation'}, //  irrigation canal: a canal which serves as a main conduit for irrigation water
         'CNLN':{'waterway':'canal','service':'navigation'}, //  navigation canal(s): a watercourse constructed for navigation of vessels
         'CNL':{'waterway':'canal'}, //  canal: an artificial watercourse
-        'CNLQ':{'abandoned:waterway':'canal'}, //  abandoned canal: 
+        'CNLQ':{'abandoned:waterway':'canal'}, //  abandoned canal:
         'CNLSB':{'waterway':'canal','service':'irrigation','location':'underground'}, //  underground irrigation canal(s): a gently inclined underground tunnel bringing water for irrigation from aquifers
         'CNLX':{'poi':'section_of_canal'}, //  section of canal:
         'CNS':{'poi':'concession_area'}, //  concession area: a lease of land by a government for economic development, e.g., mining, forestry
@@ -221,14 +221,14 @@ geonames.rules = {
         'FLDI':{'landuse':'farmland','irrigated':'yes'}, //  irrigated field(s): a tract of level or terraced land which is irrigated
         'FLD':{'landuse':'meadow'}, //  field(s): an open as opposed to wooded area
         'FLLS':{'waterway':'waterfall'}, //  waterfall(s): a perpendicular or very steep descent of the water of a stream
-        'FLLSX':{'waterway':'waterfall'}, //  section of waterfall(s): 
+        'FLLSX':{'waterway':'waterfall'}, //  section of waterfall(s):
         'FLTM':{'wetland':'tidal_flat'}, //  mud flat(s): a relatively level area of mud either between high and low tide lines, or subject to flooding
         'FLTT':{'wetland':'tidal_flat'}, //  tidal flat(s): a large flat area of mud or sand attached to the shore and alternately covered and uncovered by the tide
         'FLTU':{'geological':'undersea_flat'}, //  flat: a small level or nearly level area
         'FNDY':{'building':'industrial','product':'metal_casting'}, //  foundry: a building or works where metal casting is carried out
         'FORD':{'ford':'yes'}, //  ford: a shallow part of a stream which can be crossed on foot or by land vehicle
         'FRM':{'place':'farm'}, //  farm: a tract of land with associated buildings devoted to agriculture
-        'FRMQ':{'abandoned:place':'farm'}, //  abandoned farm: 
+        'FRMQ':{'abandoned:place':'farm'}, //  abandoned farm:
         'FRMS':{'place':'farm'}, //  farms: tracts of land with associated buildings devoted to agriculture
         'FRMT':{'building':'farm'}, //  farmstead: the buildings and adjacent service areas of a farm
         'FRSTF':{'natural':'fossilized_forest'}, //  fossilized forest: a forest fossilized by geologic processes and now exposed at the earth's surface
@@ -261,7 +261,7 @@ geonames.rules = {
         'GVL':{'surface':'gravel'}, //  gravel area: an area covered with gravel
         'GYSR':{'natural':'geyser'}, //  geyser: a type of hot spring with intermittent eruptions of jets of hot water and steam
         'HBR':{'landuse':'harbor'}, //  harbor(s): a haven or space of deep water so sheltered by the adjacent land as to afford a safe anchorage for ships
-        'HBRX':{'landuse':'harbor'}, //  section of harbor: 
+        'HBRX':{'landuse':'harbor'}, //  section of harbor:
         'HDLD':{'natural':'headland'}, //  headland: a high projection of land extending into a large body of water beyond the line of the coast
         'HERM':{'building':'hermitage'}, //  hermitage: a secluded residence, usually for religious sects
         'HLL':{'natural':'hill'}, //  hill: a rounded elevation of limited extent rising above the surrounding land with local relief of less than 300m
@@ -271,7 +271,7 @@ geonames.rules = {
         'HLT':{'poi':'halting_place'}, //  halting place: a place where caravans stop for rest
         'HMCK':{'natural':'hammock'}, //  hammock(s): a patch of ground, distinct from and slightly above the surrounding plain or wetland. Often occurs in groups
         'HMDA':{'natural':'desert','desert':'rock'}, //  rock desert: a relatively sand-free, high bedrock plateau in a hot desert, with or without a gravel veneer
-        'HMSD':{'building':'farm'}, //  homestead: a residence, owner's or manager's, on a sheep or cattle station, woolshed, outcamp, or Aboriginal outstation, specific to Australia and New Zealand 
+        'HMSD':{'building':'farm'}, //  homestead: a residence, owner's or manager's, on a sheep or cattle station, woolshed, outcamp, or Aboriginal outstation, specific to Australia and New Zealand
         'HOLU':{'geological':'undersea_hole'}, //  hole: a small depression of the sea floor
         'HSEC':{'building':'house'}, //  country house: a large house, mansion, or chateau, on a large estate
         'HSE':{'building':'house'}, //  house(s): a building used as a human habitation
@@ -295,7 +295,7 @@ geonames.rules = {
         'ISL':{'natural':'island'}, //  island: a tract of land, smaller than a continent, surrounded by water at high water
         'ISLS':{'natural':'island'}, //  islands: tracts of land, smaller than a continent, surrounded by water at high water
         'ISLT':{'natural':'land-tied_island'}, //  land-tied island: a coastal island connected to the mainland by barrier beaches, levees or dikes
-        'ISLX':{'natural':'island'}, //  section of island: 
+        'ISLX':{'natural':'island'}, //  section of island:
         'ISTH':{'natural':'isthmus'}, //  isthmus: a narrow strip of land connecting two larger land masses and bordered by water
         'ITTR':{'building':'research'}, //  research institute: a facility where research is carried out
         'JTY':{'man_made':'jetty'}, //  jetty: a structure built out into the water at a river mouth or harbor entrance to regulate currents and silting
@@ -313,7 +313,7 @@ geonames.rules = {
         'LEVU':{'geological':'undersea_dyke'}, //  levee: an embankment bordering a canyon, valley, or seachannel
         'LGN':{'water':'lagoon'}, //  lagoon: a shallow coastal waterbody, completely or partly separated from a larger body of water by a barrier island, coral reef or other depositional feature
         'LGNS':{'water':'lagoon'}, //  lagoons: shallow coastal waterbodies, completely or partly separated from a larger body of water by a barrier island, coral reef or other depositional feature
-        'LGNX':{'water':'lagoon'}, //  section of lagoon: 
+        'LGNX':{'water':'lagoon'}, //  section of lagoon:
         'LIBR':{'amenity':'library'}, //  library: A place in which information resources such as books are kept for reading, reference, or lending.
         'LKC':{'natural':'water','water':'lake'}, //  crater lake: a lake in a crater or caldera
         'LKI':{'natural':'water','water':'lake','intermittent':'yes'}, //  intermittent lake:
@@ -346,7 +346,7 @@ geonames.rules = {
         'MFGN':{'landuse':'salt_pond'}, //  salt evaporation ponds: diked salt ponds used in the production of solar evaporated salt
         'MFGPH':{'building':'industrial','product':'phosphate'}, //  phosphate works: a facility for producing fertilizer
         'MFG':{'building':'industrial'}, //  factory: one or more buildings where goods are manufactured, processed or fabricated
-        'MFGQ':{'abandoned:building':'industrial'}, //  abandoned factory: 
+        'MFGQ':{'abandoned:building':'industrial'}, //  abandoned factory:
         'MFGSG':{'building':'industrial','product':'sugar'}, //  sugar refinery: a facility for converting raw sugar into refined sugar
         'MGV':{'natural':'wetland','wetland':'mangrove'}, //  mangrove swamp: a tropical tidal mud flat characterized by mangrove vegetation
         'MILB':{'military':'base'}, //  military base: a place used by an army or other armed service for storing arms and supplies, and for accommodating and training troops, a base from which operations can be initiated
@@ -370,7 +370,7 @@ geonames.rules = {
         'MNMT':{'historic':'monument'}, //  monument: a commemorative structure or statue
         'MNN':{'landuse':'mineral_mining','resource':'salt'}, //  salt mine(s): a mine from which salt is extracted
         'MN':{'landuse':'mineral_mining'}, //  mine(s): a site where mineral ores are extracted from the ground by excavating surface pits and subterranean passages
-        'MNQ':{'abandoned:landuse':'mineral_mining',}, //  abandoned mine: 
+        'MNQ':{'abandoned:landuse':'mineral_mining',}, //  abandoned mine:
         'MNQR':{'landuse':'quarry'}, //  quarry(-ies): a surface mine where building stone or gravel and sand, etc. are extracted
         'MOLE':{'man_made':'breakwater'}, //  mole: a massive structure of masonry or large stones serving as a pier or breakwater
         'MOOR':{'natural':'moor'}, //  moor(s): an area of open ground overlaid with wet peaty soils
@@ -380,7 +380,7 @@ geonames.rules = {
         'MRSH':{'natural':'wetland','wetland':'marsh'}, //  marsh(es): a wetland dominated by grass-like vegetation
         'MSQE':{'amenity':'place_of_worship','building':'mosque'}, //  mosque: a building for public Islamic worship
         'MSSN':{'building':'mission'}, //  mission: a place characterized by dwellings, school, church, hospital and other facilities operated by a religious group for the purpose of providing charitable services and to propagate religion
-        'MSSNQ':{'abandoned:building':'abandoned_mission'}, //  abandoned mission: 
+        'MSSNQ':{'abandoned:building':'abandoned_mission'}, //  abandoned mission:
         'MSTY':{'amenity':'monastery'}, //  monastery: a building and grounds where a community of monks lives in seclusion
         'MT':{'natural':'mountain'}, //  mountain: an elevation standing high above the surrounding area with small summit area, steep slopes and local relief of 300m or more
         'MTRO':{'railway':'station','station':'subway'}, //  metro station: metro station (Underground, Tube, or Metro)
@@ -404,7 +404,7 @@ geonames.rules = {
         'OILF':{'man_made':'oilfield'}, //  oilfield: an area containing a subterranean store of petroleum of economic value
         'OILJ':{'man_made':'pipeline','pipeline:type':'oil','pipeline':'junction'}, //  oil pipeline junction: a section of an oil pipeline where two or more pipes join together
         'OILP':{'man_made':'pipeline','pipeline:type':'oil'}, //  oil pipeline: a pipeline used for transporting oil
-        'OILQ':{'abandoned:man_made':'oil_well'}, //  abandoned oil well: 
+        'OILQ':{'abandoned:man_made':'oil_well'}, //  abandoned oil well:
         'OILR':{'landuse':'industrial','industrial':'refinery'}, //  oil refinery: a facility for converting crude oil into refined petroleum products
         'OILT':{'landuse':'tank_farm'}, //  tank farm: a tract of land occupied by large, cylindrical, metal tanks in which oil or liquid petrochemicals are stored
         'OILW':{'man_made':'oil_well'}, //  oil well: a well from which oil may be pumped
@@ -415,12 +415,12 @@ geonames.rules = {
         'PANS':{'natural':'pan'}, //  pans: a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool
         'PASS':{'mountain_pass':'yes'}, //  pass: a break in a mountain range or other high obstruction, used for transportation from one side to the other [See also gap]
         'PCLD':{'place':'dependent_political_entity'}, //  dependent political entity:
-        'PCLF':{'place':'state'}, //  freely associated state: 
+        'PCLF':{'place':'state'}, //  freely associated state:
         'PCLH':{'place':'historical_political_entity'}, //  historical political entity: a former political entity
-        'PCLI':{'place':'independent_political_entity'}, //  independent political entity: 
-        'PCLIX':{'place':'section_of_independent_political_entity'}, //  section of independent political entity: 
-        'PCL':{'place':'political_entity'}, //  political entity: 
-        'PCLS':{'place':'semi-independent_political_entity'}, //  semi-independent political entity: 
+        'PCLI':{'place':'independent_political_entity'}, //  independent political entity:
+        'PCLIX':{'place':'section_of_independent_political_entity'}, //  section of independent political entity:
+        'PCL':{'place':'political_entity'}, //  political entity:
+        'PCLS':{'place':'semi-independent_political_entity'}, //  semi-independent political entity:
         'PEAT':{'landuse':'peat_cutting'}, //  peat cutting area: an area where peat is harvested
         'PEN':{'natural':'peninsula'}, //  peninsula: an elongate area of land projecting into a body of water and nearly surrounded by water
         'PENX':{'poi':'section_of_peninsula'}, //  section of peninsula:
@@ -458,7 +458,7 @@ geonames.rules = {
         'PPLA4':{'poi':'seat_of_a_fourth-order_administrative_division'}, //  seat of a fourth-order administrative division:
         'PPLA':{'poi':'seat_of_a_first-order_administrative_division'}, //  seat of a first-order administrative division: seat of a first-order administrative division (PPLC takes precedence over PPLA)
         'PPLCH':{'historic':'capital'}, //  historical capital of a political entity: a former capital of a political entity
-        'PPLC':{'capital':'yes'}, //  capital of a political entity: 
+        'PPLC':{'capital':'yes'}, //  capital of a political entity:
         'PPLF':{'place':'village'}, //  farm village: a populated place where the population is largely engaged in agricultural activities
         'PPLG':{'poi':'seat_of_government_of_a_political_entity'}, //  seat of government of a political entity:
         'PPLH':{'historic':'place'}, //  historical populated place: a populated place that no longer exists
@@ -468,15 +468,15 @@ geonames.rules = {
         'PPLR':{'place':'religious_community'}, //  religious populated place: a populated place whose population is largely engaged in religious occupations
         'PPLS':{'place':'populated'}, //  populated places: cities, towns, villages, or other agglomerations of buildings where people live and work
         'PPLW':{'destroyed:place':'populated'}, //  destroyed populated place: a village, town or city destroyed by a natural disaster, or by war
-        'PPLX':{'place':'neighbourhood'}, //  section of populated place: 
-        'PPQ':{'abandoned:amenity':'police'}, //  abandoned police post: 
+        'PPLX':{'place':'neighbourhood'}, //  section of populated place:
+        'PPQ':{'abandoned:amenity':'police'}, //  abandoned police post:
         'PRKGT':{'barrier':'gate'}, //  park gate: a controlled access to a park
         'PRKHQ':{'building':'park_headquarters'}, //  park headquarters: a park administrative facility
         'PRK':{'leisure':'park'}, //  park: an area, often of forested land, maintained as a place of beauty, or for recreation
         'PRMN':{'man_made':'promenade'}, //  promenade: a place for public walking, usually along a beach front
         'PRN':{'amenity':'prison'}, //  prison: a facility for confining prisoners
         'PRNJ':{'amenity':'reformatory'}, //  reformatory: a facility for confining, training, and reforming young law offenders
-        'PRNQ':{'abandoned:amenity':'prison'}, //  abandoned prison: 
+        'PRNQ':{'abandoned:amenity':'prison'}, //  abandoned prison:
         'PROM':{'natural':'promontory'}, //  promontory(-ies): a bluff or prominent hill overlooking or projecting into a lowland
         'PRSH':{'place':'parish'}, //  parish: an ecclesiastical district
         // 'PRT':{'landuse':'port'}, //  port: a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor
@@ -524,7 +524,7 @@ geonames.rules = {
         'RF':{'natural':'reef'}, //  reef(s): a surface-navigation hazard composed of consolidated material
         'RFSU':{'natural':'reef'}, //  reefs: surface-navigation hazards composed of consolidated material
         'RFU':{'natural':'reef'}, //  reef: a surface-navigation hazard composed of consolidated material
-        'RFX':{'natural':'section_of_reef'}, //  section of reef: 
+        'RFX':{'natural':'section_of_reef'}, //  section of reef:
         'RGNE':{'place':'region','place:type':'economic'}, //  economic region: a region of a country established for economic development or for statistical purposes
         'RGNH':{'historic':'region'}, //  historical region: a former historic area distinguished by one or more observable physical or cultural characteristics
         'RGNL':{'place':'region','place:type':'lake'}, //  lake region: a tract of land distinguished by numerous lakes
@@ -542,12 +542,12 @@ geonames.rules = {
         'RNGA':{'military':'artillery_range'}, //  artillery range: a tract of land used for artillery firing practice
         'RPDS':{'waterway':'rapids'}, //  rapids: a turbulent section of a stream associated with a steep, irregular stream bed
         'RR':{'railway':'rail'}, //  railroad: a permanent twin steel-rail track on which freight and passenger cars move long distances
-        'RRQ':{'railway':'abandoned'}, //  abandoned railroad: 
+        'RRQ':{'railway':'abandoned'}, //  abandoned railroad:
         'RSD':{'railway':'rail','service':'siding'}, //  railroad siding: a short track parallel to and joining the main track
         'RSGNL':{'railway':'signal'}, //  railroad signal: a signal at the entrance of a particular section of track governing the movement of trains
         'RSRT':{'leisure':'resort'}, //  resort: a specialized facility for vacation, health, or participation sports activities
         'RSTN':{'railway':'station'}, //  railroad station: a facility comprising ticket office, platforms, etc. for loading and unloading train passengers and freight
-        'RSTNQ':{'disused:railway':'station'}, //  abandoned railroad station: 
+        'RSTNQ':{'disused:railway':'station'}, //  abandoned railroad station:
         'RSTP':{'railway':'halt'}, //  railroad stop: a place lacking station facilities where trains stop to pick up and unload passengers and freight
         'RSTPQ':{'abandoned:railway':'halt'}, //  abandoned railroad stop:
         'RSVI':{'natural':'water','water':'reservoir','intermittent':'yes'}, //  intermittent reservoir:
@@ -639,7 +639,7 @@ geonames.rules = {
         'SWT':{'man_made':'wastewater_plant'}, //  sewage treatment plant: facility for the processing of sewage and/or wastewater
         'SYSI':{'waterway':'canal','service':'irrigation'}, //  irrigation system: a network of ditches and one or more of the following elements: water supply, reservoir, canal, pump, well, drain, etc.
         'TAL':{'geological':'talus_slope'}, //  talus slope: a steep concave slope formed by an accumulation of loose rock fragments at the base of a cliff or steep slope
-        'TERR':{'place':'territory'}, //  territory: 
+        'TERR':{'place':'territory'}, //  territory:
         'TERU':{'geological':'undersea_terrace'}, //  terrace: a relatively flat horizontal or gently inclined surface, sometimes long and narrow, which is bounded by a steeper ascending slope on one side and by a steep descending slope on the opposite side
         'THTR':{'amenity':'theater'}, //  theater: A building, room, or outdoor structure for the presentation of plays, films, or other dramatic performances
         'TMB':{'tomb':'yes'}, //  tomb(s): a structure for interring bodies
@@ -675,7 +675,7 @@ geonames.rules = {
         'VAL':{'natural':'valley'}, //  valley: an elongated depression usually traversed by a stream
         'VALS':{'natural':'valleys'}, //  valleys: elongated depressions usually traversed by a stream
         'VALU':{'natural':'undersea_valley'}, //  valley: a relatively shallow, wide depression, the bottom of which usually has a continuous gradient
-        'VALX':{'natural':'valley'}, //  section of valley: 
+        'VALX':{'natural':'valley'}, //  section of valley:
         'VETF':{'amenity':'veterinary'}, //  veterinary facility: a building or camp at which veterinary services are available
         'VIN':{'landuse':'vineyard'}, //  vineyard: a planting of grapevines
         'VINS':{'landuse':'vineyard'}, //  vineyards: plantings of grapevines
@@ -692,7 +692,7 @@ geonames.rules = {
         'WEIR':{'waterway':'weir'}, //  weir(s): a small dam in a stream, designed to raise the water level or to divert stream flow through a desired channel
         'WHRF':{'waterway':'dock'}, //  wharf(-ves): a structure of open rather than solid construction along a shore or a bank which provides berthing for ships and cargo-handling facilities
         'WHRL':{'water':'whirlpool'}, //  whirlpool: a turbulent, rotating movement of water in a stream
-        'WLLQ':{'abandoned:man_made':'well'}, //  abandoned well: 
+        'WLLQ':{'abandoned:man_made':'well'}, //  abandoned well:
         'WLLS':{'man_made':'well'}, //  wells: cylindrical holes, pits, or tunnels drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
         'WLL':{'man_made':'well'}, //  well: a cylindrical hole, pit, or tunnel drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface
         'WRCK':{'historic':'wreck'}, //  wreck: the site of the remains of a wrecked vessel
