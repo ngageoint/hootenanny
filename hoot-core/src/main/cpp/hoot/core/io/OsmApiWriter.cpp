@@ -269,7 +269,7 @@ void OsmApiWriter::_changesetThreadFunc()
         changesetSize += workInfo->size();
         //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
         //  otherwise keep it open and go again
-        if (changesetSize > _maxChangesetSize - _maxPushSize)
+        if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
         {
           //  Close the changeset
           _closeChangeset(request, id);
@@ -298,6 +298,8 @@ void OsmApiWriter::_changesetThreadFunc()
               continue;
             }
             //  Fall through here to split the changeset and retry
+            //  This includes when the changeset is too big, i.e.:
+            //    The changeset <id> was closed at <dtg> UTC
           }
         case 400:   //  Placeholder ID is missing or not unique
         case 404:   //  Diff contains elements where the given ID could not be found
