@@ -64,6 +64,7 @@ public:
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
+
 private:
 
   std::set<ElementId> _eids;

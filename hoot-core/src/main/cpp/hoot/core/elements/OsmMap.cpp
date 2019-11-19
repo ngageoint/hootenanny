@@ -158,7 +158,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     NodePtr node = itn->second;
     if (containsElement(ElementId(node->getElementId())))
     {
-      // If they have the same ID but aren't considerd to be identical elements, throw an error.
+      // If they have the same ID but aren't considered to be identical elements, throw an error.
       // Otherwise we'll just skip adding the identical element, since we already have it.
       // throwOutDupes being enabled lets us skip it whether the two are identical or not.
       ElementPtr existingElement = getElement(node->getElementId());
@@ -403,7 +403,7 @@ bool OsmMap::containsElement(const std::shared_ptr<const Element>& e) const
 void OsmMap::_copy(const ConstOsmMapPtr& from)
 {
   _idGen = from->_idGen;
-  _idGenSp = from->_idGenSp;
+  //_idGenSp = from->_idGenSp;
   _index.reset(new OsmMapIndex(*this));
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();

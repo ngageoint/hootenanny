@@ -56,9 +56,9 @@ class MergerFactory;
 class ElementId;
 
 /**
- * A different form of conflation from the standard greedy conflation.
- *
- * This is named Unifying because it unifies the building conflation and road conflation approaches.
+ * A different conflation algorithm compared to the original greedy conflation alg. This is named
+ * Unifying because it unifies different feature type conflation approaches (building, road, etc.)
+ * that were originally separated from each other.
  *
  * Re-entrant but not thread safe.
  *
