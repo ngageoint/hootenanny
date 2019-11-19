@@ -502,8 +502,8 @@ for the reference dataset will be ignored and not added to changeset output.
 * Data Type: long
 * Default Value: `1000`
 
-This is the maximum number of elements to write to an OSM API database in a changeset. This value
-is used when splitting a changeset into smaller pieces.
+This is the maximum number of elements to write to an OSM API database in a changeset push.
+This value is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
