@@ -299,9 +299,8 @@ public:
   static void resetCounters() { IdGenerator::getInstance()->reset(); }
 
   const IdGenerator& getIdGenerator() const { return *_idGen; }
-  //std::shared_ptr<IdGenerator> getIdGeneratorSp() const { return _idGenSp; }
   void setIdGenerator(const std::shared_ptr<IdGenerator>& gen)
-  { _idGen = gen; /*_idGen = gen.get();*/ }
+  { _idGen = gen;  }
 
   void setProjection(const std::shared_ptr<OGRSpatialReference>& srs);
 
@@ -332,7 +331,6 @@ public:
 
 protected:
 
-  //mutable IdGenerator* _idGen;
   mutable std::shared_ptr<IdGenerator> _idGen;
 
   static std::shared_ptr<OGRSpatialReference> _wgs84;

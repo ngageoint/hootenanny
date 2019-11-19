@@ -403,7 +403,6 @@ bool OsmMap::containsElement(const std::shared_ptr<const Element>& e) const
 void OsmMap::_copy(const ConstOsmMapPtr& from)
 {
   _idGen = from->_idGen;
-  //_idGenSp = from->_idGenSp;
   _index.reset(new OsmMapIndex(*this));
   _srs = from->getProjection();
   _roundabouts = from->getRoundabouts();
