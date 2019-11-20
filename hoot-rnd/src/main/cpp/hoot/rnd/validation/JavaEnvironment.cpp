@@ -70,11 +70,11 @@ void JavaEnvironment::_initVm()
   const QString josmJarPath = cpStart + opts.getValidationJosmLibraryPath();
   LOG_VART(josmJarPath);
   //options[0].optionString = (char*)josmJarPath.toStdString().c_str();
-  // This is insane that only this works...will figure it out at some point...
+  // This is insane that only this works...will figure this out at some point...
   options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/hoot/tmp/me-josm.4.4.4.jar";
   //options[0].optionString = josmJarPath.toUtf8().data();
   //options[0].optionString = &josmJarPath.toStdString()[0];
-  LOG_VARW(options[0].optionString);
+  LOG_VART(options[0].optionString);
   const QString hootJosmJarPath = cpStart + opts.getValidationHootJosmLibraryPath();
   LOG_VART(hootJosmJarPath);
   //options[1].optionString = (char*)hootJosmJarPath.toStdString().c_str();

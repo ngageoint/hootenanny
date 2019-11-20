@@ -5,6 +5,8 @@ set -e
 
 cd /ramdisk/hoot
 
+rsync -rzuv ~/hoot/hoot-rnd .
+rsync -rzuv ~/hoot/hoot-services .
 make -j12
 
 echo "Building hoot-josm jar..."

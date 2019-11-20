@@ -42,15 +42,8 @@ namespace hoot
 class JosmValidatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorClientTest);
-  //CPPUNIT_TEST(runJniTest1); // works
-  //CPPUNIT_TEST(runJniTest2); // works
-  //CPPUNIT_TEST(runJniTest3); // works
-  //CPPUNIT_TEST(runJniTest4); // works
-  //CPPUNIT_TEST(runJniTest5); // works
-  //CPPUNIT_TEST(runJniTest6); // works
-  //CPPUNIT_TEST(runToyValidationTest); //works
-  CPPUNIT_TEST(runToyValidationTest2); //works
-  //CPPUNIT_TEST(runListValidatorsTest);
+  //CPPUNIT_TEST(runToyValidationTest);
+  CPPUNIT_TEST(runListValidatorsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -61,193 +54,10 @@ public:
     setResetType(ResetAll);
   }
 
-  void runJniTest1()
-  {
-    // hello world calling Java built-in String class to lower case
-
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 0;
-    vm_args.ignoreUnrecognized = 1;
-    // TODO: I think this has to be a Singleton.
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
-    //_createVM(vm, env);
-
-    jstring jstr = env->NewStringUTF("Hello World");
-    jclass clazz = env->FindClass("java/lang/String");
-    jmethodID to_lower = env->GetMethodID(clazz, "toLowerCase", "()Ljava/lang/String;");
-    jobject result = env->CallObjectMethod(jstr, to_lower);
-    const char* str = env->GetStringUTFChars((jstring)result, NULL);
-    LOG_VARW(str);
-
-    env->ReleaseStringUTFChars(jstr, str);
-    vm->DestroyJavaVM();
-  }
-
-  void runJniTest2()
-  {
-    // call a static method in a jar that takes in no params and returns a string
-
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString = (char*)"-Djava.class.path=.";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
-    vm_args.options = options;
-    vm_args.ignoreUnrecognized = 1;;
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
-
-    jclass cls = env->FindClass("org/openstreetmap/josm/URLSetup");
-    jmethodID methodId = env->GetStaticMethodID(cls, "get_planetsense_url", "()Ljava/lang/String;");
-    jobject result = env->CallStaticObjectMethod(cls, methodId);
-    const char* str = env->GetStringUTFChars((jstring)result, NULL);
-    LOG_VARW(QString(str));
-  }
-
-  void runJniTest3()
-  {
-    // call a static method in a jar that takes in params and returns a string
-
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString = (char*)"-Djava.class.path=.";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
-    vm_args.options = options;
-    vm_args.ignoreUnrecognized = 1;;
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
-
-    jclass cls = env->FindClass("org/openstreetmap/josm/tools/Utils");
-    jmethodID methodId =
-      env->GetStaticMethodID(
-        cls, "escapeReservedCharactersHTML", "(Ljava/lang/String;)Ljava/lang/String;");
-    jstring input = env->NewStringUTF("<test>");
-    jobject result = env->CallStaticObjectMethod(cls, methodId, input);
-    const char* str = env->GetStringUTFChars((jstring)result, NULL);
-    LOG_VARW(QString(str));
-  }
-
-  void runJniTest4()
-  {
-    // call an instance method on an object (without invoking the constructor) in a jar that
-    // returns a String object
-
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString = (char*)"-Djava.class.path=.";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
-    vm_args.options = options;
-    vm_args.ignoreUnrecognized = 1;;
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
-
-    jclass cls = env->FindClass("org/openstreetmap/josm/tools/WikiReader");
-    jobject wikiReader = env->AllocObject(cls);
-    jmethodID methodId = env->GetMethodID(cls, "getBaseUrlWiki", "()Ljava/lang/String;");
-    jobject result = env->CallObjectMethod(wikiReader, methodId);
-    const char* str = env->GetStringUTFChars((jstring)result, NULL);
-    LOG_VARW(QString(str));
-
-    vm->DestroyJavaVM();
-  }
-
-  void runJniTest5()
-  {
-    // call an instance method on an object (with invoking the constructor) in a jar that returns a
-    // String object
-
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString = (char*)"-Djava.class.path=.";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
-    vm_args.options = options;
-    vm_args.ignoreUnrecognized = 1;;
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
-
-    jclass cls = env->FindClass("org/openstreetmap/josm/tools/WikiReader");
-    jstring baseUrl = env->NewStringUTF("http://blah");
-    jmethodID constructorMethodId = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;)V");
-    jobject wikiReader = env->NewObject(cls, constructorMethodId, baseUrl);
-    jmethodID methodId = env->GetMethodID(cls, "getBaseUrlWiki", "()Ljava/lang/String;");
-    jobject result = env->CallObjectMethod(wikiReader, methodId);
-    const char* str = env->GetStringUTFChars((jstring)result, NULL);
-    LOG_VARW(QString(str));
-
-    vm->DestroyJavaVM();
-  }
-
-  void runJniTest6()
-  {
-    // pass a custom object into an object's method and then retrieve it
-
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString = (char*)"-Djava.class.path=.";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
-    vm_args.options = options;
-    vm_args.ignoreUnrecognized = 1;;
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
-
-    // create two nodes
-    jclass nodeCls = env->FindClass("org/openstreetmap/josm/data/osm/Node");
-    jmethodID nodeConstructorMethodId = env->GetMethodID(nodeCls, "<init>", "(J)V");
-    jobject node1 = env->NewObject(nodeCls, nodeConstructorMethodId, 1L);
-    jobject node2 = env->NewObject(nodeCls, nodeConstructorMethodId, 2L);
-
-    // create a node pair and add both nodes
-    jclass nodePairCls = env->FindClass("org/openstreetmap/josm/data/osm/NodePair");
-    jmethodID nodePairConstructorMethodId =
-      env->GetMethodID(nodePairCls, "<init>",
-      "(Lorg/openstreetmap/josm/data/osm/Node;Lorg/openstreetmap/josm/data/osm/Node;)V");
-    jobject nodePair = env->NewObject(nodePairCls, nodePairConstructorMethodId, node1, node2);
-
-    // get the first node
-    jmethodID getNodeAMethodId =
-      env->GetMethodID(nodePairCls, "getA", "()Lorg/openstreetmap/josm/data/osm/Node;");
-    jobject node1Returned = env->CallObjectMethod(nodePair, getNodeAMethodId);
-
-    // print the node's id and latitude
-
-    jmethodID getLatMethodId = env->GetMethodID(nodeCls, "lat", "()D");
-    jdouble node1Lat = env->CallDoubleMethod(node1Returned, getLatMethodId);
-    double lat = (double)node1Lat;
-    LOG_VARW(lat);
-
-    jmethodID getIdMethodId = env->GetMethodID(nodeCls, "getId", "()J");
-    jlong node1Id = env->CallLongMethod(node1Returned, getIdMethodId);
-    long id = (long)node1Id;
-    LOG_VARW(id);
-
-    vm->DestroyJavaVM();
-  }
-
   virtual void setUp()
   {
+    conf().set("validation.josm.library.path", "/home/vagrant/hoot/hoot/tmp/me-josm.4.4.4.jar");
+    conf().set("validation.hoot.josm.library.path", "/home/vagrant/hoot/tmp/hoot-josm.jar");
   }
 
   virtual void tearDown()
@@ -256,64 +66,16 @@ public:
 
   void runToyValidationTest()
   {
-    JavaVM* vm = 0;
-    JNIEnv* env = 0;
-    JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString =
-      (char*)"-Djava.class.path=/home/vagrant/hoot/hoot/tmp/me-josm.4.4.4.jar";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
-    vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
-    vm_args.options = options;
-    vm_args.ignoreUnrecognized = 1;
-    jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VART(res);  // zero is good
-
-    JosmValidatorClient uut;
-    CPPUNIT_ASSERT_EQUAL(0L, uut.getBlankNodeIdTest(env));
-
-    vm->DestroyJavaVM();
-  }
-
-  void runToyValidationTest2()
-  {
-    conf().set("validation.josm.library.path", "/home/vagrant/hoot/hoot/tmp/me-josm.4.4.4.jar");
-    conf().set("validation.hoot.josm.library.path", "/home/vagrant/hoot/tmp/hoot-josm.jar");
-
     JosmValidatorClient uut;
     CPPUNIT_ASSERT_EQUAL(0L, uut.getBlankNodeIdTest());
   }
 
   void runListValidatorsTest()
   {
+    JosmValidatorClient uut;
+    LOG_VARW(uut.getAvailableValidators());
   }
 
-private:
-
-/*
- *  const QString jarDirPath =
-      QString(getenv("HOOT_HOME")) + "/hoot-services/target/hoot-services-vagrant/WEB-INF/lib";
-    QDir jarDir(jarDirPath);
-    QStringList nameFilters;
-    nameFilters.append("*.jar");
-    const QStringList jarDirContents = jarDir.entryList(nameFilters, QDir::Files);
-    JavaVMOption options[jarDirContents.size() + 2];
-    const QString cpEntryStart = "-Djava.class.path=";
-    for (int i = 0; i < jarDirContents.size(); i++)
-    {
-      const QString jarFile = jarDirContents.at(i);
-      const QString cpEntry = cpEntryStart + jarDirPath + "/" + jarFile;
-      //LOG_VARW(cpEntry);
-      options[i].optionString = (char*)cpEntry.toStdString().c_str();
-    }
-    // I don't understand why I can't just load these from the jar dir in the loop above...
-    options[jarDirContents.size()].optionString =
-      (char*)QString(cpEntryStart + jarDirPath + "/me-josm-4.4.4.jar").toStdString().c_str();
-    options[jarDirContents.size() + 1].optionString =
-      (char*)QString(cpEntryStart + jarDirPath + "/hoot-josm.jar").toStdString().c_str();
-    vm_args.nOptions = jarDirContents.size() + 2;
- */
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorClientTest, "quick");

@@ -36,6 +36,10 @@ namespace hoot
 
 JosmValidatorClient::JosmValidatorClient()
 {
+  JNIEnv* env = JavaEnvironment::getEnvironment();
+  _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
+  jmethodID constructorMethodId = env->GetMethodID(_validatorClass, "<init>", "()V");
+  _validator = env->NewObject(_validatorClass, constructorMethodId);
 }
 
 void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
@@ -44,23 +48,40 @@ void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 
 long JosmValidatorClient::getBlankNodeIdTest() const
 {
-  JNIEnv* env = JavaEnvironment::getEnvironment();
-  jclass validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
-  //LOG_VART(validatorClass == 0);
-  jmethodID constructorMethodId = env->GetMethodID(validatorClass, "<init>", "()V");
-  //LOG_VARW(constructorMethodId == 0);
-  jobject validator = env->NewObject(validatorClass, constructorMethodId);
-  //LOG_VARW(validator == 0);
-  jmethodID getNodeIdMethodId = env->GetMethodID(validatorClass, "getBlankNodeIdTest", "()J");
-  //LOG_VARW(getNodeIdMethodId == 0);
-  jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
-  //LOG_VARW(nodeIdResult == 0);
+  JNIEnv* env = JavaEnvironment::getEnvironment();;
+  jmethodID getNodeIdMethodId = env->GetMethodID(_validatorClass, "getBlankNodeIdTest", "()J");
+  jlong nodeIdResult = env->CallLongMethod(_validator, getNodeIdMethodId);
   return (long)nodeIdResult;
 }
 
 QStringList JosmValidatorClient::getAvailableValidators() const
 {
-  return QStringList();
+  QStringList validators;
+
+  JNIEnv* env = JavaEnvironment::getEnvironment();
+
+  jmethodID getAvailableValidatorsMethodId =
+    env->GetMethodID(_validatorClass, "getAvailableValidators", "()Ljava/util/List;");
+  jobject availableValidatorsResult =
+    env->CallObjectMethod(_validator, getAvailableValidatorsMethodId);
+
+  jclass listClass = env->FindClass("java/util/List");
+  jmethodID getListSizeMethodId = env->GetMethodID(listClass, "size", "()I");
+  const int validatorsSize =
+    (int)env->CallIntMethod(availableValidatorsResult, getListSizeMethodId);
+  LOG_VART(validatorsSize);
+  jmethodID listGetMethodId = env->GetMethodID(listClass, "get", "(I)V");
+  for (int i = 0; i < validatorsSize; i++)
+  {
+    jint index = i;
+    jobject validatorNameResult =
+      env->CallObjectMethod(availableValidatorsResult, listGetMethodId, index);
+    const QString testName = QString(env->GetStringUTFChars((jstring)validatorNameResult, NULL));
+    LOG_VART(testName);
+    validators.append(testName);
+  }
+
+  return validators;
 }
 
 QMap<ElementId, QString> JosmValidatorClient::validate(const ConstOsmMapPtr& /*map*/)

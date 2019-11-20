@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collection;
+import java.lang.Exception;
 
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Node;
@@ -44,7 +46,7 @@ public class JosmValidator
 {
   public JosmValidator()
   {
-    //System.out.println("test1");
+    System.out.println("test1");
   }
 
   public long getBlankNodeIdTest()
@@ -54,7 +56,31 @@ public class JosmValidator
 
   public List<String> getAvailableValidators()
   {
-    return new ArrayList<String>();
+    List<String> testNames = new ArrayList<String>();
+    try
+    {
+      System.out.println("test3");
+
+      OsmValidator.initializeTests();
+      System.out.println("test4");
+      OsmValidator.initializeErrorLayer();
+      System.out.println("test5");
+
+      Collection<Test> validationTests = OsmValidator.getEnabledTests(false);
+      System.out.println("test6");
+      for (Test validationTest : validationTests)
+      {
+        testNames.add(validationTest.getName());
+      }
+      System.out.println("test7");
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+      throw e;
+    }
+
+    return testNames;
   }
 
   public void setValidatorsToUse(List<String> validators)

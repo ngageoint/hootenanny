@@ -66,6 +66,9 @@ public:
 private:
 
   QStringList _validatorsToUse;
+
+  jclass _validatorClass;
+  jobject _validator;
 };
 
 }
