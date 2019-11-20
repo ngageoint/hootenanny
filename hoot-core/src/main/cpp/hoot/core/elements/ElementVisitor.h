@@ -31,9 +31,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 
-// Standard
-#include <memory>
-
 namespace hoot
 {
 

@@ -131,7 +131,7 @@ _crit(crit)
   _from->visitRo(idVis);
   _eids = getIdVis->getElementSet();
   LOG_VARD(_eids.size());
-  LOG_VARD(_eids);
+  LOG_VART(_eids);
 }
 
 void CopyMapSubsetOp::apply(OsmMapPtr &map)

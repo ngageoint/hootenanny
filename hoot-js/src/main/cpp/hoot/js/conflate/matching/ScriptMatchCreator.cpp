@@ -223,9 +223,10 @@ public:
     return handleScope.Escape(plugin);
   }
 
-  // See the "Calculating Search Radius" section in the user docs for more information.
   Meters getSearchRadius(const ConstElementPtr& e)
   {
+    // See the "Calculating Search Radius" section in the user docs for more information.
+
     Meters result;
     if (_getSearchRadius.IsEmpty())
     {
@@ -269,11 +270,12 @@ public:
     return result;
   }
 
-  /*
-   * This is meant to run one time when the match creator is initialized.
-   */
   void calculateSearchRadius()
   {
+    /*
+     * This is meant to run one time when the match creator is initialized.
+     */
+
     Isolate* current = v8::Isolate::GetCurrent();
     HandleScope handleScope(current);
     Context::Scope context_scope(_script->getContext(current));

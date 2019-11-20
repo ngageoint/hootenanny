@@ -39,6 +39,7 @@ namespace hoot
 class ScriptMergerCreator : public MergerCreator
 {
 public:
+
   static std::string className() { return "hoot::ScriptMergerCreator"; }
 
   ScriptMergerCreator();

@@ -32,7 +32,6 @@
 #include <hoot/core/info/ApiEntityInfo.h>
 
 // Standard
-#include <memory>
 #include <string>
 
 // Boost

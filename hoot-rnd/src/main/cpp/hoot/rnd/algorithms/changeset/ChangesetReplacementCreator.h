@@ -87,17 +87,16 @@ struct BoundsOptions
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
- * replace features inside of a specified bounds) and then calls on appropriate changeset file
- * writers.
+ * replace features inside of a specified bounds) and then calls on the appropriate changeset file
+ * writer to output a changeset file.
  *
  * This class uses a customized workflow that depends upon the feature type the changeset is being
  * generated for, whether all the reference features or just those that overlap secondary features
  * are to be replaced, and how strict the AOI is to be interpreted. ChangesetCreator is used for the
  * actual changeset generation and file output. This class handles the cookie cutting, conflation,
  * and a host of other things that need to happen before the changeset generation. The secondary
- * data added to the output changeset can be further restricted with a non-geometry type filter.
- * The reference data removed from the changeset can also be further restricted with a non-geometry
- * type filter.
+ * data added to the output changeset, as well as the reference data removed from the changeset can
+ * be further restricted with a non-geometry type filter.
  *
  * TODO: implement progress
  * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
