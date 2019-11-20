@@ -519,7 +519,7 @@ ggdm30 = {
     }, // End manyFeatures
 
     // Doesn't do much but saves typing the same code out a few times in the to GGDM Pre Processing
-    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these 
+    // NOTE if these are points, we drop the railway/highway tags since we can't make transport features out of these
     fixTransType : function(tags,geometry)
     {
         if (tags.railway)
@@ -1099,7 +1099,7 @@ ggdm30 = {
                 }
                 else
                 {
-                    tags.highway = 'road';                    
+                    tags.highway = 'road';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1129,7 +1129,7 @@ ggdm30 = {
                 }
                 else
                 {
-                    tags.railway = 'rail';                    
+                    tags.railway = 'rail';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1164,7 +1164,7 @@ ggdm30 = {
                 }
                 else
                 {
-                    tags.building = 'yes';                    
+                    tags.building = 'yes';
                 }
                 tags.condition = 'construction';
                 break;
@@ -1199,7 +1199,7 @@ ggdm30 = {
                 }
                 else
                 {
-                    tags.bridge = 'yes';                    
+                    tags.bridge = 'yes';
                 }
                 tags.condition = 'construction';
                 break;

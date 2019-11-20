@@ -456,7 +456,6 @@ fcodeCommon = {
       ['F_CODE','ZI039','source:metadata','entity'], // Entity Collection Metadata
       ['F_CODE','ZI040','source:metadata','spatial_entity'], // Spatial Metadata Entity
       ['F_CODE','ZI041','source:metadata','non_spatial_entity'], // Non-Spatial Metadata Entity
-      ['F_CODE','ZJ001','source:metadata','relation'], // Resource Metadata Relation
-    ], // End fcodeOne2one
-
+      ['F_CODE','ZJ001','source:metadata','relation'] // Resource Metadata Relation
+    ] // End fcodeOne2one
 } // End of fcodeCommon

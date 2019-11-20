@@ -66,6 +66,20 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[Basic]
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes-1[Advanced]
 
+=== Workflow
+
+The high level workflow looks like:
+
+1) load reference map at specified bounds
+2) filter reference map (optional)
+3) load secondary map at specified bounds
+4) filter secondary map (optional)
+5) cookie cut secondary map out of the reference map
+6) combine the cookie cut reference map back with the secondary map
+7) conflate the data in the combined map (optional)
+8) snap linear features in the combined map (optional)
+9) derive a changeset between the combined map and the reference map
+
 === Input Data
 
 All inputs must support bounded reading. To list the Hootenanny input formats that support bounded reading:
@@ -201,6 +215,13 @@ If the final target of the resulting changeset is an OSM API data store (direct 
 reference dataset must be populated with the correct changeset versions or application of the resulting changeset will fail. 
 
 To ensure this for the output from Overpass API queries, add "out meta" to the query retrieving the reference data.
+
+=== Conflation
+
+Conflation is used by default primarily to clean up data at the seams of the boundary between the cookie cut reference map and the new secondary
+data. Both reference and secondary inputs are processed separately for each geometry type they have (point/line/polygon), therefore, cross
+geometry conflation types like POI to Polygon conflation, will have no effect on the output. POI to Polygon conflation should be run on the
+map data outside of this changeset replacement derivation workflow. 
 
 === See Also
 

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -250,7 +250,7 @@ dnc.rules = {
         'NAME':'source:chart:name', // DQ Chart Name
         'NM3':'name:three', // Name 3
         'NM4':'name:four', // Name 4
-        'OSM_UUID':'uuid', // NOTE: This is not in the DNC spec but is in our OSM data 
+        'OSM_UUID':'uuid', // NOTE: This is not in the DNC spec but is in our OSM data
         'PRINT_DATE':'source:chart:print_date', // DQ Chart Print date
         'SCALE':'source:scale', // DQ Chart Scale
         'SOURCE_ID':'source:chart:identifier', // DQ Chart Identifier
@@ -320,7 +320,7 @@ dnc.rules = {
         'WID':'width', // Width
         'ZV2':'ele' // Highest Z-Value
      }, // End numBiased
-    
+
 
     // One2one rules. Used for import. Taken from the DNC spec
     one2one : [
@@ -439,7 +439,7 @@ dnc.rules = {
         ['BTC','7','seamark:mooring:category','buoy'], // Mooring
         ['BTC','10','seamark:buoy_special_purpose:category','odas'], // Ocean Data Acquisition System (ODAS)
         ['BTC','35','seamark:type','articulated_lights'], // Articulated Lights
-        
+
 
         // BSM - Bridge Span Mobility Type
         ['BSM','0',undefined,undefined], // Unknown
@@ -550,21 +550,21 @@ dnc.rules = {
         ['EXS','5','condition','construction'],
         ['EXS','6','condition','abandoned'],
         ['EXS','7','condition','destroyed'],
-        ['EXS','8','condition','dismantled'], // Dismantled 
+        ['EXS','8','condition','dismantled'], // Dismantled
         ['EXS','22','oneway','yes'], // One Way
         ['EXS','23','oneway','no'], // Two Way
         ['EXS','28','condition','functional'], // Fully Functional - default
         ['EXS','30','isolated','no'], // Not Isolated ???
-        ['EXS','31','isolated','yes'], // Isolated 
-        ['EXS','32','navigation','yes'], // Navigable 
-        ['EXS','42','operational_status','continuous_operation'], // Continuous Operation 
-        ['EXS','45','artificial','no'], // Natural 
-        ['EXS','46','artificial','yes'], // Man-Made 
+        ['EXS','31','isolated','yes'], // Isolated
+        ['EXS','32','navigation','yes'], // Navigable
+        ['EXS','42','operational_status','continuous_operation'], // Continuous Operation
+        ['EXS','45','artificial','no'], // Natural
+        ['EXS','46','artificial','yes'], // Man-Made
         ['EXS','50','tidal','no'], // Non Tidal
         ['EXS','51','tidal','yes'], // Tidal / Tidal Fluctuation
 
 
-        // HDI - Hydrographic Depth/Height Information 
+        // HDI - Hydrographic Depth/Height Information
         ['HDI','9','depth:hydrographic:information','depth_known_by_other_than_wire_drag'],
         ['HDI','10','depth:hydrographic:information','depth_known_by_wire_drag'],
         ['HDI','11','depth:hydrographic:information','depth_unknown_but_safe_to_depth_shown'],
@@ -572,7 +572,7 @@ dnc.rules = {
         ['HDI','13','depth:hydrographic:information','uncovering_height_known'],
         ['HDI','14','depth:hydrographic:information','uncovering_height_unknown'],
         ['HDI','15',undefined,undefined], // Not Applicable
-        
+
 
 
         // HLT - Hydrographic Light Type
@@ -680,20 +680,20 @@ dnc.rules = {
         ['LOC','0',undefined,undefined], // Unknown
         ['LOC','4','location','underwater'], // Below Water Surface
         ['LOC','8','location','surface'], // On Ground Surface
-        ['LOC','13','location','hull_showing'], // Hull Showing 
-        ['LOC','14','location','masts_showing'], // Masts Showing 
-        ['LOC','15','location','on_water_surface/floating'], // On Water Surface/Floating 
+        ['LOC','13','location','hull_showing'], // Hull Showing
+        ['LOC','14','location','masts_showing'], // Masts Showing
+        ['LOC','15','location','on_water_surface/floating'], // On Water Surface/Floating
         ['LOC','17','location','on_waterbody_bottom'], // No OSM
-        ['LOC','20','location','funnel_showing'], // Funnel Showing 
-        ['LOC','21','location','superstructuure_showing'], // Superstructure Showing 
-        ['LOC','22','location','offshore'], // Off Shore 
+        ['LOC','20','location','funnel_showing'], // Funnel Showing
+        ['LOC','21','location','superstructuure_showing'], // Superstructure Showing
+        ['LOC','22','location','offshore'], // Off Shore
         ['LOC','23','location','below_waterbody_bottom'], // No OSM
-        ['LOC','24','location','suspended_or_elevated_above_sea_bottom'], // Suspended or Elevated above sea bottom 
+        ['LOC','24','location','suspended_or_elevated_above_sea_bottom'], // Suspended or Elevated above sea bottom
         ['LOC','25','location','overground'], // Suspended /Elevated Above Ground or Water Surface
-        ['LOC','28','location','masts_and_funnel_showing'], // Masts and Funnel Showing 
-        ['LOC','30','location','non-floating'], // Non-Floating 
+        ['LOC','28','location','masts_and_funnel_showing'], // Masts and Funnel Showing
+        ['LOC','30','location','non-floating'], // Non-Floating
 
-        
+
         // MAS - Maintenance Status
         ['MAS','1','maintained','yes'], // Maintained
         ['MAS','2','maintained','no'], // Not Maintained
@@ -951,12 +951,12 @@ dnc.rules = {
 
         // OPS - Operational Status
         ['OPS','1','operational_status','operational'], // Operational
-        ['OPS','2','operational_status','non_operational'], // Non Operational
+        ['OPS','2','operational_status','non-operational'], // Non Operational
 
 
         // OWO - Over Water Obstruction
-        ['OWO','1','waterway:overhead_obstruction','yes'], // Feature crosses navigable water 
-        ['OWO','2','waterway:overhead_obstruction','no'], // Feature does not cross navigable water 
+        ['OWO','1','waterway:overhead_obstruction','yes'], // Feature crosses navigable water
+        ['OWO','2','waterway:overhead_obstruction','no'], // Feature does not cross navigable water
 
 
         // PBV - Pilot Boarding Vehicle
@@ -1238,10 +1238,10 @@ dnc.rules = {
         ['TUC','3','transport:type','railway'], // Railroad
         ['TUC','4','transport:type','road'], // Road
         ['TUC','12','transport:type','marine'], // Marine
-        ['TUC','13','transport:type','air'], // Air 
+        ['TUC','13','transport:type','air'], // Air
         ['TUC','17','transport:type','pedestrian'], // Pedestrian
         ['TUC','37','transport:type','aqueduct'], // Aqueduct
-        ['TUC','38','transport:type','canal'], // Canal 
+        ['TUC','38','transport:type','canal'], // Canal
 
 
         // UMC - Underlying Material Characteristics
@@ -1305,9 +1305,9 @@ dnc.rules = {
         ['VEG','999','vegetation:type','other'], // Other
 
 
-        // VRR - Vertical Reference Category 
+        // VRR - Vertical Reference Category
         // ['VRR','0','hydrographic_vertical_position','unknown'], // Unknown
-        ['VRR','0',undefined,undefined], // Unknown 
+        ['VRR','0',undefined,undefined], // Unknown
         ['VRR','1','hydrographic_vertical_position','always_dry'], // Above Surface/Does Not Cover (at High Water)
         ['VRR','2','hydrographic_vertical_position','awash_at_chart_datum'], // Awash at Sounding Datum
         ['VRR','4','hydrographic_vertical_position','always_submerged'], // Below Surface/Submerged

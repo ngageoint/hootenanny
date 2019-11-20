@@ -305,21 +305,21 @@ gifd = {
 
         } // End Condition tags
 
-        // Add 'building = yes' to amenities if we don't already have one
-        if (tags.amenity && !tags.building)
-        {
-            // Debug:
-            // print('Added building');
-            // Don't add building=yes to built up areas!
-            if (!tags.place) tags.building = 'yes';
-        }
+        // // Add 'building = yes' to amenities if we don't already have one
+        // if (tags.amenity && !tags.building)
+        // {
+        //     // Debug:
+        //     // print('Added building');
+        //     // Don't add building=yes to built up areas!
+        //     if (!tags.place) tags.building = 'yes';
+        // }
 
         // Add 'building = yes' to military if it isn't a range
         if (tags.military && !tags.building)
         {
             // Debug:
             // print('Added building to military');
-            if (tags.military !== 'range') tags.building = 'yes';
+            if (tags.military !== 'range' && tags.military !== 'installation' ) tags.building = 'yes';
         }
 
         // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
@@ -390,6 +390,11 @@ gifd = {
                         delete tags.use;
                         break;
                 } // End switch
+
+                break;
+
+            case 'AL045': // Complex Outline. Going with landuse for this
+                if (tags.building = 'residential') delete tags.building; // Goes with landuse == residential
 
                 break;
 

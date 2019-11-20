@@ -64,6 +64,8 @@ public:
   void clearElement() { _element.reset(); }
   ConstElementPtr getPreviousElement() const { return _previousElement; }
 
+  bool operator==(Change other) const;
+
 private:
 
   ChangeType _type;
