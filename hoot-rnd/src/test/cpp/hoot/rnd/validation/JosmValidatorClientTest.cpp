@@ -133,8 +133,8 @@ public:
 
   void runJniTest4()
   {
-    // call an instance method on an object (no constructor params) in a jar that returns a String
-    // object
+    // call an instance method on an object (without invoking the constructor) in a jar that
+    // returns a String object
 
     JavaVM* vm = 0;
     JNIEnv* env = 0;
@@ -161,8 +161,8 @@ public:
 
   void runJniTest5()
   {
-    // call an instance method on an object (with constructor params) in a jar that returns a String
-    // object
+    // call an instance method on an object (with invoking the constructor) in a jar that returns a
+    // String object
 
     JavaVM* vm = 0;
     JNIEnv* env = 0;
@@ -244,16 +244,20 @@ public:
     JavaVM* vm = 0;
     JNIEnv* env = 0;
     JavaVMInitArgs vm_args;
-    JavaVMOption options[2];
-    options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    options[1].optionString =
-      (char*)"-Djava.class.path=/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/hoot/services/validation/JosmValidator.class";
+    JavaVMOption options[3];
+    options[0].optionString = (char*)"-Djava.class.path=.";
+    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
+    //JosmValidator.class
+    //options[2].optionString =
+      //(char*)"-Djava.class.path=/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/hoot/services/validation/*";
+    options[2].optionString =
+      (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
     vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 2;
+    vm_args.nOptions = 3;
     vm_args.options = options;
     vm_args.ignoreUnrecognized = 1;
     jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
-    LOG_VARW(res);
+    LOG_VARW(res);  // zero is good
 
     JosmValidatorClient uut;
     LOG_VARW(uut.getNodeId(env));

@@ -28,6 +28,7 @@
 
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -44,9 +45,11 @@ void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 long JosmValidatorClient::getNodeId(JNIEnv* env) const
 {
   jclass validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
-  jobject validator = env->AllocObject(validatorClass);
-  jmethodID getNodeIdMethodId = env->GetMethodID(validatorClass, "getNodeId", "()J;");
+  jmethodID constructorMethodId = env->GetMethodID(validatorClass, "<init>", "()V");
+  jobject validator = env->NewObject(validatorClass, constructorMethodId);
+  jmethodID getNodeIdMethodId = env->GetMethodID(validatorClass, "getNodeId", "()J");
   jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
+  LOG_VARW(nodeIdResult == 0);
   const long nodeId = (long)nodeIdResult;
   return nodeId;
 }
