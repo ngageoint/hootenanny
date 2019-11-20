@@ -26,7 +26,16 @@
  */
 package hoot.services.validation;
 
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Node;
+import org.openstreetmap.josm.data.validation.OsmValidator;
+import org.openstreetmap.josm.data.validation.Test;
+import org.openstreetmap.josm.data.validation.TestError;
 
 /**
  * 
@@ -42,4 +51,28 @@ public class JosmValidator
   {
     return (new Node()).getId();
   }
+
+  public List<String> getAvailableValidators()
+  {
+    return new ArrayList<String>();
+  }
+
+  public void setValidatorsToUse(List<String> validators)
+  {
+    validatorsToUse = validators;
+  }
+
+  public Map<String, String> validate(List<OsmPrimitive> features)
+  {
+    // element id string to validation msg
+    return new HashMap<String, String>();
+  }
+
+  public Map<String, OsmPrimitive> validateAndFix(List<OsmPrimitive> features)
+  {
+    // element id string;fix msg to fixed element
+    return new HashMap<String, OsmPrimitive>();
+  }
+
+  private List<String> validatorsToUse;
 }

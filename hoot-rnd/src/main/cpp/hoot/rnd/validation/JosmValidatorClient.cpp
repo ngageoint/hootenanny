@@ -37,9 +37,13 @@ JosmValidatorClient::JosmValidatorClient()
 {
 }
 
+JosmValidatorClient::JosmValidatorClient(JNIEnv* env) :
+_env(env)
+{
+}
+
 void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 {
-
 }
 
 long JosmValidatorClient::getBlankNodeIdTest(JNIEnv* env) const
@@ -55,6 +59,21 @@ long JosmValidatorClient::getBlankNodeIdTest(JNIEnv* env) const
   jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
   //LOG_VARW(nodeIdResult == 0);
   return (long)nodeIdResult;
+}
+
+QStringList JosmValidatorClient::getAvailableValidators() const
+{
+  return QStringList();
+}
+
+QMap<ElementId, QString> JosmValidatorClient::validate(const ConstOsmMapPtr& /*map*/)
+{
+  return QMap<ElementId, QString>();
+}
+
+void JosmValidatorClient::validateAndFix(OsmMapPtr& /*map*/)
+{
+
 }
 
 }

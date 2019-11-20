@@ -48,8 +48,8 @@ class JosmValidatorClientTest : public HootTestFixture
   //CPPUNIT_TEST(runJniTest4); // works
   //CPPUNIT_TEST(runJniTest5); // works
   //CPPUNIT_TEST(runJniTest6); // works
-  CPPUNIT_TEST(runValidationTest1); //works
-  //CPPUNIT_TEST(runListValidateClassesTest);
+  //CPPUNIT_TEST(runToyValidationTest); //works
+  CPPUNIT_TEST(runListValidatorsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -251,7 +251,7 @@ public:
   {
   }
 
-  void runValidationTest1()
+  void runToyValidationTest()
   {
     JavaVM* vm = 0;
     JNIEnv* env = 0;
@@ -272,7 +272,7 @@ public:
     vm->DestroyJavaVM();
   }
 
-  void runListValidateClassesTest()
+  void runListValidatorsTest()
   {
 
   }

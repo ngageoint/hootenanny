@@ -29,16 +29,19 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // JNI
 #include <jni.h>
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * Adds one or more attributes to elements.  Only common OSM attributes may be added
- * (see ElementAttributeType).
+ *
  */
 class JosmValidatorClient : public Configurable
 {
@@ -46,14 +49,25 @@ class JosmValidatorClient : public Configurable
 public:
 
   JosmValidatorClient();
+  JosmValidatorClient(JNIEnv* env);
 
   long getBlankNodeIdTest(JNIEnv* env) const;
 
   virtual void setConfiguration(const Settings& conf);
 
+  QStringList getAvailableValidators() const;
+
+  void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
+
+  QMap<ElementId, QString> validate(const ConstOsmMapPtr& map);
+
+  void validateAndFix(OsmMapPtr& map);
+
 private:
 
+  JNIEnv* _env;
 
+  QStringList _validatorsToUse;
 };
 
 }
