@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/rnd/validation/JavaEnvironment.h>
 
 namespace hoot
 {
@@ -59,6 +60,11 @@ long JosmValidatorClient::getBlankNodeIdTest(JNIEnv* env) const
   jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
   //LOG_VARW(nodeIdResult == 0);
   return (long)nodeIdResult;
+}
+
+long JosmValidatorClient::getBlankNodeIdTest() const
+{
+  return getBlankNodeIdTest(JavaEnvironment::getEnvironment());
 }
 
 QStringList JosmValidatorClient::getAvailableValidators() const

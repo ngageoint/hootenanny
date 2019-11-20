@@ -24,53 +24,49 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef JOSM_VALIDATOR_CLIENT_H
-#define JOSM_VALIDATOR_CLIENT_H
-
-// hoot
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/OsmMap.h>
+#ifndef JAVA_ENVIRONMENT_H
+#define JAVA_ENVIRONMENT_H
 
 // JNI
 #include <jni.h>
 
 // Qt
-#include <QStringList>
+#include <QString>
 
 namespace hoot
 {
 
+class JavaEnvironment;
+
+typedef std::shared_ptr<JavaEnvironment> JavaEnvironmentPtr;
+
 /**
- *
+ * TODO (Singleton)
  */
-class JosmValidatorClient : public Configurable
+class JavaEnvironment
 {
 
 public:
 
-  JosmValidatorClient();
-  JosmValidatorClient(JNIEnv* env);
+  static std::string className() { return "hoot::JavaEnvironment"; }
 
-  long getBlankNodeIdTest(JNIEnv* env) const;
-  long getBlankNodeIdTest() const;
+  ~JavaEnvironment();
 
-  virtual void setConfiguration(const Settings& conf);
-
-  QStringList getAvailableValidators() const;
-
-  void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
-
-  QMap<ElementId, QString> validate(const ConstOsmMapPtr& map);
-
-  void validateAndFix(OsmMapPtr& map);
+  static JNIEnv* getEnvironment() { return _getInstance()->_env; }
 
 private:
 
+  JavaEnvironment();
+
+  static JavaEnvironmentPtr _theInstance;
+  JavaVM* _vm;
   JNIEnv* _env;
 
-  QStringList _validatorsToUse;
+  static const JavaEnvironmentPtr& _getInstance();
+
+  void _initVm();
 };
 
 }
 
-#endif // JOSM_VALIDATOR_CLIENT_H
+#endif // JAVA_ENVIRONMENT_H
