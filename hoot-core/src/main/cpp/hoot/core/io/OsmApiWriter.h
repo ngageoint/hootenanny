@@ -254,7 +254,12 @@ private:
   /** Maximum number of writer threads processing changesets, loaded with 'changeset.apidb.max.writers' option */
   int _maxWriters;
   /** Soft maximum number of elements per changeset, size could be larger than the soft max in order to include
-   *  the entirety of a way or relation, loaded with 'changeset.apidb.max.size' option
+   *  the entirety of a way or relation, loaded with 'changeset.apidb.size.max' option
+   */
+  long _maxPushSize;
+  /** Maximum size of a changeset read from the API itself.  This allows for the potential of multiple
+   *  pushes per changeset to increase the speed of the upload.  That way less requests for new changeset
+   *  opens/closes are required but the pushes can be an optimal size still.
    */
   long _maxChangesetSize;
   /** Flag to turn on OSM API writer throttling */
@@ -278,6 +283,10 @@ private:
   QString _secretToken;
   /** Full pathname of the error file changeset, if any errors occur */
   QString _errorPathname;
+  /** Number of changesets written to API */
+  int _changesetCount;
+  /** Mutex for changeset count */
+  std::mutex _changesetCountMutex;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */

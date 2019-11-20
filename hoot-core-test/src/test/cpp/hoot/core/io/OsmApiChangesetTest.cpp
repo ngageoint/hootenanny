@@ -129,7 +129,7 @@ public:
 
     //  Four elements max will divide the changeset into four changesets
     //  one for each way, with its corresponding nodes
-    changeset.setMaxSize(4);
+    changeset.setMaxPushSize(4);
 
     QStringList expectedFiles;
     expectedFiles.append(_inputPath + "ToyTestASplit1.osc");
@@ -297,7 +297,7 @@ public:
     changeset.loadChangeset(_inputPath + "DeleteSplit.osc");
 
     //  8 elements max will divide the changeset into 4 changesets
-    changeset.setMaxSize(8);
+    changeset.setMaxPushSize(8);
 
     QStringList expectedFiles;
     expectedFiles.append(_inputPath + "DeleteSplit1.osc");

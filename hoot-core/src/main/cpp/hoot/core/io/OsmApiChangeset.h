@@ -147,11 +147,11 @@ public:
    */
   QString getFailedChangesetString();
   /**
-   * @brief setMaxSize Set the soft maximum size of the changeset.  Max is soft because if while creating a way there are still
+   * @brief setMaxPushSize Set the maximum size of the push changeset.  Max is soft because if while creating a way there are still
    *  more required nodes to add and the max is hit, those nodes are added to the changeset to make it atomic
    * @param size - Number of elements in the soft max size
    */
-  void setMaxSize(long size) { _maxChangesetSize = size; }
+  void setMaxPushSize(long size) { _maxPushSize = size; }
   /**
    * @brief hasFailedElements
    * @return true if any elements failed upload
@@ -456,8 +456,8 @@ private:
   ChangesetTypeMap _relations;
   /** Element ID to ID data structure for checking old ID to new ID and new ID to old ID lookups */
   ElementIdToIdMap _idMap;
-  /** Soft maximum changeset size */
-  long _maxChangesetSize;
+  /** Maximum changeset push size */
+  long _maxPushSize;
   /** Count of elements that have been sent */
   long _sentCount;
   /** Count of elements that have been processed */
