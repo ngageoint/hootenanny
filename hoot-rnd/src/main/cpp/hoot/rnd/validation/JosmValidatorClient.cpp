@@ -38,17 +38,13 @@ JosmValidatorClient::JosmValidatorClient()
 {
 }
 
-JosmValidatorClient::JosmValidatorClient(JNIEnv* env) :
-_env(env)
-{
-}
-
 void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 {
 }
 
-long JosmValidatorClient::getBlankNodeIdTest(JNIEnv* env) const
+long JosmValidatorClient::getBlankNodeIdTest() const
 {
+  JNIEnv* env = JavaEnvironment::getEnvironment();
   jclass validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
   //LOG_VARW(validatorClass == 0);
   jmethodID constructorMethodId = env->GetMethodID(validatorClass, "<init>", "()V");
@@ -60,11 +56,6 @@ long JosmValidatorClient::getBlankNodeIdTest(JNIEnv* env) const
   jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
   //LOG_VARW(nodeIdResult == 0);
   return (long)nodeIdResult;
-}
-
-long JosmValidatorClient::getBlankNodeIdTest() const
-{
-  return getBlankNodeIdTest(JavaEnvironment::getEnvironment());
 }
 
 QStringList JosmValidatorClient::getAvailableValidators() const

@@ -49,7 +49,6 @@ class JosmValidatorClient : public Configurable
 public:
 
   JosmValidatorClient();
-  JosmValidatorClient(JNIEnv* env);
 
   long getBlankNodeIdTest(JNIEnv* env) const;
   long getBlankNodeIdTest() const;
@@ -65,8 +64,6 @@ public:
   void validateAndFix(OsmMapPtr& map);
 
 private:
-
-  JNIEnv* _env;
 
   QStringList _validatorsToUse;
 };
