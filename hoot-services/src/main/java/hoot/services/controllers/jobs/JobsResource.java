@@ -85,7 +85,7 @@ public class JobsResource {
     @GET
     @Path("/history")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<JobStatusResponse> getHistoryJobs(@Context HttpServletRequest request,
+    public JobHistory getHistoryJobs(@Context HttpServletRequest request,
             @QueryParam("sort") @DefaultValue("") String sort,
             @QueryParam("offset") @DefaultValue("0") long offset,
             @QueryParam("limit") @DefaultValue("25") long limit,
@@ -100,5 +100,6 @@ public class JobsResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
     }
+
 
 }

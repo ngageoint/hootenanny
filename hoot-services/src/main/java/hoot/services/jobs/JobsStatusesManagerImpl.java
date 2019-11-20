@@ -45,6 +45,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 
 import hoot.services.controllers.job.JobStatusResponse;
+import hoot.services.controllers.jobs.JobHistory;
 import hoot.services.job.JobType;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Users;
@@ -56,7 +57,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
 
     @Override
-    public List<JobStatusResponse> getJobsHistory(Users user, String sort, long offset, long limit, String type, String status) throws IllegalArgumentException {
+    public JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status) throws IllegalArgumentException {
         OrderSpecifier<?> sorter = jobStatus.start.desc();
         List<Integer> types = new ArrayList<>();
         List<Integer> statuses = new ArrayList<>();
@@ -135,9 +136,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
                 .limit(limit)
                 .fetch();
 
-
-        //format jobs
-        return jobsHistory.stream().map(j -> {
+        List<JobStatusResponse> jobs = jobsHistory.stream().map(j -> {
             JobStatusResponse response = new JobStatusResponse();
             response.setJobId(j.getJobId());
             response.setJobType(JobType.fromInteger(
@@ -151,6 +150,15 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
 
             return response;
         }).collect(Collectors.toList());
+
+        Long total = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(whereClause)
+                .fetchCount();
+
+        //format jobs history
+        return new JobHistory(total, jobs);
     }
 
     @Override
