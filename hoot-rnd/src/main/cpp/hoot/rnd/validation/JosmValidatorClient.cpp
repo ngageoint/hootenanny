@@ -46,7 +46,7 @@ long JosmValidatorClient::getBlankNodeIdTest() const
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   jclass validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
-  //LOG_VARW(validatorClass == 0);
+  //LOG_VART(validatorClass == 0);
   jmethodID constructorMethodId = env->GetMethodID(validatorClass, "<init>", "()V");
   //LOG_VARW(constructorMethodId == 0);
   jobject validator = env->NewObject(validatorClass, constructorMethodId);
