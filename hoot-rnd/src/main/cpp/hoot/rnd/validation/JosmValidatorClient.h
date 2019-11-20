@@ -47,7 +47,7 @@ public:
 
   JosmValidatorClient();
 
-  long getNodeId(JNIEnv* env) const;
+  long getBlankNodeIdTest(JNIEnv* env) const;
 
   virtual void setConfiguration(const Settings& conf);
 

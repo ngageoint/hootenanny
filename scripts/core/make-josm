@@ -1,0 +1,9 @@
+
+# temp solution until this can be made to work within maven
+
+cd /ramdisk/hoot
+make -j12
+echo "Building hoot-josm jar..."
+cd hoot-services/target/classes
+jar cf ~/hoot/tmp/hoot-josm.jar .
+cd /ramdisk/hoot

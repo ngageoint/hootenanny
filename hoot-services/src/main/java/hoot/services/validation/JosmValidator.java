@@ -43,9 +43,8 @@ public class JosmValidator
 
   }
 
-  public long getNodeId()
+  public long getBlankNodeIdTest()
   {
-    Node node = new Node();
-    return node.getId();
+    return (new Node()).getId();
   }
 }

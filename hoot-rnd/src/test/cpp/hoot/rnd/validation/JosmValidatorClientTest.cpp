@@ -45,7 +45,8 @@ class JosmValidatorClientTest : public HootTestFixture
   //CPPUNIT_TEST(runJniTest4); // works
   //CPPUNIT_TEST(runJniTest5); // works
   //CPPUNIT_TEST(runJniTest6); // works
-  CPPUNIT_TEST(runValidationTest1);
+  CPPUNIT_TEST(runValidationTest1); //works
+  //CPPUNIT_TEST(runListValidateClassesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -247,9 +248,6 @@ public:
     JavaVMOption options[3];
     options[0].optionString = (char*)"-Djava.class.path=.";
     options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    //JosmValidator.class
-    //options[2].optionString =
-      //(char*)"-Djava.class.path=/var/lib/tomcat8/webapps/hoot-services/WEB-INF/classes/hoot/services/validation/*";
     options[2].optionString =
       (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
     vm_args.version = JNI_VERSION_1_8;
@@ -260,7 +258,14 @@ public:
     LOG_VARW(res);  // zero is good
 
     JosmValidatorClient uut;
-    LOG_VARW(uut.getNodeId(env));
+    LOG_VARW(uut.getBlankNodeIdTest(env));
+
+    vm->DestroyJavaVM();
+  }
+
+  void runListValidateClassesTest()
+  {
+
   }
 
 private:
