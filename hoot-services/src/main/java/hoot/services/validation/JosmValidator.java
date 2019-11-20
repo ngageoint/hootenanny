@@ -26,10 +26,6 @@
  */
 package hoot.services.validation;
 
-// having trouble picking these up right now, I think
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 import org.openstreetmap.josm.data.osm.Node;
 
 /**
@@ -37,10 +33,9 @@ import org.openstreetmap.josm.data.osm.Node;
  */
 public class JosmValidator
 {
-  //private static final Logger logger = LoggerFactory.getLogger(JosmValidator.class);
-
   public JosmValidator()
   {
+    //System.out.println("test1");
   }
 
   public long getBlankNodeIdTest()

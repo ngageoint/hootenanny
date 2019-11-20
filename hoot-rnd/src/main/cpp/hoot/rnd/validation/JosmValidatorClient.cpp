@@ -45,10 +45,15 @@ void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 long JosmValidatorClient::getBlankNodeIdTest(JNIEnv* env) const
 {
   jclass validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
+  //LOG_VARW(validatorClass == 0);
   jmethodID constructorMethodId = env->GetMethodID(validatorClass, "<init>", "()V");
+  //LOG_VARW(constructorMethodId == 0);
   jobject validator = env->NewObject(validatorClass, constructorMethodId);
+  //LOG_VARW(validator == 0);
   jmethodID getNodeIdMethodId = env->GetMethodID(validatorClass, "getBlankNodeIdTest", "()J");
-  jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);;
+  //LOG_VARW(getNodeIdMethodId == 0);
+  jlong nodeIdResult = env->CallLongMethod(validator, getNodeIdMethodId);
+  //LOG_VARW(nodeIdResult == 0);
   return (long)nodeIdResult;
 }
 
