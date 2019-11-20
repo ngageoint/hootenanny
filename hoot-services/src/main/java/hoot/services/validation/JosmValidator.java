@@ -26,6 +26,7 @@
  */
 package hoot.services.validation;
 
+// having trouble picking these up right now, I think
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,6 @@ public class JosmValidator
 
   public JosmValidator()
   {
-
   }
 
   public long getBlankNodeIdTest()

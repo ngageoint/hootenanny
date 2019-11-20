@@ -245,13 +245,12 @@ public:
     JavaVM* vm = 0;
     JNIEnv* env = 0;
     JavaVMInitArgs vm_args;
-    JavaVMOption options[3];
-    options[0].optionString = (char*)"-Djava.class.path=.";
-    options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
-    options[2].optionString =
+    JavaVMOption options[2];
+    options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/me-josm-4.4.4.jar";
+    options[1].optionString =
       (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
     vm_args.version = JNI_VERSION_1_8;
-    vm_args.nOptions = 3;
+    vm_args.nOptions = 2;
     vm_args.options = options;
     vm_args.ignoreUnrecognized = 1;
     jint res = JNI_CreateJavaVM(&vm, (void**)&env, &vm_args);
