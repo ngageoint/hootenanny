@@ -59,11 +59,6 @@ public class JosmValidator
     Config.setPreferencesInstance(pref);
   }
 
-  public long getBlankNodeIdTest()
-  {
-    return (new Node(1)).getId();
-  }
-
   public List<String> getAvailableValidators()
   {
     // could use a map here instead, but trying to keep the complexity of the client code down
@@ -104,12 +99,7 @@ public class JosmValidator
     return testsInfo;
   }
 
-  public void setValidatorsToUse(List<String> validators)
-  {
-    validatorsToUse = validators;
-  }
-
-  public Map<String, String> validate(String featuresXml)
+  public Map<String, String> validate(List<String> validators, String featuresXml)
   {
     //Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     //Config.setUrlsProvider(JosmUrls.getInstance());
@@ -122,10 +112,10 @@ public class JosmValidator
     return new HashMap<String, String>();
   }
 
-  public Map<String, OsmPrimitive> validateAndFix(String featuresXml)
+  public Map<String, String> validateAndFix(List<String> validators, String featuresXml)
   {
-    // element id string;fix msg to fixed element
-    return new HashMap<String, OsmPrimitive>();
+    // element id string;fix msg to fixed element xml
+    return new HashMap<String, String>();
   }
 
   private List<String> validatorsToUse;

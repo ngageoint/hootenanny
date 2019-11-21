@@ -27,7 +27,6 @@
 #include "JosmValidatorClient.h"
 
 // hoot
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/validation/JavaEnvironment.h>
 
@@ -40,25 +39,6 @@ JosmValidatorClient::JosmValidatorClient()
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
   jmethodID constructorMethodId = env->GetMethodID(_validatorClass, "<init>", "()V");
   _validator = env->NewObject(_validatorClass, constructorMethodId);
-}
-
-void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
-{
-}
-
-long JosmValidatorClient::getBlankNodeIdTest() const
-{
-  JNIEnv* env = JavaEnvironment::getEnvironment();
-  jmethodID getNodeIdMethodId = env->GetMethodID(_validatorClass, "getBlankNodeIdTest", "()J");
-  jlong nodeIdResult = env->CallLongMethod(_validator, getNodeIdMethodId);
-  jboolean hasException = env->ExceptionCheck();
-  if (hasException)
-  {
-    env->ExceptionDescribe();
-    env->ExceptionClear();
-    throw HootException("Error calling getBlankNodeIdTest.");
-  }
-  return (long)nodeIdResult;
 }
 
 QMap<QString, QString> JosmValidatorClient::getAvailableValidators() const
@@ -107,11 +87,24 @@ QMap<QString, QString> JosmValidatorClient::getAvailableValidators() const
 
 QMap<ElementId, QString> JosmValidatorClient::validate(const ConstOsmMapPtr& /*map*/)
 {
+  // convert map to xml string
+
+  // pass validators and xml to java method
+
+  // convert returned info into map
+
   return QMap<ElementId, QString>();
 }
 
-void JosmValidatorClient::validateAndFix(OsmMapPtr& /*map*/)
+QMap<ElementId, QString> JosmValidatorClient::validateAndFix(OsmMapPtr& /*map*/)
 {
+  // convert map to xml string
+
+  // pass validators and xml to java method
+
+  // convert returned info into map
+
+  return QMap<ElementId, QString>();
 }
 
 }

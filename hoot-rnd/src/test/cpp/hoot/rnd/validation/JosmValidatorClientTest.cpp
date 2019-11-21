@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/validation/JosmValidatorClient.h>
-
+#include <hoot/core/io/OsmMapReaderFactory.h>
 // JNI
 #include <jni.h>
 
@@ -42,8 +42,9 @@ namespace hoot
 class JosmValidatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorClientTest);
-  //CPPUNIT_TEST(runToyValidationTest);
-  CPPUNIT_TEST(runListValidatorsTest);
+  //CPPUNIT_TEST(runListValidatorsTest);
+  CPPUNIT_TEST(runValidateTest);
+  //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,12 +65,6 @@ public:
   {
   }
 
-  void runToyValidationTest()
-  {
-    JosmValidatorClient uut;
-    CPPUNIT_ASSERT_EQUAL(1L, uut.getBlankNodeIdTest());
-  }
-
   void runListValidatorsTest()
   {
     JosmValidatorClient uut;
@@ -77,6 +72,32 @@ public:
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
     CPPUNIT_ASSERT_EQUAL(51, validators.size());
+  }
+
+  void runValidateTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "TODO");
+
+    JosmValidatorClient uut;
+    uut.setValidatorsToUse(QStringList("TODO"));
+    const QMap<ElementId, QString> validationInfo = uut.validate(map);
+    LOG_VART(validationInfo.size());
+
+    // TODO: validationInfo assertions
+  }
+
+  void runValidateAndFixTest()
+  {
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "TODO");
+
+    JosmValidatorClient uut;
+    uut.setValidatorsToUse(QStringList("TODO"));
+    const QMap<ElementId, QString> fixInfo = uut.validateAndFix(map);
+    LOG_VART(fixInfo.size());
+
+    // TODO: map and fixInfo assertions
   }
 };
 

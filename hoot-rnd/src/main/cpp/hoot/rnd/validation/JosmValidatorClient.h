@@ -28,7 +28,6 @@
 #define JOSM_VALIDATOR_CLIENT_H
 
 // hoot
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/OsmMap.h>
 
 // JNI
@@ -43,25 +42,18 @@ namespace hoot
 /**
  *
  */
-class JosmValidatorClient : public Configurable
+class JosmValidatorClient
 {
 
 public:
 
   JosmValidatorClient();
 
-  long getBlankNodeIdTest(JNIEnv* env) const;
-  long getBlankNodeIdTest() const;
-
-  virtual void setConfiguration(const Settings& conf);
-
   QMap<QString, QString> getAvailableValidators() const;
-
   void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
 
   QMap<ElementId, QString> validate(const ConstOsmMapPtr& map);
-
-  void validateAndFix(OsmMapPtr& map);
+  QMap<ElementId, QString> validateAndFix(OsmMapPtr& map);
 
 private:
 
