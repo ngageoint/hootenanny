@@ -89,7 +89,7 @@ public class JobsResource {
             @QueryParam("sort") @DefaultValue("") String sort,
             @QueryParam("offset") @DefaultValue("0") long offset,
             @QueryParam("limit") @DefaultValue("25") long limit,
-            @QueryParam("type") @DefaultValue("") String type,
+            @QueryParam("jobType") @DefaultValue("") String type,
             @QueryParam("status") @DefaultValue("") String status
             ) {
         Users user = Users.fromRequest(request);
