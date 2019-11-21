@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/validation/JosmValidator.h>
+#include <hoot/rnd/ops/JosmValidator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 // JNI
 #include <jni.h>
@@ -82,7 +82,7 @@ public:
     JosmValidator uut(false);
     uut.setValidatorsToUse(QStringList("TODO"));
     uut.apply(map);
-    const QMap<ElementId, QString> validationResults = uut.getValidationResults;
+    const QMap<ElementId, QString> validationResults = uut.getValidationResults();
     LOG_VART(validationResults.size());
 
     // TODO: validationInfo assertions
@@ -96,7 +96,7 @@ public:
     JosmValidator uut(true);
     uut.setValidatorsToUse(QStringList("TODO"));
     uut.apply(map);
-    const QMap<ElementId, QString> validationResults = uut.getValidationResults;
+    const QMap<ElementId, QString> validationResults = uut.getValidationResults();
     LOG_VART(validationResults.size());
 
     // TODO: map and fixInfo assertions

@@ -101,6 +101,9 @@ public class JosmValidator
 
   public Map<String, String> validate(List<String> validators, String featuresXml)
   {
+    // will try passing features around as xml for the first draft; if too slow can try
+    // OsmMap --> OsmPrimitive conversion
+
     //Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     //Config.setUrlsProvider(JosmUrls.getInstance());
 

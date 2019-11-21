@@ -42,7 +42,7 @@ _fixFeatures(fixFeatures)
   _validator = env->NewObject(_validatorClass, constructorMethodId);
 }
 
-void JosmValidator::apply(std::shared_ptr<OsmMap>& /*map*/) override
+void JosmValidator::apply(std::shared_ptr<OsmMap>& /*map*/)
 {
   // convert map to xml string
 

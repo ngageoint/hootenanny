@@ -59,6 +59,8 @@ public:
 
   QMap<ElementId, QString> getValidationResults() const { return _validationResults; }
 
+  virtual QString getDescription() const { return "TODO"; }
+
 private:
 
   QStringList _validatorsToUse;
