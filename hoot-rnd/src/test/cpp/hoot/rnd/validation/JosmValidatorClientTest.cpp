@@ -42,8 +42,8 @@ namespace hoot
 class JosmValidatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorClientTest);
-  CPPUNIT_TEST(runToyValidationTest);
-  //CPPUNIT_TEST(runListValidatorsTest);
+  //CPPUNIT_TEST(runToyValidationTest);
+  CPPUNIT_TEST(runListValidatorsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:

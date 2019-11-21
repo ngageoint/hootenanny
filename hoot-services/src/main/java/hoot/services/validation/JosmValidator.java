@@ -47,7 +47,7 @@ public class JosmValidator
 {
   public JosmValidator()
   {
-    System.out.println("test1");
+    //System.out.println("test1");
   }
 
   public long getBlankNodeIdTest()
@@ -60,10 +60,8 @@ public class JosmValidator
     List<String> testNames = new ArrayList<String>();
     try
     {
-      System.out.println("test2");
       Logging.setLogLevel(Logging.LEVEL_DEBUG);
-      System.out.println("test3");
-      OsmValidator.initializeTests();
+      OsmValidator.initializeTests(); // dying here
       OsmValidator.initializeErrorLayer();
 
       Collection<Test> validationTests = OsmValidator.getEnabledTests(false);

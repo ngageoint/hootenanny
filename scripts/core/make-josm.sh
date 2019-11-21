@@ -18,6 +18,8 @@ rm -f /home/vagrant/hoot/tmp/hoot-josm.jar
 #jar cf /home/vagrant/hoot/tmp/hoot-josm.jar .
 #rm -rf tmp/hoot-josm
 
+# This is kludgy, but the best that can be done for now...
+
 # copy me jar out of m2 into tmp and rename
 cp /home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm/4.4.4/me-josm-4.4.4.jar /home/vagrant/hoot/tmp/hoot-josm.jar
 # use jar to add the validator class to it

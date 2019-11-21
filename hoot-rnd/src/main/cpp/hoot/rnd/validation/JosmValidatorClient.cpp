@@ -38,10 +38,8 @@ JosmValidatorClient::JosmValidatorClient()
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
-  //LOG_VARW(_validatorClass == 0);
   jmethodID constructorMethodId = env->GetMethodID(_validatorClass, "<init>", "()V");
   _validator = env->NewObject(_validatorClass, constructorMethodId);
-  //LOG_VARW(_validator == 0);
 }
 
 void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
@@ -59,7 +57,6 @@ long JosmValidatorClient::getBlankNodeIdTest() const
   {
     env->ExceptionDescribe();
     env->ExceptionClear();
-    // TODO: get exception message from object and add here
     throw HootException("Error calling getBlankNodeIdTest.");
   }
 
@@ -80,10 +77,10 @@ QStringList JosmValidatorClient::getAvailableValidators() const
   jboolean hasException = env->ExceptionCheck();
   if (hasException)
   {
-    //env->ExceptionDescribe();
-    //env->ExceptionClear();
+    env->ExceptionDescribe();
+    env->ExceptionClear();
     // TODO: get exception message from object and add here
-    //throw HootException("Error calling getAvailableValidators.");
+    throw HootException("Error calling getAvailableValidators.");
   }
 
   jclass listClass = env->FindClass("java/util/List");
