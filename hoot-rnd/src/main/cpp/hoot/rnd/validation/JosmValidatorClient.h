@@ -55,7 +55,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  QStringList getAvailableValidators() const;
+  QMap<QString, QString> getAvailableValidators() const;
 
   void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
 

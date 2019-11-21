@@ -66,7 +66,9 @@ public class JosmValidator
 
   public List<String> getAvailableValidators()
   {
-    List<String> testNames = new ArrayList<String>();
+    // could use a map here instead, but trying to keep the complexity of the client code down
+    // as much as possible
+    List<String> testsInfo = new ArrayList<String>();
     try
     {
       Collection<Test> validationTests = OsmValidator.getTests();
@@ -82,7 +84,8 @@ public class JosmValidator
           if (validationTest != null)
           {
             //System.out.println("name= " + validationTest.getName());
-            testNames.add(validationTest.getName());
+            String testName = validationTest.toString().split("@")[0];
+            testsInfo.add(testName + ";" + validationTest.getName());
           }
         }
       }
@@ -97,8 +100,8 @@ public class JosmValidator
       throw e;
     }
 
-    //System.out.println("testNames size: " + testNames.size());
-    return testNames;
+    //System.out.println("testsInfo size: " + testsInfo.size());
+    return testsInfo;
   }
 
   public void setValidatorsToUse(List<String> validators)
@@ -106,7 +109,7 @@ public class JosmValidator
     validatorsToUse = validators;
   }
 
-  public Map<String, String> validate(List<OsmPrimitive> features)
+  public Map<String, String> validate(String featuresXml)
   {
     //Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     //Config.setUrlsProvider(JosmUrls.getInstance());
@@ -119,7 +122,7 @@ public class JosmValidator
     return new HashMap<String, String>();
   }
 
-  public Map<String, OsmPrimitive> validateAndFix(List<OsmPrimitive> features)
+  public Map<String, OsmPrimitive> validateAndFix(String featuresXml)
   {
     // element id string;fix msg to fixed element
     return new HashMap<String, OsmPrimitive>();

@@ -51,7 +51,6 @@ long JosmValidatorClient::getBlankNodeIdTest() const
   JNIEnv* env = JavaEnvironment::getEnvironment();
   jmethodID getNodeIdMethodId = env->GetMethodID(_validatorClass, "getBlankNodeIdTest", "()J");
   jlong nodeIdResult = env->CallLongMethod(_validator, getNodeIdMethodId);
-
   jboolean hasException = env->ExceptionCheck();
   if (hasException)
   {
@@ -59,13 +58,12 @@ long JosmValidatorClient::getBlankNodeIdTest() const
     env->ExceptionClear();
     throw HootException("Error calling getBlankNodeIdTest.");
   }
-
   return (long)nodeIdResult;
 }
 
-QStringList JosmValidatorClient::getAvailableValidators() const
+QMap<QString, QString> JosmValidatorClient::getAvailableValidators() const
 {
-  QStringList validators;
+  QMap<QString, QString> validators;
 
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
@@ -79,7 +77,7 @@ QStringList JosmValidatorClient::getAvailableValidators() const
   {
     env->ExceptionDescribe();
     env->ExceptionClear();
-    // TODO: get exception message from object and add here
+    // get exception message from object and add here?
     throw HootException("Error calling getAvailableValidators.");
   }
 
@@ -93,10 +91,15 @@ QStringList JosmValidatorClient::getAvailableValidators() const
     jint index = i;
     jobject validatorNameResult =
       env->CallObjectMethod(availableValidatorsResult, listGetMethodId, index);
-    const QString testName = QString(env->GetStringUTFChars((jstring)validatorNameResult, NULL));
-    LOG_VART(testName);
+    const QString testResultStr =
+      QString(env->GetStringUTFChars((jstring)validatorNameResult, NULL));
+    LOG_VART(testResultStr);
+    assert(testResultStr.contains(";"));
+    const QStringList testResultParts = testResultStr.split(";");
     //env->ReleaseStringUTFChars //??
-    validators.append(testName);
+    const QString testName = testResultParts[0];
+    const QString testDescription = testResultParts[1];
+    validators[testName] = testDescription;
   }
 
   return validators;
@@ -109,7 +112,6 @@ QMap<ElementId, QString> JosmValidatorClient::validate(const ConstOsmMapPtr& /*m
 
 void JosmValidatorClient::validateAndFix(OsmMapPtr& /*map*/)
 {
-
 }
 
 }

@@ -73,7 +73,10 @@ public:
   void runListValidatorsTest()
   {
     JosmValidatorClient uut;
-    CPPUNIT_ASSERT_EQUAL(51, uut.getAvailableValidators().size());
+    const QMap<QString, QString> validators = uut.getAvailableValidators();
+    LOG_VART(validators.keys());
+    LOG_VART(validators.values());
+    CPPUNIT_ASSERT_EQUAL(51, validators.size());
   }
 };
 
