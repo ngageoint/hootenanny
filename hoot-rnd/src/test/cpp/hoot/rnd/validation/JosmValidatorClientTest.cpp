@@ -42,8 +42,8 @@ namespace hoot
 class JosmValidatorClientTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorClientTest);
-  //CPPUNIT_TEST(runToyValidationTest);
-  CPPUNIT_TEST(runListValidatorsTest);
+  CPPUNIT_TEST(runToyValidationTest);
+  //CPPUNIT_TEST(runListValidatorsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -67,7 +67,7 @@ public:
   void runToyValidationTest()
   {
     JosmValidatorClient uut;
-    CPPUNIT_ASSERT_EQUAL(0L, uut.getBlankNodeIdTest());
+    CPPUNIT_ASSERT_EQUAL(1L, uut.getBlankNodeIdTest());
   }
 
   void runListValidatorsTest()
@@ -75,7 +75,6 @@ public:
     JosmValidatorClient uut;
     LOG_VARW(uut.getAvailableValidators());
   }
-
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorClientTest, "quick");

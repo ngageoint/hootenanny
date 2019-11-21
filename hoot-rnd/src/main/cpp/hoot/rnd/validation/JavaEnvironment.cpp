@@ -63,15 +63,17 @@ const JavaEnvironmentPtr& JavaEnvironment::_getInstance()
 void JavaEnvironment::_initVm()
 {
   JavaVMInitArgs vm_args;
-  JavaVMOption options[2];
+  const int numOptions = 2;
+  JavaVMOption options[numOptions];
 
   const QString cpStart = "-Djava.class.path=";
   ConfigOptions opts(conf());
   const QString josmJarPath = cpStart + opts.getValidationJosmLibraryPath();
   LOG_VART(josmJarPath);
   //options[0].optionString = (char*)josmJarPath.toStdString().c_str();
-  // This is insane that only this works...will figure this out at some point...
-  options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/hoot/tmp/me-josm.4.4.4.jar";
+  // THIS IS INSANE that only this works...will figure this out at some point...
+  options[0].optionString =
+    (char*)"-Djava.class.path=/home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm.4.4.4.jar";
   //options[0].optionString = josmJarPath.toUtf8().data();
   //options[0].optionString = &josmJarPath.toStdString()[0];
   LOG_VART(options[0].optionString);
@@ -82,8 +84,9 @@ void JavaEnvironment::_initVm()
   //options[1].optionString = hootJosmJarPath.toUtf8().data();
   //options[1].optionString = &hootJosmJarPath.toStdString()[0];
   LOG_VART(options[1].optionString);
+  //options[2].optionString = (char*)"-verbose:jni";
   vm_args.version = JNI_VERSION_1_8;
-  vm_args.nOptions = 2;
+  vm_args.nOptions = numOptions;
   vm_args.options = options;
   vm_args.ignoreUnrecognized = 1;
 

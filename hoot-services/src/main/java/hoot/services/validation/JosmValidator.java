@@ -38,20 +38,22 @@ import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.validation.OsmValidator;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
+import org.openstreetmap.josm.tools.Logging;
 
 /**
  * 
  */
 public class JosmValidator
 {
-  public JosmValidator()
+  public JosmValidator() //throws Exception
   {
     System.out.println("test1");
+    //throw new Exception("test3");
   }
 
   public long getBlankNodeIdTest()
   {
-    return (new Node()).getId();
+    return (new Node(1)).getId();
   }
 
   public List<String> getAvailableValidators()
@@ -59,20 +61,17 @@ public class JosmValidator
     List<String> testNames = new ArrayList<String>();
     try
     {
-      System.out.println("test3");
-
+      System.out.println("test2");
+      //Logging.setLogLevel(Logging.LEVEL_DEBUG);
+      //System.out.println("test3");
       OsmValidator.initializeTests();
-      System.out.println("test4");
       OsmValidator.initializeErrorLayer();
-      System.out.println("test5");
 
       Collection<Test> validationTests = OsmValidator.getEnabledTests(false);
-      System.out.println("test6");
       for (Test validationTest : validationTests)
       {
         testNames.add(validationTest.getName());
       }
-      System.out.println("test7");
     }
     catch (Exception e)
     {

@@ -38,8 +38,10 @@ JosmValidatorClient::JosmValidatorClient()
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
+  //LOG_VARW(_validatorClass == 0);
   jmethodID constructorMethodId = env->GetMethodID(_validatorClass, "<init>", "()V");
   _validator = env->NewObject(_validatorClass, constructorMethodId);
+  //LOG_VARW(_validator == 0);
 }
 
 void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
@@ -48,9 +50,19 @@ void JosmValidatorClient::setConfiguration(const Settings& /*conf*/)
 
 long JosmValidatorClient::getBlankNodeIdTest() const
 {
-  JNIEnv* env = JavaEnvironment::getEnvironment();;
+  JNIEnv* env = JavaEnvironment::getEnvironment();
   jmethodID getNodeIdMethodId = env->GetMethodID(_validatorClass, "getBlankNodeIdTest", "()J");
   jlong nodeIdResult = env->CallLongMethod(_validator, getNodeIdMethodId);
+
+  jboolean hasException = env->ExceptionCheck();
+  if (hasException)
+  {
+    env->ExceptionDescribe();
+    env->ExceptionClear();
+    // TODO: get exception message from object and add here
+    throw HootException("Error calling getBlankNodeIdTest.");
+  }
+
   return (long)nodeIdResult;
 }
 
@@ -65,6 +77,15 @@ QStringList JosmValidatorClient::getAvailableValidators() const
   jobject availableValidatorsResult =
     env->CallObjectMethod(_validator, getAvailableValidatorsMethodId);
 
+  jboolean hasException = env->ExceptionCheck();
+  if (hasException)
+  {
+    //env->ExceptionDescribe();
+    //env->ExceptionClear();
+    // TODO: get exception message from object and add here
+    //throw HootException("Error calling getAvailableValidators.");
+  }
+
   jclass listClass = env->FindClass("java/util/List");
   jmethodID getListSizeMethodId = env->GetMethodID(listClass, "size", "()I");
   const int validatorsSize =
@@ -78,6 +99,7 @@ QStringList JosmValidatorClient::getAvailableValidators() const
       env->CallObjectMethod(availableValidatorsResult, listGetMethodId, index);
     const QString testName = QString(env->GetStringUTFChars((jstring)validatorNameResult, NULL));
     LOG_VART(testName);
+    //env->ReleaseStringUTFChars //??
     validators.append(testName);
   }
 
