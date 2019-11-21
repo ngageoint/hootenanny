@@ -100,24 +100,33 @@ public class JosmValidator
   /**
    * TODO
    */
-  public String validate(String validators, String featuresXml, bool fix)
+  public String validate(String validators, String featuresXml, boolean fixFeatures)
   {
     // will try passing features around as xml for the first draft; if too slow can try
     // an OsmMap --> OsmPrimitive conversion
 
-    assert(validators.contains(";");
-    List<String> validatorsParts = validators.split(";");
+    assert(validators.contains(";"));
+    String[] validatorsParts = validators.split(";");
 
+    // TODO: create from featuresXml
+    Collection<OsmPrimitive> elements = null;
 
-    //Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
-    //Config.setUrlsProvider(JosmUrls.getInstance());
+    // TODO: create and init collection of tests via select logic from OsmValidator
+    Test validationTest = null;
+    validationTest.setPartialSelection(false);
+    validationTest.visit(elements);
+    validationTest.endTest();
+    List<TestError> errors = validationTest.getErrors();
+    validationTest.clear();
 
-    //OsmValidator.initializeTests();
-    //OsmValidator.initializeErrorLayer();
-    //OsmValidator.getEnabledTests(false);
+    if (fixFeatures)
+    {
+       // TODO: fix features
+    }
 
     // if not fix: <element id string>;<validation msg>
     // if fix: <element id string>;fix msg;<fixed element xml>
-    return new ArrayList<String>();
+    // TODO: convert elements back to xml
+    return "";
   }
 }

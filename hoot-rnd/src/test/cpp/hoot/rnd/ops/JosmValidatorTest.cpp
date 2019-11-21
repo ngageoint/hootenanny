@@ -37,8 +37,8 @@ namespace hoot
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  //CPPUNIT_TEST(runListValidatorsTest);
-  CPPUNIT_TEST(runValidateTest);
+  CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  //CPPUNIT_TEST(runValidateTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -61,12 +61,12 @@ public:
   {
   }
 
-  void runListValidatorsTest()
+  void runGetAvailableValidatorsTest()
   {
     JosmValidator uut;
     const QMap<QString, QString> validators = uut.getAvailableValidators();
-    LOG_VART(validators.keys());
-    LOG_VART(validators.values());
+    LOG_VARW(validators.keys());
+    LOG_VARW(validators.values());
     CPPUNIT_ASSERT_EQUAL(51, validators.size());
   }
 

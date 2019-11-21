@@ -44,7 +44,7 @@ _fixFeatures(fixFeatures)
   _validator = env->NewObject(_validatorClass, constructorMethodId);
 }
 
-void JosmValidator::setConfiguration(const Settings& conf)
+void JosmValidator::setConfiguration(const Settings& /*conf*/)
 {
   //validation.josm.validator.exclude.list
   //validation.josm.validator.include.list
@@ -62,7 +62,7 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
-  jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";"));
+  jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
   jstring featuresXml = env->NewStringUTF(mapXml);
   jboolean fixFeatures = _fixFeatures;
   jmethodID getValidateMethodId =
