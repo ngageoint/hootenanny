@@ -73,7 +73,7 @@ public:
   void runListValidatorsTest()
   {
     JosmValidatorClient uut;
-    LOG_VARW(uut.getAvailableValidators());
+    CPPUNIT_ASSERT_EQUAL(51, uut.getAvailableValidators().size());
   }
 };
 

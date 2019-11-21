@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collection;
 import java.lang.Exception;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Node;
@@ -39,6 +41,11 @@ import org.openstreetmap.josm.data.validation.OsmValidator;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
+import org.openstreetmap.josm.spi.preferences.Config;
+import org.openstreetmap.josm.spi.preferences.Setting;
+import org.openstreetmap.josm.data.Preferences;
+import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
+import org.openstreetmap.josm.data.preferences.JosmUrls;
 
 /**
  * 
@@ -47,7 +54,9 @@ public class JosmValidator
 {
   public JosmValidator()
   {
-    //System.out.println("test1");
+    Logging.setLogLevel(Logging.LEVEL_DEBUG);
+    Preferences pref = Preferences.main();
+    Config.setPreferencesInstance(pref);
   }
 
   public long getBlankNodeIdTest()
@@ -60,14 +69,26 @@ public class JosmValidator
     List<String> testNames = new ArrayList<String>();
     try
     {
-      Logging.setLogLevel(Logging.LEVEL_DEBUG);
-      OsmValidator.initializeTests(); // dying here
-      OsmValidator.initializeErrorLayer();
-
-      Collection<Test> validationTests = OsmValidator.getEnabledTests(false);
-      for (Test validationTest : validationTests)
+      Collection<Test> validationTests = OsmValidator.getTests();
+      //System.out.println("validationTests size: " + validationTests.size());
+      // for each loop was causing a segfault here (?)...oddd
+      Iterator<Test> iterator = validationTests.iterator();
+      try
       {
-        testNames.add(validationTest.getName());
+        while (iterator.hasNext())
+        {
+          //System.out.println("value= " + iterator.next());
+          Test validationTest = iterator.next();
+          if (validationTest != null)
+          {
+            //System.out.println("name= " + validationTest.getName());
+            testNames.add(validationTest.getName());
+          }
+        }
+      }
+      catch (NoSuchElementException e)
+      {
+        System.out.println(e.getMessage());
       }
     }
     catch (Exception e)
@@ -76,6 +97,7 @@ public class JosmValidator
       throw e;
     }
 
+    //System.out.println("testNames size: " + testNames.size());
     return testNames;
   }
 
@@ -86,6 +108,13 @@ public class JosmValidator
 
   public Map<String, String> validate(List<OsmPrimitive> features)
   {
+    //Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
+    //Config.setUrlsProvider(JosmUrls.getInstance());
+
+    //OsmValidator.initializeTests();
+    //OsmValidator.initializeErrorLayer();
+    //OsmValidator.getEnabledTests(false);
+
     // element id string to validation msg
     return new HashMap<String, String>();
   }

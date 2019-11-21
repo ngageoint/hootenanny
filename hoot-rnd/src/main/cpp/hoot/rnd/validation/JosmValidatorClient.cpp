@@ -87,8 +87,7 @@ QStringList JosmValidatorClient::getAvailableValidators() const
   jmethodID getListSizeMethodId = env->GetMethodID(listClass, "size", "()I");
   const int validatorsSize =
     (int)env->CallIntMethod(availableValidatorsResult, getListSizeMethodId);
-  LOG_VART(validatorsSize);
-  jmethodID listGetMethodId = env->GetMethodID(listClass, "get", "(I)V");
+  jmethodID listGetMethodId = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
   for (int i = 0; i < validatorsSize; i++)
   {
     jint index = i;
