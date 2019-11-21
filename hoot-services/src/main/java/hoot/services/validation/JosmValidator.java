@@ -74,10 +74,8 @@ public class JosmValidator
     {
       Collection<Test> validationTests = OsmValidator.getTests();
       //System.out.println("validationTests size: " + validationTests.size());
-      Iterator<Test> iterator = validationTests.iterator();
-      while (iterator.hasNext())
+      for (Test validationTest : validationTests)
       {
-        Test validationTest = iterator.next();
         if (validationTest != null)
         {
           String testName = validationTest.toString().split("@")[0];
