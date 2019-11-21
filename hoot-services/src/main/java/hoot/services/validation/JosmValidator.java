@@ -66,7 +66,7 @@ public class JosmValidator
   /**
    * TODO
    */
-  public String getAvailableValidators()
+  public String getAvailableValidators() throws Exception
   {
     String testsInfo = "";
 
@@ -74,17 +74,17 @@ public class JosmValidator
     {
       Collection<Test> validationTests = OsmValidator.getTests();
       //System.out.println("validationTests size: " + validationTests.size());
-      // for each loop was causing a segfault here (?)...odd
       Iterator<Test> iterator = validationTests.iterator();
       while (iterator.hasNext())
       {
-        //System.out.println("value= " + iterator.next());
         Test validationTest = iterator.next();
         if (validationTest != null)
         {
-          //System.out.println("name= " + validationTest.getName());
           String testName = validationTest.toString().split("@")[0];
-          testsInfo += testName + "," + validationTest.getName() + ";";
+          String testDescription = validationTest.getName();
+          //System.out.println("name= " + testName);
+          //System.out.println("value= " + testDescription);
+          testsInfo += testName + "," + testDescription + ";";
         }
       }
     }
@@ -94,6 +94,7 @@ public class JosmValidator
       throw e;
     }
 
+    //System.out.println(testsInfo);
     return testsInfo;
   }
 
@@ -101,27 +102,37 @@ public class JosmValidator
    * TODO
    */
   public String validate(String validators, String featuresXml, boolean fixFeatures)
+    throws Exception
   {
-    // will try passing features around as xml for the first draft; if too slow can try
-    // an OsmMap --> OsmPrimitive conversion
-
-    assert(validators.contains(";"));
-    String[] validatorsParts = validators.split(";");
-
-    // TODO: create from featuresXml
-    Collection<OsmPrimitive> elements = null;
-
-    // TODO: create and init collection of tests via select logic from OsmValidator
-    Test validationTest = null;
-    validationTest.setPartialSelection(false);
-    validationTest.visit(elements);
-    validationTest.endTest();
-    List<TestError> errors = validationTest.getErrors();
-    validationTest.clear();
-
-    if (fixFeatures)
+    try
     {
-       // TODO: fix features
+      // will try passing features around as xml for the first draft; if too slow can try
+      // an OsmMap --> OsmPrimitive conversion
+
+      assert(validators.contains(";"));
+      String[] validatorsParts = validators.split(";");
+
+      // TODO: create from featuresXml
+      Collection<OsmPrimitive> elements = null;
+
+      // TODO: create and init collection of tests via select logic from OsmValidator
+      Test validationTest = null;
+      validationTest.initialize();
+      validationTest.setPartialSelection(false);
+      validationTest.visit(elements);
+      validationTest.endTest();
+      List<TestError> errors = validationTest.getErrors();
+      validationTest.clear();
+
+      if (fixFeatures)
+      {
+        // TODO: fix features
+      }
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+      throw e;
     }
 
     // if not fix: <element id string>;<validation msg>

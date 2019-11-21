@@ -65,8 +65,8 @@ public:
   {
     JosmValidator uut;
     const QMap<QString, QString> validators = uut.getAvailableValidators();
-    LOG_VARW(validators.keys());
-    LOG_VARW(validators.values());
+    LOG_VART(validators.keys());
+    LOG_VART(validators.values());
     CPPUNIT_ASSERT_EQUAL(51, validators.size());
   }
 

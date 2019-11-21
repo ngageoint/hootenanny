@@ -63,7 +63,7 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
   jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
-  jstring featuresXml = env->NewStringUTF(mapXml);
+  jstring featuresXml = env->NewStringUTF(mapXml.toStdString().c_str());
   jboolean fixFeatures = _fixFeatures;
   jmethodID getValidateMethodId =
     env->GetMethodID(_validatorClass, "validate", "()Ljava/lang/String;");
@@ -118,7 +118,7 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
   jmethodID getAvailableValidatorsMethodId =
-    env->GetMethodID(_validatorClass, "getAvailableValidators", "()Ljava/util/List;");
+    env->GetMethodID(_validatorClass, "getAvailableValidators", "()Ljava/lang/String;");
   jobject availableValidatorsResult =
     env->CallObjectMethod(_validator, getAvailableValidatorsMethodId);
   jboolean hasException = env->ExceptionCheck();
@@ -137,13 +137,16 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
   for (int i = 0; i < validatorStrings.size(); i++)
   {
     const QString validatorStr = validatorStrings.at(i);
-    assert(validatorStr.contains(","));
-    const QStringList validatorStrParts = validatorStr.split(",");
-    assert(validatorStrParts.size() == 2);
+    if (!validatorStr.isEmpty())
+    {
+      assert(validatorStr.contains(","));
+      const QStringList validatorStrParts = validatorStr.split(",");
+      assert(validatorStrParts.size() == 2);
 
-    const QString validatorName = validatorStrParts[0];
-    const QString validatorDescription = validatorStrParts[1];
-    validators[validatorName] = validatorDescription;
+      const QString validatorName = validatorStrParts[0];
+      const QString validatorDescription = validatorStrParts[1];
+      validators[validatorName] = validatorDescription;
+    }
   }
   //env->ReleaseStringUTFChars //??
 
