@@ -87,6 +87,22 @@ public:
 
   void readFromString(const QString& xml, const OsmMapPtr& map);
 
+  /**
+   * TODO
+   *
+   * @param xml
+   * @return
+   */
+  static OsmMapPtr fromXml(const QString& xml);
+
+  /**
+   * TODO
+   *
+   * @param xml
+   * @return
+   */
+  static ElementPtr fromElementXml(const QString& xml);
+
   void read(const QString& path, const OsmMapPtr& map);
 
   virtual ElementPtr readNextElement() override;

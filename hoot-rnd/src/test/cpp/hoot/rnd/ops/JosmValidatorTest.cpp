@@ -30,11 +30,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/ops/JosmValidator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-// JNI
-#include <jni.h>
-
-// Qt
-#include <QDir>
 
 namespace hoot
 {
@@ -42,8 +37,8 @@ namespace hoot
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  CPPUNIT_TEST(runListValidatorsTest);
-  //CPPUNIT_TEST(runValidateTest);
+  //CPPUNIT_TEST(runListValidatorsTest);
+  CPPUNIT_TEST(runValidateTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -57,6 +52,7 @@ public:
 
   virtual void setUp()
   {
+    // TODO: not being passed in correctly yet
     conf().set("validation.josm.library.path", "/home/vagrant/hoot/hoot/tmp/me-josm.4.4.4.jar");
     conf().set("validation.hoot.josm.library.path", "/home/vagrant/hoot/tmp/hoot-josm.jar");
   }

@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
 
 // JNI
 #include <jni.h>
@@ -41,34 +42,65 @@ namespace hoot
 {
 
 /**
- *
+ * TODO
  */
-class JosmValidator : public OsmMapOperation
+class JosmValidator : public OsmMapOperation, public Configurable
 {
 
 public:
 
   static std::string className() { return "hoot::JosmValidator"; }
 
+  /**
+   * TODO
+   *
+   * @param fixFeatures
+   */
   JosmValidator(const bool fixFeatures = false);
 
+  /**
+   * @see OsmMapOperation
+   */
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   QMap<QString, QString> getAvailableValidators() const;
   void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
 
   QMap<ElementId, QString> getValidationResults() const { return _validationResults; }
 
+  /**
+   * @see ApiEntityInfo
+   */
   virtual QString getDescription() const { return "TODO"; }
+
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
 
 private:
 
+  // TODO
   QStringList _validatorsToUse;
+  // TODO
   bool _fixFeatures;
+  // TODO
   QMap<ElementId, QString> _validationResults;
 
+  // TODO
   jclass _validatorClass;
+  // TODO
   jobject _validator;
+
+  /*
+   * TODO
+   */
+  ElementId _idStrToElementId(const QString& idStr) const;
 };
 
 }

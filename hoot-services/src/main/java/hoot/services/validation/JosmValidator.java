@@ -27,9 +27,7 @@
 package hoot.services.validation;
 
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Collection;
 import java.lang.Exception;
 import java.util.Iterator;
@@ -48,10 +46,16 @@ import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
 import org.openstreetmap.josm.data.preferences.JosmUrls;
 
 /**
- * 
+ * TODO
+
+ using delimited strings in place of containers here to keep the code simpler initially; will
+ replace with containers later if performance dictates it
  */
 public class JosmValidator
 {
+  /**
+   * TODO
+   */
   public JosmValidator()
   {
     Logging.setLogLevel(Logging.LEVEL_DEBUG);
@@ -59,34 +63,29 @@ public class JosmValidator
     Config.setPreferencesInstance(pref);
   }
 
-  public List<String> getAvailableValidators()
+  /**
+   * TODO
+   */
+  public String getAvailableValidators()
   {
-    // could use a map here instead, but trying to keep the complexity of the client code down
-    // as much as possible
-    List<String> testsInfo = new ArrayList<String>();
+    String testsInfo = "";
+
     try
     {
       Collection<Test> validationTests = OsmValidator.getTests();
       //System.out.println("validationTests size: " + validationTests.size());
-      // for each loop was causing a segfault here (?)...oddd
+      // for each loop was causing a segfault here (?)...odd
       Iterator<Test> iterator = validationTests.iterator();
-      try
+      while (iterator.hasNext())
       {
-        while (iterator.hasNext())
+        //System.out.println("value= " + iterator.next());
+        Test validationTest = iterator.next();
+        if (validationTest != null)
         {
-          //System.out.println("value= " + iterator.next());
-          Test validationTest = iterator.next();
-          if (validationTest != null)
-          {
-            //System.out.println("name= " + validationTest.getName());
-            String testName = validationTest.toString().split("@")[0];
-            testsInfo.add(testName + ";" + validationTest.getName());
-          }
+          //System.out.println("name= " + validationTest.getName());
+          String testName = validationTest.toString().split("@")[0];
+          testsInfo += testName + "," + validationTest.getName() + ";";
         }
-      }
-      catch (NoSuchElementException e)
-      {
-        System.out.println(e.getMessage());
       }
     }
     catch (Exception e)
@@ -95,14 +94,20 @@ public class JosmValidator
       throw e;
     }
 
-    //System.out.println("testsInfo size: " + testsInfo.size());
     return testsInfo;
   }
 
-  public Map<String, String> validate(List<String> validators, String featuresXml)
+  /**
+   * TODO
+   */
+  public String validate(String validators, String featuresXml, bool fix)
   {
     // will try passing features around as xml for the first draft; if too slow can try
-    // OsmMap --> OsmPrimitive conversion
+    // an OsmMap --> OsmPrimitive conversion
+
+    assert(validators.contains(";");
+    List<String> validatorsParts = validators.split(";");
+
 
     //Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     //Config.setUrlsProvider(JosmUrls.getInstance());
@@ -111,15 +116,8 @@ public class JosmValidator
     //OsmValidator.initializeErrorLayer();
     //OsmValidator.getEnabledTests(false);
 
-    // element id string to validation msg
-    return new HashMap<String, String>();
+    // if not fix: <element id string>;<validation msg>
+    // if fix: <element id string>;fix msg;<fixed element xml>
+    return new ArrayList<String>();
   }
-
-  public Map<String, String> validateAndFix(List<String> validators, String featuresXml)
-  {
-    // element id string;fix msg to fixed element xml
-    return new HashMap<String, String>();
-  }
-
-  private List<String> validatorsToUse;
 }

@@ -456,6 +456,18 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
+OsmMapPtr OsmXmlReader::fromXml(const QString& /*xml*/)
+{
+  // TODO
+  return OsmMapPtr();
+}
+
+ElementPtr OsmXmlReader::fromElementXml(const QString& /*xml*/)
+{
+  // TODO
+  return ElementPtr();
+}
+
 void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 {
   _numRead = 0;

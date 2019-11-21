@@ -52,6 +52,11 @@ public:
 
   ~JavaEnvironment();
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   static JNIEnv* getEnvironment() { return _getInstance()->_env; }
 
 private:

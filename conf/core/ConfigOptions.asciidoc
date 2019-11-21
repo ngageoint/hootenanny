@@ -4512,6 +4512,22 @@ normal operation.
 
 TODO
 
+=== validation.josm.validator.exclude.list
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
+=== validation.josm.validator.include.list
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
 === validation.josm.library.path
 
 * Data Type: string

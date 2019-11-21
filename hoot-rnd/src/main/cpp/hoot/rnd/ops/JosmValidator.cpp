@@ -28,7 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/validation/JavaEnvironment.h>
+#include <hoot/rnd/util/JavaEnvironment.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/io/OsmXmlReader.h>
 
 namespace hoot
 {
@@ -42,55 +44,108 @@ _fixFeatures(fixFeatures)
   _validator = env->NewObject(_validatorClass, constructorMethodId);
 }
 
-void JosmValidator::apply(std::shared_ptr<OsmMap>& /*map*/)
+void JosmValidator::setConfiguration(const Settings& conf)
+{
+  //validation.josm.validator.exclude.list
+  //validation.josm.validator.include.list
+
+  // TODO
+}
+
+void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 {
   // convert map to xml string
 
+  const QString mapXml = OsmXmlWriter::toString(map, false);
+
   // pass validators and xml to appropriate java method
 
-  // convert returned info into map
+  JNIEnv* env = JavaEnvironment::getEnvironment();
+
+  jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";"));
+  jstring featuresXml = env->NewStringUTF(mapXml);
+  jboolean fixFeatures = _fixFeatures;
+  jmethodID getValidateMethodId =
+    env->GetMethodID(_validatorClass, "validate", "()Ljava/lang/String;");
+  jobject validationResult =
+    env->CallObjectMethod(_validator, getValidateMethodId, validatorsStr, featuresXml, fixFeatures);
+  //env->ReleaseStringUTFChars //??
+  jboolean hasException = env->ExceptionCheck();
+  if (hasException)
+  {
+    env->ExceptionDescribe();
+    env->ExceptionClear();
+    // TODO: get exception message from object and add here?
+    throw HootException("Error calling JosmValidator::apply.");
+  }
+
+  // update map with fixed features and add validation info to validation results collection
+
+  const char* str = env->GetStringUTFChars((jstring)validationResult, NULL);
+  QString validationResultsStr(str);
+  //env->ReleaseStringUTFChars //??
+  assert(validationResultsStr.contains(";"));
+  QStringList validationResultStrings = validationResultsStr.split(";");
+  for (int i = 0; i < validationResultStrings.size(); i++)
+  {
+    const QString validationResultStr = validationResultStrings.at(i);
+    assert(validationResultStr.contains(","));
+    const QStringList validationResultParts = validationResultStr.split(",");
+    if (!_fixFeatures)
+    {
+      assert(validationResultParts.size() == 2);
+    }
+    else
+    {
+      assert(validationResultParts.size() == 3);
+    }
+    const ElementId id = _idStrToElementId(validationResultParts[0]);
+    _validationResults[id] = validationResultParts[1];
+    ElementPtr fixedElement = OsmXmlReader::fromElementXml(validationResultParts[2]);
+    map->replace(map->getElement(id), fixedElement);
+  }
+}
+
+ElementId JosmValidator::_idStrToElementId(const QString& /*idStr*/) const
+{
+  // TODO
+  return ElementId();
 }
 
 QMap<QString, QString> JosmValidator::getAvailableValidators() const
 {
   QMap<QString, QString> validators;
-
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
   jmethodID getAvailableValidatorsMethodId =
     env->GetMethodID(_validatorClass, "getAvailableValidators", "()Ljava/util/List;");
   jobject availableValidatorsResult =
     env->CallObjectMethod(_validator, getAvailableValidatorsMethodId);
-
   jboolean hasException = env->ExceptionCheck();
   if (hasException)
   {
     env->ExceptionDescribe();
     env->ExceptionClear();
-    // get exception message from object and add here?
+    // TODO: get exception message from object and add here?
     throw HootException("Error calling getAvailableValidators.");
   }
 
-  jclass listClass = env->FindClass("java/util/List");
-  jmethodID getListSizeMethodId = env->GetMethodID(listClass, "size", "()I");
-  const int validatorsSize =
-    (int)env->CallIntMethod(availableValidatorsResult, getListSizeMethodId);
-  jmethodID listGetMethodId = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
-  for (int i = 0; i < validatorsSize; i++)
+  const char* str = env->GetStringUTFChars((jstring)availableValidatorsResult, NULL);
+  QString validatorsStr(str);
+  assert(validatorsStr.contains(";"));
+  QStringList validatorStrings = validatorsStr.split(";");
+  for (int i = 0; i < validatorStrings.size(); i++)
   {
-    jint index = i;
-    jobject validatorNameResult =
-      env->CallObjectMethod(availableValidatorsResult, listGetMethodId, index);
-    const QString testResultStr =
-      QString(env->GetStringUTFChars((jstring)validatorNameResult, NULL));
-    LOG_VART(testResultStr);
-    assert(testResultStr.contains(";"));
-    const QStringList testResultParts = testResultStr.split(";");
-    //env->ReleaseStringUTFChars //??
-    const QString testName = testResultParts[0];
-    const QString testDescription = testResultParts[1];
-    validators[testName] = testDescription;
+    const QString validatorStr = validatorStrings.at(i);
+    assert(validatorStr.contains(","));
+    const QStringList validatorStrParts = validatorStr.split(",");
+    assert(validatorStrParts.size() == 2);
+
+    const QString validatorName = validatorStrParts[0];
+    const QString validatorDescription = validatorStrParts[1];
+    validators[validatorName] = validatorDescription;
   }
+  //env->ReleaseStringUTFChars //??
 
   return validators;
 }
