@@ -45,10 +45,9 @@ import org.openstreetmap.josm.tools.Logging;
  */
 public class JosmValidator
 {
-  public JosmValidator() //throws Exception
+  public JosmValidator()
   {
     System.out.println("test1");
-    //throw new Exception("test3");
   }
 
   public long getBlankNodeIdTest()
@@ -62,8 +61,8 @@ public class JosmValidator
     try
     {
       System.out.println("test2");
-      //Logging.setLogLevel(Logging.LEVEL_DEBUG);
-      //System.out.println("test3");
+      Logging.setLogLevel(Logging.LEVEL_DEBUG);
+      System.out.println("test3");
       OsmValidator.initializeTests();
       OsmValidator.initializeErrorLayer();
 

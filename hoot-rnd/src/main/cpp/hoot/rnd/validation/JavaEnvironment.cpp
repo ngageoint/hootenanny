@@ -63,28 +63,34 @@ const JavaEnvironmentPtr& JavaEnvironment::_getInstance()
 void JavaEnvironment::_initVm()
 {
   JavaVMInitArgs vm_args;
-  const int numOptions = 2;
+  const int numOptions = 1;
   JavaVMOption options[numOptions];
 
-  const QString cpStart = "-Djava.class.path=";
-  ConfigOptions opts(conf());
-  const QString josmJarPath = cpStart + opts.getValidationJosmLibraryPath();
-  LOG_VART(josmJarPath);
+  //const QString cpStart = "-Djava.class.path=";
+  //ConfigOptions opts(conf());
+  //const QString josmJarPath = cpStart + opts.getValidationJosmLibraryPath();
   //options[0].optionString = (char*)josmJarPath.toStdString().c_str();
-  // THIS IS INSANE that only this works...will figure this out at some point...
-  options[0].optionString =
-    (char*)"-Djava.class.path=/home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm.4.4.4.jar";
+  //options[0].optionString =
+    //(char*)"-Djava.class.path=/home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm/4.4.4/me-josm-4.4.4.jar";
   //options[0].optionString = josmJarPath.toUtf8().data();
   //options[0].optionString = &josmJarPath.toStdString()[0];
-  LOG_VART(options[0].optionString);
-  const QString hootJosmJarPath = cpStart + opts.getValidationHootJosmLibraryPath();
-  LOG_VART(hootJosmJarPath);
+  //LOG_VART(options[0].optionString);
+  //const QString hootJosmJarPath = cpStart + opts.getValidationHootJosmLibraryPath();
+  //LOG_VART(hootJosmJarPath);
   //options[1].optionString = (char*)hootJosmJarPath.toStdString().c_str();
-  options[1].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
+  // THIS IS INSANE that only this works...will figure this out at some point...
+  //options[/*1*/0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
   //options[1].optionString = hootJosmJarPath.toUtf8().data();
   //options[1].optionString = &hootJosmJarPath.toStdString()[0];
-  LOG_VART(options[1].optionString);
-  //options[2].optionString = (char*)"-verbose:jni";
+  //LOG_VART(options[1].optionString);
+
+  // Due to classpath loading issues on the Java end, now copying the josm jar to one to be used by
+  // hoot, adding hoot validator classes to it, and then using that jar to call JNI against. This
+  // isn't a great long term solution but good enough for testing now. Also, the fact that I can't
+  // set the string from a config setting is INSANE...will figure that out too (string copying
+  // issues likely).
+  options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
+  //options[1].optionString = (char*)"-verbose:jni";
   vm_args.version = JNI_VERSION_1_8;
   vm_args.nOptions = numOptions;
   vm_args.options = options;
