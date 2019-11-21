@@ -24,11 +24,12 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef JOSM_VALIDATOR_CLIENT_H
-#define JOSM_VALIDATOR_CLIENT_H
+#ifndef JOSM_VALIDATOR_H
+#define JOSM_VALIDATOR_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
 
 // JNI
 #include <jni.h>
@@ -42,22 +43,27 @@ namespace hoot
 /**
  *
  */
-class JosmValidatorClient
+class JosmValidator : public OsmMapOperation
 {
 
 public:
 
-  JosmValidatorClient();
+  static std::string className() { return "hoot::JosmValidator"; }
+
+  JosmValidator(const bool fixFeatures = false);
+
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   QMap<QString, QString> getAvailableValidators() const;
   void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
 
-  QMap<ElementId, QString> validate(const ConstOsmMapPtr& map);
-  QMap<ElementId, QString> validateAndFix(OsmMapPtr& map);
+  QMap<ElementId, QString> getValidationResults() const { return _validationResults; }
 
 private:
 
   QStringList _validatorsToUse;
+  bool _fixFeatures;
+  QMap<ElementId, QString> _validationResults;
 
   jclass _validatorClass;
   jobject _validator;
@@ -65,4 +71,4 @@ private:
 
 }
 
-#endif // JOSM_VALIDATOR_CLIENT_H
+#endif // JOSM_VALIDATOR_H

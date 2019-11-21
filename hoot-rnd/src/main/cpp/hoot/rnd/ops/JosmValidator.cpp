@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "JosmValidatorClient.h"
+#include "JosmValidator.h"
 
 // hoot
 #include <hoot/core/util/Log.h>
@@ -33,7 +33,8 @@
 namespace hoot
 {
 
-JosmValidatorClient::JosmValidatorClient()
+JosmValidator::JosmValidator(const bool fixFeatures) :
+_fixFeatures(fixFeatures)
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
@@ -41,7 +42,16 @@ JosmValidatorClient::JosmValidatorClient()
   _validator = env->NewObject(_validatorClass, constructorMethodId);
 }
 
-QMap<QString, QString> JosmValidatorClient::getAvailableValidators() const
+void JosmValidator::apply(std::shared_ptr<OsmMap>& /*map*/) override
+{
+  // convert map to xml string
+
+  // pass validators and xml to appropriate java method
+
+  // convert returned info into map
+}
+
+QMap<QString, QString> JosmValidator::getAvailableValidators() const
 {
   QMap<QString, QString> validators;
 
@@ -83,28 +93,6 @@ QMap<QString, QString> JosmValidatorClient::getAvailableValidators() const
   }
 
   return validators;
-}
-
-QMap<ElementId, QString> JosmValidatorClient::validate(const ConstOsmMapPtr& /*map*/)
-{
-  // convert map to xml string
-
-  // pass validators and xml to java method
-
-  // convert returned info into map
-
-  return QMap<ElementId, QString>();
-}
-
-QMap<ElementId, QString> JosmValidatorClient::validateAndFix(OsmMapPtr& /*map*/)
-{
-  // convert map to xml string
-
-  // pass validators and xml to java method
-
-  // convert returned info into map
-
-  return QMap<ElementId, QString>();
 }
 
 }

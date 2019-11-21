@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/validation/JosmValidatorClient.h>
+#include <hoot/rnd/validation/JosmValidator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 // JNI
 #include <jni.h>
@@ -39,17 +39,17 @@
 namespace hoot
 {
 
-class JosmValidatorClientTest : public HootTestFixture
+class JosmValidatorTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(JosmValidatorClientTest);
-  //CPPUNIT_TEST(runListValidatorsTest);
-  CPPUNIT_TEST(runValidateTest);
+  CPPUNIT_TEST_SUITE(JosmValidatorTest);
+  CPPUNIT_TEST(runListValidatorsTest);
+  //CPPUNIT_TEST(runValidateTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  JosmValidatorClientTest() :
+  JosmValidatorTest() :
   HootTestFixture(UNUSED_PATH, UNUSED_PATH)
   {
     setResetType(ResetAll);
@@ -67,7 +67,7 @@ public:
 
   void runListValidatorsTest()
   {
-    JosmValidatorClient uut;
+    JosmValidator uut;
     const QMap<QString, QString> validators = uut.getAvailableValidators();
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
@@ -79,10 +79,11 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "TODO");
 
-    JosmValidatorClient uut;
+    JosmValidator uut(false);
     uut.setValidatorsToUse(QStringList("TODO"));
-    const QMap<ElementId, QString> validationInfo = uut.validate(map);
-    LOG_VART(validationInfo.size());
+    uut.apply(map);
+    const QMap<ElementId, QString> validationResults = uut.getValidationResults;
+    LOG_VART(validationResults.size());
 
     // TODO: validationInfo assertions
   }
@@ -92,15 +93,16 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "TODO");
 
-    JosmValidatorClient uut;
+    JosmValidator uut(true);
     uut.setValidatorsToUse(QStringList("TODO"));
-    const QMap<ElementId, QString> fixInfo = uut.validateAndFix(map);
-    LOG_VART(fixInfo.size());
+    uut.apply(map);
+    const QMap<ElementId, QString> validationResults = uut.getValidationResults;
+    LOG_VART(validationResults.size());
 
     // TODO: map and fixInfo assertions
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorClientTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorTest, "quick");
 
 }
