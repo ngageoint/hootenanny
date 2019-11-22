@@ -50,8 +50,10 @@ import org.openstreetmap.josm.data.preferences.JosmUrls;
 /**
  * TODO
 
- using delimited strings in place of containers here to keep the JNI code simpler initially; will
- replace with containers later if performance dictates it
+   @todo using delimited xml strings in place of containers here to keep the JNI code simpler
+   initially;will replace with containers for a likely performance boost after prototype is working
+   @todo move this class out of hoot-services and into its own library, as its not specific to
+   services functionality
  */
 public class JosmValidator
 {
@@ -68,8 +70,9 @@ public class JosmValidator
    */
   private void initJosm()
   {
-    Logging.setLogLevel(Logging.LEVEL_WARN); // LEVEL_DEBUG
-    Logging.debug("Initializing JOSM...");
+    // TODO: could set this log level from hoot
+    Logging.setLogLevel(Logging.LEVEL_TRACE);
+    //Logging.debug("Initializing JOSM...");
     Preferences pref = Preferences.main();
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
@@ -109,16 +112,20 @@ public class JosmValidator
 
   /**
    * TODO
+
+     @todo change validatorsStr to take in a list of strings
+     @todo change featuresXml to take in a list of OsmPrimitive
+     @todo change return type to a list of OsmPrimitive
    */
-  public String validate(String validators, String featuresXml, boolean fixFeatures)
+  public String validate(String validatorsStr, String featuresXml, boolean fixFeatures)
     throws Exception
   {
-    // will try passing features around as xml for the first draft; if too slow can try
-    // an OsmMap --> OsmPrimitive conversion
+    String[] validators = validatorsStr.split(";");
+    Logging.info("Validating elements with " + validators.length + " validators...");
 
     String validatedFeaturesStr = "";
     numValidationErrors = 0;
-    numFeatureFixesMade = 0;
+    numElementsFixed = 0;
     try
     {
       Logging.trace("validators: " + validators);
@@ -133,12 +140,13 @@ public class JosmValidator
 
       // run the specified validation tests against the elements
       Logging.debug("Running validators...");
-      List<TestError> errors = runValidators(validators.split(";"), elementsToValidate);
+      List<TestError> errors = runValidators(validators, elementsToValidate);
       Logging.trace("errors size: " + errors.size());
 
       if (errors.size() > 0)
       {
-        // optionally fix features failing validation and add validation/fix msg tags for use in hoot
+        // optionally fix features failing validation and add validation/fix msg tags for use in
+        // hoot
         Logging.debug("Parsing validated elements...");
         Collection<AbstractPrimitive> validatedElements =
           collectValidatedElements(errors, fixFeatures);
@@ -150,6 +158,10 @@ public class JosmValidator
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
         Logging.trace("validatedFeaturesStr: " + validatedFeaturesStr);
       }
+
+      Logging.info(
+        "Found " + numValidationErrors + " validation errors and fixed " + numElementsFixed +
+        " elements.");
     }
     catch (Exception e)
     {
@@ -219,7 +231,7 @@ public class JosmValidator
           if (fixSuccess)
           {
             fixStatus = "true";
-            numFeatureFixesMade++;
+            numElementsFixed++;
           }
           element.put("hoot:validation:fixed", fixStatus);
         }
@@ -230,10 +242,10 @@ public class JosmValidator
   }
 
   public int getNumValidationErrors() { return numValidationErrors; }
-  public int getNumFeatureFixesMade() { return numFeatureFixesMade; }
+  public int getNumElementsFixed() { return numElementsFixed; }
 
   // TODO
   private int numValidationErrors = 0;
   // TODO
-  private int numFeatureFixesMade = 0;
+  private int numElementsFixed = 0;
 }

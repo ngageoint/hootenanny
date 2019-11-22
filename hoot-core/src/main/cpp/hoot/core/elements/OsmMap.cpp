@@ -1179,22 +1179,39 @@ QSet<long> OsmMap::getRelationIds() const
 
 void OsmMap::_next()
 {
-  const NodeMap& nodes = getNodes();
-  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  if (_currentElementId.isNull())
   {
-    _addElement(getNode(it->first));
+    _currentNodeItr = getNodes().begin();
   }
 
-  const WayMap& ways = getWays();
-  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  if (_currentNodeItr != getNodes().end())
   {
-    _addElement(getWay(it->first));
+    const ElementId nodeId = ElementId(ElementType::Node, _currentNodeItr->first);
+    _addElement(getNode(nodeId.getId()));
+    _currentElementId = nodeId;
+    _currentNodeItr++;
+    if (_currentNodeItr == getNodes().end())
+    {
+      _currentWayItr = getWays().begin();
+    }
   }
-
-  const RelationMap& relations = getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  else if (_currentWayItr != getWays().end())
   {
-    _addElement(getRelation(it->first));
+    const ElementId wayId = ElementId(ElementType::Way, _currentWayItr->first);
+    _addElement(getWay(wayId.getId()));
+    _currentElementId = wayId;
+    _currentWayItr++;
+    if (_currentWayItr == getWays().end())
+    {
+      _currentRelationItr = getRelations().begin();
+    }
+  }
+  else if (_currentRelationItr != getRelations().end())
+  {
+    const ElementId relationId = ElementId(ElementType::Relation, _currentRelationItr->first);
+    _addElement(getRelation(relationId.getId()));
+    _currentElementId = relationId;
+    _currentRelationItr++;
   }
 }
 

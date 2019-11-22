@@ -41,9 +41,9 @@ static const QString JOSM_TESTS_NAMESPACE = "org.openstreetmap.josm.data.validat
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runValidateNoErrorsTest);
-  //CPPUNIT_TEST(runValidateWithErrorsTest);
+  //CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  //CPPUNIT_TEST(runValidateNoErrorsTest);
+  CPPUNIT_TEST(runValidateWithErrorsTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -88,9 +88,9 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
-    CPPUNIT_ASSERT_EQUAL(40, uut.getNumFeaturesValidated());
+    CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsValidated());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFeaturesFixed());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsFixed());
   }
 
   void runValidateWithErrorsTest()
@@ -100,6 +100,9 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
     LOG_VARD(map->size());
 
+    // The next to last way has both no tags and only one node, so it should definitely cause a
+    // validation error in UntaggedWay, and it will be marked with a hoot validation error tag.
+
     JosmValidator uut(false);
     // TODO: add another validator
     uut.setValidatorsToUse(QStringList(JOSM_TESTS_NAMESPACE + ".UntaggedWay"));
@@ -107,9 +110,9 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
-    CPPUNIT_ASSERT_EQUAL(40, uut.getNumFeaturesValidated());
+    CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsValidated());
     CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFeaturesFixed());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsFixed());
 
     MapProjector::projectToWgs84(map);
     const QString outTestFileName =  testName + "-out.osm";
@@ -131,9 +134,9 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
-    CPPUNIT_ASSERT_EQUAL(40, uut.getNumFeaturesValidated());
+    CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsValidated());
     CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getNumFeaturesFixed());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumElementsFixed());
 
     MapProjector::projectToWgs84(map);
     const QString outTestFileName =  testName + "-out.osm";

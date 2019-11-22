@@ -36,10 +36,10 @@
 namespace hoot
 {
 
-JosmValidator::JosmValidator(const bool fixFeatures) :
-_fixFeatures(fixFeatures),
+JosmValidator::JosmValidator(const bool fixElements) :
+_fixElements(fixElements),
 _numValidationErrors(0),
-_numFeaturesFixed(0)
+_numElementsFixed(0)
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
@@ -58,27 +58,30 @@ void JosmValidator::setConfiguration(const Settings& /*conf*/)
 void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 {
   LOG_VARD(map->size());
-  LOG_VARD(_fixFeatures);
+  LOG_VARD(_fixElements);
   _numAffected = 0;
   _numValidationErrors = 0;
-  _numFeaturesFixed = 0;
+  _numElementsFixed = 0;
 
   // convert map to xml string - see notes in JosmValidator.java about using xml instead of element
   // objects for now
 
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
+  // TODO: change validatorsStr to be a string list
+  // TODO: change mapXml to be a collection of OsmPrimitive
+  // TODO: change return type to be a collection of OsmPrimitive
   jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
-  jstring featuresXml = env->NewStringUTF(OsmXmlWriter::toString(map, false).toStdString().c_str());
+  jstring mapXml = env->NewStringUTF(OsmXmlWriter::toString(map, false).toStdString().c_str());
   jobject validationResult =
     env->CallObjectMethod(
     _validator,
     env->GetMethodID(
       _validatorClass, "validate", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
     validatorsStr,
-    featuresXml,
-    _fixFeatures);
-  //env->ReleaseStringUTFChars //??
+    mapXml,
+    _fixElements);
+  // TODO: env->ReleaseStringUTFChars
   if (env->ExceptionCheck())
   {
     env->ExceptionDescribe();
@@ -89,26 +92,26 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 
   // update map with fixed features and add validation info to validation results collection
 
-  const char* str = env->GetStringUTFChars((jstring)validationResult, NULL);
-  const QString validatedMapStr(str);
-  LOG_VART(validatedMapStr);
-  //env->ReleaseStringUTFChars //??;
+  const char* xml = env->GetStringUTFChars((jstring)validationResult, NULL);
+  const QString validatedMapXml(xml);
+  LOG_VART(validatedMapXml);
+  // TODO: env->ReleaseStringUTFChars
 
   _numAffected = map->size();
   _numValidationErrors =
     (int)env->CallIntMethod(
       _validator, env->GetMethodID(_validatorClass, "getNumValidationErrors", "()I"));
-  if (_fixFeatures)
+  if (_fixElements)
   {
-    _numFeaturesFixed =
+    _numElementsFixed =
       (int)env->CallIntMethod(
-        _validator, env->GetMethodID(_validatorClass, "getNumFeaturesFixed", "()I"));
+        _validator, env->GetMethodID(_validatorClass, "getNumElementsFixed", "()I"));
   }
 
   // empty string returned means no features had validation issues
-  if (!validatedMapStr.trimmed().isEmpty())
+  if (!validatedMapXml.trimmed().isEmpty())
   {
-    ElementReplacer replacer(OsmXmlReader::fromXml(validatedMapStr.trimmed()));
+    ElementReplacer replacer(OsmXmlReader::fromXml(validatedMapXml.trimmed()));
     LOG_INFO(replacer.getInitStatusMessage());
     replacer.apply(map);
     LOG_INFO(replacer.getCompletedStatusMessage());

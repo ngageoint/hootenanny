@@ -45,9 +45,9 @@ with new data.
 # Feature Filtering
 
 Hootenanny has the capability to let you selectively pick the features that are conflated from your data to save you from some pre-conflation data wrangling. Some examples:
-* [conflate only buildings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-buildings)
-* [conflate only restaurant buildings](https://github.com/ngageoint/hootenanny/master/blob/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings)
-* [conflate only restaurant buildings with "Subway" in the name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings-with-subway-in-the-name)
+* [Conflate only buildings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-buildings)
+* [Conflate only restaurant buildings](https://github.com/ngageoint/hootenanny/master/blob/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings)
+* [Conflate only restaurant buildings with "Subway" in the name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings-with-subway-in-the-name)
 
 Hootenanny has many additional [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that can also be specified to perform feature filtering during conflation.
 
@@ -60,6 +60,13 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 * [others](https://github.com/ngageoint/hootenanny/tree/master/translations)
 
 Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
+
+# Feature Validation
+
+Hootenanny is integrated with the feature validation capabilities in [JOSM](https://josm.openstreetmap.de/). Either during the ingesting of 
+features or during map conflation you may elect to either 1) simply mark features in your map that fail validation tests and clean them up 
+manually later using Hootenanny's review mode in iD Editor or 2) attempt to automatically fix features that fail validation tests for those that
+can be fixed. There is more information on Hootenanny validation [here](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidation.asciidoc).
 
 # When To Use
 No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring Hootenanny options to get the best conflated output. 
@@ -146,6 +153,7 @@ In addition to running conflation jobs with map data, Hootenanny also provides f
 * [Sort map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc)
 * [Translate feature tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
 * [Translate feature tags to English](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc)
+* [Validate features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidation.asciidoc)
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 

@@ -372,6 +372,12 @@ protected:
   int _numWaysSkippedForAppending;
   int _numRelationsSkippedForAppending;
 
+  // for use with ElementIterator
+  ElementId _currentElementId;
+  NodeMap::const_iterator _currentNodeItr;
+  WayMap::const_iterator _currentWayItr;
+  RelationMap::const_iterator _currentRelationItr;
+
   void _copy(const std::shared_ptr<const OsmMap>& from);
 
   /**
