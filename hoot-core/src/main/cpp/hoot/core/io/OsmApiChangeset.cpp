@@ -49,7 +49,7 @@ XmlChangeset::XmlChangeset()
   : _nodes(ChangesetType::TypeMax),
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
     _sentCount(0),
     _processedCount(0),
     _failedCount(0)
@@ -60,7 +60,7 @@ XmlChangeset::XmlChangeset(const QList<QString> &changesets)
   : _nodes(ChangesetType::TypeMax),
     _ways(ChangesetType::TypeMax),
     _relations(ChangesetType::TypeMax),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
     _sentCount(0),
     _processedCount(0),
     _failedCount(0)
@@ -439,7 +439,7 @@ bool XmlChangeset::addNodes(ChangesetInfoPtr& changeset, ChangesetType type)
   for (ChangesetElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
   {
     //  Add nodes up until the max changeset
-    if (changeset->size() < (size_t)_maxChangesetSize)
+    if (changeset->size() < (size_t)_maxPushSize)
       added |= addNode(changeset, type, dynamic_cast<ChangesetNode*>(it->second.get()));
   }
   //  Return true if something was added
@@ -523,7 +523,7 @@ bool XmlChangeset::addWays(ChangesetInfoPtr& changeset, ChangesetType type)
   for (ChangesetElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
   {
     //  Add ways up until the max changeset
-    if (changeset->size() < (size_t)_maxChangesetSize)
+    if (changeset->size() < (size_t)_maxPushSize)
       added |= addWay(changeset, type, dynamic_cast<ChangesetWay*>(it->second.get()));
   }
   //  Return true if something was added
@@ -667,7 +667,7 @@ bool XmlChangeset::addRelations(ChangesetInfoPtr& changeset, ChangesetType type)
   for (ChangesetElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
   {
     //  Add relations up until the max changeset
-    if (changeset->size() < (size_t)_maxChangesetSize)
+    if (changeset->size() < (size_t)_maxPushSize)
       added |= addRelation(changeset, type, dynamic_cast<ChangesetRelation*>(it->second.get()));
   }
   //  Return true if something was added
@@ -1054,10 +1054,10 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
   if (!changeset)
     changeset.reset(new ChangesetInfo());
   changeset->clear();
-  //  Build up the changeset to be around the MAX changeset size
+  //  Build up the changeset to be around the MAX changeset push size
   ChangesetType type = ChangesetType::TypeCreate;
   while (type != ChangesetType::TypeMax &&
-         changeset->size() < (size_t)_maxChangesetSize &&
+         changeset->size() < (size_t)_maxPushSize &&
          hasElementsToSend())
   {
     /**
@@ -1070,17 +1070,17 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
     //  Start with the relations
     addRelations(changeset, type);
     //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
+    if (changeset->size() >= (size_t)_maxPushSize)
       continue;
     //  Then the ways
     addWays(changeset, type);
     //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
+    if (changeset->size() >= (size_t)_maxPushSize)
       continue;
     //  Finally the nodes
     addNodes(changeset, type);
     //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxChangesetSize)
+    if (changeset->size() >= (size_t)_maxPushSize)
       continue;
     //  Go to the next type and loop back around
     type = static_cast<ChangesetType>(type + 1);

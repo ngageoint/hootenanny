@@ -58,10 +58,16 @@ const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
-    _showProgress(false)
+    _showProgress(false),
+    _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
+    _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
+    _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
+    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _changesetCount(0)
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -72,14 +78,16 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
-    _maxChangesetSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
+    _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _throttleWriters(ConfigOptions().getChangesetApidbWritersThrottle()),
     _throttleTime(ConfigOptions().getChangesetApidbWritersThrottleTime()),
     _showProgress(false),
     _consumerKey(ConfigOptions().getHootOsmAuthConsumerKey()),
     _consumerSecret(ConfigOptions().getHootOsmAuthConsumerSecret()),
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
-    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret())
+    _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
+    _changesetCount(0)
 {
   if (isSupported(url))
     _url = url;
@@ -101,6 +109,8 @@ bool OsmApiWriter::apply()
   //  pushed across multiple processing threads out performed larger (50k element) datasets
   if (_maxChangesetSize > _capabilities.getChangesets())
     _maxChangesetSize = _capabilities.getChangesets();
+  if (_maxPushSize > _maxChangesetSize)
+    _maxPushSize = _maxChangesetSize / 5;
   //  Setup the network request object with OAuth or with username/password authentication
   request = createNetworkRequest(true);
   //  Validate API permissions
@@ -112,7 +122,7 @@ bool OsmApiWriter::apply()
   _stats.append(SingleStat("API Permissions Query Time (sec)", timer.getElapsedAndRestart()));
   bool success = true;
   //  Load all of the changesets into memory
-  _changeset.setMaxSize(_maxChangesetSize);
+  _changeset.setMaxPushSize(_maxPushSize);
   for (int i = 0; i < _changesets.size(); ++i)
   {
     LOG_INFO("Loading changeset: " << _changesets[i]);
@@ -191,6 +201,7 @@ bool OsmApiWriter::apply()
   LOG_INFO("Upload progress: 100%");
   //  Keep some stats
   _stats.append(SingleStat("API Upload Time (sec)", timer.getElapsedAndRestart()));
+  _stats.append(SingleStat("Total OSM Changesets Uploaded", _changesetCount));
   _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
   _stats.append(SingleStat("Total Ways in Changeset", _changeset.getTotalWayCount()));
   _stats.append(SingleStat("Total Relations in Changeset", _changeset.getTotalRelationCount()));
@@ -207,6 +218,7 @@ void OsmApiWriter::_changesetThreadFunc()
   //  Setup the network request object with OAuth or with username/password authentication
   HootNetworkRequestPtr request = createNetworkRequest(true);
   long id = -1;
+  long changesetSize = 0;
   //  Iterate until all elements are sent and updated
   while (!_changeset.isDone())
   {
@@ -224,7 +236,10 @@ void OsmApiWriter::_changesetThreadFunc()
     {
       //  Create the changeset ID if required
       if (id < 1)
+      {
         id = _createChangeset(request, _description);
+        changesetSize = 0;
+      }
       //  An ID of less than 1 isn't valid, try to fix it
       if (id < 1)
       {
@@ -250,10 +265,17 @@ void OsmApiWriter::_changesetThreadFunc()
         _changesetMutex.lock();
         _changeset.updateChangeset(QString(request->getResponseContent()));
         _changesetMutex.unlock();
-        //  Close the changeset
-        _closeChangeset(request, id);
-        //  Signal for a new changeset id
-        id = -1;
+        //  Update the size of the current changeset that is open
+        changesetSize += workInfo->size();
+        //  When the current changeset is nearing the 50k max (or the specified max), close the changeset
+        //  otherwise keep it open and go again
+        if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
+        {
+          //  Close the changeset
+          _closeChangeset(request, id);
+          //  Signal for a new changeset id
+          id = -1;
+        }
         //  Throttle the input rate if desired
         if (_throttleWriters && !_changeset.isDone())
           this_thread::sleep_for(chrono::seconds(_throttleTime));
@@ -276,6 +298,8 @@ void OsmApiWriter::_changesetThreadFunc()
               continue;
             }
             //  Fall through here to split the changeset and retry
+            //  This includes when the changeset is too big, i.e.:
+            //    The changeset <id> was closed at <dtg> UTC
           }
         case 400:   //  Placeholder ID is missing or not unique
         case 404:   //  Diff contains elements where the given ID could not be found
@@ -343,7 +367,8 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _description = options.getChangesetDescription();
-  _maxChangesetSize = options.getChangesetApidbSizeMax();
+  _maxPushSize = options.getChangesetApidbSizeMax();
+  _maxChangesetSize = options.getChangesetMaxSize();
   _maxWriters = options.getChangesetApidbWritersMax();
   _throttleWriters = options.getChangesetApidbWritersThrottle();
   _throttleTime = options.getChangesetApidbWritersThrottleTime();
@@ -529,6 +554,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
       break;
     case 200:
       //  Changeset closed successfully
+      _changesetCountMutex.lock();
+      _changesetCount++;
+      _changesetCountMutex.unlock();
       break;
     default:
       LOG_WARN("Uknown HTTP response code: " << request->getHttpStatus());
