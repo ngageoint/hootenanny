@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 namespace hoot
 {
@@ -38,14 +39,14 @@ namespace hoot
  * Replaces all elements in a map with features from another map with corresponding element IDs.
  * Elements in the from map with no corresponding IDs in the target map are skipped.
  */
-class ElementReplacer : public OsmMapOperation
+class ElementReplacer : public OsmMapOperation, public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::ElementReplacer"; }
 
   ElementReplacer();
-  ElementReplacer(OsmMapPtr& mapToReplaceFrom);
+  ElementReplacer(OsmMapPtr mapToReplaceFrom);
 
   /**
    * @see OsmMapOperation
@@ -54,6 +55,12 @@ public:
 
   virtual QString getDescription() const override
   { return "Replace features in a map with those from another map"; }
+
+  virtual QString getInitStatusMessage() const
+  { return "Replacing elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  { return "Replaced " + QString::number(_numAffected) + " elements"; }
 
 private:
 

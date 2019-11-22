@@ -33,12 +33,8 @@ import java.lang.Exception;
 import java.io.ByteArrayInputStream;
 import java.lang.Class;
 
-//import org.apache.commons.lang3.ClassUtils;
-//import org.apache.commons.lang3.reflect.ConstructorUtils;
-
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
-import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.validation.OsmValidator;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
@@ -48,6 +44,8 @@ import org.openstreetmap.josm.data.Preferences;
 import org.openstreetmap.josm.io.OsmReader;
 import org.openstreetmap.josm.io.OsmApi;
 import org.openstreetmap.josm.command.Command;
+import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
+import org.openstreetmap.josm.data.preferences.JosmUrls;
 
 /**
  * TODO
@@ -62,9 +60,20 @@ public class JosmValidator
    */
   public JosmValidator()
   {
-    Logging.setLogLevel(Logging.LEVEL_DEBUG);
+    initJosm();
+  }
+
+  /*
+   * TODO
+   */
+  private void initJosm()
+  {
+    Logging.setLogLevel(Logging.LEVEL_WARN); // LEVEL_DEBUG
+    Logging.debug("Initializing JOSM...");
     Preferences pref = Preferences.main();
     Config.setPreferencesInstance(pref);
+    Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
+    Config.setUrlsProvider(JosmUrls.getInstance());
   }
 
   /**
@@ -104,91 +113,105 @@ public class JosmValidator
   public String validate(String validators, String featuresXml, boolean fixFeatures)
     throws Exception
   {
+    // will try passing features around as xml for the first draft; if too slow can try
+    // an OsmMap --> OsmPrimitive conversion
+
     String validatedFeaturesStr = "";
+    numValidationErrors = 0;
+    numFeatureFixesMade = 0;
     try
     {
-      // will try passing features around as xml for the first draft; if too slow can try
-      // an OsmMap --> OsmPrimitive conversion
+      Logging.trace("validators: " + validators);
+      Logging.trace("fixFeatures: " + fixFeatures);
 
-      // read element xml
-      Collection<OsmPrimitive> elements =
+      // read input element xml
+      Logging.debug("Converting input elements from xml...");
+      Collection<OsmPrimitive> elementsToValidate =
         OsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
+      Logging.trace("elementsToValidate size: " + elementsToValidate.size());
 
-      // run the specified validation tests
-      assert(validators.contains(";"));
-      List<TestError> errors = runValidators(validators.split(";"), elements);
+      // run the specified validation tests against the elements
+      Logging.debug("Running validators...");
+      List<TestError> errors = runValidators(validators.split(";"), elementsToValidate);
+      Logging.trace("errors size: " + errors.size());
 
-      // add validation/fix msg tags
-      Collection<AbstractPrimitive> validatedElements =
-        collectValidatedElements(errors, fixFeatures);
+      if (errors.size() > 0)
+      {
+        // optionally fix features failing validation and add validation/fix msg tags for use in hoot
+        Logging.debug("Parsing validated elements...");
+        Collection<AbstractPrimitive> validatedElements =
+          collectValidatedElements(errors, fixFeatures);
+        Logging.trace("validatedElements size: " + validatedElements.size());
 
-      // convert elements back to xml
-      validatedFeaturesStr =
-        OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
+        // convert the validated elements back to xml
+        Logging.debug("Converting validated elements to xml...");
+        validatedFeaturesStr =
+          OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
+        Logging.trace("validatedFeaturesStr: " + validatedFeaturesStr);
+      }
     }
     catch (Exception e)
     {
       System.out.println(e.getMessage());
       throw e;
     }
-
-    return validatedFeaturesStr;
+    return validatedFeaturesStr; // empty string returned means no features had validation issues
   }
 
+  /*
+   * TODO
+   */
   private List<TestError> runValidators(String[] validators, Collection<OsmPrimitive> elements)
     throws Exception
   {
     List<TestError> errors = new ArrayList<TestError>();
-
     for (int i = 0; i < validators.length; i++)
     {
       String validatorStr = validators[i];
-      // TODO: fix
-      Test validator = null;
-      // ClassUtils.getPackageName(ElementFactory.class) + "." + elementType
-      /*Test validationTest =
-        (Test)ConstructorUtils.invokeConstructor(
-          Class.forName(validatorStr),
-          new Object[] { validatorStr },
-          new Class<?>[] { String.class });*/
+      Logging.trace("validatorStr: " + validatorStr);
+      Test validator = (Test)Class.forName(validatorStr).newInstance();
 
       validator.initialize();
       validator.setPartialSelection(false);
       validator.startTest(null);
       validator.visit(elements);
       validator.endTest();
+
       errors.addAll(validator.getErrors());
       validator.clear();
-   }
-
-   return errors;
+    }
+    numValidationErrors = errors.size();
+    return errors;
   }
 
+  /*
+   * TODO
+   */
   private Collection<AbstractPrimitive> collectValidatedElements(
     List<TestError> errors, boolean fixFeatures)
   {
     Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
-
     for (TestError error : errors)
     {
       Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
+      Logging.trace("elementsWithErrors size: " + elementsWithErrors.size());
 
       boolean fixSuccess = false;
       if (fixFeatures && error.isFixable())
       {
         // fix features based on error found
-
         Command fixCmd = error.getFix();
         fixSuccess = fixCmd.executeCommand();
         if (!fixSuccess)
         {
-          System.out.println("Failure executing fix command.");
+          Logging.trace("Failure executing fix command.");
         }
       }
 
       for (OsmPrimitive element : elementsWithErrors)
       {
+        // mark the validated/fixed elements for use in hoot
         element.put("hoot:validation", error.getMessage());
         if (fixFeatures)
         {
@@ -196,13 +219,21 @@ public class JosmValidator
           if (fixSuccess)
           {
             fixStatus = "true";
+            numFeatureFixesMade++;
           }
           element.put("hoot:validation:fixed", fixStatus);
         }
         validatedElements.add(element);
       }
     }
-
     return validatedElements;
   }
+
+  public int getNumValidationErrors() { return numValidationErrors; }
+  public int getNumFeatureFixesMade() { return numFeatureFixesMade; }
+
+  // TODO
+  private int numValidationErrors = 0;
+  // TODO
+  private int numFeatureFixesMade = 0;
 }

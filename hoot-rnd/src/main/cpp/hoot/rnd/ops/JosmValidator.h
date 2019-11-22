@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/info/OperationStatusInfo.h>
 
 // JNI
 #include <jni.h>
@@ -44,7 +45,7 @@ namespace hoot
 /**
  * TODO
  */
-class JosmValidator : public OsmMapOperation, public Configurable
+class JosmValidator : public OsmMapOperation, public Configurable, public OperationStatusInfo
 {
 
 public:
@@ -81,12 +82,31 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
+  virtual QString getInitStatusMessage() const
+  { return "Validating elements..."; }
+
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      QString::number(_numValidationErrors) + " / " + QString::number(_numAffected) +
+      " elements had validation errors. Fixed " + QString::number(_numFeaturesFixed) + " errors.";
+  }
+
+  int getNumFeaturesValidated() const { return _numAffected; }
+  int getNumValidationErrors() const { return _numValidationErrors; }
+  int getNumFeaturesFixed() const { return _numFeaturesFixed; }
+
 private:
 
   // TODO
   QStringList _validatorsToUse;
   // TODO
   bool _fixFeatures;
+
+  // TODO
+  int _numValidationErrors;
+  // TODO
+  int _numFeaturesFixed;
 
   // TODO
   jclass _validatorClass;

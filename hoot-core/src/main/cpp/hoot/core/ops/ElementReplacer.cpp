@@ -38,7 +38,7 @@ ElementReplacer::ElementReplacer()
 {
 }
 
-ElementReplacer::ElementReplacer(OsmMapPtr& mapToReplaceFrom) :
+ElementReplacer::ElementReplacer(OsmMapPtr mapToReplaceFrom) :
 _mapToReplaceFrom(mapToReplaceFrom)
 {
 }
@@ -49,10 +49,13 @@ void ElementReplacer::apply(std::shared_ptr<OsmMap>& map)
   {
     throw IllegalArgumentException("No replace from map specified.");
   }
+  LOG_VARD(_mapToReplaceFrom->size());
 
   while (_mapToReplaceFrom->hasNext())
   {
     const ElementPtr elementToReplaceWith = _mapToReplaceFrom->next();
+    LOG_VARD(elementToReplaceWith->getElementId());
+    LOG_VARD(map->containsElement(elementToReplaceWith->getElementId()));
     if (map->containsElement(elementToReplaceWith->getElementId()))
     {
       map->replace(map->getElement(elementToReplaceWith->getElementId()), elementToReplaceWith);

@@ -549,7 +549,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
 }
 
 void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
-{
+{ 
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.

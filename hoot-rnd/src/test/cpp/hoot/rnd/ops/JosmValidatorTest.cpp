@@ -30,22 +30,27 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/ops/JosmValidator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
+
+static const QString JOSM_TESTS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
 
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
   CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  //CPPUNIT_TEST(runValidateTest);
+  CPPUNIT_TEST(runValidateNoErrorsTest);
+  //CPPUNIT_TEST(runValidateWithErrorsTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   JosmValidatorTest() :
-  HootTestFixture(UNUSED_PATH, UNUSED_PATH)
+  HootTestFixture("test-files/rnd/ops/JosmValidatorTest", "test-output/rnd/ops/JosmValidatorTest")
   {
     setResetType(ResetAll);
   }
@@ -70,28 +75,70 @@ public:
     CPPUNIT_ASSERT_EQUAL(51, validators.size());
   }
 
-  void runValidateTest()
+  void runValidateNoErrorsTest()
   {
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "TODO");
+    OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
+    LOG_VARD(map->size());
 
     JosmValidator uut(false);
-    uut.setValidatorsToUse(QStringList("TODO"));
+    // TODO: add another validator
+    uut.setValidatorsToUse(QStringList(JOSM_TESTS_NAMESPACE + ".UntaggedWay"));
+    LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
+    LOG_INFO(uut.getCompletedStatusMessage());
 
-    // TODO: map assertions
+    CPPUNIT_ASSERT_EQUAL(40, uut.getNumFeaturesValidated());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFeaturesFixed());
+  }
+
+  void runValidateWithErrorsTest()
+  {
+    const QString testName = "runValidateWithErrorsTest";
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
+    LOG_VARD(map->size());
+
+    JosmValidator uut(false);
+    // TODO: add another validator
+    uut.setValidatorsToUse(QStringList(JOSM_TESTS_NAMESPACE + ".UntaggedWay"));
+    LOG_INFO(uut.getInitStatusMessage());
+    uut.apply(map);
+    LOG_INFO(uut.getCompletedStatusMessage());
+
+    CPPUNIT_ASSERT_EQUAL(40, uut.getNumFeaturesValidated());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFeaturesFixed());
+
+    MapProjector::projectToWgs84(map);
+    const QString outTestFileName =  testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 
   void runValidateAndFixTest()
   {
+    const QString testName = "runValidateAndFixTest";
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, "TODO");
+    OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
+    LOG_VARD(map->size());
 
     JosmValidator uut(true);
-    uut.setValidatorsToUse(QStringList("TODO"));
+    // TODO: replace UntaggedWay and then add another validator
+    uut.setValidatorsToUse(QStringList(JOSM_TESTS_NAMESPACE + ".UntaggedWay"));
+    LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
+    LOG_INFO(uut.getCompletedStatusMessage());
 
-    // TODO: map assertions
+    CPPUNIT_ASSERT_EQUAL(40, uut.getNumFeaturesValidated());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumFeaturesFixed());
+
+    MapProjector::projectToWgs84(map);
+    const QString outTestFileName =  testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, true);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 };
 

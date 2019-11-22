@@ -37,7 +37,9 @@ namespace hoot
 {
 
 JosmValidator::JosmValidator(const bool fixFeatures) :
-_fixFeatures(fixFeatures)
+_fixFeatures(fixFeatures),
+_numValidationErrors(0),
+_numFeaturesFixed(0)
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
@@ -55,10 +57,14 @@ void JosmValidator::setConfiguration(const Settings& /*conf*/)
 
 void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 {
+  LOG_VARD(map->size());
+  LOG_VARD(_fixFeatures);
+  _numAffected = 0;
+  _numValidationErrors = 0;
+  _numFeaturesFixed = 0;
+
   // convert map to xml string - see notes in JosmValidator.java about using xml instead of element
   // objects for now
-
-  // pass validators and xml to appropriate java method
 
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
@@ -67,7 +73,8 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
   jobject validationResult =
     env->CallObjectMethod(
     _validator,
-    env->GetMethodID(_validatorClass, "validate", "()Ljava/lang/String;"),
+    env->GetMethodID(
+      _validatorClass, "validate", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
     validatorsStr,
     featuresXml,
     _fixFeatures);
@@ -84,9 +91,28 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 
   const char* str = env->GetStringUTFChars((jstring)validationResult, NULL);
   const QString validatedMapStr(str);
+  LOG_VART(validatedMapStr);
   //env->ReleaseStringUTFChars //??;
-  OsmMapPtr validatedMap = OsmXmlReader::fromXml(validatedMapStr);
-  ElementReplacer(validatedMap).apply(map);
+
+  _numAffected = map->size();
+  _numValidationErrors =
+    (int)env->CallIntMethod(
+      _validator, env->GetMethodID(_validatorClass, "getNumValidationErrors", "()I"));
+  if (_fixFeatures)
+  {
+    _numFeaturesFixed =
+      (int)env->CallIntMethod(
+        _validator, env->GetMethodID(_validatorClass, "getNumFeaturesFixed", "()I"));
+  }
+
+  // empty string returned means no features had validation issues
+  if (!validatedMapStr.trimmed().isEmpty())
+  {
+    ElementReplacer replacer(OsmXmlReader::fromXml(validatedMapStr.trimmed()));
+    LOG_INFO(replacer.getInitStatusMessage());
+    replacer.apply(map);
+    LOG_INFO(replacer.getCompletedStatusMessage());
+  }
 }
 
 QMap<QString, QString> JosmValidator::getAvailableValidators() const

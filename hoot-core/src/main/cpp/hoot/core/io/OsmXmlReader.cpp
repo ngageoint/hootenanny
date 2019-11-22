@@ -170,7 +170,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
-  LOG_VART(version);
+  //LOG_VART(version);
   if (_warnOnVersionZeroElement && version == 0)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
@@ -458,6 +458,7 @@ void OsmXmlReader::read(const OsmMapPtr& map)
 
 OsmMapPtr OsmXmlReader::fromXml(const QString& xml)
 {
+  LOG_DEBUG("Reading map from xml...");
   OsmMapPtr map(new OsmMap());
   OsmXmlReader().readFromString(xml, map);
   return map;
@@ -468,6 +469,8 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   _numRead = 0;
   finalizePartial();
   _map = map;
+
+  LOG_DEBUG("Parsing map from xml...");
 
   // do xml parsing
   QXmlSimpleReader reader;
@@ -482,6 +485,8 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   {
     throw Exception(_errorString);
   }
+
+  LOG_DEBUG("Parsed map from xml.");
 
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())
