@@ -30,7 +30,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.lang.Exception;
+import java.io.ByteArrayInputStream;
 
+import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.validation.OsmValidator;
@@ -38,15 +40,15 @@ import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.spi.preferences.Config;
-//import org.openstreetmap.josm.spi.preferences.Setting;
 import org.openstreetmap.josm.data.Preferences;
-//import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
-//import org.openstreetmap.josm.data.preferences.JosmUrls;
+import org.openstreetmap.josm.io.OsmReader;
+//import org.openstreetmap.josm.data.osm.DataSet;
+import org.openstreetmap.josm.io.OsmApi;
 
 /**
  * TODO
 
- using delimited strings in place of containers here to keep the code simpler initially; will
+ using delimited strings in place of containers here to keep the JNI code simpler initially; will
  replace with containers later if performance dictates it
  */
 public class JosmValidator
@@ -78,8 +80,6 @@ public class JosmValidator
         {
           String testName = validationTest.toString().split("@")[0];
           String testDescription = validationTest.getName();
-          //System.out.println("name= " + testName);
-          //System.out.println("value= " + testDescription);
           testsInfo += testName + "," + testDescription + ";";
         }
       }
@@ -100,34 +100,59 @@ public class JosmValidator
   public String validate(String validators, String featuresXml, boolean fixFeatures)
     throws Exception
   {
-    String validatedMapStr = "";
+    String validatedFeaturesStr = "";
     try
     {
-      // TODO: create from featuresXml
-      Collection<OsmPrimitive> elements = null;
-
       // will try passing features around as xml for the first draft; if too slow can try
       // an OsmMap --> OsmPrimitive conversion
 
+      Collection<OsmPrimitive> elements =
+        OsmReader.parseDataSet(
+          new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
+
       assert(validators.contains(";"));
       String[] validatorsToUse = validators.split(";");
-
-      // TODO: create and init collection of tests based on contents of validatorsParts via select
-      // logic from OsmValidator
-      Test validationTest = null;
-      validationTest.initialize();
-      validationTest.setPartialSelection(false);
-      validationTest.visit(elements);
-      validationTest.endTest();
-      List<TestError> errors = validationTest.getErrors();
-      validationTest.clear();
-
-      if (fixFeatures)
+      List<TestError> errors = new ArrayList<TestError>();
+      for (int i = 0; i < validatorsToUse.length; i++)
       {
-        // TODO: fix features
+        String validator = validatorsToUse[i];
+
+        // TODO: create and init collection of tests based on contents of validatorsParts via select
+        // logic from OsmValidator
+        Test validationTest = null;
+        validationTest.initialize();
+        validationTest.setPartialSelection(false);
+        validationTest.visit(elements);
+        validationTest.endTest();
+        errors.addAll(validationTest.getErrors());
+        validationTest.clear();
       }
 
-      // TODO: convert elements back to xml, add validation/fix msg tags
+      // add validation/fix msg tags
+
+      Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
+      if (fixFeatures)
+      {
+        // TODO: fix features based on errors found
+
+      }
+      else
+      {
+        for (TestError error : errors)
+        {
+          Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
+          for (OsmPrimitive element : elementsWithErrors)
+          {
+            element.put("hoot:validation", error.getMessage());
+            validatedElements.add(element);
+          }
+        }
+      }
+
+      // convert elements back to xml
+
+      validatedFeaturesStr =
+        OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
     }
     catch (Exception e)
     {
@@ -135,6 +160,6 @@ public class JosmValidator
       throw e;
     }
 
-    return validatedMapStr;
+    return validatedFeaturesStr;
   }
 }
