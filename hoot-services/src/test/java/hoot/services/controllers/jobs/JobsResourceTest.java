@@ -367,7 +367,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testHistoryFilterType() throws Exception {
         Response response = target("/history")
-                .queryParam("type", "conflate")
+                .queryParam("jobType", "conflate")
                 .queryParam("limit", 50)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
@@ -405,7 +405,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testHistoryFilterTypeStatus() throws Exception {
         Response response = target("/history")
-                .queryParam("type", "export,conflate,clip")
+                .queryParam("jobType", "export,conflate,clip")
                 .queryParam("status", "complete")
                 .queryParam("limit", 50)
                 .request(MediaType.APPLICATION_JSON)
@@ -441,7 +441,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testHistoryFilterTypeBad() throws Exception {
         Response response = target("/history")
-                .queryParam("type", "bar")
+                .queryParam("jobType", "bar")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         Assert.assertEquals(400, response.getStatus());
