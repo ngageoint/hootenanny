@@ -64,17 +64,15 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 
   jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
   jstring featuresXml = env->NewStringUTF(OsmXmlWriter::toString(map, false).toStdString().c_str());
-  jboolean fixFeatures = _fixFeatures;
   jobject validationResult =
     env->CallObjectMethod(
     _validator,
     env->GetMethodID(_validatorClass, "validate", "()Ljava/lang/String;"),
     validatorsStr,
     featuresXml,
-    fixFeatures);
+    _fixFeatures);
   //env->ReleaseStringUTFChars //??
-  jboolean hasException = env->ExceptionCheck();
-  if (hasException)
+  if (env->ExceptionCheck())
   {
     env->ExceptionDescribe();
     env->ExceptionClear();
@@ -96,12 +94,11 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
   QMap<QString, QString> validators;
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
-  jmethodID getAvailableValidatorsMethodId =
-    env->GetMethodID(_validatorClass, "getAvailableValidators", "()Ljava/lang/String;");
   jobject availableValidatorsResult =
-    env->CallObjectMethod(_validator, getAvailableValidatorsMethodId);
-  jboolean hasException = env->ExceptionCheck();
-  if (hasException)
+    env->CallObjectMethod(
+      _validator,
+      env->GetMethodID(_validatorClass, "getAvailableValidators", "()Ljava/lang/String;"));
+  if (env->ExceptionCheck())
   {
     env->ExceptionDescribe();
     env->ExceptionClear();

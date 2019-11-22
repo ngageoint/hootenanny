@@ -120,7 +120,7 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
         }
         break;
       }
-    default:;
+    default:
       throw InternalErrorException(
         "Internal Error: Unexpected element reported as a parent. PID: " + pid.toString());
     }
