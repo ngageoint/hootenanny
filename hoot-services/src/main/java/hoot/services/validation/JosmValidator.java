@@ -104,7 +104,7 @@ public class JosmValidator
     try
     {
       // TODO: create from featuresXml
-      Collection<OsmPrimitive> elements = null
+      Collection<OsmPrimitive> elements = null;
 
       // will try passing features around as xml for the first draft; if too slow can try
       // an OsmMap --> OsmPrimitive conversion

@@ -71,8 +71,6 @@ public:
   QMap<QString, QString> getAvailableValidators() const;
   void setValidatorsToUse(const QStringList& validators) { _validatorsToUse = validators; }
 
-  QMap<ElementId, QString> getValidationResults() const { return _validationResults; }
-
   /**
    * @see ApiEntityInfo
    */
