@@ -31,6 +31,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.lang.Exception;
 import java.io.ByteArrayInputStream;
+import java.lang.Class;
+
+//import org.apache.commons.lang3.ClassUtils;
+//import org.apache.commons.lang3.reflect.ConstructorUtils;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -42,8 +46,8 @@ import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.spi.preferences.Config;
 import org.openstreetmap.josm.data.Preferences;
 import org.openstreetmap.josm.io.OsmReader;
-//import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.io.OsmApi;
+import org.openstreetmap.josm.command.Command;
 
 /**
  * TODO
@@ -110,18 +114,26 @@ public class JosmValidator
         OsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
 
+      // run the specified validation tests
+
       assert(validators.contains(";"));
       String[] validatorsToUse = validators.split(";");
       List<TestError> errors = new ArrayList<TestError>();
       for (int i = 0; i < validatorsToUse.length; i++)
       {
         String validator = validatorsToUse[i];
-
-        // TODO: create and init collection of tests based on contents of validatorsParts via select
-        // logic from OsmValidator
+        // TODO: fix
         Test validationTest = null;
+        // ClassUtils.getPackageName(ElementFactory.class) + "." + elementType
+        /*Test validationTest =
+          (Test)ConstructorUtils.invokeConstructor(
+            Class.forName(validator),
+            new Object[] { validator },
+            new Class<?>[] { String.class });*/
+
         validationTest.initialize();
         validationTest.setPartialSelection(false);
+        validationTest.startTest(null);
         validationTest.visit(elements);
         validationTest.endTest();
         errors.addAll(validationTest.getErrors());
@@ -131,21 +143,36 @@ public class JosmValidator
       // add validation/fix msg tags
 
       Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
-      if (fixFeatures)
+      for (TestError error : errors)
       {
-        // TODO: fix features based on errors found
+        Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
 
-      }
-      else
-      {
-        for (TestError error : errors)
+        boolean fixSuccess = false;
+        if (fixFeatures && error.isFixable())
         {
-          Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
-          for (OsmPrimitive element : elementsWithErrors)
+          // fix features based on errors found
+
+          Command fixCmd = error.getFix();
+          fixSuccess = fixCmd.executeCommand();
+          if (!fixSuccess)
           {
-            element.put("hoot:validation", error.getMessage());
-            validatedElements.add(element);
+            System.out.println("Failure executing fix command.");
           }
+        }
+
+        for (OsmPrimitive element : elementsWithErrors)
+        {
+          element.put("hoot:validation", error.getMessage());
+          if (fixFeatures)
+          {
+            String fixStatus = "false";
+            if (fixSuccess)
+            {
+              fixStatus = "true";
+            }
+            element.put("hoot:validation:fixed", fixStatus);
+          }
+          validatedElements.add(element);
         }
       }
 
