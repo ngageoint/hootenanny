@@ -110,74 +110,20 @@ public class JosmValidator
       // will try passing features around as xml for the first draft; if too slow can try
       // an OsmMap --> OsmPrimitive conversion
 
+      // read element xml
       Collection<OsmPrimitive> elements =
         OsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
 
       // run the specified validation tests
-
       assert(validators.contains(";"));
-      String[] validatorsToUse = validators.split(";");
-      List<TestError> errors = new ArrayList<TestError>();
-      for (int i = 0; i < validatorsToUse.length; i++)
-      {
-        String validator = validatorsToUse[i];
-        // TODO: fix
-        Test validationTest = null;
-        // ClassUtils.getPackageName(ElementFactory.class) + "." + elementType
-        /*Test validationTest =
-          (Test)ConstructorUtils.invokeConstructor(
-            Class.forName(validator),
-            new Object[] { validator },
-            new Class<?>[] { String.class });*/
-
-        validationTest.initialize();
-        validationTest.setPartialSelection(false);
-        validationTest.startTest(null);
-        validationTest.visit(elements);
-        validationTest.endTest();
-        errors.addAll(validationTest.getErrors());
-        validationTest.clear();
-      }
+      List<TestError> errors = runValidators(validators.split(";"), elements);
 
       // add validation/fix msg tags
-
-      Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
-      for (TestError error : errors)
-      {
-        Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
-
-        boolean fixSuccess = false;
-        if (fixFeatures && error.isFixable())
-        {
-          // fix features based on errors found
-
-          Command fixCmd = error.getFix();
-          fixSuccess = fixCmd.executeCommand();
-          if (!fixSuccess)
-          {
-            System.out.println("Failure executing fix command.");
-          }
-        }
-
-        for (OsmPrimitive element : elementsWithErrors)
-        {
-          element.put("hoot:validation", error.getMessage());
-          if (fixFeatures)
-          {
-            String fixStatus = "false";
-            if (fixSuccess)
-            {
-              fixStatus = "true";
-            }
-            element.put("hoot:validation:fixed", fixStatus);
-          }
-          validatedElements.add(element);
-        }
-      }
+      Collection<AbstractPrimitive> validatedElements =
+        collectValidatedElements(errors, fixFeatures);
 
       // convert elements back to xml
-
       validatedFeaturesStr =
         OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
     }
@@ -188,5 +134,75 @@ public class JosmValidator
     }
 
     return validatedFeaturesStr;
+  }
+
+  private List<TestError> runValidators(String[] validators, Collection<OsmPrimitive> elements)
+    throws Exception
+  {
+    List<TestError> errors = new ArrayList<TestError>();
+
+    for (int i = 0; i < validators.length; i++)
+    {
+      String validatorStr = validators[i];
+      // TODO: fix
+      Test validator = null;
+      // ClassUtils.getPackageName(ElementFactory.class) + "." + elementType
+      /*Test validationTest =
+        (Test)ConstructorUtils.invokeConstructor(
+          Class.forName(validatorStr),
+          new Object[] { validatorStr },
+          new Class<?>[] { String.class });*/
+
+      validator.initialize();
+      validator.setPartialSelection(false);
+      validator.startTest(null);
+      validator.visit(elements);
+      validator.endTest();
+      errors.addAll(validator.getErrors());
+      validator.clear();
+   }
+
+   return errors;
+  }
+
+  private Collection<AbstractPrimitive> collectValidatedElements(
+    List<TestError> errors, boolean fixFeatures)
+  {
+    Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
+
+    for (TestError error : errors)
+    {
+      Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
+
+      boolean fixSuccess = false;
+      if (fixFeatures && error.isFixable())
+      {
+        // fix features based on error found
+
+        Command fixCmd = error.getFix();
+        fixSuccess = fixCmd.executeCommand();
+        if (!fixSuccess)
+        {
+          System.out.println("Failure executing fix command.");
+        }
+      }
+
+      for (OsmPrimitive element : elementsWithErrors)
+      {
+        element.put("hoot:validation", error.getMessage());
+        if (fixFeatures)
+        {
+          String fixStatus = "false";
+          if (fixSuccess)
+          {
+            fixStatus = "true";
+          }
+          element.put("hoot:validation:fixed", fixStatus);
+        }
+        validatedElements.add(element);
+      }
+    }
+
+    return validatedElements;
   }
 }

@@ -58,19 +58,20 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
   // convert map to xml string - see notes in JosmValidator.java about using xml instead of element
   // objects for now
 
-  const QString mapXml = OsmXmlWriter::toString(map, false);
-
   // pass validators and xml to appropriate java method
 
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
   jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
-  jstring featuresXml = env->NewStringUTF(mapXml.toStdString().c_str());
+  jstring featuresXml = env->NewStringUTF(OsmXmlWriter::toString(map, false).toStdString().c_str());
   jboolean fixFeatures = _fixFeatures;
-  jmethodID getValidateMethodId =
-    env->GetMethodID(_validatorClass, "validate", "()Ljava/lang/String;");
   jobject validationResult =
-    env->CallObjectMethod(_validator, getValidateMethodId, validatorsStr, featuresXml, fixFeatures);
+    env->CallObjectMethod(
+    _validator,
+    env->GetMethodID(_validatorClass, "validate", "()Ljava/lang/String;"),
+    validatorsStr,
+    featuresXml,
+    fixFeatures);
   //env->ReleaseStringUTFChars //??
   jboolean hasException = env->ExceptionCheck();
   if (hasException)
@@ -85,10 +86,9 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 
   const char* str = env->GetStringUTFChars((jstring)validationResult, NULL);
   const QString validatedMapStr(str);
-  //env->ReleaseStringUTFChars //??
+  //env->ReleaseStringUTFChars //??;
   OsmMapPtr validatedMap = OsmXmlReader::fromXml(validatedMapStr);
-  ElementReplacer elementReplacer(validatedMap);
-  elementReplacer.apply(map);
+  ElementReplacer(validatedMap).apply(map);
 }
 
 QMap<QString, QString> JosmValidator::getAvailableValidators() const
