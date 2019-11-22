@@ -37,6 +37,7 @@ namespace hoot
 class PbfElementIterator : public ElementIterator
 {
 public:
+
   /**
    * Constructs an element reader using the specified istream. This takes ownership of the istream.
    */
@@ -48,6 +49,7 @@ public:
   PbfElementIterator(QString path);
 
 private:
+
   std::shared_ptr<std::istream> _in;
   std::shared_ptr<OsmPbfReader> _reader;
   std::vector<OsmPbfReader::BlobLocation> _blobs;

@@ -22,57 +22,44 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
+#ifndef ELEMENT_REPLACER_H
+#define ELEMENT_REPLACER_H
 
-#ifndef ELEMENTITERATOR_H
-#define ELEMENTITERATOR_H
-
-// Standard
-#include <list>
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class Element;
-
 /**
- * Implements the iterator concept and provides some simple methods for the inheriter to use.
- *
- * The inheriting class will need to implement "_next" and call "_addElement".
+ * Replaces all elements in a map with features from another map with corresponding element IDs.
+ * Elements in the from map with no corresponding IDs in the target map are skipped.
  */
-class ElementIterator
+class ElementReplacer : public OsmMapOperation
 {
 public:
 
-  ElementIterator() {}
+  static std::string className() { return "hoot::ElementReplacer"; }
 
-  virtual ~ElementIterator() {}
-
-  const std::shared_ptr<Element>& next();
-
-  bool hasNext();
-
-protected:
+  ElementReplacer();
+  ElementReplacer(OsmMapPtr& mapToReplaceFrom);
 
   /**
-   * A method to be used by the inheriting class to add new available elements.
+   * @see OsmMapOperation
    */
-  void _addElement(const std::shared_ptr<Element>& e) { _pending.push_back(e); }
+  virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  /**
-   * A method to be overridden by the implementing class. This method will be called periodically
-   * by the ElementProvider to queue up elements. As long as the provider is not at the end then
-   * _addElement should be called at least once each time _next is called.
-   */
-  virtual void _next() = 0;
+  virtual QString getDescription() const override
+  { return "Replace features in a map with those from another map"; }
 
 private:
 
-  std::shared_ptr<Element> _current;
-  std::list<std::shared_ptr<Element>> _pending;
+  OsmMapPtr _mapToReplaceFrom;
 };
 
 }
 
-#endif // ELEMENTITERATOR_H
+#endif // ELEMENT_REPLACER_H

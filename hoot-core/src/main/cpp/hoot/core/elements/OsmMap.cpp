@@ -1177,4 +1177,25 @@ QSet<long> OsmMap::getRelationIds() const
   return ids;
 }
 
+void OsmMap::_next()
+{
+  const NodeMap& nodes = getNodes();
+  for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+  {
+    _addElement(getNode(it->first));
+  }
+
+  const WayMap& ways = getWays();
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    _addElement(getWay(it->first));
+  }
+
+  const RelationMap& relations = getRelations();
+  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+  {
+    _addElement(getRelation(it->first));
+  }
+}
+
 }

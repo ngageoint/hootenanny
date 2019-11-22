@@ -22,43 +22,42 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ElementIterator.h"
+#include "ElementReplacer.h"
 
-// Hoot
-#include <hoot/core/elements/Element.h>
+// hoot
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
-bool ElementIterator::hasNext()
+HOOT_FACTORY_REGISTER(OsmMapOperation, ElementReplacer)
+
+ElementReplacer::ElementReplacer()
 {
-  if (_pending.empty())
-  {
-    _next();
-  }
-  return _pending.empty() == false;
 }
 
-const std::shared_ptr<Element>& ElementIterator::next()
+ElementReplacer::ElementReplacer(OsmMapPtr& mapToReplaceFrom) :
+_mapToReplaceFrom(mapToReplaceFrom)
 {
-  if (_pending.empty())
+}
+
+void ElementReplacer::apply(std::shared_ptr<OsmMap>& map)
+{
+  if (!_mapToReplaceFrom)
   {
-    _next();
+    throw IllegalArgumentException("No replace from map specified.");
   }
 
-  if (_pending.empty())
+  while (_mapToReplaceFrom->hasNext())
   {
-    _current.reset();
+    const ElementPtr elementToReplaceWith = _mapToReplaceFrom->next();
+    if (map->containsElement(elementToReplaceWith->getElementId()))
+    {
+      map->replace(map->getElement(elementToReplaceWith->getElementId()), elementToReplaceWith);
+    }
   }
-  else
-  {
-    _current = _pending.front();
-    _pending.pop_front();
-  }
-
-  return _current;
 }
 
 }

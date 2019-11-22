@@ -4505,6 +4505,13 @@ problematic if you're doing testing or expecting repeatable output for other.
 Creates a repeatable UUID for the features. This is useful for debugging, but shouldn't be used in
 normal operation.
 
+=== validation.enabled
+
+* Data Type: string
+* Default Value: `off`
+
+'off', 'validate', or 'fix' - TODO: handle this convenience setting in conflate and convert commands
+
 === validation.hoot.josm.library.path
 
 * Data Type: string

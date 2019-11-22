@@ -456,16 +456,11 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
-OsmMapPtr OsmXmlReader::fromXml(const QString& /*xml*/)
+OsmMapPtr OsmXmlReader::fromXml(const QString& xml)
 {
-  // TODO
-  return OsmMapPtr();
-}
-
-ElementPtr OsmXmlReader::fromElementXml(const QString& /*xml*/)
-{
-  // TODO
-  return ElementPtr();
+  OsmMapPtr map(new OsmMap());
+  OsmXmlReader().readFromString(xml, map);
+  return map;
 }
 
 void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)

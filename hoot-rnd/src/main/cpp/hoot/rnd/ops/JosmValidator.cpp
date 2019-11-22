@@ -31,6 +31,7 @@
 #include <hoot/rnd/util/JavaEnvironment.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/ops/ElementReplacer.h>
 
 namespace hoot
 {
@@ -54,7 +55,8 @@ void JosmValidator::setConfiguration(const Settings& /*conf*/)
 
 void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 {
-  // convert map to xml string
+  // convert map to xml string - see notes in JosmValidator.java about using xml instead of element
+  // objects for now
 
   const QString mapXml = OsmXmlWriter::toString(map, false);
 
@@ -82,34 +84,11 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
   // update map with fixed features and add validation info to validation results collection
 
   const char* str = env->GetStringUTFChars((jstring)validationResult, NULL);
-  QString validationResultsStr(str);
+  const QString validatedMapStr(str);
   //env->ReleaseStringUTFChars //??
-  assert(validationResultsStr.contains(";"));
-  QStringList validationResultStrings = validationResultsStr.split(";");
-  for (int i = 0; i < validationResultStrings.size(); i++)
-  {
-    const QString validationResultStr = validationResultStrings.at(i);
-    assert(validationResultStr.contains(","));
-    const QStringList validationResultParts = validationResultStr.split(",");
-    if (!_fixFeatures)
-    {
-      assert(validationResultParts.size() == 2);
-    }
-    else
-    {
-      assert(validationResultParts.size() == 3);
-    }
-    const ElementId id = _idStrToElementId(validationResultParts[0]);
-    _validationResults[id] = validationResultParts[1];
-    ElementPtr fixedElement = OsmXmlReader::fromElementXml(validationResultParts[2]);
-    map->replace(map->getElement(id), fixedElement);
-  }
-}
-
-ElementId JosmValidator::_idStrToElementId(const QString& /*idStr*/) const
-{
-  // TODO
-  return ElementId();
+  OsmMapPtr validatedMap = OsmXmlReader::fromXml(validatedMapStr);
+  ElementReplacer elementReplacer(validatedMap);
+  elementReplacer.apply(map);
 }
 
 QMap<QString, QString> JosmValidator::getAvailableValidators() const

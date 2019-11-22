@@ -89,18 +89,11 @@ private:
   QStringList _validatorsToUse;
   // TODO
   bool _fixFeatures;
-  // TODO
-  QMap<ElementId, QString> _validationResults;
 
   // TODO
   jclass _validatorClass;
   // TODO
   jobject _validator;
-
-  /*
-   * TODO
-   */
-  ElementId _idStrToElementId(const QString& idStr) const;
 };
 
 }

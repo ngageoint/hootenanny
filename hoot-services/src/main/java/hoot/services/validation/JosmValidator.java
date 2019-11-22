@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.lang.Exception;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Node;
@@ -40,10 +38,10 @@ import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.spi.preferences.Config;
-import org.openstreetmap.josm.spi.preferences.Setting;
+//import org.openstreetmap.josm.spi.preferences.Setting;
 import org.openstreetmap.josm.data.Preferences;
-import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
-import org.openstreetmap.josm.data.preferences.JosmUrls;
+//import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
+//import org.openstreetmap.josm.data.preferences.JosmUrls;
 
 /**
  * TODO
@@ -102,18 +100,20 @@ public class JosmValidator
   public String validate(String validators, String featuresXml, boolean fixFeatures)
     throws Exception
   {
+    String validatedMapStr = "";
     try
     {
+      // TODO: create from featuresXml
+      Collection<OsmPrimitive> elements = null
+
       // will try passing features around as xml for the first draft; if too slow can try
       // an OsmMap --> OsmPrimitive conversion
 
       assert(validators.contains(";"));
-      String[] validatorsParts = validators.split(";");
+      String[] validatorsToUse = validators.split(";");
 
-      // TODO: create from featuresXml
-      Collection<OsmPrimitive> elements = null;
-
-      // TODO: create and init collection of tests via select logic from OsmValidator
+      // TODO: create and init collection of tests based on contents of validatorsParts via select
+      // logic from OsmValidator
       Test validationTest = null;
       validationTest.initialize();
       validationTest.setPartialSelection(false);
@@ -126,6 +126,8 @@ public class JosmValidator
       {
         // TODO: fix features
       }
+
+      // TODO: convert elements back to xml, add validation/fix msg tags
     }
     catch (Exception e)
     {
@@ -133,9 +135,6 @@ public class JosmValidator
       throw e;
     }
 
-    // if not fix: <element id string>;<validation msg>
-    // if fix: <element id string>;fix msg;<fixed element xml>
-    // TODO: convert elements back to xml
-    return "";
+    return validatedMapStr;
   }
 }

@@ -37,8 +37,8 @@ namespace hoot
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  //CPPUNIT_TEST(runValidateTest);
+  //CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  CPPUNIT_TEST(runValidateTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -78,10 +78,8 @@ public:
     JosmValidator uut(false);
     uut.setValidatorsToUse(QStringList("TODO"));
     uut.apply(map);
-    const QMap<ElementId, QString> validationResults = uut.getValidationResults();
-    LOG_VART(validationResults.size());
 
-    // TODO: validationInfo assertions
+    // TODO: map assertions
   }
 
   void runValidateAndFixTest()
@@ -92,10 +90,8 @@ public:
     JosmValidator uut(true);
     uut.setValidatorsToUse(QStringList("TODO"));
     uut.apply(map);
-    const QMap<ElementId, QString> validationResults = uut.getValidationResults();
-    LOG_VART(validationResults.size());
 
-    // TODO: map and fixInfo assertions
+    // TODO: map assertions
   }
 };
 
