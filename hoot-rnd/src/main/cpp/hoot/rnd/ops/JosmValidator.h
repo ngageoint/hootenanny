@@ -45,7 +45,8 @@ namespace hoot
 /**
  * TODO
  *
- * @todo add an option to the info command to return JOSM validator class names
+ * passing strings for all collection types in order to cut down on JNI calls for performance
+ * reasons; also keeps the client code less complex
  */
 class JosmValidator : public OsmMapOperation, public Configurable, public OperationStatusInfo
 {

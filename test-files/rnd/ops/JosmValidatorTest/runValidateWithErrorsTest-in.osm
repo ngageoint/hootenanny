@@ -52,6 +52,8 @@
   </way>
   <way id='-1669797' visible='true'>
     <nd ref='-1669789' />
+    <tag k='highway' v='road' />
+    <tag k='note' v='4' />
   </way>
   <way id='-1669795' visible='true'>
     <nd ref='-1669725' />

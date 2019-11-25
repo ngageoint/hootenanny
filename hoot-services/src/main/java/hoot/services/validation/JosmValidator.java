@@ -150,63 +150,132 @@ public class JosmValidator
   {
     String validatedFeaturesXmlStr = "";
 
+    numValidationErrors = 0;
+    numElementsFixed = 0;
+
+    // verify inputs
+
+    Logging.debug("fixFeatures: " + fixFeatures);
+
+    if (featuresXml == null || featuresXml.trim().isEmpty())
+    {
+      throw new Exception("No features passed to validation.");
+    }
+    Logging.trace("featuresXml: " + featuresXml);
+
+    // empty or null validators means we'll run them all
+    String[] validators = null;
+    if (validatorsStr != null && !validatorsStr.trim().isEmpty())
+    {
+      validators = validatorsStr.split(";");
+    }
+    if (validators == null)
+    {
+      Logging.info("Validating elements with " + validators.length + " validators...");
+    }
+    else
+    {
+      Logging.info("Validating elements with all validators...");
+    }
+    Logging.debug("validators: " + Arrays.toString(validators));
+
+    Collection<OsmPrimitive> elementsToValidate = null;
     try
     {
-      numValidationErrors = 0;
-      numElementsFixed = 0;
-
-      String[] validators = validatorsStr.split(";");
-      Logging.info("Validating elements with " + validators.length + " validators...");
-      Logging.trace("validators: " + Arrays.toString(validators));
-      Logging.trace("featuresXml: " + featuresXml);
-      Logging.trace("fixFeatures: " + fixFeatures);
-
       // read input element xml
+
       Logging.debug("Converting input elements from xml...");
-      Collection<OsmPrimitive> elementsToValidate =
+      //TODO: OsmPrimitive::allowNegativeId ??
+      elementsToValidate =
         OsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
-      Logging.trace("elementsToValidate size: " + elementsToValidate.size());
+      Logging.debug("elementsToValidate size: " + elementsToValidate.size());
       Logging.trace("elementsToValidate: " + getElementsStr(elementsToValidate));
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error converting validation input features to XML: " + e.getMessage());
+      throw e;
+    }
 
+    List<TestError> errors = null;
+    try
+    {
       // run the specified validation tests against the elements
-      Logging.debug("Running validators...");
-      List<TestError> errors = runValidators(validators, elementsToValidate);
-      Logging.trace("errors size: " + errors.size());
 
+      Logging.debug("Running validators...");
+      if (validators == null)
+      {
+        runValidation(OsmValidator.getTests(), elementsToValidate);
+      }
+      else
+      {
+        runValidation(validators, elementsToValidate);
+      }
+      Logging.debug("errors size: " + errors.size());
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error running validation tests: " + e.getMessage());
+      throw e;
+    }
+
+    Collection<AbstractPrimitive> validatedElements = null;
+    try
+    {
+      // we'll just return empty features if no errors were found
       if (errors.size() > 0)
       {
         // optionally fix features failing validation and add validation/fix msg tags for use in
         // hoot
-        Logging.debug("Parsing validated elements...");
-        Collection<AbstractPrimitive> validatedElements =
-          collectValidatedElements(errors, fixFeatures);
-        Logging.trace("validatedElements size: " + validatedElements.size());
 
+        Logging.debug("Parsing validated elements...");
+        validatedElements = collectValidatedElements(errors, fixFeatures);
+        Logging.debug("validatedElements size: " + validatedElements.size());
+        Logging.trace("validatedElements: " + getElementsStr(validatedElements));
+      }
+    }
+    catch (Exception e)
+    {
+      String msg = "Error gathering";
+      if (fixFeatures)
+      {
+        msg += " and fixing";
+      }
+      msg += " validated elements: ";
+      Logging.error(msg + e.getMessage());
+      throw e;
+    }
+
+    try
+    {
+      if (validatedElements.size() > 0)
+      {
         // convert the validated elements back to xml
+
         Logging.debug("Converting validated elements to xml...");
         validatedFeaturesXmlStr =
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
         Logging.trace("validatedFeaturesStr: " + validatedFeaturesXmlStr);
       }
-
-      Logging.info(
-        "Found " + numValidationErrors + " validation errors and fixed " + numElementsFixed +
-        " elements.");
     }
     catch (Exception e)
     {
-      System.out.println(e.getMessage());
+      Logging.error("Error converting validated elements back to XML: " + e.getMessage());
       throw e;
     }
 
-    return validatedFeaturesXmlStr; // empty string returned means no features had validation issues
+    Logging.info(
+      "Found " + numValidationErrors + " validation errors and fixed " + numElementsFixed +
+      " elements.");
+
+    return validatedFeaturesXmlStr;
   }
 
   /*
    * TODO
    */
-  private List<TestError> runValidators(String[] validators, Collection<OsmPrimitive> elements)
+  private List<TestError> runValidation(String[] validators, Collection<OsmPrimitive> elements)
     throws Exception
   {
     List<TestError> errors = new ArrayList<TestError>();
@@ -215,17 +284,44 @@ public class JosmValidator
       String validatorStr = validators[i];
       Logging.trace("validatorStr: " + validatorStr);
       Test validator = (Test)Class.forName(validatorStr).newInstance();
-
-      validator.initialize();
-      validator.setPartialSelection(false);
-      validator.startTest(null);
-      validator.visit(elements);
-      validator.endTest();
-
-      errors.addAll(validator.getErrors());
-      validator.clear();
+      errors.addAll(runValidation(validator, elements));
     }
     numValidationErrors = errors.size();
+    return errors;
+  }
+
+  /*
+   * TODO
+   */
+  private List<TestError> runValidation(
+    Collection<Test> validators, Collection<OsmPrimitive> elements) throws Exception
+  {
+    List<TestError> errors = new ArrayList<TestError>();
+    for (Test validator : validators)
+    {
+      errors.addAll(runValidation(validator, elements));
+    }
+    numValidationErrors = errors.size();
+    return errors;
+  }
+
+  /*
+   * TODO
+   */
+  private List<TestError> runValidation(Test validator, Collection<OsmPrimitive> elements)
+    throws Exception
+  {
+    List<TestError> errors = new ArrayList<TestError>();
+
+    validator.initialize();
+    validator.setPartialSelection(false);
+    validator.startTest(null);
+    validator.visit(elements);
+    validator.endTest();
+
+    errors.addAll(validator.getErrors());
+    validator.clear();
+
     return errors;
   }
 
@@ -305,12 +401,12 @@ public class JosmValidator
     return validatedElements;
   }
 
-  private static String getElementsStr(Collection<OsmPrimitive> elements)
+  private static String getElementsStr(Collection<? extends AbstractPrimitive> elements)
   {
     String elementsStr = "";
-    for (OsmPrimitive element : elements)
+    for (AbstractPrimitive element : elements)
     {
-      elementsStr += element.toString() + ";";
+      elementsStr += element.toString() + ", keys: " + element.getKeys().toString() + ";";
     }
     return elementsStr;
   }

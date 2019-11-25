@@ -111,9 +111,6 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 
   JNIEnv* env = JavaEnvironment::getEnvironment();
 
-  // passing strings for all collection types in order to cut down on JNI calls for performance
-  // reasons; also keeps the client code less complex
-
   // pass in the validators to use, the features to be examined, and whether to just validate or to
   // validate and fix them
 
@@ -148,6 +145,7 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
   // TODO: env->ReleaseStringUTFChars
 
   // call back in to Java to get validation stats
+
   _numAffected = map->size();
   _numValidationErrors =
     (int)env->CallIntMethod(
@@ -166,6 +164,7 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
     // only elements will just have tags indicating which validations they failed; elements also
     // attempted to be fixed after validation will have both the failed validation tag and whether
     // the fix was successful or not
+
     ElementReplacer replacer(OsmXmlReader::fromXml(validatedMapXml.trimmed(), true, true, true));
     LOG_INFO(replacer.getInitStatusMessage());
     replacer.apply(map);
