@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.lang.Exception;
 import java.io.ByteArrayInputStream;
 import java.lang.Class;
+import java.util.Arrays;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -137,6 +138,9 @@ public class JosmValidator
   /**
    * TODO
 
+     passing in xml for features in place of OsmPrimitive and delimited strings in place of
+     containers to keep the JNI client code simpler and likely more performant
+
      @todo change validatorsStr to take in a list of strings
      @todo change featuresXml to take in a list of OsmPrimitive
      @todo change return type to a list of OsmPrimitive
@@ -144,19 +148,17 @@ public class JosmValidator
   public String validate(String validatorsStr, String featuresXml, boolean fixFeatures)
     throws Exception
   {
-    // passing in xml for features in place of OsmPrimitive and delimited strings in place of
-    // containers to keep the JNI client code simpler and likely more performant
-
     String validatedFeaturesXmlStr = "";
 
-    String[] validators = validatorsStr.split(";");
-    Logging.info("Validating elements with " + validators.length + " validators...");
-
-    numValidationErrors = 0;
-    numElementsFixed = 0;
     try
     {
-      Logging.trace("validators: " + validators);
+      numValidationErrors = 0;
+      numElementsFixed = 0;
+
+      String[] validators = validatorsStr.split(";");
+      Logging.info("Validating elements with " + validators.length + " validators...");
+      Logging.trace("validators: " + Arrays.toString(validators));
+      Logging.trace("featuresXml: " + featuresXml);
       Logging.trace("fixFeatures: " + fixFeatures);
 
       // read input element xml
@@ -165,6 +167,7 @@ public class JosmValidator
         OsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
       Logging.trace("elementsToValidate size: " + elementsToValidate.size());
+      Logging.trace("elementsToValidate: " + getElementsStr(elementsToValidate));
 
       // run the specified validation tests against the elements
       Logging.debug("Running validators...");
@@ -233,6 +236,7 @@ public class JosmValidator
     List<TestError> errors, boolean fixFeatures)
   {
     Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
+
     for (TestError error : errors)
     {
       Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
@@ -297,15 +301,26 @@ public class JosmValidator
         validatedElements.add(element);
       }
     }
+
     return validatedElements;
+  }
+
+  private static String getElementsStr(Collection<OsmPrimitive> elements)
+  {
+    String elementsStr = "";
+    for (OsmPrimitive element : elements)
+    {
+      elementsStr += element.toString() + ";";
+    }
+    return elementsStr;
   }
 
   public int getNumValidationErrors() { return numValidationErrors; }
   public int getNumElementsFixed() { return numElementsFixed; }
 
   // these match corresponding entries in core MetadataTags class
-  private static final String VALIDATED_TAG_KEY = "hoot:validated";
-  private static final String FIXED_TAG_KEY = "hoot:validatedAndFixed";
+  private static final String VALIDATED_TAG_KEY = "hoot:validation:error";
+  private static final String FIXED_TAG_KEY = "hoot:validation:error:fixed";
 
   // TODO
   private int numValidationErrors = 0;
