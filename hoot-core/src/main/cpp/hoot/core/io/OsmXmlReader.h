@@ -91,9 +91,14 @@ public:
    * TODO
    *
    * @param xml
+   * @param useDataSourceId
+   * @param useDataSourceStatus
+   * @param keepStatusTag
    * @return
    */
-  static OsmMapPtr fromXml(const QString& xml);
+  static OsmMapPtr fromXml(const QString& xml, const bool useDataSourceId = false,
+                           const bool useDataSourceStatus = false,
+                           const bool keepStatusTag = false);
 
   void read(const QString& path, const OsmMapPtr& map);
 

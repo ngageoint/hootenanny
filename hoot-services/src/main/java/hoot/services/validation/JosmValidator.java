@@ -49,34 +49,58 @@ import org.openstreetmap.josm.data.preferences.JosmUrls;
 
 /**
  * TODO
-
-   @todo using delimited xml strings in place of containers here to keep the JNI code simpler
-   initially;will replace with containers for a likely performance boost after prototype is working
-   @todo move this class out of hoot-services and into its own library, as its not specific to
-   services functionality
  */
 public class JosmValidator
 {
   /**
    * TODO
    */
-  public JosmValidator()
+  public JosmValidator(String logLevel) throws Exception
   {
-    initJosm();
+    initJosm(logLevel);
   }
 
   /*
    * TODO
    */
-  private void initJosm()
+  private void initJosm(String logLevel) throws Exception
   {
-    // TODO: could set this log level from hoot
-    Logging.setLogLevel(Logging.LEVEL_TRACE);
-    //Logging.debug("Initializing JOSM...");
+    setLogLevel(logLevel);
+    Logging.debug("Initializing JOSM...");
     Preferences pref = Preferences.main();
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
+  }
+
+  public void setLogLevel(String logLevel) throws Exception
+  {
+    switch (logLevel.toUpperCase())
+    {
+      case "FATAL":
+        Logging.setLogLevel(Logging.LEVEL_ERROR);
+        break;
+      case "ERROR":
+        Logging.setLogLevel(Logging.LEVEL_ERROR);
+        break;
+      case "WARN":
+        Logging.setLogLevel(Logging.LEVEL_WARN);
+        break;
+      case "STATUS":
+        Logging.setLogLevel(Logging.LEVEL_INFO);
+        break;
+      case "INFO":
+        Logging.setLogLevel(Logging.LEVEL_INFO);
+        break;
+      case "DEBUG":
+        Logging.setLogLevel(Logging.LEVEL_DEBUG);
+        break;
+      case "TRACE":
+        Logging.setLogLevel(Logging.LEVEL_TRACE);
+        break;
+      default:
+        throw new Exception("Invalid log level: " + logLevel);
+    }
   }
 
   /**
@@ -120,10 +144,14 @@ public class JosmValidator
   public String validate(String validatorsStr, String featuresXml, boolean fixFeatures)
     throws Exception
   {
+    // passing in xml for features in place of OsmPrimitive and delimited strings in place of
+    // containers to keep the JNI client code simpler and likely more performant
+
+    String validatedFeaturesXmlStr = "";
+
     String[] validators = validatorsStr.split(";");
     Logging.info("Validating elements with " + validators.length + " validators...");
 
-    String validatedFeaturesStr = "";
     numValidationErrors = 0;
     numElementsFixed = 0;
     try
@@ -154,9 +182,9 @@ public class JosmValidator
 
         // convert the validated elements back to xml
         Logging.debug("Converting validated elements to xml...");
-        validatedFeaturesStr =
+        validatedFeaturesXmlStr =
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
-        Logging.trace("validatedFeaturesStr: " + validatedFeaturesStr);
+        Logging.trace("validatedFeaturesStr: " + validatedFeaturesXmlStr);
       }
 
       Logging.info(
@@ -168,7 +196,8 @@ public class JosmValidator
       System.out.println(e.getMessage());
       throw e;
     }
-    return validatedFeaturesStr; // empty string returned means no features had validation issues
+
+    return validatedFeaturesXmlStr; // empty string returned means no features had validation issues
   }
 
   /*
@@ -210,21 +239,40 @@ public class JosmValidator
       Logging.trace("elementsWithErrors size: " + elementsWithErrors.size());
 
       boolean fixSuccess = false;
+      Logging.trace("error fixable?: " + error.isFixable());
       if (fixFeatures && error.isFixable())
       {
         // fix features based on error found
+        Logging.trace("Fixing features...");
         Command fixCmd = error.getFix();
+        Logging.trace("cmd descr: " + fixCmd.getDescriptionText());
         fixSuccess = fixCmd.executeCommand();
         if (!fixSuccess)
         {
           Logging.trace("Failure executing fix command.");
+        }
+        else
+        {
+          Logging.trace("Success executing fix command.");
         }
       }
 
       for (OsmPrimitive element : elementsWithErrors)
       {
         // mark the validated/fixed elements for use in hoot
-        element.put("hoot:validation", error.getMessage());
+
+        // validated is a ';' separated list describing one or more validations performed
+        String validationVal = "";
+        if (element.hasKey(VALIDATED_TAG_KEY))
+        {
+          validationVal = element.get(VALIDATED_TAG_KEY) + ";" + error.getMessage();
+        }
+        else
+        {
+          validationVal = error.getMessage();
+        }
+        element.put(VALIDATED_TAG_KEY, validationVal);
+
         if (fixFeatures)
         {
           String fixStatus = "false";
@@ -233,7 +281,18 @@ public class JosmValidator
             fixStatus = "true";
             numElementsFixed++;
           }
-          element.put("hoot:validation:fixed", fixStatus);
+
+          // fixed is a ';' separated list describing one or more fixes made
+          String fixedVal = "";
+          if (element.hasKey(FIXED_TAG_KEY))
+          {
+            fixedVal = element.get(FIXED_TAG_KEY) + ";" + fixStatus;
+          }
+          else
+          {
+            fixedVal = fixStatus;
+          }
+          element.put(FIXED_TAG_KEY, fixedVal);
         }
         validatedElements.add(element);
       }
@@ -243,6 +302,10 @@ public class JosmValidator
 
   public int getNumValidationErrors() { return numValidationErrors; }
   public int getNumElementsFixed() { return numElementsFixed; }
+
+  // these match corresponding entries in core MetadataTags class
+  private static final String VALIDATED_TAG_KEY = "hoot:validated";
+  private static final String FIXED_TAG_KEY = "hoot:validatedAndFixed";
 
   // TODO
   private int numValidationErrors = 0;

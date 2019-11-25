@@ -34,6 +34,7 @@ namespace hoot
 
 bool ElementIterator::hasNext()
 {
+  LOG_VART(_pending.empty());
   if (_pending.empty())
   {
     _next();

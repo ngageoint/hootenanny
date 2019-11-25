@@ -68,6 +68,8 @@ _status(Status::Invalid),
 _missingNodeCount(0),
 _missingWayCount(0),
 _badAccuracyCount(0),
+_keepStatusTag(false),
+_useFileStatus(false),
 _useDataSourceId(false),
 _wayId(0),
 _relationId(0),
@@ -456,11 +458,16 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
-OsmMapPtr OsmXmlReader::fromXml(const QString& xml)
+OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
+                                const bool useDataSourceStatus, const bool keepStatusTag)
 {
   LOG_DEBUG("Reading map from xml...");
   OsmMapPtr map(new OsmMap());
-  OsmXmlReader().readFromString(xml, map);
+  OsmXmlReader reader;
+  reader.setUseDataSourceIds(useDataSourceId);
+  reader.setUseFileStatus(useDataSourceStatus);
+  reader.setKeepStatusTag(keepStatusTag);
+  reader.readFromString(xml, map);
   return map;
 }
 

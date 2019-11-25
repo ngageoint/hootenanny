@@ -43,8 +43,14 @@ _numElementsFixed(0)
 {
   JNIEnv* env = JavaEnvironment::getEnvironment();
   _validatorClass = env->FindClass("hoot/services/validation/JosmValidator");
-  jmethodID constructorMethodId = env->GetMethodID(_validatorClass, "<init>", "()V");
-  _validator = env->NewObject(_validatorClass, constructorMethodId);
+  jmethodID constructorMethodId =
+    env->GetMethodID(_validatorClass, "<init>", "(Ljava/lang/String;)V");
+  // TODO: change back
+  //jstring logLevelStr =
+    //env->NewStringUTF(Log::getInstance().getLevelAsString().toStdString().c_str());
+  jstring logLevelStr = env->NewStringUTF(QString("TRACE").toStdString().c_str());
+  _validator = env->NewObject(_validatorClass, constructorMethodId, logLevelStr);
+  // TODO: env->ReleaseStringUTFChars
 }
 
 void JosmValidator::setConfiguration(const Settings& /*conf*/)
@@ -53,69 +59,6 @@ void JosmValidator::setConfiguration(const Settings& /*conf*/)
   //validation.josm.validator.include.list
 
   // TODO
-}
-
-void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
-{
-  LOG_VARD(map->size());
-  LOG_VARD(_fixElements);
-  _numAffected = 0;
-  _numValidationErrors = 0;
-  _numElementsFixed = 0;
-
-  // convert map to xml string - see notes in JosmValidator.java about using xml instead of element
-  // objects for now
-
-  JNIEnv* env = JavaEnvironment::getEnvironment();
-
-  // TODO: change validatorsStr to be a string list
-  // TODO: change mapXml to be a collection of OsmPrimitive
-  // TODO: change return type to be a collection of OsmPrimitive
-  jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
-  jstring mapXml = env->NewStringUTF(OsmXmlWriter::toString(map, false).toStdString().c_str());
-  jobject validationResult =
-    env->CallObjectMethod(
-    _validator,
-    env->GetMethodID(
-      _validatorClass, "validate", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
-    validatorsStr,
-    mapXml,
-    _fixElements);
-  // TODO: env->ReleaseStringUTFChars
-  if (env->ExceptionCheck())
-  {
-    env->ExceptionDescribe();
-    env->ExceptionClear();
-    // TODO: get exception message from object and add here?
-    throw HootException("Error calling JosmValidator::apply.");
-  }
-
-  // update map with fixed features and add validation info to validation results collection
-
-  const char* xml = env->GetStringUTFChars((jstring)validationResult, NULL);
-  const QString validatedMapXml(xml);
-  LOG_VART(validatedMapXml);
-  // TODO: env->ReleaseStringUTFChars
-
-  _numAffected = map->size();
-  _numValidationErrors =
-    (int)env->CallIntMethod(
-      _validator, env->GetMethodID(_validatorClass, "getNumValidationErrors", "()I"));
-  if (_fixElements)
-  {
-    _numElementsFixed =
-      (int)env->CallIntMethod(
-        _validator, env->GetMethodID(_validatorClass, "getNumElementsFixed", "()I"));
-  }
-
-  // empty string returned means no features had validation issues
-  if (!validatedMapXml.trimmed().isEmpty())
-  {
-    ElementReplacer replacer(OsmXmlReader::fromXml(validatedMapXml.trimmed()));
-    LOG_INFO(replacer.getInitStatusMessage());
-    replacer.apply(map);
-    LOG_INFO(replacer.getCompletedStatusMessage());
-  }
 }
 
 QMap<QString, QString> JosmValidator::getAvailableValidators() const
@@ -156,6 +99,78 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
   //env->ReleaseStringUTFChars //??
 
   return validators;
+}
+
+void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
+{
+  LOG_VARD(map->size());
+  LOG_VARD(_fixElements);
+  _numAffected = 0;
+  _numValidationErrors = 0;
+  _numElementsFixed = 0;
+
+  JNIEnv* env = JavaEnvironment::getEnvironment();
+
+  // passing strings for all collection types in order to cut down on JNI calls for performance
+  // reasons; also keeps the client code less complex
+
+  // pass in the validators to use, the features to be examined, and whether to just validate or to
+  // validate and fix them
+
+  // validators delimited by ';'
+  jstring validatorsStr = env->NewStringUTF(_validatorsToUse.join(";").toStdString().c_str());
+  // convert map to xml string
+  jstring mapXml = env->NewStringUTF(OsmXmlWriter::toString(map, false).toStdString().c_str());
+  jobject validationResult =
+    env->CallObjectMethod(
+    _validator,
+    // JNI sig format: (input params...)return type
+    // Java sig: String validate(String validatorsStr, String featuresXml, boolean fixFeatures)
+    env->GetMethodID(
+      _validatorClass, "validate", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
+    validatorsStr,
+    mapXml,
+    _fixElements);
+  // TODO: env->ReleaseStringUTFChars
+  if (env->ExceptionCheck())
+  {
+    env->ExceptionDescribe();
+    env->ExceptionClear();
+    // TODO: get exception message from object and add here?
+    throw HootException("Error calling JosmValidator::apply.");
+  }
+
+  // update map with fixed features and add validation info to validation results collection
+
+  const char* xml = env->GetStringUTFChars((jstring)validationResult, NULL);
+  const QString validatedMapXml(xml);
+  LOG_VART(validatedMapXml);
+  // TODO: env->ReleaseStringUTFChars
+
+  // call back in to Java to get validation stats
+  _numAffected = map->size();
+  _numValidationErrors =
+    (int)env->CallIntMethod(
+      _validator, env->GetMethodID(_validatorClass, "getNumValidationErrors", "()I"));
+  if (_fixElements)
+  {
+    _numElementsFixed =
+      (int)env->CallIntMethod(
+        _validator, env->GetMethodID(_validatorClass, "getNumElementsFixed", "()I"));
+  }
+
+  // empty string returned means no features had validation issues
+  if (!validatedMapXml.trimmed().isEmpty())
+  {
+    // replace any of the validated and/or fixed elements with what's in the original map; validated
+    // only elements will just have tags indicating which validations they failed; elements also
+    // attempted to be fixed after validation will have both the failed validation tag and whether
+    // the fix was successful or not
+    ElementReplacer replacer(OsmXmlReader::fromXml(validatedMapXml.trimmed(), true, true, true));
+    LOG_INFO(replacer.getInitStatusMessage());
+    replacer.apply(map);
+    LOG_INFO(replacer.getCompletedStatusMessage());
+  }
 }
 
 }

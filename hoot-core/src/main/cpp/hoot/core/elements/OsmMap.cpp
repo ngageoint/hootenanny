@@ -1181,12 +1181,24 @@ void OsmMap::_next()
 {
   if (_currentElementId.isNull())
   {
-    _currentNodeItr = getNodes().begin();
+    if (getNodes().size() > 0)
+    {
+      _currentNodeItr = getNodes().begin();
+    }
+    else if (getWays().size() > 0)
+    {
+      _currentWayItr = getWays().begin();
+    }
+    else if (getRelations().size() > 0)
+    {
+      _currentRelationItr = getRelations().begin();
+    }
   }
 
-  if (_currentNodeItr != getNodes().end())
+  if (getNodes().size() > 0 && _currentNodeItr != getNodes().end())
   {
     const ElementId nodeId = ElementId(ElementType::Node, _currentNodeItr->first);
+    LOG_VARD(nodeId);
     _addElement(getNode(nodeId.getId()));
     _currentElementId = nodeId;
     _currentNodeItr++;
@@ -1195,9 +1207,10 @@ void OsmMap::_next()
       _currentWayItr = getWays().begin();
     }
   }
-  else if (_currentWayItr != getWays().end())
+  else if (getWays().size() > 0 && _currentWayItr != getWays().end())
   {
     const ElementId wayId = ElementId(ElementType::Way, _currentWayItr->first);
+    LOG_VARD(wayId);
     _addElement(getWay(wayId.getId()));
     _currentElementId = wayId;
     _currentWayItr++;
@@ -1206,9 +1219,10 @@ void OsmMap::_next()
       _currentRelationItr = getRelations().begin();
     }
   }
-  else if (_currentRelationItr != getRelations().end())
+  else if (getRelations().size() > 0 && _currentRelationItr != getRelations().end())
   {
     const ElementId relationId = ElementId(ElementType::Relation, _currentRelationItr->first);
+    LOG_VARD(relationId);
     _addElement(getRelation(relationId.getId()));
     _currentElementId = relationId;
     _currentRelationItr++;
