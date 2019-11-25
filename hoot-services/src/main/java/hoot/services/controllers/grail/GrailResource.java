@@ -700,13 +700,27 @@ public class GrailResource {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
-        Map<String, Map<String, Double>> allStats = new HashMap<>();
+
+        List<String> columns = new ArrayList<>();
+        List<JSONObject> data = new ArrayList<>();
+        JSONObject nodeObj = new JSONObject();
+        nodeObj.put("label", "node");
+        JSONObject wayObj = new JSONObject();
+        wayObj.put("label", "way");
+        JSONObject relationObj = new JSONObject();
+        relationObj.put("label", "relation");
+        JSONObject totalObj = new JSONObject();
+        totalObj.put("label", "total");
 
         // Get public overpass data
         String publicUrl = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
         ArrayList<Double> publicStats = retrieveOverpassStats(publicUrl, false);
         if(publicStats.size() != 0) {
-            allStats.put("publicStats", mapOverpassStats(publicStats));
+            columns.add(GRAIL_OVERPASS_LABEL);
+            totalObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(0));
+            nodeObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(1));
+            wayObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(2));
+            relationObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(3));
         }
 
         // Get private overpass data if private overpass url was provided
@@ -714,21 +728,36 @@ public class GrailResource {
             String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
             ArrayList<Double> privateStats = retrieveOverpassStats(privateUrl, true);
             if(privateStats.size() != 0) {
-                allStats.put("privateStats", mapOverpassStats(privateStats));
+                columns.add(GRAIL_RAILS_LABEL);
+                totalObj.put(GRAIL_RAILS_LABEL, privateStats.get(0));
+                nodeObj.put(GRAIL_RAILS_LABEL, privateStats.get(1));
+                wayObj.put(GRAIL_RAILS_LABEL, privateStats.get(2));
+                relationObj.put(GRAIL_RAILS_LABEL, privateStats.get(3));
             }
         }
 
-        return Response.ok().entity(allStats).build();
-    }
+        data.add(nodeObj);
+        data.add(wayObj);
+        data.add(relationObj);
+        data.add(totalObj);
+        /*
+        * Example response object
+            {
+            columns: ["OSM", "NOME"],
+            data: [
+               {label: "node", NOME: 3, OSM: 5},
+               {label: "way", NOME: 1, OSM: 2},
+               {label: "relation", NOME: 0, OSM: 1},
+               {label: "total", NOME: 4, OSM: 7}
+            ]
+            }
+        *
+        */
+        JSONObject stats = new JSONObject();
+        stats.put("columns", columns);
+        stats.put("data", data);
 
-    private Map<String, Double> mapOverpassStats(ArrayList<Double> stats) {
-        Map<String, Double> statsMap = new HashMap<>();
-        statsMap.put("total", stats.get(0));
-        statsMap.put("node", stats.get(1));
-        statsMap.put("way", stats.get(2));
-        statsMap.put("relation", stats.get(3));
-
-        return statsMap;
+        return Response.ok().entity(stats).build();
     }
 
     /**
