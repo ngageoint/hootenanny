@@ -71,10 +71,13 @@ _badAccuracyCount(0),
 _keepStatusTag(false),
 _useFileStatus(false),
 _useDataSourceId(false),
+_addSourceDateTime(true),
 _wayId(0),
 _relationId(0),
 _inputCompressed(false),
+_addChildRefsWhenMissing(false),
 _numRead(0),
+_statusUpdateInterval(1000),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());

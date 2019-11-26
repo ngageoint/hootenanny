@@ -28,7 +28,6 @@ package hoot.services.validation;
 
 import java.io.InputStream;
 
-import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.io.OsmReader;
@@ -37,10 +36,18 @@ import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.io.IllegalDataException;
 
 /**
- * TODO
+ * Reads data for use by JOSM validation called by hoot
+ *
+ * The default behavior of OsmReader is to convert all negative ID elements to positive in
+ * preparation for upload to the server. In hoot's case, we want to retain all ID's regardless...
+ * positive/negative issues get handled when a changeset is created. Overriding buildPrimitive was
+ * the only way found to make this happen...there may be a better way.
  */
 public class HootOsmReader extends OsmReader
 {
+  /*
+   * TODO
+   */
   protected OsmPrimitive buildPrimitive(PrimitiveData pd)
   {
     OsmPrimitive p;
@@ -50,7 +57,8 @@ public class HootOsmReader extends OsmReader
 
     p = pd.getType().newInstance(pd.getUniqueId(), true);
     Logging.trace("primitive id: " + p.getId());
-    AbstractPrimitive.advanceUniqueId(pd.getUniqueId());
+    // This is in the parent method but blows up here.
+    //AbstractPrimitive.advanceUniqueId(pd.getUniqueId());
     p.setVisible(pd.isVisible());
     p.load(pd);
 
@@ -60,7 +68,7 @@ public class HootOsmReader extends OsmReader
   }
 
   /**
-   * TODO
+   * @see OsmReader.parseDataSet
    */
   public static DataSet parseDataSet(InputStream source) throws IllegalDataException
   {

@@ -181,6 +181,7 @@ _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 void DataConverter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
+  //TODO: handle validation.enabled - 'off', 'validate', or 'fix'
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());

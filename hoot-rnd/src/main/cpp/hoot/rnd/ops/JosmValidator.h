@@ -120,6 +120,9 @@ private:
   // TODO
   int _numElementsFixed;
 
+  /*
+   * TODO
+   */
   OsmMapPtr _getValidatedMap(OsmMapPtr& inputMap);
 };
 

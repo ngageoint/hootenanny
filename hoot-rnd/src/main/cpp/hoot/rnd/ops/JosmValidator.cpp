@@ -96,7 +96,7 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
       validators[validatorName] = validatorDescription;
     }
   }
-  //env->ReleaseStringUTFChars //??
+  //TODO: env->ReleaseStringUTFChars //??
 
   return validators;
 }
@@ -181,9 +181,7 @@ OsmMapPtr JosmValidator::_getValidatedMap(OsmMapPtr& inputMap)
 
   if (!validatedMapXml.trimmed().isEmpty())
   {
-    // TODO
-
-    validatedMap = OsmXmlReader::fromXml(validatedMapXml.trimmed(), true, true, true);
+    validatedMap = OsmXmlReader::fromXml(validatedMapXml.trimmed(), true, true, false);
   }
 
   // return a null map if no features had validation issues

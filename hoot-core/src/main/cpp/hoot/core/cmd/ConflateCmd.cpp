@@ -220,6 +220,9 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _numTotalTasks++;
   }
+
+  //TODO: handle validation.enabled - 'off', 'validate', or 'fix'
+
   // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
   // each op internally.
   if (ConfigOptions().getConflatePreOps().size() > 0)

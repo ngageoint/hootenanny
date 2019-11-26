@@ -4510,7 +4510,7 @@ normal operation.
 * Data Type: string
 * Default Value: `off`
 
-'off', 'validate', or 'fix' - TODO: handle this convenience setting in conflate and convert commands
+TODO
 
 === validation.hoot.josm.library.path
 
