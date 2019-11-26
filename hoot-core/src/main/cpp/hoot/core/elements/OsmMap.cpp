@@ -595,12 +595,14 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 }
 
 void OsmMap::replaceNode(long oldId, long newId)
-{
+{  
   // nothing to do
   if (oldId == newId)
   {
     return;
   }
+
+  LOG_TRACE("Replacing node: " << oldId << " with: " << newId << "...");
 
   for (size_t i = 0; i < _listeners.size(); i++)
   {

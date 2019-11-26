@@ -59,6 +59,7 @@ void ElementReplacer::apply(std::shared_ptr<OsmMap>& map)
     if (map->containsElement(elementToReplaceWith->getElementId()))
     {
       map->replace(map->getElement(elementToReplaceWith->getElementId()), elementToReplaceWith);
+      _numAffected++;
     }
   }
 }

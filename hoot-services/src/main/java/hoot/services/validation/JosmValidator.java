@@ -236,10 +236,10 @@ public class JosmValidator
       }
       catch (Exception e)
       {
-        String msg = "Error gathering";
+        String msg = "Error during gathering";
         if (fixFeatures)
         {
-          msg += " and fixing";
+          msg += " and fixing of";
         }
         msg += " validated elements: ";
         Logging.error(msg + e.getMessage());
@@ -255,9 +255,10 @@ public class JosmValidator
       try
       {
         Logging.debug("Converting validated elements to xml...");
+        // TODO: this xml needs to be fully rehydrated
         validatedFeaturesXmlStr =
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
-        Logging.trace("validatedFeaturesStr: " + validatedFeaturesXmlStr);
+        Logging.trace("validatedFeaturesXmlStr: " + validatedFeaturesXmlStr);
       }
       catch (Exception e)
       {

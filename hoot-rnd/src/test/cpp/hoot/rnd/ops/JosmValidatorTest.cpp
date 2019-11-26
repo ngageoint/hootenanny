@@ -41,8 +41,8 @@ static const QString JOSM_TESTS_NAMESPACE = "org.openstreetmap.josm.data.validat
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runValidateNoErrorsTest);
+  //CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  //CPPUNIT_TEST(runValidateNoErrorsTest);
   CPPUNIT_TEST(runValidateWithErrorsTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();

@@ -55,6 +55,7 @@ _removeOnlyUnused(removeOnlyUnused)
 
 void RemoveNodeByEid::_removeNodeNoCheck(const OsmMapPtr& map, long nId)
 {
+  LOG_TRACE("Removing node: " << nId << "...");
   map->_index->removeNode(map->getNode(_nodeIdToRemove));
   map->_nodes.erase(nId);
 }
