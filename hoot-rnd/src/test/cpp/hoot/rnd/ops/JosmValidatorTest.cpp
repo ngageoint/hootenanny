@@ -103,14 +103,16 @@ public:
     // validation error in UntaggedWay, and it will be marked with a hoot validation error tag.
 
     JosmValidator uut(false);
-    // TODO: add another validator
-    uut.setValidatorsToUse(QStringList(JOSM_TESTS_NAMESPACE + ".UntaggedWay"));
+    QStringList validators;
+    validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");
+    validators.append(JOSM_TESTS_NAMESPACE + ".UnclosedWays");
+    uut.setValidatorsToUse(validators);
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
-    CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsValidated());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(44, uut.getNumElementsValidated());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsFixed());
 
     const QString outTestFileName =  testName + "-out.osm";
@@ -143,6 +145,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmValidatorTest, "glacial");
 
 }

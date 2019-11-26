@@ -94,13 +94,6 @@ public class JosmValidator
 
   /**
    * TODO
-
-     passing in xml for features in place of OsmPrimitive and delimited strings in place of
-     containers to keep the JNI client code simpler and likely more performant
-
-     @todo change validatorsStr to take in a list of strings
-     @todo change featuresXml to take in a list of OsmPrimitive
-     @todo change return type to a list of OsmPrimitive
    */
   public String validate(String validatorsStr, String featuresXml, boolean fixFeatures)
     throws Exception
@@ -139,6 +132,7 @@ public class JosmValidator
 
     // read in the input element xml
 
+    // TODO: clone initial map?
     Collection<OsmPrimitive> elementsToValidate = null;
     try
     {
@@ -177,7 +171,7 @@ public class JosmValidator
       throw e;
     }
 
-    // if any validation issues were found, collect and optionally fix features failing validation
+    // if any validation issues were found, collect, optionally fix features failing validation,
     // and add validation/fix msg tags for use in hoot
 
     Collection<AbstractPrimitive> validatedElements = null;
@@ -186,7 +180,7 @@ public class JosmValidator
       try
       {
         Logging.debug("Parsing validated elements...");
-        validatedElements = collectValidatedElements(errors, fixFeatures);
+        validatedElements = collectAndOptionallyFixValidatedElements(errors, fixFeatures);
         Logging.debug("validatedElements size: " + validatedElements.size());
         Logging.trace("validatedElements: " + JosmUtils.elementsToString(validatedElements));
       }
@@ -285,11 +279,11 @@ public class JosmValidator
   /*
    * TODO
    */
-  private Collection<AbstractPrimitive> collectValidatedElements(
+  private Collection<AbstractPrimitive> collectAndOptionallyFixValidatedElements(
     List<TestError> errors, boolean fixFeatures)
   {
-    // type:id mapped to element; would use PrimitiveId here but don't know how to get it directly
-    // from the OsmPrimitive
+    // <element type>:<element id> mapped to element; would like to use PrimitiveId here but don't
+    // know how to get it directly from the OsmPrimitive
     Map<String, AbstractPrimitive> validatedElements =
       new HashMap<String, AbstractPrimitive>();
 
@@ -299,22 +293,9 @@ public class JosmValidator
       Logging.trace("elementsWithErrors size: " + elementsWithErrors.size());
 
       boolean fixSuccess = false;
-      Logging.trace("error fixable?: " + error.isFixable());
-      if (fixFeatures && error.isFixable())
+      if (fixFeatures)
       {
-        // fix features based on error found
-        Logging.trace("Fixing features...");
-        Command fixCmd = error.getFix();
-        Logging.trace("cmd descr: " + fixCmd.getDescriptionText());
-        fixSuccess = fixCmd.executeCommand();
-        if (!fixSuccess)
-        {
-          Logging.trace("Failure executing fix command.");
-        }
-        else
-        {
-          Logging.trace("Success executing fix command.");
-        }
+        fixSuccess = fixValidatedElement(error);
       }
 
       for (OsmPrimitive element : elementsWithErrors)
@@ -359,14 +340,38 @@ public class JosmValidator
 
         // we need to add all children elements of elements in the validated map; map won't allow
         // duplicate elements to be added
-        Map<String, AbstractPrimitive> validatedElementsTemp = JosmUtils.hydrate(element);
-        Logging.trace("validatedElementsTemp: " + validatedElementsTemp);
-        validatedElements.putAll(validatedElementsTemp);
+        validatedElements.putAll(JosmUtils.hydrate(element));
         Logging.trace("validatedElements size: " + validatedElements.size());
       }
     }
 
     return validatedElements.values();
+  }
+
+  /*
+   * TODO
+   */
+  private boolean fixValidatedElement(TestError error)
+  {
+    Logging.trace("error fixable?: " + error.isFixable());
+    if (error.isFixable())
+    {
+      // fix features based on error found
+      Logging.trace("Fixing feature(s)...");
+      Command fixCmd = error.getFix();
+      Logging.trace("cmd descr: " + fixCmd.getDescriptionText());
+      boolean fixSuccess = fixCmd.executeCommand();
+      if (!fixSuccess)
+      {
+        Logging.trace("Failure executing fix command.");
+      }
+      else
+      {
+        Logging.trace("Success executing fix command.");
+      }
+      return fixSuccess;
+    }
+    return false;
   }
 
   public int getNumValidationErrors() { return numValidationErrors; }

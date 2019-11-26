@@ -42,6 +42,8 @@ import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
 import org.openstreetmap.josm.data.preferences.JosmUrls;
 import org.openstreetmap.josm.spi.preferences.Config;
 import org.openstreetmap.josm.data.Preferences;
+import org.openstreetmap.josm.command.DeleteCommand;
+import org.openstreetmap.josm.actions.DeleteAction;
 
 /**
  * TODO
@@ -59,6 +61,7 @@ public class JosmUtils
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
+    DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
   }
 
   /**
@@ -100,8 +103,8 @@ public class JosmUtils
   private static String getElementMapKey(OsmPrimitive element)
   {
     Logging.trace(
-      "key: " + element.getClass().getSimpleName() + ":" + String.valueOf(element.getId()));
-    return element.getClass().getSimpleName() + ":" + String.valueOf(element.getId());
+      "key: " + element.getClass().getSimpleName() + ":" + String.valueOf(element.getUniqueId()));
+    return element.getClass().getSimpleName() + ":" + String.valueOf(element.getUniqueId());
   }
 
   /**
@@ -148,10 +151,12 @@ public class JosmUtils
     Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
     elementWithChildren.put(getElementMapKey(way), way);
     List<Node> wayNodes = way.getNodes();
+    Logging.trace("wayNodes size: " + wayNodes.size());
     for (Node wayNode : wayNodes)
     {
       elementWithChildren.put(getElementMapKey(wayNode), wayNode);
     }
+    Logging.trace("elementWithChildren size: " + elementWithChildren.size());
     return elementWithChildren;
   }
 
