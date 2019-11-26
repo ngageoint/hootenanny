@@ -134,6 +134,7 @@ public class JosmValidator
     // read in the input element xml
 
     // TODO: clone initial map?
+
     Collection<OsmPrimitive> elementsToValidate = null;
     try
     {
@@ -200,6 +201,7 @@ public class JosmValidator
 
     // convert any validated elements back to xml; we'll just end up returning empty xml if no
     // errors were found
+    // TODO: combine original copied input map back with validated features
 
     if (validatedElements != null)
     {
@@ -313,10 +315,14 @@ public class JosmValidator
       Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
       boolean fixSuccess = false;
-      if (fixFeatures)
+      Logging.trace("error fixable?: " + error.isFixable());
+      if (fixFeatures && error.isFixable())
       {
         fixSuccess = fixValidatedElement(error);
       }
+
+      // TODO: if the element was deleted by the fix, we need to ensure its not returned in the
+      // output
 
       for (OsmPrimitive element : elementsWithErrors)
       {
@@ -373,29 +379,19 @@ public class JosmValidator
    */
   private boolean fixValidatedElement(TestError error)
   {
-    Logging.trace("error fixable?: " + error.isFixable());
-    if (error.isFixable())
-    {
-      // fix features based on error found
-      Logging.trace(
-        "Fixing " + error.getPrimitives().size() + " elements for error: \"" + error.getMessage() +
-        "\" found by test: " + error.getTester().getName() + "...");
-      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+    // fix features based on error found
+    Logging.trace(
+      "Fixing " + error.getPrimitives().size() + " elements for error: \"" + error.getMessage() +
+      "\" found by test: " + error.getTester().getName() + "...");
+    Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
-      Command fixCmd = error.getFix();
-      Logging.trace("cmd descr: " + fixCmd.getDescriptionText());
-      boolean fixSuccess = fixCmd.executeCommand();
-      if (!fixSuccess)
-      {
-        Logging.trace("Failure executing fix command: " + fixCmd.getDescriptionText());
-      }
-      else
-      {
-        Logging.trace("Success executing fix command:" + fixCmd.getDescriptionText());
-      }
-      return fixSuccess;
-    }
-    return false;
+    Command fixCmd = error.getFix();
+    Logging.trace("fixCmd: " + JosmUtils.commandToString(fixCmd, true));
+
+    boolean fixSuccess = fixCmd.executeCommand();
+    String fixStatus = fixSuccess ? "Success" : "Failure";
+    Logging.trace(fixStatus + " executing fix command: " + fixCmd.getDescriptionText());
+    return fixSuccess;
   }
 
   public int getNumValidationErrors() { return numValidationErrors; }

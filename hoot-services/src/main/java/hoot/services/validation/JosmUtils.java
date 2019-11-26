@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -42,8 +43,11 @@ import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
 import org.openstreetmap.josm.data.preferences.JosmUrls;
 import org.openstreetmap.josm.spi.preferences.Config;
 import org.openstreetmap.josm.data.Preferences;
+import org.openstreetmap.josm.command.PseudoCommand;
+import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.command.DeleteCommand;
 import org.openstreetmap.josm.actions.DeleteAction;
+import org.openstreetmap.josm.command.SequenceCommand;
 
 /**
  * TODO
@@ -187,5 +191,30 @@ public class JosmUtils
       elementsStr += element.toString() + ", keys: " + element.getKeys().toString() + ";";
     }
     return elementsStr;
+  }
+
+  /**
+   * TODO
+
+     Not all of the commands implement toString()
+   */
+  public static String commandToString(Command command, boolean printElements)
+  {
+    String str = "";
+    if (command instanceof SequenceCommand)
+    {
+      SequenceCommand seqCmd = (SequenceCommand)command;
+      str += "Name: " + seqCmd.getName() + ", description: " + seqCmd.getDescriptionText();
+      str += ", commands: " + Arrays.toString(seqCmd.getChildren().toArray(new PseudoCommand[]{}));
+      if (printElements)
+      {
+        str += ", elements: " + elementsToString(seqCmd.getParticipatingPrimitives());
+      }
+    }
+    else
+    {
+      str += command.toString() + ", description: " + command.getDescriptionText();
+    }
+    return str;
   }
 }

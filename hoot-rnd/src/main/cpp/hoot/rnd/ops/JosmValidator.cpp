@@ -104,7 +104,9 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
 void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
 {
   LOG_VARD(map->size());
+  LOG_TRACE("Input map: " << OsmXmlWriter::toString(map, true));
   LOG_VARD(_fixElements);
+
   _numAffected = 0;
   _numValidationErrors = 0;
   _numElementsFixed = 0;
@@ -137,12 +139,14 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
     // attempted to be fixed after validation will have both the failed validation tag and whether
     // the fix was successful or not
 
+    // TODO: get rid of this after whole map gets returned
     ElementReplacer replacer(validatedMap);
     LOG_INFO(replacer.getInitStatusMessage());
     replacer.apply(map);
     LOG_INFO(replacer.getCompletedStatusMessage());
-    //LOG_VART(OsmXmlWriter::toString(map, true));
   }
+
+  LOG_TRACE("Final map: " << OsmXmlWriter::toString(map, true));
 }
 
 OsmMapPtr JosmValidator::_getValidatedMap(OsmMapPtr& inputMap)
@@ -180,6 +184,7 @@ OsmMapPtr JosmValidator::_getValidatedMap(OsmMapPtr& inputMap)
   LOG_VART(validatedMapXml);
   // TODO: env->ReleaseStringUTFChars
 
+  // TODO: won't need this check after whole map gets returned
   if (!validatedMapXml.trimmed().isEmpty())
   {
     validatedMap = OsmXmlReader::fromXml(validatedMapXml.trimmed(), true, true, false);

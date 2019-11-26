@@ -130,7 +130,7 @@ public:
     LOG_VARD(map->size());
 
     JosmValidator uut(true);
-    // TODO: replace UntaggedWay and then add another validator
+    // TODO: add another validator
     uut.setValidatorsToUse(QStringList(JOSM_TESTS_NAMESPACE + ".UntaggedWay"));
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
