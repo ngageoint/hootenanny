@@ -255,7 +255,6 @@ public class JosmValidator
       try
       {
         Logging.debug("Converting validated elements to xml...");
-        // TODO: this xml needs to be fully rehydrated
         validatedFeaturesXmlStr =
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
         Logging.trace("validatedFeaturesXmlStr: " + validatedFeaturesXmlStr);
@@ -337,6 +336,7 @@ public class JosmValidator
 
     for (TestError error : errors)
     {
+      // TODO: this xml needs to be fully rehydrated when fixes occur (or regardless)
       Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
       Logging.trace("elementsWithErrors size: " + elementsWithErrors.size());
 

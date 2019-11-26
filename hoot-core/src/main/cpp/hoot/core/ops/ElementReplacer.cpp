@@ -58,7 +58,16 @@ void ElementReplacer::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(map->containsElement(elementToReplaceWith->getElementId()));
     if (map->containsElement(elementToReplaceWith->getElementId()))
     {
-      map->replace(map->getElement(elementToReplaceWith->getElementId()), elementToReplaceWith);
+      LOG_TRACE(
+        "Updating " << map->getElement(elementToReplaceWith->getElementId())->getElementId() <<
+        " with " << elementToReplaceWith->getElementId() << "...");
+      LOG_VART(elementToReplaceWith);
+      ElementPtr elementToReplace = map->getElement(elementToReplaceWith->getElementId());
+      LOG_VART(elementToReplace);
+      assert(elementToReplace->getElementId() == elementToReplaceWith->getElementId());
+      elementToReplace.reset(elementToReplaceWith->clone());
+      map->addElement(elementToReplace);
+      LOG_VART(elementToReplace);
       _numAffected++;
     }
   }

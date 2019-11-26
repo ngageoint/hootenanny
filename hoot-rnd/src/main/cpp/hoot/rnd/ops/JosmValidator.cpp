@@ -141,6 +141,7 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
     LOG_INFO(replacer.getInitStatusMessage());
     replacer.apply(map);
     LOG_INFO(replacer.getCompletedStatusMessage());
+    LOG_VART(OsmXmlWriter::toString(map, true));
   }
 }
 
@@ -185,6 +186,7 @@ OsmMapPtr JosmValidator::_getValidatedMap(OsmMapPtr& inputMap)
   }
 
   // return a null map if no features had validation issues
+  LOG_VART(OsmXmlWriter::toString(validatedMap, true));
   return validatedMap;
 }
 

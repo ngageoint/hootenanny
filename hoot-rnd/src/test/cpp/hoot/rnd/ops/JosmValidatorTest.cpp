@@ -41,8 +41,8 @@ static const QString JOSM_TESTS_NAMESPACE = "org.openstreetmap.josm.data.validat
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  //CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  //CPPUNIT_TEST(runValidateNoErrorsTest);
+  CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  CPPUNIT_TEST(runValidateNoErrorsTest);
   CPPUNIT_TEST(runValidateWithErrorsTest);
   //CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
@@ -116,6 +116,7 @@ public:
 
     MapProjector::projectToWgs84(map);
     const QString outTestFileName =  testName + "-out.osm";
+    // TODO: setting debug to false should actually suppress the validation tag...
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
