@@ -51,6 +51,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -699,22 +700,64 @@ public class GrailResource {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
 
+
+        List<String> columns = new ArrayList<>();
+        List<JSONObject> data = new ArrayList<>();
+        JSONObject nodeObj = new JSONObject();
+        nodeObj.put("label", "node");
+        JSONObject wayObj = new JSONObject();
+        wayObj.put("label", "way");
+        JSONObject relationObj = new JSONObject();
+        relationObj.put("label", "relation");
+        JSONObject totalObj = new JSONObject();
+        totalObj.put("label", "total");
+
         // Get public overpass data
         String publicUrl = replaceSensitiveData(PUBLIC_OVERPASS_URL) + "?data=" + overpassQuery;
-        String publicStats = retrieveOverpassStats(publicUrl, false);
-
-        // Get private overpass data if private overpass url was provided
-        String privateStats = null;
-        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
-            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
-            privateStats = retrieveOverpassStats(privateUrl, true);
+        ArrayList<Double> publicStats = retrieveOverpassStats(publicUrl, false);
+        if(publicStats.size() != 0) {
+            columns.add(GRAIL_OVERPASS_LABEL);
+            totalObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(0));
+            nodeObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(1));
+            wayObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(2));
+            relationObj.put(GRAIL_OVERPASS_LABEL, publicStats.get(3));
         }
 
-        JSONObject jobInfo = new JSONObject();
-        jobInfo.put("publicStats", publicStats);
-        jobInfo.put("privateStats", privateStats);
+        // Get private overpass data if private overpass url was provided
+        if (!replaceSensitiveData(PRIVATE_OVERPASS_URL).equals(PRIVATE_OVERPASS_URL)) {
+            String privateUrl = replaceSensitiveData(PRIVATE_OVERPASS_URL) + "?data=" + overpassQuery;
+            ArrayList<Double> privateStats = retrieveOverpassStats(privateUrl, true);
+            if(privateStats.size() != 0) {
+                columns.add(GRAIL_RAILS_LABEL);
+                totalObj.put(GRAIL_RAILS_LABEL, privateStats.get(0));
+                nodeObj.put(GRAIL_RAILS_LABEL, privateStats.get(1));
+                wayObj.put(GRAIL_RAILS_LABEL, privateStats.get(2));
+                relationObj.put(GRAIL_RAILS_LABEL, privateStats.get(3));
+            }
+        }
 
-        return Response.ok(jobInfo.toJSONString()).build();
+        data.add(nodeObj);
+        data.add(wayObj);
+        data.add(relationObj);
+        data.add(totalObj);
+        /*
+        * Example response object
+            {
+            columns: ["OSM", "NOME"],
+            data: [
+               {label: "node", NOME: 3, OSM: 5},
+               {label: "way", NOME: 1, OSM: 2},
+               {label: "relation", NOME: 0, OSM: 1},
+               {label: "total", NOME: 4, OSM: 7}
+            ]
+            }
+        *
+        */
+        JSONObject stats = new JSONObject();
+        stats.put("columns", columns);
+        stats.put("data", data);
+
+        return Response.ok().entity(stats).build();
     }
 
     /**
@@ -897,8 +940,8 @@ public class GrailResource {
      *          If false then no cert will need to be used for the request
      * @return
      */
-    private static String retrieveOverpassStats(String url, boolean usePrivateOverpass) {
-        StringBuilder statsInfo = new StringBuilder();
+    private static ArrayList<Double> retrieveOverpassStats(String url, boolean usePrivateOverpass) {
+        ArrayList<Double> statCounts = new ArrayList<>();
 
         try {
             InputStream inputStream;
@@ -919,13 +962,21 @@ public class GrailResource {
 
             boolean firstLine = true;
             while ((inputLine = br.readLine()) != null) {
-                //Prevents newline from being printed for last line
+                //After the first line it is all stat numbers
                 if(!firstLine){
-                    statsInfo.append("\n");
+                    String[] rowCounts = inputLine.split("\t");
+                    for(int i = 0; i < rowCounts.length; i++) {
+                        statCounts.set(i, statCounts.get(i) + Double.parseDouble(rowCounts[i]));
+                    }
+                } else {
+                    // This else is only entered for the first line which contains the column names so we initialize arraylist with that many elements
+                    int numColumns = inputLine.split("\t").length;
+                    for(int i = 0; i < numColumns; i++) {
+                        statCounts.add(0.0);
+                    }
                 }
-                firstLine = false;
 
-                statsInfo.append(inputLine);
+                firstLine = false;
             }
 
             br.close();
@@ -935,7 +986,7 @@ public class GrailResource {
             throw new WebApplicationException(exc, Response.status(Response.Status.NOT_FOUND).entity(msg).build());
         }
 
-        return statsInfo.toString();
+        return statCounts;
     }
 
 }
