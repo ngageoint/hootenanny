@@ -19,7 +19,7 @@ cp /home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm/4.4.4/me-josm-4.4
 
 # add out hoot josm validator classes to it
 cd hoot-services/target/classes
-jar uf /home/vagrant/hoot/tmp/hoot-josm.jar hoot/services/validation/JosmValidator.class
+jar uf /home/vagrant/hoot/tmp/hoot-josm.jar hoot/services/validation
 
 chmod -R 777 /home/vagrant/hoot/tmp
 

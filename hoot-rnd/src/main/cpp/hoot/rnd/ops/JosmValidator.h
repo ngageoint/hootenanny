@@ -109,14 +109,18 @@ private:
   bool _fixElements;
 
   // TODO
-  int _numValidationErrors;
-  // TODO
-  int _numElementsFixed;
-
+  JNIEnv* _javaEnv;
   // TODO
   jclass _validatorClass;
   // TODO
   jobject _validator;
+
+  // TODO
+  int _numValidationErrors;
+  // TODO
+  int _numElementsFixed;
+
+  OsmMapPtr _getValidatedMap(OsmMapPtr& inputMap);
 };
 
 }

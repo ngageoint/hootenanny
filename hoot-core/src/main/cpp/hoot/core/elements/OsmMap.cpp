@@ -1177,6 +1177,11 @@ QSet<long> OsmMap::getRelationIds() const
   return ids;
 }
 
+void OsmMap::resetIterator()
+{
+  _currentNodeItr = getNodes().begin();
+}
+
 void OsmMap::_next()
 {
   if (_currentElementId.isNull())

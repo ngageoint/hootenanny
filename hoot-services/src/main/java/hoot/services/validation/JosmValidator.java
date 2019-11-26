@@ -26,6 +26,8 @@
  */
 package hoot.services.validation;
 
+import hoot.services.validation.HootOsmReader;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +44,6 @@ import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.spi.preferences.Config;
 import org.openstreetmap.josm.data.Preferences;
-import org.openstreetmap.josm.io.OsmReader;
 import org.openstreetmap.josm.io.OsmApi;
 import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
@@ -157,14 +158,15 @@ public class JosmValidator
 
     Logging.debug("fixFeatures: " + fixFeatures);
 
+    // TODO: check for empty map too?
     if (featuresXml == null || featuresXml.trim().isEmpty())
     {
       throw new Exception("No features passed to validation.");
     }
     Logging.trace("featuresXml: " + featuresXml);
 
-    // empty or null validators means we'll run them all
     String[] validators = null;
+    // empty or null input validators means we'll run them all
     if (validatorsStr != null && !validatorsStr.trim().isEmpty())
     {
       validators = validatorsStr.split(";");
@@ -179,16 +181,15 @@ public class JosmValidator
     }
     Logging.debug("validators: " + Arrays.toString(validators));
 
+    // read in the input element xml
+
     Collection<OsmPrimitive> elementsToValidate = null;
     try
     {
-      // read input element xml
-
       Logging.debug("Converting input elements from xml...");
-      //TODO: OsmPrimitive::allowNegativeId ??
       elementsToValidate =
-        OsmReader.parseDataSet(
-          new ByteArrayInputStream(featuresXml.getBytes()), null).getAllPrimitives();
+        HootOsmReader.parseDataSet(
+          new ByteArrayInputStream(featuresXml.getBytes())).getAllPrimitives();
       Logging.debug("elementsToValidate size: " + elementsToValidate.size());
       Logging.trace("elementsToValidate: " + getElementsStr(elementsToValidate));
     }
@@ -198,19 +199,19 @@ public class JosmValidator
       throw e;
     }
 
+    // run the specified validation tests against the elements
+
     List<TestError> errors = null;
+    Logging.debug("Running validators...");
     try
     {
-      // run the specified validation tests against the elements
-
-      Logging.debug("Running validators...");
       if (validators == null)
       {
-        runValidation(OsmValidator.getTests(), elementsToValidate);
+        errors = runValidation(OsmValidator.getTests(), elementsToValidate);
       }
       else
       {
-        runValidation(validators, elementsToValidate);
+        errors = runValidation(validators, elementsToValidate);
       }
       Logging.debug("errors size: " + errors.size());
     }
@@ -220,49 +221,49 @@ public class JosmValidator
       throw e;
     }
 
-    Collection<AbstractPrimitive> validatedElements = null;
-    try
-    {
-      // we'll just return empty features if no errors were found
-      if (errors.size() > 0)
-      {
-        // optionally fix features failing validation and add validation/fix msg tags for use in
-        // hoot
+    // if any validation issues were found, collect and optionally fix features failing validation
+    // and add validation/fix msg tags for use in hoot
 
+    Collection<AbstractPrimitive> validatedElements = null;
+    if (errors.size() > 0)
+    {
+      try
+      {
         Logging.debug("Parsing validated elements...");
         validatedElements = collectValidatedElements(errors, fixFeatures);
         Logging.debug("validatedElements size: " + validatedElements.size());
         Logging.trace("validatedElements: " + getElementsStr(validatedElements));
       }
-    }
-    catch (Exception e)
-    {
-      String msg = "Error gathering";
-      if (fixFeatures)
+      catch (Exception e)
       {
-        msg += " and fixing";
+        String msg = "Error gathering";
+        if (fixFeatures)
+        {
+          msg += " and fixing";
+        }
+        msg += " validated elements: ";
+        Logging.error(msg + e.getMessage());
+        throw e;
       }
-      msg += " validated elements: ";
-      Logging.error(msg + e.getMessage());
-      throw e;
     }
 
-    try
-    {
-      if (validatedElements.size() > 0)
-      {
-        // convert the validated elements back to xml
+    // convert any validated elements back to xml; we'll just end up returning empty xml if no
+    // errors were found
 
+    if (validatedElements != null)
+    {
+      try
+      {
         Logging.debug("Converting validated elements to xml...");
         validatedFeaturesXmlStr =
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
         Logging.trace("validatedFeaturesStr: " + validatedFeaturesXmlStr);
       }
-    }
-    catch (Exception e)
-    {
-      Logging.error("Error converting validated elements back to XML: " + e.getMessage());
-      throw e;
+      catch (Exception e)
+      {
+        Logging.error("Error converting validated elements back to XML: " + e.getMessage());
+        throw e;
+      }
     }
 
     Logging.info(

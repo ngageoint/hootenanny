@@ -53,6 +53,11 @@ public:
 
   bool hasNext();
 
+  /**
+   * TODO
+   */
+  virtual void resetIterator() = 0;
+
 protected:
 
   /**

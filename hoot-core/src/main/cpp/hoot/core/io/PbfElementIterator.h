@@ -48,6 +48,9 @@ public:
    */
   PbfElementIterator(QString path);
 
+  // not implemented
+  virtual void resetIterator() {}
+
 private:
 
   std::shared_ptr<std::istream> _in;

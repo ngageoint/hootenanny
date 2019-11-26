@@ -390,6 +390,7 @@ protected:
   void _initCounters();
 
   virtual void _next();
+  virtual void resetIterator();
 };
 
 typedef std::shared_ptr<OsmMap> OsmMapPtr;

@@ -97,7 +97,7 @@ public:
   {
     const QString testName = "runValidateWithErrorsTest";
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm", true, true);
     LOG_VARD(map->size());
 
     // The next to last way has both no tags and only one node, so it should definitely cause a
