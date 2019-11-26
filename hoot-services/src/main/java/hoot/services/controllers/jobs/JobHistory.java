@@ -38,6 +38,10 @@ public class JobHistory {
     @JsonProperty("jobs")
     List<JobStatusResponse> jobs;
 
+    //No-arg constructor needed for tests
+    public JobHistory() {
+    }
+
     public JobHistory(Long total, List<JobStatusResponse> jobs) {
         this.total = total;
         this.jobs = jobs;
