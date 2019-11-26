@@ -27,6 +27,7 @@
 package hoot.services.controllers.conflation;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -116,7 +117,12 @@ public class ConflateResource {
 
             Command[] workflow = { conflateCommand, updateTagsCommand, setFolderCommand };
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE));
+            Map<String, Object> jobStatusTags = new HashMap<>();
+            jobStatusTags.put("bbox", params.getBounds());
+            jobStatusTags.put("input1", params.getInput1());
+            jobStatusTags.put("input2", params.getInput2());
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.CONFLATE, jobStatusTags));
         }
         catch (IllegalArgumentException iae) {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

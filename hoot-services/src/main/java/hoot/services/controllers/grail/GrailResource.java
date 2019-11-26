@@ -430,13 +430,12 @@ public class GrailResource {
                 }
             }
 
-            // The parents parents of the current job is the conflate job which contains the resource id of the merged layer
-            String grandparentJobId = DbUtils.getParentId(reqParams.getParentId());
-            Long resourceId = DbUtils.getMapIdByJobId(grandparentJobId); // the merged layer
+            Map<String, String> tags = DbUtils.getJobTags(reqParams.getParentId());
+            String resourceId = tags.get("input1");
 
             if(resourceId != null) {
                 // Setup workflow to refresh rails data after the push
-                long referenceId = DbUtils.getMergedReference(resourceId);
+                long referenceId = Long.parseLong(resourceId);
                 Long parentFolderId = DbUtils.getParentFolder(referenceId);
                 Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
 
@@ -455,7 +454,11 @@ public class GrailResource {
                 }
             }
 
-            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, reqParams.getParentId()));
+            Map<String, Object> jobStatusTags = new HashMap<>();
+            jobStatusTags.put("bbox", reqParams.getBounds());
+            jobStatusTags.put("parentId", reqParams.getParentId());
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.UPLOAD_CHANGESET, jobStatusTags));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -537,8 +540,14 @@ public class GrailResource {
             ExternalCommand makeChangeset = grailCommandFactory.build(mainJobId, params, debugLevel, (replacement) ? DeriveChangesetReplacementCommand.class : DeriveChangesetCommand.class, this.getClass());
             workflow.add(makeChangeset);
 
+            Map<String, Object> jobStatusTags = new HashMap<>();
+            jobStatusTags.put("bbox", reqParams.getBounds());
+            jobStatusTags.put("input1", input1);
+            jobStatusTags.put("input2", input2);
+            jobStatusTags.put("parentId", reqParams.getParentId());
+
             // Now roll the dice and run everything.....
-            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, reqParams.getParentId()));
+            jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
         }
         catch (WebApplicationException wae) {
             throw wae;
@@ -630,7 +639,10 @@ public class GrailResource {
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, folderId, layerName, user, this.getClass());
         workflow.add(setFolder);
 
-        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+        Map<String, Object> jobStatusTags = new HashMap<>();
+        jobStatusTags.put("bbox", bbox);
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
         ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
         response = responseBuilder.build();
@@ -754,7 +766,6 @@ public class GrailResource {
             throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
         }
 
-        Response response;
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
 
@@ -771,12 +782,12 @@ public class GrailResource {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
         }
 
-        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT));
+        Map<String, Object> jobStatusTags = new HashMap<>();
+        jobStatusTags.put("bbox", reqParams.getBounds());
 
-        ResponseBuilder responseBuilder = Response.ok(json.toJSONString());
-        response = responseBuilder.build();
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
 
-        return response;
+        return Response.ok(json.toJSONString()).build();
     }
 
     private List<Command> setupRailsPull(String jobId, GrailParams params, Long parentFolderId) throws UnavailableException {

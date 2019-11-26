@@ -54,7 +54,7 @@ public class JobStatus {
 
     private Integer trackableCommandCount;
 
-    private String parentId;
+    private Object tags;
 
     public java.sql.Timestamp getEnd() {
         return end;
@@ -136,12 +136,12 @@ public class JobStatus {
         this.trackableCommandCount = commandCount;
     }
 
-    public String getParentId() {
-        return parentId;
+    public Object getTags() {
+        return tags;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setTags(Object tags) {
+        this.tags = tags;
     }
 }
 
