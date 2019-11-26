@@ -91,7 +91,7 @@ public class JobResource {
 
         JobStatusResponse response = new JobStatusResponse();
 
-        hoot.services.models.db.JobStatus jobStatus = this.jobStatusManager.getJobStatusObj(jobId);
+        hoot.services.models.db.JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
             if (!jobStatus.getUserId().equals(user.getId())) {
@@ -104,7 +104,7 @@ public class JobResource {
             response.setLastText(jobStatus.getStatusDetail());
 
             if (includeCommandDetail) {
-                List<CommandStatus> commandDetail = this.jobStatusManager.getCommandDetail(jobId, user.getId());
+                List<CommandStatus> commandDetail = jobStatusManager.getCommandDetail(jobId, user.getId());
                 response.setCommandDetail(commandDetail);
             }
         }
@@ -134,7 +134,7 @@ public class JobResource {
     public Response deleteJob(@Context HttpServletRequest request, @PathParam("jobId") String jobId) {
         Users user = Users.fromRequest(request);
         try {
-            this.jobStatusManager.deleteJob(jobId, user.getId());
+            jobStatusManager.deleteJob(jobId, user.getId());
         }
         catch (Exception e) {
             logger.error("job delete", e);
@@ -166,7 +166,7 @@ public class JobResource {
         Users user = Users.fromRequest(request);
         List<String> errors;
         try {
-            errors = this.jobStatusManager.getJobErrors(jobId, user.getId());
+            errors = jobStatusManager.getJobErrors(jobId, user.getId());
         }
         catch (Exception e) {
             logger.error("job error", e);

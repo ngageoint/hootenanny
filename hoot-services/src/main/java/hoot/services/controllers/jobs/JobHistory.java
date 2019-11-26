@@ -22,20 +22,37 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
- */
-package hoot.services.jobs;
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ */package hoot.services.controllers.jobs;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import hoot.services.controllers.job.JobStatusResponse;
-import hoot.services.controllers.jobs.JobHistory;
-import hoot.services.models.db.Users;
 
-@Service
-public interface JobsStatusesManager {
-    List<JobStatusResponse> getRunningJobs();
-    JobHistory getJobsHistory(Users user, String sort, long offset, long limit, String type, String status);
+public class JobHistory {
+    @JsonProperty("total")
+    Long total;
+
+    @JsonProperty("jobs")
+    List<JobStatusResponse> jobs;
+
+    //No-arg constructor needed for tests
+    public JobHistory() {
+    }
+
+    public JobHistory(Long total, List<JobStatusResponse> jobs) {
+        this.total = total;
+        this.jobs = jobs;
+    }
+
+    public Long getTotal() {
+        return total;
+    }
+
+    public List<JobStatusResponse> getJobs() {
+        return jobs;
+    }
+
 }
