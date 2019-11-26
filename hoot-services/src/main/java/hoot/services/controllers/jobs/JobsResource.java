@@ -72,7 +72,7 @@ public class JobsResource {
     @Path("/running")
     @Produces(MediaType.APPLICATION_JSON)
     public List<JobStatusResponse> getRunningJobs() {
-        return this.jobsStatusesManager.getRunningJobs();
+        return jobsStatusesManager.getRunningJobs();
     }
 
     /**
@@ -94,7 +94,7 @@ public class JobsResource {
             ) {
         Users user = Users.fromRequest(request);
         try {
-            return this.jobsStatusesManager.getJobsHistory(user, sort, offset, limit, type, status);
+            return jobsStatusesManager.getJobsHistory(user, sort, offset, limit, type, status);
         } catch (IllegalArgumentException iae) {
             logger.error(iae.getMessage(), iae);
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());

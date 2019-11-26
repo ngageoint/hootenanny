@@ -38,9 +38,6 @@ public class JobHistory {
     @JsonProperty("jobs")
     List<JobStatusResponse> jobs;
 
-    public JobHistory() {
-    }
-
     public JobHistory(Long total, List<JobStatusResponse> jobs) {
         this.total = total;
         this.jobs = jobs;
