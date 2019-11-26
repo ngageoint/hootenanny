@@ -27,7 +27,9 @@
 package hoot.services.job;
 
 
+import java.util.Map;
 import hoot.services.command.Command;
+import hoot.services.utils.PostgresUtils;
 
 
 public class Job {
@@ -36,31 +38,27 @@ public class Job {
     private Long mapId;
     private Command[] commands;
     private JobType jobType;
-    private String parentId;
+    private Object tags;
 
-    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId, String parentId) {
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId, Map<String, Object> tags) {
         this.jobId = jobId;
         this.userId = userId;
         this.commands = commands;
         this.jobType = jobType;
         this.mapId = mapId;
-        this.parentId = parentId;
-    }
-
-    public Job(String jobId, Long userId, Command[] commands, JobType jobType) {
-        this(jobId, userId, commands, jobType, null, null);
+        this.tags = tags;
     }
 
     public Job(String jobId, Long userId, Command[] commands, JobType jobType, Long mapId) {
         this(jobId, userId, commands, jobType, mapId, null);
     }
 
-    public Job(String jobId, Long userId, Command[] commands, JobType jobType, String parentId) {
-        this(jobId, userId, commands, jobType, null, parentId);
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType, Map<String, Object> tags) {
+        this(jobId, userId, commands, jobType, null, tags);
     }
 
-    public Job(String jobId) {
-        this.jobId = jobId;
+    public Job(String jobId, Long userId, Command[] commands, JobType jobType) {
+        this(jobId, userId, commands, jobType, null, null);
     }
 
     public String getJobId() {
@@ -103,11 +101,11 @@ public class Job {
         this.mapId = mapId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setTags(Object tags) {
+        this.tags = tags;
     }
 
-    public String getParentId() {
-        return parentId;
+    public Map<String, String> getTags() {
+        return PostgresUtils.postgresObjToHStore(tags);
     }
 }

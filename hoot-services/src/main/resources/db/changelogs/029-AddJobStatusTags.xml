@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="bobby.simic" id="29" context="default">
+        <comment>
+            This change adds tags hstore to job_status which will contain info on the job such as inputs used and parent job id
+        </comment>
+
+        <addColumn tableName="job_status">
+            <column name="tags" type="hstore" />
+        </addColumn>
+
+        <!-- sets a default value for future rows inserted into the column -->
+        <addDefaultValue tableName="job_status" columnName="tags" defaultValue="" />
+
+        <!-- change the value of already existing rows to '' -->
+        <addNotNullConstraint tableName="job_status" columnName="tags" defaultNullValue="" />
+
+        <dropColumn tableName="job_status" columnName="parent_id" />
+
+    </changeSet>
+</databaseChangeLog>

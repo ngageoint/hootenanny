@@ -36,6 +36,7 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.SimplePath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.ColumnMetadata;
 
@@ -74,7 +75,7 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
 
     public final NumberPath<Integer> trackableCommandCount = createNumber("trackableCommandCount", Integer.class);
 
-    public final StringPath parentId = createString("parentId");
+    public final SimplePath<Object> tags = createSimple("tags", Object.class);
 
     public QJobStatus(String variable) {
         super(JobStatus.class, forVariable(variable), "public", "job_status");
@@ -107,7 +108,7 @@ public class QJobStatus extends com.querydsl.sql.RelationalPathBase<JobStatus> {
         addMetadata(userId, ColumnMetadata.named("user_id").withIndex(8).ofType(Types.BIGINT).withSize(19).notNull());
         addMetadata(jobType, ColumnMetadata.named("job_type").withIndex(9).ofType(Types.INTEGER).withSize(10));
         addMetadata(trackableCommandCount, ColumnMetadata.named("trackable_command_count").withIndex(10).ofType(Types.INTEGER).withSize(10));
-        addMetadata(parentId, ColumnMetadata.named("parent_id").withIndex(11).ofType(Types.VARCHAR).withSize(64).notNull());
+        addMetadata(tags, ColumnMetadata.named("tags").withIndex(11).ofType(Types.OTHER).withSize(2147483647));
     }
 
 }
