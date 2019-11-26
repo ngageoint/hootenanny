@@ -53,6 +53,7 @@
     <tag k='highway' v='road' />
     <tag k='note' v='3' />
   </way>
+  <!-- one node way -->
   <way id='-21186769' visible='true'>
     <nd ref='-21186700' />
     <tag k='highway' v='road' />
@@ -66,11 +67,18 @@
     <tag k='highway' v='road' />
     <tag k='note' v='2' />
   </way>
+  <!-- unclosed area -->
   <way id='-21186773' visible='true'>
     <nd ref='-21186771' />
     <nd ref='-21186772' />
     <nd ref='-21186774' />
     <tag k='area' v='yes' />
     <tag k='note' v='5' />
+  </way>
+  <!-- one node way and unclosed area -->
+  <way id='-21186774' visible='true'>
+    <nd ref='-21186764' />
+    <tag k='area' v='yes' />
+    <tag k='note' v='6' />
   </way>
 </osm>

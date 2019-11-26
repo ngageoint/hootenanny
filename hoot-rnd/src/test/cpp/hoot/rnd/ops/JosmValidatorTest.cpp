@@ -40,10 +40,10 @@ static const QString JOSM_TESTS_NAMESPACE = "org.openstreetmap.josm.data.validat
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runValidateNoErrorsTest);
-  CPPUNIT_TEST(runValidateWithErrorsTest);
-  //CPPUNIT_TEST(runValidateAndFixTest);
+  //CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  //CPPUNIT_TEST(runValidateNoErrorsTest);
+  //CPPUNIT_TEST(runValidateWithErrorsTest);
+  CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -99,20 +99,21 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm", true, true);
     LOG_VARD(map->size());
 
-    // The next to last way has both no tags and only one node, so it should definitely cause a
-    // validation error in UntaggedWay, and it will be marked with a hoot validation error tag.
+    // In this dataset, there is one way with one node that fails the UntaggedWay validator, one
+    // unclosed area that fails the UnclosedWays validator, and one way that fails both validators.
+
+    // TODO: only getting one error for the element that I thought would fail both validators;
+    // need to look into it; may need a better example for a multi-error element
 
     JosmValidator uut(false);
     QStringList validators;
     validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");
     validators.append(JOSM_TESTS_NAMESPACE + ".UnclosedWays");
     uut.setValidatorsToUse(validators);
-    LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
-    LOG_INFO(uut.getCompletedStatusMessage());
 
-    CPPUNIT_ASSERT_EQUAL(44, uut.getNumElementsValidated());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsValidated());
+    CPPUNIT_ASSERT_EQUAL(3, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsFixed());
 
     const QString outTestFileName =  testName + "-out.osm";

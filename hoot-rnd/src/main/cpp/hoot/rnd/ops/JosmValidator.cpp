@@ -141,7 +141,7 @@ void JosmValidator::apply(std::shared_ptr<OsmMap>& map)
     LOG_INFO(replacer.getInitStatusMessage());
     replacer.apply(map);
     LOG_INFO(replacer.getCompletedStatusMessage());
-    LOG_VART(OsmXmlWriter::toString(map, true));
+    //LOG_VART(OsmXmlWriter::toString(map, true));
   }
 }
 

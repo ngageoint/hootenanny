@@ -105,6 +105,7 @@ public class JosmValidator
 
     // verify inputs
 
+    Logging.debug("validatorsStr: " + validatorsStr);
     Logging.debug("fixFeatures: " + fixFeatures);
 
     // TODO: check for empty map too?
@@ -112,7 +113,7 @@ public class JosmValidator
     {
       throw new Exception("No features passed to validation.");
     }
-    Logging.trace("featuresXml: " + featuresXml);
+    //Logging.trace("featuresXml: " + featuresXml);
 
     String[] validators = null;
     // empty or null input validators means we'll run them all
@@ -120,7 +121,7 @@ public class JosmValidator
     {
       validators = validatorsStr.split(";");
     }
-    if (validators == null)
+    if (validators != null)
     {
       Logging.info("Validating elements with " + validators.length + " validators...");
     }
@@ -141,7 +142,7 @@ public class JosmValidator
         HootOsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes())).getAllPrimitives();
       Logging.debug("elementsToValidate size: " + elementsToValidate.size());
-      Logging.trace("elementsToValidate: " + JosmUtils.elementsToString(elementsToValidate));
+      //Logging.trace("elementsToValidate: " + JosmUtils.elementsToString(elementsToValidate));
     }
     catch (Exception e)
     {
@@ -182,7 +183,7 @@ public class JosmValidator
         Logging.debug("Parsing validated elements...");
         validatedElements = collectAndOptionallyFixValidatedElements(errors, fixFeatures);
         Logging.debug("validatedElements size: " + validatedElements.size());
-        Logging.trace("validatedElements: " + JosmUtils.elementsToString(validatedElements));
+        //Logging.trace("validatedElements: " + JosmUtils.elementsToString(validatedElements));
       }
       catch (Exception e)
       {
@@ -207,7 +208,7 @@ public class JosmValidator
         Logging.debug("Converting validated elements to xml...");
         validatedFeaturesXmlStr =
           OsmApi.getOsmApi("http://localhost").toBulkXml(validatedElements, true);
-        Logging.trace("validatedFeaturesXmlStr: " + validatedFeaturesXmlStr);
+        //Logging.trace("validatedFeaturesXmlStr: " + validatedFeaturesXmlStr);
       }
       catch (Exception e)
       {
@@ -273,7 +274,23 @@ public class JosmValidator
     errors.addAll(validator.getErrors());
     validator.clear();
 
+    Logging.trace(
+      "Validator: " + validator.getName() + " found " + errors.size() + " errors with " +
+      getNumElementsInvolvedInErrors(errors) + " total involved elements.");
     return errors;
+  }
+
+  /*
+   * TODO
+   */
+  private int getNumElementsInvolvedInErrors(List<TestError> errors)
+  {
+    int numElementsInvolved = 0;
+    for (TestError error : errors)
+    {
+      numElementsInvolved += error.getPrimitives().size();
+    }
+    return numElementsInvolved;
   }
 
   /*
@@ -290,7 +307,10 @@ public class JosmValidator
     for (TestError error : errors)
     {
       Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
-      Logging.trace("elementsWithErrors size: " + elementsWithErrors.size());
+      Logging.trace(
+        "Processing " + error.getPrimitives().size() + " elements for error: \"" +
+        error.getMessage() + "\" found by test: " + error.getTester().getName() + "...");
+      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
       boolean fixSuccess = false;
       if (fixFeatures)
@@ -357,17 +377,21 @@ public class JosmValidator
     if (error.isFixable())
     {
       // fix features based on error found
-      Logging.trace("Fixing feature(s)...");
+      Logging.trace(
+        "Fixing " + error.getPrimitives().size() + " elements for error: \"" + error.getMessage() +
+        "\" found by test: " + error.getTester().getName() + "...");
+      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+
       Command fixCmd = error.getFix();
       Logging.trace("cmd descr: " + fixCmd.getDescriptionText());
       boolean fixSuccess = fixCmd.executeCommand();
       if (!fixSuccess)
       {
-        Logging.trace("Failure executing fix command.");
+        Logging.trace("Failure executing fix command: " + fixCmd.getDescriptionText());
       }
       else
       {
-        Logging.trace("Success executing fix command.");
+        Logging.trace("Success executing fix command:" + fixCmd.getDescriptionText());
       }
       return fixSuccess;
     }

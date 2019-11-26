@@ -52,11 +52,11 @@ public class HootOsmReader extends OsmReader
   {
     OsmPrimitive p;
 
-    Logging.trace("primitive data unique id: " + pd.getUniqueId());
-    Logging.trace("primitive data primitive id: " + pd.getPrimitiveId());
+    //Logging.trace("primitive data unique id: " + pd.getUniqueId());
+    //Logging.trace("primitive data primitive id: " + pd.getPrimitiveId());
 
     p = pd.getType().newInstance(pd.getUniqueId(), true);
-    Logging.trace("primitive id: " + p.getId());
+    //Logging.trace("primitive id: " + p.getId());
     // This is in the parent method but blows up here.
     //AbstractPrimitive.advanceUniqueId(pd.getUniqueId());
     p.setVisible(pd.isVisible());
