@@ -30,7 +30,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/rnd/ops/JosmValidator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
@@ -114,7 +113,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsFixed());
 
-    MapProjector::projectToWgs84(map);
     const QString outTestFileName =  testName + "-out.osm";
     // TODO: setting debug to false should actually suppress the validation tag...
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
@@ -125,7 +123,7 @@ public:
   {
     const QString testName = "runValidateAndFixTest";
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
+    OsmMapReaderFactory::read(map, _inputPath + "/runValidateWithErrorsTest-in.osm");
     LOG_VARD(map->size());
 
     JosmValidator uut(true);
@@ -139,9 +137,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(1, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(1, uut.getNumElementsFixed());
 
-    MapProjector::projectToWgs84(map);
     const QString outTestFileName =  testName + "-out.osm";
-    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, true);
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 };

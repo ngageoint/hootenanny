@@ -61,13 +61,20 @@ void ElementReplacer::apply(std::shared_ptr<OsmMap>& map)
       LOG_TRACE(
         "Updating " << map->getElement(elementToReplaceWith->getElementId())->getElementId() <<
         " with " << elementToReplaceWith->getElementId() << "...");
-      LOG_VART(elementToReplaceWith);
+
       ElementPtr elementToReplace = map->getElement(elementToReplaceWith->getElementId());
+
+      LOG_VART(elementToReplaceWith);
       LOG_VART(elementToReplace);
       assert(elementToReplace->getElementId() == elementToReplaceWith->getElementId());
+
+      // map replace doesn't seem to work when the elements have the same id but different content,
+      // so cloning the element and re-adding it to do the replacement
       elementToReplace.reset(elementToReplaceWith->clone());
       map->addElement(elementToReplace);
+
       LOG_VART(elementToReplace);
+
       _numAffected++;
     }
   }

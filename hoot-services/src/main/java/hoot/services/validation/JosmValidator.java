@@ -27,9 +27,12 @@
 package hoot.services.validation;
 
 import hoot.services.validation.HootOsmReader;
+import hoot.services.validation.JosmUtils;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Collection;
 import java.lang.Exception;
 import java.io.ByteArrayInputStream;
@@ -42,12 +45,8 @@ import org.openstreetmap.josm.data.validation.OsmValidator;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
-import org.openstreetmap.josm.spi.preferences.Config;
-import org.openstreetmap.josm.data.Preferences;
 import org.openstreetmap.josm.io.OsmApi;
 import org.openstreetmap.josm.command.Command;
-import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
-import org.openstreetmap.josm.data.preferences.JosmUrls;
 
 /**
  * TODO
@@ -59,50 +58,7 @@ public class JosmValidator
    */
   public JosmValidator(String logLevel) throws Exception
   {
-    initJosm(logLevel);
-  }
-
-  /*
-   * TODO
-   */
-  private void initJosm(String logLevel) throws Exception
-  {
-    setLogLevel(logLevel);
-    Logging.debug("Initializing JOSM...");
-    Preferences pref = Preferences.main();
-    Config.setPreferencesInstance(pref);
-    Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
-    Config.setUrlsProvider(JosmUrls.getInstance());
-  }
-
-  public void setLogLevel(String logLevel) throws Exception
-  {
-    switch (logLevel.toUpperCase())
-    {
-      case "FATAL":
-        Logging.setLogLevel(Logging.LEVEL_ERROR);
-        break;
-      case "ERROR":
-        Logging.setLogLevel(Logging.LEVEL_ERROR);
-        break;
-      case "WARN":
-        Logging.setLogLevel(Logging.LEVEL_WARN);
-        break;
-      case "STATUS":
-        Logging.setLogLevel(Logging.LEVEL_INFO);
-        break;
-      case "INFO":
-        Logging.setLogLevel(Logging.LEVEL_INFO);
-        break;
-      case "DEBUG":
-        Logging.setLogLevel(Logging.LEVEL_DEBUG);
-        break;
-      case "TRACE":
-        Logging.setLogLevel(Logging.LEVEL_TRACE);
-        break;
-      default:
-        throw new Exception("Invalid log level: " + logLevel);
-    }
+    JosmUtils.initJosm(logLevel);
   }
 
   /**
@@ -191,7 +147,7 @@ public class JosmValidator
         HootOsmReader.parseDataSet(
           new ByteArrayInputStream(featuresXml.getBytes())).getAllPrimitives();
       Logging.debug("elementsToValidate size: " + elementsToValidate.size());
-      Logging.trace("elementsToValidate: " + getElementsStr(elementsToValidate));
+      Logging.trace("elementsToValidate: " + JosmUtils.elementsToString(elementsToValidate));
     }
     catch (Exception e)
     {
@@ -232,7 +188,7 @@ public class JosmValidator
         Logging.debug("Parsing validated elements...");
         validatedElements = collectValidatedElements(errors, fixFeatures);
         Logging.debug("validatedElements size: " + validatedElements.size());
-        Logging.trace("validatedElements: " + getElementsStr(validatedElements));
+        Logging.trace("validatedElements: " + JosmUtils.elementsToString(validatedElements));
       }
       catch (Exception e)
       {
@@ -332,11 +288,13 @@ public class JosmValidator
   private Collection<AbstractPrimitive> collectValidatedElements(
     List<TestError> errors, boolean fixFeatures)
   {
-    Collection<AbstractPrimitive> validatedElements = new ArrayList<AbstractPrimitive>();
+    // type:id mapped to element; would use PrimitiveId here but don't know how to get it directly
+    // from the OsmPrimitive
+    Map<String, AbstractPrimitive> validatedElements =
+      new HashMap<String, AbstractPrimitive>();
 
     for (TestError error : errors)
     {
-      // TODO: this xml needs to be fully rehydrated when fixes occur (or regardless)
       Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
       Logging.trace("elementsWithErrors size: " + elementsWithErrors.size());
 
@@ -373,6 +331,7 @@ public class JosmValidator
         {
           validationVal = error.getMessage();
         }
+        Logging.trace("validationVal: " + validationVal);
         element.put(VALIDATED_TAG_KEY, validationVal);
 
         if (fixFeatures)
@@ -394,23 +353,20 @@ public class JosmValidator
           {
             fixedVal = fixStatus;
           }
+          Logging.trace("fixedVal: " + fixedVal);
           element.put(FIXED_TAG_KEY, fixedVal);
         }
-        validatedElements.add(element);
+
+        // we need to add all children elements of elements in the validated map; map won't allow
+        // duplicate elements to be added
+        Map<String, AbstractPrimitive> validatedElementsTemp = JosmUtils.hydrate(element);
+        Logging.trace("validatedElementsTemp: " + validatedElementsTemp);
+        validatedElements.putAll(validatedElementsTemp);
+        Logging.trace("validatedElements size: " + validatedElements.size());
       }
     }
 
-    return validatedElements;
-  }
-
-  private static String getElementsStr(Collection<? extends AbstractPrimitive> elements)
-  {
-    String elementsStr = "";
-    for (AbstractPrimitive element : elements)
-    {
-      elementsStr += element.toString() + ", keys: " + element.getKeys().toString() + ";";
-    }
-    return elementsStr;
+    return validatedElements.values();
   }
 
   public int getNumValidationErrors() { return numValidationErrors; }
