@@ -94,12 +94,14 @@ public:
   {
     return
       QString::number(_numValidationErrors) + " / " + QString::number(_numAffected) +
-      " elements had validation errors. Fixed " + QString::number(_numElementsFixed) + " errors.";
+      " elements had validation errors. Fixed " + QString::number(_numGroupsOfElementsFixed) +
+      " errors. Deleted " + QString::number(getNumElementsDeleted()) + " elements.";
   }
 
   int getNumElementsValidated() const { return _numAffected; }
   int getNumValidationErrors() const { return _numValidationErrors; }
-  int getNumElementsFixed() const { return _numElementsFixed; }
+  int getNumGroupsOfElementsFixed() const { return _numGroupsOfElementsFixed; }
+  int getNumElementsDeleted() const { return _deletedElementIds.size(); }
 
 private:
 
@@ -118,12 +120,16 @@ private:
   // TODO
   int _numValidationErrors;
   // TODO
-  int _numElementsFixed;
+  int _numGroupsOfElementsFixed;
+  // TODO
+  QSet<ElementId> _deletedElementIds;
 
   /*
    * TODO
    */
   OsmMapPtr _getValidatedMap(OsmMapPtr& inputMap);
+
+  QSet<ElementId> _elementIdsStrToElementIds(const QString elementIdsStr) const;
 };
 
 }

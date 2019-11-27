@@ -72,7 +72,7 @@ public class HootOsmReader extends OsmReader
    */
   public static DataSet parseDataSet(InputStream source) throws IllegalDataException
   {
-    Logging.debug("Converting input elements from xml with hoot reader...");
+    //Logging.debug("Converting input elements from xml with hoot reader...");
     return new HootOsmReader().doParseDataSet(source, null);
   }
 }

@@ -27,6 +27,7 @@
 package hoot.services.validation;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
@@ -104,7 +105,7 @@ public class JosmUtils
  /*
   * TODO
   */
-  private static String getElementMapKey(OsmPrimitive element)
+  public static String getElementMapKey(OsmPrimitive element)
   {
     //Logging.trace(
       //"key: " + element.getClass().getSimpleName() + ":" + String.valueOf(element.getUniqueId()));
@@ -216,5 +217,55 @@ public class JosmUtils
       str += command.toString() + ", description: " + command.getDescriptionText();
     }
     return str;
+  }
+
+  /**
+   * TODO
+   */
+  public static List<String> getDeletedElementIds(Command command) throws Exception
+  {
+    if (command instanceof DeleteCommand)
+    {
+      return getDeletedElementIds((DeleteCommand)command);
+    }
+    else if (command instanceof SequenceCommand)
+    {
+      return getDeletedElementIds((SequenceCommand)command);
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+  /*
+   * TODO
+   */
+  private static List<String> getDeletedElementIds(DeleteCommand deleteCommand)
+  {
+    List<String> deletedElementIds = new ArrayList<String>();
+    Collection<? extends OsmPrimitive> deletedElements = deleteCommand.getParticipatingPrimitives();
+    for (OsmPrimitive deletedElement : deletedElements)
+    {
+      deletedElementIds.add(JosmUtils.getElementMapKey(deletedElement));
+    }
+    return deletedElementIds;
+  }
+
+  /*
+   * TODO
+   */
+  private static List<String> getDeletedElementIds(SequenceCommand seqCommand)
+  {
+    List<String> deletedElementIds = new ArrayList<String>();
+    Collection<PseudoCommand> childCmds = seqCommand.getChildren();
+    for (PseudoCommand childCmd : childCmds)
+    {
+      if (childCmd instanceof DeleteCommand)
+      {
+        deletedElementIds.addAll(JosmUtils.getDeletedElementIds((DeleteCommand)childCmd));
+      }
+    }
+    return deletedElementIds;
   }
 }

@@ -462,14 +462,18 @@ void OsmXmlReader::read(const OsmMapPtr& map)
 }
 
 OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
-                                const bool useDataSourceStatus, const bool keepStatusTag)
+                                const bool useDataSourceStatus, const bool keepStatusTag,
+                                const bool addChildRefsWhenMissing)
 {
   LOG_DEBUG("Reading map from xml...");
+  // TODO: comment out
+  //LOG_VART(xml);
   OsmMapPtr map(new OsmMap());
   OsmXmlReader reader;
   reader.setUseDataSourceIds(useDataSourceId);
   reader.setUseFileStatus(useDataSourceStatus);
   reader.setKeepStatusTag(keepStatusTag);
+  reader.setAddChildRefsWhenMissing(addChildRefsWhenMissing);
   reader.readFromString(xml, map);
   return map;
 }

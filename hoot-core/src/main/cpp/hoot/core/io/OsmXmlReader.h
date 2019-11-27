@@ -94,11 +94,13 @@ public:
    * @param useDataSourceId
    * @param useDataSourceStatus
    * @param keepStatusTag
+   * @param addChildRefsWhenMissing
    * @return
    */
   static OsmMapPtr fromXml(const QString& xml, const bool useDataSourceId = false,
                            const bool useDataSourceStatus = false,
-                           const bool keepStatusTag = false);
+                           const bool keepStatusTag = false,
+                           const bool addChildRefsWhenMissing = false);
 
   void read(const QString& path, const OsmMapPtr& map);
 
