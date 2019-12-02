@@ -4542,6 +4542,13 @@ TODO
 
 TODO
 
+=== validation.tagging.enabled
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === waterway.angle.sample.distance
 
 * Data Type: double

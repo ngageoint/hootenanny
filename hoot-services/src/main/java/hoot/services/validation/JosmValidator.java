@@ -39,6 +39,9 @@ import java.io.ByteArrayInputStream;
 import java.lang.Class;
 import java.util.Arrays;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.LinkedHashMultimap;
+
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.validation.OsmValidator;
@@ -54,47 +57,10 @@ import org.openstreetmap.josm.data.osm.DataSet;
  */
 public class JosmValidator
 {
-  /**
-   * TODO
-   */
   public JosmValidator(String logLevel) throws Exception
   {
     JosmUtils.initJosm(logLevel);
   }
-
-  /**
-   * TODO
-   */
-  public String getDeletedElementIds()
-  {
-    if (deletedElementIds != null)
-    {
-      return String.join(";", deletedElementIds.toArray(new String[deletedElementIds.size()]));
-    }
-    return "";
-  }
-
-  /**
-   * TODO
-   */
-  public int getNumDeletedElements()
-  {
-    if (deletedElementIds != null)
-    {
-      return deletedElementIds.size();
-    }
-    return 0;
-  }
-
-  /**
-   * TODO
-   */
-  public int getNumValidationErrors() { return numValidationErrors; }
-
-   /**
-    * TODO
-    */
-  public int getNumGroupsOfElementsFixed() { return numGroupsOfElementsFixed; }
 
   /**
    * TODO
@@ -217,18 +183,14 @@ public class JosmValidator
       try
       {
         // record the features that were validated
+        updateElementValidations(errors);
 
-        Map<String, String> validatedElementsMap = getValidationTagsMap(errors);
-        Logging.debug("validatedElementsMap size: " + validatedElementsMap.size());
-
-        Map<String, String> fixedElementsMap = new HashMap<String, String>();
         if (fixFeatures)
         {
           // If we're fixing features, fix the features, record those that were fixed, and get back
           // the fixed features.
 
-          validatedElements = fixElements(errors, fixedElementsMap);
-          Logging.debug("fixedElementsMap size: " + fixedElementsMap.size());
+          validatedElements = fixElements(errors);
 
           if (validatedElements == null)
           {
@@ -258,8 +220,7 @@ public class JosmValidator
 
         // add validation/fix message tags for use in hoot and remove deleted elements
 
-        validatedElements =
-          getUpdatedReturnElements(validatedElements, validatedElementsMap, fixedElementsMap);
+        validatedElements = getTaggedReturnElements(validatedElements);
         Logging.debug("validatedElements size: " + validatedElements.size());
       }
       catch (Exception e)
@@ -334,163 +295,6 @@ public class JosmValidator
   /*
    * TODO
    */
-  private Map<String, String> getValidationTagsMap(List<TestError> errors)
-  {
-    Logging.debug("Recording validated elements...");
-
-    // <element type>:<element id> mapped to validation error message; would like to use PrimitiveId
-    // here but don't know how to get it directly from the OsmPrimitive
-    Map<String, String> validationTagsMap = new HashMap<String, String>();
-
-    for (TestError error : errors)
-    {
-      Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
-      Logging.trace(
-        "Processing validation results for " + error.getPrimitives().size() + " elements for " +
-        " error: \"" + error.getMessage() + "\" found by test: " + error.getTester().getName() +
-        "...");
-      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
-
-      for (OsmPrimitive element : elementsWithErrors)
-      {
-        String elementKey = JosmUtils.getElementMapKey(element);
-        // validated is a ';' separated list describing one or more validations performed
-        String validationVal = "";
-        if (validationTagsMap.containsKey(elementKey))
-        {
-          validationVal = validationTagsMap.get(elementKey) + ";" + error.getMessage();
-        }
-        else
-        {
-          validationVal = error.getMessage();
-        }
-        Logging.trace("validationVal: " + validationVal);
-        validationTagsMap.put(elementKey, validationVal);
-      }
-    }
-
-    return validationTagsMap;
-  }
-
-  /*
-   * TODO
-   */
-  private Collection<AbstractPrimitive> fixElements(
-    List<TestError> errors, Map<String, String> fixedElementsMap) throws Exception
-  {
-    Logging.debug("Fixing and recording fixed elements...");
-
-    Collection<AbstractPrimitive> fixedElements = null;
-
-    DataSet affectedData = null;
-    deletedElementIds = new ArrayList<String>();
-    for (TestError error : errors)
-    {
-      Collection<? extends OsmPrimitive> elementsWithErrors = error.getPrimitives();
-      Logging.trace(
-        "Processing " + error.getPrimitives().size() + " elements to fix for error: \"" +
-        error.getMessage() + "\" found by test: " + error.getTester().getName() + "...");
-      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
-
-      boolean fixSuccess = false;
-      Logging.trace("error fixable?: " + error.isFixable());
-      if (error.isFixable())
-      {
-        fixSuccess = fixValidatedElement(error, affectedData);
-      }
-
-      Logging.debug("Recording fixed elements...");
-
-      for (OsmPrimitive element : elementsWithErrors)
-      {
-        String fixStatus = "false";
-        if (fixSuccess)
-        {
-          fixStatus = "true";
-          numGroupsOfElementsFixed++;
-        }
-
-        String elementKey = JosmUtils.getElementMapKey(element);
-        // fixed is a ';' separated list describing one or more fixes made
-        String fixedVal = "";
-        if (fixedElementsMap.containsKey(elementKey))
-        {
-          fixedVal = fixedElementsMap.get(elementKey) + ";" + fixStatus;
-        }
-        else
-        {
-          fixedVal = fixStatus;
-        }
-        Logging.trace("fixedVal: " + fixedVal);
-        fixedElementsMap.put(elementKey, fixedVal);
-        Logging.trace("fixedElementsMap size: " + fixedElementsMap.size());
-      }
-    }
-
-    boolean affectedDataNull = (affectedData == null);
-    Logging.trace("affectedData == null: " + affectedDataNull);
-    if (affectedData != null)
-    {
-      fixedElements = new ArrayList<AbstractPrimitive>();
-      fixedElements.addAll(affectedData.getAllPrimitives());
-    }
-
-    return fixedElements;
-  }
-
-  /*
-   * TODO
-   */
-  private Collection<AbstractPrimitive> getUpdatedReturnElements(
-    Collection<AbstractPrimitive> finalElements, Map<String, String> validatedElementsMap,
-    Map<String, String> fixedElementsMap)
-  {
-    Logging.debug("Updating tags on up to " + finalElements.size() + " elements...");
-
-    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
-
-    int numValidationTagsAdded = 0;
-    int numFixTagsAdded = 0;
-    int numDeletedElements = 0;
-    for (AbstractPrimitive element : finalElements)
-    {
-      OsmPrimitive osmElement = (OsmPrimitive)element;
-      String elementKey = JosmUtils.getElementMapKey(osmElement);
-
-      if (deletedElementIds == null || !deletedElementIds.contains(elementKey))
-      {
-        if (validatedElementsMap.containsKey(elementKey))
-        {
-          Logging.trace("Adding validation tag to element: " + elementKey + "...");
-          osmElement.put(VALIDATED_TAG_KEY, validatedElementsMap.get(elementKey));
-          numValidationTagsAdded++;
-        }
-        if (fixedElementsMap.containsKey(elementKey))
-        {
-          Logging.trace("Adding fix tag to element: " + elementKey + "...");
-          // TODO: make this easier to understand
-          osmElement.put(FIXED_TAG_KEY, fixedElementsMap.get(elementKey));
-          numFixTagsAdded++;
-        }
-        Logging.trace("Adding return element: " + elementKey + "...");
-        returnElements.add(osmElement);
-      }
-      else
-      {
-        numDeletedElements++;
-      }
-    }
-
-    Logging.debug(
-      "Added " + numValidationTagsAdded + " validation tags and " + numFixTagsAdded +
-      " fix tags. " + numDeletedElements + " deleted elements were skipped. Total return " +
-      "elements: " + returnElements.size());
-    return returnElements;
-  }
-
-  /*
-   * TODO
-   */
   private List<TestError> runValidation(String[] validators, Collection<OsmPrimitive> elements)
     throws Exception
   {
@@ -547,14 +351,88 @@ public class JosmValidator
   /*
    * TODO
    */
-  private int getNumElementsInvolvedInErrors(List<TestError> errors)
+  private void updateElementValidations(List<TestError> errors)
   {
-    int numElementsInvolved = 0;
+    Logging.debug("Recording validated elements...");
+
     for (TestError error : errors)
     {
-      numElementsInvolved += error.getPrimitives().size();
+      Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
+      Logging.trace(
+        "Processing validation results for " + error.getPrimitives().size() + " elements for " +
+        " error: \"" + error.getMessage() + "\" found by test: " + error.getTester().getName() +
+        "...");
+      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+
+      for (OsmPrimitive element : elementGroupWithError)
+      {
+        elementValidations.put(JosmUtils.getElementMapKey(element), error.getMessage());
+      }
     }
-    return numElementsInvolved;
+
+    Logging.debug("elementValidations size: " + elementValidations.size());
+  }
+
+  /*
+   * TODO
+   */
+  private Collection<AbstractPrimitive> fixElements(List<TestError> errors) throws Exception
+  {
+    Logging.debug("Fixing and recording fixed elements...");
+
+    Collection<AbstractPrimitive> fixedElements = null;
+
+    DataSet affectedData = null;
+    deletedElementIds = new ArrayList<String>();
+    for (TestError error : errors)
+    {
+      Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
+      Logging.trace(
+        "Processing " + error.getPrimitives().size() + " elements to fix for error: \"" +
+        error.getMessage() + "\" found by test: " + error.getTester().getName() + "...");
+      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+
+      boolean fixSuccess = false;
+      Logging.trace("error fixable?: " + error.isFixable());
+      if (error.isFixable())
+      {
+        fixSuccess = fixValidatedElement(error, affectedData);
+      }
+
+      Logging.debug("Recording fixed elements...");
+      for (OsmPrimitive element : elementGroupWithError)
+      {
+        FixStatus fixStatus = FixStatus.NONE_AVAILABLE;
+        if (error.isFixable())
+        {
+          if (fixSuccess)
+          {
+            fixStatus = fixStatus.SUCCEEDED;
+            numGroupsOfElementsFixed++;
+          }
+          else
+          {
+            fixStatus = fixStatus.FAILED;
+          }
+        }
+
+        String elementKey = JosmUtils.getElementMapKey(element);
+        assert(elementValidations.containsKey(elementKey));
+        elementFixes.put(elementKey, error.getMessage() + "=" + fixStatusToString(fixStatus));
+      }
+    }
+
+    Logging.debug("elementFixes size: " + elementFixes.size());
+
+    boolean affectedDataNull = (affectedData == null);
+    Logging.trace("affectedData == null: " + affectedDataNull);
+    if (affectedData != null)
+    {
+      fixedElements = new ArrayList<AbstractPrimitive>();
+      fixedElements.addAll(affectedData.getAllPrimitives());
+    }
+
+    return fixedElements;
   }
 
   /*
@@ -580,12 +458,144 @@ public class JosmValidator
     return fixSuccess;
   }
 
+  /*
+   * TODO
+   */
+  private Collection<AbstractPrimitive> getTaggedReturnElements(
+    Collection<AbstractPrimitive> finalElements) throws Exception
+  {
+    Logging.debug("Updating tags on up to " + finalElements.size() + " elements...");
+
+    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
+
+    int numValidationTagsAdded = 0;
+    int numFixTagsAdded = 0;
+    int numDeletedElements = 0;
+    for (AbstractPrimitive element : finalElements)
+    {
+      OsmPrimitive osmElement = (OsmPrimitive)element;
+      String elementKey = JosmUtils.getElementMapKey(osmElement);
+
+      if (deletedElementIds == null || !deletedElementIds.contains(elementKey))
+      {
+        if (elementValidations.containsKey(elementKey))
+        {
+          Logging.trace("Adding validation tag to element: " + elementKey + "...");
+          Collection<String> errorMessages = elementValidations.get(elementKey);
+          String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
+          osmElement.put(VALIDATED_TAG_KEY, String.join(";", errorMessagesArr));
+          numValidationTagsAdded++;
+
+          Logging.trace("Adding fix tag to element: " + elementKey + "...");
+          String fixStatusStr = "";
+          if (elementFixes.containsKey(elementKey))
+          {
+            Collection<String> fixMessages = elementFixes.get(elementKey);
+            fixStatusStr =
+              String.join(
+                ";", elementFixes.get(elementKey).toArray(new String[fixMessages.size()]));
+          }
+          else
+          {
+            for (int i = 0; i < errorMessagesArr.length; i++)
+            {
+              fixStatusStr +=
+                errorMessagesArr[i] + "=" + fixStatusToString(FixStatus.NOT_ATTEMPTED);
+              if (i < errorMessagesArr.length - 1)
+              {
+                fixStatusStr += ";";
+              }
+            }
+          }
+          osmElement.put(FIXED_TAG_KEY, fixStatusStr);
+          numFixTagsAdded++;
+        }
+        Logging.trace("Adding return element: " + elementKey + "...");
+        returnElements.add(osmElement);
+      }
+      else
+      {
+        numDeletedElements++;
+      }
+    }
+
+    Logging.debug(
+      "Added " + numValidationTagsAdded + " validation tags and " + numFixTagsAdded +
+      " fix tags. " + numDeletedElements + " deleted elements were skipped. Total return " +
+      "elements: " + returnElements.size());
+    return returnElements;
+  }
+
+  private String fixStatusToString(FixStatus fixStatus) throws Exception
+  {
+    switch (fixStatus)
+    {
+      case NOT_ATTEMPTED:
+        return "no fix attempted";
+      case NONE_AVAILABLE:
+        return "no fix available";
+      case FAILED:
+        return "fix failed";
+      case SUCCEEDED:
+        return "fix succeeded";
+      default:
+        throw new Exception("Invalid fix status: " + fixStatus);
+    }
+  }
+
+  /*
+   * TODO
+   */
+  private int getNumElementsInvolvedInErrors(List<TestError> errors)
+  {
+    int numElementsInvolved = 0;
+    for (TestError error : errors)
+    {
+      numElementsInvolved += error.getPrimitives().size();
+    }
+    return numElementsInvolved;
+  }
+
+  public String getDeletedElementIds()
+  {
+    if (deletedElementIds != null)
+    {
+      return String.join(";", deletedElementIds.toArray(new String[deletedElementIds.size()]));
+    }
+    return "";
+  }
+  public int getNumDeletedElements()
+  {
+    if (deletedElementIds != null)
+    {
+      return deletedElementIds.size();
+    }
+    return 0;
+  }
+  public int getNumValidationErrors() { return numValidationErrors; }
+  public int getNumGroupsOfElementsFixed() { return numGroupsOfElementsFixed; }
+
   // these match corresponding entries in core MetadataTags class
   private static final String VALIDATED_TAG_KEY = "hoot:validation:error";
   private static final String FIXED_TAG_KEY = "hoot:validation:error:fixed";
 
+  private enum FixStatus
+  {
+    NOT_ATTEMPTED, NONE_AVAILABLE, FAILED, SUCCEEDED;
+  }
+
+  // Not using PrimitiveId as keys here but don't know how to get it directly from OsmPrimitive;
+  // using LinkedHashMultimap to preserve the value orderings between the various multimaps
+
+  // element keys to validation error messages
+  // e.g. key=Way:1, value1="Duplicated way nodes", value2="Unclosed way"
+  private Multimap<String, String> elementValidations = LinkedHashMultimap.create();
+  // element keys to validation error fix messages
+  // e.g. key=Way:1, value1="Duplicated way nodes=fixed", value2="Unclosed way=none available"
+  private Multimap<String, String> elementFixes = LinkedHashMultimap.create();
+
   // TODO
-  List<String> deletedElementIds = null;
+  private List<String> deletedElementIds = null;
   // TODO
   private int numValidationErrors = 0;
   // TODO

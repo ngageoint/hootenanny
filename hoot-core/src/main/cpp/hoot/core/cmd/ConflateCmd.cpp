@@ -221,7 +221,8 @@ int ConflateCmd::runSimple(QStringList& args)
     _numTotalTasks++;
   }
 
-  //TODO: handle validation.enabled - 'off', 'validate', or 'fix'
+  // TODO: handle validation.enabled - 'off', 'validate', or 'fix'
+  // TODO: use validation.hoot.josm.library.path and validation.josm.library.path ??
 
   // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
   // each op internally.

@@ -55,8 +55,10 @@ _numGroupsOfElementsFixed(0)
 
 void JosmValidator::setConfiguration(const Settings& /*conf*/)
 {
-  //validation.josm.validator.exclude.list
-  //validation.josm.validator.include.list
+  // validation.josm.validator.exclude.list
+  // validation.josm.validator.include.list
+  // validation.tagging.enabled
+  // validation.enabled - 'off', 'validate', or 'fix'
 
   // TODO
 }
