@@ -42,6 +42,7 @@ import java.util.Arrays;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.LinkedHashMultimap;
 
+import org.openstreetmap.josm.data.osm.TagMap;
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.validation.OsmValidator;
@@ -99,6 +100,8 @@ public class JosmValidator
   public String validate(String validatorsStr, String featuresXml, boolean fixFeatures)
     throws Exception
   {
+    // TODO: add option to turn off tagging
+
     String validatedFeaturesXmlStr = "";
 
     numValidationErrors = 0;
@@ -109,7 +112,6 @@ public class JosmValidator
     Logging.debug("validatorsStr: " + validatorsStr);
     Logging.debug("fixFeatures: " + fixFeatures);
 
-    // TODO: check for empty input map too?
     if (featuresXml == null || featuresXml.trim().isEmpty())
     {
       throw new Exception("No features passed to validation.");
@@ -142,6 +144,12 @@ public class JosmValidator
       elementsToValidate =
         HootOsmReader.parseDataSet(new ByteArrayInputStream(featuresXml.getBytes()))
           .getAllPrimitives();
+
+      if (elementsToValidate.size() == 0)
+      {
+        throw new Exception("No features passed to validation.");
+      }
+
       originalMapSize = elementsToValidate.size();
       Logging.debug("originalMapSize: " + originalMapSize);
       Logging.trace("input elements: " + JosmUtils.elementsToString(elementsToValidate));
@@ -220,7 +228,7 @@ public class JosmValidator
 
         // add validation/fix message tags for use in hoot and remove deleted elements
 
-        validatedElements = getTaggedReturnElements(validatedElements);
+        validatedElements = tagReturnElements(validatedElements);
         Logging.debug("validatedElements size: " + validatedElements.size());
       }
       catch (Exception e)
@@ -292,9 +300,6 @@ public class JosmValidator
     return validatedFeaturesXmlStr;
   }
 
-  /*
-   * TODO
-   */
   private List<TestError> runValidation(String[] validators, Collection<OsmPrimitive> elements)
     throws Exception
   {
@@ -310,9 +315,6 @@ public class JosmValidator
     return errors;
   }
 
-  /*
-   * TODO
-   */
   private List<TestError> runValidation(
     Collection<Test> validators, Collection<OsmPrimitive> elements) throws Exception
   {
@@ -325,9 +327,6 @@ public class JosmValidator
     return errors;
   }
 
-  /*
-   * TODO
-   */
   private List<TestError> runValidation(Test validator, Collection<OsmPrimitive> elements)
     throws Exception
   {
@@ -348,11 +347,10 @@ public class JosmValidator
     return errors;
   }
 
-  /*
-   * TODO
-   */
   private void updateElementValidations(List<TestError> errors)
   {
+    // TODO
+
     Logging.debug("Recording validated elements...");
 
     for (TestError error : errors)
@@ -373,9 +371,6 @@ public class JosmValidator
     Logging.debug("elementValidations size: " + elementValidations.size());
   }
 
-  /*
-   * TODO
-   */
   private Collection<AbstractPrimitive> fixElements(List<TestError> errors) throws Exception
   {
     Logging.debug("Fixing and recording fixed elements...");
@@ -417,8 +412,7 @@ public class JosmValidator
         }
 
         String elementKey = JosmUtils.getElementMapKey(element);
-        assert(elementValidations.containsKey(elementKey));
-        elementFixes.put(elementKey, error.getMessage() + "=" + fixStatusToString(fixStatus));
+        elementFixes.put(elementKey, fixStatusToString(fixStatus));
       }
     }
 
@@ -435,9 +429,6 @@ public class JosmValidator
     return fixedElements;
   }
 
-  /*
-   * TODO
-   */
   private boolean fixValidatedElement(TestError error, DataSet affectedData) throws Exception
   {
     // fix features based on error found
@@ -458,20 +449,19 @@ public class JosmValidator
     return fixSuccess;
   }
 
-  /*
-   * TODO
-   */
-  private Collection<AbstractPrimitive> getTaggedReturnElements(
-    Collection<AbstractPrimitive> finalElements) throws Exception
+  private Collection<AbstractPrimitive> tagReturnElements(Collection<AbstractPrimitive> elements)
+    throws Exception
   {
-    Logging.debug("Updating tags on up to " + finalElements.size() + " elements...");
+    // TODO
+
+    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
 
     Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
 
     int numValidationTagsAdded = 0;
-    int numFixTagsAdded = 0;
+    //int numFixTagsAdded = 0;
     int numDeletedElements = 0;
-    for (AbstractPrimitive element : finalElements)
+    for (AbstractPrimitive element : elements)
     {
       OsmPrimitive osmElement = (OsmPrimitive)element;
       String elementKey = JosmUtils.getElementMapKey(osmElement);
@@ -481,34 +471,36 @@ public class JosmValidator
         if (elementValidations.containsKey(elementKey))
         {
           Logging.trace("Adding validation tag to element: " + elementKey + "...");
+
           Collection<String> errorMessages = elementValidations.get(elementKey);
           String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
-          osmElement.put(VALIDATED_TAG_KEY, String.join(";", errorMessagesArr));
-          numValidationTagsAdded++;
-
-          Logging.trace("Adding fix tag to element: " + elementKey + "...");
-          String fixStatusStr = "";
+          String[] fixMessagesArr = null;
           if (elementFixes.containsKey(elementKey))
           {
             Collection<String> fixMessages = elementFixes.get(elementKey);
-            fixStatusStr =
-              String.join(
-                ";", elementFixes.get(elementKey).toArray(new String[fixMessages.size()]));
+            fixMessagesArr = fixMessages.toArray(new String[fixMessages.size()]);
           }
-          else
+
+          int errorCtr = 1;
+          for (int i = 0; i < errorMessagesArr.length; i++)
           {
-            for (int i = 0; i < errorMessagesArr.length; i++)
+            String validatedVal = errorMessagesArr[i] + ": ";
+            if (fixMessagesArr != null)
             {
-              fixStatusStr +=
-                errorMessagesArr[i] + "=" + fixStatusToString(FixStatus.NOT_ATTEMPTED);
-              if (i < errorMessagesArr.length - 1)
-              {
-                fixStatusStr += ";";
-              }
+              // either a fix attempt was made on all features or none of them (based on the value
+              // of fixFeatures), so fixMessagesArr's ordering will match that of errorMessagesArr
+              validatedVal += fixMessagesArr[i];
             }
+            else
+            {
+              validatedVal += fixStatusToString(FixStatus.NOT_ATTEMPTED);
+            }
+            osmElement.put(
+              VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr),
+              validatedVal + "; source=JOSM");
+            numValidationTagsAdded++;
+            errorCtr++;
           }
-          osmElement.put(FIXED_TAG_KEY, fixStatusStr);
-          numFixTagsAdded++;
         }
         Logging.trace("Adding return element: " + elementKey + "...");
         returnElements.add(osmElement);
@@ -520,9 +512,8 @@ public class JosmValidator
     }
 
     Logging.debug(
-      "Added " + numValidationTagsAdded + " validation tags and " + numFixTagsAdded +
-      " fix tags. " + numDeletedElements + " deleted elements were skipped. Total return " +
-      "elements: " + returnElements.size());
+      "Added " + numValidationTagsAdded + " validation tags. " + numDeletedElements +
+      " deleted elements were skipped. Total return elements: " + returnElements.size());
     return returnElements;
   }
 
@@ -543,9 +534,6 @@ public class JosmValidator
     }
   }
 
-  /*
-   * TODO
-   */
   private int getNumElementsInvolvedInErrors(List<TestError> errors)
   {
     int numElementsInvolved = 0;
@@ -575,9 +563,8 @@ public class JosmValidator
   public int getNumValidationErrors() { return numValidationErrors; }
   public int getNumGroupsOfElementsFixed() { return numGroupsOfElementsFixed; }
 
-  // these match corresponding entries in core MetadataTags class
-  private static final String VALIDATED_TAG_KEY = "hoot:validation:error";
-  private static final String FIXED_TAG_KEY = "hoot:validation:error:fixed";
+  // these matche corresponding entries in the hoot-core MetadataTags class
+  private static final String VALIDATION_ERROR_TAG_KEY_BASE = "hoot:validation:error";
 
   private enum FixStatus
   {

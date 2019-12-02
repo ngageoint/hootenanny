@@ -135,52 +135,6 @@ public class JosmUtils
     return null;
   }
 
-  /*
-   * TODO
-   */
-  private static Map<String, AbstractPrimitive> hydrate(Node node)
-  {
-    // node doesn't have any children
-    //Logging.trace("Hydrating node: " + node.toString() + "...");
-    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
-    elementWithChildren.put(getElementMapKey(node), node);
-    return elementWithChildren;
-  }
-
-  /*
-   * TODO
-   */
-  private static Map<String, AbstractPrimitive> hydrate(Way way)
-  {
-    //Logging.trace("Hydrating way: " + way.toString() + "...");
-    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
-    elementWithChildren.put(getElementMapKey(way), way);
-    List<Node> wayNodes = way.getNodes();
-    //Logging.trace("wayNodes size: " + wayNodes.size());
-    for (Node wayNode : wayNodes)
-    {
-      elementWithChildren.put(getElementMapKey(wayNode), wayNode);
-    }
-    //Logging.trace("elementWithChildren size: " + elementWithChildren.size());
-    return elementWithChildren;
-  }
-
-  /*
-   * TODO
-   */
-  private static Map<String, AbstractPrimitive> hydrate(Relation relation)
-  {
-    //Logging.trace("Hydrating relation: " + relation.toString() + "...");
-    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
-    elementWithChildren.put(getElementMapKey(relation), relation);
-    List<RelationMember> members = relation.getMembers();
-    for (RelationMember member : members)
-    {
-      elementWithChildren.put(getElementMapKey(member.getMember()), member.getMember());
-    }
-    return elementWithChildren;
-  }
-
   /**
    * TODO
    */
@@ -238,9 +192,6 @@ public class JosmUtils
     }
   }
 
-  /*
-   * TODO
-   */
   private static List<String> getDeletedElementIds(DeleteCommand deleteCommand)
   {
     List<String> deletedElementIds = new ArrayList<String>();
@@ -252,9 +203,6 @@ public class JosmUtils
     return deletedElementIds;
   }
 
-  /*
-   * TODO
-   */
   private static List<String> getDeletedElementIds(SequenceCommand seqCommand)
   {
     List<String> deletedElementIds = new ArrayList<String>();
@@ -267,5 +215,42 @@ public class JosmUtils
       }
     }
     return deletedElementIds;
+  }  
+
+  private static Map<String, AbstractPrimitive> hydrate(Node node)
+  {
+    // node doesn't have any children
+    //Logging.trace("Hydrating node: " + node.toString() + "...");
+    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
+    elementWithChildren.put(getElementMapKey(node), node);
+    return elementWithChildren;
+  }
+
+  private static Map<String, AbstractPrimitive> hydrate(Way way)
+  {
+    //Logging.trace("Hydrating way: " + way.toString() + "...");
+    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
+    elementWithChildren.put(getElementMapKey(way), way);
+    List<Node> wayNodes = way.getNodes();
+    //Logging.trace("wayNodes size: " + wayNodes.size());
+    for (Node wayNode : wayNodes)
+    {
+      elementWithChildren.put(getElementMapKey(wayNode), wayNode);
+    }
+    //Logging.trace("elementWithChildren size: " + elementWithChildren.size());
+    return elementWithChildren;
+  }
+
+  private static Map<String, AbstractPrimitive> hydrate(Relation relation)
+  {
+    //Logging.trace("Hydrating relation: " + relation.toString() + "...");
+    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
+    elementWithChildren.put(getElementMapKey(relation), relation);
+    List<RelationMember> members = relation.getMembers();
+    for (RelationMember member : members)
+    {
+      elementWithChildren.put(getElementMapKey(member.getMember()), member.getMember());
+    }
+    return elementWithChildren;
   }
 }

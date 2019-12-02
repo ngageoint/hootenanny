@@ -55,12 +55,11 @@ _numGroupsOfElementsFixed(0)
 
 void JosmValidator::setConfiguration(const Settings& /*conf*/)
 {
+  // TODO:
   // validation.josm.validator.exclude.list
   // validation.josm.validator.include.list
   // validation.tagging.enabled
   // validation.enabled - 'off', 'validate', or 'fix'
-
-  // TODO
 }
 
 QMap<QString, QString> JosmValidator::getAvailableValidators() const
@@ -199,8 +198,6 @@ OsmMapPtr JosmValidator::_getValidatedMap(OsmMapPtr& inputMap)
     // TODO: get exception message from object and add here
     throw HootException("Error calling JosmValidator::apply.");
   }
-
-  // TODO
 
   const char* xml = _javaEnv->GetStringUTFChars((jstring)validationResult, NULL);
   validatedMap = OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
