@@ -264,24 +264,23 @@ public class GrailResource {
     }
 
     /**
-     * Retrieve statistics on the specified differential
+     * Retrieve statistics on the specified changeset
      *
-     * GET hoot-services/grail/differentialstats/{jobId}
+     * GET hoot-services/grail/changesetstats/{jobId}
      *
      * @param jobDir
-     *      Internally, this is the directory that the files are kept in. We expect that the directory
-     *      has dest.osm & source.osm files to run the diff with.
+     *      Internally, this is the directory that the files are kept in.
      *
      * @param debugLevel
      *      debug level
      *
-     * @return JSON object containing info about the differential such as
+     * @return JSON object containing info about the changeset such as
      *      the count of new nodes, ways, and relations
      */
     @GET
-    @Path("/differentialstats")
+    @Path("/changesetstats")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response differentialStats(@Context HttpServletRequest request,
+    public Response changesetStats(@Context HttpServletRequest request,
             @QueryParam("jobId") String jobDir,
             @QueryParam("includeTags") Boolean includeTags,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
@@ -306,8 +305,8 @@ public class GrailResource {
 
             for(File currentOsc : oscFilesList) {
                 String xmlData = FileUtils.readFileToString(currentOsc, "UTF-8");
-                Document changesetDiffDoc = XmlDocumentBuilder.parse(xmlData);
-                logger.debug("Parsing changeset diff XML: {}", StringUtils.abbreviate(xmlData, 1000));
+                Document changesetDoc = XmlDocumentBuilder.parse(xmlData);
+                logger.debug("Parsing changeset XML: {}", StringUtils.abbreviate(xmlData, 1000));
 
                 for (DbUtils.EntityChangeType entityChangeType : DbUtils.EntityChangeType.values()) {
                     String changeTypeName = entityChangeType.toString().toLowerCase();
@@ -315,7 +314,7 @@ public class GrailResource {
                     for (DbUtils.nwr_enum elementType : DbUtils.nwr_enum.values()) {
                         String elementTypeName = elementType.toString();
 
-                        NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDiffDoc,
+                        NodeList elementXmlNodes = XPathAPI.selectNodeList(changesetDoc,
                                 "//osmChange/" + changeTypeName +"/" + elementTypeName);
 
                         String key = changeTypeName + "-" + elementTypeName;
@@ -334,7 +333,7 @@ public class GrailResource {
             throw new RuntimeException("Error invoking XPathAPI!", e);
         }
         catch (Exception exc) {
-            String msg = "Error during differential stats! jobid: " + jobDir;
+            String msg = "Error during changeset stats! jobid: " + jobDir;
             throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
         }
 
@@ -342,18 +341,19 @@ public class GrailResource {
     }
 
     /**
-     * Pushes the specified differential changeset back to the
+     * Pushes the specified changeset back to the
      * reference dataset API
      *
      * Takes in a json object
-     * POST hoot-services/grail/differentialpush
+     * POST hoot-services/grail/changesetpush
      *
      * {
-     *   //the job id. We make the directory for the differential with the name of the jobid
+     *   //the job id. We make the directory for the changeset with the name of the jobid
      *   "folder" : "grail_8e8c4681-ead9-4c27-aa2e-80746d627523",
      *
      *   //boolean if the user wants to apply the tags when pushing to reference API
      *   "APPLY_TAGS" : true
+     *   //this is only applicable if the changeset is the result of "create differential changeset"
      * }
      *
      * @param reqParams
@@ -362,13 +362,13 @@ public class GrailResource {
      * @param debugLevel
      *      debug level
      *
-     * @return Job ID. Can be used to check status of the conflate push
+     * @return Job ID. Can be used to check status of the changeset push
      */
     @POST
-    @Path("/differentialpush")
+    @Path("/changesetpush")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response differentialPush(@Context HttpServletRequest request,
+    public Response changesetPush(@Context HttpServletRequest request,
             GrailParams reqParams,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
@@ -391,28 +391,28 @@ public class GrailResource {
         File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
 
         if (!workDir.exists()) {
-            logger.error("ApplyDiff: jobDir {} does not exist.", workDir.getAbsolutePath());
+            logger.error("ApplyChangeset: jobDir {} does not exist.", workDir.getAbsolutePath());
             return Response.status(Response.Status.BAD_REQUEST).entity("Job " + jobDir + " does not exist.").build();
         }
 
         try {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
-            logger.info("ApplyDiff: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
+            logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
             if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
                 return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline. Try again later").build();
             }
 
-            File geomDiffFile = new File(workDir, "diff.osc");
+            File changesetFile = new File(workDir, "diff.osc");
             List<Command> workflow = new LinkedList<>();
 
-            if (geomDiffFile.exists()) {
-                params.setOutput(geomDiffFile.getAbsolutePath());
+            if (changesetFile.exists()) {
+                params.setOutput(changesetFile.getAbsolutePath());
 
                 ExternalCommand applyGeomChange = grailCommandFactory.build(jobId, params, debugLevel, ApplyChangesetCommand.class, this.getClass());
                 workflow.add(applyGeomChange);
             }
             else {
-                String msg = "Error during differential push! Could not find differential file ";
+                String msg = "Error during changeset push! Could not find osc file ";
                 throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
             }
 
@@ -426,7 +426,7 @@ public class GrailResource {
                     workflow.add(applyTagChange);
                 }
                 else {
-                    String msg = "Error during differential push! Could not find differential tags file ";
+                    String msg = "Error during changset push! Could not find osc tags file ";
                     throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
                 }
             }
@@ -468,7 +468,7 @@ public class GrailResource {
             throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
         }
         catch (Exception e) {
-            String msg = "Error during differential push! Params: " + params;
+            String msg = "Error during changeset push! Params: " + params;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 
