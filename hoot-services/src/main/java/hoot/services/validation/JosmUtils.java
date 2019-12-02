@@ -115,7 +115,7 @@ public class JosmUtils
   /**
    * TODO
    *
-   *  There's probably some utility function to do this in JOSM, just haven't found it.
+   * There's probably some utility function to do this in JOSM, just haven't found it.
    */
   public static Map<String, AbstractPrimitive> hydrate(OsmPrimitive element)
   {
@@ -234,7 +234,7 @@ public class JosmUtils
     }
     else
     {
-      return null;
+      return new ArrayList<String>();
     }
   }
 

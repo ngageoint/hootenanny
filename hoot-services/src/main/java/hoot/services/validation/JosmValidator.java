@@ -468,6 +468,7 @@ public class JosmValidator
         if (fixedElementsMap.containsKey(elementKey))
         {
           Logging.trace("Adding fix tag to element: " + elementKey + "...");
+          // TODO: make this easier to understand
           osmElement.put(FIXED_TAG_KEY, fixedElementsMap.get(elementKey));
           numFixTagsAdded++;
         }

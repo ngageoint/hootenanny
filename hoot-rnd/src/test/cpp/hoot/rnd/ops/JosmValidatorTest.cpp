@@ -135,7 +135,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsValidated());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getNumGroupsOfElementsFixed());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsFixed());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
 
     const QString outTestFileName =  testName + "-out.osm";

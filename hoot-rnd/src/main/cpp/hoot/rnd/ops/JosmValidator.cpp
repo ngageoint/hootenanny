@@ -74,7 +74,7 @@ QMap<QString, QString> JosmValidator::getAvailableValidators() const
   {
     env->ExceptionDescribe();
     env->ExceptionClear();
-    // TODO: get exception message from object and add here?
+    // TODO: get exception message from object and add here
     throw HootException("Error calling getAvailableValidators.");
   }
 
@@ -194,7 +194,7 @@ OsmMapPtr JosmValidator::_getValidatedMap(OsmMapPtr& inputMap)
   {
     _javaEnv->ExceptionDescribe();
     _javaEnv->ExceptionClear();
-    // TODO: get exception message from object and add here?
+    // TODO: get exception message from object and add here
     throw HootException("Error calling JosmValidator::apply.");
   }
 
