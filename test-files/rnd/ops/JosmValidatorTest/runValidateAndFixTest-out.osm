@@ -44,6 +44,8 @@
         <nd ref="-21186772"/>
         <nd ref="-21186774"/>
         <tag k="area" v="yes"/>
+        <tag k="hoot:validation:error" v="Unclosed way"/>
+        <tag k="hoot:validation:error:fixed" v="false"/>
         <tag k="note" v="5"/>
         <tag k="error:circular" v="15"/>
     </way>
