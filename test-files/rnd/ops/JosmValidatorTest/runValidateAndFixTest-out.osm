@@ -39,6 +39,17 @@
     <node visible="true" id="-21186702" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541298962099972" lon="-104.9023065312200060"/>
     <node visible="true" id="-21186698" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549524185700008" lon="-104.8987388916499981"/>
     <node visible="true" id="-21186696" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549321261900005" lon="-104.8979050333499998"/>
+    <way visible="true" id="-21186774" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21186771"/>
+        <nd ref="-21186772"/>
+        <nd ref="-21186774"/>
+        <nd ref="-21186774"/>
+        <tag k="area" v="yes"/>
+        <tag k="hoot:validation:error" v="Unclosed way"/>
+        <tag k="hoot:validation:error:fixed" v="false"/>
+        <tag k="note" v="6"/>
+        <tag k="error:circular" v="15"/>
+    </way>
     <way visible="true" id="-21186773" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21186771"/>
         <nd ref="-21186772"/>

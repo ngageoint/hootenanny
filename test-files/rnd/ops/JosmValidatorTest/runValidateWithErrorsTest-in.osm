@@ -75,9 +75,12 @@
     <tag k='area' v='yes' />
     <tag k='note' v='5' />
   </way>
-  <!-- one node way and unclosed area -->
+  <!-- duplicate node and unclosed area -->
   <way id='-21186774' visible='true'>
-    <nd ref='-21186764' />
+    <nd ref='-21186771' />
+    <nd ref='-21186772' />
+    <nd ref='-21186774' />
+    <nd ref='-21186774' />
     <tag k='area' v='yes' />
     <tag k='note' v='6' />
   </way>

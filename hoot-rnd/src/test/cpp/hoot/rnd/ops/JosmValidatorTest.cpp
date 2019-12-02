@@ -40,8 +40,8 @@ static const QString JOSM_TESTS_NAMESPACE = "org.openstreetmap.josm.data.validat
 class JosmValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmValidatorTest);
-  //CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  //CPPUNIT_TEST(runValidateNoErrorsTest);
+  CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  CPPUNIT_TEST(runValidateNoErrorsTest);
   CPPUNIT_TEST(runValidateWithErrorsTest);
   CPPUNIT_TEST(runValidateAndFixTest);
   CPPUNIT_TEST_SUITE_END();
@@ -100,19 +100,16 @@ public:
     OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm", true, true);
     LOG_VARD(map->size());
 
-    // In this dataset, there is one way with one node that fails the UntaggedWay validator, one
-    // unclosed area that fails the UnclosedWays validator, and one way that fails both validators.
-
     JosmValidator uut(false);
     QStringList validators;
-    validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");
+    validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");   // triggers "One node way"
     validators.append(JOSM_TESTS_NAMESPACE + ".UnclosedWays");
+    validators.append(JOSM_TESTS_NAMESPACE + ".DuplicateNode");
     uut.setValidatorsToUse(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsValidated());
-    // TODO: only getting one error for the element that I thought would fail both validators;
-    // need to look into it; may need a better example for a multi-error element
+    // TODO: expect to get 4 total here
     CPPUNIT_ASSERT_EQUAL(3, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumGroupsOfElementsFixed());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
@@ -131,20 +128,18 @@ public:
 
     JosmValidator uut(true);
     QStringList validators;
-    validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");
+    validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");   // triggers "One node way"
     validators.append(JOSM_TESTS_NAMESPACE + ".UnclosedWays");
+    validators.append(JOSM_TESTS_NAMESPACE + ".DuplicateNode");
     uut.setValidatorsToUse(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsValidated());
-    // TODO: validation problem described in runValidateWithErrorsTest also applies here
+    // TODO: expect to get 4 total here
     CPPUNIT_ASSERT_EQUAL(3, uut.getNumValidationErrors());
-    // TODO: This should also be different.
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsFixed());
-    // TODO: this doesn't seem right; one more node should be deleted
-    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumGroupsOfElementsFixed());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
 
-    // TODO: missing one validation tag here; update test out when fixed
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
