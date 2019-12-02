@@ -104,13 +104,12 @@ public:
     QStringList validators;
     validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");   // triggers "One node way"
     validators.append(JOSM_TESTS_NAMESPACE + ".UnclosedWays");
-    validators.append(JOSM_TESTS_NAMESPACE + ".DuplicateNode");
+    validators.append(JOSM_TESTS_NAMESPACE + ".DuplicatedWayNodes");
     uut.setValidatorsToUse(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsValidated());
-    // TODO: expect to get 4 total here
-    CPPUNIT_ASSERT_EQUAL(3, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumGroupsOfElementsFixed());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
 
@@ -130,13 +129,12 @@ public:
     QStringList validators;
     validators.append(JOSM_TESTS_NAMESPACE + ".UntaggedWay");   // triggers "One node way"
     validators.append(JOSM_TESTS_NAMESPACE + ".UnclosedWays");
-    validators.append(JOSM_TESTS_NAMESPACE + ".DuplicateNode");
+    validators.append(JOSM_TESTS_NAMESPACE + ".DuplicatedWayNodes");
     uut.setValidatorsToUse(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsValidated());
-    // TODO: expect to get 4 total here
-    CPPUNIT_ASSERT_EQUAL(3, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(1, uut.getNumGroupsOfElementsFixed());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
 

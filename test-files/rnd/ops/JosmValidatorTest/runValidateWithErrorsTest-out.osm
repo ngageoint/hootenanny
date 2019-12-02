@@ -46,7 +46,7 @@
         <nd ref="-21186774"/>
         <nd ref="-21186774"/>
         <tag k="area" v="yes"/>
-        <tag k="hoot:validation:error" v="Unclosed way"/>
+        <tag k="hoot:validation:error" v="Unclosed way;Duplicated way nodes"/>
         <tag k="landuse" v="grass"/>
         <tag k="note" v="6"/>
         <tag k="error:circular" v="15"/>
