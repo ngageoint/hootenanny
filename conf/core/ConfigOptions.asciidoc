@@ -2116,7 +2116,14 @@ TODO
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
 
-=== map.validator.modify.map
+=== map.validator.josm.java.implementation
+
+* Data Type: string
+* Default Value: `hoot/services/josm/JosmMapValidator`
+
+TODO
+
+=== map.validator.josm.modify.map
 
 * Data Type: bool
 * Default Value: `true`

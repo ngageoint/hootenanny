@@ -41,7 +41,8 @@ namespace hoot
 class JosmMapValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
-
+  CPPUNIT_TEST(runValidateTest);
+  CPPUNIT_TEST(runValidateMapUnmodifiedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -61,6 +62,16 @@ public:
 
   virtual void tearDown()
   {
+  }
+
+  void runValidateTest()
+  {
+
+  }
+
+  void runValidateMapUnmodifiedTest()
+  {
+
   }
 };
 

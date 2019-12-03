@@ -1,0 +1,34 @@
+[[validate]]
+== validate
+
+=== Description
+
+The +validate+ command uses JOSM to identify (but does not fix) data with common erroneous aspects.
+
+* +input+  - Input; may be any supported input format (e.g. .osm file).
+* +output+ - (optional) Output file; may be any supported output format (e.g. .osm file). If specified, elements with validation will be marked
+             with tags in the output file. If not specified, then only a validation error summary will be displayed.
+
+To see a list of available validation operations:
+-----
+hoot info --josm-validators
+-----
+
+=== Usage
+
+--------------------------------------
+validate (input) [output]
+--------------------------------------
+
+==== Examples
+
+--------------------------------------
+hoot validate input.osm
+hoot validate input.osm output.osm
+--------------------------------------
+
+==== See Also
+
+* map.validator.josm.modify.map
+* `map.validator.*` configuration options
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

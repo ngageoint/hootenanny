@@ -38,13 +38,13 @@ namespace hoot
 class JosmMapCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapCleanerTest);
-  CPPUNIT_TEST(runGetAvailableCleanersTest);
+  CPPUNIT_TEST(runGetAvailableValidatorsTest);
   CPPUNIT_TEST(runCleanNoErrorsTest);
   CPPUNIT_TEST(runCleanTest);
-  CPPUNIT_TEST(runCleanerInclusionTest);
-  CPPUNIT_TEST(runCleanerExclusionTest);
-  CPPUNIT_TEST(runEmptyCleanersTest);
-  CPPUNIT_TEST(runCleanerNamespacesTest);
+  CPPUNIT_TEST(runValidatorInclusionTest);
+  CPPUNIT_TEST(runValidatorExclusionTest);
+  CPPUNIT_TEST(runEmptyValidatorsTest);
+  CPPUNIT_TEST(runValidatorNamespacesTest);
   CPPUNIT_TEST(runNoDebugTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -66,13 +66,13 @@ public:
   {
   }
 
-  void runGetAvailableCleanersTest()
+  void runGetAvailableValidatorsTest()
   {
     JosmMapCleaner uut;
-    const QMap<QString, QString> cleaners = uut.getAvailableCleaners();
-    LOG_VART(cleaners.keys());
-    LOG_VART(cleaners.values());
-    CPPUNIT_ASSERT_EQUAL(51, cleaners.size());
+    const QMap<QString, QString> validators = uut.getAvailableValidators();
+    LOG_VART(validators.keys());
+    LOG_VART(validators.values());
+    CPPUNIT_ASSERT_EQUAL(51, validators.size());
   }
 
   void runCleanNoErrorsTest()
@@ -83,7 +83,7 @@ public:
 
     JosmMapCleaner uut;
     uut.setAddDebugTags(true);
-    uut.setJosmCleanersInclude(QStringList("UntaggedWay"));
+    uut.setJosmValidatorsInclude(QStringList("UntaggedWay"));
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
@@ -103,11 +103,11 @@ public:
 
     JosmMapCleaner uut;
     uut.setAddDebugTags(true);
-    QStringList cleaners;
-    cleaners.append("UntaggedWay");   // triggers "One node way"
-    cleaners.append("UnclosedWays");
-    cleaners.append("DuplicatedWayNodes");
-    uut.setJosmCleanersInclude(cleaners);
+    QStringList validators;
+    validators.append("UntaggedWay");   // triggers "One node way"
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
     uut.apply(map);
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
@@ -120,19 +120,19 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 
-  void runCleanerInclusionTest()
+  void runValidatorInclusionTest()
   {
   }
 
-  void runCleanerExclusionTest()
+  void runValidatorExclusionTest()
   {
   }
 
-  void runEmptyCleanersTest()
+  void runEmptyValidatorsTest()
   {
   }
 
-  void runCleanerNamespacesTest()
+  void runValidatorNamespacesTest()
   {
   }
 

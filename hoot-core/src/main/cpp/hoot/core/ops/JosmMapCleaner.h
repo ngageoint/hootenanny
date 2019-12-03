@@ -28,16 +28,7 @@
 #define JOSM_MAP_CLEANER_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
-
-// JNI
-#include <jni.h>
-
-// Qt
-#include <QStringList>
+#include <hoot/core/ops/JosmMapValidatorAbstract.h>
 
 namespace hoot
 {
@@ -48,7 +39,7 @@ namespace hoot
  * passing strings for all collection types in order to cut down on JNI calls for performance
  * reasons; also keeps the client code less complex
  */
-class JosmMapCleaner : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class JosmMapCleaner : public JosmMapValidatorAbstract
 {
 
 public:
@@ -60,17 +51,12 @@ public:
    */
   JosmMapCleaner();
 
+  virtual QMap<QString, QString> getAvailableValidators();
+
   /**
    * @see OsmMapOperation
    */
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
-
-  /**
-   * TODO
-   *
-   * @return
-   */
-  QMap<QString, QString> getAvailableCleaners();
 
   /**
    * @see ApiEntityInfo
@@ -94,63 +80,26 @@ public:
       " elements.";
   }
 
-  int getNumElementsProcessed() const { return _numAffected; }
-  int getNumValidationErrors() const { return _numValidationErrors; }
   int getNumGroupsOfElementsCleaned() const { return _numGroupsOfElementsCleaned; }
   int getNumElementsDeleted() const { return _deletedElementIds.size(); }
 
-  QStringList getJosmCleanersUsed() const { return _josmCleanersToUse; }
-  void setCleanersJosmNamespace(const QString& cleanersNamespace)
-  { _cleanersJosmNamespace = cleanersNamespace; }
-  void setCleanerInterfaceName(const QString& name) { _cleanerInterfaceName = name; }
-  void setJosmCleanersExclude(const QStringList& cleaners) { _josmCleanersExclude = cleaners; }
-  void setJosmCleanersInclude(const QStringList& cleaners) { _josmCleanersInclude = cleaners; }
-  void setAddValidationTags(const bool add) { _addValidationTags = add; }
   void setAddDebugTags(const bool add) { _addDebugTags = add; }
+
+protected:
+
+  virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
+
+  virtual void _getStats();
 
 private:
 
-  // TODO - assuming a single one for now
-  QString _cleanersJosmNamespace;
-  // TODO
-  QString _cleanerInterfaceName;
-  // TODO
-  QStringList _josmCleanersToUse;
-  // TODO
-  QStringList _josmCleanersInclude;
-  // TODO
-  QStringList _josmCleanersExclude;
-  // TODO
-  bool _addValidationTags;
   // TODO
   bool _addDebugTags;
 
   // TODO
-  JNIEnv* _javaEnv;
-  // TODO
-  jclass _cleanerInterfaceClass;
-  // TODO
-  jobject _cleanerInterface;
-  // TODO
-  bool _cleanerInterfaceInitialized;
-
-  // TODO
-  int _numValidationErrors;
-  // TODO
   int _numGroupsOfElementsCleaned;
   // TODO
   QSet<ElementId> _deletedElementIds;
-
-  void _initCleanerImplementation();
-  void _initJosmCleanersList();
-  void _updateJosmCleanersWithNamepace(QStringList& cleaners);
-
-  void _getCleanStats();
-
-  /*
-   * TODO
-   */
-  OsmMapPtr _getCleanedMap(OsmMapPtr& inputMap);
 
   QSet<ElementId> _elementIdsStrToElementIds(const QString elementIdsStr) const;
 };

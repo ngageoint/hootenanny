@@ -55,19 +55,35 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() != 2)
+    if (args.size() < 1 || args.size() > 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
+      throw HootException(QString("%1 takes one or two parameters.").arg(getName()));
+    }
+
+    const QString input = args[0];
+    const bool modifyMap = args.size() == 2;
+    QString output;
+    if (args.size() == 2)
+    {
+      output = args[1];
     }
 
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], true, Status::Unknown1);
+    IoUtils::loadMap(map, input, true, Status::Unknown1);
 
-    JosmMapValidator().apply(map);
+    JosmMapValidator validator;
+    LOG_INFO(validator.getInitStatusMessage());
+    validator.setModifyMap(modifyMap);
+    validator.apply(map);
 
-    MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, args[1]);
+    if (modifyMap)
+    {
+      MapProjector::projectToWgs84(map);
+      IoUtils::saveMap(map, args[1]);
+    }
+
+    LOG_INFO(validator.getCompletedStatusMessage());
 
     return 0;
   }

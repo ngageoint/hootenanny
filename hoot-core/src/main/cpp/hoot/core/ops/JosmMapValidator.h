@@ -28,24 +28,18 @@
 #define JOSM_MAP_VALIDATOR_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
-
-// JNI
-#include <jni.h>
-
-// Qt
-#include <QStringList>
+#include <hoot/core/ops/JosmMapValidatorAbstract.h>
 
 namespace hoot
 {
 
 /**
- * TODO - finish
+ * TODO
+ *
+ * passing strings for all collection types in order to cut down on JNI calls for performance
+ * reasons; also keeps the client code less complex
  */
-class JosmMapValidator : public OsmMapOperation, public Configurable, public OperationStatusInfo
+class JosmMapValidator : public JosmMapValidatorAbstract
 {
 
 public:
@@ -58,9 +52,11 @@ public:
   JosmMapValidator();
 
   /**
-   * @see OsmMapOperation
+   * TODO
+   *
+   * @return
    */
-  virtual void apply(std::shared_ptr<OsmMap>& map) override;
+  virtual QMap<QString, QString> getAvailableValidators();
 
   /**
    * @see ApiEntityInfo
@@ -73,18 +69,24 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual QString getInitStatusMessage() const
-  { return "Validating elements..."; }
+  { return "Cleaning elements..."; }
 
   virtual QString getCompletedStatusMessage() const
   {
-//    return
-//      QString::number(_numValidationErrors) + " / " + QString::number(_numAffected) +
-//      " elements had validation errors.";
-    return "";
+    return
+      QString::number(_numValidationErrors) + " / " + QString::number(_numAffected) +
+      " elements had validation errors.";
   }
+
+  void setModifyMap(bool modify) { _modifyMap = modify; }
+
+protected:
+
+  virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
 
 private:
 
+  bool _modifyMap;
 };
 
 }
