@@ -76,6 +76,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
@@ -97,6 +98,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
@@ -329,13 +331,22 @@ public class GrailResource {
             File tagDiffFile = new File(workDir, "diff.tags.osc");
             jobInfo.put("hasTags", tagDiffFile.exists());
         }
+        catch (IllegalArgumentException e) {
+            throw new WebApplicationException(e, Response.serverError().entity("Changeset file not found.").build());
+        }
+        catch (IOException e) {
+            throw new WebApplicationException(e, Response.serverError().entity("Changeset file not found.").build());
+        }
+        catch (ParserConfigurationException e) {
+            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
+        }
+        catch (SAXException e) {
+            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
+        }
         catch (TransformerException e) {
-            throw new RuntimeException("Error invoking XPathAPI!", e);
+            throw new WebApplicationException(e, Response.serverError().entity("Changeset file is malformed.").build());
         }
-        catch (Exception exc) {
-            String msg = "Error during changeset stats! jobid: " + jobDir;
-            throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
-        }
+
 
         return Response.ok(jobInfo.toJSONString()).build();
     }
