@@ -42,15 +42,6 @@ with new data.
 
 # [Conflation Algorithms](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/ConflationAlgsOverview.md)
 
-# Feature Filtering
-
-Hootenanny has the capability to let you selectively pick the features that are conflated from your data to save you from some pre-conflation data wrangling. Some examples:
-* [Conflate only buildings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-buildings)
-* [Conflate only restaurant buildings](https://github.com/ngageoint/hootenanny/master/blob/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings)
-* [Conflate only restaurant buildings with "Subway" in the name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings-with-subway-in-the-name)
-
-Hootenanny has many additional [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that can also be specified to perform feature filtering during conflation.
-
 # Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports automated schema conversion between: 
 * Topographic Data Store (TDS) 
@@ -61,12 +52,21 @@ Hootenanny leverages the OSM key value pair tag concept to support translation b
 
 Users can define their own [custom translations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) via Javascript or Python.
 
-# Feature Validation
+# Feature Validation and Cleaning
 
-Hootenanny is integrated with the feature validation capabilities in [JOSM](https://josm.openstreetmap.de/). Either during the ingesting of 
-features or during map conflation you may elect to either 1) simply mark features in your map that fail validation tests and clean them up 
-manually later using Hootenanny's review mode in iD Editor or 2) attempt to automatically fix features that fail validation tests for those that
-can be fixed. There is more information on Hootenanny validation [here](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidation.asciidoc).
+Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. In addition to the built-in cleaning operations,
+Hootenanny is integrated with the feature cleaning capabilities in [JOSM](https://josm.openstreetmap.de/). For situations where you want feature
+validation only and no automatic cleaning, JOSM validation may be used alone. There is more information on Hootenanny validation and 
+cleaning [here](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc).
+
+# Feature Filtering
+
+Hootenanny has the capability to let you selectively pick the features that are conflated from your data to save you from some pre-conflation data wrangling. Some examples:
+* [Conflate only buildings](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-buildings)
+* [Conflate only restaurant buildings](https://github.com/ngageoint/hootenanny/master/blob/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings)
+* [Conflate only restaurant buildings with "Subway" in the name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#conflate-only-restaurant-buildings-with-subway-in-the-name)
+
+Hootenanny has many additional [available filters](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#list-all-entities-that-can-operate-on-data) that can also be specified to perform feature filtering during conflation.
 
 # When To Use
 No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to conflate them manually yourself, given you are looking for perfectly conflated output and want to avoid any potential time spent configuring Hootenanny options to get the best conflated output. 

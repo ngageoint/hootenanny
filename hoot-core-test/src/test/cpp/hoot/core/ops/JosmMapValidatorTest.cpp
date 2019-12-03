@@ -22,58 +22,48 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/io/IoUtils.h>
-
-using namespace std;
+#include <hoot/core/ops/JosmMapValidator.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
 
-class CleanCmd : public BaseCommand
+/*
+ * TODO: finish
+ */
+class JosmMapValidatorTest : public HootTestFixture
 {
+  CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
+
+  CPPUNIT_TEST_SUITE_END();
+
 public:
 
-  static string className() { return "hoot::CleanCmd"; }
-
-  CleanCmd() { }
-
-  virtual QString getName() const override { return "clean"; }
-
-  virtual QString getDescription() const override { return "Corrects erroneous map data"; }
-
-  virtual int runSimple(QStringList& args) override
+  JosmMapValidatorTest() :
+  HootTestFixture(
+    "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
-    if (args.size() != 2)
-    {
-      cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes two parameters.").arg(getName()));
-    }
+    //setResetType(ResetAll);
+  }
 
-    OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, args[0], true, Status::Unknown1);
+  virtual void setUp()
+  {
+    // TODO: not being passed in correctly yet
+    //conf().set("jni.class.path", QStringList("/home/vagrant/hoot/tmp/hoot-josm.jar"));
+  }
 
-    MapCleaner().apply(map);
-
-    MapProjector::projectToWgs84(map);
-    IoUtils::saveMap(map, args[1]);
-
-    return 0;
+  virtual void tearDown()
+  {
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, CleanCmd)
-
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "slow");
 
 }
-

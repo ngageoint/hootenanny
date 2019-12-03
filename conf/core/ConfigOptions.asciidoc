@@ -1684,6 +1684,13 @@ corresponding implicit tag rules database.
 
 A list of paths to include in the javascript translator search path.
 
+=== jni.class.path
+
+* Data Type: string
+* Default Value: `/home/vagrant/hoot/tmp/hoot-josm.jar`
+
+TODO
+
 === in.bounds.criterion.bounds
 
 * Data Type: string
@@ -1699,6 +1706,14 @@ The bounding box used by InBoundsCriterion, of the form: minx,miny,maxx,maxy.
 If true, InBoundsCriterion requires features exist completely within `in.bounds.criterion.bounds`
 in order for the criterion to be satisfied. If false, features that cross the bounds may also
 satisfy the criterion.
+
+=== jni.class.path
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
 
 === job.id
 
@@ -2031,6 +2046,50 @@ names with their namespace. An empty string (default) disables the filtering.
 The maximum number of warn log messages that will be emitted per class before they are silenced.
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the option.
 A setting of -1 is useful for tests where you do not have granular enough logging control.
+
+=== map.cleaner.josm.add.debug.tags
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
+=== map.cleaner.josm.add.validation.tags
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
+=== map.cleaner.josm.validators.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
+=== map.cleaner.josm.validators.include
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
+=== map.cleaner.josm.java.implementation
+
+* Data Type: string
+* Default Value: `hoot/services/josm/JosmMapCleaner`
+
+TODO
+
+=== map.cleaner.josm.java.namespace
+
+* Data Type: string
+* Default Value: `org.openstreetmap.josm.data.validation.tests`
+
+TODO
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
@@ -4504,50 +4563,6 @@ problematic if you're doing testing or expecting repeatable output for other.
 
 Creates a repeatable UUID for the features. This is useful for debugging, but shouldn't be used in
 normal operation.
-
-=== validation.enabled
-
-* Data Type: string
-* Default Value: `off`
-
-TODO
-
-=== validation.hoot.josm.library.path
-
-* Data Type: string
-* Default Value: ``
-
-TODO
-
-=== validation.josm.validator.exclude.list
-
-* Data Type: list
-* Default Value:
-** ``
-
-TODO
-
-=== validation.josm.validator.include.list
-
-* Data Type: list
-* Default Value:
-** ``
-
-TODO
-
-=== validation.josm.library.path
-
-* Data Type: string
-* Default Value: ``
-
-TODO
-
-=== validation.tagging.enabled
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
 
 === waterway.angle.sample.distance
 

@@ -45,6 +45,8 @@ namespace hoot
 /*
  * Some time needs to be spent exploring ways to make the classes containing the information
  * printed out by this command auto-register themselves in a more extensible way.
+ *
+ * TODO: add --josm-validators implementation after its moved to hoot-core
  */
 class InfoCmd : public BaseCommand
 {

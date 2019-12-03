@@ -21,6 +21,7 @@ Only one of the following options can be passed to the command:
 * +--filters+                  - Displays a list of all criteria that can be used for element filtering
 * +--formats+                  - Displays supported data input/output formats
 * +--geometry-type-criteria+   - Displays criteria that identify a feature geometry type
+* +--josm-validators+          - Displays available JOSM validators available for use both in validation and cleaning
 * +--languages+                - Displays information about translatable/detectable spoken languages
 * +--matchers+                 - Displays available feature matchers used during conflation
 * +--match-creators+           - Displays available feature match creators used during conflation
@@ -250,6 +251,23 @@ info --geometry-type-crieria
 
 --------------------------------------
 hoot info --geometry-type-crieria
+--------------------------------------
+
+=== JOSM Validators
+
+The +--josm-validators++ option prints out all JOSM Java validator classes which can be used to validate map data (mark elements with 
+validation errors only) or clean map data (attempt to fix elements with validation errors).
+
+==== Usage
+
+--------------------------------------
+info --josm-validators
+--------------------------------------
+
+==== Example
+
+--------------------------------------
+hoot info --josm-validators
 --------------------------------------
 
 === Languages

@@ -31,7 +31,7 @@ rm -f guava-20.0.jar
 
 # add our hoot josm validator classes
 cd /ramdisk/hoot/hoot-services/target/classes
-jar uf /home/vagrant/hoot/tmp/hoot-josm.jar hoot/services/validation
+jar uf /home/vagrant/hoot/tmp/hoot-josm.jar hoot/services/josm
 
 chmod -R 777 /home/vagrant/hoot/tmp
 

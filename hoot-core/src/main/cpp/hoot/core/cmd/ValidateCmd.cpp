@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/ops/JosmMapValidator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
@@ -40,17 +40,18 @@ using namespace std;
 namespace hoot
 {
 
-class CleanCmd : public BaseCommand
+class ValidateCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CleanCmd"; }
+  static string className() { return "hoot::ValidateCmd"; }
 
-  CleanCmd() { }
+  ValidateCmd() { }
 
-  virtual QString getName() const override { return "clean"; }
+  virtual QString getName() const override { return "validate"; }
 
-  virtual QString getDescription() const override { return "Corrects erroneous map data"; }
+  virtual QString getDescription() const override
+  { return "Marks erroneous map data with validation errors using JOSM"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -63,7 +64,7 @@ public:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, args[0], true, Status::Unknown1);
 
-    MapCleaner().apply(map);
+    JosmMapValidator().apply(map);
 
     MapProjector::projectToWgs84(map);
     IoUtils::saveMap(map, args[1]);
@@ -72,7 +73,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, CleanCmd)
+HOOT_FACTORY_REGISTER(Command, ValidateCmd)
 
 
 }

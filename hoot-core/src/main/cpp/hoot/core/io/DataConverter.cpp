@@ -181,8 +181,6 @@ _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 void DataConverter::setConfiguration(const Settings& conf)
 {
   ConfigOptions config = ConfigOptions(conf);
-  // TODO: handle validation.enabled - 'off', 'validate', or 'fix'
-  // TODO: use validation.hoot.josm.library.path and validation.josm.library.path ??
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());

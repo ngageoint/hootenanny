@@ -145,6 +145,14 @@ public:
    * @return true if any string in the input list contains the given substring; false otherwise
    */
   static bool containsSubstring(const QStringList& input, const QString& substring);
+
+  /**
+   * TODO: make generic and move to CollectionUtils?
+   *
+   * @param input
+   * @param toRemove
+   */
+  static void removeAll(QStringList& input, const QStringList& toRemove);
 };
 
 }
