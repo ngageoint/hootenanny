@@ -2116,6 +2116,13 @@ TODO
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
 
+=== map.validator.modify.map
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 [[match.creators]]
 === match.creators
 

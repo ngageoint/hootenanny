@@ -63,6 +63,25 @@ public class JosmMapCleaner
     JosmUtils.initJosm(logLevel);
   }
 
+  public String getDeletedElementIds()
+  {
+    if (deletedElementIds != null)
+    {
+      return String.join(";", deletedElementIds.toArray(new String[deletedElementIds.size()]));
+    }
+    return "";
+  }
+  public int getNumDeletedElements()
+  {
+    if (deletedElementIds != null)
+    {
+      return deletedElementIds.size();
+    }
+    return 0;
+  }
+  public int getNumValidationErrors() { return numValidationErrors; }
+  public int getNumGroupsOfElementsCleaned() { return numGroupsOfElementsCleaned; }
+
   /**
    * TODO - change to return Map<String, String>?
    */
@@ -181,7 +200,7 @@ public class JosmMapCleaner
         // If we're fixing features, fix the features, record those that were fixed, and get back
         // the fixed features.
 
-        cleanedElements = fixElements(errors);
+        cleanedElements = cleanElements(errors);
 
         if (cleanedElements == null)
         {
@@ -268,6 +287,8 @@ public class JosmMapCleaner
     return cleanedElementsXml;
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
   private List<TestError> runValidation(String[] validators, Collection<OsmPrimitive> elements)
     throws Exception
   {
@@ -337,7 +358,7 @@ public class JosmMapCleaner
     Logging.debug("elementValidations size: " + elementValidations.size());
   }
 
-  private Collection<AbstractPrimitive> fixElements(List<TestError> errors) throws Exception
+  private Collection<AbstractPrimitive> cleanElements(List<TestError> errors) throws Exception
   {
     Logging.debug("Fixing and recording fixed elements...");
 
@@ -499,24 +520,7 @@ public class JosmMapCleaner
     return numElementsInvolved;
   }
 
-  public String getDeletedElementIds()
-  {
-    if (deletedElementIds != null)
-    {
-      return String.join(";", deletedElementIds.toArray(new String[deletedElementIds.size()]));
-    }
-    return "";
-  }
-  public int getNumDeletedElements()
-  {
-    if (deletedElementIds != null)
-    {
-      return deletedElementIds.size();
-    }
-    return 0;
-  }
-  public int getNumValidationErrors() { return numValidationErrors; }
-  public int getNumGroupsOfElementsCleaned() { return numGroupsOfElementsCleaned; }
+  //////////////////////////////////////////////////////////////////////////////////////////////
 
   // these match corresponding entries in the hoot-core MetadataTags class
   private static final String VALIDATION_ERROR_TAG_KEY_BASE = "hoot:validation:error";

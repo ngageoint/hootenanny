@@ -42,7 +42,7 @@ JosmMapValidator::JosmMapValidator()
 
 void JosmMapValidator::setConfiguration(const Settings& /*conf*/)
 {
-
+  // TODO: map.validator.modify.map
 }
 
 void JosmMapValidator::apply(std::shared_ptr<OsmMap>& /*map*/)
