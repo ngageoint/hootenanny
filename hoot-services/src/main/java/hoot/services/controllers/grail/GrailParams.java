@@ -84,6 +84,8 @@ public class GrailParams {
 
     private String conflationType;
 
+    private String comment;
+
     public GrailParams() {}
 
     public GrailParams(GrailParams params) {
@@ -102,6 +104,15 @@ public class GrailParams {
         this.consumerSecret = params.getConsumerSecret();
         this.workDir = params.getWorkDir();
         this.conflationType = params.getConflationType();
+        this.comment = params.getComment();
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getConflationType() {

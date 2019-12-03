@@ -389,6 +389,7 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
+        params.setComment(params.getComment());
 
         ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
         params.setConsumerKey(oauthInfo.getConsumerKey());
@@ -410,7 +411,7 @@ public class GrailResource {
             APICapabilities railsPortCapabilities = getCapabilities(RAILSPORT_CAPABILITIES_URL);
             logger.info("ApplyChangeset: railsPortAPI status = " + railsPortCapabilities.getApiStatus());
             if (railsPortCapabilities.getApiStatus() == null || railsPortCapabilities.getApiStatus().equals("offline")) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline. Try again later").build();
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("The reference OSM API server is offline.").build();
             }
 
             File changesetFile = new File(workDir, "diff.osc");
