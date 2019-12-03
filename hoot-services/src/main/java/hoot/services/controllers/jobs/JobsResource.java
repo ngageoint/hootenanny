@@ -29,12 +29,18 @@ package hoot.services.controllers.jobs;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,28 +53,13 @@ import hoot.services.models.db.Users;
 @Path("")
 @Transactional
 public class JobsResource {
-    private static final int MAX_SIZE = 10;
+    private static final Logger logger = LoggerFactory.getLogger(JobsResource.class);
 
     @Autowired
     private JobsStatusesManager jobsStatusesManager;
 
 
     public JobsResource() {}
-
-    /**
-     * This service allows for tracking the status of Hootenanny jobs launched by other web services.
-     *
-     * GET hoot-services/jobs/recent
-     *
-     * @return job status JSON
-     */
-    @GET
-    @Path("/recent")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<JobStatusResponse> getJobStatus(@Context HttpServletRequest request) {
-        Users user = Users.fromRequest(request);
-        return this.jobsStatusesManager.getRecentJobs(user, MAX_SIZE);
-    }
 
     /**
      * This service allows for tracking the status of running Hootenanny jobs launched all users.
@@ -81,7 +72,7 @@ public class JobsResource {
     @Path("/running")
     @Produces(MediaType.APPLICATION_JSON)
     public List<JobStatusResponse> getRunningJobs() {
-        return this.jobsStatusesManager.getRunningJobs();
+        return jobsStatusesManager.getRunningJobs();
     }
 
     /**
@@ -94,9 +85,21 @@ public class JobsResource {
     @GET
     @Path("/history")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<JobStatusResponse> getHistoryJobs(@Context HttpServletRequest request) {
+    public JobHistory getHistoryJobs(@Context HttpServletRequest request,
+            @QueryParam("sort") @DefaultValue("") String sort,
+            @QueryParam("offset") @DefaultValue("0") long offset,
+            @QueryParam("limit") @DefaultValue("25") long limit,
+            @QueryParam("jobType") @DefaultValue("") String type,
+            @QueryParam("status") @DefaultValue("") String status
+            ) {
         Users user = Users.fromRequest(request);
-        return this.jobsStatusesManager.getJobsHistory(user);
+        try {
+            return jobsStatusesManager.getJobsHistory(user, sort, offset, limit, type, status);
+        } catch (IllegalArgumentException iae) {
+            logger.error(iae.getMessage(), iae);
+            throw new WebApplicationException(iae, Response.status(Response.Status.BAD_REQUEST).entity(iae.getMessage()).build());
+        }
     }
+
 
 }

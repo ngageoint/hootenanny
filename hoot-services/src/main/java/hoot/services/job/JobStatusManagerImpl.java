@@ -71,7 +71,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
             newJobStatus.setResourceId(job.getMapId());
             Timestamp ts = new Timestamp(System.currentTimeMillis());  //Is this UTC?
             newJobStatus.setStart(ts);
-            newJobStatus.setParentId(job.getParentId());
+            newJobStatus.setTags(job.getTags());
 
             // We only get the external command count because they take the longest to run so they have
             // the biggest impact on the math for job progress

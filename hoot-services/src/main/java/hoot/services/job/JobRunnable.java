@@ -95,7 +95,7 @@ class JobRunnable implements Runnable {
             jobStatusManager.setCompleted(job.getJobId(), "FULLY PROCESSED");
 
             if(job.getJobType().equals(JobType.UPLOAD_CHANGESET)){
-                DbUtils.setStale(job.getParentId());
+                DbUtils.setStale(job.getTags().get("parentId"));
             }
         }
         catch (Exception e) {

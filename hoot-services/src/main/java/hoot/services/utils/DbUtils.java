@@ -640,13 +640,29 @@ public class DbUtils {
         return -1;
     }
 
-    // Returns the parentId for the specified jobId job
-    public static String getParentId(String jobId) {
-        return createQuery()
-                .select(jobStatus.parentId)
+    // Gets tags column from job status table for specified job id row
+    public static Map<String, String> getJobTags(String jobId) {
+        Map<String, String> tags = new HashMap<>();
+
+        List<Object> results = createQuery()
+                .select(jobStatus.tags)
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(jobId))
-                .fetchFirst();
+                .fetch();
+
+        if (!results.isEmpty()) {
+            Object oTag = results.get(0);
+            tags = PostgresUtils.postgresObjToHStore(oTag);
+        }
+
+        return tags;
+    }
+
+    // Returns the parentId for the specified jobId job
+    public static String getParentId(String jobId) {
+        Map<String, String> tags = getJobTags(jobId);
+
+        return tags.get("parentId");
     }
 
     // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
@@ -665,9 +681,10 @@ public class DbUtils {
                 .set(jobStatus.statusDetail, "STALE")
                 .execute();
 
+            String parentId = getParentId(jobId);
             // If it has a parent, make the parent stale too
-            if(job.getParentId() != null && !job.getParentId().equals("")) {
-                setStale(job.getParentId());
+            if(parentId != null) {
+                setStale(parentId);
             }
         }
     }
