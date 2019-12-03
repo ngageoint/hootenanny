@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.grail;
 
+import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_LABEL;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
@@ -204,7 +205,7 @@ public class GrailResource {
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
 
-        File workDir = new File(TEMP_OUTPUT_PATH, jobId);
+        File workDir = new File(CHANGESETS_FOLDER, jobId);
         try {
             FileUtils.forceMkdir(workDir);
         }
@@ -292,7 +293,7 @@ public class GrailResource {
 
         JSONObject jobInfo = new JSONObject();
 
-        String fileDirectory = TEMP_OUTPUT_PATH + "/" + jobDir;
+        String fileDirectory = CHANGESETS_FOLDER + "/" + jobDir;
         File workDir = new File(fileDirectory);
 
         try {
@@ -400,7 +401,7 @@ public class GrailResource {
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
         String jobDir = reqParams.getParentId();
-        File workDir = new File(TEMP_OUTPUT_PATH, jobDir);
+        File workDir = new File(CHANGESETS_FOLDER, jobDir);
 
         if (!workDir.exists()) {
             logger.error("ApplyChangeset: jobDir {} does not exist.", workDir.getAbsolutePath());
@@ -528,7 +529,7 @@ public class GrailResource {
 
         List<Command> workflow = new LinkedList<>();
 
-        File workDir = new File(TEMP_OUTPUT_PATH, mainJobId);
+        File workDir = new File(CHANGESETS_FOLDER, mainJobId);
         try {
             FileUtils.forceMkdir(workDir);
         }
