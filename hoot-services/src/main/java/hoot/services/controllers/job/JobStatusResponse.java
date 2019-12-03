@@ -28,6 +28,7 @@ package hoot.services.controllers.job;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -68,6 +69,9 @@ public class JobStatusResponse {
 
     @JsonProperty("commandDetail")
     private List<CommandStatus> commandDetail;
+
+    @JsonProperty("tags")
+    private Map<String, String> tags;
 
     public String getJobId() {
         return jobId;
@@ -155,6 +159,14 @@ public class JobStatusResponse {
 
     public void setCommandDetail(List<CommandStatus> commandDetail) {
         this.commandDetail = commandDetail;
+    }
+
+    public Map<String, String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Map<String, String> tags) {
+        this.tags = tags;
     }
 
     @Override

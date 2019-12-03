@@ -49,6 +49,7 @@ import hoot.services.controllers.jobs.JobHistory;
 import hoot.services.job.JobType;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Users;
+import hoot.services.utils.PostgresUtils;
 
 @Component
 @Transactional(propagation = Propagation.REQUIRES_NEW) // Run inside of a new transaction.  This is intentional.
@@ -147,6 +148,7 @@ public class JobsStatusesManagerImpl implements JobsStatusesManager {
             response.setEnd(j.getEnd().getTime());
             response.setStatus(hoot.services.job.JobStatus.fromInteger(j.getStatus()).toString());
             response.setStatusDetail(j.getStatusDetail());
+            response.setTags(PostgresUtils.postgresObjToHStore(j.getTags()));
 
             return response;
         }).collect(Collectors.toList());
