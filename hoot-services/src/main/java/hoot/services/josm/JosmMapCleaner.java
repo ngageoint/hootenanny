@@ -454,8 +454,7 @@ public class JosmMapCleaner
             osmElement.put(
               VALIDATION_FIX_STATUS_TAG_KEY_BASE + ":" + String.valueOf(errorCtr),
               cleaningMessagesArr[i]);
-            osmElement.put(
-              VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "source=JOSM");
+            osmElement.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "JOSM");
             numValidationTagsAdded++;
             errorCtr++;
           }
