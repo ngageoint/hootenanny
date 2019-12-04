@@ -39,13 +39,12 @@ class JosmMapCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapCleanerTest);
   CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runCleanNoErrorsTest);
-  CPPUNIT_TEST(runCleanTest);
   CPPUNIT_TEST(runValidatorInclusionTest);
   CPPUNIT_TEST(runValidatorExclusionTest);
   CPPUNIT_TEST(runEmptyValidatorsTest);
-  CPPUNIT_TEST(runValidatorNamespacesTest);
-  CPPUNIT_TEST(runNoDebugTagsTest);
+  CPPUNIT_TEST(runCleanNoErrorsTest);
+  CPPUNIT_TEST(runCleanTest);
+  CPPUNIT_TEST(runCleanNoDebugTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -72,7 +71,58 @@ public:
     const QMap<QString, QString> validators = uut.getAvailableValidators();
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
+    // TODO: This won't hold up across version changes...come up with something better.
     CPPUNIT_ASSERT_EQUAL(51, validators.size());
+  }
+
+  void runValidatorInclusionTest()
+  {
+    JosmMapCleaner uut;
+    QStringList validators;
+    validators.append("UntaggedWay");
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    uut._initJosmValidatorsList();
+
+    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
+    LOG_VARD(validatorsUsed);
+    CPPUNIT_ASSERT_EQUAL(3, validatorsUsed.size());
+    const QString validatorsNamespace = uut.getValidatorsJosmNamespace();
+    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".UntaggedWay"));
+    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".UnclosedWays"));
+    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".DuplicatedWayNodes"));
+  }
+
+  void runValidatorExclusionTest()
+  {
+    JosmMapCleaner uut;
+
+    QStringList validators;
+    validators.append("UntaggedWay");
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+
+    validators.clear();
+    validators.append("UntaggedWay");
+    uut.setJosmValidatorsExclude(validators);
+
+    uut._initJosmValidatorsList();
+
+    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
+    CPPUNIT_ASSERT_EQUAL(2, validatorsUsed.size());
+    const QString validatorsNamespace = uut.getValidatorsJosmNamespace();
+    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".UnclosedWays"));
+    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".DuplicatedWayNodes"));
+  }
+
+  void runEmptyValidatorsTest()
+  {
+    JosmMapCleaner uut;
+    uut._initJosmValidatorsList();
+    // TODO: This won't hold up across version changes...come up with something better.
+    CPPUNIT_ASSERT_EQUAL(51, uut.getJosmValidatorsUsed().size());
   }
 
   void runCleanNoErrorsTest()
@@ -96,6 +146,8 @@ public:
 
   void runCleanTest()
   {
+    // TODO: fix
+
     const QString testName = "runCleanTest";
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
@@ -120,25 +172,32 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 
-  void runValidatorInclusionTest()
+  void runCleanNoDebugTagsTest()
   {
-  }
+    // TODO: fix
 
-  void runValidatorExclusionTest()
-  {
-  }
+    const QString testName = "runCleanNoDebugTagsTest";
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
+    LOG_VARD(map->size());
 
-  void runEmptyValidatorsTest()
-  {
-  }
+    JosmMapCleaner uut;
+    uut.setAddDebugTags(false);
+    QStringList validators;
+    validators.append("UntaggedWay");   // triggers "One node way"
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    uut.apply(map);
 
-  void runValidatorNamespacesTest()
-  {
-  }
+    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
 
-  void runNoDebugTagsTest()
-  {
-
+    const QString outTestFileName =  testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 };
 

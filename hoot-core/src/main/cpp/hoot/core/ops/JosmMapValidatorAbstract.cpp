@@ -45,9 +45,9 @@ _validatorsJosmNamespace("org.openstreetmap.josm.data.validation.tests")
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
-  _josmValidatorsExclude = opts.getMapCleanerJosmValidatorsExclude();
-  _josmValidatorsInclude = opts.getMapCleanerJosmValidatorsInclude();
-  _validatorsJosmNamespace = opts.getMapCleanerJosmJavaNamespace();
+  _josmValidatorsExclude = opts.getJosmValidatorsExclude();
+  _josmValidatorsInclude = opts.getJosmValidatorsInclude();
+  _validatorsJosmNamespace = opts.getJosmValidatorsJavaNamespace();
   _josmInterfaceName = opts.getMapCleanerJosmJavaImplementation();
 }
 

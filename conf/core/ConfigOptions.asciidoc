@@ -1800,6 +1800,29 @@ vs
 ...
 -----
 
+=== josm.validators.java.namespace
+
+* Data Type: string
+* Default Value: `org.openstreetmap.josm.data.validation.tests`
+
+TODO
+
+=== josm.validators.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
+=== josm.validators.include
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
 === json.output.tasking.manager.aoi
 
 * Data Type: bool
@@ -2061,33 +2084,10 @@ TODO
 
 TODO
 
-=== map.cleaner.josm.validators.exclude
-
-* Data Type: list
-* Default Value:
-** ``
-
-TODO
-
-=== map.cleaner.josm.validators.include
-
-* Data Type: list
-* Default Value:
-** ``
-
-TODO
-
 === map.cleaner.josm.java.implementation
 
 * Data Type: string
 * Default Value: `hoot/services/josm/JosmMapCleaner`
-
-TODO
-
-=== map.cleaner.josm.java.namespace
-
-* Data Type: string
-* Default Value: `org.openstreetmap.josm.data.validation.tests`
 
 TODO
 

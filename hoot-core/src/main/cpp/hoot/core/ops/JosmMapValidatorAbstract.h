@@ -65,6 +65,7 @@ public:
   int getNumValidationErrors() const { return _numValidationErrors; }
 
   QStringList getJosmValidatorsUsed() const { return _josmValidators; }
+  QString getValidatorsJosmNamespace() const { return _validatorsJosmNamespace; }
   void setValidatorsJosmNamespace(const QString& validatorsNamespace)
   { _validatorsJosmNamespace = validatorsNamespace; }
   void setJosmInterfaceName(const QString& name) { _josmInterfaceName = name; }
@@ -101,6 +102,8 @@ protected:
   virtual void _getStats();
 
 private:
+
+  friend class JosmMapCleanerTest;
 
   // TODO - assuming a single one for now
   QString _validatorsJosmNamespace;

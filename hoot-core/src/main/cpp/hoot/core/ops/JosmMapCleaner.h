@@ -38,6 +38,10 @@ namespace hoot
  *
  * passing strings for all collection types in order to cut down on JNI calls for performance
  * reasons; also keeps the client code less complex
+ *
+ * Not using inheritance with JosmMapValidator since both this and that class need to be factory
+ * registered as OsmMapOperations and that can't be done in a class inherited from a class that
+ * is already registered.
  */
 class JosmMapCleaner : public JosmMapValidatorAbstract
 {

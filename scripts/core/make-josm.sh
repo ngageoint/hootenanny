@@ -1,13 +1,15 @@
 #!/bin/bash
 set -e
 
-cd /ramdisk/hoot
+#HOME=/ramdisk/hoot
+HOME=/home/vagrant/hoot
+cd $HOME
 
-rsync -rzuv ~/hoot/conf .
-rsync -rzuv ~/hoot/hoot-core .
-rsync -rzuv ~/hoot/hoot-rnd .
-rsync -rzuv ~/hoot/hoot-services .
-rsync -rzuv ~/hoot/test-files .
+rsync -rzuv /home/vagrant/hoot/conf .
+rsync -rzuv /home/vagrant/hoot/hoot-core .
+rsync -rzuv /home/vagrant/hoot/hoot-rnd .
+rsync -rzuv /home/vagrant/hoot/hoot-services .
+rsync -rzuv /home/vagrant/hoot/test-files .
 make -j12
 
 echo "Building hoot-josm jar..."
@@ -30,9 +32,9 @@ rm -rf com
 rm -f guava-20.0.jar
 
 # add our hoot josm validator classes
-cd /ramdisk/hoot/hoot-services/target/classes
+cd $HOME/hoot-services/target/classes
 jar uf /home/vagrant/hoot/tmp/hoot-josm.jar hoot/services/josm
 
 chmod -R 777 /home/vagrant/hoot/tmp
 
-cd /ramdisk/hoot
+cd $HOME

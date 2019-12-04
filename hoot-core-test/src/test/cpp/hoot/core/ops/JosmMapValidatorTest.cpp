@@ -35,21 +35,19 @@
 namespace hoot
 {
 
-/*
- * TODO: finish
- */
 class JosmMapValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
   CPPUNIT_TEST(runValidateTest);
-  CPPUNIT_TEST(runValidateMapUnmodifiedTest);
+  //CPPUNIT_TEST(runValidateMapUnmodifiedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
   JosmMapValidatorTest() :
   HootTestFixture(
-    "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
+    // note: using JosmMapCleanerTest's dir for input
+    "test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapValidatorTest")
   {
     //setResetType(ResetAll);
   }
@@ -66,12 +64,50 @@ public:
 
   void runValidateTest()
   {
+    const QString testName = "runValidateTest";
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
+    LOG_VARD(map->size());
 
+    JosmMapValidator uut;
+    uut.setModifyMap(false);
+    QStringList validators;
+    validators.append("UntaggedWay");   // triggers "One node way"
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+
+    const QString outTestFileName =  testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 
   void runValidateMapUnmodifiedTest()
   {
+    const QString testName = "runValidateMapUnmodifiedTest";
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
+    LOG_VARD(map->size());
 
+    JosmMapValidator uut;
+    uut.setModifyMap(false);
+    QStringList validators;
+    validators.append("UntaggedWay");   // triggers "One node way"
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+
+    const QString outTestFileName =  testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 };
 
