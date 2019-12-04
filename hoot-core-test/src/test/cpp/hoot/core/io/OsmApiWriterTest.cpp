@@ -309,7 +309,8 @@ public:
     HOOT_STR_EQUALS(
           FileUtils::readFully(_inputPath + "ToyTestAConflicts.osc")
             .replace("timestamp=\"\"", "timestamp=\"\" changeset=\"0\"")
-            .replace("    ", "\t"),
+            .replace("    ", "\t")
+            .replace("<delete>", "<delete if-unused=\"true\">"),
       writer.getFailedChangeset());
     //  Check the stats
     checkStats(writer.getStats(), 3, 2, 0, 2, 1, 2, 5);
