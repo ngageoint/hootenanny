@@ -22,7 +22,7 @@ default: build
 all: build
 always:
 
-build: core #ui-build
+build: core ui-build
 
 core: makedirs js-make qt-make services-build model-build conf/dictionary/words.sqlite osmapidb \
 	conf/dictionary/WordsAbridged.sqlite hoot-services/src/main/resources/language-translation/langdetect-183.bin
