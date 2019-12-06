@@ -57,6 +57,7 @@ void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   _numGroupsOfElementsCleaned = 0;
   _deletedElementIds.clear();
+  LOG_VARD(_addDebugTags);
 
   JosmMapValidatorAbstract::apply(map);
 }

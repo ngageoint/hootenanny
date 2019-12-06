@@ -161,6 +161,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   LOG_VARD(map->size());
   //LOG_TRACE("Input map: " << OsmXmlWriter::toString(map, true));
 
+  _numAffected = map->size();
   _numValidationErrors = 0;
 
   if (!_josmInterfaceInitialized)
@@ -176,7 +177,6 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
   OsmMapPtr validatedMap = _getUpdatedMap(map);
   LOG_VARD(validatedMap->size());
   map = validatedMap;
-  _numAffected = map->size();
 
   _getStats();
 }

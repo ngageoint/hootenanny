@@ -44,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.LinkedHashMultimap;
 
-import org.openstreetmap.josm.data.osm.TagMap;
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.validation.OsmValidator;
@@ -52,8 +51,6 @@ import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.io.OsmApi;
-import org.openstreetmap.josm.command.Command;
-import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
  * TODO
@@ -252,47 +249,6 @@ public class JosmMapValidator
     return validatedElements;
   }
 
-  protected Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements)
-    throws Exception
-  {
-    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
-
-    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
-
-    int numValidationTagsAdded = 0;
-    int numDeletedElements = 0;
-    for (AbstractPrimitive element : elements)
-    {
-      OsmPrimitive osmElement = (OsmPrimitive)element;
-      String elementKey = JosmUtils.getElementMapKey(osmElement);
-
-      if (elementValidations.containsKey(elementKey))
-      {
-        Logging.trace("Adding validation tags to element: " + elementKey + "...");
-
-        Collection<String> errorMessages = elementValidations.get(elementKey);
-        String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
-
-        int errorCtr = 1;
-        for (int i = 0; i < errorMessagesArr.length; i++)
-        {
-          osmElement.put(
-            VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), errorMessagesArr[i]);
-          osmElement.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "JOSM");
-          numValidationTagsAdded++;
-          errorCtr++;
-        }
-      }
-      Logging.trace("Adding return element: " + elementKey + "...");
-      returnElements.add(osmElement);
-    }
-
-    Logging.debug(
-      "Added " + numValidationTagsAdded + " validation tags. Total return elements: " +
-      returnElements.size());
-    return returnElements;
-  }
-
   protected String convertOutputElementsToXml()
   {
     int validatedMapSize = outputElements.size();
@@ -428,6 +384,47 @@ public class JosmMapValidator
     }
 
     Logging.debug("elementValidations size: " + elementValidations.size());
+  }
+
+  private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements)
+    throws Exception
+  {
+    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
+
+    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
+
+    int numValidationTagsAdded = 0;
+    int numDeletedElements = 0;
+    for (AbstractPrimitive element : elements)
+    {
+      OsmPrimitive osmElement = (OsmPrimitive)element;
+      String elementKey = JosmUtils.getElementMapKey(osmElement);
+
+      if (elementValidations.containsKey(elementKey))
+      {
+        Logging.trace("Adding validation tags to element: " + elementKey + "...");
+
+        Collection<String> errorMessages = elementValidations.get(elementKey);
+        String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
+
+        int errorCtr = 1;
+        for (int i = 0; i < errorMessagesArr.length; i++)
+        {
+          osmElement.put(
+            VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), errorMessagesArr[i]);
+          osmElement.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "JOSM");
+          numValidationTagsAdded++;
+          errorCtr++;
+        }
+      }
+      Logging.trace("Adding return element: " + elementKey + "...");
+      returnElements.add(osmElement);
+    }
+
+    Logging.debug(
+      "Added " + numValidationTagsAdded + " validation error tags. Total return " +
+      "elements: " + returnElements.size());
+    return returnElements;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////

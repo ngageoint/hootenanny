@@ -27,7 +27,6 @@
 package hoot.services.josm;
 
 import hoot.services.josm.JosmMapValidator;
-import hoot.services.josm.HootOsmReader;
 import hoot.services.josm.JosmUtils;
 
 import java.util.List;
@@ -36,23 +35,16 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
 import java.lang.Exception;
-import java.io.ByteArrayInputStream;
-import java.lang.Class;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.LinkedHashMultimap;
 
-import org.openstreetmap.josm.data.osm.TagMap;
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
-import org.openstreetmap.josm.data.osm.OsmPrimitive;
-import org.openstreetmap.josm.data.validation.OsmValidator;
-import org.openstreetmap.josm.data.validation.Test;
+import org.openstreetmap.josm.data.osm.OsmPrimitive;;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
-import org.openstreetmap.josm.io.OsmApi;
 import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.data.osm.DataSet;
 
@@ -103,6 +95,8 @@ public class JosmMapCleaner extends JosmMapValidator
   public String clean(String validatorsStr, String elementsXml, boolean addDebugTags)
     throws Exception
   {
+    Logging.debug("addDebugTags: " + addDebugTags);
+
     clear();
 
     /*outputElements = */parseAndValidateElements(validatorsStr, elementsXml);
@@ -138,7 +132,7 @@ public class JosmMapCleaner extends JosmMapValidator
 
         // add validation/fix message tags for use in hoot and remove deleted elements
 
-        outputElements = getReturnElements(outputElements);
+        outputElements = getReturnElements(outputElements, addDebugTags);
         Logging.debug("outputElements size: " + outputElements.size());
       }
       catch (Exception e)
@@ -183,66 +177,6 @@ public class JosmMapCleaner extends JosmMapValidator
     {
       deletedElementIds.clear();
     }
-  }
-
-  protected Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements,
-    boolean addDebugTags) throws Exception
-  {
-    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
-
-    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
-
-    int numValidationTagsAdded = 0;
-    int numDeletedElements = 0;
-    for (AbstractPrimitive element : elements)
-    {
-      OsmPrimitive osmElement = (OsmPrimitive)element;
-      String elementKey = JosmUtils.getElementMapKey(osmElement);
-
-      if (deletedElementIds == null || !deletedElementIds.contains(elementKey))
-      {
-        // Always add tags if addDebugTags=true, otherwise only add them if a fix couldn't be made
-        // after a validation error. elementValidations and elementCleanings should always have the
-        // same element keys.
-        if (elementValidations.containsKey(elementKey) &&
-            (addDebugTags ||
-             !elementCleanings.get(elementKey).equals(cleanStatusToString(CleanStatus.SUCCEEDED))))
-        {
-          Logging.trace("Adding validation tags to element: " + elementKey + "...");
-
-          Collection<String> errorMessages = elementValidations.get(elementKey);
-          String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
-          Collection<String> cleaningMessages = elementCleanings.get(elementKey);
-          String[] cleaningMessagesArr =
-            cleaningMessages.toArray(new String[cleaningMessages.size()]);
-
-          int errorCtr = 1;
-          for (int i = 0; i < errorMessagesArr.length; i++)
-          {
-            // cleaningMessagesArr's ordering will match that of errorMessagesArr
-            osmElement.put(
-              VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), errorMessagesArr[i]);
-            osmElement.put(
-              VALIDATION_FIX_STATUS_TAG_KEY_BASE + ":" + String.valueOf(errorCtr),
-              cleaningMessagesArr[i]);
-            osmElement.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "JOSM");
-            numValidationTagsAdded++;
-            errorCtr++;
-          }
-        }
-        Logging.trace("Adding return element: " + elementKey + "...");
-        returnElements.add(osmElement);
-      }
-      else
-      {
-        numDeletedElements++;
-      }
-    }
-
-    Logging.debug(
-      "Added " + numValidationTagsAdded + " validation tags. " + numDeletedElements +
-      " deleted elements were skipped. Total return elements: " + returnElements.size());
-    return returnElements;
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,6 +288,67 @@ public class JosmMapCleaner extends JosmMapValidator
       default:
         throw new Exception("Invalid clean status: " + cleanStatus);
     }
+  }
+
+  private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements,
+    boolean addDebugTags) throws Exception
+  {
+    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
+
+    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
+
+    int numValidationTagsAdded = 0;
+    int numDeletedElements = 0;
+    for (AbstractPrimitive element : elements)
+    {
+      OsmPrimitive osmElement = (OsmPrimitive)element;
+      String elementKey = JosmUtils.getElementMapKey(osmElement);
+
+      if (deletedElementIds == null || !deletedElementIds.contains(elementKey))
+      {
+        // Always add tags if addDebugTags=true, otherwise only add them if a fix couldn't be made
+        // after a validation error. elementValidations and elementCleanings should always have the
+        // same element keys.
+        if (elementValidations.containsKey(elementKey) &&
+            (addDebugTags ||
+             !elementCleanings.get(elementKey).equals(cleanStatusToString(CleanStatus.SUCCEEDED))))
+        {
+          Logging.trace("Adding validation tags to element: " + elementKey + "...");
+
+          Collection<String> errorMessages = elementValidations.get(elementKey);
+          String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
+          Collection<String> cleaningMessages = elementCleanings.get(elementKey);
+          String[] cleaningMessagesArr =
+            cleaningMessages.toArray(new String[cleaningMessages.size()]);
+
+          int errorCtr = 1;
+          for (int i = 0; i < errorMessagesArr.length; i++)
+          {
+            // cleaningMessagesArr's ordering will match that of errorMessagesArr
+            osmElement.put(
+              VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), errorMessagesArr[i]);
+            osmElement.put(
+              VALIDATION_FIX_STATUS_TAG_KEY_BASE + ":" + String.valueOf(errorCtr),
+              cleaningMessagesArr[i]);
+            osmElement.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "JOSM");
+            numValidationTagsAdded++;
+            errorCtr++;
+          }
+        }
+        Logging.trace("Adding return element: " + elementKey + "...");
+        returnElements.add(osmElement);
+      }
+      else
+      {
+        numDeletedElements++;
+      }
+    }
+
+    Logging.debug(
+      "Added " + numValidationTagsAdded + " validation error/fix status tags. " +
+      numDeletedElements + " deleted elements were skipped. Total return elements: " +
+      returnElements.size());
+    return returnElements;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////

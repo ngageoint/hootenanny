@@ -49,8 +49,8 @@
         <tag k="hoot:validation:error:clean:status:2" v="no cleaning available"/>
         <tag k="landuse" v="grass"/>
         <tag k="note" v="6"/>
-        <tag k="hoot:validation:error:source:1" v="source=JOSM"/>
-        <tag k="hoot:validation:error:source:2" v="source=JOSM"/>
+        <tag k="hoot:validation:error:source:1" v="JOSM"/>
+        <tag k="hoot:validation:error:source:2" v="JOSM"/>
         <tag k="hoot:validation:error:1" v="Duplicated way nodes"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -61,7 +61,7 @@
         <tag k="area" v="yes"/>
         <tag k="hoot:validation:error:clean:status:1" v="no cleaning available"/>
         <tag k="note" v="5"/>
-        <tag k="hoot:validation:error:source:1" v="source=JOSM"/>
+        <tag k="hoot:validation:error:source:1" v="JOSM"/>
         <tag k="hoot:validation:error:1" v="Unclosed way"/>
         <tag k="error:circular" v="15"/>
     </way>
