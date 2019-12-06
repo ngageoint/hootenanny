@@ -289,14 +289,21 @@ public class JosmMapCleaner extends JosmMapValidator
 
         elementCleanings.put(JosmUtils.getElementMapKey(element), cleanStatusToString(cleanStatus));
 
-        if (validationErrorFixesByType.containsKey(error.getTester().getName()))
+        if (cleanSuccess)
         {
-          int currentFixCountForType = validationErrorFixesByType.get(error.getTester().getName());
-          validationErrorFixesByType.put(error.getTester().getName(), currentFixCountForType + 1);
+          if (validationErrorFixesByType.containsKey(error.getTester().getName()))
+          {
+            int currentFixCountForType = validationErrorFixesByType.get(error.getTester().getName());
+            validationErrorFixesByType.put(error.getTester().getName(), currentFixCountForType + 1);
+          }
+          else
+          {
+            validationErrorFixesByType.put(error.getTester().getName(), 1);
+          }
         }
-        else
+        else if (!validationErrorFixesByType.containsKey(error.getTester().getName()))
         {
-          validationErrorFixesByType.put(error.getTester().getName(), 1);
+          validationErrorFixesByType.put(error.getTester().getName(), 0);
         }
       }
     }

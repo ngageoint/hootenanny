@@ -88,10 +88,14 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
-    // TODO: verify summary out
-
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+    HOOT_STR_EQUALS(
+      "Total validation errors: 4\n"
+      "Duplicated way nodes errors: 1\n"
+      "Unclosed Ways errors: 2\n"
+      "Untagged, empty and one node ways errors: 1",
+      uut.getSummary());
 
     // TODO: fix output
 

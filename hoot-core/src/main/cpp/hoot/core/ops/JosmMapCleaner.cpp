@@ -168,31 +168,56 @@ void JosmMapCleaner::_getStats()
     _javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
   const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
   // TODO: env->ReleaseStringUTFChars
+  LOG_VART(validationErrorFixCountsByType);
 
   _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
   _errorSummary +=
-    "Total groups of element cleaned: " + QString::number(_numGroupsOfElementsCleaned) + "\n";
+    "Total groups of elements cleaned: " + QString::number(_numGroupsOfElementsCleaned) + "\n";
   _errorSummary += "Total elements deleted: " + QString::number(_deletedElementIds.size()) + "\n";
   if (!validationErrorCountsByType.trimmed().isEmpty())
   {
-    _errorSummary += _errorCountsByTypeStrToSummaryStr(validationErrorCountsByType);
+    _errorSummary +=
+       _errorCountsByTypeStrToSummaryStr(
+         validationErrorCountsByType, validationErrorFixCountsByType);
   }
-  if (!validationErrorFixCountsByType.trimmed().isEmpty())
-  {
-    _errorSummary += _errorFixCountsByTypeStrToSummaryStr(validationErrorFixCountsByType);
-  }
+  _errorSummary = _errorSummary.trimmed();
+  LOG_VART(_errorSummary);
 }
 
-QString JosmMapCleaner::_errorFixCountsByTypeStrToSummaryStr(
-  const QString& errorFixCountsByTypeStr) const
+QString JosmMapCleaner::_errorCountsByTypeStrToSummaryStr(
+  const QString& errorCountsByTypeStr, const QString& errorFixCountsByTypeStr) const
 {
   QString summary = "";
+
+  QMap<QString, int> errorCountsByType;
+  const QStringList errorsByTypeParts = errorCountsByTypeStr.split(";");
+  for (int i = 0; i < errorsByTypeParts.size(); i++)
+  {
+    const QStringList errorByTypeParts = errorsByTypeParts.at(i).split(":");
+    errorCountsByType[errorByTypeParts.at(0)] = errorByTypeParts.at(1).toInt();
+  }
+  LOG_VART(errorCountsByType.size());
+
+  QMap<QString, int> errorFixCountsByType;
   const QStringList fixesByTypeParts = errorFixCountsByTypeStr.split(";");
   for (int i = 0; i < fixesByTypeParts.size(); i++)
   {
     const QStringList fixByTypeParts = fixesByTypeParts.at(i).split(":");
-    fixByTypeParts.at(0) + " groups cleaned: " + fixByTypeParts.at(1) + "\n";
+    errorFixCountsByType[fixByTypeParts.at(0)] = fixByTypeParts.at(1).toInt();
   }
+  LOG_VART(errorFixCountsByType.size());
+
+  assert(errorCountsByType.size() == errorFixCountsByType.size());
+
+  for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
+       errorItr != errorCountsByType.end(); ++errorItr)
+  {
+    assert(errorFixCountsByType.contains(errorItr.key()));
+    summary +=
+      errorItr.key() + " errors: " + QString::number(errorItr.value()) +
+      ", groups cleaned: " + QString::number(errorFixCountsByType[errorItr.key()]) + "\n";
+  }
+
   return summary;
 }
 

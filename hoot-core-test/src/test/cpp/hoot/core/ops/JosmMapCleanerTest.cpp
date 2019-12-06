@@ -160,12 +160,18 @@ public:
     uut.setJosmValidatorsInclude(validators);
     uut.apply(map);
 
-    // TODO: verify summary out
-
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    HOOT_STR_EQUALS(
+      "Total validation errors: 4\n"
+      "Total groups of elements cleaned: 2\n"
+      "Total elements deleted: 2\n"
+      "Duplicated way nodes errors: 1, groups cleaned: 1\n"
+      "Unclosed Ways errors: 2, groups cleaned: 0\n"
+      "Untagged, empty and one node ways errors: 1, groups cleaned: 1",
+      uut.getSummary());
 
     // TODO: fix output
 
@@ -190,12 +196,18 @@ public:
     uut.setJosmValidatorsInclude(validators);
     uut.apply(map);
 
-    // TODO: verify summary out
-
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    HOOT_STR_EQUALS(
+      "Total validation errors: 4\n"
+      "Total groups of elements cleaned: 2\n"
+      "Total elements deleted: 2\n"
+      "Duplicated way nodes errors: 1, groups cleaned: 1\n"
+      "Unclosed Ways errors: 2, groups cleaned: 0\n"
+      "Untagged, empty and one node ways errors: 1, groups cleaned: 1",
+      uut.getSummary());
 
     // TODO: fix output
 

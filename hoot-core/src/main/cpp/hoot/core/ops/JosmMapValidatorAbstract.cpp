@@ -208,6 +208,8 @@ void JosmMapValidatorAbstract::_getStats()
   {
     _errorSummary += _errorCountsByTypeStrToSummaryStr(validationErrorCountsByType);
   }
+  _errorSummary = _errorSummary.trimmed();
+  LOG_VART(_errorSummary);
 }
 
 QString JosmMapValidatorAbstract::_errorCountsByTypeStrToSummaryStr(
@@ -221,7 +223,7 @@ QString JosmMapValidatorAbstract::_errorCountsByTypeStrToSummaryStr(
   {
     const QStringList countByTypeParts = countsByTypeParts.at(i).split(":");
     LOG_VART(countByTypeParts.size());
-    countByTypeParts.at(0) + " errors: " + countByTypeParts.at(1) + "\n";
+    summary += countByTypeParts.at(0) + " errors: " + countByTypeParts.at(1) + "\n";
   }
   return summary;
 }

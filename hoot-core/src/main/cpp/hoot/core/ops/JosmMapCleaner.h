@@ -105,7 +105,8 @@ private:
 
   QSet<ElementId> _elementIdsStrToElementIds(const QString elementIdsStr) const;
 
-  QString _errorFixCountsByTypeStrToSummaryStr(const QString& errorFixCountsByTypeStr) const;
+  QString _errorCountsByTypeStrToSummaryStr(
+    const QString& errorCountsByTypeStr, const QString& errorFixCountsByTypeStr) const;
 };
 
 }
