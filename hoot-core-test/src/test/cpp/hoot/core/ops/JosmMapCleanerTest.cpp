@@ -138,6 +138,8 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
+    // TODO: verify summary out
+
     CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumGroupsOfElementsCleaned());
@@ -161,6 +163,8 @@ public:
     validators.append("DuplicatedWayNodes");
     uut.setJosmValidatorsInclude(validators);
     uut.apply(map);
+
+    // TODO: verify summary out
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
@@ -189,6 +193,8 @@ public:
     validators.append("DuplicatedWayNodes");
     uut.setJosmValidatorsInclude(validators);
     uut.apply(map);
+
+    // TODO: verify summary out
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());

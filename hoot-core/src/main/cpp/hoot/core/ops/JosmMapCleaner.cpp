@@ -56,11 +56,6 @@ void JosmMapCleaner::setConfiguration(const Settings& conf)
   _addDebugTags = opts.getMapCleanerJosmAddDebugTags();
 }
 
-QMap<QString, QString> JosmMapCleaner::getAvailableValidators()
-{
-  return JosmMapValidator().getAvailableValidators();
-}
-
 void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   _numGroupsOfElementsCleaned = 0;
@@ -71,6 +66,8 @@ void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 
 OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
 {
+  LOG_DEBUG("Retrieving cleaned map...");
+
   // pass in the validators to use, the features to be examined, and whether to just validate or to
   // validate and fix them;
 
@@ -133,6 +130,8 @@ QSet<ElementId> JosmMapCleaner::_elementIdsStrToElementIds(const QString element
 
 void JosmMapCleaner::_getStats()
 {
+  LOG_DEBUG("Retrieving stats...");
+
   // call back into Java validator to get the validation stats
   JosmMapValidatorAbstract::_getStats();
   _numGroupsOfElementsCleaned =
@@ -150,6 +149,12 @@ void JosmMapCleaner::_getStats()
   _deletedElementIds = _elementIdsStrToElementIds(deletedElementIdsQStr);
   // TODO: not sure what to do with this info yet...
   LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
+}
+
+QString JosmMapCleaner::getSummary() const
+{
+  // TODO - count numbers and types of validation errors and fixes
+  return "";
 }
 
 }

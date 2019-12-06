@@ -85,32 +85,13 @@ public class JosmMapCleaner extends JosmMapValidator
   /**
    * TODO - change to string array for cleaners?
    */
-  public String clean(String cleanersStr, String elementsXml, boolean addDebugTags) throws Exception
+  public String clean(String validatorsStr, String elementsXml, boolean addDebugTags)
+    throws Exception
   {
-    String cleanedElementsXml = "";
-
     numValidationErrors = 0;
     numGroupsOfElementsCleaned = 0;
 
-    // verify inputs
-
-    Logging.debug("cleanersStr: " + cleanersStr);
-    Logging.trace("elementsXml: " + elementsXml);
-    Logging.debug("addDebugTags: " + addDebugTags);
-
-    // we're always expecting populated cleaners
-    if (cleanersStr == null || cleanersStr.trim().isEmpty())
-    {
-      throw new Exception("No cleaners specified.");
-    }
-    if (elementsXml == null || elementsXml.trim().isEmpty())
-    {
-      throw new Exception("No elements passed to cleaning.");
-    }
-
-    String[] cleaners = cleanersStr.split(";");
-
-    /*outputElements = */parseAndValidateElements(cleaners, elementsXml);
+    /*outputElements = */parseAndValidateElements(validatorsStr, elementsXml);
 
     // check for any validation errors
 

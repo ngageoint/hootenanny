@@ -38,8 +38,8 @@ namespace hoot
 class JosmMapValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
+  CPPUNIT_TEST(runGetAvailableValidatorsTest);
   CPPUNIT_TEST(runValidateTest);
-  //CPPUNIT_TEST(runValidateMapUnmodifiedTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -62,48 +62,34 @@ public:
   {
   }
 
+  void runGetAvailableValidatorsTest()
+  {
+    // TODO
+  }
+
   void runValidateTest()
   {
+    // TODO: fix
+
     const QString testName = "runValidateTest";
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
     LOG_VARD(map->size());
 
     JosmMapValidator uut;
-    uut.setModifyMap(false);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
     uut.setJosmValidatorsInclude(validators);
+    LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
+    LOG_INFO(uut.getCompletedStatusMessage());
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
 
-    const QString outTestFileName =  testName + "-out.osm";
-    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
-    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
-  }
-
-  void runValidateMapUnmodifiedTest()
-  {
-    const QString testName = "runValidateMapUnmodifiedTest";
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
-    LOG_VARD(map->size());
-
-    JosmMapValidator uut;
-    uut.setModifyMap(false);
-    QStringList validators;
-    validators.append("UntaggedWay");   // triggers "One node way"
-    validators.append("UnclosedWays");
-    validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
-    uut.apply(map);
-
-    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
-    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+    // TODO: verify summary out
 
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);

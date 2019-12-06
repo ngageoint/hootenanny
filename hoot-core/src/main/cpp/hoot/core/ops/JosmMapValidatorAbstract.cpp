@@ -53,7 +53,7 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
 {
-  LOG_DEBUG("Initializing cleaner implementation...");
+  LOG_DEBUG("Initializing JOSM implementation...");
 
   // TODO: change back
   _josmInterfaceClass =
@@ -72,6 +72,8 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
 
 void JosmMapValidatorAbstract::_initJosmValidatorsList()
 {
+  LOG_DEBUG("Initializing validators...");
+
   _josmValidatorsInclude.sort();
   _josmValidatorsExclude.sort();
 
@@ -109,6 +111,51 @@ void JosmMapValidatorAbstract::_updateJosmValidatorsWithNamepace(QStringList& va
   validators = validatorsTemp;
 }
 
+QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidators()
+{
+  LOG_DEBUG("Getting available validators...");
+
+  QMap<QString, QString> validators;
+  if (!_josmInterfaceInitialized)
+  {
+    _initJosmImplementation();
+  }
+
+  jobject availableValidatorsResult =
+    _javaEnv->CallObjectMethod(
+      _josmInterface,
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/lang/String;"));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    // TODO: get exception message from object and add here
+    throw HootException("Error calling getAvailableValidators.");
+  }
+
+  const char* str = _javaEnv->GetStringUTFChars((jstring)availableValidatorsResult, NULL);
+  QString validatorsStr(str);
+  assert(validatorsStr.contains(";"));
+  QStringList validatorStrings = validatorsStr.split(";");
+  for (int i = 0; i < validatorStrings.size(); i++)
+  {
+    const QString validatorStr = validatorStrings.at(i);
+    if (!validatorStr.isEmpty())
+    {
+      assert(validatorStr.contains(","));
+      const QStringList validatorStrParts = validatorStr.split(",");
+      assert(validatorStrParts.size() == 2);
+
+      const QString validatorName = validatorStrParts[0];
+      const QString validatorDescription = validatorStrParts[1];
+      validators[validatorName] = validatorDescription;
+    }
+  }
+  //TODO: env->ReleaseStringUTFChars //??
+
+  return validators;
+}
+
 void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 {
   LOG_VARD(map->size());
@@ -136,6 +183,8 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 
 void JosmMapValidatorAbstract::_getStats()
 {
+  LOG_DEBUG("Retrieving stats...");
+
   // call back into Java validator to get the validation stats
   _numValidationErrors =
     (int)_javaEnv->CallIntMethod(

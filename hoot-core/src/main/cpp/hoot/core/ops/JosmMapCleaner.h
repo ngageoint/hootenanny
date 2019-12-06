@@ -55,7 +55,7 @@ public:
    */
   JosmMapCleaner();
 
-  virtual QMap<QString, QString> getAvailableValidators();
+  virtual QString getSummary() const;
 
   /**
    * @see OsmMapOperation

@@ -59,7 +59,9 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QMap<QString, QString> getAvailableValidators() = 0;
+  virtual QString getSummary() const = 0;
+
+  QMap<QString, QString> getAvailableValidators();
 
   int getNumElementsProcessed() const { return _numAffected; }
   int getNumValidationErrors() const { return _numValidationErrors; }

@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# TODO: finish
-
 mkdir -p $HOOT_HOME/test-output/cmd/quick/ValidateCmdTest
 
 inputfile=$HOOT_HOME/test-files/DcGisRoads.osm

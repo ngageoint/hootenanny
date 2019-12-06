@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-#HOME=/ramdisk/hoot
-HOME=/home/vagrant/hoot
+HOME=/ramdisk/hoot
+#HOME=/home/vagrant/hoot
 cd $HOME
 
 rsync -rzuv /home/vagrant/hoot/conf .

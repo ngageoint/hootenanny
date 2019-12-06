@@ -2123,13 +2123,6 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 
 TODO
 
-=== map.validator.josm.modify.map
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
-
 [[match.creators]]
 === match.creators
 

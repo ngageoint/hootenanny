@@ -103,10 +103,20 @@ public class JosmMapValidator
    */
   public String validate(String validatorsStr, String elementsXml) throws Exception
   {
-    String validatedElementsXml = "";
-
     numValidationErrors = 0;
 
+    // check for any validation errors
+    outputElements = parseAndValidateElements(validatorsStr, elementsXml);
+    Logging.info("Found " + numValidationErrors + " validation errors.");
+
+    return convertOutputElementsToXml();
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+  protected Collection<AbstractPrimitive> parseAndValidateElements(
+    String validatorsStr, String elementsXml) throws Exception
+  {
     // verify inputs
 
     Logging.debug("validatorsStr: " + validatorsStr);
@@ -124,27 +134,6 @@ public class JosmMapValidator
 
     String[] validators = validatorsStr.split(";");
 
-    // check for any validation errors
-
-    outputElements = parseAndValidateElements(validators, elementsXml);
-    Logging.info("Found " + numValidationErrors + " validation errors.");
-
-    return convertOutputElementsToXml();
-  }
-
- /**
-  * TODO
-  */
-  public String getValidateStats(String validatorsStr, String elementsXml)
-  {
-    return "";
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
-
-  protected Collection<AbstractPrimitive> parseAndValidateElements(
-    String[] validators, String elementsXml) throws Exception
-  {
     Logging.info("Validating elements with " + validators.length + " validators...");
     Logging.debug("validators: " + Arrays.toString(validators));
 

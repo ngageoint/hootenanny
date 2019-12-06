@@ -51,12 +51,7 @@ public:
    */
   JosmMapValidator();
 
-  /**
-   * TODO
-   *
-   * @return
-   */
-  virtual QMap<QString, QString> getAvailableValidators();
+  virtual QString getSummary() const;
 
   /**
    * @see ApiEntityInfo
@@ -78,15 +73,9 @@ public:
       " elements had validation errors.";
   }
 
-  void setModifyMap(bool modify) { _modifyMap = modify; }
-
 protected:
 
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
-
-private:
-
-  bool _modifyMap;
 };
 
 }
