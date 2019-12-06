@@ -68,12 +68,13 @@ public:
     IoUtils::loadMap(map, input, true, Status::Unknown1);
 
     JosmMapValidator validator;
+    validator.setConfiguration(conf());
     LOG_INFO(validator.getInitStatusMessage());
     validator.apply(map);
+    LOG_INFO(validator.getCompletedStatusMessage());
 
     MapProjector::projectToWgs84(map);
     IoUtils::saveMap(map, output);
-    LOG_INFO(validator.getCompletedStatusMessage());
 
     std::cout << validator.getSummary() << std::endl;
 

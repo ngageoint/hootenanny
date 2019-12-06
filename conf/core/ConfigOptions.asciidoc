@@ -2077,13 +2077,6 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 
 TODO
 
-=== map.cleaner.josm.add.validation.tags
-
-* Data Type: bool
-* Default Value: `true`
-
-TODO
-
 === map.cleaner.josm.java.implementation
 
 * Data Type: string

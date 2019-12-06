@@ -51,6 +51,7 @@ void JosmMapCleaner::setConfiguration(const Settings& conf)
 
   ConfigOptions opts(conf);
   _addDebugTags = opts.getMapCleanerJosmAddDebugTags();
+  _josmInterfaceName = opts.getMapCleanerJosmJavaImplementation();
 }
 
 void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)

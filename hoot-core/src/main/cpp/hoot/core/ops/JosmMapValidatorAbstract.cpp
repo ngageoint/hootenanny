@@ -48,7 +48,6 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   _josmValidatorsExclude = opts.getJosmValidatorsExclude();
   _josmValidatorsInclude = opts.getJosmValidatorsInclude();
   _validatorsJosmNamespace = opts.getJosmValidatorsJavaNamespace();
-  _josmInterfaceName = opts.getMapCleanerJosmJavaImplementation();
 }
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
