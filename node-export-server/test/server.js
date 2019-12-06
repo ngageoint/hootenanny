@@ -73,5 +73,21 @@ describe("RenderDb Export Server", function() {
                 })
             })
         });
+        it("takes posted osm xml data from non-overpass source and makes it a .osm file", function() {
+            var osmFile = path.join(__dirname, 'test_overpass.osm')
+            var mockXMLRequest = fs.createReadStream(osmFile);
+            mockXMLRequest.params = {
+                datasource: 'not_overpass',
+                schema: 'TDSv70',
+                format: 'json'
+            }
+            server.writeExportFile(mockXMLRequest, function(hash, fileName) {
+                expect(fileName.split('.')[1]).to.eql('osm');
+                fs.unlink(fileName, function(err) {
+                    done();
+                })
+            })
+
+        })
     })
 });
