@@ -103,6 +103,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "slow");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(JosmMapValidatorTest, "quick");
 
 }
