@@ -309,9 +309,12 @@ public class JosmMapCleaner extends JosmMapValidator
         // Always add tags if addDebugTags=true, otherwise only add them if a fix couldn't be made
         // after a validation error. elementValidations and elementCleanings should always have the
         // same element keys.
-        if (elementValidations.containsKey(elementKey) &&
-            (addDebugTags ||
-             !elementCleanings.get(elementKey).equals(cleanStatusToString(CleanStatus.SUCCEEDED))))
+        Logging.trace(
+          "elementValidations.containsKey(elementKey): " +
+          elementValidations.containsKey(elementKey));
+        Logging.trace("addDebugTags: " + addDebugTags);
+        Logging.trace("elementCleanings.get(elementKey): " + elementCleanings.get(elementKey));
+        if (elementValidations.containsKey(elementKey) && addDebugTags)
         {
           Logging.trace("Adding validation tags to element: " + elementKey + "...");
 
