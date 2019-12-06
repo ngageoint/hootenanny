@@ -125,6 +125,9 @@ public class JosmMapValidator
     outputElements = parseAndValidateElements(validatorsStr, elementsXml);
     Logging.info("Found " + numValidationErrors + " validation errors.");
 
+    outputElements = getReturnElements(outputElements);
+    Logging.debug("outputElements size: " + outputElements.size());
+
     return convertOutputElementsToXml();
   }
 

@@ -97,8 +97,6 @@ public:
       "Untagged, empty and one node ways errors: 1",
       uut.getSummary());
 
-    // TODO: fix output
-
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
