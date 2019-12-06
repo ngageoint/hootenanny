@@ -28,10 +28,8 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/JavaEnvironment.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -93,12 +91,6 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   // return a null map if no features had validation issues
   //LOG_VART(OsmXmlWriter::toString(validatedMap, true));
   return validatedMap;
-}
-
-QString JosmMapValidator::getSummary() const
-{
-  // TODO - count numbers and types of validation errors
-  return "";
 }
 
 }

@@ -75,6 +75,8 @@ public:
     IoUtils::saveMap(map, output);
     LOG_INFO(validator.getCompletedStatusMessage());
 
+    std::cout << validator.getSummary() << std::endl;
+
     return 0;
   }
 };

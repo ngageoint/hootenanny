@@ -39,6 +39,8 @@ import java.io.ByteArrayInputStream;
 import java.lang.Class;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.Multimap;
 import com.google.common.collect.LinkedHashMultimap;
 
@@ -64,6 +66,20 @@ public class JosmMapValidator
   }
 
   public int getNumValidationErrors() { return numValidationErrors; }
+
+  public String getValidationErrorCountsByType()
+  {
+    Logging.trace("Retrieving validation error counts by type...");
+    Logging.trace("validationErrorCountsByType size: " + validationErrorCountsByType.size());
+    String returnStr = "";
+    for (Map.Entry<String, Integer> entry : validationErrorCountsByType.entrySet())
+    {
+      returnStr += entry.getKey() + ":" + String.valueOf(entry.getValue()) + ";";
+    }
+    returnStr = StringUtils.chop(returnStr);
+    Logging.trace("returnStr: " + returnStr);
+    return returnStr;
+  }
 
   /**
    * TODO - change to return Map<String, String>?
@@ -103,7 +119,7 @@ public class JosmMapValidator
    */
   public String validate(String validatorsStr, String elementsXml) throws Exception
   {
-    numValidationErrors = 0;
+    clear();
 
     // check for any validation errors
     outputElements = parseAndValidateElements(validatorsStr, elementsXml);
@@ -113,6 +129,32 @@ public class JosmMapValidator
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
+
+  protected void clear()
+  {
+    numValidationErrors = 0;
+    originalMapSize = 0;
+    if (inputElements != null)
+    {
+      inputElements.clear();
+    }
+    if (outputElements != null)
+    {
+      outputElements.clear();
+    }
+    if (validationErrors != null)
+    {
+      validationErrors.clear();
+    }
+    if (elementValidations != null)
+    {
+      elementValidations.clear();
+    }
+    if (validationErrorCountsByType != null)
+    {
+      validationErrorCountsByType.clear();
+    }
+  }
 
   protected Collection<AbstractPrimitive> parseAndValidateElements(
     String validatorsStr, String elementsXml) throws Exception
@@ -370,6 +412,16 @@ public class JosmMapValidator
       {
         elementValidations.put(JosmUtils.getElementMapKey(element), error.getMessage());
       }
+
+      if (validationErrorCountsByType.containsKey(error.getTester().getName()))
+      {
+        int currentErrorCountForType = validationErrorCountsByType.get(error.getTester().getName());
+        validationErrorCountsByType.put(error.getTester().getName(), currentErrorCountForType + 1);
+      }
+      else
+      {
+        validationErrorCountsByType.put(error.getTester().getName(), 1);
+      }
     }
 
     Logging.debug("elementValidations size: " + elementValidations.size());
@@ -398,4 +450,6 @@ public class JosmMapValidator
   ///////////////////////////////////////////////////////////////
 
   private int originalMapSize = 0;
+
+  private Map<String, Integer> validationErrorCountsByType = new HashMap<String, Integer>();
 }

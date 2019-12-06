@@ -51,15 +51,13 @@ class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable,
 
 public:
 
-  //static std::string className() { return "hoot::JosmMapValidatorAbstract"; }
-
   JosmMapValidatorAbstract();
 
   virtual void setConfiguration(const Settings& conf);
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getSummary() const = 0;
+  QString getSummary() const { return _errorSummary; }
 
   QMap<QString, QString> getAvailableValidators();
 
@@ -90,10 +88,11 @@ protected:
   // TODO
   jobject _josmInterface;
   // TODO
-  bool _josmInterfaceInitialized;
+  bool _josmInterfaceInitialized; 
 
   // TODO
   int _numValidationErrors;
+  QString _errorSummary;
 
   // can get away with this in the base class b/c all the josm java classes used by all children
   // classes have the same signature...this may not be true forever
@@ -102,6 +101,8 @@ protected:
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap) = 0;
 
   virtual void _getStats();
+
+  QString _errorCountsByTypeStrToSummaryStr(const QString& errorCountsByTypeStr) const;
 
 private:
 

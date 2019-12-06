@@ -28,12 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/JavaEnvironment.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
-#include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/JosmMapValidator.h>
 
 namespace hoot
 {
@@ -134,10 +131,12 @@ void JosmMapCleaner::_getStats()
 
   // call back into Java validator to get the validation stats
   JosmMapValidatorAbstract::_getStats();
+
   _numGroupsOfElementsCleaned =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
+
   jstring deletedElementIdsResult =
     (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
@@ -149,12 +148,52 @@ void JosmMapCleaner::_getStats()
   _deletedElementIds = _elementIdsStrToElementIds(deletedElementIdsQStr);
   // TODO: not sure what to do with this info yet...
   LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
+
+  jstring validationErrorCountsByTypeResult =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
+  const char* validationErrorCountsByTypeTempStr =
+    _javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
+  const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
+  // TODO: env->ReleaseStringUTFChars
+
+  jstring validationErrorFixCountsByTypeResult =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/lang/String;"));
+  const char* validationErrorFixCountsByTypeTempStr =
+    _javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
+  const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
+  // TODO: env->ReleaseStringUTFChars
+
+  _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
+  _errorSummary +=
+    "Total groups of element cleaned: " + QString::number(_numGroupsOfElementsCleaned) + "\n";
+  _errorSummary += "Total elements deleted: " + QString::number(_deletedElementIds.size()) + "\n";
+  if (!validationErrorCountsByType.trimmed().isEmpty())
+  {
+    _errorSummary += _errorCountsByTypeStrToSummaryStr(validationErrorCountsByType);
+  }
+  if (!validationErrorFixCountsByType.trimmed().isEmpty())
+  {
+    _errorSummary += _errorFixCountsByTypeStrToSummaryStr(validationErrorFixCountsByType);
+  }
 }
 
-QString JosmMapCleaner::getSummary() const
+QString JosmMapCleaner::_errorFixCountsByTypeStrToSummaryStr(
+  const QString& errorFixCountsByTypeStr) const
 {
-  // TODO - count numbers and types of validation errors and fixes
-  return "";
+  QString summary = "";
+  const QStringList fixesByTypeParts = errorFixCountsByTypeStr.split(";");
+  for (int i = 0; i < fixesByTypeParts.size(); i++)
+  {
+    const QStringList fixByTypeParts = fixesByTypeParts.at(i).split(":");
+    fixByTypeParts.at(0) + " groups cleaned: " + fixByTypeParts.at(1) + "\n";
+  }
+  return summary;
 }
 
 }

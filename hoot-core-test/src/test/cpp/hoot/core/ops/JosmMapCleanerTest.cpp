@@ -138,8 +138,6 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
-    // TODO: verify summary out
-
     CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumGroupsOfElementsCleaned());
@@ -148,8 +146,6 @@ public:
 
   void runCleanTest()
   {
-    // TODO: fix
-
     const QString testName = "runCleanTest";
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "/" + testName + "-in.osm");
@@ -171,6 +167,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
 
+    // TODO: fix output
+
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
@@ -178,8 +176,6 @@ public:
 
   void runCleanNoDebugTagsTest()
   {
-    // TODO: fix
-
     const QString testName = "runCleanNoDebugTagsTest";
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
@@ -200,6 +196,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+
+    // TODO: fix output
 
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);

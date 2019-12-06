@@ -40,6 +40,8 @@ import java.io.ByteArrayInputStream;
 import java.lang.Class;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.Multimap;
 import com.google.common.collect.LinkedHashMultimap;
 
@@ -81,6 +83,19 @@ public class JosmMapCleaner extends JosmMapValidator
     return 0;
   }
   public int getNumGroupsOfElementsCleaned() { return numGroupsOfElementsCleaned; }
+  public String getValidationErrorFixCountsByType()
+  {
+    Logging.trace("Retrieving validation error fix counts by type...");
+    Logging.trace("validationErrorFixesByType size: " + validationErrorFixesByType.size());
+
+    String returnStr = "";
+    for (Map.Entry<String, Integer> entry : validationErrorFixesByType.entrySet())
+    {
+      returnStr += entry.getKey() + ":" + String.valueOf(entry.getValue()) + ";";
+    }
+    returnStr = StringUtils.chop(returnStr);
+    return returnStr;
+  }
 
   /**
    * TODO - change to string array for cleaners?
@@ -88,8 +103,7 @@ public class JosmMapCleaner extends JosmMapValidator
   public String clean(String validatorsStr, String elementsXml, boolean addDebugTags)
     throws Exception
   {
-    numValidationErrors = 0;
-    numGroupsOfElementsCleaned = 0;
+    clear();
 
     /*outputElements = */parseAndValidateElements(validatorsStr, elementsXml);
 
@@ -151,6 +165,25 @@ public class JosmMapCleaner extends JosmMapValidator
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
+
+  protected void clear()
+  {
+    super.clear();
+
+    numGroupsOfElementsCleaned = 0;
+    if (elementCleanings != null)
+    {
+      elementCleanings.clear();
+    }
+    if (validationErrorFixesByType != null)
+    {
+      validationErrorFixesByType.clear();
+    }
+    if (deletedElementIds != null)
+    {
+      deletedElementIds.clear();
+    }
+  }
 
   protected Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements,
     boolean addDebugTags) throws Exception
@@ -255,6 +288,16 @@ public class JosmMapCleaner extends JosmMapValidator
         }
 
         elementCleanings.put(JosmUtils.getElementMapKey(element), cleanStatusToString(cleanStatus));
+
+        if (validationErrorFixesByType.containsKey(error.getTester().getName()))
+        {
+          int currentFixCountForType = validationErrorFixesByType.get(error.getTester().getName());
+          validationErrorFixesByType.put(error.getTester().getName(), currentFixCountForType + 1);
+        }
+        else
+        {
+          validationErrorFixesByType.put(error.getTester().getName(), 1);
+        }
       }
     }
 
@@ -323,6 +366,8 @@ public class JosmMapCleaner extends JosmMapValidator
   // element keys to validation error fix messages
   // e.g. key=Way:1, value1="Duplicated way nodes=fixed", value2="Unclosed way=none available"
   private Multimap<String, String> elementCleanings = LinkedHashMultimap.create();
+
+  private Map<String, Integer> validationErrorFixesByType = new HashMap<String, Integer>();
 
   // TODO
   private List<String> deletedElementIds = null;

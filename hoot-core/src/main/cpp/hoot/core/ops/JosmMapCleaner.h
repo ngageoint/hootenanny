@@ -55,8 +55,6 @@ public:
    */
   JosmMapCleaner();
 
-  virtual QString getSummary() const;
-
   /**
    * @see OsmMapOperation
    */
@@ -106,6 +104,8 @@ private:
   QSet<ElementId> _deletedElementIds;
 
   QSet<ElementId> _elementIdsStrToElementIds(const QString elementIdsStr) const;
+
+  QString _errorFixCountsByTypeStrToSummaryStr(const QString& errorFixCountsByTypeStr) const;
 };
 
 }

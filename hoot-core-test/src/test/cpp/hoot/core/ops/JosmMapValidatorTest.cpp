@@ -46,8 +46,7 @@ public:
 
   JosmMapValidatorTest() :
   HootTestFixture(
-    // note: using JosmMapCleanerTest's dir for input
-    "test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapValidatorTest")
+    "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
     //setResetType(ResetAll);
   }
@@ -64,16 +63,19 @@ public:
 
   void runGetAvailableValidatorsTest()
   {
-    // TODO
+    JosmMapValidator uut;
+    const QMap<QString, QString> validators = uut.getAvailableValidators();
+    LOG_VART(validators.keys());
+    LOG_VART(validators.values());
+    // TODO: This won't hold up across version changes...come up with something better.
+    CPPUNIT_ASSERT_EQUAL(51, validators.size());
   }
 
   void runValidateTest()
   {
-    // TODO: fix
-
     const QString testName = "runValidateTest";
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
+    OsmMapReaderFactory::read(map, "test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm");
     LOG_VARD(map->size());
 
     JosmMapValidator uut;
@@ -86,10 +88,12 @@ public:
     uut.apply(map);
     LOG_INFO(uut.getCompletedStatusMessage());
 
+    // TODO: verify summary out
+
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
 
-    // TODO: verify summary out
+    // TODO: fix output
 
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);

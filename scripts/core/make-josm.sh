@@ -23,13 +23,24 @@ cp /home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm/4.4.4/me-josm-4.4
 
 # add in external dependency classes
 # TODO: make the version a wildcard
+
 # 1) guava
+cd $HOME
 cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/guava-20.0.jar /home/vagrant/hoot/tmp
 cd /home/vagrant/hoot/tmp
 jar xf guava-20.0.jar com/google/common
 jar uf /home/vagrant/hoot/tmp/hoot-josm.jar com/google/common
 rm -rf com
 rm -f guava-20.0.jar
+
+# 2) apache commons lang
+cd $HOME
+cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/commons-lang3-3.1.jar /home/vagrant/hoot/tmp
+cd /home/vagrant/hoot/tmp
+jar xf commons-lang3-3.1.jar org/apache/commons/lang3
+jar uf /home/vagrant/hoot/tmp/hoot-josm.jar org/apache/commons/lang3
+rm -rf org
+rm -f commons-lang3-3.1.jar
 
 # add our hoot josm validator classes
 cd $HOME/hoot-services/target/classes

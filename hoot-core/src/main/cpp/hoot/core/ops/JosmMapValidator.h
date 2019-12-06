@@ -51,8 +51,6 @@ public:
    */
   JosmMapValidator();
 
-  virtual QString getSummary() const;
-
   /**
    * @see ApiEntityInfo
    */

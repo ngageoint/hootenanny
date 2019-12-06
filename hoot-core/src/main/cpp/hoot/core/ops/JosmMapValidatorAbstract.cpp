@@ -190,6 +190,40 @@ void JosmMapValidatorAbstract::_getStats()
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
+
+  jstring validationErrorCountsByTypeResult =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
+  LOG_VART(validationErrorCountsByTypeResult == 0);
+  const char* validationErrorCountsByTypeTempStr =
+    _javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
+  const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
+  // TODO: env->ReleaseStringUTFChars
+  LOG_VART(validationErrorCountsByType);
+
+  _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
+  if (!validationErrorCountsByType.trimmed().isEmpty())
+  {
+    _errorSummary += _errorCountsByTypeStrToSummaryStr(validationErrorCountsByType);
+  }
+}
+
+QString JosmMapValidatorAbstract::_errorCountsByTypeStrToSummaryStr(
+  const QString& errorCountsByTypeStr) const
+{
+  // count numbers and types of validation errors
+
+  QString summary = "";
+  const QStringList countsByTypeParts = errorCountsByTypeStr.split(";");
+  for (int i = 0; i < countsByTypeParts.size(); i++)
+  {
+    const QStringList countByTypeParts = countsByTypeParts.at(i).split(":");
+    LOG_VART(countByTypeParts.size());
+    countByTypeParts.at(0) + " errors: " + countByTypeParts.at(1) + "\n";
+  }
+  return summary;
 }
 
 }
