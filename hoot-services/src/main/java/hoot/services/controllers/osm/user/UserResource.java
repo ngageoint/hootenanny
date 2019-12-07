@@ -54,7 +54,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
-import com.querydsl.core.types.OrderSpecifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +63,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 
 import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
@@ -232,7 +232,7 @@ public class UserResource {
                 userInfo = createQuery()
                         .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges)
                         .from(users)
-                        .orderBy(users.displayName.asc())
+                        .orderBy(sorter)
                         .fetch();
             } else {
                 userInfo = createQuery()
