@@ -45,8 +45,10 @@ class ApplyChangesetCommand extends GrailCommand {
         Users user = params.getUser();
 
         List<String> options = new LinkedList<>();
-        //append any comment from UI
+        //append any tags from UI
         options.add("changeset.description=" + params.getComment());
+        options.add("changeset.hashtags=" + params.getHashtags());
+        options.add("changeset.source=" + params.getSource());
         options.add("hoot.osm.auth.access.token=" + user.getProviderAccessKey());
         options.add("hoot.osm.auth.access.token.secret=" + user.getProviderAccessToken());
         options.add("hoot.osm.auth.consumer.key=" + params.getConsumerKey());
