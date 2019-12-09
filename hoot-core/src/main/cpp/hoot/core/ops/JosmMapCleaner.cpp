@@ -67,41 +67,27 @@ void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving cleaned map...");
-
-  // call into hoot-josm to clean features in the map
-
-  // validators to use delimited by ';'
-  //jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
-  jstring validatorsStr =
-    JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";"));
-  // convert input map to xml string to pass in
-  //jstring mapXml =
-    //_javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
-  jstring mapXml =
-    JavaEnvironment::getInstance()->toJavaString(OsmXmlWriter::toString(inputMap, false));
-  jstring cleanResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String clean(String validatorsStr, String elementsXml, boolean addDetailTags)
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "clean", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
-      validatorsStr,
-      mapXml,
-      _addDetailTags);
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling JosmMapCleaner::_getUpdatedMap.");
-  }
-
-  //const char* xml = _javaEnv->GetStringUTFChars(cleanResult, NULL);
-  //OsmMapPtr cleanedMap = OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
-  QString cleanedMapStr = JavaEnvironment::getInstance()->fromJavaString(cleanResult);
-  OsmMapPtr cleanedMap = OsmXmlReader::fromXml(cleanedMapStr.trimmed(), true, true, false, true);
-  //LOG_VART(OsmXmlWriter::toString(cleanedMap, true));
-  return cleanedMap;
+  // call into hoot-josm to clean features in the map and return the cleaned map
+  return
+    OsmXmlReader::fromXml(
+      JavaEnvironment::getInstance()->fromJavaString(
+        (jstring)_javaEnv->CallObjectMethod(
+          _josmInterface,
+          // JNI sig format: (input params...)return type
+          // Java sig: String clean(String validatorsStr, String elementsXml, boolean addDetailTags)
+          _javaEnv->GetMethodID(
+            _josmInterfaceClass, "clean",
+            "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
+          // validators to use delimited by ';'
+          JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";")),
+          // convert input map to xml string to pass in
+          JavaEnvironment::getInstance()->toJavaString( OsmXmlWriter::toString(inputMap, false)),
+          _addDetailTags))
+          .trimmed(),
+      true,
+      true,
+      false,
+      true);
 }
 
 void JosmMapCleaner::_getStats()
@@ -119,46 +105,35 @@ void JosmMapCleaner::_getStats()
       // Java sig: int getNumGroupsOfElementsCleaned()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
 
-  jstring deletedElementIdsResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String getDeletedElementIds()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/lang/String;"));
-  //const char* deletedElementIdsStr =
-    //_javaEnv->GetStringUTFChars((jstring)deletedElementIdsResult, NULL);
-  //const QString deletedElementIdsQStr(deletedElementIdsStr);
-  const QString deletedElementIdsQStr =
-    JavaEnvironment::getInstance()->fromJavaString(deletedElementIdsResult);
-  _deletedElementIds = _elementIdsStrToElementIds(deletedElementIdsQStr);
+  _deletedElementIds =
+    _elementIdsStrToElementIds(
+      JavaEnvironment::getInstance()->fromJavaString(
+        (jstring)_javaEnv->CallObjectMethod(
+          _josmInterface,
+          // JNI sig format: (input params...)return type
+          // Java sig: String getDeletedElementIds()
+          _javaEnv->GetMethodID(
+            _josmInterfaceClass, "getDeletedElementIds", "()Ljava/lang/String;"))));
   // TODO: need to add this to the map tags??
   LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
 
-  jstring validationErrorCountsByTypeResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String getValidationErrorCountsByType()
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
-  //const char* validationErrorCountsByTypeTempStr =
-    //_javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
-  //const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
   const QString validationErrorCountsByType =
-    JavaEnvironment::getInstance()->fromJavaString(validationErrorCountsByTypeResult);
+    JavaEnvironment::getInstance()->fromJavaString(
+      (jstring)_javaEnv->CallObjectMethod(
+        _josmInterface,
+        // JNI sig format: (input params...)return type
+        // Java sig: String getValidationErrorCountsByType()
+        _javaEnv->GetMethodID(
+          _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;")));
 
-  jstring validationErrorFixCountsByTypeResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String getValidationErrorFixCountsByType()
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/lang/String;"));
-  //const char* validationErrorFixCountsByTypeTempStr =
-    //_javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
-  //const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
   const QString validationErrorFixCountsByType =
-    JavaEnvironment::getInstance()->fromJavaString(validationErrorFixCountsByTypeResult);
+    JavaEnvironment::getInstance()->fromJavaString(
+      (jstring)_javaEnv->CallObjectMethod(
+        _josmInterface,
+        // JNI sig format: (input params...)return type
+        // Java sig: String getValidationErrorFixCountsByType()
+        _javaEnv->GetMethodID(
+          _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/lang/String;")));
   LOG_VART(validationErrorFixCountsByType);
 
   // create a readable error summary

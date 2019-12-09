@@ -48,43 +48,26 @@ JosmMapValidatorAbstract()
 OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving validated map...");
-
-  // call into hoot-josm to validate features in the map
-
-  // validators to use delimited by ';'
-  //jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
-  jstring validatorsStr = JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";"));
-  // convert input map to xml string to pass in
-  //jstring mapXml =
-    //_javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
-  jstring mapXml =
-    JavaEnvironment::getInstance()->toJavaString(OsmXmlWriter::toString(inputMap, false));
-  jstring validateResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String validate(String validatorsStr, String elementsXml)
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "validate",
-        "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"),
-      validatorsStr,
-      mapXml);
-
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling JosmMapValidator::_getUpdatedMap.");
-  }
-
-  //const char* xml = _javaEnv->GetStringUTFChars((jstring)validateResult, NULL);
-  //OsmMapPtr validatedMap =
-   // OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
-  QString validatedMapStr = JavaEnvironment::getInstance()->fromJavaString(validateResult);
-  OsmMapPtr validatedMap =
-    OsmXmlReader::fromXml(validatedMapStr.trimmed(), true, true, false, true);
-  //LOG_VART(OsmXmlWriter::toString(validatedMap, true));
-  return validatedMap;
+  // call into hoot-josm to validate features in the map and convert result to a map
+  return
+    OsmXmlReader::fromXml(
+      JavaEnvironment::getInstance()->fromJavaString(
+        (jstring)_javaEnv->CallObjectMethod(
+          _josmInterface,
+          // JNI sig format: (input params...)return type
+          // Java sig: String validate(String validatorsStr, String elementsXml)
+          _javaEnv->GetMethodID(
+            _josmInterfaceClass, "validate",
+            "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"),
+          // validators to use delimited by ';'
+          JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";")),
+          // convert input map to xml string to pass in
+          JavaEnvironment::getInstance()->toJavaString(
+            OsmXmlWriter::toString(inputMap, false)))).trimmed(),
+      true,
+      true,
+      false,
+      true);
 }
 
 }

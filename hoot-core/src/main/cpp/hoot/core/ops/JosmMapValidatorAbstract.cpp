@@ -56,10 +56,8 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   _josmInterfaceClass =
     _javaEnv->FindClass(/*_josmInterfaceName.toStdString().c_str()*/
                         "hoot/services/josm/JosmMapCleaner");
-  LOG_VART(_josmInterfaceClass == 0);
   jmethodID constructorMethodId =
     _javaEnv->GetMethodID(_josmInterfaceClass, "<init>", "(Ljava/lang/String;)V");
-  // TODO: change back
   jstring logLevelStr =
     _javaEnv->NewStringUTF(Log::getInstance().getLevelAsString().toStdString().c_str());
   _josmInterface = _javaEnv->NewObject(_josmInterfaceClass, constructorMethodId, logLevelStr);
@@ -103,28 +101,16 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     _initJosmImplementation();
   }
 
-  // make the hoot-josm call to get the validators
-  jstring availableValidatorsResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String getAvailableValidators()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/lang/String;"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    // TODO: get exception message from object and add here
-    throw HootException("Error calling getAvailableValidators.");
-  }
-
-  // convert the delimited validators string into a map
-  //const char* str = _javaEnv->GetStringUTFChars((jstring)availableValidatorsResult, NULL);
-  //QString validatorsStr(str);
-  const QString validatorsStr =
-    JavaEnvironment::getInstance()->fromJavaString(availableValidatorsResult);
-  assert(validatorsStr.contains(";"));
-  QStringList validatorStrings = validatorsStr.split(";");
+  // make the hoot-josm call to get the validators and convert the delimited validators string into
+  // a map
+  const QStringList validatorStrings =
+    JavaEnvironment::getInstance()->fromJavaString(
+     (jstring)_javaEnv->CallObjectMethod(
+       _josmInterface,
+     // JNI sig format: (input params...)return type
+     // Java sig: String getAvailableValidators()
+     _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/lang/String;")))
+     .split(";");
   for (int i = 0; i < validatorStrings.size(); i++)
   {
     const QString validatorStr = validatorStrings.at(i);
@@ -138,6 +124,13 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
       const QString validatorDescription = validatorStrParts[1];
       validators[validatorName] = validatorDescription;
     }
+  }
+
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getAvailableValidatorsWithDescription.");
   }
 
   return validators;
@@ -167,11 +160,25 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 
   // pass the map into JOSM and update it
   OsmMapPtr validatedMap = _getUpdatedMap(map);
-  LOG_VARD(validatedMap->size());
-  map = validatedMap;
+  if (validatedMap)
+  {
+    LOG_VARD(validatedMap->size());
+    map = validatedMap;
 
-  // get statistics about the validation
-  _getStats();
+    // get statistics about the validation
+    _getStats();
+  }
+  else
+  {
+    LOG_ERROR("No map returned from JOSM validation.");
+  }
+
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getAvailableValidatorsWithDescription.");
+  }
 }
 
 void JosmMapValidatorAbstract::_getStats()
@@ -187,19 +194,14 @@ void JosmMapValidatorAbstract::_getStats()
       // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
 
-  jstring validationErrorCountsByTypeResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      // JNI sig format: (input params...)return type
-      // Java sig: String getValidationErrorCountsByType()
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
-  LOG_VART(validationErrorCountsByTypeResult == 0);
-  //const char* validationErrorCountsByTypeTempStr =
-    //_javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
-  //const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
   const QString validationErrorCountsByType =
-    JavaEnvironment::getInstance()->fromJavaString(validationErrorCountsByTypeResult);
+    JavaEnvironment::getInstance()->fromJavaString(
+      (jstring)_javaEnv->CallObjectMethod(
+        _josmInterface,
+        // JNI sig format: (input params...)return type
+        // Java sig: String getValidationErrorCountsByType()
+        _javaEnv->GetMethodID(
+          _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;")));
   LOG_VART(validationErrorCountsByType);
 
   _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
