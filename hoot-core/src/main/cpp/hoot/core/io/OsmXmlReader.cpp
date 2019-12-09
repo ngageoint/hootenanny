@@ -466,7 +466,6 @@ OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
                                 const bool addChildRefsWhenMissing)
 {
   LOG_DEBUG("Reading map from xml...");
-  // TODO: comment out
   //LOG_VART(xml);
   OsmMapPtr map(new OsmMap());
   OsmXmlReader reader;

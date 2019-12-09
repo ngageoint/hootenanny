@@ -34,10 +34,10 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Calls a hoot-josm Java map validator that runs selected JOSM validation routines on a map and
+ * marks elements that fail validation with custom tags
  *
- * passing strings for all collection types in order to cut down on JNI calls for performance
- * reasons; also keeps the client code less complex
+ * See note in JosmMapValidatorAbstract about handling of collection objects via JNI.
  */
 class JosmMapValidator : public JosmMapValidatorAbstract
 {
@@ -46,24 +46,22 @@ public:
 
   static std::string className() { return "hoot::JosmMapValidator"; }
 
-  /**
-   * TODO
-   */
   JosmMapValidator();
 
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const { return "Validates a map using JOSM"; }
 
   /**
-   * @see Configurable
+   * @see OperationStatusInfo
    */
-  virtual void setConfiguration(const Settings& conf);
-
   virtual QString getInitStatusMessage() const
   { return "Cleaning elements..."; }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getCompletedStatusMessage() const
   {
     return
@@ -73,6 +71,9 @@ public:
 
 protected:
 
+  /*
+   * @see JosmMapValidatorAbstract
+   */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
 };
 

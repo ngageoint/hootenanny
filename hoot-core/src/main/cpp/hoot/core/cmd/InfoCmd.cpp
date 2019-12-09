@@ -374,15 +374,12 @@ private:
 
   void _printJosmValidators()
   {
-    const QString validatorsNamespace = ConfigOptions().getJosmValidatorsJavaNamespace() + ".";
     const QMap<QString, QString> validators =
       JosmMapValidator().getAvailableValidatorsWithDescription();
     for (QMap<QString, QString>::const_iterator itr = validators.begin(); itr != validators.end();
          ++itr)
     {
-      QString name = itr.key();
-      name = name.remove(validatorsNamespace);
-      name = name.replace("$", ".");
+      const QString name = itr.key();
       const QString description = itr.value();
       const int indentAfterName = ApiEntityDisplayInfo::MAX_NAME_SIZE - name.size();
       const int indentAfterDescription = ApiEntityDisplayInfo::MAX_TYPE_SIZE - description.size();

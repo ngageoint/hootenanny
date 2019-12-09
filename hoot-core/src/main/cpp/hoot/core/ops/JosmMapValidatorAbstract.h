@@ -43,7 +43,20 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Base class for classes interacting with JOSM for validation or cleaning purposes
+ *
+ * Helpful JNI reference:
+ * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html
+ *
+ * Note that in JNI interactions the choice has been made to pass in and return delimited strings
+ * in place of Java collection classes. The passed in delimited strings are converted to Java
+ * collection objects where necessary in the hoot-josm Java code and the returned strings are
+ * converted to C++ collection objects in this and inheriting classes. This cuts down on the number
+ * of overall JNI calls made for performance improvement reasons and also keeps the JNI client
+ * code simpler arguably at some cost of readability. However, no specific comparison has been done
+ * yet of performance using JNI to create collection classes vs passing delimited strings. So if
+ * at some point we prove there isn't signficant overhead using JNI to create collection classes we
+ * could convert this code over to do that instead.
  */
 class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable,
   public OperationStatusInfo
@@ -53,23 +66,35 @@ public:
 
   JosmMapValidatorAbstract();
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * @see OsmMapOperation
+   */
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  QString getSummary() const { return _errorSummary; }
-
+  /**
+   * Returns a collection of available JOSM validators
+   *
+   * @return collection of validator Java class names
+   */
   QStringList getAvailableValidators();
+
+  /**
+   * Returns a collection of available JOSM validators with descriptions
+   *
+   * @return collection of validator Java class names with descriptions
+   */
   QMap<QString, QString> getAvailableValidatorsWithDescription();
 
+  QString getSummary() const { return _errorSummary; }
   int getNumElementsProcessed() const { return _numAffected; }
   int getNumValidationErrors() const { return _numValidationErrors; }
 
   QStringList getJosmValidatorsUsed() const { return _josmValidators; }
-  QString getValidatorsJosmNamespace() const { return _validatorsJosmNamespace; }
-  void setValidatorsJosmNamespace(const QString& validatorsNamespace)
-  { _validatorsJosmNamespace = validatorsNamespace; }
-  void setJosmInterfaceName(const QString& name) { _josmInterfaceName = name; }
   void setJosmValidatorsExclude(const QStringList& validators)
   { _josmValidatorsExclude = validators; }
   void setJosmValidatorsInclude(const QStringList& validators)
@@ -77,47 +102,54 @@ public:
 
 protected:
 
-  // TODO
+  // path plus class name of the hoot-josm class used to interact with JOSM validation;
+  // of the form: path/to/class/ClassName
   QString _josmInterfaceName;
-  // TODO
+  // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
 
-  // TODO
+  // JNI environment
   JNIEnv* _javaEnv;
-  // TODO
+  // JNI static class ref corresponding to class referenced in _josmInterfaceName
   jclass _josmInterfaceClass;
-  // TODO
+  // instantiated JNI object corresponding to class referenced in _josmInterfaceName
   jobject _josmInterface;
-  // TODO
   bool _josmInterfaceInitialized; 
 
-  // TODO
+  // total number of validation errors found
   int _numValidationErrors;
+  // a printable summer of validation errors found
   QString _errorSummary;
 
-  // can get away with this in the base class b/c all the josm java classes used by all children
-  // classes have the same signature...this may not be true forever
-  virtual void _initJosmImplementation();
-
+  /*
+   * Passes a map to a JOSM operation and returns it with JOSM updates
+   */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap) = 0;
 
+  /*
+   * Retrieves validation stats
+   */
   virtual void _getStats();
 
+  /*
+   * Converts JOSM validation stats to a printable string
+   */
   QString _errorCountsByTypeStrToSummaryStr(const QString& errorCountsByTypeStr) const;
 
 private:
 
+  friend class JosmMapValidatorTest;
   friend class JosmMapCleanerTest;
 
-  // TODO - assuming a single one for now
-  QString _validatorsJosmNamespace;
-  // TODO
+  // a list of explicit JOSM validator class names without prefixed namespace to be used as
+  // validators; can be overridden by _josmValidatorsExclude
   QStringList _josmValidatorsInclude;
-  // TODO
+  // a list of explicit JOSM validator class name excludes without prefixed namespace to be excluded
+  // as validators; overrides _josmValidatorsInclude
   QStringList _josmValidatorsExclude;
 
   void _initJosmValidatorsList();
-  void _updateJosmValidatorsWithNamepace(QStringList& validators);
+  void _initJosmImplementation();
 };
 
 }

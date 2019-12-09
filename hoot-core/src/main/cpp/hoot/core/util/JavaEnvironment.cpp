@@ -71,7 +71,7 @@ void JavaEnvironment::_initVm()
   // isn't a great long term solution but good enough for testing now. Also, the fact that I can't
   // set the string from a config setting is INSANE...will figure that out too (string copying
   // issues likely).
-  // TODO: read this from jni.class.path
+  // TODO: read this from jni.class.path list
   options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
   //options[1].optionString = (char*)"-verbose:jni";
   vm_args.version = JNI_VERSION_1_8;

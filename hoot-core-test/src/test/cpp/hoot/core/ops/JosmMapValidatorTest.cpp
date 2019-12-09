@@ -39,6 +39,9 @@ class JosmMapValidatorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapValidatorTest);
   CPPUNIT_TEST(runGetAvailableValidatorsTest);
+  CPPUNIT_TEST(runValidatorInclusionTest);
+  CPPUNIT_TEST(runValidatorExclusionTest);
+  CPPUNIT_TEST(runEmptyValidatorsTest);
   CPPUNIT_TEST(runValidateTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -48,17 +51,6 @@ public:
   HootTestFixture(
     "test-files/ops/JosmMapValidatorTest", "test-output/ops/JosmMapValidatorTest")
   {
-    //setResetType(ResetAll);
-  }
-
-  virtual void setUp()
-  {
-    // TODO: not being passed in correctly yet
-    //conf().set("jni.class.path", QStringList("/home/vagrant/hoot/tmp/hoot-josm.jar"));
-  }
-
-  virtual void tearDown()
-  {
   }
 
   void runGetAvailableValidatorsTest()
@@ -67,8 +59,59 @@ public:
     const QMap<QString, QString> validators = uut.getAvailableValidatorsWithDescription();
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
-    // TODO: This won't hold up across version changes...come up with something better.
-    CPPUNIT_ASSERT_EQUAL(51, validators.size());
+    CPPUNIT_ASSERT(validators.size() > 0);
+    CPPUNIT_ASSERT(validators.contains("DuplicatedWayNodes"));
+    CPPUNIT_ASSERT(validators.contains("CrossingWays.SelfCrossing"));
+  }
+
+  void runValidatorInclusionTest()
+  {
+    JosmMapValidator uut;
+    QStringList validators;
+    validators.append("UntaggedWay");
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    uut._initJosmValidatorsList();
+
+    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
+    LOG_VARD(validatorsUsed);
+    CPPUNIT_ASSERT_EQUAL(3, validatorsUsed.size());
+    CPPUNIT_ASSERT(validatorsUsed.contains("UntaggedWay"));
+    CPPUNIT_ASSERT(validatorsUsed.contains("UnclosedWays"));
+    CPPUNIT_ASSERT(validatorsUsed.contains("DuplicatedWayNodes"));
+  }
+
+  void runValidatorExclusionTest()
+  {
+    JosmMapValidator uut;
+
+    QStringList validators;
+    validators.append("UntaggedWay");
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+
+    validators.clear();
+    validators.append("UntaggedWay");
+    uut.setJosmValidatorsExclude(validators);
+
+    uut._initJosmValidatorsList();
+
+    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
+    CPPUNIT_ASSERT_EQUAL(2, validatorsUsed.size());
+    CPPUNIT_ASSERT(validatorsUsed.contains("UnclosedWays"));
+    CPPUNIT_ASSERT(validatorsUsed.contains("DuplicatedWayNodes"));
+  }
+
+  void runEmptyValidatorsTest()
+  {
+    JosmMapValidator uut;
+    uut._initJosmValidatorsList();
+
+    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
+    CPPUNIT_ASSERT(validatorsUsed.size() > 0);
+    CPPUNIT_ASSERT(validatorsUsed.contains("DuplicatedWayNodes"));
   }
 
   void runValidateTest()

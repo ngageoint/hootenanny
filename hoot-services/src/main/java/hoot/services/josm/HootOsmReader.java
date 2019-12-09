@@ -36,34 +36,24 @@ import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.io.IllegalDataException;
 
 /**
- * Reads data for use by JOSM validation called by hoot
+ * Reads data for use by JOSM validation/cleaning requests from hoot
  *
  * The default behavior of OsmReader is to convert all negative ID elements to positive in
- * preparation for upload to the server. In hoot's case, we want to retain all ID's regardless...
- * positive/negative issues get handled when a changeset is created. Overriding buildPrimitive was
- * the only way found to make this happen...there may be a better way.
+ * preparation for upload to the server. In hoot's case, we want to retain all ID's no matter what.
+ * This overrides the default JOSM OSM reading behavior.
  */
 public class HootOsmReader extends OsmReader
 {
   /*
-   * TODO
+   * Builds an OsmPrimitive which always retains the source ID
    */
   protected OsmPrimitive buildPrimitive(PrimitiveData pd)
   {
     OsmPrimitive p;
-
-    //Logging.trace("primitive data unique id: " + pd.getUniqueId());
-    //Logging.trace("primitive data primitive id: " + pd.getPrimitiveId());
-
     p = pd.getType().newInstance(pd.getUniqueId(), true);
-    //Logging.trace("primitive id: " + p.getId());
-    // This is in the parent method but blows up here.
-    //AbstractPrimitive.advanceUniqueId(pd.getUniqueId());
     p.setVisible(pd.isVisible());
     p.load(pd);
-
     externalIdMap.put(pd.getPrimitiveId(), p);
-
     return p;
   }
 
@@ -72,7 +62,7 @@ public class HootOsmReader extends OsmReader
    */
   public static DataSet parseDataSet(InputStream source) throws IllegalDataException
   {
-    //Logging.debug("Converting input elements from xml with hoot reader...");
+    Logging.debug("Converting input elements from xml with hoot reader...");
     return new HootOsmReader().doParseDataSet(source, null);
   }
 }

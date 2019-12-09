@@ -34,10 +34,11 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Calls a hoot-josm Java map cleaner that runs selected JOSM validation routines on a map and
+ * cleans any failing elements where possible. Optionally marks elements that fail validation with
+ * custom tags, TODO: and if elements were deleted adds their IDs to the map's base tags.
  *
- * passing strings for all collection types in order to cut down on JNI calls for performance
- * reasons; also keeps the client code less complex
+ * See note in JosmMapValidatorAbstract about handling of collection objects via JNI.
  *
  * Not using inheritance with JosmMapValidator since both this and that class need to be factory
  * registered as OsmMapOperations and that can't be done in a class inherited from a class that
@@ -50,9 +51,6 @@ public:
 
   static std::string className() { return "hoot::JosmMapCleaner"; }
 
-  /**
-   * TODO
-   */
   JosmMapCleaner();
 
   /**
@@ -70,9 +68,15 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getInitStatusMessage() const
   { return "Cleaning elements..."; }
 
+  /**
+   * @see OperationStatusInfo
+   */
   virtual QString getCompletedStatusMessage() const
   {
     return
@@ -84,27 +88,40 @@ public:
 
   int getNumGroupsOfElementsCleaned() const { return _numGroupsOfElementsCleaned; }
   int getNumElementsDeleted() const { return _deletedElementIds.size(); }
-
-  void setAddDebugTags(const bool add) { _addDebugTags = add; }
+  void setAddDetailTags(const bool add) { _addDetailTags = add; }
 
 protected:
 
+  /*
+   * @see JosmMapValidatorAbstract
+   */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
 
+  /*
+   * @see JosmMapValidatorAbstract
+   */
   virtual void _getStats();
 
 private:
 
-  // TODO
-  bool _addDebugTags;
+  // optionally tags elements that were cleaned; if an element was deleted, their ID is added
+  // to the maps base tags
+  bool _addDetailTags;
 
-  // TODO
+  // Each JOSM command capable of cleaning elements after validation breaks the elements up into
+  // cleanable groups.
   int _numGroupsOfElementsCleaned;
-  // TODO
+  // the IDs of the elements deleted as a result of cleaning
   QSet<ElementId> _deletedElementIds;
 
+  /*
+   * Converts the delimited element IDs string returned by hoot-josm into a collection
+   */
   QSet<ElementId> _elementIdsStrToElementIds(const QString elementIdsStr) const;
 
+  /*
+   * Converts the error status info returned by hoot-josm into a readable string
+   */
   QString _errorCountsByTypeStrToSummaryStr(
     const QString& errorCountsByTypeStr, const QString& errorFixCountsByTypeStr) const;
 };

@@ -1684,13 +1684,6 @@ corresponding implicit tag rules database.
 
 A list of paths to include in the javascript translator search path.
 
-=== jni.class.path
-
-* Data Type: string
-* Default Value: `/home/vagrant/hoot/tmp/hoot-josm.jar`
-
-TODO
-
 === in.bounds.criterion.bounds
 
 * Data Type: string
@@ -1711,9 +1704,10 @@ satisfy the criterion.
 
 * Data Type: list
 * Default Value:
-** ``
+** `${HOOT_HOME}/tmp/hoot-josm.jar`
 
-TODO
+A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm
+project interacts with Java code.
 
 === job.id
 
@@ -1800,20 +1794,14 @@ vs
 ...
 -----
 
-=== josm.validators.java.namespace
-
-* Data Type: string
-* Default Value: `org.openstreetmap.josm.data.validation.tests`
-
-TODO
-
 === josm.validators.exclude
 
 * Data Type: list
 * Default Value:
 ** ``
 
-TODO
+A list of JOSM validator Java class names without namespace prefixes to explicitly exclude use of
+during validation or cleaning using JOSM. Overrides values set in josm.validators.include.
 
 === josm.validators.include
 
@@ -1821,7 +1809,8 @@ TODO
 * Default Value:
 ** ``
 
-TODO
+A list of JOSM validator Java class names without namespace prefixes to explicitly include use of
+during validation or cleaning using JOSM. Overridden by values set in josm.validators.exclude.
 
 === json.output.tasking.manager.aoi
 
@@ -1881,11 +1870,13 @@ side detectors via the API, confidence support information is included.
 ** `TikaLanguageDetector`
 ** `OpenNlpLanguageDetector`
 
-When using 'HootServicesTranslatorClient' as the to English language translator or HootServicesLanguageDetectorClient as a source 
-language detector, one or more hoot-services Java class names implementing LanguageDetector.  Language detectors are used in order of 
-entry. 'hoot info --languages --detectors' displays information about the available server side detectors. If no detectors are specified, then 
-language translation will attempt to use as many detectors as needed, in a pre-determined order, to get a positive detection. 
-Separate values with a ';' and surround in quotes when passing in from the command line.
+When using 'HootServicesTranslatorClient' as the to English language translator or
+HootServicesLanguageDetectorClient as a source language detector, one or more hoot-services Java
+class names implementing LanguageDetector.  Language detectors are used in order of entry.
+'hoot info --languages --detectors' displays information about the available server side detectors.
+If no detectors are specified, then language translation will attempt to use as many detectors as
+needed, in a pre-determined order, to get a positive detection. Separate values with a ';' and
+surround in quotes when passing in from the command line.
 
 === language.info.provider
 
@@ -2070,19 +2061,12 @@ The maximum number of warn log messages that will be emitted per class before th
 A value of -1 passed to class will ensure that no warnings are logged by it, if it honors the option.
 A setting of -1 is useful for tests where you do not have granular enough logging control.
 
-=== map.cleaner.josm.add.debug.tags
+=== map.cleaner.josm.add.detail.tags
 
 * Data Type: bool
 * Default Value: `false`
 
-TODO
-
-=== map.cleaner.josm.java.implementation
-
-* Data Type: string
-* Default Value: `hoot/services/josm/JosmMapCleaner`
-
-TODO
+If true, cleaning detail tags will be added to map outputs when cleaning maps with JOSM.
 
 [[MapCleanerTransforms]]
 === map.cleaner.transforms
@@ -2108,13 +2092,6 @@ TODO
 
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
-
-=== map.validator.josm.java.implementation
-
-* Data Type: string
-* Default Value: `hoot/services/josm/JosmMapValidator`
-
-TODO
 
 [[match.creators]]
 === match.creators

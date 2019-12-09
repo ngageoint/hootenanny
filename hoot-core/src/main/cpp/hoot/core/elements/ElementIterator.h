@@ -38,8 +38,6 @@ class Element;
 
 /**
  * Implements the iterator concept and provides some simple methods for the inheriter to use.
- *
- * The inheriting class will need to implement "_next" and call "_addElement".
  */
 class ElementIterator
 {
@@ -54,7 +52,7 @@ public:
   bool hasNext();
 
   /**
-   * TODO
+   * Resets the element iterator
    */
   virtual void resetIterator() = 0;
 

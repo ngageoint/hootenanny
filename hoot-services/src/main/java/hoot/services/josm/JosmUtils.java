@@ -51,12 +51,14 @@ import org.openstreetmap.josm.actions.DeleteAction;
 import org.openstreetmap.josm.command.SequenceCommand;
 
 /**
- * TODO
+ * Various utilities for use when using JOSM from hoot-josm
  */
 public class JosmUtils
 {
   /**
-   * TODO
+   * Initializes JOSM for use
+   *
+   * @param logLevel the verbosity of the logging
    */
   public static void initJosm(String logLevel) throws Exception
   {
@@ -70,7 +72,9 @@ public class JosmUtils
   }
 
   /**
-   * TODO
+   * Sets the verbosity of JOSM logging
+   *
+   * @param logLevel the verbosity of the logging
    */
   public static void setLogLevel(String logLevel) throws Exception
   {
@@ -102,41 +106,20 @@ public class JosmUtils
     }
   }
 
- /*
-  * TODO
+ /**
+  * Creates a unique element ID key string
+  *
+  * @param element the element for which to create the key string
   */
   public static String getElementMapKey(OsmPrimitive element)
   {
-    //Logging.trace(
-      //"key: " + element.getClass().getSimpleName() + ":" + String.valueOf(element.getUniqueId()));
     return element.getClass().getSimpleName() + ":" + String.valueOf(element.getUniqueId());
   }
 
   /**
-   * TODO
+   * Converts elements to a printable string
    *
-   * There's probably some utility function to do this in JOSM, just haven't found it.
-   */
-  public static Map<String, AbstractPrimitive> hydrate(OsmPrimitive element)
-  {
-    //Logging.trace("Hydrating element: " + element.toString() + "...");
-    if (element instanceof Node)
-    {
-      return hydrate((Node)element);
-    }
-    else if (element instanceof Way)
-    {
-      return hydrate((Way)element);
-    }
-    else if (element instanceof Relation)
-    {
-      return hydrate((Relation)element);
-    }
-    return null;
-  }
-
-  /**
-   * TODO
+   * @param elements the elements to print
    */
   public static String elementsToString(Collection<? extends AbstractPrimitive> elements)
   {
@@ -149,9 +132,12 @@ public class JosmUtils
   }
 
   /**
-   * TODO
-
-     Not all of the commands implement toString()
+   * Creates a displayable string for a JOSM command
+   *
+   * Necessary because not all of the commands implement toString().
+   *
+   * @param command the command to print
+   * @param printElements if true and the command references elements, the elements are also printed
    */
   public static String commandToString(Command command, boolean printElements)
   {
@@ -174,7 +160,9 @@ public class JosmUtils
   }
 
   /**
-   * TODO
+   * Returns a list of element IDs for elements being deleted by a command
+   *
+   * @param command the command referencing elements to be deleted
    */
   public static List<String> getDeletedElementIds(Command command) throws Exception
   {
@@ -216,41 +204,4 @@ public class JosmUtils
     }
     return deletedElementIds;
   }  
-
-  private static Map<String, AbstractPrimitive> hydrate(Node node)
-  {
-    // node doesn't have any children
-    //Logging.trace("Hydrating node: " + node.toString() + "...");
-    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
-    elementWithChildren.put(getElementMapKey(node), node);
-    return elementWithChildren;
-  }
-
-  private static Map<String, AbstractPrimitive> hydrate(Way way)
-  {
-    //Logging.trace("Hydrating way: " + way.toString() + "...");
-    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
-    elementWithChildren.put(getElementMapKey(way), way);
-    List<Node> wayNodes = way.getNodes();
-    //Logging.trace("wayNodes size: " + wayNodes.size());
-    for (Node wayNode : wayNodes)
-    {
-      elementWithChildren.put(getElementMapKey(wayNode), wayNode);
-    }
-    //Logging.trace("elementWithChildren size: " + elementWithChildren.size());
-    return elementWithChildren;
-  }
-
-  private static Map<String, AbstractPrimitive> hydrate(Relation relation)
-  {
-    //Logging.trace("Hydrating relation: " + relation.toString() + "...");
-    Map<String, AbstractPrimitive> elementWithChildren = new HashMap<String, AbstractPrimitive>();
-    elementWithChildren.put(getElementMapKey(relation), relation);
-    List<RelationMember> members = relation.getMembers();
-    for (RelationMember member : members)
-    {
-      elementWithChildren.put(getElementMapKey(member.getMember()), member.getMember());
-    }
-    return elementWithChildren;
-  }
 }

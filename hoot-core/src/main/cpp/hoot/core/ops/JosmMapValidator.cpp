@@ -40,27 +40,19 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapValidator)
 JosmMapValidator::JosmMapValidator() :
 JosmMapValidatorAbstract()
 {
+  // Don't see this changing any time soon, so not making it configurable until necessary
   _josmInterfaceName = "hoot/services/josm/JosmMapValidator";
-}
-
-void JosmMapValidator::setConfiguration(const Settings& conf)
-{
-  JosmMapValidatorAbstract::setConfiguration(conf);
-
-  ConfigOptions opts(conf);
-  _josmInterfaceName = opts.getMapValidatorJosmJavaImplementation();
 }
 
 OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving validated map...");
 
-  // pass in the validators to use, the features to be examined, and whether to just validate or to
-  // validate and fix them
+  // call into hoot-josm to validate features in the map
 
-  // validators delimited by ';'
+  // validators to use delimited by ';'
   jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
-  // convert input map to xml string
+  // convert input map to xml string to pass in
   jstring mapXml =
     _javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
   jobject validateResult =
@@ -87,8 +79,6 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   OsmMapPtr validatedMap =
     OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
   // TODO: env->ReleaseStringUTFChars
-
-  // return a null map if no features had validation issues
   //LOG_VART(OsmXmlWriter::toString(validatedMap, true));
   return validatedMap;
 }

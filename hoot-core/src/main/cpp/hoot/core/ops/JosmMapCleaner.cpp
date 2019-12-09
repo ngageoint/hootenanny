@@ -39,9 +39,10 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapCleaner)
 
 JosmMapCleaner::JosmMapCleaner() :
 JosmMapValidatorAbstract(),
-_addDebugTags(false),
+_addDetailTags(false),
 _numGroupsOfElementsCleaned(0)
 {
+  // Don't see this changing any time soon, so not making it configurable until necessary
   _josmInterfaceName = "hoot/services/josm/JosmMapCleaner";
 }
 
@@ -50,15 +51,14 @@ void JosmMapCleaner::setConfiguration(const Settings& conf)
   JosmMapValidatorAbstract::setConfiguration(conf);
 
   ConfigOptions opts(conf);
-  _addDebugTags = opts.getMapCleanerJosmAddDebugTags();
-  _josmInterfaceName = opts.getMapCleanerJosmJavaImplementation();
+  _addDetailTags = opts.getMapCleanerJosmAddDetailTags();
 }
 
 void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   _numGroupsOfElementsCleaned = 0;
   _deletedElementIds.clear();
-  LOG_VARD(_addDebugTags);
+  LOG_VARD(_addDetailTags);
 
   JosmMapValidatorAbstract::apply(map);
 }
@@ -67,24 +67,23 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving cleaned map...");
 
-  // pass in the validators to use, the features to be examined, and whether to just validate or to
-  // validate and fix them;
+  // call into hoot-josm to clean features in the map
 
-  // validators delimited by ';'
+  // validators to use delimited by ';'
   jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
-  // convert input map to xml string
+  // convert input map to xml string to pass in
   jstring mapXml =
     _javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
   jobject cleanResult =
     _javaEnv->CallObjectMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
-      // Java sig: String clean(String validatorsStr, String elementsXml, boolean addDebugTags)
+      // Java sig: String clean(String validatorsStr, String elementsXml, boolean addDetailTags)
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "clean", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/String;"),
       validatorsStr,
       mapXml,
-      _addDebugTags);
+      _addDetailTags);
   // TODO: env->ReleaseStringUTFChars
   if (_javaEnv->ExceptionCheck())
   {
@@ -97,10 +96,78 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   const char* xml = _javaEnv->GetStringUTFChars((jstring)cleanResult, NULL);
   OsmMapPtr cleanedMap = OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
   // TODO: env->ReleaseStringUTFChars
-
-  // return a null map if no features had validation issues
   //LOG_VART(OsmXmlWriter::toString(cleanedMap, true));
   return cleanedMap;
+}
+
+void JosmMapCleaner::_getStats()
+{
+  LOG_DEBUG("Retrieving stats...");
+
+  // call back into the hoot-josm validator to get the stats after validation
+
+  JosmMapValidatorAbstract::_getStats();
+
+  _numGroupsOfElementsCleaned =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: int getNumGroupsOfElementsCleaned()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
+
+  jstring deletedElementIdsResult =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: String getDeletedElementIds()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/lang/String;"));
+  const char* deletedElementIdsStr =
+    _javaEnv->GetStringUTFChars((jstring)deletedElementIdsResult, NULL);
+  const QString deletedElementIdsQStr(deletedElementIdsStr);
+   // TODO: env->ReleaseStringUTFChars
+  _deletedElementIds = _elementIdsStrToElementIds(deletedElementIdsQStr);
+  // TODO: need to add this to the map tags??
+  LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
+
+  jstring validationErrorCountsByTypeResult =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: String getValidationErrorCountsByType()
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
+  const char* validationErrorCountsByTypeTempStr =
+    _javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
+  const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
+  // TODO: env->ReleaseStringUTFChars
+
+  jstring validationErrorFixCountsByTypeResult =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: String getValidationErrorFixCountsByType()
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/lang/String;"));
+  const char* validationErrorFixCountsByTypeTempStr =
+    _javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
+  const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
+  // TODO: env->ReleaseStringUTFChars
+  LOG_VART(validationErrorFixCountsByType);
+
+  // create a readable error summary
+
+  _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
+  _errorSummary +=
+    "Total groups of elements cleaned: " + QString::number(_numGroupsOfElementsCleaned) + "\n";
+  _errorSummary += "Total elements deleted: " + QString::number(_deletedElementIds.size()) + "\n";
+  if (!validationErrorCountsByType.trimmed().isEmpty())
+  {
+    _errorSummary +=
+       _errorCountsByTypeStrToSummaryStr(
+         validationErrorCountsByType, validationErrorFixCountsByType);
+  }
+  _errorSummary = _errorSummary.trimmed();
+  LOG_VART(_errorSummary);
 }
 
 QSet<ElementId> JosmMapCleaner::_elementIdsStrToElementIds(const QString elementIdsStr) const
@@ -108,6 +175,7 @@ QSet<ElementId> JosmMapCleaner::_elementIdsStrToElementIds(const QString element
   QSet<ElementId> elementIds;
   if (!elementIdsStr.trimmed().isEmpty())
   {
+    // elementIdsStr format example: Way:-1;Node:-2
     QStringList elementIdsParts = elementIdsStr.split(";");
     for (int i = 0; i < elementIdsParts.size(); i++)
     {
@@ -127,68 +195,12 @@ QSet<ElementId> JosmMapCleaner::_elementIdsStrToElementIds(const QString element
   return elementIds;
 }
 
-void JosmMapCleaner::_getStats()
-{
-  LOG_DEBUG("Retrieving stats...");
-
-  // call back into Java validator to get the validation stats
-  JosmMapValidatorAbstract::_getStats();
-
-  _numGroupsOfElementsCleaned =
-    (int)_javaEnv->CallIntMethod(
-      _josmInterface,
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
-
-  jstring deletedElementIdsResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/lang/String;"));
-  const char* deletedElementIdsStr =
-    _javaEnv->GetStringUTFChars((jstring)deletedElementIdsResult, NULL);
-  const QString deletedElementIdsQStr(deletedElementIdsStr);
-   // TODO: env->ReleaseStringUTFChars
-  _deletedElementIds = _elementIdsStrToElementIds(deletedElementIdsQStr);
-  // TODO: not sure what to do with this info yet...
-  LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
-
-  jstring validationErrorCountsByTypeResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
-  const char* validationErrorCountsByTypeTempStr =
-    _javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
-  const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
-  // TODO: env->ReleaseStringUTFChars
-
-  jstring validationErrorFixCountsByTypeResult =
-    (jstring)_javaEnv->CallObjectMethod(
-      _josmInterface,
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/lang/String;"));
-  const char* validationErrorFixCountsByTypeTempStr =
-    _javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
-  const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
-  // TODO: env->ReleaseStringUTFChars
-  LOG_VART(validationErrorFixCountsByType);
-
-  _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
-  _errorSummary +=
-    "Total groups of elements cleaned: " + QString::number(_numGroupsOfElementsCleaned) + "\n";
-  _errorSummary += "Total elements deleted: " + QString::number(_deletedElementIds.size()) + "\n";
-  if (!validationErrorCountsByType.trimmed().isEmpty())
-  {
-    _errorSummary +=
-       _errorCountsByTypeStrToSummaryStr(
-         validationErrorCountsByType, validationErrorFixCountsByType);
-  }
-  _errorSummary = _errorSummary.trimmed();
-  LOG_VART(_errorSummary);
-}
-
 QString JosmMapCleaner::_errorCountsByTypeStrToSummaryStr(
   const QString& errorCountsByTypeStr, const QString& errorFixCountsByTypeStr) const
 {
+  // errorCountsByTypeStr and errorFixCountsByTypeStr format examples:
+  // DuplicatedWayNodes:1;UntaggedWay:2
+
   QString summary = "";
 
   QMap<QString, int> errorCountsByType;

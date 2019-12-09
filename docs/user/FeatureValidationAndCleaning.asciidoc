@@ -2,5 +2,14 @@
 [[FeatureValidation]]
 == Feature Validation
 
-TODO
+Hootenanny allows for the validation and cleaning of map data. Validation is accomplished entirely using JOSM and cleaning is done via a
+combination of JOSM and Hootenanny internal cleaning operations.
+
+=== Validation
+
+Hootenanny allows for tagging features which fail validation tests. TODO: finish
+
+=== Cleaning
+
+Hootenanny allows for cleaning some features which fail validation tests. TODO: finish
 

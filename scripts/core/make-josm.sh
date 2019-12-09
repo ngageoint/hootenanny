@@ -7,7 +7,6 @@ cd $HOME
 
 rsync -rzuv /home/vagrant/hoot/conf .
 rsync -rzuv /home/vagrant/hoot/hoot-core .
-rsync -rzuv /home/vagrant/hoot/hoot-rnd .
 rsync -rzuv /home/vagrant/hoot/hoot-services .
 rsync -rzuv /home/vagrant/hoot/test-files .
 make -j12

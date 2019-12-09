@@ -49,7 +49,9 @@ import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
- * TODO
+ * Cleans a map using JOSM
+ *
+ * @see JosmMapValidatorAbstract in hoot-core about handling of collection objects via JNI.
  */
 public class JosmMapCleaner extends JosmMapValidator
 {
@@ -75,9 +77,18 @@ public class JosmMapCleaner extends JosmMapValidator
     return 0;
   }
   public int getNumGroupsOfElementsCleaned() { return numGroupsOfElementsCleaned; }
+
+  /**
+   * Returns the counts of elements that were cleaned, organized by validation error type, during
+   * map validation
+   *
+   * @return a delimited string of the form:
+   * <validation error 1 name>:<cleaned element count for validation error 1>;
+   * <validation error 2 name>:<cleaned element count for validation error 2>...
+   */
   public String getValidationErrorFixCountsByType()
   {
-    Logging.trace("Retrieving validation error fix counts by type...");
+    Logging.debug("Retrieving validation error fix counts by type...");
     Logging.trace("validationErrorFixesByType size: " + validationErrorFixesByType.size());
 
     String returnStr = "";
@@ -90,15 +101,25 @@ public class JosmMapCleaner extends JosmMapValidator
   }
 
   /**
-   * TODO - change to string array for cleaners?
+   * Runs selected JOSM validation routines on a map and cleans a subset of the elements that fail
+   * validation with
+   *
+   * @param validatorsStr semicolon delimited string with the full Java class names of the
+   * validators to be used
+   * @param elementsXml input OSM map to be cleaned as XML
+   * @param addDetailTags if true, elements failing validation are tagged with validation error
+   * descriptions and an indication of whether they were cleaned or not; TODO: The IDs of deleted
+   * elements are recorded in theoutput  map's base tags.
    */
-  public String clean(String validatorsStr, String elementsXml, boolean addDebugTags)
+  public String clean(String validatorsStr, String elementsXml, boolean addDetailTags)
     throws Exception
   {
-    Logging.debug("addDebugTags: " + addDebugTags);
+    Logging.debug("addDetailTags: " + addDetailTags);
 
+    // clear out existing data and stats
     clear();
 
+    // validate the elements
     /*outputElements = */parseAndValidateElements(validatorsStr, elementsXml);
 
     // check for any validation errors
@@ -108,10 +129,9 @@ public class JosmMapCleaner extends JosmMapValidator
     {
       try
       {
-        // If we're fixing features, fix the features, record those that were fixed, and get back
-        // the fixed features.
+        // clean the validated features and record that those that were successfully cleaned
 
-        outputElements = cleanElements(validationErrors);
+        outputElements = cleanValidatedElements(validationErrors);
 
         if (outputElements == null)
         {
@@ -130,9 +150,9 @@ public class JosmMapCleaner extends JosmMapValidator
         }
         Logging.debug("cleanedElements size: " + outputElements.size());
 
-        // add validation/fix message tags for use in hoot and remove deleted elements
+        // optionally add validation/fix message tags and also remove deleted elements
 
-        outputElements = getReturnElements(outputElements, addDebugTags);
+        outputElements = getReturnElements(outputElements, addDetailTags);
         Logging.debug("outputElements size: " + outputElements.size());
       }
       catch (Exception e)
@@ -152,14 +172,18 @@ public class JosmMapCleaner extends JosmMapValidator
     }
 
     Logging.info(
-      "Found " + numValidationErrors + " validation errors, cleaned " + numGroupsOfElementsCleaned +
-      " groups of elements, and deleted " + getNumDeletedElements() + " elements.");
+      "Found " + getNumValidationErrors() + " validation errors, cleaned " +
+      numGroupsOfElementsCleaned + " groups of elements, and deleted " + getNumDeletedElements() +
+      " elements.");
 
     return convertOutputElementsToXml();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
 
+  /*
+   * @see JosmMapValidator
+   */
   protected void clear()
   {
     super.clear();
@@ -181,9 +205,13 @@ public class JosmMapCleaner extends JosmMapValidator
 
   /////////////////////////////////////////////////////////////////////////////////////////////
 
-  private Collection<AbstractPrimitive> cleanElements(List<TestError> errors) throws Exception
+  /*
+   * Attempts to clean all elements involved in a collection of validation errors
+   */
+  private Collection<AbstractPrimitive> cleanValidatedElements(List<TestError> errors)
+    throws Exception
   {
-    Logging.debug("Fixing and recording fixed elements...");
+    Logging.debug("Cleaning and recording the cleaning success status elements...");
 
     Collection<AbstractPrimitive> cleanedElements = null;
 
@@ -201,7 +229,7 @@ public class JosmMapCleaner extends JosmMapValidator
       Logging.trace("error cleanable?: " + error.isFixable());
       if (error.isFixable())
       {
-        cleanSuccess = cleanValidatedElement(error, affectedData);
+        cleanSuccess = cleanValidatedElementsForError(error, affectedData);
       }
 
       Logging.debug("Recording cleaned elements...");
@@ -221,8 +249,10 @@ public class JosmMapCleaner extends JosmMapValidator
           }
         }
 
+        // record the elements cleaned by ID
         elementCleanings.put(JosmUtils.getElementMapKey(element), cleanStatusToString(cleanStatus));
 
+        // record the elements cleaned by validation error type
         if (cleanSuccess)
         {
           if (validationErrorFixesByType.containsKey(error.getTester().getName()))
@@ -244,6 +274,7 @@ public class JosmMapCleaner extends JosmMapValidator
 
     Logging.debug("elementCleanings size: " + elementCleanings.size());
 
+    // record the updated state of the map after cleaning
     boolean affectedDataNull = (affectedData == null);
     Logging.trace("affectedData == null: " + affectedDataNull);
     if (affectedData != null)
@@ -255,23 +286,29 @@ public class JosmMapCleaner extends JosmMapValidator
     return cleanedElements;
   }
 
-  private boolean cleanValidatedElement(TestError error, DataSet affectedData) throws Exception
+  /*
+   * Cleans a collection of elements associated with a single validation test error
+   */
+  private boolean cleanValidatedElementsForError(TestError error, DataSet affectedData)
+    throws Exception
   {
-    // fix features based on error found
     Logging.trace(
       "Cleaning " + error.getPrimitives().size() + " elements for error: \"" + error.getMessage() +
       "\" found by test: " + error.getTester().getName() + "...");
     Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
+    // clean associated features based on the error found
     Command cleanCmd = error.getFix();
     Logging.trace("cleanCmd: " + JosmUtils.commandToString(cleanCmd, true));
-
-    deletedElementIds.addAll(JosmUtils.getDeletedElementIds(cleanCmd));
-    affectedData = cleanCmd.getAffectedDataSet();
-
     boolean cleanSuccess = cleanCmd.executeCommand();
     String cleanStatusStr = cleanSuccess ? "Success" : "Failure";
     Logging.trace(cleanStatusStr + " executing fix command: " + cleanCmd.getDescriptionText());
+
+    // record any elements that were deleted
+    deletedElementIds.addAll(JosmUtils.getDeletedElementIds(cleanCmd));
+    // grab the actual data from the command so we can update our return map
+    affectedData = cleanCmd.getAffectedDataSet();
+
     return cleanSuccess;
   }
 
@@ -291,7 +328,7 @@ public class JosmMapCleaner extends JosmMapValidator
   }
 
   private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements,
-    boolean addDebugTags) throws Exception
+    boolean addDetailTags) throws Exception
   {
     Logging.debug("Updating tags on up to " + elements.size() + " elements...");
 
@@ -304,21 +341,21 @@ public class JosmMapCleaner extends JosmMapValidator
       OsmPrimitive osmElement = (OsmPrimitive)element;
       String elementKey = JosmUtils.getElementMapKey(osmElement);
 
+      // don't add the feature to the output map if it was deleted
       if (deletedElementIds == null || !deletedElementIds.contains(elementKey))
       {
-        // Always add tags if addDebugTags=true, otherwise only add them if a fix couldn't be made
-        // after a validation error. elementValidations and elementCleanings should always have the
-        // same element keys.
+        // elementValidations and elementCleanings should always have the same element keys.
         Logging.trace(
           "elementValidations.containsKey(elementKey): " +
           elementValidations.containsKey(elementKey));
-        Logging.trace("addDebugTags: " + addDebugTags);
+        Logging.trace("addDetailTags: " + addDetailTags);
         Logging.trace("elementCleanings.get(elementKey): " + elementCleanings.get(elementKey));
-        if (elementValidations.containsKey(elementKey) && addDebugTags)
+        if (elementValidations.containsKey(elementKey) && addDetailTags)
         {
           Logging.trace("Adding validation tags to element: " + elementKey + "...");
 
           Collection<String> errorMessages = elementValidations.get(elementKey);
+          // cleaningMessagesArr's ordering will match that of errorMessagesArr
           String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
           Collection<String> cleaningMessages = elementCleanings.get(elementKey);
           String[] cleaningMessagesArr =
@@ -327,7 +364,6 @@ public class JosmMapCleaner extends JosmMapValidator
           int errorCtr = 1;
           for (int i = 0; i < errorMessagesArr.length; i++)
           {
-            // cleaningMessagesArr's ordering will match that of errorMessagesArr
             osmElement.put(
               VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), errorMessagesArr[i]);
             osmElement.put(
@@ -365,17 +401,16 @@ public class JosmMapCleaner extends JosmMapValidator
     NONE_AVAILABLE, FAILED, SUCCEEDED;
   }
 
-  // Not using PrimitiveId as keys here but don't know how to get it directly from OsmPrimitive;
-  // using LinkedHashMultimap to preserve the value orderings between the various multimaps
-
-  // element keys to validation error fix messages
+  // element keys to validation error cleaning statuses; see related notes for
+  // JosmMapValidator::elementValidations
   // e.g. key=Way:1, value1="Duplicated way nodes=fixed", value2="Unclosed way=none available"
   private Multimap<String, String> elementCleanings = LinkedHashMultimap.create();
 
+  // validation error types (validator names) mapped to successful cleaning counts
   private Map<String, Integer> validationErrorFixesByType = new HashMap<String, Integer>();
 
-  // TODO
+  // list of IDs for all elements deleted during cleaning
   private List<String> deletedElementIds = null;
-  // TODO
+  // each command attempts to clean a group of elements associated with a validation error
   private int numGroupsOfElementsCleaned = 0;
 }

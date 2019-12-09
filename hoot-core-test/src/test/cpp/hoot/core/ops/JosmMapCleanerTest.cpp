@@ -38,13 +38,9 @@ namespace hoot
 class JosmMapCleanerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(JosmMapCleanerTest);
-  CPPUNIT_TEST(runGetAvailableValidatorsTest);
-  CPPUNIT_TEST(runValidatorInclusionTest);
-  CPPUNIT_TEST(runValidatorExclusionTest);
-  CPPUNIT_TEST(runEmptyValidatorsTest);
   CPPUNIT_TEST(runCleanNoErrorsTest);
   CPPUNIT_TEST(runCleanTest);
-  CPPUNIT_TEST(runCleanNoDebugTagsTest);
+  CPPUNIT_TEST(runCleanNoDetailTagsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -52,77 +48,6 @@ public:
   JosmMapCleanerTest() :
   HootTestFixture("test-files/ops/JosmMapCleanerTest", "test-output/ops/JosmMapCleanerTest")
   {
-    //setResetType(ResetAll);
-  }
-
-  virtual void setUp()
-  {
-    // TODO: not being passed in correctly yet
-    //conf().set("jni.class.path", QStringList("/home/vagrant/hoot/tmp/hoot-josm.jar"));
-  }
-
-  virtual void tearDown()
-  {
-  }
-
-  void runGetAvailableValidatorsTest()
-  {
-    JosmMapCleaner uut;
-    const QMap<QString, QString> validators = uut.getAvailableValidatorsWithDescription();
-    LOG_VART(validators.keys());
-    LOG_VART(validators.values());
-    // TODO: This won't hold up across version changes...come up with something better.
-    CPPUNIT_ASSERT_EQUAL(51, validators.size());
-  }
-
-  void runValidatorInclusionTest()
-  {
-    JosmMapCleaner uut;
-    QStringList validators;
-    validators.append("UntaggedWay");
-    validators.append("UnclosedWays");
-    validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
-    uut._initJosmValidatorsList();
-
-    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
-    LOG_VARD(validatorsUsed);
-    CPPUNIT_ASSERT_EQUAL(3, validatorsUsed.size());
-    const QString validatorsNamespace = uut.getValidatorsJosmNamespace();
-    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".UntaggedWay"));
-    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".UnclosedWays"));
-    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".DuplicatedWayNodes"));
-  }
-
-  void runValidatorExclusionTest()
-  {
-    JosmMapCleaner uut;
-
-    QStringList validators;
-    validators.append("UntaggedWay");
-    validators.append("UnclosedWays");
-    validators.append("DuplicatedWayNodes");
-    uut.setJosmValidatorsInclude(validators);
-
-    validators.clear();
-    validators.append("UntaggedWay");
-    uut.setJosmValidatorsExclude(validators);
-
-    uut._initJosmValidatorsList();
-
-    const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
-    CPPUNIT_ASSERT_EQUAL(2, validatorsUsed.size());
-    const QString validatorsNamespace = uut.getValidatorsJosmNamespace();
-    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".UnclosedWays"));
-    CPPUNIT_ASSERT(validatorsUsed.contains(validatorsNamespace + ".DuplicatedWayNodes"));
-  }
-
-  void runEmptyValidatorsTest()
-  {
-    JosmMapCleaner uut;
-    uut._initJosmValidatorsList();
-    // TODO: This won't hold up across version changes...come up with something better.
-    CPPUNIT_ASSERT_EQUAL(51, uut.getJosmValidatorsUsed().size());
   }
 
   void runCleanNoErrorsTest()
@@ -132,7 +57,7 @@ public:
     LOG_VARD(map->size());
 
     JosmMapCleaner uut;
-    uut.setAddDebugTags(true);
+    uut.setAddDetailTags(true);
     uut.setJosmValidatorsInclude(QStringList("UntaggedWay"));
     LOG_INFO(uut.getInitStatusMessage());
     uut.apply(map);
@@ -152,7 +77,7 @@ public:
     LOG_VARD(map->size());
 
     JosmMapCleaner uut;
-    uut.setAddDebugTags(true);
+    uut.setAddDetailTags(true);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -178,7 +103,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 
-  void runCleanNoDebugTagsTest()
+  void runCleanNoDetailTagsTest()
   {
     const QString testName = "runCleanNoDebugTagsTest";
     OsmMapPtr map(new OsmMap());
@@ -186,7 +111,7 @@ public:
     LOG_VARD(map->size());
 
     JosmMapCleaner uut;
-    uut.setAddDebugTags(false);
+    uut.setAddDetailTags(false);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");

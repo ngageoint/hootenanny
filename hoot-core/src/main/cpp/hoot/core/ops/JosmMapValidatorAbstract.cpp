@@ -37,8 +37,7 @@ namespace hoot
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
-_numValidationErrors(0),
-_validatorsJosmNamespace("org.openstreetmap.josm.data.validation.tests")
+_numValidationErrors(0)
 {
 }
 
@@ -47,7 +46,6 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _josmValidatorsExclude = opts.getJosmValidatorsExclude();
   _josmValidatorsInclude = opts.getJosmValidatorsInclude();
-  _validatorsJosmNamespace = opts.getJosmValidatorsJavaNamespace();
 }
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
@@ -57,13 +55,13 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   // TODO: change back
   _josmInterfaceClass =
     _javaEnv->FindClass(/*_josmInterfaceName.toStdString().c_str()*/
-                        "hoot/services/josm/JosmMapCleaner");;
+                        "hoot/services/josm/JosmMapCleaner");
+  LOG_VART(_josmInterfaceClass == 0);
   jmethodID constructorMethodId =
     _javaEnv->GetMethodID(_josmInterfaceClass, "<init>", "(Ljava/lang/String;)V");
   // TODO: change back
   jstring logLevelStr =
     _javaEnv->NewStringUTF(Log::getInstance().getLevelAsString().toStdString().c_str());
-  //jstring logLevelStr = _javaEnv->NewStringUTF(QString("TRACE").toStdString().c_str());
   _josmInterface = _javaEnv->NewObject(_josmInterfaceClass, constructorMethodId, logLevelStr);
   // TODO: _javaEnv->ReleaseStringUTFChars
   _josmInterfaceInitialized = true;
@@ -76,43 +74,29 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
   _josmValidatorsInclude.sort();
   _josmValidatorsExclude.sort();
 
-  // assuming class names only for validators passed in
-  _updateJosmValidatorsWithNamepace(_josmValidatorsInclude);
-  _updateJosmValidatorsWithNamepace(_josmValidatorsExclude);
-
   // If an include list was specified, let's start with that.
   _josmValidators = _josmValidatorsInclude;
 
-  // The exclude list overrides the include list, so check it too.
+  // The exclude list overrides the include list, so check it.
   StringUtils::removeAll(_josmValidators, _josmValidatorsExclude);
 
+  // make sure the include/exclude lists didn't conflict
   if (!_josmValidatorsInclude.isEmpty() && _josmValidators.isEmpty())
   {
     throw IllegalArgumentException(
       "Cleaner include/exclude lists resulted in no JOSM cleaners specified.");
   }
 
-  // If validators are empty at this point, then use them all.
+  // If validators are empty by this point, then just use them all.
   if (_josmValidators.isEmpty())
   {
     _josmValidators = getAvailableValidators();
-    _updateJosmValidatorsWithNamepace(_josmValidators);
   }
-}
-
-void JosmMapValidatorAbstract::_updateJosmValidatorsWithNamepace(QStringList& validators)
-{
-  QStringList validatorsTemp;
-  for (int i = 0; i < validators.size(); i++)
-  {
-    validatorsTemp.append(_validatorsJosmNamespace + "." + validators.at(i));
-  }
-  validators = validatorsTemp;
 }
 
 QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescription()
 {
-  LOG_DEBUG("Getting available validators...");
+  LOG_DEBUG("Retrieving available validators...");
 
   QMap<QString, QString> validators;
   if (!_josmInterfaceInitialized)
@@ -120,9 +104,12 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     _initJosmImplementation();
   }
 
+  // make the hoot-josm call to get the validators
   jobject availableValidatorsResult =
     _javaEnv->CallObjectMethod(
       _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: String getAvailableValidators()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/lang/String;"));
   if (_javaEnv->ExceptionCheck())
   {
@@ -132,6 +119,7 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     throw HootException("Error calling getAvailableValidators.");
   }
 
+  // convert the delimited validators string into a map
   const char* str = _javaEnv->GetStringUTFChars((jstring)availableValidatorsResult, NULL);
   QString validatorsStr(str);
   assert(validatorsStr.contains(";"));
@@ -177,11 +165,12 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     _initJosmValidatorsList();
   }
 
-  // update map with fixed features and add validation info to validation results collection
+  // pass the map into JOSM and update it
   OsmMapPtr validatedMap = _getUpdatedMap(map);
   LOG_VARD(validatedMap->size());
   map = validatedMap;
 
+  // get statistics about the validation
   _getStats();
 }
 
@@ -189,15 +178,20 @@ void JosmMapValidatorAbstract::_getStats()
 {
   LOG_DEBUG("Retrieving stats...");
 
-  // call back into Java validator to get the validation stats
+  // call back into the hoot-josm validator to get the stats after validation
+
   _numValidationErrors =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
 
   jstring validationErrorCountsByTypeResult =
     (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: String getValidationErrorCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
   LOG_VART(validationErrorCountsByTypeResult == 0);
@@ -210,6 +204,7 @@ void JosmMapValidatorAbstract::_getStats()
   _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
   if (!validationErrorCountsByType.trimmed().isEmpty())
   {
+    // convert the validation error info to a readable summary string
     _errorSummary += _errorCountsByTypeStrToSummaryStr(validationErrorCountsByType);
   }
   _errorSummary = _errorSummary.trimmed();
@@ -219,8 +214,6 @@ void JosmMapValidatorAbstract::_getStats()
 QString JosmMapValidatorAbstract::_errorCountsByTypeStrToSummaryStr(
   const QString& errorCountsByTypeStr) const
 {
-  // count numbers and types of validation errors
-
   QString summary = "";
   const QStringList countsByTypeParts = errorCountsByTypeStr.split(";");
   for (int i = 0; i < countsByTypeParts.size(); i++)
