@@ -68,7 +68,7 @@ public:
   void runGetAvailableValidatorsTest()
   {
     JosmMapCleaner uut;
-    const QMap<QString, QString> validators = uut.getAvailableValidators();
+    const QMap<QString, QString> validators = uut.getAvailableValidatorsWithDescription();
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
     // TODO: This won't hold up across version changes...come up with something better.

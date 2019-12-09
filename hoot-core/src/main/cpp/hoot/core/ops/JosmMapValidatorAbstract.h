@@ -59,7 +59,8 @@ public:
 
   QString getSummary() const { return _errorSummary; }
 
-  QMap<QString, QString> getAvailableValidators();
+  QStringList getAvailableValidators();
+  QMap<QString, QString> getAvailableValidatorsWithDescription();
 
   int getNumElementsProcessed() const { return _numAffected; }
   int getNumValidationErrors() const { return _numValidationErrors; }

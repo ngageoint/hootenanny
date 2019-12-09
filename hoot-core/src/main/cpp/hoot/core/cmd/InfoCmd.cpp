@@ -35,6 +35,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/ops/JosmMapValidator.h>
 
 // Qt
 #include <QUrl>
@@ -45,8 +46,6 @@ namespace hoot
 /*
  * Some time needs to be spent exploring ways to make the classes containing the information
  * printed out by this command auto-register themselves in a more extensible way.
- *
- * TODO: add --josm-validators implementation after its moved to hoot-core
  */
 class InfoCmd : public BaseCommand
 {
@@ -296,6 +295,10 @@ public:
     {
       std::cout << ApiEntityDisplayInfo::getDisplayInfoOps("conflate.pre.ops").toStdString();
     }
+    else if (specifiedOpts.contains("--josm-validators"))
+    {
+      _printJosmValidators();
+    }
     // everything else
     else if (specifiedOpts.size() == 1)
     {
@@ -353,6 +356,7 @@ private:
     options.append("--filters");
     options.append("--formats");
     options.append("--geometry-type-criteria");
+    options.append("--josm-validators");
     options.append("--languages");
     options.append("--matchers");
     options.append("--match-creators");
@@ -366,6 +370,25 @@ private:
     options.append("--value-aggregators");
     options.append("--way-joiners");
     return options;
+  }
+
+  void _printJosmValidators()
+  {
+    const QString validatorsNamespace = ConfigOptions().getJosmValidatorsJavaNamespace() + ".";
+    const QMap<QString, QString> validators =
+      JosmMapValidator().getAvailableValidatorsWithDescription();
+    for (QMap<QString, QString>::const_iterator itr = validators.begin(); itr != validators.end();
+         ++itr)
+    {
+      QString name = itr.key();
+      name = name.remove(validatorsNamespace);
+      name = name.replace("$", ".");
+      const QString description = itr.value();
+      const int indentAfterName = ApiEntityDisplayInfo::MAX_NAME_SIZE - name.size();
+      const int indentAfterDescription = ApiEntityDisplayInfo::MAX_TYPE_SIZE - description.size();
+      std::cout << name << QString(indentAfterName, ' ') << description <<
+                   QString(indentAfterDescription, ' ') << std::endl;
+    }
   }
 };
 

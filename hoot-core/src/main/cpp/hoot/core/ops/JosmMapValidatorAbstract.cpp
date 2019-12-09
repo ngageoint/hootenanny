@@ -95,7 +95,7 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
   // If validators are empty at this point, then use them all.
   if (_josmValidators.isEmpty())
   {
-    _josmValidators = getAvailableValidators().keys();
+    _josmValidators = getAvailableValidators();
     _updateJosmValidatorsWithNamepace(_josmValidators);
   }
 }
@@ -110,7 +110,7 @@ void JosmMapValidatorAbstract::_updateJosmValidatorsWithNamepace(QStringList& va
   validators = validatorsTemp;
 }
 
-QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidators()
+QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescription()
 {
   LOG_DEBUG("Getting available validators...");
 
@@ -153,6 +153,11 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidators()
   //TODO: env->ReleaseStringUTFChars //??
 
   return validators;
+}
+
+QStringList JosmMapValidatorAbstract::getAvailableValidators()
+{
+  return getAvailableValidatorsWithDescription().keys();
 }
 
 void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)

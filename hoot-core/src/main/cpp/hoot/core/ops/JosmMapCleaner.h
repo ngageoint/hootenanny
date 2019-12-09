@@ -63,7 +63,7 @@ public:
   /**
    * @see ApiEntityInfo
    */
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const { return "Cleans map data using JOSM"; }
 
   /**
    * @see Configurable
