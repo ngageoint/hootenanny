@@ -1480,9 +1480,10 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     category = "delete";
   if (changeset->size(ElementType::Node, type) > 0 || changeset->size(ElementType::Way, type) > 0 || changeset->size(ElementType::Relation, type) > 0)
   {
-    ts << "\t<" << category << ">\n";
+    ts << "\t<" << category;
     if (type != ChangesetType::TypeDelete)
     {
+      ts << ">\n";
       //  Nodes go first in each category
       writeNodes(changeset, ts, type, changeset_id);
       //  Followed by ways
@@ -1492,6 +1493,7 @@ QString XmlChangeset::getChangeset(ChangesetInfoPtr changeset, long changeset_id
     }
     else
     {
+      ts << " if-unused=\"true\">\n";
       //  Relations first for deletes
       writeRelations(changeset, ts, type, changeset_id);
       //  Followed by ways
