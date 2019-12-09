@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/JavaEnvironment.h>
 
 namespace hoot
 {
@@ -51,12 +52,15 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   // call into hoot-josm to validate features in the map
 
   // validators to use delimited by ';'
-  jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
+  //jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
+  jstring validatorsStr = JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";"));
   // convert input map to xml string to pass in
+  //jstring mapXml =
+    //_javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
   jstring mapXml =
-    _javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
-  jobject validateResult =
-    _javaEnv->CallObjectMethod(
+    JavaEnvironment::getInstance()->toJavaString(OsmXmlWriter::toString(inputMap, false));
+  jstring validateResult =
+    (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
       // Java sig: String validate(String validatorsStr, String elementsXml)
@@ -66,19 +70,19 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
       validatorsStr,
       mapXml);
 
-  // TODO: env->ReleaseStringUTFChars
   if (_javaEnv->ExceptionCheck())
   {
     _javaEnv->ExceptionDescribe();
     _javaEnv->ExceptionClear();
-    // TODO: get exception message from object and add here
-    throw HootException("Error calling JosmMapValidator::validate.");
+    throw HootException("Error calling JosmMapValidator::_getUpdatedMap.");
   }
 
-  const char* xml = _javaEnv->GetStringUTFChars((jstring)validateResult, NULL);
+  //const char* xml = _javaEnv->GetStringUTFChars((jstring)validateResult, NULL);
+  //OsmMapPtr validatedMap =
+   // OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
+  QString validatedMapStr = JavaEnvironment::getInstance()->fromJavaString(validateResult);
   OsmMapPtr validatedMap =
-    OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
-  // TODO: env->ReleaseStringUTFChars
+    OsmXmlReader::fromXml(validatedMapStr.trimmed(), true, true, false, true);
   //LOG_VART(OsmXmlWriter::toString(validatedMap, true));
   return validatedMap;
 }

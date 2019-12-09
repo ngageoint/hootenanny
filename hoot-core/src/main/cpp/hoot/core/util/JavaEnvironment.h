@@ -58,7 +58,25 @@ public:
    *
    * @return a pointer to a JNI environment
    */
-  static JNIEnv* getEnvironment() { return _getInstance()->_env; }
+  static JNIEnv* getEnvironment() { return getInstance()->_env; }
+
+  static const JavaEnvironmentPtr& getInstance();
+
+  /**
+   * TODO
+   *
+   * @param from
+   * @return
+   */
+  jstring toJavaString(const QString& from);
+
+  /**
+   * TODO
+   *
+   * @param from
+   * @return
+   */
+  QString fromJavaString(jstring from);
 
 private:
 
@@ -70,7 +88,6 @@ private:
   // A JNI environment
   JNIEnv* _env;
 
-  static const JavaEnvironmentPtr& _getInstance();
 
   void _initVm();
 };

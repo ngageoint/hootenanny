@@ -63,7 +63,6 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   jstring logLevelStr =
     _javaEnv->NewStringUTF(Log::getInstance().getLevelAsString().toStdString().c_str());
   _josmInterface = _javaEnv->NewObject(_josmInterfaceClass, constructorMethodId, logLevelStr);
-  // TODO: _javaEnv->ReleaseStringUTFChars
   _josmInterfaceInitialized = true;
 }
 
@@ -105,8 +104,8 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
   }
 
   // make the hoot-josm call to get the validators
-  jobject availableValidatorsResult =
-    _javaEnv->CallObjectMethod(
+  jstring availableValidatorsResult =
+    (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
       // Java sig: String getAvailableValidators()
@@ -120,8 +119,10 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
   }
 
   // convert the delimited validators string into a map
-  const char* str = _javaEnv->GetStringUTFChars((jstring)availableValidatorsResult, NULL);
-  QString validatorsStr(str);
+  //const char* str = _javaEnv->GetStringUTFChars((jstring)availableValidatorsResult, NULL);
+  //QString validatorsStr(str);
+  const QString validatorsStr =
+    JavaEnvironment::getInstance()->fromJavaString(availableValidatorsResult);
   assert(validatorsStr.contains(";"));
   QStringList validatorStrings = validatorsStr.split(";");
   for (int i = 0; i < validatorStrings.size(); i++)
@@ -138,7 +139,6 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
       validators[validatorName] = validatorDescription;
     }
   }
-  //TODO: env->ReleaseStringUTFChars //??
 
   return validators;
 }
@@ -195,10 +195,11 @@ void JosmMapValidatorAbstract::_getStats()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
   LOG_VART(validationErrorCountsByTypeResult == 0);
-  const char* validationErrorCountsByTypeTempStr =
-    _javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
-  const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
-  // TODO: env->ReleaseStringUTFChars
+  //const char* validationErrorCountsByTypeTempStr =
+    //_javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
+  //const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
+  const QString validationErrorCountsByType =
+    JavaEnvironment::getInstance()->fromJavaString(validationErrorCountsByTypeResult);
   LOG_VART(validationErrorCountsByType);
 
   _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";

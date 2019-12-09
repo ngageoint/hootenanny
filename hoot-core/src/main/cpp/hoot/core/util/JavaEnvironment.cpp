@@ -50,7 +50,7 @@ JavaEnvironment::~JavaEnvironment()
   }
 }
 
-const JavaEnvironmentPtr& JavaEnvironment::_getInstance()
+const JavaEnvironmentPtr& JavaEnvironment::getInstance()
 {
   if (_theInstance.get() == 0)
   {
@@ -84,6 +84,20 @@ void JavaEnvironment::_initVm()
   {
     throw HootException("Unable to initialize JVM. Error code: " + QString::number(res));
   }
+}
+
+jstring JavaEnvironment::toJavaString(const QString& from)
+{
+  return _env->NewStringUTF(from.toUtf8().data());
+}
+
+QString JavaEnvironment::fromJavaString(jstring from)
+{
+  jboolean isCopy;
+  const char* data = _env->GetStringUTFChars(from, &isCopy);
+  QString result = QString::fromUtf8(data);
+  _env->ReleaseStringUTFChars(from, data);
+  return result;
 }
 
 }

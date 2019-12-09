@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/JavaEnvironment.h>
 
 namespace hoot
 {
@@ -70,12 +71,16 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   // call into hoot-josm to clean features in the map
 
   // validators to use delimited by ';'
-  jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
+  //jstring validatorsStr = _javaEnv->NewStringUTF(_josmValidators.join(";").toStdString().c_str());
+  jstring validatorsStr =
+    JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";"));
   // convert input map to xml string to pass in
+  //jstring mapXml =
+    //_javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
   jstring mapXml =
-    _javaEnv->NewStringUTF(OsmXmlWriter::toString(inputMap, false).toStdString().c_str());
-  jobject cleanResult =
-    _javaEnv->CallObjectMethod(
+    JavaEnvironment::getInstance()->toJavaString(OsmXmlWriter::toString(inputMap, false));
+  jstring cleanResult =
+    (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
       // Java sig: String clean(String validatorsStr, String elementsXml, boolean addDetailTags)
@@ -84,18 +89,17 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
       validatorsStr,
       mapXml,
       _addDetailTags);
-  // TODO: env->ReleaseStringUTFChars
   if (_javaEnv->ExceptionCheck())
   {
     _javaEnv->ExceptionDescribe();
     _javaEnv->ExceptionClear();
-    // TODO: get exception message from object and add here
-    throw HootException("Error calling JosmValidator::apply.");
+    throw HootException("Error calling JosmMapCleaner::_getUpdatedMap.");
   }
 
-  const char* xml = _javaEnv->GetStringUTFChars((jstring)cleanResult, NULL);
-  OsmMapPtr cleanedMap = OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
-  // TODO: env->ReleaseStringUTFChars
+  //const char* xml = _javaEnv->GetStringUTFChars(cleanResult, NULL);
+  //OsmMapPtr cleanedMap = OsmXmlReader::fromXml(QString(xml).trimmed(), true, true, false, true);
+  QString cleanedMapStr = JavaEnvironment::getInstance()->fromJavaString(cleanResult);
+  OsmMapPtr cleanedMap = OsmXmlReader::fromXml(cleanedMapStr.trimmed(), true, true, false, true);
   //LOG_VART(OsmXmlWriter::toString(cleanedMap, true));
   return cleanedMap;
 }
@@ -121,10 +125,11 @@ void JosmMapCleaner::_getStats()
       // JNI sig format: (input params...)return type
       // Java sig: String getDeletedElementIds()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/lang/String;"));
-  const char* deletedElementIdsStr =
-    _javaEnv->GetStringUTFChars((jstring)deletedElementIdsResult, NULL);
-  const QString deletedElementIdsQStr(deletedElementIdsStr);
-   // TODO: env->ReleaseStringUTFChars
+  //const char* deletedElementIdsStr =
+    //_javaEnv->GetStringUTFChars((jstring)deletedElementIdsResult, NULL);
+  //const QString deletedElementIdsQStr(deletedElementIdsStr);
+  const QString deletedElementIdsQStr =
+    JavaEnvironment::getInstance()->fromJavaString(deletedElementIdsResult);
   _deletedElementIds = _elementIdsStrToElementIds(deletedElementIdsQStr);
   // TODO: need to add this to the map tags??
   LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
@@ -136,10 +141,11 @@ void JosmMapCleaner::_getStats()
       // Java sig: String getValidationErrorCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;"));
-  const char* validationErrorCountsByTypeTempStr =
-    _javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
-  const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
-  // TODO: env->ReleaseStringUTFChars
+  //const char* validationErrorCountsByTypeTempStr =
+    //_javaEnv->GetStringUTFChars((jstring)validationErrorCountsByTypeResult, NULL);
+  //const QString validationErrorCountsByType(validationErrorCountsByTypeTempStr);
+  const QString validationErrorCountsByType =
+    JavaEnvironment::getInstance()->fromJavaString(validationErrorCountsByTypeResult);
 
   jstring validationErrorFixCountsByTypeResult =
     (jstring)_javaEnv->CallObjectMethod(
@@ -148,10 +154,11 @@ void JosmMapCleaner::_getStats()
       // Java sig: String getValidationErrorFixCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/lang/String;"));
-  const char* validationErrorFixCountsByTypeTempStr =
-    _javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
-  const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
-  // TODO: env->ReleaseStringUTFChars
+  //const char* validationErrorFixCountsByTypeTempStr =
+    //_javaEnv->GetStringUTFChars((jstring)validationErrorFixCountsByTypeResult, NULL);
+  //const QString validationErrorFixCountsByType(validationErrorFixCountsByTypeTempStr);
+  const QString validationErrorFixCountsByType =
+    JavaEnvironment::getInstance()->fromJavaString(validationErrorFixCountsByTypeResult);
   LOG_VART(validationErrorFixCountsByType);
 
   // create a readable error summary
