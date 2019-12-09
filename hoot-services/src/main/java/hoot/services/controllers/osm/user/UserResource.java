@@ -29,13 +29,18 @@ package hoot.services.controllers.osm.user;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -58,6 +63,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 
 import hoot.services.controllers.auth.UserManager;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
@@ -189,25 +195,50 @@ public class UserResource {
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllUsers(@Context HttpServletRequest request) {
+    public Response getAllUsers(@Context HttpServletRequest request,
+            @QueryParam("sort") @DefaultValue("") String sort,
+            @QueryParam("privileges") @DefaultValue("") String privileges) {
         Users currentUser = Users.fromRequest(request);
 
         try {
             List<Tuple> userInfo;
+            OrderSpecifier<?> sorter;
+            Collection<String> activePrivileges = new ArrayList<>();
+
+            switch (sort) {
+                case "-auth":
+                    sorter = users.hootservices_last_authorize.desc();
+                    break;
+                case "+auth":
+                    sorter = users.hootservices_last_authorize.asc();
+                    break;
+                case "-name":
+                    sorter = users.displayName.desc();
+                    break;
+                case "+name":
+                default:
+                    sorter = users.displayName.asc();
+                    break;
+            }
 
             // Run the proper query to retrieve user data based on the request users privileges
             // Admin user gets extra info on other users
             if (adminUserCheck(currentUser)) {
+                if (!privileges.isEmpty()) {
+                    activePrivileges = Arrays.stream(privileges.split(","))
+                            .collect(Collectors.toList());
+                }
+
                 userInfo = createQuery()
                         .select(users.id, users.displayName, users.hootservices_last_authorize, users.privileges)
                         .from(users)
-                        .orderBy(users.displayName.asc())
+                        .orderBy(sorter)
                         .fetch();
             } else {
                 userInfo = createQuery()
                         .select(users.id, users.displayName)
                         .from(users)
-                        .orderBy(users.displayName.asc())
+                        .orderBy(sorter)
                         .fetch();
             }
 
@@ -215,15 +246,26 @@ public class UserResource {
 
             for (Tuple tuple : userInfo) {
                 Users user = new Users();
-                user.setId(tuple.get(users.id));
-                user.setDisplayName(tuple.get(users.displayName));
 
                 if (adminUserCheck(currentUser)) {
-                    user.setHootservicesLastAuthorize(tuple.get(users.hootservices_last_authorize));
-                    user.setPrivileges(tuple.get(users.privileges));
-                }
+                    Map<String, String> substitutionMap = (Map<String, String>) tuple.get(users.privileges);
+                    Collection<String> filterPrivileges = substitutionMap.keySet()
+                            .stream().filter(map -> substitutionMap.get(map).equals("true"))
+                            .collect(Collectors.toSet());
 
-                userList.add(user);
+                    if (activePrivileges.size() == 0 || filterPrivileges.containsAll(activePrivileges)) {
+                        user.setId(tuple.get(users.id));
+                        user.setDisplayName(tuple.get(users.displayName));
+                        user.setHootservicesLastAuthorize(tuple.get(users.hootservices_last_authorize));
+                        user.setPrivileges(tuple.get(users.privileges));
+                        userList.add(user);
+                    }
+
+                } else {
+                    user.setId(tuple.get(users.id));
+                    user.setDisplayName(tuple.get(users.displayName));
+                    userList.add(user);
+                }
             }
 
             return Response.ok().entity(userList).build();
@@ -296,23 +338,6 @@ public class UserResource {
         Map<String, String> json = PostgresUtils.postgresObjToHStore(user.getPrivileges());
 
         return Response.ok(json).build();
-    }
-
-    /**
-     * Gets all types of privileges a user can have
-     *
-     * GET hoot-services/osm/api/0.6/user/getPrivilegeOptions
-     *
-     * @param request
-     * @return list of privileges a user can have
-     */
-    @GET
-    @Path("/getPrivilegeOptions")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPrivilegeOptions(@Context HttpServletRequest request) {
-        String[] privilegeOptions = { "admin", "advanced" };
-
-        return Response.ok().entity(privilegeOptions).build();
     }
 
     /**
