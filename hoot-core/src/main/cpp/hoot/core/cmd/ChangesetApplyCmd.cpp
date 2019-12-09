@@ -36,6 +36,7 @@
 // Qt
 #include <QFile>
 #include <QFileInfo>
+#include <QHostAddress>
 
 using namespace std;
 
@@ -98,8 +99,11 @@ public:
       QUrl osm;
       osm.setUrl(args[args.size() - 1]);
 
-      //  Create a URL without user info for logging
+      //  Create a URL without IP and user info for logging
       QString printableUrl = osm.toString(QUrl::RemoveUserInfo);
+      QHostAddress host(osm.host());
+      if (!host.isNull())
+        printableUrl.replace(osm.host(), "<host>");
 
       const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
 
