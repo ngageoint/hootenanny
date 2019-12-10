@@ -58,6 +58,8 @@ public:
 
   JosmMapValidatorAbstract();
 
+  virtual ~JosmMapValidatorAbstract();
+
   /**
    * @see Configurable
    */

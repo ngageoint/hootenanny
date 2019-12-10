@@ -42,6 +42,14 @@ _numValidationErrors(0)
 {
 }
 
+JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
+{
+  if (_javaEnv != 0 && _josmInterface != 0)
+  {
+    _javaEnv->DeleteGlobalRef(_josmInterface);
+  }
+}
+
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
@@ -61,7 +69,10 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
     _javaEnv->GetMethodID(_josmInterfaceClass, "<init>", "(Ljava/lang/String;)V");
   jstring logLevelStr =
     _javaEnv->NewStringUTF(Log::getInstance().getLevelAsString().toStdString().c_str());
-  _josmInterface = _javaEnv->NewObject(_josmInterfaceClass, constructorMethodId, logLevelStr);
+  // Grab this as a global ref, since its possible it could be garbage collected at any time. We'll
+  // clean it up in the destructor.
+  _josmInterface =
+    _javaEnv->NewGlobalRef(_javaEnv->NewObject(_josmInterfaceClass, constructorMethodId, logLevelStr));
   _josmInterfaceInitialized = true;
 
   LOG_DEBUG("JOSM implementation initialized.");
@@ -118,7 +129,7 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     throw HootException("Error calling getAvailableValidators.");
   }
 
-  return JniConversion::fromJavaStringStringMap(_javaEnv, validatorsJavaMap);
+  return JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
 }
 
 QStringList JosmMapValidatorAbstract::getAvailableValidators()

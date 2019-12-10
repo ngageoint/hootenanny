@@ -103,7 +103,7 @@ public:
    * @param javaMap
    * @return
    */
-  static QMap<QString, QString> fromJavaStringStringMap(JNIEnv* javaEnv, jobject javaMap);
+  static QMap<QString, QString> fromJavaStringMap(JNIEnv* javaEnv, jobject javaMap);
 
   /**
    * TODO

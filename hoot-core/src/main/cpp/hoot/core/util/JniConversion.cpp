@@ -53,7 +53,7 @@ jobject JniConversion::toJavaStringList(JNIEnv* javaEnv, const QStringList& cppS
 {
   LOG_TRACE("Converting to java string list...");
 
-  // see related note about method mappings in fromJavaStringStringMap
+  // see related note about method mappings in fromJavaStringMap
   jclass arrayListJavaClass = javaEnv->FindClass("java/util/ArrayList");
   jmethodID arrayListConstructorMethod =
     javaEnv->GetMethodID(arrayListJavaClass, "<init>", "(I)V");
@@ -73,7 +73,7 @@ QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnv, jobject javaStrLi
 {
   LOG_TRACE("Converting from java string list...");
 
-  // see related note about method mappings in fromJavaStringStringMap
+  // see related note about method mappings in fromJavaStringMap
   jclass listClass = javaEnv->FindClass("java/util/List");
   jmethodID listSizeMethod = javaEnv->GetMethodID(listClass, "size", "()I");
   jmethodID listGetMethod = javaEnv->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
@@ -101,7 +101,7 @@ QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrS
 {
   QSet<QString> result;
 
-  // see related note about method mappings in fromJavaStringStringMap
+  // see related note about method mappings in fromJavaStringMap
   jclass setClass = javaEnv->GetObjectClass(javaStrSet);
   jmethodID iteratorMethod = javaEnv->GetMethodID(setClass, "iterator", "()Ljava/util/Iterator;");
   jclass iteratorClass = javaEnv->FindClass("java/util/Iterator");
@@ -123,7 +123,7 @@ QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrS
   return result;
 }
 
-QMap<QString, QString> JniConversion::fromJavaStringStringMap(JNIEnv* javaEnv, jobject javaMap)
+QMap<QString, QString> JniConversion::fromJavaStringMap(JNIEnv* javaEnv, jobject javaMap)
 {
   LOG_TRACE("Converting from java string string map...");
 
@@ -176,7 +176,7 @@ QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnv, jobject 
   QMap<QString, int> result;
 
   // yes, this is kind of kludgy...could time to come up with a templated version at some point
-  QMap<QString, QString> tempResult = fromJavaStringStringMap(javaEnv, javaMap);
+  QMap<QString, QString> tempResult = fromJavaStringMap(javaEnv, javaMap);
   for (QMap<QString, QString>::const_iterator mapItr = tempResult.begin();
        mapItr != tempResult.end(); ++mapItr)
   {
