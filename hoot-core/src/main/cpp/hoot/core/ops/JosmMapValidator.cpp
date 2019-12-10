@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/JniConversion.h>
+#include <hoot/core/jni/JniConversion.h>
 
 namespace hoot
 {

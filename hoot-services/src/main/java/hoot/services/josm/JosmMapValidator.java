@@ -51,11 +51,12 @@ import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.io.OsmApi;
+//import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
- * Validates a map using JOSM
+ * Validates a map using JOSM validators
  *
- * @see JosmMapValidatorAbstract in hoot-core about handling of collection objects via JNI.
+ * @see JosmMapValidator in hoot-core
  */
 public class JosmMapValidator
 {
@@ -134,6 +135,8 @@ public class JosmMapValidator
    */
   public String validate(List<String> validators, String elementsXml) throws Exception
   {
+    Logging.info("Validating map with " + validators.size() + " validators...");
+
     // clear out existing data and stats
     clear();
 
@@ -177,15 +180,18 @@ public class JosmMapValidator
     {
       validationErrorCountsByType.clear();
     }
+    failingValidators.clear();
   }
 
   protected Collection<AbstractPrimitive> parseAndValidateElements(
     List<String> validators, String elementsXml) throws Exception
   {
+    long startTime = -1;
+
     // verify inputs
 
     validators = parseValidatorsInput(validators);
-    Logging.trace("elementsXml: " + elementsXml);
+    //Logging.trace("elementsXml: " + elementsXml);
     if (elementsXml == null || elementsXml.trim().isEmpty())
     {
       throw new Exception("No elements passed to validation.");
@@ -197,10 +203,17 @@ public class JosmMapValidator
 
     try
     {
-      Logging.debug("Converting input elements from xml...");
+      Logging.info("Converting input elements from xml...");
+      startTime = System.currentTimeMillis();
+      //ByteArrayInputStream bytes = new ByteArrayInputStream(elementsXml.getBytes());
+      //DataSet dataset = HootOsmReader.parseDataSet(new ByteArrayInputStream(elementsXml.getBytes()));
       inputElements =
         HootOsmReader.parseDataSet(new ByteArrayInputStream(elementsXml.getBytes()))
           .getAllPrimitives();
+      Logging.info(
+        "Input elements converted from xml in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+      Logging.debug("inputElements.size(): " + inputElements.size());
 
       if (inputElements.size() == 0)
       {
@@ -209,7 +222,7 @@ public class JosmMapValidator
 
       originalMapSize = inputElements.size();
       Logging.debug("originalMapSize: " + originalMapSize);
-      Logging.trace("input elements: " + JosmUtils.elementsToString(inputElements));
+      //Logging.trace("input elements: " + JosmUtils.elementsToString(inputElements));
     }
     catch (Exception e)
     {
@@ -219,11 +232,18 @@ public class JosmMapValidator
 
     // run the specified validators against the elements
 
-    Logging.debug("Running validation tests...");
+    Logging.info("Running validation tests...");
     try
     {
+      startTime = System.currentTimeMillis();
       validationErrors = runValidation(validators, inputElements);
-       Logging.info("Found " + validationErrors.size() + " validation errors.");
+      Logging.info(
+        "Found " + validationErrors.size() + " validation errors in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+      if (failingValidators.size() > 0)
+      {
+        Logging.error("The following validators failed: " + failingValidators);
+      }
     }
     catch (Exception e)
     {
@@ -263,6 +283,9 @@ public class JosmMapValidator
 
   protected String convertOutputElementsToXml()
   {
+    Logging.info("Converting output elements to XML...");
+    long startTime = System.currentTimeMillis();
+
     // gather some stats on the modified map
 
     int validatedMapSize = outputElements.size();
@@ -305,6 +328,10 @@ public class JosmMapValidator
       throw e;
     }
 
+    Logging.info(
+      "Output elements converted to xml in: " +
+      String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+
     return outputElementsXml;
   }
 
@@ -318,21 +345,22 @@ public class JosmMapValidator
     {
       throw new Exception("No validators specified.");
     }
-    Logging.info("Validating elements with " + validators.size() + " validators...");
     List<String> validatorsOut = new ArrayList<String>();
     // Incoming validators don't have the Java namespace prefixed, so add it here.
     for (String validator : validators)
     {
       String validatorName = validator;
+      Logging.trace("validatorName: " + validatorName);
+      // convert '.' back to '$' to handle inner classes; inner classes are the only reason a '.'
+      // should be in the validator input
+      validatorName = validatorName.replace(".", "$");
       if (validatorName.contains("."))
       {
         throw new Exception("Validators must not have a Java namespace prefixed.");
       }
-      // convert '.' back to '$' to handle inner classes; inner classes are the only reason a '.'
-      // should be in the validator input
-      validatorName = validatorName.replace(".", "$");
       // prepend the Java namespace to the validator
       validatorName = VALIDATORS_NAMESPACE + "." + validatorName;
+      Logging.trace("validatorName: " + validatorName);
       validatorsOut.add(validatorName);
     }
     Logging.debug("validatorsOut: " + validatorsOut);
@@ -375,20 +403,31 @@ public class JosmMapValidator
   private List<TestError> runValidation(Test validator, Collection<OsmPrimitive> elements)
     throws Exception
   {
+    Logging.debug("Running validator: " + validator.getName() + "...");
+
     List<TestError> errors = new ArrayList<TestError>();
 
-    validator.initialize();
-    validator.setPartialSelection(false);
-    validator.startTest(null);
-    validator.visit(elements);
-    validator.endTest();
+    try
+    {
+      validator.initialize();
+      validator.setPartialSelection(false);
+      validator.startTest(null);
+      validator.visit(elements);
+      validator.endTest();
 
-    errors.addAll(validator.getErrors());
-    validator.clear();
+      errors.addAll(validator.getErrors());
+      validator.clear();
 
-    Logging.trace(
-      "Validator: " + validator.getName() + " found " + errors.size() + " errors with " +
-      getNumElementsInvolvedInErrors(errors) + " total involved elements.");
+      Logging.info(
+        "Validator: " + validator.getName() + " found " + errors.size() + " errors with " +
+        getNumElementsInvolvedInErrors(errors) + " total involved elements.");
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error running validator: " + validator.getName());
+      failingValidators.put(validator.getName(), e.getMessage());
+    }
+
     return errors;
   }
 
@@ -404,7 +443,7 @@ public class JosmMapValidator
 
   private void updateElementValidations(List<TestError> errors)
   {
-    Logging.debug("Recording validated elements...");
+    Logging.info("Recording validated elements...");
 
     for (TestError error : errors)
     {
@@ -445,7 +484,7 @@ public class JosmMapValidator
   private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements)
     throws Exception
   {
-    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
+    Logging.info("Updating tags on up to " + elements.size() + " elements...");
 
     Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
 
@@ -478,15 +517,13 @@ public class JosmMapValidator
       returnElements.add(osmElement);
     }
 
-    Logging.debug(
+    Logging.info(
       "Added " + numValidationTagsAdded + " validation error tags. Total return " +
       "elements: " + returnElements.size());
     return returnElements;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////
-
-  private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
 
   // these match corresponding entries in the hoot-core MetadataTags class
   protected static final String VALIDATION_ERROR_TAG_KEY_BASE = "hoot:validation:error";
@@ -507,6 +544,11 @@ public class JosmMapValidator
   protected Multimap<String, String> elementValidations = LinkedHashMultimap.create();
 
   ///////////////////////////////////////////////////////////////
+
+  private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
+
+  // a list of names of validators that threw an error during validation
+  private Map<String, String> failingValidators = new HashMap<String, String>();
 
   // size of the map input to the validation routine
   private int originalMapSize = 0;

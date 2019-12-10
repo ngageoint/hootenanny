@@ -28,9 +28,10 @@
 
 // hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/JavaEnvironment.h>
+#include <hoot/core/jni/JavaEnvironment.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/JniConversion.h>
+#include <hoot/core/jni/JniConversion.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
@@ -46,6 +47,7 @@ JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
 {
   if (_javaEnv != 0 && _josmInterface != 0)
   {
+    // We have a memory leak if this doesn't happen.
     _javaEnv->DeleteGlobalRef(_josmInterface);
   }
 }
@@ -85,10 +87,18 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
   _josmValidatorsInclude.sort();
   _josmValidatorsExclude.sort();
 
-  // If an include list was specified, let's start with that.
-  _josmValidators = _josmValidatorsInclude;
+  if (_josmValidatorsInclude.size() > 0)
+  {
+    // If an include list was specified, let's start with that.
+    _josmValidators = _josmValidatorsInclude;
+  }
+  else
+  {
+    // If no include list was specified, let's grab all the validators.
+    _josmValidators = getAvailableValidators();
+  }
 
-  // The exclude list overrides the include list, so check it.
+  // The exclude list overrides the include list, so subtract it from our current list.
   StringUtils::removeAll(_josmValidators, _josmValidatorsExclude);
 
   // make sure the include/exclude lists didn't conflict
@@ -103,6 +113,8 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
   {
     _josmValidators = getAvailableValidators();
   }
+
+  LOG_VARD(_josmValidators);
 }
 
 QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescription()
@@ -154,7 +166,8 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     _initJosmValidatorsList();
   }
 
-  // pass the map into JOSM and update it
+  // pass the map to JOSM for updating
+  MapProjector::projectToWgs84(map);
   OsmMapPtr validatedMap = _getUpdatedMap(map);
   if (validatedMap)
   {

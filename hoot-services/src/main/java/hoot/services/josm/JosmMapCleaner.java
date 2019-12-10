@@ -51,9 +51,9 @@ import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
- * Cleans a map using JOSM
+ * Cleans a map using JOSM validators
  *
- * @see JosmMapValidatorAbstract in hoot-core about handling of collection objects via JNI.
+ * @see JosmMapCleaner in hoot-core
  */
 public class JosmMapCleaner extends JosmMapValidator
 {
@@ -107,6 +107,7 @@ public class JosmMapCleaner extends JosmMapValidator
   public String clean(List<String> validators, String elementsXml, boolean addDetailTags)
     throws Exception
   {
+    Logging.info("Cleaning map with " + validators.size() + " validators...");
     Logging.debug("addDetailTags: " + addDetailTags);
 
     // clear out existing data and stats
@@ -130,7 +131,7 @@ public class JosmMapCleaner extends JosmMapValidator
         {
           if (deletedElementIds == null || deletedElementIds.size() == 0)
           {
-            Logging.trace("No elements cleaned. Using original input data for output...");
+            Logging.debug("No elements cleaned. Using original input data for output...");
           }
           else
           {
@@ -204,7 +205,8 @@ public class JosmMapCleaner extends JosmMapValidator
   private Collection<AbstractPrimitive> cleanValidatedElements(List<TestError> errors)
     throws Exception
   {
-    Logging.debug("Cleaning and recording the cleaning success status elements...");
+    Logging.info("Cleaning elements and recording the cleaning success status...");
+    long startTime = System.currentTimeMillis();
 
     Collection<AbstractPrimitive> cleanedElements = null;
 
@@ -264,7 +266,6 @@ public class JosmMapCleaner extends JosmMapValidator
         }
       }
     }
-
     Logging.debug("elementCleanings size: " + elementCleanings.size());
 
     // record the updated state of the map after cleaning
@@ -275,6 +276,10 @@ public class JosmMapCleaner extends JosmMapValidator
       cleanedElements = new ArrayList<AbstractPrimitive>();
       cleanedElements.addAll(affectedData.getAllPrimitives());
     }
+
+    Logging.info(
+      "Cleaned " + elementCleanings.size() + " elements in: " +
+      String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
 
     return cleanedElements;
   }
@@ -290,17 +295,26 @@ public class JosmMapCleaner extends JosmMapValidator
       "\" found by test: " + error.getTester().getName() + "...");
     Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
-    // clean associated features based on the error found
+    // get the command to use for cleaning
     Command cleanCmd = error.getFix();
     Logging.trace("cleanCmd: " + JosmUtils.commandToString(cleanCmd, true));
-    boolean cleanSuccess = cleanCmd.executeCommand();
-    String cleanStatusStr = cleanSuccess ? "Success" : "Failure";
-    Logging.trace(cleanStatusStr + " executing fix command: " + cleanCmd.getDescriptionText());
-
-    // record any elements that were deleted
-    deletedElementIds.addAll(JosmUtils.getDeletedElementIds(cleanCmd));
-    // grab the actual data from the command so we can update our return map
-    affectedData = cleanCmd.getAffectedDataSet();
+    boolean cleanSuccess = false;
+    try
+    {
+      // clean associated features based on the error found
+      cleanSuccess = cleanCmd.executeCommand();
+      Logging.trace("Success executing fix command: " + cleanCmd.getDescriptionText());
+      // record any elements that were deleted
+      deletedElementIds.addAll(JosmUtils.getDeletedElementIds(cleanCmd));
+      // grab the actual data from the command so we can update our return map
+      affectedData = cleanCmd.getAffectedDataSet();
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error running validator: " + error.getTester().getName());
+      failingCleaners.put(error.getTester().getName(), e.getMessage());
+      cleanSuccess = false;
+    }
 
     return cleanSuccess;
   }
@@ -323,7 +337,7 @@ public class JosmMapCleaner extends JosmMapValidator
   private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements,
     boolean addDetailTags) throws Exception
   {
-    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
+    Logging.info("Updating tags on up to " + elements.size() + " elements...");
 
     Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
 
@@ -376,7 +390,7 @@ public class JosmMapCleaner extends JosmMapValidator
       }
     }
 
-    Logging.debug(
+    Logging.info(
       "Added " + numValidationTagsAdded + " validation error/fix status tags. " +
       numDeletedElements + " deleted elements were skipped. Total return elements: " +
       returnElements.size());
@@ -398,6 +412,8 @@ public class JosmMapCleaner extends JosmMapValidator
   // JosmMapValidator::elementValidations
   // e.g. key=Way:1, value1="Duplicated way nodes=fixed", value2="Unclosed way=none available"
   private Multimap<String, String> elementCleanings = LinkedHashMultimap.create();
+  // a list of names of validators that threw an error during cleaning
+  private Map<String, String> failingCleaners = new HashMap<String, String>();
 
   // validation error types (validator names) mapped to successful cleaning counts
   private Map<String, Integer> validationErrorFixesByType = new HashMap<String, Integer>();

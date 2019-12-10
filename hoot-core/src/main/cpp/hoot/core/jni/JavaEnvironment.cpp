@@ -74,11 +74,13 @@ void JavaEnvironment::_initVm()
 
   // TODO: read this from jni.class.path list
   // TODO: use jni.initial.memory and jni.max.memory
+  // TODO: fix X terminal error
 
   options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
-  options[1].optionString = (char*)"-Xms256m";
+  // If init mem is set too low, large file ingests will slow to a crawl.
+  options[1].optionString = (char*)"-Xms1g";
   options[2].optionString = (char*)"-Xmx8g";
-    //options[1].optionString = (char*)"-verbose:jni";
+  //options[1].optionString = (char*)"-verbose:jni";
   vm_args.version = JNI_VERSION_1_8;
   vm_args.nOptions = numOptions;
   vm_args.options = options;
