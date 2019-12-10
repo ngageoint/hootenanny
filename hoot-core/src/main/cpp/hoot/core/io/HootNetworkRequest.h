@@ -124,6 +124,13 @@ public:
   void setOAuthKeys(const QString& consumer_key, const QString& consumer_secret,
                     const QString& access_token, const QString& access_secret);
 
+  /**
+   * @brief removeIpFromUrlString Replace the IP address in a URL with <host-ip> for logging purposes
+   * @param endpointUrl Endpoint URL as a string (probably contains full path of API call)
+   * @param url URL object for extracting the host to compare as an IP address or a domain name
+   */
+  static void removeIpFromUrlString(QString& endpointUrl, const QUrl& url);
+
 private:
   /**
    * @brief _networkRequest Function to make the actual request
