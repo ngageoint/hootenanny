@@ -62,16 +62,13 @@ public class JosmMapCleaner extends JosmMapValidator
     super(logLevel);
   }
 
-  // really this should return a set...just didn't want to write additional conversion functions
-  // for java.util.Set on the hoot-core side
-  public List<String> getDeletedElementIds()
+  public Set<String> getDeletedElementIds()
   {
-    List<String> listToReturn = new ArrayList<String>();
     if (deletedElementIds != null)
     {
-      listToReturn.addAll(deletedElementIds);
+      return deletedElementIds;
     }
-    return listToReturn;
+    return new HashSet<String>();
   }
   public int getNumDeletedElements()
   {

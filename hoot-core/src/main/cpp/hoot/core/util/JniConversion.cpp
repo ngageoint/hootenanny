@@ -34,13 +34,13 @@ namespace hoot
 
 jstring JniConversion::toJavaString(JNIEnv* javaEnvironment, const QString& cppStr)
 {
-  LOG_TRACE("Converting to java string: " << cppStr << "...");
+  //LOG_TRACE("Converting to java string: " << cppStr << "...");
   return javaEnvironment->NewStringUTF(cppStr.toUtf8().data());
 }
 
 QString JniConversion::fromJavaString(JNIEnv* javaEnvironment, jstring javaStr)
 {
-  LOG_TRACE("Converting from java string...");
+  //LOG_TRACE("Converting from java string...");
   jboolean isCopy;
   const char* data = javaEnvironment->GetStringUTFChars(javaStr, &isCopy);
   QString result = QString::fromUtf8(data);
@@ -91,6 +91,36 @@ QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnvironment, jobject j
     jstring javaStr =
       (jstring)javaEnvironment->CallObjectMethod(javaStrList, arrayListGetMethodId, i);
     result.append(fromJavaString(javaEnvironment, javaStr));
+  }
+
+  return result;
+}
+
+QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnvironment, jobject javaStrSet)
+{
+  QSet<QString> result;
+
+  jclass c_set = javaEnvironment->GetObjectClass(javaStrSet);
+  jmethodID id_iterator = javaEnvironment->GetMethodID(c_set, "iterator", "()Ljava/util/Iterator;");
+
+  jclass c_iterator = javaEnvironment->FindClass("java/util/Iterator");
+  jmethodID id_hasNext = javaEnvironment->GetMethodID(c_iterator, "hasNext", "()Z");
+  jmethodID id_next = javaEnvironment->GetMethodID(c_iterator, "next", "()Ljava/lang/Object;");
+
+  //jclass c_string = javaEnvironment->FindClass("java/lang/String");
+  //jmethodID id_toString = javaEnvironment->GetMethodID(c_string, "toString", "()Ljava/lang/String;");
+
+  jobject obj_iterator = javaEnvironment->CallObjectMethod(javaStrSet, id_iterator);
+
+  bool hasNext = (bool) javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
+  while (hasNext)
+  {
+    jstring entry = (jstring)javaEnvironment->CallObjectMethod(obj_iterator, id_next);
+    const char *strKey = javaEnvironment->GetStringUTFChars(entry, 0);
+    result.insert(QString(strKey));
+    javaEnvironment->ReleaseStringUTFChars(entry, strKey);
+
+    hasNext = (bool)javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
   }
 
   return result;

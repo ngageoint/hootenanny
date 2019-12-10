@@ -122,9 +122,9 @@ private:
     const QMap<QString, int>& errorFixCountsByType) const;
 
   /*
-   *
+   * TODO
    */
-  QSet<ElementId> _elementIdStringsToElementIds(const QStringList& elementIdStrs) const;
+  QSet<ElementId> _elementIdStringsToElementIds(const QSet<QString>& elementIdStrs) const;
 };
 
 }

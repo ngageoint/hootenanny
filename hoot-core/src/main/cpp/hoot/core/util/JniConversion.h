@@ -33,6 +33,7 @@
 // Qt
 #include <QString>
 #include <QMap>
+#include <QSet>
 
 namespace hoot
 {
@@ -85,6 +86,15 @@ public:
    * @return
    */
   static QStringList fromJavaStringList(JNIEnv* javaEnvironment, jobject javaStrList);
+
+  /**
+   * TODO
+   *
+   * @param javaEnvironment
+   * @param javaStrSet
+   * @return
+   */
+  static QSet<QString> fromJavaStringSet(JNIEnv* javaEnvironment, jobject javaStrSet);
 
   /**
    * TODO

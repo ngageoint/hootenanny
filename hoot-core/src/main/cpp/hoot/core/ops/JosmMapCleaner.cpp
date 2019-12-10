@@ -117,12 +117,12 @@ void JosmMapCleaner::_getStats()
     throw HootException("Error calling getNumGroupsOfElementsCleaned.");
   }
 
-  jobject deletedElementIdsJavaList =
+  jobject deletedElementIdsJavaSet =
     _javaEnv->CallObjectMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
-      // Java sig: List<String> getDeletedElementIds()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/List;"));
+      // Java sig: Set<String> getDeletedElementIds()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/Set;"));
   if (_javaEnv->ExceptionCheck())
   {
     _javaEnv->ExceptionDescribe();
@@ -131,7 +131,7 @@ void JosmMapCleaner::_getStats()
   }
   _deletedElementIds =
     _elementIdStringsToElementIds(
-      JniConversion::fromJavaStringList(_javaEnv, deletedElementIdsJavaList));
+      JniConversion::fromJavaStringSet(_javaEnv, deletedElementIdsJavaSet));
   // TODO: need to add this to the map tags??
   LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
 
@@ -178,14 +178,12 @@ void JosmMapCleaner::_getStats()
 }
 
 QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(
-  const QStringList& elementIdStrs) const
+  const QSet<QString>& elementIdStrs) const
 {
-  // elementIdsStr format example: Way:-1
-
   QSet<ElementId> result;
-  for (int i = 0; i < elementIdStrs.size(); i++)
+  for (QString elementIdStr : elementIdStrs)
   {
-    const QStringList elementIdParts = elementIdStrs.at(i).split(":");
+    const QStringList elementIdParts = elementIdStr.split(":");
     if (elementIdParts.size() == 2)
     {
       bool ok = false;
