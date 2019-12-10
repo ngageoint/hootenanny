@@ -52,65 +52,66 @@ class JniConversion
 public:
 
   /**
-   * TODO
+   * Converts a Qt string to a Java string
    *
-   * @param javaEnv
-   * @param cppStr
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param cppStr the string to convert
+   * @return a Java string
    */
   static jstring toJavaString(JNIEnv* javaEnv, const QString& cppStr);
 
   /**
-   * TODO
+   * Converts a Java string to a Qt string
    *
-   * @param javaEnv
-   * @param javaStr
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param javaStr the string to convert
+   * @return a Qt string
    */
   static QString fromJavaString(JNIEnv* javaEnv, jstring javaStr);
 
   /**
-   * TODO
+   * Converts a Qt string list to a Java string list
    *
-   * @param javaEnv
-   * @param cppStrList
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param cppStrList the list to convert
+   * @return a Java string list
    */
   static jobject toJavaStringList(JNIEnv* javaEnv, const QStringList& cppStrList);
 
   /**
-   * TODO
+   * Converts a Java string list to a Qt string list
    *
-   * @param javaEnv
-   * @param javaStrList
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param javaStrList the list to convert
+   * @return a Qt string list
    */
   static QStringList fromJavaStringList(JNIEnv* javaEnv, jobject javaStrList);
 
   /**
-   * TODO
+   * Converts a Java string set to a Qt string set
    *
-   * @param javaEnv
-   * @param javaStrSet
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param javaStrSet the set to convert
+   * @return a Qt string set
    */
   static QSet<QString> fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrSet);
 
   /**
-   * TODO
+   * Converts a Java map with strings as keys and values to a Qt map with strings as keys and values
    *
-   * @param javaEnv
-   * @param javaMap
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param javaMap the map to convert
+   * @return a Qt map
    */
   static QMap<QString, QString> fromJavaStringMap(JNIEnv* javaEnv, jobject javaMap);
 
   /**
-   * TODO
+   * Converts a Java map with strings as keys and integers as values to a Qt map with strings as
+   * keys and integers as values
    *
-   * @param javaEnv
-   * @param javaMap
-   * @return
+   * @param javaEnv the associated JNI environment
+   * @param javaMap the map to convert
+   * @return a Qt map
    */
   static QMap<QString, int> fromJavaStringIntMap(JNIEnv* javaEnv, jobject javaMap);
 };

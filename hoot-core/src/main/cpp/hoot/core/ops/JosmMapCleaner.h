@@ -122,7 +122,7 @@ private:
     const QMap<QString, int>& errorFixCountsByType) const;
 
   /*
-   * TODO
+   * Converts element ID strings used in hoot-josm code to hoot-core element IDs
    */
   QSet<ElementId> _elementIdStringsToElementIds(const QSet<QString>& elementIdStrs) const;
 };

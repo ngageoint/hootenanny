@@ -76,7 +76,6 @@ private:
   // A JNI environment
   JNIEnv* _env;
 
-
   void _initVm();
 };
 
