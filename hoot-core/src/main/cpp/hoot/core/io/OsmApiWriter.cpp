@@ -282,8 +282,8 @@ void OsmApiWriter::_changesetThreadFunc()
       }
       else
       {
-        //  Log the error
-        LOG_ERROR("Error uploading changeset: " << id << "\t" << request->getErrorString());
+        //  Log the error as a status message
+        LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString());
         //  Split the changeset on conflict errors
         switch (info->status)
         {
@@ -616,7 +616,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
       info->success = true;
       break;
     case 400:
-      LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << info->response);
+      LOG_WARN("Changeset Upload Error: Error parsing XML changeset - " << info->response);
       break;
     case 404:
       LOG_WARN("Unknown changeset or elements don't exist");
