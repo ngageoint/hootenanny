@@ -88,9 +88,12 @@ QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnvironment, jobject j
 
   for (jint i = 0; i < len; i++)
   {
-    jstring javaStr =
-      (jstring)javaEnvironment->CallObjectMethod(javaStrList, arrayListGetMethodId, i);
-    result.append(fromJavaString(javaEnvironment, javaStr));
+    jobject javaStrObj =
+      javaEnvironment->CallObjectMethod(javaStrList, arrayListGetMethodId, i);
+    result.append(fromJavaString(javaEnvironment, (jstring)javaStrObj));
+    // If the list is large the strings won't get garbage collected until the end of the method,
+    // so let's free them up as we go to take it easy on the JVM.
+    javaEnvironment->DeleteLocalRef(javaStrObj);
   }
 
   return result;
@@ -107,18 +110,15 @@ QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnvironment, jobject 
   jmethodID id_hasNext = javaEnvironment->GetMethodID(c_iterator, "hasNext", "()Z");
   jmethodID id_next = javaEnvironment->GetMethodID(c_iterator, "next", "()Ljava/lang/Object;");
 
-  //jclass c_string = javaEnvironment->FindClass("java/lang/String");
-  //jmethodID id_toString = javaEnvironment->GetMethodID(c_string, "toString", "()Ljava/lang/String;");
-
   jobject obj_iterator = javaEnvironment->CallObjectMethod(javaStrSet, id_iterator);
 
-  bool hasNext = (bool) javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
+  bool hasNext = (bool)javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
   while (hasNext)
   {
-    jstring entry = (jstring)javaEnvironment->CallObjectMethod(obj_iterator, id_next);
-    const char *strKey = javaEnvironment->GetStringUTFChars(entry, 0);
-    result.insert(QString(strKey));
-    javaEnvironment->ReleaseStringUTFChars(entry, strKey);
+    jobject javaStrObj = javaEnvironment->CallObjectMethod(obj_iterator, id_next);
+    result.insert(fromJavaString(javaEnvironment, (jstring)javaStrObj));
+    // see related note in fromJavaStringList
+    javaEnvironment->DeleteLocalRef(javaStrObj);
 
     hasNext = (bool)javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
   }
