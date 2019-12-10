@@ -188,6 +188,9 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     _javaEnv->ExceptionClear();
     throw HootException("Error calling getAvailableValidatorsWithDescription.");
   }
+
+  // TODO: convert to debug?
+  LOG_INFO(getCompletedStatusMessage());
 }
 
 void JosmMapValidatorAbstract::_getStats()
@@ -223,11 +226,27 @@ void JosmMapValidatorAbstract::_getStats()
     throw HootException("Error calling getValidationErrorCountsByType.");
   }
 
-  _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
+  const int numFailingValidators =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: int getNumFailingValidators()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getNumFailingValidators.");
+  }
+
+  _errorSummary =
+    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
+    " / " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
   // convert the validation error info to a readable summary string
   _errorSummary +=
     _errorCountsByTypeToSummaryStr(
       JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap));
+  _errorSummary += "Total failing JOSM validators: " + QString::number(numFailingValidators) + "\n";
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }

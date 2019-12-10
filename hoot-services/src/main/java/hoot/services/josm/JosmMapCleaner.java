@@ -79,6 +79,14 @@ public class JosmMapCleaner extends JosmMapValidator
     return 0;
   }
   public int getNumGroupsOfElementsCleaned() { return numGroupsOfElementsCleaned; }
+  public int getNumFailedCleaningOperations()
+  {
+    if (failedCleaningOps != null)
+    {
+      return failedCleaningOps.size();
+    }
+    return 0;
+  }
 
   /**
    * Returns the counts of elements that were cleaned, organized by validation error type, during
@@ -205,7 +213,7 @@ public class JosmMapCleaner extends JosmMapValidator
   private Collection<AbstractPrimitive> cleanValidatedElements(List<TestError> errors)
     throws Exception
   {
-    Logging.info("Cleaning elements and recording the cleaning success status...");
+    Logging.info("Cleaning elements with JOSM...");
     long startTime = System.currentTimeMillis();
 
     Collection<AbstractPrimitive> cleanedElements = null;
@@ -215,10 +223,6 @@ public class JosmMapCleaner extends JosmMapValidator
     for (TestError error : errors)
     {
       Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
-      Logging.trace(
-        "Processing " + error.getPrimitives().size() + " elements to clean for error: \"" +
-        error.getMessage() + "\" found by test: " + error.getTester().getName() + "...");
-      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
       boolean cleanSuccess = false;
       Logging.trace("error cleanable?: " + error.isFixable());
@@ -277,7 +281,7 @@ public class JosmMapCleaner extends JosmMapValidator
       cleanedElements.addAll(affectedData.getAllPrimitives());
     }
 
-    Logging.info(
+    Logging.debug(
       "Cleaned " + elementCleanings.size() + " elements in: " +
       String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
 
@@ -293,7 +297,7 @@ public class JosmMapCleaner extends JosmMapValidator
     Logging.trace(
       "Cleaning " + error.getPrimitives().size() + " elements for error: \"" + error.getMessage() +
       "\" found by test: " + error.getTester().getName() + "...");
-    Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+    //Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
     // get the command to use for cleaning
     Command cleanCmd = error.getFix();
@@ -312,7 +316,7 @@ public class JosmMapCleaner extends JosmMapValidator
     catch (Exception e)
     {
       Logging.error("Error running validator: " + error.getTester().getName());
-      failingCleaners.put(error.getTester().getName(), e.getMessage());
+      failedCleaningOps.put(error.getTester().getName(), e.getMessage());
       cleanSuccess = false;
     }
 
@@ -413,7 +417,7 @@ public class JosmMapCleaner extends JosmMapValidator
   // e.g. key=Way:1, value1="Duplicated way nodes=fixed", value2="Unclosed way=none available"
   private Multimap<String, String> elementCleanings = LinkedHashMultimap.create();
   // a list of names of validators that threw an error during cleaning
-  private Map<String, String> failingCleaners = new HashMap<String, String>();
+  private Map<String, String> failedCleaningOps = new HashMap<String, String>();
 
   // validation error types (validator names) mapped to successful cleaning counts
   private Map<String, Integer> validationErrorFixesByType = new HashMap<String, Integer>();

@@ -51,7 +51,6 @@ import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.io.OsmApi;
-//import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
  * Validates a map using JOSM validators
@@ -70,6 +69,15 @@ public class JosmMapValidator
     if (validationErrors != null)
     {
       return validationErrors.size();
+    }
+    return 0;
+  }
+
+  public int getNumFailingValidators()
+  {
+    if (failingValidators != null)
+    {
+      return failingValidators.size();
     }
     return 0;
   }
@@ -205,12 +213,10 @@ public class JosmMapValidator
     {
       Logging.info("Converting input elements from xml...");
       startTime = System.currentTimeMillis();
-      //ByteArrayInputStream bytes = new ByteArrayInputStream(elementsXml.getBytes());
-      //DataSet dataset = HootOsmReader.parseDataSet(new ByteArrayInputStream(elementsXml.getBytes()));
       inputElements =
         HootOsmReader.parseDataSet(new ByteArrayInputStream(elementsXml.getBytes()))
           .getAllPrimitives();
-      Logging.info(
+      Logging.debug(
         "Input elements converted from xml in: " +
         String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
       Logging.debug("inputElements.size(): " + inputElements.size());
@@ -237,7 +243,7 @@ public class JosmMapValidator
     {
       startTime = System.currentTimeMillis();
       validationErrors = runValidation(validators, inputElements);
-      Logging.info(
+      Logging.debug(
         "Found " + validationErrors.size() + " validation errors in: " +
         String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
       if (failingValidators.size() > 0)
@@ -283,9 +289,6 @@ public class JosmMapValidator
 
   protected String convertOutputElementsToXml()
   {
-    Logging.info("Converting output elements to XML...");
-    long startTime = System.currentTimeMillis();
-
     // gather some stats on the modified map
 
     int validatedMapSize = outputElements.size();
@@ -307,7 +310,7 @@ public class JosmMapValidator
         "The output map has " + mapSizeDiff + " fewer elements than the input map.");
     }
 
-    Logging.trace("output elements: " + JosmUtils.elementsToString(outputElements));
+    //Logging.trace("output elements: " + JosmUtils.elementsToString(outputElements));
 
     // convert any validated elements back to xml
 
@@ -317,20 +320,20 @@ public class JosmMapValidator
     String outputElementsXml = null;
     try
     {
-      Logging.debug("Converting validated elements to xml...");
+      Logging.info("Converting output elements to xml...");
+      long startTime = System.currentTimeMillis();
       outputElementsXml =
         OsmApi.getOsmApi("http://localhost").toBulkXml(outputElements, true);
-      Logging.trace("outputElementsXml: " + outputElementsXml);
+      Logging.debug(
+        "Output elements converted to xml in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+      //Logging.trace("outputElementsXml: " + outputElementsXml);
     }
     catch (Exception e)
     {
       Logging.error("Error converting output elements to XML: " + e.getMessage());
       throw e;
     }
-
-    Logging.info(
-      "Output elements converted to xml in: " +
-      String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
 
     return outputElementsXml;
   }
@@ -403,7 +406,7 @@ public class JosmMapValidator
   private List<TestError> runValidation(Test validator, Collection<OsmPrimitive> elements)
     throws Exception
   {
-    Logging.debug("Running validator: " + validator.getName() + "...");
+    Logging.info("Running JOSM validator: " + validator.getName() + "...");
 
     List<TestError> errors = new ArrayList<TestError>();
 
@@ -418,13 +421,13 @@ public class JosmMapValidator
       errors.addAll(validator.getErrors());
       validator.clear();
 
-      Logging.info(
+      Logging.debug(
         "Validator: " + validator.getName() + " found " + errors.size() + " errors with " +
         getNumElementsInvolvedInErrors(errors) + " total involved elements.");
     }
     catch (Exception e)
     {
-      Logging.error("Error running validator: " + validator.getName());
+      Logging.debug("Error running validator: " + validator.getName());
       failingValidators.put(validator.getName(), e.getMessage());
     }
 
@@ -443,7 +446,7 @@ public class JosmMapValidator
 
   private void updateElementValidations(List<TestError> errors)
   {
-    Logging.info("Recording validated elements...");
+    Logging.debug("Recording validated elements...");
 
     for (TestError error : errors)
     {
@@ -452,7 +455,7 @@ public class JosmMapValidator
         "Processing validation results for " + error.getPrimitives().size() + " elements for " +
         " error: \"" + error.getMessage() + "\" found by test: " + error.getTester().getName() +
         "...");
-      Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+      //Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
       // map validated elements by ID and error that occurred
       for (OsmPrimitive element : elementGroupWithError)
@@ -484,7 +487,7 @@ public class JosmMapValidator
   private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements)
     throws Exception
   {
-    Logging.info("Updating tags on up to " + elements.size() + " elements...");
+    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
 
     Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
 

@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QString>
@@ -50,12 +51,17 @@ public:
   static QString opsKey() { return "map.cleaner.transforms"; }
 
   MapCleaner();
+  MapCleaner(const Progress& progress);
 
   virtual ~MapCleaner() {}
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual QString getDescription() const override { return "Cleans map data"; }
+
+private:
+
+  Progress _progress;
 };
 
 }

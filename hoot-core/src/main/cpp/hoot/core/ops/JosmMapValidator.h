@@ -57,17 +57,7 @@ public:
    * @see OperationStatusInfo
    */
   virtual QString getInitStatusMessage() const
-  { return "Cleaning elements..."; }
-
-  /**
-   * @see OperationStatusInfo
-   */
-  virtual QString getCompletedStatusMessage() const
-  {
-    return
-      QString::number(_numValidationErrors) + " / " + QString::number(_numAffected) +
-      " elements had validation errors.";
-  }
+  { return "Validating elements..."; }
 
 protected:
 

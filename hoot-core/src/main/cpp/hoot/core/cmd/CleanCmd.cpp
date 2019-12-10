@@ -34,11 +34,18 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/Progress.h>
+#include <hoot/core/util/StringUtils.h>
+
+// Tgs
+#include <tgs/System/Timer.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+static const QString JOB_SOURCE = "Clean";
 
 class CleanCmd : public BaseCommand
 {
@@ -60,13 +67,30 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
+    Tgs::Timer timer;
+    Progress progress(
+      ConfigOptions().getJobId(),
+      JOB_SOURCE,
+      Progress::JobState::Running,
+      0.0,
+      // import, export, and cleaning tasks
+      1.0 / 3.0);
+
+    progress.set(0.0, Progress::JobState::Running, "Importing map...");
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, args[0], true, Status::Unknown1);
 
-    MapCleaner().apply(map);
+    progress.set(1.0 / 3.0, Progress::JobState::Running, "Cleaning map...");
+    MapCleaner(progress).apply(map);
 
+    progress.set(2.0 / 3.0, Progress::JobState::Running, "Exporting map...");
     MapProjector::projectToWgs84(map);
     IoUtils::saveMap(map, args[1]);
+
+    double totalElapsed = timer.getElapsed();
+    progress.set(
+      1.0, Progress::JobState::Successful,
+      "Cleaning job completed in " + StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)));
 
     return 0;
   }

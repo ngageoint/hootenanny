@@ -163,12 +163,46 @@ void JosmMapCleaner::_getStats()
     throw HootException("Error calling getValidationErrorFixCountsByType.");
   }
 
+  const int numFailingValidators =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: int getNumFailingValidators()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getNumFailingValidators.");
+  }
+
+  const int numFailedCleans =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: int getNumFailedCleaningOperations()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getNumFailedCleaningOperations.");
+  }
+
   // create a readable error summary
 
-  _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
+  _errorSummary =
+    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) + " / " +
+    StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
   _errorSummary +=
-    "Total groups of elements cleaned: " + QString::number(_numGroupsOfElementsCleaned) + "\n";
-  _errorSummary += "Total elements deleted: " + QString::number(_deletedElementIds.size()) + "\n";
+    "Total groups of elements cleaned: " +
+    StringUtils::formatLargeNumber(_numGroupsOfElementsCleaned) + "\n";
+  _errorSummary +=
+    "Total elements deleted: " + StringUtils::formatLargeNumber(_deletedElementIds.size()) + "\n";
+  _errorSummary =
+    "Total failing JOSM validators: " + QString::number(numFailingValidators) + "\n";
+  _errorSummary +=
+    "Total failing JOSM cleaning operations: " + QString::number(numFailedCleans) + "\n";
   _errorSummary +=
      _errorCountsByTypeToSummaryStr(
        JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap),
@@ -202,14 +236,20 @@ QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
 {
   assert(errorCountsByType.size() == errorFixCountsByType.size());
 
+  const int longestErrorNameSize = 16;
+  const int longestCountSize = 11;
   QString summary = "";
   for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
        errorItr != errorCountsByType.end(); ++errorItr)
   {
     assert(errorFixCountsByType.contains(errorItr.key()));
+    const int indentAfterName = longestErrorNameSize - errorItr.key().size() + 1;
+    const QString numErrorsForTypeStr = StringUtils::formatLargeNumber(errorItr.value());
+    const int indentAfterCount = longestCountSize - numErrorsForTypeStr.size();
     summary +=
-      errorItr.key() + " errors: " + QString::number(errorItr.value()) +
-      ", groups cleaned: " + QString::number(errorFixCountsByType[errorItr.key()]) + "\n";
+      errorItr.key() + " errors: " + QString(indentAfterName, ' ') + numErrorsForTypeStr + " " +
+      QString(indentAfterCount, ' ') + " groups cleaned: " +
+      StringUtils::formatLargeNumber(errorFixCountsByType[errorItr.key()]) + "\n";
   }
   return summary;
 }

@@ -32,6 +32,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/util/StringUtils.h>
 
 // JNI
 #include <jni.h>
@@ -49,6 +50,9 @@ namespace hoot
  *
  * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html
  * http://journals.ecs.soton.ac.uk/java/tutorial/native1.1/implementing/method.html
+ *
+ * Note that we're passing maps as XML to JOSM vs trying to build a JOSM map dataset to avoid
+ * complexity in the code.
  */
 class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable,
   public OperationStatusInfo
@@ -69,6 +73,11 @@ public:
    * @see OsmMapOperation
    */
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
+
+  /**
+   * @see OperationStatusInfo
+   */
+  virtual QString getCompletedStatusMessage() const { return _errorSummary; }
 
   /**
    * Returns a collection of available JOSM validators

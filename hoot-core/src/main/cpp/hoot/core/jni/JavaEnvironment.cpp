@@ -63,7 +63,7 @@ const JavaEnvironmentPtr& JavaEnvironment::getInstance()
 void JavaEnvironment::_initVm()
 {
   JavaVMInitArgs vm_args;
-  const int numOptions = 3;
+  const int numOptions = 4;
   JavaVMOption options[numOptions];
 
   // Due to classpath loading issues on the Java end, now copying the josm jar to one to be used by
@@ -74,12 +74,13 @@ void JavaEnvironment::_initVm()
 
   // TODO: read this from jni.class.path list
   // TODO: use jni.initial.memory and jni.max.memory
-  // TODO: fix X terminal error
+  //
 
   options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
   // If init mem is set too low, large file ingests will slow to a crawl.
-  options[1].optionString = (char*)"-Xms1g";
+  options[1].optionString = (char*)"-Xms256m";
   options[2].optionString = (char*)"-Xmx8g";
+  options[3].optionString = (char*)"-Djava.awt.headless=true";
   //options[1].optionString = (char*)"-verbose:jni";
   vm_args.version = JNI_VERSION_1_8;
   vm_args.nOptions = numOptions;

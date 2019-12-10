@@ -74,18 +74,6 @@ public:
   virtual QString getInitStatusMessage() const
   { return "Cleaning elements..."; }
 
-  /**
-   * @see OperationStatusInfo
-   */
-  virtual QString getCompletedStatusMessage() const
-  {
-    return
-      QString::number(_numValidationErrors) + " / " + QString::number(_numAffected) +
-      " elements had validation errors. Fixed " + QString::number(_numGroupsOfElementsCleaned) +
-      " groups of elements with errors. Deleted " + QString::number(getNumElementsDeleted()) +
-      " elements.";
-  }
-
   int getNumGroupsOfElementsCleaned() const { return _numGroupsOfElementsCleaned; }
   int getNumElementsDeleted() const { return _deletedElementIds.size(); }
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
