@@ -31,11 +31,11 @@ function writeExportFile(req, done) {
 
     req.on('data', function(chunk) {
         if (fileExtension === '') { // if overpass, figure out file type to guide reader in hoot command
-            var firstChunk = chunk.toString();
-            if (firstChunk.trim()[0] === '{') {
-                fileExtension = 'json'
-            } else if (firstChunk.trim()[0] === '<') {
-                fileExtension = 'osm'
+            var firstChar = chunk.toString().trim()[0];
+            if (firstChar === '{') {
+                fileExtension = 'json';
+            } else if (firstChar === '<') {
+                fileExtension = 'osm';
             }
         }
     });
