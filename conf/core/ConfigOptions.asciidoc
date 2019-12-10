@@ -1709,6 +1709,20 @@ satisfy the criterion.
 A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm
 project interacts with Java code.
 
+=== jni.initial.memory
+
+* Data Type: string
+* Default Value: `256m`
+
+JVM -Xms setting to use with JNI to configure the initial amount of memory available to the JVM.
+
+=== jni.max.memory
+
+* Data Type: string
+* Default Value: `8g`
+
+JVM -Xmx setting to use with JNI to configure the maximum amount of memory available to the JVM.
+
 === job.id
 
 * Data Type: string
