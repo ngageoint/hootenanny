@@ -116,7 +116,7 @@ public class JosmMapCleaner extends JosmMapValidator
   public String clean(List<String> validators, String elementsXml, boolean addDetailTags)
     throws Exception
   {
-    Logging.info("Cleaning map with " + validators.size() + " validators...");
+    Logging.debug("Cleaning map with " + validators.size() + " validators...");
     Logging.debug("addDetailTags: " + addDetailTags);
 
     // clear out existing data and stats
@@ -174,7 +174,7 @@ public class JosmMapCleaner extends JosmMapValidator
       Logging.debug("outputElements size: " + outputElements.size());
     }
 
-    Logging.info(
+    Logging.debug(
       "Found " + getNumValidationErrors() + " validation errors, cleaned " +
       numGroupsOfElementsCleaned + " groups of elements, and deleted " + getNumDeletedElements() +
       " elements.");
@@ -404,7 +404,7 @@ public class JosmMapCleaner extends JosmMapValidator
       }
     }
 
-    Logging.info(
+    Logging.debug(
       "Added " + numValidationTagsAdded + " validation error/fix status tags. " +
       numDeletedElements + " deleted elements were skipped. Total return elements: " +
       returnElements.size());

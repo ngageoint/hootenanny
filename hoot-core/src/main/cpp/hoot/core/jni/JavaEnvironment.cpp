@@ -77,7 +77,6 @@ void JavaEnvironment::_initVm()
   //
 
   options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
-  // If init mem is set too low, large file ingests will slow to a crawl.
   options[1].optionString = (char*)"-Xms256m";
   options[2].optionString = (char*)"-Xmx8g";
   options[3].optionString = (char*)"-Djava.awt.headless=true";

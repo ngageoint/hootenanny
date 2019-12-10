@@ -72,11 +72,12 @@ public:
    * @see OperationStatusInfo
    */
   virtual QString getInitStatusMessage() const
-  { return "Cleaning elements..."; }
+  { return "Cleaning elements with JOSM..."; }
 
   int getNumGroupsOfElementsCleaned() const { return _numGroupsOfElementsCleaned; }
   int getNumElementsDeleted() const { return _deletedElementIds.size(); }
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
+  int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
 
 protected:
 
@@ -101,6 +102,8 @@ private:
   int _numGroupsOfElementsCleaned;
   // the IDs of the elements deleted as a result of cleaning
   QSet<ElementId> _deletedElementIds;
+  // the number of clean attempts that resulted in an error being thrown
+  int _numFailedCleaningOperations;
 
   /*
    * Converts the error status info returned by hoot-josm into a readable string

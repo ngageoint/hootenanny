@@ -39,7 +39,8 @@ namespace hoot
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
-_numValidationErrors(0)
+_numValidationErrors(0),
+_numFailingValidators(0)
 {
 }
 
@@ -156,6 +157,7 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
 
   _numAffected = map->size();
   _numValidationErrors = 0;
+  _numFailingValidators = 0;
 
   if (!_josmInterfaceInitialized)
   {
@@ -226,7 +228,7 @@ void JosmMapValidatorAbstract::_getStats()
     throw HootException("Error calling getValidationErrorCountsByType.");
   }
 
-  const int numFailingValidators =
+  _numFailingValidators =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
@@ -246,7 +248,8 @@ void JosmMapValidatorAbstract::_getStats()
   _errorSummary +=
     _errorCountsByTypeToSummaryStr(
       JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap));
-  _errorSummary += "Total failing JOSM validators: " + QString::number(numFailingValidators) + "\n";
+  _errorSummary +=
+    "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }

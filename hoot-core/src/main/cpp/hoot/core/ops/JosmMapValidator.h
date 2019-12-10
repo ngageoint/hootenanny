@@ -57,7 +57,7 @@ public:
    * @see OperationStatusInfo
    */
   virtual QString getInitStatusMessage() const
-  { return "Validating elements..."; }
+  { return "Validating elements with JOSM..."; }
 
 protected:
 

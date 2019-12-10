@@ -67,6 +67,8 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
   }
 
   void runCleanTest()
@@ -89,6 +91,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
     HOOT_STR_EQUALS(
       "Total validation errors: 4\n"
       "Total groups of elements cleaned: 2\n"

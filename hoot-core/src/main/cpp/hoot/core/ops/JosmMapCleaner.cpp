@@ -41,7 +41,8 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapCleaner)
 JosmMapCleaner::JosmMapCleaner() :
 JosmMapValidatorAbstract(),
 _addDetailTags(false),
-_numGroupsOfElementsCleaned(0)
+_numGroupsOfElementsCleaned(0),
+_numFailedCleaningOperations(0)
 {
   // Don't see this changing any time soon, so not making it configurable until necessary
   _josmInterfaceName = "hoot/services/josm/JosmMapCleaner";
@@ -58,6 +59,7 @@ void JosmMapCleaner::setConfiguration(const Settings& conf)
 void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
   _numGroupsOfElementsCleaned = 0;
+  _numFailedCleaningOperations = 0;
   _deletedElementIds.clear();
   LOG_VARD(_addDetailTags);
 
@@ -163,7 +165,7 @@ void JosmMapCleaner::_getStats()
     throw HootException("Error calling getValidationErrorFixCountsByType.");
   }
 
-  const int numFailingValidators =
+  _numFailingValidators =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
@@ -176,7 +178,7 @@ void JosmMapCleaner::_getStats()
     throw HootException("Error calling getNumFailingValidators.");
   }
 
-  const int numFailedCleans =
+  _numFailedCleaningOperations =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       // JNI sig format: (input params...)return type
@@ -199,10 +201,11 @@ void JosmMapCleaner::_getStats()
     StringUtils::formatLargeNumber(_numGroupsOfElementsCleaned) + "\n";
   _errorSummary +=
     "Total elements deleted: " + StringUtils::formatLargeNumber(_deletedElementIds.size()) + "\n";
-  _errorSummary =
-    "Total failing JOSM validators: " + QString::number(numFailingValidators) + "\n";
   _errorSummary +=
-    "Total failing JOSM cleaning operations: " + QString::number(numFailedCleans) + "\n";
+    "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
+  _errorSummary +=
+    "Total failing JOSM cleaning operations: " + QString::number(_numFailedCleaningOperations) +
+    "\n";
   _errorSummary +=
      _errorCountsByTypeToSummaryStr(
        JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap),

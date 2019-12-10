@@ -211,7 +211,7 @@ public class JosmMapValidator
 
     try
     {
-      Logging.info("Converting input elements from xml...");
+      Logging.debug("Converting input elements from xml...");
       startTime = System.currentTimeMillis();
       inputElements =
         HootOsmReader.parseDataSet(new ByteArrayInputStream(elementsXml.getBytes()))
@@ -238,7 +238,7 @@ public class JosmMapValidator
 
     // run the specified validators against the elements
 
-    Logging.info("Running validation tests...");
+    Logging.debug("Running validation tests...");
     try
     {
       startTime = System.currentTimeMillis();
@@ -320,7 +320,7 @@ public class JosmMapValidator
     String outputElementsXml = null;
     try
     {
-      Logging.info("Converting output elements to xml...");
+      Logging.debug("Converting output elements to xml...");
       long startTime = System.currentTimeMillis();
       outputElementsXml =
         OsmApi.getOsmApi("http://localhost").toBulkXml(outputElements, true);

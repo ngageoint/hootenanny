@@ -96,6 +96,7 @@ public:
   QString getSummary() const { return _errorSummary; }
   int getNumElementsProcessed() const { return _numAffected; }
   int getNumValidationErrors() const { return _numValidationErrors; }
+  int getNumFailingValidators() const { return _numFailingValidators; }
 
   QStringList getJosmValidatorsUsed() const { return _josmValidators; }
   void setJosmValidatorsExclude(const QStringList& validators)
@@ -121,6 +122,8 @@ protected:
 
   // total number of validation errors found
   int _numValidationErrors;
+  // the number of validators that threw an error during validation
+  int _numFailingValidators;
   // a printable summer of validation errors found
   QString _errorSummary;
 
