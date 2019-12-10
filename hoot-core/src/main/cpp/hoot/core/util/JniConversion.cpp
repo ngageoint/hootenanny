@@ -32,168 +32,160 @@
 namespace hoot
 {
 
-jstring JniConversion::toJavaString(JNIEnv* javaEnvironment, const QString& cppStr)
+jstring JniConversion::toJavaString(JNIEnv* javaEnv, const QString& cppStr)
 {
   //LOG_TRACE("Converting to java string: " << cppStr << "...");
-  return javaEnvironment->NewStringUTF(cppStr.toUtf8().data());
+  return javaEnv->NewStringUTF(cppStr.toUtf8().data());
 }
 
-QString JniConversion::fromJavaString(JNIEnv* javaEnvironment, jstring javaStr)
+QString JniConversion::fromJavaString(JNIEnv* javaEnv, jstring javaStr)
 {
   //LOG_TRACE("Converting from java string...");
   jboolean isCopy;
-  const char* data = javaEnvironment->GetStringUTFChars(javaStr, &isCopy);
+  const char* data = javaEnv->GetStringUTFChars(javaStr, &isCopy);
   QString result = QString::fromUtf8(data);
   // Do this to avoid a memory leak.
-  javaEnvironment->ReleaseStringUTFChars(javaStr, data);
+  javaEnv->ReleaseStringUTFChars(javaStr, data);
   return result;
 }
 
-jobject JniConversion::toJavaStringList(JNIEnv* javaEnvironment, const QStringList& cppStrList)
+jobject JniConversion::toJavaStringList(JNIEnv* javaEnv, const QStringList& cppStrList)
 {
   LOG_TRACE("Converting to java string list...");
 
-  // TODO: cache some of this with static
-  jclass arrayListJavaClass = javaEnvironment->FindClass("java/util/ArrayList");
-  jmethodID arrayListConstructorMethodId =
-    javaEnvironment->GetMethodID(arrayListJavaClass, "<init>", "(I)V");
-  jmethodID arrayListAddMethodId =
-    javaEnvironment->GetMethodID(arrayListJavaClass, "add", "(Ljava/lang/Object;)Z");
+  // see related note about method mappings in fromJavaStringStringMap
+  jclass arrayListJavaClass = javaEnv->FindClass("java/util/ArrayList");
+  jmethodID arrayListConstructorMethod =
+    javaEnv->GetMethodID(arrayListJavaClass, "<init>", "(I)V");
+  jmethodID arrayListAddMethod =
+    javaEnv->GetMethodID(arrayListJavaClass, "add", "(Ljava/lang/Object;)Z");
 
   jobject result =
-    javaEnvironment->NewObject(arrayListJavaClass, arrayListConstructorMethodId, cppStrList.size());
+    javaEnv->NewObject(arrayListJavaClass, arrayListConstructorMethod, cppStrList.size());
   for (int i = 0; i < cppStrList.size(); i++)
   {
-    javaEnvironment->CallObjectMethod(
-      result, arrayListAddMethodId, toJavaString(javaEnvironment, cppStrList.at(i)));
+    javaEnv->CallObjectMethod(result, arrayListAddMethod, toJavaString(javaEnv, cppStrList.at(i)));
   }
   return result;
 }
 
-QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnvironment, jobject javaStrList)
+QStringList JniConversion::fromJavaStringList(JNIEnv* javaEnv, jobject javaStrList)
 {
   LOG_TRACE("Converting from java string list...");
 
-  // TODO: cache some of this with static
-  jclass arrayListJavaClass = javaEnvironment->FindClass("java/util/ArrayList");
-  jmethodID arrayListSizeMethodId = javaEnvironment->GetMethodID(arrayListJavaClass, "size", "()I");
-  jmethodID arrayListGetMethodId =
-    javaEnvironment->GetMethodID(arrayListJavaClass, "get", "(I)Ljava/lang/Object;");
+  // see related note about method mappings in fromJavaStringStringMap
+  jclass listClass = javaEnv->FindClass("java/util/List");
+  jmethodID listSizeMethod = javaEnv->GetMethodID(listClass, "size", "()I");
+  jmethodID listGetMethod = javaEnv->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
 
   QStringList result;
 
-  jint len = javaEnvironment->CallIntMethod(javaStrList, arrayListSizeMethodId);
+  jint len = javaEnv->CallIntMethod(javaStrList, listSizeMethod);
   result.clear();
   result.reserve(len);
 
   for (jint i = 0; i < len; i++)
   {
     jobject javaStrObj =
-      javaEnvironment->CallObjectMethod(javaStrList, arrayListGetMethodId, i);
-    result.append(fromJavaString(javaEnvironment, (jstring)javaStrObj));
+      javaEnv->CallObjectMethod(javaStrList, listGetMethod, i);
+    result.append(fromJavaString(javaEnv, (jstring)javaStrObj));
     // If the list is large the strings won't get garbage collected until the end of the method,
     // so let's free them up as we go to take it easy on the JVM.
-    javaEnvironment->DeleteLocalRef(javaStrObj);
+    javaEnv->DeleteLocalRef(javaStrObj);
   }
 
   return result;
 }
 
-QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnvironment, jobject javaStrSet)
+QSet<QString> JniConversion::fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrSet)
 {
   QSet<QString> result;
 
-  jclass c_set = javaEnvironment->GetObjectClass(javaStrSet);
-  jmethodID id_iterator = javaEnvironment->GetMethodID(c_set, "iterator", "()Ljava/util/Iterator;");
+  // see related note about method mappings in fromJavaStringStringMap
+  jclass setClass = javaEnv->GetObjectClass(javaStrSet);
+  jmethodID iteratorMethod = javaEnv->GetMethodID(setClass, "iterator", "()Ljava/util/Iterator;");
+  jclass iteratorClass = javaEnv->FindClass("java/util/Iterator");
+  jmethodID hasNextMethod = javaEnv->GetMethodID(iteratorClass, "hasNext", "()Z");
+  jmethodID nextMethod = javaEnv->GetMethodID(iteratorClass, "next", "()Ljava/lang/Object;");
 
-  jclass c_iterator = javaEnvironment->FindClass("java/util/Iterator");
-  jmethodID id_hasNext = javaEnvironment->GetMethodID(c_iterator, "hasNext", "()Z");
-  jmethodID id_next = javaEnvironment->GetMethodID(c_iterator, "next", "()Ljava/lang/Object;");
-
-  jobject obj_iterator = javaEnvironment->CallObjectMethod(javaStrSet, id_iterator);
-
-  bool hasNext = (bool)javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
+  jobject iterator = javaEnv->CallObjectMethod(javaStrSet, iteratorMethod);
+  bool hasNext = (bool)javaEnv->CallBooleanMethod(iterator, hasNextMethod);
   while (hasNext)
   {
-    jobject javaStrObj = javaEnvironment->CallObjectMethod(obj_iterator, id_next);
-    result.insert(fromJavaString(javaEnvironment, (jstring)javaStrObj));
+    jobject javaStrObj = javaEnv->CallObjectMethod(iterator, nextMethod);
+    result.insert(fromJavaString(javaEnv, (jstring)javaStrObj));
     // see related note in fromJavaStringList
-    javaEnvironment->DeleteLocalRef(javaStrObj);
+    javaEnv->DeleteLocalRef(javaStrObj);
 
-    hasNext = (bool)javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
+    hasNext = (bool)javaEnv->CallBooleanMethod(iterator, hasNextMethod);
   }
 
   return result;
 }
 
-QMap<QString, QString> JniConversion::fromJavaStringStringMap(JNIEnv* javaEnvironment,
-                                                              jobject javaMap)
+QMap<QString, QString> JniConversion::fromJavaStringStringMap(JNIEnv* javaEnv, jobject javaMap)
 {
   LOG_TRACE("Converting from java string string map...");
 
   QMap<QString, QString> result;
 
-  // TODO: cache some of this with static
+  // Creating these method mappings each time for now. If that proves to be a bottleneck at some
+  // point, we can create some global refs.
 
-  jclass c_map = javaEnvironment->GetObjectClass(javaMap);
-  jmethodID id_entrySet = javaEnvironment->GetMethodID(c_map, "entrySet", "()Ljava/util/Set;");
+  jclass mapClass = javaEnv->GetObjectClass(javaMap);
+  jmethodID entrySetMethod = javaEnv->GetMethodID(mapClass, "entrySet", "()Ljava/util/Set;");
 
-  jclass c_entryset = javaEnvironment->FindClass("java/util/Set");
-  jmethodID id_iterator = javaEnvironment->GetMethodID(c_entryset, "iterator", "()Ljava/util/Iterator;");
+  jclass entrySetClass = javaEnv->FindClass("java/util/Set");
+  jmethodID iteratorMethod =
+    javaEnv->GetMethodID(entrySetClass, "iterator", "()Ljava/util/Iterator;");
 
-  jclass c_iterator = javaEnvironment->FindClass("java/util/Iterator");
-  jmethodID id_hasNext = javaEnvironment->GetMethodID(c_iterator, "hasNext", "()Z");
-  jmethodID id_next = javaEnvironment->GetMethodID(c_iterator, "next", "()Ljava/lang/Object;");
+  jclass iteratorClass = javaEnv->FindClass("java/util/Iterator");
+  jmethodID hasNextMethod = javaEnv->GetMethodID(iteratorClass, "hasNext", "()Z");
+  jmethodID nextMethod = javaEnv->GetMethodID(iteratorClass, "next", "()Ljava/lang/Object;");
 
-  jclass c_entry = javaEnvironment->FindClass("java/util/Map$Entry");
-  jmethodID id_getKey = javaEnvironment->GetMethodID(c_entry, "getKey", "()Ljava/lang/Object;");
-  jmethodID id_getValue = javaEnvironment->GetMethodID(c_entry, "getValue", "()Ljava/lang/Object;");
+  jclass entryClass = javaEnv->FindClass("java/util/Map$Entry");
+  jmethodID getKeyMethod = javaEnv->GetMethodID(entryClass, "getKey", "()Ljava/lang/Object;");
+  jmethodID getValueMethod = javaEnv->GetMethodID(entryClass, "getValue", "()Ljava/lang/Object;");
 
-  jclass c_string = javaEnvironment->FindClass("java/lang/String");
-  jmethodID id_toString = javaEnvironment->GetMethodID(c_string, "toString", "()Ljava/lang/String;");
+  jclass stringClass = javaEnv->FindClass("java/lang/String");
+  jmethodID toStringMethod = javaEnv->GetMethodID(stringClass, "toString", "()Ljava/lang/String;");
 
-  jobject obj_entrySet = javaEnvironment->CallObjectMethod(javaMap, id_entrySet);
-
-  jobject obj_iterator = javaEnvironment->CallObjectMethod(obj_entrySet, id_iterator);
-
-  bool hasNext = (bool) javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
+  jobject entrySet = javaEnv->CallObjectMethod(javaMap, entrySetMethod);
+  jobject iterator = javaEnv->CallObjectMethod(entrySet, iteratorMethod);
+  bool hasNext = (bool)javaEnv->CallBooleanMethod(iterator, hasNextMethod);
   while (hasNext)
   {
-    jobject entry = javaEnvironment->CallObjectMethod(obj_iterator, id_next);
+    jobject entry = javaEnv->CallObjectMethod(iterator, nextMethod);
 
-    jobject key = javaEnvironment->CallObjectMethod(entry, id_getKey);
-    jobject value = javaEnvironment->CallObjectMethod(entry, id_getValue);
+    jobject key = javaEnv->CallObjectMethod(entry, getKeyMethod);
+    jobject value = javaEnv->CallObjectMethod(entry, getValueMethod);
+    jstring jstrKey = (jstring)javaEnv->CallObjectMethod(key, toStringMethod);
+    jstring jstrValue = (jstring)javaEnv->CallObjectMethod(value, toStringMethod);
+    result[fromJavaString(javaEnv, jstrKey)] = fromJavaString(javaEnv, jstrValue);
 
-    jstring jstrKey = (jstring) javaEnvironment->CallObjectMethod(key, id_toString);
-    jstring jstrValue = (jstring) javaEnvironment->CallObjectMethod(value, id_toString);
-
-    const char *strKey = javaEnvironment->GetStringUTFChars(jstrKey, 0);
-    const char *strValue = javaEnvironment->GetStringUTFChars(jstrValue, 0);
-
-    result[QString(strKey)] = QString(strValue);
-
-    javaEnvironment->ReleaseStringUTFChars(jstrKey, strKey);
-    javaEnvironment->ReleaseStringUTFChars(jstrValue, strValue);
-
-    hasNext = (bool)javaEnvironment->CallBooleanMethod(obj_iterator, id_hasNext);
+    hasNext = (bool)javaEnv->CallBooleanMethod(iterator, hasNextMethod);
   }
 
   return result;
 }
 
-QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnvironment, jobject javaMap)
+QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnv, jobject javaMap)
 {
   LOG_TRACE("Converting from java string int map...");
 
   QMap<QString, int> result;
 
-  // yes, kind of kludgy...
-  QMap<QString, QString> tempResult = fromJavaStringStringMap(javaEnvironment, javaMap);
+  // yes, this is kind of kludgy...could time to come up with a templated version at some point
+  QMap<QString, QString> tempResult = fromJavaStringStringMap(javaEnv, javaMap);
   for (QMap<QString, QString>::const_iterator mapItr = tempResult.begin();
        mapItr != tempResult.end(); ++mapItr)
   {
     bool ok = false;
-    result[mapItr.key()] = mapItr.value().toInt(&ok);
+    const int val = mapItr.value().toInt(&ok);
+    if (ok)
+    {
+      result[mapItr.key()] = val;
+    }
   }
 
   return result;

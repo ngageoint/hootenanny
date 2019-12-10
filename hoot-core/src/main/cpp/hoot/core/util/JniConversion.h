@@ -54,65 +54,65 @@ public:
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param cppStr
    * @return
    */
-  static jstring toJavaString(JNIEnv* javaEnvironment, const QString& cppStr);
+  static jstring toJavaString(JNIEnv* javaEnv, const QString& cppStr);
 
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param javaStr
    * @return
    */
-  static QString fromJavaString(JNIEnv* javaEnvironment, jstring javaStr);
+  static QString fromJavaString(JNIEnv* javaEnv, jstring javaStr);
 
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param cppStrList
    * @return
    */
-  static jobject toJavaStringList(JNIEnv* javaEnvironment, const QStringList& cppStrList);
+  static jobject toJavaStringList(JNIEnv* javaEnv, const QStringList& cppStrList);
 
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param javaStrList
    * @return
    */
-  static QStringList fromJavaStringList(JNIEnv* javaEnvironment, jobject javaStrList);
+  static QStringList fromJavaStringList(JNIEnv* javaEnv, jobject javaStrList);
 
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param javaStrSet
    * @return
    */
-  static QSet<QString> fromJavaStringSet(JNIEnv* javaEnvironment, jobject javaStrSet);
+  static QSet<QString> fromJavaStringSet(JNIEnv* javaEnv, jobject javaStrSet);
 
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param javaMap
    * @return
    */
-  static QMap<QString, QString> fromJavaStringStringMap(JNIEnv* javaEnvironment, jobject javaMap);
+  static QMap<QString, QString> fromJavaStringStringMap(JNIEnv* javaEnv, jobject javaMap);
 
   /**
    * TODO
    *
-   * @param javaEnvironment
+   * @param javaEnv
    * @param javaMap
    * @return
    */
-  static QMap<QString, int> fromJavaStringIntMap(JNIEnv* javaEnvironment, jobject javaMap);
+  static QMap<QString, int> fromJavaStringIntMap(JNIEnv* javaEnv, jobject javaMap);
 };
 
 }
