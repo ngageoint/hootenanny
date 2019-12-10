@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
 import java.lang.Exception;
+import java.awt.AWTException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -299,12 +300,13 @@ public class JosmMapCleaner extends JosmMapValidator
       "\" found by test: " + error.getTester().getName() + "...");
     //Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
-    // get the command to use for cleaning
-    Command cleanCmd = error.getFix();
-    Logging.trace("cleanCmd: " + JosmUtils.commandToString(cleanCmd, true));
     boolean cleanSuccess = false;
     try
     {
+      // get the command to use for cleaning; certain commands will try to create a window when
+      // getFix is called, so make sure we trap that since we're headless
+      Command cleanCmd = error.getFix();
+      Logging.trace("cleanCmd: " + JosmUtils.commandToString(cleanCmd, true));
       // clean associated features based on the error found
       cleanSuccess = cleanCmd.executeCommand();
       Logging.trace("Success executing fix command: " + cleanCmd.getDescriptionText());
@@ -312,6 +314,14 @@ public class JosmMapCleaner extends JosmMapValidator
       deletedElementIds.addAll(JosmUtils.getDeletedElementIds(cleanCmd));
       // grab the actual data from the command so we can update our return map
       affectedData = cleanCmd.getAffectedDataSet();
+    }
+    catch (AWTException awte)
+    {
+      Logging.error(
+        "Error running validator: " + error.getTester().getName() +
+        " that tried to open a window.");
+      failedCleaningOps.put(error.getTester().getName(), awte.getMessage());
+      cleanSuccess = false;
     }
     catch (Exception e)
     {
@@ -341,7 +351,7 @@ public class JosmMapCleaner extends JosmMapValidator
   private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements,
     boolean addDetailTags) throws Exception
   {
-    Logging.info("Updating tags on up to " + elements.size() + " elements...");
+    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
 
     Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
 

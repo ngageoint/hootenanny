@@ -90,7 +90,8 @@ public:
     double totalElapsed = timer.getElapsed();
     progress.set(
       1.0, Progress::JobState::Successful,
-      "Cleaning job completed in " + StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)));
+      "Cleaning job completed using " + QString::number(ConfigOptions().getMapCleanerTransforms()) +
+      " cleaning operations in " + StringUtils::millisecondsToDhms((qint64)(totalElapsed * 1000)));
 
     return 0;
   }

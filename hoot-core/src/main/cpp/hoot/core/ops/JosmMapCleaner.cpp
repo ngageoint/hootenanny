@@ -236,7 +236,7 @@ QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
 {
   assert(errorCountsByType.size() == errorFixCountsByType.size());
 
-  const int longestErrorNameSize = 16;
+  const int longestErrorNameSize = 33;
   const int longestCountSize = 11;
   QString summary = "";
   for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
