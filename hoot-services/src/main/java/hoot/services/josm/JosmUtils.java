@@ -26,8 +26,8 @@
  */
 package hoot.services.josm;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
@@ -69,6 +69,7 @@ public class JosmUtils
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
+    Logging.debug("JOSM initialized.");
   }
 
   /**
@@ -160,11 +161,11 @@ public class JosmUtils
   }
 
   /**
-   * Returns a list of element IDs for elements being deleted by a command
+   * Returns a collection of element IDs for elements being deleted by a command
    *
    * @param command the command referencing elements to be deleted
    */
-  public static List<String> getDeletedElementIds(Command command) throws Exception
+  public static Set<String> getDeletedElementIds(Command command) throws Exception
   {
     if (command instanceof DeleteCommand)
     {
@@ -176,13 +177,13 @@ public class JosmUtils
     }
     else
     {
-      return new ArrayList<String>();
+      return new HashSet<String>();
     }
   }
 
-  private static List<String> getDeletedElementIds(DeleteCommand deleteCommand)
+  private static Set<String> getDeletedElementIds(DeleteCommand deleteCommand)
   {
-    List<String> deletedElementIds = new ArrayList<String>();
+    Set<String> deletedElementIds = new HashSet<String>();
     Collection<? extends OsmPrimitive> deletedElements = deleteCommand.getParticipatingPrimitives();
     for (OsmPrimitive deletedElement : deletedElements)
     {
@@ -191,9 +192,9 @@ public class JosmUtils
     return deletedElementIds;
   }
 
-  private static List<String> getDeletedElementIds(SequenceCommand seqCommand)
+  private static Set<String> getDeletedElementIds(SequenceCommand seqCommand)
   {
-    List<String> deletedElementIds = new ArrayList<String>();
+    Set<String> deletedElementIds = new HashSet<String>();
     Collection<PseudoCommand> childCmds = seqCommand.getChildren();
     for (PseudoCommand childCmd : childCmds)
     {

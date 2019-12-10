@@ -43,6 +43,10 @@ typedef std::shared_ptr<JavaEnvironment> JavaEnvironmentPtr;
 /**
  * Creates a Java Virtual Machine for use by Hootenanny C++ code that calls Java code in the
  * hoot-josm library via JNI (Singleton)
+ *
+ *  Helpful JNI reference:
+ *
+ * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/invocation.html
  */
 class JavaEnvironment
 {
@@ -61,22 +65,6 @@ public:
   static JNIEnv* getEnvironment() { return getInstance()->_env; }
 
   static const JavaEnvironmentPtr& getInstance();
-
-  /**
-   * TODO
-   *
-   * @param from
-   * @return
-   */
-  jstring toJavaString(const QString& from);
-
-  /**
-   * TODO
-   *
-   * @param from
-   * @return
-   */
-  QString fromJavaString(jstring from);
 
 private:
 

@@ -81,18 +81,9 @@ public class JosmMapValidator
    * <validation error 1 name>:<validation error 1 count>;
    * <validation error 2 name>:<validation error 2 count>...
    */
-  public String getValidationErrorCountsByType()
+  public Map<String, Integer> getValidationErrorCountsByType()
   {
-    Logging.debug("Retrieving validation error counts by type...");
-    Logging.trace("validationErrorCountsByType size: " + validationErrorCountsByType.size());
-    String returnStr = "";
-    for (Map.Entry<String, Integer> entry : validationErrorCountsByType.entrySet())
-    {
-      returnStr += entry.getKey() + ":" + String.valueOf(entry.getValue()) + ";";
-    }
-    returnStr = StringUtils.chop(returnStr);
-    Logging.trace("returnStr: " + returnStr);
-    return returnStr;
+    return validationErrorCountsByType;
   }
 
   /**
@@ -101,10 +92,10 @@ public class JosmMapValidator
    * @return a delimited string of the form:
    * <validator 1 class name>:<validator 1 description>;<validator 2 class name>:<validator 2 description>
    */
-  public String getAvailableValidators() throws Exception
+  public Map<String, String> getAvailableValidators() throws Exception
   {
     Logging.debug("Retrieving available validators...");
-    String testsInfo = "";
+    Map<String, String> validators = new HashMap<String, String>();
     try
     {
       Collection<Test> validationTests = OsmValidator.getTests();
@@ -119,7 +110,7 @@ public class JosmMapValidator
           testName = testName.replace(VALIDATORS_NAMESPACE + ".", "");
           Logging.trace("testName: " + testName);
           String testDescription = validationTest.getName();
-          testsInfo += testName + "," + testDescription + ";";
+          validators.put(testName, testDescription);
         }
       }
     }
@@ -128,7 +119,7 @@ public class JosmMapValidator
       System.out.println(e.getMessage());
       throw e;
     }
-    return testsInfo;
+    return validators;
   }
 
   /**
@@ -141,13 +132,13 @@ public class JosmMapValidator
    * @return modified OSM map XML string if validation errors were found; otherwise a map identical
    * to the input map
    */
-  public String validate(String validatorsStr, String elementsXml) throws Exception
+  public String validate(List<String> validators, String elementsXml) throws Exception
   {
     // clear out existing data and stats
     clear();
 
     // validate the elements
-    outputElements = parseAndValidateElements(validatorsStr, elementsXml);
+    outputElements = parseAndValidateElements(validators, elementsXml);
 
     // update modified map
     outputElements = getReturnElements(outputElements);
@@ -189,11 +180,11 @@ public class JosmMapValidator
   }
 
   protected Collection<AbstractPrimitive> parseAndValidateElements(
-    String validatorsStr, String elementsXml) throws Exception
+    List<String> validators, String elementsXml) throws Exception
   {
     // verify inputs
 
-    String[] validators = parseValidatorsInput(validatorsStr);
+    validators = parseValidatorsInput(validators);
     Logging.trace("elementsXml: " + elementsXml);
     if (elementsXml == null || elementsXml.trim().isEmpty())
     {
@@ -319,19 +310,20 @@ public class JosmMapValidator
 
   /////////////////////////////////////////////////////////////////////////////////////////////
 
-  private String[] parseValidatorsInput(String validatorsStr) throws Exception
+  private List<String> parseValidatorsInput(List<String> validators) throws Exception
   {
-    Logging.debug("validatorsStr: " + validatorsStr);
+    Logging.debug("input validators: " + validators);
     // we're always expecting populated validators
-    if (validatorsStr == null || validatorsStr.trim().isEmpty())
+    if (validators.size() == 0)
     {
       throw new Exception("No validators specified.");
     }
-    String[] validators = validatorsStr.split(";");
+    Logging.info("Validating elements with " + validators.size() + " validators...");
+    List<String> validatorsOut = new ArrayList<String>();
     // Incoming validators don't have the Java namespace prefixed, so add it here.
-    for (int i = 0; i < validators.length; i++)
+    for (String validator : validators)
     {
-      String validatorName = validators[i];
+      String validatorName = validator;
       if (validatorName.contains("."))
       {
         throw new Exception("Validators must not have a Java namespace prefixed.");
@@ -341,23 +333,21 @@ public class JosmMapValidator
       validatorName = validatorName.replace(".", "$");
       // prepend the Java namespace to the validator
       validatorName = VALIDATORS_NAMESPACE + "." + validatorName;
-      validators[i] = validatorName;
+      validatorsOut.add(validatorName);
     }
-    Logging.info("Validating elements with " + validators.length + " validators...");
-    Logging.debug("validators: " + Arrays.toString(validators));
-    return validators;
+    Logging.debug("validatorsOut: " + validatorsOut);
+    return validatorsOut;
   }
 
   /*
    * Runs a set of validators against specified input elements
    */
-  private List<TestError> runValidation(String[] validators, Collection<OsmPrimitive> elements)
+  private List<TestError> runValidation(List<String> validators, Collection<OsmPrimitive> elements)
     throws Exception
   {
     List<TestError> errors = new ArrayList<TestError>();
-    for (int i = 0; i < validators.length; i++)
+    for (String validatorStr : validators)
     {
-      String validatorStr = validators[i];
       Logging.trace("validatorStr: " + validatorStr);
       Test validator = (Test)Class.forName(validatorStr).newInstance();
       errors.addAll(runValidation(validator, elements));

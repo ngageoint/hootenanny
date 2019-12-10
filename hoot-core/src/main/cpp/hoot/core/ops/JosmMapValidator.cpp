@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/JavaEnvironment.h>
+#include <hoot/core/util/JniConversion.h>
 
 namespace hoot
 {
@@ -48,25 +48,29 @@ JosmMapValidatorAbstract()
 OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving validated map...");
+
   // call into hoot-josm to validate features in the map and convert result to a map
+  jstring validatedMapJavaStr =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: String validate(List<String> validators, String elementsXml)
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "validate", "(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;"),
+      // validators to use
+      JniConversion::toJavaStringList(_javaEnv, _josmValidators),
+      // convert input map to xml string to pass in
+      JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling validate.");
+  }
+
   return
     OsmXmlReader::fromXml(
-      JavaEnvironment::getInstance()->fromJavaString(
-        (jstring)_javaEnv->CallObjectMethod(
-          _josmInterface,
-          // JNI sig format: (input params...)return type
-          // Java sig: String validate(String validatorsStr, String elementsXml)
-          _javaEnv->GetMethodID(
-            _josmInterfaceClass, "validate",
-            "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"),
-          // validators to use delimited by ';'
-          JavaEnvironment::getInstance()->toJavaString(_josmValidators.join(";")),
-          // convert input map to xml string to pass in
-          JavaEnvironment::getInstance()->toJavaString(
-            OsmXmlWriter::toString(inputMap, false)))).trimmed(),
-      true,
-      true,
-      false,
+      JniConversion::fromJavaString(_javaEnv, validatedMapJavaStr).trimmed(), true, true, false,
       true);
 }
 

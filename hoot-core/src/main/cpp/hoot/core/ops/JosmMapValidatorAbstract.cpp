@@ -30,6 +30,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/JavaEnvironment.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/JniConversion.h>
 
 namespace hoot
 {
@@ -62,6 +63,8 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
     _javaEnv->NewStringUTF(Log::getInstance().getLevelAsString().toStdString().c_str());
   _josmInterface = _javaEnv->NewObject(_josmInterfaceClass, constructorMethodId, logLevelStr);
   _josmInterfaceInitialized = true;
+
+  LOG_DEBUG("JOSM implementation initialized.");
 }
 
 void JosmMapValidatorAbstract::_initJosmValidatorsList()
@@ -95,7 +98,6 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
 {
   LOG_DEBUG("Retrieving available validators...");
 
-  QMap<QString, QString> validators;
   if (!_josmInterfaceInitialized)
   {
     _initJosmImplementation();
@@ -103,37 +105,20 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
 
   // make the hoot-josm call to get the validators and convert the delimited validators string into
   // a map
-  const QStringList validatorStrings =
-    JavaEnvironment::getInstance()->fromJavaString(
-     (jstring)_javaEnv->CallObjectMethod(
-       _josmInterface,
-     // JNI sig format: (input params...)return type
-     // Java sig: String getAvailableValidators()
-     _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/lang/String;")))
-     .split(";");
-  for (int i = 0; i < validatorStrings.size(); i++)
-  {
-    const QString validatorStr = validatorStrings.at(i);
-    if (!validatorStr.isEmpty())
-    {
-      assert(validatorStr.contains(","));
-      const QStringList validatorStrParts = validatorStr.split(",");
-      assert(validatorStrParts.size() == 2);
-
-      const QString validatorName = validatorStrParts[0];
-      const QString validatorDescription = validatorStrParts[1];
-      validators[validatorName] = validatorDescription;
-    }
-  }
-
+  jobject validatorsJavaMap =
+    _javaEnv->CallObjectMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: Map<String, String> getAvailableValidators()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getAvailableValidators", "()Ljava/util/Map;"));
   if (_javaEnv->ExceptionCheck())
   {
     _javaEnv->ExceptionDescribe();
     _javaEnv->ExceptionClear();
-    throw HootException("Error calling getAvailableValidatorsWithDescription.");
+    throw HootException("Error calling getAvailableValidators.");
   }
 
-  return validators;
+  return JniConversion::fromJavaStringStringMap(_javaEnv, validatorsJavaMap);
 }
 
 QStringList JosmMapValidatorAbstract::getAvailableValidators()
@@ -193,37 +178,44 @@ void JosmMapValidatorAbstract::_getStats()
       // JNI sig format: (input params...)return type
       // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getNumValidationErrors.");
+  }
 
-  const QString validationErrorCountsByType =
-    JavaEnvironment::getInstance()->fromJavaString(
-      (jstring)_javaEnv->CallObjectMethod(
-        _josmInterface,
-        // JNI sig format: (input params...)return type
-        // Java sig: String getValidationErrorCountsByType()
-        _javaEnv->GetMethodID(
-          _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/lang/String;")));
-  LOG_VART(validationErrorCountsByType);
+  jobject validationErrorCountsByTypeJavaMap =
+    _javaEnv->CallObjectMethod(
+      _josmInterface,
+      // JNI sig format: (input params...)return type
+      // Java sig: Map<String, Integer> getValidationErrorCountsByType()
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
+  if (_javaEnv->ExceptionCheck())
+  {
+    _javaEnv->ExceptionDescribe();
+    _javaEnv->ExceptionClear();
+    throw HootException("Error calling getValidationErrorCountsByType.");
+  }
 
   _errorSummary = "Total validation errors: " + QString::number(_numValidationErrors) + "\n";
-  if (!validationErrorCountsByType.trimmed().isEmpty())
-  {
-    // convert the validation error info to a readable summary string
-    _errorSummary += _errorCountsByTypeStrToSummaryStr(validationErrorCountsByType);
-  }
+  // convert the validation error info to a readable summary string
+  _errorSummary +=
+    _errorCountsByTypeToSummaryStr(
+      JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap));
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }
 
-QString JosmMapValidatorAbstract::_errorCountsByTypeStrToSummaryStr(
-  const QString& errorCountsByTypeStr) const
+QString JosmMapValidatorAbstract::_errorCountsByTypeToSummaryStr(
+  const QMap<QString, int>& errorCountsByType) const
 {
   QString summary = "";
-  const QStringList countsByTypeParts = errorCountsByTypeStr.split(";");
-  for (int i = 0; i < countsByTypeParts.size(); i++)
+  for (QMap<QString, int>::const_iterator errorItr = errorCountsByType.begin();
+       errorItr != errorCountsByType.end(); ++errorItr)
   {
-    const QStringList countByTypeParts = countsByTypeParts.at(i).split(":");
-    LOG_VART(countByTypeParts.size());
-    summary += countByTypeParts.at(0) + " errors: " + countByTypeParts.at(1) + "\n";
+    summary += errorItr.key() + " errors: " + QString::number(errorItr.value()) + "\n";
   }
   return summary;
 }

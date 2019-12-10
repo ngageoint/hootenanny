@@ -115,15 +115,16 @@ private:
   QSet<ElementId> _deletedElementIds;
 
   /*
-   * Converts the delimited element IDs string returned by hoot-josm into a collection
-   */
-  QSet<ElementId> _elementIdsStrToElementIds(const QString elementIdsStr) const;
-
-  /*
    * Converts the error status info returned by hoot-josm into a readable string
    */
-  QString _errorCountsByTypeStrToSummaryStr(
-    const QString& errorCountsByTypeStr, const QString& errorFixCountsByTypeStr) const;
+  QString _errorCountsByTypeToSummaryStr(
+    const QMap<QString, int>& errorCountsByType,
+    const QMap<QString, int>& errorFixCountsByType) const;
+
+  /*
+   *
+   */
+  QSet<ElementId> _elementIdStringsToElementIds(const QStringList& elementIdStrs) const;
 };
 
 }

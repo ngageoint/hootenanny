@@ -31,6 +31,8 @@ import hoot.services.josm.JosmUtils;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
@@ -60,13 +62,16 @@ public class JosmMapCleaner extends JosmMapValidator
     super(logLevel);
   }
 
-  public String getDeletedElementIds()
+  // really this should return a set...just didn't want to write additional conversion functions
+  // for java.util.Set on the hoot-core side
+  public List<String> getDeletedElementIds()
   {
+    List<String> listToReturn = new ArrayList<String>();
     if (deletedElementIds != null)
     {
-      return String.join(";", deletedElementIds.toArray(new String[deletedElementIds.size()]));
+      listToReturn.addAll(deletedElementIds);
     }
-    return "";
+    return listToReturn;
   }
   public int getNumDeletedElements()
   {
@@ -86,18 +91,9 @@ public class JosmMapCleaner extends JosmMapValidator
    * <validation error 1 name>:<cleaned element count for validation error 1>;
    * <validation error 2 name>:<cleaned element count for validation error 2>...
    */
-  public String getValidationErrorFixCountsByType()
+  public Map<String, Integer> getValidationErrorFixCountsByType()
   {
-    Logging.debug("Retrieving validation error fix counts by type...");
-    Logging.trace("validationErrorFixesByType size: " + validationErrorFixesByType.size());
-
-    String returnStr = "";
-    for (Map.Entry<String, Integer> entry : validationErrorFixesByType.entrySet())
-    {
-      returnStr += entry.getKey() + ":" + String.valueOf(entry.getValue()) + ";";
-    }
-    returnStr = StringUtils.chop(returnStr);
-    return returnStr;
+    return validationErrorFixesByType;
   }
 
   /**
@@ -111,7 +107,7 @@ public class JosmMapCleaner extends JosmMapValidator
    * descriptions and an indication of whether they were cleaned or not; TODO: The IDs of deleted
    * elements are recorded in theoutput  map's base tags.
    */
-  public String clean(String validatorsStr, String elementsXml, boolean addDetailTags)
+  public String clean(List<String> validators, String elementsXml, boolean addDetailTags)
     throws Exception
   {
     Logging.debug("addDetailTags: " + addDetailTags);
@@ -120,7 +116,7 @@ public class JosmMapCleaner extends JosmMapValidator
     clear();
 
     // validate the elements
-    /*outputElements = */parseAndValidateElements(validatorsStr, elementsXml);
+    /*outputElements = */parseAndValidateElements(validators, elementsXml);
 
     // check for any validation errors
 
@@ -216,7 +212,7 @@ public class JosmMapCleaner extends JosmMapValidator
     Collection<AbstractPrimitive> cleanedElements = null;
 
     DataSet affectedData = null;
-    deletedElementIds = new ArrayList<String>();
+    deletedElementIds = new HashSet<String>();
     for (TestError error : errors)
     {
       Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
@@ -410,7 +406,7 @@ public class JosmMapCleaner extends JosmMapValidator
   private Map<String, Integer> validationErrorFixesByType = new HashMap<String, Integer>();
 
   // list of IDs for all elements deleted during cleaning
-  private List<String> deletedElementIds = null;
+  private Set<String> deletedElementIds = null;
   // each command attempts to clean a group of elements associated with a validation error
   private int numGroupsOfElementsCleaned = 0;
 }

@@ -45,18 +45,10 @@ namespace hoot
 /**
  * Base class for classes interacting with JOSM for validation or cleaning purposes
  *
- * Helpful JNI reference:
- * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html
+ * Helpful JNI references:
  *
- * Note that in JNI interactions the choice has been made to pass in and return delimited strings
- * in place of Java collection classes. The passed in delimited strings are converted to Java
- * collection objects where necessary in the hoot-josm Java code and the returned strings are
- * converted to C++ collection objects in this and inheriting classes. This cuts down on the number
- * of overall JNI calls made for performance improvement reasons and also keeps the JNI client
- * code simpler arguably at some cost of readability. However, no specific comparison has been done
- * yet of performance using JNI to create collection classes vs passing delimited strings. So if
- * at some point we prove there isn't signficant overhead using JNI to create collection classes we
- * could convert this code over to do that instead.
+ * https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html
+ * http://journals.ecs.soton.ac.uk/java/tutorial/native1.1/implementing/method.html
  */
 class JosmMapValidatorAbstract : public OsmMapOperation, public Configurable,
   public OperationStatusInfo
@@ -134,7 +126,7 @@ protected:
   /*
    * Converts JOSM validation stats to a printable string
    */
-  QString _errorCountsByTypeStrToSummaryStr(const QString& errorCountsByTypeStr) const;
+  QString _errorCountsByTypeToSummaryStr(const QMap<QString, int>& errorCountsByType) const;
 
 private:
 
