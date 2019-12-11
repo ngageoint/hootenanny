@@ -390,7 +390,9 @@ public class GrailResource {
         GrailParams params = new GrailParams();
         params.setUser(user);
         params.setPushUrl(RAILSPORT_PUSH_URL);
-        params.setComment(params.getComment());
+        params.setComment(reqParams.getComment());
+        params.setHashtags(reqParams.getHashtags());
+        params.setSource(reqParams.getSource());
 
         ProtectedResourceDetails oauthInfo = oauthRestTemplate.getResource();
         params.setConsumerKey(oauthInfo.getConsumerKey());
