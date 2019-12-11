@@ -71,6 +71,7 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   LOG_DEBUG("Retrieving cleaned map...");
 
   // call into hoot-josm to clean features in the map and return the cleaned map
+
   jstring cleanedMapJavaStr =
     (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
@@ -106,10 +107,11 @@ void JosmMapCleaner::_getStats()
 
   JosmMapValidatorAbstract::_getStats();
 
+  // JNI sig format: (input params...)return type
+
   _numGroupsOfElementsCleaned =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: int getNumGroupsOfElementsCleaned()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
   if (_javaEnv->ExceptionCheck())
@@ -122,7 +124,6 @@ void JosmMapCleaner::_getStats()
   jobject deletedElementIdsJavaSet =
     _javaEnv->CallObjectMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: Set<String> getDeletedElementIds()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/Set;"));
   if (_javaEnv->ExceptionCheck())
@@ -140,7 +141,6 @@ void JosmMapCleaner::_getStats()
   jobject validationErrorCountsByTypeJavaMap =
     _javaEnv->CallObjectMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: Map<String, Integer> getValidationErrorCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
@@ -154,7 +154,6 @@ void JosmMapCleaner::_getStats()
   jobject validationErrorFixCountsByTypeJavaMap =
     _javaEnv->CallObjectMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: Map<String, Integer> getValidationErrorFixCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/util/Map;"));
@@ -168,7 +167,6 @@ void JosmMapCleaner::_getStats()
   _numFailingValidators =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: int getNumFailingValidators()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
   if (_javaEnv->ExceptionCheck())
@@ -181,7 +179,6 @@ void JosmMapCleaner::_getStats()
   _numFailedCleaningOperations =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: int getNumFailedCleaningOperations()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
   if (_javaEnv->ExceptionCheck())
@@ -251,7 +248,7 @@ QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
     const int indentAfterCount = longestCountSize - numErrorsForTypeStr.size();
     summary +=
       errorItr.key() + " errors: " + QString(indentAfterName, ' ') + numErrorsForTypeStr + " " +
-      QString(indentAfterCount, ' ') + " groups cleaned: " +
+      QString(indentAfterCount, ' ') + " groups of elements cleaned: " +
       StringUtils::formatLargeNumber(errorFixCountsByType[errorItr.key()]) + "\n";
   }
   return summary;

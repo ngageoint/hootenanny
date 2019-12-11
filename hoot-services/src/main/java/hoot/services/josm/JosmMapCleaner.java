@@ -54,6 +54,9 @@ import org.openstreetmap.josm.data.osm.DataSet;
 /**
  * Cleans a map using JOSM validators
  *
+ * The interface for this class is kept purposefully coarse, so as to result in the smallest number
+ * of JNI calls from clients as possible.
+ *
  * @see JosmMapCleaner in hoot-core
  */
 public class JosmMapCleaner extends JosmMapValidator
@@ -135,6 +138,12 @@ public class JosmMapCleaner extends JosmMapValidator
         // clean the validated features and record that those that were successfully cleaned
 
         outputElements = cleanValidatedElements(validationErrors);
+
+        if (failedCleaningOps.size() > 0)
+        {
+          Logging.warn(
+            "The following JOSM cleaning operations failed: " + failedCleaningOps.keySet());
+        }
 
         if (outputElements == null)
         {
@@ -317,7 +326,7 @@ public class JosmMapCleaner extends JosmMapValidator
     }
     catch (AWTException awte)
     {
-      Logging.error(
+      Logging.debug(
         "Error running validator: " + error.getTester().getName() +
         " that tried to open a window.");
       failedCleaningOps.put(error.getTester().getName(), awte.getMessage());
@@ -325,7 +334,7 @@ public class JosmMapCleaner extends JosmMapValidator
     }
     catch (Exception e)
     {
-      Logging.error("Error running validator: " + error.getTester().getName());
+      Logging.debug("Error running validator: " + error.getTester().getName());
       failedCleaningOps.put(error.getTester().getName(), e.getMessage());
       cleanSuccess = false;
     }

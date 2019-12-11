@@ -55,6 +55,9 @@ import org.openstreetmap.josm.io.OsmApi;
 /**
  * Validates a map using JOSM validators
  *
+ * The interface for this class is kept purposefully coarse, so as to result in the smallest number
+ * of JNI calls from clients as possible.
+ *
  * @see JosmMapValidator in hoot-core
  */
 public class JosmMapValidator
@@ -248,7 +251,7 @@ public class JosmMapValidator
         String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
       if (failingValidators.size() > 0)
       {
-        Logging.error("The following validators failed: " + failingValidators);
+        Logging.warn("The following JOSM validators failed: " + failingValidators.keySet());
       }
     }
     catch (Exception e)
@@ -361,7 +364,8 @@ public class JosmMapValidator
       {
         throw new Exception("Validators must not have a Java namespace prefixed.");
       }
-      // prepend the Java namespace to the validator
+      // prepend the Java namespace to the validator; All the validation tests are in a single
+      // namespace, so this works. Clearly, we'll need to refactor if that doesn't remain the case.
       validatorName = VALIDATORS_NAMESPACE + "." + validatorName;
       Logging.trace("validatorName: " + validatorName);
       validatorsOut.add(validatorName);
@@ -379,9 +383,7 @@ public class JosmMapValidator
     List<TestError> errors = new ArrayList<TestError>();
     for (String validatorStr : validators)
     {
-      Logging.trace("validatorStr: " + validatorStr);
-      Test validator = (Test)Class.forName(validatorStr).newInstance();
-      errors.addAll(runValidation(validator, elements));
+      errors.addAll(runValidation((Test)Class.forName(validatorStr).newInstance(), elements));
     }
     return errors;
   }
@@ -409,7 +411,6 @@ public class JosmMapValidator
     Logging.info("Running JOSM validator: " + validator.getName() + "...");
 
     List<TestError> errors = new ArrayList<TestError>();
-
     try
     {
       validator.initialize();
@@ -430,7 +431,6 @@ public class JosmMapValidator
       Logging.debug("Error running validator: " + validator.getName());
       failingValidators.put(validator.getName(), e.getMessage());
     }
-
     return errors;
   }
 

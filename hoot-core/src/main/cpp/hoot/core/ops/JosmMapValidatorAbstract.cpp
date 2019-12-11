@@ -201,10 +201,11 @@ void JosmMapValidatorAbstract::_getStats()
 
   // call back into the hoot-josm validator to get the stats after validation
 
+  // JNI sig format: (input params...)return type
+
   _numValidationErrors =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
   if (_javaEnv->ExceptionCheck())
@@ -217,7 +218,6 @@ void JosmMapValidatorAbstract::_getStats()
   jobject validationErrorCountsByTypeJavaMap =
     _javaEnv->CallObjectMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: Map<String, Integer> getValidationErrorCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
@@ -231,7 +231,6 @@ void JosmMapValidatorAbstract::_getStats()
   _numFailingValidators =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig: int getNumFailingValidators()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
   if (_javaEnv->ExceptionCheck())

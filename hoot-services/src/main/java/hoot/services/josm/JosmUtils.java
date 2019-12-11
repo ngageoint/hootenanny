@@ -32,6 +32,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.io.File;
+import java.io.InputStream;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -64,11 +66,16 @@ public class JosmUtils
   {
     setLogLevel(logLevel);
     Logging.debug("Initializing JOSM...");
+
     Preferences pref = Preferences.main();
+    pref.enableSaveOnPut(false);
+    pref.put("user-cert.path", "/home/vagrant/hoot/tmp/nomeuser459-cert.p12");
+    pref.put("user-cert.pass", "");
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
+
     Logging.debug("JOSM initialized.");
   }
 
@@ -204,5 +211,5 @@ public class JosmUtils
       }
     }
     return deletedElementIds;
-  }  
+  }
 }
