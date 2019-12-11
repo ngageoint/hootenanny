@@ -84,6 +84,12 @@ public class GrailParams {
 
     private String conflationType;
 
+    private String comment;
+
+    private String hashtags;
+
+    private String source;
+
     public GrailParams() {}
 
     public GrailParams(GrailParams params) {
@@ -102,6 +108,31 @@ public class GrailParams {
         this.consumerSecret = params.getConsumerSecret();
         this.workDir = params.getWorkDir();
         this.conflationType = params.getConflationType();
+        this.comment = params.getComment();
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(String hashtags) {
+        this.hashtags = hashtags;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getConflationType() {
