@@ -1,0 +1,16 @@
+[[encrypt]]
+== encrypt
+
+=== Description
+
+TODO
+
+=== Input Parameters
+
+* +ref1+               - Input with REF1 tags; may be any supported input format (e.g. .osm file).
+
+=== Usage
+
+--------------------------------------
+build-model (ref1 ref2) [ref1 ref2 ...] (output) [--export-arff-only]
+--------------------------------------

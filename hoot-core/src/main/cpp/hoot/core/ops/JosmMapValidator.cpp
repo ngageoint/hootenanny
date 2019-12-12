@@ -61,12 +61,7 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
       JniConversion::toJavaStringList(_javaEnv, _josmValidators),
       // convert input map to xml string to pass in
       JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling validate.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "validate");
 
   return
     OsmXmlReader::fromXml(

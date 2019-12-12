@@ -28,6 +28,7 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/HootException.h>
 
 namespace hoot
 {
@@ -190,5 +191,16 @@ QMap<QString, int> JniConversion::fromJavaStringIntMap(JNIEnv* javaEnv, jobject 
 
   return result;
 }
+
+void JniConversion::checkForErrors(JNIEnv* javaEnv, const QString& operationName)
+{
+  if (javaEnv->ExceptionCheck())
+  {
+    javaEnv->ExceptionDescribe();
+    javaEnv->ExceptionClear();
+    throw HootException("Error calling " + operationName + ".");
+  }
+}
+
 
 }

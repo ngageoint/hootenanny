@@ -114,6 +114,15 @@ public:
    * @return a Qt map
    */
   static QMap<QString, int> fromJavaStringIntMap(JNIEnv* javaEnv, jobject javaMap);
+
+  /**
+   * TODO
+   *
+   * @param javaEnv
+   * @param operationName
+   * @todo This probably belongs in its own class, like JniUtils, or whatever.
+   */
+  static void checkForErrors(JNIEnv* javaEnv, const QString& operationName);
 };
 
 }

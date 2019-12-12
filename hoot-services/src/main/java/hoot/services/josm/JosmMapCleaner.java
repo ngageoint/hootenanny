@@ -61,9 +61,11 @@ import org.openstreetmap.josm.data.osm.DataSet;
  */
 public class JosmMapCleaner extends JosmMapValidator
 {
-  public JosmMapCleaner(String logLevel) throws Exception
+  public JosmMapCleaner(
+    String logLevel, String userCertPath, String userCertPassword) throws Exception
   {
-    super(logLevel);
+    //JosmUtils.initJosm(logLevel, userCertPath, userCertPassword);
+    super(logLevel, userCertPath, userCertPassword);
   }
 
   public Set<String> getDeletedElementIds()

@@ -111,6 +111,8 @@ protected:
   QString _josmInterfaceName;
   // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
+  QString _josmCertificatePath;
+  QString _josmPasswordEncrypted;
 
   // JNI environment
   JNIEnv* _javaEnv;
@@ -126,6 +128,8 @@ protected:
   int _numFailingValidators;
   // a printable summer of validation errors found
   QString _errorSummary;
+
+  void _checkForErrors(const QString& operationName);
 
   /*
    * Passes a map to a JOSM operation and returns it with JOSM updates

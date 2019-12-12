@@ -1706,8 +1706,8 @@ satisfy the criterion.
 * Default Value:
 ** `${HOOT_HOME}/tmp/hoot-josm.jar`
 
-A list of JAR files to place on the JAVA classpath when Hootenanny C++ code in the hoot-josm
-project interacts with Java code.
+A list of JAR files to place on the JAVA classpath when Hootenanny C++ code interacts with Java
+code using JNI.
 
 === jni.initial.memory
 
@@ -1731,6 +1731,39 @@ JVM -Xmx setting to use with JNI to configure the maximum amount of memory avail
 This option allows for passing in a job ID for the currently executing command. This is useful when
 trying to track multiple commands across a single job. When the Hootenanny API database is used
 for job output storage, the ID will be stored in the job status table of the associated map.
+
+=== josm.certificate
+
+* Data Type: string
+* Default Value: ``
+
+Some version of JOSM require a PKCS certificate to access certain functionality (.p12). Add the
+path to your certificate file here.
+
+=== josm.certificate.encrypted.password
+
+* Data Type: string
+* Default Value: ``
+
+Encypted password for the certificate specified in josm.certificate.
+
+=== josm.validators.exclude
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of JOSM validator Java class names without namespace prefixes to explicitly exclude use of
+during validation or cleaning using JOSM. Overrides values set in josm.validators.include.
+
+=== josm.validators.include
+
+* Data Type: list
+* Default Value:
+** ``
+
+A list of JOSM validator Java class names without namespace prefixes to explicitly include use of
+during validation or cleaning using JOSM. Overridden by values set in josm.validators.exclude.
 
 === json.format.hootenanny
 
@@ -1807,24 +1840,6 @@ vs
 },
 ...
 -----
-
-=== josm.validators.exclude
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of JOSM validator Java class names without namespace prefixes to explicitly exclude use of
-during validation or cleaning using JOSM. Overrides values set in josm.validators.include.
-
-=== josm.validators.include
-
-* Data Type: list
-* Default Value:
-** ``
-
-A list of JOSM validator Java class names without namespace prefixes to explicitly include use of
-during validation or cleaning using JOSM. Overridden by values set in josm.validators.exclude.
 
 === json.output.tasking.manager.aoi
 

@@ -23,7 +23,7 @@ cp /home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm/4.4.4/me-josm-4.4
 # add in external dependency classes
 # TODO: make the version a wildcard
 
-# 1) guava
+echo "Packaging guava..."
 cd $HOME
 cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/guava-20.0.jar /home/vagrant/hoot/tmp
 cd /home/vagrant/hoot/tmp
@@ -32,7 +32,7 @@ jar uf /home/vagrant/hoot/tmp/hoot-josm.jar com/google/common
 rm -rf com
 rm -f guava-20.0.jar
 
-# 2) apache commons lang
+echo "Packaging apache commons lang..."
 cd $HOME
 cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/commons-lang3-3.1.jar /home/vagrant/hoot/tmp
 cd /home/vagrant/hoot/tmp
@@ -41,7 +41,26 @@ jar uf /home/vagrant/hoot/tmp/hoot-josm.jar org/apache/commons/lang3
 rm -rf org
 rm -f commons-lang3-3.1.jar
 
+echo "Packaging tink..."
+cd $HOME
+cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/tink-1.3.0-rc2.jar /home/vagrant/hoot/tmp
+cd /home/vagrant/hoot/tmp
+jar xf tink-1.3.0-rc2.jar com/google/crypto/tink
+jar uf /home/vagrant/hoot/tmp/hoot-josm.jar com/google/crypto/tink
+rm -rf com
+rm -f tink-1.3.0-rc2.jar
+
+echo "Packaging protobuf..."
+cd $HOME
+cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/protobuf-java-3.10.0.jar /home/vagrant/hoot/tmp
+cd /home/vagrant/hoot/tmp
+jar xf protobuf-java-3.10.0.jar com/google/protobuf
+jar uf /home/vagrant/hoot/tmp/hoot-josm.jar com/google/protobuf
+rm -rf com
+rm -f protobuf-java-3.10.0.jar
+
 # add our hoot josm validator classes
+echo "Packaging hoot josm classes..."
 cd $HOME/hoot-services/target/classes
 jar uf /home/vagrant/hoot/tmp/hoot-josm.jar hoot/services/josm
 

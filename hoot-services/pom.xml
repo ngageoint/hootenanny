@@ -740,10 +740,19 @@
 
        <!-- josm -->
 
+        <!-- TOOD: change back to public josm -->
         <dependency>
           <groupId>org.openstreetmap.josm</groupId>
           <artifactId>me-josm</artifactId>
           <version>4.4.4</version>
+        </dependency>
+
+        <!-- crypto -->
+
+        <dependency>
+          <groupId>com.google.crypto.tink</groupId>
+          <artifactId>tink</artifactId>
+          <version>1.3.0-rc2</version>
         </dependency>
 
         <!-- test -->

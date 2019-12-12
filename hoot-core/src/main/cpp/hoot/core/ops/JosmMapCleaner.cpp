@@ -72,10 +72,11 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
 
   // call into hoot-josm to clean features in the map and return the cleaned map
 
+  // JNI sig format: (input params...)return type
+
   jstring cleanedMapJavaStr =
     (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
-      // JNI sig format: (input params...)return type
       // Java sig:
       //  String clean(List<String> validators, String elementsXml, boolean addDetailTags)
       _javaEnv->GetMethodID(
@@ -86,12 +87,7 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
       JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)),
       // add explanation tags for cleaning
       _addDetailTags);
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling clean.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "clean");
 
   return
     OsmXmlReader::fromXml(
@@ -114,24 +110,14 @@ void JosmMapCleaner::_getStats()
       _josmInterface,
       // Java sig: int getNumGroupsOfElementsCleaned()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getNumGroupsOfElementsCleaned.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "getNumGroupsOfElementsCleaned");
 
   jobject deletedElementIdsJavaSet =
     _javaEnv->CallObjectMethod(
       _josmInterface,
       // Java sig: Set<String> getDeletedElementIds()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/Set;"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getDeletedElementIds.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "getDeletedElementIds");
   _deletedElementIds =
     _elementIdStringsToElementIds(
       JniConversion::fromJavaStringSet(_javaEnv, deletedElementIdsJavaSet));
@@ -144,12 +130,7 @@ void JosmMapCleaner::_getStats()
       // Java sig: Map<String, Integer> getValidationErrorCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getValidationErrorCountsByType.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "getValidationErrorCountsByType");
 
   jobject validationErrorFixCountsByTypeJavaMap =
     _javaEnv->CallObjectMethod(
@@ -157,36 +138,21 @@ void JosmMapCleaner::_getStats()
       // Java sig: Map<String, Integer> getValidationErrorFixCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/util/Map;"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getValidationErrorFixCountsByType.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
 
   _numFailingValidators =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       // Java sig: int getNumFailingValidators()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getNumFailingValidators.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "getNumFailingValidators");
 
   _numFailedCleaningOperations =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       // Java sig: int getNumFailedCleaningOperations()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
-  if (_javaEnv->ExceptionCheck())
-  {
-    _javaEnv->ExceptionDescribe();
-    _javaEnv->ExceptionClear();
-    throw HootException("Error calling getNumFailedCleaningOperations.");
-  }
+  JniConversion::checkForErrors(_javaEnv, "getNumFailedCleaningOperations");
 
   // create a readable error summary
 

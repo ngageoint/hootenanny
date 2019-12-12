@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.io.File;
 import java.io.InputStream;
 
+import org.apache.commons.lang3.StringUtils;
+
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Node;
@@ -62,19 +64,26 @@ public class JosmUtils
    *
    * @param logLevel the verbosity of the logging
    */
-  public static void initJosm(String logLevel) throws Exception
+  public static void initJosm(String logLevel, String userCertPath,
+    String userCertPassword) throws Exception
   {
     setLogLevel(logLevel);
     Logging.debug("Initializing JOSM...");
 
     Preferences pref = Preferences.main();
     pref.enableSaveOnPut(false);
-    pref.put("user-cert.path", "/home/vagrant/hoot/tmp/nomeuser459-cert.p12");
-    pref.put("user-cert.pass", "");
+    if (StringUtils.trimToNull(userCertPath) != null &&
+        StringUtils.trimToNull(userCertPassword) != null)
+    {
+      pref.put("user-cert.path", userCertPath);
+      pref.put("user-cert.pass", userCertPassword);
+    }
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
+
+    Logging.info("base directory: " + JosmBaseDirectories.getInstance().getName());
 
     Logging.debug("JOSM initialized.");
   }

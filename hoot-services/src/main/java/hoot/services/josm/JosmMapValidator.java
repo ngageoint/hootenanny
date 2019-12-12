@@ -62,9 +62,10 @@ import org.openstreetmap.josm.io.OsmApi;
  */
 public class JosmMapValidator
 {
-  public JosmMapValidator(String logLevel) throws Exception
+  public JosmMapValidator(
+    String logLevel, String userCertPath, String userCertPassword) throws Exception
   {
-    JosmUtils.initJosm(logLevel);
+    JosmUtils.initJosm(logLevel, userCertPath, userCertPassword);
   }
 
   public int getNumValidationErrors()
