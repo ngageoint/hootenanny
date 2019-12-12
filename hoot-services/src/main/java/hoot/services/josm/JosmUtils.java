@@ -53,6 +53,9 @@ import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.command.DeleteCommand;
 import org.openstreetmap.josm.actions.DeleteAction;
 import org.openstreetmap.josm.command.SequenceCommand;
+import org.openstreetmap.josm.data.projection.ProjectionRegistry;
+import org.openstreetmap.josm.data.projection.Projection;
+import org.openstreetmap.josm.gui.preferences.projection.ProjectionPreference;
 
 /**
  * Various utilities for use when using JOSM from hoot-josm
@@ -82,10 +85,16 @@ public class JosmUtils
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
+    ProjectionPreference.setProjection();
 
     Logging.debug(
       "base directory: " +
       JosmBaseDirectories.getInstance().getPreferencesDirectory(false).getPath());
+    Projection proj = ProjectionRegistry.getProjection();
+    if (proj != null)
+    {
+      Logging.debug("Proj: " + proj.toString());
+    }
 
     Logging.debug("JOSM initialized.");
   }

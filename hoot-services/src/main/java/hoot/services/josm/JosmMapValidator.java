@@ -433,7 +433,13 @@ public class JosmMapValidator
     catch (Exception e)
     {
       Logging.debug(
-        "Error running validator: " + validator.getName() + ", failure: " + e.getMessage());
+        "Error running validator: " + validator.getName() + ", failure: " + e.getMessage() +
+        " " + e.toString());
+      if (e.getCause() != null)
+      {
+        Logging.debug(e.getCause().toString());
+      }
+      e.printStackTrace();
       failingValidators.put(validator.getName(), e.getMessage());
     }
     return errors;

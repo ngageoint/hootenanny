@@ -158,7 +158,7 @@ private:
   QStringList _josmValidatorsExclude;
   // Some versions of JOSM require a user cert to access certain validators.
   QString _josmCertificatePath;
-  // Note that the version of JOSM using a user cert store the password in clear text in a
+  // Note that the version of JOSM using a user cert stores the password in cleartext in a
   // configuration file, so not worrying about encrypting it here.
   QString _josmCertificatePassword;
   bool _logMissingCertAsWarning;
