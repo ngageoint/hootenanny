@@ -37,11 +37,11 @@ namespace hoot
 {
 
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
-_logMissingCertAsWarning(true),
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
 _numValidationErrors(0),
-_numFailingValidators(0)
+_numFailingValidators(0),
+_logMissingCertAsWarning(true)
 {
 }
 
@@ -62,16 +62,23 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   _josmValidatorsInclude = opts.getJosmValidatorsInclude();
   _josmCertificatePath = opts.getJosmCertificatePath();
   _josmCertificatePassword = opts.getJosmCertificatePassword();
+  _josmValidatorsRequiringUserCert = opts.getJosmValidatorsRequiringUserCertificate();
+}
+
+bool JosmMapValidatorAbstract::_noUserCertSpecified() const
+{
+  return _josmCertificatePath.trimmed().isEmpty() || _josmCertificatePassword.trimmed().isEmpty();
 }
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
 {
   LOG_DEBUG("Initializing JOSM implementation...");
 
-  if (_logMissingCertAsWarning &&
-      (_josmCertificatePath.trimmed().isEmpty() || _josmCertificatePassword.trimmed().isEmpty()))
+  if (_logMissingCertAsWarning && _noUserCertSpecified())
   {
-    LOG_WARN("No JOSM user certificate specified. Some validators will be unavailable for use.");
+    LOG_WARN(
+      "No JOSM user certificate specified. At a minimum these validators will be unavailable "
+      "for use: " + _josmValidatorsRequiringUserCert.join(", "));
   }
 
   // TODO: change back
@@ -136,6 +143,12 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
   if (_josmValidators.isEmpty())
   {
     _josmValidators = getAvailableValidators();
+  }
+
+  // If no cert was specified, let's remove the validators we know require one
+  if (_noUserCertSpecified())
+  {
+    StringUtils::removeAll(_josmValidators, _josmValidatorsRequiringUserCert);
   }
 
   LOG_VARD(_josmValidators);

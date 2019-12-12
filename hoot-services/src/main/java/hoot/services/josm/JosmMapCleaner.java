@@ -242,7 +242,7 @@ public class JosmMapCleaner extends JosmMapValidator
         cleanSuccess = cleanValidatedElementsForError(error, affectedData);
       }
 
-      Logging.debug("Recording cleaned elements...");
+      Logging.trace("Recording cleaned elements...");
       for (OsmPrimitive element : elementGroupWithError)
       {
         CleanStatus cleanStatus = CleanStatus.NONE_AVAILABLE;

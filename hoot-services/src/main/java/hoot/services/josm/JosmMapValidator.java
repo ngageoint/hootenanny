@@ -232,6 +232,9 @@ public class JosmMapValidator
 
       originalMapSize = inputElements.size();
       Logging.debug("originalMapSize: " + originalMapSize);
+      // NOTE: Unlike hoot core's logging, JOSM's will still execute any code in the logging
+      // statement despite the log level and simply not log the statement. So, you definitely don't
+      // want anything like this making its way into a production environment.
       //Logging.trace("input elements: " + JosmUtils.elementsToString(inputElements));
     }
     catch (Exception e)
@@ -429,7 +432,8 @@ public class JosmMapValidator
     }
     catch (Exception e)
     {
-      Logging.debug("Error running validator: " + validator.getName());
+      Logging.debug(
+        "Error running validator: " + validator.getName() + ", failure: " + e.getMessage());
       failingValidators.put(validator.getName(), e.getMessage());
     }
     return errors;

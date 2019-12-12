@@ -112,12 +112,6 @@ protected:
   QString _josmInterfaceName;
   // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
-  // Some versions of JOSM require a user cert to access certain validators.
-  QString _josmCertificatePath;
-  // Note that the version of JOSM using a user cert store the password in clear text in a
-  // configuration file, so not worrying about encrypting it here.
-  QString _josmCertificatePassword;
-  bool _logMissingCertAsWarning;
 
   // JNI environment
   JNIEnv* _javaEnv;
@@ -162,9 +156,18 @@ private:
   // a list of explicit JOSM validator class name excludes without prefixed namespace to be excluded
   // as validators; overrides _josmValidatorsInclude
   QStringList _josmValidatorsExclude;
+  // Some versions of JOSM require a user cert to access certain validators.
+  QString _josmCertificatePath;
+  // Note that the version of JOSM using a user cert store the password in clear text in a
+  // configuration file, so not worrying about encrypting it here.
+  QString _josmCertificatePassword;
+  bool _logMissingCertAsWarning;
+  // TODO
+  QStringList _josmValidatorsRequiringUserCert;
 
   void _initJosmValidatorsList();
   void _initJosmImplementation();
+  bool _noUserCertSpecified() const;
 };
 
 }

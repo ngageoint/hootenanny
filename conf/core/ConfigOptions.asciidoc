@@ -1779,6 +1779,18 @@ during validation or cleaning using JOSM. Overrides values set in josm.validator
 A list of JOSM validator Java class names without namespace prefixes to explicitly include use of
 during validation or cleaning using JOSM. Overridden by values set in josm.validators.exclude.
 
+=== josm.validators.requiring.user.certificate
+
+* Data Type: list
+* Default Value:
+** `ApiCapabilitiesTest`
+** `MapCSSTagChecker`
+
+A list of JOSM validators known to require the user certificate specified in josm.certificate.path.
+These validators will be skipped if no user certificate is specified to avoid seeing unnecessary
+error message from JOSM when they cannot be properly run without the certificate. Clearly, this list
+may become out of sync with JOSM over time without maintenance.
+
 === json.format.hootenanny
 
 * Data Type: bool
