@@ -325,18 +325,9 @@ public class JosmMapCleaner extends JosmMapValidator
       // grab the actual data from the command so we can update our return map
       affectedData = cleanCmd.getAffectedDataSet();
     }
-    catch (AWTException awte)
-    {
-      Logging.debug(
-        "Error running validator: " + error.getTester().getName() +
-        " that tried to open a window.");
-      failedCleaningOps.put(error.getTester().getName(), awte.getMessage());
-      cleanSuccess = false;
-    }
     catch (Exception e)
     {
-      Logging.debug("Error running validator: " + error.getTester().getName());
-      failedCleaningOps.put(error.getTester().getName(), e.getMessage());
+      failedCleaningOps.put(error.getTester().getName(), getErrorMessage(error.getTester(), e));
       cleanSuccess = false;
     }
 

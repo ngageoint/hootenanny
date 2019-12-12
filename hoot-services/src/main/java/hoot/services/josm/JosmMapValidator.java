@@ -195,6 +195,22 @@ public class JosmMapValidator
     failingValidators.clear();
   }
 
+  protected String getErrorMessage(Test validator, Exception e)
+  {
+    if (Logging.isTraceEnabled())
+    {
+      e.printStackTrace();
+    }
+    String errorMsg =
+      "Error running validator: " + validator.getName() + ", failure detail: " + e.getMessage() +
+      " " + e.toString();
+    if (e.getCause() != null)
+    {
+      errorMsg += e.getCause().toString();
+    }
+    return errorMsg;
+  }
+
   protected Collection<AbstractPrimitive> parseAndValidateElements(
     List<String> validators, String elementsXml) throws Exception
   {
@@ -432,15 +448,7 @@ public class JosmMapValidator
     }
     catch (Exception e)
     {
-      Logging.debug(
-        "Error running validator: " + validator.getName() + ", failure: " + e.getMessage() +
-        " " + e.toString());
-      if (e.getCause() != null)
-      {
-        Logging.debug(e.getCause().toString());
-      }
-      e.printStackTrace();
-      failingValidators.put(validator.getName(), e.getMessage());
+      failingValidators.put(validator.getName(), getErrorMessage(validator, e));
     }
     return errors;
   }

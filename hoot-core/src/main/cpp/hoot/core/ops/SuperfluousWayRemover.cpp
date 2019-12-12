@@ -53,7 +53,7 @@ _inputMap(map)
 long SuperfluousWayRemover::removeWays(const std::shared_ptr<OsmMap>& map)
 {
   SuperfluousWayRemover wayRemover(map);
-  LOG_INFO(wayRemover.getInitStatusMessage());
+  LOG_DEBUG(wayRemover.getInitStatusMessage());
   wayRemover.removeWays();
   LOG_DEBUG(wayRemover.getCompletedStatusMessage());
   return wayRemover.getNumAffected();

@@ -85,7 +85,7 @@ public class JosmUtils
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
-    ProjectionPreference.setProjection();
+    ProjectionPreference.setProjection(ProjectionPreference.wgs84.getId(), null, true);
 
     Logging.debug(
       "base directory: " +

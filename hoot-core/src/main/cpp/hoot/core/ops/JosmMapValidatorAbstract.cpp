@@ -263,7 +263,7 @@ void JosmMapValidatorAbstract::_getStats()
 
   _errorSummary =
     "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
-    " / " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
+    " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
   // convert the validation error info to a readable summary string
   _errorSummary +=
     _errorCountsByTypeToSummaryStr(
