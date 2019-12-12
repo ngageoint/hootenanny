@@ -32,12 +32,12 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/jni/JniConversion.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/StringCrypto.h>
 
 namespace hoot
 {
 
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
+_logMissingCertAsWarning(true),
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
 _numValidationErrors(0),
@@ -59,13 +59,19 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _josmValidatorsExclude = opts.getJosmValidatorsExclude();
   _josmValidatorsInclude = opts.getJosmValidatorsInclude();
-  _josmCertificatePath = opts.getJosmCertificate();
-  _josmPassword = opts.getJosmCertificatePassword();
+  _josmCertificatePath = opts.getJosmCertificatePath();
+  _josmCertificatePassword = opts.getJosmCertificatePassword();
 }
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
 {
   LOG_DEBUG("Initializing JOSM implementation...");
+
+  if (_logMissingCertAsWarning &&
+      (_josmCertificatePath.trimmed().isEmpty() || _josmCertificatePassword.trimmed().isEmpty()))
+  {
+    LOG_WARN("No JOSM user certificate specified. Some validators will be unavailable for use.");
+  }
 
   // TODO: change back
   _josmInterfaceClass =
@@ -88,7 +94,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
         // userCertPath
         JniConversion::toJavaString(_javaEnv, _josmCertificatePath),
         // userCertPassword
-        JniConversion::toJavaString(_javaEnv, _josmPassword)));
+        JniConversion::toJavaString(_javaEnv, _josmCertificatePassword)));
   JniConversion::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
 

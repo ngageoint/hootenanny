@@ -1746,7 +1746,7 @@ This option allows for passing in a job ID for the currently executing command. 
 trying to track multiple commands across a single job. When the Hootenanny API database is used
 for job output storage, the ID will be stored in the job status table of the associated map.
 
-=== josm.certificate
+=== josm.certificate.path
 
 * Data Type: string
 * Default Value: ``
@@ -1759,7 +1759,7 @@ path to your certificate file here.
 * Data Type: string
 * Default Value: ``
 
-Password for the certificate specified in josm.certificate.
+Password for the certificate specified in josm.certificate.path.
 
 === josm.validators.exclude
 

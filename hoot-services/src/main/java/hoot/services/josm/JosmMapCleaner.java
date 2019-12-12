@@ -64,7 +64,6 @@ public class JosmMapCleaner extends JosmMapValidator
   public JosmMapCleaner(
     String logLevel, String userCertPath, String userCertPassword) throws Exception
   {
-    //JosmUtils.initJosm(logLevel, userCertPath, userCertPassword);
     super(logLevel, userCertPath, userCertPassword);
   }
 

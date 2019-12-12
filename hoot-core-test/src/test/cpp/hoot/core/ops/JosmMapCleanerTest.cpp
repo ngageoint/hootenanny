@@ -57,6 +57,7 @@ public:
     LOG_VARD(map->size());
 
     JosmMapCleaner uut;
+    uut.setLogMissingCertAsWarning(false);
     uut.setAddDetailTags(true);
     uut.setJosmValidatorsInclude(QStringList("UntaggedWay"));
     LOG_INFO(uut.getInitStatusMessage());
@@ -79,6 +80,7 @@ public:
     LOG_VARD(map->size());
 
     JosmMapCleaner uut;
+    uut.setLogMissingCertAsWarning(false);
     uut.setAddDetailTags(true);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"

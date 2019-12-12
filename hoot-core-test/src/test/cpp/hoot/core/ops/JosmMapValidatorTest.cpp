@@ -56,6 +56,7 @@ public:
   void runGetAvailableValidatorsTest()
   {
     JosmMapValidator uut;
+    uut.setLogMissingCertAsWarning(false);
     const QMap<QString, QString> validators = uut.getAvailableValidatorsWithDescription();
     LOG_VART(validators.keys());
     LOG_VART(validators.values());
@@ -73,6 +74,7 @@ public:
     validators.append("UnclosedWays");
     validators.append("DuplicatedWayNodes");
     uut.setJosmValidatorsInclude(validators);
+    uut.setLogMissingCertAsWarning(false);
     uut._initJosmValidatorsList();
 
     const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
@@ -86,6 +88,7 @@ public:
   void runValidatorExclusionTest()
   {
     JosmMapValidator uut;
+    uut.setLogMissingCertAsWarning(false);
 
     QStringList validators;
     validators.append("UntaggedWay");
@@ -108,6 +111,7 @@ public:
   void runEmptyValidatorsTest()
   {
     JosmMapValidator uut;
+    uut.setLogMissingCertAsWarning(false);
     uut._initJosmValidatorsList();
 
     const QStringList validatorsUsed = uut.getJosmValidatorsUsed();
@@ -123,6 +127,7 @@ public:
     LOG_VARD(map->size());
 
     JosmMapValidator uut;
+    uut.setLogMissingCertAsWarning(false);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");

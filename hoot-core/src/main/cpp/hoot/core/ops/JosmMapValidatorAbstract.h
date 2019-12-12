@@ -103,6 +103,7 @@ public:
   { _josmValidatorsExclude = validators; }
   void setJosmValidatorsInclude(const QStringList& validators)
   { _josmValidatorsInclude = validators; }
+  void setLogMissingCertAsWarning(bool log) { _logMissingCertAsWarning = log; }
 
 protected:
 
@@ -111,8 +112,12 @@ protected:
   QString _josmInterfaceName;
   // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
+  // Some versions of JOSM require a user cert to access certain validators.
   QString _josmCertificatePath;
-  QString _josmPassword;
+  // Note that the version of JOSM using a user cert store the password in clear text in a
+  // configuration file, so not worrying about encrypting it here.
+  QString _josmCertificatePassword;
+  bool _logMissingCertAsWarning;
 
   // JNI environment
   JNIEnv* _javaEnv;
