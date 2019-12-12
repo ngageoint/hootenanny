@@ -57,6 +57,8 @@ const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
 
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
     _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
     _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
@@ -77,6 +79,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
 OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
   : _changesets(changesets),
     _description(ConfigOptions().getChangesetDescription()),
+    _source(ConfigOptions().getChangesetSource()),
+    _hashtags(ConfigOptions().getChangesetHashtags()),
     _maxWriters(ConfigOptions().getChangesetApidbWritersMax()),
     _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
     _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
@@ -237,7 +241,7 @@ void OsmApiWriter::_changesetThreadFunc()
       //  Create the changeset ID if required
       if (id < 1)
       {
-        id = _createChangeset(request, _description);
+        id = _createChangeset(request, _description, _source, _hashtags);
         changesetSize = 0;
       }
       //  An ID of less than 1 isn't valid, try to fix it
@@ -282,8 +286,8 @@ void OsmApiWriter::_changesetThreadFunc()
       }
       else
       {
-        //  Log the error
-        LOG_ERROR("Error uploading changeset: " << id << "\t" << request->getErrorString());
+        //  Log the error as a status message
+        LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString());
         //  Split the changeset on conflict errors
         switch (info->status)
         {
@@ -367,6 +371,8 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
   _description = options.getChangesetDescription();
+  _source = options.getChangesetSource();
+  _hashtags = options.getChangesetHashtags();
   _maxPushSize = options.getChangesetApidbSizeMax();
   _maxChangesetSize = options.getChangesetMaxSize();
   _maxWriters = options.getChangesetApidbWritersMax();
@@ -508,7 +514,10 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
-long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request, const QString& description)
+long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
+                                    const QString& description,
+                                    const QString& source,
+                                    const QString& hashtags)
 {
   try
   {
@@ -519,8 +528,11 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request, const QString
       "  <changeset>"
       "    <tag k='created_by' v='%1'/>"
       "    <tag k='comment' v='%2'/>"
+      "    <tag k='source' v='%3'/>"
+      "    <tag k='hashtags' v='%4'/>"
+      "    <tag k='bot' v='yes'/>"
       "  </changeset>"
-      "</osm>").arg(HOOT_NAME).arg(description);
+      "</osm>").arg(HOOT_NAME).arg(description).arg(source).arg(hashtags);
 
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, xml.toUtf8());
 
@@ -616,7 +628,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
       info->success = true;
       break;
     case 400:
-      LOG_WARN("Changeset Upload Error: Error parsing XML changeset\n" << info->response);
+      LOG_WARN("Changeset Upload Error: Error parsing XML changeset - " << info->response);
       break;
     case 404:
       LOG_WARN("Unknown changeset or elements don't exist");

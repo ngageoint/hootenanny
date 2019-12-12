@@ -35,6 +35,7 @@
 
 //  Qt
 #include <QEventLoop>
+#include <QHostAddress>
 #include <QtNetwork/QSslConfiguration>
 #include <QtNetwork/QSslSocket>
 
@@ -167,6 +168,8 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url,
     //  Remove authentication information if present
     if (request.url() != tempUrl)
       _error.replace(request.url().toString(), tempUrl.toString(QUrl::RemoveUserInfo), Qt::CaseInsensitive);
+    //  Replace the IP address in the error string with <host-ip>
+    HootNetworkRequest::removeIpFromUrlString(_error, request.url());
     return false;
   }
 
@@ -214,6 +217,13 @@ void HootNetworkRequest::_setOAuthHeader(QNetworkAccessManager::Operation http_o
   string header = requestClient.getHttpHeader(op, request.url().toString(QUrl::RemoveUserInfo).toStdString());
   //  Set the Authorization header for OAuth
   request.setRawHeader("Authorization", QString(header.c_str()).toUtf8());
+}
+
+void HootNetworkRequest::removeIpFromUrlString(QString& endpointUrl, const QUrl& url)
+{
+  QHostAddress host(url.host());
+  if (!host.isNull())
+    endpointUrl.replace(url.host(), "<host-ip>");
 }
 
 }

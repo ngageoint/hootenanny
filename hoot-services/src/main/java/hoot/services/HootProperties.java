@@ -62,6 +62,7 @@ public final class HootProperties {
     public static final String BASEMAPS_TILES_FOLDER;
     public static final String BASEMAPS_FOLDER;
     public static final String JS_HEADER_SCRIPT_PATH;
+    public static final String CHANGESETS_FOLDER;
     public static final String SCRIPT_FOLDER;
     public static final String DEFAULT_TRANSLATIONS_CONFIG;
     public static final String DEFAULT_FOUO_TRANSLATIONS_CONFIG;
@@ -270,6 +271,9 @@ public final class HootProperties {
 
         // Root folder of tomcat writable locations
         USERFILES_FOLDER = HOME_FOLDER + File.separator + "userfiles";
+
+        // User generated changesets location
+        CHANGESETS_FOLDER = USERFILES_FOLDER + File.separator + "changesets";
 
         // User uploaded translation scripts go here
         SCRIPT_FOLDER = USERFILES_FOLDER + File.separator + "customscript";

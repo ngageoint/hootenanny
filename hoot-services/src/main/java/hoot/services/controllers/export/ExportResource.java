@@ -26,6 +26,7 @@
  */
 package hoot.services.controllers.export;
 
+import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.TEMP_OUTPUT_PATH;
 import static hoot.services.HootProperties.TRANSLATION_EXT_PATH;
@@ -445,7 +446,11 @@ public class ExportResource {
     }
 
     private static File getExportFile(String jobId, String outputName, String fileExt) {
-        File exportFile = new File(new File(TEMP_OUTPUT_PATH, jobId), outputName + "." + fileExt);
+        String path = TEMP_OUTPUT_PATH;
+        if (fileExt.equalsIgnoreCase("osc"))
+            path = CHANGESETS_FOLDER;
+
+        File exportFile = new File(new File(path, jobId), outputName + "." + fileExt);
 
         if (!exportFile.exists()) {
             String errorMsg = "Error exporting data.  Missing output file.";
