@@ -36,6 +36,7 @@ public class FolderRecord {
     private String name;
     private long userId;
     private boolean isPublic;
+    private String createdAt;
 
     public FolderRecord() {}
 
@@ -74,7 +75,16 @@ public class FolderRecord {
     public void setPublic(Boolean publicCol) {
         isPublic = publicCol.booleanValue();
     }
+
     public boolean getPublic() {
         return isPublic;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
     }
 }
