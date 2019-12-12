@@ -140,12 +140,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
-    HOOT_STR_EQUALS(
-      "Total validation errors: 4\n"
-      "Duplicated way nodes errors: 1\n"
-      "Unclosed Ways errors: 2\n"
-      "Untagged, empty and one node ways errors: 1",
-      uut.getSummary());
 
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);

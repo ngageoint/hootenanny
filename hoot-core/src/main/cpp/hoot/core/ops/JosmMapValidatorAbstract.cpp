@@ -47,11 +47,12 @@ _numFailingValidators(0)
 
 JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
 {
-  if (_javaEnv != 0 && _josmInterface != 0)
-  {
+  //if (_javaEnv != 0 && _josmInterface != 0)
+  //{
     // We have a memory leak if this doesn't happen.
-    _javaEnv->DeleteGlobalRef(_josmInterface);
-  }
+    //LOG_DEBUG("Deleting josm interface...");
+    //_javaEnv->DeleteGlobalRef(_josmInterface);
+  //}
 }
 
 void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
@@ -79,10 +80,12 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
                         "hoot/services/josm/JosmMapCleaner");
   // Using the same constructor signature for both validation and cleaning works since both Java
   // implementations use it. If the signatures change, then this logic will need to be moved down
-  // to the child classes. Grab this as a global ref, since its possible it could be garbage
-  // collected at any time. We'll clean it up in the destructor.
+  // to the child classes.
   _josmInterface =
-    _javaEnv->NewGlobalRef(
+    // Thought it would be best to grab this as a global ref, since its possible it could be garbage
+    // collected at any time. Then it can be cleaned up in the destructor. However, that's causing
+    // crashes during the tests, so need to think about it some more.
+    /*_javaEnv->NewGlobalRef(*/
       _javaEnv->NewObject(
         _josmInterfaceClass,
         // Java sig: <ClassName>(String logLevel, String userCertPath, String userCertPassword)
@@ -94,7 +97,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
         // userCertPath
         JniConversion::toJavaString(_javaEnv, _josmCertificatePath),
         // userCertPassword
-        JniConversion::toJavaString(_javaEnv, _josmCertificatePassword)));
+        JniConversion::toJavaString(_javaEnv, _josmCertificatePassword))/*)*/;
   JniConversion::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
 
@@ -253,7 +256,7 @@ void JosmMapValidatorAbstract::_getStats()
     _errorCountsByTypeToSummaryStr(
       JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap));
   _errorSummary +=
-    "Total failing JOSM validators: " + QString::number(_numFailingValidators) + "\n";
+    "Total failing JOSM validators: " + QString::number(_numFailingValidators);
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
 }

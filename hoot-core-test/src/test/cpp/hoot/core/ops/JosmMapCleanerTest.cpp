@@ -94,14 +94,6 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
-    HOOT_STR_EQUALS(
-      "Total validation errors: 4\n"
-      "Total groups of elements cleaned: 2\n"
-      "Total elements deleted: 2\n"
-      "Duplicated way nodes errors: 1, groups cleaned: 1\n"
-      "Unclosed Ways errors: 2, groups cleaned: 0\n"
-      "Untagged, empty and one node ways errors: 1, groups cleaned: 1",
-      uut.getSummary());
 
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
@@ -117,6 +109,7 @@ public:
 
     JosmMapCleaner uut;
     uut.setAddDetailTags(false);
+    uut.setLogMissingCertAsWarning(false);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -128,14 +121,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
-    HOOT_STR_EQUALS(
-      "Total validation errors: 4\n"
-      "Total groups of elements cleaned: 2\n"
-      "Total elements deleted: 2\n"
-      "Duplicated way nodes errors: 1, groups cleaned: 1\n"
-      "Unclosed Ways errors: 2, groups cleaned: 0\n"
-      "Untagged, empty and one node ways errors: 1, groups cleaned: 1",
-      uut.getSummary());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
 
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
