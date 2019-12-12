@@ -78,12 +78,18 @@ public class JosmUtils
       pref.put("user-cert.path", userCertPath);
       pref.put("user-cert.pass", userCertPassword);
     }
+    else
+    {
+      Logging.warn("No user certificate specified. Some validators will be unavailable for use.");
+    }
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
     DeleteCommand.setDeletionCallback(DeleteAction.defaultDeletionCallback);
 
-    Logging.info("base directory: " + JosmBaseDirectories.getInstance().getName());
+    Logging.debug(
+      "base directory: " +
+      JosmBaseDirectories.getInstance().getPreferencesDirectory(false).getPath());
 
     Logging.debug("JOSM initialized.");
   }

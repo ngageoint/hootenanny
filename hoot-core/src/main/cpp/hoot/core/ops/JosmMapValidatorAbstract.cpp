@@ -60,7 +60,7 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   _josmValidatorsExclude = opts.getJosmValidatorsExclude();
   _josmValidatorsInclude = opts.getJosmValidatorsInclude();
   _josmCertificatePath = opts.getJosmCertificate();
-  _josmPasswordEncrypted = opts.getJosmCertificateEncryptedPassword();
+  _josmPassword = opts.getJosmCertificatePassword();
 }
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
@@ -88,7 +88,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
         // userCertPath
         JniConversion::toJavaString(_javaEnv, _josmCertificatePath),
         // userCertPassword
-        JniConversion::toJavaString(_javaEnv, StringCrypto::decrypt(_josmPasswordEncrypted))));
+        JniConversion::toJavaString(_javaEnv, _josmPassword)));
   JniConversion::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
 

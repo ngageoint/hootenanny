@@ -112,7 +112,7 @@ protected:
   // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
   QString _josmCertificatePath;
-  QString _josmPasswordEncrypted;
+  QString _josmPassword;
 
   // JNI environment
   JNIEnv* _javaEnv;

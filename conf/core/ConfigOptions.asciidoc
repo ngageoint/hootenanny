@@ -1740,12 +1740,12 @@ for job output storage, the ID will be stored in the job status table of the ass
 Some version of JOSM require a PKCS certificate to access certain functionality (.p12). Add the
 path to your certificate file here.
 
-=== josm.certificate.encrypted.password
+=== josm.certificate.password
 
 * Data Type: string
 * Default Value: ``
 
-Encypted password for the certificate specified in josm.certificate.
+Password for the certificate specified in josm.certificate.
 
 === josm.validators.exclude
 
