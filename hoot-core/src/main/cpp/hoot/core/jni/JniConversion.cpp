@@ -202,5 +202,4 @@ void JniConversion::checkForErrors(JNIEnv* javaEnv, const QString& operationName
   }
 }
 
-
 }

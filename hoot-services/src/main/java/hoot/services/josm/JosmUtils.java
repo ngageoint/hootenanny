@@ -90,11 +90,7 @@ public class JosmUtils
     Logging.debug(
       "base directory: " +
       JosmBaseDirectories.getInstance().getPreferencesDirectory(false).getPath());
-    Projection proj = ProjectionRegistry.getProjection();
-    if (proj != null)
-    {
-      Logging.debug("Proj: " + proj.toString());
-    }
+    Logging.debug("Proj: " + ProjectionRegistry.getProjection().toString());
 
     Logging.debug("JOSM initialized.");
   }
