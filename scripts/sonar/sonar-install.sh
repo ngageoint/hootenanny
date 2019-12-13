@@ -37,7 +37,7 @@ if [ ! -f $SONAR_BLD_ZIP ]; then
     wget --quiet $SONAR_BLD_URL/$SONAR_BLD_ZIP
 fi
 
-#Install sonar build wrapper
+# Install sonar build wrapper
 if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     echo "### Installing Sonar Build Wrapper..."
     if [ ! -f $SONAR_BLD_PKG ]; then
@@ -48,3 +48,6 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     sudo mv $SONAR_BLD_PKG/libinterceptor-i686.so $SONAR_PATH/bin/
     rm -rf $SONAR_BLD_PKG
 fi
+
+# Display the installed sonar version
+sonar-scanner --version
