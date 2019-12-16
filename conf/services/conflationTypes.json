@@ -25,12 +25,12 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "differential.remove.unconflatable.data": "Pass unconflatable data from the secondary input to output",
+            "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary input from the output",
+            "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from output",
             "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
-	    "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from output",
-            "snap.unconnected.ways.snap.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to neighboring roads",
+            "snap.unconnected.ways.snap.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to existing roads",
             "snap.unconnected.ways.use.existing.way.nodes": "Reuse highway nodes when snapping unconnected roads",
-            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected highway nodes to neighboring roads"
+            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to existing road nodes"
         }
     },
     "Roads": {
@@ -66,7 +66,7 @@
         "matcher": "hoot::ScriptMatchCreator,PoiGeneric.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "poi.ignore.type.if.name.present": "Ignore type if name present"
+        "poi.ignore.type.if.name.present": "Ignore type if name present"
        }
     },
     "PoiPolygon": {
@@ -94,14 +94,14 @@
         "matcher": "hoot::ScriptMatchCreator,Area.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "search.radius.area": "Area search radius"
+        "search.radius.area": "Area search radius"
        }
     },
     "Railways": {
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "search.radius.railway": "Railway search radius"
+        "search.radius.railway": "Railway search radius"
        }
     },
     "Powerlines": {
@@ -113,7 +113,7 @@
         "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "search.radius.waterway": "Waterway search radius"
+        "search.radius.waterway": "Waterway search radius"
         }
     }
 }
