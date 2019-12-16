@@ -86,6 +86,7 @@ public class AdvancedConflationOptionsResource {
     private JSONArray horizontalTemplate;
     private JSONArray attributeTemplate;
     private JSONArray hoot2Template;
+    private JSONArray diffTemplate;
     private JSONObject conflationOptionsTemplate;
     private JSONObject referenceOverride;
     private JSONObject horizontalOverride;
@@ -176,12 +177,17 @@ public class AdvancedConflationOptionsResource {
 
             JSONParser parser = new JSONParser();
 
+            //This first conditional gives the non-default values inferred by
+            //a specific conflation type so the UI can update the discrete values
+            //exposed in the advanced options pane
             if (confType.equalsIgnoreCase("conflationOptions")) {
                 if((conflationOptionsTemplate == null) || doForce) {
                     conflationOptionsTemplate = new JSONObject(confOptionsMap);
                 }
                 return Response.ok(conflationOptionsTemplate.toJSONString()).build();
             }
+            //This one gets the different options exposed in the advanced options pane
+            //grouped by category
             else if (confType.equalsIgnoreCase("hoot2")) {
                 if ((hoot2Template == null) || doForce) {
                     hoot2Template = new JSONArray();
@@ -189,6 +195,18 @@ public class AdvancedConflationOptionsResource {
                 }
                 template = hoot2Template;
             }
+            //This one gets the differential options from the hoot2 config
+            else if (confType.equalsIgnoreCase("differential")) {
+                if ((diffTemplate == null) || doForce) {
+                    JSONArray hoot2Opts = (JSONArray) hoot2Override.get("hoot2");
+                    JSONObject diffOpts = (JSONObject)hoot2Opts.stream().filter(config -> {
+                                return ((JSONObject)config).get("name").equals("Differential");
+                            }).findFirst().orElse(null);
+                    diffTemplate = (JSONArray) diffOpts.get("members");
+                }
+                template = diffTemplate;
+            }
+            //The rest are used in Hoot1 UI
             else if (confType.equalsIgnoreCase("reference")) {
                 if ((referenceTemplate == null) || doForce) {
                     referenceTemplate = new JSONArray();
