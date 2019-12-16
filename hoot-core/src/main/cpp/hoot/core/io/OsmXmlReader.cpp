@@ -68,11 +68,16 @@ _status(Status::Invalid),
 _missingNodeCount(0),
 _missingWayCount(0),
 _badAccuracyCount(0),
+_keepStatusTag(false),
+_useFileStatus(false),
 _useDataSourceId(false),
+_addSourceDateTime(true),
 _wayId(0),
 _relationId(0),
 _inputCompressed(false),
+_addChildRefsWhenMissing(false),
 _numRead(0),
+_statusUpdateInterval(1000),
 _keepImmediatelyConnectedWaysOutsideBounds(false)
 {
   setConfiguration(conf());
@@ -170,7 +175,7 @@ void OsmXmlReader::_createNode(const QXmlAttributes& attributes)
   {
     uid = _parseDouble(attributes.value("uid"));
   }
-  LOG_VART(version);
+  //LOG_VART(version);
   if (_warnOnVersionZeroElement && version == 0)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
@@ -456,11 +461,34 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   _map.reset();
 }
 
+OsmMapPtr OsmXmlReader::fromXml(const QString& xml, const bool useDataSourceId,
+                                const bool useDataSourceStatus, const bool keepStatusTag,
+                                const bool addChildRefsWhenMissing)
+{
+  if (xml.isEmpty())
+  {
+    return OsmMapPtr();
+  }
+
+  LOG_DEBUG("Reading map from xml...");
+  //LOG_VART(xml);
+  OsmMapPtr map(new OsmMap());
+  OsmXmlReader reader;
+  reader.setUseDataSourceIds(useDataSourceId);
+  reader.setUseFileStatus(useDataSourceStatus);
+  reader.setKeepStatusTag(keepStatusTag);
+  reader.setAddChildRefsWhenMissing(addChildRefsWhenMissing);
+  reader.readFromString(xml, map);
+  return map;
+}
+
 void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 {
   _numRead = 0;
   finalizePartial();
   _map = map;
+
+  LOG_DEBUG("Parsing map from xml...");
 
   // do xml parsing
   QXmlSimpleReader reader;
@@ -475,6 +503,8 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
   {
     throw Exception(_errorString);
   }
+
+  LOG_DEBUG("Parsed map from xml.");
 
   LOG_VARD(_bounds.isNull());
   if (!_bounds.isNull())

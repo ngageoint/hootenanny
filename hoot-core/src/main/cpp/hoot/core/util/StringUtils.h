@@ -145,6 +145,14 @@ public:
    * @return true if any string in the input list contains the given substring; false otherwise
    */
   static bool containsSubstring(const QStringList& input, const QString& substring);
+
+  /**
+   * Removes all strings in a specified list from another string list
+   *
+   * @param input the list to remove strings from
+   * @param toRemove the list of string to remove
+   */
+  static void removeAll(QStringList& input, const QStringList& toRemove);
 };
 
 }

@@ -42,9 +42,16 @@ MapCleaner::MapCleaner()
 {
 }
 
+MapCleaner::MapCleaner(const Progress& progress) :
+_progress(progress)
+{
+}
+
 void MapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
-  NamedOp(ConfigOptions().getMapCleanerTransforms()).apply(map);
+  NamedOp cleaningOps(ConfigOptions().getMapCleanerTransforms());
+  cleaningOps.setProgress(_progress);
+  cleaningOps.apply(map);
 }
 
 }

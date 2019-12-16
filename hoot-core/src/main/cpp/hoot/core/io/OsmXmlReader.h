@@ -87,6 +87,21 @@ public:
 
   void readFromString(const QString& xml, const OsmMapPtr& map);
 
+  /**
+   * Converts OSM XML to a map
+   *
+   * @param xml the XML string to convert
+   * @param useDataSourceId use IDs from the source data
+   * @param useDataSourceStatus use statues from the source data
+   * @param keepStatusTag retain the status tag in the output
+   * @param addChildRefsWhenMissing add referenced children when they are missing from the input
+   * @return a map
+   */
+  static OsmMapPtr fromXml(const QString& xml, const bool useDataSourceId = false,
+                           const bool useDataSourceStatus = false,
+                           const bool keepStatusTag = false,
+                           const bool addChildRefsWhenMissing = false);
+
   void read(const QString& path, const OsmMapPtr& map);
 
   virtual ElementPtr readNextElement() override;

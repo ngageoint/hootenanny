@@ -468,7 +468,6 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   if (eid.getType() == ElementType::Node)
   {
     const set<long>& ways = getNodeToWayMap()->getWaysByNode(eid.getId());
-
     for (set<long>::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       result.insert(ElementId::way(*it));
@@ -476,7 +475,6 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
   }
 
   const set<long>& ancestors = getElementToRelationMap()->getRelationByElement(eid);
-
   for (set<long>::const_iterator it = ancestors.begin(); it != ancestors.end(); ++it)
   {
     if (!_map.containsRelation(*it))
@@ -484,11 +482,11 @@ set<ElementId> OsmMapIndex::getParents(ElementId eid) const
       LOG_INFO("Child element: " << eid);
       LOG_INFO("Missing relation: " << *it);
       LOG_INFO("Child element: " << _map.getElement(eid)->toString());
+      // TODO: throw exception here or continue to next iteration?
     }
     // the map should contain all the relations returned by the index.
     assert(_map.containsRelation(*it));
     const ConstRelationPtr& r = _map.getRelation(*it);
-
     if (r->contains(eid))
     {
       result.insert(r->getElementId());
