@@ -27,6 +27,7 @@
 package hoot.services.controllers.grail;
 
 import java.io.File;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -76,6 +77,9 @@ public class GrailParams {
     @JsonProperty("customQuery")
     private String customQuery;
 
+    @JsonProperty("ADV_OPTIONS")
+    private Map<String, String> advancedOptions;
+
     private String consumerKey;
 
     private String consumerSecret;
@@ -109,6 +113,9 @@ public class GrailParams {
         this.workDir = params.getWorkDir();
         this.conflationType = params.getConflationType();
         this.comment = params.getComment();
+        this.hashtags = params.getHashtags();
+        this.source = params.getSource();
+        this.advancedOptions = params.getAdvancedOptions();
     }
 
     public String getComment() {
@@ -253,6 +260,14 @@ public class GrailParams {
 
     public String getCustomQuery() {
         return customQuery;
+    }
+
+    public Map<String, String> getAdvancedOptions() {
+        return advancedOptions;
+    }
+
+    public void setAdvancedOptions(Map<String, String> advancedOptions) {
+        this.advancedOptions = advancedOptions;
     }
 
     @Override
