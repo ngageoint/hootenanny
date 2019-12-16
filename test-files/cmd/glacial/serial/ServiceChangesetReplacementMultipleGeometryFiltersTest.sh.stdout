@@ -1,0 +1,62 @@
+test name:  ServiceChangesetReplacementMultipleGeometryFiltersTest
+source file 1:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
+crop aoi:  -71.4809,42.4808,-71.45688,42.49368
+source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
+REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
+SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
+replacement aoi:  -71.4698,42.4866,-71.4657,42.4902
+full replacement: 
+strict bounds: 
+geometry filters:  --geometry-filters hoot::BuildingCriterion;hoot::HighwayCriterion
+tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion
+replacement filters: 
+chain replacement filters: 
+replacement filter options: 
+retainment filters: 
+chain retainment filters: 
+retainment filter options: 
+source formats:  xml
+way snap tolerance:  20.0
+existing way node tolerance:  20.0
+
+Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+19:16:28.671 WARN   .../hoot/core/io/OsmXmlReader.cpp( 611) Skipping missing Node(73301713) in Way(9514937)...
+19:16:28.671 WARN   .../hoot/core/io/OsmXmlReader.cpp( 611) Skipping missing Node(73191975) in Way(9514937)...
+19:16:28.671 WARN   .../hoot/core/io/OsmXmlReader.cpp( 611) Skipping missing Node(73238746) in Way(9514937)...
+19:16:28.671 WARN   .../hoot/core/io/OsmXmlReader.cpp( 615) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/ref-perturbed-original.osm (contains features to be replaced)...
+
+
+Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/sec-original.osm (contains features to replace with)...
+
+19:16:32.689 WARN   .../hoot/core/io/OsmXmlReader.cpp( 611) Skipping missing Node(73301713) in Way(9514937)...
+19:16:32.689 WARN   .../hoot/core/io/OsmXmlReader.cpp( 611) Skipping missing Node(73191975) in Way(9514937)...
+19:16:32.689 WARN   .../hoot/core/io/OsmXmlReader.cpp( 611) Skipping missing Node(73238746) in Way(9514937)...
+19:16:32.689 WARN   .../hoot/core/io/OsmXmlReader.cpp( 615) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/sec-original.osm over: -71.4698,42.4866,-71.4657,42.4902, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/ServiceChangesetReplacementMultipleGeometryFiltersTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/ServiceChangesetReplacementMultipleGeometryFiltersTest-changeset-xml.osc.sql to the reference data in the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4606041, num_changes=1525
+Node(s) Created: 703
+Node(s) Modified: 1
+Node(s) Deleted: 678
+Way(s) Created: 71
+Way(s) Modified: 2
+Way(s) Deleted: 70
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementMultipleGeometryFiltersTest-xml-replaced.osm for verification...
+

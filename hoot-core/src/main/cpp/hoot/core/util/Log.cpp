@@ -116,7 +116,7 @@ int Log::getWarnMessageLimit()
   return _warnMessageLimit;
 }
 
-Log::WarningLevel Log::getLevelFromString(QString l)
+Log::WarningLevel Log::levelFromString(QString l)
 {
   l = l.toLower();
   if (l == "none")
@@ -155,7 +155,7 @@ Log::WarningLevel Log::getLevelFromString(QString l)
   throw IllegalArgumentException("Unexpected log level string: " + l);
 }
 
-QString Log::getLevelString(WarningLevel l)
+QString Log::levelToString(WarningLevel l)
 {
   switch(l)
   {
@@ -178,6 +178,11 @@ QString Log::getLevelString(WarningLevel l)
   default:
     return "UNK";
   }
+}
+
+QString Log::getLevelAsString() const
+{
+  return levelToString(_level);
 }
 
 void Log::log(WarningLevel level, const QString& str, const QString& filename,

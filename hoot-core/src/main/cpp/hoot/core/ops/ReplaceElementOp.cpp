@@ -91,7 +91,6 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
   assert(to);
 
   set<ElementId> parents = map->getParents(_from);
-
   for (set<ElementId>::const_iterator it = parents.begin(); it != parents.end(); ++it)
   {
     ElementId pid = *it;
@@ -109,11 +108,10 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
         // this should never happen.
         if (from->getElementType() != ElementType::Node)
         {
-          LOG_VARE(from);
-          LOG_VARE(to);
           map->validate();
           throw InternalErrorException(
-            "Internal Error: Somehow a non-node is being reported as part of a way.");
+            "Internal Error: Somehow a non-node is being reported as part of a way. From element: " +
+            from->getElementId().toString() + ", To element: " + to->getElementId().toString());
         }
         else if (to->getElementType() == ElementType::Node)
         {
@@ -123,8 +121,8 @@ void ReplaceElementOp::apply(const OsmMapPtr &map)
         break;
       }
     default:
-      LOG_VARE(pid);
-      throw InternalErrorException("Internal Error: Unexpected element reported as a parent.");
+      throw InternalErrorException(
+        "Internal Error: Unexpected element reported as a parent. PID: " + pid.toString());
     }
   }
 
