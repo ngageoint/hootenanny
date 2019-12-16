@@ -224,6 +224,9 @@ public:
     delete _d;
   }
 
+  // not implemented
+  virtual void resetIterator() {}
+
 protected:
 
   virtual void _next()

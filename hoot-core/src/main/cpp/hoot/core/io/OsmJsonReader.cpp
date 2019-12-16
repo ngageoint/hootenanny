@@ -393,8 +393,10 @@ void OsmJsonReader::_parseOverpassJson()
 
   // The previous two final load steps correspond to effectively the same behavior that the XML
   // reader uses, except with that reader we simply don't add a missing ref in the first place b/c
-  // we're guaranteed element type ordering. Because of that, we know at the time a parent element
-  // is loaded any missing child refs mean the child itself is definitely absent from the input.
+  // we're guaranteed element type ordering (unless
+  // osm.map.reader.xml.add.child.refs.when.missing=true). Because of that, we know at the time a
+  // parent element is loaded any missing child refs mean the child itself is definitely absent
+  // from the input.
 }
 
 void OsmJsonReader::_updateRelationChildRefs(const ElementType& childElementType)
@@ -505,7 +507,7 @@ void OsmJsonReader::_updateChildRefs()
 {
   LOG_DEBUG("Updating child element ID references...");
 
-  // For any ways which added way nodes that weren't validated upon load, let's update those way
+  // For any ways in which added way nodes that weren't validated upon load, let's update those way
   // node id refs now with what we actually loaded.
   _updateWayChildRefs();
 

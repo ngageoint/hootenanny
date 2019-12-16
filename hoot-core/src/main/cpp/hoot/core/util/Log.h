@@ -109,20 +109,22 @@ public:
     return *_theInstance;
   }
 
-  WarningLevel getLevel() { return _level; }
+  WarningLevel getLevel() const { return _level; }
 
-  static WarningLevel getLevelFromString(QString l);
+  static WarningLevel levelFromString(QString l);
 
-  QString getLevelString(WarningLevel l);
+  static QString levelToString(WarningLevel l);
+
+  QString getLevelAsString() const;
 
   /**
    * May get called multiple times (e.g. before and after config settings are finalized).
    */
   void init();
 
-  bool isDebugEnabled() { return _level <= Debug; }
+  bool isDebugEnabled() const { return _level <= Debug; }
 
-  bool isInfoEnabled() { return _level <= Info; }
+  bool isInfoEnabled() const { return _level <= Info; }
 
   void log(WarningLevel level, const std::string& str);
 

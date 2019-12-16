@@ -549,7 +549,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
 }
 
 void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
-{
+{ 
   const std::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.
@@ -595,12 +595,14 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
 }
 
 void OsmMap::replaceNode(long oldId, long newId)
-{
+{  
   // nothing to do
   if (oldId == newId)
   {
     return;
   }
+
+  LOG_TRACE("Replacing node: " << oldId << " with: " << newId << "...");
 
   for (size_t i = 0; i < _listeners.size(); i++)
   {
@@ -1175,6 +1177,63 @@ QSet<long> OsmMap::getRelationIds() const
     ids.insert(it->first);
   }
   return ids;
+}
+
+void OsmMap::resetIterator()
+{
+  _currentNodeItr = getNodes().begin();
+}
+
+void OsmMap::_next()
+{
+  if (_currentElementId.isNull())
+  {
+    if (getNodes().size() > 0)
+    {
+      _currentNodeItr = getNodes().begin();
+    }
+    else if (getWays().size() > 0)
+    {
+      _currentWayItr = getWays().begin();
+    }
+    else if (getRelations().size() > 0)
+    {
+      _currentRelationItr = getRelations().begin();
+    }
+  }
+
+  if (getNodes().size() > 0 && _currentNodeItr != getNodes().end())
+  {
+    const ElementId nodeId = ElementId(ElementType::Node, _currentNodeItr->first);
+    LOG_VARD(nodeId);
+    _addElement(getNode(nodeId.getId()));
+    _currentElementId = nodeId;
+    _currentNodeItr++;
+    if (_currentNodeItr == getNodes().end())
+    {
+      _currentWayItr = getWays().begin();
+    }
+  }
+  else if (getWays().size() > 0 && _currentWayItr != getWays().end())
+  {
+    const ElementId wayId = ElementId(ElementType::Way, _currentWayItr->first);
+    LOG_VARD(wayId);
+    _addElement(getWay(wayId.getId()));
+    _currentElementId = wayId;
+    _currentWayItr++;
+    if (_currentWayItr == getWays().end())
+    {
+      _currentRelationItr = getRelations().begin();
+    }
+  }
+  else if (getRelations().size() > 0 && _currentRelationItr != getRelations().end())
+  {
+    const ElementId relationId = ElementId(ElementType::Relation, _currentRelationItr->first);
+    LOG_VARD(relationId);
+    _addElement(getRelation(relationId.getId()));
+    _currentElementId = relationId;
+    _currentRelationItr++;
+  }
 }
 
 }

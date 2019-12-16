@@ -29,6 +29,5 @@ hoot clean JustHighways.osm Cleaned.osm
 ==== See Also
 
 * `map.cleaner.transforms` configuration option
-* `convert` command
 * <<hootalgo, IngestAndClean>>
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

@@ -38,12 +38,11 @@ class Element;
 
 /**
  * Implements the iterator concept and provides some simple methods for the inheriter to use.
- *
- * The inheriting class will need to implement "_next" and call "_addElement".
  */
 class ElementIterator
 {
 public:
+
   ElementIterator() {}
 
   virtual ~ElementIterator() {}
@@ -51,6 +50,11 @@ public:
   const std::shared_ptr<Element>& next();
 
   bool hasNext();
+
+  /**
+   * Resets the element iterator
+   */
+  virtual void resetIterator() = 0;
 
 protected:
 
@@ -67,6 +71,7 @@ protected:
   virtual void _next() = 0;
 
 private:
+
   std::shared_ptr<Element> _current;
   std::list<std::shared_ptr<Element>> _pending;
 };
