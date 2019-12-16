@@ -39,6 +39,7 @@ namespace hoot
 class MatchMembers
 {
 public:
+
   enum Type
   {
     None = 0,
@@ -72,6 +73,7 @@ public:
   }
 
 private:
+
   Type _type;
 };
 

@@ -48,7 +48,8 @@ public:
   static std::string className() { return "hoot::ElementInIdListCriterion"; }
 
   ElementInIdListCriterion() {}
-  explicit ElementInIdListCriterion(const std::vector<long>& ids);
+  explicit ElementInIdListCriterion(const ElementType& elementType, const std::vector<long>& ids);
+  ElementInIdListCriterion(const std::vector<ElementId>& ids);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -62,7 +63,7 @@ public:
 
 private:
 
-  std::set<long> _ids;
+  std::set<ElementId> _ids;
 };
 
 }

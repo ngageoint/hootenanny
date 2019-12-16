@@ -40,6 +40,7 @@
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/HasNameCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
 
 using namespace v8;
 
@@ -175,6 +176,16 @@ void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isPoint(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, PointCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)

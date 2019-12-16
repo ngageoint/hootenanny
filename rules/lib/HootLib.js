@@ -150,6 +150,15 @@ function getTagDistance(commonKvp, t1, t2) {
 }
 
 /**
+ * TODO
+ */
+function getTagScore(map, e1, e2)
+{
+  var differ = new hoot.ComparatorTagDifferencer();
+  return differ.diff(map, e1, e2);
+}
+
+/**
  * Wrapper for logWarn for backward compatibility.
  */
 function logWarn(e)
@@ -305,6 +314,14 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
 function isArea(e)
 {
   return hoot.OsmSchema.isArea(e);
+}
+
+/**
+ * Returns true if the specified element is a point element.
+ */
+function isPoint(e)
+{
+  return hoot.OsmSchema.isPoint(e);
 }
 
 /**

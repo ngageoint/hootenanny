@@ -374,7 +374,7 @@ bool PoiPolygonTypeScoreExtractor::_haveMatchingTypeNames(const QString& kvp, co
 // As part of #2633, attempted to re-implement some of this hardcoded type code as categories in
 // the hoot schema.  In doing that, several strange bugs started occurring and many poi/poly unit
 // tests started to break.  Using the categories in that manner may not be the best approach and
-// possibly a different on is needed.  The branch "2633-new-categories" is an example of the failed
+// possibly a different one is needed.  The branch "2633-new-categories" is an example of the failed
 // changes.
 
 bool PoiPolygonTypeScoreExtractor::isSchool(ConstElementPtr element)

@@ -152,6 +152,11 @@ private:
   QString _matchSetToString(const MatchSet& matchSet) const;
 
   void _updateProgress(const int currentStep, const QString message);
+
+  /*
+   * TODO
+   */
+  void _addGenericMatches(const ConstOsmMapPtr& map);
 };
 
 }

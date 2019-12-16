@@ -6,6 +6,7 @@ exports.matchThreshold = parseFloat(hoot.get("generic.polygon.match.threshold"))
 exports.missThreshold = parseFloat(hoot.get("generic.polygon.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
+exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 exports.experimental = false;
 
 /**
@@ -45,46 +46,52 @@ exports.isWholeGroup = function()
  */
 exports.matchScore = function(map, e1, e2)
 {
-    var result;
+  var result;
 
-    if (e1.getStatusString() == e2.getStatusString()) {
-        result = { miss: 1.0, explain:'Miss' };
-    }
-    else if (isArea(e1) == false || isArea(e2) == false)
+  if (e1.getStatusString() == e2.getStatusString()) 
+  {
+    result = { miss: 1.0, explain:'Miss' };
+  }
+  /*else if (isArea(e1) == false || isArea(e2) == false)
+  {
+      result = { match: 0.0, miss: 1.0, review: 0.0 };
+  }*/
+  else
+  {
+    var tagScore = getTagScore(map, e1, e2);
+    if (tagScore < exports.tagThreshold)
     {
-        result = { match: 0.0, miss: 1.0, review: 0.0 };
+      result = { match: 0.0, miss: 1.0, review: 0.0 };
     }
-    else
+
+    // These rules were derived by using training data in Weka with the
+    // REPTree model w/ maxDepth set to 3. 
+    var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
+    if (overlap < 0.20)
     {
-        // These rules were derived by using training data in Weka with the
-        // REPTree model w/ maxDepth set to 3. 
-        var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
-        if (overlap < 0.20)
-        {
-            result = { match: 0.0, miss: 1.0, review: 0.0 };
-        }
-        else 
-        {
-            if (overlap < 0.45)
-            {
-                var hist = new hoot.AngleHistogramExtractor().
-                    extract(map, e1, e2);
-                if (hist < 0.58)
-                {
-                    result = { match: 0.0, miss: 0.0, review: 1.0 };
-                }
-                else
-                {
-                    result = { match: 1.0, miss: 0.0, review: 0.0 };
-                }
-            }
-            else
-            {
-                result = { match: 1.0, miss: 0.0, review: 0.0 };
-            }
-        }
+      result = { match: 0.0, miss: 1.0, review: 0.0 };
     }
-    return result;
+    else 
+    {
+      if (overlap < 0.45)
+      {
+        var hist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
+        if (hist < 0.58)
+        {
+          result = { match: 0.0, miss: 0.0, review: 1.0 };
+        }
+        else
+        {
+          result = { match: 1.0, miss: 0.0, review: 0.0 };
+        }
+      }
+      else
+      {
+        result = { match: 1.0, miss: 0.0, review: 0.0 };
+      }
+    }
+  }
+  return result;
 };
 
 /**
@@ -94,12 +101,12 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
+  var newTags = mergeTags(e1, e2);
+  e1.setTags(newTags);
 
-    removeElement(map, e2);
+  removeElement(map, e2);
 
-    return e1;
+  return e1;
 };
 
 /**
@@ -110,11 +117,11 @@ exports.mergePair = function(map, e1, e2)
  * This should handle a large number of scenarios by simply implementing more internal, complex
  * merge methods.
  */
-exports.mergeSets = function(map, set1, set2) {
-
-    // snap the ways in set2 on to set1. Use the default merge method for merging the tags while
-    // snapping.
-    return new hoot.SnapWays(mergeTags);
+exports.mergeSets = function(map, set1, set2) 
+{
+  // snap the ways in set2 on to set1. Use the default merge method for merging the tags while
+  // snapping.
+  return new hoot.SnapWays(mergeTags);
 };
 
 

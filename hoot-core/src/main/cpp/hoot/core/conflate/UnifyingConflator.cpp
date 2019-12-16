@@ -43,6 +43,9 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/criterion/ElementInIdListCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 // standard
 #include <algorithm>
@@ -168,6 +171,15 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_VART(_matches);
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
+
+  if (ConfigOptions(_settings).getConflateMatchUnmatchedWithGeneric())
+  {
+    // For any remaining unmatched features (features hoot didn't have a predefined match for),
+    // let's see if we can get a match with any of the generic matchers. This must be done in a
+    // separate step since we don't want generic conflate matches conflicting with the (probably
+    // more accurate) non-generic conflate matches that we already have.
+    _addGenericMatches(map);
+  }
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -319,6 +331,76 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 
   currentStep++;
+}
+
+void UnifyingConflator::_addGenericMatches(const ConstOsmMapPtr& map)
+{
+  // TODO: don't know if this can work...due to the mergers having not been run yet; may need
+  // to pull this out into ConflateCmd and run this in a second call to UnifyingConflator??
+
+  LOG_DEBUG("Adding generic matches...");
+  LOG_VARD(map->size());
+
+  // get the ids of all unmatched features
+  QSet<ElementId> elementIdsInvolvedInMatches;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = _matches.begin();
+       matchItr != _matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr = matchPairs.begin();
+         matchPairItr != matchPairs.end(); ++matchPairItr)
+    {
+      elementIdsInvolvedInMatches.insert(matchPairItr->first);
+      elementIdsInvolvedInMatches.insert(matchPairItr->second);
+    }
+  }
+  LOG_VARD(elementIdsInvolvedInMatches.size());
+
+  // copy out a subset map with only unmatched features
+  ElementCriterionPtr idCrit(
+    new NotCriterion(
+      new ElementInIdListCriterion(elementIdsInvolvedInMatches.toList().toVector().toStdVector())));
+  CopyMapSubsetOp mapCopier(map, idCrit);
+  OsmMapPtr unmatchedFeatures(new OsmMap());
+  mapCopier.apply(unmatchedFeatures);
+  LOG_VARD(unmatchedFeatures->size());
+
+  // conflate the unmatched features
+  MatchFactory::getInstance().reset();
+  QStringList genericMatchers;
+  genericMatchers.append("hoot::ScriptMatchCreator,PointGeneric.js");
+  genericMatchers.append("hoot::ScriptMatchCreator,LineStringGeneric.js");
+  genericMatchers.append("hoot::ScriptMatchCreator,PolygonGeneric.js");
+  const QStringList originalMatchCreators = conf().getList("match.creators");
+  conf().set("match.creators", genericMatchers);
+  QStringList genericMergers;
+  for (int i = 0; i < 3; i++)
+  {
+    genericMergers.append("hoot::ScriptMergerCreator");
+  }
+  const QStringList originalMergerCreators = conf().getList("merger.creators");
+  conf().set("merger.creators", genericMergers);
+
+  std::vector<ConstMatchPtr> genericMatches;
+  //_matchFactory = MatchFactory::getInstance();
+  if (_matchThreshold.get())
+  {
+    _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds, _matchThreshold);
+  }
+  else
+  {
+    _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds);
+  }
+  LOG_VARD(genericMatches.size());
+
+  // don't think this is actually necessary...
+  conf().set("match.creators", originalMatchCreators);
+  conf().set("merger.creators", originalMergerCreators);
+
+  // combine the new matches with the existing ones
+  _matches.insert(std::end(_matches), std::begin(genericMatches), std::end(genericMatches));
+  LOG_VARD(_matches.size());
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,

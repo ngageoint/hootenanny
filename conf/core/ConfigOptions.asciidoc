@@ -642,6 +642,13 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== conflate.match.unmatched.with.generic
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === conflate.miss.threshold.default
 
 * Data Type: double
@@ -1143,6 +1150,13 @@ Absolute file path to dictionaries of English words. The first file found will b
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
 
+=== generic.conflate.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+TODO
+
 === generic.line.match.threshold
 
 * Data Type: double
@@ -1190,6 +1204,40 @@ See also:
 * Default Value: `hoot::MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines with generic line conflation.
+
+=== generic.point.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for generic points.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for generic points.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for generic points. See
+`conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
 
 === generic.polygon.match.threshold
 
@@ -3944,6 +3992,13 @@ the default value.
 * Default Value: `${search.radius.default}`
 
 The search radius to use when conflating generic lines.  See `search.radius.default`.
+
+=== search.radius.generic.point
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius to use when conflating generic points.  See `search.radius.default`.
 
 === search.radius.generic.polygon
 

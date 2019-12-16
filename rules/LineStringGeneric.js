@@ -7,6 +7,7 @@ exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
+exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -37,8 +38,9 @@ exports.isMatchCandidate = function(map, e)
  * If this function returns false the conflation routines will attempt to 
  * pick the best subset of matches that do not conflict.
  */
-exports.isWholeGroup = function() {
-    return false;
+exports.isWholeGroup = function() 
+{
+  return false;
 };
 
 /**
@@ -50,36 +52,43 @@ exports.isWholeGroup = function() {
  * The scores should always sum to one. If they don't you will be taunted 
  * mercilessly and we'll normalize it anyway. :P
  */
-exports.matchScore = function(map, e1, e2) {
-    var result = { miss: 1.0 };
+exports.matchScore = function(map, e1, e2) 
+{
+  var result = { miss: 1.0 };
 
-    if (e1.getStatusString() == e2.getStatusString()) {
-        return result;
-    }
-
-    // extract the sublines needed for matching
-    var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-
-    if (sublines)
-    {
-        var m = sublines.map;
-        var m1 = sublines.match1;
-        var m2 = sublines.match2;
-        var ds = distanceScoreExtractor.extract(m, m1, m2);
-        var ps = weightedShapeDistanceExtractor.extract(m, m1, m2);
-        var ls = lengthScoreExtractor.extract(m, m1, m2);
-
-        if (ds * ps * ls > 0.4)
-        {
-//             hoot.log("Found Match!", e1.getTags().get('note'),
-//                 e2.getTags().get('note'));
-//             hoot.log(angleHistogramValue);
-//             hoot.log(weightedShapeDistanceValue);
-            result = { match: 1.0 };
-        }
-    }
-
+  if (e1.getStatusString() == e2.getStatusString()) 
+  {
     return result;
+  }
+
+  var tagScore = getTagScore(map, e1, e2);
+  if (tagScore < exports.tagThreshold)
+  {
+    result = { match: 0.0, miss: 1.0, review: 0.0 };
+  }
+
+  // extract the sublines needed for matching
+  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  if (sublines)
+  {
+    var m = sublines.map;
+    var m1 = sublines.match1;
+    var m2 = sublines.match2;
+    var ds = distanceScoreExtractor.extract(m, m1, m2);
+    var ps = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    var ls = lengthScoreExtractor.extract(m, m1, m2);
+
+    if (ds * ps * ls > 0.4)
+    {
+//     hoot.log("Found Match!", e1.getTags().get('note'),
+//         e2.getTags().get('note'));
+//     hoot.log(angleHistogramValue);
+//     hoot.log(weightedShapeDistanceValue);
+     result = { match: 1.0 };
+    }
+  }
+
+  return result;
 };
 
 /**
@@ -99,9 +108,9 @@ exports.matchScore = function(map, e1, e2) {
  */
 exports.mergeSets = function(map, pairs, replaced) 
 {
-    // snap the ways in the second input to the first input. Use the default tag 
-    // merge method.
-    var result = snapWays(sublineMatcher, map, pairs, replaced);
-    return result;
+  // snap the ways in the second input to the first input. Use the default tag 
+  // merge method.
+  var result = snapWays(sublineMatcher, map, pairs, replaced);
+  return result;
 };
 

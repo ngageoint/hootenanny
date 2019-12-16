@@ -428,7 +428,6 @@ exports.mergePair = function(map, e1, e2)
     // replace instances of e2 with e1 and merge tags
     mergeElements(map, e1, e2);
     e1.setStatusString("conflated");
-
     return e1;
 };
 

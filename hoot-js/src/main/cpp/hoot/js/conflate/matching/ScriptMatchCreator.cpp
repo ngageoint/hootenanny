@@ -137,7 +137,7 @@ public:
 
     ConstOsmMapPtr map = getMap();
 
-    // create an envlope around the e plus the search radius.
+    // create an envelope around the e plus the search radius.
     std::shared_ptr<Envelope> env(e->getEnvelope(map));
     LOG_VART(env);
     Meters searchRadius = getSearchRadius(e);

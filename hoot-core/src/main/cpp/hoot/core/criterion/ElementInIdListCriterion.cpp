@@ -36,7 +36,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementInIdListCriterion)
 
-ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<long>& ids)
+ElementInIdListCriterion::ElementInIdListCriterion(const ElementType& elementType,
+                                                   const std::vector<long>& ids)
+{
+  for (uint i = 0; i < ids.size(); i++)
+  {
+    _ids.insert(ElementId(elementType, ids[i]));
+  }
+}
+
+ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<ElementId>& ids)
 {
   for (uint i = 0; i < ids.size(); i++)
   {
@@ -46,7 +55,7 @@ ElementInIdListCriterion::ElementInIdListCriterion(const std::vector<long>& ids)
 
 bool ElementInIdListCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return _ids.find(e->getId()) != _ids.end();
+  return _ids.find(e->getElementId()) != _ids.end();
 }
 
 }
