@@ -37,6 +37,7 @@ namespace hoot
 {
 
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
+_inMemoryMapSizeMax(2000000),
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
 _numValidationErrors(0),
@@ -63,6 +64,7 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   _josmCertificatePath = opts.getJosmCertificatePath();
   _josmCertificatePassword = opts.getJosmCertificatePassword();
   _josmValidatorsRequiringUserCert = opts.getJosmValidatorsRequiringUserCertificate();
+  _inMemoryMapSizeMax = opts.getJosmInMemoryMapSizeMax();
 }
 
 bool JosmMapValidatorAbstract::_noUserCertSpecified() const
@@ -227,8 +229,10 @@ void JosmMapValidatorAbstract::apply(std::shared_ptr<OsmMap>& map)
     throw HootException("Error calling getAvailableValidatorsWithDescription.");
   }
 
-  // TODO: convert to debug?
-  LOG_INFO(getCompletedStatusMessage());
+  if (Log::getInstance().getLevel() > Log::Debug)
+  {
+    LOG_INFO(getCompletedStatusMessage());
+  }
 }
 
 void JosmMapValidatorAbstract::_getStats()

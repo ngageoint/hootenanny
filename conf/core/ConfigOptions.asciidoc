@@ -1761,6 +1761,13 @@ path to your certificate file here.
 
 Password for the certificate specified in josm.certificate.path.
 
+=== josm.in.memory.map.size.max
+
+* Data Type: int
+* Default Value: `2000000`
+
+TODO
+
 === josm.validators.exclude
 
 * Data Type: list

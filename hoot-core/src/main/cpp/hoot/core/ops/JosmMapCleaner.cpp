@@ -33,6 +33,9 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/jni/JniConversion.h>
 
+// Qt
+#include <QTemporaryFile>
+
 namespace hoot
 {
 
@@ -69,30 +72,84 @@ void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving cleaned map...");
+  LOG_VARD(inputMap->size());
 
   // call into hoot-josm to clean features in the map and return the cleaned map
 
   // JNI sig format: (input params...)return type
 
-  jstring cleanedMapJavaStr =
-    (jstring)_javaEnv->CallObjectMethod(
+  if ((int)inputMap->size() > _inMemoryMapSizeMax)
+  {
+    std::shared_ptr<QTemporaryFile> tempInputFile(
+      new QTemporaryFile(
+        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-in.osm"));
+    tempInputFile->setAutoRemove(false);    // TODO: change to true
+    if (!tempInputFile->open())
+    {
+      throw HootException(
+        "Unable to open temp input file for cleaning: " + tempInputFile->fileName() + ".");
+    }
+//    std::shared_ptr<QTemporaryFile> tempOutputFile(
+//      new QTemporaryFile(
+//        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-out.osm"));
+//    tempOutputFile->setAutoRemove(false);    // TODO: change to true
+//    if (!tempOutputFile->open())
+//    {
+//      throw HootException(
+//        "Unable to open temp output file for cleaning: " + tempOutputFile->fileName() + ".");
+//    }
+//    tempOutputFile->close();
+    LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
+    OsmXmlWriter().write(inputMap, tempInputFile->fileName());
+
+    const QString tempOutput = tempInputFile->fileName().replace("in", "out");
+
+    _javaEnv->CallVoidMethod(
       _josmInterface,
       // Java sig:
-      //  String clean(List<String> validators, String elementsXml, boolean addDetailTags)
+      //  void clean(
+      //    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
+      //    boolean addDetailTags)
       _javaEnv->GetMethodID(
-        _josmInterfaceClass, "clean", "(Ljava/util/List;Ljava/lang/String;Z)Ljava/lang/String;"),
+        _josmInterfaceClass, "clean",
+        "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Z)V"),
       // validators to use
       JniConversion::toJavaStringList(_javaEnv, _josmValidators),
       // convert input map to xml string to pass in
-      JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)),
+      JniConversion::toJavaString(_javaEnv, tempInputFile->fileName()),
+      JniConversion::toJavaString(_javaEnv, tempOutput),
       // add explanation tags for cleaning
       _addDetailTags);
-  JniConversion::checkForErrors(_javaEnv, "clean");
+    JniConversion::checkForErrors(_javaEnv, "cleanFromMapFile");
 
-  return
-    OsmXmlReader::fromXml(
-      JniConversion::fromJavaString(_javaEnv, cleanedMapJavaStr).trimmed(), true, true, false,
-      true);
+    LOG_DEBUG("Reading cleaned map from " << tempOutput << "...");
+    OsmMapPtr cleanedMap(new OsmMap());
+    OsmXmlReader().read(tempOutput, cleanedMap);
+    return cleanedMap;
+  }
+  else
+  {
+    jstring cleanedMapResultStr =
+      (jstring)_javaEnv->CallObjectMethod(
+        _josmInterface,
+        // Java sig:
+        //  String clean(List<String> validators, String elementsXml, boolean addDetailTags)
+        _javaEnv->GetMethodID(
+          _josmInterfaceClass, "clean",
+          "(Ljava/util/List;Ljava/lang/String;Z)Ljava/lang/String;"),
+        // validators to use
+        JniConversion::toJavaStringList(_javaEnv, _josmValidators),
+        // convert input map to xml string to pass in
+        JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)),
+        // add explanation tags for cleaning
+        _addDetailTags);
+    JniConversion::checkForErrors(_javaEnv, "cleanFromMapString");
+
+    return
+      OsmXmlReader::fromXml(
+        JniConversion::fromJavaString(_javaEnv, cleanedMapResultStr).trimmed(), true, true, false,
+        true);
+  }
 }
 
 void JosmMapCleaner::_getStats()

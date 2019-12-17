@@ -104,6 +104,7 @@ public:
   void setJosmValidatorsInclude(const QStringList& validators)
   { _josmValidatorsInclude = validators; }
   void setLogMissingCertAsWarning(bool log) { _logMissingCertAsWarning = log; }
+  void setInMemoryMapSizeMax(int max) { _inMemoryMapSizeMax = max; }
 
 protected:
 
@@ -112,6 +113,8 @@ protected:
   QString _josmInterfaceName;
   // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
+  // TODO
+  int _inMemoryMapSizeMax;
 
   // JNI environment
   JNIEnv* _javaEnv;

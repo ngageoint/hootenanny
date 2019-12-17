@@ -38,6 +38,13 @@ import java.lang.Exception;
 import java.io.ByteArrayInputStream;
 import java.lang.Class;
 import java.util.Arrays;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,6 +58,9 @@ import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.validation.TestError;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.io.OsmApi;
+import org.openstreetmap.josm.io.OsmWriter;
+import org.openstreetmap.josm.io.OsmWriterFactory;
+import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
  * Validates a map using JOSM validators
@@ -147,23 +157,55 @@ public class JosmMapValidator
    */
   public String validate(List<String> validators, String elementsXml) throws Exception
   {
+    //Logging.trace("elementsXml: " + elementsXml);
+    if (elementsXml == null || elementsXml.trim().isEmpty())
+    {
+      throw new Exception("No elements passed to validation.");
+    }
+    return validate(validators, new ByteArrayInputStream(elementsXml.getBytes()), null);
+  }
+
+  // TODO
+  public void validate(
+    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath)
+    throws Exception
+  {
+    Logging.debug("elementsFileInputPath: " + elementsFileInputPath);
+    Logging.debug("elementsFileInputPath: " + elementsFileOutputPath);
+
+    validate(
+      validators, new FileInputStream(new File(elementsFileInputPath)),
+      new File(elementsFileOutputPath));
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+  protected String validate(
+    List<String> validators, InputStream inputElementsStream, File outputFile) throws Exception
+  {
     Logging.info("Validating map with " + validators.size() + " validators...");
 
     // clear out existing data and stats
     clear();
 
     // validate the elements
-    outputElements = parseAndValidateElements(validators, elementsXml);
+    outputElements = parseAndValidateElements(validators, inputElementsStream);
 
     // update modified map
     outputElements = getReturnElements(outputElements);
     Logging.debug("outputElements size: " + outputElements.size());
 
-    // return the modified map as xml
-    return convertOutputElementsToXml();
+    if (outputFile == null)
+    {
+      // return the modified map as xml
+      return convertOutputElementsToXml();
+    }
+    else
+    {
+      writeOutputElements(outputFile);
+      return null;
+    }
   }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
 
   /*
    * Clear out member data
@@ -212,30 +254,23 @@ public class JosmMapValidator
   }
 
   protected Collection<AbstractPrimitive> parseAndValidateElements(
-    List<String> validators, String elementsXml) throws Exception
+    List<String> validators, InputStream elementsStream) throws Exception
   {
     long startTime = -1;
 
     // verify inputs
 
     validators = parseValidatorsInput(validators);
-    //Logging.trace("elementsXml: " + elementsXml);
-    if (elementsXml == null || elementsXml.trim().isEmpty())
-    {
-      throw new Exception("No elements passed to validation.");
-    }
 
     Collection<AbstractPrimitive> validatedElements = null;
 
     // read in the input element map xml
-
     try
     {
       Logging.debug("Converting input elements from xml...");
       startTime = System.currentTimeMillis();
-      inputElements =
-        HootOsmReader.parseDataSet(new ByteArrayInputStream(elementsXml.getBytes()))
-          .getAllPrimitives();
+      inputDataset = HootOsmReader.parseDataSet(elementsStream);
+      inputElements = inputDataset.getAllPrimitives();
       Logging.debug(
         "Input elements converted from xml in: " +
         String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
@@ -308,6 +343,15 @@ public class JosmMapValidator
     }
 
     return validatedElements;
+  }
+
+  protected void writeOutputElements(File outFile) throws IOException
+  {
+    Logging.debug("Writing map to file...");
+    PrintWriter writer = new PrintWriter(outFile);
+    OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(inputDataset);
+    writer.flush();
+    writer.close();
   }
 
   protected String convertOutputElementsToXml()
@@ -577,4 +621,7 @@ public class JosmMapValidator
 
   // maps validation error names to occurrence counts
   private Map<String, Integer> validationErrorCountsByType = new HashMap<String, Integer>();
+
+  // TODO
+  private DataSet inputDataset = null;
 }

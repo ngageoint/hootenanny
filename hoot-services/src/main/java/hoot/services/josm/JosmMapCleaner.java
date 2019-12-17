@@ -38,6 +38,12 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.lang.Exception;
 import java.awt.AWTException;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -120,6 +126,32 @@ public class JosmMapCleaner extends JosmMapValidator
   public String clean(List<String> validators, String elementsXml, boolean addDetailTags)
     throws Exception
   {
+    if (elementsXml == null || elementsXml.trim().isEmpty())
+    {
+      throw new Exception("No elements passed to validation.");
+    }
+    return clean(validators, new ByteArrayInputStream(elementsXml.getBytes()), null, addDetailTags);
+  }
+
+  // TODO
+  public void clean(
+    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
+    boolean addDetailTags) throws Exception
+  {
+    Logging.debug("elementsFileInputPath: " + elementsFileInputPath);
+    Logging.debug("elementsFileInputPath: " + elementsFileOutputPath);
+
+    clean(
+      validators, new FileInputStream(new File(elementsFileInputPath)),
+      new File(elementsFileOutputPath), addDetailTags);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+  protected String clean(
+    List<String> validators, InputStream inputElementsStream, File outputFile,
+    boolean addDetailTags) throws Exception
+  {
     Logging.debug("Cleaning map with " + validators.size() + " validators...");
     Logging.debug("addDetailTags: " + addDetailTags);
 
@@ -127,7 +159,9 @@ public class JosmMapCleaner extends JosmMapValidator
     clear();
 
     // validate the elements
-    /*outputElements = */parseAndValidateElements(validators, elementsXml);
+
+    /*outputElements = */
+      parseAndValidateElements(validators, inputElementsStream);
 
     // check for any validation errors
 
@@ -189,10 +223,17 @@ public class JosmMapCleaner extends JosmMapValidator
       numGroupsOfElementsCleaned + " groups of elements, and deleted " + getNumDeletedElements() +
       " elements.");
 
-    return convertOutputElementsToXml();
+    if (outputFile == null)
+    {
+      // return the modified map as xml
+      return convertOutputElementsToXml();
+    }
+    else
+    {
+      writeOutputElements(outputFile);
+      return null;
+    }
   }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
 
   /*
    * @see JosmMapValidator
