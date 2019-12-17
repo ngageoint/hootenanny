@@ -218,6 +218,10 @@ public class JosmMapValidator
     {
       inputElements.clear();
     }
+    if (inputDataset != null)
+    {
+      inputDataset.clear();
+    }
     if (outputElements != null)
     {
       outputElements.clear();
@@ -614,7 +618,6 @@ public class JosmMapValidator
   private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
 
   // input map to be validated as dataset
-  // TODO: This is redundant with storing inputElements
   private DataSet inputDataset = null;
 
   // a list of names of validators that threw an error during validation
