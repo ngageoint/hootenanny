@@ -28,8 +28,8 @@ be saved, an osm file will be generated on the server.
 In the jobs panel you can find the Derive Changeset job and under the actions there will be a cloud icon with an up arrow.
 This is what you use to upload the differential results to the Rails Port, but before doing that you can view stats on the differential
 upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations. Once an upload job is
-completed, the parent job will be marked as 'STALE' so that the parent job actions connot be run again because that data
-will no longer be viable. If there was a reference dataset from the rails port used in the process of making the upload job, that
+completed, the parent job will be marked as 'STALE' so that the parent job actions cannot be run again because that data
+will no longer be viable (versions have been incremented on the server). If there was a reference dataset from the rails port used in the process of making the upload job, that
 will be refreshed with the newly uploaded data.
 
 
