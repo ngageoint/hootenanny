@@ -26,6 +26,12 @@
  */
 package hoot.services.controllers.osm.map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+
 /**
  * Model class for the Hootenanny folder record
  */
@@ -36,7 +42,10 @@ public class FolderRecord {
     private String name;
     private long userId;
     private boolean isPublic;
-    private String createdAt;
+    private Timestamp createdAt;
+
+    @JsonIgnore
+    public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public FolderRecord() {}
 
@@ -80,11 +89,11 @@ public class FolderRecord {
         return isPublic;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        return format.format(this.createdAt);
     }
 }
