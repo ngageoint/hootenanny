@@ -104,7 +104,7 @@ public:
   void setJosmValidatorsInclude(const QStringList& validators)
   { _josmValidatorsInclude = validators; }
   void setLogMissingCertAsWarning(bool log) { _logMissingCertAsWarning = log; }
-  void setInMemoryMapSizeMax(int max) { _inMemoryMapSizeMax = max; }
+  void setMaxElementsForMapString(int max) { _maxElementsForMapString = max; }
 
 protected:
 
@@ -113,8 +113,10 @@ protected:
   QString _josmInterfaceName;
   // list of Java class names with namespaces to use during validation
   QStringList _josmValidators;
-  // TODO
-  int _inMemoryMapSizeMax;
+  // Since JOSM doesn't have a streaming interface for loading maps, we need a cutoff point above
+  // which we'll serialize all maps passed to/from JOSM to file rather than passing them as a
+  // string. If this value is set too high, bad string allocs will occur.
+  int _maxElementsForMapString;
 
   // JNI environment
   JNIEnv* _javaEnv;
@@ -142,6 +144,10 @@ protected:
    * Retrieves validation stats
    */
   virtual void _getStats();
+
+  QMap<QString, int> _getValidationErrorCountsByType();
+  int _getNumFailingValidators();
+  int _getNumValidationErrors();
 
   /*
    * Converts JOSM validation stats to a printable string

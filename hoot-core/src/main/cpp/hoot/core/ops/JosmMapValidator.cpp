@@ -55,10 +55,11 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
   LOG_VARD(inputMap->size());
   LOG_VARD(_josmValidators.size());
 
-  // JNI sig format: (input params...)return type
-
-  if ((int)inputMap->size() > _inMemoryMapSizeMax)
+  // see related note in JosmMapCleaner::_getUpdatedMap
+  if ((int)inputMap->size() > _maxElementsForMapString)
   {
+    // pass map as temp file and get it back as a temp file
+
     std::shared_ptr<QTemporaryFile> tempInputFile(
       new QTemporaryFile(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm"));
@@ -71,54 +72,62 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
     LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
     OsmXmlWriter().write(inputMap, tempInputFile->fileName());
 
-    const QString tempOutput = tempInputFile->fileName().replace("in", "out");
+    const QString tempOutputPath = tempInputFile->fileName().replace("in", "out");
 
-    LOG_DEBUG("Calling JOSM method...");
-    _javaEnv->CallVoidMethod(
-      _josmInterface,
-      // Java sig:
-      // void validate(
-      //   List<String> validators, String elementsFileInputPath, String elementsFileOutputPath)
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "validate",
-        "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V"),
-      // validators to use
-      JniConversion::toJavaStringList(_javaEnv, _josmValidators),
-      // convert input map to xml string to pass in
-      JniConversion::toJavaString(_javaEnv, tempInputFile->fileName()),
-      JniConversion::toJavaString(_javaEnv, tempOutput));
-    JniConversion::checkForErrors(_javaEnv, "validateFromMapFile");
+    _validate(_josmValidators, tempInputFile->fileName(), tempOutputPath);
 
-    LOG_DEBUG("Reading validated map from " << tempOutput << "...");
+    LOG_DEBUG("Reading validated map from " << tempOutputPath << "...");
     OsmMapPtr validatedMap(new OsmMap());
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
-    reader.open(tempOutput);
-    reader.read(tempOutput, validatedMap);
+    reader.open(tempOutputPath);
+    reader.read(tempOutputPath, validatedMap);
     return validatedMap;
   }
   else
   {
-    // call into hoot-josm to validate features in the map and convert result to a map
-    jstring validatedMapJavaStr =
-      (jstring)_javaEnv->CallObjectMethod(
-        _josmInterface,
-        // Java sig: String validate(List<String> validators, String elementsXml)
-        _javaEnv->GetMethodID(
-          _josmInterfaceClass, "validate",
-          "(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;"),
-        // validators to use
-        JniConversion::toJavaStringList(_javaEnv, _josmValidators),
-        // convert input map to xml string to pass in
-        JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)));
-    JniConversion::checkForErrors(_javaEnv, "validateFromMapString");
-
+    // pass map as string and get it back as a string
     return
       OsmXmlReader::fromXml(
-        JniConversion::fromJavaString(_javaEnv, validatedMapJavaStr).trimmed(), true, true, false,
-        true);
+        _validate(
+          _josmValidators,
+          OsmXmlWriter::toString(inputMap, false)).trimmed(), true, true, false, true);
   }
+}
+
+QString JosmMapValidator::_validate(const QStringList& validators, const QString& map)
+{
+  // JNI sig format: (input params...)return type
+  jstring validatedMapJavaStr =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      // Java sig: String validate(List<String> validators, String elementsXml)
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "validate",
+        "(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;"),
+      JniConversion::toJavaStringList(_javaEnv, validators),
+      JniConversion::toJavaString(_javaEnv, map));
+  JniConversion::checkForErrors(_javaEnv, "validateFromMapString");
+  return JniConversion::fromJavaString(_javaEnv, validatedMapJavaStr);
+}
+
+void JosmMapValidator::_validate(
+  const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath)
+{
+  // JNI sig format: (input params...)return type
+  _javaEnv->CallVoidMethod(
+    _josmInterface,
+    // Java sig:
+    // void validate(
+    //   List<String> validators, String elementsFileInputPath, String elementsFileOutputPath)
+    _javaEnv->GetMethodID(
+      _josmInterfaceClass, "validate",
+      "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V"),
+    JniConversion::toJavaStringList(_javaEnv, validators),
+    JniConversion::toJavaString(_javaEnv, inputMapPath),
+    JniConversion::toJavaString(_javaEnv, outputMapPath));
+  JniConversion::checkForErrors(_javaEnv, "validateFromMapFile");
 }
 
 }

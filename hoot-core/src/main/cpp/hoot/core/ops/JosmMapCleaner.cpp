@@ -74,12 +74,13 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
   LOG_DEBUG("Retrieving cleaned map...");
   LOG_VARD(inputMap->size());
 
-  // call into hoot-josm to clean features in the map and return the cleaned map
-
   // JNI sig format: (input params...)return type
 
-  if ((int)inputMap->size() > _inMemoryMapSizeMax)
+  // If the map is large enough, we want to avoid string serialization.
+  if ((int)inputMap->size() > _maxElementsForMapString)
   {
+    // pass map as temp file and get it back as a temp file
+
     std::shared_ptr<QTemporaryFile> tempInputFile(
       new QTemporaryFile(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-in.osm"));
@@ -92,58 +93,66 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
     LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
     OsmXmlWriter().write(inputMap, tempInputFile->fileName());
 
-    const QString tempOutput = tempInputFile->fileName().replace("in", "out");
+    const QString tempOutputPath = tempInputFile->fileName().replace("in", "out");
 
-    _javaEnv->CallVoidMethod(
-      _josmInterface,
-      // Java sig:
-      //  void clean(
-      //    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
-      //    boolean addDetailTags)
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "clean",
-        "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Z)V"),
-      // validators to use
-      JniConversion::toJavaStringList(_javaEnv, _josmValidators),
-      // convert input map to xml string to pass in
-      JniConversion::toJavaString(_javaEnv, tempInputFile->fileName()),
-      JniConversion::toJavaString(_javaEnv, tempOutput),
-      // add explanation tags for cleaning
-      _addDetailTags);
-    JniConversion::checkForErrors(_javaEnv, "cleanFromMapFile");
+    _clean(_josmValidators, tempInputFile->fileName(), tempOutputPath, _addDetailTags);
 
-    LOG_DEBUG("Reading cleaned map from " << tempOutput << "...");
+    LOG_DEBUG("Reading cleaned map from " << tempOutputPath << "...");
     OsmMapPtr cleanedMap(new OsmMap());
     OsmXmlReader reader;
     reader.setUseDataSourceIds(true);
     reader.setUseFileStatus(true);
-    reader.open(tempOutput);
-    reader.read(tempOutput, cleanedMap);
+    reader.open(tempOutputPath);
+    reader.read(tempOutputPath, cleanedMap);
     return cleanedMap;
   }
   else
   {
-    jstring cleanedMapResultStr =
-      (jstring)_javaEnv->CallObjectMethod(
-        _josmInterface,
-        // Java sig:
-        //  String clean(List<String> validators, String elementsXml, boolean addDetailTags)
-        _javaEnv->GetMethodID(
-          _josmInterfaceClass, "clean",
-          "(Ljava/util/List;Ljava/lang/String;Z)Ljava/lang/String;"),
-        // validators to use
-        JniConversion::toJavaStringList(_javaEnv, _josmValidators),
-        // convert input map to xml string to pass in
-        JniConversion::toJavaString(_javaEnv, OsmXmlWriter::toString(inputMap, false)),
-        // add explanation tags for cleaning
-        _addDetailTags);
-    JniConversion::checkForErrors(_javaEnv, "cleanFromMapString");
-
+    // pass map as string and get it back as a string
     return
       OsmXmlReader::fromXml(
-        JniConversion::fromJavaString(_javaEnv, cleanedMapResultStr).trimmed(), true, true, false,
-        true);
+        _clean(_josmValidators, OsmXmlWriter::toString(inputMap, false), _addDetailTags).trimmed(),
+        true, true, false, true);
   }
+}
+
+QString JosmMapCleaner::_clean(
+  const QStringList& validators, const QString& map, const bool addDetailTags)
+{
+  // JNI sig format: (input params...)return type
+  jstring cleanedMapResultStr =
+    (jstring)_javaEnv->CallObjectMethod(
+      _josmInterface,
+      // Java sig:
+      //  String clean(List<String> validators, String elementsXml, boolean addDetailTags)
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "clean",
+        "(Ljava/util/List;Ljava/lang/String;Z)Ljava/lang/String;"),
+      JniConversion::toJavaStringList(_javaEnv, validators),
+      JniConversion::toJavaString(_javaEnv, map),
+      addDetailTags);
+  JniConversion::checkForErrors(_javaEnv, "cleanFromMapString");
+  return JniConversion::fromJavaString(_javaEnv, cleanedMapResultStr);
+}
+
+void JosmMapCleaner::_clean(
+  const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
+  const bool addDetailTags)
+{
+  // JNI sig format: (input params...)return type
+  _javaEnv->CallVoidMethod(
+    _josmInterface,
+    // Java sig:
+    //  void clean(
+    //    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
+    //    boolean addDetailTags)
+    _javaEnv->GetMethodID(
+      _josmInterfaceClass, "clean", "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Z)V"),
+    JniConversion::toJavaStringList(_javaEnv, validators),
+    JniConversion::toJavaString(_javaEnv, inputMapPath),
+    JniConversion::toJavaString(_javaEnv, outputMapPath),
+    addDetailTags);
+  JniConversion::checkForErrors(_javaEnv, "cleanFromMapFile");
 }
 
 void JosmMapCleaner::_getStats()
@@ -153,57 +162,10 @@ void JosmMapCleaner::_getStats()
   // call back into the hoot-josm validator to get the stats after validation
 
   JosmMapValidatorAbstract::_getStats();
-
-  // JNI sig format: (input params...)return type
-
-  _numGroupsOfElementsCleaned =
-    (int)_javaEnv->CallIntMethod(
-      _josmInterface,
-      // Java sig: int getNumGroupsOfElementsCleaned()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumGroupsOfElementsCleaned");
-
-  jobject deletedElementIdsJavaSet =
-    _javaEnv->CallObjectMethod(
-      _josmInterface,
-      // Java sig: Set<String> getDeletedElementIds()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/Set;"));
-  JniConversion::checkForErrors(_javaEnv, "getDeletedElementIds");
-  _deletedElementIds =
-    _elementIdStringsToElementIds(
-      JniConversion::fromJavaStringSet(_javaEnv, deletedElementIdsJavaSet));
-  // TODO: need to add this to the map tags??
-  LOG_INFO("Deleted " << _deletedElementIds.size() << " elements from map.");
-
-  jobject validationErrorCountsByTypeJavaMap =
-    _javaEnv->CallObjectMethod(
-      _josmInterface,
-      // Java sig: Map<String, Integer> getValidationErrorCountsByType()
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
-  JniConversion::checkForErrors(_javaEnv, "getValidationErrorCountsByType");
-
-  jobject validationErrorFixCountsByTypeJavaMap =
-    _javaEnv->CallObjectMethod(
-      _josmInterface,
-      // Java sig: Map<String, Integer> getValidationErrorFixCountsByType()
-      _javaEnv->GetMethodID(
-        _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/util/Map;"));
-  JniConversion::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
-
-  _numFailingValidators =
-    (int)_javaEnv->CallIntMethod(
-      _josmInterface,
-      // Java sig: int getNumFailingValidators()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumFailingValidators");
-
-  _numFailedCleaningOperations =
-    (int)_javaEnv->CallIntMethod(
-      _josmInterface,
-      // Java sig: int getNumFailedCleaningOperations()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumFailedCleaningOperations");
+  _numGroupsOfElementsCleaned = _getNumGroupsOfElementsCleaned();
+  _deletedElementIds = _getDeletedElementIds();
+  _numFailingValidators = _getNumFailingValidators();
+  _numFailedCleaningOperations = _getNumFailedCleaningOperations();
 
   // create a readable error summary
 
@@ -222,10 +184,60 @@ void JosmMapCleaner::_getStats()
     "\n";
   _errorSummary +=
      _errorCountsByTypeToSummaryStr(
-       JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap),
-       JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorFixCountsByTypeJavaMap));
+       _getValidationErrorCountsByType(), _getValidationErrorFixCountsByType());
   _errorSummary = _errorSummary.trimmed();
   LOG_VART(_errorSummary);
+}
+
+// JNI sig format: (input params...)return type
+
+int JosmMapCleaner::_getNumGroupsOfElementsCleaned()
+{
+  const int numCleaned =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // Java sig: int getNumGroupsOfElementsCleaned()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
+  JniConversion::checkForErrors(_javaEnv, "getNumGroupsOfElementsCleaned");
+  return numCleaned;
+}
+
+QSet<ElementId> JosmMapCleaner::_getDeletedElementIds()
+{
+  jobject deletedElementIdsJavaSet =
+    _javaEnv->CallObjectMethod(
+      _josmInterface,
+      // Java sig: Set<String> getDeletedElementIds()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/Set;"));
+  JniConversion::checkForErrors(_javaEnv, "getDeletedElementIds");
+  return
+    _elementIdStringsToElementIds(
+      JniConversion::fromJavaStringSet(_javaEnv, deletedElementIdsJavaSet));
+  // TODO: need to add this to the map tags??
+}
+
+QMap<QString, int> JosmMapCleaner::_getValidationErrorFixCountsByType()
+{
+  jobject validationErrorFixCountsByTypeJavaMap =
+    _javaEnv->CallObjectMethod(
+      _josmInterface,
+      // Java sig: Map<String, Integer> getValidationErrorFixCountsByType()
+      _javaEnv->GetMethodID(
+        _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/util/Map;"));
+  JniConversion::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
+  JniConversion::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
+  return JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorFixCountsByTypeJavaMap);
+}
+
+int JosmMapCleaner::_getNumFailedCleaningOperations()
+{
+  const int numFailedCleaningOperations =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // Java sig: int getNumFailedCleaningOperations()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
+  JniConversion::checkForErrors(_javaEnv, "getNumFailedCleaningOperations");
+  return numFailedCleaningOperations;
 }
 
 QSet<ElementId> JosmMapCleaner::_elementIdStringsToElementIds(

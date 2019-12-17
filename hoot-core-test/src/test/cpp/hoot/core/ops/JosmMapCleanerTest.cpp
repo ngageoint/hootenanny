@@ -83,7 +83,7 @@ public:
     JosmMapCleaner uut;
     uut.setLogMissingCertAsWarning(false);
     uut.setAddDetailTags(true);
-    uut.setInMemoryMapSizeMax(INT_MAX);
+    uut.setMaxElementsForMapString(INT_MAX);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -112,7 +112,7 @@ public:
     JosmMapCleaner uut;
     uut.setAddDetailTags(false);
     uut.setLogMissingCertAsWarning(false);
-    uut.setInMemoryMapSizeMax(INT_MAX);
+    uut.setMaxElementsForMapString(INT_MAX);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -141,7 +141,7 @@ public:
     JosmMapCleaner uut;
     uut.setLogMissingCertAsWarning(false);
     uut.setAddDetailTags(true);
-    uut.setInMemoryMapSizeMax(1);
+    uut.setMaxElementsForMapString(1); // force temp map file I/O
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");

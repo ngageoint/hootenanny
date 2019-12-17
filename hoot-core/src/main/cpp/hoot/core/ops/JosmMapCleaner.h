@@ -106,6 +106,24 @@ private:
   int _numFailedCleaningOperations;
 
   /*
+   * clean the map and return it as an xml string
+   */
+  QString _clean(
+    const QStringList& validators, const QString& map, const bool addDetailTags);
+
+  /*
+   * clean the map from a file and write the cleaned map out to another file
+   */
+  void _clean(
+    const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
+    const bool addDetailTags);
+
+  int _getNumGroupsOfElementsCleaned();
+  QSet<ElementId> _getDeletedElementIds();
+  QMap<QString, int> _getValidationErrorFixCountsByType();
+  int _getNumFailedCleaningOperations();
+
+  /*
    * Converts the error status info returned by hoot-josm into a readable string
    */
   QString _errorCountsByTypeToSummaryStr(

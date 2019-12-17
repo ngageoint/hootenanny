@@ -37,7 +37,7 @@ namespace hoot
 {
 
 JosmMapValidatorAbstract::JosmMapValidatorAbstract() :
-_inMemoryMapSizeMax(2000000),
+_maxElementsForMapString(2000000),
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
 _numValidationErrors(0),
@@ -64,7 +64,7 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   _josmCertificatePath = opts.getJosmCertificatePath();
   _josmCertificatePassword = opts.getJosmCertificatePassword();
   _josmValidatorsRequiringUserCert = opts.getJosmValidatorsRequiringUserCertificate();
-  _inMemoryMapSizeMax = opts.getJosmInMemoryMapSizeMax();
+  _maxElementsForMapString = opts.getJosmMaxElementsForMapString();
 }
 
 bool JosmMapValidatorAbstract::_noUserCertSpecified() const
@@ -165,8 +165,6 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     _initJosmImplementation();
   }
 
-  // make the hoot-josm call to get the validators and convert the delimited validators string into
-  // a map
   jobject validatorsJavaMap =
     _javaEnv->CallObjectMethod(
       _josmInterface,
@@ -239,17 +237,46 @@ void JosmMapValidatorAbstract::_getStats()
 {
   LOG_DEBUG("Retrieving stats...");
 
-  // call back into the hoot-josm validator to get the stats after validation
-
   // JNI sig format: (input params...)return type
 
-  _numValidationErrors =
+  _numValidationErrors = _getNumValidationErrors();
+  _numFailingValidators = _getNumFailingValidators();
+
+  _errorSummary =
+    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
+    " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
+  // convert the validation error info to a readable summary string
+  _errorSummary += _errorCountsByTypeToSummaryStr(_getValidationErrorCountsByType());
+  _errorSummary +=
+    "Total failing JOSM validators: " + QString::number(_numFailingValidators);
+  _errorSummary = _errorSummary.trimmed();
+  LOG_VART(_errorSummary);
+}
+
+int JosmMapValidatorAbstract::_getNumValidationErrors()
+{
+  const int numValidationErrors =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
       // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
   JniConversion::checkForErrors(_javaEnv, "getNumValidationErrors");
+  return numValidationErrors;
+}
 
+int JosmMapValidatorAbstract::_getNumFailingValidators()
+{
+  const int numFailingValidators =
+    (int)_javaEnv->CallIntMethod(
+      _josmInterface,
+      // Java sig: int getNumFailingValidators()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
+  JniConversion::checkForErrors(_javaEnv, "getNumFailingValidators");
+  return numFailingValidators;
+}
+
+QMap<QString, int> JosmMapValidatorAbstract::_getValidationErrorCountsByType()
+{
   jobject validationErrorCountsByTypeJavaMap =
     _javaEnv->CallObjectMethod(
       _josmInterface,
@@ -257,25 +284,7 @@ void JosmMapValidatorAbstract::_getStats()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
   JniConversion::checkForErrors(_javaEnv, "getValidationErrorCountsByType");
-
-  _numFailingValidators =
-    (int)_javaEnv->CallIntMethod(
-      _josmInterface,
-      // Java sig: int getNumFailingValidators()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumFailingValidators");
-
-  _errorSummary =
-    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
-    " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
-  // convert the validation error info to a readable summary string
-  _errorSummary +=
-    _errorCountsByTypeToSummaryStr(
-      JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap));
-  _errorSummary +=
-    "Total failing JOSM validators: " + QString::number(_numFailingValidators);
-  _errorSummary = _errorSummary.trimmed();
-  LOG_VART(_errorSummary);
+  return JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap);
 }
 
 QString JosmMapValidatorAbstract::_errorCountsByTypeToSummaryStr(

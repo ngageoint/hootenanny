@@ -1761,12 +1761,12 @@ path to your certificate file here.
 
 Password for the certificate specified in josm.certificate.path.
 
-=== josm.in.memory.map.size.max
+=== josm.max.elements.for.map.string
 
 * Data Type: int
 * Default Value: `2000000`
 
-TODO
+The maximum size in elements for a map allowed to be passed as a string between Hootenanny and JOSM.
 
 === josm.validators.exclude
 
