@@ -135,8 +135,9 @@ bool OsmApiWriter::apply()
   _changeset.fixMalformedInput();
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
+  _threadStatus.reserve(_maxWriters);
   for (int i = 0; i < _maxWriters; ++i)
-    _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this));
+    _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this, i));
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
   float progress = 0.0f;
@@ -168,6 +169,22 @@ bool OsmApiWriter::apply()
       //  Add the new work to the queue if there is any
       if (newChangeset)
       {
+        _workQueueMutex.lock();
+        _workQueue.push(changeset_info);
+        _workQueueMutex.unlock();
+      }
+      else if (queueSize == 0 && !newChangeset && _changeset.hasElementsToSend() && _threadsAreIdle())
+      {
+        //  This is an error case, the queue is empty, there are still elements to send but
+        //  all of the threads are idle and not waiting for something to come back
+        //  There are two things that can be done here, first is to put everything that is
+        //  "ready to send" in a changeset and send it OR move everything to the error state
+
+        //  Option #1: Get all of the remaining elements as a single changeset
+        _changesetMutex.lock();
+        _changeset.calculateRemainingChangeset(changeset_info);
+        _changesetMutex.unlock();
+        //  Push that changeset
         _workQueueMutex.lock();
         _workQueue.push(changeset_info);
         _workQueueMutex.unlock();
@@ -213,8 +230,12 @@ bool OsmApiWriter::apply()
   return success;
 }
 
-void OsmApiWriter::_changesetThreadFunc()
+void OsmApiWriter::_changesetThreadFunc(int index)
 {
+  //  Set the status to working
+  _threadStatusMutex.lock();
+  _threadStatus[index] = ThreadStatus::Working;
+  _threadStatusMutex.unlock();
   //  Setup the network request object with OAuth or with username/password authentication
   HootNetworkRequestPtr request = createNetworkRequest(true);
   long id = -1;
@@ -234,6 +255,10 @@ void OsmApiWriter::_changesetThreadFunc()
 
     if (workInfo)
     {
+      //  Set the status to working
+      _threadStatusMutex.lock();
+      _threadStatus[index] = ThreadStatus::Working;
+      _threadStatusMutex.unlock();
       //  Create the changeset ID if required
       if (id < 1)
       {
@@ -284,6 +309,14 @@ void OsmApiWriter::_changesetThreadFunc()
       {
         //  Log the error as a status message
         LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString());
+        //  If this is the last changeset, error it all out and finish working
+        if (workInfo->getLast())
+        {
+          //  Fail the entire changeset
+          _changeset.updateFailedChangeset(workInfo, true);
+          //  Looping should end the thread
+          continue;
+        }
         //  Split the changeset on conflict errors
         switch (info->status)
         {
@@ -304,37 +337,39 @@ void OsmApiWriter::_changesetThreadFunc()
         case 400:   //  Placeholder ID is missing or not unique
         case 404:   //  Diff contains elements where the given ID could not be found
         case 412:   //  Precondition Failed, Relation with id cannot be saved due to other member
+          if (!_splitChangeset(workInfo, info->response))
           {
-            _changesetMutex.lock();
-            ChangesetInfoPtr split = _changeset.splitChangeset(workInfo, info->response);
-            _changesetMutex.unlock();
-            if (split->size() > 0)
+            if (!workInfo->getAttemptedResolveChangesetIssues())
             {
-              _workQueueMutex.lock();
-              _workQueue.push(split);
-              _workQueue.push(workInfo);
-              _workQueueMutex.unlock();
-            }
-            else
-            {
-              if (!workInfo->getAttemptedResolveChangesetIssues())
+              //  Set the attempt issues resolved flag
+              workInfo->setAttemptedResolveChangesetIssues(true);
+              //  Try to automatically resolve certain issues, like out of date version
+              if (_resolveIssues(request, workInfo))
               {
-                //  Set the attempt issues resolved flag
-                workInfo->setAttemptedResolveChangesetIssues(true);
-                //  Try to automatically resolve certain issues, like out of date version
-                if (_resolveIssues(request, workInfo))
-                {
-                  _workQueueMutex.lock();
-                  _workQueue.push(workInfo);
-                  _workQueueMutex.unlock();
-                }
-                else
-                {
-                  //  Set the element in the changeset to failed because the issues couldn't be resolved
-                  _changeset.updateFailedChangeset(workInfo);
-                }
+                _workQueueMutex.lock();
+                _workQueue.push(workInfo);
+                _workQueueMutex.unlock();
+              }
+              else
+              {
+                //  Set the element in the changeset to failed because the issues couldn't be resolved
+                _changeset.updateFailedChangeset(workInfo);
               }
             }
+          }
+          break;
+        case 500:   //  Internal Server Error, could be caused by the database being saturated
+        case 502:   //  Bad Gateway, there are issues with the gateway, split and retry
+        case 504:   //  Gateway Timeout, server is taking too long, split and retry
+          if (!_splitChangeset(workInfo, info->response))
+          {
+            //  Splitting failed which means that the changeset only has one element in it,
+            //  push it back on the queue and give the API a break
+            _workQueueMutex.lock();
+            _workQueue.push(workInfo);
+            _workQueueMutex.unlock();
+            //  Sleep the thread
+            this_thread::sleep_for(chrono::milliseconds(10));
           }
           break;
         default:
@@ -356,7 +391,14 @@ void OsmApiWriter::_changesetThreadFunc()
       }
     }
     else
+    {
+      //  Set the status to idle
+      _threadStatusMutex.lock();
+      _threadStatus[index] = ThreadStatus::Idle;
+      _threadStatusMutex.unlock();
+      //  Sleep the thread
       this_thread::sleep_for(chrono::milliseconds(10));
+    }
   }
   //  Close the changeset if one is still open
   if (id != -1)
@@ -772,5 +814,43 @@ HootNetworkRequestPtr OsmApiWriter::createNetworkRequest(bool requiresAuthentica
   }
   return request;
 }
+
+bool OsmApiWriter::_threadsAreIdle()
+{
+  bool response = true;
+  //  Lock the thread status mutex only once
+  _threadStatusMutex.lock();
+  for (vector<ThreadStatus>::iterator it = _threadStatus.begin(); it != _threadStatus.end(); ++it)
+  {
+    //  It only takes one thread working to return false
+    if (*it == ThreadStatus::Working)
+    {
+      response = false;
+      break;
+    }
+  }
+  //  Unlock the thread status mutex
+  _threadStatusMutex.unlock();
+  return response;
+}
+
+bool OsmApiWriter::_splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response)
+{
+  //  Try to split the changeset in half
+  _changesetMutex.lock();
+  ChangesetInfoPtr split = _changeset.splitChangeset(workInfo, response);
+  _changesetMutex.unlock();
+  if (split->size() > 0)
+  {
+    //  Push both of the changesets onto the queue
+    _workQueueMutex.lock();
+    _workQueue.push(split);
+    _workQueue.push(workInfo);
+    _workQueueMutex.unlock();
+    return true;
+  }
+  return false;
+}
+
 
 }

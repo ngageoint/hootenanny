@@ -226,8 +226,9 @@ private:
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
    *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
    *  if necessary
+   * @param index Index into the thread status vector to place the status
    */
-  void _changesetThreadFunc();
+  void _changesetThreadFunc(int index);
   /**
    * @brief createNetworkRequest Create a network request object
    * @param requiresAuthentication Authentication flag set to true will cause OAuth credentials,
@@ -235,6 +236,18 @@ private:
    * @return smart pointer to network request object
    */
   HootNetworkRequestPtr createNetworkRequest(bool requiresAuthentication = false);
+  /**
+   * @brief _threadsAreIdle Checks each thread in the thread pool if it is working or idle
+   * @return True if all threads are idle
+   */
+  bool _threadsAreIdle();
+  /**
+   * @brief _splitChangeset
+   * @param workInfo
+   * @param response
+   * @return
+   */
+  bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response);
   /** Changeset processing thread pool */
   std::vector<std::thread> _threadPool;
   /** Queue for producer/consumer work model */
@@ -245,6 +258,13 @@ private:
   XmlChangeset _changeset;
   /** Mutex protecting large changeset */
   std::mutex _changesetMutex;
+  enum ThreadStatus
+  {
+    Idle,
+    Working
+  };
+  std::vector<ThreadStatus> _threadStatus;
+  std::mutex _threadStatusMutex;
   /** Base URL for the target OSM API, including authentication information */
   QUrl _url;
   /** List of pathnames for changeset divided across files */
