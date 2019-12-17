@@ -66,8 +66,8 @@
         "matcher": "hoot::ScriptMatchCreator,PoiGeneric.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-        "poi.ignore.type.if.name.present": "Ignore type if name present"
-       }
+            "poi.ignore.type.if.name.present": "Ignore type if name present"
+        }
     },
     "PoiPolygon": {
         "matcher": "hoot::PoiPolygonMatchCreator",
@@ -94,15 +94,15 @@
         "matcher": "hoot::ScriptMatchCreator,Area.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-        "search.radius.area": "Area search radius"
-       }
+            "search.radius.area": "Area search radius"
+        }
     },
     "Railways": {
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-        "search.radius.railway": "Railway search radius"
-       }
+            "search.radius.railway": "Railway search radius"
+        }
     },
     "Powerlines": {
         "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
@@ -113,7 +113,7 @@
         "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-        "search.radius.waterway": "Waterway search radius"
+            "search.radius.waterway": "Waterway search radius"
         }
     }
 }
