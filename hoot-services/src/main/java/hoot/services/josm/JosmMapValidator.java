@@ -26,9 +26,6 @@
  */
 package hoot.services.josm;
 
-import hoot.services.josm.HootOsmReader;
-import hoot.services.josm.JosmUtils;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -146,12 +143,10 @@ public class JosmMapValidator
   }
 
   /**
-   * Runs selected JOSM validation routines on a map and marks elements that fail validation with
-   * custom tags
+   * Runs JOSM validators against an XML map string and tags elements that fail validation
    *
-   * @param validatorsStr semicolon delimited string with the full Java class names of the
-   * validators to be used
-   * @param elementsXml input OSM map to be validated as XML
+   * @param validators list of simple class names of the validators to be used
+   * @param elementsXml map to be validated as an XML string
    * @return modified OSM map XML string if validation errors were found; otherwise a map identical
    * to the input map
    */
@@ -165,7 +160,13 @@ public class JosmMapValidator
     return validate(validators, new ByteArrayInputStream(elementsXml.getBytes()), null);
   }
 
-  // TODO
+  /**
+   * Runs JOSM validators against an XML map file and tags elements that fail validation
+   *
+   * @param validators list of simple class names of the validators to be used
+   * @param elementsFileInputPath file path to the map to be validated
+   * @param elementsFileOutputPath file path for the validated output map
+   */
   public void validate(
     List<String> validators, String elementsFileInputPath, String elementsFileOutputPath)
     throws Exception
@@ -212,7 +213,6 @@ public class JosmMapValidator
    */
   protected void clear()
   {
-    //numValidationErrors = 0;
     originalMapSize = 0;
     if (inputElements != null)
     {
@@ -347,7 +347,7 @@ public class JosmMapValidator
 
   protected void writeOutputElements(File outFile) throws IOException
   {
-    Logging.debug("Writing map to file...");
+    Logging.debug("Writing map to file: " + outFile.getName() + "...");
     PrintWriter writer = new PrintWriter(outFile);
     OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(inputDataset);
     writer.flush();
@@ -613,6 +613,10 @@ public class JosmMapValidator
 
   private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
 
+  // input map to be validated as dataset
+  // TODO: This is redundant with storing inputElements
+  private DataSet inputDataset = null;
+
   // a list of names of validators that threw an error during validation
   private Map<String, String> failingValidators = new HashMap<String, String>();
 
@@ -621,7 +625,4 @@ public class JosmMapValidator
 
   // maps validation error names to occurrence counts
   private Map<String, Integer> validationErrorCountsByType = new HashMap<String, Integer>();
-
-  // TODO
-  private DataSet inputDataset = null;
 }

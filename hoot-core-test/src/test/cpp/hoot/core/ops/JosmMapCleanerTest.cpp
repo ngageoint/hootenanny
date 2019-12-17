@@ -41,6 +41,7 @@ class JosmMapCleanerTest : public HootTestFixture
   CPPUNIT_TEST(runCleanNoErrorsTest);
   CPPUNIT_TEST(runCleanTest);
   CPPUNIT_TEST(runCleanNoDetailTagsTest);
+  CPPUNIT_TEST(runCleanFileTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -82,6 +83,7 @@ public:
     JosmMapCleaner uut;
     uut.setLogMissingCertAsWarning(false);
     uut.setAddDetailTags(true);
+    uut.setInMemoryMapSizeMax(INT_MAX);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -95,7 +97,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
 
-    const QString outTestFileName =  testName + "-out.osm";
+    const QString outTestFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
@@ -110,6 +112,7 @@ public:
     JosmMapCleaner uut;
     uut.setAddDetailTags(false);
     uut.setLogMissingCertAsWarning(false);
+    uut.setInMemoryMapSizeMax(INT_MAX);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -123,9 +126,38 @@ public:
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
 
-    const QString outTestFileName =  testName + "-out.osm";
+    const QString outTestFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
+  }
+
+  void runCleanFileTest()
+  {
+    const QString testName = "runCleanFileTest";
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
+    LOG_VARD(map->size());
+
+    JosmMapCleaner uut;
+    uut.setLogMissingCertAsWarning(false);
+    uut.setAddDetailTags(true);
+    uut.setInMemoryMapSizeMax(1);
+    QStringList validators;
+    validators.append("UntaggedWay");   // triggers "One node way"
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    uut.apply(map);
+
+    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
+
+    const QString outTestFileName = testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
+    HOOT_FILE_EQUALS(_inputPath + "/runCleanTest-out.osm", _outputPath + "/" + outTestFileName);
   }
 };
 

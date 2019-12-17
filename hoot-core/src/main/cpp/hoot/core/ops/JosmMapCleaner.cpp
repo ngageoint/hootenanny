@@ -83,22 +83,12 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
     std::shared_ptr<QTemporaryFile> tempInputFile(
       new QTemporaryFile(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-in.osm"));
-    tempInputFile->setAutoRemove(false);    // TODO: change to true
+    tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
     {
       throw HootException(
         "Unable to open temp input file for cleaning: " + tempInputFile->fileName() + ".");
     }
-//    std::shared_ptr<QTemporaryFile> tempOutputFile(
-//      new QTemporaryFile(
-//        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapCleaner-out.osm"));
-//    tempOutputFile->setAutoRemove(false);    // TODO: change to true
-//    if (!tempOutputFile->open())
-//    {
-//      throw HootException(
-//        "Unable to open temp output file for cleaning: " + tempOutputFile->fileName() + ".");
-//    }
-//    tempOutputFile->close();
     LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
     OsmXmlWriter().write(inputMap, tempInputFile->fileName());
 
@@ -124,7 +114,11 @@ OsmMapPtr JosmMapCleaner::_getUpdatedMap(OsmMapPtr& inputMap)
 
     LOG_DEBUG("Reading cleaned map from " << tempOutput << "...");
     OsmMapPtr cleanedMap(new OsmMap());
-    OsmXmlReader().read(tempOutput, cleanedMap);
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+    reader.setUseFileStatus(true);
+    reader.open(tempOutput);
+    reader.read(tempOutput, cleanedMap);
     return cleanedMap;
   }
   else

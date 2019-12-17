@@ -53,7 +53,7 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
 {
   LOG_DEBUG("Retrieving validated map...");
   LOG_VARD(inputMap->size());
-
+  LOG_VARD(_josmValidators.size());
 
   // JNI sig format: (input params...)return type
 
@@ -62,25 +62,18 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
     std::shared_ptr<QTemporaryFile> tempInputFile(
       new QTemporaryFile(
         ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-in.osm"));
-    tempInputFile->setAutoRemove(false);    // TODO: change to true
+    tempInputFile->setAutoRemove(true);
     if (!tempInputFile->open())
     {
       throw HootException(
-        "Unable to open temp input file for validation: " + tempInputFile->fileName() + ".");
+          "Unable to open temp input file for validation: " + tempInputFile->fileName() + ".");
     }
-    std::shared_ptr<QTemporaryFile> tempOutputFile(
-      new QTemporaryFile(
-        ConfigOptions().getApidbBulkInserterTempFileDir() + "/JosmMapValidator-out.osm"));
-    tempOutputFile->setAutoRemove(false);    // TODO: change to true
-    if (!tempOutputFile->open())
-    {
-      throw HootException(
-        "Unable to open temp output file for validation: " + tempOutputFile->fileName() + ".");
-    }
-    tempOutputFile->close();
     LOG_DEBUG("Writing temp map to " << tempInputFile->fileName() << "...");
     OsmXmlWriter().write(inputMap, tempInputFile->fileName());
 
+    const QString tempOutput = tempInputFile->fileName().replace("in", "out");
+
+    LOG_DEBUG("Calling JOSM method...");
     _javaEnv->CallVoidMethod(
       _josmInterface,
       // Java sig:
@@ -93,12 +86,16 @@ OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)
       JniConversion::toJavaStringList(_javaEnv, _josmValidators),
       // convert input map to xml string to pass in
       JniConversion::toJavaString(_javaEnv, tempInputFile->fileName()),
-      JniConversion::toJavaString(_javaEnv, tempOutputFile->fileName()));
+      JniConversion::toJavaString(_javaEnv, tempOutput));
     JniConversion::checkForErrors(_javaEnv, "validateFromMapFile");
 
-    LOG_DEBUG("Reading validated map from " << tempOutputFile->fileName() << "...");
+    LOG_DEBUG("Reading validated map from " << tempOutput << "...");
     OsmMapPtr validatedMap(new OsmMap());
-    OsmXmlReader().read(tempOutputFile->fileName(), validatedMap);
+    OsmXmlReader reader;
+    reader.setUseDataSourceIds(true);
+    reader.setUseFileStatus(true);
+    reader.open(tempOutput);
+    reader.read(tempOutput, validatedMap);
     return validatedMap;
   }
   else

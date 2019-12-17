@@ -35,13 +35,13 @@ namespace hoot
 
 jstring JniConversion::toJavaString(JNIEnv* javaEnv, const QString& cppStr)
 {
-  //LOG_TRACE("Converting to java string: " << cppStr << "...");
+  LOG_TRACE("Converting to java string: " << cppStr << "...");
   return javaEnv->NewStringUTF(cppStr.toUtf8().data());
 }
 
 QString JniConversion::fromJavaString(JNIEnv* javaEnv, jstring javaStr)
 {
-  //LOG_TRACE("Converting from java string...");
+  LOG_TRACE("Converting from java string...");
   jboolean isCopy;
   const char* data = javaEnv->GetStringUTFChars(javaStr, &isCopy);
   QString result = QString::fromUtf8(data);

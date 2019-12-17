@@ -26,9 +26,6 @@
  */
 package hoot.services.josm;
 
-import hoot.services.josm.JosmMapValidator;
-import hoot.services.josm.JosmUtils;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -113,15 +110,12 @@ public class JosmMapCleaner extends JosmMapValidator
   }
 
   /**
-   * Runs selected JOSM validation routines on a map and cleans a subset of the elements that fail
-   * validation with
+   * Runs JOSM validators against an XML map string and cleans any elements that fail validation
    *
-   * @param validatorsStr semicolon delimited string with the full Java class names of the
-   * validators to be used
-   * @param elementsXml input OSM map to be cleaned as XML
+   * @param validators list of simple class names of the validators to be used
+   * @param elementsXml map to be validated as an XML string
    * @param addDetailTags if true, elements failing validation are tagged with validation error
-   * descriptions and an indication of whether they were cleaned or not; TODO: The IDs of deleted
-   * elements are recorded in theoutput  map's base tags.
+   * descriptions and an indication of whether they were cleaned or not
    */
   public String clean(List<String> validators, String elementsXml, boolean addDetailTags)
     throws Exception
@@ -133,7 +127,15 @@ public class JosmMapCleaner extends JosmMapValidator
     return clean(validators, new ByteArrayInputStream(elementsXml.getBytes()), null, addDetailTags);
   }
 
-  // TODO
+  /**
+   * Runs JOSM validators against an XML map file and cleans any elements that fail validation
+   *
+   * @param validators list of simple class names of the validators to be used
+   * @param elementsFileInputPath file path to the map to be cleaned
+   * @param elementsFileOutputPath file path for the cleaned output map
+   * @param addDetailTags if true, elements failing validation are tagged with validation error
+   * descriptions and an indication of whether they were cleaned or not
+   */
   public void clean(
     List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
     boolean addDetailTags) throws Exception

@@ -43,6 +43,7 @@ class JosmMapValidatorTest : public HootTestFixture
   CPPUNIT_TEST(runValidatorExclusionTest);
   CPPUNIT_TEST(runEmptyValidatorsTest);
   CPPUNIT_TEST(runValidateTest);
+  CPPUNIT_TEST(runValidateFileTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -128,6 +129,7 @@ public:
 
     JosmMapValidator uut;
     uut.setLogMissingCertAsWarning(false);
+    uut.setInMemoryMapSizeMax(INT_MAX);
     QStringList validators;
     validators.append("UntaggedWay");   // triggers "One node way"
     validators.append("UnclosedWays");
@@ -144,6 +146,34 @@ public:
     const QString outTestFileName =  testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
     HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
+  }
+
+  void runValidateFileTest()
+  {
+    const QString testName = "runValidateFileTest";
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, "test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm");
+    LOG_VARD(map->size());
+
+    JosmMapValidator uut;
+    uut.setLogMissingCertAsWarning(false);
+    uut.setInMemoryMapSizeMax(1);
+    QStringList validators;
+    validators.append("UntaggedWay");   // triggers "One node way"
+    validators.append("UnclosedWays");
+    validators.append("DuplicatedWayNodes");
+    uut.setJosmValidatorsInclude(validators);
+    LOG_INFO(uut.getInitStatusMessage());
+    uut.apply(map);
+    LOG_INFO(uut.getCompletedStatusMessage());
+
+    CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
+    CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
+
+    const QString outTestFileName =  testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
+    HOOT_FILE_EQUALS(_inputPath + "/runValidateTest-out.osm", _outputPath + "/" + outTestFileName);
   }
 };
 
