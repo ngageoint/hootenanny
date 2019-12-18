@@ -542,8 +542,14 @@ public class GrailResource {
 
         try {
             params.setInput1(HOOTAPI_DB_URL + "/" + input1);
-            params.setInput2(HOOTAPI_DB_URL + "/" + input2);
-            params.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
+
+            //If not passed INPUT2 assume an adds only changeset using one input
+            if(params.getInput2() != null) {
+                params.setInput2(HOOTAPI_DB_URL + "/" + input2);
+                params.setConflationType(DbUtils.getConflationType(Long.parseLong(input2)));
+            } else {
+                params.setInput2("\"\"");
+            }
 
             File changeSet = new File(workDir, "diff.osc");
             if (changeSet.exists()) { changeSet.delete(); }
@@ -559,7 +565,6 @@ public class GrailResource {
             jobStatusTags.put("input2", input2);
             jobStatusTags.put("parentId", reqParams.getParentId());
 
-            // Now roll the dice and run everything.....
             jobProcessor.submitAsync(new Job(mainJobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.DERIVE_CHANGESET, jobStatusTags));
         }
         catch (WebApplicationException wae) {
