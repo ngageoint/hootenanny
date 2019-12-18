@@ -26,7 +26,6 @@
  */
 package hoot.services.utils;
 
-import static hoot.services.utils.DbUtils.createQuery;
 import static hoot.services.utils.MapUtils.insertMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,7 +33,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -255,4 +253,29 @@ public class DbUtilsTest {
         JSONObject outJson = (JSONObject) parser.parse(output.replaceAll("\\\\\"", "\""));
         assertEquals(exJson, outJson);
     }
+
+
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testDeleteEmptyFolders() throws Exception {
+        long userId = MapUtils.insertUser();
+        long folderId1 = DbUtils.createFolder("empty1", 0L, userId, false);
+        long folderId2 = DbUtils.createFolder("empty1", folderId1, userId, false);
+        long folderId3 = DbUtils.createFolder("empty1", 0L, userId, false);
+        long mapId = insertMap(userId);
+        DbUtils.updateFolderMapping(mapId, folderId3);
+
+
+        assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
+        assertTrue(checkForDependents(mapId));
+        DbUtils.getFolderIdsForUser(Long.valueOf(userId));
+        DbUtils.deleteEmptyFolders();
+
+        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
+        assertFalse(checkForDependents(mapId));
+
+    }
+
+
 }

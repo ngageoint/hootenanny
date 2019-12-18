@@ -169,7 +169,7 @@ public class MapResource {
         // that the folder is recursively visible to the user based on folder
         // visibility:
         List<Maps> mapLayersOut = new ArrayList<Maps>(mapLayerRecords.size());
-        Set<Long> foldersTheUserCanSee = FolderResource.getFolderIdsForUser(user);
+        Set<Long> foldersTheUserCanSee = DbUtils.getFolderIdsForUser(user);
         for(Tuple t : mapLayerRecords) {
             Long parentFolder = t.get(folders.id);
             Boolean parentFolderIsPublic = t.get(folders.publicCol);

@@ -41,8 +41,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Provider;
 import javax.sql.DataSource;
@@ -74,8 +76,11 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.QFolders;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 
 
 /**
@@ -248,6 +253,42 @@ public class DbUtils {
         return sql.fetchFirst();
     }
 
+    public static Set<Long> getFolderIdsForUser(Users user) {
+        Long userId = null;
+        if (user != null) userId = user.getId();
+        return getFolderIdsForUser(userId);
+    }
+
+    public static Set<Long> getFolderIdsForUser(Long userId) {
+        List<Folders> folders = getFoldersForUser(userId);
+        Set<Long> out = new HashSet<Long>(folders.size());
+        for (Folders f : folders) {
+            out.add(f.getId());
+        }
+        return out;
+    }
+
+    public static List<Folders> getFoldersForUser(Users user) {
+        Long userId = null;
+        if (user != null) userId = user.getId();
+        return getFoldersForUser(userId);
+    }
+
+    public static List<Folders> getFoldersForUser(Long userId) {
+            SQLQuery<Folders> sql = createQuery()
+                .select(folders)
+                .from(folders)
+                .where(folders.id.ne(0L));
+        if(userId != null) {
+            sql.where(
+                    folders.userId.eq(userId).or(folders.publicCol.isTrue())
+            );
+        }
+        List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
+
+        return folderRecordSet;
+    }
+
     public static List<Long> getChildrenFolders(Long folderId) {
         List<Long> childrenFolders = createQuery()
                 .select(folders.id)
@@ -256,6 +297,34 @@ public class DbUtils {
                 .fetch();
 
         return childrenFolders;
+    }
+
+/*
+ * --Deletes folders that are empty (no child datasets or folders)
+DELETE
+FROM folders f
+WHERE
+NOT EXISTS
+    (
+    SELECT  NULL
+    FROM    folder_map_mappings fmm
+    WHERE   f.id = fmm.folder_id
+    )
+AND
+NOT EXISTS
+    (
+    SELECT  NULL
+    FROM    folders f2
+    WHERE   f.id = f2.parent_id
+    );
+ */
+    public static void deleteEmptyFolders() {
+        QFolders folders2 = new QFolders("folders2");
+        createQuery()
+            .delete(folders)
+            .where(new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
+            .and(new SQLQuery<>().from(folders).where(folders.id.eq(folders2.id)).notExists()))
+            .execute();
     }
 
     /**
