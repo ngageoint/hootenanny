@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
@@ -261,19 +262,24 @@ public class DbUtilsTest {
     public void testDeleteEmptyFolders() throws Exception {
         long userId = MapUtils.insertUser();
         long folderId1 = DbUtils.createFolder("empty1", 0L, userId, false);
-        long folderId2 = DbUtils.createFolder("empty1", folderId1, userId, false);
-        long folderId3 = DbUtils.createFolder("empty1", 0L, userId, false);
+        long folderId2 = DbUtils.createFolder("empty2", folderId1, userId, false);
+        long folderId3 = DbUtils.createFolder("full3", 0L, userId, false);
         long mapId = insertMap(userId);
         DbUtils.updateFolderMapping(mapId, folderId3);
 
 
         assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
-        assertTrue(checkForDependents(mapId));
-        DbUtils.getFolderIdsForUser(Long.valueOf(userId));
+        Set<Long> fids = DbUtils.getFolderIdsForUser(Long.valueOf(userId));
+        assertTrue(fids.contains(folderId1));
+        assertTrue(fids.contains(folderId2));
+        assertTrue(fids.contains(folderId3));
+
         DbUtils.deleteEmptyFolders();
 
-        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
-        assertFalse(checkForDependents(mapId));
+        fids = DbUtils.getFolderIdsForUser(Long.valueOf(userId));
+        assertTrue(fids.contains(folderId1)); //we would expect this to be False but the folder is not empty until it's empty child is deleted
+        assertFalse(fids.contains(folderId2));
+        assertTrue(fids.contains(folderId3));
 
     }
 

@@ -323,7 +323,7 @@ NOT EXISTS
         createQuery()
             .delete(folders)
             .where(new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
-            .and(new SQLQuery<>().from(folders).where(folders.id.eq(folders2.id)).notExists()))
+            .and(new SQLQuery<>().from(folders2).where(folders.id.eq(folders2.parentId)).notExists()))
             .execute();
     }
 
