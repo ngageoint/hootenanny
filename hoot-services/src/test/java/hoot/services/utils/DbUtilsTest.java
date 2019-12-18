@@ -98,7 +98,8 @@ public class DbUtilsTest {
         assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
         assertFalse(checkForDependents(mapId));
 
-    }
+        MapUtils.deleteUser(userId);
+   }
 
 
     public boolean checkForDependents(long mapId) throws SQLException {
@@ -197,6 +198,10 @@ public class DbUtilsTest {
         assertEquals(v2, checkTags.get(k2));
         assertEquals(v4, checkTags.get(k4));
         assertEquals(v6, checkTags.get(k6));
+
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+        MapUtils.deleteUser(userId);
     }
 
     @Test
@@ -260,6 +265,7 @@ public class DbUtilsTest {
     @Category(UnitTest.class)
     @Transactional
     public void testDeleteEmptyFolders() throws Exception {
+        //Create a user, some folders and a map in one of the folders
         long userId = MapUtils.insertUser();
         long folderId1 = DbUtils.createFolder("empty1", 0L, userId, false);
         long folderId2 = DbUtils.createFolder("empty2", folderId1, userId, false);
@@ -267,19 +273,36 @@ public class DbUtilsTest {
         long mapId = insertMap(userId);
         DbUtils.updateFolderMapping(mapId, folderId3);
 
-
+        //Confirm the map and folders were all created
+        assertTrue(DbUtils.userExists(userId));
         assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
         Set<Long> fids = DbUtils.getFolderIdsForUser(Long.valueOf(userId));
         assertTrue(fids.contains(folderId1));
         assertTrue(fids.contains(folderId2));
         assertTrue(fids.contains(folderId3));
 
+        //Delete the empty folders
         DbUtils.deleteEmptyFolders();
 
+        //Confirm emppty folders were deleted
         fids = DbUtils.getFolderIdsForUser(Long.valueOf(userId));
         assertTrue(fids.contains(folderId1)); //we would expect this to be False but the folder is not empty until it's empty child is deleted
         assertFalse(fids.contains(folderId2));
         assertTrue(fids.contains(folderId3));
+
+        //Delete the map and resulting empty folders and user
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+        DbUtils.deleteEmptyFolders();
+        MapUtils.deleteUser(userId);
+
+        //Confirm map and all folders (now empty) are gone
+        fids = DbUtils.getFolderIdsForUser(Long.valueOf(userId));
+        assertFalse(DbUtils.userExists(userId));
+        assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
+        assertFalse(fids.contains(folderId1));
+        assertFalse(fids.contains(folderId2));
+        assertFalse(fids.contains(folderId3));
 
     }
 

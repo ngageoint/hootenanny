@@ -38,6 +38,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
 import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.MapUtils;
 
 
@@ -75,6 +76,9 @@ public abstract class OSMResourceTestAbstract extends HootServicesJerseyTestAbst
     public void afterTest() throws Exception {
         txManager.rollback(transactionStatus);
         transactionStatus = null;
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+        MapUtils.deleteUser(userId);
     }
 
     protected Timestamp getCurrentDBTime() throws Exception {

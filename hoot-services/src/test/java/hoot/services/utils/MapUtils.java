@@ -199,7 +199,7 @@ public final class MapUtils {
         return newId;
     }
 
-    static void deleteUser(long userId) {
+    public static void deleteUser(long userId) {
         createQuery().delete(users).where(users.id.eq(userId)).execute();
     }
 
@@ -209,7 +209,7 @@ public final class MapUtils {
      */
     public static void deleteOSMRecord(Long mapId) {
         DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        createQuery().delete(maps).where(maps.id.eq(mapId)).execute();
+        DbUtils.deleteMap(mapId);
     }
 
     private static void createTable(String createTblSql, Connection conn) throws SQLException {

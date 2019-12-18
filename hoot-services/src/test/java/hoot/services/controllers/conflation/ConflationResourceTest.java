@@ -82,5 +82,6 @@ public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals(3, job.getCommands().length);
         assertEquals(ConflateCommand.class, job.getCommands()[0].getClass());
         assertEquals(UpdateMapTagsCommand.class, job.getCommands()[1].getClass());
+        MapUtils.deleteUser(userId);
     }
 }

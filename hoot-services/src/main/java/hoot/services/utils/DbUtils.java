@@ -31,6 +31,7 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.models.db.QUsers.users;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -632,6 +633,20 @@ NOT EXISTS
             id = -1;
         }
         return (id > -1);
+    }
+
+    /**
+     * Checks for the existence of user
+     *
+     * @param userId
+     * @return returns true when exists else false
+     */
+    public static boolean userExists(Long userId) {
+        return createQuery()
+                .select(users)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchCount() == 1;
     }
 
     /**

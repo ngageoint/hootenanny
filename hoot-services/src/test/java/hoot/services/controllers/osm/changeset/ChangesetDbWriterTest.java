@@ -37,6 +37,7 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.osm.Changeset;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.MapUtils;
 
 
@@ -50,7 +51,7 @@ public class ChangesetDbWriterTest {
 
     /*
      * @Test
-     * 
+     *
      * @Category(IntegrationTest.class)
      */
     public void testLargeWrite() throws Exception {
@@ -80,5 +81,9 @@ public class ChangesetDbWriterTest {
 
         Assert.assertEquals(NUM_NODES * NUM_TAGS_PER_NODE,
                 OSMTestUtils.getTagCountForElementType(mapId, ElementType.Node));
-    }
+
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+        MapUtils.deleteUser(userId);
+}
 }
