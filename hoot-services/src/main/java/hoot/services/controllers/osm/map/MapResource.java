@@ -86,7 +86,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
@@ -697,19 +696,7 @@ public class MapResource {
         Map m = getMapForUser(user, mapId, false, true);
         // Handle some CRUD
         FolderResource.getFolderForUser(user, folderId);
-
-        // Delete any existing to avoid duplicate entries
-        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();
-
-        Long newId = createQuery()
-            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-            .from()
-            .fetchOne();
-
-        createQuery()
-            .insert(folderMapMappings)
-            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-            .values(newId, m.getId(), folderId).execute();
+        DbUtils.updateFolderMapping(m.getId(), folderId);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);
