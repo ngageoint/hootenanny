@@ -249,19 +249,25 @@ public class AdvancedConflationOptionsResource {
     private void getOverrides(Boolean doForce) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
-        if ((horizontalOverride == null) || (referenceOverride == null) || doForce) {
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HOOT2_OVERRIDE_PATH))){
+        if ((hoot2Override == null) || doForce) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HOOT2_OVERRIDE_PATH))) {
                 hoot2Override = (JSONObject) parser.parse(fileReader);
             }
+        }
 
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))){
+        if ((referenceOverride == null) || doForce) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, REF_OVERRIDE_PATH))) {
                 referenceOverride = (JSONObject) parser.parse(fileReader);
             }
+        }
 
-            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HORZ_OVERRIDE_PATH))){
+        if ((horizontalOverride == null) || doForce) {
+            try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, HORZ_OVERRIDE_PATH))) {
                 horizontalOverride = (JSONObject) parser.parse(fileReader);
             }
+        }
 
+        if ((attributeOverride == null) || doForce) {
             try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, ATT_OVERRIDE_PATH))) {
                 attributeOverride = (JSONObject) parser.parse(fileReader);
             }
