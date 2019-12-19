@@ -44,7 +44,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapCleaner)
 JosmMapCleaner::JosmMapCleaner() :
 JosmMapValidatorAbstract(),
 _addDetailTags(false),
-_numGroupsOfElementsCleaned(0),
+_numElementsCleaned(0),
 _numFailedCleaningOperations(0)
 {
   // Don't see this changing any time soon, so not making it configurable until necessary
@@ -61,7 +61,7 @@ void JosmMapCleaner::setConfiguration(const Settings& conf)
 
 void JosmMapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
-  _numGroupsOfElementsCleaned = 0;
+  _numElementsCleaned = 0;
   _numFailedCleaningOperations = 0;
   _deletedElementIds.clear();
   LOG_VARD(_addDetailTags);
@@ -124,12 +124,14 @@ QString JosmMapCleaner::_clean(
     (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
       // Java sig:
-      //  String clean(List<String> validators, String elementsXml, boolean addDetailTags)
+      //  String validate(
+      //    List<String> validators, String elementsXml, boolean cleanValidated, boolean addTags)
       _javaEnv->GetMethodID(
-        _josmInterfaceClass, "clean",
-        "(Ljava/util/List;Ljava/lang/String;Z)Ljava/lang/String;"),
+        _josmInterfaceClass, "validate",
+        "(Ljava/util/List;Ljava/lang/String;ZZ)Ljava/lang/String;"),
       JniConversion::toJavaStringList(_javaEnv, validators),
       JniConversion::toJavaString(_javaEnv, map),
+      true,
       addDetailTags);
   JniConversion::checkForErrors(_javaEnv, "cleanFromMapString");
   return JniConversion::fromJavaString(_javaEnv, cleanedMapResultStr);
@@ -143,14 +145,15 @@ void JosmMapCleaner::_clean(
   _javaEnv->CallVoidMethod(
     _josmInterface,
     // Java sig:
-    //  void clean(
+    //  void validate(
     //    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
-    //    boolean addDetailTags)
+    //    boolean cleanValidated, boolean addTags)
     _javaEnv->GetMethodID(
-      _josmInterfaceClass, "clean", "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Z)V"),
+      _josmInterfaceClass, "validate", "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ZZ)V"),
     JniConversion::toJavaStringList(_javaEnv, validators),
     JniConversion::toJavaString(_javaEnv, inputMapPath),
     JniConversion::toJavaString(_javaEnv, outputMapPath),
+    true,
     addDetailTags);
   JniConversion::checkForErrors(_javaEnv, "cleanFromMapFile");
 }
@@ -162,7 +165,7 @@ void JosmMapCleaner::_getStats()
   // call back into the hoot-josm validator to get the stats after validation
 
   JosmMapValidatorAbstract::_getStats();
-  _numGroupsOfElementsCleaned = _getNumGroupsOfElementsCleaned();
+  _numElementsCleaned = _getNumElementsCleaned();
   _deletedElementIds = _getDeletedElementIds();
   _numFailingValidators = _getNumFailingValidators();
   _numFailedCleaningOperations = _getNumFailedCleaningOperations();
@@ -173,8 +176,7 @@ void JosmMapCleaner::_getStats()
     "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) + " / " +
     StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
   _errorSummary +=
-    "Total groups of elements cleaned: " +
-    StringUtils::formatLargeNumber(_numGroupsOfElementsCleaned) + "\n";
+    "Total elements cleaned: " + StringUtils::formatLargeNumber(_numElementsCleaned) + "\n";
   _errorSummary +=
     "Total elements deleted: " + StringUtils::formatLargeNumber(_deletedElementIds.size()) + "\n";
   _errorSummary +=
@@ -191,14 +193,14 @@ void JosmMapCleaner::_getStats()
 
 // JNI sig format: (input params...)return type
 
-int JosmMapCleaner::_getNumGroupsOfElementsCleaned()
+int JosmMapCleaner::_getNumElementsCleaned()
 {
   const int numCleaned =
     (int)_javaEnv->CallIntMethod(
       _josmInterface,
-      // Java sig: int getNumGroupsOfElementsCleaned()
-      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumGroupsOfElementsCleaned", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumGroupsOfElementsCleaned");
+      // Java sig: int getNumElementsCleaned()
+      _javaEnv->GetMethodID(_josmInterfaceClass, "getNumElementsCleaned", "()I"));
+  JniConversion::checkForErrors(_javaEnv, "getNumElementsCleaned");
   return numCleaned;
 }
 

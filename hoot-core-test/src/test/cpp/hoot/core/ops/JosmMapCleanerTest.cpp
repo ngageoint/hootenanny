@@ -67,7 +67,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(40, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumGroupsOfElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
@@ -93,7 +93,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
 
@@ -122,7 +122,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
 
@@ -151,7 +151,7 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(45, uut.getNumElementsProcessed());
     CPPUNIT_ASSERT_EQUAL(4, uut.getNumValidationErrors());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumGroupsOfElementsCleaned());
+    CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
 

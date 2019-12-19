@@ -74,7 +74,7 @@ public:
   virtual QString getInitStatusMessage() const
   { return "Cleaning elements with JOSM..."; }
 
-  int getNumGroupsOfElementsCleaned() const { return _numGroupsOfElementsCleaned; }
+  int getNumElementsCleaned() const { return _numElementsCleaned; }
   int getNumElementsDeleted() const { return _deletedElementIds.size(); }
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
@@ -99,7 +99,7 @@ private:
 
   // Each JOSM command capable of cleaning elements after validation breaks the elements up into
   // cleanable groups.
-  int _numGroupsOfElementsCleaned;
+  int _numElementsCleaned;
   // the IDs of the elements deleted as a result of cleaning
   QSet<ElementId> _deletedElementIds;
   // the number of clean attempts that resulted in an error being thrown
@@ -118,7 +118,7 @@ private:
     const QStringList& validators, const QString& inputMapPath, const QString& outputMapPath,
     const bool addDetailTags);
 
-  int _getNumGroupsOfElementsCleaned();
+  int _getNumElementsCleaned();
   QSet<ElementId> _getDeletedElementIds();
   QMap<QString, int> _getValidationErrorFixCountsByType();
   int _getNumFailedCleaningOperations();

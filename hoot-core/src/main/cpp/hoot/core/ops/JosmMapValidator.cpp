@@ -102,12 +102,16 @@ QString JosmMapValidator::_validate(const QStringList& validators, const QString
   jstring validatedMapJavaStr =
     (jstring)_javaEnv->CallObjectMethod(
       _josmInterface,
-      // Java sig: String validate(List<String> validators, String elementsXml)
+      // Java sig:
+      // String validate(
+      //   List<String> validators, String elementsXml, boolean cleanValidated, boolean addTag)
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "validate",
-        "(Ljava/util/List;Ljava/lang/String;)Ljava/lang/String;"),
+        "(Ljava/util/List;Ljava/lang/String;ZZ)Ljava/lang/String;"),
       JniConversion::toJavaStringList(_javaEnv, validators),
-      JniConversion::toJavaString(_javaEnv, map));
+      JniConversion::toJavaString(_javaEnv, map),
+      false,
+      true);
   JniConversion::checkForErrors(_javaEnv, "validateFromMapString");
   return JniConversion::fromJavaString(_javaEnv, validatedMapJavaStr);
 }
@@ -120,13 +124,16 @@ void JosmMapValidator::_validate(
     _josmInterface,
     // Java sig:
     // void validate(
-    //   List<String> validators, String elementsFileInputPath, String elementsFileOutputPath)
+    //   List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
+    //   boolean cleanValidated, boolean addTag)
     _javaEnv->GetMethodID(
       _josmInterfaceClass, "validate",
-      "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V"),
+      "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ZZ)V"),
     JniConversion::toJavaStringList(_javaEnv, validators),
     JniConversion::toJavaString(_javaEnv, inputMapPath),
-    JniConversion::toJavaString(_javaEnv, outputMapPath));
+    JniConversion::toJavaString(_javaEnv, outputMapPath),
+    false,
+    true);
   JniConversion::checkForErrors(_javaEnv, "validateFromMapFile");
 }
 

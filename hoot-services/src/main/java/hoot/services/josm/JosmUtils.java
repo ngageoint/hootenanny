@@ -29,20 +29,12 @@ package hoot.services.josm;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Arrays;
-import java.io.File;
-import java.io.InputStream;
 
 import org.apache.commons.lang3.StringUtils;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
-import org.openstreetmap.josm.data.osm.Node;
-import org.openstreetmap.josm.data.osm.Way;
-import org.openstreetmap.josm.data.osm.Relation;
-import org.openstreetmap.josm.data.osm.RelationMember;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
 import org.openstreetmap.josm.data.preferences.JosmUrls;
@@ -56,6 +48,7 @@ import org.openstreetmap.josm.command.SequenceCommand;
 import org.openstreetmap.josm.data.projection.ProjectionRegistry;
 import org.openstreetmap.josm.data.projection.Projection;
 import org.openstreetmap.josm.gui.preferences.projection.ProjectionPreference;
+import org.openstreetmap.josm.data.validation.Test;
 
 /**
  * Various utilities for use when using JOSM from hoot-josm
@@ -203,6 +196,24 @@ public class JosmUtils
       return new HashSet<String>();
     }
   }
+
+  public static String getErrorMessage(Test validator, Exception e)
+  {
+    if (Logging.isTraceEnabled())
+    {
+      e.printStackTrace();
+    }
+    String errorMsg =
+      "Error running validator: " + validator.getName() + ", failure detail: " + e.getMessage() +
+      " " + e.toString();
+    if (e.getCause() != null)
+    {
+      errorMsg += e.getCause().toString();
+    }
+    return errorMsg;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////
 
   private static Set<String> getDeletedElementIds(DeleteCommand deleteCommand)
   {
