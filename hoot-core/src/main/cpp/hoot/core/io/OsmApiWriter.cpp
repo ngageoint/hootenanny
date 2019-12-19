@@ -48,7 +48,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities";
+const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities/";
 const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions/";
 const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
 const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
