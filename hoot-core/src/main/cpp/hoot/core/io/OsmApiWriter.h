@@ -226,7 +226,7 @@ private:
    * @brief _changesetThreadFunc Thread function that does the actual work of creating a changeset ID
    *  via the API, pushing the changeset data, closing the changeset, and splitting a failing changeset
    *  if necessary
-   * @param index Index into the thread status vector to place the status
+   * @param index Index into the thread status vector to report the status
    */
   void _changesetThreadFunc(int index);
   /**
@@ -242,10 +242,11 @@ private:
    */
   bool _threadsAreIdle();
   /**
-   * @brief _splitChangeset
-   * @param workInfo
-   * @param response
-   * @return
+   * @brief _splitChangeset Split a changeset either in half or split out the element reported
+   *  back from the API into a new changeset, then both changesets are pushed back on the queue
+   * @param workInfo Pointer to the work element to split
+   * @param response String response from the server to help in the splitting process
+   * @return True if the changeset was split
    */
   bool _splitChangeset(const ChangesetInfoPtr& workInfo, const QString& response);
   /** Changeset processing thread pool */
@@ -258,12 +259,15 @@ private:
   XmlChangeset _changeset;
   /** Mutex protecting large changeset */
   std::mutex _changesetMutex;
+  /** Status of each working thread, working or idle */
   enum ThreadStatus
   {
     Idle,
     Working
   };
+  /** Vector of statuses for each running thread */
   std::vector<ThreadStatus> _threadStatus;
+  /** Mutex protecting status vector */
   std::mutex _threadStatusMutex;
   /** Base URL for the target OSM API, including authentication information */
   QUrl _url;
