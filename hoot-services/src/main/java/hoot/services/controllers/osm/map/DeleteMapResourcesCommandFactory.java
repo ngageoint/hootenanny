@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @Component
 class DeleteMapResourcesCommandFactory {
 
-    DeleteMapResourcesCommand build(String mapName, Class<?> caller) {
-        return new DeleteMapResourcesCommand(mapName, caller);
+    DeleteMapResourcesCommand build(String mapName, String jobId, Class<?> caller) {
+        return new DeleteMapResourcesCommand(mapName, jobId, caller);
     }
 }

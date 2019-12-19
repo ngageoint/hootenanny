@@ -33,7 +33,6 @@ import static hoot.services.utils.DbUtils.createQuery;
 import static hoot.services.utils.DbUtils.deleteMapRelatedTablesByMapId;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
@@ -43,10 +42,12 @@ import hoot.services.utils.DbUtils;
 public class DeleteMapResourcesCommand implements InternalCommand {
 
     private final String mapName;
+    private final String jobId;
     private final Class<?> caller;
 
-    DeleteMapResourcesCommand(String mapName, Class<?> caller) {
+    DeleteMapResourcesCommand(String mapName, String jobId, Class<?> caller) {
         this.mapName = mapName;
+        this.jobId = jobId;
         this.caller = caller;
     }
 
@@ -66,7 +67,7 @@ public class DeleteMapResourcesCommand implements InternalCommand {
 
         commandResult.setExitCode(CommandResult.SUCCESS);
         commandResult.setFinish(LocalDateTime.now());
-        commandResult.setJobId(UUID.randomUUID().toString());
+        commandResult.setJobId(jobId);
         commandResult.setCaller(this.caller.getName());
 
         return commandResult;
