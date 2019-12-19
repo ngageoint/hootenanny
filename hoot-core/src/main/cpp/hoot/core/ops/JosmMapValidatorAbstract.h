@@ -164,7 +164,7 @@ private:
   // a list of explicit JOSM validator class name excludes without prefixed namespace to be excluded
   // as validators; overrides _josmValidatorsInclude
   QStringList _josmValidatorsExclude;
-  // TODO
+  // a known list of validators that need a user cert to operate; will skip them
   QStringList _josmValidatorsRequiringUserCert;
 
   void _initJosmValidatorsList();

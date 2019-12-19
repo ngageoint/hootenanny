@@ -215,7 +215,6 @@ QSet<ElementId> JosmMapCleaner::_getDeletedElementIds()
   return
     _elementIdStringsToElementIds(
       JniConversion::fromJavaStringSet(_javaEnv, deletedElementIdsJavaSet));
-  // TODO: need to add this to the map tags??
 }
 
 QMap<QString, int> JosmMapCleaner::_getValidationErrorFixCountsByType()

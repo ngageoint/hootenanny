@@ -104,7 +104,7 @@ QString JosmMapValidator::_validate(const QStringList& validators, const QString
       _josmInterface,
       // Java sig:
       // String validate(
-      //   List<String> validators, String elementsXml, boolean cleanValidated, boolean addTag)
+      //   List<String> validators, String elementsXml, boolean cleanValidated, boolean addTags)
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "validate",
         "(Ljava/util/List;Ljava/lang/String;ZZ)Ljava/lang/String;"),
@@ -125,7 +125,7 @@ void JosmMapValidator::_validate(
     // Java sig:
     // void validate(
     //   List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
-    //   boolean cleanValidated, boolean addTag)
+    //   boolean cleanValidated, boolean addTags)
     _javaEnv->GetMethodID(
       _josmInterfaceClass, "validate",
       "(Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ZZ)V"),

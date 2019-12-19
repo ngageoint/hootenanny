@@ -36,7 +36,9 @@ namespace hoot
 /**
  * Calls a hoot-josm Java map cleaner that runs selected JOSM validation routines on a map and
  * cleans any failing elements where possible. Optionally marks elements that fail validation with
- * custom tags, TODO: and if elements were deleted adds their IDs to the map's base tags.
+ * custom tags.
+ *
+ * TODO: and if elements were deleted adds their IDs to the map's base tags.
  *
  * See note in JosmMapValidatorAbstract about handling of collection objects via JNI.
  *
