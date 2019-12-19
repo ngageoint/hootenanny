@@ -214,7 +214,7 @@ void LogJs::setLogLevel(const FunctionCallbackInfo<Value>& args)
   try
   {
     QString logLevel = toCpp<QString>(args[0]);
-    Log::getInstance().setLevel(Log::getLevelFromString(logLevel));
+    Log::getInstance().setLevel(Log::levelFromString(logLevel));
 
     args.GetReturnValue().SetUndefined();
   }

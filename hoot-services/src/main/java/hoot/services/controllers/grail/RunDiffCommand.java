@@ -27,7 +27,10 @@
 package hoot.services.controllers.grail;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +45,35 @@ class RunDiffCommand extends GrailCommand {
     RunDiffCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId,params);
 
-        logger.info("Params: " + params);
+        logger.debug("Params: " + params);
+
+        List<String> options = new LinkedList<>();
+
+        Map<String, String> hoot2AdvOptions = params.getAdvancedOptions();
+
+        if (hoot2AdvOptions != null && !hoot2AdvOptions.isEmpty()) {
+            for (Entry<String, String> option: hoot2AdvOptions.entrySet()) {
+                if (configOptions.containsKey(option.getKey())) { // if option key in possible values, add new option command
+                    Map<String, String> optionConfig = configOptions.get(option.getKey());
+                    String optionValue = option.getValue();
+
+                    if (optionConfig.get("type").toLowerCase().equals("list")) {
+                        optionValue = optionValue.replaceAll("\\[|\\]", "").replaceAll(",", ";");
+                    }
+
+                    options.add("\"" + optionConfig.get("key") + "=" + optionValue + "\"");
+                }
+            }
+        }
 
         Map<String, Object> substitutionMap = new HashMap<>();
+        substitutionMap.put("HOOT_OPTIONS", toHootOptions(options));
         substitutionMap.put("INPUT1", params.getInput1());
         substitutionMap.put("INPUT2", params.getInput2());
         substitutionMap.put("OUTPUT", params.getOutput());
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
-        String command = "hoot conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output";
+        String command = "hoot conflate --${DEBUG_LEVEL} -C DifferentialConflation.conf -C NetworkAlgorithm.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OUTPUT} --differential --include-tags --separate-output";
 
         super.configureCommand(command, substitutionMap, caller);
     }

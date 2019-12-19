@@ -158,9 +158,12 @@ private:
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2Fchangeset.2Fcreate
    * @param request - Network request object initialized with OSM API URL
    * @param description - Text description of the changeset to create
+   * @param source - Text specifying the source for the edits for this changeset
+   * @param hashtags - Semicolon delimited list of hashtags for changeset
    * @return ID of the changeset that was created on the server
    */
-  long _createChangeset(HootNetworkRequestPtr request, const QString& description);
+  long _createChangeset(HootNetworkRequestPtr request, const QString& description,
+                        const QString& source, const QString& hashtags);
   /**
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
@@ -275,6 +278,10 @@ private:
   QList<QString> _changesets;
   /** Changeset description for all changesets loaded, loaded with 'changeset.description' option */
   QString _description;
+  /** Changeset source for all changesets loaded, loaded with 'changeset.source' config option */
+  QString _source;
+  /** Changeset hashtags for all changesets loaded, loaded with 'changeset.hashtags' config option */
+  QString _hashtags;
   /** Maximum number of writer threads processing changesets, loaded with 'changeset.apidb.max.writers' option */
   int _maxWriters;
   /** Soft maximum number of elements per changeset, size could be larger than the soft max in order to include

@@ -27,6 +27,7 @@
 package hoot.services.controllers.grail;
 
 import java.io.File;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -76,6 +77,9 @@ public class GrailParams {
     @JsonProperty("customQuery")
     private String customQuery;
 
+    @JsonProperty("ADV_OPTIONS")
+    private Map<String, String> advancedOptions;
+
     private String consumerKey;
 
     private String consumerSecret;
@@ -83,6 +87,12 @@ public class GrailParams {
     private File workDir;
 
     private String conflationType;
+
+    private String comment;
+
+    private String hashtags;
+
+    private String source;
 
     public GrailParams() {}
 
@@ -102,6 +112,34 @@ public class GrailParams {
         this.consumerSecret = params.getConsumerSecret();
         this.workDir = params.getWorkDir();
         this.conflationType = params.getConflationType();
+        this.comment = params.getComment();
+        this.hashtags = params.getHashtags();
+        this.source = params.getSource();
+        this.advancedOptions = params.getAdvancedOptions();
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(String hashtags) {
+        this.hashtags = hashtags;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getConflationType() {
@@ -222,6 +260,14 @@ public class GrailParams {
 
     public String getCustomQuery() {
         return customQuery;
+    }
+
+    public Map<String, String> getAdvancedOptions() {
+        return advancedOptions;
+    }
+
+    public void setAdvancedOptions(Map<String, String> advancedOptions) {
+        this.advancedOptions = advancedOptions;
     }
 
     @Override

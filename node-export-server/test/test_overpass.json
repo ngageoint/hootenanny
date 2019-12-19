@@ -1,0 +1,315 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.1009 5e627b63",
+  "osm3s": {
+    "timestamp_osm_base": "2019-12-06T20:54:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "node",
+      "id": 248743324,
+      "lat": 41.8935446,
+      "lon": 12.4877253,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 255331456,
+      "lat": 41.8907465,
+      "lon": 12.4976886,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 266310817,
+      "lat": 41.8926848,
+      "lon": 12.4931113,
+      "tags": {
+        "amenity": "drinking_water",
+        "disused": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 266310881,
+      "lat": 41.8923773,
+      "lon": 12.4934985,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 266317282,
+      "lat": 41.8932611,
+      "lon": 12.4901658,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 266317940,
+      "lat": 41.891398,
+      "lon": 12.4911918,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 388983995,
+      "lat": 41.8869371,
+      "lon": 12.4949446,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 388984003,
+      "lat": 41.8877413,
+      "lon": 12.494519,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 410781415,
+      "lat": 41.8911751,
+      "lon": 12.4847414,
+      "tags": {
+        "amenity": "drinking_water",
+        "disused": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 495113034,
+      "lat": 41.8913309,
+      "lon": 12.4934283,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 685457655,
+      "lat": 41.8902623,
+      "lon": 12.4867108,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 685461877,
+      "lat": 41.8891234,
+      "lon": 12.4875779,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 953890053,
+      "lat": 41.8887986,
+      "lon": 12.4879526,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 953890062,
+      "lat": 41.890985,
+      "lon": 12.4883755,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 953909059,
+      "lat": 41.8889852,
+      "lon": 12.4968765,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1157932638,
+      "lat": 41.8867552,
+      "lon": 12.4954695,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1170494282,
+      "lat": 41.8900409,
+      "lon": 12.4941977,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1656861982,
+      "lat": 41.8907193,
+      "lon": 12.4883593,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1709280191,
+      "lat": 41.891319,
+      "lon": 12.4911794,
+      "tags": {
+        "amenity": "drinking_water",
+        "name:ru": "вода с газом и без. бесплатная"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2537299968,
+      "lat": 41.8911676,
+      "lon": 12.4987211,
+      "tags": {
+        "amenity": "drinking_water",
+        "indoor": "no"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3785014818,
+      "lat": 41.8873381,
+      "lon": 12.4934389,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3786621294,
+      "lat": 41.8867114,
+      "lon": 12.4927208,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5314059440,
+      "lat": 41.8863528,
+      "lon": 12.490124,
+      "tags": {
+        "amenity": "drinking_water",
+        "fountain": "nasone"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5340247517,
+      "lat": 41.8912427,
+      "lon": 12.4978518,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5340252322,
+      "lat": 41.8913872,
+      "lon": 12.4973968,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5535092255,
+      "lat": 41.8918027,
+      "lon": 12.4915049,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5732659653,
+      "lat": 41.8936702,
+      "lon": 12.4923174,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5767727022,
+      "lat": 41.8921044,
+      "lon": 12.4858406,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5801329944,
+      "lat": 41.8881076,
+      "lon": 12.4885132,
+      "tags": {
+        "amenity": "drinking_water",
+        "description:de": "Wasserbrunnen"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6280605307,
+      "lat": 41.8939824,
+      "lon": 12.4936946,
+      "tags": {
+        "amenity": "drinking_water",
+        "level": "1"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6547164641,
+      "lat": 41.8923303,
+      "lon": 12.487009,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6616168986,
+      "lat": 41.8922741,
+      "lon": 12.4967144,
+      "tags": {
+        "amenity": "drinking_water"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6841124063,
+      "lat": 41.8906387,
+      "lon": 12.4926345,
+      "tags": {
+        "amenity": "drinking_water",
+        "name": "Fuente dentro del Coliseo Romano"
+      }
+    }
+  ]
+}

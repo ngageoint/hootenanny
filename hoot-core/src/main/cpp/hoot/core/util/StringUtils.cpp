@@ -185,4 +185,12 @@ bool StringUtils::containsSubstring(const QStringList& input, const QString& sub
   return input.filter(substring, Qt::CaseInsensitive).size() > 0;
 }
 
+void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
+{
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    input.removeAll(toRemove.at(i));
+  }
+}
+
 }

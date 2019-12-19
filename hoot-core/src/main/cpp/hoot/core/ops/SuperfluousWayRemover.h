@@ -44,6 +44,8 @@ class OsmMap;
 /**
  * Removes all ways that are not being used by relations that contain zero nodes, or all the nodes
  * are identical.
+ *
+ * @todo what about one node ways?
  */
 class SuperfluousWayRemover : public OsmMapOperation, public OperationStatusInfo
 {

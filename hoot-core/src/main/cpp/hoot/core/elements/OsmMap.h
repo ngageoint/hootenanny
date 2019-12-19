@@ -44,6 +44,7 @@
 #include <hoot/core/elements/WayMap.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/elements/ElementIterator.h>
 
 #include <memory>
 
@@ -77,7 +78,8 @@ class IdSwap;
  *    and OsmData class. The OsmMap class maintains pointers to OsmData and an OsmIndex
  *    where neither directly references the other. (?)
  */
-class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider
+class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider,
+  public ElementIterator
 {
   // Friend classes that need to modify private elements
   friend class RemoveNodeByEid;
@@ -159,7 +161,7 @@ public:
    * context of a relation, but may not make sense in other cases (e.g. replace a single node
    * that is part of a way with multiple nodes).
    */
-  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr> &to);
+  void replace(const std::shared_ptr<const Element>& from, const QList<ElementPtr>& to);
 
   //NODE///////////////////////////////////////////////////////////////////////////////////
 
@@ -370,6 +372,12 @@ protected:
   int _numWaysSkippedForAppending;
   int _numRelationsSkippedForAppending;
 
+  // for use with ElementIterator
+  ElementId _currentElementId;
+  NodeMap::const_iterator _currentNodeItr;
+  WayMap::const_iterator _currentWayItr;
+  RelationMap::const_iterator _currentRelationItr;
+
   void _copy(const std::shared_ptr<const OsmMap>& from);
 
   /**
@@ -380,6 +388,9 @@ protected:
   void _replaceNodeInRelations(long oldId, long newId);
 
   void _initCounters();
+
+  virtual void _next();
+  virtual void resetIterator();
 };
 
 typedef std::shared_ptr<OsmMap> OsmMapPtr;

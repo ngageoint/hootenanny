@@ -149,6 +149,8 @@ void OsmXmlWriter::close()
 
 QString OsmXmlWriter::toString(const ConstOsmMapPtr& map, const bool formatXml)
 {
+  LOG_DEBUG("Writing map to xml string...");
+
   OsmXmlWriter writer;
   writer.setFormatXml(formatXml);
   // this will be deleted by the _fp std::shared_ptr
