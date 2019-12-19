@@ -171,7 +171,7 @@ public class JosmMapCleaner
    */
   public void removeDeletedElements(DataSet map)
   {
-    Collection<OsmPrimitive> elements = map.getAllPrimitives();
+    Collection<OsmPrimitive> elements = map./*getAllPrimitives()*/allPrimitives();
     Collection<OsmPrimitive> outputElements = elements;
     for (OsmPrimitive element : elements)
     {

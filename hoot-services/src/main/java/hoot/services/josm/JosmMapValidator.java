@@ -37,7 +37,6 @@ import java.lang.Class;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
@@ -212,7 +211,24 @@ public class JosmMapValidator
 
     DataSet map = parseAndValidate(validators, new ByteArrayInputStream(elementsXml.getBytes()));
     logMapStats(map);
-    return writeMapToXml(map);
+
+    String mapXml = null;
+    try
+    {
+      Logging.debug("Writing map to xml...");
+      long startTime = System.currentTimeMillis();
+      mapXml = JosmUtils.writeMapToXml(map);
+      Logging.debug(
+        "Map written to xml in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error writing output to xml: " + e.getMessage());
+      throw e;
+    }
+
+    return mapXml;
   }
 
   /**
@@ -236,7 +252,21 @@ public class JosmMapValidator
     DataSet map =
       parseAndValidate(validators, new FileInputStream(new File(elementsFileInputPath)));
     logMapStats(map);
-    writeMapToFile(map, new File(elementsFileOutputPath));
+
+    try
+    {
+      Logging.debug("Writing map to file...");
+      long startTime = System.currentTimeMillis();
+      JosmUtils.writeMapToFile(map, new File(elementsFileOutputPath));
+      Logging.debug(
+        "Map written to file in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error writing output to file: " + e.getMessage());
+      throw e;
+    }
   }
 
   // these match corresponding entries in the hoot-core MetadataTags class
@@ -330,7 +360,7 @@ public class JosmMapValidator
       Logging.debug(
         "Input elements converted from xml in: " +
         String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-      originalMapSize = map.getAllPrimitives().size();
+      originalMapSize = map.allPrimitives().size();
       Logging.debug("originalMapSize: " + originalMapSize);
 
       if (originalMapSize == 0)
@@ -342,7 +372,7 @@ public class JosmMapValidator
       // statement despite the log level and simply not log the statement. So, you definitely don't
       // want anything like this making its way into a production environment.
       //Logging.trace(
-      // "input elements: " + JosmUtils.elementsToString(inputDataset.getAllPrimitives()));
+      // "input elements: " + JosmUtils.elementsToString(inputDataset.allPrimitives()));
     }
     catch (Exception e)
     {
@@ -401,7 +431,7 @@ public class JosmMapValidator
       validator.initialize();
       validator.setPartialSelection(false);
       validator.startTest(null);
-      validator.visit(map.getAllPrimitives());
+      validator.visit(map.allPrimitives());
       validator.endTest();
 
       errors = validator.getErrors();
@@ -494,7 +524,7 @@ public class JosmMapValidator
   {
     // gather some stats on the modified map
 
-    Collection<OsmPrimitive> elements = map.getAllPrimitives();
+    Collection<OsmPrimitive> elements = map.allPrimitives();
     int validatedMapSize = elements.size();
     int mapSizeDiff = 0;
     if (getNumValidationErrors() == 0 || originalMapSize == validatedMapSize)
@@ -523,56 +553,5 @@ public class JosmMapValidator
       numElementsInvolved += error.getPrimitives().size();
     }
     return numElementsInvolved;
-  }
-
-  private String writeMapToXml(DataSet map)
-  {
-    Logging.debug("Writing map to XML...");
-    //Logging.trace("elements: " + JosmUtils.elementsToString(elements));
-
-    String outputElementsXml = null;
-    try
-    {
-      long startTime = System.currentTimeMillis();
-      Collection<AbstractPrimitive> elementsToWrite = new ArrayList<AbstractPrimitive>();
-      elementsToWrite.addAll(map.getAllPrimitives());
-      outputElementsXml =
-        OsmApi.getOsmApi("http://localhost").toBulkXml(elementsToWrite, true);
-
-      Logging.debug(
-        "Output elements converted to xml in: " +
-        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-      //Logging.trace("outputElementsXml: " + outputElementsXml);
-    }
-    catch (Exception e)
-    {
-      Logging.error("Error writing output to XML: " + e.getMessage());
-      throw e;
-    }
-
-    return outputElementsXml;
-  }
-
-  private void writeMapToFile(DataSet map, File outFile) throws IOException
-  {
-    Logging.debug("Writing map to file: " + outFile.getName() + "...");
-
-    try
-    {
-      long startTime = System.currentTimeMillis();
-      PrintWriter writer = new PrintWriter(outFile);
-      OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(map);
-      writer.flush();
-      writer.close();
-
-      Logging.debug(
-        "Output elements written to file in: " +
-        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-    }
-    catch (Exception e)
-    {
-      Logging.error("Error writing output to file: " + e.getMessage());
-      throw e;
-    }
   }
 }

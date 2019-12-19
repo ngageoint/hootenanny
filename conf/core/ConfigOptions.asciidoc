@@ -1752,6 +1752,7 @@ for job output storage, the ID will be stored in the job status table of the ass
 * Default Value: `2000000`
 
 The maximum size in elements for a map allowed to be passed as a string between Hootenanny and JOSM.
+The default value was determined experimentally and may need tweaking per environment.
 
 === josm.validators.exclude
 

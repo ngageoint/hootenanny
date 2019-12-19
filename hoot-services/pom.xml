@@ -740,11 +740,12 @@
 
        <!-- josm -->
 
-        <!-- TOOD: change back to public josm -->
         <dependency>
           <groupId>org.openstreetmap.josm</groupId>
           <artifactId>me-josm</artifactId>
-          <version>4.4.4</version>
+          <version>4.4.6</version>
+          <!-- artifactId>josm-tested</artifactId>
+          <version>15553</version -->
         </dependency>
 
         <!-- test -->

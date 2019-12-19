@@ -30,6 +30,10 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.Arrays;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
+import java.io.File;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -47,6 +51,9 @@ import org.openstreetmap.josm.data.projection.Projection;
 import org.openstreetmap.josm.gui.preferences.projection.ProjectionPreference;
 import org.openstreetmap.josm.data.validation.Test;
 import org.openstreetmap.josm.data.Preferences;
+import org.openstreetmap.josm.io.OsmWriter;
+import org.openstreetmap.josm.io.OsmWriterFactory;
+import org.openstreetmap.josm.data.osm.DataSet;
 
 /**
  * Various utilities for use when using JOSM from hoot-josm
@@ -185,6 +192,50 @@ public class JosmUtils
     else
     {
       return new HashSet<String>();
+    }
+  }
+
+  /**
+   * TODO
+   */
+  public static String writeMapToXml(DataSet map)
+  {
+    Collection<OsmPrimitive> primitives = map.allPrimitives();
+    StringWriter stringWriter = new StringWriter();
+    try (OsmWriter osmWriter =
+           OsmWriterFactory.createOsmWriter(new PrintWriter(stringWriter), true, "0.6"))
+    {
+      stringWriter.getBuffer().setLength(0);
+      osmWriter.setWithBody(true);
+      //osmWriter.setChangeset(changeset);
+      osmWriter.header();
+      primitives.forEach(o -> o.accept(osmWriter));
+      osmWriter.footer();
+      osmWriter.flush();
+    }
+    catch (IOException e)
+    {
+      Logging.warn(e);
+    }
+    return stringWriter.toString();
+  }
+
+  /**
+   * TODO
+   */
+  public static void writeMapToFile(DataSet map, File outFile) throws IOException
+  {
+    try
+    {
+      PrintWriter writer = new PrintWriter(outFile);
+      OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(map);
+      writer.flush();
+      writer.close();
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error writing output to file: " + e.getMessage());
+      throw e;
     }
   }
 
