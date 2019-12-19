@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
@@ -323,11 +324,21 @@ NOT EXISTS
  */
     public static void deleteEmptyFolders() {
         QFolders folders2 = new QFolders("folders2");
-        createQuery()
-            .delete(folders)
-            .where(new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
-            .and(new SQLQuery<>().from(folders2).where(folders.id.eq(folders2.parentId)).notExists()))
-            .execute();
+        BooleanExpression isEmpty = new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
+                .and(new SQLQuery<>().from(folders2).where(folders.id.eq(folders2.parentId)).notExists());
+
+        SQLQuery<Folders> hasEmpty = createQuery()
+            .select(folders)
+            .from(folders)
+            .where(isEmpty);
+
+        //keep trying to delete newly empty folders until no more are detected
+        while (hasEmpty.fetchCount() > 0) {
+            createQuery()
+                .delete(folders)
+                .where(isEmpty)
+                .execute();
+        }
     }
 
     /**

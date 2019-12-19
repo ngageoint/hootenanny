@@ -81,6 +81,9 @@ public class DeleteOlderMapsCommand implements InternalCommand {
             DbUtils.deleteBookmarksByMapId(m.getId());
             DbUtils.deleteOSMRecordById(m.getId());
         });
+
+        //Delete empty folders
+        DbUtils.deleteEmptyFolders();
     }
 
 }

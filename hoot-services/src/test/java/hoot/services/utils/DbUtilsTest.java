@@ -294,7 +294,7 @@ public class DbUtilsTest {
 
         //Confirm emppty folders were deleted
         fids = DbUtils.getFolderIdsForUser(Long.valueOf(userId));
-        assertTrue(fids.contains(folderId1)); //we would expect this to be False but the folder is not empty until it's empty child is deleted
+        assertFalse(fids.contains(folderId1));
         assertFalse(fids.contains(folderId2));
         assertTrue(fids.contains(folderId3));
 
