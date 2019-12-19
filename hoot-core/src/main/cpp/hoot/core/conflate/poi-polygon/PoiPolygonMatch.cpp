@@ -220,16 +220,31 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
       QString::number(matchEvidenceThreshold) + ".  Valid values are 1 to 4.");
   }
   setMatchEvidenceThreshold(matchEvidenceThreshold);
-  LOG_VART(_matchEvidenceThreshold);
-  const int reviewEvidenceThreshold = config.getPoiPolygonReviewEvidenceThreshold();
-  if (reviewEvidenceThreshold < 0 || reviewEvidenceThreshold > matchEvidenceThreshold - 1)
+  if (_matchEvidenceThreshold == 1)
+  {
+    // reviews are effectively turned off if match thresh = 1
+    _reviewEvidenceThreshold = 0;
+  }
+  else
+  {
+    const int reviewEvidenceThreshold = config.getPoiPolygonReviewEvidenceThreshold();
+    if (reviewEvidenceThreshold < 1 || reviewEvidenceThreshold > 3)
+    {
+      throw HootException(
+        "Invalid value for POI/Polygon review evidence threshold: " +
+        QString::number(reviewEvidenceThreshold) + ".  Valid values are 1 to 3.");
+    }
+    setReviewEvidenceThreshold(reviewEvidenceThreshold);
+  }
+  if (_reviewEvidenceThreshold >= _matchEvidenceThreshold)
   {
     throw HootException(
-      "Invalid value for POI/Polygon review evidence threshold: " +
-      QString::number(reviewEvidenceThreshold) + ".  Valid values are 0 to " +
-      QString::number(matchEvidenceThreshold - 1) + ".");
+      "Value for POI/Polygon review evidence threshold: " +
+      QString::number(_reviewEvidenceThreshold) +
+      " is greater than or equal to value for POI/Polyon match evidence threshold: " +
+      QString::number(_matchEvidenceThreshold) + ".");
   }
-  setReviewEvidenceThreshold(reviewEvidenceThreshold);
+  LOG_VART(_matchEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
   _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
@@ -402,8 +417,17 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   unsigned int evidence = _calculateEvidence(_poi, _poly);
   LOG_VART(evidence);
 
-  //no point in trying to reduce reviews if we're still at a miss here
-  if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
+  // no point in trying to reduce reviews if we're still at a miss here; if the review
+  // threshold = 0, that means we've lowered match threshold to 1 and therefore, don't want any
+  // reviews...so no point in trying to reduce them
+  bool runReviewReduction = _enableReviewReduction;
+  if ((_reviewEvidenceThreshold > 0 && evidence < _reviewEvidenceThreshold) ||
+      (_matchEvidenceThreshold == 1 && evidence < _matchEvidenceThreshold))
+  {
+    runReviewReduction = false;
+  }
+  LOG_VART(runReviewReduction);
+  if (runReviewReduction)
   {
     // this constructor has gotten a little out of hand
     PoiPolygonReviewReducer reviewReducer(
@@ -416,7 +440,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     {
       evidence = 0;
       // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
-      _explainText = "Match score automatically dropped by review reduction.";
+      _explainText =
+        "Match score automatically dropped by review reduction rule: " +
+        reviewReducer.getTriggeredRuleDescription();
     }
     numReviewReductions++;
   }
@@ -448,7 +474,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
         "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
     }
   }
-  else if (evidence >= _reviewEvidenceThreshold)
+  else if (evidence >= _reviewEvidenceThreshold && _reviewEvidenceThreshold > 0)
            //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();

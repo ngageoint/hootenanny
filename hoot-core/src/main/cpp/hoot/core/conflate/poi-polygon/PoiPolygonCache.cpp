@@ -384,6 +384,7 @@ bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNod
     bool hasCloserPoiNeighbor = false;
     LOG_VART(poiNeighborIds.size());
     //LOG_VART(_poiNeighborIds);
+    ElementId closerNeighborId;
     for (std::set<ElementId>::const_iterator poiNeighborItr = poiNeighborIds.begin();
          poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
     {
@@ -397,6 +398,7 @@ bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNod
         LOG_VART(neighborPoiToPolyDist);
         if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
         {
+          closerNeighborId = poiNeighbor->getElementId();
           hasCloserPoiNeighbor = true;
           break;
         }
@@ -405,6 +407,20 @@ bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNod
 
     _poiNeighborCloserCache[key] = hasCloserPoiNeighbor;
     _incrementCacheSizeCount("hasCloserPoiNeighbor");
+
+    if (hasCloserPoiNeighbor)
+    {
+      LOG_TRACE(
+        "Poly: " << poly->getElementId() << " has closer poi neighbor than: " <<
+        poi->getElementId() << ". Closer neighbor: " << closerNeighborId);
+    }
+    else
+    {
+      LOG_TRACE(
+        "Poly: " << poly->getElementId() << " does not have closer poi neighbor than: " <<
+        poi->getElementId() << ".");
+    }
+
     return hasCloserPoiNeighbor;
   }
 }

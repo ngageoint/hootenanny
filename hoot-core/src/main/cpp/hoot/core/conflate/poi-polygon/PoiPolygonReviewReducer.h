@@ -76,6 +76,8 @@ public:
    */
   bool triggersRule(ConstNodePtr poi, ConstElementPtr poly);
 
+  QString getTriggeredRuleDescription() const { return _triggeredRuleDescription; }
+
 private:
 
   ConstOsmMapPtr _map;
@@ -102,6 +104,8 @@ private:
   AddressParser _addressParser;
 
   PoiPolygonCachePtr _infoCache;
+
+  QString _triggeredRuleDescription;
 
   bool _nonDistanceSimilaritiesPresent() const;
 

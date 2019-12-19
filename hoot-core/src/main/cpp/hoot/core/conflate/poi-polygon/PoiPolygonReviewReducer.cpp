@@ -123,6 +123,7 @@ bool PoiPolygonReviewReducer::_inCategory(ConstElementPtr element,
 bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr poly)
 {
   LOG_TRACE("Checking review reduction rules...");
+  _triggeredRuleDescription = "";
   //QElapsedTimer timer;
   //timer.start();
 
@@ -167,6 +168,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       else
       {
         LOG_TRACE("Returning miss per review reduction rule #1...");
+        _triggeredRuleDescription = "#1";
         return true;
       }
     }
@@ -177,6 +179,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
        poiHasType && _typeScore < 0.4)
   {
     LOG_TRACE("Returning miss per review reduction rule #2...");
+    _triggeredRuleDescription = "#2";
     return true;
   }
 
@@ -188,6 +191,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if ((poiPlaceVal == "neighbourhood" || poiPlaceVal == "suburb") && !polyTags.contains("place"))
   {
     LOG_TRACE("Returning miss per review reduction rule #3...");
+    _triggeredRuleDescription = "#3";
     return true;
   }
 
@@ -202,6 +206,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       polyTags.get("man_made").toLower() != "mine")
   {
     LOG_TRACE("Returning miss per review reduction rule #4...");
+    _triggeredRuleDescription = "#4";
     return true;
   }
 
@@ -210,6 +215,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if ((poiPlaceVal == "island" || polyPlaceVal == "island") && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #5...");
+    _triggeredRuleDescription = "#5";
     return true;
   }
 
@@ -231,6 +237,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         (polyIsPark && !polyName.toLower().contains("garden"))))
   {
     LOG_TRACE("Returning miss per review reduction rule #6...");
+    _triggeredRuleDescription = "#6";
     return true;
   }
 
@@ -239,6 +246,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (poiTags.get("amenity") == "fountain" && _nameScore < 0.5)
   {
     LOG_TRACE("Returning miss per review reduction rule #7...");
+    _triggeredRuleDescription = "#7";
     return true;
   }
 
@@ -250,6 +258,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #8...");
+    _triggeredRuleDescription = "#8";
     return true;
   }
 
@@ -258,6 +267,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       poiHasName && polyHasName && _nameScore < 0.5 && !_addressMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #9...");
+    _triggeredRuleDescription = "#9";
     return true;
   }
 
@@ -276,6 +286,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
            !_nonDistanceSimilaritiesPresent())
   {
     LOG_TRACE("Returning miss per review reduction rule #10...");
+    _triggeredRuleDescription = "#10";
     return true;
   }
 
@@ -285,6 +296,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (polyHasLanduse && !_nonDistanceSimilaritiesPresent())
   {
     LOG_TRACE("Returning miss per review reduction rule #11...");
+    _triggeredRuleDescription = "#11";
     return true;
   }
 
@@ -293,6 +305,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       !PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly))
   {
     LOG_TRACE("Returning miss per review reduction rule #12...");
+    _triggeredRuleDescription = "#12";
     return true;
   }
 
@@ -305,6 +318,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if ((polyIsNatural || polyIsPark) && _inCategory(poi, OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #13...");
+    _triggeredRuleDescription = "#13";
     return true;
   }
 
@@ -312,6 +326,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (poiHasType && polyIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #14...");
+    _triggeredRuleDescription = "#14";
     return true;
   }
 
@@ -320,6 +335,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (polyHasType && poiIsNatural && !_typeMatch)
   {
     LOG_TRACE("Returning miss per review reduction rule #15...");
+    _triggeredRuleDescription = "#15";
     return true;
   }
 
@@ -328,6 +344,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (_distance == 0 && polyIsPark && poiLeisureVal == "pitch")
   {
     LOG_TRACE("Returning miss per review reduction rule #16...");
+    _triggeredRuleDescription = "#16";
     return true;
   }
 
@@ -340,6 +357,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (poiIsPark && polyIsSport)
   {
     LOG_TRACE("Returning miss per review reduction rule #17...");
+    _triggeredRuleDescription = "#17";
     return true;
   }
 
@@ -353,6 +371,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       !_inCategory(poly, OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #18...");
+    _triggeredRuleDescription = "#18";
     return true;
   }
 
@@ -362,6 +381,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       polyTags.get("parking") != "multi-storey")
   {
     LOG_TRACE("Returning miss per review reduction rule #19...");
+    _triggeredRuleDescription = "#19";
     return true;
   }
 
@@ -370,6 +390,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (_infoCache->isType(poi, "school") && polyIsSport)
   {
     LOG_TRACE("Returning miss per review reduction rule #20...");
+    _triggeredRuleDescription = "#20";
     return true;
   }
 
@@ -379,6 +400,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
   {
     LOG_TRACE("Returning miss per review reduction rule #21...");
+    _triggeredRuleDescription = "#21";
     return true;
   }
 
@@ -393,6 +415,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
        (polyPlaceVal == "neighborhood" || polyPlaceVal == "neighbourhood")) && polyArea > 50000)
   {
     LOG_TRACE("Returning miss per review reduction rule #22...");
+    _triggeredRuleDescription = "#22";
     return true;
   }
 
@@ -409,6 +432,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   if (!poiIsPark && !poiIsParkish && poiHasType && polyIsPark && !polyHasMoreThanOneType)
   {
     LOG_TRACE("Returning miss per review reduction rule #23...");
+    _triggeredRuleDescription = "#23";
     return true;
   }
 
@@ -426,6 +450,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         PoiPolygonTypeScoreExtractor().extract(*_map, poi, matchingWay)  >= _typeScoreThreshold)
     {
       LOG_TRACE("Returning miss per review reduction rule #24...");
+      _triggeredRuleDescription = "#24";
       return true;
     }
   }
@@ -463,6 +488,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       _infoCache->polyHasPoiNeighborCloserThanPoi(polyAsWay, poi, _poiNeighborIds, _distance))
   {
     LOG_TRACE("Returning miss per review reduction rule #25...");
+    _triggeredRuleDescription = "#25";
     return true;
   }
 
@@ -496,6 +522,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         if (poiToNeighborPolyDist != -1.0 && _distance > poiToNeighborPolyDist)
         {
           LOG_TRACE("Returning miss per review reduction rule #26...");
+          _triggeredRuleDescription = "#26";
           return true;
         }
       }
@@ -587,6 +614,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           poiToOtherParkPolyNodeDist != -1.0 && otherParkPolyHasName && parkPolyOverlapVal < 0.9)
       {
         LOG_TRACE("Returning miss per review reduction rule #27...");
+        _triggeredRuleDescription = "#27";
         return true;
       }
 
@@ -598,6 +626,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           otherParkPolyNameMatch)
       {
         LOG_TRACE("Returning miss per review reduction rule #28...");
+        _triggeredRuleDescription = "#28";
         return true;
       }
 
@@ -607,6 +636,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
       {
         LOG_TRACE("Returning miss per review reduction rule #29...");
+        _triggeredRuleDescription = "#29";
         return true;
       }
 
@@ -616,6 +646,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
       {
         LOG_TRACE("Returning miss per review reduction rule #30...");
+        _triggeredRuleDescription = "#30";
         return true;
       }
 
@@ -624,6 +655,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
       {
         LOG_TRACE("Returning miss per review reduction rule #31...");
+        _triggeredRuleDescription = "#31";
         return true;
       }
 
@@ -636,6 +668,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
           !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType && _exactNameMatch)
       {
         LOG_TRACE("Returning miss per review reduction rule #32...");
+        _triggeredRuleDescription = "#32";
         return true;
       }
     }

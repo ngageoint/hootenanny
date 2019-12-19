@@ -139,6 +139,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
     "POI/Polygon review reductions: " <<
     StringUtils::formatLargeNumber(PoiPolygonMatch::numReviewReductions));
   _infoCache->printCacheInfo();
+  _infoCache->clear();
 }
 
 std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const

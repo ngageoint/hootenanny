@@ -241,7 +241,7 @@ bool PoiPolygonMatchVisitor::isMatchCandidate(ConstElementPtr element)
     return false;
   }
 
-  // Itssimpler logic to just examine each POI and check for surrounding polys, rather than check
+  // Its simpler logic to just examine each POI and check for surrounding polys, rather than check
   // both POIs and their surrounding polys and polys and their surrounding POIs; note that this is
   // different than PoiPolygonMatchCreator::isMatchCandidate, which is looking at both to appease
   // the stats.
