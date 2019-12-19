@@ -173,8 +173,8 @@ void JosmMapCleaner::_getStats()
   // create a readable error summary
 
   _errorSummary =
-    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) + " / " +
-    StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
+    "Total JOSM validation errors: " + StringUtils::formatLargeNumber(_numValidationErrors) +
+    " found in " + StringUtils::formatLargeNumber(_numAffected) + " total features.\n";
   _errorSummary +=
     "Total elements cleaned: " + StringUtils::formatLargeNumber(_numElementsCleaned) + "\n";
   _errorSummary +=
@@ -279,7 +279,7 @@ QString JosmMapCleaner::_errorCountsByTypeToSummaryStr(
     const int indentAfterCount = longestCountSize - numErrorsForTypeStr.size();
     summary +=
       errorItr.key() + " errors: " + QString(indentAfterName, ' ') + numErrorsForTypeStr + " " +
-      QString(indentAfterCount, ' ') + " groups of elements cleaned: " +
+      QString(indentAfterCount, ' ') + " elements cleaned: " +
       StringUtils::formatLargeNumber(errorFixCountsByType[errorItr.key()]) + "\n";
   }
   return summary;

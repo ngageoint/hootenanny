@@ -155,19 +155,19 @@ public:
   static void removeAll(QStringList& input, const QStringList& toRemove);
 
   /**
-   * TODO
+   * Determines if list contains any strings from another list
    *
-   * @param input
-   * @param toCompare
-   * @return
+   * @param input list to search
+   * @param toCompare list to compare with
+   * @return true if at least one match is found; false otherwise
    */
   static bool containsAny(const QStringList& input, const QStringList& compareList);
 
   /**
-   * TODO
+   * Removes all map entries from input that are contained in a specified list
    *
-   * @param input
-   * @param keysToRemove
+   * @param input map to modify
+   * @param keysToRemove keys to remove from input map
    */
   static void removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove);
 };

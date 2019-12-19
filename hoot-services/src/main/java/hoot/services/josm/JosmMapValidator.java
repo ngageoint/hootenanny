@@ -100,6 +100,9 @@ public class JosmMapValidator
     return validationErrorCountsByType;
   }
 
+  /**
+   * Returns the IDs of all elements deleted if the map was also cleaned during validation
+   */
   public Set<String> getDeletedElementIds()
   {
     if (cleaner == null)
@@ -108,6 +111,10 @@ public class JosmMapValidator
     }
     return cleaner.getDeletedElementIds();
   }
+
+  /**
+   * Returns the number of elements deleted if the map was also cleaned during validation
+   */
   public int getNumDeletedElements()
   {
     if (cleaner == null)
@@ -116,6 +123,10 @@ public class JosmMapValidator
     }
     return cleaner.getNumDeletedElements();
   }
+
+  /**
+   * Returns the the number of elements cleaned if the map was also cleaned during validation
+   */
   public int getNumElementsCleaned()
   {
     if (cleaner == null)
@@ -124,6 +135,10 @@ public class JosmMapValidator
     }
     return cleaner.getNumElementsCleaned();
   }
+
+  /**
+   * Returns the number of failed cleaning operations if the map was also cleaned during validation
+   */
   public int getNumFailedCleaningOperations()
   {
     if (cleaner == null)
@@ -191,7 +206,7 @@ public class JosmMapValidator
    *
    * @param validators list of simple class names of the validators to be used
    * @param elementsXml map to be validated as an XML string
-   * @param cleanValidated TODO
+   * @param cleanValidated if true, elements failing validation are cleaned where possible
    * @return modified OSM map XML string if validation errors were found; otherwise a map identical
    * to the input map
    */
@@ -232,12 +247,12 @@ public class JosmMapValidator
   }
 
   /**
-   * Runs JOSM validators against an XML map file and tags elements that fail validation
+   * Runs JOSM validators against a map
    *
    * @param validators list of simple class names of the validators to be used
    * @param elementsFileInputPath file path to the map to be validated
    * @param elementsFileOutputPath file path for the validated output map
-   * @param cleanValidated TODO
+   * @param cleanValidated if true, elements failing validation are cleaned where possible
    */
   public void validate(
     List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
@@ -275,28 +290,29 @@ public class JosmMapValidator
 
   private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
 
-  //
+  // determines whether a cleaning attempt will be performed on elements failing validation if
+  // applicable
   boolean cleanValidated = false;
 
-  //
+  // determine whether tags are added to elements failing validation
   boolean addTags = false;
 
-  //
+  // the size of the input map
   int originalMapSize = 0;
 
-  //
+  // maps error names to a running count
   private Map<String, Integer> elementErrorCounts = new HashMap<String, Integer>();
 
-  //
+  // maps element keys to a running count of the number of errors the element is involved in
   private Map<String, Integer> elementErrorIndexes = new HashMap<String, Integer>();
 
-  // maps validation error names to occurrence counts
+  // maps validation error names to error occurrence counts
   private Map<String, Integer> validationErrorCountsByType = new HashMap<String, Integer>();
 
   // a list of names of validators that threw an error during validation
   private Map<String, String> failingValidators = new HashMap<String, String>();
 
-  //
+  // optionally attempts to clean features failing validation
   private JosmMapCleaner cleaner = null;
 
   /*
@@ -436,7 +452,7 @@ public class JosmMapValidator
 
       errors = validator.getErrors();
 
-      Logging.debug(
+      Logging.info(
         "Validator: " + validator.getName() + " found " + errors.size() + " errors with " +
         getNumElementsInvolvedInErrors(errors) + " total involved elements."); 
     }
@@ -445,39 +461,46 @@ public class JosmMapValidator
       failingValidators.put(validator.getName(), JosmUtils.getErrorMessage(validator, e));
     }
 
-    parseValidationErrors(errors, map);
+    parseValidationErrors(validator.getName(), errors, map);
 
     // This will clear out any errors, so call it last.
     validator.clear();
   }
 
-  private void parseValidationErrors(List<TestError> validationErrors, DataSet map) throws Exception
+  /*
+   * Records any validation errors and performs cleaning if cleaning was specified
+   */
+  private void parseValidationErrors(
+    String validatorName, List<TestError> validationErrors, DataSet map) throws Exception
   {
-    //Logging.debug("Parsing validation errors...");
-    //Logging.trace("validationErrors size: " + validationErrors.size());
-
+    String cleanMsgStr = "will not";
     if (cleanValidated)
     {
       cleaner = new JosmMapCleaner(addTags);
+      cleanMsgStr = "will";
     }
+    Logging.info(
+      "Parsing validation errors for: " + validatorName + ". Cleaning " + cleanMsgStr +
+      " be attempted...");
+    //Logging.trace("validationErrors size: " + validationErrors.size());
 
+    int numCleaned = 0;
     for (TestError error : validationErrors)
     {
       Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
-      String testName = error.getTester().getName();
       Logging.trace(
         "Processing validation results for " + error.getPrimitives().size() + " elements for " +
-        " error: \"" + error.getMessage() + "\" found by test: " + testName + "...");
+        " error: \"" + error.getMessage() + "\" found by test: " + validatorName + "...");
       //Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
 
-      if (validationErrorCountsByType.containsKey(testName))
+      if (validationErrorCountsByType.containsKey(validatorName))
       {
-        int currentErrorCountForType = validationErrorCountsByType.get(testName);
-        validationErrorCountsByType.put(testName, currentErrorCountForType + 1);
+        int currentErrorCountForType = validationErrorCountsByType.get(validatorName);
+        validationErrorCountsByType.put(validatorName, currentErrorCountForType + 1);
       }
       else
       {
-        validationErrorCountsByType.put(testName, 1);
+        validationErrorCountsByType.put(validatorName, 1);
       }
 
       //Logging.trace("addTags: " + addTags);
@@ -507,12 +530,13 @@ public class JosmMapValidator
       {
         //Logging.trace("elementErrorIndexes size: " + elementErrorIndexes.size());
         cleaner.setElementErrorIndexes(elementErrorIndexes);
-        cleaner.clean(error);
+        numCleaned += cleaner.clean(error);
       }
     }
 
     if (cleanValidated)
     {
+      Logging.info("Cleaned " + numCleaned + " features for error: " + validatorName);
       // Apparently, any JOSM fixes resulting in deletes don't actually delete the elements (tried
       // accessing the affected dataset from the command itself). So, we'll manually delete them
       // here.

@@ -43,21 +43,22 @@ import org.openstreetmap.josm.data.osm.PrimitiveId;
 /**
  * Cleans a map using JOSM validators
  *
- * The interface for this class is kept purposefully coarse, so as to result in the smallest number
- * of JNI calls from clients as possible.
- *
  * @see JosmMapCleaner in hoot-core
  */
 public class JosmMapCleaner
 {  
+  /**
+   * Constructor
+   * @param addTags if true, elements being cleaned will be marked with custom tags
+   */
   public JosmMapCleaner(boolean addTags) throws Exception
   {
     this.addTags = addTags;
     //Logging.trace("addTags: " + this.addTags);
   }
 
-  /*
-   *
+  /**
+   * Clears member data
    */
   public void clear()
   {
@@ -108,7 +109,13 @@ public class JosmMapCleaner
     this.elementErrorIndexes = elementErrorIndexes;
   }
 
-  public void clean(TestError validationError) throws Exception
+  /**
+   * Attempt to clean all features involved in a validation test error
+   *
+   * @param validationError a validation error identified by a validation test
+   * @return the number of features cleaned
+   */
+  public int clean(TestError validationError) throws Exception
   {
     //Logging.info("Cleaning element(s) with JOSM...");
     long startTime = System.currentTimeMillis();
@@ -118,6 +125,7 @@ public class JosmMapCleaner
     boolean cleanSuccess = false;
     //Logging.trace("error cleanable?: " + validationError.isFixable());
     CleanStatus cleanStatus = CleanStatus.NONE_AVAILABLE;
+    int numCleaned = 0;
     if (validationError.isFixable())
     {
       Logging.trace(
@@ -156,6 +164,7 @@ public class JosmMapCleaner
       if (cleanSuccess)
       {
         cleanStatus = CleanStatus.SUCCEEDED;
+        numCleaned += elementGroupWithError.size();
       }
       else
       {
@@ -164,14 +173,19 @@ public class JosmMapCleaner
     }
 
     recordCleaningStatus(elementGroupWithError, cleanStatus, validationError);
+
+    return numCleaned;
   }
 
-  /*
-   * TODO
+  /**
+   * Removes all elements whose fix was to be deleted as determined during cleaning
+   *
+   * @param map the map to remove deleted elements from
    */
   public void removeDeletedElements(DataSet map)
   {
-    Collection<OsmPrimitive> elements = map./*getAllPrimitives()*/allPrimitives();
+    Logging.debug("Removing " + deletedElementIds.size() + " deleted elements...");
+    Collection<OsmPrimitive> elements = map.allPrimitives();
     Collection<OsmPrimitive> outputElements = elements;
     for (OsmPrimitive element : elements)
     {
@@ -192,8 +206,10 @@ public class JosmMapCleaner
     NONE_AVAILABLE, FAILED, SUCCEEDED;
   }
 
+  // determines whether debug tags are added to cleaned elements
   boolean addTags = false;
 
+  // @see JosmMapValidator.elementErrorIndexes
   private Map<String, Integer> elementErrorIndexes = null;
 
   // validators that threw an error during cleaning; validator name mapped to exception message
@@ -222,6 +238,9 @@ public class JosmMapCleaner
     }
   }
 
+  /*
+   * Record cleaning statuses and mark cleaned elements with tags
+   */
   private void recordCleaningStatus(
     Collection<? extends OsmPrimitive> elementGroupWithError, CleanStatus cleanStatus,
     TestError validationError) throws Exception

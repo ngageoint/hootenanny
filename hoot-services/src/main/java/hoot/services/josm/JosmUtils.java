@@ -196,7 +196,10 @@ public class JosmUtils
   }
 
   /**
-   * TODO
+   * Writes a map to an XML string
+   *
+   * @param map the map to write
+   * @return the input map as an XML string
    */
   public static String writeMapToXml(DataSet map)
   {
@@ -221,7 +224,10 @@ public class JosmUtils
   }
 
   /**
-   * TODO
+   * Writes a map to a file
+   *
+   * @param map the map to write
+   * @param file the file to write the map to
    */
   public static void writeMapToFile(DataSet map, File outFile) throws IOException
   {
@@ -239,18 +245,25 @@ public class JosmUtils
     }
   }
 
-  public static String getErrorMessage(Test validator, Exception e)
+  /**
+   * Retrieves a printable error message from a failed vaildation test
+   *
+   * @param validator failing validation test
+   * @param exception exception thrown by validation test
+   * @return an error message string
+   */
+  public static String getErrorMessage(Test validator, Exception exception)
   {
     if (Logging.isTraceEnabled())
     {
-      e.printStackTrace();
+      exception.printStackTrace();
     }
     String errorMsg =
-      "Error running validator: " + validator.getName() + ", failure detail: " + e.getMessage() +
-      " " + e.toString();
-    if (e.getCause() != null)
+      "Error running validator: " + validator.getName() + ", failure detail: " +
+      exception.getMessage() + " " + exception.toString();
+    if (exception.getCause() != null)
     {
-      errorMsg += e.getCause().toString();
+      errorMsg += exception.getCause().toString();
     }
     return errorMsg;
   }

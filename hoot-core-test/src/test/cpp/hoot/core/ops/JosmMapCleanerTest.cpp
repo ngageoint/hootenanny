@@ -53,6 +53,7 @@ public:
 
   void runCleanNoErrorsTest()
   {
+    const QString testName = "runCleanNoErrorsTest";
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm");
     LOG_VARD(map->size());
@@ -70,6 +71,17 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailingValidators());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
+    HOOT_STR_EQUALS(
+      "Total JOSM validation errors: 0 found in 40 total features.\n"
+      "Total elements cleaned: 0\n"
+      "Total elements deleted: 0\n"
+      "Total failing JOSM validators: 0\n"
+      "Total failing JOSM cleaning operations: 0",
+      uut.getSummary());
+
+    const QString outTestFileName = testName + "-out.osm";
+    OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
+    HOOT_FILE_EQUALS(_inputPath + "/" + outTestFileName, _outputPath + "/" + outTestFileName);
   }
 
   void runCleanTest()
@@ -94,6 +106,16 @@ public:
     CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
+    HOOT_STR_EQUALS(
+      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Total elements cleaned: 3\n"
+      "Total elements deleted: 2\n"
+      "Total failing JOSM validators: 0\n"
+      "Total failing JOSM cleaning operations: 0\n"
+      "Duplicated way nodes errors:               1            elements cleaned: 0\n"
+      "Unclosed Ways errors:                      2            elements cleaned: 0\n"
+      "Untagged, empty and one node ways errors:  1            elements cleaned: 1",
+      uut.getSummary());
 
     const QString outTestFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
@@ -122,6 +144,16 @@ public:
     CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
+    HOOT_STR_EQUALS(
+      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Total elements cleaned: 3\n"
+      "Total elements deleted: 2\n"
+      "Total failing JOSM validators: 0\n"
+      "Total failing JOSM cleaning operations: 0\n"
+      "Duplicated way nodes errors:               1            elements cleaned: 0\n"
+      "Unclosed Ways errors:                      2            elements cleaned: 0\n"
+      "Untagged, empty and one node ways errors:  1            elements cleaned: 1",
+      uut.getSummary());
 
     const QString outTestFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
@@ -150,6 +182,16 @@ public:
     CPPUNIT_ASSERT_EQUAL(3, uut.getNumElementsCleaned());
     CPPUNIT_ASSERT_EQUAL(2, uut.getNumElementsDeleted());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumFailedCleaningOperations());
+    HOOT_STR_EQUALS(
+      "Total JOSM validation errors: 4 found in 45 total features.\n"
+      "Total elements cleaned: 3\n"
+      "Total elements deleted: 2\n"
+      "Total failing JOSM validators: 0\n"
+      "Total failing JOSM cleaning operations: 0\n"
+      "Duplicated way nodes errors:               1            elements cleaned: 0\n"
+      "Unclosed Ways errors:                      2            elements cleaned: 0\n"
+      "Untagged, empty and one node ways errors:  1            elements cleaned: 1",
+      uut.getSummary());
 
     const QString outTestFileName = testName + "-out.osm";
     OsmMapWriterFactory::write(map, _outputPath + "/" + outTestFileName, false, false);
