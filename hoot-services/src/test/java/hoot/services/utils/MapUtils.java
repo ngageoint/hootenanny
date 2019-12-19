@@ -35,10 +35,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.models.db.Maps;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelations;
@@ -46,6 +50,7 @@ import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 
 
+@Transactional
 public final class MapUtils {
 
     private MapUtils() {}
@@ -203,14 +208,26 @@ public final class MapUtils {
         createQuery().delete(users).where(users.id.eq(userId)).execute();
     }
 
-    /**
-     *
-     * @param mapId
-     */
-    public static void deleteOSMRecord(Long mapId) {
-        DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        DbUtils.deleteMap(mapId);
+    public static void cleanupTestUsers() {
+        List<Maps> testMaps = createQuery().select(maps).from(maps)
+                .where(maps.userId.lt(0)).fetch();
+        System.out.println("this many test maps ->" + testMaps.size());
+        testMaps.stream().forEach(m -> {
+            DbUtils.deleteMapRelatedTablesByMapId(m.getId());
+            DbUtils.deleteMap(m.getId());
+        });
+
+        Long testUserCount = createQuery().select(users).from(users).where(users.displayName.like("%::MapUtils::insertUser()")).fetchCount();
+        System.out.println("this many test users ->" + testUserCount);
+        createQuery().delete(users).where(users.displayName.like("%::MapUtils::insertUser()")).execute();
+//        try {
+//            DbUtils.createQuery().getConnection().commit();
+//        } catch (SQLException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
+
 
     private static void createTable(String createTblSql, Connection conn) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {

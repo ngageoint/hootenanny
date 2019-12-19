@@ -32,9 +32,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
@@ -51,11 +56,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.querydsl.core.types.dsl.Expressions;
-
 import hoot.services.ApplicationContextUtils;
 import hoot.services.UnitTest;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
+import hoot.services.models.db.Maps;
+import hoot.services.models.osm.MapLayer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -73,37 +78,40 @@ public class DbUtilsTest {
         new ApplicationContextUtils().setApplicationContext(applicationContext);
     }
 
+//    @After
+//    public void cleanup() {
+//        MapUtils.cleanupTestUsers();
+//    }
+
     @Test
     @Category(UnitTest.class)
     @Transactional
     public void testDeleteTables() throws Exception {
+        MapUtils.cleanupTestUsers();
+
         long userId = MapUtils.insertUser();
         long mapId = insertMap(userId);
+//        DbUtils.createQuery().getConnection().commit();
 
-        //burn a sequence to see if this makes them persist
-        //after table delete
-        Long burner = DbUtils.createQuery()
-                .select(Expressions.numberTemplate(Long.class, "nextval('changesets_" + mapId + "_id_seq')"))
-                .from()
-                .fetchOne();
-
-        DbUtils.createQuery().getConnection().commit();
-
+        assertTrue(DbUtils.userExists(userId));
         assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
-        assertTrue(checkForDependents(mapId));
+//        assertTrue(DbUtils.getMapTableSeqCount(mapId) == 10);
 
-        MapUtils.deleteOSMRecord(mapId);
-        DbUtils.createQuery().getConnection().commit();
+        DbUtils.deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+//        DbUtils.createQuery().getConnection().commit();
 
         assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
-        assertFalse(checkForDependents(mapId));
+//        assertTrue(DbUtils.getMapTableSeqCount(mapId) == 0);
 
         MapUtils.deleteUser(userId);
+//        DbUtils.createQuery().getConnection().commit();
+        assertFalse(DbUtils.userExists(userId));
    }
 
 
     public boolean checkForDependents(long mapId) throws SQLException {
-        return DbUtils.getMapTableSeqCount(mapId) > 0;
+        return DbUtils.getMapTableSeqCount(mapId) == 10;
     }
 
     @Test
@@ -306,5 +314,40 @@ public class DbUtilsTest {
 
     }
 
+    @Test
+    @Category(UnitTest.class)
+    @Transactional
+    public void testGetOldMaps() throws Exception {
+        //Create a user, some folders and a map in one of the folders
+        long userId = MapUtils.insertUser();
+        long mapIdOld = insertMap(userId);
+        long mapIdNew = insertMap(userId);
 
+        Map<String, String> tagsOld = new HashMap<>();
+        tagsOld.put("lastAccessed", "2019-10-24T17:03:51.125Z");
+
+        Map<String, String> tagsNew = new HashMap<>();
+        DateFormat dateFormat = MapLayer.format;
+        Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        tagsNew.put("lastAccessed", dateFormat.format(now));
+
+
+        DbUtils.updateMapsTableTags(tagsOld, mapIdOld);
+        DbUtils.updateMapsTableTags(tagsNew, mapIdNew);
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        List<Maps> oldMaps = DbUtils.getOldMaps(new Timestamp(cal.getTime().getTime()));
+
+        List<Long> oldMapIds = oldMaps.stream().map(m -> m.getId()).collect(Collectors.toList());
+        assertTrue(oldMapIds.contains(mapIdOld));
+        assertFalse(oldMapIds.contains(mapIdNew));
+
+
+        DbUtils.deleteMapRelatedTablesByMapId(mapIdOld);
+        DbUtils.deleteMap(mapIdOld);
+        DbUtils.deleteMapRelatedTablesByMapId(mapIdNew);
+        DbUtils.deleteMap(mapIdNew);
+        MapUtils.deleteUser(userId);
+    }
 }

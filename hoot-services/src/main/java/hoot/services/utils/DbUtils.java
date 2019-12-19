@@ -79,6 +79,7 @@ import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Maps;
 import hoot.services.models.db.QFolders;
 import hoot.services.models.db.QUsers;
 import hoot.services.models.db.Users;
@@ -608,6 +609,23 @@ NOT EXISTS
         return count;
     }
 
+/*
+    SELECT id
+    FROM maps
+    WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
+    OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
+
+ */
+    public static List<Maps> getOldMaps(Timestamp ts) {
+        return createQuery()
+                .select(maps)
+                .from(maps)
+                .where(
+                    (Expressions.stringTemplate("tags->'lastAccessed'").isNotNull().and(maps.createdAt.lt(ts)))
+                    .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts))
+                )
+                .fetch();
+    }
 
     /**
      * Returns table size in bytes
