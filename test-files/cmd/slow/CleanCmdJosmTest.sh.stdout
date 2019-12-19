@@ -1,2 +1,2 @@
-14:20:11.192 WARN   ...s/JosmMapValidatorAbstract.cpp(  83) No JOSM user certificate specified. At a minimum these validators will be unavailable for use: ApiCapabilitiesTest, MapCSSTagChecker
-14:20:12.737 WARN   ...s/JosmMapValidatorAbstract.cpp(  83) No JOSM user certificate specified. At a minimum these validators will be unavailable for use: ApiCapabilitiesTest, MapCSSTagChecker
+14:50:59.817 WARN   ...s/JosmMapValidatorAbstract.cpp(  83) No JOSM user certificate specified. At a minimum these validators will be unavailable for use: ApiCapabilitiesTest, MapCSSTagChecker
+14:51:01.291 WARN   ...s/JosmMapValidatorAbstract.cpp(  83) No JOSM user certificate specified. At a minimum these validators will be unavailable for use: ApiCapabilitiesTest, MapCSSTagChecker

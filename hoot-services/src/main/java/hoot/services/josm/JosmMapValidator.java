@@ -34,19 +34,13 @@ import java.util.Collection;
 import java.lang.Exception;
 import java.io.ByteArrayInputStream;
 import java.lang.Class;
-import java.util.Arrays;
-import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.File;
-import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.IOException;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.LinkedHashMultimap;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -77,11 +71,13 @@ public class JosmMapValidator
 
   public int getNumValidationErrors()
   {
-    if (validationErrors != null)
+    Logging.debug("validationErrorCountsByType size: " + validationErrorCountsByType.size());
+    int errorCount = 0;
+    for (Map.Entry<String, Integer> entry : validationErrorCountsByType.entrySet())
     {
-      return validationErrors.size();
+      errorCount += entry.getValue();
     }
-    return 0;
+    return errorCount;
   }
 
   public int getNumFailingValidators()
@@ -104,6 +100,56 @@ public class JosmMapValidator
   public Map<String, Integer> getValidationErrorCountsByType()
   {
     return validationErrorCountsByType;
+  }
+
+  public Set<String> getDeletedElementIds()
+  {
+    if (cleaner == null)
+    {
+      return new HashSet<String>();
+    }
+    return cleaner.getDeletedElementIds();
+  }
+  public int getNumDeletedElements()
+  {
+    if (cleaner == null)
+    {
+      return 0;
+    }
+    return cleaner.getNumDeletedElements();
+  }
+  public int getNumElementsCleaned()
+  {
+    if (cleaner == null)
+    {
+      return 0;
+    }
+    return cleaner.getNumElementsCleaned();
+  }
+  public int getNumFailedCleaningOperations()
+  {
+    if (cleaner == null)
+    {
+      return 0;
+    }
+    return cleaner.getNumFailedCleaningOperations();
+  }
+
+  /**
+   * Returns the counts of elements that were cleaned, organized by validation error type, during
+   * map validation
+   *
+   * @return a delimited string of the form:
+   * <validation error 1 name>:<cleaned element count for validation error 1>;
+   * <validation error 2 name>:<cleaned element count for validation error 2>...
+   */
+  public Map<String, Integer> getValidationErrorFixCountsByType()
+  {
+    if (cleaner == null)
+    {
+      return new HashMap<String, Integer>();
+    }
+    return cleaner.getValidationErrorFixCountsByType();
   }
 
   /**
@@ -147,17 +193,27 @@ public class JosmMapValidator
    *
    * @param validators list of simple class names of the validators to be used
    * @param elementsXml map to be validated as an XML string
+   * @param cleanValidated TODO
    * @return modified OSM map XML string if validation errors were found; otherwise a map identical
    * to the input map
    */
-  public String validate(List<String> validators, String elementsXml) throws Exception
+  public String validate(List<String> validators, String elementsXml, boolean cleanValidated,
+    boolean addTags) throws Exception
   {
     //Logging.trace("elementsXml: " + elementsXml);
     if (elementsXml == null || elementsXml.trim().isEmpty())
     {
       throw new Exception("No elements passed to validation.");
     }
-    return validate(validators, new ByteArrayInputStream(elementsXml.getBytes()), null);
+    clear();
+    this.cleanValidated = cleanValidated;
+    Logging.trace("cleanValidated: " + this.cleanValidated);
+    this.addTags = addTags;
+    Logging.trace("addTags: " + this.addTags);
+
+    DataSet map = parseAndValidate(validators, new ByteArrayInputStream(elementsXml.getBytes()));
+    logMapStats(map);
+    return writeMapToXml(map);
   }
 
   /**
@@ -166,252 +222,70 @@ public class JosmMapValidator
    * @param validators list of simple class names of the validators to be used
    * @param elementsFileInputPath file path to the map to be validated
    * @param elementsFileOutputPath file path for the validated output map
+   * @param cleanValidated TODO
    */
   public void validate(
-    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath)
-    throws Exception
+    List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
+    boolean cleanValidated, boolean addTags) throws Exception
   {
-    Logging.debug("elementsFileInputPath: " + elementsFileInputPath);
-    Logging.debug("elementsFileInputPath: " + elementsFileOutputPath);
+   clear();
+   this.cleanValidated = cleanValidated;
+   Logging.trace("cleanValidated: " + this.cleanValidated);
+   this.addTags = addTags;
+   Logging.trace("addTags: " + this.addTags);
 
-    validate(
-      validators, new FileInputStream(new File(elementsFileInputPath)),
-      new File(elementsFileOutputPath));
+    DataSet map =
+      parseAndValidate(validators, new FileInputStream(new File(elementsFileInputPath)));
+    logMapStats(map);
+    writeMapToFile(map, new File(elementsFileOutputPath));
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  // these match corresponding entries in the hoot-core MetadataTags class
+  private static final String VALIDATION_ERROR_TAG_KEY_BASE = "hoot:validation:error";
+  private static final String VALIDATION_SOURCE_TAG_KEY_BASE = "hoot:validation:error:source";
 
-  protected String validate(
-    List<String> validators, InputStream inputElementsStream, File outputFile) throws Exception
-  {
-    Logging.info("Validating map with " + validators.size() + " validators...");
+  private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
 
-    // clear out existing data and stats
-    clear();
+  //
+  boolean cleanValidated = false;
 
-    // validate the elements
-    outputElements = parseAndValidateElements(validators, inputElementsStream);
+  //
+  boolean addTags = false;
 
-    // update modified map
-    outputElements = getReturnElements(outputElements);
-    Logging.debug("outputElements size: " + outputElements.size());
+  //
+  int originalMapSize = 0;
 
-    if (outputFile == null)
-    {
-      // return the modified map as xml
-      return convertOutputElementsToXml();
-    }
-    else
-    {
-      writeOutputElements(outputFile);
-      return null;
-    }
-  }
+  //
+  private Map<String, Integer> elementErrorCounts = new HashMap<String, Integer>();
+
+  //
+  private Map<String, Integer> elementErrorIndexes = new HashMap<String, Integer>();
+
+  // maps validation error names to occurrence counts
+  private Map<String, Integer> validationErrorCountsByType = new HashMap<String, Integer>();
+
+  // a list of names of validators that threw an error during validation
+  private Map<String, String> failingValidators = new HashMap<String, String>();
+
+  //
+  private JosmMapCleaner cleaner = null;
 
   /*
    * Clear out member data
    */
-  protected void clear()
+  private void clear()
   {
-    originalMapSize = 0;
-    if (inputElements != null)
-    {
-      inputElements.clear();
-    }
-    if (inputDataset != null)
-    {
-      inputDataset.clear();
-    }
-    if (outputElements != null)
-    {
-      outputElements.clear();
-    }
-    if (validationErrors != null)
-    {
-      validationErrors.clear();
-    }
-    if (elementValidations != null)
-    {
-      elementValidations.clear();
-    }
-    if (validationErrorCountsByType != null)
-    {
-      validationErrorCountsByType.clear();
-    }
+    validationErrorCountsByType.clear();
     failingValidators.clear();
+    cleaner = null;
+    elementErrorIndexes.clear();
+    elementErrorCounts.clear();
+    originalMapSize = 0;
+    cleanValidated = false;
+    addTags = false;
   }
 
-  protected String getErrorMessage(Test validator, Exception e)
-  {
-    if (Logging.isTraceEnabled())
-    {
-      e.printStackTrace();
-    }
-    String errorMsg =
-      "Error running validator: " + validator.getName() + ", failure detail: " + e.getMessage() +
-      " " + e.toString();
-    if (e.getCause() != null)
-    {
-      errorMsg += e.getCause().toString();
-    }
-    return errorMsg;
-  }
-
-  protected Collection<AbstractPrimitive> parseAndValidateElements(
-    List<String> validators, InputStream elementsStream) throws Exception
-  {
-    long startTime = -1;
-
-    // verify inputs
-
-    validators = parseValidatorsInput(validators);
-
-    Collection<AbstractPrimitive> validatedElements = null;
-
-    // read in the input element map xml
-    try
-    {
-      Logging.debug("Converting input elements from xml...");
-      startTime = System.currentTimeMillis();
-      inputDataset = HootOsmReader.parseDataSet(elementsStream);
-      inputElements = inputDataset.getAllPrimitives();
-      Logging.debug(
-        "Input elements converted from xml in: " +
-        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-      Logging.debug("inputElements.size(): " + inputElements.size());
-
-      if (inputElements.size() == 0)
-      {
-        throw new Exception("No features passed to validation.");
-      }
-
-      originalMapSize = inputElements.size();
-      Logging.debug("originalMapSize: " + originalMapSize);
-      // NOTE: Unlike hoot core's logging, JOSM's will still execute any code in the logging
-      // statement despite the log level and simply not log the statement. So, you definitely don't
-      // want anything like this making its way into a production environment.
-      //Logging.trace("input elements: " + JosmUtils.elementsToString(inputElements));
-    }
-    catch (Exception e)
-    {
-      Logging.error("Error converting validation input features to XML: " + e.getMessage());
-      throw e;
-    }
-
-    // run the specified validators against the elements
-
-    Logging.debug("Running validation tests...");
-    try
-    {
-      startTime = System.currentTimeMillis();
-      validationErrors = runValidation(validators, inputElements);
-      Logging.debug(
-        "Found " + validationErrors.size() + " validation errors in: " +
-        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-      if (failingValidators.size() > 0)
-      {
-        Logging.warn("The following JOSM validators failed: " + failingValidators.keySet());
-      }
-    }
-    catch (Exception e)
-    {
-      Logging.error("Error running validation tests: " + e.getMessage());
-      throw e;
-    }
-
-    if (validationErrors.size() > 0)
-    {
-      // record the features that were validated
-
-      try
-      {
-        updateElementValidations(validationErrors);
-        validatedElements = new ArrayList<AbstractPrimitive>();
-        validatedElements.addAll(inputElements);
-        Logging.debug("validatedElements size: " + validatedElements.size());
-      }
-      catch (Exception e)
-      {
-        Logging.error("Error during validation of elements: " + e.getMessage());
-        throw e;
-      }
-    }
-    else
-    {
-      // If there weren't any validation errors, just return the unmodified input map.
-
-      Logging.trace("No elements validated. Using original input data for output...");
-      validatedElements = new ArrayList<AbstractPrimitive>();
-      validatedElements.addAll(inputElements);
-      Logging.debug("validatedElements size: " + validatedElements.size());
-    }
-
-    return validatedElements;
-  }
-
-  protected void writeOutputElements(File outFile) throws IOException
-  {
-    Logging.debug("Writing map to file: " + outFile.getName() + "...");
-    PrintWriter writer = new PrintWriter(outFile);
-    OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(inputDataset);
-    writer.flush();
-    writer.close();
-  }
-
-  protected String convertOutputElementsToXml()
-  {
-    // gather some stats on the modified map
-
-    int validatedMapSize = outputElements.size();
-    int mapSizeDiff = 0;
-    if (validationErrors.size() == 0 || originalMapSize == validatedMapSize)
-    {
-      Logging.debug("The output map has the same number of elements as the input map.");
-    }
-    else if (originalMapSize < validatedMapSize)
-    {
-      mapSizeDiff = validatedMapSize - originalMapSize;
-      Logging.debug(
-        "The output map has " + mapSizeDiff + " more elements than the input map.");
-    }
-    else if (validatedMapSize < originalMapSize)
-    {
-      mapSizeDiff = originalMapSize - validatedMapSize;
-      Logging.debug(
-        "The output map has " + mapSizeDiff + " fewer elements than the input map.");
-    }
-
-    //Logging.trace("output elements: " + JosmUtils.elementsToString(outputElements));
-
-    // convert any validated elements back to xml
-
-    // TODO: make sure if all elements get deleted here that empty map xml is returned and not an
-    // empty xml string
-
-    String outputElementsXml = null;
-    try
-    {
-      Logging.debug("Converting output elements to xml...");
-      long startTime = System.currentTimeMillis();
-      outputElementsXml =
-        OsmApi.getOsmApi("http://localhost").toBulkXml(outputElements, true);
-      Logging.debug(
-        "Output elements converted to xml in: " +
-        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
-      //Logging.trace("outputElementsXml: " + outputElementsXml);
-    }
-    catch (Exception e)
-    {
-      Logging.error("Error converting output elements to XML: " + e.getMessage());
-      throw e;
-    }
-
-    return outputElementsXml;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
-
-  private List<String> parseValidatorsInput(List<String> validators) throws Exception
+  private List<String> updateValidators(List<String> validators) throws Exception
   {
     Logging.debug("input validators: " + validators);
     // we're always expecting populated validators
@@ -442,63 +316,206 @@ public class JosmMapValidator
     return validatorsOut;
   }
 
-  /*
-   * Runs a set of validators against specified input elements
-   */
-  private List<TestError> runValidation(List<String> validators, Collection<OsmPrimitive> elements)
+  private DataSet parseAndValidate(List<String> validators, InputStream elementsStream)
     throws Exception
   {
-    List<TestError> errors = new ArrayList<TestError>();
-    for (String validatorStr : validators)
+    long startTime = -1;
+
+    validators = updateValidators(validators);
+
+    // read in the input element map xml
+    DataSet map = null;
+    try
     {
-      errors.addAll(runValidation((Test)Class.forName(validatorStr).newInstance(), elements));
+      Logging.debug("Converting input elements from xml...");
+      startTime = System.currentTimeMillis();
+      map = HootOsmReader.parseDataSet(elementsStream);
+      Logging.debug(
+        "Input elements converted from xml in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+      originalMapSize = map.getAllPrimitives().size();
+      Logging.debug("originalMapSize: " + originalMapSize);
+
+      if (originalMapSize == 0)
+      {
+        throw new Exception("No features passed to validation.");
+      }
+
+      // NOTE: Unlike hoot core's logging, JOSM's will still execute any code in the logging
+      // statement despite the log level and simply not log the statement. So, you definitely don't
+      // want anything like this making its way into a production environment.
+      //Logging.trace(
+      // "input elements: " + JosmUtils.elementsToString(inputDataset.getAllPrimitives()));
     }
-    return errors;
+    catch (Exception e)
+    {
+      Logging.error("Error converting validation input features to XML: " + e.getMessage());
+      throw e;
+    }
+
+    // run the specified validators against the elements
+    try
+    {
+      runValidation(validators, map);
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error running validation tests: " + e.getMessage());
+      throw e;
+    }
+
+    return map;
   }
 
   /*
    * Runs a set of validators against specified input elements
    */
-  private List<TestError> runValidation(
-    Collection<Test> validators, Collection<OsmPrimitive> elements) throws Exception
+  private void runValidation(List<String> validators, DataSet map) throws Exception
   {
-    List<TestError> errors = new ArrayList<TestError>();
-    for (Test validator : validators)
+    Logging.debug("Running validation tests...");
+    long startTime = System.currentTimeMillis();
+
+    //Logging.trace("elements size: " + elements.size());
+    for (String validator : validators)
     {
-      errors.addAll(runValidation(validator, elements));
+      runValidation((Test)Class.forName(validator).newInstance(), map);
     }
-    return errors;
+
+    Logging.debug(
+      "Found " + getNumValidationErrors() + " validation errors in: " +
+      String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+    if (failingValidators.size() > 0)
+    {
+      Logging.warn("The following JOSM validators failed: " + failingValidators.keySet());
+    }
   }
 
   /*
    * Runs a single validator against specified input elements
    */
-  private List<TestError> runValidation(Test validator, Collection<OsmPrimitive> elements)
-    throws Exception
+  private void runValidation(Test validator, DataSet map) throws Exception
   {
     Logging.info("Running JOSM validator: " + validator.getName() + "...");
+    //Logging.trace("elements size: " + elements.size());
 
-    List<TestError> errors = new ArrayList<TestError>();
+    List<TestError> errors = null;
     try
     {
       validator.initialize();
       validator.setPartialSelection(false);
       validator.startTest(null);
-      validator.visit(elements);
+      validator.visit(map.getAllPrimitives());
       validator.endTest();
 
-      errors.addAll(validator.getErrors());
-      validator.clear();
+      errors = validator.getErrors();
 
       Logging.debug(
         "Validator: " + validator.getName() + " found " + errors.size() + " errors with " +
-        getNumElementsInvolvedInErrors(errors) + " total involved elements.");
+        getNumElementsInvolvedInErrors(errors) + " total involved elements."); 
     }
     catch (Exception e)
     {
-      failingValidators.put(validator.getName(), getErrorMessage(validator, e));
+      failingValidators.put(validator.getName(), JosmUtils.getErrorMessage(validator, e));
     }
-    return errors;
+
+    parseValidationErrors(errors, map);
+
+    // This will clear out any errors, so call it last.
+    validator.clear();
+  }
+
+  private void parseValidationErrors(List<TestError> validationErrors, DataSet map) throws Exception
+  {
+    //Logging.debug("Parsing validation errors...");
+    //Logging.trace("validationErrors size: " + validationErrors.size());
+
+    if (cleanValidated)
+    {
+      cleaner = new JosmMapCleaner(addTags);
+    }
+
+    for (TestError error : validationErrors)
+    {
+      Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
+      String testName = error.getTester().getName();
+      Logging.trace(
+        "Processing validation results for " + error.getPrimitives().size() + " elements for " +
+        " error: \"" + error.getMessage() + "\" found by test: " + testName + "...");
+      //Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
+
+      if (validationErrorCountsByType.containsKey(testName))
+      {
+        int currentErrorCountForType = validationErrorCountsByType.get(testName);
+        validationErrorCountsByType.put(testName, currentErrorCountForType + 1);
+      }
+      else
+      {
+        validationErrorCountsByType.put(testName, 1);
+      }
+
+      //Logging.trace("addTags: " + addTags);
+      if (addTags)
+      {
+        //Logging.debug("Adding validation tags...");
+
+        for (OsmPrimitive element : elementGroupWithError)
+        {
+          String elementKey = JosmUtils.getElementMapKey(element);
+          int errorCount = 1;
+          if (elementErrorCounts.containsKey(elementKey))
+          {
+            errorCount = elementErrorCounts.get(elementKey);
+            errorCount++;
+          }
+          elementErrorCounts.put(elementKey, errorCount);
+          elementErrorIndexes.put(elementKey + ";" + error.getMessage(), errorCount);
+
+          element.put(
+            VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCount), error.getMessage());
+          element.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCount), "JOSM");
+        }
+      }
+
+      if (cleanValidated)
+      {
+        //Logging.trace("elementErrorIndexes size: " + elementErrorIndexes.size());
+        cleaner.setElementErrorIndexes(elementErrorIndexes);
+        cleaner.clean(error);
+      }
+    }
+
+    if (cleanValidated)
+    {
+      // Apparently, any JOSM fixes resulting in deletes don't actually delete the elements (tried
+      // accessing the affected dataset from the command itself). So, we'll manually delete them
+      // here.
+      cleaner.removeDeletedElements(map);
+    }
+  }
+
+  private void logMapStats(DataSet map)
+  {
+    // gather some stats on the modified map
+
+    Collection<OsmPrimitive> elements = map.getAllPrimitives();
+    int validatedMapSize = elements.size();
+    int mapSizeDiff = 0;
+    if (getNumValidationErrors() == 0 || originalMapSize == validatedMapSize)
+    {
+      Logging.debug("The output map has the same number of elements as the input map.");
+    }
+    else if (originalMapSize < validatedMapSize)
+    {
+      mapSizeDiff = validatedMapSize - originalMapSize;
+      Logging.debug(
+        "The output map has " + mapSizeDiff + " more elements than the input map.");
+    }
+    else if (validatedMapSize < originalMapSize)
+    {
+      mapSizeDiff = originalMapSize - validatedMapSize;
+      Logging.debug(
+        "The output map has " + mapSizeDiff + " fewer elements than the input map.");
+    }
   }
 
   private int getNumElementsInvolvedInErrors(List<TestError> errors)
@@ -511,121 +528,42 @@ public class JosmMapValidator
     return numElementsInvolved;
   }
 
-  private void updateElementValidations(List<TestError> errors)
+  private String writeMapToXml(DataSet map)
   {
-    Logging.debug("Recording validated elements...");
+    Logging.debug("Writing map to XML...");
+    //Logging.trace("elements: " + JosmUtils.elementsToString(elements));
 
-    for (TestError error : errors)
+    // convert any validated elements back to xml
+
+    String outputElementsXml = null;
+    try
     {
-      Collection<? extends OsmPrimitive> elementGroupWithError = error.getPrimitives();
-      Logging.trace(
-        "Processing validation results for " + error.getPrimitives().size() + " elements for " +
-        " error: \"" + error.getMessage() + "\" found by test: " + error.getTester().getName() +
-        "...");
-      //Logging.trace("error.getPrimitives(): " + JosmUtils.elementsToString(error.getPrimitives()));
-
-      // map validated elements by ID and error that occurred
-      for (OsmPrimitive element : elementGroupWithError)
-      {
-        elementValidations.put(JosmUtils.getElementMapKey(element), error.getMessage());
-      }
-
-      // map validation errors by type
-      if (validationErrorCountsByType.containsKey(error.getTester().getName()))
-      {
-        int currentErrorCountForType = validationErrorCountsByType.get(error.getTester().getName());
-        validationErrorCountsByType.put(error.getTester().getName(), currentErrorCountForType + 1);
-      }
-      else
-      {
-        validationErrorCountsByType.put(error.getTester().getName(), 1);
-      }
+      long startTime = System.currentTimeMillis();
+      Collection<AbstractPrimitive> elementsToWrite = new ArrayList<AbstractPrimitive>();
+      elementsToWrite.addAll(map.getAllPrimitives());
+      outputElementsXml =
+        OsmApi.getOsmApi("http://localhost").toBulkXml(elementsToWrite, true);
+      Logging.debug(
+        "Output elements converted to xml in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+      //Logging.trace("outputElementsXml: " + outputElementsXml);
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error converting output elements to XML: " + e.getMessage());
+      throw e;
     }
 
-    Logging.debug("elementValidations size: " + elementValidations.size());
+    return outputElementsXml;
   }
 
-  /*
-   * Mark elements which failed validation with tags
-   *
-   * @param elements the elements to tag
-   * @return an updated collection of elements
-   */
-  private Collection<AbstractPrimitive> getReturnElements(Collection<AbstractPrimitive> elements)
-    throws Exception
+  private void writeMapToFile(DataSet map, File outFile) throws IOException
   {
-    Logging.debug("Updating tags on up to " + elements.size() + " elements...");
+    Logging.debug("Writing map to file: " + outFile.getName() + "...");
 
-    Collection<AbstractPrimitive> returnElements = new ArrayList<AbstractPrimitive>();
-
-    int numValidationTagsAdded = 0;
-    int numDeletedElements = 0;
-    for (AbstractPrimitive element : elements)
-    {
-      OsmPrimitive osmElement = (OsmPrimitive)element;
-      String elementKey = JosmUtils.getElementMapKey(osmElement);
-
-      if (elementValidations.containsKey(elementKey))
-      {
-        Logging.trace("Adding validation tags to element: " + elementKey + "...");
-
-        Collection<String> errorMessages = elementValidations.get(elementKey);
-        String[] errorMessagesArr = errorMessages.toArray(new String[errorMessages.size()]);
-
-        // Add a separate tag for each validation error this element was involved in.
-        int errorCtr = 1;
-        for (int i = 0; i < errorMessagesArr.length; i++)
-        {
-          osmElement.put(
-            VALIDATION_ERROR_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), errorMessagesArr[i]);
-          osmElement.put(VALIDATION_SOURCE_TAG_KEY_BASE + ":" + String.valueOf(errorCtr), "JOSM");
-          numValidationTagsAdded++;
-          errorCtr++;
-        }
-      }
-      Logging.trace("Adding return element: " + elementKey + "...");
-      returnElements.add(osmElement);
-    }
-
-    Logging.info(
-      "Added " + numValidationTagsAdded + " validation error tags. Total return " +
-      "elements: " + returnElements.size());
-    return returnElements;
+    PrintWriter writer = new PrintWriter(outFile);
+    OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(map);
+    writer.flush();
+    writer.close();
   }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////
-
-  // these match corresponding entries in the hoot-core MetadataTags class
-  protected static final String VALIDATION_ERROR_TAG_KEY_BASE = "hoot:validation:error";
-  protected static final String VALIDATION_SOURCE_TAG_KEY_BASE = "hoot:validation:error:source";
-
-  // the elements passed into the validate routine
-  protected Collection<OsmPrimitive> inputElements;
-  // the validated elements
-  protected Collection<AbstractPrimitive> outputElements;
-
-  // validation errors found on the input elements
-  protected List<TestError> validationErrors;
-
-  // element keys mapped to one or more validation error messages; not using PrimitiveId as element
-  // keys here but don't know how to get it directly from OsmPrimitive; using LinkedHashMultimap to
-  // preserve the value orderings between the various multimaps
-  // e.g. key=Way:1, value1="Duplicated way nodes", value2="Unclosed way"
-  protected Multimap<String, String> elementValidations = LinkedHashMultimap.create();
-
-  ///////////////////////////////////////////////////////////////
-
-  private static final String VALIDATORS_NAMESPACE = "org.openstreetmap.josm.data.validation.tests";
-
-  // input map to be validated as dataset
-  private DataSet inputDataset = null;
-
-  // a list of names of validators that threw an error during validation
-  private Map<String, String> failingValidators = new HashMap<String, String>();
-
-  // size of the map input to the validation routine
-  private int originalMapSize = 0;
-
-  // maps validation error names to occurrence counts
-  private Map<String, Integer> validationErrorCountsByType = new HashMap<String, Integer>();
 }

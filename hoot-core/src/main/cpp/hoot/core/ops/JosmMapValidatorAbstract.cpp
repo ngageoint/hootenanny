@@ -86,7 +86,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
   // TODO: change back
   _josmInterfaceClass =
     _javaEnv->FindClass(/*_josmInterfaceName.toStdString().c_str()*/
-                        "hoot/services/josm/JosmMapValidator2");
+                        "hoot/services/josm/JosmMapValidator");
   // Using the same constructor signature for both validation and cleaning works since both Java
   // implementations use it. If the signatures change, then this logic will need to be moved down
   // to the child classes.
