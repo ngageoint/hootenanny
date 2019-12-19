@@ -496,6 +496,7 @@ public class FolderResource {
             folder.setUserId(folderRecord.getUserId());
             folder.setParentId(folderRecord.getParentId());
             folder.setPublic(folderRecord.getPublicCol());
+            folder.setCreatedAt(folderRecord.getCreatedAt());
             folderRecordList.add(folder);
         }
 
