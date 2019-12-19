@@ -41,8 +41,7 @@ _maxElementsForMapString(2000000),
 _javaEnv(JavaEnvironment::getEnvironment()),
 _josmInterfaceInitialized(false),
 _numValidationErrors(0),
-_numFailingValidators(0),
-_logMissingCertAsWarning(true)
+_numFailingValidators(0)
 {
 }
 
@@ -61,27 +60,13 @@ void JosmMapValidatorAbstract::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _josmValidatorsExclude = opts.getJosmValidatorsExclude();
   _josmValidatorsInclude = opts.getJosmValidatorsInclude();
-  _josmCertificatePath = opts.getJosmCertificatePath();
-  _josmCertificatePassword = opts.getJosmCertificatePassword();
   _josmValidatorsRequiringUserCert = opts.getJosmValidatorsRequiringUserCertificate();
   _maxElementsForMapString = opts.getJosmMaxElementsForMapString();
-}
-
-bool JosmMapValidatorAbstract::_noUserCertSpecified() const
-{
-  return _josmCertificatePath.trimmed().isEmpty() || _josmCertificatePassword.trimmed().isEmpty();
 }
 
 void JosmMapValidatorAbstract::_initJosmImplementation()
 {
   LOG_DEBUG("Initializing JOSM implementation...");
-
-  if (_logMissingCertAsWarning && _noUserCertSpecified())
-  {
-    LOG_WARN(
-      "No JOSM user certificate specified. At a minimum these validators will be unavailable "
-      "for use: " + _josmValidatorsRequiringUserCert.join(", "));
-  }
 
   // TODO: change back
   _josmInterfaceClass =
@@ -99,14 +84,9 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
         _josmInterfaceClass,
         // Java sig: <ClassName>(String logLevel, String userCertPath, String userCertPassword)
         _javaEnv->GetMethodID(
-          _josmInterfaceClass, "<init>",
-          "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"),
+          _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
         // logLevel
-        JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()),
-        // userCertPath
-        JniConversion::toJavaString(_javaEnv, _josmCertificatePath),
-        // userCertPassword
-        JniConversion::toJavaString(_javaEnv, _josmCertificatePassword))/*)*/;
+        JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()));
   JniConversion::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
 
@@ -131,6 +111,14 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
     _josmValidators = getAvailableValidators();
   }
 
+  if (StringUtils::containsAny(_josmValidators, _josmValidatorsRequiringUserCert))
+  {
+    LOG_WARN(
+      "Validator include list contained one or more validators requiring a user certificate " <<
+      "which is not supported by the Hootenanny JOSM validation client. Removing validators.");
+    StringUtils::removeAll(_josmValidators, _josmValidatorsRequiringUserCert);
+  }
+
   // The exclude list overrides the include list, so subtract it from our current list.
   StringUtils::removeAll(_josmValidators, _josmValidatorsExclude);
 
@@ -145,12 +133,6 @@ void JosmMapValidatorAbstract::_initJosmValidatorsList()
   if (_josmValidators.isEmpty())
   {
     _josmValidators = getAvailableValidators();
-  }
-
-  // If no cert was specified, let's remove the validators we know require one
-  if (_noUserCertSpecified())
-  {
-    StringUtils::removeAll(_josmValidators, _josmValidatorsRequiringUserCert);
   }
 
   LOG_VARD(_josmValidators);
@@ -178,7 +160,9 @@ QMap<QString, QString> JosmMapValidatorAbstract::getAvailableValidatorsWithDescr
     throw HootException("Error calling getAvailableValidators.");
   }
 
-  return JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
+  QMap<QString, QString> validators = JniConversion::fromJavaStringMap(_javaEnv, validatorsJavaMap);
+  StringUtils::removeAllWithKey(validators, _josmValidatorsRequiringUserCert);
+  return validators;
 }
 
 QStringList JosmMapValidatorAbstract::getAvailableValidators()

@@ -20,18 +20,6 @@ rm -f /home/vagrant/hoot/tmp/hoot-josm.jar
 # TODO: make the version a wildcard
 cp /home/vagrant/.m2/repository/org/openstreetmap/josm/me-josm/4.4.4/me-josm-4.4.4.jar /home/vagrant/hoot/tmp/hoot-josm.jar
 
-# add in external dependency classes
-# TODO: make the version a wildcard
-
-echo "Packaging apache commons lang..."
-cd $HOME
-cp hoot-services/target/hoot-services-vagrant/WEB-INF/lib/commons-lang3-3.1.jar /home/vagrant/hoot/tmp
-cd /home/vagrant/hoot/tmp
-jar xf commons-lang3-3.1.jar org/apache/commons/lang3
-jar uf /home/vagrant/hoot/tmp/hoot-josm.jar org/apache/commons/lang3
-rm -rf org
-rm -f commons-lang3-3.1.jar
-
 # add our hoot josm validator classes
 echo "Packaging hoot josm classes..."
 cd $HOME/hoot-services/target/classes

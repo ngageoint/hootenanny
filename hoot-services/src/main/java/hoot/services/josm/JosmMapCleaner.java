@@ -265,7 +265,6 @@ public class JosmMapCleaner
             VALIDATION_FIX_STATUS_TAG_KEY_BASE + ":" + String.valueOf(errorIndex),
             cleanStatusToString(cleanStatus));
         }
-        // TODO: delete here?
       }
     }
   }

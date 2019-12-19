@@ -63,10 +63,9 @@ import org.openstreetmap.josm.data.osm.DataSet;
  */
 public class JosmMapValidator
 {
-  public JosmMapValidator(
-    String logLevel, String userCertPath, String userCertPassword) throws Exception
+  public JosmMapValidator(String logLevel) throws Exception
   {
-    JosmUtils.initJosm(logLevel, userCertPath, userCertPassword);
+    JosmUtils.initJosm(logLevel);
   }
 
   public int getNumValidationErrors()
@@ -319,8 +318,6 @@ public class JosmMapValidator
   private DataSet parseAndValidate(List<String> validators, InputStream elementsStream)
     throws Exception
   {
-    long startTime = -1;
-
     validators = updateValidators(validators);
 
     // read in the input element map xml
@@ -328,7 +325,7 @@ public class JosmMapValidator
     try
     {
       Logging.debug("Converting input elements from xml...");
-      startTime = System.currentTimeMillis();
+      long startTime = System.currentTimeMillis();
       map = HootOsmReader.parseDataSet(elementsStream);
       Logging.debug(
         "Input elements converted from xml in: " +
@@ -533,8 +530,6 @@ public class JosmMapValidator
     Logging.debug("Writing map to XML...");
     //Logging.trace("elements: " + JosmUtils.elementsToString(elements));
 
-    // convert any validated elements back to xml
-
     String outputElementsXml = null;
     try
     {
@@ -543,6 +538,7 @@ public class JosmMapValidator
       elementsToWrite.addAll(map.getAllPrimitives());
       outputElementsXml =
         OsmApi.getOsmApi("http://localhost").toBulkXml(elementsToWrite, true);
+
       Logging.debug(
         "Output elements converted to xml in: " +
         String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
@@ -550,7 +546,7 @@ public class JosmMapValidator
     }
     catch (Exception e)
     {
-      Logging.error("Error converting output elements to XML: " + e.getMessage());
+      Logging.error("Error writing output to XML: " + e.getMessage());
       throw e;
     }
 
@@ -561,9 +557,22 @@ public class JosmMapValidator
   {
     Logging.debug("Writing map to file: " + outFile.getName() + "...");
 
-    PrintWriter writer = new PrintWriter(outFile);
-    OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(map);
-    writer.flush();
-    writer.close();
+    try
+    {
+      long startTime = System.currentTimeMillis();
+      PrintWriter writer = new PrintWriter(outFile);
+      OsmWriterFactory.createOsmWriter(writer, true, "0.6").write(map);
+      writer.flush();
+      writer.close();
+
+      Logging.debug(
+        "Output elements written to file in: " +
+        String.valueOf((System.currentTimeMillis() - startTime) / 1000) + " seconds.");
+    }
+    catch (Exception e)
+    {
+      Logging.error("Error writing output to file: " + e.getMessage());
+      throw e;
+    }
   }
 }

@@ -31,15 +31,12 @@ import java.util.HashSet;
 import java.util.Collection;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringUtils;
-
 import org.openstreetmap.josm.data.osm.AbstractPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.tools.Logging;
 import org.openstreetmap.josm.data.preferences.JosmBaseDirectories;
 import org.openstreetmap.josm.data.preferences.JosmUrls;
 import org.openstreetmap.josm.spi.preferences.Config;
-import org.openstreetmap.josm.data.Preferences;
 import org.openstreetmap.josm.command.PseudoCommand;
 import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.command.DeleteCommand;
@@ -49,6 +46,7 @@ import org.openstreetmap.josm.data.projection.ProjectionRegistry;
 import org.openstreetmap.josm.data.projection.Projection;
 import org.openstreetmap.josm.gui.preferences.projection.ProjectionPreference;
 import org.openstreetmap.josm.data.validation.Test;
+import org.openstreetmap.josm.data.Preferences;
 
 /**
  * Various utilities for use when using JOSM from hoot-josm
@@ -60,20 +58,13 @@ public class JosmUtils
    *
    * @param logLevel the verbosity of the logging
    */
-  public static void initJosm(String logLevel, String userCertPath,
-    String userCertPassword) throws Exception
+  public static void initJosm(String logLevel) throws Exception
   {
     setLogLevel(logLevel);
     Logging.debug("Initializing JOSM...");
 
     Preferences pref = Preferences.main();
     pref.enableSaveOnPut(false);
-    if (StringUtils.trimToNull(userCertPath) != null &&
-        StringUtils.trimToNull(userCertPassword) != null)
-    {
-      pref.put("user-cert.path", userCertPath);
-      pref.put("user-cert.pass", userCertPassword);
-    }
     Config.setPreferencesInstance(pref);
     Config.setBaseDirectoriesProvider(JosmBaseDirectories.getInstance());
     Config.setUrlsProvider(JosmUrls.getInstance());
@@ -212,8 +203,6 @@ public class JosmUtils
     }
     return errorMsg;
   }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////
 
   private static Set<String> getDeletedElementIds(DeleteCommand deleteCommand)
   {

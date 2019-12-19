@@ -153,6 +153,23 @@ public:
    * @param toRemove the list of string to remove
    */
   static void removeAll(QStringList& input, const QStringList& toRemove);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param toCompare
+   * @return
+   */
+  static bool containsAny(const QStringList& input, const QStringList& compareList);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @param keysToRemove
+   */
+  static void removeAllWithKey(QMap<QString, QString>& input, const QStringList& keysToRemove);
 };
 
 }
