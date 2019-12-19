@@ -91,6 +91,7 @@ import com.querydsl.sql.SQLQuery;
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -130,6 +131,9 @@ public class MapResource {
 
     @Autowired
     private DeleteMapResourcesCommandFactory deleteMapResourcesCommandFactory;
+
+    @Autowired
+    private DeleteOlderMapsCommandFactory deleteOlderMapsCommandFactory;
 
 
     /**
@@ -629,7 +633,7 @@ public class MapResource {
         try {
             Command[] workflow = {
                 () -> {
-                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, this.getClass());
+                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, jobId, this.getClass());
                     return mapResourcesCleaner.execute();
                 }
             };
@@ -638,6 +642,54 @@ public class MapResource {
         }
         catch (Exception e) {
             String msg = "Error submitting delete map request for map with id =  " + mapId;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
+
+        return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Deletes maps older than ?
+     *
+     * DELETE hoot-services/osm/api/0.6/map/delete/{id}
+     *
+     *
+     * @param months
+     *            number of months back
+     * @return job id
+     */
+    @DELETE
+    @Path("/older/{months}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteOldLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
+        Users user = Users.fromRequest(request);
+
+        if (!UserResource.adminUserCheck(user)) {
+            return Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to delete old map data").build();
+        }
+
+        String jobId = UUID.randomUUID().toString();
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1 * months);
+        Timestamp monthsAgo = new Timestamp(cal.getTime().getTime());
+
+        try {
+            Command[] workflow = {
+                () -> {
+                    InternalCommand mapResourcesCleaner = deleteOlderMapsCommandFactory.build(monthsAgo, jobId, this.getClass());
+                    return mapResourcesCleaner.execute();
+                }
+            };
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.DELETE));
+        }
+        catch (Exception e) {
+            String msg = "Error submitting delete map request for maps older than " + months;
             throw new WebApplicationException(e, Response.serverError().entity(msg).build());
         }
 

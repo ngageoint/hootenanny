@@ -31,6 +31,7 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.models.db.QUsers.users;
 
 import java.sql.Connection;
@@ -942,5 +943,14 @@ NOT EXISTS
         }
 
         return progress;
+    }
+
+    public static void deleteOSMRecordById(Long mapId) {
+        deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+    }
+
+    public static void deleteBookmarksByMapId(Long mapId) {
+        createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
     }
 }
