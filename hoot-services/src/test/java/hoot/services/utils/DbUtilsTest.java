@@ -337,12 +337,15 @@ public class DbUtilsTest {
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1);
-        List<Maps> oldMaps = DbUtils.getStaleMaps(new Timestamp(cal.getTime().getTime()));
+        Timestamp ts = new Timestamp(cal.getTime().getTime());
+        List<Maps> oldMaps = DbUtils.getStaleMaps(ts);
 
         List<Long> oldMapIds = oldMaps.stream().map(m -> m.getId()).collect(Collectors.toList());
         assertTrue(oldMapIds.contains(mapIdOld));
         assertFalse(oldMapIds.contains(mapIdNew));
 
+        Map<String, Long> staleMapSummary = DbUtils.getStaleMapsSummary(ts);
+        assertTrue(staleMapSummary.get(userId + "::MapUtils::insertUser()") == 1);
 
         DbUtils.deleteMapRelatedTablesByMapId(mapIdOld);
         DbUtils.deleteMap(mapIdOld);

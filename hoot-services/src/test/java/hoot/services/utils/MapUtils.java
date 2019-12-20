@@ -211,21 +211,12 @@ public final class MapUtils {
     public static void cleanupTestUsers() {
         List<Maps> testMaps = createQuery().select(maps).from(maps)
                 .where(maps.userId.lt(0)).fetch();
-        System.out.println("this many test maps ->" + testMaps.size());
         testMaps.stream().forEach(m -> {
             DbUtils.deleteMapRelatedTablesByMapId(m.getId());
             DbUtils.deleteMap(m.getId());
         });
 
-        Long testUserCount = createQuery().select(users).from(users).where(users.displayName.like("%::MapUtils::insertUser()")).fetchCount();
-        System.out.println("this many test users ->" + testUserCount);
         createQuery().delete(users).where(users.displayName.like("%::MapUtils::insertUser()")).execute();
-//        try {
-//            DbUtils.createQuery().getConnection().commit();
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
     }
 
 

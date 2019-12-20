@@ -643,13 +643,21 @@ NOT EXISTS
                 .fetch();
     }
 
-    public static List<Tuple> getStaleMapsSummary(Timestamp ts) {
-        return createQuery()
-                .select(maps.userId, maps.countDistinct())
-                .from(maps)
-                .where(getStale(ts))
-                .groupBy(maps.userId)
+    public static Map<String, Long> getStaleMapsSummary(Timestamp ts) {
+        List<Tuple> result =  createQuery()
+                .select(users.displayName, maps.countDistinct())
+                .from(users, maps)
+                .where(users.id.eq(maps.userId).and(getStale(ts)))
+                .groupBy(users.displayName)
                 .fetch();
+
+        Map<String, Long> response = new HashMap<>();
+
+        result.stream().forEach(tuple -> {
+            response.put(tuple.get(users.displayName), tuple.get(maps.countDistinct()));
+        });
+
+        return response;
     }
 
     /**

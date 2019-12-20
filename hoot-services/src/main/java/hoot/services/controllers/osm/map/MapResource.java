@@ -709,9 +709,8 @@ public class MapResource {
      *            number of months back
      * @return job id
      */
-    @DELETE
+    @GET
     @Path("/stale/{months}")
-    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStaleLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
         Users user = Users.fromRequest(request);
@@ -720,15 +719,11 @@ public class MapResource {
             return Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to delete old map data").build();
         }
 
-        String jobId = UUID.randomUUID().toString();
-
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1 * months);
         Timestamp monthsAgo = new Timestamp(cal.getTime().getTime());
 
-
-
-        return DbUtils.getStaleMapsSummary(monthsAgo);
+        return Response.ok().entity(DbUtils.getStaleMapsSummary(monthsAgo)).build();
     }
 
     /**
