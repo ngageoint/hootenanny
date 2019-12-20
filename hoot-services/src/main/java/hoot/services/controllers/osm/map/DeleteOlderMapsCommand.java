@@ -74,7 +74,7 @@ public class DeleteOlderMapsCommand implements InternalCommand {
     private static void deleteOlderMaps(Timestamp timestamp) {
 
         //Get older maps
-        List<Maps> olderMaps = DbUtils.getOldMaps(timestamp);
+        List<Maps> olderMaps = DbUtils.getStaleMaps(timestamp);
 
         //Delete older maps
         olderMaps.stream().forEach(m -> {

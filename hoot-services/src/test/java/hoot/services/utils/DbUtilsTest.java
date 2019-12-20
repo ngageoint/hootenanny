@@ -337,7 +337,7 @@ public class DbUtilsTest {
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1);
-        List<Maps> oldMaps = DbUtils.getOldMaps(new Timestamp(cal.getTime().getTime()));
+        List<Maps> oldMaps = DbUtils.getStaleMaps(new Timestamp(cal.getTime().getTime()));
 
         List<Long> oldMapIds = oldMaps.stream().map(m -> m.getId()).collect(Collectors.toList());
         assertTrue(oldMapIds.contains(mapIdOld));

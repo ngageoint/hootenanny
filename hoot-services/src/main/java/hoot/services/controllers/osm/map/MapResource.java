@@ -654,7 +654,7 @@ public class MapResource {
     /**
      * Deletes maps older than ?
      *
-     * DELETE hoot-services/osm/api/0.6/map/delete/{id}
+     * DELETE hoot-services/osm/api/0.6/map/delete/stale/{months}
      *
      *
      * @param months
@@ -662,10 +662,10 @@ public class MapResource {
      * @return job id
      */
     @DELETE
-    @Path("/older/{months}")
+    @Path("/stale/{months}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteOldLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
+    public Response deleteStaleLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
         Users user = Users.fromRequest(request);
 
         if (!UserResource.adminUserCheck(user)) {
@@ -697,6 +697,38 @@ public class MapResource {
         ret.put("jobid", jobId);
 
         return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Deletes maps older than ?
+     *
+     * GET hoot-services/osm/api/0.6/map/delete/{id}
+     *
+     *
+     * @param months
+     *            number of months back
+     * @return job id
+     */
+    @DELETE
+    @Path("/stale/{months}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStaleLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
+        Users user = Users.fromRequest(request);
+
+        if (!UserResource.adminUserCheck(user)) {
+            return Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to delete old map data").build();
+        }
+
+        String jobId = UUID.randomUUID().toString();
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1 * months);
+        Timestamp monthsAgo = new Timestamp(cal.getTime().getTime());
+
+
+
+        return DbUtils.getStaleMapsSummary(monthsAgo);
     }
 
     /**

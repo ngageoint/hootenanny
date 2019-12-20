@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -628,14 +629,26 @@ NOT EXISTS
     OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
 
  */
-    public static List<Maps> getOldMaps(Timestamp ts) {
+
+    private static BooleanExpression getStale(Timestamp ts) {
+        return (Expressions.stringTemplate("tags->'lastAccessed'").isNotNull().and(maps.createdAt.lt(ts)))
+                .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
+    }
+
+    public static List<Maps> getStaleMaps(Timestamp ts) {
         return createQuery()
                 .select(maps)
                 .from(maps)
-                .where(
-                    (Expressions.stringTemplate("tags->'lastAccessed'").isNotNull().and(maps.createdAt.lt(ts)))
-                    .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts))
-                )
+                .where(getStale(ts))
+                .fetch();
+    }
+
+    public static List<Tuple> getStaleMapsSummary(Timestamp ts) {
+        return createQuery()
+                .select(maps.userId, maps.countDistinct())
+                .from(maps)
+                .where(getStale(ts))
+                .groupBy(maps.userId)
                 .fetch();
     }
 
