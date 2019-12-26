@@ -54,6 +54,16 @@ translation_assistant = {
                 }
             }
         }
+
+        // If the layerName does not match and we only have one layer in the translation, use it.
+        // Yes, the columns could be different but making the translation useable with other layers is what was asked for.
+        if (!l) {
+            var amKeys = Object.keys(attributeMapping);
+            if (amKeys.length == 1) {
+                l = attributeMapping[amKeys[0]];
+            }            
+        }
+
         // Don't translate feature if no matching attribute mapping could be found
         if (!l) {
             return null;
