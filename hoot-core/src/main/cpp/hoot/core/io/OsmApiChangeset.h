@@ -225,6 +225,15 @@ public:
    */
   static bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
   /**
+   * @brief matchesMultiRelationFailure
+   * @param hint
+   * @param element_id
+   * @param member_ids
+   * @param member_type
+   * @return
+   */
+  static bool matchesMultiRelationFailure(const QString& hint, long& element_id, std::vector<long>& member_ids, ElementType::Type& member_type);
+  /**
    * @brief matchesChangesetPreconditionFailure
    * @param hint Error message from OSM API
    * @param member_id ID of the member element that caused the element to fail
