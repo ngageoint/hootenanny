@@ -93,6 +93,13 @@ public:
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
 
+  /**
+   * Returns the IDs of all way members
+   *
+   * @return a collection of element IDs
+   */
+  std::set<ElementId> getWayMemberIds() const;
+
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;
 

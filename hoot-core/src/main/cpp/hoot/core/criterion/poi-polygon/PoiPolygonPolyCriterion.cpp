@@ -49,13 +49,17 @@ _tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList
 
 bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(e);
   const Tags& tags = e->getTags();
 
-  //Using this looser definition b/c isLinearHighway will return false if any tag is in an area
-  //category and not a linestring category, which still gives us some features we don't want to
-  //conflate with poi/poly.
-  if (tags.contains("highway"))
+  // Using this looser definition b/c isLinearHighway will return false if any tag is in an area
+  // category and not a linestring category, which still gives us some features we don't want to
+  // conflate with poi/poly. Do an empty string check here, b/c oddly at some point in the
+  // conflation chain empty highway tags get added (among others) to features and then are removed
+  // at a later point...probably something that needs to be looked into.
+  if (!tags.get("highway").trimmed().isEmpty())
   {
+    LOG_TRACE("tags contain highway");
     return false;
   }
 
@@ -66,18 +70,19 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
     LOG_TRACE("Contains tag from tag ignore list");
     return false;
   }
-  LOG_TRACE("Does not contain tag from tag ignore list");
 
   // TODO: should use be added as a category here?
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags)
       .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+  LOG_VART(inABuildingOrPoiCategory);
+  LOG_VART(tags.getNames().size());
+  LOG_VART(AreaCriterion().isSatisfied(e));
   //isArea includes building too
   const bool isPoly =
     AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
 
-  //LOG_VART(e);
-  //LOG_VART(isPoly);
+  LOG_VART(isPoly);
   return isPoly;
 }
 

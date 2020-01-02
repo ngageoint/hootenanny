@@ -67,7 +67,6 @@ _typeScore(typeScore),
 _typeMatch(typeMatch),
 _matchDistanceThreshold(matchDistanceThreshold),
 _addressMatch(addressMatch),
-_keepClosestMatchesOnly(ConfigOptions().getPoiPolygonKeepClosestMatchesOnly()),
 _addressParsingEnabled(addressParsingEnabled),
 _infoCache(infoCache)
 {
@@ -150,6 +149,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   LOG_VART(poiHasType);
   const bool polyHasType = PoiPolygonTypeScoreExtractor::hasType(poly);
   LOG_VART(polyHasType);
+
+  // Yes, it is a pain to re-number these rules every time one is removed...think of a better way...
 
   LOG_TRACE("Checking rule #1...");
   if (_addressParsingEnabled)
@@ -480,18 +481,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _infoCache->hasCriterion(poi, QString::fromStdString(BuildingCriterion::className()));
   LOG_VART(poiIsBuilding);
 
-  //This will check the current poi against all neighboring pois.  If any neighboring poi is
-  //closer to the current poly than the current poi, then the current poi will not be matched or
-  //reviewed against the current poly.
-  LOG_TRACE("Checking rule #25...");
-  if (_keepClosestMatchesOnly &&
-      _infoCache->polyHasPoiNeighborCloserThanPoi(polyAsWay, poi, _poiNeighborIds, _distance))
-  {
-    LOG_TRACE("Returning miss per review reduction rule #25...");
-    _triggeredRuleDescription = "#25";
-    return true;
-  }
-
   LOG_VART(_polyNeighborIds.size());
   //LOG_VART(_polyNeighborIds);
   // This loop becomes more expensive as the search radius is increased.
@@ -506,27 +495,6 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     }
     if (polyNeighbor->getElementId() != poly->getElementId())
     {
-      //This will check the current poly against all neighboring polys.  If any neighboring
-      //poly is closer to the current poi than the current poly, then the current poi will
-      //not be matched or reviewed against the current poly.
-      if (_keepClosestMatchesOnly && poly->getElementType() == ElementType::Way &&
-          polyNeighbor->getElementType() == ElementType::Way)
-      {
-        LOG_VART(poly);
-        LOG_VART(polyNeighbor);
-
-        LOG_TRACE("Checking rule #26...");
-        const double poiToNeighborPolyDist =
-          _infoCache->getPolyToPointDistance(polyNeighborAsWay, poi);
-        LOG_VART(poiToNeighborPolyDist);
-        if (poiToNeighborPolyDist != -1.0 && _distance > poiToNeighborPolyDist)
-        {
-          LOG_TRACE("Returning miss per review reduction rule #26...");
-          _triggeredRuleDescription = "#26";
-          return true;
-        }
-      }
-
       if (_infoCache->isType(polyNeighbor, "park"))
       {
         // Should this be OsmSchema::elementHasName instead?
@@ -607,55 +575,55 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       //If the POI is inside a poly that is very close to another park poly, declare miss if
       //the distance to the outer ring of the other park poly is shorter than the distance to the
       //outer ring of this poly and the other park poly has a name.
-      LOG_TRACE("Checking rule #27...");
+      LOG_TRACE("Checking rule #25...");
       if ((poiIsPark || poiIsParkish) && polyVeryCloseToAnotherParkPoly && _distance == 0 &&
           poiToOtherParkPolyNodeDist < poiToPolyNodeDist && poiToPolyNodeDist != DBL_MAX &&
           poiToPolyNodeDist != -1.0 && poiToOtherParkPolyNodeDist != DBL_MAX &&
           poiToOtherParkPolyNodeDist != -1.0 && otherParkPolyHasName && parkPolyOverlapVal < 0.9)
       {
-        LOG_TRACE("Returning miss per review reduction rule #27...");
-        _triggeredRuleDescription = "#27";
+        LOG_TRACE("Returning miss per review reduction rule #25...");
+        _triggeredRuleDescription = "#25";
         return true;
       }
 
       //If the poi is a park, the poly it is being compared to is not a park or building, and that
       //poly is "very close" to another park poly that has a name match with the poi, then
       //declare a miss (exclude poly playgrounds from this).
-      LOG_TRACE("Checking rule #28...");
+      LOG_TRACE("Checking rule #26...");
       if (poiIsPark && !polyIsPark && !polyIsBuilding && polyVeryCloseToAnotherParkPoly &&
           otherParkPolyNameMatch)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #26...");
+        _triggeredRuleDescription = "#26";
+        return true;
+      }
+
+      //If a park poi is contained within one park poly, then there's no reason for it to trigger
+      //reviews in another one that its not contained in.
+      LOG_TRACE("Checking rule #27...");
+      if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
+      {
+        LOG_TRACE("Returning miss per review reduction rule #27...");
+        _triggeredRuleDescription = "#27";
+        return true;
+      }
+
+      //If a sport poi is contained within a type match sport poi poly, don't let it be
+      //matched against anything else.
+      LOG_TRACE("Checking rule #28...");
+      if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
       {
         LOG_TRACE("Returning miss per review reduction rule #28...");
         _triggeredRuleDescription = "#28";
         return true;
       }
 
-      //If a park poi is contained within one park poly, then there's no reason for it to trigger
-      //reviews in another one that its not contained in.
+      //If a poi is like and on top of a building, don't review it against a non-building poly.
       LOG_TRACE("Checking rule #29...");
-      if (poiIsPark && polyIsPark && _distance > 0 && poiContainedInAnotherParkPoly)
+      if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
       {
         LOG_TRACE("Returning miss per review reduction rule #29...");
         _triggeredRuleDescription = "#29";
-        return true;
-      }
-
-      //If a sport poi is contained within a type match sport poi poly, don't let it be
-      //matched against anything else.
-      LOG_TRACE("Checking rule #30...");
-      if (poiIsSport && poiContainedInParkPoly && sportPoiOnOtherSportPolyWithTypeMatch)
-      {
-        LOG_TRACE("Returning miss per review reduction rule #30...");
-        _triggeredRuleDescription = "#30";
-        return true;
-      }
-
-      //If a poi is like and on top of a building, don't review it against a non-building poly.
-      LOG_TRACE("Checking rule #31...");
-      if (poiIsBuilding && poiOnBuilding && !polyIsBuilding)
-      {
-        LOG_TRACE("Returning miss per review reduction rule #31...");
-        _triggeredRuleDescription = "#31";
         return true;
       }
 
@@ -663,12 +631,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       //"very close" to another park poly, we want to be more restrictive on type matching, but
       //only if the poi has any type at all.  If the poi has no type, then behave as normal.
       //Also, let an exact name match cause a review here, rather than a miss.
-      LOG_TRACE("Checking rule #32...");
+      LOG_TRACE("Checking rule #30...");
       if ((polyIsPark || (polyVeryCloseToAnotherParkPoly && !polyHasType)) &&
           !polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType && _exactNameMatch)
       {
-        LOG_TRACE("Returning miss per review reduction rule #32...");
-        _triggeredRuleDescription = "#32";
+        LOG_TRACE("Returning miss per review reduction rule #30...");
+        _triggeredRuleDescription = "#30";
         return true;
       }
     }

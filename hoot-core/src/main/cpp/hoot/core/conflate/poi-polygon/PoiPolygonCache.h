@@ -120,19 +120,36 @@ public:
   bool hasCriterion(ConstElementPtr element, const QString& criterionClassName);
 
   /**
-   * Determines if there exists another poi that is closer than a specified poi to a specified poly
+   * Determines if there exists a neighboring poi that is closer to a specified poly than a
+   * specified distance
    *
-   * @param poly the polygon to examine
+   * @param polyId element ID of the polygon to examine
    * @param poi the POI to examine
    * @param poiNeighborIds IDs of POI neighbors to the polygon
-   * @param poiPolyDistance the pre-calculated distance between poi and poly
-   * @return true if at least one other POI is closer to poly than poi; false otherwise
-   * @note The operation becomes more expensive as the search radius is increased.
-   * @todo This only handles ways as polygons and not relations. See #3474.
+   * @param poiPolyDistance the pre-calculated distance between the input poi and poly
+   * @return true if at least one other POI is closer to the poly with ID=polyId than poi;
+   * false otherwise
+   * @note The operation may become much more expensive as the search radius is increased.
    */
-  bool polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+  bool polyHasPoiNeighborCloserThanPoi(const ElementId& polyId, ConstNodePtr poi,
                                        const std::set<ElementId>& poiNeighborIds,
                                        const double poiPolyDistance);
+
+  /**
+   * Determines if there exists a neighboring poly that is closer to a specified poi than a
+   * specified distance
+   *
+   * @param poi the POI to examine
+   * @param polyId element ID of the polygon to examine
+   * @param polyNeighborIds IDs of polygon neighbors to the POI
+   * @param poiPolyDistance the pre-calculated distance between the input poi and poly
+   * @return true if at least one other poly is closer to poi than the poly with ID=polyId; false
+   * otherwise
+   * @note The operation may become much more expensive as the search radius is increased.
+   */
+  bool poiHasPolyNeighborCloserThanPoly(
+    ConstNodePtr poi, const ElementId& polyId, const std::set<ElementId>& polyNeighborIds,
+    const double poiPolyDistance);
 
   /**
    * Clears the contents of the cache
@@ -158,6 +175,7 @@ private:
 
   // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
   QHash<QString, bool> _poiNeighborCloserCache;
+  QHash<QString, bool> _polyNeighborCloserCache;
 
   // ordering of the ID keys does matter here; does first element contain second element?; keys are
   // "elementId1;elementId2"

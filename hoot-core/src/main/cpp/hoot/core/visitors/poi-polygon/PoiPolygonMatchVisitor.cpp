@@ -98,6 +98,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
   LOG_TRACE("Searching for polys neighboring the POI...");
   const std::set<ElementId> neighbors =
     IndexElementsVisitor::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
+  LOG_VART(neighbors.size());
 
   LOG_TRACE("Attempting to match poly neighbors with POI...");
   const ElementId poiId(e->getElementType(), e->getId());
@@ -136,7 +137,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
 
 void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<const Element>& e)
 {
-  LOG_TRACE("Collecting surrounding poly IDs...");
+  LOG_TRACE("Collecting surrounding poly IDs for: " << e->getElementId());
 
   _surroundingPolyIds.clear();
   std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
@@ -146,17 +147,22 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<co
   LOG_TRACE("Searching for neighbors...");
   const std::set<ElementId> neighbors =
     IndexElementsVisitor::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
+  LOG_VART(neighbors.size());
 
   LOG_TRACE("Processing neighbors...");
   ElementId from(e->getElementType(), e->getId());
   for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
-    if (from != *it)
+    ElementId neighboringElementId = *it;
+    if (from != neighboringElementId)
     {
-      const std::shared_ptr<const Element>& n = _map->getElement(*it);
-      if (n->isUnknown())
+      const std::shared_ptr<const Element>& poly = _map->getElement(neighboringElementId);
+      LOG_VART(neighboringElementId);
+      LOG_VART(poly->isUnknown());
+      if (poly->isUnknown())
       {
-        _surroundingPolyIds.insert(*it);
+        LOG_TRACE("Found neighboring poly: " << neighboringElementId);
+        _surroundingPolyIds.insert(neighboringElementId);
       }
     }
   }
@@ -164,7 +170,7 @@ void PoiPolygonMatchVisitor::_collectSurroundingPolyIds(const std::shared_ptr<co
 
 void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const std::shared_ptr<const Element>& e)
 {
-  LOG_TRACE("Collecting surrounding POI IDs...");
+  LOG_TRACE("Collecting surrounding POI IDs for: " << e->getElementId());
 
   _surroundingPoiIds.clear();
   std::shared_ptr<geos::geom::Envelope> env(e->getEnvelope(_map));
@@ -174,17 +180,22 @@ void PoiPolygonMatchVisitor::_collectSurroundingPoiIds(const std::shared_ptr<con
   LOG_TRACE("Searching for neighbors...");
   const std::set<ElementId> neighbors =
     IndexElementsVisitor::findNeighbors(*env, _getPoiIndex(), _poiIndexToEid, _getMap());
+  LOG_VART(neighbors.size());
 
   LOG_TRACE("Processing neighbors...");
   ElementId from(e->getElementType(), e->getId());
   for (std::set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
   {
-    if (from != *it)
+    ElementId neighboringElementId = *it;
+    if (from != neighboringElementId)
     {
-      const std::shared_ptr<const Element>& n = _map->getElement(*it);
-      if (n->isUnknown())
+      const std::shared_ptr<const Element>& poi = _map->getElement(neighboringElementId);
+      LOG_VART(neighboringElementId);
+      LOG_VART(poi->isUnknown());
+      if (poi->isUnknown())
       {
-        _surroundingPoiIds.insert(*it);
+        LOG_TRACE("Found neighboring poi: " << neighboringElementId);
+        _surroundingPoiIds.insert(neighboringElementId);
       }
     }
   }
@@ -261,7 +272,8 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     IndexElementsVisitor v(_polyIndex,
                            _polyIndexToEid,
                            crit,
-                           std::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
+                           std::bind(
+                             &PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
                            _getMap());
 
     _getMap()->visitWaysRo(v);
@@ -284,7 +296,8 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPoiIndex()
     IndexElementsVisitor v(_poiIndex,
                            _poiIndexToEid,
                            crit,
-                           std::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
+                           std::bind(
+                             &PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
                            _getMap());
 
     _getMap()->visitNodesRo(v);

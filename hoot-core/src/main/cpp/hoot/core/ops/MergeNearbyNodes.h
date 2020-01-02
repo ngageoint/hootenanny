@@ -44,9 +44,10 @@ namespace hoot
 {
 
 /**
- * This class works with four pass as long as distance is less than the four pass buffer.
+ * Merges together nodes that are within a small configurable distance of each other.
  *
- * The input map can be in either a planar or geographic projection.
+ * This class works with four pass as long as distance is less than the four pass buffer. The input
+ * map can be in either a planar or geographic projection.
  */
 class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable,
   public OperationStatusInfo

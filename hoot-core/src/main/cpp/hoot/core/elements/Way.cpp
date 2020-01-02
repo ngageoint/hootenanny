@@ -357,9 +357,10 @@ void Way::replaceNode(long oldId, long newId)
   // MergeNearbyNodes. Initially made some attempts in here to clean that up, but it introduced
   // unwanted logic and runtime complexity. Ultimately since the problem was only seen with
   // MergeNearbyNodes, it was updated to remove the duplicated way nodes at the end of its run and
-  // this logic was left alone. The argument can be made that this method allows you to replace
-  // whatever is desired, but its the caller's responsbility to make sure the result of the
-  // replacement is valid.
+  // this logic was left alone. To validate this behavior, the argument can be made that this method
+  // allows you to replace whatever is desired, but its the caller's responsbility to make sure the
+  // result of the replacement is valid. If we ever decide we want to make this more foolproof for
+  // the caller, then a different approach should be taken similar to the changes attempted before.
 
   if (oldId == newId)
   {

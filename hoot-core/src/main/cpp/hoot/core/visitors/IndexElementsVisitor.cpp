@@ -81,6 +81,7 @@ void IndexElementsVisitor::finalizeIndex()
 
 void IndexElementsVisitor::visit(const ConstElementPtr& e)
 {
+  LOG_VART(e->getElementId());
   if (!_criterion || _criterion->isSatisfied(e))
   {
     LOG_VART(e->getElementId());
@@ -123,6 +124,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
   while (it.next())
   {
     ElementId eid = indexToEid[it.getId()];
+    LOG_VART(eid);
     if (elementType == ElementType::Unknown || eid.getType() == elementType)
     {
       // Map the tree id to an element id and push into result.
@@ -140,7 +142,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
     }
   }
 
-  //LOG_VART(neighborIds);
+  LOG_VART(neighborIds);
   LOG_VART(neighborIds.size());
   return neighborIds;
 }

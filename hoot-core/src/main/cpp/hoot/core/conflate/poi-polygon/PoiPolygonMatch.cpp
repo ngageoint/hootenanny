@@ -417,11 +417,11 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   unsigned int evidence = _calculateEvidence(_poi, _poly);
   LOG_VART(evidence);
 
-  // no point in trying to reduce reviews if we're still at a miss here; if the review
-  // threshold = 0, that means we've lowered match threshold to 1 and therefore, don't want any
-  // reviews...so no point in trying to reduce them
   bool runReviewReduction = _enableReviewReduction;
-  if ((_reviewEvidenceThreshold > 0 && evidence < _reviewEvidenceThreshold) ||
+  if (// no point in trying to reduce reviews if we're still at a miss here
+      (_reviewEvidenceThreshold > 0 && evidence < _reviewEvidenceThreshold) ||
+      // If the review threshold = 0, that means we've lowered match threshold to 1 and therefore,
+      // don't want any reviews...so no point in trying to reduce them.
       (_matchEvidenceThreshold == 1 && evidence < _matchEvidenceThreshold))
   {
     runReviewReduction = false;
@@ -429,7 +429,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_VART(runReviewReduction);
   if (runReviewReduction)
   {
-    // this constructor has gotten a little out of hand
+    // this constructor has gotten a little out of hand...
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
@@ -447,6 +447,25 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     numReviewReductions++;
   }
   LOG_VART(evidence);
+
+  // If we're not at a miss and keeping only the closest matches, we need to make sure this match
+  // is the closest of the possible matches. We do this check outside of PoiPolygonReviewReducer b/c
+  // you could disable review reduction but still want to keep only closest matches, and this
+  // applies to current matches as well as reviews, whereas PoiPolygonReviewReducer is only meant to
+  // handle when current evidence is a review.
+  if (ConfigOptions().getPoiPolygonKeepClosestMatchesOnly() &&
+      ((_reviewEvidenceThreshold > 0 && evidence >= _reviewEvidenceThreshold) ||
+       evidence >= _matchEvidenceThreshold) &&
+      // This will check the current poly against all neighboring pois and the current poi against
+      // all neighboring polys. If any neighboring poi is closer to the poly than the current poi or
+      // any neighboring poly is closer to the poi than the current poly, then this match will be
+      // thrown out.
+      _currentMatchHasCloserNeighbors())
+  {
+    LOG_TRACE("Skipping match that isn't the closest available.");
+    evidence = 0;
+    _explainText = "Match skipped due to another match available at a closer distance.";
+  }
 
   if (evidence >= _matchEvidenceThreshold)
   {
@@ -520,8 +539,17 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     _explainText = "";
   }
 
-  LOG_VART(_class);
+  LOG_TRACE("eid1: " << eid1 << ", eid2: " << eid2 << ", class: " << _class);
   LOG_TRACE("**************************");
+}
+
+bool PoiPolygonMatch::_currentMatchHasCloserNeighbors()
+{
+  return
+    _infoCache->polyHasPoiNeighborCloserThanPoi(
+      _poly->getElementId(), _poi, _poiNeighborIds, _distance) ||
+    _infoCache->poiHasPolyNeighborCloserThanPoly(
+      _poi, _poly->getElementId(), _polyNeighborIds, _distance);
 }
 
 MatchType PoiPolygonMatch::getType() const

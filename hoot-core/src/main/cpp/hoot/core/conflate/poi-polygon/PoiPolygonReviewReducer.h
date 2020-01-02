@@ -98,8 +98,6 @@ private:
 
   QStringList _genericLandUseTagVals;
 
-  bool _keepClosestMatchesOnly;
-
   bool _addressParsingEnabled;
   AddressParser _addressParser;
 

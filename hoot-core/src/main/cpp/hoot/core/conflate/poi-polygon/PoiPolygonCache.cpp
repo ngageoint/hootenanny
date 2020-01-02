@@ -363,27 +363,49 @@ ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
   }
 }
 
-bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNodePtr poi,
+bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(const ElementId& polyId, ConstNodePtr poi,
                                                       const std::set<ElementId>& poiNeighborIds,
                                                       const double poiPolyDistance)
 {
-  if (!poly || !poi || poiNeighborIds.size() == 0)
+  LOG_VART(polyId.isNull());
+  LOG_VART(poi.get());
+  LOG_VART(poiNeighborIds.size());
+  LOG_VART(poiPolyDistance);
+
+  if (polyId.isNull() || !poi || poiNeighborIds.size() == 0)
   {
     return false;
   }
+
+  ConstElementPtr poly = _map->getElement(polyId);
+  LOG_VART(poly->getElementId());
+  LOG_VART(poi->getElementId());
 
   const QString key = poly->getElementId().toString() + ";" + poi->getElementId().toString();
   QHash<QString, bool>::const_iterator itr = _poiNeighborCloserCache.find(key);
   if (itr != _poiNeighborCloserCache.end())
   {
     _incrementCacheHitCount("hasCloserPoiNeighbor");
+    LOG_TRACE(
+      "Poly: " << polyId << " has closer poi neighbor than: " << poi->getElementId() << ".");
     return itr.value();
   }
   else
   {
+    std::set<ElementId> polyWayIds;
+    assert(poly->getElementType() != ElementType::Node);
+    if (poly->getElementType() == ElementType::Way)
+    {
+      polyWayIds.insert(poly->getElementId());
+    }
+    else
+    {
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(poly);
+      polyWayIds = relation->getWayMemberIds();
+    }
+    LOG_VART(polyWayIds.size());
+
     bool hasCloserPoiNeighbor = false;
-    LOG_VART(poiNeighborIds.size());
-    //LOG_VART(_poiNeighborIds);
     ElementId closerNeighborId;
     for (std::set<ElementId>::const_iterator poiNeighborItr = poiNeighborIds.begin();
          poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
@@ -392,16 +414,28 @@ bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNod
       LOG_VART(poiNeighbor.get());
       if (poiNeighbor->getElementId() != poi->getElementId())
       {
-        long neighborPoiToPolyDist = -1.0;
-        neighborPoiToPolyDist =
-          getPolyToPointDistance(poly, std::dynamic_pointer_cast<const Node>(poiNeighbor));
-        LOG_VART(neighborPoiToPolyDist);
-        if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
+        for (std::set<ElementId>::const_iterator polyWayIdItr = polyWayIds.begin();
+             polyWayIdItr != polyWayIds.end(); ++polyWayIdItr)
         {
-          closerNeighborId = poiNeighbor->getElementId();
-          hasCloserPoiNeighbor = true;
-          break;
+          long neighborPoiToPolyDist = -1.0;
+          const ElementId wayId = *polyWayIdItr;
+          ConstWayPtr currentPolyWay = _map->getWay(wayId.getId());
+          neighborPoiToPolyDist =
+            getPolyToPointDistance(
+              currentPolyWay, std::dynamic_pointer_cast<const Node>(poiNeighbor));
+          LOG_VART(neighborPoiToPolyDist);
+          if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
+          {
+            closerNeighborId = poiNeighbor->getElementId();
+            hasCloserPoiNeighbor = true;
+            break;
+          }
         }
+      }
+
+      if (hasCloserPoiNeighbor)
+      {
+        break;
       }
     }
 
@@ -411,17 +445,109 @@ bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(ConstWayPtr poly, ConstNod
     if (hasCloserPoiNeighbor)
     {
       LOG_TRACE(
-        "Poly: " << poly->getElementId() << " has closer poi neighbor than: " <<
+        "Poly: " << polyId << " has closer poi neighbor than: " <<
         poi->getElementId() << ". Closer neighbor: " << closerNeighborId);
     }
     else
     {
       LOG_TRACE(
-        "Poly: " << poly->getElementId() << " does not have closer poi neighbor than: " <<
+        "Poly: " << polyId << " does not have closer poi neighbor than: " <<
         poi->getElementId() << ".");
     }
 
     return hasCloserPoiNeighbor;
+  }
+}
+
+bool PoiPolygonCache::poiHasPolyNeighborCloserThanPoly(
+  ConstNodePtr poi, const ElementId& polyId, const std::set<ElementId>& polyNeighborIds,
+  const double poiPolyDistance)
+{
+  LOG_VART(polyId.isNull());
+  LOG_VART(poi.get());
+  LOG_VART(polyNeighborIds.size());
+  LOG_VART(poiPolyDistance);
+
+  if (polyId.isNull() || !poi || polyNeighborIds.size() == 0)
+  {
+    return false;
+  }
+
+  ConstElementPtr poly = _map->getElement(polyId);
+  LOG_VART(poly->getElementId());
+  LOG_VART(poi->getElementId());
+
+  const QString key = poi->getElementId().toString() + ";" + poly->getElementId().toString();
+  QHash<QString, bool>::const_iterator itr = _polyNeighborCloserCache.find(key);
+  if (itr != _polyNeighborCloserCache.end())
+  {
+    _incrementCacheHitCount("hasCloserPolyNeighbor");
+    LOG_TRACE(
+      "POI: " << poi->getElementId() << " has closer poly neighbor than: " << polyId << ".");
+    return itr.value();
+  }
+  else
+  {
+    bool hasCloserPolyNeighbor = false;
+    ElementId closerNeighborId;
+    for (std::set<ElementId>::const_iterator polyNeighborItr = polyNeighborIds.begin();
+         polyNeighborItr != polyNeighborIds.end(); ++polyNeighborItr)
+    {
+      ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
+      LOG_VART(polyNeighbor.get());
+      if (polyNeighbor->getElementId() != polyId)
+      {
+        std::set<ElementId> polyWayIds;
+        if (polyNeighbor->getElementType() == ElementType::Way)
+        {
+          polyWayIds.insert(polyNeighbor->getElementId());
+        }
+        else
+        {
+          ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(polyNeighbor);
+          polyWayIds = relation->getWayMemberIds();
+        }
+
+        for (std::set<ElementId>::const_iterator polyWayIdItr = polyWayIds.begin();
+             polyWayIdItr != polyWayIds.end(); ++polyWayIdItr)
+        {
+          long neighborPolyToPoiDist = -1.0;
+          const ElementId wayId = *polyWayIdItr;
+          ConstWayPtr currentPolyWay = _map->getWay(wayId.getId());
+          neighborPolyToPoiDist = getPolyToPointDistance(currentPolyWay, poi);
+          LOG_VART(neighborPolyToPoiDist);
+          if (neighborPolyToPoiDist != -1.0 && poiPolyDistance > neighborPolyToPoiDist)
+          {
+            closerNeighborId = polyNeighbor->getElementId();
+            hasCloserPolyNeighbor = true;
+            break;
+          }
+        }
+      }
+
+      if (hasCloserPolyNeighbor)
+      {
+        break;
+      }
+    }
+
+    _polyNeighborCloserCache[key] = hasCloserPolyNeighbor;
+    _incrementCacheSizeCount("hasCloserPolyNeighbor");
+
+    if (hasCloserPolyNeighbor)
+    {
+      LOG_TRACE(
+        "POI: " << poi->getElementId() << " has closer poly neighbor than: " <<
+        polyId << ". Closer neighbor: " << closerNeighborId);
+    }
+    else
+    {
+      LOG_TRACE(
+        "POI: " << poi->getElementId() << " does not have closer poly neighbor than: " <<
+        polyId << ".");
+    }
+
+    return hasCloserPolyNeighbor;
   }
 }
 

@@ -245,6 +245,12 @@ private:
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 
   bool _skipForReviewTypeDebugging() const;
+
+  /*
+   * Determines if there are poi/poly matches with less distance between them than the current
+   * match being evaluated
+   */
+  bool _currentMatchHasCloserNeighbors();
 };
 
 }
