@@ -1044,7 +1044,7 @@ void XmlChangeset::markBuffered(ChangesetElement* element)
     element->setStatus(ChangesetElement::Buffering);
     //  Add to the buffer for lookup within this subset
     _sendBuffer.push_back(element);
-    _sentCount++;
+    ++_sentCount;
   }
 }
 
@@ -1692,9 +1692,70 @@ void XmlChangeset::writeRelations(const ChangesetInfoPtr& changeset, QTextStream
   writeElements(changeset, ts, type, changeset_id, ElementType::Relation, _relations[type]);
 }
 
+bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr &changeset)
+{
+  //  Create the changeset info object if there isn't one
+  if (!changeset)
+    changeset.reset(new ChangesetInfo());
+  changeset->clear();
+  //  This is the last changeset of the bunch because of the error state
+  changeset->setLast();
+  //  Loop through all remaining elements
+  for (ChangesetType type = ChangesetType::TypeCreate; type != ChangesetType::TypeMax; type = static_cast<ChangesetType>(type + 1))
+  {
+    //  Iterate all of the relations of "type" in the changeset
+    for (ChangesetElementMap::iterator it = _relations[type].begin(); it != _relations[type].end(); ++it)
+    {
+      ChangesetElement* relation = it->second.get();
+      if (relation->getStatus() == ChangesetElement::Available)
+      {
+        //  Add the relation to the changeset
+        changeset->add(ElementType::Relation, type, relation->id());
+        //  Mark the relation as buffered
+        markBuffered(relation);
+        //  Mark the relation as sent
+        relation->setStatus(ChangesetElement::Sent);
+      }
+    }
+    //  Iterate all of the ways of "type" in the changeset
+    for (ChangesetElementMap::iterator it = _ways[type].begin(); it != _ways[type].end(); ++it)
+    {
+      ChangesetElement* way = it->second.get();
+      if (way->getStatus() == ChangesetElement::Available)
+      {
+        //  Add the way to the changeset
+        changeset->add(ElementType::Way, type, way->id());
+        //  Mark the way as buffered
+        markBuffered(way);
+        //  Mark the way as sent
+        way->setStatus(ChangesetElement::Sent);
+      }
+    }
+    //  Iterate all of the nodes of "type" in the changeset
+    for (ChangesetElementMap::iterator it = _nodes[type].begin(); it != _nodes[type].end(); ++it)
+    {
+      ChangesetElement* node = it->second.get();
+      if (node->getStatus() == ChangesetElement::Available)
+      {
+        //  Add the node to the changeset
+        changeset->add(ElementType::Node, type, node->id());
+        //  Mark the node as buffered
+        markBuffered(node);
+        //  Mark the node as sent
+        node->setStatus(ChangesetElement::Sent);
+      }
+    }
+  }
+  //  Clear the send buffer
+  _sendBuffer.clear();
+  //  Return true if there is anything in the changeset
+  return changeset->size() > 0;
+}
+
 ChangesetInfo::ChangesetInfo()
   : _attemptedResolveChangesetIssues(false),
-    _numRetries(0)
+    _numRetries(0),
+    _last(false)
 {
 }
 
