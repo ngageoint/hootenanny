@@ -82,6 +82,7 @@ tds61.rules = {
     ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
     ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
     ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
     ['F_CODE','AQ125','public_transport','stop_position'],
@@ -4002,6 +4003,8 @@ tds61.rules = {
     [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
 
     ['IWT','4','water','reservoir'], // Reservoir
+
+    ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
     // From UFD
     ['CAA','-999999','controlling_authority','unknown'],
