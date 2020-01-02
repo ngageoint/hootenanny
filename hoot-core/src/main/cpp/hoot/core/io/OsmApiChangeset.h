@@ -259,6 +259,14 @@ public:
    */
   bool writeErrorFile();
 
+  /**
+   * @brief calculateRemainingChangeset This function is an error correction case for when a changeset cannot finish
+   *  and the upload stalls indefinitely.  Move all remaining elements into a changeset so the job can finish or error out.
+   * @param changeset Reference to the changeset info for changeset creation
+   * @return true if there is anything in the changeset
+   */
+  bool calculateRemainingChangeset(ChangesetInfoPtr &changeset);
+
 private:
   /**
    * @brief loadChangesetFile Load changeset file, can be called multiple times on changeset that are split across files
@@ -554,6 +562,9 @@ public:
   /** Set/get _numRetries member */
   bool canRetry();
   void retry();
+  /** Set/get _last member for final error checking */
+  void setLast() { _last = true; }
+  bool getLast() { return _last; }
 private:
   /** 3x3 array of containers for elements in this subset */
   std::array<std::array<container, XmlChangeset::TypeMax>, ElementType::Unknown> _changeset;
@@ -562,6 +573,8 @@ private:
   /** Number of times this exact changeset has been retried unsuccessfully */
   int _numRetries;
   const int MAX_RETRIES = 5;
+  /** Flag set when this is the last changeset because of error */
+  bool _last;
 };
 
 }
