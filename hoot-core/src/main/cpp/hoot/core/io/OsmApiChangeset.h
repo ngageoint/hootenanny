@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_CHANGESET_H
@@ -213,19 +213,33 @@ public:
    * @return True if the message matches and was parsed
    */
   static bool matchesPlaceholderFailure(const QString& hint,
-                                 long& member_id, ElementType::Type& member_type,
-                                 long& element_id, ElementType::Type& element_type);
+                                        long& member_id, ElementType::Type& member_type,
+                                        long& element_id, ElementType::Type& element_type);
   /**
    * @brief matchesRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Relation with id  cannot be saved due to Relation with id 1707699"
    * @param hint Error message from OSM API
    * @param element_id ID of the element that failed
    * @param member_id ID of the member element that caused the element to fail
    * @param member_type Type of the member element that caused the element to fail
    * @return True if the message matches and was parsed
    */
-  static bool matchesRelationFailure(const QString& hint, long& element_id, long& member_id, ElementType::Type& member_type);
+  static bool matchesRelationFailure(const QString& hint, long& element_id,
+                                     long& member_id, ElementType::Type& member_type);
   /**
-   * @brief matchesChangesetPreconditionFailure
+   * @brief matchesMultiRelationFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible."
+   * @param hint Error message from OSM API
+   * @param element_id ID of the element that failed
+   * @param member_ids IDs of the member elements that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @return True if the message matches and was parsed
+   */
+  static bool matchesMultiRelationFailure(const QString& hint, long& element_id,
+                                          std::vector<long>& member_ids, ElementType::Type& member_type);
+  /**
+   * @brief matchesChangesetPreconditionFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Precondition failed: Node 55 is still used by ways 123"
    * @param hint Error message from OSM API
    * @param member_id ID of the member element that caused the element to fail
    * @param member_type Type of the member element that caused the element to fail
@@ -234,20 +248,21 @@ public:
    * @return True if the message matches and was parsed
    */
   static bool matchesChangesetPreconditionFailure(const QString& hint,
-                                           long& member_id, ElementType::Type& member_type,
-                                           long& element_id, ElementType::Type& element_type);
+                                                  long& member_id, ElementType::Type& member_type,
+                                                  long& element_id, ElementType::Type& element_type);
   /**
-   * @brief matchesChangesetConflictVersionMismatchFailure
-   * @param hint
-   * @param element_id
-   * @param element_type
-   * @param version_old
-   * @param version_new
-   * @return
+   * @brief matchesChangesetConflictVersionMismatchFailure Checks the return from the API to see if it is similar to the following error message:
+   *        "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616"
+   * @param hint Error message from OSM API
+   * @param member_id ID of the member element that caused the element to fail
+   * @param member_type Type of the member element that caused the element to fail
+   * @param element_id ID of the element that failed
+   * @param element_type Type of the element that failed
+   * @return True if the message matches and was parsed
    */
   static bool matchesChangesetConflictVersionMismatchFailure(const QString& hint,
-                                                      long& element_id, ElementType::Type& element_type,
-                                                      long& version_old, long& version_new);
+                                                             long& element_id, ElementType::Type& element_type,
+                                                             long& version_old, long& version_new);
   /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname
