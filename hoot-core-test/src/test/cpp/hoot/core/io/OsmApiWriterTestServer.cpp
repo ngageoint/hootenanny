@@ -85,7 +85,7 @@ bool RetryConflictsTestServer::respond(HttpConnection::HttpConnectionPtr& connec
     response.reset(new HttpResponse(405));
     response->add_header("Allow", "GET");
   }
-  else if (headers.find("/close/"))
+  else if (headers.find(QString(OsmApiWriter::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
   {
     response.reset(new HttpResponse(200));
     continue_processing = false;
@@ -129,7 +129,7 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
   else if (headers.find(OsmApiWriter::API_PATH_CREATE_CHANGESET) != std::string::npos)
     response.reset(new HttpResponse(200, "1"));
   //  Upload changeset 1
-  else if (headers.find("/api/0.6/changeset/1/upload/") != std::string::npos)
+  else if (headers.find(QString(OsmApiWriter::API_PATH_UPLOAD_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
     //  The first time through, the 'version' of element 1 should fail.
     if (!_has_error)
@@ -141,10 +141,10 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
       response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE));
   }
   //  Get way 1's updated version
-  else if (headers.find("/api/0.6/way/1") != std::string::npos)
+  else if (headers.find(QString(OsmApiWriter::API_PATH_GET_ELEMENT).arg("way").arg(1).toStdString()) != std::string::npos)
     response.reset(new HttpResponse(200, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_1_GET_RESPONSE));
   //  Close changeset
-  else if (headers.find("/close/"))
+  else if (headers.find(QString(OsmApiWriter::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()))
   {
     response.reset(new HttpResponse(200));
     continue_processing = false;

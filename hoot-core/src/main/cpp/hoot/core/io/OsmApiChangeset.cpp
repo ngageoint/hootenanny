@@ -324,6 +324,11 @@ void XmlChangeset::updateChangeset(const QString &changes)
   QXmlStreamReader reader(changes);
   //  Make sure that the XML provided starts with the <diffResult> tag
   QXmlStreamReader::TokenType type = reader.readNext();
+  if (type == QXmlStreamReader::Invalid)
+  {
+    LOG_ERROR("Invalid changeset response.");
+    return;
+  }
   if (type == QXmlStreamReader::StartDocument)
     type = reader.readNext();
   if (type == QXmlStreamReader::StartElement && reader.name() != "diffResult")
@@ -1318,7 +1323,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
         }
       }
     }
-    //  See if the hint is something like:
+    //  See if the hint is something like: Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
     else if (matchesMultiRelationFailure(splitHint, element_id, member_ids, member_type))
     {
       //  If there is a relation id, move just that relation to the split
