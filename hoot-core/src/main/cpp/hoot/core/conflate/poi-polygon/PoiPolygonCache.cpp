@@ -359,7 +359,7 @@ double PoiPolygonCache::getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr po
   {
     double distance = -1.0;
 
-    if (polyContainsPoi(poly, point)) // TODO: remove
+    if (polyContainsPoi(poly, point)) // TODO: remove??
     {
       distance = 0.0;
     }

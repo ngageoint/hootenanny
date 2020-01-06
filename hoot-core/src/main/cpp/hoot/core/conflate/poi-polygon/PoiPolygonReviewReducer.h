@@ -37,8 +37,8 @@ namespace hoot
 {
 
 /**
- * Class intended to reduce the number of unnecessary reviews between POI's and polygons with the
- * goal of never causing a miss where there should be a match.  Any rule that results in an
+ * This class is intended to reduce the number of unnecessary reviews between POI's and polygons
+ * with the goal of never causing a miss where there should be a match.  Any rule that results in an
  * incorrect match found over the course of time testing against different datasets should be
  * removed from this class.
  *
@@ -48,7 +48,13 @@ namespace hoot
  * definition of what poi/poly conflation conflates, as well as modifications to the evidence
  * calculation in PoiPolygonMatch.  Alternatively, making another attempt at a poi/poly random
  * forest model could make it entirely obsolete (#2323).  At the very least, triggersRule could
- * benefit from being refactored into smaller chunks.
+ * benefit from being refactored into smaller chunks. - BDW
+ *
+ * This class was created almost entirely using the POI/Polygon regression test datasets C and D.
+ * Unfortunately, the data found in those tests to warrant creating the review reduction rules
+ * never had conflate case tests generated for them. This could eventually be done but will be
+ * very tedious, as data for each separate test case must be tracked down individually from those
+ * datasets.
  */
 class PoiPolygonReviewReducer : public Configurable
 {

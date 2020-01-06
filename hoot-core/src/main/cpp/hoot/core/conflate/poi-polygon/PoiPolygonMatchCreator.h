@@ -86,6 +86,11 @@ private:
    */
   int _retainClosestDistanceMatchesOnly(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
+  /*
+   * TODO
+   */
+  int _retainClosestDistanceMatchesOnlyByType(
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
 };
 
 }
