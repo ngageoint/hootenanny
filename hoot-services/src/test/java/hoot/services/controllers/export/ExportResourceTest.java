@@ -163,7 +163,6 @@ public class ExportResourceTest extends OSMResourceTestAbstract {
         assertEquals(2, job.getCommands().length);
         assertSame(CalculateTilesCommand.class, job.getCommands()[0].getClass());
         assertSame(ZIPDirectoryContentsCommand.class, job.getCommands()[1].getClass());
-        MapUtils.deleteUser(userId);
     }
 
     @Test

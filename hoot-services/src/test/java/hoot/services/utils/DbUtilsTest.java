@@ -78,11 +78,6 @@ public class DbUtilsTest {
         new ApplicationContextUtils().setApplicationContext(applicationContext);
     }
 
-//    @After
-//    public void cleanup() {
-//        MapUtils.cleanupTestUsers();
-//    }
-
     @Test
     @Category(UnitTest.class)
     @Transactional
@@ -91,21 +86,16 @@ public class DbUtilsTest {
 
         long userId = MapUtils.insertUser();
         long mapId = insertMap(userId);
-//        DbUtils.createQuery().getConnection().commit();
 
         assertTrue(DbUtils.userExists(userId));
         assertTrue(DbUtils.mapExists(String.valueOf(mapId)));
-//        assertTrue(DbUtils.getMapTableSeqCount(mapId) == 10);
 
         DbUtils.deleteMapRelatedTablesByMapId(mapId);
         DbUtils.deleteMap(mapId);
-//        DbUtils.createQuery().getConnection().commit();
 
         assertFalse(DbUtils.mapExists(String.valueOf(mapId)));
-//        assertTrue(DbUtils.getMapTableSeqCount(mapId) == 0);
 
         MapUtils.deleteUser(userId);
-//        DbUtils.createQuery().getConnection().commit();
         assertFalse(DbUtils.userExists(userId));
    }
 

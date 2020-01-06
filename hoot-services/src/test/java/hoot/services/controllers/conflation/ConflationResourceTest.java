@@ -34,13 +34,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 
-import hoot.services.jerseyframework.HootServicesJerseyTestAbstract;
+import hoot.services.UnitTest;
+import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.jerseyframework.HootServicesSpringTestConfig;
 import hoot.services.job.Job;
 import hoot.services.utils.MapUtils;
@@ -49,9 +51,10 @@ import hoot.services.utils.MapUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = HootServicesSpringTestConfig.class, loader = AnnotationConfigContextLoader.class)
 @Transactional
-public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
+public class ConflationResourceTest extends OSMResourceTestAbstract {
 
     @Test
+    @Category(UnitTest.class)
     public void testConflate() throws Exception {
         long userId = MapUtils.insertUser();
         long mapId = MapUtils.insertMap(userId);
@@ -82,6 +85,6 @@ public class ConflationResourceTest extends HootServicesJerseyTestAbstract {
         assertEquals(3, job.getCommands().length);
         assertEquals(ConflateCommand.class, job.getCommands()[0].getClass());
         assertEquals(UpdateMapTagsCommand.class, job.getCommands()[1].getClass());
-        MapUtils.deleteUser(userId);
+
     }
 }

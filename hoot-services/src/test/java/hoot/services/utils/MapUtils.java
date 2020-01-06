@@ -37,8 +37,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
@@ -50,7 +48,6 @@ import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
 
 
-@Transactional
 public final class MapUtils {
 
     private MapUtils() {}
