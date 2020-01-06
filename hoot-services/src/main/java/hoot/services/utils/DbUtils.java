@@ -280,10 +280,10 @@ public class DbUtils {
     }
 
     public static List<Folders> getFoldersForUser(Long userId) {
-            SQLQuery<Folders> sql = createQuery()
-                .select(folders)
-                .from(folders)
-                .where(folders.id.ne(0L));
+        SQLQuery<Folders> sql = createQuery()
+            .select(folders)
+            .from(folders)
+            .where(folders.id.ne(0L));
         if(userId != null) {
             sql.where(
                     folders.userId.eq(userId).or(folders.publicCol.isTrue())
