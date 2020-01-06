@@ -284,7 +284,7 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
       }
       if (pointCount != 1)
       {
-        throw HootException("TODO");
+        throw IllegalArgumentException("POI/Polygon match does not contain exactly one POI.");
       }
 
       int polyCount = 0;
@@ -300,7 +300,7 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
       }
       if (polyCount != 1)
       {
-        throw HootException("TODO");
+        throw IllegalArgumentException("POI/Polygon match does not contain exactly one Polygon.");
       }
 
       ConstElementPtr comparisonElement = map->getElement(comparisonElementId);

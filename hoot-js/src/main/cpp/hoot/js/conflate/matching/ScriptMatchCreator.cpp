@@ -612,7 +612,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<Co
   LOG_INFO(
     "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
-  // TODO: can we filter this based on the script?
+  // TODO: Can we filter the element types we iterate over here this based on the script being run?
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<

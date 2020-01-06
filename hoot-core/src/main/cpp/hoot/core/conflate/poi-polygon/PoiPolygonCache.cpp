@@ -346,6 +346,7 @@ double PoiPolygonCache::getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr po
     return -1.0;
   }
 
+  // TODO: remove the distance cache if it doesn't increase performance
   const QString key = point->getElementId().toString() + ";" + poly->getElementId().toString();
   QHash<QString, double>::const_iterator itr = _elementDistanceCache.find(key);
   if (itr != _elementDistanceCache.end())

@@ -272,18 +272,6 @@
     <node visible="true" id="-4691" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656224024964899" lon="-122.4083961860541905"/>
     <node visible="true" id="-4690" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645243936961137" lon="-122.4082942594553316"/>
     <node visible="true" id="-4689" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7645053152394752" lon="-122.4085699989071401"/>
-    <node visible="true" id="-4688" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7694999999999865" lon="-122.4326999999999970">
-        <tag k="wheelchair" v="yes"/>
-        <tag k="addr:state" v="CA"/>
-        <tag k="address" v="Duboce &amp; Scott St"/>
-        <tag k="name" v="Duboce Park Dog Play Area"/>
-        <tag k="addr:postcode" v="94117"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="dog_park"/>
-        <tag k="phone" v="(415) 717-2872"/>
-        <tag k="REF2" v="0048cb"/>
-        <tag k="error:circular" v="15"/>
-    </node>
     <node visible="true" id="-4687" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7695999999999970" lon="-122.4339999999999975">
         <tag k="wheelchair" v="yes"/>
         <tag k="addr:state" v="CA"/>
@@ -306,17 +294,6 @@
         <tag k="leisure" v="park"/>
         <tag k="phone" v="(415) 203-1299"/>
         <tag k="REF2" v="000d65"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4684" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7648999999999972" lon="-122.4333999999999918">
-        <tag k="wheelchair" v="limited"/>
-        <tag k="addr:state" v="CA"/>
-        <tag k="address" v="Noe St &amp; Beaver St"/>
-        <tag k="name" v="Noe &amp; Beaver Mini Park Community Garden"/>
-        <tag k="addr:postcode" v="94114"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="garden"/>
-        <tag k="REF2" v="005aa3"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-4683" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7642000000000095" lon="-122.4202999999999975">
@@ -7709,9 +7686,17 @@
         <nd ref="-4696"/>
         <nd ref="-4695"/>
         <nd ref="-4700"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="wheelchair" v="limited"/>
         <tag k="area" v="yes"/>
+        <tag k="addr:state" v="CA"/>
         <tag k="name" v="Noe &amp; Beaver Mini Park"/>
-        <tag k="REF2" v="none"/>
+        <tag k="address" v="Noe St &amp; Beaver St"/>
+        <tag k="addr:postcode" v="94114"/>
+        <tag k="alt_name" v="Noe &amp; Beaver Mini Park Community Garden"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="garden"/>
+        <tag k="REF2" v="none;005aa3"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-801" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -7759,9 +7744,18 @@
         <nd ref="-4673"/>
         <nd ref="-4672"/>
         <nd ref="-4674"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="wheelchair" v="yes"/>
         <tag k="area" v="yes"/>
+        <tag k="addr:state" v="CA"/>
         <tag k="name" v="Duboce Park"/>
-        <tag k="REF2" v="none"/>
+        <tag k="address" v="Duboce &amp; Scott St"/>
+        <tag k="addr:postcode" v="94117"/>
+        <tag k="alt_name" v="Duboce Park Dog Play Area"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="leisure" v="dog_park"/>
+        <tag k="phone" v="(415) 717-2872"/>
+        <tag k="REF2" v="none;0048cb"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-797" timestamp="1970-01-01T00:00:00Z" version="1">

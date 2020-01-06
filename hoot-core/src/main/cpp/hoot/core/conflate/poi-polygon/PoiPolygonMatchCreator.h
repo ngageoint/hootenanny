@@ -82,12 +82,14 @@ private:
   PoiPolygonCachePtr _infoCache;
 
   /*
-   * TODO
+   * For any 2:1 matches/reviews, will only keep the match with the smallest distance between
+   * matched features
    */
   int _retainClosestDistanceMatchesOnly(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
   /*
-   * TODO
+   * Called by _retainClosestDistanceMatchesOnly; 2:1 POI to poly and 2:1 polyl to POI matches are
+   * processed separately
    */
   int _retainClosestDistanceMatchesOnlyByType(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);

@@ -63,17 +63,20 @@ public:
   /**
    * Returns the distance from a point node to a polygon way
    *
-   * @param poly the polygon to measure distance from
+   * @param poly the way polygon to measure distance from
    * @param point the point to measure distance from
    * @return the distance between the point and polygon or -1.0 if the distance could not be
    * calculated
-   * @note The distance calc is not backed by a cache, but the geometries used to derive it are.
-   * @todo update
    */
   double getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point);
 
   /**
-   * @todo
+   * Returns the shortest distance from a point node to a relation containing polygons
+   *
+   * @param poly the relation containing polygons to measure distance from
+   * @param point the point to measure distance from
+   * @return the distance between the point and closest polygon in the relation or -1.0 if the
+   * distance could not be calculated
    */
   double getPolyToPointDistance(ConstRelationPtr poly, ConstNodePtr point);
 
@@ -93,7 +96,6 @@ public:
    * @param point the point to examine
    * @return true if the polygon contains the point; false otherwise or if the containment could
    * not be calculated
-   * @todo add support for relations
    */
   bool polyContainsPoi(ConstWayPtr poly, ConstNodePtr point);
 
