@@ -50,13 +50,12 @@ namespace hoot
 
 PoiPolygonReviewReducer::PoiPolygonReviewReducer(
   const ConstOsmMapPtr& map,
-  const std::set<ElementId>& polyNeighborIds, const std::set<ElementId>& poiNeighborIds,
-  double distance, double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
-  double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
-  bool addressMatch, bool addressParsingEnabled, PoiPolygonCachePtr infoCache) :
+  const std::set<ElementId>& polyNeighborIds, double distance, double nameScoreThreshold,
+  double nameScore, bool nameMatch, bool exactNameMatch, double typeScoreThreshold,
+  double typeScore, bool typeMatch, double matchDistanceThreshold, bool addressMatch,
+  bool addressParsingEnabled, PoiPolygonCachePtr infoCache) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
-_poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _nameScoreThreshold(nameScoreThreshold),
 _nameScore(nameScore),
@@ -71,7 +70,6 @@ _addressParsingEnabled(addressParsingEnabled),
 _infoCache(infoCache)
 {
   LOG_VART(_polyNeighborIds.size());
-  LOG_VART(_poiNeighborIds.size());
   LOG_VART(_distance);
   LOG_VART(_nameScoreThreshold);
   LOG_VART(_nameMatch);
@@ -123,8 +121,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 {
   LOG_TRACE("Checking review reduction rules...");
   _triggeredRuleDescription = "";
-  //QElapsedTimer timer;
-  //timer.start();
+  QElapsedTimer timer;
+  //const int timingThreshold = 10;
+
+  //timer.restart();
 
   ConstWayPtr polyAsWay;
   ConstRelationPtr polyAsRelation;
@@ -174,7 +174,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       }
     }
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #1: " << timer.elapsed());
+//  }
 
+  //timer.restart();
   LOG_TRACE("Checking rule #2...");
   if (_infoCache->hasCriterion(poly, QString::fromStdString(MultiUseCriterion::className())) &&
        poiHasType && _typeScore < 0.4)
@@ -183,11 +188,16 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#2";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #2: " << timer.elapsed());
+//  }
 
   const QString poiPlaceVal = poiTags.get("place").toLower();
   const QString polyPlaceVal = polyTags.get("place").toLower();
 
   //be a little stricter on place related reviews
+  //timer.restart();
   LOG_TRACE("Checking rule #3...");
   if ((poiPlaceVal == "neighbourhood" || poiPlaceVal == "suburb") && !polyTags.contains("place"))
   {
@@ -195,6 +205,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#3";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #3: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const QString poiLanduseVal = poiTags.get("landuse").toLower();
   const bool poiHasLanduse = !poiLanduseVal.trimmed().isEmpty();
@@ -210,8 +226,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#4";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #4: " << timer.elapsed());
+//  }
 
   //points sitting on islands need to have an island type, or the match doesn't make any sense
+  //timer.restart();
   LOG_TRACE("Checking rule #5...");
   if ((poiPlaceVal == "island" || polyPlaceVal == "island") && !_typeMatch)
   {
@@ -219,6 +240,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#5";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #5: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const bool polyIsPark = _infoCache->isType(poly, "park");
   LOG_VART(polyIsPark);
@@ -241,8 +268,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#6";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #6: " << timer.elapsed());
+//  }
 
   //lots of things have fountains, so let's raise the requirements a bit
+  //timer.restart();
   LOG_TRACE("Checking rule #7...");
   if (poiTags.get("amenity") == "fountain" && _nameScore < 0.5)
   {
@@ -250,10 +282,15 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#7";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #7: " << timer.elapsed());
+//  }
 
   //these seem to be clustered together tightly a lot in cities, so up the requirement a bit
   // TODO: using custom match/review distances or custom score requirements may be a better way to
   // handle these types
+  //timer.restart();
   LOG_TRACE("Checking rule #8...");
   if (poiTags.get("tourism") == "hotel" && polyTags.get("tourism") == "hotel" &&
       poiHasName && polyHasName && _nameScore < 0.75 && !_addressMatch)
@@ -262,8 +299,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#8";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #8: " << timer.elapsed());
+//  }
 
   LOG_TRACE("Checking rule #9...");
+  //timer.restart();
   if (_infoCache->isType(poi, "restaurant") && _infoCache->isType(poly, "restaurant") &&
       poiHasName && polyHasName && _nameScore < 0.5 && !_addressMatch)
   {
@@ -271,8 +313,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#9";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #9: " << timer.elapsed());
+//  }
 
   //similar to above, but for sport fields
+  //timer.restart();
   LOG_TRACE("Checking rule #10...");
   const bool poiNameEndsWithField = poiName.endsWith("field");
   LOG_VART(poiNameEndsWithField);
@@ -290,9 +337,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#10";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #10: " << timer.elapsed());
+//  }
 
   //Landuse polys often wrap a bunch of other features and don't necessarily match to POI's, so
   //be more strict with their reviews.
+  //timer.restart();
   LOG_TRACE("Checking rule #11...");
   if (polyHasLanduse && !_nonDistanceSimilaritiesPresent())
   {
@@ -300,7 +352,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#11";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #11: " << timer.elapsed());
+//  }
 
+  //timer.restart();
   LOG_TRACE("Checking rule #12...");
   if (_infoCache->isType(poi, "specificSchool") && _infoCache->isType(poly, "specificSchool") &&
       !PoiPolygonTypeScoreExtractor::specificSchoolMatch(poi, poly))
@@ -309,6 +366,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#12";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #12: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const bool poiIsNatural = _infoCache->isType(poi, "natural");
   const bool polyIsNatural = _infoCache->isType(poly, "natural");
@@ -322,7 +385,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#13";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #13: " << timer.elapsed());
+//  }
 
+  //timer.restart();
   LOG_TRACE("Checking rule #14...");
   if (poiHasType && polyIsNatural && !_typeMatch)
   {
@@ -330,8 +398,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#14";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #14: " << timer.elapsed());
+//  }
 
   //inverse of above
+  //timer.restart();
   LOG_TRACE("Checking rule #15...");
   if (polyHasType && poiIsNatural && !_typeMatch)
   {
@@ -339,8 +412,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#15";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #15: " << timer.elapsed());
+//  }
 
   //prevent athletic POIs within a park poly from being reviewed against that park poly
+  //timer.restart();
   LOG_TRACE("Checking rule #16...");
   if (_distance == 0 && polyIsPark && poiLeisureVal == "pitch")
   {
@@ -348,6 +426,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#16";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #16: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const bool poiIsPark = _infoCache->isType(poi, "park");
   LOG_VART(poiIsPark);
@@ -361,6 +445,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#17";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #17: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const bool polyIsBuilding =
     _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className()));
@@ -375,8 +465,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#18";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #18: " << timer.elapsed());
+//  }
 
   //Be more strict reviewing parking lots against other features
+  //timer.restart();
   LOG_TRACE("Checking rule #19...");
   if (poiHasType && polyHasType && _infoCache->isType(poly, "parking") && !_typeMatch &&
       polyTags.get("parking") != "multi-storey")
@@ -385,8 +480,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#19";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//      LOG_DEBUG("rule #19: " << timer.elapsed());
+//  }
 
   //Don't review schools against their sports fields.
+  //timer.restart();
   LOG_TRACE("Checking rule #20...");
   if (_infoCache->isType(poi, "school") && polyIsSport)
   {
@@ -394,8 +494,13 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#20";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #20: " << timer.elapsed());
+//  }
 
   //Need to be stricter on tunnels since we don't want above ground things to review against them.
+  //timer.restart();
   LOG_TRACE("Checking rule #21...");
   if (polyTags.get("tunnel") == "yes" && poiHasType &&
       (!(_typeMatch || _nameMatch) || (_nameMatch && _typeScore < 0.2)))
@@ -404,6 +509,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#21";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #21: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const double polyArea = _infoCache->getArea(poly);
   LOG_VART(polyArea);
@@ -419,6 +530,12 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#22";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #22: " << timer.elapsed());
+//  }
+
+  //timer.restart();
 
   const bool polyIsPlayground = _infoCache->isType(poly, "playground");
   LOG_VART(polyIsPlayground);
@@ -436,11 +553,16 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _triggeredRuleDescription = "#23";
     return true;
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #23: " << timer.elapsed());
+//  }
 
   //If the poi is a way node, it belongs to a building way, and there is a type match between the
   //poi and the building way, then don't review the two.  This allows for tagged poi way nodes to
   //conflate cleanly with building ways they belong to, rather than being reviewed against other
   //building ways.
+  //timer.restart();
   LOG_TRACE("Checking rule #24...");
   const long matchingWayId = BuildingWayNodeCriterion(_map).getMatchingWayId(poi);
   if (matchingWayId != 0)
@@ -455,10 +577,16 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       return true;
     }
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #24: " << timer.elapsed());
+//  }
+
+  timer.restart();
 
   //This portion is saved until last b/c it involves looping over all the neighboring data for
   //each of the features being compared.  This neighbor checking section could be abstracted to
-  //types other than parks, if desired.
+  //types other than parks, if proven valuable to do so after testing against real world data.
 
   bool polyVeryCloseToAnotherParkPoly = false;
   double parkPolyAngleHistVal = -1.0;
@@ -481,8 +609,27 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     _infoCache->hasCriterion(poi, QString::fromStdString(BuildingCriterion::className()));
   LOG_VART(poiIsBuilding);
 
+  bool iterateOverPolyNeighbors = false;
+  if ((poiIsPark || poiIsParkish) || // 25 pre-req
+      (poiIsPark && !polyIsPark && !polyIsBuilding) || // 26 pre-req
+      (poiIsPark && polyIsPark && _distance > 0) || // 27 pre-req
+      (poiIsSport && poiContainedInParkPoly) || // 28 pre-req
+      (poiIsBuilding && !polyIsBuilding) || // 29 pre-req
+      // 30 pre-req
+      (!polyHasMoreThanOneType && !poiIsPark && !poiIsParkish && poiHasType && _exactNameMatch))
+  {
+    iterateOverPolyNeighbors = true;
+  }
+  if (!iterateOverPolyNeighbors)
+  {
+//    if (timer.elapsed() > timingThreshold)
+//    {
+//      LOG_DEBUG("rule #25-30: " << timer.elapsed());
+//    }
+    return false;
+  }
+
   LOG_VART(_polyNeighborIds.size());
-  //LOG_VART(_polyNeighborIds);
   // This loop becomes more expensive as the search radius is increased.
   for (std::set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();
        polyNeighborItr != _polyNeighborIds.end(); ++polyNeighborItr)
@@ -641,6 +788,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       }
     }
   }
+//  if (timer.elapsed() > timingThreshold)
+//  {
+//    LOG_DEBUG("rule #25-30: " << timer.elapsed());
+//  }
 
   return false;
 }

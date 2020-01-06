@@ -243,6 +243,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating highway feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -330,7 +332,8 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<C
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
-  map->visitRo(v);
+  map->visitWaysRo(v);
+  map->visitRelationsRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " highway match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");

@@ -159,7 +159,8 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
   {
     foundAPoi = true;
   }
-  if (m1->getMatchMembers() & MatchMembers::Polygon || m2->getMatchMembers() & MatchMembers::Polygon)
+  if (m1->getMatchMembers() & MatchMembers::Polygon ||
+      m2->getMatchMembers() & MatchMembers::Polygon)
   {
     foundAPolygon = true;
   }
@@ -172,7 +173,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     // get out the matched pairs from the matches
     set<pair<ElementId, ElementId>> p1 = m1->getMatchPairs();
     set<pair<ElementId, ElementId>> p2 = m2->getMatchPairs();
-    // we're expecting them to have one match each, more could be handled, but are not necessary at
+    // We're expecting them to have one match each, more could be handled, but are not necessary at
     // this time.
     LOG_VART(p1.size());
     LOG_VART(p2.size());
@@ -186,7 +187,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     LOG_VART(eids2.first);
     LOG_VART(eids1.second);
     LOG_VART(eids2.second);
-    // there should be one elementId that is shared between the matches, find it as well as the
+    // There should be one elementId that is shared between the matches. Find it as well as the
     // other elements.
     ElementId sharedEid, o1, o2;
     if (eids1.first == eids2.first || eids1.first == eids2.second)
@@ -221,7 +222,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     LOG_VART(o2);
 
     //We only want the auto-merge to occur here in the situation where two pois are matching
-    //against the same poly.  We do not want auto-merges occurring in the situation where the
+    //against the same poly. We do not want auto-merges occurring in the situation where the
     //same poi is being reviewed against multiple polys, so those end up as reviews.
 
     //not passing the tag ignore list here, since it would have already be used when calling

@@ -61,7 +61,7 @@ public:
 
   /**
    * Returns a set of relation ids that have the specified element as a member, explicity or
-   * implicitly through the ancestry. E.g. If there is a bulding relation that contains a
+   * implicitly through the ancestry. E.g. If there is a building relation that contains a
    * multipolygon and the multipolygon contains a way w/ id 3, when this is called with
    * (ElementType::Way, 3) you will get both the multipolygon and the building relation.
    */

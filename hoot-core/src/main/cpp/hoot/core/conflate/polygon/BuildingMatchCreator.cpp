@@ -232,6 +232,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating building feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -414,7 +416,8 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   LOG_INFO("Looking for matches with: " << className() << "...");
   LOG_VARD(*threshold);
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
-  map->visitRo(v);
+  map->visitWaysRo(v);
+  map->visitRelationsRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " building match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");

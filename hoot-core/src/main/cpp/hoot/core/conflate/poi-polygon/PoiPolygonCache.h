@@ -29,7 +29,6 @@
 
 // geos
 #include <geos/geom/Geometry.h>
-#include <geos/geom/LineString.h>
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -48,7 +47,10 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
  *
  * The caches used in this class were determined on 9/30/18 running against the regression test:
  * unifying-tests.child/somalia.child/somalia-test3.child. Further caching could be deemed necessary
- * for other datasets going forward.
+ * given performance with other datasets.
+ *
+ * Some of the distance comparisons in this class could be abstracted out beyond poi/poly geoms and
+ * moved into another cache class if we ever need them to be used with other conflation algs.
  */
 class PoiPolygonCache
 {
@@ -66,8 +68,14 @@ public:
    * @return the distance between the point and polygon or -1.0 if the distance could not be
    * calculated
    * @note The distance calc is not backed by a cache, but the geometries used to derive it are.
+   * @todo update
    */
   double getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point);
+
+  /**
+   * @todo
+   */
+  double getPolyToPointDistance(ConstRelationPtr poly, ConstNodePtr point);
 
   /**
    * Calculates the area of an element
@@ -85,6 +93,7 @@ public:
    * @param point the point to examine
    * @return true if the polygon contains the point; false otherwise or if the containment could
    * not be calculated
+   * @todo add support for relations
    */
   bool polyContainsPoi(ConstWayPtr poly, ConstNodePtr point);
 
@@ -120,38 +129,6 @@ public:
   bool hasCriterion(ConstElementPtr element, const QString& criterionClassName);
 
   /**
-   * Determines if there exists a neighboring poi that is closer to a specified poly than a
-   * specified distance
-   *
-   * @param polyId element ID of the polygon to examine
-   * @param poi the POI to examine
-   * @param poiNeighborIds IDs of POI neighbors to the polygon
-   * @param poiPolyDistance the pre-calculated distance between the input poi and poly
-   * @return true if at least one other POI is closer to the poly with ID=polyId than poi;
-   * false otherwise
-   * @note The operation may become much more expensive as the search radius is increased.
-   */
-  bool polyHasPoiNeighborCloserThanPoi(const ElementId& polyId, ConstNodePtr poi,
-                                       const std::set<ElementId>& poiNeighborIds,
-                                       const double poiPolyDistance);
-
-  /**
-   * Determines if there exists a neighboring poly that is closer to a specified poi than a
-   * specified distance
-   *
-   * @param poi the POI to examine
-   * @param polyId element ID of the polygon to examine
-   * @param polyNeighborIds IDs of polygon neighbors to the POI
-   * @param poiPolyDistance the pre-calculated distance between the input poi and poly
-   * @return true if at least one other poly is closer to poi than the poly with ID=polyId; false
-   * otherwise
-   * @note The operation may become much more expensive as the search radius is increased.
-   */
-  bool poiHasPolyNeighborCloserThanPoly(
-    ConstNodePtr poi, const ElementId& polyId, const std::set<ElementId>& polyNeighborIds,
-    const double poiPolyDistance);
-
-  /**
    * Clears the contents of the cache
    */
   void clear();
@@ -173,12 +150,11 @@ private:
   // work. Also, not doing any management of the size of these caches, which may eventually end up
   // being needed to control memory usage.
 
-  // ordering of the ID keys doesn't matter here; keys are "elementId1;elementId2"
-  QHash<QString, bool> _poiNeighborCloserCache;
-  QHash<QString, bool> _polyNeighborCloserCache;
+  // ordering of the ID keys does matter here; "poi element ID;poly element ID"
+  QHash<QString, double> _elementDistanceCache;
 
-  // ordering of the ID keys does matter here; does first element contain second element?; keys are
-  // "elementId1;elementId2"
+  // ordering of the ID keys does matter here; we're asking the question: does the first element
+  // contain the second element?; keys are "elementId1;elementId2"
   QHash<QString, bool> _elementContainsCache;
 
   // key is "elementId;type string"
@@ -191,13 +167,11 @@ private:
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
-  QHash<ElementId, std::shared_ptr<geos::geom::LineString>> _lineStringCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
-  std::shared_ptr<geos::geom::LineString> _getLineString(ConstWayPtr way);
 
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
 

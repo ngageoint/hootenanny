@@ -45,9 +45,6 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
-// Qt
-#include <QElapsedTimer>
-
 namespace hoot
 {
 
@@ -226,8 +223,6 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  std::shared_ptr<QElapsedTimer> _timer;
-
   PoiPolygonCachePtr _infoCache;
 
   void _categorizeElementsByGeometryType();
@@ -245,12 +240,6 @@ private:
   bool _featureHasReviewIfMatchedType(ConstElementPtr element) const;
 
   bool _skipForReviewTypeDebugging() const;
-
-  /*
-   * Determines if there are poi/poly matches with less distance between them than the current
-   * match being evaluated
-   */
-  bool _currentMatchHasCloserNeighbors();
 };
 
 }

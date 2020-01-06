@@ -46,11 +46,9 @@ namespace hoot
 {
 
 PoiPolygonAdvancedMatcher::PoiPolygonAdvancedMatcher(const ConstOsmMapPtr& map,
-                                                     const set<ElementId>& polyNeighborIds,
                                                      const set<ElementId>& poiNeighborIds,
                                                      double distance) :
 _map(map),
-_polyNeighborIds(polyNeighborIds),
 _poiNeighborIds(poiNeighborIds),
 _distance(distance),
 _badGeomCount(0)

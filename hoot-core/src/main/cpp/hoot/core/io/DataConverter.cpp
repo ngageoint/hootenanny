@@ -562,6 +562,7 @@ void DataConverter::_setFromOgrOptions()
 
   // Nodes that are very close together but with different IDs present a problem from OGR sources,
   // so let's merge them together.
+  // TODO: remove this and add MergeNearbyNodes to the pipeline permanently?
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
     if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))

@@ -62,7 +62,6 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     MatchPtr m = _creators[i]->createMatch(map, eid1, eid2);
-
     if (m)
     {
       return m;

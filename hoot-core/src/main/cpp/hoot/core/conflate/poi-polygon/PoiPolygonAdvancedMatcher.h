@@ -50,7 +50,7 @@ class PoiPolygonAdvancedMatcher : public Configurable
 
 public:
 
-  PoiPolygonAdvancedMatcher(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
+  PoiPolygonAdvancedMatcher(const ConstOsmMapPtr& map,
                             const std::set<ElementId>& poiNeighborIds, double distance);
 
   virtual void setConfiguration(const Settings& conf);
@@ -61,7 +61,6 @@ private:
 
   ConstOsmMapPtr _map;
 
-  std::set<ElementId> _polyNeighborIds;
   std::set<ElementId> _poiNeighborIds;
 
   double _distance;

@@ -80,6 +80,12 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
 
   PoiPolygonCachePtr _infoCache;
+
+  /*
+   * TODO
+   */
+  int _retainClosestDistanceMatchesOnly(
+    std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
 };
 
 }

@@ -110,9 +110,6 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
   LOG_VART(indexToEid.size());
   LOG_VART(index.get());
 
-  const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
-  LOG_VART(e2r.size());
-
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
   min[1] = env.getMinY();
@@ -133,7 +130,8 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
       if (includeContainingRelations)
       {
         // Check for relations that contain this element
-        const set<long>& relations = e2r.getRelationByElement(eid);
+        const set<long>& relations =
+          pMap->getIndex().getElementToRelationMap()->getRelationByElement(eid);
         for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
         {
           neighborIds.insert(ElementId(ElementType::Relation, *it));

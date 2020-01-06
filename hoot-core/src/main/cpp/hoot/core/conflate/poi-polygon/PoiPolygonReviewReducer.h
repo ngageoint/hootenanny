@@ -56,12 +56,11 @@ class PoiPolygonReviewReducer : public Configurable
 public:
 
   // maybe encapsulate all these params in a class...this is nasty
-  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
-                          const std::set<ElementId>& poiNeighborIds, double distance,
-                          double nameScoreThreshold, double nameScore, bool nameMatch,
-                          bool exactNameMatch, double typeScoreThreshold, double typeScore,
-                          bool typeMatch, double matchDistanceThreshold, bool addressMatch,
-                          bool addressParsingEnabled, PoiPolygonCachePtr infoCache);
+  PoiPolygonReviewReducer(
+    const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds, double distance,
+    double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
+    double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
+    bool addressMatch, bool addressParsingEnabled, PoiPolygonCachePtr infoCache);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -83,7 +82,6 @@ private:
   ConstOsmMapPtr _map;
 
   std::set<ElementId> _polyNeighborIds;
-  std::set<ElementId> _poiNeighborIds;
 
   double _distance;
   double _nameScoreThreshold;

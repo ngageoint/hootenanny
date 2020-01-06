@@ -48,6 +48,8 @@ namespace hoot
  *
  * This class works with four pass as long as distance is less than the four pass buffer. The input
  * map can be in either a planar or geographic projection.
+ *
+ * @todo rename and use a tag comparison
  */
 class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable,
   public OperationStatusInfo

@@ -43,6 +43,9 @@
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 
+// Qt
+#include <QElapsedTimer>
+
 using namespace std;
 
 namespace hoot
@@ -116,9 +119,6 @@ _rf(rf),
 _explainText(""),
 _infoCache(infoCache)
 {
-//  _timer.reset(new QElapsedTimer());
-//  _timer->start();
-
   LOG_VART(_infoCache.get());
 }
 
@@ -388,6 +388,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  const bool oneElementIsRelation =
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
+  QElapsedTimer timer;
   matchesProcessed++;
   _explainText = "";
   _class.setMiss();
@@ -409,13 +410,25 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //    return;
 //  }
 
+  const int timingThreshold = 5;
+
   //allow for auto marking features with certain types for review if they get matched
+  timer.restart();
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
   LOG_VART(foundReviewIfMatchedType);
+  if (timer.elapsed() > timingThreshold)
+  {
+    LOG_DEBUG("foundReviewIfMatchedType: " << timer.elapsed());
+  }
 
+  timer.restart();
   unsigned int evidence = _calculateEvidence(_poi, _poly);
   LOG_VART(evidence);
+  if (timer.elapsed() > timingThreshold)
+  {
+    LOG_DEBUG("_calculateEvidence: " << timer.elapsed());
+  }
 
   bool runReviewReduction = _enableReviewReduction;
   if (// no point in trying to reduce reviews if we're still at a miss here
@@ -429,9 +442,10 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_VART(runReviewReduction);
   if (runReviewReduction)
   {
+    timer.restart();
     // this constructor has gotten a little out of hand...
     PoiPolygonReviewReducer reviewReducer(
-      _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
+      _map, _polyNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
       _addressMatchEnabled, _infoCache);
@@ -445,27 +459,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
         reviewReducer.getTriggeredRuleDescription();
     }
     numReviewReductions++;
+    if (timer.elapsed() > timingThreshold)
+    {
+      LOG_DEBUG("_calculateEvidence: " << timer.elapsed());
+    }
   }
   LOG_VART(evidence);
-
-  // If we're not at a miss and keeping only the closest matches, we need to make sure this match
-  // is the closest of the possible matches. We do this check outside of PoiPolygonReviewReducer b/c
-  // you could disable review reduction but still want to keep only closest matches, and this
-  // applies to current matches as well as reviews, whereas PoiPolygonReviewReducer is only meant to
-  // handle when current evidence is a review.
-  if (ConfigOptions().getPoiPolygonKeepClosestMatchesOnly() &&
-      ((_reviewEvidenceThreshold > 0 && evidence >= _reviewEvidenceThreshold) ||
-       evidence >= _matchEvidenceThreshold) &&
-      // This will check the current poly against all neighboring pois and the current poi against
-      // all neighboring polys. If any neighboring poi is closer to the poly than the current poi or
-      // any neighboring poly is closer to the poi than the current poly, then this match will be
-      // thrown out.
-      _currentMatchHasCloserNeighbors())
-  {
-    LOG_TRACE("Skipping match that isn't the closest available.");
-    evidence = 0;
-    _explainText = "Match skipped due to another match available at a closer distance.";
-  }
 
   if (evidence >= _matchEvidenceThreshold)
   {
@@ -541,15 +540,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 
   LOG_TRACE("eid1: " << eid1 << ", eid2: " << eid2 << ", class: " << _class);
   LOG_TRACE("**************************");
-}
-
-bool PoiPolygonMatch::_currentMatchHasCloserNeighbors()
-{
-  return
-    _infoCache->polyHasPoiNeighborCloserThanPoi(
-      _poly->getElementId(), _poi, _poiNeighborIds, _distance) ||
-    _infoCache->poiHasPolyNeighborCloserThanPoly(
-      _poi, _poly->getElementId(), _polyNeighborIds, _distance);
 }
 
 MatchType PoiPolygonMatch::getType() const
@@ -794,8 +784,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //no point in trying to increase evidence if we're already at a match
   if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
   {
-    PoiPolygonAdvancedMatcher advancedMatcher(
-      _map, _polyNeighborIds, _poiNeighborIds, _distance);
+    PoiPolygonAdvancedMatcher advancedMatcher(_map, _poiNeighborIds, _distance);
     advancedMatcher.setConfiguration(conf());
     if (advancedMatcher.triggersRule(_poi, _poly))
     {

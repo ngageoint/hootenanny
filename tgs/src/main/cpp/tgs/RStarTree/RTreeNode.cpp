@@ -78,7 +78,9 @@ double BoxInternalData::calculateExpansion(const Box& b) const
   assert(b.getDimensions() == getDimensions());
   for (int i = 0; i < _dimensions; i++)
   {
-    v2 *= std::max(getUpperBound(i), b.getUpperBound(i)) - std::min(getLowerBound(i), b.getLowerBound(i));
+    v2 *=
+      std::max(getUpperBound(i), b.getUpperBound(i)) -
+      std::min(getLowerBound(i), b.getLowerBound(i));
   }
   return v2 - v1;
 }
@@ -159,7 +161,6 @@ bool BoxInternalData::isContained(const Box& b) const
   return result;
 }
 
-
 RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
 {
   _dimensions = dimensions;
@@ -181,7 +182,6 @@ RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
 RTreeNode::~RTreeNode()
 {
 }
-
 
 void RTreeNode::addChild(const Box& envelope, int id)
 {

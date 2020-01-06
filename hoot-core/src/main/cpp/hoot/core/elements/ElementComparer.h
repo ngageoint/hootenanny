@@ -62,7 +62,6 @@ private:
                         const std::shared_ptr<const Element>& e) const;
 
   void _removeTagsNotImportantForComparison(Tags& tags) const;
-
 };
 
 }

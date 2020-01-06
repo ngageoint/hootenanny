@@ -327,6 +327,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating script feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -610,6 +612,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<Co
   LOG_INFO(
     "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
+  // TODO: can we filter this based on the script?
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<

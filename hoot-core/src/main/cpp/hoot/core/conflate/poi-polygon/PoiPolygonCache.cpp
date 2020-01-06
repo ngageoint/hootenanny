@@ -36,6 +36,9 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
 
+// Std
+#include <float.h>
+
 namespace hoot
 {
 
@@ -56,10 +59,9 @@ void PoiPolygonCache::clear()
   _elementContainsCache.clear();
   _isTypeCache.clear();
   _hasCriterionCache.clear();
-  _poiNeighborCloserCache.clear();
   _criterionCache.clear();
   _geometryCache.clear();
-  _lineStringCache.clear();
+  _elementDistanceCache.clear();
 }
 
 void PoiPolygonCache::printCacheInfo()
@@ -110,13 +112,13 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
   {
     return std::shared_ptr<geos::geom::Geometry>();
   }
-  LOG_VART(element->getElementType());
+  //LOG_VART(element->getElementType());
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
     _geometryCache.find(element->getElementId());
   if (itr != _geometryCache.end())
   {
-    LOG_VART(itr.value());
+    //LOG_VART(itr.value());
     _incrementCacheHitCount("geometry");
     return itr.value();
   }
@@ -145,7 +147,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
         _badGeomCount++;
       }
     }
-    LOG_VART(newGeom.get());
+    //LOG_VART(newGeom.get());
     if (newGeom.get() &&
         QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
     {
@@ -156,59 +158,9 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(ConstElement
       }
       newGeom.reset();
     }
-    LOG_VART(newGeom.get());
+    //LOG_VART(newGeom.get());
     _geometryCache[element->getElementId()] = newGeom;
     _incrementCacheSizeCount("geometry");
-    return newGeom;
-  }
-}
-
-std::shared_ptr<geos::geom::LineString> PoiPolygonCache::_getLineString(ConstWayPtr poly)
-{
-  LOG_VART(poly.get());
-  if (!poly)
-  {
-    return std::shared_ptr<geos::geom::LineString>();
-  }
-
-  QHash<ElementId, std::shared_ptr<geos::geom::LineString>>::const_iterator itr =
-    _lineStringCache.find(poly->getElementId());
-  if (itr != _lineStringCache.end())
-  {
-    _incrementCacheHitCount("linestring");
-    return itr.value();
-  }
-  else
-  {
-    std::shared_ptr<geos::geom::LineString> newGeom;
-    try
-    {
-      newGeom = ElementConverter(_map).convertToLineString(poly);
-    }
-    catch (const geos::util::TopologyException& e)
-    {
-      if (_badGeomCount <= Log::getWarnMessageLimit())
-      {
-        LOG_TRACE(
-          "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a " <<
-          "geometry: " << poly->toString() << "\n" << e.what());
-        _badGeomCount++;
-      }
-    }
-    LOG_VART(newGeom.get());
-    if (newGeom.get() &&
-        QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
-    {
-      if (_badGeomCount <= Log::getWarnMessageLimit())
-      {
-        LOG_TRACE("Invalid element passed to PoiPolygonReviewReducer: " << newGeom->toString());
-        _badGeomCount++;
-      }
-      newGeom.reset();
-    }
-    LOG_VART(newGeom.get());
-    _lineStringCache[poly->getElementId()] = newGeom;
-    _incrementCacheSizeCount("linestring");
     return newGeom;
   }
 }
@@ -226,16 +178,23 @@ bool PoiPolygonCache::polyContainsPoi(ConstWayPtr poly, ConstNodePtr point)
   if (itr != _elementContainsCache.end())
   {
     _incrementCacheHitCount("contains");
-    return itr.value();
+    const bool contains = itr.value();
+    LOG_TRACE("Found cached contains: " << contains << " for key: " << key);
+    return contains;
   }
   else
   {
-    std::shared_ptr<geos::geom::LineString> polyGeom = _getLineString(poly);
+    std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
     std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
     bool contains = false;
     if (polyGeom && pointGeom)
     {
       contains = polyGeom->contains(pointGeom.get());
+      LOG_TRACE("Calculated contains: " << contains << " for key: " << key);
+    }
+    else
+    {
+      LOG_TRACE("Unable to calculate contains for key: " << key);
     }
     _elementContainsCache[key] = contains;
     _incrementCacheSizeCount("contains");
@@ -363,194 +322,6 @@ ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
   }
 }
 
-bool PoiPolygonCache::polyHasPoiNeighborCloserThanPoi(const ElementId& polyId, ConstNodePtr poi,
-                                                      const std::set<ElementId>& poiNeighborIds,
-                                                      const double poiPolyDistance)
-{
-  LOG_VART(polyId.isNull());
-  LOG_VART(poi.get());
-  LOG_VART(poiNeighborIds.size());
-  LOG_VART(poiPolyDistance);
-
-  if (polyId.isNull() || !poi || poiNeighborIds.size() == 0)
-  {
-    return false;
-  }
-
-  ConstElementPtr poly = _map->getElement(polyId);
-  LOG_VART(poly->getElementId());
-  LOG_VART(poi->getElementId());
-
-  const QString key = poly->getElementId().toString() + ";" + poi->getElementId().toString();
-  QHash<QString, bool>::const_iterator itr = _poiNeighborCloserCache.find(key);
-  if (itr != _poiNeighborCloserCache.end())
-  {
-    _incrementCacheHitCount("hasCloserPoiNeighbor");
-    LOG_TRACE(
-      "Poly: " << polyId << " has closer poi neighbor than: " << poi->getElementId() << ".");
-    return itr.value();
-  }
-  else
-  {
-    std::set<ElementId> polyWayIds;
-    assert(poly->getElementType() != ElementType::Node);
-    if (poly->getElementType() == ElementType::Way)
-    {
-      polyWayIds.insert(poly->getElementId());
-    }
-    else
-    {
-      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(poly);
-      polyWayIds = relation->getWayMemberIds();
-    }
-    LOG_VART(polyWayIds.size());
-
-    bool hasCloserPoiNeighbor = false;
-    ElementId closerNeighborId;
-    for (std::set<ElementId>::const_iterator poiNeighborItr = poiNeighborIds.begin();
-         poiNeighborItr != poiNeighborIds.end(); ++poiNeighborItr)
-    {
-      ConstElementPtr poiNeighbor = _map->getElement(*poiNeighborItr);
-      LOG_VART(poiNeighbor.get());
-      if (poiNeighbor->getElementId() != poi->getElementId())
-      {
-        for (std::set<ElementId>::const_iterator polyWayIdItr = polyWayIds.begin();
-             polyWayIdItr != polyWayIds.end(); ++polyWayIdItr)
-        {
-          long neighborPoiToPolyDist = -1.0;
-          const ElementId wayId = *polyWayIdItr;
-          ConstWayPtr currentPolyWay = _map->getWay(wayId.getId());
-          neighborPoiToPolyDist =
-            getPolyToPointDistance(
-              currentPolyWay, std::dynamic_pointer_cast<const Node>(poiNeighbor));
-          LOG_VART(neighborPoiToPolyDist);
-          if (neighborPoiToPolyDist != -1.0 && poiPolyDistance > neighborPoiToPolyDist)
-          {
-            closerNeighborId = poiNeighbor->getElementId();
-            hasCloserPoiNeighbor = true;
-            break;
-          }
-        }
-      }
-
-      if (hasCloserPoiNeighbor)
-      {
-        break;
-      }
-    }
-
-    _poiNeighborCloserCache[key] = hasCloserPoiNeighbor;
-    _incrementCacheSizeCount("hasCloserPoiNeighbor");
-
-    if (hasCloserPoiNeighbor)
-    {
-      LOG_TRACE(
-        "Poly: " << polyId << " has closer poi neighbor than: " <<
-        poi->getElementId() << ". Closer neighbor: " << closerNeighborId);
-    }
-    else
-    {
-      LOG_TRACE(
-        "Poly: " << polyId << " does not have closer poi neighbor than: " <<
-        poi->getElementId() << ".");
-    }
-
-    return hasCloserPoiNeighbor;
-  }
-}
-
-bool PoiPolygonCache::poiHasPolyNeighborCloserThanPoly(
-  ConstNodePtr poi, const ElementId& polyId, const std::set<ElementId>& polyNeighborIds,
-  const double poiPolyDistance)
-{
-  LOG_VART(polyId.isNull());
-  LOG_VART(poi.get());
-  LOG_VART(polyNeighborIds.size());
-  LOG_VART(poiPolyDistance);
-
-  if (polyId.isNull() || !poi || polyNeighborIds.size() == 0)
-  {
-    return false;
-  }
-
-  ConstElementPtr poly = _map->getElement(polyId);
-  LOG_VART(poly->getElementId());
-  LOG_VART(poi->getElementId());
-
-  const QString key = poi->getElementId().toString() + ";" + poly->getElementId().toString();
-  QHash<QString, bool>::const_iterator itr = _polyNeighborCloserCache.find(key);
-  if (itr != _polyNeighborCloserCache.end())
-  {
-    _incrementCacheHitCount("hasCloserPolyNeighbor");
-    LOG_TRACE(
-      "POI: " << poi->getElementId() << " has closer poly neighbor than: " << polyId << ".");
-    return itr.value();
-  }
-  else
-  {
-    bool hasCloserPolyNeighbor = false;
-    ElementId closerNeighborId;
-    for (std::set<ElementId>::const_iterator polyNeighborItr = polyNeighborIds.begin();
-         polyNeighborItr != polyNeighborIds.end(); ++polyNeighborItr)
-    {
-      ConstElementPtr polyNeighbor = _map->getElement(*polyNeighborItr);
-      LOG_VART(polyNeighbor.get());
-      if (polyNeighbor->getElementId() != polyId)
-      {
-        std::set<ElementId> polyWayIds;
-        if (polyNeighbor->getElementType() == ElementType::Way)
-        {
-          polyWayIds.insert(polyNeighbor->getElementId());
-        }
-        else
-        {
-          ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(polyNeighbor);
-          polyWayIds = relation->getWayMemberIds();
-        }
-
-        for (std::set<ElementId>::const_iterator polyWayIdItr = polyWayIds.begin();
-             polyWayIdItr != polyWayIds.end(); ++polyWayIdItr)
-        {
-          long neighborPolyToPoiDist = -1.0;
-          const ElementId wayId = *polyWayIdItr;
-          ConstWayPtr currentPolyWay = _map->getWay(wayId.getId());
-          neighborPolyToPoiDist = getPolyToPointDistance(currentPolyWay, poi);
-          LOG_VART(neighborPolyToPoiDist);
-          if (neighborPolyToPoiDist != -1.0 && poiPolyDistance > neighborPolyToPoiDist)
-          {
-            closerNeighborId = polyNeighbor->getElementId();
-            hasCloserPolyNeighbor = true;
-            break;
-          }
-        }
-      }
-
-      if (hasCloserPolyNeighbor)
-      {
-        break;
-      }
-    }
-
-    _polyNeighborCloserCache[key] = hasCloserPolyNeighbor;
-    _incrementCacheSizeCount("hasCloserPolyNeighbor");
-
-    if (hasCloserPolyNeighbor)
-    {
-      LOG_TRACE(
-        "POI: " << poi->getElementId() << " has closer poly neighbor than: " <<
-        polyId << ". Closer neighbor: " << closerNeighborId);
-    }
-    else
-    {
-      LOG_TRACE(
-        "POI: " << poi->getElementId() << " does not have closer poly neighbor than: " <<
-        polyId << ".");
-    }
-
-    return hasCloserPolyNeighbor;
-  }
-}
-
 bool PoiPolygonCache::elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2)
 {
   if (!element1 || !element2)
@@ -569,38 +340,92 @@ bool PoiPolygonCache::elementIntersectsElement(ConstElementPtr element1, ConstEl
 }
 
 double PoiPolygonCache::getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point)
-{
+{   
   if (!poly || !point)
   {
     return -1.0;
   }
 
-  std::shared_ptr<geos::geom::LineString> polyGeom = _getLineString(poly);
-  std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
-  double distance = -1.0;
-  if (polyGeom && pointGeom)
+  const QString key = point->getElementId().toString() + ";" + poly->getElementId().toString();
+  QHash<QString, double>::const_iterator itr = _elementDistanceCache.find(key);
+  if (itr != _elementDistanceCache.end())
   {
-    distance = polyGeom->distance(pointGeom.get());
+    _incrementCacheHitCount("polyToPointDistance");
+    double distance = itr.value();
+    LOG_TRACE("Found cached distance: " << distance << " for key: " << key);
+    return distance;
   }
-  return distance;
+  else
+  {
+    double distance = -1.0;
+
+    if (polyContainsPoi(poly, point)) // TODO: remove
+    {
+      distance = 0.0;
+    }
+    else
+    {
+      std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
+      std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
+      if (polyGeom && pointGeom)
+      {
+        distance = polyGeom->distance(pointGeom.get());
+        LOG_TRACE("Calculated distance: " << distance << " for key: " << key);
+      }
+      else
+      {
+        LOG_TRACE("Unable to calculate distance for key: " << key);
+      }
+    }
+
+    _elementDistanceCache[key] = distance;
+    _incrementCacheSizeCount("polyToPointDistance");
+
+    return distance;
+  }
+}
+
+double PoiPolygonCache::getPolyToPointDistance(ConstRelationPtr poly, ConstNodePtr point)
+{
+  double smallestDistance = DBL_MAX;
+  std::set<ElementId> polyWayIds = poly->getWayMemberIds();
+  for (std::set<ElementId>::const_iterator polyWayIdItr = polyWayIds.begin();
+       polyWayIdItr != polyWayIds.end(); ++polyWayIdItr)
+  {
+    const double distance = getPolyToPointDistance(_map->getWay(*polyWayIdItr), point);
+    if (distance != -1.0 && distance < smallestDistance)
+    {
+      smallestDistance = distance;
+      //LOG_VART(smallestDistance);
+    }
+  }
+  if (smallestDistance != DBL_MAX)
+  {
+    //LOG_VART(smallestDistance);
+    return smallestDistance;
+  }
+  else
+  {
+    return -1.0;
+  }
 }
 
 double PoiPolygonCache::getArea(ConstElementPtr element)
 {
-  LOG_VART(element.get());
+  //LOG_VART(element.get());
   if (!element)
   {
     return -1.0;
   }
 
   std::shared_ptr<geos::geom::Geometry> geom = _getGeometry(element);
-  LOG_VART(geom.get());
+  //LOG_VART(geom.get());
   double area = -1.0;
   if (geom)
   {
     area = geom->getArea();
   }
-  LOG_VART(area);
+  //LOG_VART(area);
   return area;
 }
 
