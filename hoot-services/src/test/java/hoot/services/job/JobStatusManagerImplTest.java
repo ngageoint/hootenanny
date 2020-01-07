@@ -96,5 +96,6 @@ public class JobStatusManagerImplTest {
 
         assertEquals(1, errors.size());
         assertEquals(expectedError, errors.get(0));
+        MapUtils.deleteUser(userId);
     }
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -35,10 +35,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.models.db.Maps;
 import hoot.services.models.db.QCurrentNodes;
 import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelations;
@@ -199,18 +201,21 @@ public final class MapUtils {
         return newId;
     }
 
-    static void deleteUser(long userId) {
+    public static void deleteUser(long userId) {
         createQuery().delete(users).where(users.id.eq(userId)).execute();
     }
 
-    /**
-     *
-     * @param mapId
-     */
-    public static void deleteOSMRecord(Long mapId) {
-        DbUtils.deleteMapRelatedTablesByMapId(mapId);
-        createQuery().delete(maps).where(maps.id.eq(mapId)).execute();
+    public static void cleanupTestUsers() {
+        List<Maps> testMaps = createQuery().select(maps).from(maps)
+                .where(maps.userId.lt(0)).fetch();
+        testMaps.stream().forEach(m -> {
+            DbUtils.deleteMapRelatedTablesByMapId(m.getId());
+            DbUtils.deleteMap(m.getId());
+        });
+
+        createQuery().delete(users).where(users.displayName.like("%::MapUtils::insertUser()")).execute();
     }
+
 
     private static void createTable(String createTblSql, Connection conn) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {
