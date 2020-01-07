@@ -47,8 +47,9 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
 /**
  * Cached back class storing POI/Polygon feature comparison info
  *
- * The caches used in this class were determined on 9/30/18 running against the regression test:
- * unifying-tests.child/somalia.child/somalia-test3.child. Further caching could be deemed necessary
+ * The caches used in this class were determined on 9/30/18 running against the regression test
+ * unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20 against the data in
+ * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary
  * given performance with other datasets.
  *
  * Some of the distance comparisons in this class could be abstracted out beyond poi/poly geoms and
@@ -65,11 +66,12 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * TODO
+   * Returns the distance from a point node to a polygon way
    *
-   * @param poly
-   * @param point
-   * @return
+   * @param poly the way polygon to measure distance from
+   * @param point the point to measure distance from
+   * @return the distance between the point and polygon or -1.0 if the distance could not be
+   * calculated
    */
   double getPolyToPointDistance(const ConstElementPtr& poly, const ConstElementPtr& point);
 
@@ -90,7 +92,7 @@ public:
    * @return true if the polygon contains the point; false otherwise or if the containment could
    * not be calculated
    */
-  bool polyContainsPoi(const ConstWayPtr& poly, const ConstNodePtr& point);
+  bool polyContainsPoi(const ConstElementPtr& poly, const ConstElementPtr& point);
 
   /**
    * Determines if an element intersects another element
@@ -130,6 +132,14 @@ public:
    * @return
    */
   bool hasMoreThanOneType(const ConstElementPtr& element);
+
+  /**
+   * TODO
+   *
+   * @param element
+   * @return
+   */
+  bool hasRelatedType(const ConstElementPtr& element);
 
   /**
    * TODO
@@ -194,6 +204,7 @@ private:
   // ordering of the ID keys does matter here; we're asking the question: does the first element
   // contain the second element?; keys are "elementId1;elementId2"
   QHash<QString, bool> _elementContainsCache;
+  QHash<QString, bool> _elementIntersectsCache;
 
   // key is "elementId;type string"
   QHash<QString, bool> _isTypeCache;
@@ -207,6 +218,7 @@ private:
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
 
   QHash<ElementId, bool> _hasMoreThanOneTypeCache;
+  QHash<ElementId, bool> _hasRelatedTypeCache;
   QHash<ElementId, bool> _inBuildingCategoryCache;
   QHash<ElementId, int> _numAddressesCache;
 
@@ -220,26 +232,6 @@ private:
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);
   void _incrementCacheSizeCount(const QString& cacheTypeKey);
-
-  /**
-   * Returns the distance from a point node to a polygon way
-   *
-   * @param poly the way polygon to measure distance from
-   * @param point the point to measure distance from
-   * @return the distance between the point and polygon or -1.0 if the distance could not be
-   * calculated
-   */
-  //double _getPolyToPointDistance(const ConstWayPtr& poly, const ConstNodePtr& point);
-
-  /**
-   * Returns the shortest distance from a point node to a relation containing polygons
-   *
-   * @param poly the relation containing polygons to measure distance from
-   * @param point the point to measure distance from
-   * @return the distance between the point and closest polygon in the relation or -1.0 if the
-   * distance could not be calculated
-   */
-  //double _getPolyToPointDistance(const ConstRelationPtr& poly, const ConstNodePtr& point);
 };
 
 }

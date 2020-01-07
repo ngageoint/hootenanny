@@ -27,13 +27,13 @@
 #include "PoiPolygonDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/elements/ElementConverter.h>
+//#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 // geos
 #include <geos/util/TopologyException.h>
-#include <geos/geom/Geometry.h>
+//#include <geos/geom/Geometry.h>
 
 using namespace geos::geom;
 
@@ -47,9 +47,14 @@ _infoCache(infoCache)
 {
 }
 
-double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
+double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstElementPtr& poi,
                                             const ConstElementPtr& poly) const
 {
+  if (!_infoCache)
+  {
+    throw HootException("No cache passed to extractor.");
+  }
+
   try
   {
     LOG_VART(poi->getElementId());
@@ -58,23 +63,22 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElemen
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
     DisableLog dl(Log::Warn);
 
-    if (_infoCache)
-    {
+    //if (_infoCache)
+    //{
       return _infoCache->getPolyToPointDistance(poly, poi);
-    }
-    // to appease unit test for now
-    else
-    {
-      // TODO: rework test and remove
-      ElementConverter elementConverter(map.shared_from_this());
-      std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-      if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
-      {
-        throw geos::util::TopologyException();
-      }
-      std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
-      return polyGeom->distance(poiGeom.get());
-    }
+//    }
+//    // to appease unit test for now
+//    else
+//    {
+//      ElementConverter elementConverter(map.shared_from_this());
+//      std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+//      if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+//      {
+//        throw geos::util::TopologyException();
+//      }
+//      std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+//      return polyGeom->distance(poiGeom.get());
+//    }
   }
   catch (const geos::util::TopologyException& e)
   {

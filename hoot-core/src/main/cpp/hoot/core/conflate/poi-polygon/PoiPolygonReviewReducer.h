@@ -110,11 +110,6 @@ private:
   QString _triggeredRuleDescription;
 
   bool _nonDistanceSimilaritiesPresent() const;
-
-  //bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
-  //bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
-
-  //static bool _inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
 };
 
 }

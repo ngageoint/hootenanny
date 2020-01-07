@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -55,8 +56,10 @@ public:
 
   void runBasicTest()
   {
-    PoiPolygonDistanceExtractor uut;
     OsmMapPtr map(new OsmMap());
+    PoiPolygonCachePtr infoCache(new PoiPolygonCache(map));
+    infoCache->setConfiguration(conf());
+    PoiPolygonDistanceExtractor uut(infoCache);
 
     Coordinate c1[] = { Coordinate(0.0, 0.0), Coordinate(20.0, 0.0),
                         Coordinate(20.0, 20.0), Coordinate(0.0, 20.0),

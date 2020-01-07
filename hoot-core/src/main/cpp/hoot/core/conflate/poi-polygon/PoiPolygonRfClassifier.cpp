@@ -27,11 +27,11 @@
 #include "PoiPolygonRfClassifier.h"
 
 // hoot
-#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonDistanceExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
+//#include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
+//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
+//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonDistanceExtractor.h>
+//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonNameScoreExtractor.h>
+//#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace std;
@@ -48,14 +48,14 @@ void PoiPolygonRfClassifier::_createExtractors()
 {
   _extractors.clear();
 
-  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
-  _extractors.push_back(std::shared_ptr<FeatureExtractor>(
-    new PoiPolygonAlphaShapeDistanceExtractor()));
-  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
-  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
-  std::shared_ptr<AddressScoreExtractor> addressExtractor1(new AddressScoreExtractor());
-  addressExtractor1->setConfiguration(conf());
-  _extractors.push_back(addressExtractor1);
+//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonDistanceExtractor()));
+//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(
+//    new PoiPolygonAlphaShapeDistanceExtractor()));
+//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonNameScoreExtractor()));
+//  _extractors.push_back(std::shared_ptr<FeatureExtractor>(new PoiPolygonTypeScoreExtractor()));
+//  std::shared_ptr<AddressScoreExtractor> addressExtractor1(new AddressScoreExtractor());
+//  addressExtractor1->setConfiguration(conf());
+//  _extractors.push_back(addressExtractor1);
 }
 
 map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m,

@@ -30,6 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -53,9 +54,11 @@ public:
 
   void runTest()
   {
-    PoiPolygonTypeScoreExtractor uut;
-    uut.setConfiguration(conf());
     OsmMapPtr map(new OsmMap());
+    PoiPolygonCachePtr infoCache(new PoiPolygonCache(map));
+    infoCache->setConfiguration(conf());
+    PoiPolygonTypeScoreExtractor uut(infoCache);
+    uut.setConfiguration(conf());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
     node1->getTags().set("amenity", "school");
@@ -78,12 +81,14 @@ public:
 
   void translateTagValueTest()
   {
-    PoiPolygonTypeScoreExtractor uut;
     Settings settings = conf();
     OsmMapPtr map(new OsmMap());
 
     settings.set("poi.polygon.type.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
+    PoiPolygonCachePtr infoCache(new PoiPolygonCache(map));
+    infoCache->setConfiguration(settings);
+    PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(settings);
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));

@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>
@@ -44,12 +45,13 @@ class PoiPolygonDistance
 
 public:
 
-  PoiPolygonDistance(double matchDistanceThresholdDefault, double reviewDistanceThresholdDefault,
-                     const Tags& polyTags, long searchRadius);
+  PoiPolygonDistance(const ConstOsmMapPtr& map, double matchDistanceThresholdDefault,
+                     double reviewDistanceThresholdDefault, const Tags& polyTags,
+                     long searchRadius);
 
-  PoiPolygonDistance(double matchDistanceThresholdDefault, double reviewDistanceThresholdDefault,
-                     const Tags& polyTags, long searchRadius, long surroundingPolyCount,
-                     long surroundingPoiCount);
+  PoiPolygonDistance(const ConstOsmMapPtr& map, double matchDistanceThresholdDefault,
+                     double reviewDistanceThresholdDefault, const Tags& polyTags, long searchRadius,
+                     long surroundingPolyCount, long surroundingPoiCount);
 
   /**
    * Returns a custom match distance for the given type
@@ -102,6 +104,7 @@ private:
 
   static QHash<ElementId, double> _reviewDistanceCache;
   static int _reviewDistanceCacheHits;
+  static bool _cacheInitialized;
 };
 
 }

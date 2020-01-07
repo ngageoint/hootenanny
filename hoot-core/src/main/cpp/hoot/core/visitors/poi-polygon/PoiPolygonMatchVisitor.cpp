@@ -227,7 +227,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   //const int timingThreshold = 1000000; //nanoseconds
 
   // See if the element is a POI as defined by poi/poly conflation.
-  //_timer.restart();
+  _timer.restart();
   if (isMatchCandidate(e))
   {
     // If we are doing advanced matching or review reduction, let's collect all polys that surround
@@ -250,10 +250,10 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _numMatchCandidatesVisited++;
     if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
     {
-//      PROGRESS_DEBUG(
-//        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
-//        " match candidates / " << StringUtils::formatLargeNumber(_map->getNodeCount()) <<
-//        " total nodes.");
+      PROGRESS_DEBUG(
+        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+        " match candidates / " << StringUtils::formatLargeNumber(_map->getNodeCount()) <<
+        " total nodes.");
     }
   }
 //  else
@@ -264,10 +264,10 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 //    }
 //  }
 
-//  if (_timer.elapsed() > 5000 && _taskStatusUpdateInterval >= 10)
-//  {
-//    _taskStatusUpdateInterval /= 10;
-//  }
+  if (_timer.elapsed() > 5000 && _taskStatusUpdateInterval >= 10)
+  {
+    _taskStatusUpdateInterval /= 10;
+  }
 
   _numElementsVisited++;
   // poi/poly matching can be a little slow at times compared to the others, so keep the log update
@@ -277,7 +277,7 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
       StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
-    //_timer.restart();
+    _timer.restart();
   }
 }
 

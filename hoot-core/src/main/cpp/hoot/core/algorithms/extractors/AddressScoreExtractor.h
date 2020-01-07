@@ -82,6 +82,9 @@ public:
   void setAllowLenientHouseNumberMatching(bool allow)
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
 
+  static int getAddressCacheSize() { return _addressesCache.size(); }
+  static int getNumAddressCacheHits() { return _addressCacheHits; }
+
 private:
 
   friend class AddressScoreExtractorTest;
@@ -90,6 +93,10 @@ private:
   mutable bool _matchAttemptMade;
 
   AddressParser _addressParser;
+
+  static QHash<ElementId, QList<Address>> _addressesCache;
+  static int _addressCacheHits;
+  static bool _cacheInitialized;
 
   /*
    * Searches for an address on element. Will look also look for address way nodes and address

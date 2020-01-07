@@ -33,7 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonType.h>
 #include <hoot/core/util/Factory.h>
 
 // Qt
@@ -323,7 +323,7 @@ Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStrin
 {
   Tags tagsToAdd;
 
-  if (PoiPolygonTypeScoreExtractor::isPark(e))
+  if (PoiPolygonType::isPark(e))
   {
     for (int i = 0; i < filteredNames.size(); i++)
     {

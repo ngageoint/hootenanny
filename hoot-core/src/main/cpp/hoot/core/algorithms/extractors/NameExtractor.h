@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/string/StringDistanceConsumer.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -48,7 +49,7 @@ public:
 
   virtual std::string getName() const;
 
-  virtual double extract(const OsmMap& /*map*/, const std::shared_ptr<const Element>& target,
+  virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
   virtual double extract(const ConstElementPtr& target,
@@ -62,11 +63,18 @@ public:
   long getNamesProcessed() const { return _namesProcessed; }
   bool getMatchAttemptMade() const { return _matchAttemptMade; }
 
+  static int getNameCacheSize() { return _nameCache.size(); }
+  static int getNumNameCacheHits() { return _nameCacheHits; }
+
 private:
 
   StringDistancePtr _d;
   mutable long _namesProcessed;
   mutable bool _matchAttemptMade;
+
+  static QHash<ElementId, QStringList> _nameCache;
+  static int _nameCacheHits;
+  static bool _cacheInitialized;
 };
 
 }

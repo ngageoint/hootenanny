@@ -39,6 +39,10 @@ using namespace std;
 namespace hoot
 {
 
+QHash<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache;
+int AddressScoreExtractor::_addressCacheHits = 0;
+bool AddressScoreExtractor::_cacheInitialized = false;
+
 HOOT_FACTORY_REGISTER(FeatureExtractor, AddressScoreExtractor)
 
 AddressScoreExtractor::AddressScoreExtractor() :
@@ -72,28 +76,46 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   const ConstElementPtr& elementBeingComparedWith) const
 {
   LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
-  //LOG_VART(element);
-  QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
-  if (elementAddresses.size() == 0)
+
+  if (!_cacheInitialized)
   {
-    //if not, try to find the address from a poly way node instead
-    if (element->getElementType() == ElementType::Way)
-    {
-      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
-      elementAddresses =
-        _addressParser.parseAddressesFromWayNodes(
-          *way, map, elementBeingComparedWith->getElementId());
-    }
-    //if still no luck, try to find the address from a poly way node that is a relation member
-    else if (element->getElementType() == ElementType::Relation)
-    {
-      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-      elementAddresses =
-        _addressParser.parseAddressesFromRelationMembers(
-          *relation, map, elementBeingComparedWith->getElementId());
-    }
+    _addressesCache.reserve(map.size());
+    _cacheInitialized = true;
   }
-  return elementAddresses;
+
+  QHash<ElementId, QList<Address>>::const_iterator itr =
+    _addressesCache.find(element->getElementId());
+  if (itr != _addressesCache.end())
+  {
+    _addressCacheHits++;
+    return itr.value();
+  }
+  else
+  {
+    //LOG_VART(element);
+    QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
+    if (elementAddresses.size() == 0)
+    {
+      //if not, try to find the address from a poly way node instead
+      if (element->getElementType() == ElementType::Way)
+      {
+        ConstWayPtr way = std::dynamic_pointer_cast<const Way>(element);
+        elementAddresses =
+          _addressParser.parseAddressesFromWayNodes(
+            *way, map, elementBeingComparedWith->getElementId());
+      }
+      //if still no luck, try to find the address from a poly way node that is a relation member
+      else if (element->getElementType() == ElementType::Relation)
+      {
+        ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
+        elementAddresses =
+          _addressParser.parseAddressesFromRelationMembers(
+            *relation, map, elementBeingComparedWith->getElementId());
+      }
+    }
+    _addressesCache[element->getElementId()] = elementAddresses;
+    return elementAddresses;
+  }
 }
 
 double AddressScoreExtractor::extract(const OsmMap& map, const ConstElementPtr& element1,

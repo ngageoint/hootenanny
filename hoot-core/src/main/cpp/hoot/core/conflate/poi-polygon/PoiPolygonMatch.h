@@ -181,7 +181,7 @@ private:
 
   // should be able to shrink some of this scorer code down with some abstraction
 
-  PoiPolygonTypeScoreExtractor _typeScorer;
+  std::shared_ptr<PoiPolygonTypeScoreExtractor> _typeScorer;
   double _typeScore;
   double _typeScoreThreshold;
   QStringList _reviewIfMatchedTypes;

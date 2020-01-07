@@ -37,8 +37,10 @@ namespace hoot
 
 QHash<ElementId, double> PoiPolygonDistance::_reviewDistanceCache;
 int PoiPolygonDistance::_reviewDistanceCacheHits = 0;
+bool PoiPolygonDistance::_cacheInitialized = false;
 
-PoiPolygonDistance::PoiPolygonDistance(double matchDistanceThresholdDefault,
+PoiPolygonDistance::PoiPolygonDistance(const ConstOsmMapPtr& map,
+                                       double matchDistanceThresholdDefault,
                                        double reviewDistanceThresholdDefault,
                                        const Tags& polyTags, long searchRadius) :
 _matchDistanceThresholdDefault(matchDistanceThresholdDefault),
@@ -48,9 +50,15 @@ _searchRadius(searchRadius),
 _surroundingPolyCount(-1),
 _surroundingPoiCount(-1)
 {
+  if (!_cacheInitialized)
+  {
+    _reviewDistanceCache.reserve(map->size());
+    _cacheInitialized = true;
+  }
 }
 
-PoiPolygonDistance::PoiPolygonDistance(double matchDistanceThresholdDefault,
+PoiPolygonDistance::PoiPolygonDistance(const ConstOsmMapPtr& map,
+                                       double matchDistanceThresholdDefault,
                                        double reviewDistanceThresholdDefault,
                                        const Tags& polyTags, long searchRadius,
                                        long surroundingPolyCount, long surroundingPoiCount) :
@@ -61,6 +69,11 @@ _searchRadius(searchRadius),
 _surroundingPolyCount(surroundingPolyCount),
 _surroundingPoiCount(surroundingPoiCount)
 {
+  if (!_cacheInitialized)
+  {
+    _reviewDistanceCache.reserve(map->size());
+    _cacheInitialized = true;
+  }
 }
 
 double PoiPolygonDistance::getMatchDistanceForType(const Tags& /*tags*/) const
@@ -69,7 +82,7 @@ double PoiPolygonDistance::getMatchDistanceForType(const Tags& /*tags*/) const
 }
 
 double PoiPolygonDistance::getReviewDistanceForType(const ConstElementPtr& element) const
-{
+{ 
   QHash<ElementId, double>::const_iterator itr = _reviewDistanceCache.find(element->getElementId());
   if (itr != _reviewDistanceCache.end())
   {
