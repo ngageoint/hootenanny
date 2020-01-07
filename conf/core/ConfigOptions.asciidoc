@@ -3245,7 +3245,8 @@ they do not have specific type tags.
 
 The maximum distance, in meters, combined with the circular error of the features being compared,
 the total of which allows the features to still be considered a match based on distance criteria
-only.
+only. If a value of zero is specified, then only the feature circular error will factor into the
+review distance search distance.
 
 === poi.polygon.review.evidence.threshold
 

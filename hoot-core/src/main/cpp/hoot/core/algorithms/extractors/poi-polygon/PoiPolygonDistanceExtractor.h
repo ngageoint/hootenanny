@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
-
+#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
 
 namespace hoot
 {
@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
-  PoiPolygonDistanceExtractor();
+  PoiPolygonDistanceExtractor(PoiPolygonCachePtr infoCache = PoiPolygonCachePtr());
 
   virtual std::string getClassName() const
   { return PoiPolygonDistanceExtractor::className(); }
@@ -62,6 +62,10 @@ public:
 
   virtual QString getDescription() const
   { return "Calculates the distance between a poi and a polygon"; }
+
+private:
+
+  PoiPolygonCachePtr _infoCache;
 };
 
 }

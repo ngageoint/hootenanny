@@ -62,10 +62,10 @@ public:
   /**
    * Returns a custom review distance for the given type
    *
-   * @param tags the tags containing the type to return a custom distance for
+   * @param element the element containing the type to return a custom distance for
    * @return the review distance for the given type
    */
-  double getReviewDistanceForType(const Tags& tags) const;
+  double getReviewDistanceForType(const ConstElementPtr& element) const;
 
   //The density based match/review distance modifications proved to have no positive effect for
   //the data tested.  The logic is being left intact in case we find a use for the technique with
@@ -85,6 +85,9 @@ public:
    */
   void modifyReviewDistanceForPolyDensity(double& distance);
 
+  static int getReviewDistanceCacheSize() { return _reviewDistanceCache.size(); }
+  static int getNumReviewDistanceCacheHits() { return _reviewDistanceCacheHits; }
+
 private:
 
   double _matchDistanceThresholdDefault;
@@ -97,6 +100,8 @@ private:
   double _getPolyDensity() const;
   double _getPoiDensity() const;
 
+  static QHash<ElementId, double> _reviewDistanceCache;
+  static int _reviewDistanceCacheHits;
 };
 
 }

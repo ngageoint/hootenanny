@@ -28,11 +28,15 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+QHash<ElementId, double> PoiPolygonDistance::_reviewDistanceCache;
+int PoiPolygonDistance::_reviewDistanceCacheHits = 0;
 
 PoiPolygonDistance::PoiPolygonDistance(double matchDistanceThresholdDefault,
                                        double reviewDistanceThresholdDefault,
@@ -64,20 +68,38 @@ double PoiPolygonDistance::getMatchDistanceForType(const Tags& /*tags*/) const
   return _matchDistanceThresholdDefault;
 }
 
-double PoiPolygonDistance::getReviewDistanceForType(const Tags& tags) const
+double PoiPolygonDistance::getReviewDistanceForType(const ConstElementPtr& element) const
 {
-  //these distances could be moved to a config
-  if (tags.get("leisure") == "park")
+  QHash<ElementId, double>::const_iterator itr = _reviewDistanceCache.find(element->getElementId());
+  if (itr != _reviewDistanceCache.end())
   {
-    return 25.0;
+    _reviewDistanceCacheHits++;
+    double distance = itr.value();
+    LOG_TRACE("Found review distance: " << distance << " for: " << element->getElementId());
+    return distance;
   }
-  else if ((tags.get("station") == "light_rail" || tags.get("railway") == "platform") &&
-           //passing in the poly tags separately is a little awkward...need to rethink this
-           (_polyTags.get("subway") == "yes" || _polyTags.get("tunnel") == "yes"))
+  else
   {
-    return 150.0;
+    double distance;
+    const Tags& tags = element->getTags();
+    //these distances could be moved to a config
+    if (tags.get("leisure") == "park")
+    {
+      distance = 25.0;
+    }
+    else if ((tags.get("station") == "light_rail" || tags.get("railway") == "platform") &&
+             //passing in the poly tags separately is a little awkward...need to rethink this
+             (_polyTags.get("subway") == "yes" || _polyTags.get("tunnel") == "yes"))
+    {
+      distance = 150.0;
+    }
+    else
+    {
+      distance = _reviewDistanceThresholdDefault;
+    }
+    _reviewDistanceCache[element->getElementId()] = distance;
+    return distance;
   }
-  return _reviewDistanceThresholdDefault;
 }
 
 double PoiPolygonDistance::_getPolyDensity() const

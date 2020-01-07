@@ -42,7 +42,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceExtractor)
 
-PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor()
+PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor(PoiPolygonCachePtr infoCache) :
+_infoCache(infoCache)
 {
 }
 
@@ -51,17 +52,29 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElemen
 {
   try
   {
+    LOG_VART(poi->getElementId());
+    LOG_VART(poly->getElementId());
+
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
     DisableLog dl(Log::Warn);
 
-    ElementConverter elementConverter(map.shared_from_this());
-    std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-    if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+    if (_infoCache)
     {
-      throw geos::util::TopologyException();
+      return _infoCache->getPolyToPointDistance(poly, poi);
     }
-    std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
-    return polyGeom->distance(poiGeom.get());
+    // to appease unit test for now
+    else
+    {
+      // TODO: rework test and remove
+      ElementConverter elementConverter(map.shared_from_this());
+      std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+      if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
+      {
+        throw geos::util::TopologyException();
+      }
+      std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+      return polyGeom->distance(poiGeom.get());
+    }
   }
   catch (const geos::util::TopologyException& e)
   {

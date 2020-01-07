@@ -111,12 +111,10 @@ private:
 
   bool _nonDistanceSimilaritiesPresent() const;
 
-  bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
-  bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
+  //bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
+  //bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
 
-  bool _hasAddress(ConstElementPtr element);
-
-  static bool _inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
+  //static bool _inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
 };
 
 }

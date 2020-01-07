@@ -108,7 +108,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
        it != surroundingPolyIds.end(); ++it)
   {
     const ElementId polyId = *it;
-    LOG_VARD(polyId);
+    LOG_VART(polyId);
     if (poiId != polyId)
     {
       const std::shared_ptr<const Element>& poly = _map->getElement(polyId);
@@ -142,7 +142,7 @@ void PoiPolygonMatchVisitor::_checkForMatch(const std::shared_ptr<const Element>
 std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
   const std::shared_ptr<const Element>& e)
 {
-  LOG_DEBUG("Collecting surrounding poly IDs for: " << e->getElementId());
+  LOG_TRACE("Collecting surrounding poly IDs for: " << e->getElementId());
 
   std::set<ElementId> surroundingPolyIds;
 
@@ -173,14 +173,14 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
     }
   }
 
-  LOG_VARD(surroundingPolyIds.size());
+  LOG_VART(surroundingPolyIds.size());
   return surroundingPolyIds;
 }
 
 std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPoiIds(
   const std::shared_ptr<const Element>& e)
 {
-  LOG_DEBUG("Collecting surrounding POI IDs for: " << e->getElementId());
+  LOG_TRACE("Collecting surrounding POI IDs for: " << e->getElementId());
 
   std::set<ElementId> surroundingPoiIds;
 
@@ -211,7 +211,7 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPoiIds(
     }
   }
 
-  LOG_VARD(surroundingPoiIds.size());
+  LOG_VART(surroundingPoiIds.size());
   return surroundingPoiIds;
 }
 
@@ -224,12 +224,20 @@ Meters PoiPolygonMatchVisitor::_getSearchRadius(const std::shared_ptr<const Elem
 
 void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
 {
+  //const int timingThreshold = 1000000; //nanoseconds
+
   // See if the element is a POI as defined by poi/poly conflation.
+  //_timer.restart();
   if (isMatchCandidate(e))
   {
     // If we are doing advanced matching or review reduction, let's collect all polys that surround
     // the POI and also all POIs that surround it.
+    _timer.restart();
     std::set<ElementId> surroundingPolyIds = _collectSurroundingPolyIds(e);
+//    if (_timer.nsecsElapsed() > timingThreshold)
+//    {
+//      LOG_DEBUG("surroundingPolyIds: " << _timer.nsecsElapsed());
+//    }
     std::set<ElementId> surroundingPoiIds;
     if (_enableAdvancedMatching)
     {
@@ -242,12 +250,19 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     _numMatchCandidatesVisited++;
     if (_numMatchCandidatesVisited % _taskStatusUpdateInterval == 0)
     {
-      PROGRESS_DEBUG(
-        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
-        " match candidates / " << StringUtils::formatLargeNumber(_map->getElementCount()) <<
-        " total elements.");
+//      PROGRESS_DEBUG(
+//        "Processed " << StringUtils::formatLargeNumber(_numMatchCandidatesVisited) <<
+//        " match candidates / " << StringUtils::formatLargeNumber(_map->getNodeCount()) <<
+//        " total nodes.");
     }
   }
+//  else
+//  {
+//    if (_timer.elapsed() > timingThreshold)
+//    {
+//      LOG_DEBUG("isMatchCandidate: " << _timer.elapsed());
+//    }
+//  }
 
 //  if (_timer.elapsed() > 5000 && _taskStatusUpdateInterval >= 10)
 //  {
@@ -261,8 +276,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   {
     PROGRESS_INFO(
       "Processed " << StringUtils::formatLargeNumber(_numElementsVisited) << " / " <<
-      StringUtils::formatLargeNumber(_map->getElementCount()) << " elements.");
-    _timer.restart();
+      StringUtils::formatLargeNumber(_map->getNodeCount()) << " nodes.");
+    //_timer.restart();
   }
 }
 
@@ -301,6 +316,8 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     _getMap()->visitWaysRo(v);
     _getMap()->visitRelationsRo(v);
     v.finalizeIndex();
+
+    LOG_DEBUG("Polygon feature index created.");
   }
   return _polyIndex;
 }

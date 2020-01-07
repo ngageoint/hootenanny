@@ -34,6 +34,8 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/address/AddressParser.h>
 
 namespace hoot
 {
@@ -52,7 +54,7 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
  * Some of the distance comparisons in this class could be abstracted out beyond poi/poly geoms and
  * moved into another cache class if we ever need them to be used with other conflation algs.
  */
-class PoiPolygonCache
+class PoiPolygonCache : public Configurable
 {
 
 public:
@@ -60,25 +62,16 @@ public:
   PoiPolygonCache(const ConstOsmMapPtr& map);
   ~PoiPolygonCache();
 
-  /**
-   * Returns the distance from a point node to a polygon way
-   *
-   * @param poly the way polygon to measure distance from
-   * @param point the point to measure distance from
-   * @return the distance between the point and polygon or -1.0 if the distance could not be
-   * calculated
-   */
-  double getPolyToPointDistance(ConstWayPtr poly, ConstNodePtr point);
+  virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Returns the shortest distance from a point node to a relation containing polygons
+   * TODO
    *
-   * @param poly the relation containing polygons to measure distance from
-   * @param point the point to measure distance from
-   * @return the distance between the point and closest polygon in the relation or -1.0 if the
-   * distance could not be calculated
+   * @param poly
+   * @param point
+   * @return
    */
-  double getPolyToPointDistance(ConstRelationPtr poly, ConstNodePtr point);
+  double getPolyToPointDistance(const ConstElementPtr& poly, const ConstElementPtr& point);
 
   /**
    * Calculates the area of an element
@@ -87,7 +80,7 @@ public:
    * @return the area of the feature or -1.0 if the area could not be calculated
    * @note The area calc is not backed by a cache, but the geometries used to derive it are.
    */
-  double getArea(ConstElementPtr element);
+  double getArea(const ConstElementPtr& element);
 
   /**
    * Determines if a polygon contains a point
@@ -97,7 +90,7 @@ public:
    * @return true if the polygon contains the point; false otherwise or if the containment could
    * not be calculated
    */
-  bool polyContainsPoi(ConstWayPtr poly, ConstNodePtr point);
+  bool polyContainsPoi(const ConstWayPtr& poly, const ConstNodePtr& point);
 
   /**
    * Determines if an element intersects another element
@@ -107,7 +100,7 @@ public:
    * @return true if the two elements intersect; false otherwise or if the intersection could not
    * be calculated
    */
-  bool elementIntersectsElement(ConstElementPtr element1, ConstElementPtr element2);
+  bool elementIntersectsElement(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if an element is of the given type
@@ -118,7 +111,7 @@ public:
    * @throws if the requested type is invalid
    * @todo change type to enum
    */
-  bool isType(ConstElementPtr element, const QString& type);
+  bool isType(const ConstElementPtr& element, const QString& type);
 
   /**
    * Determines if an element has a given criterion
@@ -128,7 +121,48 @@ public:
    * @return true if the element has the criterion; false otherwise
    * @throws if the criterion class name is invalid
    */
-  bool hasCriterion(ConstElementPtr element, const QString& criterionClassName);
+  bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
+
+  /**
+   * TODO
+   *
+   * @param element
+   * @return
+   */
+  bool hasMoreThanOneType(const ConstElementPtr& element);
+
+  /**
+   * TODO
+   *
+   * @param element
+   * @return
+   */
+  bool inBuildingCategory(const ConstElementPtr& element);
+
+  /**
+   * TODO
+   *
+   * @param element
+   * @return
+   */
+  int numAddresses(const ConstElementPtr& element);
+
+  /**
+   * TODO
+   *
+   * @param parent
+   * @param memberId
+   * @return
+   */
+  bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
+
+  /**
+   * TODO
+   *
+   * @param element
+   * @return
+   */
+  std::shared_ptr<geos::geom::Geometry> getGeometry(const ConstElementPtr& element);
 
   /**
    * Clears the contents of the cache
@@ -145,6 +179,8 @@ private:
   ConstOsmMapPtr _map;
 
   int _badGeomCount;
+
+  AddressParser _addressParser;
 
   // Using QHash here instead of QCache, since we're mostly just storing primitives for values and
   // they all take up the same amount of space. Tried to use QCache with the geometries, but since
@@ -170,15 +206,40 @@ private:
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
 
+  QHash<ElementId, bool> _hasMoreThanOneTypeCache;
+  QHash<ElementId, bool> _inBuildingCategoryCache;
+  QHash<ElementId, int> _numAddressesCache;
+
+  // key = parent ID;child ID
+  QHash<QString, bool> _containsMemberCache;
+
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
-
-  std::shared_ptr<geos::geom::Geometry> _getGeometry(ConstElementPtr element);
 
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);
   void _incrementCacheSizeCount(const QString& cacheTypeKey);
+
+  /**
+   * Returns the distance from a point node to a polygon way
+   *
+   * @param poly the way polygon to measure distance from
+   * @param point the point to measure distance from
+   * @return the distance between the point and polygon or -1.0 if the distance could not be
+   * calculated
+   */
+  //double _getPolyToPointDistance(const ConstWayPtr& poly, const ConstNodePtr& point);
+
+  /**
+   * Returns the shortest distance from a point node to a relation containing polygons
+   *
+   * @param poly the relation containing polygons to measure distance from
+   * @param point the point to measure distance from
+   * @return the distance between the point and closest polygon in the relation or -1.0 if the
+   * distance could not be calculated
+   */
+  //double _getPolyToPointDistance(const ConstRelationPtr& poly, const ConstNodePtr& point);
 };
 
 }

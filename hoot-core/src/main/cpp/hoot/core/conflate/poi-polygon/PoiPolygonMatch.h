@@ -66,7 +66,7 @@ public:
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
-    PoiPolygonCachePtr infoCache,
+    PoiPolygonCachePtr infoCache = PoiPolygonCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
     const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
 
@@ -171,7 +171,8 @@ private:
   double _distance;
   //max distance allowed between the elements where they can be considered a distance match
   double _matchDistanceThreshold;
-  //max distance allowed between the elements where they can be considered for review
+  // max distance allowed between the elements where they can be considered for review; note: this
+  // possibly should be renamed to search distance
   double _reviewDistanceThreshold;
   double _reviewDistancePlusCe;
   //true if the distance between the elements, given CE, is within the review distance; absolute
@@ -224,6 +225,8 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
 
   PoiPolygonCachePtr _infoCache;
+
+  int _timingThreshold;
 
   void _categorizeElementsByGeometryType();
 

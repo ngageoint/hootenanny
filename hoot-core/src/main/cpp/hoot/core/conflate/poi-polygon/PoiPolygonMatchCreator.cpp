@@ -35,6 +35,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 
 // Std
 #include <float.h>
@@ -88,6 +89,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   {
     LOG_TRACE("Initializing info cache...");
     _infoCache.reset(new PoiPolygonCache(map));
+    _infoCache->setConfiguration(conf());
   }
 
   PoiPolygonMatch::resetMatchDistanceInfo();
@@ -320,33 +322,11 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
       double distance = DBL_MAX;
       if (sharedWasPoint)
       {
-        if (comparisonElementId.getType() == ElementType::Way)
-        {
-          distance =
-            _infoCache->getPolyToPointDistance(
-              std::dynamic_pointer_cast<const Way>(comparisonElement), point);
-        }
-        else
-        {
-          distance =
-            _infoCache->getPolyToPointDistance(
-              std::dynamic_pointer_cast<const Relation>(comparisonElement), point);
-        }
+        distance = _infoCache->getPolyToPointDistance(comparisonElement, point);
       }
       else
       {
-        if (sharedElementId.getType() == ElementType::Way)
-        {
-          distance =
-            _infoCache->getPolyToPointDistance(
-              std::dynamic_pointer_cast<const Way>(sharedElement), point);
-        }
-        else
-        {
-          distance =
-            _infoCache->getPolyToPointDistance(
-              std::dynamic_pointer_cast<const Relation>(sharedElement), point);
-        }
+        distance = _infoCache->getPolyToPointDistance(sharedElement, point);
       }
       LOG_VART(distance);
       if (distance != -1.0 && distance < smallestDistance)

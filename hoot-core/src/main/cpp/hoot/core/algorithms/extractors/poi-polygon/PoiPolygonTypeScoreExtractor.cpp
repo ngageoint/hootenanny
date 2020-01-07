@@ -36,8 +36,10 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
+
 // Qt
 #include <QSet>
+#include <QStringBuilder>
 
 using namespace std;
 
@@ -329,7 +331,7 @@ QStringList PoiPolygonTypeScoreExtractor::_getRelatedTags(const Tags& tags) cons
            (OsmSchemaCategory::building() | OsmSchemaCategory::use() | OsmSchemaCategory::poi()))
              != OsmSchemaCategory::Empty)
       {
-        tagsList.append(key + "=" + value);
+        tagsList.append(key % "=" % value);
       }
     }
   }
@@ -557,7 +559,7 @@ bool PoiPolygonTypeScoreExtractor::_haveConflictingTags(const QString& tagKey, c
   tag1Val = t1Val;
   tag2Val = t2Val;
   if (t1HasVal && t2HasVal &&
-      OsmSchema::getInstance().score(tagKey + "=" + t1Val, tagKey + "=" + t2Val) != 1.0)
+      OsmSchema::getInstance().score(tagKey % "=" % t1Val, tagKey % "=" % t2Val) != 1.0)
   {
     return true;
   }
