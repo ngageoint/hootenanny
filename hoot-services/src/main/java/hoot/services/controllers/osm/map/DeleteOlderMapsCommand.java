@@ -22,31 +22,29 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
 
-import static hoot.services.models.db.QMaps.maps;
-import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
-import static hoot.services.utils.DbUtils.createQuery;
-import static hoot.services.utils.DbUtils.deleteMapRelatedTablesByMapId;
-
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
+import hoot.services.models.db.Maps;
 import hoot.services.utils.DbUtils;
 
 
-public class DeleteMapResourcesCommand implements InternalCommand {
+public class DeleteOlderMapsCommand implements InternalCommand {
 
-    private final String mapName;
+    private final Timestamp timestamp;
     private final String jobId;
     private final Class<?> caller;
 
-    DeleteMapResourcesCommand(String mapName, String jobId, Class<?> caller) {
-        this.mapName = mapName;
+    DeleteOlderMapsCommand(Timestamp timestamp, String jobId, Class<?> caller) {
+        this.timestamp = timestamp;
         this.jobId = jobId;
         this.caller = caller;
     }
@@ -54,14 +52,14 @@ public class DeleteMapResourcesCommand implements InternalCommand {
     @Override
     public CommandResult execute() {
         CommandResult commandResult = new CommandResult();
-        commandResult.setCommand("[Delete Map Resources] of map with ID = " + this.mapName);
+        commandResult.setCommand("[Delete Older Maps] last accessed before " + this.timestamp);
         commandResult.setStart(LocalDateTime.now());
 
         try {
-            deleteLayerBy(mapName);
+            deleteOlderMaps(timestamp);
         }
         catch (Exception e) {
-            String msg = "Error deleting layer where mapName = " +  mapName;
+            String msg = "Error deleting maps last accessed before " + this.timestamp;
             throw new RuntimeException(msg, e);
         }
 
@@ -73,28 +71,19 @@ public class DeleteMapResourcesCommand implements InternalCommand {
         return commandResult;
     }
 
-    private static void deleteLayerBy(String mapName) {
-        Long mapIdNum = -2L;
-        try {
-            mapIdNum = Long.parseLong(mapName);
-        }
-        catch (NumberFormatException ignored) {
-            mapIdNum = DbUtils.getRecordIdForInputString(mapName, maps, maps.id, maps.displayName);
-        }
-        if(mapIdNum == null || mapIdNum < 0) {
-            throw new IllegalArgumentException(mapName + " doesn't have a corresponding map ID associated with it!");
-        }
+    private static void deleteOlderMaps(Timestamp timestamp) {
 
-        deleteBookmarksBy(mapIdNum);
-        deleteOSMRecordByName(mapIdNum);
+        //Get older maps
+        List<Maps> olderMaps = DbUtils.getStaleMaps(timestamp);
+
+        //Delete older maps
+        olderMaps.stream().forEach(m -> {
+            DbUtils.deleteBookmarksByMapId(m.getId());
+            DbUtils.deleteOSMRecordById(m.getId());
+        });
+
+        //Delete empty folders
+        DbUtils.deleteEmptyFolders();
     }
 
-    private static void deleteOSMRecordByName(Long mapId) {
-        deleteMapRelatedTablesByMapId(mapId);
-        DbUtils.deleteMap(mapId);
-    }
-
-    private static void deleteBookmarksBy(Long mapId) {
-        createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
-    }
 }

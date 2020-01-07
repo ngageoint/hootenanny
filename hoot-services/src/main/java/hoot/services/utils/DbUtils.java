@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.utils;
 
@@ -31,6 +31,8 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
+import static hoot.services.models.db.QUsers.users;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,8 +43,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Provider;
 import javax.sql.DataSource;
@@ -58,6 +62,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
@@ -74,8 +80,12 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
+import hoot.services.models.db.Maps;
+import hoot.services.models.db.QFolders;
 import hoot.services.models.db.QUsers;
+import hoot.services.models.db.Users;
 
 
 /**
@@ -248,6 +258,42 @@ public class DbUtils {
         return sql.fetchFirst();
     }
 
+    public static Set<Long> getFolderIdsForUser(Users user) {
+        Long userId = null;
+        if (user != null) userId = user.getId();
+        return getFolderIdsForUser(userId);
+    }
+
+    public static Set<Long> getFolderIdsForUser(Long userId) {
+        List<Folders> folders = getFoldersForUser(userId);
+        Set<Long> out = new HashSet<Long>(folders.size());
+        for (Folders f : folders) {
+            out.add(f.getId());
+        }
+        return out;
+    }
+
+    public static List<Folders> getFoldersForUser(Users user) {
+        Long userId = null;
+        if (user != null) userId = user.getId();
+        return getFoldersForUser(userId);
+    }
+
+    public static List<Folders> getFoldersForUser(Long userId) {
+        SQLQuery<Folders> sql = createQuery()
+            .select(folders)
+            .from(folders)
+            .where(folders.id.ne(0L));
+        if(userId != null) {
+            sql.where(
+                    folders.userId.eq(userId).or(folders.publicCol.isTrue())
+            );
+        }
+        List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
+
+        return folderRecordSet;
+    }
+
     public static List<Long> getChildrenFolders(Long folderId) {
         List<Long> childrenFolders = createQuery()
                 .select(folders.id)
@@ -256,6 +302,44 @@ public class DbUtils {
                 .fetch();
 
         return childrenFolders;
+    }
+
+/*
+ * --Deletes folders that are empty (no child datasets or folders)
+DELETE
+FROM folders f
+WHERE
+NOT EXISTS
+    (
+    SELECT  NULL
+    FROM    folder_map_mappings fmm
+    WHERE   f.id = fmm.folder_id
+    )
+AND
+NOT EXISTS
+    (
+    SELECT  NULL
+    FROM    folders f2
+    WHERE   f.id = f2.parent_id
+    );
+ */
+    public static void deleteEmptyFolders() {
+        QFolders folders2 = new QFolders("folders2");
+        BooleanExpression isEmpty = new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
+                .and(new SQLQuery<>().from(folders2).where(folders.id.eq(folders2.parentId)).notExists());
+
+        SQLQuery<Folders> hasEmpty = createQuery()
+            .select(folders)
+            .from(folders)
+            .where(isEmpty);
+
+        //keep trying to delete newly empty folders until no more are detected
+        while (hasEmpty.fetchCount() > 0) {
+            createQuery()
+                .delete(folders)
+                .where(isEmpty)
+                .execute();
+        }
     }
 
     /**
@@ -538,6 +622,43 @@ public class DbUtils {
         return count;
     }
 
+/*
+    SELECT id
+    FROM maps
+    WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
+    OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
+
+ */
+
+    private static BooleanExpression getStale(Timestamp ts) {
+        return (Expressions.stringTemplate("tags->'lastAccessed'").isNotNull().and(maps.createdAt.lt(ts)))
+                .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
+    }
+
+    public static List<Maps> getStaleMaps(Timestamp ts) {
+        return createQuery()
+                .select(maps)
+                .from(maps)
+                .where(getStale(ts))
+                .fetch();
+    }
+
+    public static Map<String, Long> getStaleMapsSummary(Timestamp ts) {
+        List<Tuple> result =  createQuery()
+                .select(users.displayName, maps.countDistinct())
+                .from(users, maps)
+                .where(users.id.eq(maps.userId).and(getStale(ts)))
+                .groupBy(users.displayName)
+                .fetch();
+
+        Map<String, Long> response = new HashMap<>();
+
+        result.stream().forEach(tuple -> {
+            response.put(tuple.get(users.displayName), tuple.get(maps.countDistinct()));
+        });
+
+        return response;
+    }
 
     /**
      * Returns table size in bytes
@@ -563,6 +684,20 @@ public class DbUtils {
             id = -1;
         }
         return (id > -1);
+    }
+
+    /**
+     * Checks for the existence of user
+     *
+     * @param userId
+     * @return returns true when exists else false
+     */
+    public static boolean userExists(Long userId) {
+        return createQuery()
+                .select(users)
+                .from(users)
+                .where(users.id.eq(userId))
+                .fetchCount() == 1;
     }
 
     /**
@@ -840,5 +975,14 @@ public class DbUtils {
         }
 
         return progress;
+    }
+
+    public static void deleteOSMRecordById(Long mapId) {
+        deleteMapRelatedTablesByMapId(mapId);
+        DbUtils.deleteMap(mapId);
+    }
+
+    public static void deleteBookmarksByMapId(Long mapId) {
+        createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
     }
 }

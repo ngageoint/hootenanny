@@ -22,17 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
+
+import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
 
 
 @Component
-class DeleteMapResourcesCommandFactory {
+class DeleteOlderMapsCommandFactory {
 
-    DeleteMapResourcesCommand build(String mapName, String jobId, Class<?> caller) {
-        return new DeleteMapResourcesCommand(mapName, jobId, caller);
+    DeleteOlderMapsCommand build(Timestamp timestamp, String jobId, Class<?> caller) {
+        return new DeleteOlderMapsCommand(timestamp, jobId, caller);
     }
 }
