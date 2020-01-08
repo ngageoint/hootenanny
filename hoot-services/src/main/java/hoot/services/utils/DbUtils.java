@@ -824,6 +824,24 @@ NOT EXISTS
         }
     }
 
+    // Sets the specified job to a status detail of conflicts
+    public static void setConflicted(String jobId) {
+        // Find the job
+        JobStatus job = createQuery()
+                .select(jobStatus)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchFirst();
+
+        if(job != null) {
+            createQuery()
+                .update(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .set(jobStatus.statusDetail, "CONFLICTS")
+                .execute();
+        }
+    }
+
     /**
      * Inserts the command_status if it doesn't exist already, else update the stdout, stderr, and percent_complete for the command
      * This function will also call updateJobProgress

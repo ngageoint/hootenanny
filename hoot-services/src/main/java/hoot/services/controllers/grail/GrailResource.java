@@ -144,6 +144,9 @@ public class GrailResource {
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
 
+    @Autowired
+    private CheckForConflictsCommandFactory checkForConflictsCommandFactory;
+
     public GrailResource() {}
 
     private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
@@ -442,6 +445,14 @@ public class GrailResource {
                     throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
                 }
             }
+
+            //Check for conflicts diff-error.osc file and update job status if found
+            //this will indicate to the UI that the conflicts osc file is available for download
+            GrailParams checkConflictsParams = new GrailParams();
+            checkConflictsParams.setParentId(params.getParentId());
+            InternalCommand checkForConflicts = checkForConflictsCommandFactory.build(jobId, checkConflictsParams, this.getClass());
+            workflow.add(checkForConflicts);
+
 
             Map<String, String> tags = DbUtils.getJobTags(reqParams.getParentId());
             String resourceId = tags.get("input1");
