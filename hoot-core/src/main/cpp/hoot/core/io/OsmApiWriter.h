@@ -207,8 +207,20 @@ private:
    * @return success Whether or not the function was able to find a resolvable issue
    */
   bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
-
+  /**
+   * @brief _fixConflict
+   * @param request
+   * @param changeset
+   * @param conflictExplanation
+   * @return
+   */
   bool _fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr changeset, const QString& conflictExplanation);
+  /**
+   * @brief _changesetClosed
+   * @param x
+   * @return
+   */
+  bool _changesetClosed(const QString& conflictExplanation);
   /**
    * @brief _getNode/Way/Relation Perform HTTP GET request to OSM API to get current node/way/relation by ID
    * @param request Network request object initialized with OSM API URL

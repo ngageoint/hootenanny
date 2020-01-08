@@ -330,7 +330,18 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         {
         case 409:   //  Conflict, check for version conflicts and fix, or split and continue
           {
-            if (_fixConflict(request, workInfo, info->response))
+            if (_changesetClosed(info->response))
+            {
+              //  The changeset was closed already so set the ID to -1 and reprocess
+              id = -1;
+              //  Push the changeset back on the queue
+              _workQueueMutex.lock();
+              _workQueue.push(workInfo);
+              _workQueueMutex.unlock();
+              //  Loop back around to work on the next changeset
+              continue;
+            }
+            else if (_fixConflict(request, workInfo, info->response))
             {
               _workQueueMutex.lock();
               _workQueue.push(workInfo);
@@ -734,6 +745,11 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
     }
   }
   return success;
+}
+
+bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation)
+{
+  return _changeset.matchesChangesetClosedFailure(conflictExplanation);
 }
 
 bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)

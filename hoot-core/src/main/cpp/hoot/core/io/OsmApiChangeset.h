@@ -264,6 +264,13 @@ public:
                                                              long& element_id, ElementType::Type& element_type,
                                                              long& version_old, long& version_new);
   /**
+   * @brief matchesChangesetClosed FailureChecks the return from the API to see if it is similar to the following error message:
+   *        "Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC"
+   * @param hint Error message from OSM API
+   * @return True if the message matches
+   */
+  static bool matchesChangesetClosedFailure(const QString& hint);
+  /**
    * @brief setErrorPathname Record the pathname of the error changeset
    * @param path Pathname
    */
