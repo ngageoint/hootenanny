@@ -15,7 +15,7 @@ import traceback
 def findCopyrightYears(fileName, debugMode):
     dates = run(["git", "log", "--date=short", "--format=format:%ad", fileName]).split()
     years = set()
-    print(("\tfileName: " + fileName) if debugMode else '')
+    print("\tfileName: " + fileName if debugMode else '')
     for l in dates:
         print("\tl: " + l  if debugMode else '')
         years.add(l[0:4])
