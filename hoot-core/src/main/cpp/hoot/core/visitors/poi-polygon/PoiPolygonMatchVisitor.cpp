@@ -271,6 +271,10 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   {
     _taskStatusUpdateInterval /= 10;
   }
+  else if (_timer.elapsed() < 250 && _taskStatusUpdateInterval < 10000)
+  {
+    _taskStatusUpdateInterval *= 10;
+  }
 
   _numElementsVisited++;
   // poi/poly matching can be a little slow at times compared to the others, so keep the log update

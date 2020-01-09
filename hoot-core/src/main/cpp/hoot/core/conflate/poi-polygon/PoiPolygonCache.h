@@ -52,6 +52,11 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
  * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary
  * given performance with other datasets.
  *
+ * Note: I did notice later in the second round of performance testing that largely differing
+ * runtimes were being returned on a vagrant instance with the same configuration. I'm not sure
+ * what could be causing this, but that means the results are suspect. Going to go ahead and use
+ * the caching config from the best runtime, but it still may need to be tweaked.
+ *
  * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
  * moved into another cache class if we ever need them to be used with other conflation algs.
  */
@@ -124,7 +129,7 @@ public:
    * @param criterionClassName class name of the ElementCriterion to determine membership of
    * @return true if the element has the criterion; false otherwise
    * @throws if the criterion class name is invalid
-   * @todo move to OsmSchema?
+   * @todo move to OsmSchema
    */
   bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 
@@ -151,7 +156,7 @@ public:
    *
    * @param element
    * @return
-   * @todo move to PoiPolygonType if backed by cache; otherwise get rid of
+   * @todo get rid of
    */
   bool inBuildingCategory(const ConstElementPtr& element);
 
@@ -160,7 +165,7 @@ public:
    *
    * @param element
    * @return
-   * @todo move to cache to AddressScoreExtractor
+   * @todo move to cache to AddressParser
    */
   int numAddresses(const ConstElementPtr& element);
 
