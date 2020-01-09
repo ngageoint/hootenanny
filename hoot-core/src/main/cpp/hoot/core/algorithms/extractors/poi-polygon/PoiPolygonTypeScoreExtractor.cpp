@@ -31,6 +31,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
 // Qt
 #include <QSet>
@@ -371,7 +372,8 @@ bool PoiPolygonTypeScoreExtractor::_failsCuisineMatch(const ConstElementPtr& e1,
   const Tags& t2 = e2->getTags();
   QString t1Val;
   QString t2Val;
-  if (_infoCache->isType(e1, "restaurant") && _infoCache->isType(e2, "restaurant") &&
+  if (_infoCache->isType(e1, PoiPolygonSchemaType::Restaurant) &&
+      _infoCache->isType(e2, PoiPolygonSchemaType::Restaurant) &&
       _haveConflictingTags("cuisine", t1, t2, t1Val, t2Val))
   {
     if (//Don't return false on regional, since its location dependent, and we don't take the
@@ -392,7 +394,8 @@ bool PoiPolygonTypeScoreExtractor::_failsSportMatch(const ConstElementPtr& e1,
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
-  if (_infoCache->isType(e1, "sport") && _infoCache->isType(e2, "sport"))
+  if (_infoCache->isType(e1, PoiPolygonSchemaType::Sport) &&
+      _infoCache->isType(e2, PoiPolygonSchemaType::Sport))
   {
     QString t1Val;
     QString t2Val;
@@ -411,7 +414,8 @@ bool PoiPolygonTypeScoreExtractor::_failsReligionMatch(const ConstElementPtr& e1
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();
-  if (_infoCache->isType(e1, "religion") && _infoCache->isType(e2, "religion"))
+  if (_infoCache->isType(e1, PoiPolygonSchemaType::Religion) &&
+       _infoCache->isType(e2, PoiPolygonSchemaType::Religion))
   {
     QString t1Val;
     QString t2Val;

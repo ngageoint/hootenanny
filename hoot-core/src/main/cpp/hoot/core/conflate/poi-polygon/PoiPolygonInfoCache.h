@@ -36,6 +36,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/address/AddressParser.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
 namespace hoot
 {
@@ -76,16 +77,14 @@ public:
    * @param point the point to measure distance from
    * @return the distance between the point and polygon or -1.0 if the distance could not be
    * calculated
-   * @todo move to OsmUtils; rename
    */
-  double getPolyToPointDistance(const ConstElementPtr& poly, const ConstElementPtr& point);
+  double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Calculates the area of an element
    *
    * @param element the feature to calculate the area of
    * @return the area of the feature or -1.0 if the area could not be calculated
-   * @todo move to OsmUtils
    */
   double getArea(const ConstElementPtr& element);
 
@@ -96,9 +95,9 @@ public:
    * @param point the point to examine
    * @return true if the polygon contains the point; false otherwise or if the containment could
    * not be calculated
-   * @todo move to OsmUtils; rename to elementContains?
    */
-  bool polyContainsPoint(const ConstElementPtr& poly, const ConstElementPtr& point);
+  bool elementContains(const ConstElementPtr& containingElement,
+                       const ConstElementPtr& containedElement);
 
   /**
    * Determines if an element intersects another element
@@ -107,9 +106,8 @@ public:
    * @param element2 the second element to examine
    * @return true if the two elements intersect; false otherwise or if the intersection could not
    * be calculated
-   * @todo move to OsmUtils; rename to elementsIntersect
    */
-  bool elementIntersectsElement(const ConstElementPtr& element1, const ConstElementPtr& element2);
+  bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
    * Determines if an element is of the given type
@@ -118,9 +116,8 @@ public:
    * @param type the type to determine membership for the element
    * @return true if the element is of the requested type; false otherwise
    * @throws if the requested type is invalid
-   * @todo change type to enum; move to PoiPolygonType
    */
-  bool isType(const ConstElementPtr& element, const QString& type);
+  bool isType(const ConstElementPtr& element, const PoiPolygonSchemaType& type);
 
   /**
    * Determines if an element has a given criterion
@@ -129,7 +126,6 @@ public:
    * @param criterionClassName class name of the ElementCriterion to determine membership of
    * @return true if the element has the criterion; false otherwise
    * @throws if the criterion class name is invalid
-   * @todo move to OsmSchema
    */
   bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 
@@ -138,7 +134,6 @@ public:
    *
    * @param element
    * @return
-   * @todo move to PoiPolygonType
    */
   bool hasMoreThanOneType(const ConstElementPtr& element);
 
@@ -147,7 +142,6 @@ public:
    *
    * @param element
    * @return
-   * @todo move to PoiPolygonType
    */
   bool hasRelatedType(const ConstElementPtr& element);
 
@@ -156,16 +150,6 @@ public:
    *
    * @param element
    * @return
-   * @todo get rid of
-   */
-  bool inBuildingCategory(const ConstElementPtr& element);
-
-  /**
-   * TODO
-   *
-   * @param element
-   * @return
-   * @todo move to cache to AddressParser
    */
   int numAddresses(const ConstElementPtr& element);
 
@@ -174,7 +158,6 @@ public:
    *
    * @param parent
    * @param memberId
-   * @todo move to OsmUtils
    */
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
@@ -214,12 +197,8 @@ private:
   // work. Also, not doing any management of the size of these caches, which may eventually end up
   // being needed to control memory usage.
 
-  // ordering of the ID keys does matter here; "poi element ID;poly element ID"
-  QHash<QString, double> _elementDistanceCache;
-
-  // ordering of the ID keys does matter here; we're asking the question: does the first element
-  // contain the second element?; keys are "elementId1;elementId2"
-  QHash<QString, bool> _elementContainsCache;
+  // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
+  // in both directions
   QHash<QString, bool> _elementIntersectsCache;
 
   // key is "elementId;type string"
@@ -234,15 +213,9 @@ private:
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
 
   QHash<ElementId, bool> _hasMoreThanOneTypeCache;
-  QHash<ElementId, bool> _hasRelatedTypeCache;
-  QHash<ElementId, bool> _inBuildingCategoryCache;
   QHash<ElementId, int> _numAddressesCache;
-  QHash<ElementId, double> _areaCache;
 
   QHash<ElementId, double> _reviewDistanceCache;
-
-  // key = parent ID;child ID
-  QHash<QString, bool> _containsMemberCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;

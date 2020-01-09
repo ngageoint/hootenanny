@@ -321,11 +321,11 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
       double distance = DBL_MAX;
       if (sharedWasPoint)
       {
-        distance = _infoCache->getPolyToPointDistance(comparisonElement, point);
+        distance = _infoCache->getDistance(comparisonElement, point);
       }
       else
       {
-        distance = _infoCache->getPolyToPointDistance(sharedElement, point);
+        distance = _infoCache->getDistance(sharedElement, point);
       }
       LOG_VART(distance);
       if (distance != -1.0 && distance < smallestDistance)

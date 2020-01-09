@@ -63,22 +63,7 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstEl
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
     DisableLog dl(Log::Warn);
 
-    //if (_infoCache)
-    //{
-      return _infoCache->getPolyToPointDistance(poly, poi);
-//    }
-//    // to appease unit test for now
-//    else
-//    {
-//      ElementConverter elementConverter(map.shared_from_this());
-//      std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-//      if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
-//      {
-//        throw geos::util::TopologyException();
-//      }
-//      std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
-//      return polyGeom->distance(poiGeom.get());
-//    }
+    return _infoCache->getDistance(poly, poi);
   }
   catch (const geos::util::TopologyException& e)
   {

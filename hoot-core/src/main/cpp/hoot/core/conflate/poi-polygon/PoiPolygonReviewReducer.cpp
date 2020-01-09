@@ -200,7 +200,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //  }
 
   //timer.restart();
-  const bool polyIsPark = _infoCache->isType(poly, "park");
+  const bool polyIsPark = _infoCache->isType(poly, PoiPolygonSchemaType::Park);
   LOG_VART(polyIsPark);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
@@ -271,7 +271,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   LOG_TRACE("Checking rule #9...");
   //timer.restart();
   if (poiHasName && polyHasName && _nameScore < 0.5 && !_addressMatch &&
-      _infoCache->isType(poi, "restaurant") && _infoCache->isType(poly, "restaurant"))
+      _infoCache->isType(poi, PoiPolygonSchemaType::Restaurant) &&
+      _infoCache->isType(poly, PoiPolygonSchemaType::Restaurant))
   {
     LOG_TRACE("Returning miss per review reduction rule #9...");
     _triggeredRuleDescription = "#9";
@@ -299,7 +300,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   //timer.restart();
   LOG_TRACE("Checking rule #12...");
-  if (_infoCache->isType(poi, "specificSchool") && _infoCache->isType(poly, "specificSchool") &&
+  if (_infoCache->isType(poi, PoiPolygonSchemaType::SpecificSchool) &&
+      _infoCache->isType(poly, PoiPolygonSchemaType::SpecificSchool) &&
       !PoiPolygonSchema::specificSchoolMatch(poi, poly))
   {
     LOG_TRACE("Returning miss per review reduction rule #12...");
@@ -312,7 +314,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //  }
 
   //timer.restart();
-  const bool polyIsNatural = _infoCache->isType(poly, "natural");
+  const bool polyIsNatural = _infoCache->isType(poly, PoiPolygonSchemaType::Natural);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
 //    LOG_DEBUG("polyIsNatural: " << timer.nsecsElapsed());
@@ -322,7 +324,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //extended
   //timer.restart();
   LOG_TRACE("Checking rule #13...");
-  if ((polyIsNatural || polyIsPark) && _infoCache->inBuildingCategory(poi))
+  if ((polyIsNatural || polyIsPark) &&
+      OsmSchema::getInstance().getCategories(poi->getTags()).intersects(
+        OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #13...");
     _triggeredRuleDescription = "#13";
@@ -355,7 +359,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //  }
 
   //timer.restart();
-  const bool poiIsNatural = _infoCache->isType(poi, "natural");
+  const bool poiIsNatural = _infoCache->isType(poi, PoiPolygonSchemaType::Natural);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
 //    LOG_DEBUG("poiIsNatural: " << timer.nsecsElapsed());
@@ -390,7 +394,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //  }
 
   //timer.restart();
-  const bool poiIsPark = _infoCache->isType(poi, "park");
+  const bool poiIsPark = _infoCache->isType(poi, PoiPolygonSchemaType::Park);
   LOG_VART(poiIsPark);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
@@ -398,7 +402,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //  }
 
   //timer.restart();
-  const bool polyIsSport = _infoCache->isType(poly, "sport");
+  const bool polyIsSport = _infoCache->isType(poly, PoiPolygonSchemaType::Sport);
   LOG_VART(polyIsSport);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
@@ -445,8 +449,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   // similar to previous, except more focused for restrooms
   //timer.restart();
   LOG_TRACE("Checking rule #18...");
-  if (poiHasType && polyHasType && _typeScore != 1.0 && _infoCache->isType(poi, "restroom") &&
-      !_infoCache->inBuildingCategory(poly))
+  if (poiHasType && polyHasType && _typeScore != 1.0 &&
+      _infoCache->isType(poi, PoiPolygonSchemaType::Restroom) &&
+      !OsmSchema::getInstance().getCategories(poly->getTags()).intersects(
+         OsmSchemaCategory::building()))
   {
     LOG_TRACE("Returning miss per review reduction rule #18...");
     _triggeredRuleDescription = "#18";
@@ -460,7 +466,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //Be more strict reviewing parking lots against other features
   //timer.restart();
   LOG_TRACE("Checking rule #19...");
-  if (poiHasType && polyHasType && !_typeMatch && _infoCache->isType(poly, "parking") &&
+  if (poiHasType && polyHasType && !_typeMatch &&
+      _infoCache->isType(poly, PoiPolygonSchemaType::Parking) &&
       polyTags.get("parking").toLower() != QLatin1String("multi-storey"))
   {
     LOG_TRACE("Returning miss per review reduction rule #19...");
@@ -475,7 +482,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //Don't review schools against their sports fields.
   //timer.restart();
   LOG_TRACE("Checking rule #20...");
-  if (polyIsSport && _infoCache->isType(poi, "school"))
+  if (polyIsSport && _infoCache->isType(poi, PoiPolygonSchemaType::School))
   {
     LOG_TRACE("Returning miss per review reduction rule #20...");
     _triggeredRuleDescription = "#20";
@@ -556,7 +563,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //  }
 
   //timer.restart();
-  const bool poiIsParkish = _infoCache->isType(poi, "parkish");
+  const bool poiIsParkish = _infoCache->isType(poi, PoiPolygonSchemaType::Parkish);
   LOG_VART(poiIsParkish);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
@@ -632,7 +639,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   bool sportPoiOnOtherSportPolyWithTypeMatch = false;
   bool poiOnBuilding = false;
   //timer.restart();
-  const bool poiIsSport = _infoCache->isType(poi, "sport");
+  const bool poiIsSport = _infoCache->isType(poi, PoiPolygonSchemaType::Sport);
   LOG_VART(poiIsSport);
 //  if (timer.nsecsElapsed() > timingThreshold)
 //  {
@@ -689,8 +696,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     {
       //this is a little loose, b/c there could be more than one type match set of tags...
       //timer.restart();
-      if (poiIsSport && _infoCache->isType(polyNeighbor, "sport") &&
-          _infoCache->polyContainsPoint(polyNeighbor, poi) &&
+      if (poiIsSport && _infoCache->isType(polyNeighbor, PoiPolygonSchemaType::Sport) &&
+          _infoCache->elementContains(polyNeighbor, poi) &&
           PoiPolygonTypeScoreExtractor(_infoCache).extract(*_map, poi, polyNeighbor) >=
            _typeScoreThreshold)
       {
@@ -702,7 +709,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       }
       else if (_infoCache->hasCriterion(
                  polyNeighbor, QString::fromStdString(BuildingCriterion::className())) &&
-               _infoCache->polyContainsPoint(polyNeighbor/*AsWay*/, poi))
+               _infoCache->elementContains(polyNeighbor, poi))
       {
         poiOnBuilding = true;
 //        if (timer.nsecsElapsed() > timingThreshold)
@@ -710,14 +717,14 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 //          LOG_DEBUG("poiOnBuilding: " << timer.nsecsElapsed());
 //        }
       }
-      else if (_infoCache->isType(polyNeighbor, "park"))
+      else if (_infoCache->isType(polyNeighbor, PoiPolygonSchemaType::Park))
       {
         // Should this be OsmSchema::elementHasName instead?
         otherParkPolyHasName = !polyNeighbor->getTags().get("name").trimmed().isEmpty();
         otherParkPolyNameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, polyNeighbor);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
 
-        if (_infoCache->polyContainsPoint(polyNeighbor/*AsWay*/, poi))
+        if (_infoCache->elementContains(polyNeighbor, poi))
         {
           poiContainedInAnotherParkPoly = true;
           LOG_TRACE(
@@ -727,7 +734,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         }
 
         //timer.restart();
-        if (_infoCache->elementIntersectsElement(polyNeighbor, poly))
+        if (_infoCache->elementsIntersect(polyNeighbor, poly))
         {
 //          if (timer.nsecsElapsed() > timingThreshold)
 //          {
@@ -760,9 +767,8 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
             //Calc the distance from the poi to the poly line instead of the poly itself.
             //Calcing distance to the poly itself will always return 0 when the poi is in the
             //poly.
-            poiToPolyNodeDist = _infoCache->getPolyToPointDistance(poly, poi);
-            poiToOtherParkPolyNodeDist =
-              _infoCache->getPolyToPointDistance(polyNeighbor, poi);
+            poiToPolyNodeDist = _infoCache->getDistance(poly, poi);
+            poiToOtherParkPolyNodeDist = _infoCache->getDistance(polyNeighbor, poi);
             LOG_TRACE(
               "poly examined and found very close to a another park poly: " << poly->toString());
             LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());
