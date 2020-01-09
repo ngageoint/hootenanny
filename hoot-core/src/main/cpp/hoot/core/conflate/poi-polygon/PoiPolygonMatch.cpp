@@ -197,7 +197,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
 
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
-  setReviewDistanceThreshold(config.getPoiPolygonReviewDistanceThreshold());
+  setReviewDistanceThreshold(config.getPoiPolygonAdditionalSearchDistance());
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
 

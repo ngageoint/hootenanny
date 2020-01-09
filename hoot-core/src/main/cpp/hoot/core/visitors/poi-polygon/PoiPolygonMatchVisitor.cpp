@@ -76,7 +76,7 @@ _filter(filter),
 _infoCache(infoCache)
 {
   ConfigOptions opts = ConfigOptions();
-  _reviewDistanceThreshold = opts.getPoiPolygonReviewDistanceThreshold();
+  _reviewDistanceThreshold = opts.getPoiPolygonAdditionalSearchDistance();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
   LOG_VART(_infoCache.get());
 }

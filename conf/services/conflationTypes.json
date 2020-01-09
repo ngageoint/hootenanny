@@ -73,6 +73,7 @@
         "matcher": "hoot::PoiPolygonMatchCreator",
         "merger": "hoot::PoiPolygonMergerCreator",
         "members": {
+	    "poi.polygon.additional.search.distance": "Additional distance to look for POI/Polygon matches added to match candidate circular error",
             "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and Poi to Polygon matches",
             "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Merge many to one POI to polygon matches",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
@@ -82,7 +83,6 @@
             "poi.polygon.match.evidence.threshold": "Match evidence threshold",
             "poi.polygon.name.score.threshold": "Name score threshold",
             "poi.polygon.promote.points.with.addresses.to.pois": "Promote point with addresses to POIs",
-            "poi.polygon.review.distance.threshold": "Review distance threshold",
             "poi.polygon.review.evidence.threshold": "Review evidence threshold",
             "poi.polygon.review.if.matched.types": "Tags used to flag reviews",
             "poi.polygon.review.multiuse.buildings": "Review POI matches with multi-use buildings",

@@ -1737,12 +1737,10 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
   }
   else
   {
-    // for now all metadata tags are text so they're referenced by the key only. If that changes then
-    // we'll need some logic here to check if a vertex is a text vertex.
+    // for now all metadata tags are text so they're referenced by the key only. If that changes
+    // then we'll need some logic here to check if a vertex is a text vertex.
     bool metadata = isAncestor(key, "metadata");
-
     _metadataKey[key] = metadata;
-
     return metadata;
   }
 }
