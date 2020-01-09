@@ -66,10 +66,6 @@ _map(map)
 //  _areaCache.reserve(_map->size());
 }
 
-PoiPolygonCache::~PoiPolygonCache()
-{
-}
-
 void PoiPolygonCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
@@ -93,6 +89,7 @@ void PoiPolygonCache::clear()
   _hasRelatedTypeCache.clear();
   _elementIntersectsCache.clear();
   _areaCache.clear();
+  _numAddressesCache.clear();
 }
 
 void PoiPolygonCache::printCacheInfo()
@@ -460,16 +457,16 @@ int PoiPolygonCache::numAddresses(const ConstElementPtr& element)
     throw IllegalArgumentException();
   }
 
-//  QHash<ElementId, int>::const_iterator itr = _numAddressesCache.find(element->getElementId());
-//  if (itr != _numAddressesCache.end())
-//  {
-//    _incrementCacheHitCount("numAddresses");
-//    return itr.value();
-//  }
+  QHash<ElementId, int>::const_iterator itr = _numAddressesCache.find(element->getElementId());
+  if (itr != _numAddressesCache.end())
+  {
+    _incrementCacheHitCount("numAddresses");
+    return itr.value();
+  }
 
   const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
-  //_numAddressesCache[element->getElementId()] = numAddresses;
-  //_incrementCacheSizeCount("numAddresses");
+  _numAddressesCache[element->getElementId()] = numAddresses;
+  _incrementCacheSizeCount("numAddresses");
   return numAddresses;
 }
 

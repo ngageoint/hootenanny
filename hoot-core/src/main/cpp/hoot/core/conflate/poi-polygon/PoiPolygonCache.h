@@ -61,7 +61,6 @@ class PoiPolygonCache : public Configurable
 public:
 
   PoiPolygonCache(const ConstOsmMapPtr& map);
-  ~PoiPolygonCache();
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -161,7 +160,7 @@ public:
    *
    * @param element
    * @return
-   * @todo move to OsmUtils if keeping; otherwise get rid of
+   * @todo move to cache to AddressScoreExtractor
    */
   int numAddresses(const ConstElementPtr& element);
 
@@ -170,7 +169,7 @@ public:
    *
    * @param parent
    * @param memberId
-   * @todo move to OsmUtils if keeping; otherwise get rid of
+   * @todo move to OsmUtils
    */
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
