@@ -12,12 +12,12 @@ import sys
 import traceback
 
 # Given a file determine which years it was changed in git.
-def findCopyrightYears(fileName):
+def findCopyrightYears(fileName, debugMode):
     dates = run(["git", "log", "--date=short", "--format=format:%ad", fileName]).split()
     years = set()
-    #print "\tfileName: " + fileName  # debug output
+    print(("\tfileName: " + fileName) if debugMode else '')
     for l in dates:
-        #print "\tl: " + l  # debug output
+        print("\tl: " + l  if debugMode else '')
         years.add(l[0:4])
     # If it isn't in git then just give it the current year as the copyright.
     if len(years) == 0:
@@ -54,6 +54,18 @@ def sortDedupeYears(copyrightYears):
                 rtnCopyrightYears = rtnCopyrightYears + ", " + copyrightYear
         
     return rtnCopyrightYears
+
+def compareCopyrightYears(gitCopyrightYears, existingCopyrightYears):
+    if gitCopyrightYears != existingCopyrightYears:
+        # Split the git years
+        gitCopyrightYears = gitCopyrightYears.replace(" ", "")
+        gitYears = gitCopyrightYears.split(",")
+        # Loop through and make sure that all of the git years exist in the existing file header
+        for git_year in gitYears:
+            # If the git year is not in the existing file years
+            if git_year != "" and git_year not in existingCopyrightYears:
+                return False
+    return True
 
 def run(args):
     p = Popen(args, stdout=PIPE)
@@ -146,6 +158,9 @@ clp.add_option("--update-mode", dest="updateMode", type="int", default=0,
     help="1 = Enable update mode which means the copyrights will be updated " +
         "otherwise, 0 = the copyrights will only be checked, not updated")
 
+clp.add_option("--debug", dest="debugMode", action="store_true", default=False,
+    help="Enable debug mode. Print extra output for debugging copyright")
+
 (options, args) = clp.parse_args()
 
 exitCode = 0
@@ -167,7 +182,7 @@ if (options.updateMode!=0 and options.updateMode!=1):
     raise Exception("Error, must set --update-mode (0 or 1)")
     exitCode = 2
     
-#print "updateMode  = "+ str(options.updateMode)
+print("updateMode  = "+ str(options.updateMode) if options.debugMode else '')
 
 if options.scriptMode:
   commentBegin = ""
@@ -198,7 +213,7 @@ try:
     copyrights = []
     
     # See if the first line is #!
-    #print "fileLines[0] = '"+fileLines[0]+"'"
+    print("fileLines[0] = '"+fileLines[0]+"'" if options.debugMode else '')
     if options.scriptMode and fileLines[0][0:2] == "#!":
       firstLineIsSheBang = True
     else:
@@ -214,23 +229,23 @@ try:
     lineCount = 0
     existingCopyrightYears = "" # New variable as of 2-2-2017
     for line in fileLines:
-      #print "line: '"+line+"'"
+      print("line: '"+line+"'" if options.debugMode else '')
       if firstLineIsSheBang and not foundSheBang:
-        #print "Found #!"
+        print("Found #!" if options.debugMode else '')
         firstLineStr = line
         foundSheBang = True
         lineCount = 0
       elif lineCount == 0 and not doneWithHeader and line.startswith("/*") and not inHeaderBlock:
-        #print "Found first @HEADER!"
+        print("Found first @HEADER!" if options.debugMode else '')
         inHeaderBlock = True
         oldHeaderBlock += line
       elif "*/" in line and inHeaderBlock:
-        #print "Found last @HEADER!"
+        print("Found last @HEADER!" if options.debugMode else '')
         inHeaderBlock = False
         doneWithHeader = True
         oldHeaderBlock += line
       elif inHeaderBlock:
-        #print "Skipping line in existing header block!"
+        print("Skipping line in existing header block!" if options.debugMode else '')
         if line.startswith(" * @copyright"):
             if "DigitalGlobe" not in line:
                 copyrights.append(line.rstrip())
@@ -242,35 +257,35 @@ try:
                 # If there is a match then assign it to existingCopyrightYears
                 if m:
                     existingCopyrightYears = m.group(1)
-                    #print "existingCopyrightYears: " + existingCopyrightYears
+                    print("existingCopyrightYears: " + existingCopyrightYears if options.debugMode else '')
         lineCount += 1
         oldHeaderBlock += line
       else:
-        #print "Augmenting line!"
+        print("Augmenting line!" if options.debugMode else '')
         lowerNewFileStr += line
         lineCount += 1
         
     # Determine copyright years by examining git log.
     # Set the condition for whether or not the copyright header needs updating.
-    copyrightYears = findCopyrightYears(options.fileName)
+    copyrightYears = findCopyrightYears(options.fileName, options.debugMode)
     updateNeeded = False
-    #print "\tcopyrightYears: " + copyrightYears
+    print("\t        copyrightYears: " + copyrightYears if options.debugMode else '')
+    print("\texistingCopyrightYears: " + existingCopyrightYears if options.debugMode else '')
     if (copyrightYears == existingCopyrightYears):
-        #print "\tcopyrightYears match existingCopyrightYears"
+        print("\tcopyrightYears match existingCopyrightYears" if options.debugMode else '')
         copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " DigitalGlobe (http://www.digitalglobe.com/)")
     else:
-        #print "\tcopyrightYears do NOT match existingCopyrightYears"
+        print("\tcopyrightYears do NOT match existingCopyrightYears" if options.debugMode else '')
         if existingCopyrightYears != "":
             # There are existing copyright years, we need to find out if the years identified in the git logs
             # are already in the existing copyright years.
-            if copyrightYears in existingCopyrightYears: 
-                #print "\tcopyrightYears are already included in existingCopyrightYears" # No update needed
-                a=1 # Meaningless statement - needed to keep this construct 'legal' (commenting out the above print statement necessitated this)
+            if compareCopyrightYears(copyrightYears, existingCopyrightYears):
+                print("\tcopyrightYears are already included in existingCopyrightYears" if options.debugMode else '')
             else:
                 # The years from the git logs are NOT in the existing copyright years, so combine the two strings of
                 # years and run them through the sorting and deduping process (ignores any overlap and sorts the years).
                 combinedCopyrightYears = sortDedupeYears(existingCopyrightYears + ", " + copyrightYears)
-                #print "\tcombinedCopyrightYears: " + combinedCopyrightYears
+                print("\tcombinedCopyrightYears: " + combinedCopyrightYears if options.debugMode else '')
                 copyrights.append(" * @copyright Copyright (C) " + combinedCopyrightYears + " DigitalGlobe (http://www.digitalglobe.com/)")
                 updateNeeded = True
         else:
@@ -285,15 +300,15 @@ try:
     # Create a new header that includes all necessary copyrights.
     copyrightHeaderStr = "\n".join(lines) + "\n"
     
-    #print "\n\nfirstLineStr =", firstLineStr
-    #print "\n\nlowerNewFileStr:\n----------\n"+lowerNewFileStr+"-----------\n"
+    print("\n\nfirstLineStr =", firstLineStr if options.debugMode else '')
+    print("\n\nlowerNewFileStr:\n----------\n"+lowerNewFileStr+"-----------\n" if options.debugMode else '')
     
     # C) If an existing header was never found, then add one at the top of the file.
     newFileStr = firstLineStr + \
       copyrightHeaderStr + \
       lowerNewFileStr
     
-    #print "Checking copyright header: " + options.fileName
+    print("Checking copyright header: " + options.fileName if options.debugMode else '')
     
     # D) Write the new file.
     # The *elif* portion of the following condition is being changed because the LicenseTemplate.txt file has a space character
@@ -305,17 +320,17 @@ try:
     elif updateNeeded: # oldHeaderBlock != copyrightHeaderStr
         if options.updateMode: # update-mode = 1 (True) - write a new copyright header
             print "Updating copyright header --> <" + options.fileName + ">"  # Production version (tab-less)
-            #print "\tUpdating copyright header --> " + options.fileName  # Debug version (with tab)
-            #print "\tcopyrightHeaderStr:\n" + copyrightHeaderStr + "\n"
-            #print "\n\nnewFileStr:\n----------\n"+newFileStr+"-----------\n"
+            print("\tUpdating copyright header --> " + options.fileName  if options.debugMode else '')
+            print("\tcopyrightHeaderStr:\n" + copyrightHeaderStr + "\n" if options.debugMode else '')
+            print("\n\nnewFileStr:\n----------\n"+newFileStr+"-----------\n" if options.debugMode else '')
             open(options.fileName, 'w').write(newFileStr)
             exitCode = 0
         elif not options.updateMode: # update-mode = 0 (False) - note files that need a new copyright header (needs updating)
             print "Needs copyright header updated --> <" + options.fileName + ">"  # Production version (tab-less)
-            #print "\tNeeds copyright header updated --> " + options.fileName  # Debug version (with tab)
+            print("\tNeeds copyright header updated --> " + options.fileName  if options.debugMode else '')
             # Debug output - see what the old header looks like vs. what the new header would look like.
-            #print "\toldHeaderBlock:\n" + oldHeaderBlock + "\n"
-            #print "\tcopyrightHeaderStr:\n" + copyrightHeaderStr + "\n"
+            print("\toldHeaderBlock:\n" + oldHeaderBlock + "\n" if options.debugMode else '')
+            print("\tcopyrightHeaderStr:\n" + copyrightHeaderStr + "\n" if options.debugMode else '')
             exitCode = 1
 except Exception as e:
     exMsg = str(e)
@@ -323,5 +338,5 @@ except Exception as e:
     print "\tError message --> <" + exMsg + ">"
     exitCode = 2
 finally:
-    #print "Exit code from Python: " + str(exitCode)
+    print("Exit code from Python: " + str(exitCode) if options.debugMode else '')
     exit(exitCode)
