@@ -79,6 +79,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -102,6 +103,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -129,6 +131,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -166,6 +169,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -201,6 +205,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -223,6 +228,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -255,6 +261,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -302,6 +309,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -383,6 +391,7 @@ public:
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
     settings.set("address.use.default.language.translation.only", "false");
     uut.setConfiguration(settings);
+    uut.setCacheEnabled(false);
     std::shared_ptr<ToEnglishDictionaryTranslator> dictTranslator =
       std::dynamic_pointer_cast<ToEnglishDictionaryTranslator>(
         ToEnglishAddressTranslator::_translator);
@@ -410,6 +419,7 @@ public:
 
     settings.set("address.translate.to.english", "false");
     uut.setConfiguration(settings);
+    uut.setCacheEnabled(false);
      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, uut.extract(*map, node1, way1), 0.0);
   }
 
@@ -417,6 +427,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
     QSet<QString> additionalTagKeys;
     additionalTagKeys.insert("note");
     additionalTagKeys.insert("description");
@@ -457,6 +468,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -491,6 +503,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
@@ -529,6 +542,7 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    uut.setCacheEnabled(false);
 
     OsmMapPtr map(new OsmMap());
     NodePtr node1(new Node(Status::Unknown1, -1, Coordinate(0.0, 0.0), 15.0));
