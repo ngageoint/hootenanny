@@ -690,7 +690,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       //this is a little loose, b/c there could be more than one type match set of tags...
       //timer.restart();
       if (poiIsSport && _infoCache->isType(polyNeighbor, "sport") &&
-          _infoCache->polyContainsPoi(polyNeighbor/*AsWay*/, poi) &&
+          _infoCache->polyContainsPoint(polyNeighbor, poi) &&
           PoiPolygonTypeScoreExtractor(_infoCache).extract(*_map, poi, polyNeighbor) >=
            _typeScoreThreshold)
       {
@@ -702,7 +702,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       }
       else if (_infoCache->hasCriterion(
                  polyNeighbor, QString::fromStdString(BuildingCriterion::className())) &&
-               _infoCache->polyContainsPoi(polyNeighbor/*AsWay*/, poi))
+               _infoCache->polyContainsPoint(polyNeighbor/*AsWay*/, poi))
       {
         poiOnBuilding = true;
 //        if (timer.nsecsElapsed() > timingThreshold)
@@ -717,7 +717,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         otherParkPolyNameScore = PoiPolygonNameScoreExtractor().extract(*_map, poi, polyNeighbor);
         otherParkPolyNameMatch = otherParkPolyNameScore >= _nameScoreThreshold;
 
-        if (_infoCache->polyContainsPoi(polyNeighbor/*AsWay*/, poi))
+        if (_infoCache->polyContainsPoint(polyNeighbor/*AsWay*/, poi))
         {
           poiContainedInAnotherParkPoly = true;
           LOG_TRACE(
@@ -760,9 +760,9 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
             //Calc the distance from the poi to the poly line instead of the poly itself.
             //Calcing distance to the poly itself will always return 0 when the poi is in the
             //poly.
-            poiToPolyNodeDist = _infoCache->getPolyToPointDistance(/*polyAsWay*/poly, poi);
+            poiToPolyNodeDist = _infoCache->getPolyToPointDistance(poly, poi);
             poiToOtherParkPolyNodeDist =
-              _infoCache->getPolyToPointDistance(/*polyNeighborAsWay*/polyNeighbor, poi);
+              _infoCache->getPolyToPointDistance(polyNeighbor, poi);
             LOG_TRACE(
               "poly examined and found very close to a another park poly: " << poly->toString());
             LOG_TRACE("park poly it is very close to: " << polyNeighbor->toString());

@@ -52,7 +52,7 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
  * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary
  * given performance with other datasets.
  *
- * Some of the distance comparisons in this class could be abstracted out beyond poi/poly geoms and
+ * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
  * moved into another cache class if we ever need them to be used with other conflation algs.
  */
 class PoiPolygonCache : public Configurable
@@ -72,6 +72,7 @@ public:
    * @param point the point to measure distance from
    * @return the distance between the point and polygon or -1.0 if the distance could not be
    * calculated
+   * @todo move to OsmUtils; rename
    */
   double getPolyToPointDistance(const ConstElementPtr& poly, const ConstElementPtr& point);
 
@@ -80,7 +81,7 @@ public:
    *
    * @param element the feature to calculate the area of
    * @return the area of the feature or -1.0 if the area could not be calculated
-   * @note The area calc is not backed by a cache, but the geometries used to derive it are.
+   * @todo move to OsmUtils
    */
   double getArea(const ConstElementPtr& element);
 
@@ -91,8 +92,9 @@ public:
    * @param point the point to examine
    * @return true if the polygon contains the point; false otherwise or if the containment could
    * not be calculated
+   * @todo move to OsmUtils; rename to elementContains?
    */
-  bool polyContainsPoi(const ConstElementPtr& poly, const ConstElementPtr& point);
+  bool polyContainsPoint(const ConstElementPtr& poly, const ConstElementPtr& point);
 
   /**
    * Determines if an element intersects another element
@@ -101,6 +103,7 @@ public:
    * @param element2 the second element to examine
    * @return true if the two elements intersect; false otherwise or if the intersection could not
    * be calculated
+   * @todo move to OsmUtils; rename to elementsIntersect
    */
   bool elementIntersectsElement(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
@@ -111,7 +114,7 @@ public:
    * @param type the type to determine membership for the element
    * @return true if the element is of the requested type; false otherwise
    * @throws if the requested type is invalid
-   * @todo change type to enum
+   * @todo change type to enum; move to PoiPolygonType
    */
   bool isType(const ConstElementPtr& element, const QString& type);
 
@@ -122,6 +125,7 @@ public:
    * @param criterionClassName class name of the ElementCriterion to determine membership of
    * @return true if the element has the criterion; false otherwise
    * @throws if the criterion class name is invalid
+   * @todo move to OsmSchema?
    */
   bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 
@@ -130,6 +134,7 @@ public:
    *
    * @param element
    * @return
+   * @todo move to PoiPolygonType
    */
   bool hasMoreThanOneType(const ConstElementPtr& element);
 
@@ -138,6 +143,7 @@ public:
    *
    * @param element
    * @return
+   * @todo move to PoiPolygonType
    */
   bool hasRelatedType(const ConstElementPtr& element);
 
@@ -146,6 +152,7 @@ public:
    *
    * @param element
    * @return
+   * @todo move to PoiPolygonType if backed by cache; otherwise get rid of
    */
   bool inBuildingCategory(const ConstElementPtr& element);
 
@@ -154,6 +161,7 @@ public:
    *
    * @param element
    * @return
+   * @todo move to OsmUtils if keeping; otherwise get rid of
    */
   int numAddresses(const ConstElementPtr& element);
 
@@ -162,17 +170,9 @@ public:
    *
    * @param parent
    * @param memberId
-   * @return
+   * @todo move to OsmUtils if keeping; otherwise get rid of
    */
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
-
-  /**
-   * TODO
-   *
-   * @param element
-   * @return
-   */
-  std::shared_ptr<geos::geom::Geometry> getGeometry(const ConstElementPtr& element);
 
   /**
    * Clears the contents of the cache
@@ -188,6 +188,7 @@ private:
 
   ConstOsmMapPtr _map;
 
+  // TODO: should this be static?
   int _badGeomCount;
 
   AddressParser _addressParser;
@@ -221,12 +222,21 @@ private:
   QHash<ElementId, bool> _hasRelatedTypeCache;
   QHash<ElementId, bool> _inBuildingCategoryCache;
   QHash<ElementId, int> _numAddressesCache;
+  QHash<ElementId, double> _areaCache;
 
   // key = parent ID;child ID
   QHash<QString, bool> _containsMemberCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
+
+  /*
+   * TODO
+   *
+   * @param element
+   * @return
+   */
+  std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
 
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
 

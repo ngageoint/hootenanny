@@ -80,7 +80,7 @@ void PoiPolygonTypeScoreExtractor::setConfiguration(const Settings& conf)
   }
 }
 
-double PoiPolygonTypeScoreExtractor::extract(const OsmMap& map,
+double PoiPolygonTypeScoreExtractor::extract(const OsmMap& /*map*/,
                                              const ConstElementPtr& poi,
                                              const ConstElementPtr& poly) const
 {
@@ -89,11 +89,11 @@ double PoiPolygonTypeScoreExtractor::extract(const OsmMap& map,
     throw HootException("No cache passed to extractor.");
   }
 
-  if (!_cacheInitialized)
-  {
-    _relatedTagsCache.reserve(map.size());
-    _cacheInitialized = true;
-  }
+//  if (!_cacheInitialized)
+//  {
+//    _relatedTagsCache.reserve(map.size());
+//    _cacheInitialized = true;
+//  }
 
   LOG_VART(_translateTagValuesToEnglish);
 
@@ -203,33 +203,33 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
 
   QStringList poiTagList, polyTagList;
 
-  QHash<ElementId, QStringList>::const_iterator poiRelatedTagsItr =
-    _relatedTagsCache.find(poi->getElementId());
-  if (poiRelatedTagsItr != _relatedTagsCache.end())
-  {
-    _relatedTagsCacheHits++;
-    poiTagList = poiRelatedTagsItr.value();
-    LOG_TRACE("Found : " << poiTagList.size() << " related tags for: " << poi->getElementId());
-  }
-  else
-  {
+//  QHash<ElementId, QStringList>::const_iterator poiRelatedTagsItr =
+//    _relatedTagsCache.find(poi->getElementId());
+//  if (poiRelatedTagsItr != _relatedTagsCache.end())
+//  {
+//    _relatedTagsCacheHits++;
+//    poiTagList = poiRelatedTagsItr.value();
+//    LOG_TRACE("Found : " << poiTagList.size() << " related tags for: " << poi->getElementId());
+//  }
+//  else
+//  {
     poiTagList = _getRelatedTags(poi->getTags());
-    _relatedTagsCache[poi->getElementId()] = poiTagList;
-  }
+    //_relatedTagsCache[poi->getElementId()] = poiTagList;
+  //}
 
-  QHash<ElementId, QStringList>::const_iterator polyRelatedTagsItr =
-    _relatedTagsCache.find(poly->getElementId());
-  if (polyRelatedTagsItr != _relatedTagsCache.end())
-  {
-    _relatedTagsCacheHits++;
-    polyTagList = polyRelatedTagsItr.value();
-    LOG_TRACE("Found : " << polyTagList.size() << " related tags for: " << poly->getElementId());
-  }
-  else
-  {
+//  QHash<ElementId, QStringList>::const_iterator polyRelatedTagsItr =
+//    _relatedTagsCache.find(poly->getElementId());
+//  if (polyRelatedTagsItr != _relatedTagsCache.end())
+//  {
+//    _relatedTagsCacheHits++;
+//    polyTagList = polyRelatedTagsItr.value();
+//    LOG_TRACE("Found : " << polyTagList.size() << " related tags for: " << poly->getElementId());
+//  }
+//  else
+//  {
     polyTagList = _getRelatedTags(poly->getTags());
-    _relatedTagsCache[poly->getElementId()] = polyTagList;
-  }
+    //_relatedTagsCache[poly->getElementId()] = polyTagList;
+  //}
 
   LOG_VART(poiTagList);
   LOG_VART(polyTagList);

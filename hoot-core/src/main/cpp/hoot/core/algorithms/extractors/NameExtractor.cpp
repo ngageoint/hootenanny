@@ -56,14 +56,14 @@ _matchAttemptMade(false)
 {
 }
 
-double NameExtractor::extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
+double NameExtractor::extract(const OsmMap& /*map*/, const std::shared_ptr<const Element>& target,
   const std::shared_ptr<const Element>& candidate) const
 {
-  if (!_cacheInitialized)
-  {
-    _nameCache.reserve(map.size());
-    _cacheInitialized = true;
-  }
+//  if (!_cacheInitialized)
+//  {
+//    _nameCache.reserve(map.size());
+//    _cacheInitialized = true;
+//  }
 
   return extract(target, candidate);
 }
@@ -72,36 +72,36 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
 {
   QStringList targetNames, candidateNames;
 
-  QHash<ElementId, QStringList>::const_iterator targetNameItr =
-    _nameCache.find(target->getElementId());
-  if (targetNameItr != _nameCache.end())
-  {
-    _nameCacheHits++;
-    targetNames = targetNameItr.value();
-    LOG_TRACE("Found " << targetNames.size() << " names for: " << target->getElementId());
-  }
-  else
-  {
+//  QHash<ElementId, QStringList>::const_iterator targetNameItr =
+//    _nameCache.find(target->getElementId());
+//  if (targetNameItr != _nameCache.end())
+//  {
+//    _nameCacheHits++;
+//    targetNames = targetNameItr.value();
+//    LOG_TRACE("Found " << targetNames.size() << " names for: " << target->getElementId());
+//  }
+//  else
+//  {
     targetNames = target->getTags().getNames();
     targetNames.append(target->getTags().getPseudoNames());
-    _nameCache[target->getElementId()] = targetNames;
-  }
+    //_nameCache[target->getElementId()] = targetNames;
+  //}
   _namesProcessed += targetNames.size();
 
-  QHash<ElementId, QStringList>::const_iterator candidateNameItr =
-    _nameCache.find(candidate->getElementId());
-  if (candidateNameItr != _nameCache.end())
-  {
-    _nameCacheHits++;
-    candidateNames = candidateNameItr.value();
-    LOG_TRACE("Found " << candidateNames.size() << " names for: " << candidate->getElementId());
-  }
-  else
-  {
+//  QHash<ElementId, QStringList>::const_iterator candidateNameItr =
+//    _nameCache.find(candidate->getElementId());
+//  if (candidateNameItr != _nameCache.end())
+//  {
+//    _nameCacheHits++;
+//    candidateNames = candidateNameItr.value();
+//    LOG_TRACE("Found " << candidateNames.size() << " names for: " << candidate->getElementId());
+//  }
+//  else
+//  {
     candidateNames = candidate->getTags().getNames();
     candidateNames.append(candidate->getTags().getPseudoNames());
-    _nameCache[candidate->getElementId()] = candidateNames;
-  }
+    //_nameCache[candidate->getElementId()] = candidateNames;
+  //}
   _namesProcessed += candidateNames.size();
 
   double score = -1;

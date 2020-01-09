@@ -233,6 +233,9 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     // If we are doing advanced matching or review reduction, let's collect all polys that surround
     // the POI and also all POIs that surround it.
     _timer.restart();
+    // If you're doing performance analysis of poi/poly getting the neighbor polys is definitely a
+    // bottleneck, but at this point not sure anything can be done about it other than running with
+    // a smaller search radius.
     std::set<ElementId> surroundingPolyIds = _collectSurroundingPolyIds(e);
 //    if (_timer.nsecsElapsed() > timingThreshold)
 //    {

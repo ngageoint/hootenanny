@@ -269,8 +269,8 @@ MatchFactory& MatchFactory::getInstance()
 
   const QStringList matchCreators = ConfigOptions().getMatchCreators();
   const QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARD(matchCreators);
-  LOG_VARD(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   if (matchCreators.size() != mergerCreators.size())
   {

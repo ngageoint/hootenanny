@@ -43,6 +43,7 @@
 // Std
 #include <float.h>
 
+// Qt
 #include <QStringBuilder>
 
 namespace hoot
@@ -51,17 +52,18 @@ namespace hoot
 PoiPolygonCache::PoiPolygonCache(const ConstOsmMapPtr& map) :
 _map(map)
 {
-  _elementContainsCache.reserve(_map->size());
-  _isTypeCache.reserve(_map->size() * 11);
-  _hasCriterionCache.reserve(_map->size() * 2);
-  _geometryCache.reserve(_map->size());
-  _elementDistanceCache.reserve(_map->getNodes().size());
-  _hasMoreThanOneTypeCache.reserve(_map->size());
-  _inBuildingCategoryCache.reserve(_map->size());
-  _numAddressesCache.reserve(_map->size());
-  _containsMemberCache.reserve(_map->getWays().size() + _map->getRelations().size());
-  _hasRelatedTypeCache.reserve(_map->size());
-  _elementIntersectsCache.reserve(_map->getNodes().size());
+//  _elementContainsCache.reserve(_map->size());
+//  _isTypeCache.reserve(_map->size() * 11);
+//  _hasCriterionCache.reserve(_map->size() * 2);
+//  _geometryCache.reserve(_map->size());
+//  _elementDistanceCache.reserve(_map->getNodes().size());
+//  _hasMoreThanOneTypeCache.reserve(_map->size());
+//  _inBuildingCategoryCache.reserve(_map->size());
+//  _numAddressesCache.reserve(_map->size());
+//  _containsMemberCache.reserve(_map->getWays().size() + _map->getRelations().size());
+//  _hasRelatedTypeCache.reserve(_map->size());
+//  _elementIntersectsCache.reserve(_map->getNodes().size());
+//  _areaCache.reserve(_map->size());
 }
 
 PoiPolygonCache::~PoiPolygonCache()
@@ -90,6 +92,7 @@ void PoiPolygonCache::clear()
   _containsMemberCache.clear();
   _hasRelatedTypeCache.clear();
   _elementIntersectsCache.clear();
+  _areaCache.clear();
 }
 
 void PoiPolygonCache::printCacheInfo()
@@ -161,67 +164,60 @@ void PoiPolygonCache::_incrementCacheSizeCount(const QString& cacheTypeKey)
   }
 }
 
-std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::getGeometry(const ConstElementPtr& element)
+std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(const ConstElementPtr& element)
 {
   if (!element)
   {
-    //return std::shared_ptr<geos::geom::Geometry>();
     throw IllegalArgumentException();
   }
-  //LOG_VART(element->getElementType());
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>>::const_iterator itr =
     _geometryCache.find(element->getElementId());
   if (itr != _geometryCache.end())
   {
-    //LOG_VART(itr.value());
     _incrementCacheHitCount("geometry");
     return itr.value();
   }
-  else
+
+  std::shared_ptr<geos::geom::Geometry> newGeom;
+  QString errorMsg =
+    "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a geometry: ";
+  try
   {
-    std::shared_ptr<geos::geom::Geometry> newGeom;
-    QString errorMsg =
-      "Feature passed to PoiPolygonReviewReducer caused topology exception on conversion to a geometry: ";
-    try
-    {
-      newGeom = ElementConverter(_map).convertToGeometry(element);
-    }
-    catch (const geos::util::TopologyException& e)
-    {
-      if (_badGeomCount <= Log::getWarnMessageLimit())
-      {
-        LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
-        _badGeomCount++;
-      }
-    }
-    catch (const HootException& e)
-    {
-      if (_badGeomCount <= Log::getWarnMessageLimit())
-      {
-        LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
-        _badGeomCount++;
-      }
-    }
-    //LOG_VART(newGeom.get());
-    if (newGeom.get() &&
-        QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
-    {
-      if (_badGeomCount <= Log::getWarnMessageLimit())
-      {
-        LOG_TRACE("Invalid element passed to PoiPolygonReviewReducer: " << newGeom->toString());
-        _badGeomCount++;
-      }
-      newGeom.reset();
-    }
-    //LOG_VART(newGeom.get());
-    _geometryCache[element->getElementId()] = newGeom;
-    _incrementCacheSizeCount("geometry");
-    return newGeom;
+    newGeom = ElementConverter(_map).convertToGeometry(element);
   }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (_badGeomCount <= Log::getWarnMessageLimit())
+    {
+      LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+  }
+  catch (const HootException& e)
+  {
+    if (_badGeomCount <= Log::getWarnMessageLimit())
+    {
+      LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+  }
+  if (newGeom.get() &&
+      QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+  {
+    if (_badGeomCount <= Log::getWarnMessageLimit())
+    {
+      LOG_TRACE("Invalid element passed: " << newGeom->toString());
+      _badGeomCount++;
+    }
+    newGeom.reset();
+  }
+  _geometryCache[element->getElementId()] = newGeom;
+  _incrementCacheSizeCount("geometry");
+  return newGeom;
 }
 
-bool PoiPolygonCache::polyContainsPoi(const ConstElementPtr& poly, const ConstElementPtr& point)
+bool PoiPolygonCache::polyContainsPoint(const ConstElementPtr& poly, const ConstElementPtr& point)
 {
   if (!poly || !point)
   {
@@ -238,34 +234,38 @@ bool PoiPolygonCache::polyContainsPoi(const ConstElementPtr& poly, const ConstEl
   LOG_VART(point->getElementId());
   LOG_VART(poly->getElementId());
 
-  const QString key =
-    poly->getElementId().toString() % ";" % point->getElementId().toString();
-  QHash<QString, bool>::const_iterator itr = _elementContainsCache.find(key);
-  if (itr != _elementContainsCache.end())
+//  const QString key =
+//    poly->getElementId().toString() % ";" % point->getElementId().toString();
+//  QHash<QString, bool>::const_iterator itr = _elementContainsCache.find(key);
+//  if (itr != _elementContainsCache.end())
+//  {
+//    _incrementCacheHitCount("contains");
+//    const bool contains = itr.value();
+//    LOG_TRACE(
+//      "Found cached contains: " << contains << " for poly: " << poly->getElementId() <<
+//      " and poi: " << point->getElementId() << ".");
+//    return contains;
+//  }
+
+  std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
+  std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
+  bool contains = false;
+  if (polyGeom && pointGeom)
   {
-    _incrementCacheHitCount("contains");
-    const bool contains = itr.value();
-    LOG_TRACE("Found cached contains: " << contains << " for key: " << key);
-    return contains;
+    contains = polyGeom->contains(pointGeom.get());
+    LOG_TRACE(
+      "Calculated contains: " << contains << " for poly: " << poly->getElementId() <<
+      " and poi: " << point->getElementId() << ".");
   }
   else
   {
-    std::shared_ptr<geos::geom::Geometry> polyGeom = getGeometry(poly);
-    std::shared_ptr<geos::geom::Geometry> pointGeom = getGeometry(point);
-    bool contains = false;
-    if (polyGeom && pointGeom)
-    {
-      contains = polyGeom->contains(pointGeom.get());
-      LOG_TRACE("Calculated contains: " << contains << " for key: " << key);
-    }
-    else
-    {
-      LOG_TRACE("Unable to calculate contains for key: " << key);
-    }
-    _elementContainsCache[key] = contains;
-    _incrementCacheSizeCount("contains");
-    return contains;
+    LOG_TRACE(
+      "Unable to calculate contains for poly: " << poly->getElementId() <<
+      " and poi: " << point->getElementId() << ".");
   }
+  //_elementContainsCache[key] = contains;
+  //_incrementCacheSizeCount("contains");
+  return contains;
 }
 
 bool PoiPolygonCache::isType(const ConstElementPtr& element, const QString& type)
@@ -282,63 +282,62 @@ bool PoiPolygonCache::isType(const ConstElementPtr& element, const QString& type
     _incrementCacheHitCount("isType");
     return itr.value();
   }
+
+  // A re-design is needed to make this a little less maintenance prone...possiby add custom
+  // schema lookup files for poi/poly?
+  bool isType = false;
+  const QString typeForComparison = type.toLower();
+  if (typeForComparison == QLatin1String("natural"))
+  {
+    isType = PoiPolygonType::isNatural(element);
+  }
+  else if (typeForComparison == QLatin1String("park"))
+  {
+    isType = PoiPolygonType::isPark(element);
+  }
+  else if (typeForComparison == QLatin1String("parking"))
+  {
+    isType = PoiPolygonType::isParking(element);
+  }
+  else if (typeForComparison == QLatin1String("parkish"))
+  {
+    isType = PoiPolygonType::isParkish(element);
+  }
+  else if (typeForComparison == QLatin1String("playground"))
+  {
+    isType = PoiPolygonType::isPlayground(element);
+  }
+  else if (typeForComparison == QLatin1String("restaurant"))
+  {
+    isType = PoiPolygonType::isRestaurant(element);
+  }
+  else if (typeForComparison == QLatin1String("religion"))
+  {
+    isType = PoiPolygonType::isReligion(element);
+  }
+  else if (typeForComparison == QLatin1String("restroom"))
+  {
+    isType = PoiPolygonType::isRestroom(element);
+  }
+  else if (typeForComparison == QLatin1String("school"))
+  {
+    isType = PoiPolygonType::isSchool(element);
+  }
+  else if (typeForComparison == QLatin1String("specificschool"))
+  {
+    isType = PoiPolygonType::isSpecificSchool(element);
+  }
+  else if (typeForComparison == QLatin1String("sport"))
+  {
+    isType = PoiPolygonType::isSport(element);
+  }
   else
   {
-    // A re-design is needed to make this a little less maintenance prone.
-    bool isType = false;
-    const QString typeForComparison = type.toLower();
-    if (typeForComparison == QLatin1String("natural"))
-    {
-      isType = PoiPolygonType::isNatural(element);
-    }
-    else if (typeForComparison == QLatin1String("park"))
-    {
-      isType = PoiPolygonType::isPark(element);
-    }
-    else if (typeForComparison == QLatin1String("parking"))
-    {
-      isType = PoiPolygonType::isParking(element);
-    }
-    else if (typeForComparison == QLatin1String("parkish"))
-    {
-      isType = PoiPolygonType::isParkish(element);
-    }
-    else if (typeForComparison == QLatin1String("playground"))
-    {
-      isType = PoiPolygonType::isPlayground(element);
-    }
-    else if (typeForComparison == QLatin1String("restaurant"))
-    {
-      isType = PoiPolygonType::isRestaurant(element);
-    }
-    else if (typeForComparison == QLatin1String("religion"))
-    {
-      isType = PoiPolygonType::isReligion(element);
-    }
-    else if (typeForComparison == QLatin1String("restroom"))
-    {
-      isType = PoiPolygonType::isRestroom(element);
-    }
-    else if (typeForComparison == QLatin1String("school"))
-    {
-      isType = PoiPolygonType::isSchool(element);
-    }
-    else if (typeForComparison == QLatin1String("specificschool"))
-    {
-      isType = PoiPolygonType::isSpecificSchool(element);
-    }
-    else if (typeForComparison == QLatin1String("sport"))
-    {
-      isType = PoiPolygonType::isSport(element);
-    }
-    else
-    {
-      throw IllegalArgumentException("Invalid type passed to PoiPolygonCache::isType: " + type);
-    }
-    _isTypeCache[key] = isType;
-    _incrementCacheSizeCount("isType");
-    return isType;
+    throw IllegalArgumentException("Invalid type passed to PoiPolygonCache::isType: " + type);
   }
+  _isTypeCache[key] = isType;
+  _incrementCacheSizeCount("isType");
+  return isType;
 }
 
 bool PoiPolygonCache::hasCriterion(const ConstElementPtr& element, const QString& criterionClassName)
@@ -355,14 +354,38 @@ bool PoiPolygonCache::hasCriterion(const ConstElementPtr& element, const QString
     _incrementCacheHitCount("hasCrit");
     return itr.value();
   }
-  else
+
+  ElementCriterionPtr crit = _getCrit(criterionClassName);
+  const bool hasCrit = crit->isSatisfied(element);
+  _hasCriterionCache[key] = hasCrit;
+  _incrementCacheSizeCount("hasCrit");
+  return hasCrit;
+}
+
+ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
+{
+  if (criterionClassName.trimmed().isEmpty())
   {
-    ElementCriterionPtr crit = _getCrit(criterionClassName);
-    const bool hasCrit = crit->isSatisfied(element);
-    _hasCriterionCache[key] = hasCrit;
-    _incrementCacheSizeCount("hasCrit");
-    return hasCrit;
+    throw IllegalArgumentException();
   }
+
+  QHash<QString, ElementCriterionPtr>::const_iterator itr =
+    _criterionCache.find(criterionClassName);
+  if (itr != _criterionCache.end())
+  {
+    return itr.value();
+  }
+
+  ElementCriterionPtr crit =
+    ElementCriterionPtr(
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+  if (!crit)
+  {
+    throw IllegalArgumentException(
+      "Invalid criterion passed to PoiPolygonCache::hasCriterion: " + criterionClassName);
+  }
+  _criterionCache[criterionClassName] = crit;
+  return crit;
 }
 
 bool PoiPolygonCache::hasMoreThanOneType(const ConstElementPtr& element)
@@ -379,13 +402,11 @@ bool PoiPolygonCache::hasMoreThanOneType(const ConstElementPtr& element)
     _incrementCacheHitCount("hasMoreThanOneType");
     return itr.value();
   }
-  else
-  {
-    const bool hasMoreThanOneType = PoiPolygonType::hasMoreThanOneType(element);
-    _hasMoreThanOneTypeCache[element->getElementId()] = hasMoreThanOneType;
-    _incrementCacheSizeCount("hasMoreThanOneType");
-    return hasMoreThanOneType;
-  }
+
+  const bool hasMoreThanOneType = PoiPolygonType::hasMoreThanOneType(element);
+  _hasMoreThanOneTypeCache[element->getElementId()] = hasMoreThanOneType;
+  _incrementCacheSizeCount("hasMoreThanOneType");
+  return hasMoreThanOneType;
 }
 
 bool PoiPolygonCache::hasRelatedType(const ConstElementPtr& element)
@@ -395,20 +416,18 @@ bool PoiPolygonCache::hasRelatedType(const ConstElementPtr& element)
     throw IllegalArgumentException();
   }
 
-  QHash<ElementId, bool>::const_iterator itr =
-    _hasRelatedTypeCache.find(element->getElementId());
-  if (itr != _hasRelatedTypeCache.end())
-  {
-    _incrementCacheHitCount("hasRelatedType");
-    return itr.value();
-  }
-  else
-  {
-    const bool hasRelatedType = PoiPolygonType::hasRelatedType(element);
-    _hasRelatedTypeCache[element->getElementId()] = hasRelatedType;
-    _incrementCacheSizeCount("hasRelatedType");
-    return hasRelatedType;
-  }
+//  QHash<ElementId, bool>::const_iterator itr =
+//    _hasRelatedTypeCache.find(element->getElementId());
+//  if (itr != _hasRelatedTypeCache.end())
+//  {
+//    _incrementCacheHitCount("hasRelatedType");
+//    return itr.value();
+//  }
+
+  const bool hasRelatedType = PoiPolygonType::hasRelatedType(element);
+  //_hasRelatedTypeCache[element->getElementId()] = hasRelatedType;
+  //_incrementCacheSizeCount("hasRelatedType");
+  return hasRelatedType;
 }
 
 bool PoiPolygonCache::inBuildingCategory(const ConstElementPtr& element)
@@ -418,22 +437,20 @@ bool PoiPolygonCache::inBuildingCategory(const ConstElementPtr& element)
     throw IllegalArgumentException();
   }
 
-  QHash<ElementId, bool>::const_iterator itr =
-    _inBuildingCategoryCache.find(element->getElementId());
-  if (itr != _inBuildingCategoryCache.end())
-  {
-    _incrementCacheHitCount("inBuildingCategory");
-    return itr.value();
-  }
-  else
-  {
-    const bool inBuildingCategory =
-      OsmSchema::getInstance().getCategories(element->getTags()).intersects(
-        OsmSchemaCategory::building());
-    _inBuildingCategoryCache[element->getElementId()] = inBuildingCategory;
-    _incrementCacheSizeCount("inBuildingCategory");
-    return inBuildingCategory;
-  }
+//  QHash<ElementId, bool>::const_iterator itr =
+//    _inBuildingCategoryCache.find(element->getElementId());
+//  if (itr != _inBuildingCategoryCache.end())
+//  {
+//    _incrementCacheHitCount("inBuildingCategory");
+//    return itr.value();
+//  }
+
+  const bool inBuildingCategory =
+    OsmSchema::getInstance().getCategories(element->getTags()).intersects(
+      OsmSchemaCategory::building());
+  //_inBuildingCategoryCache[element->getElementId()] = inBuildingCategory;
+  //_incrementCacheSizeCount("inBuildingCategory");
+  return inBuildingCategory;
 }
 
 int PoiPolygonCache::numAddresses(const ConstElementPtr& element)
@@ -443,19 +460,17 @@ int PoiPolygonCache::numAddresses(const ConstElementPtr& element)
     throw IllegalArgumentException();
   }
 
-  QHash<ElementId, int>::const_iterator itr = _numAddressesCache.find(element->getElementId());
-  if (itr != _numAddressesCache.end())
-  {
-    _incrementCacheHitCount("numAddresses");
-    return itr.value();
-  }
-  else
-  {
-    const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
-     _numAddressesCache[element->getElementId()] = numAddresses;
-    _incrementCacheSizeCount("numAddresses");
-    return numAddresses;
-  }
+//  QHash<ElementId, int>::const_iterator itr = _numAddressesCache.find(element->getElementId());
+//  if (itr != _numAddressesCache.end())
+//  {
+//    _incrementCacheHitCount("numAddresses");
+//    return itr.value();
+//  }
+
+  const int numAddresses = _addressParser.numAddressesRecursive(element, *_map);
+  //_numAddressesCache[element->getElementId()] = numAddresses;
+  //_incrementCacheSizeCount("numAddresses");
+  return numAddresses;
 }
 
 bool PoiPolygonCache::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
@@ -476,58 +491,28 @@ bool PoiPolygonCache::containsMember(const ConstElementPtr& parent, const Elemen
     throw IllegalArgumentException();
   }
 
-  const QString key = parent->getElementId().toString() % ";" % memberId.toString();
-  QHash<QString, bool>::const_iterator itr = _containsMemberCache.find(key);
-  if (itr != _containsMemberCache.end())
+//  const QString key = parent->getElementId().toString() % ";" % memberId.toString();
+//  QHash<QString, bool>::const_iterator itr = _containsMemberCache.find(key);
+//  if (itr != _containsMemberCache.end())
+//  {
+//    _incrementCacheHitCount("containsMember");
+//    return itr.value();
+//  }
+
+  bool containsMember = false;
+  if (parent->getElementType() == ElementType::Way)
   {
-    _incrementCacheHitCount("containsMember");
-    return itr.value();
+    containsMember =
+      (std::dynamic_pointer_cast<const Way>(parent))->containsNodeId(memberId.getId());
   }
   else
   {
-    bool containsMember = false;
-    if (parent->getElementType() == ElementType::Way)
-    {
-      containsMember =
-        (std::dynamic_pointer_cast<const Way>(parent))->containsNodeId(memberId.getId());
-    }
-    else
-    {
-      containsMember =
-        (std::dynamic_pointer_cast<const Relation>(parent))->contains(memberId);
-    }
-    _containsMemberCache[key] = containsMember;
-    _incrementCacheSizeCount("containsMember");
-    return containsMember;
+    containsMember =
+      (std::dynamic_pointer_cast<const Relation>(parent))->contains(memberId);
   }
-}
-
-ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
-{
-  if (criterionClassName.trimmed().isEmpty())
-  {
-    throw IllegalArgumentException();
-  }
-
-  QHash<QString, ElementCriterionPtr>::const_iterator itr =
-    _criterionCache.find(criterionClassName);
-  if (itr != _criterionCache.end())
-  {
-    return itr.value();
-  }
-  else
-  {
-    ElementCriterionPtr crit =
-      ElementCriterionPtr(
-        Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-    if (!crit)
-    {
-      throw IllegalArgumentException(
-        "Invalid criterion passed to PoiPolygonCache::hasCriterion: " + criterionClassName);
-    }
-    _criterionCache[criterionClassName] = crit;
-    return crit;
-  }
+  //_containsMemberCache[key] = containsMember;
+  //_incrementCacheSizeCount("containsMember");
+  return containsMember;
 }
 
 bool PoiPolygonCache::elementIntersectsElement(
@@ -535,6 +520,7 @@ bool PoiPolygonCache::elementIntersectsElement(
 {
   if (!element1 || !element2)
   {
+    // TODO: add message
     throw IllegalArgumentException();
   }
 
@@ -559,14 +545,21 @@ bool PoiPolygonCache::elementIntersectsElement(
     return intersects;
   }
 
-  std::shared_ptr<geos::geom::Geometry> geom1 = getGeometry(element1);
-  std::shared_ptr<geos::geom::Geometry> geom2 = getGeometry(element2);
+  std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1);
+  std::shared_ptr<geos::geom::Geometry> geom2 = _getGeometry(element2);
   bool intersects = false;
   if (geom1 && geom2)
   {
     intersects = geom1->intersects(geom2.get());
-    _elementIntersectsCache[key1] = intersects;
   }
+  else
+  {
+    LOG_TRACE(
+      "Unable to calculate intersects for: " << element1->getElementId() <<
+      " and: " << element2->getElementId() << ".");
+  }
+  _elementIntersectsCache[key1] = intersects;
+  _incrementCacheSizeCount("intersects");
   return intersects;
 }
 
@@ -588,62 +581,70 @@ double PoiPolygonCache::getPolyToPointDistance(
   LOG_VART(point->getElementId());
   LOG_VART(poly->getElementId());
 
-  // TODO: remove the distance cache if it doesn't increase performance
-  const QString key = point->getElementId().toString() % ";" % poly->getElementId().toString();
-  QHash<QString, double>::const_iterator itr = _elementDistanceCache.find(key);
-  if (itr != _elementDistanceCache.end())
+//  const QString key = point->getElementId().toString() % ";" % poly->getElementId().toString();
+//  QHash<QString, double>::const_iterator itr = _elementDistanceCache.find(key);
+//  if (itr != _elementDistanceCache.end())
+//  {
+//    _incrementCacheHitCount("polyToPointDistance");
+//    double distance = itr.value();
+//    LOG_TRACE(
+//      "Found cached distance: " << distance << " for poly: " << poly->getElementId() <<
+//      " and poi: " << point->getElementId() << ".");
+//    return distance;
+//  }
+
+  double distance = -1.0;
+
+  std::shared_ptr<geos::geom::Geometry> polyGeom = _getGeometry(poly);
+  std::shared_ptr<geos::geom::Geometry> pointGeom = _getGeometry(point);
+  if (polyGeom && pointGeom)
   {
-    _incrementCacheHitCount("polyToPointDistance");
-    double distance = itr.value();
-    LOG_TRACE("Found cached distance: " << distance << " for key: " << key);
-    return distance;
+    distance = polyGeom->distance(pointGeom.get());
+    LOG_TRACE(
+      "Calculated distance: " << distance << " for poly: " << poly->getElementId() <<
+      " and poi: " << point->getElementId() << ".");
   }
   else
   {
-    double distance = -1.0;
-
-    /*if (polyContainsPoi(poly, point)) // TODO: remove??
-    {
-      distance = 0.0;
-    }
-    else
-    {*/
-      std::shared_ptr<geos::geom::Geometry> polyGeom = getGeometry(poly);
-      std::shared_ptr<geos::geom::Geometry> pointGeom = getGeometry(point);
-      if (polyGeom && pointGeom)
-      {
-        distance = polyGeom->distance(pointGeom.get());
-        LOG_TRACE("Calculated distance: " << distance << " for key: " << key);
-      }
-      else
-      {
-        LOG_TRACE("Unable to calculate distance for key: " << key);
-      }
-    //}
-
-    _elementDistanceCache[key] = distance;
-    _incrementCacheSizeCount("polyToPointDistance");
-
-    return distance;
+    LOG_TRACE(
+      "Unable to calculate distance for poly: " << poly->getElementId() <<
+      " and poi: " << point->getElementId() << ".");
   }
+
+  //_elementDistanceCache[key] = distance;
+  //_incrementCacheSizeCount("polyToPointDistance");
+
+  return distance;
 }
 
 double PoiPolygonCache::getArea(const ConstElementPtr& element)
 {
-  //LOG_VART(element.get());
   if (!element)
   {
     throw IllegalArgumentException();
   }
 
-  std::shared_ptr<geos::geom::Geometry> geom = getGeometry(element);
-  //LOG_VART(geom.get());
+//  QHash<ElementId, double>::const_iterator itr = _areaCache.find(element->getElementId());
+//  if (itr != _areaCache.end())
+//  {
+//    _incrementCacheHitCount("area");
+//    double area = itr.value();
+//    LOG_TRACE("Found cached area: " << area << " for: " << element->getElementId());
+//    return area;
+//  }
+
+  std::shared_ptr<geos::geom::Geometry> geom = _getGeometry(element);;
   double area = -1.0;
   if (geom)
   {
     area = geom->getArea();
   }
-  //LOG_VART(area);
+  else
+  {
+    LOG_TRACE("Unable to calculate area for: " << element->getElementId() << ".");
+  }
+  //_areaCache[element->getElementId()] = area;
+  //_incrementCacheSizeCount("area");;
   return area;
 }
 
