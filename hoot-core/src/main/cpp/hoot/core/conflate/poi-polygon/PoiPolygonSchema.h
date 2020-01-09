@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef POI_POLYGON_TYPE_H
-#define POI_POLYGON_TYPE_H
+#ifndef POI_POLYGON_SCHEMA_H
+#define POI_POLYGON_SCHEMA_H
 
 // Hoot
 #include <hoot/core/elements/Element.h>
@@ -39,12 +39,12 @@ namespace hoot
 /**
  * TODO
  */
-class PoiPolygonType
+class PoiPolygonSchema
 {
 
 public:
 
-  PoiPolygonType();
+  PoiPolygonSchema();
 
   // As part of #2633, attempted to re-implement some of this hardcoded type code as categories in
   // the hoot schema.  In doing that, several strange bugs started occurring and many poi/poly unit
@@ -103,4 +103,4 @@ private:
 
 }
 
-#endif // POI_POLYGON_TYPE_H
+#endif // POI_POLYGON_SCHEMA_H

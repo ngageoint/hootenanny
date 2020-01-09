@@ -31,7 +31,6 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonType.h>
 
 // Qt
 #include <QSet>
@@ -51,7 +50,7 @@ HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonTypeScoreExtractor)
 std::shared_ptr<ToEnglishTranslator> PoiPolygonTypeScoreExtractor::_translator;
 QMap<QString, QSet<QString>> PoiPolygonTypeScoreExtractor::_categoriesToSchemaTagValues;
 
-PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor(PoiPolygonCachePtr infoCache) :
+PoiPolygonTypeScoreExtractor::PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache) :
 _typeScoreThreshold(-1.0),
 _featureDistance(-1.0),
 _printMatchDistanceTruth(false),

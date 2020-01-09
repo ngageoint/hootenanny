@@ -43,7 +43,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 namespace hoot
 {
@@ -66,7 +66,7 @@ public:
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
-    PoiPolygonCachePtr infoCache = PoiPolygonCachePtr(),
+    PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
     const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
 
   virtual void setConfiguration(const Settings& conf) override;
@@ -221,7 +221,7 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
 
   int _timingThreshold;
 

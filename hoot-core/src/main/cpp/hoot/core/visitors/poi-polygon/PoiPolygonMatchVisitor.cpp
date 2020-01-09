@@ -34,7 +34,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/util/StringUtils.h>
 
 // tgs
@@ -61,7 +61,7 @@ PoiPolygonMatchVisitor::PoiPolygonMatchVisitor(const ConstOsmMapPtr& map,
                                                std::vector<ConstMatchPtr>& result,
                                                ConstMatchThresholdPtr threshold,
                                                std::shared_ptr<PoiPolygonRfClassifier> rf,
-                                               PoiPolygonCachePtr infoCache,
+                                               PoiPolygonInfoCachePtr infoCache,
                                                ElementCriterionPtr filter) :
 _map(map),
 _result(result),
@@ -143,7 +143,7 @@ std::set<ElementId> PoiPolygonMatchVisitor::_collectSurroundingPolyIds(
   // find other nearby candidates
   LOG_TRACE("Searching for neighbors...");
   const std::set<ElementId> neighbors =
-    IndexElementsVisitor::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
+    SpatialIndexer::findNeighbors(*env, _getPolyIndex(), _polyIndexToEid, _getMap());
   LOG_VART(neighbors.size());
 
   LOG_TRACE("Processing neighbors...");
@@ -247,7 +247,7 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
 
     std::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
-    IndexElementsVisitor v(_polyIndex,
+    SpatialIndexer v(_polyIndex,
                            _polyIndexToEid,
                            crit,
                            std::bind(
@@ -274,7 +274,7 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
 
 //    std::shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
 
-//    IndexElementsVisitor v(_poiIndex,
+//    SpatialIndexer v(_poiIndex,
 //                           _poiIndexToEid,
 //                           crit,
 //                           std::bind(

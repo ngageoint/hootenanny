@@ -41,7 +41,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -135,7 +135,7 @@ public:
 
     // find other nearby candidates
     set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
 
     ElementId from(e->getElementType(), e->getId());
 
@@ -256,7 +256,7 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(
+      SpatialIndexer v(
         _index, _indexToEid, pCrit,
         std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
 

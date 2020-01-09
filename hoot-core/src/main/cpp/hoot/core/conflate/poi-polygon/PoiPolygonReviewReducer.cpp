@@ -38,7 +38,7 @@
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/criterion/BuildingWayNodeCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonType.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 
 // Std
 #include <float.h>
@@ -54,7 +54,7 @@ PoiPolygonReviewReducer::PoiPolygonReviewReducer(
   const std::set<ElementId>& polyNeighborIds, double distance, double nameScoreThreshold,
   double nameScore, bool nameMatch, bool exactNameMatch, double typeScoreThreshold,
   double typeScore, bool typeMatch, double matchDistanceThreshold, bool addressMatch,
-  bool addressParsingEnabled, PoiPolygonCachePtr infoCache) :
+  bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache) :
 _map(map),
 _polyNeighborIds(polyNeighborIds),
 _distance(distance),
@@ -300,7 +300,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   //timer.restart();
   LOG_TRACE("Checking rule #12...");
   if (_infoCache->isType(poi, "specificSchool") && _infoCache->isType(poly, "specificSchool") &&
-      !PoiPolygonType::specificSchoolMatch(poi, poly))
+      !PoiPolygonSchema::specificSchoolMatch(poi, poly))
   {
     LOG_TRACE("Returning miss per review reduction rule #12...");
     _triggeredRuleDescription = "#12";

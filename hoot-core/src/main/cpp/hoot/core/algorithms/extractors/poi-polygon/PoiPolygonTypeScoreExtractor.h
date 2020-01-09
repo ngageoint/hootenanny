@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 // Qt
 #include <QMultiHash>
@@ -49,7 +49,7 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
-  PoiPolygonTypeScoreExtractor(PoiPolygonCachePtr infoCache = PoiPolygonCachePtr());
+  PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
 
   virtual std::string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
 
@@ -109,7 +109,7 @@ private:
   mutable QStringList _failedMatchRequirements;
   mutable bool _noTypeFound;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
 
   static QHash<ElementId, QStringList> _relatedTagsCache;
   static int _relatedTagsCacheHits;

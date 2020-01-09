@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -58,7 +58,7 @@ public:
                          ElementCriterionPtr filter = ElementCriterionPtr());
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                          ConstMatchThresholdPtr threshold,
-                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonCachePtr infoCache,
+                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
@@ -110,7 +110,7 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
   ElementCriterionPtr _filter;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
 
   QElapsedTimer _timer;
 

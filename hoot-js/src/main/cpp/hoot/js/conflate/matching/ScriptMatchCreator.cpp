@@ -39,7 +39,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -145,7 +145,7 @@ public:
 
     // find other nearby candidates
     set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
@@ -345,7 +345,7 @@ public:
       std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
+      SpatialIndexer v(_index,
                              _indexToEid,
                              pC,
                              std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),

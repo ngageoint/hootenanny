@@ -95,7 +95,7 @@ public:
     std::shared_ptr<PoiPolygonMatch> match1(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
-                              PoiPolygonCachePtr(new PoiPolygonCache(map))));
+                              PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -144,7 +144,7 @@ public:
     std::shared_ptr<PoiPolygonMatch> match1(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
-                              PoiPolygonCachePtr(new PoiPolygonCache(map))));
+                              PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
     match1->setMatchEvidenceThreshold(3);
     match1->setReviewEvidenceThreshold(1);
     match1->calculateMatch(w1->getElementId(), n1->getElementId());
@@ -155,7 +155,7 @@ public:
     std::shared_ptr<PoiPolygonMatch> match2(
           new PoiPolygonMatch(map, std::shared_ptr<MatchThreshold>(),
                               std::shared_ptr<PoiPolygonRfClassifier>(),
-                              PoiPolygonCachePtr(new PoiPolygonCache(map))));
+                              PoiPolygonInfoCachePtr(new PoiPolygonInfoCache(map))));
     match2->setMatchEvidenceThreshold(3);
     match2->setReviewEvidenceThreshold(1);
     match2->calculateMatch(w2->getElementId(), n1->getElementId());

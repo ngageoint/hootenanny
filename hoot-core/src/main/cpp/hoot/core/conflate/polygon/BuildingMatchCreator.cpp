@@ -39,7 +39,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
@@ -124,7 +124,7 @@ public:
 
     // find other nearby candidates
     std::set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
 
     ElementId from(e->getElementType(), e->getId());
 
@@ -245,7 +245,7 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
+      SpatialIndexer v(_index,
                              _indexToEid,
                              pCrit,
                              std::bind(

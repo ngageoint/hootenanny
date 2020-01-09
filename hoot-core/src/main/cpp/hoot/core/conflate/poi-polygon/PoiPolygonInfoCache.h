@@ -40,9 +40,9 @@
 namespace hoot
 {
 
-class PoiPolygonCache;
+class PoiPolygonInfoCache;
 
-typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
+typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
 
 /**
  * Cached back class storing POI/Polygon feature comparison info
@@ -60,12 +60,12 @@ typedef std::shared_ptr<PoiPolygonCache> PoiPolygonCachePtr;
  * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
  * moved into another cache class if we ever need them to be used with other conflation algs.
  */
-class PoiPolygonCache : public Configurable
+class PoiPolygonInfoCache : public Configurable
 {
 
 public:
 
-  PoiPolygonCache(const ConstOsmMapPtr& map);
+  PoiPolygonInfoCache(const ConstOsmMapPtr& map);
 
   virtual void setConfiguration(const Settings& conf);
 

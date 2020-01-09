@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef INDEXELEMENTSVISITOR_H
-#define INDEXELEMENTSVISITOR_H
+#ifndef SpatialIndexer_H
+#define SpatialIndexer_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -50,14 +50,14 @@ namespace hoot
  */
 class ElementCriterion;
 
-class IndexElementsVisitor : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
+class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
   public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::CreateIndexVisitor"; }
 
-  explicit IndexElementsVisitor(std::shared_ptr<Tgs::HilbertRTree>& index,
+  explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                                 std::deque<ElementId>& indexToEid,
                                 const std::shared_ptr<ElementCriterion>& criterion,
                                 std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
@@ -124,4 +124,4 @@ private:
 
 }
 
-#endif // INDEXELEMENTSVISITOR_H
+#endif // SpatialIndexer_H

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonType.h"
+#include "PoiPolygonSchema.h"
 
 // hoot
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -40,15 +40,15 @@
 namespace hoot
 {
 
-QMultiHash<QString, QString> PoiPolygonType::_typeToNames;
-QSet<QString> PoiPolygonType::_allTagKeys;
+QMultiHash<QString, QString> PoiPolygonSchema::_typeToNames;
+QSet<QString> PoiPolygonSchema::_allTagKeys;
 
-PoiPolygonType::PoiPolygonType()
+PoiPolygonSchema::PoiPolygonSchema()
 {
   _readTypeToNames();
 }
 
-void PoiPolygonType::_readTypeToNames()
+void PoiPolygonSchema::_readTypeToNames()
 {
   // see related note in ImplicitTagUtils::_modifyUndesirableTokens
   if (_typeToNames.isEmpty())
@@ -73,7 +73,7 @@ void PoiPolygonType::_readTypeToNames()
   }
 }
 
-bool PoiPolygonType::_typeHasName(const QString& kvp, const QString& name)
+bool PoiPolygonSchema::_typeHasName(const QString& kvp, const QString& name)
 {
   const QStringList typeNames =_typeToNames.values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
@@ -86,7 +86,7 @@ bool PoiPolygonType::_typeHasName(const QString& kvp, const QString& name)
   return false;
 }
 
-QString PoiPolygonType::_getMatchingTypeName(const QString& kvp, const QString& name)
+QString PoiPolygonSchema::_getMatchingTypeName(const QString& kvp, const QString& name)
 {
   const QStringList typeNames =_typeToNames.values(kvp);
   for (int i = 0; i < typeNames.size(); i++)
@@ -100,7 +100,7 @@ QString PoiPolygonType::_getMatchingTypeName(const QString& kvp, const QString& 
   return "";
 }
 
-bool PoiPolygonType::_haveMatchingTypeNames(const QString& kvp, const QString& name1,
+bool PoiPolygonSchema::_haveMatchingTypeNames(const QString& kvp, const QString& name1,
                                                           const QString& name2)
 {
   const QString typeName1 = _getMatchingTypeName(kvp, name1);
@@ -108,7 +108,7 @@ bool PoiPolygonType::_haveMatchingTypeNames(const QString& kvp, const QString& n
   return typeName1 == typeName2 && !typeName1.isEmpty();
 }
 
-bool PoiPolygonType::isSchool(const ConstElementPtr& element)
+bool PoiPolygonSchema::isSchool(const ConstElementPtr& element)
 {
   const QString amenityStr = element->getTags().get("amenity").toLower();
   return amenityStr == QLatin1String("school") || amenityStr == QLatin1String("university");
@@ -118,7 +118,7 @@ bool PoiPolygonType::isSchool(const ConstElementPtr& element)
 // same type when their names indicate they are actually different types.  If this concept proves
 // useful with other types, the code could be abstracted to handle them.
 
-bool PoiPolygonType::isSpecificSchool(const ConstElementPtr& element)
+bool PoiPolygonSchema::isSpecificSchool(const ConstElementPtr& element)
 {
   if (!isSchool(element))
   {
@@ -127,7 +127,7 @@ bool PoiPolygonType::isSpecificSchool(const ConstElementPtr& element)
   return _typeHasName("amenity=school", element->getTags().getName().toLower());
 }
 
-bool PoiPolygonType::specificSchoolMatch(const ConstElementPtr& element1,
+bool PoiPolygonSchema::specificSchoolMatch(const ConstElementPtr& element1,
                                          const ConstElementPtr& element2)
 {
   if (isSpecificSchool(element1) && isSpecificSchool(element2))
@@ -142,14 +142,14 @@ bool PoiPolygonType::specificSchoolMatch(const ConstElementPtr& element1,
   return false;
 }
 
-bool PoiPolygonType::isPark(const ConstElementPtr& element)
+bool PoiPolygonSchema::isPark(const ConstElementPtr& element)
 {
   return
     element->getTags().get("leisure").toLower() == QLatin1String("park") &&
     !BuildingCriterion().isSatisfied(element);
 }
 
-bool PoiPolygonType::isParkish(const ConstElementPtr& element)
+bool PoiPolygonSchema::isParkish(const ConstElementPtr& element)
 {
   const QString leisureVal = element->getTags().get("leisure").toLower();
   return
@@ -157,12 +157,12 @@ bool PoiPolygonType::isParkish(const ConstElementPtr& element)
     !BuildingCriterion().isSatisfied(element);
 }
 
-bool PoiPolygonType::isPlayground(const ConstElementPtr& element)
+bool PoiPolygonSchema::isPlayground(const ConstElementPtr& element)
 {
   return element->getTags().get("leisure").toLower() == QLatin1String("playground");
 }
 
-bool PoiPolygonType::isSport(const ConstElementPtr& element)
+bool PoiPolygonSchema::isSport(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   if (tags.contains("sport"))
@@ -173,12 +173,12 @@ bool PoiPolygonType::isSport(const ConstElementPtr& element)
   return leisureVal.contains("sport") || leisureVal == QLatin1String("pitch");
 }
 
-bool PoiPolygonType::isRestroom(const ConstElementPtr& element)
+bool PoiPolygonSchema::isRestroom(const ConstElementPtr& element)
 {
   return element->getTags().get("amenity").toLower() == QLatin1String("toilets");
 }
 
-bool PoiPolygonType::isParking(const ConstElementPtr& element)
+bool PoiPolygonSchema::isParking(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   if (tags.contains("parking"))
@@ -189,7 +189,7 @@ bool PoiPolygonType::isParking(const ConstElementPtr& element)
   return amenityVal == QLatin1String("parking") || amenityVal == QLatin1String("bicycle_parking");
 }
 
-bool PoiPolygonType::isReligion(const ConstElementPtr& element)
+bool PoiPolygonSchema::isReligion(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   const QString amenityVal = tags.get("amenity").toLower();
@@ -203,7 +203,7 @@ bool PoiPolygonType::isReligion(const ConstElementPtr& element)
          buildingVal == QLatin1String("synagogue");
 }
 
-bool PoiPolygonType::hasMoreThanOneType(const ConstElementPtr& element)
+bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
 {
   int typeCount = 0;
   QStringList typesParsed;
@@ -246,14 +246,14 @@ bool PoiPolygonType::hasMoreThanOneType(const ConstElementPtr& element)
   return false;
 }
 
-bool PoiPolygonType::hasRelatedType(const ConstElementPtr& element)
+bool PoiPolygonSchema::hasRelatedType(const ConstElementPtr& element)
 {
   return
     OsmSchema::getInstance().getCategories(element->getTags()).intersects(
       OsmSchemaCategory::building() | OsmSchemaCategory::poi());
 }
 
-bool PoiPolygonType::hasSpecificType(const ConstElementPtr& element)
+bool PoiPolygonSchema::hasSpecificType(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   return
@@ -262,14 +262,14 @@ bool PoiPolygonType::hasSpecificType(const ConstElementPtr& element)
     tags.get("area").toLower() != QLatin1String("yes") && hasRelatedType(element);
 }
 
-bool PoiPolygonType::isRestaurant(const ConstElementPtr& element)
+bool PoiPolygonSchema::isRestaurant(const ConstElementPtr& element)
 {
   const Tags& tags = element->getTags();
   const QString amenityVal = tags.get("amenity").toLower();
   return amenityVal == QLatin1String("restaurant") || amenityVal == QLatin1String("fast_food");
 }
 
-bool PoiPolygonType::isNatural(const ConstElementPtr& element)
+bool PoiPolygonSchema::isNatural(const ConstElementPtr& element)
 {
   return element->getTags().contains("natural");
 }

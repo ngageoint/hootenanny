@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "IndexElementsVisitor.h"
+#include "SpatialIndexer.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -46,7 +46,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-IndexElementsVisitor::IndexElementsVisitor(
+SpatialIndexer::SpatialIndexer(
   std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
   const std::shared_ptr<ElementCriterion>& criterion,
   std::function<Meters (const ConstElementPtr& e)> getSearchRadius, ConstOsmMapPtr pMap) :
@@ -64,13 +64,13 @@ _indexToEid(indexToEid)
   }
 }
 
-void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
+void SpatialIndexer::addCriterion(const ElementCriterionPtr& e)
 {
   assert(_criterion.get() == 0);
   _criterion = e;
 }
 
-void IndexElementsVisitor::finalizeIndex()
+void SpatialIndexer::finalizeIndex()
 {
   LOG_DEBUG("Finalizing index...");
   LOG_VARD(_indexToEid.size());
@@ -79,7 +79,7 @@ void IndexElementsVisitor::finalizeIndex()
   _index->bulkInsert(_boxes, _fids);
 }
 
-void IndexElementsVisitor::visit(const ConstElementPtr& e)
+void SpatialIndexer::visit(const ConstElementPtr& e)
 {
   LOG_VART(e->getElementId());
   if (!_criterion || _criterion->isSatisfied(e))
@@ -101,7 +101,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-set<ElementId> IndexElementsVisitor::findNeighbors(
+set<ElementId> SpatialIndexer::findNeighbors(
   const Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
   const deque<ElementId>& indexToEid, ConstOsmMapPtr pMap, const ElementType& elementType,
   const bool includeContainingRelations)
@@ -145,7 +145,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
   return neighborIds;
 }
 
-QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
+QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
   const ConstNodePtr& node, const geos::geom::Envelope& env,
   const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
   ConstOsmMapPtr pMap)

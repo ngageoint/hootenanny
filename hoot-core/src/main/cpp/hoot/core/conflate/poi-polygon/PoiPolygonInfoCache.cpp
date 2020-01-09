@@ -24,13 +24,13 @@
  *
  * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "PoiPolygonCache.h"
+#include "PoiPolygonInfoCache.h"
 
 // geos
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonType.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
@@ -48,7 +48,7 @@
 namespace hoot
 {
 
-PoiPolygonCache::PoiPolygonCache(const ConstOsmMapPtr& map) :
+PoiPolygonInfoCache::PoiPolygonInfoCache(const ConstOsmMapPtr& map) :
 _map(map)
 {
 //  _elementContainsCache.reserve(_map->size());
@@ -65,12 +65,12 @@ _map(map)
 //  _areaCache.reserve(_map->size());
 }
 
-void PoiPolygonCache::setConfiguration(const Settings& conf)
+void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
 }
 
-void PoiPolygonCache::clear()
+void PoiPolygonInfoCache::clear()
 {
   _numCacheHitsByCacheType.clear();
   _numCacheEntriesByCacheType.clear();
@@ -91,7 +91,7 @@ void PoiPolygonCache::clear()
   _numAddressesCache.clear();
 }
 
-void PoiPolygonCache::printCacheInfo()
+void PoiPolygonInfoCache::printCacheInfo()
 {
   // Add one for the address cache on AddressScoreExtractor.
   LOG_VARD(_numCacheHitsByCacheType.size());
@@ -116,7 +116,7 @@ void PoiPolygonCache::printCacheInfo()
   LOG_DEBUG(line);
 }
 
-void PoiPolygonCache::_incrementCacheHitCount(const QString& cacheTypeKey)
+void PoiPolygonInfoCache::_incrementCacheHitCount(const QString& cacheTypeKey)
 {
   if (!_numCacheHitsByCacheType.contains(cacheTypeKey))
   {
@@ -128,7 +128,7 @@ void PoiPolygonCache::_incrementCacheHitCount(const QString& cacheTypeKey)
   }
 }
 
-void PoiPolygonCache::_incrementCacheSizeCount(const QString& cacheTypeKey)
+void PoiPolygonInfoCache::_incrementCacheSizeCount(const QString& cacheTypeKey)
 {
   if (!_numCacheEntriesByCacheType.contains(cacheTypeKey))
   {
@@ -140,7 +140,7 @@ void PoiPolygonCache::_incrementCacheSizeCount(const QString& cacheTypeKey)
   }
 }
 
-std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(const ConstElementPtr& element)
+std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(const ConstElementPtr& element)
 {
   if (!element)
   {
@@ -193,7 +193,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonCache::_getGeometry(const ConstE
   return newGeom;
 }
 
-bool PoiPolygonCache::polyContainsPoint(const ConstElementPtr& poly, const ConstElementPtr& point)
+bool PoiPolygonInfoCache::polyContainsPoint(const ConstElementPtr& poly, const ConstElementPtr& point)
 {
   if (!poly || !point)
   {
@@ -244,7 +244,7 @@ bool PoiPolygonCache::polyContainsPoint(const ConstElementPtr& poly, const Const
   return contains;
 }
 
-bool PoiPolygonCache::isType(const ConstElementPtr& element, const QString& type)
+bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const QString& type)
 {
   if (!element || type.trimmed().isEmpty())
   {
@@ -265,58 +265,58 @@ bool PoiPolygonCache::isType(const ConstElementPtr& element, const QString& type
   const QString typeForComparison = type.toLower();
   if (typeForComparison == QLatin1String("natural"))
   {
-    isType = PoiPolygonType::isNatural(element);
+    isType = PoiPolygonSchema::isNatural(element);
   }
   else if (typeForComparison == QLatin1String("park"))
   {
-    isType = PoiPolygonType::isPark(element);
+    isType = PoiPolygonSchema::isPark(element);
   }
   else if (typeForComparison == QLatin1String("parking"))
   {
-    isType = PoiPolygonType::isParking(element);
+    isType = PoiPolygonSchema::isParking(element);
   }
   else if (typeForComparison == QLatin1String("parkish"))
   {
-    isType = PoiPolygonType::isParkish(element);
+    isType = PoiPolygonSchema::isParkish(element);
   }
   else if (typeForComparison == QLatin1String("playground"))
   {
-    isType = PoiPolygonType::isPlayground(element);
+    isType = PoiPolygonSchema::isPlayground(element);
   }
   else if (typeForComparison == QLatin1String("restaurant"))
   {
-    isType = PoiPolygonType::isRestaurant(element);
+    isType = PoiPolygonSchema::isRestaurant(element);
   }
   else if (typeForComparison == QLatin1String("religion"))
   {
-    isType = PoiPolygonType::isReligion(element);
+    isType = PoiPolygonSchema::isReligion(element);
   }
   else if (typeForComparison == QLatin1String("restroom"))
   {
-    isType = PoiPolygonType::isRestroom(element);
+    isType = PoiPolygonSchema::isRestroom(element);
   }
   else if (typeForComparison == QLatin1String("school"))
   {
-    isType = PoiPolygonType::isSchool(element);
+    isType = PoiPolygonSchema::isSchool(element);
   }
   else if (typeForComparison == QLatin1String("specificschool"))
   {
-    isType = PoiPolygonType::isSpecificSchool(element);
+    isType = PoiPolygonSchema::isSpecificSchool(element);
   }
   else if (typeForComparison == QLatin1String("sport"))
   {
-    isType = PoiPolygonType::isSport(element);
+    isType = PoiPolygonSchema::isSport(element);
   }
   else
   {
-    throw IllegalArgumentException("Invalid type passed to PoiPolygonCache::isType: " + type);
+    throw IllegalArgumentException("Invalid type passed to PoiPolygonInfoCache::isType: " + type);
   }
   _isTypeCache[key] = isType;
   _incrementCacheSizeCount("isType");
   return isType;
 }
 
-bool PoiPolygonCache::hasCriterion(const ConstElementPtr& element, const QString& criterionClassName)
+bool PoiPolygonInfoCache::hasCriterion(const ConstElementPtr& element, const QString& criterionClassName)
 {
   if (!element || criterionClassName.trimmed().isEmpty())
   {
@@ -338,7 +338,7 @@ bool PoiPolygonCache::hasCriterion(const ConstElementPtr& element, const QString
   return hasCrit;
 }
 
-ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
+ElementCriterionPtr PoiPolygonInfoCache::_getCrit(const QString& criterionClassName)
 {
   if (criterionClassName.trimmed().isEmpty())
   {
@@ -358,13 +358,13 @@ ElementCriterionPtr PoiPolygonCache::_getCrit(const QString& criterionClassName)
   if (!crit)
   {
     throw IllegalArgumentException(
-      "Invalid criterion passed to PoiPolygonCache::hasCriterion: " + criterionClassName);
+      "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
   }
   _criterionCache[criterionClassName] = crit;
   return crit;
 }
 
-bool PoiPolygonCache::hasMoreThanOneType(const ConstElementPtr& element)
+bool PoiPolygonInfoCache::hasMoreThanOneType(const ConstElementPtr& element)
 {
   if (!element)
   {
@@ -379,13 +379,13 @@ bool PoiPolygonCache::hasMoreThanOneType(const ConstElementPtr& element)
     return itr.value();
   }
 
-  const bool hasMoreThanOneType = PoiPolygonType::hasMoreThanOneType(element);
+  const bool hasMoreThanOneType = PoiPolygonSchema::hasMoreThanOneType(element);
   _hasMoreThanOneTypeCache[element->getElementId()] = hasMoreThanOneType;
   _incrementCacheSizeCount("hasMoreThanOneType");
   return hasMoreThanOneType;
 }
 
-bool PoiPolygonCache::hasRelatedType(const ConstElementPtr& element)
+bool PoiPolygonInfoCache::hasRelatedType(const ConstElementPtr& element)
 {
   if (!element)
   {
@@ -400,13 +400,13 @@ bool PoiPolygonCache::hasRelatedType(const ConstElementPtr& element)
 //    return itr.value();
 //  }
 
-  const bool hasRelatedType = PoiPolygonType::hasRelatedType(element);
+  const bool hasRelatedType = PoiPolygonSchema::hasRelatedType(element);
   //_hasRelatedTypeCache[element->getElementId()] = hasRelatedType;
   //_incrementCacheSizeCount("hasRelatedType");
   return hasRelatedType;
 }
 
-double PoiPolygonCache::getReviewDistance(const ConstElementPtr& element,
+double PoiPolygonInfoCache::getReviewDistance(const ConstElementPtr& element,
                                           const Tags& polyTags,
                                           const double reviewDistanceThresholdDefault)
 {
@@ -444,7 +444,7 @@ double PoiPolygonCache::getReviewDistance(const ConstElementPtr& element,
   }
 }
 
-bool PoiPolygonCache::inBuildingCategory(const ConstElementPtr& element)
+bool PoiPolygonInfoCache::inBuildingCategory(const ConstElementPtr& element)
 {
   if (!element)
   {
@@ -467,7 +467,7 @@ bool PoiPolygonCache::inBuildingCategory(const ConstElementPtr& element)
   return inBuildingCategory;
 }
 
-int PoiPolygonCache::numAddresses(const ConstElementPtr& element)
+int PoiPolygonInfoCache::numAddresses(const ConstElementPtr& element)
 {
   if (!element)
   {
@@ -487,7 +487,7 @@ int PoiPolygonCache::numAddresses(const ConstElementPtr& element)
   return numAddresses;
 }
 
-bool PoiPolygonCache::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
+bool PoiPolygonInfoCache::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
 {
   if (!parent ||
       (parent->getElementType() != ElementType::Way &&
@@ -529,7 +529,7 @@ bool PoiPolygonCache::containsMember(const ConstElementPtr& parent, const Elemen
   return containsMember;
 }
 
-bool PoiPolygonCache::elementIntersectsElement(
+bool PoiPolygonInfoCache::elementIntersectsElement(
   const ConstElementPtr& element1, const ConstElementPtr& element2)
 {
   if (!element1 || !element2)
@@ -577,7 +577,7 @@ bool PoiPolygonCache::elementIntersectsElement(
   return intersects;
 }
 
-double PoiPolygonCache::getPolyToPointDistance(
+double PoiPolygonInfoCache::getPolyToPointDistance(
   const ConstElementPtr& poly, const ConstElementPtr& point)
 {
   if (!poly || !point)
@@ -631,7 +631,7 @@ double PoiPolygonCache::getPolyToPointDistance(
   return distance;
 }
 
-double PoiPolygonCache::getArea(const ConstElementPtr& element)
+double PoiPolygonInfoCache::getArea(const ConstElementPtr& element)
 {
   if (!element)
   {

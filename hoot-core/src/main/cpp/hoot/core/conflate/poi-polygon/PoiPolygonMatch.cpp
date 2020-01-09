@@ -40,7 +40,7 @@
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonType.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -84,7 +84,7 @@ Match(threshold)
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  std::shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 PoiPolygonCachePtr infoCache,
+                                 PoiPolygonInfoCachePtr infoCache,
                                  const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
@@ -368,7 +368,7 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource() const
 
 bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 {
-  if (!PoiPolygonType::hasSpecificType(_poi) || !PoiPolygonType::hasSpecificType(_poly))
+  if (!PoiPolygonSchema::hasSpecificType(_poi) || !PoiPolygonSchema::hasSpecificType(_poly))
   {
     return true;
   }

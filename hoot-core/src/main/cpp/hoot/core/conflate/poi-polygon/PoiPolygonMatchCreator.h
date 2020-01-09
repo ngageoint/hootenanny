@@ -34,7 +34,7 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 namespace hoot
 {
@@ -79,7 +79,7 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
 
   /*
    * For any 2:1 matches/reviews, will only keep the match with the smallest distance between

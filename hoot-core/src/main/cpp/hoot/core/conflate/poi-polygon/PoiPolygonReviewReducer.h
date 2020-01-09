@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 
@@ -66,7 +66,7 @@ public:
     const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds, double distance,
     double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
     double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
-    bool addressMatch, bool addressParsingEnabled, PoiPolygonCachePtr infoCache);
+    bool addressMatch, bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -105,7 +105,7 @@ private:
   bool _addressParsingEnabled;
   AddressParser _addressParser;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
 
   QString _triggeredRuleDescription;
 

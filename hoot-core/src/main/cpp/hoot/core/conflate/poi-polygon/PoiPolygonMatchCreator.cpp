@@ -54,7 +54,7 @@ MatchPtr PoiPolygonMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementI
   if (!_infoCache)
   {
     LOG_TRACE("Initializing info cache...");
-    _infoCache.reset(new PoiPolygonCache(map));
+    _infoCache.reset(new PoiPolygonInfoCache(map));
   }
 
   std::shared_ptr<PoiPolygonMatch> result;
@@ -87,7 +87,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   if (!_infoCache)
   {
     LOG_TRACE("Initializing info cache...");
-    _infoCache.reset(new PoiPolygonCache(map));
+    _infoCache.reset(new PoiPolygonInfoCache(map));
     _infoCache->setConfiguration(conf());
   }
 

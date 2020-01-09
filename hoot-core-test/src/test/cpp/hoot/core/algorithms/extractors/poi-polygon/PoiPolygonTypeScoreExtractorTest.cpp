@@ -30,7 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -55,7 +55,7 @@ public:
   void runTest()
   {
     OsmMapPtr map(new OsmMap());
-    PoiPolygonCachePtr infoCache(new PoiPolygonCache(map));
+    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
     infoCache->setConfiguration(conf());
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(conf());
@@ -86,7 +86,7 @@ public:
 
     settings.set("poi.polygon.type.translate.to.english", "true");
     settings.set("language.translation.translator", "hoot::ToEnglishDictionaryTranslator");
-    PoiPolygonCachePtr infoCache(new PoiPolygonCache(map));
+    PoiPolygonInfoCachePtr infoCache(new PoiPolygonInfoCache(map));
     infoCache->setConfiguration(settings);
     PoiPolygonTypeScoreExtractor uut(infoCache);
     uut.setConfiguration(settings);

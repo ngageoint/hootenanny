@@ -42,7 +42,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceExtractor)
 
-PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor(PoiPolygonCachePtr infoCache) :
+PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache) :
 _infoCache(infoCache)
 {
 }
