@@ -88,8 +88,8 @@ public class JobCancellationResource {
             throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         } else {
             try {
-                this.externalCommandInterface.terminate(jobIdToCancel);
                 this.jobStatusManager.setCancelled(jobIdToCancel, "Cancelled by user!");
+                this.externalCommandInterface.terminate(jobIdToCancel);
             } catch (Exception e) {
                 String msg = "Error cancelling job with ID = " + jobIdToCancel;
                 throw new WebApplicationException(e, Response.serverError().entity(msg).build());
@@ -116,8 +116,8 @@ public class JobCancellationResource {
             throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
         } else {
             try {
-                this.externalCommandInterface.terminate(jobId);
                 this.jobStatusManager.setCancelled(jobId, "Cancelled by user!");
+                this.externalCommandInterface.terminate(jobId);
             } catch (Exception e) {
                 String msg = "Error cancelling job with ID = " + jobId;
                 throw new WebApplicationException(e, Response.serverError().entity(msg).build());

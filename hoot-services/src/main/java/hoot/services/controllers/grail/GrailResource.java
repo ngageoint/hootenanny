@@ -144,9 +144,6 @@ public class GrailResource {
     @Autowired
     private UpdateParentCommandFactory updateParentCommandFactory;
 
-    @Autowired
-    private CheckForConflictsCommandFactory checkForConflictsCommandFactory;
-
     public GrailResource() {}
 
     private Command getRailsPortApiCommand(String jobId, GrailParams params) throws UnavailableException {
@@ -446,37 +443,29 @@ public class GrailResource {
                 }
             }
 
-            //Check for conflicts diff-error.osc file and update job status if found
-            //this will indicate to the UI that the conflicts osc file is available for download
-            GrailParams checkConflictsParams = new GrailParams();
-            checkConflictsParams.setParentId(params.getParentId());
-            InternalCommand checkForConflicts = checkForConflictsCommandFactory.build(jobId, checkConflictsParams, this.getClass());
-            workflow.add(checkForConflicts);
-
-
-            Map<String, String> tags = DbUtils.getJobTags(reqParams.getParentId());
-            String resourceId = tags.get("input1");
-
-            if(resourceId != null) {
-                // Setup workflow to refresh rails data after the push
-                long referenceId = Long.parseLong(resourceId);
-                Long parentFolderId = DbUtils.getParentFolder(referenceId);
-                Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
-
-                GrailParams refreshParams = new GrailParams();
-                refreshParams.setUser(user);
-                refreshParams.setWorkDir(workDir);
-                refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
-                refreshParams.setBounds(mapTags.get("bbox"));
-
-                try {
-                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams, parentFolderId);
-                    workflow.addAll(refreshWorkflow);
-                }
-                catch(UnavailableException exc) {
-                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
-                }
-            }
+//            Map<String, String> tags = DbUtils.getJobTags(reqParams.getParentId());
+//            String resourceId = tags.get("input1");
+//
+//            if(resourceId != null) {
+//                // Setup workflow to refresh rails data after the push
+//                long referenceId = Long.parseLong(resourceId);
+//                Long parentFolderId = DbUtils.getParentFolder(referenceId);
+//                Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
+//
+//                GrailParams refreshParams = new GrailParams();
+//                refreshParams.setUser(user);
+//                refreshParams.setWorkDir(workDir);
+//                refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
+//                refreshParams.setBounds(mapTags.get("bbox"));
+//
+//                try {
+//                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams, parentFolderId);
+//                    workflow.addAll(refreshWorkflow);
+//                }
+//                catch(UnavailableException exc) {
+//                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
+//                }
+//            }
 
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("bbox", reqParams.getBounds());
