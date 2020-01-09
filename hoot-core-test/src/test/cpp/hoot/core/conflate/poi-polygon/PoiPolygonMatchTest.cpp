@@ -83,7 +83,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -104,7 +103,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -139,7 +137,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -160,7 +157,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -195,7 +191,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -215,7 +210,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -236,7 +230,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -274,7 +267,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -297,7 +289,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -320,7 +311,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -563,7 +553,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -587,7 +576,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -629,7 +617,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -653,7 +640,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -695,7 +681,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -735,7 +720,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
         PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -756,7 +740,6 @@ public:
       PoiPolygonMatch uut(
         map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
        PoiPolygonCachePtr(new PoiPolygonCache(map)));
-      uut.setEnableAdvancedMatching(false);
       uut.setEnableReviewReduction(true);
       uut.setMatchDistanceThreshold(0.0);
       uut.setReviewDistanceThreshold(0.0);
@@ -789,7 +772,6 @@ public:
     PoiPolygonMatch uut(
       map, std::shared_ptr<MatchThreshold>(), std::shared_ptr<PoiPolygonRfClassifier>(),
       PoiPolygonCachePtr(new PoiPolygonCache(map)));
-    uut.setEnableAdvancedMatching(false);
     uut.setEnableReviewReduction(true);
     uut.setMatchDistanceThreshold(0.0);
     uut.setReviewDistanceThreshold(0.0);

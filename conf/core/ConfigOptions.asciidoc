@@ -129,6 +129,13 @@ separate list items with a semicolon and surround the entire list in double quot
 If true, conflation that uses address matching will allow house number subletter mismatches for the
 addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
 
+=== address.scorer.enable.caching
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === address.tag.keys.file
 
 * Data Type: string
@@ -3130,15 +3137,6 @@ e.g. both have 'source=osm' tag  If set to true and poi.polygon.disable.same.sou
 set to true, then the tag matcher is less strict and will attempt to match the prefix of the source
 tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match
 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.
-
-=== poi.polygon.enable.advanced.matching
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, POI to Polygon conflation will perform additional checks against surrounding features
-for match evidence.  This setting allows for detailed conflation customization but can be runtime
-expensive when enabled.
 
 === poi.polygon.enable.review.reduction
 

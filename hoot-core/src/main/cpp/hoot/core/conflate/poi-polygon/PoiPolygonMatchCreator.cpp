@@ -35,7 +35,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 
 // Std
 #include <float.h>

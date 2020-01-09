@@ -41,13 +41,13 @@ namespace hoot
 
 QHash<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache;
 int AddressScoreExtractor::_addressCacheHits = 0;
-bool AddressScoreExtractor::_cacheInitialized = false;
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, AddressScoreExtractor)
 
 AddressScoreExtractor::AddressScoreExtractor() :
 _addressesProcessed(0),
-_matchAttemptMade(false)
+_matchAttemptMade(false),
+_cacheEnabled(true)
 {
 }
 
@@ -69,6 +69,8 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
     preTranslateTagValuesToEnglish = false;
   }
   _addressParser.setPreTranslateTagValuesToEnglish(preTranslateTagValuesToEnglish, conf);
+
+  _cacheEnabled = config.getAddressScorerEnableCaching();
 }
 
 QList<Address> AddressScoreExtractor::_getElementAddresses(
@@ -77,18 +79,21 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
 {
   LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
 
-  if (!_cacheInitialized)
-  {
-    _addressesCache.reserve(map.size());
-    _cacheInitialized = true;
-  }
+//  if (_cacheEnabled && !_cacheInitialized)
+//  {
+//    _addressesCache.reserve(map.size());
+//    _cacheInitialized = true;
+//  }
 
-  QHash<ElementId, QList<Address>>::const_iterator itr =
-    _addressesCache.find(element->getElementId());
-  if (itr != _addressesCache.end())
+  if (_cacheEnabled)
   {
-    _addressCacheHits++;
-    return itr.value();
+    QHash<ElementId, QList<Address>>::const_iterator itr =
+      _addressesCache.find(element->getElementId());
+    if (itr != _addressesCache.end())
+    {
+      _addressCacheHits++;
+      return itr.value();
+    }
   }
 
   //LOG_VART(element);
@@ -112,7 +117,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
           *relation, map, elementBeingComparedWith->getElementId());
     }
   }
-  _addressesCache[element->getElementId()] = elementAddresses;
+
+  if (_cacheEnabled)
+  {
+    _addressesCache[element->getElementId()] = elementAddresses;
+  }
+
   return elementAddresses;
 }
 

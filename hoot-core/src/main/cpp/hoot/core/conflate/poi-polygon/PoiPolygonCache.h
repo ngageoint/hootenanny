@@ -179,6 +179,17 @@ public:
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
   /**
+   * TODO
+   *
+   * @param element
+   * @param polyTags
+   * @param reviewDistanceThresholdDefault
+   * @return
+   */
+  double getReviewDistance(const ConstElementPtr& element, const Tags& polyTags,
+                           const double reviewDistanceThresholdDefault);
+
+  /**
    * Clears the contents of the cache
    */
   void clear();
@@ -227,6 +238,8 @@ private:
   QHash<ElementId, bool> _inBuildingCategoryCache;
   QHash<ElementId, int> _numAddressesCache;
   QHash<ElementId, double> _areaCache;
+
+  QHash<ElementId, double> _reviewDistanceCache;
 
   // key = parent ID;child ID
   QHash<QString, bool> _containsMemberCache;

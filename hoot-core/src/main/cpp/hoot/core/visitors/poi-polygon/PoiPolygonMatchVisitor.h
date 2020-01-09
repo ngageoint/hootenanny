@@ -100,9 +100,6 @@ private:
 
   std::shared_ptr<PoiPolygonRfClassifier> _rf;
 
-  bool _enableAdvancedMatching;
-  bool _enableReviewReduction;
-
   double _reviewDistanceThreshold;
 
   long _numElementsVisited;
@@ -118,14 +115,12 @@ private:
   QElapsedTimer _timer;
 
   void _checkForMatch(const std::shared_ptr<const Element>& e,
-                      const std::set<ElementId>& surroundingPolyIds,
-                      const std::set<ElementId>& surroundingPoiIds);
+                      const std::set<ElementId>& surroundingPolyIds);
   std::set<ElementId> _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);
-  std::set<ElementId> _collectSurroundingPoiIds(const std::shared_ptr<const Element>& e);
   Meters _getSearchRadius(const std::shared_ptr<const Element>& e) const;
 
   std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
-  std::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();
+  //std::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();
 
   ConstOsmMapPtr _getMap() { return _map; }
 };

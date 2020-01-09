@@ -84,6 +84,7 @@ public:
 
   static int getAddressCacheSize() { return _addressesCache.size(); }
   static int getNumAddressCacheHits() { return _addressCacheHits; }
+  void setCacheEnabled(const bool enabled) { _cacheEnabled = enabled; }
 
 private:
 
@@ -96,7 +97,7 @@ private:
 
   static QHash<ElementId, QList<Address>> _addressesCache;
   static int _addressCacheHits;
-  static bool _cacheInitialized;
+  bool _cacheEnabled;
 
   /*
    * Searches for an address on element. Will look also look for address way nodes and address

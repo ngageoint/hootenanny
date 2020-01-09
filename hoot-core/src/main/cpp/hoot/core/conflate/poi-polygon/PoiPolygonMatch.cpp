@@ -30,8 +30,6 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
@@ -87,8 +85,7 @@ Match(threshold)
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  std::shared_ptr<const PoiPolygonRfClassifier> rf,
                                  PoiPolygonCachePtr infoCache,
-                                 const set<ElementId>& polyNeighborIds,
-                                 const set<ElementId>& poiNeighborIds) :
+                                 const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
 _e1IsPoi(false),
@@ -110,8 +107,6 @@ _addressMatchEnabled(false),
 _phoneNumberScore(-1.0),
 _phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
-_poiNeighborIds(poiNeighborIds),
-_enableAdvancedMatching(false),
 _enableReviewReduction(true),
 _disableSameSourceConflation(false),
 _disableSameSourceConflationMatchTagKeyPrefixOnly(true),
@@ -214,7 +209,6 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
 
   setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
 
-  setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
 
   const int matchEvidenceThreshold = config.getPoiPolygonMatchEvidenceThreshold();
@@ -567,14 +561,10 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
     return 0;
   }
 
-  //search radius taken from PoiPolygonMatchCreator
-  PoiPolygonDistance distanceCalc(
-    _map, _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + _reviewDistanceThreshold);
   _reviewDistanceThreshold =
     max(
-      distanceCalc.getReviewDistanceForType(_poi),
-      distanceCalc.getReviewDistanceForType(_poly));
+      _infoCache->getReviewDistance(_poi, poly->getTags(), _reviewDistanceThreshold),
+      _infoCache->getReviewDistance(_poly, poly->getTags(), _reviewDistanceThreshold));
 
   //Tried type and density based match distance changes here too, but they didn't have any positive
   //effect.
@@ -820,17 +810,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //  {
 //    LOG_DEBUG("_getConvexPolyDistanceEvidence: " << timer.nsecsElapsed());
 //  }
-
-  //no point in trying to increase evidence if we're already at a match
-  if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
-  {
-    PoiPolygonAdvancedMatcher advancedMatcher(_map, _poiNeighborIds, _distance);
-    advancedMatcher.setConfiguration(conf());
-    if (advancedMatcher.triggersRule(_poi, _poly))
-    {
-      evidence++;
-    }
-  }
 
   LOG_VART(evidence);
   return evidence;

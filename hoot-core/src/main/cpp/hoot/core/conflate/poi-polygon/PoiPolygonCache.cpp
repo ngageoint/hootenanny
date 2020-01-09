@@ -35,7 +35,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 #include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
@@ -94,11 +93,9 @@ void PoiPolygonCache::clear()
 
 void PoiPolygonCache::printCacheInfo()
 {
-  // Add one for review distance cache on PoiPolygonDistance, one for the address cache on
-  // AddressScoreExtractor, one for the name cache on NameExtractor, and one for the related tags
-  // cache on the type score extractor.
+  // Add one for the address cache on AddressScoreExtractor.
   LOG_VARD(_numCacheHitsByCacheType.size());
-  LOG_DEBUG("POI/Polygon caches used: " <<  (_numCacheHitsByCacheType.size() + 3));
+  LOG_DEBUG("POI/Polygon caches used: " <<  (_numCacheHitsByCacheType.size() + 1));
   for (QMap<QString, int>::const_iterator numCacheHitsByCacheTypeItr = _numCacheHitsByCacheType.begin();
        numCacheHitsByCacheTypeItr != _numCacheHitsByCacheType.end(); ++numCacheHitsByCacheTypeItr)
   {
@@ -111,29 +108,11 @@ void PoiPolygonCache::printCacheInfo()
             _numCacheEntriesByCacheType[numCacheHitsByCacheTypeItr.key()]));
     LOG_DEBUG(line);
   }
-  QString line =
-    QString("%1:\t%2 hits     entries: %3")
-      .arg("reviewDistance")
-      .arg(StringUtils::formatLargeNumber(PoiPolygonDistance::getNumReviewDistanceCacheHits()))
-      .arg(StringUtils::formatLargeNumber(PoiPolygonDistance::getReviewDistanceCacheSize()));
-  LOG_DEBUG(line);
-  line =
+  const QString line =
     QString("%1:\t%2 hits     entries: %3")
       .arg("address")
       .arg(StringUtils::formatLargeNumber(AddressScoreExtractor::getNumAddressCacheHits()))
       .arg(StringUtils::formatLargeNumber(AddressScoreExtractor::getAddressCacheSize()));
-  LOG_DEBUG(line);
-  line =
-    QString("%1:\t%2 hits     entries: %3")
-      .arg("name")
-      .arg(StringUtils::formatLargeNumber(NameExtractor::getNumNameCacheHits()))
-      .arg(StringUtils::formatLargeNumber(NameExtractor::getNameCacheSize()));
-  LOG_DEBUG(line);
-  line =
-    QString("%1:\t%2 hits     entries: %3")
-      .arg("relatedTags")
-      .arg(StringUtils::formatLargeNumber(PoiPolygonTypeScoreExtractor::getNumRelatedTagsCacheHits()))
-      .arg(StringUtils::formatLargeNumber(PoiPolygonTypeScoreExtractor::getRelatedTagsCacheSize()));
   LOG_DEBUG(line);
 }
 
@@ -425,6 +404,44 @@ bool PoiPolygonCache::hasRelatedType(const ConstElementPtr& element)
   //_hasRelatedTypeCache[element->getElementId()] = hasRelatedType;
   //_incrementCacheSizeCount("hasRelatedType");
   return hasRelatedType;
+}
+
+double PoiPolygonCache::getReviewDistance(const ConstElementPtr& element,
+                                          const Tags& polyTags,
+                                          const double reviewDistanceThresholdDefault)
+{
+  QHash<ElementId, double>::const_iterator itr = _reviewDistanceCache.find(element->getElementId());
+  if (itr != _reviewDistanceCache.end())
+  {
+    _incrementCacheHitCount("reviewDistance");
+    double distance = itr.value();
+    LOG_TRACE("Found review distance: " << distance << " for: " << element->getElementId());
+    return distance;
+  }
+  else
+  {
+    double distance;
+    const Tags& tags = element->getTags();
+    //these distances could be moved to a config
+    if (tags.get("leisure") == "park")
+    {
+      distance = 25.0;
+    }
+    else if ((tags.get("station").toLower() == "light_rail" ||
+              tags.get("railway").toLower() == "platform") &&
+             (polyTags.get("subway").toLower() == "yes" ||
+              polyTags.get("tunnel").toLower() == "yes"))
+    {
+      distance = 150.0;
+    }
+    else
+    {
+      distance = reviewDistanceThresholdDefault;
+    }
+    _reviewDistanceCache[element->getElementId()] = distance;
+    _incrementCacheSizeCount("reviewDistance");
+    return distance;
+  }
 }
 
 bool PoiPolygonCache::inBuildingCategory(const ConstElementPtr& element)
