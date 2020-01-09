@@ -1396,7 +1396,10 @@ tds61 = {
             ["t.golf == 'driving_range' && t.leisure == 'golf_course'","delete t.leisure"],
             ["t.highway == 'bus_stop'","t['transport:type'] = 'bus'"],
             ["t.highway == 'crossing'","t['transport:type'] = 'road';a.F_CODE = 'AQ062'; delete t.highway"],
+            ["t.highway == 'give-way'","a.F_CODE = 'AQ062'"],
             ["t.highway == 'mini_roundabout'","t.junction = 'roundabout'"],
+            ["t.highway == 'steps'","t.highway = 'footway'"],
+            ["t.highway == 'stop'","a.F_CODE = 'AQ062'"],
             ["t.historic == 'castle' && t.building","delete t.building"],
             ["t.historic == 'castle' && t.ruins == 'yes'","t.condition = 'destroyed'; delete t.ruins"],
             ["t.landcover == 'snowfield' || t.landcover == 'ice-field'","a.F_CODE = 'BJ100'"],
@@ -1754,6 +1757,16 @@ tds61 = {
             delete tags.man_made;
             tags.cable = 'yes';
             tags.location = 'underwater';
+        }
+
+        // "service = parking_aisle" is actually the road between rows of car spaces.
+        // If this is a line: make it into a road - the default
+        // If this is an area: make it into a car park.
+        if (tags.service == 'parking_aisle' && geometryType == 'Area')
+        {
+            delete tags.highway;
+            delete tags.service;
+            attrs.F_CODE = 'AQ140'; // Vehicle lot / car park
         }
 
         // Now use the lookup table to find an FCODE. This is here to stop clashes with the
