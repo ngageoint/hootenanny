@@ -149,9 +149,9 @@ bool OsmApiWriter::apply()
   float progress = 0.0f;
   float increment = 0.01f;
   //  Setup the increment
-  if (total < 100000)
+  if (total < 10000)
     increment = 0.1f;
-  else if (total < 1000000)
+  else if (total < 100000)
     increment = 0.05f;
   //  Iterate all changes until there are no more elements to send
   while (_changeset.hasElementsToSend())
