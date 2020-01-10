@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiChangeset.h"
@@ -324,6 +324,11 @@ void XmlChangeset::updateChangeset(const QString &changes)
   QXmlStreamReader reader(changes);
   //  Make sure that the XML provided starts with the <diffResult> tag
   QXmlStreamReader::TokenType type = reader.readNext();
+  if (type == QXmlStreamReader::Invalid)
+  {
+    LOG_ERROR("Invalid changeset response.");
+    return;
+  }
   if (type == QXmlStreamReader::StartDocument)
     type = reader.readNext();
   if (type == QXmlStreamReader::StartElement && reader.name() != "diffResult")
@@ -1098,14 +1103,14 @@ bool XmlChangeset::matchesPlaceholderFailure(const QString& hint,
                                              long& element_id, ElementType::Type& element_type)
 {
   //  Placeholder node not found for reference -145213 in way -5687
-  //  Placeholder Way not found for reference -12257 in relation -51
+  //  Placeholder Way not found for reference -12257 in Relation -51
   QRegularExpression reg("Placeholder (node|way|relation) not found for reference (-?[0-9]+) in (node|way|relation) (-?[0-9]+)",
                          QRegularExpression::CaseInsensitiveOption);
   QRegularExpressionMatch match = reg.match(hint);
   if (match.hasMatch())
   {
     //  Get the node/way/relation type and id that caused the failure
-    member_type = ElementType::fromString(match.captured(1));
+    member_type = ElementType::fromString(match.captured(1).toLower());
     bool success = false;
     member_id = match.captured(2).toLong(&success);
     if (!success)
@@ -1133,6 +1138,35 @@ bool XmlChangeset::matchesRelationFailure(const QString& hint, long& element_id,
     member_type = ElementType::fromString(match.captured(2));
     bool success = false;
     member_id = match.captured(3).toLong(&success);
+    return success;
+  }
+  return false;
+}
+
+bool XmlChangeset::matchesMultiRelationFailure(const QString& hint,
+                                               long& element_id,
+                                               std::vector<long>& member_ids,
+                                               ElementType::Type& member_type)
+{
+  //  Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
+  QRegularExpression reg("Relation (-?[0-9]+) requires the (nodes|ways|relations) with id in ((-?[0-9]+,)+) (.*)", //-?[0-9]+,).*", //+ which either do not exist, or are not visible.",
+                         QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = reg.match(hint);
+  if (match.hasMatch())
+  {
+    QString error = match.captured(1);
+    if (error != "")
+      element_id = error.toLong();
+    //  Get the node/way/relation type (remove the 's') and id that failed
+    member_type = ElementType::fromString(match.captured(2).left(match.captured(2).length() - 1));
+    bool success = false;
+    QStringList ids = match.captured(3).split(",", QString::SkipEmptyParts);
+    for (int i = 0; i < ids.size(); ++i)
+    {
+      long id = ids[i].toLong(&success);
+      if (success)
+        member_ids.push_back(id);
+    }
     return success;
   }
   return false;
@@ -1186,6 +1220,16 @@ bool XmlChangeset::matchesChangesetConflictVersionMismatchFailure(const QString&
   return false;
 }
 
+bool XmlChangeset::matchesChangesetClosedFailure(const QString& hint)
+{
+  //  Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC
+  QRegularExpression reg(
+        "Changeset conflict: The changeset ([0-9]+) was closed.*",
+        QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = reg.match(hint);
+  return match.hasMatch();
+}
+
 bool XmlChangeset::writeErrorFile()
 {
   //  Validate the pathname
@@ -1220,6 +1264,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
   {
     long member_id = 0;
     long element_id = 0;
+    std::vector<long> member_ids;
     ElementType::Type member_type = ElementType::Unknown;
     ElementType::Type element_type = ElementType::Unknown;
     //  See if the hint is something like: Placeholder node not found for reference -145213 in way -5687
@@ -1257,7 +1302,7 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
         //  If there is a relation id, move just that relation to the split
         for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
         {
-          if (changeset->contains(member_type, (ChangesetType)current_type, element_id))
+          if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, element_id))
           {
             ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
             //  Add the relation to the split and remove from the changeset
@@ -1285,6 +1330,22 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(ChangesetInfoPtr changeset, const 
               return split;
             }
           }
+        }
+      }
+    }
+    //  See if the hint is something like: Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
+    else if (matchesMultiRelationFailure(splitHint, element_id, member_ids, member_type))
+    {
+      //  If there is a relation id, move just that relation to the split
+      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+      {
+        if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, element_id))
+        {
+          ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+          //  Add the relation to the split and remove from the changeset
+          split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+          changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+          return split;
         }
       }
     }

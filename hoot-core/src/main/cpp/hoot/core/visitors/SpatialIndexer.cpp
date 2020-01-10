@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "IndexElementsVisitor.h"
+#include "SpatialIndexer.h"
 
 // Hoot
 #include <hoot/core/util/Factory.h>
@@ -46,7 +46,7 @@ using namespace Tgs;
 namespace hoot
 {
 
-IndexElementsVisitor::IndexElementsVisitor(
+SpatialIndexer::SpatialIndexer(
   std::shared_ptr<HilbertRTree>& index, deque<ElementId>& indexToEid,
   const std::shared_ptr<ElementCriterion>& criterion,
   std::function<Meters (const ConstElementPtr& e)> getSearchRadius, ConstOsmMapPtr pMap) :
@@ -64,13 +64,13 @@ _indexToEid(indexToEid)
   }
 }
 
-void IndexElementsVisitor::addCriterion(const ElementCriterionPtr& e)
+void SpatialIndexer::addCriterion(const ElementCriterionPtr& e)
 {
   assert(_criterion.get() == 0);
   _criterion = e;
 }
 
-void IndexElementsVisitor::finalizeIndex()
+void SpatialIndexer::finalizeIndex()
 {
   LOG_DEBUG("Finalizing index...");
   LOG_VARD(_indexToEid.size());
@@ -79,8 +79,9 @@ void IndexElementsVisitor::finalizeIndex()
   _index->bulkInsert(_boxes, _fids);
 }
 
-void IndexElementsVisitor::visit(const ConstElementPtr& e)
+void SpatialIndexer::visit(const ConstElementPtr& e)
 {
+  LOG_VART(e->getElementId());
   if (!_criterion || _criterion->isSatisfied(e))
   {
     LOG_VART(e->getElementId());
@@ -100,7 +101,7 @@ void IndexElementsVisitor::visit(const ConstElementPtr& e)
   }
 }
 
-set<ElementId> IndexElementsVisitor::findNeighbors(
+set<ElementId> SpatialIndexer::findNeighbors(
   const Envelope& env, const std::shared_ptr<Tgs::HilbertRTree>& index,
   const deque<ElementId>& indexToEid, ConstOsmMapPtr pMap, const ElementType& elementType,
   const bool includeContainingRelations)
@@ -108,9 +109,6 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
   LOG_TRACE("Finding neighbors within env: " << env << "...");
   LOG_VART(indexToEid.size());
   LOG_VART(index.get());
-
-  const ElementToRelationMap& e2r = *(pMap->getIndex()).getElementToRelationMap();
-  LOG_VART(e2r.size());
 
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
@@ -123,6 +121,7 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
   while (it.next())
   {
     ElementId eid = indexToEid[it.getId()];
+    LOG_VART(eid);
     if (elementType == ElementType::Unknown || eid.getType() == elementType)
     {
       // Map the tree id to an element id and push into result.
@@ -131,7 +130,8 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
       if (includeContainingRelations)
       {
         // Check for relations that contain this element
-        const set<long>& relations = e2r.getRelationByElement(eid);
+        const set<long>& relations =
+          pMap->getIndex().getElementToRelationMap()->getRelationByElement(eid);
         for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
         {
           neighborIds.insert(ElementId(ElementType::Relation, *it));
@@ -140,12 +140,12 @@ set<ElementId> IndexElementsVisitor::findNeighbors(
     }
   }
 
-  //LOG_VART(neighborIds);
+  LOG_VART(neighborIds);
   LOG_VART(neighborIds.size());
   return neighborIds;
 }
 
-QList<ElementId> IndexElementsVisitor::findSortedNodeNeighbors(
+QList<ElementId> SpatialIndexer::findSortedNodeNeighbors(
   const ConstNodePtr& node, const geos::geom::Envelope& env,
   const std::shared_ptr<Tgs::HilbertRTree>& index, const std::deque<ElementId>& indexToEid,
   ConstOsmMapPtr pMap)

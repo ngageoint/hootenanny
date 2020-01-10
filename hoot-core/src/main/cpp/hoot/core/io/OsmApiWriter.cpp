@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiWriter.h"
@@ -48,12 +48,12 @@ using namespace Tgs;
 namespace hoot
 {
 
-const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities/";
-const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions/";
-const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create/";
-const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close/";
-const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload/";
-const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2/";
+const char* OsmApiWriter::API_PATH_CAPABILITIES = "/api/capabilities";
+const char* OsmApiWriter::API_PATH_PERMISSIONS = "/api/0.6/permissions";
+const char* OsmApiWriter::API_PATH_CREATE_CHANGESET = "/api/0.6/changeset/create";
+const char* OsmApiWriter::API_PATH_CLOSE_CHANGESET = "/api/0.6/changeset/%1/close";
+const char* OsmApiWriter::API_PATH_UPLOAD_CHANGESET = "/api/0.6/changeset/%1/upload";
+const char* OsmApiWriter::API_PATH_GET_ELEMENT = "/api/0.6/%1/%2";
 
 OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
   : _description(ConfigOptions().getChangesetDescription()),
@@ -139,17 +139,19 @@ bool OsmApiWriter::apply()
   _changeset.fixMalformedInput();
   //  Start the writer threads
   LOG_INFO("Starting " << _maxWriters << " processing threads.");
-  _threadStatus.reserve(_maxWriters);
   for (int i = 0; i < _maxWriters; ++i)
+  {
+    _threadStatus.push_back(ThreadStatus::Working);
     _threadPool.push_back(thread(&OsmApiWriter::_changesetThreadFunc, this, i));
+  }
   //  Setup the progress indicators
   long total = _changeset.getTotalElementCount();
   float progress = 0.0f;
   float increment = 0.01f;
   //  Setup the increment
-  if (total < 100000)
+  if (total < 10000)
     increment = 0.1f;
-  else if (total < 1000000)
+  else if (total < 100000)
     increment = 0.05f;
   //  Iterate all changes until there are no more elements to send
   while (_changeset.hasElementsToSend())
@@ -244,12 +246,14 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   HootNetworkRequestPtr request = createNetworkRequest(true);
   long id = -1;
   long changesetSize = 0;
+  bool stop_thread = false;
   //  Iterate until all elements are sent and updated
-  while (!_changeset.isDone())
+  while (!_changeset.isDone() && !stop_thread)
   {
     ChangesetInfoPtr workInfo;
     //  Try to get something off of the work queue
     _workQueueMutex.lock();
+    int queueSize = _workQueue.size();
     if (!_workQueue.empty())
     {
       workInfo = _workQueue.front();
@@ -312,13 +316,13 @@ void OsmApiWriter::_changesetThreadFunc(int index)
       else
       {
         //  Log the error as a status message
-        LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString());
+        LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString() << " (" << request->getHttpStatus() << ")");
         //  If this is the last changeset, error it all out and finish working
         if (workInfo->getLast())
         {
           //  Fail the entire changeset
           _changeset.updateFailedChangeset(workInfo, true);
-          //  Looping should end the thread
+          //  Looping should end the thread because all of the remaining elements have now been set to the failed state
           continue;
         }
         //  Split the changeset on conflict errors
@@ -326,7 +330,18 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         {
         case 409:   //  Conflict, check for version conflicts and fix, or split and continue
           {
-            if (_fixConflict(request, workInfo, info->response))
+            if (_changesetClosed(info->response))
+            {
+              //  The changeset was closed already so set the ID to -1 and reprocess
+              id = -1;
+              //  Push the changeset back on the queue
+              _workQueueMutex.lock();
+              _workQueue.push(workInfo);
+              _workQueueMutex.unlock();
+              //  Loop back around to work on the next changeset
+              continue;
+            }
+            else if (_fixConflict(request, workInfo, info->response))
             {
               _workQueueMutex.lock();
               _workQueue.push(workInfo);
@@ -396,12 +411,21 @@ void OsmApiWriter::_changesetThreadFunc(int index)
     }
     else
     {
-      //  Set the status to idle
-      _threadStatusMutex.lock();
-      _threadStatus[index] = ThreadStatus::Idle;
-      _threadStatusMutex.unlock();
-      //  Sleep the thread
-      this_thread::sleep_for(chrono::milliseconds(10));
+      if (!_changeset.hasElementsToSend() && queueSize == 0 && _threadsAreIdle())
+      {
+        //  In this case there are elements that have been sent and not reported back
+        //  BUT there are no threads that are waiting for them either
+        stop_thread = true;
+      }
+      else
+      {
+        //  Set the status to idle
+        _threadStatusMutex.lock();
+        _threadStatus[index] = ThreadStatus::Idle;
+        _threadStatusMutex.unlock();
+        //  Sleep the thread
+        this_thread::sleep_for(chrono::milliseconds(10));
+      }
     }
   }
   //  Close the changeset if one is still open
@@ -721,6 +745,11 @@ bool OsmApiWriter::_fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr 
     }
   }
   return success;
+}
+
+bool OsmApiWriter::_changesetClosed(const QString &conflictExplanation)
+{
+  return _changeset.matchesChangesetClosedFailure(conflictExplanation);
 }
 
 bool OsmApiWriter::_resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset)

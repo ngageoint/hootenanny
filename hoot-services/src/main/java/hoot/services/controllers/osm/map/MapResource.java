@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -86,12 +86,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
 import hoot.services.controllers.osm.OsmResponseHeaderGenerator;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.job.Job;
 import hoot.services.job.JobProcessor;
@@ -132,6 +132,9 @@ public class MapResource {
     @Autowired
     private DeleteMapResourcesCommandFactory deleteMapResourcesCommandFactory;
 
+    @Autowired
+    private DeleteOlderMapsCommandFactory deleteOlderMapsCommandFactory;
+
 
     /**
      * Returns a list of all map layers in the services database
@@ -170,7 +173,7 @@ public class MapResource {
         // that the folder is recursively visible to the user based on folder
         // visibility:
         List<Maps> mapLayersOut = new ArrayList<Maps>(mapLayerRecords.size());
-        Set<Long> foldersTheUserCanSee = FolderResource.getFolderIdsForUser(user);
+        Set<Long> foldersTheUserCanSee = DbUtils.getFolderIdsForUser(user);
         for(Tuple t : mapLayerRecords) {
             Long parentFolder = t.get(folders.id);
             Boolean parentFolderIsPublic = t.get(folders.publicCol);
@@ -630,7 +633,7 @@ public class MapResource {
         try {
             Command[] workflow = {
                 () -> {
-                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, this.getClass());
+                    InternalCommand mapResourcesCleaner = deleteMapResourcesCommandFactory.build(mapId, jobId, this.getClass());
                     return mapResourcesCleaner.execute();
                 }
             };
@@ -646,6 +649,81 @@ public class MapResource {
         ret.put("jobid", jobId);
 
         return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Deletes maps older than ?
+     *
+     * DELETE hoot-services/osm/api/0.6/map/delete/stale/{months}
+     *
+     *
+     * @param months
+     *            number of months back
+     * @return job id
+     */
+    @DELETE
+    @Path("/stale/{months}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteStaleLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
+        Users user = Users.fromRequest(request);
+
+        if (!UserResource.adminUserCheck(user)) {
+            return Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to delete old map data").build();
+        }
+
+        String jobId = UUID.randomUUID().toString();
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1 * months);
+        Timestamp monthsAgo = new Timestamp(cal.getTime().getTime());
+
+        try {
+            Command[] workflow = {
+                () -> {
+                    InternalCommand mapResourcesCleaner = deleteOlderMapsCommandFactory.build(monthsAgo, jobId, this.getClass());
+                    return mapResourcesCleaner.execute();
+                }
+            };
+
+            jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow, JobType.DELETE));
+        }
+        catch (Exception e) {
+            String msg = "Error submitting delete map request for maps older than " + months;
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+
+        java.util.Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("jobid", jobId);
+
+        return Response.ok().entity(ret).build();
+    }
+
+    /**
+     * Deletes maps older than ?
+     *
+     * GET hoot-services/osm/api/0.6/map/delete/{id}
+     *
+     *
+     * @param months
+     *            number of months back
+     * @return job id
+     */
+    @GET
+    @Path("/stale/{months}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStaleLayers(@Context HttpServletRequest request, @PathParam("months") Integer months) {
+        Users user = Users.fromRequest(request);
+
+        if (!UserResource.adminUserCheck(user)) {
+            return Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to delete old map data").build();
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1 * months);
+        Timestamp monthsAgo = new Timestamp(cal.getTime().getTime());
+
+        return Response.ok().entity(DbUtils.getStaleMapsSummary(monthsAgo)).build();
     }
 
     /**
@@ -697,19 +775,7 @@ public class MapResource {
         Map m = getMapForUser(user, mapId, false, true);
         // Handle some CRUD
         FolderResource.getFolderForUser(user, folderId);
-
-        // Delete any existing to avoid duplicate entries
-        createQuery().delete(folderMapMappings).where(folderMapMappings.mapId.eq(m.getId())).execute();
-
-        Long newId = createQuery()
-            .select(Expressions.numberTemplate(Long.class, "nextval('folder_map_mappings_id_seq')"))
-            .from()
-            .fetchOne();
-
-        createQuery()
-            .insert(folderMapMappings)
-            .columns(folderMapMappings.id, folderMapMappings.mapId, folderMapMappings.folderId)
-            .values(newId, m.getId(), folderId).execute();
+        DbUtils.updateFolderMapping(m.getId(), folderId);
 
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         ret.put("success", true);

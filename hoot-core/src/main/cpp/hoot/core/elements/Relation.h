@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_H
 #define RELATION_H
@@ -92,6 +92,13 @@ public:
 
   const std::vector<RelationData::Entry>& getMembers() const
   { return _relationData->getElements(); }
+
+  /**
+   * Returns the IDs of all way members
+   *
+   * @return a collection of element IDs
+   */
+  std::set<ElementId> getWayMemberIds() const;
 
   virtual geos::geom::Envelope* getEnvelope(
     const std::shared_ptr<const ElementProvider>& ep) const override;

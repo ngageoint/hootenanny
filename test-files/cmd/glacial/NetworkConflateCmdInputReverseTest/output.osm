@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="38.8845" minlon="-77.05510026444678" maxlat="38.90310000000001" maxlon="-77.02809969690385"/>
-    <node visible="true" id="-102941" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8868961331782472" lon="-77.0441725215878392"/>
-    <node visible="true" id="-102911" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871319687052335" lon="-77.0489647755421743"/>
-    <node visible="true" id="-102856" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023514518557647" lon="-77.0495008117322584"/>
-    <node visible="true" id="-102718" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027928872356199" lon="-77.0547509546836409"/>
-    <node visible="true" id="-102693" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8893173382485031" lon="-77.0513784570690490"/>
-    <node visible="true" id="-102692" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8896433705565840" lon="-77.0512801608843318"/>
-    <node visible="true" id="-102632" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946312593677419" lon="-77.0319636129346890"/>
-    <node visible="true" id="-102625" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973261391521987" lon="-77.0529768322234645"/>
-    <node visible="true" id="-102558" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8894868828550102" lon="-77.0328710657144597"/>
-    <node visible="true" id="-102499" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8852141817114756" lon="-77.0449544316413863"/>
-    <node visible="true" id="-102465" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9007476806676635" lon="-77.0547013860499419"/>
-    <node visible="true" id="-102282" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027513034636954" lon="-77.0507116341859017"/>
-    <node visible="true" id="-102255" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8982626699593936" lon="-77.0534235404026333"/>
-    <node visible="true" id="-102227" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8985041043504509" lon="-77.0537052492769305"/>
-    <node visible="true" id="-102195" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8876676386429025" lon="-77.0343972827783290"/>
-    <node visible="true" id="-102191" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885389637321737" lon="-77.0521697636968241"/>
-    <node visible="true" id="-102161" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8893213620929359" lon="-77.0526169681676976"/>
-    <node visible="true" id="-102127" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022148524724329" lon="-77.0490223228173221"/>
-    <node visible="true" id="-101998" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885131487762976" lon="-77.0509360815161699"/>
-    <node visible="true" id="-101960" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8979584558485243" lon="-77.0530559999999838"/>
+    <bounds minlat="38.8845" minlon="-77.05510026444678" maxlat="38.90310000000001" maxlon="-77.02809999999999"/>
+    <node visible="true" id="-102937" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027513034636954" lon="-77.0507116341859017"/>
+    <node visible="true" id="-102912" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9023514518557647" lon="-77.0495008117322584"/>
+    <node visible="true" id="-102843" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871318653674578" lon="-77.0489838464382899"/>
+    <node visible="true" id="-102830" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027928872356199" lon="-77.0547509546836409"/>
+    <node visible="true" id="-102766" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973261391521987" lon="-77.0529768322234645"/>
+    <node visible="true" id="-102736" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8979584558485243" lon="-77.0530559999999838"/>
+    <node visible="true" id="-102710" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8985041043504509" lon="-77.0537052492769305"/>
+    <node visible="true" id="-102611" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885131487762976" lon="-77.0509360815161699"/>
+    <node visible="true" id="-102586" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8893173382485031" lon="-77.0513784570690490"/>
+    <node visible="true" id="-102585" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8896433705565840" lon="-77.0512801608843318"/>
+    <node visible="true" id="-102518" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8894868828550102" lon="-77.0328710657144597"/>
+    <node visible="true" id="-102475" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8852141817114756" lon="-77.0449544316413863"/>
+    <node visible="true" id="-102373" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8876676386429025" lon="-77.0343972827783290"/>
+    <node visible="true" id="-102309" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946312593677419" lon="-77.0319636129346890"/>
+    <node visible="true" id="-102280" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8982626699593936" lon="-77.0534235404026333"/>
+    <node visible="true" id="-102214" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8893213620929359" lon="-77.0526169681676976"/>
+    <node visible="true" id="-102189" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8885389637321737" lon="-77.0521697636968241"/>
+    <node visible="true" id="-102116" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9022148524724329" lon="-77.0490223228173221"/>
+    <node visible="true" id="-102075" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8868991421698809" lon="-77.0441723445883326"/>
+    <node visible="true" id="-101994" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9007476806676635" lon="-77.0547013860499419"/>
     <node visible="true" id="-93339" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9027928986846163" lon="-77.0508376951271714"/>
     <node visible="true" id="-93195" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870684709489112" lon="-77.0487857935559504"/>
     <node visible="true" id="-93146" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8876813454177181" lon="-77.0342997554880071"/>
@@ -29,20 +29,12 @@
     <node visible="true" id="-93143" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8877641424041514" lon="-77.0338305474840865"/>
     <node visible="true" id="-92836" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946316768288938" lon="-77.0317487418169264"/>
     <node visible="true" id="-92835" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8946355682177938" lon="-77.0311739591484610"/>
-    <node visible="true" id="-92833" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8848627473964115" lon="-77.0320062019367100"/>
-    <node visible="true" id="-92832" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8849268126183176" lon="-77.0320087183505677"/>
     <node visible="true" id="-92687" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870566781814020" lon="-77.0484692258650483"/>
     <node visible="true" id="-92686" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869255897906569" lon="-77.0449591501954814"/>
     <node visible="true" id="-92683" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923095165805606" lon="-77.0551002644467786"/>
-    <node visible="true" id="-92677" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845002070012171" lon="-77.0337272314965418"/>
-    <node visible="true" id="-92661" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845010066496215" lon="-77.0320038779200331"/>
-    <node visible="true" id="-92652" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8928791840159818" lon="-77.0551002573396744"/>
     <node visible="true" id="-92618" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8998544361471090" lon="-77.0550998974104999"/>
-    <node visible="true" id="-92608" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920850582387274" lon="-77.0280996969038512"/>
     <node visible="true" id="-92340" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8899247769218093" lon="-77.0521342728364544"/>
     <node visible="true" id="-92339" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8899004418533210" lon="-77.0520610870126887"/>
-    <node visible="true" id="-92074" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845335129496803" lon="-77.0337276109231937"/>
-    <node visible="true" id="-92073" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845487613495564" lon="-77.0337272549547976"/>
     <node visible="true" id="-91868" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984779757971495" lon="-77.0533472674582924"/>
     <node visible="true" id="-91864" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8984697934447681" lon="-77.0533771569221528"/>
     <node visible="true" id="-91771" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8985084369245655" lon="-77.0537111511209218"/>
@@ -103,8 +95,6 @@
     <node visible="true" id="-90390" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8959055684608117" lon="-77.0487353138848334"/>
     <node visible="true" id="-90389" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958888611395892" lon="-77.0484325424940977"/>
     <node visible="true" id="-90388" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8958599752809562" lon="-77.0481465194263393"/>
-    <node visible="true" id="-90372" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8928407286965054" lon="-77.0547614095201681"/>
-    <node visible="true" id="-90371" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8928516196394938" lon="-77.0548255269960976"/>
     <node visible="true" id="-89946" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8852449407437391" lon="-77.0449841909180151"/>
     <node visible="true" id="-89945" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8853815177708100" lon="-77.0450061024258872"/>
     <node visible="true" id="-89944" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8855659059652936" lon="-77.0450105628267892"/>
@@ -146,13 +136,11 @@
     <node visible="true" id="-89102" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8997753320093551" lon="-77.0549541278937795"/>
     <node visible="true" id="-89100" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8993363379025254" lon="-77.0541707917775796"/>
     <node visible="true" id="-89098" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8992052946515940" lon="-77.0539376157793328"/>
-    <node visible="true" id="-89016" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920850574829231" lon="-77.0281001137290531"/>
     <node visible="true" id="-89015" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923145194804860" lon="-77.0550999999999959"/>
     <node visible="true" id="-89014" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8983148607594842" lon="-77.0280999999999949"/>
     <node visible="true" id="-89013" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0320211349693125"/>
     <node visible="true" id="-89012" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8904648666666688" lon="-77.0280999999999949"/>
     <node visible="true" id="-89011" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920849373942517" lon="-77.0280999999999949"/>
-    <node visible="true" id="-89010" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920849373942517" lon="-77.0280999999999949"/>
     <node visible="true" id="-89009" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0281232314814446"/>
     <node visible="true" id="-89008" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0396426046511493"/>
     <node visible="true" id="-89007" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8998532215909378" lon="-77.0550999999999959"/>
@@ -186,21 +174,16 @@
     <node visible="true" id="-88979" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8973489999999984" lon="-77.0550999999999959"/>
     <node visible="true" id="-88978" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000091" lon="-77.0448960753845995"/>
     <node visible="true" id="-88977" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0365409431818193"/>
-    <node visible="true" id="-88976" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9006510000000674" lon="-77.0550999999999959"/>
     <node visible="true" id="-88975" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9004148620689634" lon="-77.0550999999999959"/>
     <node visible="true" id="-88974" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0317959649805317"/>
     <node visible="true" id="-88973" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0319062357723254"/>
     <node visible="true" id="-88972" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8950201260503619" lon="-77.0280999999999949"/>
-    <node visible="true" id="-88971" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0337256804123598"/>
     <node visible="true" id="-88970" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8886489999999796" lon="-77.0280999999999949"/>
     <node visible="true" id="-88969" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000091" lon="-77.0319542357615887"/>
     <node visible="true" id="-88968" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0385089999999906"/>
-    <node visible="true" id="-88967" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025183345070573" lon="-77.0280999999999949"/>
     <node visible="true" id="-88966" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0496005172413732"/>
     <node visible="true" id="-88965" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0514167192982455"/>
-    <node visible="true" id="-88964" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9024925138340194" lon="-77.0550999999999959"/>
     <node visible="true" id="-88963" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0451894999999638"/>
-    <node visible="true" id="-88962" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0320211349693125"/>
     <node visible="true" id="-88961" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0296251769041760"/>
     <node visible="true" id="-88960" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0472628867562292"/>
     <node visible="true" id="-88959" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025844559999712" lon="-77.0550999999999959"/>
@@ -211,14 +194,10 @@
     <node visible="true" id="-88954" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9007345352112139" lon="-77.0280999999999949"/>
     <node visible="true" id="-88953" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8998112118958730" lon="-77.0280999999999949"/>
     <node visible="true" id="-88952" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000091" lon="-77.0533045299714274"/>
-    <node visible="true" id="-88951" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8928781686746916" lon="-77.0550999999999959"/>
-    <node visible="true" id="-88950" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0319062357723254"/>
     <node visible="true" id="-88949" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0449996524163510"/>
     <node visible="true" id="-88948" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8947775000000178" lon="-77.0280999999999949"/>
     <node visible="true" id="-88947" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920052048192844" lon="-77.0280999999999949"/>
-    <node visible="true" id="-88946" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8920849373942517" lon="-77.0280999999999949"/>
     <node visible="true" id="-88945" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0416898849999825"/>
-    <node visible="true" id="-88944" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025844559999712" lon="-77.0550999999999959"/>
     <node visible="true" id="-88890" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9028950000000009" lon="-77.0512749999999897"/>
     <node visible="true" id="-88889" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9028460000000464" lon="-77.0512009999999918"/>
     <node visible="true" id="-88888" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9028119999999475" lon="-77.0511529999999851"/>
@@ -2233,7 +2212,6 @@
     <node visible="true" id="-36943" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915550000000181" lon="-77.0526979999999924"/>
     <node visible="true" id="-36942" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915980000000232" lon="-77.0526869999999917"/>
     <node visible="true" id="-36941" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8916419999999619" lon="-77.0526909999999816"/>
-    <node visible="true" id="-36940" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871370000000312" lon="-77.0501769999999908"/>
     <node visible="true" id="-36939" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8876029999999702" lon="-77.0501769999999908"/>
     <node visible="true" id="-36938" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8883069999999833" lon="-77.0501759999999791"/>
     <node visible="true" id="-36918" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845319999999859" lon="-77.0451479999999833"/>
@@ -2326,6 +2304,7 @@
     <node visible="true" id="-28011" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8867170000000115" lon="-77.0503690000000034"/>
     <node visible="true" id="-28010" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8869510000000247" lon="-77.0502460000000013"/>
     <node visible="true" id="-28009" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8870459999999767" lon="-77.0502109999999902"/>
+    <node visible="true" id="-28008" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8871469999999704" lon="-77.0502379999999647"/>
     <node visible="true" id="-28007" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8876009999999965" lon="-77.0502419999999688"/>
     <node visible="true" id="-28006" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8881170000000367" lon="-77.0502409999999855"/>
     <node visible="true" id="-28005" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8881679999999932" lon="-77.0502460000000013"/>
@@ -3306,42 +3285,8 @@
     <node visible="true" id="-1024" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025659999999860" lon="-77.0488229999999845"/>
     <node visible="true" id="-1023" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025669999999764" lon="-77.0468659999999517"/>
     <node visible="true" id="-1022" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9025259999999591" lon="-77.0466490000000022"/>
-    <way visible="true" id="-23117" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39523"/>
-        <nd ref="-102941"/>
-        <nd ref="-39512"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-23056" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-70630"/>
-        <nd ref="-70671"/>
-        <nd ref="-70672"/>
-        <nd ref="-70673"/>
-        <nd ref="-70674"/>
-        <nd ref="-70675"/>
-        <nd ref="-70676"/>
-        <nd ref="-70677"/>
-        <nd ref="-70678"/>
-        <nd ref="-102692"/>
-        <nd ref="-70679"/>
-        <nd ref="-70680"/>
-        <nd ref="-70681"/>
-        <nd ref="-70682"/>
-        <nd ref="-70683"/>
-        <nd ref="-70684"/>
-        <nd ref="-70685"/>
-        <nd ref="-102693"/>
-        <nd ref="-70686"/>
-        <nd ref="-70608"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Lincoln Memorial Cir"/>
-        <tag k="alt_name" v="LINCOLN MEMORIAL CIR NW;LINCOLN MEMORIAL CIR SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-23035" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102625"/>
+    <way visible="true" id="-22896" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102766"/>
         <nd ref="-90831"/>
         <nd ref="-90832"/>
         <nd ref="-90833"/>
@@ -3354,52 +3299,130 @@
         <nd ref="-90840"/>
         <nd ref="-90841"/>
         <nd ref="-90842"/>
-        <nd ref="-101960"/>
+        <nd ref="-102736"/>
         <tag k="highway" v="motorway"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-23019" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-15054"/>
-        <nd ref="-50178"/>
-        <nd ref="-50179"/>
-        <nd ref="-50180"/>
-        <nd ref="-50181"/>
-        <nd ref="-102558"/>
-        <nd ref="-50182"/>
-        <nd ref="-50183"/>
-        <nd ref="-50184"/>
-        <nd ref="-50185"/>
-        <nd ref="-50186"/>
-        <nd ref="-50187"/>
-        <nd ref="-39104"/>
-        <nd ref="-50188"/>
-        <nd ref="-50189"/>
-        <nd ref="-50190"/>
-        <nd ref="-50191"/>
-        <nd ref="-50192"/>
-        <nd ref="-50193"/>
-        <nd ref="-50194"/>
-        <nd ref="-50195"/>
-        <nd ref="-50196"/>
-        <nd ref="-50197"/>
-        <nd ref="-50198"/>
-        <nd ref="-39433"/>
-        <nd ref="-50199"/>
-        <nd ref="-50200"/>
-        <nd ref="-15170"/>
-        <nd ref="-50201"/>
-        <nd ref="-50202"/>
-        <nd ref="-50203"/>
-        <nd ref="-50204"/>
-        <nd ref="-50205"/>
-        <nd ref="-39105"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Raoul Wallenberg Pl SW"/>
-        <tag k="alt_name" v="15TH ST NW;15TH ST SW;15th St SW;RAOUL WALLENBERG PL SW"/>
+    <way visible="true" id="-22874" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-27249"/>
+        <nd ref="-91767"/>
+        <nd ref="-91768"/>
+        <nd ref="-91769"/>
+        <nd ref="-91770"/>
+        <nd ref="-91771"/>
+        <nd ref="-102710"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="25TH ST NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-23003" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22853" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102611"/>
+        <nd ref="-91364"/>
+        <nd ref="-91363"/>
+        <nd ref="-91362"/>
+        <nd ref="-91361"/>
+        <nd ref="-91360"/>
+        <nd ref="-91359"/>
+        <nd ref="-91358"/>
+        <nd ref="-91357"/>
+        <nd ref="-91356"/>
+        <nd ref="-91355"/>
+        <nd ref="-91354"/>
+        <nd ref="-91353"/>
+        <nd ref="-91352"/>
+        <nd ref="-91351"/>
+        <nd ref="-91350"/>
+        <nd ref="-91349"/>
+        <nd ref="-91348"/>
+        <nd ref="-91347"/>
+        <nd ref="-91346"/>
+        <nd ref="-91345"/>
+        <nd ref="-91344"/>
+        <nd ref="-91343"/>
+        <nd ref="-91342"/>
+        <nd ref="-91341"/>
+        <nd ref="-91340"/>
+        <nd ref="-60538"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22850" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-70608"/>
+        <nd ref="-70687"/>
+        <nd ref="-70688"/>
+        <nd ref="-102611"/>
+        <nd ref="-70689"/>
+        <nd ref="-70690"/>
+        <nd ref="-70691"/>
+        <nd ref="-70692"/>
+        <nd ref="-70693"/>
+        <nd ref="-70694"/>
+        <nd ref="-70695"/>
+        <nd ref="-36938"/>
+        <nd ref="-70696"/>
+        <nd ref="-70697"/>
+        <nd ref="-70698"/>
+        <nd ref="-70699"/>
+        <nd ref="-70700"/>
+        <nd ref="-70701"/>
+        <nd ref="-70702"/>
+        <nd ref="-70703"/>
+        <nd ref="-70704"/>
+        <nd ref="-70705"/>
+        <nd ref="-28017"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
+        <tag k="alt_name" v="LINCOLN MEMORIAL CIR SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22841" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-70630"/>
+        <nd ref="-70671"/>
+        <nd ref="-70672"/>
+        <nd ref="-70673"/>
+        <nd ref="-70674"/>
+        <nd ref="-70675"/>
+        <nd ref="-70676"/>
+        <nd ref="-70677"/>
+        <nd ref="-70678"/>
+        <nd ref="-102585"/>
+        <nd ref="-70679"/>
+        <nd ref="-70680"/>
+        <nd ref="-70681"/>
+        <nd ref="-70682"/>
+        <nd ref="-70683"/>
+        <nd ref="-70684"/>
+        <nd ref="-70685"/>
+        <nd ref="-102586"/>
+        <nd ref="-70686"/>
+        <nd ref="-70608"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Lincoln Memorial Cir"/>
+        <tag k="alt_name" v="LINCOLN MEMORIAL CIR NW;LINCOLN MEMORIAL CIR SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22830" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39104"/>
+        <nd ref="-50187"/>
+        <nd ref="-50186"/>
+        <nd ref="-50185"/>
+        <nd ref="-50184"/>
+        <nd ref="-50183"/>
+        <nd ref="-50182"/>
+        <nd ref="-102518"/>
+        <nd ref="-50181"/>
+        <nd ref="-50180"/>
+        <nd ref="-50179"/>
+        <nd ref="-50178"/>
+        <nd ref="-15054"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Raoul Wallenberg Pl SW"/>
+        <tag k="alt_name" v="15TH ST NW;15TH ST SW;15th St SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22823" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-92686"/>
         <nd ref="-89935"/>
         <nd ref="-89937"/>
@@ -3411,12 +3434,12 @@
         <nd ref="-89944"/>
         <nd ref="-89945"/>
         <nd ref="-89946"/>
-        <nd ref="-102499"/>
+        <nd ref="-102475"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="WEST BASIN DR SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-23001" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22821" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1772"/>
         <nd ref="-71113"/>
         <nd ref="-71114"/>
@@ -3428,7 +3451,7 @@
         <nd ref="-71120"/>
         <nd ref="-71121"/>
         <nd ref="-71122"/>
-        <nd ref="-102499"/>
+        <nd ref="-102475"/>
         <nd ref="-71123"/>
         <nd ref="-71124"/>
         <nd ref="-71125"/>
@@ -3462,90 +3485,7 @@
         <tag k="name" v="WEST BASIN DR SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-22995" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-21282"/>
-        <nd ref="-21283"/>
-        <nd ref="-21284"/>
-        <nd ref="-21285"/>
-        <nd ref="-21286"/>
-        <nd ref="-21287"/>
-        <nd ref="-102465"/>
-        <nd ref="-21288"/>
-        <nd ref="-21289"/>
-        <nd ref="-21290"/>
-        <nd ref="-21291"/>
-        <nd ref="-21292"/>
-        <nd ref="-21293"/>
-        <nd ref="-21294"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="26th St NW"/>
-        <tag k="alt_name" v="26TH ST NW;I ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22989" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-28025"/>
-        <nd ref="-92687"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="DANIEL C FRENCH DR SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22940" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102255"/>
-        <nd ref="-1040"/>
-        <nd ref="-91864"/>
-        <nd ref="-91868"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22936" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-47446"/>
-        <nd ref="-69404"/>
-        <nd ref="-102255"/>
-        <nd ref="-69405"/>
-        <nd ref="-60532"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22931" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-27249"/>
-        <nd ref="-91767"/>
-        <nd ref="-91768"/>
-        <nd ref="-91769"/>
-        <nd ref="-91770"/>
-        <nd ref="-91771"/>
-        <nd ref="-102227"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="25TH ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22924" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-15170"/>
-        <nd ref="-93143"/>
-        <nd ref="-93144"/>
-        <nd ref="-93145"/>
-        <nd ref="-93146"/>
-        <nd ref="-102195"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="INDEPENDENCE AVE SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22920" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-60538"/>
-        <nd ref="-102191"/>
-        <nd ref="-27299"/>
-        <nd ref="-60539"/>
-        <nd ref="-60540"/>
-        <nd ref="-60541"/>
-        <nd ref="-60542"/>
-        <nd ref="-88994"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Arlington Memorial Brg"/>
-        <tag k="alt_name" v="ARLINGTON MEMORIAL BRG SW;LINCOLN MEMORIAL CIR SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22918" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22810" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21294"/>
         <nd ref="-21295"/>
         <nd ref="-21296"/>
@@ -3553,7 +3493,7 @@
         <nd ref="-21298"/>
         <nd ref="-21299"/>
         <nd ref="-1030"/>
-        <nd ref="-102718"/>
+        <nd ref="-102830"/>
         <nd ref="-21300"/>
         <nd ref="-21301"/>
         <nd ref="-88958"/>
@@ -3562,7 +3502,37 @@
         <tag k="alt_name" v="26TH ST NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-22913" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22804" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15170"/>
+        <nd ref="-93143"/>
+        <nd ref="-93144"/>
+        <nd ref="-93145"/>
+        <nd ref="-93146"/>
+        <nd ref="-102373"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22776" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102280"/>
+        <nd ref="-1040"/>
+        <nd ref="-91864"/>
+        <nd ref="-91868"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22772" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-47446"/>
+        <nd ref="-69404"/>
+        <nd ref="-102280"/>
+        <nd ref="-69405"/>
+        <nd ref="-60532"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="25TH ST NW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22754" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1396"/>
         <nd ref="-27279"/>
         <nd ref="-27280"/>
@@ -3571,7 +3541,7 @@
         <nd ref="-27283"/>
         <nd ref="-27284"/>
         <nd ref="-27285"/>
-        <nd ref="-102161"/>
+        <nd ref="-102214"/>
         <nd ref="-27286"/>
         <nd ref="-27287"/>
         <nd ref="-27288"/>
@@ -3609,76 +3579,64 @@
         <tag k="alt_name" v="OHIO DR NW;OHIO DR SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-22907" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102127"/>
+    <way visible="true" id="-22750" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-60538"/>
+        <nd ref="-102189"/>
+        <nd ref="-27299"/>
+        <nd ref="-60539"/>
+        <nd ref="-60540"/>
+        <nd ref="-60541"/>
+        <nd ref="-60542"/>
+        <nd ref="-88994"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="Arlington Memorial Brg"/>
+        <tag k="alt_name" v="ARLINGTON MEMORIAL BRG SW;LINCOLN MEMORIAL CIR SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22732" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-102116"/>
         <nd ref="-89357"/>
-        <nd ref="-102856"/>
+        <nd ref="-102912"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="PENNSYLVANIA AVE NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-22883" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-101998"/>
-        <nd ref="-91364"/>
-        <nd ref="-91363"/>
-        <nd ref="-91362"/>
-        <nd ref="-91361"/>
-        <nd ref="-91360"/>
-        <nd ref="-91359"/>
-        <nd ref="-91358"/>
-        <nd ref="-91357"/>
-        <nd ref="-91356"/>
-        <nd ref="-91355"/>
-        <nd ref="-91354"/>
-        <nd ref="-91353"/>
-        <nd ref="-91352"/>
-        <nd ref="-91351"/>
-        <nd ref="-91350"/>
-        <nd ref="-91349"/>
-        <nd ref="-91348"/>
-        <nd ref="-91347"/>
-        <nd ref="-91346"/>
-        <nd ref="-91345"/>
-        <nd ref="-91344"/>
-        <nd ref="-91343"/>
-        <nd ref="-91342"/>
-        <nd ref="-91341"/>
-        <nd ref="-91340"/>
-        <nd ref="-60538"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="LINCOLN MEMORIAL CIR SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-22880" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-70608"/>
-        <nd ref="-70687"/>
-        <nd ref="-70688"/>
-        <nd ref="-101998"/>
-        <nd ref="-70689"/>
-        <nd ref="-70690"/>
-        <nd ref="-70691"/>
-        <nd ref="-70692"/>
-        <nd ref="-70693"/>
-        <nd ref="-70694"/>
-        <nd ref="-70695"/>
-        <nd ref="-36938"/>
-        <nd ref="-70696"/>
-        <nd ref="-70697"/>
-        <nd ref="-70698"/>
-        <nd ref="-70699"/>
-        <nd ref="-70700"/>
-        <nd ref="-70701"/>
-        <nd ref="-70702"/>
-        <nd ref="-70703"/>
-        <nd ref="-70704"/>
-        <nd ref="-70705"/>
-        <nd ref="-28017"/>
+    <way visible="true" id="-22722" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-39523"/>
+        <nd ref="-102075"/>
+        <nd ref="-39512"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Lincoln Memorial Cir"/>
-        <tag k="alt_name" v="LINCOLN MEMORIAL CIR SW"/>
+        <tag k="name" v="INDEPENDENCE AVE SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5889" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-22705" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-28025"/>
+        <nd ref="-92687"/>
+        <tag k="highway" v="road"/>
+        <tag k="name" v="DANIEL C FRENCH DR SW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-22699" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21282"/>
+        <nd ref="-21283"/>
+        <nd ref="-21284"/>
+        <nd ref="-21285"/>
+        <nd ref="-21286"/>
+        <nd ref="-21287"/>
+        <nd ref="-101994"/>
+        <nd ref="-21288"/>
+        <nd ref="-21289"/>
+        <nd ref="-21290"/>
+        <nd ref="-21291"/>
+        <nd ref="-21292"/>
+        <nd ref="-21293"/>
+        <nd ref="-21294"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="26th St NW"/>
+        <tag k="alt_name" v="26TH ST NW;I ST NW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5884" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29863"/>
         <nd ref="-90523"/>
         <nd ref="-90524"/>
@@ -3695,7 +3653,7 @@
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5853" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5847" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21731"/>
         <nd ref="-90388"/>
         <nd ref="-90389"/>
@@ -3706,8 +3664,33 @@
         <tag k="name" v="E ST EXPY NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5539" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36940"/>
+    <way visible="true" id="-5760" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-38983"/>
+        <nd ref="-102309"/>
+        <nd ref="-38984"/>
+        <nd ref="-38985"/>
+        <nd ref="-14964"/>
+        <nd ref="-38986"/>
+        <nd ref="-38987"/>
+        <nd ref="-38988"/>
+        <nd ref="-38989"/>
+        <nd ref="-38990"/>
+        <nd ref="-15107"/>
+        <nd ref="-14786"/>
+        <nd ref="-38991"/>
+        <nd ref="-1601"/>
+        <nd ref="-38992"/>
+        <nd ref="-38993"/>
+        <nd ref="-38994"/>
+        <nd ref="-38673"/>
+        <nd ref="-88969"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="name" v="14th St NW"/>
+        <tag k="alt_name" v="14TH ST NW"/>
+        <tag k="error:circular" v="5"/>
+    </way>
+    <way visible="true" id="-5531" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-28008"/>
         <nd ref="-39517"/>
         <nd ref="-39518"/>
         <nd ref="-27317"/>
@@ -3741,7 +3724,7 @@
         <tag k="alt_name" v="INDEPENDENCE AVE SW;OHIO DR SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5528" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-5520" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39433"/>
         <nd ref="-39434"/>
         <nd ref="-39435"/>
@@ -3749,7 +3732,7 @@
         <nd ref="-39437"/>
         <nd ref="-39438"/>
         <nd ref="-39439"/>
-        <nd ref="-102195"/>
+        <nd ref="-102373"/>
         <nd ref="-39440"/>
         <nd ref="-39441"/>
         <nd ref="-39442"/>
@@ -3826,37 +3809,18 @@
         <nd ref="-39512"/>
         <nd ref="-28025"/>
         <nd ref="-39513"/>
-        <nd ref="-102911"/>
+        <nd ref="-102843"/>
         <nd ref="-39514"/>
         <nd ref="-39515"/>
         <nd ref="-39516"/>
-        <nd ref="-36940"/>
+        <nd ref="-28008"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Independence Ave SW"/>
         <tag k="alt_name" v="INDEPENDENCE AVE SW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5422" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39105"/>
-        <nd ref="-39106"/>
-        <nd ref="-39107"/>
-        <nd ref="-39108"/>
-        <nd ref="-39109"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Raoul Wallenberg Pl"/>
-        <tag k="alt_name" v="15th St SW;RAOUL WALLENBERG PL SW;Raoul Wallenberg Pl SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5320" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-92608"/>
-        <nd ref="-89016"/>
-        <nd ref="-1360"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="CONSTITUTION AVE NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-5307" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102941"/>
+        <nd ref="-102075"/>
         <nd ref="-92686"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
@@ -3876,36 +3840,9 @@
         <nd ref="-92686"/>
         <nd ref="-92687"/>
         <nd ref="-93195"/>
-        <nd ref="-102911"/>
+        <nd ref="-102843"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="INDEPENDENCE AVE SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5278" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-92652"/>
-        <nd ref="-90371"/>
-        <nd ref="-90372"/>
-        <nd ref="-5482"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="name" v="INTERSTATE 66  BN"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5270" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-27885"/>
-        <nd ref="-92832"/>
-        <nd ref="-92833"/>
-        <nd ref="-92661"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="14TH ST SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5260" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-39109"/>
-        <nd ref="-92073"/>
-        <nd ref="-92074"/>
-        <nd ref="-92677"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="RAOUL WALLENBERG PL SW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5257" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -3919,13 +3856,13 @@
         <nd ref="-27779"/>
         <nd ref="-92835"/>
         <nd ref="-92836"/>
-        <nd ref="-102632"/>
+        <nd ref="-102309"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="D ST NW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5210" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102282"/>
+        <nd ref="-102937"/>
         <nd ref="-93339"/>
         <nd ref="-14479"/>
         <tag k="highway" v="road"/>
@@ -3978,7 +3915,7 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5069" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-102692"/>
+        <nd ref="-102585"/>
         <nd ref="-92339"/>
         <nd ref="-92340"/>
         <nd ref="-1396"/>
@@ -4010,13 +3947,6 @@
         <tag k="alt_name" v="G ST NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5043" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-89013"/>
-        <nd ref="-27885"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="14th St SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-5042" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-89012"/>
         <nd ref="-50231"/>
@@ -4041,13 +3971,6 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Madison Dr NW"/>
         <tag k="alt_name" v="MADISON DR NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5041" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-89011"/>
-        <nd ref="-1360"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 50"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5039" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -4464,14 +4387,6 @@
         <tag k="name" v="Lees Ct NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5022" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88992"/>
-        <nd ref="-38667"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="alt_name" v="K ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-5021" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1387"/>
         <nd ref="-60436"/>
@@ -4577,14 +4492,6 @@
         <tag k="alt_name" v="23RD ST NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-5018" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-21298"/>
-        <nd ref="-88988"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="alt_name" v="K ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-5017" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-42071"/>
         <nd ref="-52801"/>
@@ -4602,7 +4509,7 @@
         <nd ref="-52810"/>
         <nd ref="-52811"/>
         <nd ref="-52812"/>
-        <nd ref="-101960"/>
+        <nd ref="-102736"/>
         <nd ref="-52813"/>
         <nd ref="-30276"/>
         <nd ref="-52814"/>
@@ -4648,14 +4555,6 @@
         <nd ref="-1768"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="12th St SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5015" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88985"/>
-        <nd ref="-39109"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="15th St SW"/>
-        <tag k="alt_name" v="MAINE AVE SW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5014" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -4708,7 +4607,7 @@
         <nd ref="-88984"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Maine Ave SW"/>
-        <tag k="alt_name" v="MAINE AVE SW"/>
+        <tag k="alt_name" v="MAINE AVE SW;RAOUL WALLENBERG PL SW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5013" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -4862,8 +4761,8 @@
         <nd ref="-5483"/>
         <nd ref="-88980"/>
         <tag k="highway" v="primary"/>
-        <tag k="name" v="US Hwy 50"/>
-        <tag k="alt_name" v="I- 66;INTERSTATE 66  BN"/>
+        <tag k="name" v="I- 66"/>
+        <tag k="alt_name" v="INTERSTATE 66  BN;US Hwy 50"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5009" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -4999,7 +4898,6 @@
         <nd ref="-42083"/>
         <nd ref="-42084"/>
         <nd ref="-42085"/>
-        <nd ref="-88976"/>
         <tag k="highway" v="road"/>
         <tag k="name" v="INTERSTATE 66  BN"/>
         <tag k="error:circular" v="5"/>
@@ -5010,13 +4908,6 @@
         <nd ref="-39199"/>
         <nd ref="-39200"/>
         <tag k="highway" v="road"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-5004" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88973"/>
-        <nd ref="-2098"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="14th St SW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5003" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -5042,10 +4933,36 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5002" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88985"/>
         <nd ref="-39109"/>
-        <nd ref="-88971"/>
+        <nd ref="-39108"/>
+        <nd ref="-39107"/>
+        <nd ref="-39106"/>
+        <nd ref="-39105"/>
+        <nd ref="-50205"/>
+        <nd ref="-50204"/>
+        <nd ref="-50203"/>
+        <nd ref="-50202"/>
+        <nd ref="-50201"/>
+        <nd ref="-15170"/>
+        <nd ref="-50200"/>
+        <nd ref="-50199"/>
+        <nd ref="-39433"/>
+        <nd ref="-50198"/>
+        <nd ref="-50197"/>
+        <nd ref="-50196"/>
+        <nd ref="-50195"/>
+        <nd ref="-50194"/>
+        <nd ref="-50193"/>
+        <nd ref="-50192"/>
+        <nd ref="-50191"/>
+        <nd ref="-50190"/>
+        <nd ref="-50189"/>
+        <nd ref="-50188"/>
+        <nd ref="-39104"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Raoul Wallenberg Pl"/>
+        <tag k="alt_name" v="15TH ST SW;15th St SW;MAINE AVE SW;RAOUL WALLENBERG PL SW;Raoul Wallenberg Pl SW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-5001" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -5075,24 +4992,6 @@
         <nd ref="-1369"/>
         <nd ref="-38982"/>
         <nd ref="-38983"/>
-        <nd ref="-102632"/>
-        <nd ref="-38984"/>
-        <nd ref="-38985"/>
-        <nd ref="-14964"/>
-        <nd ref="-38986"/>
-        <nd ref="-38987"/>
-        <nd ref="-38988"/>
-        <nd ref="-38989"/>
-        <nd ref="-38990"/>
-        <nd ref="-15107"/>
-        <nd ref="-14786"/>
-        <nd ref="-38991"/>
-        <nd ref="-1601"/>
-        <nd ref="-38992"/>
-        <nd ref="-38993"/>
-        <nd ref="-38994"/>
-        <nd ref="-38673"/>
-        <nd ref="-88969"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="14th St NW"/>
         <tag k="alt_name" v="14TH ST NW"/>
@@ -5109,50 +5008,6 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="17th St NW"/>
         <tag k="alt_name" v="17TH ST NW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-4998" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88967"/>
-        <nd ref="-38667"/>
-        <nd ref="-38668"/>
-        <nd ref="-27654"/>
-        <nd ref="-38669"/>
-        <nd ref="-38670"/>
-        <nd ref="-38671"/>
-        <nd ref="-38672"/>
-        <nd ref="-38673"/>
-        <nd ref="-38674"/>
-        <nd ref="-38675"/>
-        <nd ref="-15096"/>
-        <nd ref="-38676"/>
-        <nd ref="-38677"/>
-        <nd ref="-38678"/>
-        <nd ref="-38679"/>
-        <nd ref="-38680"/>
-        <nd ref="-38681"/>
-        <nd ref="-38682"/>
-        <nd ref="-38683"/>
-        <nd ref="-38684"/>
-        <nd ref="-38685"/>
-        <nd ref="-38686"/>
-        <nd ref="-38687"/>
-        <nd ref="-38688"/>
-        <nd ref="-38689"/>
-        <nd ref="-1226"/>
-        <nd ref="-38690"/>
-        <nd ref="-38691"/>
-        <nd ref="-38692"/>
-        <nd ref="-38693"/>
-        <nd ref="-38694"/>
-        <nd ref="-38695"/>
-        <nd ref="-38696"/>
-        <nd ref="-38697"/>
-        <nd ref="-38698"/>
-        <nd ref="-38699"/>
-        <nd ref="-1022"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 29"/>
-        <tag k="alt_name" v="K ST NW;K St NW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4997" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -5242,7 +5097,7 @@
         <nd ref="-14511"/>
         <nd ref="-36959"/>
         <nd ref="-21298"/>
-        <nd ref="-88964"/>
+        <nd ref="-88988"/>
         <tag k="highway" v="secondary"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K ST NW;K St NW"/>
@@ -5261,7 +5116,7 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4993" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88962"/>
+        <nd ref="-89013"/>
         <nd ref="-27885"/>
         <nd ref="-27886"/>
         <nd ref="-27887"/>
@@ -5315,13 +5170,6 @@
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Ohio Dr SW"/>
         <tag k="alt_name" v="OHIO DR SW"/>
-        <tag k="error:circular" v="5"/>
-    </way>
-    <way visible="true" id="-4990" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-1030"/>
-        <nd ref="-88959"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="US Hwy 29"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4988" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -5448,15 +5296,8 @@
         <tag k="alt_name" v="25TH ST NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <way visible="true" id="-4983" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-5483"/>
-        <nd ref="-88951"/>
-        <tag k="highway" v="primary"/>
-        <tag k="name" v="US Hwy 50"/>
-        <tag k="error:circular" v="5"/>
-    </way>
     <way visible="true" id="-4982" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88950"/>
+        <nd ref="-88973"/>
         <nd ref="-2098"/>
         <nd ref="-2099"/>
         <nd ref="-2100"/>
@@ -5489,10 +5330,20 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4979" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-88946"/>
+        <nd ref="-89011"/>
         <nd ref="-1360"/>
+        <nd ref="-1361"/>
+        <nd ref="-1362"/>
+        <nd ref="-1363"/>
+        <nd ref="-1364"/>
+        <nd ref="-1365"/>
+        <nd ref="-1366"/>
+        <nd ref="-1367"/>
+        <nd ref="-1368"/>
+        <nd ref="-1369"/>
         <tag k="highway" v="secondary"/>
-        <tag k="name" v="Constitution Ave NW"/>
+        <tag k="name" v="US Hwy 1"/>
+        <tag k="alt_name" v="CONSTITUTION AVE NW;Constitution Ave NW;US Hwy 50"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4978" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -5542,6 +5393,43 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-4977" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-88992"/>
+        <nd ref="-38667"/>
+        <nd ref="-38668"/>
+        <nd ref="-27654"/>
+        <nd ref="-38669"/>
+        <nd ref="-38670"/>
+        <nd ref="-38671"/>
+        <nd ref="-38672"/>
+        <nd ref="-38673"/>
+        <nd ref="-38674"/>
+        <nd ref="-38675"/>
+        <nd ref="-15096"/>
+        <nd ref="-38676"/>
+        <nd ref="-38677"/>
+        <nd ref="-38678"/>
+        <nd ref="-38679"/>
+        <nd ref="-38680"/>
+        <nd ref="-38681"/>
+        <nd ref="-38682"/>
+        <nd ref="-38683"/>
+        <nd ref="-38684"/>
+        <nd ref="-38685"/>
+        <nd ref="-38686"/>
+        <nd ref="-38687"/>
+        <nd ref="-38688"/>
+        <nd ref="-38689"/>
+        <nd ref="-1226"/>
+        <nd ref="-38690"/>
+        <nd ref="-38691"/>
+        <nd ref="-38692"/>
+        <nd ref="-38693"/>
+        <nd ref="-38694"/>
+        <nd ref="-38695"/>
+        <nd ref="-38696"/>
+        <nd ref="-38697"/>
+        <nd ref="-38698"/>
+        <nd ref="-38699"/>
         <nd ref="-1022"/>
         <nd ref="-1023"/>
         <nd ref="-1024"/>
@@ -5551,7 +5439,7 @@
         <nd ref="-36955"/>
         <nd ref="-1029"/>
         <nd ref="-1030"/>
-        <nd ref="-88944"/>
+        <nd ref="-88959"/>
         <tag k="highway" v="secondary"/>
         <tag k="name" v="US Hwy 29"/>
         <tag k="alt_name" v="K ST NW;K St NW"/>
@@ -6097,19 +5985,9 @@
         <nd ref="-1371"/>
         <nd ref="-1370"/>
         <nd ref="-1369"/>
-        <nd ref="-1368"/>
-        <nd ref="-1367"/>
-        <nd ref="-1366"/>
-        <nd ref="-1365"/>
-        <nd ref="-1364"/>
-        <nd ref="-1363"/>
-        <nd ref="-1362"/>
-        <nd ref="-1361"/>
-        <nd ref="-1360"/>
-        <nd ref="-89010"/>
         <tag k="highway" v="secondary"/>
         <tag k="name" v="US Hwy 50"/>
-        <tag k="alt_name" v="CONSTITUTION AVE NW;Constitution Ave NW;US Hwy 1"/>
+        <tag k="alt_name" v="CONSTITUTION AVE NW;Constitution Ave NW"/>
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-3762" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -6634,7 +6512,7 @@
         <nd ref="-28005"/>
         <nd ref="-28006"/>
         <nd ref="-28007"/>
-        <nd ref="-36940"/>
+        <nd ref="-28008"/>
         <nd ref="-28009"/>
         <nd ref="-28010"/>
         <nd ref="-28011"/>
@@ -6741,7 +6619,7 @@
     <way visible="true" id="-2569" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36938"/>
         <nd ref="-36939"/>
-        <nd ref="-36940"/>
+        <nd ref="-28008"/>
         <tag k="highway" v="unclassified"/>
         <tag k="name" v="Ohio Dr SW"/>
         <tag k="alt_name" v="23RD ST SW"/>
@@ -6797,7 +6675,7 @@
         <nd ref="-30268"/>
         <nd ref="-30269"/>
         <nd ref="-30270"/>
-        <nd ref="-102625"/>
+        <nd ref="-102766"/>
         <nd ref="-30271"/>
         <nd ref="-30272"/>
         <nd ref="-30273"/>
@@ -7120,7 +6998,7 @@
         <nd ref="-49436"/>
         <nd ref="-49437"/>
         <nd ref="-5040"/>
-        <nd ref="-102282"/>
+        <nd ref="-102937"/>
         <nd ref="-49438"/>
         <nd ref="-49439"/>
         <nd ref="-49440"/>
@@ -7149,7 +7027,7 @@
         <nd ref="-1032"/>
         <nd ref="-49460"/>
         <nd ref="-49461"/>
-        <nd ref="-102856"/>
+        <nd ref="-102912"/>
         <nd ref="-49462"/>
         <nd ref="-36952"/>
         <nd ref="-49463"/>
@@ -7207,7 +7085,7 @@
         <nd ref="-49574"/>
         <nd ref="-49466"/>
         <nd ref="-60385"/>
-        <nd ref="-102127"/>
+        <nd ref="-102116"/>
         <nd ref="-60386"/>
         <nd ref="-1034"/>
         <nd ref="-36951"/>
@@ -7564,7 +7442,7 @@
         <nd ref="-60532"/>
         <nd ref="-60533"/>
         <nd ref="-60534"/>
-        <nd ref="-102227"/>
+        <nd ref="-102710"/>
         <nd ref="-60535"/>
         <nd ref="-60536"/>
         <nd ref="-60537"/>
@@ -8093,7 +7971,7 @@
         <tag k="error:circular" v="5"/>
     </way>
     <way visible="true" id="-389" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-36940"/>
+        <nd ref="-28008"/>
         <nd ref="-39520"/>
         <nd ref="-74992"/>
         <nd ref="-74993"/>
@@ -8462,7 +8340,29 @@
         <tag k="alt_name" v="HENRY BACON DR NW"/>
         <tag k="error:circular" v="5"/>
     </way>
-    <relation visible="true" id="-1926" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1892" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-5304" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="27"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.50932"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1891" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5037" role="reviewee"/>
+        <member type="way" ref="-5304" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="19"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.485332"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1890" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5257" role="reviewee"/>
         <member type="way" ref="-5029" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
@@ -8470,10 +8370,10 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.411618"/>
+        <tag k="hoot:review:score" v="0.41198"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1925" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1889" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5257" role="reviewee"/>
         <member type="way" ref="-5045" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
@@ -8481,88 +8381,43 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.411618"/>
+        <tag k="hoot:review:score" v="0.41198"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1924" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-4438" role="reviewee"/>
+    <relation visible="true" id="-1888" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5210" role="reviewee"/>
+        <member type="way" ref="-3781" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="31"/>
+        <tag k="hoot:review:sort_order" v="29"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.682684"/>
+        <tag k="hoot:review:score" v="0.699956"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1923" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1887" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-4438" role="reviewee"/>
         <member type="way" ref="-5210" role="reviewee"/>
-        <member type="way" ref="-3781" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:review:sort_order" v="30"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.69991"/>
+        <tag k="hoot:review:score" v="0.682757"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1922" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5320" role="reviewee"/>
-        <member type="way" ref="-4979" role="reviewee"/>
+    <relation visible="true" id="-1886" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-49480" role="reviewee"/>
+        <member type="way" ref="-5008" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="33"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:sort_order" v="31"/>
+        <tag k="hoot:review:note" v="Ambiguous intersection match. Possible dogleg? Very short segment? Please verify merge and fix as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.4113"/>
+        <tag k="hoot:review:score" v="-1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1921" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5320" role="reviewee"/>
-        <member type="way" ref="-5041" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="34"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.4113"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1920" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-3766" role="reviewee"/>
-        <member type="way" ref="-5320" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="35"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.4113"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1917" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5278" role="reviewee"/>
-        <member type="way" ref="-5010" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="13"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.409974"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1916" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5278" role="reviewee"/>
-        <member type="way" ref="-5010" role="reviewee"/>
-        <member type="way" ref="-4983" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="14"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.409974"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1915" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1884" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-70733" role="reviewee"/>
         <member type="way" ref="-657" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
@@ -8573,51 +8428,7 @@
         <tag k="hoot:review:score" v="-1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1914" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5270" role="reviewee"/>
-        <member type="way" ref="-5043" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="38"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.396569"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1913" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-4993" role="reviewee"/>
-        <member type="way" ref="-5270" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="39"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.396569"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1912" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-5304" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="29"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.50912"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1911" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5037" role="reviewee"/>
-        <member type="way" ref="-5304" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="21"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.485061"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1910" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1883" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-659" role="reviewee"/>
         <member type="way" ref="-5069" role="reviewee"/>
         <member type="way" ref="-4393" role="reviewee"/>
@@ -8626,10 +8437,10 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.683979"/>
+        <tag k="hoot:review:score" v="0.684047"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1909" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1882" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-659" role="reviewee"/>
         <member type="way" ref="-5069" role="reviewee"/>
         <member type="way" ref="-4393" role="reviewee"/>
@@ -8638,22 +8449,106 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.700728"/>
+        <tag k="hoot:review:score" v="0.700771"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1908" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5889" role="reviewee"/>
+    <relation visible="true" id="-1881" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-27259" role="reviewee"/>
+        <member type="way" ref="-3126" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="28"/>
+        <tag k="hoot:review:note" v="Ambiguous intersection match. Possible dogleg? Very short segment? Please verify merge and fix as needed."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="-1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1880" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5097" role="reviewee"/>
+        <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-3425" role="reviewee"/>
+        <member type="way" ref="-5091" role="reviewee"/>
+        <member type="way" ref="-4395" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="23"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="5"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.624911"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1879" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-70733" role="reviewee"/>
+        <member type="way" ref="-5097" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.656859"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1878" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5091" role="reviewee"/>
+        <member type="way" ref="-4395" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="32"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.718488"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1877" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5097" role="reviewee"/>
+        <member type="way" ref="-5037" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="20"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.710834"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1876" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5097" role="reviewee"/>
+        <member type="way" ref="-5847" role="reviewee"/>
+        <member type="way" ref="-3425" role="reviewee"/>
+        <member type="way" ref="-5011" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="13"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="4"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.630415"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1875" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5847" role="reviewee"/>
+        <member type="way" ref="-5097" role="reviewee"/>
+        <member type="way" ref="-3425" role="reviewee"/>
+        <member type="way" ref="-5011" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="14"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="4"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.64541"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1874" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5884" role="reviewee"/>
         <member type="way" ref="-2992" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
         <tag k="hoot:review:sort_order" v="6"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.681226"/>
+        <tag k="hoot:review:score" v="0.680625"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1907" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5889" role="reviewee"/>
+    <relation visible="true" id="-1873" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5884" role="reviewee"/>
         <member type="way" ref="-2992" role="reviewee"/>
         <member type="way" ref="-525" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
@@ -8661,23 +8556,37 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.57726"/>
+        <tag k="hoot:review:score" v="0.575773"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1906" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5889" role="reviewee"/>
+    <relation visible="true" id="-1872" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5091" role="reviewee"/>
         <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-4395" role="reviewee"/>
         <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-2992" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="15"/>
+        <tag k="hoot:review:sort_order" v="24"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="4"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.648819"/>
+        <tag k="hoot:review:score" v="0.617358"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1905" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1871" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-2992" role="reviewee"/>
+        <member type="way" ref="-5091" role="reviewee"/>
+        <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-4395" role="reviewee"/>
+        <member type="way" ref="-5097" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="25"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="5"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.588244"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1870" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3767" role="reviewee"/>
         <member type="way" ref="-5091" role="reviewee"/>
         <member type="way" ref="-4395" role="reviewee"/>
@@ -8686,169 +8595,36 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.636844"/>
+        <tag k="hoot:review:score" v="0.635382"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1904" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-70733" role="reviewee"/>
-        <member type="way" ref="-5097" role="reviewee"/>
+    <relation visible="true" id="-1869" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5884" role="reviewee"/>
+        <member type="way" ref="-3767" role="reviewee"/>
+        <member type="way" ref="-2992" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:sort_order" v="8"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.657729"/>
+        <tag k="hoot:review:score" v="0.575803"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1903" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-5037" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="22"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.711117"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1902" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-5037" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="23"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.664315"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1901" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5853" role="reviewee"/>
+    <relation visible="true" id="-1868" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5847" role="reviewee"/>
         <member type="way" ref="-3425" role="reviewee"/>
         <member type="way" ref="-3767" role="reviewee"/>
         <member type="way" ref="-5097" role="reviewee"/>
         <member type="way" ref="-5011" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="16"/>
+        <tag k="hoot:review:sort_order" v="15"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="5"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.580222"/>
+        <tag k="hoot:review:score" v="0.578418"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1900" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5889" role="reviewee"/>
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-2992" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="17"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.644777"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1899" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-4395" role="reviewee"/>
-        <member type="way" ref="-5091" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="25"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.589831"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1898" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5853" role="reviewee"/>
-        <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-3425" role="reviewee"/>
-        <member type="way" ref="-5011" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="18"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="4"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.646497"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1897" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5889" role="reviewee"/>
-        <member type="way" ref="-2992" role="reviewee"/>
-        <member type="way" ref="-525" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="5"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="3"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.577209"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1896" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-2992" role="reviewee"/>
-        <member type="way" ref="-5091" role="reviewee"/>
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-4395" role="reviewee"/>
-        <member type="way" ref="-5097" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="26"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="5"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.59"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1895" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5853" role="reviewee"/>
-        <member type="way" ref="-3425" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="7"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.698468"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1894" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5091" role="reviewee"/>
-        <member type="way" ref="-4395" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="32"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.718675"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1893" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-3425" role="reviewee"/>
-        <member type="way" ref="-5091" role="reviewee"/>
-        <member type="way" ref="-4395" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="27"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="5"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.626363"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1892" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5091" role="reviewee"/>
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-4395" role="reviewee"/>
-        <member type="way" ref="-5097" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="28"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="4"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.618858"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1891" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1867" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3767" role="reviewee"/>
         <member type="way" ref="-5091" role="reviewee"/>
         <member type="way" ref="-4395" role="reviewee"/>
@@ -8857,79 +8633,103 @@
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.63684"/>
+        <tag k="hoot:review:score" v="0.635386"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1890" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1866" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-5011" role="reviewee"/>
-        <member type="way" ref="-2992" role="reviewee"/>
-        <member type="way" ref="-5853" role="reviewee"/>
-        <member type="way" ref="-3425" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="19"/>
-        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
-        <tag k="hoot:review:members" v="5"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.634636"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-1889" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5037" role="reviewee"/>
-        <member type="way" ref="-5097" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="24"/>
+        <tag k="hoot:review:sort_order" v="21"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.682803"/>
+        <tag k="hoot:review:score" v="0.663431"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1888" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5889" role="reviewee"/>
-        <member type="way" ref="-3767" role="reviewee"/>
+    <relation visible="true" id="-1865" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5884" role="reviewee"/>
+        <member type="way" ref="-5011" role="reviewee"/>
         <member type="way" ref="-2992" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="8"/>
+        <tag k="hoot:review:sort_order" v="16"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="3"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.57729"/>
+        <tag k="hoot:review:score" v="0.643901"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1887" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-1864" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-5097" role="reviewee"/>
-        <member type="way" ref="-5853" role="reviewee"/>
-        <member type="way" ref="-3425" role="reviewee"/>
         <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-2992" role="reviewee"/>
+        <member type="way" ref="-5847" role="reviewee"/>
+        <member type="way" ref="-3425" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="20"/>
+        <tag k="hoot:review:sort_order" v="17"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="5"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.633509"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1863" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5884" role="reviewee"/>
+        <member type="way" ref="-2992" role="reviewee"/>
+        <member type="way" ref="-525" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="5"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="3"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.575721"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1862" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-4395" role="reviewee"/>
+        <member type="way" ref="-5091" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="26"/>
+        <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
+        <tag k="hoot:review:members" v="3"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="0.587954"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1861" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5884" role="reviewee"/>
+        <member type="way" ref="-5011" role="reviewee"/>
+        <member type="way" ref="-5097" role="reviewee"/>
+        <member type="way" ref="-2992" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:review:sort_order" v="18"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="4"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.631562"/>
+        <tag k="hoot:review:score" v="0.64784"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1886" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5260" role="reviewee"/>
-        <member type="way" ref="-5002" role="reviewee"/>
+    <relation visible="true" id="-1860" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5847" role="reviewee"/>
+        <member type="way" ref="-3425" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="37"/>
+        <tag k="hoot:review:sort_order" v="7"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.42252"/>
+        <tag k="hoot:review:score" v="0.698006"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-1885" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-5014" role="reviewee"/>
-        <member type="way" ref="-5260" role="reviewee"/>
+    <relation visible="true" id="-1859" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-5037" role="reviewee"/>
+        <member type="way" ref="-5097" role="reviewee"/>
         <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:review:sort_order" v="36"/>
+        <tag k="hoot:review:sort_order" v="22"/>
         <tag k="hoot:review:note" v="A complex road situation was found with multiple plausible solutions. Please reference input data/imagery and manually merge or modify as needed."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0.42252"/>
+        <tag k="hoot:review:score" v="0.682081"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>
