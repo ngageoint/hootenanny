@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_API_WRITER_H
@@ -204,11 +204,23 @@ private:
    * @brief _resolveIssues Query the OSM API for the element in the changeset and try to fix resolvable errors
    * @param request Network request object initialized with OSM API URL
    * @param changeset Pointer to a changeset with one single failed change
-   * @return success Whether or not the function was able to find a resolvable issue
+   * @return Whether or not the function was able to find a resolvable issue
    */
   bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
-
+  /**
+   * @brief _fixConflict Try to fix the "Changeset conflict: Version mismatch" errors from the OSM API
+   * @param request Network request object initialized with OSM API URL
+   * @param changeset Pointer to the failed changeset
+   * @param conflictExplanation Error message from OSM API
+   * @return Whether or not the function was able to resolve the issue
+   */
   bool _fixConflict(HootNetworkRequestPtr request, ChangesetInfoPtr changeset, const QString& conflictExplanation);
+  /**
+   * @brief _changesetClosed Check the error string for the "Changeset conflict: The changeset <id> was closed" error from the OSM API
+   * @param conflictExplanation Error message from OSM API
+   * @return Whether or not the function found the error in question
+   */
+  bool _changesetClosed(const QString& conflictExplanation);
   /**
    * @brief _getNode/Way/Relation Perform HTTP GET request to OSM API to get current node/way/relation by ID
    * @param request Network request object initialized with OSM API URL
