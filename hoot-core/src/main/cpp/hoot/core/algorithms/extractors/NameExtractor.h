@@ -60,6 +60,9 @@ public:
   virtual QString getDescription() const
   { return "Calculates name similarity between features"; }
 
+  long getNamesProcessed() const { return _namesProcessed; }
+  bool getMatchAttemptMade() const { return _matchAttemptMade; }
+
 private:
 
   StringDistancePtr _d;

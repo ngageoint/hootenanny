@@ -157,7 +157,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
 
   //points sitting on islands need to have an island type, or the match doesn't make any sense
   ruleDescription = "#4: island";
-  LLOG_TRACE("Checking rule : " << ruleDescription << "...");
+  LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (!_typeMatch &&
       (poiPlaceVal == QLatin1String("island") || polyPlaceVal == QLatin1String("island")))
   {
@@ -320,7 +320,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   }
 
   //Don't review schools against their sports fields
-  ruleDescription = "#16: school/sport";.
+  ruleDescription = "#16: school/sport";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (polyIsSport && _infoCache->isType(poi, PoiPolygonSchemaType::School))
   {
@@ -350,7 +350,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
       polyTags.get("parking").toLower() != QLatin1String("multi-storey"))
   {
     LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
-    __triggeredRuleDescription = ruleDescription;
+    _triggeredRuleDescription = ruleDescription;
     return true;
   }
 
