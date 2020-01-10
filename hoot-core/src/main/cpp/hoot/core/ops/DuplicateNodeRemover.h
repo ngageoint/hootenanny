@@ -44,7 +44,8 @@ namespace hoot
 {
 
 /**
- * Merges together nodes that are within a small configurable distance of each other.
+ * Merges together nodes that are within a small configurable distance of each other and don't have
+ * differing tags (outside of metadata tags).
  *
  * This class works with four pass as long as distance is less than the four pass buffer. The input
  * map can be in either a planar or geographic projection.
@@ -56,13 +57,20 @@ public:
 
   static std::string className() { return "hoot::DuplicateNodeRemover"; }
 
-  DuplicateNodeRemover(Meters distance = -1);
+  DuplicateNodeRemover(Meters distanceThreshold = -1.0);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const override { return className(); }
 
-  static void mergeNodes(std::shared_ptr<OsmMap> map, Meters distance = -1);
+  /**
+   * Removes duplicate nodes from a map
+   *
+   * @param map the map to remove duplicate nodes from
+   * @param distanceThreshold the distance threshold under which nodes are considered duplicates
+   * based on proximity
+   */
+  static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
 
   virtual void readObject(QDataStream& is) override;
 

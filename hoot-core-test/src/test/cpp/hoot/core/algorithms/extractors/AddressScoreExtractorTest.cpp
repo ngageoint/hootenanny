@@ -79,6 +79,9 @@ public:
   {
     AddressScoreExtractor uut;
     uut.setConfiguration(conf());
+    // The cache needs to be disabled since its static and all of these tests will run as threads
+    // within the same process, thus sharing the cache. If we weren't using the same element IDs
+    // across tests, then it wouldn't have to be disabled.
     uut.setCacheEnabled(false);
     OsmMapPtr map(new OsmMap());
 

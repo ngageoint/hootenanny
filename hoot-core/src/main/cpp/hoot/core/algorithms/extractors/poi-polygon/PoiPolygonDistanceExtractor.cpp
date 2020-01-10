@@ -33,7 +33,6 @@
 
 // geos
 #include <geos/util/TopologyException.h>
-//#include <geos/geom/Geometry.h>
 
 using namespace geos::geom;
 

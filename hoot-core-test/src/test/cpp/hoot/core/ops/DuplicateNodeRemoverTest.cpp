@@ -66,7 +66,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
 
     // merge all nodes within a meter.
-    DuplicateNodeRemover::mergeNodes(map, 1.0);
+    DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
   }
@@ -75,14 +75,16 @@ public:
   {
     OsmMapPtr map(new OsmMap());
 
+    // Nodes are within the proximity threshold and have no tags...so they're dupes.
     /*NodePtr node1 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     /*NodePtr node2 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     MapProjector::projectToOrthographic(map);
 
-    DuplicateNodeRemover::mergeNodes(map, 1.0);
+    DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
+    // uuid is a metadata tag and should be ignored, so no removal here
     map->clear();
     NodePtr node3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     node3->getTags().set("uuid", "{12449bc4-c059-4270-8d72-134fcf54291d}");
@@ -90,10 +92,11 @@ public:
     node4->getTags().set("uuid", "{bfbf2946-4342-444c-9926-1477c7bcce05}");
     MapProjector::projectToOrthographic(map);
 
-    DuplicateNodeRemover::mergeNodes(map, 1.0);
+    DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
+    // hoot:* tags are metadata tags and should be ignored, so no removal here
     map->clear();
     NodePtr node5 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     node5->getTags().set("hoot:id", "1");
@@ -101,10 +104,12 @@ public:
     node6->getTags().set("hoot:id", "2");
     MapProjector::projectToOrthographic(map);
 
-    DuplicateNodeRemover::mergeNodes(map, 1.0);
+    DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
 
+    // The nodes are inside of the proximity threshold but have different names, so aren't
+    // duplicates.
     map->clear();
     NodePtr node7 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
     node7->getTags().set("name", "node7");
@@ -112,7 +117,7 @@ public:
     node8->getTags().set("name", "node8");
     MapProjector::projectToOrthographic(map);
 
-    DuplicateNodeRemover::mergeNodes(map, 1.0);
+    DuplicateNodeRemover::removeNodes(map, 1.0);
 
     CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
   }

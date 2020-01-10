@@ -79,12 +79,6 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
 {
   LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
 
-//  if (_cacheEnabled && !_cacheInitialized)
-//  {
-//    _addressesCache.reserve(map.size());
-//    _cacheInitialized = true;
-//  }
-
   if (_cacheEnabled)
   {
     QHash<ElementId, QList<Address>>::const_iterator itr =

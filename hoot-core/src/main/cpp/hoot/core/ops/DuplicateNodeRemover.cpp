@@ -64,9 +64,9 @@ double calcDistanceSquared(const NodePtr& n1, const NodePtr& n2)
   return dx * dx + dy * dy;
 }
 
-DuplicateNodeRemover::DuplicateNodeRemover(Meters distance)
+DuplicateNodeRemover::DuplicateNodeRemover(Meters distanceThreshold)
 {
-  _distance = distance;
+  _distance = distanceThreshold;
   if (_distance < 0.0)
   {
     // This default value was found experimentally with the building data from #3446 and #3495 and
@@ -291,9 +291,9 @@ void DuplicateNodeRemover::_logMergeResult(const long nodeId1, const long nodeId
   }
 }
 
-void DuplicateNodeRemover::mergeNodes(std::shared_ptr<OsmMap> map, Meters distance)
+void DuplicateNodeRemover::removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold)
 {
-  DuplicateNodeRemover mnn(distance);
+  DuplicateNodeRemover mnn(distanceThreshold);
   mnn.apply(map);
 }
 

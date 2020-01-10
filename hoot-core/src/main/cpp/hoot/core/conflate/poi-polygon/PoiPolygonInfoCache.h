@@ -48,6 +48,11 @@ typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
 /**
  * Cached back class storing POI/Polygon feature comparison info
  *
+ * This class is passed into PoiPolygonMatch as a one stop shop to get poi/poly comparison info
+ * with a cache backing. It is done this way rather than implementing a Singleton, since case tests
+ * are launched as multiple threads within the same process, which would result in a conflicted
+ * cache state.
+ *
  * The caches used in this class were determined on 9/30/18 running against the regression test
  * unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20 against the data in
  * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary
@@ -199,6 +204,8 @@ private:
   // geometries, but since ElementConverter returns a shared pointer and QCache takes ownership, had
   // trouble making it work. Also, not doing any management of the size of these caches, which may
   // eventually end up being needed to control memory usage.
+
+  // Also, didn't see any performance improvement by reserving initial sizes for these caches.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions

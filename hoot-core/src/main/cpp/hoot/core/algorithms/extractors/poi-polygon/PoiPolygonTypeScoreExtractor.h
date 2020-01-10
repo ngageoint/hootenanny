@@ -80,9 +80,6 @@ public:
   QStringList getFailedMatchRequirements() const { return _failedMatchRequirements; }
   bool getNoTypeFound() const { return _noTypeFound; }
 
-  static int getRelatedTagsCacheSize() { return _relatedTagsCache.size(); }
-  static int getNumRelatedTagsCacheHits() { return _relatedTagsCacheHits; }
-
 private:
 
   double _typeScoreThreshold;
@@ -110,10 +107,6 @@ private:
   mutable bool _noTypeFound;
 
   PoiPolygonInfoCachePtr _infoCache;
-
-  static QHash<ElementId, QStringList> _relatedTagsCache;
-  static int _relatedTagsCacheHits;
-  static bool _cacheInitialized;
 
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
