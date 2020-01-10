@@ -79,6 +79,7 @@ _infoCache(infoCache)
   _reviewDistanceThreshold = opts.getPoiPolygonAdditionalSearchDistance();
   _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
   LOG_VART(_infoCache.get());
+  _timer.start();
 }
 
 PoiPolygonMatchVisitor::~PoiPolygonMatchVisitor()
@@ -200,6 +201,8 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
     }
   }
 
+  // poi/poly matching can be a little slow at times compared to the other types of conflation, so
+  // throttle the log update interval accordingly.
   if (_timer.elapsed() > 3000 && _taskStatusUpdateInterval >= 10)
   {
     _taskStatusUpdateInterval /= 10;
@@ -210,8 +213,6 @@ void PoiPolygonMatchVisitor::visit(const ConstElementPtr& e)
   }
 
   _numElementsVisited++;
-  // poi/poly matching can be a little slow at times compared to the others, so keep the log update
-  // interval a little lower than normal.
   if (_numElementsVisited % _taskStatusUpdateInterval == 0)
   {
     PROGRESS_INFO(
@@ -261,29 +262,5 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
   }
   return _polyIndex;
 }
-
-//std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPoiIndex()
-//{
-//  if (!_poiIndex)
-//  {
-//    LOG_INFO("Creating POI feature index...");
-
-//    // TODO: tune this? - see #3054
-//    std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
-//    _poiIndex.reset(new Tgs::HilbertRTree(mps, 2));
-
-//    std::shared_ptr<PoiPolygonPoiCriterion> crit(new PoiPolygonPoiCriterion());
-
-//    SpatialIndexer v(_poiIndex,
-//                           _poiIndexToEid,
-//                           crit,
-//                           std::bind(
-//                             &PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
-//                           _getMap());
-//    _getMap()->visitNodesRo(v);
-//    v.finalizeIndex();
-//  }
-//  return _poiIndex;
-//}
 
 }

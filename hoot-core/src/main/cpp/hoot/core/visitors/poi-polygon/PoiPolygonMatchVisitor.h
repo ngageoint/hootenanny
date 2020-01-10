@@ -120,7 +120,6 @@ private:
   Meters _getSearchRadius(const std::shared_ptr<const Element>& e) const;
 
   std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
-  //std::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();
 
   ConstOsmMapPtr _getMap() { return _map; }
 };

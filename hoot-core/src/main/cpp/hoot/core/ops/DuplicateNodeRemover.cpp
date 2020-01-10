@@ -121,7 +121,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       PROGRESS_INFO(
         "\tInitialized " << StringUtils::formatLargeNumber(startNodeCount) << " nodes / " <<
-        StringUtils::formatLargeNumber(nodes.size()) << " for merging.");
+        StringUtils::formatLargeNumber(nodes.size()) << " for duplicate removal.");
     }
   }
   LOG_VART(cph.size());
