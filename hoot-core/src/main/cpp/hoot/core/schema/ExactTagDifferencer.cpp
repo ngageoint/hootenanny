@@ -39,8 +39,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagDifferencer, ExactTagDifferencer)
 
-double ExactTagDifferencer::diff(const ConstOsmMapPtr &/*map*/, const ConstElementPtr& e1,
-  const ConstElementPtr &e2) const
+double ExactTagDifferencer::diff(const ConstOsmMapPtr&/*map*/, const ConstElementPtr& e1,
+  const ConstElementPtr& e2) const
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();

@@ -47,7 +47,7 @@
 #include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
@@ -562,12 +562,11 @@ void DataConverter::_setFromOgrOptions()
 
   // Nodes that are very close together but with different IDs present a problem from OGR sources,
   // so let's merge them together.
-  // TODO: remove this and add MergeNearbyNodes to the pipeline permanently?
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
-    if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
+    if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
     {
-      _convertOps.append(QString::fromStdString(MergeNearbyNodes::className()));
+      _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
     }
   }
 

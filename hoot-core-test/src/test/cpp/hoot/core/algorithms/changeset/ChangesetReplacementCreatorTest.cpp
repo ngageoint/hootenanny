@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/GeometryUtils.h>
 
@@ -202,7 +202,7 @@ public:
     // the convert ops added here can contain any op
     conf().set(
       ConfigOptions::getConvertOpsKey(),
-      QStringList(QString::fromStdString(MergeNearbyNodes::className())));
+      QStringList(QString::fromStdString(DuplicateNodeRemover::className())));
     try
     {
       changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");

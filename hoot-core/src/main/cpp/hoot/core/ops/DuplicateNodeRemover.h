@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef MERGENEARBYNODES_H
-#define MERGENEARBYNODES_H
+#ifndef DUPLICATE_NODE_REMOVER_H
+#define DUPLICATE_NODE_REMOVER_H
 
 // hoot
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -48,19 +48,15 @@ namespace hoot
  *
  * This class works with four pass as long as distance is less than the four pass buffer. The input
  * map can be in either a planar or geographic projection.
- *
- * @todo rename and use a tag comparison
  */
-class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable,
+class DuplicateNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
   public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::MergeNearbyNodes"; }
+  static std::string className() { return "hoot::DuplicateNodeRemover"; }
 
-  static QString distanceKey() { return "merge.nearby.nodes.distance"; }
-
-  MergeNearbyNodes(Meters distance = -1);
+  DuplicateNodeRemover(Meters distance = -1);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
@@ -74,9 +70,9 @@ public:
 
   virtual void writeObject(QDataStream& os) const override;
 
-  virtual QString getDescription() const override { return "Merges nearby nodes together"; }
+  virtual QString getDescription() const override { return "Removes duplicate nodes"; }
 
-  virtual QString getInitStatusMessage() const override { return "Merging nearby nodes..."; }
+  virtual QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
 
   virtual QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
@@ -94,4 +90,4 @@ protected:
 
 }
 
-#endif // MERGENEARBYNODES_H
+#endif // DUPLICATE_NODE_REMOVER_H

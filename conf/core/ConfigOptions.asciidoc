@@ -1080,6 +1080,15 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it
 will treat name and alternate name tags equally.
 
+=== duplicate.node.remover.distance.threshold
+
+* Data Type: double
+* Default Value: `0.01`
+
+When merging nodes with DuplicateNodeRemover, determines what tolerance should be used for deciding
+if two nodes are identical. Larger values are more likely to merge nodes which are not true
+duplicates of each other. The units are in meters, and the value must be greater than zero.
+
 === duplicate.way.remover.strict.tag.matching
 
 * Data Type: bool
@@ -2172,15 +2181,6 @@ RAM usage of applications in a shared server environment.
 Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
 matching ways.  Larger values may increase runtime performance but decrease conflation quality.
 
-=== merge.nearby.nodes.distance
-
-* Data Type: double
-* Default Value: `0.01`
-
-When merging nodes during convert, determines what tolerance should be used for deciding if two
-nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of
-each other. The units are in meters, and the value must be greater than zero.
-
 [[merger.creators]]
 === merger.creators
 
@@ -3093,7 +3093,8 @@ See also:
 The maximum distance, in meters, added to the circular error of the features being compared, the
 total of which allows the features to be considered for match or review based on distance criteria
 only. If a value of zero is specified, then only the feature circular error will factor into the
-search distance.
+search distance. Higher values for this option can cause large increases in conflation runtime for
+dense datasets.
 
 === poi.polygon.address.match.enabled
 
@@ -3162,10 +3163,11 @@ incorrect matches.  This setting may be runtime expensive when enabled for large
 * Default Value: `false`
 
 If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs
-only.  The conflation will not match additional features at greater distances, even if they are
-within the match distance threshold.  Multiple features matches are still possible in the case of
-exact distance ties.  If this setting is false, then multiple POIs found within the match distance
-threshold of a polygon are treated as reviews.
+only. This is useful, for example, when you know the POIs on top of buildings are the only correct
+match in your data. With this setting enabled, the conflation will not match additional features at
+greater distances, even if they are within the match distance threshold. Multiple features matches
+are still possible in the case of exact distance ties. If this setting is false, then multiple POIs
+found within the match distance threshold of a polygon are treated as reviews.
 
 === poi.polygon.match.distance.threshold
 

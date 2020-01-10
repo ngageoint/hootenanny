@@ -1,0 +1,123 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/TestUtils.h>
+#include <hoot/core/io/OgrReader.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/util/Progress.h>
+
+// CPP Unit
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+
+namespace hoot
+{
+
+class DuplicateNodeRemoverTest : public HootTestFixture
+{
+    CPPUNIT_TEST_SUITE(DuplicateNodeRemoverTest);
+    CPPUNIT_TEST(runBasicTest);
+    CPPUNIT_TEST(runMetadataTest);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  DuplicateNodeRemoverTest() : HootTestFixture("test-files/", UNUSED_PATH)
+  {
+  }
+
+  void runBasicTest()
+  {
+    OgrReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.read(_inputPath + "jakarta_raya_coastline.shp", "", map);
+    MapProjector::projectToOrthographic(map);
+    CPPUNIT_ASSERT_EQUAL(604, (int)map->getNodes().size());
+
+    // merge all nodes within a meter.
+    DuplicateNodeRemover::mergeNodes(map, 1.0);
+
+    CPPUNIT_ASSERT_EQUAL(601, (int)map->getNodes().size());
+  }
+
+  void runMetadataTest()
+  {
+    OsmMapPtr map(new OsmMap());
+
+    /*NodePtr node1 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    /*NodePtr node2 =*/ TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    MapProjector::projectToOrthographic(map);
+
+    DuplicateNodeRemover::mergeNodes(map, 1.0);
+
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+
+    map->clear();
+    NodePtr node3 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    node3->getTags().set("uuid", "{12449bc4-c059-4270-8d72-134fcf54291d}");
+    NodePtr node4 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    node4->getTags().set("uuid", "{bfbf2946-4342-444c-9926-1477c7bcce05}");
+    MapProjector::projectToOrthographic(map);
+
+    DuplicateNodeRemover::mergeNodes(map, 1.0);
+
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+
+    map->clear();
+    NodePtr node5 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    node5->getTags().set("hoot:id", "1");
+    NodePtr node6 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    node6->getTags().set("hoot:id", "2");
+    MapProjector::projectToOrthographic(map);
+
+    DuplicateNodeRemover::mergeNodes(map, 1.0);
+
+    CPPUNIT_ASSERT_EQUAL(1, (int)map->getNodes().size());
+
+    map->clear();
+    NodePtr node7 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    node7->getTags().set("name", "node7");
+    NodePtr node8 = TestUtils::createNode(map, Status::Unknown1, 0.0, 0.0);
+    node8->getTags().set("name", "node8");
+    MapProjector::projectToOrthographic(map);
+
+    DuplicateNodeRemover::mergeNodes(map, 1.0);
+
+    CPPUNIT_ASSERT_EQUAL(2, (int)map->getNodes().size());
+  }
+};
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DuplicateNodeRemoverTest, "quick");
+
+}
