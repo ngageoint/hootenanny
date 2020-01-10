@@ -71,7 +71,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  // TODO: should use be added as a category here?
+  // TODO: should "use" be added as a category here?
   const bool inABuildingOrPoiCategory =
     OsmSchema::getInstance().getCategories(tags)
       .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());

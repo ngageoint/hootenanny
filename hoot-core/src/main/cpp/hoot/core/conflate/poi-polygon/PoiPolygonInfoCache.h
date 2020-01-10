@@ -59,7 +59,8 @@ typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
  * the caching config from the best runtime, but it still may need to be tweaked.
  *
  * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
- * moved into another cache class if we ever need them to be used with other conflation algs.
+ * moved into a class like OsmUtils if we ever need them to be used with other conflation algs. If
+ * that's done there will be some work to make any caching being performed work across unit tests.
  */
 class PoiPolygonInfoCache : public Configurable
 {
@@ -71,12 +72,11 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * Returns the distance from a point node to a polygon way
+   * Returns the distance between two elements
    *
-   * @param poly the way polygon to measure distance from
-   * @param point the point to measure distance from
-   * @return the distance between the point and polygon or -1.0 if the distance could not be
-   * calculated
+   * @param element1 the first element to measure distance from
+   * @param element2 the second element to measure distance from
+   * @return the distance between the two elements or -1.0 if the distance could not be calculated
    */
   double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
@@ -89,18 +89,18 @@ public:
   double getArea(const ConstElementPtr& element);
 
   /**
-   * Determines if a polygon contains a point
+   * Determines if an element contains another element geographically
    *
-   * @param poly the polygon to examine
-   * @param point the point to examine
-   * @return true if the polygon contains the point; false otherwise or if the containment could
-   * not be calculated
+   * @param containingElement the element to check for containing containedElement
+   * @param containedElement the element to check if contained by containingElement
+   * @return true if containingElement contains the containedElement geographicaly; false otherwise
+   * or if the containment could not be calculated
    */
   bool elementContains(const ConstElementPtr& containingElement,
                        const ConstElementPtr& containedElement);
 
   /**
-   * Determines if an element intersects another element
+   * Determines if an element intersects another element; backed by a cache
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
@@ -110,7 +110,8 @@ public:
   bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
   /**
-   * Determines if an element is of the given type
+   * Determines if an element is of the given type as defined by the poi/poly schema; backed by a
+   * cache
    *
    * @param element the element to determine type membership for
    * @param type the type to determine membership for the element
@@ -120,7 +121,7 @@ public:
   bool isType(const ConstElementPtr& element, const PoiPolygonSchemaType& type);
 
   /**
-   * Determines if an element has a given criterion
+   * Determines if an element has a given criterion; backed by a cache
    *
    * @param element the element to examine
    * @param criterionClassName class name of the ElementCriterion to determine membership of
@@ -130,44 +131,46 @@ public:
   bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 
   /**
-   * TODO
+   * Determines if an element has more than one type as defined by the poi/poly schema; backed by a
+   * cache
    *
-   * @param element
-   * @return
+   * @param element the element to examine
+   * @return true if the element has more than one type; false otherwise
    */
   bool hasMoreThanOneType(const ConstElementPtr& element);
 
   /**
-   * TODO
+   * Determines if an element has a poi/polygon related type
    *
-   * @param element
-   * @return
+   * @param element the element to examine
+   * @return true if the element has a poi/poly related type; false otherwise
    */
   bool hasRelatedType(const ConstElementPtr& element);
 
   /**
-   * TODO
+   * Returns the number of addresses contained by an element; backed by a cache
    *
-   * @param element
-   * @return
+   * @param element the element to examine
+   * @return a number of addresses
    */
   int numAddresses(const ConstElementPtr& element);
 
   /**
-   * TODO
+   * Determines if one element a child of another; e.g. way node or relation memeber
    *
-   * @param parent
-   * @param memberId
+   * @param parent the parent element
+   * @param memberId the element ID of the child
+   * @return true if parent has the element with memberId as a child; false otherwise
    */
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
   /**
-   * TODO
+   * Determines the max distance to use for generating reviews during matching; backed by a cache
    *
-   * @param element
-   * @param polyTags
-   * @param reviewDistanceThresholdDefault
-   * @return
+   * @param element the element to examine
+   * @param polyTags the tags of the polygon involved in the current match
+   * @param reviewDistanceThresholdDefault the configured default review distance
+   * @return a review distance
    */
   double getReviewDistance(const ConstElementPtr& element, const Tags& polyTags,
                            const double reviewDistanceThresholdDefault);
@@ -191,11 +194,11 @@ private:
 
   AddressParser _addressParser;
 
-  // Using QHash here instead of QCache, since we're mostly just storing primitives for values and
-  // they all take up the same amount of space. Tried to use QCache with the geometries, but since
-  // ElementConverter returns a shared pointer and QCache takes ownership, had trouble making it
-  // work. Also, not doing any management of the size of these caches, which may eventually end up
-  // being needed to control memory usage.
+  // Using QHash here for all of these instead of QCache, since we're mostly just storing primitives
+  // for values and they all take up the same amount of space. Tried to use QCache with the
+  // geometries, but since ElementConverter returns a shared pointer and QCache takes ownership, had
+  // trouble making it work. Also, not doing any management of the size of these caches, which may
+  // eventually end up being needed to control memory usage.
 
   // key is "elementID 1;elementID 2"; ordering of the ID keys doesn't matter here, since we check
   // in both directions
@@ -211,23 +214,14 @@ private:
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
   QHash<ElementId, std::shared_ptr<geos::geom::Geometry>> _geometryCache;
-
   QHash<ElementId, bool> _hasMoreThanOneTypeCache;
   QHash<ElementId, int> _numAddressesCache;
-
   QHash<ElementId, double> _reviewDistanceCache;
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
 
-  /*
-   * TODO
-   *
-   * @param element
-   * @return
-   */
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
-
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);

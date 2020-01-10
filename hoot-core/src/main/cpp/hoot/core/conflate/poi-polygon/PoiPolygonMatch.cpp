@@ -413,22 +413,12 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  }
 
   //allow for auto marking features with certain types for review if they get matched
-  //timer.restart();
   const bool foundReviewIfMatchedType =
     _featureHasReviewIfMatchedType(_poi) || _featureHasReviewIfMatchedType(_poly);
   LOG_VART(foundReviewIfMatchedType);
-//  if (timer.nsecsElapsed() > _timingThreshold)
-//  {
-//    LOG_DEBUG("foundReviewIfMatchedType: " << timer.nsecsElapsed());
-//  }
 
-  //timer.restart();
   unsigned int evidence = _calculateEvidence(_poi, _poly);
   LOG_VART(evidence);
-//  if (timer.elapsed() > _timingThreshold)
-//  {
-//    LOG_DEBUG("_calculateEvidence: " << timer.elapsed());
-//  }
 
   bool runReviewReduction = _enableReviewReduction;
   if (// No point in trying to reduce reviews if we're still at a miss here. Also, if the review
@@ -444,7 +434,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   LOG_VART(runReviewReduction);
   if (runReviewReduction)
   {
-    //timer.restart();
     // this constructor has gotten a little out of hand...
     PoiPolygonReviewReducer reviewReducer(
       _map, _polyNeighborIds, _distance, _nameScoreThreshold, _nameScore,
@@ -461,10 +450,6 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
         reviewReducer.getTriggeredRuleDescription();
     }
     numReviewReductions++;
-//    if (timer.elapsed() > _timingThreshold)
-//    {
-//      LOG_DEBUG("PoiPolygonReviewReducer: " << timer.elapsed());
-//    }
   }
   LOG_VART(evidence);
 
@@ -725,12 +710,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   unsigned int evidence = 0;
 
-  //timer.restart();
   evidence += _getDistanceEvidence(poi, poly);
-//  if (timer.nsecsElapsed() > _timingThreshold)
-//  {
-//    LOG_DEBUG("_getDistanceEvidence: " << timer.nsecsElapsed());
-//  }
   //see comment in _getDistanceEvidence
   if (!_closeDistanceMatch)
   {
@@ -740,37 +720,20 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
-  //timer.restart();
   evidence += _getNameEvidence(poi, poly);
-//  if (timer.nsecsElapsed() > _timingThreshold)
-//  {
-//    LOG_DEBUG("_getNameEvidence: " << timer.nsecsElapsed());
-//  }
+
   // Used to allow for kicking out of the method once enough evidence was accumulated for a match
   // as a runtime optimization.  However, that results in incomplete scoring information passed to
   // the review reducer, so have since disabled. It also causes some regression tests to fail.
-//  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
-  //timer.restart();
+
   evidence += _getTypeEvidence(poi, poly);
-//  if (timer.nsecsElapsed() > _timingThreshold)
-//  {
-//    LOG_DEBUG("_getTypeEvidence: " << timer.nsecsElapsed());
-//  }
 //  if (evidence >= _matchEvidenceThreshold)
 //  {
 //    return evidence;
 //  }
   if (_addressMatchEnabled)
   {
-    //timer.restart();
     evidence += _getAddressEvidence(poi, poly);
-//    if (timer.nsecsElapsed() > _timingThreshold)
-//    {
-//      LOG_DEBUG("_getAddressEvidence: " << timer.nsecsElapsed());
-//    }
 //    if (evidence >= _matchEvidenceThreshold)
 //    {
 //      return evidence;
@@ -778,12 +741,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   }
   if (_phoneNumberMatchEnabled)
   {
-    //timer.restart();
     evidence += _getPhoneNumberEvidence(poi, poly);
-//    if (timer.nsecsElapsed() > _timingThreshold)
-//    {
-//      LOG_DEBUG("_getPhoneNumberEvidence: " << timer.nsecsElapsed());
-//    }
 //    if (evidence >= _matchEvidenceThreshold)
 //    {
 //      return evidence;
@@ -796,7 +754,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //necessary.  The school requirement definitely seems too type specific (this type of evidence
   //has actually only been found with school pois in one test dataset so far), but when
   //removing it scores dropped for other datasets...so not changing it for now.
-  //timer.restart();
   if (evidence == 0 && _distance <= 35.0 && _infoCache->isType(poi, PoiPolygonSchemaType::School) &&
       _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
   {
@@ -806,10 +763,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //      return evidence;
 //    }
   }
-//  if (timer.nsecsElapsed() > _timingThreshold)
-//  {
-//    LOG_DEBUG("_getConvexPolyDistanceEvidence: " << timer.nsecsElapsed());
-//  }
 
   LOG_VART(evidence);
   return evidence;
