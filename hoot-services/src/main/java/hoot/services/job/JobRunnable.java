@@ -96,7 +96,7 @@ class JobRunnable implements Runnable {
 
             if(job.getJobType().equals(JobType.UPLOAD_CHANGESET)){
                 DbUtils.setStale(job.getTags().get("parentId"));
-                DbUtils.setConflicted(job.getJobId());
+                DbUtils.checkConflicted(job.getJobId());
             }
         }
         catch (Exception e) {

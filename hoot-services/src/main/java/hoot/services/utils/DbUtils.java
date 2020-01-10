@@ -27,6 +27,7 @@
 package hoot.services.utils;
 
 
+import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -34,6 +35,7 @@ import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.models.db.QUsers.users;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -825,20 +827,24 @@ NOT EXISTS
     }
 
     // Sets the specified job to a status detail of conflicts
-    public static void setConflicted(String jobId) {
-        // Find the job
-        JobStatus job = createQuery()
-                .select(jobStatus)
-                .from(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .fetchFirst();
+    public static void checkConflicted(String jobId) {
+        File workDir = new File(CHANGESETS_FOLDER, jobId);
+        File diffError = new File(workDir, "diff-error.osc");
+        if (diffError.exists()) {
+            // Find the job
+            JobStatus job = createQuery()
+                    .select(jobStatus)
+                    .from(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .fetchFirst();
 
-        if(job != null) {
-            createQuery()
-                .update(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .set(jobStatus.statusDetail, "CONFLICTS")
-                .execute();
+            if(job != null) {
+                createQuery()
+                    .update(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .set(jobStatus.statusDetail, "CONFLICTS")
+                    .execute();
+            }
         }
     }
 
