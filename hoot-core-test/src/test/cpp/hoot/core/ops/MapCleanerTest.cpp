@@ -55,8 +55,8 @@ class MapCleanerTest : public HootTestFixture
 public:
 
   MapCleanerTest()
-    : HootTestFixture("test-files/ops/",
-                      "test-output/ops/")
+    : HootTestFixture("test-files/ops/MapCleanerTest/",
+                      "test-output/ops/MapCleanerTest/")
   {
     setResetType(ResetAll);
   }
@@ -83,6 +83,5 @@ public:
 
 //putting this in the quick test suite causes MatchComparatorTest to fail
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCleanerTest, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCleanerTest, "current");
 
 }

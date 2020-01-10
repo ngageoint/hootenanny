@@ -134,7 +134,8 @@ addresses with the same house number.  e.g. when enabled, 23a Elm Street matches
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+Allows address comparison to score addresses parsed from elements. This is generally only to be
+turned off when running certain unit tests which are incompatible with it being enabled.
 
 === address.tag.keys.file
 
@@ -2068,6 +2069,7 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::DuplicateNodeRemover`
 ** `hoot::OneWayRoadStandardizer`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::SuperfluousWayRemover`
