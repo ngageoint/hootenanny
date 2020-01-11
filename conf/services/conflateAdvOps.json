@@ -388,7 +388,7 @@
                 "hoot_key":"levenshtein.distance.alpha"
             },
             {
-            	"id":"merge_nearby_nodes_distance",
+            	"id":"duplicate_node_remover_distance_threshold",
                 "minvalue":"0.01",
                 "elem_type":"double",
                 "description":"When merging nodes during convert, determines what tolerance should be used for deciding two nodes are identical. Units in meters and defaults to 1.0m.",
