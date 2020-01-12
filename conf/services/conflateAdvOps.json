@@ -395,7 +395,7 @@
                 "maxvalue":"",
                 "name":"Merge Nearby Nodes Distance",
                 "defaultvalue":"1.0",
-                "hoot_key":"merge.nearby.nodes.distance"
+                "hoot_key":"duplicate.node.remover.distance.threshold"
             },
             {
             	"id":"token_min_size",
@@ -1084,14 +1084,14 @@
         	"hoot_key":"poi.polygon.promote.points.with.addresses.to.pois"
     	    },
             {
-        	"id":"poipolygon_review_distance_threshold",
+        	"id":"poipolygon_additional_search_distance",
         	"elem_type":"int",
         	"description":"The maximum distance, in meters, combined with the circular error of the features being compared, the total of which allows the features to still be considered a match based on distance criteria only.",
         	"name":"Review Distance Threshold",
         	"defaultvalue":"125",
         	"minvalue":"0",
         	"maxvalue":"",
-        	"hoot_key":"poi.polygon.review.distance.threshold"
+        	"hoot_key":"poi.polygon.additional.search.distance"
     	    },
             {
         	"id":"poipolygon_review_evidence_threshold",
