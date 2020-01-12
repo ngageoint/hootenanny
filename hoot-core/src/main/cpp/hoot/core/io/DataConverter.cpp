@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DataConverter.h"
 
@@ -47,7 +47,7 @@
 #include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/MergeNearbyNodes.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/visitors/WayGeneralizeVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
@@ -564,9 +564,9 @@ void DataConverter::_setFromOgrOptions()
   // so let's merge them together.
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
-    if (!_convertOps.contains(QString::fromStdString(MergeNearbyNodes::className())))
+    if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
     {
-      _convertOps.append(QString::fromStdString(MergeNearbyNodes::className()));
+      _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
     }
   }
 

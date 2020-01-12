@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include <hoot/core/HootConfig.h>
@@ -1737,12 +1737,10 @@ bool OsmSchema::isMetaData(const QString& key, const QString& /*value*/)
   }
   else
   {
-    // for now all metadata tags are text so they're referenced by the key only. If that changes then
-    // we'll need some logic here to check if a vertex is a text vertex.
+    // for now all metadata tags are text so they're referenced by the key only. If that changes
+    // then we'll need some logic here to check if a vertex is a text vertex.
     bool metadata = isAncestor(key, "metadata");
-
     _metadataKey[key] = metadata;
-
     return metadata;
   }
 }

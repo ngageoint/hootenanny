@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCHVISITOR_H
 #define POIPOLYGONMATCHVISITOR_H
@@ -35,10 +35,13 @@
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -55,7 +58,7 @@ public:
                          ElementCriterionPtr filter = ElementCriterionPtr());
   PoiPolygonMatchVisitor(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& result,
                          ConstMatchThresholdPtr threshold,
-                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonCachePtr infoCache,
+                         std::shared_ptr<PoiPolygonRfClassifier> rf, PoiPolygonInfoCachePtr infoCache,
                          ElementCriterionPtr filter = ElementCriterionPtr());
   ~PoiPolygonMatchVisitor();
 
@@ -87,17 +90,15 @@ private:
   size_t _maxGroupSize;
   ConstMatchThresholdPtr _threshold;
 
-  std::shared_ptr<Tgs::HilbertRTree> _polyIndex; // used for finding surrounding polys
+  // used for finding surrounding polys
+  std::shared_ptr<Tgs::HilbertRTree> _polyIndex;
   std::deque<ElementId> _polyIndexToEid;
-  std::set<ElementId> _surroundingPolyIds;
-  std::shared_ptr<Tgs::HilbertRTree> _poiIndex; // used for finding surrounding poi's
+
+  // used for finding surrounding poi's
+  std::shared_ptr<Tgs::HilbertRTree> _poiIndex;
   std::deque<ElementId> _poiIndexToEid;
-  std::set<ElementId> _surroundingPoiIds;
 
   std::shared_ptr<PoiPolygonRfClassifier> _rf;
-
-  bool _enableAdvancedMatching;
-  bool _enableReviewReduction;
 
   double _reviewDistanceThreshold;
 
@@ -109,15 +110,16 @@ private:
   PoiPolygonPolyCriterion _polyCrit;
   ElementCriterionPtr _filter;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
 
-  void _checkForMatch(const std::shared_ptr<const Element>& e);
-  void _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);
-  void _collectSurroundingPoiIds(const std::shared_ptr<const Element>& e);
+  QElapsedTimer _timer;
+
+  void _checkForMatch(const std::shared_ptr<const Element>& e,
+                      const std::set<ElementId>& surroundingPolyIds);
+  std::set<ElementId> _collectSurroundingPolyIds(const std::shared_ptr<const Element>& e);
   Meters _getSearchRadius(const std::shared_ptr<const Element>& e) const;
 
   std::shared_ptr<Tgs::HilbertRTree>& _getPolyIndex();
-  std::shared_ptr<Tgs::HilbertRTree>& _getPoiIndex();
 
   ConstOsmMapPtr _getMap() { return _map; }
 };

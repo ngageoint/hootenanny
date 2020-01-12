@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatchCreator.h"
 
@@ -39,7 +39,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -145,7 +145,7 @@ public:
 
     // find other nearby candidates
     set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
@@ -327,6 +327,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating script feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -343,7 +345,7 @@ public:
       std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(_index,
+      SpatialIndexer v(_index,
                              _indexToEid,
                              pC,
                              std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
@@ -610,6 +612,7 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<Co
   LOG_INFO(
     "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
+  // TODO: Can we filter the element types we iterate over here this based on the script being run?
   map->visitRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<

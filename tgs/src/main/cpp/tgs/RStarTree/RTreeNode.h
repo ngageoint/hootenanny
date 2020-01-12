@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGS__RTREE_NODE_H__
@@ -88,6 +88,7 @@ public:
   Box toBox() const;
 
 private:
+
   friend class RTreeNode;
 
   BoxInternalData(int dimensions, const char* data);
@@ -97,7 +98,6 @@ private:
   int _dimensions;
 
 };
-
 
 inline double BoxInternalData::getLowerBoundRaw(int d) const
 {
@@ -111,7 +111,6 @@ inline double BoxInternalData::getUpperBoundRaw(int d) const
   return v[d * 2 + 1];
 }
 
-
 /**
  * This class is filled with yucky pointer math. If you aren't "old school" you probably want
  * to turn tail and run.
@@ -122,6 +121,7 @@ inline double BoxInternalData::getUpperBoundRaw(int d) const
 class TGS_EXPORT RTreeNode
 {
 public:
+
   virtual ~RTreeNode();
 
   /**
@@ -237,6 +237,7 @@ public:
   void updateChild(int childIndex, int id, const Box& b);
 
 private:
+
   friend class RTreeNodeStore;
   friend class RTreeNodeTest;
 
@@ -275,8 +276,6 @@ private:
   const Header* _getHeader() const;
 
   static int _getHeaderSize() { return sizeof(Header); }
-
-
 
   int _maxChildCount;
   int _dimensions;

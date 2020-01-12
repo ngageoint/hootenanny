@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef INDEXELEMENTVISITOR_H
-#define INDEXELEMENTVISITOR_H
+#ifndef SpatialIndexer_H
+#define SpatialIndexer_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -44,22 +44,20 @@ namespace hoot
 {
 
 /**
- * This class was extracted from ScriptMatchCreator so that it could be used by the other
- * match creators (highway, building, etc). It is used to build an index of input elements
- * (which can be filtered by various criteria, if need be). The envelope plus the search
-   radius is created as the index box for each element. This is more efficient than using
-   the OsmMapIndex index.
+ * This class is used to build an index of input elements (which can be filtered by various
+ * criteria, if need be). The envelope plus the search radius is created as the index box for each
+ * element. This is more efficient than using the OsmMapIndex index.
  */
 class ElementCriterion;
 
-class IndexElementsVisitor : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
+class SpatialIndexer : public ElementConstOsmMapVisitor, public ElementCriterionConsumer,
   public OperationStatusInfo
 {
 public:
 
   static std::string className() { return "hoot::CreateIndexVisitor"; }
 
-  explicit IndexElementsVisitor(std::shared_ptr<Tgs::HilbertRTree>& index,
+  explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                                 std::deque<ElementId>& indexToEid,
                                 const std::shared_ptr<ElementCriterion>& criterion,
                                 std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
@@ -72,7 +70,7 @@ public:
   void finalizeIndex();
 
   /**
-   * Find nearby elements given a bounds
+   * Find elements within a specified bounds
    *
    * @param env the bounds within the map to search
    * @param index a geospatial index for the input map
@@ -126,4 +124,4 @@ private:
 
 }
 
-#endif // INDEXELEMENTVISITOR_H
+#endif // SpatialIndexer_H

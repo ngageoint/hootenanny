@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef MERGENEARBYNODES_H
-#define MERGENEARBYNODES_H
+#ifndef DUPLICATE_NODE_REMOVER_H
+#define DUPLICATE_NODE_REMOVER_H
 
 // hoot
 #include <hoot/core/info/OperationStatusInfo.h>
@@ -44,26 +44,33 @@ namespace hoot
 {
 
 /**
- * This class works with four pass as long as distance is less than the four pass buffer.
+ * Merges together nodes that are within a small configurable distance of each other and don't have
+ * differing tags (outside of metadata tags).
  *
- * The input map can be in either a planar or geographic projection.
+ * This class works with four pass as long as distance is less than the four pass buffer. The input
+ * map can be in either a planar or geographic projection.
  */
-class MergeNearbyNodes : public OsmMapOperation, public Serializable, public Boundable,
+class DuplicateNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
   public OperationStatusInfo
 {
 public:
 
-  static std::string className() { return "hoot::MergeNearbyNodes"; }
+  static std::string className() { return "hoot::DuplicateNodeRemover"; }
 
-  static QString distanceKey() { return "merge.nearby.nodes.distance"; }
-
-  MergeNearbyNodes(Meters distance = -1);
+  DuplicateNodeRemover(Meters distanceThreshold = -1.0);
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const override { return className(); }
 
-  static void mergeNodes(std::shared_ptr<OsmMap> map, Meters distance = -1);
+  /**
+   * Removes duplicate nodes from a map
+   *
+   * @param map the map to remove duplicate nodes from
+   * @param distanceThreshold the distance threshold under which nodes are considered duplicates
+   * based on proximity
+   */
+  static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
 
   virtual void readObject(QDataStream& is) override;
 
@@ -71,9 +78,9 @@ public:
 
   virtual void writeObject(QDataStream& os) const override;
 
-  virtual QString getDescription() const override { return "Merges nearby nodes together"; }
+  virtual QString getDescription() const override { return "Removes duplicate nodes"; }
 
-  virtual QString getInitStatusMessage() const override { return "Merging nearby nodes..."; }
+  virtual QString getInitStatusMessage() const override { return "Removing duplicate nodes..."; }
 
   virtual QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
@@ -91,4 +98,4 @@ protected:
 
 }
 
-#endif // MERGENEARBYNODES_H
+#endif // DUPLICATE_NODE_REMOVER_H

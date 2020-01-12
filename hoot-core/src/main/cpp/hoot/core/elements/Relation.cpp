@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Relation.h"
 
@@ -146,6 +146,21 @@ int Relation::numElementsByRole(const QString& role) const
     }
   }
   return roleCtr;
+}
+
+std::set<ElementId> Relation::getWayMemberIds() const
+{
+  std::set<ElementId> wayMemberIds;
+  const vector<RelationData::Entry>& members = getMembers();
+  for (size_t i = 0; i < members.size(); i++)
+  {
+    RelationData::Entry member = members[i];
+    if (member.getElementId().getType() == ElementType::Way)
+    {
+      wayMemberIds.insert(member.getElementId());
+    }
+  }
+  return wayMemberIds;
 }
 
 Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep) const

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonPoiCriterion.h"
 
@@ -51,6 +51,12 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const Tags& tags = e->getTags();
 
+  const bool isNode = e->getElementType() == ElementType::Node;
+  if (!isNode)
+  {
+    return false;
+  }
+
   //see note in PoiPolygonPolyCriterion::isSatisified
   if (OsmSchema::getInstance().containsTagFromList(tags, _tagIgnoreList))
   {
@@ -59,20 +65,21 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   LOG_TRACE("Does not contain tag from tag ignore list");
 
-  const bool isNode = e->getElementType() == ElementType::Node;
-  if (!isNode)
-  {
-    return false;
-  }
-
-  // TODO: should use be added as a category here?
-  const bool inABuildingOrPoiCategory =
-    OsmSchema::getInstance().getCategories(tags)
-      .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
-  bool isPoi = isNode && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
-  LOG_VART(inABuildingOrPoiCategory);
-  LOG_VART(tags.get("uuid"));
   LOG_VART(tags.getNames());
+  bool isPoi = false;
+  if (tags.getNames().size() > 0)
+  {
+    isPoi = true;
+  }
+  else
+  {
+    // TODO: should "use" be added as a category here?
+    const bool inABuildingOrPoiCategory =
+      OsmSchema::getInstance().getCategories(tags)
+        .intersects(OsmSchemaCategory::building() | OsmSchemaCategory::poi());
+    isPoi = inABuildingOrPoiCategory;
+    LOG_VART(inABuildingOrPoiCategory);
+  }
   LOG_VART(isPoi);
 
   if (!isPoi && ConfigOptions().getPoiPolygonPromotePointsWithAddressesToPois())
