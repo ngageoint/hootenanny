@@ -443,30 +443,6 @@ public class GrailResource {
                 }
             }
 
-//            Map<String, String> tags = DbUtils.getJobTags(reqParams.getParentId());
-//            String resourceId = tags.get("input1");
-//
-//            if(resourceId != null) {
-//                // Setup workflow to refresh rails data after the push
-//                long referenceId = Long.parseLong(resourceId);
-//                Long parentFolderId = DbUtils.getParentFolder(referenceId);
-//                Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
-//
-//                GrailParams refreshParams = new GrailParams();
-//                refreshParams.setUser(user);
-//                refreshParams.setWorkDir(workDir);
-//                refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
-//                refreshParams.setBounds(mapTags.get("bbox"));
-//
-//                try {
-//                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams, parentFolderId);
-//                    workflow.addAll(refreshWorkflow);
-//                }
-//                catch(UnavailableException exc) {
-//                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
-//                }
-//            }
-
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("bbox", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
