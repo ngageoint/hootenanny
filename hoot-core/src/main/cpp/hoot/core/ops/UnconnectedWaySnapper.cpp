@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "UnconnectedWaySnapper.h"
@@ -41,7 +41,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/OrCriterion.h>
 
@@ -437,23 +437,23 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
                                                 std::deque<ElementId>& featureIndexToEid,
                                                 const ElementType& elementType)
 {
-  LOG_TRACE("Creating feature index of type: " << elementType << "...");
+  LOG_INFO("Creating feature index of type: " << elementType << "...");
 
   // TODO: tune these indexes? - see #3054
   std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   featureIndex.reset(new Tgs::HilbertRTree(mps, 2));
-  std::shared_ptr<IndexElementsVisitor> spatialIndexer;
+  std::shared_ptr<SpatialIndexer> spatialIndexer;
   if (elementType == ElementType::Node)
   {
     spatialIndexer.reset(
-      new IndexElementsVisitor(
+      new SpatialIndexer(
         featureIndex, featureIndexToEid, featureCrit,
         std::bind(&UnconnectedWaySnapper::_getWayNodeSearchRadius, this, placeholders::_1), _map));
   }
   else
   {
     spatialIndexer.reset(
-      new IndexElementsVisitor(
+      new SpatialIndexer(
         featureIndex, featureIndexToEid, featureCrit,
         std::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, placeholders::_1), _map));
   }
@@ -531,14 +531,14 @@ QList<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
     // The node neighbors must be sorted by distance to get the best way node snapping results. Not
     // sure yet if they need to be when snapping to ways.
     neighborIds =
-      IndexElementsVisitor::findSortedNodeNeighbors(
+      SpatialIndexer::findSortedNodeNeighbors(
         node, *env, _snapToWayNodeIndex, _snapToWayNodeIndexToEid, _map);
   }
   else
   {
     env->expandBy(_getWaySearchRadius(node));
     const std::set<ElementId> neighborIdsSet =
-      IndexElementsVisitor::findNeighbors(
+      SpatialIndexer::findNeighbors(
         *env, _snapToWayIndex, _snapToWayIndexToEid, _map, elementType, false);
     for (std::set<ElementId>::const_iterator neighborIdsItr = neighborIdsSet.begin();
          neighborIdsItr != neighborIdsSet.end(); ++neighborIdsItr)
@@ -819,7 +819,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     // be necessary, but it is for now.  For some reason, neighbors are occasionally being
     // returned at longer distances away than expected.
     // TODO: This may have been fixed with the addition of distance sorting in
-    // IndexElementsVisitor...check.
+    // SpatialIndexer...check.
     if (/*shortestDistance != DBL_MAX &&*/
         shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
     {

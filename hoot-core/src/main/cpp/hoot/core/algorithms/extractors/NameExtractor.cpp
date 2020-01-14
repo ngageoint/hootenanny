@@ -22,21 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NameExtractor.h"
-
-// geos
-#include <geos/geom/Geometry.h>
-#include <geos/util/TopologyException.h>
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 using namespace std;
 
@@ -67,12 +60,15 @@ double NameExtractor::extract(const OsmMap& /*map*/, const std::shared_ptr<const
 
 double NameExtractor::extract(const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
-  QStringList targetNames = target->getTags().getNames();
-  _namesProcessed += targetNames.size();
+  QStringList targetNames, candidateNames;
+  targetNames = target->getTags().getNames();
   targetNames.append(target->getTags().getPseudoNames());
-  QStringList candidateNames = candidate->getTags().getNames();
-  _namesProcessed += candidateNames.size();
+  _namesProcessed += targetNames.size();
+
+  candidateNames = candidate->getTags().getNames();
   candidateNames.append(candidate->getTags().getPseudoNames());
+  _namesProcessed += candidateNames.size();
+
   double score = -1;
 
   for (int i = 0; i < targetNames.size(); i++)

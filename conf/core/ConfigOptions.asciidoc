@@ -109,7 +109,7 @@ the review will receive them as well.
 * Data Type: string
 * Default Value: ``
 
-Tag key used by AddUuidVisitor for adding custom unique ID's to data.
+Tag key used by AddUuidVisitor for adding custom unique ID's to data. TODO: default this to 'uuid'?
 
 === address.additional.tag.keys
 
@@ -128,6 +128,14 @@ separate list items with a semicolon and surround the entire list in double quot
 
 If true, conflation that uses address matching will allow house number subletter mismatches for the
 addresses with the same house number.  e.g. when enabled, 23a Elm Street matches 23 Elm Street
+
+=== address.scorer.enable.caching
+
+* Data Type: bool
+* Default Value: `true`
+
+Allows address comparison to score addresses parsed from elements. This is generally only to be
+turned off when running certain unit tests which are incompatible with it being enabled.
 
 === address.tag.keys.file
 
@@ -1072,6 +1080,15 @@ See also: <<MapCleanerTransforms,map.cleaner.transforms>>
 
 If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it
 will treat name and alternate name tags equally.
+
+=== duplicate.node.remover.distance.threshold
+
+* Data Type: double
+* Default Value: `0.01`
+
+When merging nodes with DuplicateNodeRemover, determines what tolerance should be used for deciding
+if two nodes are identical. Larger values are more likely to merge nodes which are not true
+duplicates of each other. The units are in meters, and the value must be greater than zero.
 
 === duplicate.way.remover.strict.tag.matching
 
@@ -2052,6 +2069,7 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 * Data Type: list
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
+** `hoot::DuplicateNodeRemover`
 ** `hoot::OneWayRoadStandardizer`
 ** `hoot::DuplicateWayRemover`
 ** `hoot::SuperfluousWayRemover`
@@ -2164,15 +2182,6 @@ RAM usage of applications in a shared server environment.
 
 Spacing in meters used by the MaximalSublineMatcher during point discretization performed between
 matching ways.  Larger values may increase runtime performance but decrease conflation quality.
-
-=== merge.nearby.nodes.distance
-
-* Data Type: double
-* Default Value: `0.01`
-
-When merging nodes during convert, determines what tolerance should be used for deciding if two
-nodes are identical. Larger values are more likely to merge nodes which are not true duplicates of
-each other. The units are in meters, and the value must be greater than zero.
 
 [[merger.creators]]
 === merger.creators
@@ -3078,6 +3087,17 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== poi.polygon.additional.search.distance
+
+* Data Type: double
+* Default Value: `125.0`
+
+The maximum distance, in meters, added to the circular error of the features being compared, the
+total of which allows the features to be considered for match or review based on distance criteria
+only. If a value of zero is specified, then only the feature circular error will factor into the
+search distance. Higher values for this option can cause large increases in conflation runtime for
+dense datasets.
+
 === poi.polygon.address.match.enabled
 
 * Data Type: bool
@@ -3131,15 +3151,6 @@ set to true, then the tag matcher is less strict and will attempt to match the p
 tag value when delimited by a colon.  e.g. 'source=mgcp:buildp_clip;osm' will match
 'source=mgcp:builda_clip;osm' since both tag values begin with 'mgcp:'.
 
-=== poi.polygon.enable.advanced.matching
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, POI to Polygon conflation will perform additional checks against surrounding features
-for match evidence.  This setting allows for detailed conflation customization but can be runtime
-expensive when enabled.
-
 === poi.polygon.enable.review.reduction
 
 * Data Type: bool
@@ -3154,10 +3165,11 @@ incorrect matches.  This setting may be runtime expensive when enabled for large
 * Default Value: `false`
 
 If this setting is true, POI to Polygon conflation will attempt to match the closest feature pairs
-only.  The conflation will not match additional features at greater distances, even if they are
-within the match distance threshold.  Multiple features matches are still possible in the case of
-exact distance ties.  If this setting is false, then multiple POIs found within the match distance
-threshold of a polygon are treated as reviews.
+only. This is useful, for example, when you know the POIs on top of buildings are the only correct
+match in your data. With this setting enabled, the conflation will not match additional features at
+greater distances, even if they are within the match distance threshold. Multiple features matches
+are still possible in the case of exact distance ties. If this setting is false, then multiple POIs
+found within the match distance threshold of a polygon are treated as reviews.
 
 === poi.polygon.match.distance.threshold
 
@@ -3237,15 +3249,6 @@ if running 'hoot score-matches' with POI to Polygon conflation.
 
 If true, POI to polygon conflation will classify all points with OSM address tags as POIs even if
 they do not have specific type tags.
-
-=== poi.polygon.review.distance.threshold
-
-* Data Type: double
-* Default Value: `125.0`
-
-The maximum distance, in meters, combined with the circular error of the features being compared,
-the total of which allows the features to still be considered a match based on distance criteria
-only.
 
 === poi.polygon.review.evidence.threshold
 

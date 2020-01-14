@@ -1143,7 +1143,7 @@ translate = {
     }, // End applyComplexRules
 
 
-    // makeAttrLookup - build a lookup table for FCODEs and Attrs
+    // makeAttrLookup - build a lookup table for layers and Attrs
     makeTdsAttrLookup : function(schema)
     {
         var lookup = {};
@@ -1164,8 +1164,8 @@ translate = {
     {
         var lookup = {};
 
-            // Add the attrArray to the list as <geom><FCODE>:[array]
-            // Eg[L,A,P]AP030:[array]
+        // Add the attrArray to the list as <geom><FCODE>:[array]
+        // Eg[L,A,P]AP030:[array]
         schema.forEach( function (item) {
             var iName = item.geom.charAt(0) + item.fcode;
             lookup[iName] = [];

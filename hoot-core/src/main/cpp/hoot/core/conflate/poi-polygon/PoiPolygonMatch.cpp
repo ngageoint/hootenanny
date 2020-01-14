@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatch.h"
 
@@ -30,8 +30,6 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
-#include <hoot/core/conflate/poi-polygon/PoiPolygonAdvancedMatcher.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonDistance.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonReviewReducer.h>
 #include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonAlphaShapeDistanceExtractor.h>
@@ -42,6 +40,11 @@
 #include <hoot/core/criterion/MultiUseBuildingCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
+
+// Qt
+#include <QElapsedTimer>
+#include <QStringBuilder>
 
 using namespace std;
 
@@ -81,9 +84,8 @@ Match(threshold)
 
 PoiPolygonMatch::PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
                                  std::shared_ptr<const PoiPolygonRfClassifier> rf,
-                                 PoiPolygonCachePtr infoCache,
-                                 const set<ElementId>& polyNeighborIds,
-                                 const set<ElementId>& poiNeighborIds) :
+                                 PoiPolygonInfoCachePtr infoCache,
+                                 const set<ElementId>& polyNeighborIds) :
 Match(threshold),
 _map(map),
 _e1IsPoi(false),
@@ -105,8 +107,6 @@ _addressMatchEnabled(false),
 _phoneNumberScore(-1.0),
 _phoneNumberMatchEnabled(true),
 _polyNeighborIds(polyNeighborIds),
-_poiNeighborIds(poiNeighborIds),
-_enableAdvancedMatching(false),
 _enableReviewReduction(true),
 _disableSameSourceConflation(false),
 _disableSameSourceConflationMatchTagKeyPrefixOnly(true),
@@ -114,12 +114,12 @@ _sourceTagKey(""),
 _reviewMultiUseBuildings(false),
 _rf(rf),
 _explainText(""),
-_infoCache(infoCache)
+_infoCache(infoCache),
+_timingThreshold(1000000)    //nanoseconds
 {
-//  _timer.reset(new QElapsedTimer());
-//  _timer->start();
-
   LOG_VART(_infoCache.get());
+
+  _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
 }
 
 void PoiPolygonMatch::setMatchDistanceThreshold(double distance)
@@ -197,7 +197,7 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
 
   setMatchDistanceThreshold(config.getPoiPolygonMatchDistanceThreshold());
-  setReviewDistanceThreshold(config.getPoiPolygonReviewDistanceThreshold());
+  setReviewDistanceThreshold(config.getPoiPolygonAdditionalSearchDistance());
   setNameScoreThreshold(config.getPoiPolygonNameScoreThreshold());
   setTypeScoreThreshold(config.getPoiPolygonTypeScoreThreshold());
 
@@ -209,7 +209,6 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
 
   setReviewMultiUseBuildings(config.getPoiPolygonReviewMultiuseBuildings());
 
-  setEnableAdvancedMatching(config.getPoiPolygonEnableAdvancedMatching());
   setEnableReviewReduction(config.getPoiPolygonEnableReviewReduction());
 
   const int matchEvidenceThreshold = config.getPoiPolygonMatchEvidenceThreshold();
@@ -220,16 +219,31 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
       QString::number(matchEvidenceThreshold) + ".  Valid values are 1 to 4.");
   }
   setMatchEvidenceThreshold(matchEvidenceThreshold);
-  LOG_VART(_matchEvidenceThreshold);
-  const int reviewEvidenceThreshold = config.getPoiPolygonReviewEvidenceThreshold();
-  if (reviewEvidenceThreshold < 0 || reviewEvidenceThreshold > matchEvidenceThreshold - 1)
+  if (_matchEvidenceThreshold == 1)
+  {
+    // reviews are effectively turned off if match thresh = 1
+    _reviewEvidenceThreshold = 0;
+  }
+  else
+  {
+    const int reviewEvidenceThreshold = config.getPoiPolygonReviewEvidenceThreshold();
+    if (reviewEvidenceThreshold < 1 || reviewEvidenceThreshold > 3)
+    {
+      throw HootException(
+        "Invalid value for POI/Polygon review evidence threshold: " +
+        QString::number(reviewEvidenceThreshold) + ".  Valid values are 1 to 3.");
+    }
+    setReviewEvidenceThreshold(reviewEvidenceThreshold);
+  }
+  if (_reviewEvidenceThreshold >= _matchEvidenceThreshold)
   {
     throw HootException(
-      "Invalid value for POI/Polygon review evidence threshold: " +
-      QString::number(reviewEvidenceThreshold) + ".  Valid values are 0 to " +
-      QString::number(matchEvidenceThreshold - 1) + ".");
+      "Value for POI/Polygon review evidence threshold: " +
+      QString::number(_reviewEvidenceThreshold) +
+      " is greater than or equal to value for POI/Polyon match evidence threshold: " +
+      QString::number(_matchEvidenceThreshold) + ".");
   }
-  setReviewEvidenceThreshold(reviewEvidenceThreshold);
+  LOG_VART(_matchEvidenceThreshold);
   LOG_VART(_reviewEvidenceThreshold);
 
   _addressMatchEnabled = config.getPoiPolygonAddressMatchEnabled();
@@ -237,7 +251,11 @@ void PoiPolygonMatch::setConfiguration(const Settings& conf)
   {
     _addressScorer.setConfiguration(conf);
   }
-  _typeScorer.setConfiguration(conf);
+  if (!_typeScorer)
+  {
+    _typeScorer.reset(new PoiPolygonTypeScoreExtractor(_infoCache));
+  }
+  _typeScorer->setConfiguration(conf);
   _nameScorer.setConfiguration(conf);
   _phoneNumberMatchEnabled = config.getPoiPolygonPhoneNumberMatchEnabled();
   if (_phoneNumberMatchEnabled)
@@ -291,7 +309,7 @@ bool PoiPolygonMatch::_featureHasReviewIfMatchedType(ConstElementPtr element) co
   const Tags& tags = element->getTags();
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
-    const QString kvp = it.key() + "=" + it.value();
+    const QString kvp = it.key() % "=" % it.value();
     if (_reviewIfMatchedTypes.contains(kvp))
     {
       LOG_TRACE("Matched type for review: " << kvp);
@@ -350,8 +368,7 @@ bool PoiPolygonMatch::_inputFeaturesHaveSameSource() const
 
 bool PoiPolygonMatch::_skipForReviewTypeDebugging() const
 {
-  if (!PoiPolygonTypeScoreExtractor::hasSpecificType(_poi) ||
-      !PoiPolygonTypeScoreExtractor::hasSpecificType(_poly))
+  if (!PoiPolygonSchema::hasSpecificType(_poi) || !PoiPolygonSchema::hasSpecificType(_poly))
   {
     return true;
   }
@@ -373,6 +390,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
 //  const bool oneElementIsRelation =
 //    e1->getElementType() == ElementType::Relation ||
 //    e2->getElementType() == ElementType::Relation;
+  //QElapsedTimer timer;
   matchesProcessed++;
   _explainText = "";
   _class.setMiss();
@@ -402,12 +420,23 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
   unsigned int evidence = _calculateEvidence(_poi, _poly);
   LOG_VART(evidence);
 
-  //no point in trying to reduce reviews if we're still at a miss here
-  if (_enableReviewReduction && evidence >= _reviewEvidenceThreshold)
+  bool runReviewReduction = _enableReviewReduction;
+  if (// No point in trying to reduce reviews if we're still at a miss here. Also, if the review
+      // threshold = 0, that means we don't want any reviews at all...so no point in trying to
+      //reduce them.
+      (_reviewEvidenceThreshold > 0 && evidence < _reviewEvidenceThreshold) ||
+      // If the match threshold = 1, then we throw out all reviews and no reason to try and reduce
+      // any.
+      (_matchEvidenceThreshold == 1 && evidence < _matchEvidenceThreshold))
   {
-    // this constructor has gotten a little out of hand
+    runReviewReduction = false;
+  }
+  LOG_VART(runReviewReduction);
+  if (runReviewReduction)
+  {
+    // this constructor has gotten a little out of hand...
     PoiPolygonReviewReducer reviewReducer(
-      _map, _polyNeighborIds, _poiNeighborIds, _distance, _nameScoreThreshold, _nameScore,
+      _map, _polyNeighborIds, _distance, _nameScoreThreshold, _nameScore,
       _nameScore >= _nameScoreThreshold, _nameScore == 1.0, _typeScoreThreshold, _typeScore,
       _typeScore >= _typeScoreThreshold, _matchDistanceThreshold, _addressScore == 1.0,
       _addressMatchEnabled, _infoCache);
@@ -416,7 +445,9 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     {
       evidence = 0;
       // TODO: b/c this is a miss, don't think it will actually get added to the output anywhere...
-      _explainText = "Match score automatically dropped by review reduction.";
+      _explainText =
+        "Match score automatically dropped by review reduction rule: " +
+        reviewReducer.getTriggeredRuleDescription();
     }
     numReviewReductions++;
   }
@@ -445,10 +476,10 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     {
       _class.setReview();
       _explainText =
-        "Feature contains tag specified for review from list: " + _reviewIfMatchedTypes.join(";");
+        "Feature contains tag specified for review from list: " % _reviewIfMatchedTypes.join(";");
     }
   }
-  else if (evidence >= _reviewEvidenceThreshold)
+  else if (evidence >= _reviewEvidenceThreshold && _reviewEvidenceThreshold > 0)
            //&& oneElementIsRelation) //for testing only
   {
     _class.setReview();
@@ -494,7 +525,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
     _explainText = "";
   }
 
-  LOG_VART(_class);
+  LOG_TRACE("eid1: " << eid1 << ", eid2: " << eid2 << ", class: " << _class);
   LOG_TRACE("**************************");
 }
 
@@ -507,7 +538,7 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
 {
   LOG_TRACE("Retrieving distance evidence...");
 
-  _distance = PoiPolygonDistanceExtractor().extract(*_map, poi, poly);
+  _distance = PoiPolygonDistanceExtractor(_infoCache).extract(*_map, poi, poly);
   if (_distance == -1.0)
   {
     _closeDistanceMatch = false;
@@ -515,14 +546,10 @@ unsigned int PoiPolygonMatch::_getDistanceEvidence(ConstElementPtr poi, ConstEle
     return 0;
   }
 
-  //search radius taken from PoiPolygonMatchCreator
-  PoiPolygonDistance distanceCalc(
-    _matchDistanceThreshold, _reviewDistanceThreshold, poly->getTags(),
-    poi->getCircularError() + _reviewDistanceThreshold);
   _reviewDistanceThreshold =
     max(
-      distanceCalc.getReviewDistanceForType(_poi->getTags()),
-      distanceCalc.getReviewDistanceForType(_poly->getTags()));
+      _infoCache->getReviewDistance(_poi, poly->getTags(), _reviewDistanceThreshold),
+      _infoCache->getReviewDistance(_poly, poly->getTags(), _reviewDistanceThreshold));
 
   //Tried type and density based match distance changes here too, but they didn't have any positive
   //effect.
@@ -578,36 +605,36 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
 {
   LOG_TRACE("Retrieving type evidence...");
 
-  _typeScorer.setFeatureDistance(_distance);
-  _typeScorer.setTypeScoreThreshold(_typeScoreThreshold);
-  _typeScore = _typeScorer.extract(*_map, poi, poly);
+  _typeScorer->setFeatureDistance(_distance);
+  _typeScorer->setTypeScoreThreshold(_typeScoreThreshold);
+  _typeScore = _typeScorer->extract(*_map, poi, poly);
   const bool typeMatch = _typeScore >= _typeScoreThreshold;
   if (typeMatch)
   {
     typeMatches++;
   }
-  if (_typeScorer.getNoTypeFound())
+  if (_typeScorer->getNoTypeFound())
   {
     noTypeFoundCount++;
   }
 
-  if (_typeScorer.getFailedMatchRequirements().size() > 0)
+  if (_typeScorer->getFailedMatchRequirements().size() > 0)
   {
     QString failedMatchTypes;
-    for (int i = 0; i < _typeScorer.getFailedMatchRequirements().size(); i++)
+    for (int i = 0; i < _typeScorer->getFailedMatchRequirements().size(); i++)
     {
-      failedMatchTypes += _typeScorer.getFailedMatchRequirements().at(i) + ", ";
+      failedMatchTypes += _typeScorer->getFailedMatchRequirements().at(i) % ", ";
     }
     failedMatchTypes.chop(2);
 
     QString explainBase = "Failed custom match requirements for: ";
     if (_explainText.isEmpty())
     {
-      _explainText = explainBase + failedMatchTypes;
+      _explainText = explainBase % failedMatchTypes;
     }
     else
     {
-      _explainText += ";" + explainBase + failedMatchTypes;
+      _explainText += ";" % explainBase % failedMatchTypes;
     }
   }
 
@@ -679,6 +706,8 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //LOG_VART(poi);
   //LOG_VART(poly);
 
+  //QElapsedTimer timer;
+
   unsigned int evidence = 0;
 
   evidence += _getDistanceEvidence(poi, poly);
@@ -692,13 +721,11 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //The operations from here are on down are roughly ordered by increasing runtime complexity.
 
   evidence += _getNameEvidence(poi, poly);
+
   // Used to allow for kicking out of the method once enough evidence was accumulated for a match
   // as a runtime optimization.  However, that results in incomplete scoring information passed to
   // the review reducer, so have since disabled. It also causes some regression tests to fail.
-//  if (_reviewIfMatchedTypes.isEmpty() && evidence >= _matchEvidenceThreshold)
-//  {
-//    return evidence;
-//  }
+
   evidence += _getTypeEvidence(poi, poly);
 //  if (evidence >= _matchEvidenceThreshold)
 //  {
@@ -727,7 +754,7 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
   //necessary.  The school requirement definitely seems too type specific (this type of evidence
   //has actually only been found with school pois in one test dataset so far), but when
   //removing it scores dropped for other datasets...so not changing it for now.
-  if (evidence == 0 && _distance <= 35.0 && _infoCache->isType(poi, "school") &&
+  if (evidence == 0 && _distance <= 35.0 && _infoCache->isType(poi, PoiPolygonSchemaType::School) &&
       _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
@@ -735,18 +762,6 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //    {
 //      return evidence;
 //    }
-  }
-
-  //no point in trying to increase evidence if we're already at a match
-  if (_enableAdvancedMatching && evidence < _matchEvidenceThreshold)
-  {
-    PoiPolygonAdvancedMatcher advancedMatcher(
-      _map, _polyNeighborIds, _poiNeighborIds, _distance);
-    advancedMatcher.setConfiguration(conf());
-    if (advancedMatcher.triggersRule(_poi, _poly))
-    {
-      evidence++;
-    }
   }
 
   LOG_VART(evidence);

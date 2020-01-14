@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayMatchCreator.h"
 
@@ -41,7 +41,7 @@
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/visitors/IndexElementsVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/NotImplementedException.h>
@@ -135,7 +135,7 @@ public:
 
     // find other nearby candidates
     set<ElementId> neighbors =
-      IndexElementsVisitor::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+      SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
 
     ElementId from(e->getElementType(), e->getId());
 
@@ -243,6 +243,8 @@ public:
   {
     if (!_index)
     {
+      LOG_INFO("Creating highway feature index...");
+
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
@@ -254,7 +256,7 @@ public:
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
       // Instantiate our visitor
-      IndexElementsVisitor v(
+      SpatialIndexer v(
         _index, _indexToEid, pCrit,
         std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());
 
@@ -330,7 +332,8 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<C
   HighwayMatchVisitor v(
     map, matches, _classifier, _sublineMatcher, Status::Unknown1, threshold, _tagAncestorDiff,
     _filter);
-  map->visitRo(v);
+  map->visitWaysRo(v);
+  map->visitRelationsRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " highway match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");

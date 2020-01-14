@@ -20,7 +20,7 @@ do
     # echo "##### Start ${schema} #####"
     # echo "Out: " $TA_OUT/$TA_FILE-$schema.osm "  In: " $TA_IN/$TA_FILE-$schema.osm
 
-    hoot convert $HOOT_OPT -D merge.nearby.nodes.distance=1.0 -D schema.translation.script=$TA_IN/cali-translation-$schema.js $TA_IN/$TA_FILE.shp $TA_OUT/$TA_FILE-$schema.osm
+    hoot convert $HOOT_OPT -D duplicate.node.remover.distance.threshold=1.0 -D schema.translation.script=$TA_IN/cali-translation-$schema.js $TA_IN/$TA_FILE.shp $TA_OUT/$TA_FILE-$schema.osm
 
     # Uncomment this line to update the input files when there is a schema change
     # cp $TA_OUT/$TA_FILE-$schema.osm $TA_IN/$TA_FILE-$schema.osm
@@ -32,7 +32,7 @@ do
 done
 
 #Test Feature Code mapping
-hoot convert $HOOT_OPT  -D merge.nearby.nodes.distance=1.0 -D schema.translation.script=$TA_IN/cali-translation-tdsv61-fcode.js $TA_IN/$TA_FILE.shp $TA_OUT/$TA_FILE-tdsv61-fcode.osm
+hoot convert $HOOT_OPT  -D duplicate.node.remover.distance.threshold=1.0 -D schema.translation.script=$TA_IN/cali-translation-tdsv61-fcode.js $TA_IN/$TA_FILE.shp $TA_OUT/$TA_FILE-tdsv61-fcode.osm
 
 # Uncomment this line to update the input files when there is a schema change
 #cp $TA_OUT/$TA_FILE-tdsv61-fcode.osm $TA_IN/$TA_FILE-tdsv61.osm

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ExactTagDifferencer.h"
 
@@ -39,8 +39,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagDifferencer, ExactTagDifferencer)
 
-double ExactTagDifferencer::diff(const ConstOsmMapPtr &/*map*/, const ConstElementPtr& e1,
-  const ConstElementPtr &e2) const
+double ExactTagDifferencer::diff(const ConstOsmMapPtr&/*map*/, const ConstElementPtr& e1,
+  const ConstElementPtr& e2) const
 {
   const Tags& t1 = e1->getTags();
   const Tags& t2 = e2->getTags();

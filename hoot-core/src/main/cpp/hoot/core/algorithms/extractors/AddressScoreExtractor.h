@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDRESS_SCORE_EXTRACTOR_H
 #define ADDRESS_SCORE_EXTRACTOR_H
@@ -82,6 +82,10 @@ public:
   void setAllowLenientHouseNumberMatching(bool allow)
   { _addressParser.setAllowLenientHouseNumberMatching(allow); }
 
+  static int getAddressCacheSize() { return _addressesCache.size(); }
+  static int getNumAddressCacheHits() { return _addressCacheHits; }
+  void setCacheEnabled(const bool enabled) { _cacheEnabled = enabled; }
+
 private:
 
   friend class AddressScoreExtractorTest;
@@ -90,6 +94,10 @@ private:
   mutable bool _matchAttemptMade;
 
   AddressParser _addressParser;
+
+  static QHash<ElementId, QList<Address>> _addressesCache;
+  static int _addressCacheHits;
+  bool _cacheEnabled;
 
   /*
    * Searches for an address on element. Will look also look for address way nodes and address
