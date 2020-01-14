@@ -418,10 +418,14 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   BuildingMatchVisitor v(map, matches, _getRf(), threshold, _filter, Status::Unknown1);
   map->visitWaysRo(v);
   map->visitRelationsRo(v);
+  // total match count inaccurate here
+//  LOG_INFO(
+//    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
+//    " building match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+//    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " building match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
-    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    " building match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
