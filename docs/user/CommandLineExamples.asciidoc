@@ -490,10 +490,10 @@ See the User Guide for more details on command usage.
     hoot convert -D convert.ops="hoot::DuplicateNameRemover" input.osm output.osm
 -----
 
-===== Merge nodes that are near each other:
+===== Remove duplicate nodes:
 
 -----
-    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
+    hoot convert -D convert.ops="hoot::DuplicateNodeRemover" input.osm output.osm
 -----
 
 ===== Remove elements that contain no useful information:
@@ -506,12 +506,6 @@ See the User Guide for more details on command usage.
 
 -----
     hoot convert -D convert.ops="hoot::UnionPolygonsOp" input.osm output.osm
------
-
-===== Combine like points together without using full-fledged conflation:
-
------
-    hoot convert -D convert.ops="hoot::MergeNearbyNodes" input.osm output.osm
 -----
 
 ===== Add the tag "error:circular=5.0" to all elements:

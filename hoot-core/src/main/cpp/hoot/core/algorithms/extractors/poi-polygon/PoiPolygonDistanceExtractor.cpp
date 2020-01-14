@@ -22,18 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonDistanceExtractor.h"
 
 // hoot
-#include <hoot/core/elements/ElementConverter.h>
+//#include <hoot/core/elements/ElementConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 // geos
 #include <geos/util/TopologyException.h>
-#include <geos/geom/Geometry.h>
 
 using namespace geos::geom;
 
@@ -42,26 +41,28 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, PoiPolygonDistanceExtractor)
 
-PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor()
+PoiPolygonDistanceExtractor::PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache) :
+_infoCache(infoCache)
 {
 }
 
-double PoiPolygonDistanceExtractor::extract(const OsmMap& map, const ConstElementPtr& poi,
+double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstElementPtr& poi,
                                             const ConstElementPtr& poly) const
 {
+  if (!_infoCache)
+  {
+    throw HootException("No cache passed to extractor.");
+  }
+
   try
   {
+    LOG_VART(poi->getElementId());
+    LOG_VART(poly->getElementId());
+
     //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
     DisableLog dl(Log::Warn);
 
-    ElementConverter elementConverter(map.shared_from_this());
-    std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
-    if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
-    {
-      throw geos::util::TopologyException();
-    }
-    std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
-    return polyGeom->distance(poiGeom.get());
+    return _infoCache->getDistance(poly, poi);
   }
   catch (const geos::util::TopologyException& e)
   {

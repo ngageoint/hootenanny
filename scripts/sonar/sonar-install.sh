@@ -2,7 +2,7 @@
 set -e
 
 # Main sonar scanner
-SONAR_VERSION=3.1.0.1141
+SONAR_VERSION=4.2.0.1873
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
@@ -37,7 +37,7 @@ if [ ! -f $SONAR_BLD_ZIP ]; then
     wget --quiet $SONAR_BLD_URL/$SONAR_BLD_ZIP
 fi
 
-#Install sonar build wrapper
+# Install sonar build wrapper
 if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     echo "### Installing Sonar Build Wrapper..."
     if [ ! -f $SONAR_BLD_PKG ]; then
@@ -48,3 +48,6 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     sudo mv $SONAR_BLD_PKG/libinterceptor-i686.so $SONAR_PATH/bin/
     rm -rf $SONAR_BLD_PKG
 fi
+
+# Display the installed sonar version
+sonar-scanner --version

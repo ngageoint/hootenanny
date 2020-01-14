@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -55,8 +55,8 @@ class MapCleanerTest : public HootTestFixture
 public:
 
   MapCleanerTest()
-    : HootTestFixture("test-files/ops/",
-                      "test-output/ops/")
+    : HootTestFixture("test-files/ops/MapCleanerTest/",
+                      "test-output/ops/MapCleanerTest/")
   {
     setResetType(ResetAll);
   }
@@ -83,6 +83,5 @@ public:
 
 //putting this in the quick test suite causes MatchComparatorTest to fail
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCleanerTest, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MapCleanerTest, "current");
 
 }

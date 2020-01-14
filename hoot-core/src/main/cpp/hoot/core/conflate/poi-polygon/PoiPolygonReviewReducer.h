@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONREVIEWREDUCER_H
 #define POIPOLYGONREVIEWREDUCER_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/conflate/address/AddressParser.h>
 
@@ -37,8 +37,8 @@ namespace hoot
 {
 
 /**
- * Class intended to reduce the number of unnecessary reviews between POI's and polygons with the
- * goal of never causing a miss where there should be a match.  Any rule that results in an
+ * This class is intended to reduce the number of unnecessary reviews between POI's and polygons
+ * with the goal of never causing a miss where there should be a match.  Any rule that results in an
  * incorrect match found over the course of time testing against different datasets should be
  * removed from this class.
  *
@@ -48,7 +48,13 @@ namespace hoot
  * definition of what poi/poly conflation conflates, as well as modifications to the evidence
  * calculation in PoiPolygonMatch.  Alternatively, making another attempt at a poi/poly random
  * forest model could make it entirely obsolete (#2323).  At the very least, triggersRule could
- * benefit from being refactored into smaller chunks.
+ * benefit from being refactored into smaller chunks. - BDW
+ *
+ * This class was created almost entirely using the POI/Polygon regression test datasets C and D.
+ * Unfortunately, the data found in those tests to warrant creating the review reduction rules
+ * never had conflate case tests generated for them. This could eventually be done but will be
+ * very tedious, as data for each separate test case must be tracked down individually from those
+ * datasets.
  */
 class PoiPolygonReviewReducer : public Configurable
 {
@@ -56,12 +62,11 @@ class PoiPolygonReviewReducer : public Configurable
 public:
 
   // maybe encapsulate all these params in a class...this is nasty
-  PoiPolygonReviewReducer(const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds,
-                          const std::set<ElementId>& poiNeighborIds, double distance,
-                          double nameScoreThreshold, double nameScore, bool nameMatch,
-                          bool exactNameMatch, double typeScoreThreshold, double typeScore,
-                          bool typeMatch, double matchDistanceThreshold, bool addressMatch,
-                          bool addressParsingEnabled, PoiPolygonCachePtr infoCache);
+  PoiPolygonReviewReducer(
+    const ConstOsmMapPtr& map, const std::set<ElementId>& polyNeighborIds, double distance,
+    double nameScoreThreshold, double nameScore, bool nameMatch, bool exactNameMatch,
+    double typeScoreThreshold, double typeScore, bool typeMatch, double matchDistanceThreshold,
+    bool addressMatch, bool addressParsingEnabled, PoiPolygonInfoCachePtr infoCache);
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -76,12 +81,13 @@ public:
    */
   bool triggersRule(ConstNodePtr poi, ConstElementPtr poly);
 
+  QString getTriggeredRuleDescription() const { return _triggeredRuleDescription; }
+
 private:
 
   ConstOsmMapPtr _map;
 
   std::set<ElementId> _polyNeighborIds;
-  std::set<ElementId> _poiNeighborIds;
 
   double _distance;
   double _nameScoreThreshold;
@@ -96,21 +102,14 @@ private:
 
   QStringList _genericLandUseTagVals;
 
-  bool _keepClosestMatchesOnly;
-
   bool _addressParsingEnabled;
   AddressParser _addressParser;
 
-  PoiPolygonCachePtr _infoCache;
+  PoiPolygonInfoCachePtr _infoCache;
+
+  QString _triggeredRuleDescription;
 
   bool _nonDistanceSimilaritiesPresent() const;
-
-  bool _polyContainsPoiAsMember(ConstWayPtr poly, ConstElementPtr poi) const;
-  bool _polyContainsPoiAsMember(ConstRelationPtr poly, ConstElementPtr poi) const;
-
-  bool _hasAddress(ConstElementPtr element);
-
-  static bool _inCategory(ConstElementPtr element, const OsmSchemaCategory& category);
 };
 
 }

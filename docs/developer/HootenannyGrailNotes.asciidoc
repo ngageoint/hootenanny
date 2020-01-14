@@ -21,10 +21,24 @@ in OSM Overpass that isn't already in the Rails Port and pushing it to the Rails
 be any files generated that you can view in the UI because this service will take the OSM Overpass and the Rails Port data from
 the database and calculate the differential on the server without saving the datasets. While the datasets will not
 be saved, an osm file will be generated on the server.
+
+
+=== Upload Changeset
+
 In the jobs panel you can find the Derive Changeset job and under the actions there will be a cloud icon with an up arrow.
 This is what you use to upload the differential results to the Rails Port, but before doing that you can view stats on the differential
-upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations.
-The differential will not contain any secondary features involved in a review.
+upload. The stats will include the counts of create, modify, and delete for nodes, ways, and relations. Once an upload job is
+completed, the parent job will be marked as 'STALE' so that the parent job actions cannot be run again because that data
+will no longer be viable (versions have been incremented on the server). If there was a reference dataset from the rails port used in the process of making the upload job, that
+will be refreshed with the newly uploaded data.
+
+
+=== Derive Changeset Replacement
+
+This feature can be accessed under the Jobs panel for conflate or import jobs under the rows action buttons using the square
+button with dots icon. Once you click the icon a popup box will instruct you to select a reference dataset for which the
+replace data will be compared to and run.
+
 
 === Grail Conflate
 

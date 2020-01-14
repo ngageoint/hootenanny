@@ -4,7 +4,7 @@ set -e
 export OUT=test-output/cmd/slow/Ogr2OsmTranslation
 rm -rf $OUT
 mkdir -p $OUT
-HOOT_OPTS="-D merge.nearby.nodes.distance=1.0"
+HOOT_OPTS="-D duplicate.node.remover.distance.threshold=1.0"
 
 hoot convert $HOOT_OPTS -D shape.file.writer.cols="name;poi" test-files/OnePoint.osm $OUT/OnePoint.shp
 hoot convert --warn $HOOT_OPTS -D schema.translation.script=translations/Identity.js $OUT/OnePointPoints.shp $OUT/OnePointTranslated.osm

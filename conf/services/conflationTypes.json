@@ -25,12 +25,12 @@
         "matcher": "",
         "merger": "",
         "members": {
-            "differential.remove.unconflatable.data": "Pass unconflatable data from the secondary input to output",
+            "differential.remove.unconflatable.data": "Remove unconflatable data in the secondary input from the output",
+            "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from the output",
             "differential.snap.unconnected.roads": "Snap unconnected secondary roads to reference roads",
-	    "differential.treat.reviews.as.matches": "Treat reviews as matches and remove from output",
-            "snap.unconnected.ways.snap.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to neighboring roads",
-            "snap.unconnected.ways.use.existing.way.nodes": "Reuse highway nodes when snapping unconnected roads",
-            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected highway nodes to neighboring roads"
+            "snap.unconnected.ways.snap.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to existing roads",
+            "snap.unconnected.ways.use.existing.way.nodes": "Reuse existing road nodes when snapping unconnected roads",
+            "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to existing road nodes"
         }
     },
     "Roads": {
@@ -50,7 +50,7 @@
         "matcher": "hoot::BuildingMatchCreator",
         "merger": "hoot::BuildingMergerCreator",
         "members": {
-            "building.changed.review": "Use the changed review",
+            "building.changed.review": "Create reviews when a building has changed",
             "building.changed.review.iou.threshold": "Intersection over Union threshold below which the changed review is triggered",
             "building.date.format": "Date format",
             "building.date.tag.key": "Date tag key",
@@ -66,23 +66,23 @@
         "matcher": "hoot::ScriptMatchCreator,PoiGeneric.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "poi.ignore.type.if.name.present": "Ignore type if name present"
-       }
+            "poi.ignore.type.if.name.present": "Ignore type if name present"
+        }
     },
     "PoiPolygon": {
         "matcher": "hoot::PoiPolygonMatchCreator",
         "merger": "hoot::PoiPolygonMergerCreator",
         "members": {
-            "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and Poi to Polygon matches",
-            "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Merge many to one POI to polygon matches",
+	    "poi.polygon.additional.search.distance": "Additional search radius (m) to look for matches",
+            "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and POI to Polygon matches",
+            "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Merge many to one matches",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
             "poi.polygon.disable.same.source.conflation.match.tag.key.prefix.only": "Match key prefix only if same source conflation disabled",
-            "poi.polygon.keep.closest.matches.only": "Keep only the closest matching POI to a polygon",
+            "poi.polygon.keep.closest.matches.only": "Keep only the closest match only",
             "poi.polygon.match.distance.threshold" : "Match distance threshold",
             "poi.polygon.match.evidence.threshold": "Match evidence threshold",
             "poi.polygon.name.score.threshold": "Name score threshold",
-            "poi.polygon.promote.points.with.addresses.to.pois": "Promote point with addresses to POIs",
-            "poi.polygon.review.distance.threshold": "Review distance threshold",
+            "poi.polygon.promote.points.with.addresses.to.pois": "Promote points with addresses to POIs",
             "poi.polygon.review.evidence.threshold": "Review evidence threshold",
             "poi.polygon.review.if.matched.types": "Tags used to flag reviews",
             "poi.polygon.review.multiuse.buildings": "Review POI matches with multi-use buildings",
@@ -94,15 +94,15 @@
         "matcher": "hoot::ScriptMatchCreator,Area.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "search.radius.area": "Area search radius"
-       }
+            "search.radius.area": "Area search radius"
+        }
     },
     "Railways": {
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "search.radius.railway": "Railway search radius"
-       }
+            "search.radius.railway": "Railway search radius"
+        }
     },
     "Powerlines": {
         "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
@@ -113,7 +113,7 @@
         "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-	    "search.radius.waterway": "Waterway search radius"
+            "search.radius.waterway": "Waterway search radius"
         }
     }
 }

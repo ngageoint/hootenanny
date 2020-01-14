@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONTYPESCOREEXTRACTOR_H
 #define POIPOLYGONTYPESCOREEXTRACTOR_H
@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 // Qt
 #include <QMultiHash>
@@ -49,7 +49,7 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonTypeScoreExtractor"; }
 
-  PoiPolygonTypeScoreExtractor();
+  PoiPolygonTypeScoreExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
 
   virtual std::string getClassName() const { return PoiPolygonTypeScoreExtractor::className(); }
 
@@ -64,47 +64,6 @@ public:
                          const ConstElementPtr& poly) const;
 
   virtual void setConfiguration(const Settings& conf);
-
-  /**
-   * Determines if an element is a park
-   *
-   * @param element the element to examine
-   * @return true if it is a park; false otherwise
-   */
-  static bool isPark(ConstElementPtr element);
-
-  static bool isParkish(ConstElementPtr element);
-  static bool isPlayground(ConstElementPtr element);
-  static bool isSport(ConstElementPtr element);
-  static bool isSport(const Tags& tags);
-  static bool isRestroom(ConstElementPtr element);
-  static bool isParking(ConstElementPtr element);
-  static bool isSchool(ConstElementPtr element);
-  static bool isSpecificSchool(ConstElementPtr element);
-  static bool specificSchoolMatch(ConstElementPtr element1, ConstElementPtr element2);
-  static bool isReligion(ConstElementPtr element);
-  static bool isReligion(const Tags& tags);
-  static bool isRestaurant(ConstElementPtr element);
-  static bool isRestaurant(const Tags& tags);
-  static bool isNatural(ConstElementPtr element);
-
-  /**
-   * Determines if an element has more than one type associated with it
-   *
-   * @param element the element to examine
-   * @return true if it has more than one type; false otherwise
-   */
-  static bool hasMoreThanOneType(ConstElementPtr element);
-
-  /**
-   * Determines if an element has a type associated with it
-   *
-   * @param element the element to examine
-   * @return true if it has a type; false otherwise
-   */
-  static bool hasType(ConstElementPtr element);
-
-  static bool hasSpecificType(ConstElementPtr element);
 
   double getTypeScoreThreshold() { return _typeScoreThreshold; }
   void setTypeScoreThreshold(double threshold) { _typeScoreThreshold = threshold; }
@@ -124,7 +83,6 @@ public:
 private:
 
   double _typeScoreThreshold;
-  static QSet<QString> _allTagKeys;
   double _featureDistance;
   bool _printMatchDistanceTruth;
   static QMap<QString, QSet<QString>> _categoriesToSchemaTagValues;
@@ -139,8 +97,6 @@ private:
   // allow you to see the the final statistics printed out individually by translators, like
   // HootServicesTranslatorClient.
   static std::shared_ptr<ToEnglishTranslator> _translator;
-  //maps an OSM kvp to multiple possible strings such a feature's name might contain
-  static QMultiHash<QString, QString> _typeToNames;
 
   //best type kvp match for the poi
   mutable QString _poiBestKvp;
@@ -150,19 +106,16 @@ private:
   mutable QStringList _failedMatchRequirements;
   mutable bool _noTypeFound;
 
+  PoiPolygonInfoCachePtr _infoCache;
+
   double _getTagScore(ConstElementPtr poi, ConstElementPtr poly) const;
   QStringList _getRelatedTags(const Tags& tags) const;
-  bool _failsCuisineMatch(const Tags& t1, const Tags& t2) const;
-  bool _failsSportMatch(const Tags& t1, const Tags& t2) const;
-  bool _failsReligionMatch(const Tags& t1, const Tags& t2) const;
+  bool _failsCuisineMatch(const ConstElementPtr& e1, const ConstElementPtr& e2) const;
+  bool _failsSportMatch(const ConstElementPtr& e1, const ConstElementPtr& e2) const;
+  bool _failsReligionMatch(const ConstElementPtr& e1, const ConstElementPtr& e2) const;
 
   void _translateTagValue(const QString& tagKey, QString& tagValue) const;
   static QSet<QString> _getTagValueTokens(const QString& category);
-
-  static void _readTypeToNames();
-  static bool _typeHasName(const QString& kvp, const QString& name);
-  static QString _getMatchingTypeName(const QString& kvp, const QString& name);
-  static bool _haveMatchingTypeNames(const QString& kvp, const QString& name1, const QString& name2);
 
   bool _haveConflictingTags(const QString& tagKey, const Tags& t1, const Tags& t2, QString& tag1Val,
                             QString& tag2Val) const;

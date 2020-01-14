@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ImplicitTypeTaggerBase.h"
 
@@ -33,7 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/schema/ImplicitTagUtils.h>
-#include <hoot/core/algorithms/extractors/poi-polygon/PoiPolygonTypeScoreExtractor.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/util/Factory.h>
 
 // Qt
@@ -323,7 +323,7 @@ Tags ImplicitTypeTaggerBase::_applyCustomRules(const ElementPtr& e, const QStrin
 {
   Tags tagsToAdd;
 
-  if (PoiPolygonTypeScoreExtractor::isPark(e))
+  if (PoiPolygonSchema::isPark(e))
   {
     for (int i = 0; i < filteredNames.size(); i++)
     {

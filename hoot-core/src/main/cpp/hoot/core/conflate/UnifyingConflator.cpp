@@ -43,9 +43,7 @@
 #include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/criterion/ElementInIdListCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 // standard
 #include <algorithm>
@@ -286,7 +284,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   for (size_t i = 0; i < matchSets.size(); ++i)
   {
     PROGRESS_INFO(
-      "Converting match set " << i + 1 << " / " << matchSets.size() << " to a merger...");
+      "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
+      StringUtils::formatLargeNumber(matchSets.size()) << " to a merger...");
     _mergerFactory->createMergers(map, matchSets[i], _mergers);
   }
 

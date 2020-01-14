@@ -1014,8 +1014,8 @@ mgcp = {
             }
         } // End Cleanup loop
 
-        // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
-        // repeating the code
+        // Lifecycle and general cleaning
+        // This is a bit funky and should probably be done with a fancy function instead of repeating the code
         switch (tags.highway)
         {
             case undefined: // Break early if no value
@@ -1044,7 +1044,21 @@ mgcp = {
                 }
                 tags.condition = 'construction';
                 break;
-        }
+
+            // Doing this here so we preserve the "highway" tag
+            case 'bridleway':
+            case 'cycleway':
+            case 'footway':
+            case 'steps':
+                attrs.F_CODE = 'AP050'; // Trail
+                break;
+
+            case 'service':
+            case 'living_street':
+            case 'pedestrian':
+                attrs.F_CODE = 'AP030'; // Road
+                break;
+        } // End highway
 
         switch (tags.railway)
         {
@@ -1439,6 +1453,16 @@ mgcp = {
         {
             tags.bridge = 'yes';
             tags.note = translate.appendValue(tags.note,'Viaduct',';');
+        }
+
+        // "service = parking_aisle" is actually the road between rows of car spaces.
+        // If this is a line: make it into a road - the default
+        // If this is an area: make it into a car park.
+        if (tags.service == 'parking_aisle' && geometryType == 'Area')
+        {
+            delete tags.highway;
+            delete tags.service;
+            attrs.F_CODE = 'AQ140'; // Vehicle lot / car park
         }
 
         // Keep looking for an FCODE

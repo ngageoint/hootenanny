@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.osm.map;
 
@@ -39,7 +39,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -110,26 +109,9 @@ public class FolderResource {
         // was not visible to us -so- neither should this folder be:
         return false;
     }
-    static public Set<Long> getFolderIdsForUser(Users user) {
-        List<Folders> folders = getFoldersForUser(user);
-        Set<Long> out = new HashSet<Long>(folders.size());
-        for(Folders f : folders) {
-            out.add(f.getId());
-        }
-        return out;
-    }
-    static public List<Folders> getFoldersForUser(Users user) {
-        SQLQuery<Folders> sql = createQuery()
-                .select(folders)
-                .from(folders)
-                .where(folders.id.ne(0L));
-        if(user != null) {
-            sql.where(
-                    folders.userId.eq(user.getId()).or(folders.publicCol.isTrue())
-            );
-        }
-        List<Folders> folderRecordSet = sql.orderBy(folders.displayName.asc()).fetch();
 
+    static public List<Folders> getFoldersForUser(Users user) {
+        List<Folders> folderRecordSet = DbUtils.getFoldersForUser(user);
         List<Folders> out = new ArrayList<Folders>();
         for(Folders f : folderRecordSet) {
             if(folderIsPublic(folderRecordSet, f, user)) {
@@ -196,7 +178,7 @@ public class FolderResource {
 
         // The above query is only a rough filter, we need to filter
         // recursively:
-        Set<Long> foldersUserCanSee = FolderResource.getFolderIdsForUser(user);
+        Set<Long> foldersUserCanSee = DbUtils.getFolderIdsForUser(user);
         for(FolderMapMappings link : links) {
             if(foldersUserCanSee.contains(link.getFolderId())) {
                 linksOut.add(link);
@@ -496,6 +478,7 @@ public class FolderResource {
             folder.setUserId(folderRecord.getUserId());
             folder.setParentId(folderRecord.getParentId());
             folder.setPublic(folderRecord.getPublicCol());
+            folder.setCreatedAt(folderRecord.getCreatedAt());
             folderRecordList.add(folder);
         }
 

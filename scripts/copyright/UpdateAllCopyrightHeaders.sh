@@ -87,10 +87,25 @@ echo "logFile: " $logFile
 if [ $# -eq 0 ]; then
     updateMode=false
     updateParam=""
+    debugParam=""
 elif [ $# -eq 1 ]; then
     if [ $1 == '--update' ] || [ $1 == '-u' ]; then
         updateMode=true
         updateParam='-u'
+    elif [ $1 == '--debug' ] || [ $1 == '-d' ]; then
+        debugParam='-d'
+    else
+        ExitScript 6  # Unrecognized parameter
+    fi
+elif [ $# -eq 2 ]; then
+    if [ $1 == '--update' ] || [ $2 == '--update' ] || [ $1 == '-u' ] || [ $2 == '-u' ]; then
+        updateMode=true
+        updateParam='-u'
+    else
+        ExitScript 6  # Unrecognized parameter
+    fi
+    if [ $1 == '--debug' ] || [ $2 == '--debug' ] || [ $1 == '-d' ] || [ $2 == '-d' ]; then
+        debugParam='-d'
     else
         ExitScript 6  # Unrecognized parameter
     fi
@@ -104,7 +119,7 @@ if [ ! -f $HOOT_HOME/scripts/copyright/LicenseTemplate.txt ]; then
 fi
 
 # Run the checks in parallel
-parallel --joblog $logJobs $HOOT_HOME/scripts/copyright/UpdateDirCopyrightHeaders.sh {} $logFile $updateParam ::: \
+parallel --joblog $logJobs $HOOT_HOME/scripts/copyright/UpdateDirCopyrightHeaders.sh {} $logFile $updateParam $debugParam ::: \
   $HOOT_HOME/hoot-core \
   $HOOT_HOME/hoot-core-test \
   $HOOT_HOME/hoot-services \

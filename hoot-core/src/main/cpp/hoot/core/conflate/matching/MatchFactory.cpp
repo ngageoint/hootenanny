@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
@@ -62,7 +62,6 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
   for (size_t i = 0; i < _creators.size(); ++i)
   {
     MatchPtr m = _creators[i]->createMatch(map, eid1, eid2);
-
     if (m)
     {
       return m;
@@ -270,8 +269,8 @@ MatchFactory& MatchFactory::getInstance()
 
   const QStringList matchCreators = ConfigOptions().getMatchCreators();
   const QStringList mergerCreators = ConfigOptions().getMergerCreators();
-  LOG_VARD(matchCreators);
-  LOG_VARD(mergerCreators);
+  LOG_VART(matchCreators);
+  LOG_VART(mergerCreators);
 
   if (matchCreators.size() != mergerCreators.size())
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddressScoreExtractor.h"
 
@@ -39,11 +39,15 @@ using namespace std;
 namespace hoot
 {
 
+QHash<ElementId, QList<Address>> AddressScoreExtractor::_addressesCache;
+int AddressScoreExtractor::_addressCacheHits = 0;
+
 HOOT_FACTORY_REGISTER(FeatureExtractor, AddressScoreExtractor)
 
 AddressScoreExtractor::AddressScoreExtractor() :
 _addressesProcessed(0),
-_matchAttemptMade(false)
+_matchAttemptMade(false),
+_cacheEnabled(true)
 {
 }
 
@@ -65,6 +69,8 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
     preTranslateTagValuesToEnglish = false;
   }
   _addressParser.setPreTranslateTagValuesToEnglish(preTranslateTagValuesToEnglish, conf);
+
+  _cacheEnabled = config.getAddressScorerEnableCaching();
 }
 
 QList<Address> AddressScoreExtractor::_getElementAddresses(
@@ -72,6 +78,18 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
   const ConstElementPtr& elementBeingComparedWith) const
 {
   LOG_TRACE("Collecting addresses from: " << element->getElementId() << "...");
+
+  if (_cacheEnabled)
+  {
+    QHash<ElementId, QList<Address>>::const_iterator itr =
+      _addressesCache.find(element->getElementId());
+    if (itr != _addressesCache.end())
+    {
+      _addressCacheHits++;
+      return itr.value();
+    }
+  }
+
   //LOG_VART(element);
   QList<Address> elementAddresses = _addressParser.parseAddresses(*element);
   if (elementAddresses.size() == 0)
@@ -93,6 +111,12 @@ QList<Address> AddressScoreExtractor::_getElementAddresses(
           *relation, map, elementBeingComparedWith->getElementId());
     }
   }
+
+  if (_cacheEnabled)
+  {
+    _addressesCache[element->getElementId()] = elementAddresses;
+  }
+
   return elementAddresses;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
@@ -43,10 +43,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonCache.h>
-
-// Qt
-#include <QElapsedTimer>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonInfoCache.h>
 
 namespace hoot
 {
@@ -69,9 +66,8 @@ public:
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
   PoiPolygonMatch(const ConstOsmMapPtr& map, ConstMatchThresholdPtr threshold,
     std::shared_ptr<const PoiPolygonRfClassifier> rf,
-    PoiPolygonCachePtr infoCache,
-    const std::set<ElementId>& polyNeighborIds = std::set<ElementId>(),
-    const std::set<ElementId>& poiNeighborIds = std::set<ElementId>());
+    PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr(),
+    const std::set<ElementId>& polyNeighborIds = std::set<ElementId>());
 
   virtual void setConfiguration(const Settings& conf) override;
 
@@ -79,7 +75,8 @@ public:
 
   virtual const MatchClassification& getClassification() const override { return _class; }
 
-  virtual MatchMembers getMatchMembers() const override { return MatchMembers::Poi | MatchMembers::Polygon; }
+  virtual MatchMembers getMatchMembers() const override
+  { return MatchMembers::Poi | MatchMembers::Polygon; }
 
   virtual QString getMatchName() const override { return _matchName; }
 
@@ -88,7 +85,8 @@ public:
   virtual double getProbability() const override { return _class.getMatchP(); }
 
   // Is the right implementation for this?
-  virtual bool isConflicting(const ConstMatchPtr& /*other*/, const ConstOsmMapPtr& /*map*/) const override
+  virtual bool isConflicting(const ConstMatchPtr& /*other*/,
+                             const ConstOsmMapPtr& /*map*/) const override
   { return false; }
 
   virtual bool isWholeGroup() const override { return true; }
@@ -118,7 +116,6 @@ public:
   void setNameScoreThreshold(const double threshold);
   void setTypeScoreThreshold(const double threshold);
   void setReviewIfMatchedTypes(const QStringList& types);
-  void setEnableAdvancedMatching(const bool enabled) { _enableAdvancedMatching = enabled; }
   void setEnableReviewReduction(const bool enabled) { _enableReviewReduction = enabled; }
   void setMatchEvidenceThreshold(const int threshold) { _matchEvidenceThreshold = threshold; }
   void setReviewEvidenceThreshold(const int threshold) { _reviewEvidenceThreshold = threshold; }
@@ -174,7 +171,8 @@ private:
   double _distance;
   //max distance allowed between the elements where they can be considered a distance match
   double _matchDistanceThreshold;
-  //max distance allowed between the elements where they can be considered for review
+  // max distance allowed between the elements where they can be considered for review; note: this
+  // possibly should be renamed to search distance
   double _reviewDistanceThreshold;
   double _reviewDistancePlusCe;
   //true if the distance between the elements, given CE, is within the review distance; absolute
@@ -183,7 +181,7 @@ private:
 
   // should be able to shrink some of this scorer code down with some abstraction
 
-  PoiPolygonTypeScoreExtractor _typeScorer;
+  std::shared_ptr<PoiPolygonTypeScoreExtractor> _typeScorer;
   double _typeScore;
   double _typeScoreThreshold;
   QStringList _reviewIfMatchedTypes;
@@ -200,15 +198,12 @@ private:
   double _phoneNumberScore;
   bool _phoneNumberMatchEnabled;
 
-  //These two are used by PoiPolygonReviewReducer and PoiPolygonDistance
+  //These is used by PoiPolygonReviewReducer
   // all the polys within the search radius of the POI being matched
   std::set<ElementId> _polyNeighborIds;
-  // all the pois within the search radius of the POI being matched
-  std::set<ElementId> _poiNeighborIds;
 
   MatchClassification _class;
 
-  bool _enableAdvancedMatching;
   bool _enableReviewReduction;
 
   bool _disableSameSourceConflation;
@@ -226,9 +221,9 @@ private:
   PoiPolygonPoiCriterion _poiCrit;
   PoiPolygonPolyCriterion _polyCrit;
 
-  std::shared_ptr<QElapsedTimer> _timer;
+  PoiPolygonInfoCachePtr _infoCache;
 
-  PoiPolygonCachePtr _infoCache;
+  int _timingThreshold;
 
   void _categorizeElementsByGeometryType();
 
