@@ -93,6 +93,24 @@ private:
    */
   int _retainClosestDistanceMatchesOnlyByType(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
+
+  QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(
+    const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr);
+
+  QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
+    const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr);
+
+  std::vector<ConstMatchPtr> _filterOutNonClosestMatches(
+    const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
+    const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
+    const QString& matchTypeStr);
+
+  bool _containsMatch(
+    const ElementId& elementId1, const ElementId& elementId2,
+    const std::vector<ConstMatchPtr>& matches) const;
+
+  int _numMatchesContainingElement(const ElementId& elementId,
+                                   const std::vector<ConstMatchPtr>& matches) const;
 };
 
 }

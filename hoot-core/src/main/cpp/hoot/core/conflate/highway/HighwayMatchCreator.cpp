@@ -322,8 +322,8 @@ MatchPtr HighwayMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId e
     _tagAncestorDiff, map->getElement(eid1), map->getElement(eid2));
 }
 
-void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-  ConstMatchThresholdPtr threshold)
+void HighwayMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   QElapsedTimer timer;
   timer.start();
@@ -336,7 +336,8 @@ void HighwayMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<C
   map->visitRelationsRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " highway match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    " highway match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const

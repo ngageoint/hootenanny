@@ -420,7 +420,8 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   map->visitRelationsRo(v);
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
-    " building match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    " building match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const

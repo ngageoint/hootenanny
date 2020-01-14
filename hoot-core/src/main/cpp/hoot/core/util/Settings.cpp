@@ -128,7 +128,7 @@ private:
     for (pt::ptree::value_type& element : tree.get_child(""))
     {
       const QString name = QString::fromUtf8(element.first.c_str());
-      LOG_VART(name);
+      //LOG_VART(name);
       //  Skip comments
       if (name.startsWith("#"))
         continue;

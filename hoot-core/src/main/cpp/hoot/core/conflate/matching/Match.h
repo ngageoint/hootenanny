@@ -141,6 +141,14 @@ public:
 
   virtual QString getDescription() const = 0;
 
+  /**
+   * TODO
+   *
+   * @param other
+   * @return
+   */
+  bool operator==(const Match& other) const;
+
 protected:
 
   /*

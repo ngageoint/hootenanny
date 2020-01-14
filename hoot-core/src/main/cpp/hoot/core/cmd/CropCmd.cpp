@@ -37,6 +37,7 @@
 
 // Qt
 #include <QStringList>
+#include <QElapsedTimer>
 
 using namespace geos::geom;
 using namespace std;
@@ -64,6 +65,8 @@ public:
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
+    QElapsedTimer timer;
+    timer.start();
     QString in = args[0];
     QString out = args[1];
     _env.reset(new Envelope(GeometryUtils::envelopeFromConfigString(args[2])));
@@ -78,6 +81,8 @@ public:
     cropper.apply(map);
 
     IoUtils::saveMap(map, out);
+
+    LOG_INFO("Cropping completed in: " + StringUtils::millisecondsToDhms(timer.elapsed()) + ".");
 
     return 0;
   }

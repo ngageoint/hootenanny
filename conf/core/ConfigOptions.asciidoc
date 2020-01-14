@@ -107,9 +107,9 @@ the review will receive them as well.
 === add.uuid.visitor.key
 
 * Data Type: string
-* Default Value: ``
+* Default Value: `uuid`
 
-Tag key used by AddUuidVisitor for adding custom unique ID's to data. TODO: default this to 'uuid'?
+Tag key used by AddUuidVisitor for adding custom unique ID's to data.
 
 === address.additional.tag.keys
 

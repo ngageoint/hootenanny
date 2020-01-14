@@ -588,8 +588,8 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
   return MatchPtr();
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-                                       ConstMatchThresholdPtr threshold)
+void ScriptMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   if (!_script)
   {
@@ -617,7 +617,8 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<Co
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
-    " match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
