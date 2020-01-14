@@ -142,10 +142,10 @@ public:
   virtual QString getDescription() const = 0;
 
   /**
-   * TODO
+   * Determines if this matches equals another match
    *
-   * @param other
-   * @return
+   * @param other the match being compared with
+   * @return true if this matches matches the comparision match; false otherwise
    */
   bool operator==(const Match& other) const;
 

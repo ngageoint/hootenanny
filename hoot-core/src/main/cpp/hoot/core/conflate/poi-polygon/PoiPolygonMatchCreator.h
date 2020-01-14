@@ -94,21 +94,33 @@ private:
   int _retainClosestDistanceMatchesOnlyByType(
     std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map, const bool processPois);
 
+  /*
+   * Organizes matches with key=element's ID and value=match its associated with; one
+   * element may be involved in more than one match
+   */
   QMultiMap<ElementId, ConstMatchPtr> _indexMatchesById(
     const std::vector<ConstMatchPtr>& matches, const QString& matchTypeStr);
 
+  /*
+   * Finds all instances where an element is involved in more than one match; returns a collection
+   * with the element's ID and all the matches its involved with
+   */
   QMap<ElementId, QList<ConstMatchPtr>> _getOverlappingMatches(
     const QMultiMap<ElementId, ConstMatchPtr>& matchesById, const QString& matchTypeStr);
 
+  /*
+   * Cycles through each overlapping match and keeps only the single match associated with each
+   * element that has the shortest distance between POI and polygon
+   */
   std::vector<ConstMatchPtr> _filterOutNonClosestMatches(
     const QMap<ElementId, QList<ConstMatchPtr>>& overlappingMatches,
     const std::vector<ConstMatchPtr>& allMatches, const ConstOsmMapPtr& map,
     const QString& matchTypeStr);
 
+  //debugging only methods
   bool _containsMatch(
     const ElementId& elementId1, const ElementId& elementId2,
     const std::vector<ConstMatchPtr>& matches) const;
-
   int _numMatchesContainingElement(const ElementId& elementId,
                                    const std::vector<ConstMatchPtr>& matches) const;
 };
