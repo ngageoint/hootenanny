@@ -9,6 +9,7 @@ pipeline {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
+        BUILD_DEBUG = 'yes'
     }
 
     triggers {
@@ -95,7 +96,7 @@ pipeline {
                     }
                 }
             }
-            steps{
+            steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
@@ -112,6 +113,8 @@ pipeline {
             steps {
                 // Set build verbosity
                 sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_VERBOSE=${env.BUILD_VERBOSE}\" | sudo tee -a /etc/environment'"
+                // Set debug/release build
+                sh "vagrant ssh ${params.Box} -c 'echo \"export BUILD_DEBUG=${env.BUILD_DEBUG}\" | sudo tee -a /etc/environment'"
                 // Perform remainder of provisioning
                 sh "vagrant provision ${params.Box} --provision-with build,EGD,tomcat"
                 // Configure authentication and reboot tomcat
