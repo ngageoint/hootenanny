@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="2.0604203" minlon="45.3337969" maxlat="2.061404" maxlon="45.3341006"/>
+    <node visible="true" id="-2334031" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604203000000001" lon="45.3339336000000017">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.183Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{b7ac6b6d-e2da-426d-bb37-9fa8c3d447ff}"/>
+    </node>
+    <node visible="true" id="-2334004" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0611735000000002" lon="45.3338599000000002">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.157Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{5d5e8411-0c1c-4614-9304-e4733c2be73c}"/>
+    </node>
+    <node visible="true" id="-2333989" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0608799000000002" lon="45.3339550000000031">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.162Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{f9f4778b-6948-408e-bc41-594648f446f4}"/>
+    </node>
+    <node visible="true" id="-2333707" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0607609999999998" lon="45.3341005999999993">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.093Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{310e2026-acb4-46e4-846d-1d0595497db8}"/>
+    </node>
+    <node visible="true" id="-2333531" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0613812000000000" lon="45.3340998999999982">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="unconfirmed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.007Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{bd5db17c-a076-4d5d-8317-6b8287cceba9}"/>
+    </node>
+    <node visible="true" id="-2333154" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0608409999999999" lon="45.3338236000000023">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.213Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{3647cb73-8217-41de-bba3-e26e4c609442}"/>
+    </node>
+    <node visible="true" id="-2332853" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0613812000000000" lon="45.3340998999999982">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="unconfirmed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.007Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{bd5db17c-a076-4d5d-8317-6b8287cceba9}"/>
+    </node>
+    <node visible="true" id="-2332813" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0611950000000001" lon="45.3340960000000024">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:38.972Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{25639d67-67e7-4f9b-9286-3e9959c6a5d5}"/>
+    </node>
+    <node visible="true" id="-2332514" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0614040000000000" lon="45.3337969000000029">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:38.859Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{fe02ed7d-16c0-483d-a619-96bcfd6cb5a2}"/>
+    </node>
+    <node visible="true" id="-2332454" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0608409999999999" lon="45.3338236000000023">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.213Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{3647cb73-8217-41de-bba3-e26e4c609442}"/>
+    </node>
+    <node visible="true" id="-2332407" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0604203000000001" lon="45.3339336000000017">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.183Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{b7ac6b6d-e2da-426d-bb37-9fa8c3d447ff}"/>
+    </node>
+    <node visible="true" id="-2332323" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0611735000000002" lon="45.3338599000000002">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.157Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{5d5e8411-0c1c-4614-9304-e4733c2be73c}"/>
+    </node>
+    <node visible="true" id="-2332320" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0608799000000002" lon="45.3339550000000031">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.162Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{f9f4778b-6948-408e-bc41-594648f446f4}"/>
+    </node>
+    <node visible="true" id="-2332061" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0607609999999998" lon="45.3341005999999993">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:39.093Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{310e2026-acb4-46e4-846d-1d0595497db8}"/>
+    </node>
+    <node visible="true" id="-2331329" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0611950000000001" lon="45.3340960000000024">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:38.972Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{25639d67-67e7-4f9b-9286-3e9959c6a5d5}"/>
+    </node>
+    <node visible="true" id="-2331006" timestamp="1970-01-01T00:00:00Z" version="1" lat="2.0614040000000000" lon="45.3337969000000029">
+        <tag k="admin_level1:name" v="Southwest Somalia"/>
+        <tag k="is_in:country_code" v="SO"/>
+        <tag k="source:2" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="is_in:city" v="Muqdisho"/>
+        <tag k="hoot:status" v="Invalid"/>
+        <tag k="transient" v="no"/>
+        <tag k="building" v="residential"/>
+        <tag k="hgis:imagery_confirmed" v="assessed"/>
+        <tag k="hgis:accuracy" v="high"/>
+        <tag k="source:datetime" v="April 2016"/>
+        <tag k="source:datetime:2" v="May 2016"/>
+        <tag k="admin_level3:name" v="Mogadisho"/>
+        <tag k="source:ingest:datetime" v="2017-04-05T19:32:38.859Z"/>
+        <tag k="source" v="Wikimapia"/>
+        <tag k="admin_level2:name" v="Banaadir"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="is_in:country" v="Somalia"/>
+        <tag k="uuid" v="{fe02ed7d-16c0-483d-a619-96bcfd6cb5a2}"/>
+    </node>
+</osm>

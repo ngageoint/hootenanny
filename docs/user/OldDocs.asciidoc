@@ -70,14 +70,36 @@ the two features, name similarity, type similarity, address similarity, and phon
 [[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options
 
-POI to POlygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of 
+POI to Polygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of 
 User Guide for more detail.
 
 [[PoiToPolygonStatistics]]
 ==== Statistics
 
-Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a
-different definition than those conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User 
+Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those 
+conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other 
+POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions 
+section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
+
+[[PoiToPolygonUseCases]]
+==== Use Cases
+
+===== Keep Closest Matches Only
+
+By default, POI to Polygon uses a fairly large search radius to try consider as many things possible that might need to be matched together.
+If the following are true, you may want to tweak POI to Polygon conflation to keep the closest distance matches only:
+
+1) You are fairly confident in your geometries across both layers.
+2) You have mostly generic type information on your features.
+3) You are trying to generate fewer reviews at the expense of possibly missing some matches.
+
+In this situation you could run with the following option set:
+
+poi.polygon.keep.closest.matches.only=true - When a feature is matched to more than one other features, only the match with smallest distance between features is kept, despite the search radius
+poi.polygon.additional.search.distance=0 - This reduces the overall search radius, thus reducing reviews (possible also matches) and increasing
+runtime performance.
+poi.polygon.match.threshold=1 - This will prevent reviews from being presented completely.
 
 [[AreaToAreaConflation]]
 === Area to Area Conflation
