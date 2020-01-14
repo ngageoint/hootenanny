@@ -588,8 +588,8 @@ MatchPtr ScriptMatchCreator::createMatch(const ConstOsmMapPtr& map, ElementId ei
   return MatchPtr();
 }
 
-void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-                                       ConstMatchThresholdPtr threshold)
+void ScriptMatchCreator::createMatches(
+  const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches, ConstMatchThresholdPtr threshold)
 {
   if (!_script)
   {
@@ -614,6 +614,12 @@ void ScriptMatchCreator::createMatches(const ConstOsmMapPtr& map, std::vector<Co
   LOG_VARD(*threshold);
   // TODO: Can we filter the element types we iterate over here this based on the script being run?
   map->visitRo(v);
+  // total match count inaccurate here
+//  LOG_INFO(
+//    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
+//    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
+//    " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+//    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
