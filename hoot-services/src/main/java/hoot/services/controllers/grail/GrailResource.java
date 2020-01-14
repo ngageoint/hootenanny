@@ -799,12 +799,6 @@ public class GrailResource {
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
 
-// Comment this out to allow overwrite as we're now using this endpoint to
-// refresh a grail reference layer after a changeset affecting it is uploaded
-//        if (DbUtils.mapExists(layerName)) {
-//            throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
-//        }
-
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
 
