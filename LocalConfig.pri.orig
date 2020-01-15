@@ -8,6 +8,8 @@ CONFIG -= debug
 debug {
   DEFINES += DEBUG
 
+  QMAKE_CXXFLAGS+=-g -Og
+
   # Runs expensive validation on several data structures to make sure everything is in sync.
   #DEFINES += VALIDATE_ON
 }
