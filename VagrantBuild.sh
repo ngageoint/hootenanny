@@ -42,6 +42,13 @@ if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     cp LocalConfig.pri.orig LocalConfig.pri
     sed -i s/"QMAKE_CXX=g++"/"#QMAKE_CXX=g++"/g LocalConfig.pri
     sed -i s/"#QMAKE_CXX=ccache g++"/"QMAKE_CXX=ccache g++"/g LocalConfig.pri
+    if [ "$BUILD_DEBUG" == "yes" ]; then
+        echo 'Building in DEBUG mode...'
+        sed -i s/"CONFIG += release"/"#CONFIG += release"/ LocalConfig.pri
+        sed -i s/"CONFIG -= debug"/"#CONFIG -= debug"/ LocalConfig.pri
+        sed -i s/"#CONFIG += debug"/"CONFIG += debug"/ LocalConfig.pri
+        sed -i s/"#CONFIG -= release"/"CONFIG -= release"/ LocalConfig.pri
+    fi
 fi
 
 echo "Building Hoot..."
