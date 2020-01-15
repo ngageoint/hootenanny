@@ -132,6 +132,11 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId
 
     // set the status on all keeper ways to conflated.
     merger->setKeeperStatus(Status::Conflated);
+    if (ConfigOptions().getWriterIncludeDebugTags())
+    {
+      Tags tagsToAdd(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
+      merger->addKeeperTags(tagsToAdd);
+    }
 
     LOG_DEBUG("Parsing scrap nodes...");
     // go through all the nodes in the scrap

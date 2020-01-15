@@ -61,6 +61,8 @@ public:
 
   static std::string className() { return "hoot::PoiPolygonMatch"; }
 
+  static const QString MATCH_NAME;
+
   PoiPolygonMatch();
   // this constructor added primarily for testing purposes
   PoiPolygonMatch(ConstMatchThresholdPtr threshold);
@@ -78,7 +80,7 @@ public:
   virtual MatchMembers getMatchMembers() const override
   { return MatchMembers::Poi | MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const override { return _matchName; }
+  virtual QString getMatchName() const override { return MATCH_NAME; }
 
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
@@ -148,8 +150,6 @@ public:
 private:
 
   friend class PoiPolygonMergerCreatorTest;
-
-  static QString _matchName;
 
   ConstOsmMapPtr _map;
 

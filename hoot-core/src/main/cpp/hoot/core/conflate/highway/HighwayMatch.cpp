@@ -56,8 +56,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, HighwayMatch)
 
+const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
-QString HighwayMatch::_matchName = "Highway";
 
 HighwayMatch::HighwayMatch() : Match()
 {

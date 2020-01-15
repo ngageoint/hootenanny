@@ -275,9 +275,9 @@ function removeElement(map, e)
  * Snaps the ways in the second input to the first input. The replaced array will
  * be updated appropriately to reflect the elements that were replaced.
  */
-function snapWays(sublineMatcher, map, pairs, replaced)
+function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 {
-  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced);
+  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
 }
 
 /**

@@ -53,6 +53,7 @@
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 using namespace std;
 
@@ -228,6 +229,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   keeper->setTags(_getMergedTags(e1, e2));
   keeper->setStatus(Status::Conflated);
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    keeper->setTag(MetadataTags::HootMatchedBy(), BuildingMatch::MATCH_NAME);
+  }
 
   LOG_TRACE("BuildingMerger: keeper\n" << OsmUtils::getElementDetailString(keeper, map));
   LOG_TRACE("BuildingMerger: scrap\n" << OsmUtils::getElementDetailString(scrap, map));

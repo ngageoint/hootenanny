@@ -79,6 +79,8 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
       FunctionTemplate::New(current, setStatusString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTags"),
       FunctionTemplate::New(current, setTags));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setTag"),
+      FunctionTemplate::New(current, setTag));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toJSON"),
       FunctionTemplate::New(current, toString));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
@@ -241,12 +243,35 @@ void ElementJs::setTags(const FunctionCallbackInfo<Value>& args)
   if (!e)
   {
     args.GetReturnValue().Set(
-      current->ThrowException(HootExceptionJs::create(IllegalArgumentException("Unable to set tags on a const Element."))));
+      current->ThrowException(
+        HootExceptionJs::create(IllegalArgumentException("Unable to set tags on a const Element."))));
   }
   else
   {
     Tags& tags = ObjectWrap::Unwrap<TagsJs>(args[0]->ToObject())->getTags();
     e->setTags(tags);
+    args.GetReturnValue().SetUndefined();
+  }
+}
+
+void ElementJs::setTag(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ElementPtr e = ObjectWrap::Unwrap<ElementJs>(args.This())->getElement();
+
+  if (!e)
+  {
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        HootExceptionJs::create(IllegalArgumentException("Unable to set tag on a const Element."))));
+  }
+  else
+  {
+    const QString tagKey = toCpp<QString>(args[0]);
+    const QString tagVal = toCpp<QString>(args[1]);
+    e->setTag(tagKey, tagVal);
     args.GetReturnValue().SetUndefined();
   }
 }

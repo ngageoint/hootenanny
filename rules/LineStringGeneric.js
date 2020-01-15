@@ -139,7 +139,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
   // snap the ways in the second input to the first input. Use the default tag 
   // merge method.
-  var result = snapWays(sublineMatcher, map, pairs, replaced);
+  var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
   return result;
 };
 

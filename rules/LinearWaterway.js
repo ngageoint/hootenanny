@@ -8,8 +8,7 @@ exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("waterway.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("waterway.review.threshold"));
-// See #3047
-exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
+exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion"; // See #3047
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(
@@ -135,10 +134,9 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.trace("Merging elements.");
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced);
+  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

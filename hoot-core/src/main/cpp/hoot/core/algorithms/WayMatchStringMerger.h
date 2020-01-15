@@ -158,6 +158,13 @@ public:
    */
   void setKeeperStatus(Status s);
 
+  /**
+   * TODO
+   *
+   * @param tags
+   */
+  void addKeeperTags(const Tags& tags);
+
   void setTagMerger(ConstTagMergerPtr tagMerger) { _tagMerger = tagMerger; }
 
   /**

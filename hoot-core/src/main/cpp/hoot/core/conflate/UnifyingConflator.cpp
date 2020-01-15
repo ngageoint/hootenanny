@@ -173,14 +173,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
-//  if (ConfigOptions(_settings).getConflateMatchUnmatchedWithGeneric())
-//  {
-//    // For any remaining unmatched features (features hoot didn't have a predefined match for),
-//    // let's see if we can get a match with any of the generic matchers. This must be done in a
-//    // separate step since we don't want generic conflate matches conflicting with the (probably
-//    // more accurate) non-generic conflate matches that we already have.
-//    _addGenericMatches(map);
-//  }
   // TODO: add docs for this
   _removeConflictingGenericGeometryMatches(_matches);
 
@@ -456,74 +448,6 @@ void UnifyingConflator::_removeConflictingGenericGeometryMatches(
   matches = updatedMatches;
   LOG_DEBUG("Added " << matches.size() - matchesSizeBefore << " generic matches.");
 }
-
-//void UnifyingConflator::_addGenericMatches(const ConstOsmMapPtr& map)
-//{
-//  LOG_INFO("Adding generic matches...");
-//  LOG_VARD(map->size());
-
-//  // get the ids of all unmatched features
-//  QSet<ElementId> elementIdsInvolvedInMatches;
-//  for (std::vector<ConstMatchPtr>::const_iterator matchItr = _matches.begin();
-//       matchItr != _matches.end(); ++matchItr)
-//  {
-//    ConstMatchPtr match = *matchItr;
-//    std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-//    for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr = matchPairs.begin();
-//         matchPairItr != matchPairs.end(); ++matchPairItr)
-//    {
-//      elementIdsInvolvedInMatches.insert(matchPairItr->first);
-//      elementIdsInvolvedInMatches.insert(matchPairItr->second);
-//    }
-//  }
-//  LOG_VARD(elementIdsInvolvedInMatches.size());
-
-//  // copy out a subset map with only unmatched features
-//  ElementCriterionPtr idCrit(
-//    new NotCriterion(
-//      new ElementInIdListCriterion(elementIdsInvolvedInMatches.toList().toVector().toStdVector())));
-//  CopyMapSubsetOp mapCopier(map, idCrit);
-//  OsmMapPtr unmatchedFeatures(new OsmMap());
-//  mapCopier.apply(unmatchedFeatures);
-//  LOG_VARD(unmatchedFeatures->size());
-
-//  // conflate the unmatched features
-//  MatchFactory::getInstance().reset();
-//  QStringList genericMatchers;
-//  genericMatchers.append("hoot::ScriptMatchCreator,PointGeneric.js");
-//  genericMatchers.append("hoot::ScriptMatchCreator,LineStringGeneric.js");
-//  genericMatchers.append("hoot::ScriptMatchCreator,PolygonGeneric.js");
-//  const QStringList originalMatchCreators = conf().getList("match.creators");
-//  conf().set("match.creators", genericMatchers);
-//  QStringList mergerCreators = conf().getList("merger.creators");
-//  for (int i = 0; i < 3; i++)
-//  {
-//    mergerCreators.append("hoot::ScriptMergerCreator");
-//  }
-//  conf().set("merger.creators", mergerCreators);
-
-//  std::vector<ConstMatchPtr> genericMatches;
-//  if (_matchThreshold.get())
-//  {
-//    _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds, _matchThreshold);
-//  }
-//  else
-//  {
-//    _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds);
-//  }
-//  LOG_VARD(genericMatches.size());
-
-//  // don't think this is actually necessary but doing it anyway...
-//  conf().set("match.creators", originalMatchCreators);
-//  //conf().set("merger.creators", originalMergerCreators);
-
-//  // combine the new matches with the existing ones
-//  const int numMatchesBeforeAddingGeneric = _matches.size();
-//  _matches.insert(std::end(_matches), std::begin(genericMatches), std::end(genericMatches));
-//  LOG_DEBUG("Matches size after adding generic: " << _matches.size());
-//  LOG_DEBUG(
-//    "Added " << (int)_matches.size() - numMatchesBeforeAddingGeneric << " generic matches.");
-//}
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
                           const pair<ElementId, ElementId>& pair2)

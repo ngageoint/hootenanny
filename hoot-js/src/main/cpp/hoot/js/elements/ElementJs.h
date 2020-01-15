@@ -73,6 +73,7 @@ protected:
   static void getTags(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setStatusString(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setTags(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setTag(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toString(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:

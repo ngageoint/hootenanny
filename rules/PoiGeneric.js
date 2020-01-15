@@ -12,6 +12,7 @@ exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());
@@ -425,10 +426,15 @@ exports.matchScore = function(map, e1, e2) {
 
 exports.mergePair = function(map, e1, e2)
 {
-    // replace instances of e2 with e1 and merge tags
-    mergeElements(map, e1, e2);
-    e1.setStatusString("conflated");
-    return e1;
+  // replace instances of e2 with e1 and merge tags
+  mergeElements(map, e1, e2);
+  e1.setStatusString("conflated");
+  if (exports.writeDebugTags == "true")
+  {
+    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    e1.setTag("hoot:matchedBy", exports.baseFeatureType);
+  }
+  return e1;
 };
 
 /**

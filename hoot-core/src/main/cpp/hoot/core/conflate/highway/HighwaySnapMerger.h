@@ -56,6 +56,10 @@ public:
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
+  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+
+  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
+
 protected:
 
   // When roads are split and the pieces stored in multilinestring relations, this decides if the
@@ -69,13 +73,14 @@ protected:
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  virtual QString getDescription() const { return "Merges both road geometries and tags"; }
-
 private:
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   ReviewMarker _reviewMarker;
+
+  // TODO
+  QString _matchedBy;
 
   /**
    * Returns true if the way directly connects the left and right ways. There is some tolerance

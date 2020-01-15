@@ -36,6 +36,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 
 namespace hoot
 {
@@ -199,7 +200,11 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
     mergedTags.remove(MetadataTags::HootMultilineString());
   }
   elementWithTagsToKeep->setTags(mergedTags);
-  elementWithTagsToKeep->setStatus(Status::Conflated);;
+  elementWithTagsToKeep->setStatus(Status::Conflated);
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    elementWithTagsToKeep->setTag(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
+  }
   LOG_TRACE(
     "HighwayTagOnlyMerger: keeper element\n" <<
     OsmUtils::getElementDetailString(elementWithTagsToKeep, map));

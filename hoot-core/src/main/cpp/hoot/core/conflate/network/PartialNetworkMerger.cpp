@@ -111,6 +111,11 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   merger->mergeTags();
   // set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    Tags tagsToAdd(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
+    merger->addKeeperTags(tagsToAdd);
+  }
 
   // go through all the nodes in the scrap
   QList<ConstNodePtr> scrapNodeList;

@@ -8,6 +8,7 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"
 exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
+exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 
@@ -110,7 +111,11 @@ exports.mergePair = function(map, e1, e2)
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");
-
+  if (exports.writeDebugTags == "true")
+  {
+    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    e1.setTag("hoot:matchedBy", exports.baseFeatureType);
+  }
   return e1;
 };
 

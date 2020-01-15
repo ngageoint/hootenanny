@@ -71,7 +71,8 @@ HOOT_FACTORY_REGISTER(Merger, HighwaySnapMerger)
 int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger() :
-HighwayMergerAbstract()
+HighwayMergerAbstract(),
+_matchedBy(HighwayMatch::MATCH_NAME)
 {
 }
 
@@ -80,7 +81,8 @@ HighwaySnapMerger::HighwaySnapMerger(
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations(false),
-_sublineMatcher(sublineMatcher)
+_sublineMatcher(sublineMatcher),
+_matchedBy(HighwayMatch::MATCH_NAME)
 {
   _pairs = pairs;
 }
@@ -248,6 +250,10 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
+  if (ConfigOptions().getWriterIncludeDebugTags())
+  {
+    e1Match->setTag(MetadataTags::HootMatchedBy(), _matchedBy);
+  }
 
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementId());

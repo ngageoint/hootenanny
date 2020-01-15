@@ -650,13 +650,6 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
-=== conflate.match.unmatched.with.generic
-
-* Data Type: bool
-* Default Value: `false`
-
-TODO
-
 === conflate.miss.threshold.default
 
 * Data Type: double

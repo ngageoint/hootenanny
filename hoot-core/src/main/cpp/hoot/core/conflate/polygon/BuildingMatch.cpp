@@ -49,7 +49,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, BuildingMatch)
 
-QString BuildingMatch::_matchName = "Building";
+const QString BuildingMatch::MATCH_NAME = "Building";
 
 BuildingMatch::BuildingMatch() :
 Match()

@@ -41,6 +41,7 @@
 #include <hoot/core/schema/PreserveTypesTagMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 
 using namespace std;
 
@@ -205,6 +206,10 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(poisMerged);
     finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
     finalBuilding->setStatus(Status::Conflated);
+    if (ConfigOptions().getWriterIncludeDebugTags())
+    {
+      finalBuilding->setTag(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
+    }
   }
 
   finalBuilding->setTags(finalBuildingTags);

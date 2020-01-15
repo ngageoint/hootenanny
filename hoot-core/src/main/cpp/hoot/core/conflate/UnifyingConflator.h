@@ -156,16 +156,13 @@ private:
   /*
    * TODO
    */
-  //void _addGenericMatches(const ConstOsmMapPtr& map);
-  /*
-   * TODO
-   */
   void _removeConflictingGenericGeometryMatches(std::vector<ConstMatchPtr>& matches);
   /*
    * TODO
    */
   QSet<ElementId> _getElementIdsInvolvedInANonGenericGeometryMatch(
     const std::vector<ConstMatchPtr>& matches) const;
+
   int _getNumGenericGeometryMatches(const std::vector<ConstMatchPtr>& matches) const;
 };
 

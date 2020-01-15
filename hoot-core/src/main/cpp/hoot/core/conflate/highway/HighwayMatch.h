@@ -54,6 +54,8 @@ public:
 
   static std::string className() { return "hoot::HighwayMatch"; }
 
+  static const QString MATCH_NAME;
+
   HighwayMatch();
   HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
                const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
@@ -67,7 +69,7 @@ public:
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   virtual QString getMatchName() const override { return getHighwayMatchName(); }
-  static QString getHighwayMatchName() { return _matchName; }
+  static QString getHighwayMatchName() { return MATCH_NAME; }
 
   virtual double getProbability() const override;
 
@@ -101,7 +103,6 @@ private:
   WaySublineMatchString _sublineMatch;
   mutable QHash<ElementId, bool> _conflicts;
   QString _explainText;
-  static QString _matchName;
   static QString _noMatchingSubline;
 
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;

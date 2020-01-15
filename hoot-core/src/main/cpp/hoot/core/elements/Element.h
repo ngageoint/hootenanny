@@ -124,6 +124,7 @@ public:
   void removeTag(QString k) { _getElementData().getTags().remove(k); }
   void setTags(const Tags& tags) { _getElementData().setTags(tags); }
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
+  void addTags(const Tags& tags) { _getElementData().addTags(tags); }
 
   bool getVisible() const { return _getElementData().getVisible(); }
   void setVisible(bool visible) { _getElementData().setVisible(visible); }

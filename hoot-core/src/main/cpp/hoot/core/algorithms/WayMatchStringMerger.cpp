@@ -411,6 +411,16 @@ void WayMatchStringMerger::setKeeperStatus(Status s)
   }
 }
 
+void WayMatchStringMerger::addKeeperTags(const Tags& tags)
+{
+  // go through all the way mappings
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
+  {
+    // set the new status.
+    sm->getNewWay1()->addTags(tags);
+  }
+}
+
 WayLocation WayMatchStringMerger::_snapToEnd(const WayLocation& wl) const
 {
   LOG_TRACE("Snapping to end...");
