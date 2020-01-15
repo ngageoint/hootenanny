@@ -78,8 +78,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         String scinote = String.format("%.3E", d);
         Matcher matcher = pattern.matcher(scinote);
         if (matcher.find()) {
-            exp = Integer.valueOf(matcher.group(2));
-            if (matcher.group(1).equalsIgnoreCase("-")) exp *= -1;
+            exp = Integer.parseInt(scinote.split("E")[1]);
         }
 
         return exp;
