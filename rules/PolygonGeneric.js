@@ -120,27 +120,14 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-  var newTags = mergeTags(e1, e2);
-  e1.setTags(newTags);
-
-  removeElement(map, e2);
-
+  //var newTags = mergeTags(e1, e2);
+  //e1.setTags(newTags);
+  //removeElement(map, e2);
+  //return e1;
+  // replace instances of e2 with e1 and merge tags
+  mergeElements(map, e1, e2);
+  e1.setStatusString("conflated");
   return e1;
-};
-
-/**
- * The internals of geometry merging can become quite complex. Rather than expose all those
- * geometries out to the user for merging two sets, let them return the merge method being used
- * along with some tunable parameters.
- *
- * This should handle a large number of scenarios by simply implementing more internal, complex
- * merge methods.
- */
-exports.mergeSets = function(map, set1, set2) 
-{
-  // snap the ways in set2 on to set1. Use the default merge method for merging the tags while
-  // snapping.
-  return new hoot.SnapWays(mergeTags);
 };
 
 

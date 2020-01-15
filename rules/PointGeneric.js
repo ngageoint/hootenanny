@@ -2,12 +2,12 @@
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches points";
+exports.experimental = false;
 exports.matchThreshold = parseFloat(hoot.get("generic.point.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.point.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.point.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
-exports.experimental = false;
 exports.baseFeatureType = "Point";
 
 function distance(e1, e2) 
@@ -26,7 +26,7 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoint(e);
+  return isPoint(map, e);
 };
 
 /**

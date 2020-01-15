@@ -156,7 +156,7 @@ private:
   /*
    * TODO
    */
-  void _addGenericMatches(const ConstOsmMapPtr& map);
+  //void _addGenericMatches(const ConstOsmMapPtr& map);
   /*
    * TODO
    */

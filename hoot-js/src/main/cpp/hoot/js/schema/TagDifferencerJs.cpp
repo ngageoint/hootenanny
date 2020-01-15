@@ -76,6 +76,9 @@ void TagDifferencerJs::diff(const FunctionCallbackInfo<Value>& args)
       throw IllegalArgumentException("You must specify a valid map, element 1 and element 2");
     }
 
+    LOG_VART(e1->getElementId());
+    LOG_VART(e2->getElementId());
+
     double d = op->getDifferencer()->diff(map, e1, e2);
 
     args.GetReturnValue().Set(toV8(d));
