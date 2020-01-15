@@ -182,7 +182,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 //    _addGenericMatches(map);
 //  }
   // TODO: add docs for this
-  _removeConflictingGenericMatches(_matches);
+  _removeConflictingGenericGeometryMatches(_matches);
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -337,41 +337,69 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   currentStep++;
 }
 
-QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInANonGenericMatch(
-  const std::vector<ConstMatchPtr>& matches)
+QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInANonGenericGeometryMatch(
+  const std::vector<ConstMatchPtr>& matches) const
 {
   QStringList genericMatchNames;
   genericMatchNames.append("Point");
   genericMatchNames.append("Line");
   genericMatchNames.append("Polygon");
 
-  QSet<ElementId> elementIdsInvolvedInANonGenericMatch;
+  QSet<ElementId> elementIdsInvolvedInANonGenericGeometryMatch;
   for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
        matchItr != matches.end(); ++matchItr)
   {
     ConstMatchPtr match = *matchItr;
+    LOG_VART(match->getMatchName());
+    LOG_VART(match->getType());
     if (!genericMatchNames.contains(match->getMatchName()) && match->getType() != MatchType::Miss)
     {
-      std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
+      const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
            matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
       {
         const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
-        elementIdsInvolvedInANonGenericMatch.insert(matchElementIdPair.first);
-        elementIdsInvolvedInANonGenericMatch.insert(matchElementIdPair.second);
+        elementIdsInvolvedInANonGenericGeometryMatch.insert(matchElementIdPair.first);
+        elementIdsInvolvedInANonGenericGeometryMatch.insert(matchElementIdPair.second);
       }
     }
   }
-  LOG_VART(elementIdsInvolvedInANonGenericMatch.size());
-  return elementIdsInvolvedInANonGenericMatch;
+  LOG_VART(elementIdsInvolvedInANonGenericGeometryMatch);
+  return elementIdsInvolvedInANonGenericGeometryMatch;
 }
 
-void UnifyingConflator::_removeConflictingGenericMatches(std::vector<ConstMatchPtr>& matches)
+int UnifyingConflator::_getNumGenericGeometryMatches(
+  const std::vector<ConstMatchPtr>& matches) const
+{
+  // for debugging only
+
+  QStringList genericMatchNames;
+  genericMatchNames.append("Point");
+  genericMatchNames.append("Line");
+  genericMatchNames.append("Polygon");
+
+  int ctr = 0;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (genericMatchNames.contains(match->getMatchName()))
+    {
+      ctr++;
+    }
+  }
+  return ctr;
+}
+
+void UnifyingConflator::_removeConflictingGenericGeometryMatches(
+  std::vector<ConstMatchPtr>& matches)
 {
   const int matchesSizeBefore = matches.size();
+  LOG_VART(matchesSizeBefore);
+  LOG_TRACE("Num generic geometry matches: " << _getNumGenericGeometryMatches(matches));
 
-  const QSet<ElementId> elementIdsInvolvedInANonGenericMatch =
-    _getElementIdsInvolvedInANonGenericMatch(matches);
+  const QSet<ElementId> elementIdsInvolvedInANonGenericGeometryMatch =
+    _getElementIdsInvolvedInANonGenericGeometryMatch(matches);
 
   // TODO: move to separate method
   QStringList genericMatchNames;
@@ -385,32 +413,46 @@ void UnifyingConflator::_removeConflictingGenericMatches(std::vector<ConstMatchP
   {
     ConstMatchPtr match = *matchItr;
 
+    LOG_VART(match->getMatchName());
     if (!genericMatchNames.contains(match->getMatchName()))
     {
-      LOG_TRACE("Adding generic match: " << match);
+      LOG_TRACE("Adding non-generic geometry match: " << match);
       updatedMatches.push_back(match);
-      break;
     }
-
-    std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
-    bool sharedIdWithNonGenericMatch = false;
-    for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
-         matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
+    else
     {
-      const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
-      if (elementIdsInvolvedInANonGenericMatch.contains(matchElementIdPair.first) ||
-          elementIdsInvolvedInANonGenericMatch.contains(matchElementIdPair.second))
+      const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
+      bool sharedIdWithNonGenericGeometryMatch = false;
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
+           matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
       {
-        sharedIdWithNonGenericMatch = true;
-        break;
+        const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
+        if (elementIdsInvolvedInANonGenericGeometryMatch.contains(matchElementIdPair.first))
+        {
+          sharedIdWithNonGenericGeometryMatch = true;
+          LOG_TRACE(
+            "Element part of non-generic geometry match: " << matchElementIdPair.first <<
+            ". Skipping generic geometry match...");
+          break;
+        }
+        else if (elementIdsInvolvedInANonGenericGeometryMatch.contains(matchElementIdPair.second))
+        {
+          sharedIdWithNonGenericGeometryMatch = true;
+          LOG_TRACE(
+            "Element part of non-generic geometry match: " << matchElementIdPair.second <<
+            ". Skipping generic geometry match...");
+          break;
+        }
+      }
+      if (!sharedIdWithNonGenericGeometryMatch)
+      {
+        LOG_TRACE("Adding non-conflicting generic geometry match: " << match);
+        updatedMatches.push_back(match);
       }
     }
-    if (!sharedIdWithNonGenericMatch)
-    {
-      LOG_TRACE("Adding generic match: " << match);
-      updatedMatches.push_back(match);
-    }
   }
+  LOG_VART(updatedMatches.size());
+
   matches = updatedMatches;
   LOG_DEBUG("Added " << matches.size() - matchesSizeBefore << " generic matches.");
 }

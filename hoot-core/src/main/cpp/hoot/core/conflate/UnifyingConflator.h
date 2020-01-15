@@ -160,12 +160,13 @@ private:
   /*
    * TODO
    */
-  void _removeConflictingGenericMatches(std::vector<ConstMatchPtr>& matches);
+  void _removeConflictingGenericGeometryMatches(std::vector<ConstMatchPtr>& matches);
   /*
    * TODO
    */
-  QSet<ElementId> _getElementIdsInvolvedInANonGenericMatch(
-    const std::vector<ConstMatchPtr>& matches);
+  QSet<ElementId> _getElementIdsInvolvedInANonGenericGeometryMatch(
+    const std::vector<ConstMatchPtr>& matches) const;
+  int _getNumGenericGeometryMatches(const std::vector<ConstMatchPtr>& matches) const;
 };
 
 }
