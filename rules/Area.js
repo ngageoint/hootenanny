@@ -70,6 +70,7 @@ exports.matchScore = function(map, e1, e2)
   var angleHist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
 
   //This was derived against only one dataset using Weka, so obviously needs more refinement.
+  // TODO: Do we need to be looking at tags too, since area is such a broad concept?
   if (bufferedOverlap < 0.57)
   {
     if (overlap >= 0.18 && edgeDist >= 0.99)

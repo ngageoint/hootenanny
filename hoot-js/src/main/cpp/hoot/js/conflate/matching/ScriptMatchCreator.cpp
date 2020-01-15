@@ -619,6 +619,7 @@ void ScriptMatchCreator::createMatches(
 //    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
 //    " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
 //    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+  // TODO: don't think the base feature type is populated yet
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<

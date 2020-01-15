@@ -109,9 +109,11 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
     if (stack->GetFrameCount() >= 1)
     {
       lineNumber = frame->GetLineNumber();
-      script = toString(frame->GetScriptName());
+      script = toString(frame->GetScriptName()).replace("\"", "");
       functionName = toString(frame->GetFunctionName());
     }
+    LOG_VARD(script);
+    LOG_VARD(functionName);
 
     std::stringstream rMessage;
     for (int i = 0; i < args.Length(); i++)
@@ -125,18 +127,18 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
 
     QString message = QString::fromUtf8(rMessage.str().data());
 
-    int logLimit = ConfigOptions().getLogWarnMessageLimit();
-    int messageCount = getLogCount(message);
+//    int logLimit = ConfigOptions().getLogWarnMessageLimit();
+//    int messageCount = getLogCount(message);
 
-    if (messageCount == logLimit)
-    {
-      message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
-    }
+//    if (messageCount == logLimit)
+//    {
+//      message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
+//    }
 
-    if (messageCount <= logLimit)
-    {
-      Log::getInstance().log(level, message, script, functionName, lineNumber);
-    }
+    //if (messageCount <= logLimit)
+    //{
+      Log::getInstance().log(level, message, script, /*functionName*/script, lineNumber);
+    //}
   }
 
   args.GetReturnValue().SetUndefined();
