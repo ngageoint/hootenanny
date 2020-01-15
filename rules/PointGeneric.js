@@ -8,6 +8,13 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.point.review.threshold"))
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 exports.experimental = false;
+exports.baseFeatureType = "Point";
+
+function distance(e1, e2) 
+{
+  return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
+         Math.pow(e1.getY() - e2.getY(), 2));
+}
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -46,18 +53,54 @@ exports.isWholeGroup = function()
  */
 exports.matchScore = function(map, e1, e2)
 {
-  var result;
+  var result = { miss: 1.0 };
 
   if (e1.getStatusString() == e2.getStatusString()) 
   {
-    result = { miss: 1.0, explain:'Miss' };
+    return result;
   }
     
+  // TODO: Do we want to add the concept of a review for either tags or geometry?
+
   var tagScore = getTagScore(map, e1, e2);
-  if (tagScore < exports.tagThreshold)
+  var tagScorePassesThreshold = false;
+  if (tagScore >= exports.tagThreshold)
   {
-    result = { match: 0.0, miss: 1.0, review: 0.0 };
+    tagScorePassesThreshold = true;
   }
+
+  var error1 = e1.getCircularError();
+  var error2 = e2.getCircularError();
+  var distanceBetweenFeatures = distance(e1, e2);
+  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
+  var geometryMatch = false;
+  if (distanceBetweenFeatures <= searchRadius)
+  {
+    geometryMatch = true;
+  }
+
+  var featureMatch = tagScorePassesThreshold && geometryMatch;
+  if (featureMatch)
+  {
+    var result = { match: 1.0 };
+  }
+
+  hoot.trace("***GENERIC POINT MATCH DETAIL***");
+  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  if (e1.getTags().get("note"))
+  {
+    hoot.trace("e1 note: " + e1.getTags().get("note"));
+  }
+  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  if (e2.getTags().get("note"))
+  {
+    hoot.trace("e2 note: " + e2.getTags().get("note"));
+  }
+  hoot.trace("tagScore: " + tagScore);
+  hoot.trace("tagScorePassesThreshold: " + tagScorePassesThreshold);
+  hoot.trace("geometryMatch: " + geometryMatch);
+  hoot.trace("distanceBetweenFeatures: " + distanceBetweenFeatures);
+  hoot.trace("***END POINT MATCH MATCH DETAIL***");
 
   return result;
 };

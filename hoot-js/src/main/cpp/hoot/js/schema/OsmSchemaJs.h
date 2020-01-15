@@ -64,6 +64,7 @@ private:
   // TODO: All of these methods can go away if #3047 is completed.
   static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinearHighway(const v8::FunctionCallbackInfo<v8::Value>& args);

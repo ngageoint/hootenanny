@@ -8,6 +8,7 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 exports.experimental = false;
+exports.baseFeatureType = "Polygon";
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -19,7 +20,7 @@ exports.experimental = false;
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isArea(e);
+  return isPolygon(e);
 };
 
 /**
@@ -46,51 +47,69 @@ exports.isWholeGroup = function()
  */
 exports.matchScore = function(map, e1, e2)
 {
-  var result;
+  var result = { miss: 1.0 };
 
   if (e1.getStatusString() == e2.getStatusString()) 
   {
-    result = { miss: 1.0, explain:'Miss' };
+    return result;
   }
-  /*else if (isArea(e1) == false || isArea(e2) == false)
-  {
-      result = { match: 0.0, miss: 1.0, review: 0.0 };
-  }*/
-  else
-  {
-    var tagScore = getTagScore(map, e1, e2);
-    if (tagScore < exports.tagThreshold)
-    {
-      result = { match: 0.0, miss: 1.0, review: 0.0 };
-    }
 
-    // These rules were derived by using training data in Weka with the
-    // REPTree model w/ maxDepth set to 3. 
-    var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
-    if (overlap < 0.20)
+  // TODO: Do we want to add the concept of a review for tags?
+
+  var tagScore = getTagScore(map, e1, e2);
+  var tagScorePassesThreshold = false;
+  if (tagScore >= exports.tagThreshold)
+  {
+    tagScorePassesThreshold = true;
+  }
+
+  // These rules were derived by using training data in Weka with the
+  // REPTree model w/ maxDepth set to 3. 
+  var geometryMatch = false;
+  var geometryReview = false;
+  var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
+  if (overlap < 0.20)
+  {
+    result = { match: 0.0, miss: 1.0, review: 0.0 };
+  }
+  else 
+  {
+    if (overlap < 0.45)
     {
-      result = { match: 0.0, miss: 1.0, review: 0.0 };
-    }
-    else 
-    {
-      if (overlap < 0.45)
+      var hist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
+      if (hist < 0.58)
       {
-        var hist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
-        if (hist < 0.58)
-        {
-          result = { match: 0.0, miss: 0.0, review: 1.0 };
-        }
-        else
-        {
-          result = { match: 1.0, miss: 0.0, review: 0.0 };
-        }
+        result = { match: 0.0, miss: 0.0, review: 1.0 };
+        geometryReview = true;
       }
       else
       {
         result = { match: 1.0, miss: 0.0, review: 0.0 };
+        geometryMatch = true;
       }
     }
+    else
+    {
+      result = { match: 1.0, miss: 0.0, review: 0.0 };
+      geometryMatch = true;
+    }
   }
+
+  var featureReview = false;
+  var featureMatch = tagScorePassesThreshold && geometryMatch;
+  if (featureMatch)
+  {
+    var result = { match: 1.0 };
+  }
+  else
+  {
+    featureReview = tagScorePassesThreshold && geometryReview;
+    if (featureReview)
+    {
+      var result = { review: 1.0 };
+    }
+  }
+
   return result;
 };
 

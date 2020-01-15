@@ -2150,6 +2150,9 @@ A list of map operations to be applied to a map for cleaning purposes, in order.
 ** `hoot::ScriptMatchCreator,Area.js`
 ** `hoot::ScriptMatchCreator,Railway.js`
 ** `hoot::ScriptMatchCreator,PowerLine.js`
+** `hoot::ScriptMatchCreator,PointGeneric.js`
+** `hoot::ScriptMatchCreator,LineStringGeneric.js`
+** `hoot::ScriptMatchCreator,PolygonGeneric.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -2241,6 +2244,9 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 ** `hoot::HighwayMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
+** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`

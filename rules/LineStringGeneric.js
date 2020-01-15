@@ -8,6 +8,7 @@ exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
+exports.baseFeatureType = "Line";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -61,32 +62,60 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  // TODO: Do we want to add the concept of a review for either tags or geometry?
+
   var tagScore = getTagScore(map, e1, e2);
-  if (tagScore < exports.tagThreshold)
+  var tagScorePassesThreshold = false;
+  if (tagScore >= exports.tagThreshold)
   {
-    result = { match: 0.0, miss: 1.0, review: 0.0 };
+    tagScorePassesThreshold = true;
   }
 
   // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  var distanceScore = -1.0;
+  var weightShapeDistanceScore = -1.0;
+  var lengthScore = -1.0;
+  var geometryMatch = false;
   if (sublines)
   {
     var m = sublines.map;
     var m1 = sublines.match1;
     var m2 = sublines.match2;
-    var ds = distanceScoreExtractor.extract(m, m1, m2);
-    var ps = weightedShapeDistanceExtractor.extract(m, m1, m2);
-    var ls = lengthScoreExtractor.extract(m, m1, m2);
+    distanceScore = distanceScoreExtractor.extract(m, m1, m2);
+    weightShapeDistanceScore = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    lengthScore = lengthScoreExtractor.extract(m, m1, m2);
 
-    if (ds * ps * ls > 0.4)
+    if ((distanceScore * weightShapeDistanceScore * lengthScore) > 0.4)
     {
-//     hoot.log("Found Match!", e1.getTags().get('note'),
-//         e2.getTags().get('note'));
-//     hoot.log(angleHistogramValue);
-//     hoot.log(weightedShapeDistanceValue);
-     result = { match: 1.0 };
+      geometryMatch = true;
     }
   }
+
+  var featureMatch = tagScorePassesThreshold && geometryMatch;
+  if (featureMatch)
+  {
+    var result = { match: 1.0 };
+  }
+
+  hoot.trace("***GENERIC LINE MATCH DETAIL***");
+  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  if (e1.getTags().get("note"))
+  {
+    hoot.trace("e1 note: " + e1.getTags().get("note"));
+  }
+  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  if (e2.getTags().get("note"))
+  {
+    hoot.trace("e2 note: " + e2.getTags().get("note"));
+  }
+  hoot.trace("tagScore: " + tagScore);
+  hoot.trace("tagScorePassesThreshold: " + tagScorePassesThreshold);
+  hoot.trace("geometryMatch: " + geometryMatch);
+  hoot.trace("distanceScore: " + distanceScore);
+  hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
+  hoot.trace("lengthScore: " + lengthScore);
+  hoot.trace("***END GENERIC LINE MATCH MATCH DETAIL***");
 
   return result;
 };

@@ -31,6 +31,7 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -41,6 +42,7 @@
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/HasNameCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 using namespace v8;
 
@@ -77,6 +79,10 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isAncestor)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isArea"),
               FunctionTemplate::New(current, isArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPolygon"),
+              FunctionTemplate::New(current, isPolygon)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPoint"),
+              FunctionTemplate::New(current, isPoint)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isBuilding"),
               FunctionTemplate::New(current, isBuilding)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isLinear"),
@@ -104,7 +110,6 @@ void OsmSchemaJs::Init(Handle<Object> exports)
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
-
   args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getAllTags()));
 }
 
@@ -173,9 +178,11 @@ void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(
+    Boolean::New(current, AreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isPoint(const FunctionCallbackInfo<Value>& args)
@@ -183,9 +190,11 @@ void OsmSchemaJs::isPoint(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, PointCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(
+    Boolean::New(current, PointCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
@@ -198,14 +207,26 @@ void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(e)));
 }
 
-void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::isPolygon(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(Boolean::New(current, PolygonCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, BuildingCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)

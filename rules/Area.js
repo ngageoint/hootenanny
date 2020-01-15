@@ -28,7 +28,7 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isArea(e) && !isBuilding(e);
+  return isArea(map, e) && !isBuilding(map, e);
 };
 
 /**
@@ -68,7 +68,7 @@ exports.matchScore = function(map, e1, e2)
   var edgeDist = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
   var angleHist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
 
-  //This was derived against only one dataset, so obviously needs more refinement.
+  //This was derived against only one dataset using Weka, so obviously needs more refinement.
   if (bufferedOverlap < 0.57)
   {
     if (overlap >= 0.18 && edgeDist >= 0.99)

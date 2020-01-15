@@ -40,8 +40,15 @@ PointCriterion::PointCriterion()
 {
 }
 
+PointCriterion::PointCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+  _wayNodeCrit.setOsmMap(map.get());
+}
+
 void PointCriterion::setOsmMap(const OsmMap* map)
 {
+  _map = map->shared_from_this();
   _wayNodeCrit.setOsmMap(map);
 }
 

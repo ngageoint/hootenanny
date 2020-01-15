@@ -334,12 +334,11 @@ public:
       std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(728));
       _index.reset(new HilbertRTree(mps, 2));
 
-      // Only index elements that satisfy the isMatchCandidate
-      // previously we only indexed Unknown2, but that causes issues when wanting to conflate
-      // from n datasets and support intradataset conflation. This approach over-indexes a bit and
-      // will likely slow things down, but should give the same results.
-      // An option in the future would be to support an "isIndexedFeature" or similar function
-      // to speed the operation back up again.
+      // Only index elements that satisfy the isMatchCandidate. Previously we only indexed Unknown2,
+      // but that causes issues when wanting to conflate from n datasets and support intra-dataset
+      // conflation. This approach over-indexes a bit and will likely slow things down, but should
+      // give the same results. An option in the future would be to support an "isIndexedFeature" or
+      // similar function to speed the operation back up again.
       std::function<bool (ConstElementPtr)> f =
         std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
       std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));

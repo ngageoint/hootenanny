@@ -311,25 +311,33 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Key:area
  */
-function isArea(e)
+function isArea(map, e)
 {
-  return hoot.OsmSchema.isArea(e);
+  return hoot.OsmSchema.isArea(map, e);
+}
+
+/**
+ * TODO
+ */
+function isPolygon(e)
+{
+  return hoot.OsmSchema.isPolygon(e);
 }
 
 /**
  * Returns true if the specified element is a point element.
  */
-function isPoint(e)
+function isPoint(map, e)
 {
-  return hoot.OsmSchema.isPoint(e);
+  return hoot.OsmSchema.isPoint(map, e);
 }
 
 /**
  * Returns true if the specified element is a building.
  */
-function isBuilding(e)
+function isBuilding(map, e)
 {
-  return hoot.OsmSchema.isBuilding(e);
+  return hoot.OsmSchema.isBuilding(map, e);
 }
 
 /**

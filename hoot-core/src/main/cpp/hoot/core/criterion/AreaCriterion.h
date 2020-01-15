@@ -28,6 +28,8 @@
 #define AREACRITERION_H
 
 // hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
@@ -36,13 +38,14 @@ namespace hoot
 /**
  * A criterion that will either keep or remove areas.
  */
-class AreaCriterion : public ConflatableElementCriterion
+class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
   static std::string className() { return "hoot::AreaCriterion"; }
 
   AreaCriterion();
+  AreaCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
@@ -51,12 +54,18 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Polygon; }
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new AreaCriterion(_map)); }
 
   virtual QString getDescription() const { return "Identifies areas"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
+
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
+private:
+
+  ConstOsmMapPtr _map;
 };
 
 }

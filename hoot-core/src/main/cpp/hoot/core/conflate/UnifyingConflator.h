@@ -157,6 +157,15 @@ private:
    * TODO
    */
   void _addGenericMatches(const ConstOsmMapPtr& map);
+  /*
+   * TODO
+   */
+  void _removeConflictingGenericMatches(std::vector<ConstMatchPtr>& matches);
+  /*
+   * TODO
+   */
+  QSet<ElementId> _getElementIdsInvolvedInANonGenericMatch(
+    const std::vector<ConstMatchPtr>& matches);
 };
 
 }

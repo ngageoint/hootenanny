@@ -41,6 +41,11 @@ AreaCriterion::AreaCriterion()
 {
 }
 
+AreaCriterion::AreaCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool AreaCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   return isSatisfied(e->getTags(), e->getElementType());
@@ -57,11 +62,11 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
     return false;
   }
 
-  LOG_VART( BuildingCriterion().isSatisfied(tags, elementType));
+  LOG_VART( BuildingCriterion(_map).isSatisfied(tags, elementType));
   LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
   LOG_VART(tags.isTrue("area"));
 
-  result |= BuildingCriterion().isSatisfied(tags, elementType);
+  result |= BuildingCriterion(_map).isSatisfied(tags, elementType);
   result |= tags.isTrue(MetadataTags::BuildingPart());
   result |= tags.isTrue("area");
 

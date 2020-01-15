@@ -173,14 +173,16 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
-  if (ConfigOptions(_settings).getConflateMatchUnmatchedWithGeneric())
-  {
-    // For any remaining unmatched features (features hoot didn't have a predefined match for),
-    // let's see if we can get a match with any of the generic matchers. This must be done in a
-    // separate step since we don't want generic conflate matches conflicting with the (probably
-    // more accurate) non-generic conflate matches that we already have.
-    _addGenericMatches(map);
-  }
+//  if (ConfigOptions(_settings).getConflateMatchUnmatchedWithGeneric())
+//  {
+//    // For any remaining unmatched features (features hoot didn't have a predefined match for),
+//    // let's see if we can get a match with any of the generic matchers. This must be done in a
+//    // separate step since we don't want generic conflate matches conflicting with the (probably
+//    // more accurate) non-generic conflate matches that we already have.
+//    _addGenericMatches(map);
+//  }
+  // TODO: add docs for this
+  _removeConflictingGenericMatches(_matches);
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -335,12 +337,81 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   currentStep++;
 }
 
+QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInANonGenericMatch(
+  const std::vector<ConstMatchPtr>& matches)
+{
+  QStringList genericMatchNames;
+  genericMatchNames.append("Point");
+  genericMatchNames.append("Line");
+  genericMatchNames.append("Polygon");
+
+  QSet<ElementId> elementIdsInvolvedInANonGenericMatch;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    if (!genericMatchNames.contains(match->getMatchName()) && match->getType() != MatchType::Miss)
+    {
+      std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
+           matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
+      {
+        const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
+        elementIdsInvolvedInANonGenericMatch.insert(matchElementIdPair.first);
+        elementIdsInvolvedInANonGenericMatch.insert(matchElementIdPair.second);
+      }
+    }
+  }
+  return elementIdsInvolvedInANonGenericMatch;
+}
+
+void UnifyingConflator::_removeConflictingGenericMatches(std::vector<ConstMatchPtr>& matches)
+{
+  const QSet<ElementId> elementIdsInvolvedInANonGenericMatch =
+    _getElementIdsInvolvedInANonGenericMatch(matches);
+
+  // TODO: move to separate method
+  QStringList genericMatchNames;
+  genericMatchNames.append("Point");
+  genericMatchNames.append("Line");
+  genericMatchNames.append("Polygon");
+
+  std::vector<ConstMatchPtr> updatedMatches;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+
+    if (!genericMatchNames.contains(match->getMatchName()))
+    {
+      updatedMatches.push_back(match);
+      break;
+    }
+
+    std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
+    bool sharedIdWithNonGenericMatch = false;
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
+         matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
+    {
+      const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
+      if (elementIdsInvolvedInANonGenericMatch.contains(matchElementIdPair.first) ||
+          elementIdsInvolvedInANonGenericMatch.contains(matchElementIdPair.second))
+      {
+        sharedIdWithNonGenericMatch = true;
+        break;
+      }
+    }
+    if (!sharedIdWithNonGenericMatch)
+    {
+      updatedMatches.push_back(match);
+    }
+  }
+  _matches = updatedMatches;
+}
+
 void UnifyingConflator::_addGenericMatches(const ConstOsmMapPtr& map)
 {
-  // TODO: don't know if this can work...due to the mergers having not been run yet; may need
-  // to pull this out into ConflateCmd and run this in a second call to UnifyingConflator??
-
-  LOG_DEBUG("Adding generic matches...");
+  LOG_INFO("Adding generic matches...");
   LOG_VARD(map->size());
 
   // get the ids of all unmatched features
@@ -376,16 +447,14 @@ void UnifyingConflator::_addGenericMatches(const ConstOsmMapPtr& map)
   genericMatchers.append("hoot::ScriptMatchCreator,PolygonGeneric.js");
   const QStringList originalMatchCreators = conf().getList("match.creators");
   conf().set("match.creators", genericMatchers);
-  QStringList genericMergers;
+  QStringList mergerCreators = conf().getList("merger.creators");
   for (int i = 0; i < 3; i++)
   {
-    genericMergers.append("hoot::ScriptMergerCreator");
+    mergerCreators.append("hoot::ScriptMergerCreator");
   }
-  const QStringList originalMergerCreators = conf().getList("merger.creators");
-  conf().set("merger.creators", genericMergers);
+  conf().set("merger.creators", mergerCreators);
 
   std::vector<ConstMatchPtr> genericMatches;
-  //_matchFactory = MatchFactory::getInstance();
   if (_matchThreshold.get())
   {
     _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds, _matchThreshold);
@@ -396,13 +465,16 @@ void UnifyingConflator::_addGenericMatches(const ConstOsmMapPtr& map)
   }
   LOG_VARD(genericMatches.size());
 
-  // don't think this is actually necessary...
+  // don't think this is actually necessary but doing it anyway...
   conf().set("match.creators", originalMatchCreators);
-  conf().set("merger.creators", originalMergerCreators);
+  //conf().set("merger.creators", originalMergerCreators);
 
   // combine the new matches with the existing ones
+  const int numMatchesBeforeAddingGeneric = _matches.size();
   _matches.insert(std::end(_matches), std::begin(genericMatches), std::end(genericMatches));
-  LOG_VARD(_matches.size());
+  LOG_DEBUG("Matches size after adding generic: " << _matches.size());
+  LOG_DEBUG(
+    "Added " << (int)_matches.size() - numMatchesBeforeAddingGeneric << " generic matches.");
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
