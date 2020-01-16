@@ -633,7 +633,7 @@ NOT EXISTS
  */
 
     private static BooleanExpression getStale(Timestamp ts) {
-        return (Expressions.stringTemplate("tags->'lastAccessed'").isNotNull().and(maps.createdAt.lt(ts)))
+        return (Expressions.stringTemplate("tags->'lastAccessed'").isNull().and(maps.createdAt.lt(ts)))
                 .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
     }
 
