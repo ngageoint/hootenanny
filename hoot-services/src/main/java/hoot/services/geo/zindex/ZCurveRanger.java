@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,10 +34,10 @@ import java.util.PriorityQueue;
 
 /**
  * Decomposes a bounding box into a range of zcurve values.
- * 
+ *
  * Yes, ZCurve Ranger. Picture a guy wearing a space helmet in blue spandex
  * covered in Zs.
- * 
+ *
  * //TODO: Prototype -- Requires things like basic error checking.
  */
 public class ZCurveRanger {
@@ -231,6 +231,8 @@ public class ZCurveRanger {
         Collections.sort(r);
 
         List<Range> result = new LinkedList<>();
+        if (r.isEmpty()) return result;
+
         result.add(r.get(0));
         for (int i = 1; i < r.size(); i++) {
             if ((r.get(i).getMin() - result.get(result.size() - 1).getMax()) <= slop) {
@@ -254,12 +256,22 @@ public class ZCurveRanger {
 
     /**
      * Decomposes the z value ranges that cover box into an array of ranges.
-     * 
+     *
      * @param box
      *            - Must be a valid box within the ZValue.
      */
     public List<Range> decomposeRange(Box box, int levels) {
-        return decomposeRange(toLongBox(box), levels);
+        return decomposeRange(toLongBox(box), levels, false);
+    }
+
+    /**
+     * Decomposes the z value ranges that are wholly contained in box into an array of ranges.
+     *
+     * @param box
+     *            - Must be a valid box within the ZValue.
+     */
+    public List<Range> decomposeWhollyContainedRange(Box box, int levels) {
+        return decomposeRange(toLongBox(box), levels, true);
     }
 
     private LongBox clipBox(LongBox box) {
@@ -274,11 +286,17 @@ public class ZCurveRanger {
     }
 
     public List<Range> decomposeRange(LongBox box, int levels) {
+        return decomposeRange(box, levels, false);
+    }
+
+    public List<Range> decomposeRange(LongBox box, int levels, Boolean contains) {
         List<Range> result = new LinkedList<>();
         List<LongBox> boxes = decomposeBox(clipBox(box), levels);
 
         for (LongBox boxe : boxes) {
-            result.add(toRange(boxe));
+            if (!contains || box.whollyContains(boxe)) {
+                result.add(toRange(boxe));
+            }
         }
 
         return condenseRanges(result);
@@ -376,7 +394,7 @@ public class ZCurveRanger {
      * should never be less than one. Other than that it is a tunable parameter.
      * Denser data sets probably want a smaller value. Less dense data sets
      * should have a higher value.
-     * 
+     *
      * @param slop
      */
     public void setSlop(int slop) {
