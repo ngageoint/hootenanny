@@ -72,8 +72,6 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
-    
-  // TODO: Do we want to add the concept of a review for either tags or geometry?
 
   var typeScore = getTypeScore(map, e1, e2);
   var typeScorePassesThreshold = false;
@@ -99,7 +97,7 @@ exports.matchScore = function(map, e1, e2)
   var featureMatch = typeScorePassesThreshold && geometryMatch;
   if (featureMatch)
   {
-    var result = { match: 1.0 };
+    result = { match: 1.0 };
   }
   hoot.trace("featureMatch: " + featureMatch);
 

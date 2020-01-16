@@ -380,4 +380,29 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
   return bbox->getElementId();
 }
 
+QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)
+{
+  switch (geometryTypeId)
+  {
+    case GEOS_POINT:
+      return "point";
+    case GEOS_MULTIPOINT:
+      return "multipoint";
+    case GEOS_LINESTRING:
+      return "linestring";
+    case GEOS_LINEARRING:
+      return "linearring";
+    case GEOS_MULTILINESTRING:
+      return "multilinestring";
+    case GEOS_POLYGON:
+      return "polygon";
+    case GEOS_MULTIPOLYGON:
+      return "multipolygon";
+    case GEOS_GEOMETRYCOLLECTION:
+      return "geometrycollection";
+    default:
+      return "unknown";
+  }
+}
+
 }

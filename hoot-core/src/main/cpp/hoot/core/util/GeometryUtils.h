@@ -152,6 +152,14 @@ public:
    * @return ElementId of the way created
    */
   static ElementId createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds);
+
+  /**
+   * TODO
+   *
+   * @param geometryTypeId
+   * @return
+   */
+  static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 };
 
 }

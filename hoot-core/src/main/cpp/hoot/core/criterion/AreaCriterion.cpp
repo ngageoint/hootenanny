@@ -62,7 +62,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
     return false;
   }
 
-  LOG_VART( BuildingCriterion(_map).isSatisfied(tags, elementType));
+  LOG_VART(BuildingCriterion(_map).isSatisfied(tags, elementType));
   LOG_VART(tags.isTrue(MetadataTags::BuildingPart()));
   LOG_VART(tags.isTrue("area"));
 
@@ -74,7 +74,8 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   // this to be an area feature.
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {
-    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
+    const QString kvp = OsmSchema::getInstance().toKvp(it.key(), it.value());
+    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
     LOG_VART(tv.toString());
 
     uint16_t g = tv.geometries;
@@ -85,12 +86,15 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
 
     if (g & OsmGeometries::Area && !(g & (OsmGeometries::LineString | OsmGeometries::ClosedWay)))
     {
-      LOG_TRACE("Area: " << it.key() << "=" << it.value());
+      LOG_TRACE(
+        "Found area geometry (non-linestring or closed way) from kvp: " << kvp <<
+        "; crit satisfied.");
       result = true;
       break;
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 

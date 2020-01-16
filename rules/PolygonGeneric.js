@@ -55,64 +55,6 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // TODO: Do we want to add the concept of a review for tags?
-
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-
-  // These rules were derived by using training data in Weka with the
-  // REPTree model w/ maxDepth set to 3. 
-  var geometryMatch = false;
-  var geometryReview = false;
-  var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
-  var hist = -1.0;
-  if (overlap < 0.20)
-  {
-    result = { match: 0.0, miss: 1.0, review: 0.0 };
-  }
-  else 
-  {
-    if (overlap < 0.45)
-    {
-      hist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
-      if (hist < 0.58)
-      {
-        result = { match: 0.0, miss: 0.0, review: 1.0 };
-        geometryReview = true;
-      }
-      else
-      {
-        result = { match: 1.0, miss: 0.0, review: 0.0 };
-        geometryMatch = true;
-      }
-    }
-    else
-    {
-      result = { match: 1.0, miss: 0.0, review: 0.0 };
-      geometryMatch = true;
-    }
-  }
-
-  var featureReview = false;
-  var featureMatch = typeScorePassesThreshold && geometryMatch;
-  if (featureMatch)
-  {
-    var result = { match: 1.0 };
-  }
-  else
-  {
-    featureReview = typeScorePassesThreshold && geometryReview;
-    if (featureReview)
-    {
-      var result = { review: 1.0 };
-    }
-  }
-
-  hoot.trace("***GENERIC POLYGON MATCH DETAIL***");
   hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
   {
@@ -123,12 +65,65 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
+
+  var typeScore = getTypeScore(map, e1, e2);
+  var typeScorePassesThreshold = false;
+  if (typeScore >= exports.tagThreshold)
+  {
+    typeScorePassesThreshold = true;
+  }
   hoot.trace("typeScore: " + typeScore);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
-  hoot.trace("geometryMatch: " + geometryMatch);
+
+  // These rules were derived by using training data in Weka with the
+  // REPTree model w/ maxDepth set to 3. 
+
+  var geometryMatch = false;
+  var geometryReview = false;
+  var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
+  var hist = -1.0;
+  if (overlap < 0.20)
+  {
+  }
+  else 
+  {
+    if (overlap < 0.45)
+    {
+      hist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
+      if (hist < 0.58)
+      {
+        geometryReview = true;
+      }
+      else
+      {
+        geometryMatch = true;
+      }
+    }
+    else
+    {
+      geometryMatch = true;
+    }
+  }
   hoot.trace("overlap: " + overlap);
   hoot.trace("hist: " + hist);
-  hoot.trace("***END POLYGON MATCH DETAIL***");
+  hoot.trace("geometryMatch: " + geometryMatch);
+
+  var featureReview = false;
+  var featureMatch = typeScorePassesThreshold && geometryMatch;
+  if (featureMatch)
+  {
+    result = { match: 1.0 };
+  }
+  else
+  {
+    featureReview = typeScorePassesThreshold && geometryReview;
+    if (featureReview)
+    {
+      result = { review: 1.0 };
+    }
+  }
+  hoot.trace("featureReview: " + featureReview);
+  hoot.trace("featureMatch: " + featureMatch);
 
   return result;
 };

@@ -451,7 +451,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
 QString ScriptMatch::toString() const
 {
   stringstream ss;
-  ss << "ScriptMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
+  ss << _matchName << "Match: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
   return QString::fromStdString(ss.str());
 }
 

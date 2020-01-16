@@ -62,7 +62,16 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // TODO: Do we want to add the concept of a review for either tags or geometry?
+  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  if (e1.getTags().get("note"))
+  {
+    hoot.trace("e1 note: " + e1.getTags().get("note"));
+  }
+  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+  if (e2.getTags().get("note"))
+  {
+    hoot.trace("e2 note: " + e2.getTags().get("note"));
+  }
 
   var typeScore = getTypeScore(map, e1, e2);
   var typeScorePassesThreshold = false;
@@ -70,6 +79,8 @@ exports.matchScore = function(map, e1, e2)
   {
     typeScorePassesThreshold = true;
   }
+  hoot.trace("typeScore: " + typeScore);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
 
   // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
@@ -86,36 +97,23 @@ exports.matchScore = function(map, e1, e2)
     weightShapeDistanceScore = weightedShapeDistanceExtractor.extract(m, m1, m2);
     lengthScore = lengthScoreExtractor.extract(m, m1, m2);
 
+    // not sure where this originally came from
     if ((distanceScore * weightShapeDistanceScore * lengthScore) > 0.4)
     {
       geometryMatch = true;
     }
   }
+  hoot.trace("distanceScore: " + distanceScore);
+  hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
+  hoot.trace("lengthScore: " + lengthScore);
+  hoot.trace("geometryMatch: " + geometryMatch);
 
   var featureMatch = typeScorePassesThreshold && geometryMatch;
   if (featureMatch)
   {
-    var result = { match: 1.0 };
+    result = { match: 1.0 };
   }
-
-  hoot.trace("***GENERIC LINE MATCH DETAIL***");
-  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
-  if (e1.getTags().get("note"))
-  {
-    hoot.trace("e1 note: " + e1.getTags().get("note"));
-  }
-  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
-  if (e2.getTags().get("note"))
-  {
-    hoot.trace("e2 note: " + e2.getTags().get("note"));
-  }
-  hoot.trace("typeScore: " + typeScore);
-  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
-  hoot.trace("geometryMatch: " + geometryMatch);
-  hoot.trace("distanceScore: " + distanceScore);
-  hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
-  hoot.trace("lengthScore: " + lengthScore);
-  hoot.trace("***END GENERIC LINE MATCH DETAIL***");
+  hoot.trace("featureMatch: " + featureMatch);
 
   return result;
 };

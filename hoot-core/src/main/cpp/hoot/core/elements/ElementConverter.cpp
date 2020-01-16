@@ -52,6 +52,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 // Qt
 #include <QString>
@@ -133,7 +134,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
                                                               const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
-  LOG_VART(gid);
+  LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_POLYGON)
   {
     return convertToPolygon(e);
@@ -156,6 +157,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelatio
                                                               const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
+  LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
   {
     return MultiPolygonCreator(_constProvider, e).createMultipolygon();
@@ -183,8 +185,6 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr&
 
 std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
 {
-  LOG_TRACE("Converting to line string...");
-
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
   if (size == 1)
@@ -239,8 +239,6 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
 
 std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) const
 {
-  LOG_TRACE("Converting to polygon...");
-
   const std::vector<long>& ids = w->getNodeIds();
   LOG_VART(ids);
   size_t size = ids.size();
@@ -268,7 +266,7 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   {
     LOG_VART(ids[i]);
     ConstNodePtr n = _constProvider->getNode(ids[i]);
-    LOG_VART(n.get());
+    //LOG_VART(n.get());
     if (!n.get())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
@@ -325,24 +323,29 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
       ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
       assert(w);
 
+      LOG_VART(statsFlag);
+      LOG_VART(w->isValidPolygon());
+      LOG_VART(w->isClosedArea());
+      LOG_VART(AreaCriterion().isSatisfied(w));
+      LOG_VART(OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area));
+
+      ElementCriterionPtr areaCrit;
       if (statsFlag)
       {
-        if (w->isValidPolygon() && StatsAreaCriterion().isSatisfied(w))
-          return GEOS_POLYGON;
-        else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
-          return GEOS_POLYGON;
-        else
-          return GEOS_LINESTRING;
+        areaCrit.reset(new StatsAreaCriterion());
       }
       else
       {
-        if (w->isValidPolygon() && AreaCriterion().isSatisfied(w))
-          return GEOS_POLYGON;
-        else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
-          return GEOS_POLYGON;
-        else
-          return GEOS_LINESTRING;
+        areaCrit.reset(new AreaCriterion());
       }
+      if (w->isValidPolygon() && w->isClosedArea()) // TODO: this may cause big problems
+        return GEOS_POLYGON;
+      else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
+        return GEOS_POLYGON;
+      else if (w->isClosedArea() && OsmSchema::getInstance().allowsFor(e, OsmGeometries::Area))
+        return GEOS_POLYGON;
+      else
+        return GEOS_LINESTRING;
 
       break;
     }
