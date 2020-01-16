@@ -90,6 +90,7 @@ OsmXmlReader::~OsmXmlReader()
 
 void OsmXmlReader::setConfiguration(const Settings& conf)
 {
+  PartialOsmMapReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setDefaultAccuracy(configOptions.getCircularErrorDefaultValue());
   setKeepStatusTag(configOptions.getReaderKeepStatusTag());
@@ -405,13 +406,19 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  // clear node id maps in case the reader is used for multiple files
-  _nodeIdMap.clear();
-  _relationIdMap.clear();
-  _wayIdMap.clear();
+  //  Reusing the reader for multiple files has two options, the first is the
+  //  default where the reader is reset and duplicates error out.  The second
+  //  is where duplicates are ignored in the same file and across files so the
+  //  ID maps aren't reset
+  if (!_ignoreDuplicates)
+  {
+    _nodeIdMap.clear();
+    _relationIdMap.clear();
+    _wayIdMap.clear();
 
-  _numRead = 0;
-  finalizePartial();
+    _numRead = 0;
+    finalizePartial();
+  }
   _map = map;
   _map->appendSource(_url);
 

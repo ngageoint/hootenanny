@@ -244,6 +244,7 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
 
 void OsmApiDbReader::setConfiguration(const Settings& conf)
 {
+  ApiDbReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());

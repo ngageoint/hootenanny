@@ -45,6 +45,7 @@ class OsmXmlReaderTest : public HootTestFixture
   CPPUNIT_TEST(runDecodeCharsTest);
   CPPUNIT_TEST(runBoundsTest);
   CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(runIgnoreDuplicateMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -226,9 +227,36 @@ public:
     OsmMapPtr map(new OsmMap());
     uut.read("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", map);
     uut.close();
-    OsmMapWriterFactory::write(map, _outputPath + "/" + testFileName, false, true);
+    OsmMapWriterFactory::write(map, _outputPath + testFileName, false, true);
 
-    HOOT_FILE_EQUALS(_inputPath + "/" + testFileName, _outputPath + "/" + testFileName);
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
+  }
+
+  void runIgnoreDuplicateMergeTest()
+  {
+    //  This test opens two versions of ToyTestA (with positive IDs) that contain duplicate nodes
+    //  and ways that should result in merging them both into ToyTestA
+    const QString testFileName = "IgnoreDuplicateMergeTest.osm";
+
+    //  Set the merge ignore duplicate IDs flag
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
+
+    OsmXmlReader uut;
+    uut.setIgnoreDuplicates(true);
+    uut.setUseDataSourceIds(true);
+    OsmMapPtr map(new OsmMap());
+    uut.read(_inputPath + "IgnoreDuplicateMergeTest-1.osm", map);
+    uut.read(_inputPath + "IgnoreDuplicateMergeTest-2.osm", map);
+    uut.close();
+
+    conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+
+    OsmMapWriterFactory::write(map, _outputPath + testFileName, false, false);
+
+    //  Since HOOT_FILE_EQUALS uses a reader factory, turn off the flag because it breaks it
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), false);
+
+    HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 };
 

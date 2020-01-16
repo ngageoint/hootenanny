@@ -63,7 +63,7 @@ class OsmPbfReaderData;
 /**
  * A reader for http://wiki.openstreetmap.org/wiki/PBF_Format
  */
-class OsmPbfReader : public PartialOsmMapReader, public Configurable
+class OsmPbfReader : public PartialOsmMapReader
 {
 public:
 

@@ -2089,6 +2089,16 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
 
+=== map.merge.ignore.duplicate.ids
+
+* Data Type: bool
+* Default Value: `false`
+
+Option to allow for multiple datasets to be merged into one dataset, while ignoring
+duplicate element IDs.  This allows for two neighboring cells to contain the same way
+that spans both cells and is included in both datasets to not be duplicated when read
+into Hootenanny.
+
 [[match.creators]]
 === match.creators
 

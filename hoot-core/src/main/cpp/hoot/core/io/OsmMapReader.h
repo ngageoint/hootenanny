@@ -29,11 +29,12 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class OsmMapReader
+class OsmMapReader : public Configurable
 {
 
 public:
@@ -99,10 +100,16 @@ public:
 
   void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
 
+  /** Configurable interface */
+  virtual void setConfiguration(const Settings& conf) override
+  {
+    _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
+  }
+
 protected:
 
   /**
-   * Ignore the duplicate IDs or throw an error
+   * Ignore the duplicate IDs when merging maps or throw an error
    */
   bool _ignoreDuplicates;
   /** Url of the map to open and read */

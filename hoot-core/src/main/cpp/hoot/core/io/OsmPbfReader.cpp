@@ -130,6 +130,7 @@ OsmPbfReader::~OsmPbfReader()
 
 void OsmPbfReader::setConfiguration(const Settings &conf)
 {
+  PartialOsmMapReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();

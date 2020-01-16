@@ -31,7 +31,6 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/util/Boundable.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Units.h>
 
 // Qt
@@ -52,8 +51,7 @@ class Element;
 /**
  * Reads in a .osm file into an OsmMap data structure.
  */
-class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable,
-  public Configurable
+class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, public Boundable
 {
 public:
 

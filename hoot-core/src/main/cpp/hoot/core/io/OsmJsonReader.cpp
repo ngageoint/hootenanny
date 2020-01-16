@@ -320,6 +320,7 @@ OsmMapPtr OsmJsonReader::loadFromFile(const QString& path)
 
 void OsmJsonReader::setConfiguration(const Settings& conf)
 {
+  OsmMapReader::setConfiguration(conf);
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
