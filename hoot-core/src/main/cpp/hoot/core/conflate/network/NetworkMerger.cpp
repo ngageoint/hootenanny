@@ -132,7 +132,8 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId
 
     // set the status on all keeper ways to conflated.
     merger->setKeeperStatus(Status::Conflated);
-    if (ConfigOptions().getWriterIncludeDebugTags())
+    ConfigOptions conf;
+    if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
     {
       Tags tagsToAdd(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
       merger->addKeeperTags(tagsToAdd);

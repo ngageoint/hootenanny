@@ -229,7 +229,8 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   keeper->setTags(_getMergedTags(e1, e2));
   keeper->setStatus(Status::Conflated);
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
   {
     keeper->setTag(MetadataTags::HootMatchedBy(), BuildingMatch::MATCH_NAME);
   }

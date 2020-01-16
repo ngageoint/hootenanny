@@ -61,9 +61,9 @@ Match()
 {
 }
 
-ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
-  const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj, const ElementId& eid1,
-  const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
+ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
+  const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj,
+  const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
@@ -378,7 +378,8 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
 
   if (func.IsEmpty() || func->IsFunction() == false)
   {
-    throw IllegalArgumentException("getMatchFeatureDetails must be a valid function.");
+    throw IllegalArgumentException(
+      "getMatchFeatureDetails must be a valid function for match from: " + _matchName);
   }
 
   Handle<Object> mapObj = OsmMapJs::create(map);

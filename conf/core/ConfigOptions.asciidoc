@@ -4864,6 +4864,13 @@ useful for debugging.
 When true, writers will include debug information (hoot:* tags; e.g. status). Not honored by all
 writers.
 
+=== writer.include.matched.by.tag
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === writer.precision
 
 * Data Type: int

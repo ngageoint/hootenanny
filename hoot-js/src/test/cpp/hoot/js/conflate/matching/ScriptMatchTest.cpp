@@ -51,8 +51,8 @@ namespace hoot
 class ScriptMatchTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ScriptMatchTest);
-  CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST(conflictTest);
+  CPPUNIT_TEST(cacheTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -69,8 +69,7 @@ public:
     conf().set(co.getUuidHelperRepeatableKey(), true);
     conf().set(co.getReaderUseFileStatusKey(), true);
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm",
-      true);
+    OsmMapReaderFactory::read(map, _inputPath + "ScriptMatchTest.osm", true);
     MapProjector::projectToPlanar(map);
 
     // create the test scenario in ScriptMatchTest

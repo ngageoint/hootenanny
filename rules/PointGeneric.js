@@ -122,4 +122,10 @@ exports.mergePair = function(map, e1, e2)
   return e1;
 };
 
+exports.getMatchFeatureDetails = function(map, e1, e2)
+{
+  var featureDetails = [];
+  return featureDetails;
+};
+
 

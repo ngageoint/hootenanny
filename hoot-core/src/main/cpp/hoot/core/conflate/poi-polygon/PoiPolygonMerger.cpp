@@ -206,7 +206,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     LOG_VART(poisMerged);
     finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
     finalBuilding->setStatus(Status::Conflated);
-    if (ConfigOptions().getWriterIncludeDebugTags())
+    ConfigOptions conf;
+    if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
     {
       finalBuilding->setTag(MetadataTags::HootMatchedBy(), PoiPolygonMatch::MATCH_NAME);
     }

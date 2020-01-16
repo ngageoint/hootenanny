@@ -95,7 +95,7 @@ public:
     fp.close();
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS( _inputPath + "Buildings.arff",
+    HOOT_FILE_EQUALS(_inputPath + "Buildings.arff",
                      _outputPath + "Buildings.arff");
   }
 

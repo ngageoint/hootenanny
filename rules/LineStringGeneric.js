@@ -141,3 +141,9 @@ exports.mergeSets = function(map, pairs, replaced)
   return result;
 };
 
+exports.getMatchFeatureDetails = function(map, e1, e2)
+{
+  var featureDetails = [];
+  return featureDetails;
+};
+

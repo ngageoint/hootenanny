@@ -115,6 +115,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 

@@ -250,7 +250,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
   {
     e1Match->setTag(MetadataTags::HootMatchedBy(), _matchedBy);
   }

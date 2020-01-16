@@ -85,7 +85,8 @@ public:
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
 
-  virtual QString getDescription() const override { return "Matches elements with Generic Conflation"; }
+  virtual QString getDescription() const override
+  { return "Matches elements with Generic Conflation"; }
 
 private:
 

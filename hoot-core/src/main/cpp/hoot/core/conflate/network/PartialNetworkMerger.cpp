@@ -111,7 +111,8 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   merger->mergeTags();
   // set the status on all keeper ways to conflated.
   merger->setKeeperStatus(Status::Conflated);
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
   {
     Tags tagsToAdd(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
     merger->addKeeperTags(tagsToAdd);

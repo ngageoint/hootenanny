@@ -201,7 +201,8 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   }
   elementWithTagsToKeep->setTags(mergedTags);
   elementWithTagsToKeep->setStatus(Status::Conflated);
-  if (ConfigOptions().getWriterIncludeDebugTags())
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
   {
     elementWithTagsToKeep->setTag(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
   }

@@ -6,6 +6,7 @@ exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
+exports.baseFeatureType = "Line";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
@@ -93,7 +94,7 @@ exports.mergeSets = function(map, pairs, replaced)
 {
     // snap the ways in the second input to the first input. Use the default tag
     // merge method.
-    var result = snapWays(sublineMatcher, map, pairs, replaced);
+    var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
     return result;
 };
 
