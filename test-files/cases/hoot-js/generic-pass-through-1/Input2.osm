@@ -26,20 +26,32 @@
   </node>
   <node id='-88650086' action='modify' visible='true' lat='41.44447634376' lon='-104.40797628621'>
     <tag k='amenity' v='bar' />
-    <tag k='note' v='B' />
+    <tag k='note' v='H' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </node>
   <node id='-88650481' action='modify' visible='true' lat='42.05748616227' lon='-104.38104463577'>
     <tag k='barrier' v='wall' />
-    <tag k='note' v='B' />
+    <tag k='note' v='D' />
   </node>
+  <node id='-88651837' action='modify' visible='true' lat='42.11452802733' lon='-105.5072076416' />
+  <node id='-88651838' action='modify' visible='true' lat='41.72213468512' lon='-105.4193170166' />
+  <node id='-88651840' action='modify' visible='true' lat='41.37269060408' lon='-105.56763244629' />
+  <node id='-88651842' action='modify' visible='true' lat='41.26129562319' lon='-105.49622131348' />
+  <node id='-88651861' action='modify' visible='true' lat='41.79179677818' lon='-104.02954650879'>
+    <tag k='barrier' v='wall' />
+    <tag k='note' v='F' />
+  </node>
+  <node id='-88651878' action='modify' visible='true' lat='39.51675554523' lon='-105.35905613511' />
+  <node id='-88651879' action='modify' visible='true' lat='38.59853706867' lon='-105.44428278352' />
+  <node id='-88651880' action='modify' visible='true' lat='38.56106044392' lon='-104.60266963053' />
+  <node id='-88651881' action='modify' visible='true' lat='39.48798522471' lon='-104.58136296843' />
   <way id='-88650087' action='modify' visible='true'>
     <nd ref='-88650048' />
     <nd ref='-88650050' />
     <tag k='length' v='94765.7' />
     <tag k='natural' v='shear_wall' />
-    <tag k='note' v='B' />
+    <tag k='note' v='D' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </way>
@@ -48,7 +60,7 @@
     <nd ref='-88650054' />
     <tag k='length' v='89030.0' />
     <tag k='natural' v='scrub' />
-    <tag k='note' v='B' />
+    <tag k='note' v='H' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </way>
@@ -61,7 +73,7 @@
     <tag k='barrier' v='wall' />
     <tag k='feature_area' v='6.9556775568E9' />
     <tag k='length' v='101953.3' />
-    <tag k='note' v='B' />
+    <tag k='note' v='D' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
     <tag k='width' v='71720.9' />
@@ -76,7 +88,7 @@
     <tag k='barrier' v='toll_booth' />
     <tag k='feature_area' v='7.5089369684E9' />
     <tag k='length' v='101085.0' />
-    <tag k='note' v='B' />
+    <tag k='note' v='H' />
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
     <tag k='width' v='78583.2' />
@@ -106,5 +118,27 @@
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
     <tag k='width' v='60606.2' />
+  </way>
+  <way id='-88651839' action='modify' visible='true'>
+    <nd ref='-88651837' />
+    <nd ref='-88651838' />
+    <nd ref='-88651840' />
+    <nd ref='-88651842' />
+    <tag k='natural' v='shear_wall' />
+    <tag k='note' v='F' />
+  </way>
+  <way id='-88651877' action='modify' visible='true'>
+    <nd ref='-88651878' />
+    <nd ref='-88651879' />
+    <nd ref='-88651880' />
+    <nd ref='-88651881' />
+    <nd ref='-88651878' />
+    <tag k='barrier' v='wall' />
+    <tag k='feature_area' v='6.9556775568E9' />
+    <tag k='length' v='101953.3' />
+    <tag k='note' v='F' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='width' v='71720.9' />
   </way>
 </osm>
