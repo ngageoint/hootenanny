@@ -31,8 +31,8 @@
   <node id='-88650038' action='modify' visible='true' lat='43.12561165917' lon='-103.82448540117' />
   <node id='-88650040' action='modify' visible='true' lat='42.63063625483' lon='-103.74465820515' />
   <node id='-88650464' action='modify' visible='true' lat='42.0574583773' lon='-104.38111450195'>
+    <tag k='barrier' v='wall' />
     <tag k='note' v='A' />
-    <tag k='parking' v='garage' />
   </node>
   <way id='-88650041' action='modify' visible='true'>
     <nd ref='-88650002' />

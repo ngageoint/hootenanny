@@ -31,8 +31,8 @@
     <tag k='source:imagery' v='Unknown' />
   </node>
   <node id='-88650481' action='modify' visible='true' lat='42.05748616227' lon='-104.38104463577'>
+    <tag k='barrier' v='wall' />
     <tag k='note' v='B' />
-    <tag k='parking' v='covered' />
   </node>
   <way id='-88650087' action='modify' visible='true'>
     <nd ref='-88650048' />
