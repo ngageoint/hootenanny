@@ -405,6 +405,10 @@ void UnifyingConflator::_removeConflictingGenericGeometryMatches(
   {
     ConstMatchPtr match = *matchItr;
 
+    // TODO: bug here - If its a non-generic geometry miss, AND we have a generic geometry match,
+    // then we want to add the generic geometry match. BUT if we only have the non-generic miss, we
+    // need to make sure it passes through.
+
     LOG_VART(match->getMatchName());
     if (!genericMatchNames.contains(match->getMatchName()))
     {
