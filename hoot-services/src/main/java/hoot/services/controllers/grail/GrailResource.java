@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -443,30 +443,6 @@ public class GrailResource {
                 }
             }
 
-            Map<String, String> tags = DbUtils.getJobTags(reqParams.getParentId());
-            String resourceId = tags.get("input1");
-
-            if(resourceId != null) {
-                // Setup workflow to refresh rails data after the push
-                long referenceId = Long.parseLong(resourceId);
-                Long parentFolderId = DbUtils.getParentFolder(referenceId);
-                Map<String, String> mapTags = DbUtils.getMapsTableTags(referenceId);
-
-                GrailParams refreshParams = new GrailParams();
-                refreshParams.setUser(user);
-                refreshParams.setWorkDir(workDir);
-                refreshParams.setOutput(DbUtils.getDisplayNameById(referenceId));
-                refreshParams.setBounds(mapTags.get("bbox"));
-
-                try {
-                    List<Command> refreshWorkflow = setupRailsPull(jobId, refreshParams, parentFolderId);
-                    workflow.addAll(refreshWorkflow);
-                }
-                catch(UnavailableException exc) {
-                    return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(exc.getMessage()).build();
-                }
-            }
-
             Map<String, Object> jobStatusTags = new HashMap<>();
             jobStatusTags.put("bbox", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
@@ -819,12 +795,9 @@ public class GrailResource {
         advancedUserCheck(user);
 
         String layerName = reqParams.getInput1();
+
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
-
-        if (DbUtils.mapExists(layerName)) {
-            throw new BadRequestException("Record with name : " + layerName + " already exists.  Please try a different name.");
-        }
 
         JSONObject json = new JSONObject();
         json.put("jobid", jobId);
