@@ -64,11 +64,11 @@ exports.matchScore = function(map, e1, e2)
 
   // TODO: Do we want to add the concept of a review for either tags or geometry?
 
-  var tagScore = getTagScore(map, e1, e2);
-  var tagScorePassesThreshold = false;
-  if (tagScore >= exports.tagThreshold)
+  var typeScore = getTypeScore(map, e1, e2);
+  var typeScorePassesThreshold = false;
+  if (typeScore >= exports.tagThreshold)
   {
-    tagScorePassesThreshold = true;
+    typeScorePassesThreshold = true;
   }
 
   // extract the sublines needed for matching
@@ -92,7 +92,7 @@ exports.matchScore = function(map, e1, e2)
     }
   }
 
-  var featureMatch = tagScorePassesThreshold && geometryMatch;
+  var featureMatch = typeScorePassesThreshold && geometryMatch;
   if (featureMatch)
   {
     var result = { match: 1.0 };
@@ -109,13 +109,13 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
-  hoot.trace("tagScore: " + tagScore);
-  hoot.trace("tagScorePassesThreshold: " + tagScorePassesThreshold);
+  hoot.trace("typeScore: " + typeScore);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   hoot.trace("geometryMatch: " + geometryMatch);
   hoot.trace("distanceScore: " + distanceScore);
   hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
   hoot.trace("lengthScore: " + lengthScore);
-  hoot.trace("***END GENERIC LINE MATCH MATCH DETAIL***");
+  hoot.trace("***END GENERIC LINE MATCH DETAIL***");
 
   return result;
 };

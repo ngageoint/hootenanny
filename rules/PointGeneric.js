@@ -58,35 +58,10 @@ exports.matchScore = function(map, e1, e2)
 
   if (e1.getStatusString() == e2.getStatusString()) 
   {
+    hoot.trace("same statuses: miss");
     return result;
   }
-    
-  // TODO: Do we want to add the concept of a review for either tags or geometry?
 
-  var tagScore = getTagScore(map, e1, e2);
-  var tagScorePassesThreshold = false;
-  if (tagScore >= exports.tagThreshold)
-  {
-    tagScorePassesThreshold = true;
-  }
-
-  var error1 = e1.getCircularError();
-  var error2 = e2.getCircularError();
-  var distanceBetweenFeatures = distance(e1, e2);
-  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
-  var geometryMatch = false;
-  if (distanceBetweenFeatures <= searchRadius)
-  {
-    geometryMatch = true;
-  }
-
-  var featureMatch = tagScorePassesThreshold && geometryMatch;
-  if (featureMatch)
-  {
-    var result = { match: 1.0 };
-  }
-
-  hoot.trace("***GENERIC POINT MATCH DETAIL***");
   hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
   {
@@ -97,11 +72,36 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
-  hoot.trace("tagScore: " + tagScore);
-  hoot.trace("tagScorePassesThreshold: " + tagScorePassesThreshold);
-  hoot.trace("geometryMatch: " + geometryMatch);
+    
+  // TODO: Do we want to add the concept of a review for either tags or geometry?
+
+  var typeScore = getTypeScore(map, e1, e2);
+  var typeScorePassesThreshold = false;
+  if (typeScore >= exports.tagThreshold)
+  {
+    typeScorePassesThreshold = true;
+  }
+  hoot.trace("typeScore: " + typeScore);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+
+  var error1 = e1.getCircularError();
+  var error2 = e2.getCircularError();
+  var distanceBetweenFeatures = distance(e1, e2);
+  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
+  var geometryMatch = false;
+  if (distanceBetweenFeatures <= searchRadius)
+  {
+    geometryMatch = true;
+  }
   hoot.trace("distanceBetweenFeatures: " + distanceBetweenFeatures);
-  hoot.trace("***END POINT MATCH MATCH DETAIL***");
+  hoot.trace("geometryMatch: " + geometryMatch);
+
+  var featureMatch = typeScorePassesThreshold && geometryMatch;
+  if (featureMatch)
+  {
+    var result = { match: 1.0 };
+  }
+  hoot.trace("featureMatch: " + featureMatch);
 
   return result;
 };

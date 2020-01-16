@@ -39,7 +39,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
 bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(e);
+  LOG_VART(e->getElementId());
 
   bool result = false;
 

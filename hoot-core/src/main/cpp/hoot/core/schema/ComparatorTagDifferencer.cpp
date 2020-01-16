@@ -38,6 +38,7 @@ HOOT_FACTORY_REGISTER(TagDifferencer, ComparatorTagDifferencer)
 double ComparatorTagDifferencer::diff(const ConstOsmMapPtr &/*map*/, const ConstElementPtr& e1,
   const ConstElementPtr &e2) const
 {
+  LOG_VART(TagComparator::getInstance().compareTags(e1->getTags(), e2->getTags()));
   return 1 - TagComparator::getInstance().compareTags(e1->getTags(), e2->getTags());
 }
 

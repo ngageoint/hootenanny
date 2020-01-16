@@ -41,7 +41,7 @@ namespace hoot
 {
 
 QMultiHash<QString, QString> PoiPolygonSchema::_typeToNames;
-QSet<QString> PoiPolygonSchema::_allTagKeys;
+QSet<QString> PoiPolygonSchema::_allTypeKeys;
 
 PoiPolygonSchema::PoiPolygonSchema()
 {
@@ -207,23 +207,9 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
 {
   int typeCount = 0;
   QStringList typesParsed;
-  if (_allTagKeys.size() == 0)
+  if (_allTypeKeys.size() == 0)
   {
-    QSet<QString> allTagKeysTemp = OsmSchema::getInstance().getAllTagKeys();
-    allTagKeysTemp.remove(MetadataTags::Ref1());
-    allTagKeysTemp.remove(MetadataTags::Ref2());
-    allTagKeysTemp.remove("uuid");
-    allTagKeysTemp.remove("name");
-    allTagKeysTemp.remove("ele");
-    for (QSet<QString>::const_iterator it = allTagKeysTemp.begin(); it != allTagKeysTemp.end(); ++it)
-    {
-      const QString tagKey = *it;
-      //address tags aren't really type tags
-      if (!tagKey.startsWith("addr:"))
-      {
-        _allTagKeys.insert(tagKey);
-      }
-    }
+    _allTypeKeys = OsmSchema::getInstance().getAllTypeKeys();
   }
 
   const Tags elementTags = element->getTags();
@@ -231,7 +217,7 @@ bool PoiPolygonSchema::hasMoreThanOneType(const ConstElementPtr& element)
   {
     const QString elementTagKey = it.key();
     //there may be duplicate keys in allTags
-    if (_allTagKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
+    if (_allTypeKeys.contains(elementTagKey) && !typesParsed.contains(elementTagKey))
     {
       LOG_TRACE("Has key: " << elementTagKey);
       typeCount++;

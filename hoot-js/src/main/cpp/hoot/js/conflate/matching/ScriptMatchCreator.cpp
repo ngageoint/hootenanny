@@ -135,17 +135,21 @@ public:
     Persistent<Object> plugin(current, getPlugin(_script));
     Local<Object> mapJs(ToLocal(&_mapJs));
 
+    LOG_VART(e->getElementId());
+
     ConstOsmMapPtr map = getMap();
 
     // create an envelope around the e plus the search radius.
     std::shared_ptr<Envelope> env(e->getEnvelope(map));
-    LOG_VART(env);
     Meters searchRadius = getSearchRadius(e);
+    LOG_VART(searchRadius);
     env->expandBy(searchRadius);
+    LOG_VART(env);
 
     // find other nearby candidates
     set<ElementId> neighbors =
       SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
+    LOG_VART(neighbors);
     ElementId from = e->getElementId();
 
     _elementsEvaluated++;
@@ -153,7 +157,9 @@ public:
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
-      LOG_VART(e2.get());
+      LOG_VART(e2->getElementId());
+      LOG_VART(isCorrectOrder(e, e2));
+      LOG_VART(isMatchCandidate(e2));
       if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
       {
         // score each candidate and push it on the result vector
@@ -258,7 +264,6 @@ public:
         int argc = 0;
         jsArgs[argc++] = ElementJs::New(e);
 
-        LOG_TRACE("Calling getSearchRadius...");
         Handle<Value> f = ToLocal(&_getSearchRadius)->Call(getPlugin(), argc, jsArgs);
 
         result = toCpp<Meters>(f) * _candidateDistanceSigma;
@@ -327,7 +332,7 @@ public:
   {
     if (!_index)
     {
-      LOG_INFO("Creating script feature index...");
+      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -345,16 +350,17 @@ public:
 
       // Instantiate our visitor
       SpatialIndexer v(_index,
-                             _indexToEid,
-                             pC,
-                             std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
-                             getMap());
+                       _indexToEid,
+                       pC,
+                       std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
+                       getMap());
 
       // Do the visiting
       getMap()->visitRo(v);
       v.finalizeIndex();
-    }
 
+      LOG_VART(_indexToEid.size());
+    }
     return _index;
   }
 
@@ -392,6 +398,7 @@ public:
   {
     if (_matchCandidateCache.contains(e->getElementId()))
     {
+      //LOG_TRACE("Found cached match candidate bool: " << e->getElementId());
       return _matchCandidateCache[e->getElementId()];
     }
 
@@ -460,7 +467,6 @@ public:
       Handle<Value> f = func->Call(ToLocal(&plugin), argc, jsArgs);
 
       result = f->BooleanValue();
-      LOG_VART(result);
     //}
 
     _matchCandidateCache[e->getElementId()] = result;
@@ -469,8 +475,11 @@ public:
 
   virtual void visit(const ConstElementPtr& e)
   {
+    //LOG_VART(e->getElementId());
     if (isMatchCandidate(e))
     {
+      //LOG_TRACE("isMatchCandidate: " << e->getElementId());
+
       checkForMatch(e);
 
       _numMatchCandidatesVisited++;
@@ -619,7 +628,7 @@ void ScriptMatchCreator::createMatches(
 //    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
 //    " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
 //    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-  // TODO: don't think the base feature type is populated yet
+  // TODO: don't think the base feature type is populated yet either
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
@@ -674,7 +683,7 @@ std::shared_ptr<ScriptMatchVisitor> ScriptMatchCreator::_getCachedVisitor(
     LOG_VART(scriptPath);
 
     QFileInfo scriptFileInfo(_scriptPath);
-    LOG_TRACE("Resetting the match candidate checker " << scriptFileInfo.fileName() << "...");
+    LOG_TRACE("Resetting the match candidate checker: " << scriptFileInfo.fileName() << "...");
 
     vector<ConstMatchPtr> emptyMatches;
     _cachedScriptVisitor.reset(

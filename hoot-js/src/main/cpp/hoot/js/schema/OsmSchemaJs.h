@@ -56,6 +56,7 @@ private:
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Even thoughthe logic for some of these methods have been moved from OsmSchema to criterion,

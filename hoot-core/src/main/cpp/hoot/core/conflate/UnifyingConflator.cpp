@@ -173,7 +173,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
-  // TODO: add docs for this
+  // TODO: add docs for this - we don't have a generic geometry version of poi/poly
   _removeConflictingGenericGeometryMatches(_matches);
 
   double findMatchesTime = timer.getElapsedAndRestart();
@@ -347,7 +347,8 @@ QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInANonGenericGeometryMa
     if (!genericMatchNames.contains(match->getMatchName()) && match->getType() != MatchType::Miss)
     {
       const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr =
+             matchElementIdPairs.begin();
            matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
       {
         const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
@@ -405,21 +406,27 @@ void UnifyingConflator::_removeConflictingGenericGeometryMatches(
   {
     ConstMatchPtr match = *matchItr;
 
-    // TODO: bug here - If its a non-generic geometry miss, AND we have a generic geometry match,
+    // TODO: bug here - If its a non-generic geometry miss AND we have a generic geometry match,
     // then we want to add the generic geometry match. BUT if we only have the non-generic miss, we
-    // need to make sure it passes through.
+    // need to make sure that miss passes through.
 
     LOG_VART(match->getMatchName());
-    if (!genericMatchNames.contains(match->getMatchName()))
+    const bool isNonGeneric = !genericMatchNames.contains(match->getMatchName());
+    const bool isNonGenericMiss = isNonGeneric && match->getType() == MatchType::Miss;
+    if (isNonGeneric)
     {
       LOG_TRACE("Adding non-generic geometry match: " << match);
       updatedMatches.push_back(match);
     }
-    else
+    LOG_VART(isNonGeneric);
+    LOG_VART(isNonGenericMiss);
+
+    if (!isNonGeneric || isNonGenericMiss)
     {
       const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
       bool sharedIdWithNonGenericGeometryMatch = false;
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr = matchElementIdPairs.begin();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr =
+             matchElementIdPairs.begin();
            matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
       {
         const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;

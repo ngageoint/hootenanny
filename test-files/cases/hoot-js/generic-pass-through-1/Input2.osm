@@ -18,7 +18,7 @@
   <node id='-88650078' action='modify' visible='true' lat='43.15697568672' lon='-104.79469286055' />
   <node id='-88650080' action='modify' visible='true' lat='43.12561165917' lon='-103.82448540117' />
   <node id='-88650082' action='modify' visible='true' lat='42.63063625483' lon='-103.74465820515' />
-  <node id='-88650084' action='modify' visible='true' lat='42.69782109764' lon='-105.91206294539'>
+  <node id='-88650084' action='modify' visible='true' lat='42.69884220385' lon='-105.91342550757'>
     <tag k='amenity' v='dining_hall' />
     <tag k='note' v='B' />
     <tag k='security:classification' v='UNCLASSIFIED' />
@@ -30,7 +30,7 @@
     <tag k='security:classification' v='UNCLASSIFIED' />
     <tag k='source:imagery' v='Unknown' />
   </node>
-  <node id='-88650481' action='modify' visible='true' lat='42.05898372858' lon='-104.37973571777'>
+  <node id='-88650481' action='modify' visible='true' lat='42.05748616227' lon='-104.38104463577'>
     <tag k='note' v='B' />
     <tag k='parking' v='covered' />
   </node>

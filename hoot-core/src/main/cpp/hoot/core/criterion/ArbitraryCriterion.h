@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-
+#include <hoot/core/util/Log.h>
 // Qt
 #include <QString>
 
@@ -59,9 +59,11 @@ public:
     _f = f;
   }
 
-  virtual bool isSatisfied(const std::shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const std::shared_ptr<const Element>& e) const
   {
-    return _f(e);
+    const bool result = _f(e);
+    LOG_VART(result);
+    return result;
   }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new ArbitraryCriterion(_f)); }
@@ -73,7 +75,7 @@ public:
 
 private:
 
-  std::function<bool (const std::shared_ptr<const Element> &e)> _f;
+  std::function<bool (const std::shared_ptr<const Element>& e)> _f;
 };
 
 }

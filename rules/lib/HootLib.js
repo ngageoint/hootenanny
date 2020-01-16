@@ -20,7 +20,7 @@
  */
 function testAdd(v1, v2)
 {
-    return v1 + v2;
+  return v1 + v2;
 }
 
 /**
@@ -28,7 +28,7 @@ function testAdd(v1, v2)
  */
 function createUuid()
 {
-    return hoot.UuidHelper.createUuid();
+  return hoot.UuidHelper.createUuid();
 }
 
 /**
@@ -36,7 +36,7 @@ function createUuid()
  */
 function getHootConfig(e)
 {
-    return hoot.get(e);
+  return hoot.get(e);
 }
 
 /**
@@ -152,10 +152,11 @@ function getTagDistance(commonKvp, t1, t2) {
 /**
  * TODO
  */
-function getTagScore(map, e1, e2)
+function getTypeScore(map, e1, e2)
 {
-  var differ = new hoot.ComparatorTagDifferencer();
-  return differ.diff(map, e1, e2);
+  //var differ = new hoot.ComparatorTagDifferencer();
+  //return differ.diff(map, e1, e2);
+  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags());
 }
 
 /**

@@ -43,6 +43,7 @@
 #include <hoot/core/criterion/HasNameCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/js/elements/TagsJs.h>
 
 using namespace v8;
 
@@ -101,6 +102,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isLinearHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "scoreTypes"),
+              FunctionTemplate::New(current, scoreTypes)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreOneWay"),
               FunctionTemplate::New(current, scoreOneWay)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "hasName"),
@@ -309,6 +312,18 @@ void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)
   QString kvp2 = toCpp<QString>(args[1]);
 
   args.GetReturnValue().Set(Number::New(current, OsmSchema::getInstance().score(kvp1, kvp2)));
+}
+
+void OsmSchemaJs::scoreTypes(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  Tags tags1 = toCpp<Tags>(args[0]);
+  Tags tags2 = toCpp<Tags>(args[1]);
+
+  args.GetReturnValue().Set(
+    Number::New(current, OsmSchema::getInstance().scoreTypes(tags1, tags2)));
 }
 
 void OsmSchemaJs::scoreOneWay(const FunctionCallbackInfo<Value>& args)

@@ -102,7 +102,7 @@ exports.getSearchRadius = function(e) {
     var tags = e.getTags();
 
     var radius = e.getCircularError();
-    hoot.trace("radius start: " + radius);
+    //hoot.trace("radius start: " + radius);
 
     for (var i = 0; i < distances.length; i++) {
         if (tags.contains(distances[i].k) &&
@@ -113,7 +113,7 @@ exports.getSearchRadius = function(e) {
         }
     }
 
-    hoot.trace("radius final: " + radius);
+    //hoot.trace("radius final: " + radius);
 
     return radius;
 }
@@ -213,13 +213,13 @@ function additiveScore(map, e1, e2) {
     {
       searchRadius = Math.min(e1SearchRadius, e2SearchRadius);
     }
+    hoot.trace("searchRadius: " + searchRadius);
 
     var d = distance(e1, e2);
+    hoot.trace("d: " + d);
 
     if (d > searchRadius)
     {
-        hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
-        hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
         hoot.trace(
           "distance: " + d + " greater than search radius: " + searchRadius + "; returning score: " +
           result.score);
@@ -352,19 +352,8 @@ function additiveScore(map, e1, e2) {
     result.score = score;
     result.reasons = reason;
 
-    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
-    if (e1.getTags().get("note"))
-    {
-      hoot.trace("e1 note: " + e1.getTags().get("note"));
-    }
-    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
-    if (e2.getTags().get("note"))
-    {
-      hoot.trace("e2 note: " + e2.getTags().get("note"));
-    }
-    hoot.trace("reason: " + reason);
-    hoot.trace("score: " + score);
-
+    hoot.trace("score: " + result.score);
+    hoot.trace("reasons: " + result.reasons);
     return result;
 }
 
@@ -383,13 +372,28 @@ exports.matchScore = function(map, e1, e2) {
     totalCount += 1;
     var result = { miss: 1.0, explain:'Miss' };
 
-    if (e1.getStatusString() == e2.getStatusString()) {
-        return result;
+    if (e1.getStatusString() == e2.getStatusString()) 
+    {
+      hoot.trace("same statuses: miss");
+      return result;
+    }
+
+    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+    if (e1.getTags().get("note"))
+    {
+      hoot.trace("e1 note: " + e1.getTags().get("note"));
+    }
+    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+    if (e2.getTags().get("note"))
+    {
+      hoot.trace("e2 note: " + e2.getTags().get("note"));
     }
 
     var additiveResult = additiveScore(map, e1, e2);
     var score = additiveResult.score;
+    hoot.trace("score: " + score);
     var reasons = additiveResult.reasons;
+    hoot.trace("reasons: " + reasons);
     var d = "(" + prettyNumber(distance(e1, e2)) + "m)";
 
     var matchScore;
@@ -404,22 +408,8 @@ exports.matchScore = function(map, e1, e2) {
         matchScore = {match: 1, explain: "Very similar " + d + " - " + reasons.join(", ") };
         classification = 'match';
     }
-
-    hoot.trace("***POI MATCH DETAIL***");
-    hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
-    if (e1.getTags().get("note"))
-    {
-      hoot.trace("e1 note: " + e1.getTags().get("note"));
-    }
-    hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
-    if (e2.getTags().get("note"))
-    {
-      hoot.trace("e2 note: " + e2.getTags().get("note"));
-    }
-    hoot.trace("score: " + score);
     hoot.trace("explanation: " + matchScore.explain);
     hoot.trace("classification: " + classification);
-    hoot.trace("***END POI MATCH DETAIL***");
 
     return matchScore;
 };

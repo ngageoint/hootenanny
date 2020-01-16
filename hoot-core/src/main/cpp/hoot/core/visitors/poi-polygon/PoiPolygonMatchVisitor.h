@@ -94,10 +94,6 @@ private:
   std::shared_ptr<Tgs::HilbertRTree> _polyIndex;
   std::deque<ElementId> _polyIndexToEid;
 
-  // used for finding surrounding poi's
-  std::shared_ptr<Tgs::HilbertRTree> _poiIndex;
-  std::deque<ElementId> _poiIndexToEid;
-
   std::shared_ptr<PoiPolygonRfClassifier> _rf;
 
   double _reviewDistanceThreshold;

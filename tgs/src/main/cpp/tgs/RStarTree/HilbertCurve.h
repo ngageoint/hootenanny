@@ -107,6 +107,7 @@ namespace Tgs
     }
 
   private:
+
     int _dimensions;
     int _order;
     bitmask_t* _point;

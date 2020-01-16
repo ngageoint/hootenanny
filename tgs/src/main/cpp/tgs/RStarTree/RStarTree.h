@@ -241,6 +241,7 @@ protected:
   std::set<int> _overflowedLevels;
 
 private:
+
   /// call _[get|set]RootId() instead of setting directly.
   int _rootId;
 

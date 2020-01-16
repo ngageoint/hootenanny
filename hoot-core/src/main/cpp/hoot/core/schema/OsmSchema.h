@@ -280,7 +280,19 @@ public:
 
   std::vector<SchemaVertex> getAllTags();
 
+  /**
+   * TODO
+   *
+   * @return
+   */
   QSet<QString> getAllTagKeys();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  QSet<QString> getAllTypeKeys();
 
   bool hasTagKey(const QString& key);
 
@@ -406,10 +418,27 @@ public:
   double score(const QString& kvp, const Tags& tags);
 
   /**
+   * TODO
+   *
+   * @param tags1
+   * @param tags2
+   * @return
+   */
+  double scoreTypes(const Tags& tags1, const Tags& tags2);
+
+  /**
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
    *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
    */
   double scoreOneWay(const QString& kvp1, const QString& kvp2);
+
+  /**
+   *
+   *
+   * @param key
+   * @return
+   */
+  bool isTypeKey(const QString& key);
 
   /**
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
@@ -473,6 +502,7 @@ private:
   QHash<QString, bool> _metadataKey;
 
   QSet<QString> _allTagKeysCache;
+  QSet<QString> _allTypeKeysCache;
 };
 
 }

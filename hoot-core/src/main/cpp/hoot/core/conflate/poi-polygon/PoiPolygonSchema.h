@@ -180,7 +180,7 @@ private:
 
   //maps an OSM kvp to multiple possible strings such a feature's name might contain
   static QMultiHash<QString, QString> _typeToNames;
-  static QSet<QString> _allTagKeys;
+  static QSet<QString> _allTypeKeys;
 
   static void _readTypeToNames();
   static bool _typeHasName(const QString& kvp, const QString& name);
