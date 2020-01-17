@@ -29,7 +29,6 @@
 
 // hoot
 #include <hoot/core/conflate/matching/MatchGraph.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStat.h>
@@ -51,7 +50,7 @@ namespace hoot
 
 class Match;
 class MatchClassification;
-//class MatchFactory;
+class MatchFactory;
 class MatchThreshold;
 class MergerFactory;
 class ElementId;
@@ -111,8 +110,7 @@ public:
 private:
 
   geos::geom::Envelope _bounds;
-  //const MatchFactory& _matchFactory;
-  MatchFactory _matchFactory;
+  const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::shared_ptr<MergerFactory> _mergerFactory;
   Settings _settings;   // TOOD: why is this needed?
@@ -154,24 +152,6 @@ private:
   QString _matchSetToString(const MatchSet& matchSet) const;
 
   void _updateProgress(const int currentStep, const QString message);
-
-  /*
-   * TODO
-   */
-  void _removeConflictingGenericGeometryMatches(std::vector<ConstMatchPtr>& matches);
-  /*
-   * TODO
-   */
-  int _addGenericMatches(std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map);
-  /*
-   * TODO
-   */
-  QSet<ElementId> _getElementIdsInvolvedInANonGenericGeometryMatch(
-    const std::vector<ConstMatchPtr>& matches) const;
-  QSet<ElementId> _getElementIdsInvolvedInAMatch(
-    const std::vector<ConstMatchPtr>& matches) const;
-
-  int _getNumGenericGeometryMatches(const std::vector<ConstMatchPtr>& matches) const;
 };
 
 }
