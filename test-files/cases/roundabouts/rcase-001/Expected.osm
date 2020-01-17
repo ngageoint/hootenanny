@@ -21,10 +21,6 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="3"/>
     </node>
-    <node visible="true" id="4" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5445434999999925" lon="-72.3477709000000004">
-        <tag k="hoot:status" v="1"/>
-        <tag k="hoot:id" v="4"/>
-    </node>
     <node visible="true" id="5" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117" lat="18.5463306999999951" lon="-72.3468486999999811">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="5"/>
@@ -577,10 +573,10 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="142"/>
     </node>
-    <way visible="true" id="-7" timestamp="2017-06-07T15:16:55Z" version="1">
+    <way visible="true" id="-14" timestamp="2017-06-07T15:16:55Z" version="1">
         <nd ref="-36"/>
         <nd ref="-16"/>
-        <nd ref="4"/>
+        <nd ref="84"/>
         <tag k="source:description" v="IKONOS Imagery"/>
         <tag k="surface" v="paved"/>
         <tag k="seasonal" v="no"/>
@@ -598,7 +594,7 @@
         <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
         <tag k="location" v="surface"/>
         <tag k="source" v="mgcp"/>
-        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:id" v="-14"/>
         <tag k="highway" v="road"/>
     </way>
     <way visible="true" id="1" timestamp="2017-06-07T15:16:56Z" version="1">
@@ -857,24 +853,6 @@
         <tag k="uuid" v="{4007d710-d32a-4585-8483-8c2e146ebfdf}"/>
         <tag k="hoot:id" v="13"/>
         <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="14" timestamp="2017-06-07T15:16:56Z" version="1" changeset="117">
-        <nd ref="84"/>
-        <nd ref="4"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="secondary_link"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{eafea4a7-3c57-45c7-8ffa-4d82e99dfca8}"/>
-        <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
-        <tag k="hoot:id" v="14"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="surface" v="paved"/>
-        <tag k="operational_status_quality" v="confirmed"/>
         <tag k="attribution" v="osm"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -1311,25 +1289,36 @@
         <nd ref="110"/>
         <nd ref="84"/>
         <nd ref="132"/>
-        <tag k="smoothness" v="intermediate"/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="surface" v="paved"/>
+        <tag k="source:description" v="IKONOS Imagery"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="uuid" v="{e2ee93da-504b-403b-8f6b-5d53482020e6}"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
+        <tag k="smoothness" v="intermediate"/>
+        <tag k="lanes" v="4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{e2ee93da-504b-403b-8f6b-5d53482020e6};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="width:minimum_traveled_way" v="8"/>
+        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
+        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="33"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="surface" v="paved"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
     </way>
     <way visible="true" id="34" timestamp="2017-06-07T15:16:56Z" version="1">
-        <nd ref="4"/>
+        <nd ref="84"/>
         <nd ref="79"/>
         <nd ref="133"/>
         <tag k="source:description" v="IKONOS Imagery"/>
@@ -1462,36 +1451,55 @@
     </way>
     <way visible="true" id="39" timestamp="2017-06-07T15:16:56Z" version="1">
         <nd ref="138"/>
-        <nd ref="4"/>
+        <nd ref="84"/>
         <nd ref="3"/>
         <nd ref="2"/>
         <nd ref="1"/>
-        <tag k="source:description" v="IKONOS Imagery"/>
-        <tag k="surface" v="paved"/>
-        <tag k="operational_status_quality" v="confirmed"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="condition" v="functional"/>
-        <tag k="source:name" v="very_high_resolution_commercial_monoscopic_imagery"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Boulevard Harry Truman"/>
-        <tag k="source:datetime" v="2016-03-16T16:50:52Z;2010-01-13"/>
         <tag k="smoothness" v="intermediate"/>
-        <tag k="lanes" v="4"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="uuid" v="{7b8fd54a-7dd5-4d7d-8f2a-2d864b49ba7c};{{6a141b6c-44bb-41e8-b52e-6ec8a5602ed5}}"/>
-        <tag k="operational_status" v="open"/>
-        <tag k="width:minimum_traveled_way" v="8"/>
-        <tag k="source:copyright" v="© 2010. Her Majesty the Queen in Right of Canada."/>
-        <tag k="attribution" v="osm"/>
-        <tag k="median" v="yes"/>
+        <tag k="source" v="CNIGS/GIS /DTM;osm"/>
         <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2016-03-16T16:46:59.136Z"/>
-        <tag k="location" v="surface"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="highway" v="secondary"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="source" v="CNIGS/GIS /DTM;osm;mgcp"/>
+        <tag k="name" v="Boulevard Harry Truman"/>
+        <tag k="uuid" v="{7b8fd54a-7dd5-4d7d-8f2a-2d864b49ba7c}"/>
         <tag k="practicability" v="truck_+_trailer_greater_than_20mt"/>
         <tag k="hoot:id" v="39"/>
-        <tag k="highway" v="secondary"/>
+        <tag k="source:datetime" v="2016-03-16T16:50:52Z"/>
+        <tag k="operational_status" v="open"/>
+        <tag k="surface" v="paved"/>
+        <tag k="operational_status_quality" v="confirmed"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="error:circular" v="15"/>
     </way>
+    <relation visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="33" role="reviewee"/>
+        <member type="way" ref="-14" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-111"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-14" role="reviewee"/>
+        <member type="way" ref="39" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-110"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="140" role="reviewee"/>
+        <member type="way" ref="11" role="reviewee"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-109"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="type" v="review"/>
+    </relation>
 </osm>

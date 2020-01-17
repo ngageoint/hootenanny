@@ -106,9 +106,7 @@ public:
     //  Check the geometry of a closed way without any tags
     way->addNode(way->getNodeId(0));
     geometry = ec.convertToGeometry(way);
-    //HOOT_STR_EQUALS("LineString", geometry->getGeometryType());
-    // TODO: may not want to stick with this
-    HOOT_STR_EQUALS("Polygon", geometry->getGeometryType());
+    HOOT_STR_EQUALS("LineString", geometry->getGeometryType());
     //  Add the building tag to make it an area
     way->setTag("building", "yes");
     geometry = ec.convertToGeometry(way);

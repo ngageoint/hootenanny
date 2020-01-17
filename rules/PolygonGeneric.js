@@ -11,6 +11,9 @@ exports.experimental = false;
 exports.baseFeatureType = "Polygon";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
+var overlapExtractor = 
+  new hoot.SmallerOverlapExtractor({ "convert.require.area.for.polygon": "false" });
+
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
  * optional, but may dramatically increase speed if you can cull some features
@@ -80,7 +83,7 @@ exports.matchScore = function(map, e1, e2)
 
   var geometryMatch = false;
   var geometryReview = false;
-  var overlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
+  var overlap = overlapExtractor.extract(map, e1, e2);
   var hist = -1.0;
   if (overlap < 0.20)
   {

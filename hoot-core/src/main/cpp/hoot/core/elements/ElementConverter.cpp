@@ -70,8 +70,9 @@ namespace hoot
 int ElementConverter::logWarnCount = 0;
 
 ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
-  _constProvider(provider),
-  _spatialReference(provider->getProjection())
+_constProvider(provider),
+_spatialReference(provider->getProjection()),
+_requireAreaForPolygonConversion(ConfigOptions().getConvertRequireAreaForPolygon())
 {
 }
 
@@ -133,7 +134,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
                                                               bool throwError,
                                                               const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_POLYGON)
   {
@@ -156,7 +157,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelatio
                                                               bool throwError,
                                                               const bool statsFlag) const
 {
-  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag);
+  GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
   {
@@ -306,7 +307,8 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
 }
 
 geos::geom::GeometryTypeId ElementConverter::getGeometryType(
-  const ConstElementPtr& e, bool throwError, const bool statsFlag)
+  const ConstElementPtr& e, bool throwError, const bool statsFlag,
+  const bool requireAreaForPolygonConversion)
 {
   // This is used to pass the relation type back to the exception handler
   QString relationType = "";
@@ -338,7 +340,9 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
       {
         areaCrit.reset(new AreaCriterion());
       }
-      if (w->isValidPolygon() && w->isClosedArea()) // TODO: this may cause big problems
+
+      // TODO: note
+      if (!requireAreaForPolygonConversion && w->isValidPolygon() && w->isClosedArea())
         return GEOS_POLYGON;
       else if (w->isValidPolygon() && areaCrit->isSatisfied(w))
         return GEOS_POLYGON;

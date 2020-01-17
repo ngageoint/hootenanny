@@ -30,6 +30,7 @@
 
 // hoot
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -50,7 +51,7 @@ class Element;
  * The ideas were shamelessly taken from RoadMatcher, but reimplemented in C++ with Hootenanny
  * appropriate data structures.
  */
-class SmallerOverlapExtractor : public FeatureExtractorBase
+class SmallerOverlapExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
@@ -65,6 +66,12 @@ public:
 
   virtual QString getDescription() const
   { return "Determines the overlap between two features focusing on the building with more overlap"; }
+
+  virtual void setConfiguration(const Settings& conf);
+
+private:
+
+  bool _requireAreaForPolygonConversion;
 };
 
 }

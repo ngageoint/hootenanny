@@ -70,7 +70,7 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   result |= tags.isTrue(MetadataTags::BuildingPart());
   result |= tags.isTrue("area");
 
-  // if at least one of the tags is marked as an area, but not a linestring tag then we consider
+  // If at least one of the tags is marked as an area, but not a linestring tag then we consider
   // this to be an area feature.
   for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
   {

@@ -114,9 +114,15 @@ public:
    * @param e
    * @param throwError If true an exception is thrown with an invalid geometry. If false a -1 is
    *  returned on error.
+   * @param statsFlag TODO
+   * @param requireAreaForPolygonConversion TODO
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
-    bool throwError = true, const bool statsFlag = false);
+    bool throwError = true, const bool statsFlag = false,
+    const bool requireAreaForPolygonConversion = true);
+
+  void setRequireAreaForPolygonConversion(bool require)
+  { _requireAreaForPolygonConversion = require; }
 
   static const int UNKNOWN_GEOMETRY = -1;
 
@@ -124,6 +130,7 @@ protected:
 
   ConstElementProviderPtr                 _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;
+  bool _requireAreaForPolygonConversion;
 };
 
 }

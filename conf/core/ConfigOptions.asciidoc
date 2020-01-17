@@ -841,6 +841,13 @@ performing a bounded API database query but are immediately connected to a way t
 crosses the bounds are tagged with a custom tag. Must be used in conjunction with
 `convert.bounding.box.keep.immediately.connected.ways.outside.bounds`. Not supported by all readers.
 
+=== convert.require.area.for.polygon
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === convert.ops
 
 * Data Type: list

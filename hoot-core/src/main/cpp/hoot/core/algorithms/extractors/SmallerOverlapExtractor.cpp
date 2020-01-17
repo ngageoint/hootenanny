@@ -45,8 +45,14 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, SmallerOverlapExtractor)
 
-SmallerOverlapExtractor::SmallerOverlapExtractor()
+SmallerOverlapExtractor::SmallerOverlapExtractor() :
+_requireAreaForPolygonConversion(true)
 {
+}
+
+void SmallerOverlapExtractor::setConfiguration(const Settings& conf)
+{
+  _requireAreaForPolygonConversion = ConfigOptions(conf).getConvertRequireAreaForPolygon();
 }
 
 double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& target,
@@ -56,6 +62,7 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
   LOG_VART(candidate->getElementId());
 
   ElementConverter ec(map.shared_from_this());
+  ec.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 
