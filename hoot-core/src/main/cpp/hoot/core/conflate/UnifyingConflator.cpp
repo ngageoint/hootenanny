@@ -142,6 +142,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
+  ConfigOptions conf(_settings);
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -174,7 +175,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
   // TODO: add docs for this - we don't have a generic geometry version of poi/poly
-  _removeConflictingGenericGeometryMatches(_matches);
+  const QStringList matchCreators = conf.getMatchCreators();
+  if (matchCreators.contains("LineStringGeneric") || matchCreators.contains("PointGeneric") ||
+      matchCreators.contains("PolygonGeneric"))
+  {
+    _removeConflictingGenericGeometryMatches(_matches);
+  }
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -208,10 +214,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     OptimalConstrainedMatches cm(map);
     vector<ConstMatchPtr> cmMatches;
 
-    if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
+    if (conf.getUnifyEnableOptimalConstrainedMatches())
     {
       cm.addMatches(_matches.begin(), _matches.end());
-      cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
+      cm.setTimeLimit(conf.getUnifyOptimizerTimeLimit());
       double cmStart = Time::getTime();
       try
       {
