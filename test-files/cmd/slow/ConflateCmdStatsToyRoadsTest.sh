@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-mkdir -p test-output/cmd/slow/ConflateCmdStatsTest
-STATS_OUT=test-output/cmd/slow/ConflateCmdStatsTest/toy-out
+IN_DIR=test-files/cmd/slow/ConflateCmdStatsTest
+OUT_DIR=test-output/cmd/slow/ConflateCmdStatsTest
+mkdir -p $OUT_DIR
+STATS_OUT=$OUT_DIR/toy-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 HOOT_OPTS="-C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D writer.include.debug.tags=true"
 
 hoot conflate $HOOT_OPTS test-files/ToyTestA.osm test-files/ToyTestB.osm $STATS_OUT.osm --stats > $STATS_OUT
+
+hoot diff $OUT_DIR/$STATS_OUT.osm $IN_DIR/$STATS_OUT.osm || diff OUT_DIR/$STATS_OUT.osm $IN_DIR/$STATS_OUT.osm
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""
