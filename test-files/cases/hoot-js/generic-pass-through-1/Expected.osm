@@ -203,7 +203,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-88650002"/>
     </node>
-    <way visible="true" id="-88651886" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-88651884" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88650002"/>
         <nd ref="-88650004"/>
         <tag k="hoot:status" v="3"/>
@@ -211,12 +211,12 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="note" v="C;D"/>
-        <tag k="hoot:id" v="-88651886"/>
+        <tag k="hoot:id" v="-88651884"/>
         <tag k="natural" v="cliff"/>
         <tag k="length" v="94765.7"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-88651884" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-88651882" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-88650030"/>
         <nd ref="-88650032"/>
         <tag k="hoot:status" v="3"/>
@@ -227,7 +227,7 @@
         <tag k="source:imagery" v="Unknown"/>
         <tag k="alt_name" v="highway2"/>
         <tag k="note" v="A"/>
-        <tag k="hoot:id" v="-88651884"/>
+        <tag k="hoot:id" v="-88651882"/>
         <tag k="length" v="86433.3"/>
         <tag k="error:circular" v="15"/>
     </way>

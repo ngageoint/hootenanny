@@ -52,7 +52,7 @@ NodeToWayMap::NodeToWayMap(const OsmMap& map)
 
 void NodeToWayMap::addWay(const std::shared_ptr<const Way>& w)
 {
-  LOG_TRACE("Adding way to node to way map: " << w->getElementId() << "...");
+  LOG_TRACE("Adding way: " << w->getElementId() << " with nodes: "<<  w->getNodeIds() << "...");
   const std::vector<long>& nodes = w->getNodeIds();
   for (size_t i = 0; i < nodes.size(); i++)
   {

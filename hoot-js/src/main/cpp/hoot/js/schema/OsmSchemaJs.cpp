@@ -98,8 +98,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isPoi)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isRailway"),
               FunctionTemplate::New(current, isRailway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLinearHighway"),
-              FunctionTemplate::New(current, isLinearHighway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isHighway"),
+              FunctionTemplate::New(current, isHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreTypes"),
@@ -283,6 +283,16 @@ void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
 }
 
+void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
+}
+
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -291,16 +301,6 @@ void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)

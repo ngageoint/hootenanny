@@ -43,6 +43,11 @@ WayNodeCriterion::WayNodeCriterion()
 
 bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  LOG_VART(_map.get());
+  if (_map.get())
+  {
+    LOG_VART(_map->size());
+  }
   return
     e->getElementType() == ElementType::Node &&
     _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId()).size() > 0;

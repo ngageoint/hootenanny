@@ -317,6 +317,11 @@ function isArea(map, e)
   return hoot.OsmSchema.isArea(map, e);
 }
 
+function isHighway(e)
+{
+  return hoot.OsmSchema.isHighway(e);
+}
+
 /**
  * TODO
  */

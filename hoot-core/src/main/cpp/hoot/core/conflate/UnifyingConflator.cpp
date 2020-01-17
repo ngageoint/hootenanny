@@ -142,7 +142,15 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
-  ConfigOptions conf(_settings);
+  //ConfigOptions conf(_settings);
+
+//  const QStringList matchCreators;
+//  if (matchCreators.contains("hoot::ScriptMatchCreator,PointGeneric.js") ||
+//      matchCreators.contains("hoot::ScriptMatchCreator,LineStringGeneric.js") ||
+//      matchCreators.contains("hoot::ScriptMatchCreator,PolygonGeneric.js"))
+//  {
+//    throw IllegalArgumentException("TODO");
+//  }
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
@@ -175,13 +183,14 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
   // TODO: add docs for this
-  const QStringList matchCreators = conf.getMatchCreators();
-  if (matchCreators.contains("hoot::ScriptMatchCreator,LineStringGeneric.js") ||
-      matchCreators.contains("hoot::ScriptMatchCreator,PointGeneric.js") ||
-      matchCreators.contains("hoot::ScriptMatchCreator,PolygonGeneric.js"))
-  {
-    _removeConflictingGenericGeometryMatches(_matches);
-  }
+//  const QStringList matchCreators = conf.getMatchCreators();
+//  if (matchCreators.contains("hoot::ScriptMatchCreator,LineStringGeneric.js") ||
+//      matchCreators.contains("hoot::ScriptMatchCreator,PointGeneric.js") ||
+//      matchCreators.contains("hoot::ScriptMatchCreator,PolygonGeneric.js"))
+//  {
+//    _removeConflictingGenericGeometryMatches(_matches);
+//  }
+  //const int numGenericMatchesAdded = _addGenericMatches(_matches, map);
 
   double findMatchesTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
@@ -215,10 +224,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     OptimalConstrainedMatches cm(map);
     vector<ConstMatchPtr> cmMatches;
 
-    if (conf.getUnifyEnableOptimalConstrainedMatches())
+    if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
     {
       cm.addMatches(_matches.begin(), _matches.end());
-      cm.setTimeLimit(conf.getUnifyOptimizerTimeLimit());
+      cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
       double cmStart = Time::getTime();
       try
       {
@@ -283,6 +292,27 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Merging feature matches...");
 
+//  const QStringList currentMergers = conf().getList(ConfigOptions::getMergerCreatorsKey());
+//  if (numGenericMatchesAdded > 0)
+//  {
+//    QString genericMergers;
+//    if (ConfigOptions().getConflateUnmatchedPointsWithGenericGeometryConflation())
+//    {
+//      genericMergers.append("hoot::ScriptMergerCreator");
+//    }
+//    if (ConfigOptions().getConflateUnmatchedLinesWithGenericGeometryConflation())
+//    {
+//      genericMergers.append("hoot::ScriptMergerCreator");
+//    }
+//    if (ConfigOptions().getConflateUnmatchedPolygonsWithGenericGeometryConflation())
+//    {
+//      genericMergers.append("hoot::ScriptMergerCreator");
+//    }
+//    QStringList modifiedMergers = currentMergers;
+//    modifiedMergers.append(genericMergers);
+//    conf().set(ConfigOptions::getMergerCreatorsKey(), modifiedMergers);
+//  }
+
   // Would it help to sort the matches so the biggest or best ones get merged first?
   // convert all the match sets into mergers - #2912
   for (size_t i = 0; i < matchSets.size(); ++i)
@@ -333,6 +363,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
 
+//  if (numGenericMatchesAdded > 0)
+//  {
+//    conf().set(ConfigOptions::getMergerCreatorsKey(), currentMergers);
+//  }
+
   currentStep++;
 }
 
@@ -351,7 +386,7 @@ QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInANonGenericGeometryMa
     ConstMatchPtr match = *matchItr;
     LOG_VART(match->getMatchName());
     LOG_VART(match->getType());
-    if (!genericMatchNames.contains(match->getMatchName()) && match->getType() != MatchType::Miss)
+    if (!genericMatchNames.contains(match->getMatchName()) /*&& match->getType() != MatchType::Miss*/)
     {
       const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr =
@@ -366,6 +401,30 @@ QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInANonGenericGeometryMa
   }
   LOG_VART(elementIdsInvolvedInANonGenericGeometryMatch);
   return elementIdsInvolvedInANonGenericGeometryMatch;
+}
+
+QSet<ElementId> UnifyingConflator::_getElementIdsInvolvedInAMatch(
+  const std::vector<ConstMatchPtr>& matches) const
+{
+  QSet<ElementId> elementIdsInvolvedInAMatch;
+  for (std::vector<ConstMatchPtr>::const_iterator matchItr = matches.begin();
+       matchItr != matches.end(); ++matchItr)
+  {
+    ConstMatchPtr match = *matchItr;
+    LOG_VART(match->getMatchName());
+    LOG_VART(match->getType());
+    const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
+    for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchElementIdPairsItr =
+           matchElementIdPairs.begin();
+         matchElementIdPairsItr != matchElementIdPairs.end(); ++matchElementIdPairsItr)
+    {
+      const std::pair<ElementId, ElementId> matchElementIdPair = *matchElementIdPairsItr;
+      elementIdsInvolvedInAMatch.insert(matchElementIdPair.first);
+      elementIdsInvolvedInAMatch.insert(matchElementIdPair.second);
+    }
+  }
+  LOG_VART(elementIdsInvolvedInAMatch);
+  return elementIdsInvolvedInAMatch;
 }
 
 int UnifyingConflator::_getNumGenericGeometryMatches(
@@ -389,6 +448,69 @@ int UnifyingConflator::_getNumGenericGeometryMatches(
     }
   }
   return ctr;
+}
+
+int UnifyingConflator::_addGenericMatches(std::vector<ConstMatchPtr>& matches,
+                                          const ConstOsmMapPtr& map)
+{
+  //ConfigOptions conf(_settings);
+  LOG_VARD(matches.size());
+
+  const QSet<ElementId> elementIdsInvolvedInAMatch = _getElementIdsInvolvedInAMatch(matches);
+  LOG_VARD(elementIdsInvolvedInAMatch.size());
+
+  // copy out a subset map with only unmatched features
+  ElementCriterionPtr idCrit(
+    new NotCriterion(
+      new ElementInIdListCriterion(elementIdsInvolvedInAMatch.toList().toVector().toStdVector())));
+  CopyMapSubsetOp mapCopier(map, idCrit);
+  OsmMapPtr unmatchedFeatures(new OsmMap());
+  mapCopier.apply(unmatchedFeatures);
+  LOG_VARD(unmatchedFeatures->size());
+
+  // conflate the unmatched features
+
+  QStringList currentMatchers = ConfigOptions().getMatchCreators();
+  QStringList genericMatchers;
+  if (ConfigOptions().getConflateUnmatchedPointsWithGenericGeometryConflation())
+  {
+    genericMatchers.append("hoot::ScriptMatchCreator,PointGeneric.js");
+  }
+  if (ConfigOptions().getConflateUnmatchedLinesWithGenericGeometryConflation())
+  {
+    genericMatchers.append("hoot::ScriptMatchCreator,LineStringGeneric.js");
+  }
+  if (ConfigOptions().getConflateUnmatchedPolygonsWithGenericGeometryConflation())
+  {
+    genericMatchers.append("hoot::ScriptMatchCreator,PolygonGeneric.js");
+  }
+  conf().set(ConfigOptions::getMatchCreatorsKey(), genericMatchers);
+
+  MatchFactory::getInstance().reset();
+  _matchFactory = MatchFactory::getInstance();
+  std::vector<ConstMatchPtr> genericMatches;
+  if (_matchThreshold.get())
+  {
+    _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds, _matchThreshold);
+  }
+  else
+  {
+    _matchFactory.createMatches(unmatchedFeatures, genericMatches, _bounds);
+  }
+  LOG_VARD(genericMatches.size());
+
+  // combine the new matches with the existing ones
+  if (genericMatches.size() > 0)
+  {
+    matches.insert(std::end(matches), std::begin(genericMatches), std::end(genericMatches));
+    _matches = matches;
+  }
+  LOG_VARD(_matches.size());
+
+  //currentMatchers.append(genericMatchers);
+  conf().set(ConfigOptions::getMatchCreatorsKey(), currentMatchers);
+
+  return genericMatches.size();
 }
 
 void UnifyingConflator::_removeConflictingGenericGeometryMatches(
@@ -419,16 +541,16 @@ void UnifyingConflator::_removeConflictingGenericGeometryMatches(
 
     LOG_VART(match->getMatchName());
     const bool isNonGeneric = !genericMatchNames.contains(match->getMatchName());
-    const bool isNonGenericMiss = isNonGeneric && match->getType() == MatchType::Miss;
+    //const bool isNonGenericMiss = isNonGeneric && match->getType() == MatchType::Miss;
     if (isNonGeneric)
     {
       LOG_TRACE("Adding non-generic geometry match: " << match);
       updatedMatches.push_back(match);
     }
     LOG_VART(isNonGeneric);
-    LOG_VART(isNonGenericMiss);
+    //LOG_VART(isNonGenericMiss);
 
-    if (!isNonGeneric || isNonGenericMiss)
+    if (!isNonGeneric /*|| isNonGenericMiss*/)
     {
       const std::set<std::pair<ElementId, ElementId>> matchElementIdPairs = match->getMatchPairs();
       bool sharedIdWithNonGenericGeometryMatch = false;

@@ -68,12 +68,12 @@ private:
   static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isLinearHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
