@@ -9,7 +9,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 hoot conflate -C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D writer.include.debug.tags=true test-files/conflate/unified/AllDataTypesA.osm test-files/conflate/unified/AllDataTypesB.osm $STATS_OUT.osm --stats > $STATS_OUT
 
-hoot diff $OUT_DIR/$STATS_OUT.osm $IN_DIR/$STATS_OUT.osm || diff OUT_DIR/$STATS_OUT.osm $IN_DIR/$STATS_OUT.osm
+hoot diff $STATS_OUT.osm $IN_DIR/all-data-types-out.osm || diff $STATS_OUT.osm $IN_DIR/all-data-types-out.osm
 
 #read in a set of stat names from a file, delete them from the hoot command stats output, and write the remaining stats to the final output
 EDIT_CMD=""
