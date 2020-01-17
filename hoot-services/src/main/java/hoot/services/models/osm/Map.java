@@ -57,6 +57,7 @@ import org.springframework.dao.DataAccessException;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
@@ -682,6 +683,9 @@ public class Map extends Maps {
     }
 
     public boolean isVisibleTo(Users user) {
+        //short circuit: if user is admin they see everything
+        if (UserResource.adminUserCheck(user)) return true;
+
         Tuple t = createQuery()
             .select(maps.userId, maps.displayName, folderMapMappings.folderId, folders.publicCol)
             .from(maps)
@@ -699,7 +703,7 @@ public class Map extends Maps {
         this.setUserId(ownerId);
         this.setDisplayName(t.get(maps.displayName));
 
-        // Owned by the current user, or has no folder -or- at root, in public folder:
+        // Owned by the current user, or has no folder -or- at root, or in public folder:
         return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic.booleanValue() == true);
     }
 

@@ -31,6 +31,7 @@ import static hoot.services.models.db.QCurrentNodes.currentNodes;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
@@ -56,11 +58,13 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLExpressions;
 
 import hoot.services.UnitTest;
 import hoot.services.controllers.osm.OSMResourceTestAbstract;
 import hoot.services.controllers.osm.OSMTestUtils;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.CurrentRelations;
@@ -68,10 +72,13 @@ import hoot.services.models.db.CurrentWays;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWays;
+import hoot.services.models.db.Users;
 import hoot.services.models.osm.Element.ElementType;
+import hoot.services.models.osm.Map;
 import hoot.services.models.osm.MapLayer;
 import hoot.services.models.osm.MapLayers;
 import hoot.services.models.osm.RelationMember;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.HootCustomPropertiesSetter;
 import hoot.services.utils.MapUtils;
 import hoot.services.utils.XmlUtils;
@@ -349,6 +356,12 @@ public class MapResourceTest extends OSMResourceTestAbstract {
     @Category(UnitTest.class)
     public void testGetMapById() throws Exception {
         getMap(String.valueOf(mapId), "false", true);
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetMapByNegativeOneId() throws Exception {
+        getMap(String.valueOf(-1), "false", true);
     }
 
     @Test
@@ -1085,4 +1098,117 @@ public class MapResourceTest extends OSMResourceTestAbstract {
             }
         }
     }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGenerateExtentOSM() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetTileNodesCounts() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDeleteLayers() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testDeleteStaleLayers() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetStaleLayers() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testModifyName() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testUpdateFolderMapLink() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetTags() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetAllIds() throws Exception {
+        //TODO
+    }
+
+    @Test
+    @Category(UnitTest.class)
+    public void testGetMapForAdmin() throws Exception {
+
+        MapUtils.cleanupTestUsers();
+
+        long userId = MapUtils.insertUser();
+        assertTrue(userId < 0);
+
+        long advancedId = MapUtils.insertAdvancedUser();
+        long adminId = MapUtils.insertAdminUser();
+        long advAdminId = MapUtils.insertAdvancedAdminUser();
+
+        Users user = MapUtils.getUser(userId);
+        assertNotNull(user);
+        assertFalse(UserResource.adminUserCheck(user));
+        assertFalse(UserResource.userPrivilegeCheck(user, "advanced"));
+
+        Users advancedUser = MapUtils.getUser(advancedId);
+        assertFalse(UserResource.adminUserCheck(advancedUser));
+        assertTrue(UserResource.userPrivilegeCheck(advancedUser, "advanced"));
+
+        Users adminUser = MapUtils.getUser(adminId);
+        assertTrue(UserResource.adminUserCheck(adminUser));
+        assertFalse(UserResource.userPrivilegeCheck(adminUser, "advanced"));
+
+        Users advancedAdminUser = MapUtils.getUser(advAdminId);
+        assertTrue(UserResource.adminUserCheck(advancedAdminUser));
+        assertTrue(UserResource.userPrivilegeCheck(advancedAdminUser, "advanced"));
+
+        long mapId = MapUtils.insertMap(userId);
+        long userFolderId = MapUtils.addPrivateFolder("userFolder", userId);
+        DbUtils.updateFolderMapping(mapId, userFolderId);
+
+        long adminMapId = MapUtils.insertMap(adminId);
+        long adminFolderId = MapUtils.addPrivateFolder("adminFolder", adminId);
+        DbUtils.updateFolderMapping(adminMapId, adminFolderId);
+
+        //user should not see admin private map
+        List<Tuple> userMaps = DbUtils.getMapsForUser(user);
+        assertTrue(userMaps.stream().map(m -> m.get(maps).getId()).collect(Collectors.toList()).contains(mapId));
+        assertFalse(userMaps.stream().map(m -> m.get(maps).getId()).collect(Collectors.toList()).contains(adminMapId));
+
+        //admin should see user private map
+        List<Tuple> adminMaps = DbUtils.getMapsForUser(adminUser);
+        assertTrue(adminMaps.stream().map(m -> m.get(maps).getId()).collect(Collectors.toList()).contains(mapId));
+        assertTrue(adminMaps.stream().map(m -> m.get(maps).getId()).collect(Collectors.toList()).contains(adminMapId));
+
+        Map userMap = new Map(mapId);
+        userMap.setUserId(userId);
+        Map adminMap = new Map(adminMapId);
+        adminMap.setUserId(adminId);
+        assertTrue(userMap.isVisibleTo(user));
+        assertTrue(userMap.isVisibleTo(adminUser));
+        assertFalse(adminMap.isVisibleTo(user));
+        assertTrue(adminMap.isVisibleTo(adminUser));
+    }
+
 }
