@@ -135,16 +135,13 @@ public:
     MatchCandidateCountVisitor uut(MatchFactory::getInstance().getCreators());
     map->visitRo(uut);
 
-    CPPUNIT_ASSERT_EQUAL((int)34, (int)uut.getStat());
+    CPPUNIT_ASSERT_EQUAL((int)26, (int)uut.getStat());
     QMap<QString, long> matchCandidateCountsByMatchCreator =
       boost::any_cast<QMap<QString, long>>(uut.getData());
-    CPPUNIT_ASSERT_EQUAL(3, matchCandidateCountsByMatchCreator.size());
+    CPPUNIT_ASSERT_EQUAL(2, matchCandidateCountsByMatchCreator.size());
     //These don't add up to the total...is there some overlap here?
     CPPUNIT_ASSERT_EQUAL((long)18, matchCandidateCountsByMatchCreator["hoot::BuildingMatchCreator"]);
     CPPUNIT_ASSERT_EQUAL((long)8, matchCandidateCountsByMatchCreator["hoot::HighwayMatchCreator"]);
-    CPPUNIT_ASSERT_EQUAL(
-      (long)0,
-      matchCandidateCountsByMatchCreator["hoot::hoot::ScriptMatchCreator,LineStringGenericTest.js"]);
   }
 
   void runScriptMatchCreatorTest()
