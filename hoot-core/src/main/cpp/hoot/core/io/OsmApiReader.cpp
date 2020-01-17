@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmApiReader.h"
@@ -117,13 +117,19 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
-  // clear node id maps in case the reader is used for multiple files
-  _nodeIdMap.clear();
-  _relationIdMap.clear();
-  _wayIdMap.clear();
+  //  Reusing the reader for multiple reads has two options, the first is the
+  //  default where the reader is reset and duplicates error out.  The second
+  //  is where duplicates are ignored in the same dataset and across datasets
+  //  so the ID maps aren't reset
+  if (!_ignoreDuplicates)
+  {
+    _nodeIdMap.clear();
+    _relationIdMap.clear();
+    _wayIdMap.clear();
 
-  _numRead = 0;
-  finalizePartial();
+    _numRead = 0;
+    finalizePartial();
+  }
   _map = map;
   _map->appendSource(_url);
 

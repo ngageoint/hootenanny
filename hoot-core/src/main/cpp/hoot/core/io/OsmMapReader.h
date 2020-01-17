@@ -22,18 +22,19 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADER_H
 #define OSMMAPREADER_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class OsmMapReader
+class OsmMapReader : public Configurable
 {
 
 public:
@@ -99,10 +100,16 @@ public:
 
   void setWarnOnVersionZeroElement(bool warn) { _warnOnVersionZeroElement = warn; }
 
+  /** Configurable interface */
+  virtual void setConfiguration(const Settings& conf) override
+  {
+    _ignoreDuplicates =  ConfigOptions(conf).getMapMergeIgnoreDuplicateIds();
+  }
+
 protected:
 
   /**
-   * Ignore the duplicate IDs or throw an error
+   * Ignore the duplicate IDs when merging maps or throw an error
    */
   bool _ignoreDuplicates;
   /** Url of the map to open and read */

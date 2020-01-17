@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -49,7 +49,7 @@ class ApiDb;
 /**
  * Abstract parent class for reading from an API style OSM database
  */
-class ApiDbReader : public PartialOsmMapReader, public Boundable, public Configurable
+class ApiDbReader : public PartialOsmMapReader, public Boundable
 {
 public:
 

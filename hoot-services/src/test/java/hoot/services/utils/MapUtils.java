@@ -158,17 +158,20 @@ public final class MapUtils {
     }
 
     public static long insertMap(long userId) {
+        return insertMap(userId, new Timestamp(Calendar.getInstance().getTimeInMillis()));
+    }
+
+    public static long insertMap(long userId, Timestamp ts) {
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('maps_id_seq')"))
                 .from()
                 .fetchOne();
 
         if (newId != null) {
-            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             createQuery().insert(maps)
             .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
-            .values(newId, now, "map-with-id-" + newId, true, userId)
+            .values(newId, ts, "map-with-id-" + newId, true, userId)
             .execute();
         }
 
