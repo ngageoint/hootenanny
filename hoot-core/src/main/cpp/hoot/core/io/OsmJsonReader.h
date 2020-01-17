@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_JSON_READER_H
@@ -111,8 +111,7 @@ namespace hoot
  * keeps everything in memory. Be careful if you want to use it with large datasets.
  */
 
-class OsmJsonReader : public OsmMapReader, public Configurable, public Boundable,
-  private ParallelBoundedApiReader
+class OsmJsonReader : public OsmMapReader, public Boundable, private ParallelBoundedApiReader
 {
 public:
 
