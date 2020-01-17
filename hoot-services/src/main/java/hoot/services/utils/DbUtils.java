@@ -82,6 +82,7 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Maps;
@@ -304,6 +305,33 @@ public class DbUtils {
                 .fetch();
 
         return childrenFolders;
+    }
+
+
+
+    public static List<Tuple> getMapsForUser(Users user) {
+
+        SQLQuery<Tuple> q = createQuery()
+                .select(maps, folders.id, folders.publicCol)
+                .from(maps)
+                .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .orderBy(maps.displayName.asc());
+        if(user != null) {
+            BooleanExpression isVisible = maps.userId.eq(user.getId()) // Owned by the current user
+                    // or not in a folder
+                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
+                    // or in a public folder
+                    .or(folders.publicCol.isTrue()));
+            // if user is not admin enforce visiblity rules
+            // admins can see everything
+            if (!UserResource.adminUserCheck(user)) {
+                q.where(isVisible);
+            }
+        }
+        List<Tuple> mapLayerRecords = q.fetch();
+
+        return mapLayerRecords;
     }
 
 /*
