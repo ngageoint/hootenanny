@@ -174,10 +174,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_TRACE(SystemInfo::getMemoryUsageString());
   OsmMapWriterFactory::writeDebugMap(map, "after-matching");
 
-  // TODO: add docs for this - we don't have a generic geometry version of poi/poly
+  // TODO: add docs for this
   const QStringList matchCreators = conf.getMatchCreators();
-  if (matchCreators.contains("LineStringGeneric") || matchCreators.contains("PointGeneric") ||
-      matchCreators.contains("PolygonGeneric"))
+  if (matchCreators.contains("hoot::ScriptMatchCreator,LineStringGeneric.js") ||
+      matchCreators.contains("hoot::ScriptMatchCreator,PointGeneric.js") ||
+      matchCreators.contains("hoot::ScriptMatchCreator,PolygonGeneric.js"))
   {
     _removeConflictingGenericGeometryMatches(_matches);
   }
