@@ -40,6 +40,11 @@ NonConflatableCriterion::NonConflatableCriterion()
 {
 }
 
+NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const QMap<QString, ElementCriterionPtr> conflatableCriteria =
@@ -47,7 +52,15 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
        itr != conflatableCriteria.end(); ++itr)
   {
-    if (itr.value()->isSatisfied(e))
+    ElementCriterionPtr crit = itr.value();
+
+    ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
+    if (mapConsumer != 0)
+    {
+      mapConsumer->setOsmMap(_map.get());
+    }
+
+    if (crit->isSatisfied(e))
     {
       // It is something we can conflate.
       return false;

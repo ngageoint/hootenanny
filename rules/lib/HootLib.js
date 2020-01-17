@@ -301,6 +301,11 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       .applyAndGetResult(map);
 }
 
+function isSpecificallyConflatable(map, e)
+{
+  return hoot.OsmSchema.isSpecificallyConflatable(map, e);
+}
+
 // TODO: All of these is* methods can go away if #3047 is completed.
 
 /**

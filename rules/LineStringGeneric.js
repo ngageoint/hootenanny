@@ -28,7 +28,7 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinear(e) && !isHighway(e) && !isLinearWaterway(e) && !isRailway(e) && !isPowerLine(e);
+  return isLinear(e) && !isSpecificallyConflatable(map, e);
 };
 
 /**

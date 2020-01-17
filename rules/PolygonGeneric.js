@@ -21,7 +21,7 @@ exports.writeDebugTags = hoot.get("writer.include.debug.tags");
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPolygon(e) && !isBuilding(map, e) && !isArea(map, e)
+  return isPolygon(e) && !isSpecificallyConflatable(map, e);
 };
 
 /**

@@ -43,6 +43,7 @@
 #include <hoot/core/criterion/HasNameCriterion.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/js/elements/TagsJs.h>
 
 using namespace v8;
@@ -108,6 +109,8 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, scoreOneWay)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "hasName"),
               FunctionTemplate::New(current, hasName)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
+              FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
@@ -291,6 +294,18 @@ void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isSpecificallyConflatable(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, !NonConflatableCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)

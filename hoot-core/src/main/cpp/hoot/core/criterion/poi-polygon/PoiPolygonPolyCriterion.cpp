@@ -49,7 +49,13 @@ _tagIgnoreList(PoiPolygonTagIgnoreListReader::getInstance().getPolyTagIgnoreList
 
 bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(e);
+  LOG_VART(e->getElementId());
+
+  if (e->getElementType() == ElementType::Node)
+  {
+    return false;
+  }
+
   const Tags& tags = e->getTags();
 
   // Using this looser definition b/c isLinearHighway will return false if any tag is in an area
