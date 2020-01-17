@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.85326768053999" minlon="-104.9024200286" maxlat="38.85496143739999" maxlon="-104.89615682626"/>
-    <node visible="true" id="-27665" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540914181828185" lon="-104.8988571806903565"/>
     <node visible="true" id="-27622" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549163432199904" lon="-104.8961568262599968"/>
     <node visible="true" id="-27621" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549019130799920" lon="-104.8964787882100040"/>
     <node visible="true" id="-27620" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8548910904700122" lon="-104.8966733551499999"/>
@@ -60,7 +59,7 @@
     <node visible="true" id="-27567" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542146741700023" lon="-104.9020934340999958"/>
     <node visible="true" id="-27566" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8541136621199996" lon="-104.9023412753199977"/>
     <node visible="true" id="-27565" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540360991899973" lon="-104.9024200286000053"/>
-    <way visible="true" id="-27641" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-27591" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27565"/>
         <nd ref="-27566"/>
         <nd ref="-27567"/>
@@ -79,11 +78,11 @@
         <nd ref="-27580"/>
         <nd ref="-27581"/>
         <nd ref="-27582"/>
-        <tag k="highway" v="road"/>
+        <tag k="tunnel" v="yes"/>
         <tag k="note" v="0b 1;0"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-27564" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-27588" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27582"/>
         <nd ref="-27583"/>
         <nd ref="-27584"/>
@@ -104,7 +103,6 @@
         <nd ref="-27599"/>
         <nd ref="-27600"/>
         <nd ref="-27601"/>
-        <nd ref="-27665"/>
         <nd ref="-27602"/>
         <nd ref="-27603"/>
         <nd ref="-27604"/>
@@ -126,7 +124,7 @@
         <nd ref="-27620"/>
         <nd ref="-27621"/>
         <nd ref="-27622"/>
-        <tag k="highway" v="road"/>
+        <tag k="tunnel" v="yes"/>
         <tag k="note" v="0b 2;0"/>
         <tag k="error:circular" v="15"/>
     </way>

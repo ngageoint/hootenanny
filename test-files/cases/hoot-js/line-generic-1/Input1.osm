@@ -100,7 +100,7 @@
     <nd ref='-27620' />
     <nd ref='-27621' />
     <nd ref='-27622' />
-    <tag k='highway' v='road' />
+    <tag k='tunnel' v='yes' />
     <tag k='note' v='0b 2' />
   </way>
   <way id='-27563' visible='true'>
@@ -122,7 +122,7 @@
     <nd ref='-27580' />
     <nd ref='-27581' />
     <nd ref='-27582' />
-    <tag k='highway' v='road' />
+    <tag k='tunnel' v='yes' />
     <tag k='note' v='0b 1' />
   </way>
 </osm>

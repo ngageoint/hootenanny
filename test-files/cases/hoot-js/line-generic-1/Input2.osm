@@ -61,7 +61,7 @@
     <nd ref='-27408' />
     <nd ref='-27409' />
     <nd ref='-27410' />
-    <tag k='highway' v='road' />
+    <tag k='tunnel' v='yes' />
     <tag k='note' v='0' />
   </way>
 </osm>

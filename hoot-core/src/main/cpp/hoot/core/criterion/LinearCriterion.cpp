@@ -72,7 +72,7 @@ bool LinearCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(it.key() + "=" + it.value());
     uint16_t g = tv.geometries;
-    if (g & (OsmGeometries::LineString /*| OsmGeometries::ClosedWay*/) && !(g & OsmGeometries::Area))
+    if (g & OsmGeometries::LineString && !(g & OsmGeometries::Area))
     {
       result = true;
       break;

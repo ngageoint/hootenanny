@@ -1462,6 +1462,7 @@ QSet<QString> OsmSchema::getAllTagKeys()
   if (_allTagKeysCache.isEmpty())
   {
     _allTagKeysCache = d->getAllTagKeys();
+    //LOG_VART(_allTagKeysCache);
   }
   return _allTagKeysCache;
 }
@@ -1471,6 +1472,7 @@ QSet<QString> OsmSchema::getAllTypeKeys()
   if (_allTypeKeysCache.isEmpty())
   {
     _allTypeKeysCache = d->getAllTypeKeys();
+    //LOG_VART(_allTypeKeysCache);
   }
   return _allTypeKeysCache;
 }
@@ -1835,17 +1837,30 @@ double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2)
   {
     const QString key1 = tags1Itr.key().trimmed();
     const QString val1 = tags1Itr.value().trimmed();
-    if (!key1.isEmpty() && !val1.isEmpty() && !isMetaData(key1, val1) && isTypeKey(key1))
+    const QString kvp1 = toKvp(key1, val1);
+    LOG_VART(key1);
+    LOG_VART(val1);
+    LOG_VART(kvp1);
+    LOG_VART(isMetaData(key1, val1));
+    LOG_VART(isTypeKey(key1));
+    if (!key1.isEmpty() && !val1.isEmpty() && !isMetaData(key1, val1) &&
+        (isTypeKey(key1) || isTypeKey(kvp1)))
     {
-      const QString kvp1 = toKvp(key1, val1);
       for (Tags::const_iterator tags2Itr = tags2.begin(); tags2Itr != tags2.end(); ++tags2Itr)
       {
         const QString key2 = tags2Itr.key().trimmed();
         const QString val2 = tags2Itr.value().trimmed();
-        if (!key2.isEmpty() && !val2.isEmpty() && !isMetaData(key2, val2) && isTypeKey(key2))
+        const QString kvp2 = toKvp(key2, val2);
+        LOG_VART(key2);
+        LOG_VART(val2);
+        LOG_VART(kvp2);
+        LOG_VART(isMetaData(key2, val2));
+        LOG_VART(isTypeKey(key2));
+        if (!key2.isEmpty() && !val2.isEmpty() && !isMetaData(key2, val2) &&
+            (isTypeKey(key2) || isTypeKey(kvp2)))
         {
-          const QString kvp2 = toKvp(key2, val2);
           const double score = OsmSchema::getInstance().score(kvp1, kvp2);
+          LOG_VART(score);
           if (score > maxScore)
           {
             maxScore = score;
@@ -1854,6 +1869,7 @@ double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2)
       }
     }
   }
+  LOG_VART(maxScore);
   return maxScore;
 }
 

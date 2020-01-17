@@ -66,10 +66,12 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
     if (crit->isSatisfied(e))
     {
       // It is something we can conflate.
+      LOG_TRACE("Element: " << e->getElementId() << " is conflatable with: " << itr.key());
       return false;
     }
   }
   // It is not something we can conflate
+  LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
   return true;
 }
 
