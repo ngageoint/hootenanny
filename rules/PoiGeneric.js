@@ -12,7 +12,7 @@ exports.matchThreshold = parseFloat(hoot.get("poi.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
-exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());

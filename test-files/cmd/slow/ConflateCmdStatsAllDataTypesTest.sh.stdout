@@ -1,3 +1,9 @@
+19:58:51.380 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
+19:58:51.381 INFO   .../hoot/core/io/OsmXmlReader.cpp( 854) Read 0 elements from input.        19:58:51.381 INFO   .../hoot/core/io/OsmXmlReader.cpp( 854) Read 0 elements from input.        19:58:51.387 INFO   .../hoot/core/io/OsmXmlReader.cpp( 457) 	Reporting missing elements...
+19:58:51.387 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 168 elements from input in: 00:00.
+19:58:51.387 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
+19:58:51.387 INFO   .../hoot/core/io/OsmXmlReader.cpp( 854) Read 0 elements from input.        19:58:51.387 INFO   .../hoot/core/io/OsmXmlReader.cpp( 854) Read 0 elements from input.        19:58:51.393 INFO   .../hoot/core/io/OsmXmlReader.cpp( 457) 	Reporting missing elements...
+19:58:51.393 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 168 elements from input in: 00:00.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	17	
@@ -41,7 +47,7 @@ Percentage of Total Features Conflatable	96	90.90909090909091	0
 Untagged Features	0	0	0	
 Total Unconflatable Features	1	2	0	
 Percentage of Total Features Unconflatable	4	9.090909090909092	0	
-Match Creators	8	8	8	
+Match Creators	11	11	11	
 Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
 Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
@@ -141,12 +147,13 @@ Percentage of Power Lines Conflated	0	0	0
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
 Translated Populated Tags	169	143	231	
+Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-13	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.65957446808511	
-Calculate Stats for Input 1 Time (sec)				10.02566695213318
-Calculate Stats for Input 2 Time (sec)				1.499000072479248
-Apply Pre-Conflate Ops Time (sec)				0.008193016052246094
-Apply Post-Conflate Ops Time (sec)				0.003217935562133789
-Calculate Stats for Output Time (sec)				1.516556024551392
+Calculate Stats for Input 1 Time (sec)				9.83082103729248
+Calculate Stats for Input 2 Time (sec)				1.917070150375366
+Apply Pre-Conflate Ops Time (sec)				0.008299827575683594
+Apply Post-Conflate Ops Time (sec)				0.003828048706054688
+Calculate Stats for Output Time (sec)				1.632735013961792
 
-22:40:29.435 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:15 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+19:58:50.996 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:16 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

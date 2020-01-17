@@ -9,7 +9,7 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.point.review.threshold"))
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 exports.baseFeatureType = "Point";
-exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
 
 function distance(e1, e2) 
 {
@@ -114,7 +114,7 @@ exports.mergePair = function(map, e1, e2)
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");
-  if (exports.writeDebugTags == "true")
+  if (exports.writeMatchedBy == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);
