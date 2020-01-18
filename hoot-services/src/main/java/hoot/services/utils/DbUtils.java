@@ -287,7 +287,7 @@ public class DbUtils {
             .select(folders)
             .from(folders)
             .where(folders.id.ne(0L));
-        if(userId != null) {
+        if (userId != null && !UserResource.adminUserCheck(getUser(userId))) {
             sql.where(
                     folders.userId.eq(userId).or(folders.publicCol.isTrue())
             );
@@ -728,6 +728,10 @@ NOT EXISTS
                 .from(users)
                 .where(users.id.eq(userId))
                 .fetchCount() == 1;
+    }
+
+    public static Users getUser(Long id) {
+        return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
     }
 
     /**

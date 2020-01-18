@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -1191,10 +1192,26 @@ public class MapResourceTest extends OSMResourceTestAbstract {
         long adminFolderId = MapUtils.addPrivateFolder("adminFolder", adminId);
         DbUtils.updateFolderMapping(adminMapId, adminFolderId);
 
+        //user should not see admin private folder
+//        FolderResource.get(folders, f, advancedAdminUser)
+        assertNotNull(FolderResource.getFolderForUser(user, userFolderId));
+        assertNotNull(FolderResource.getFolderForUser(adminUser, userFolderId));
+
         //user should not see admin private map
         List<Tuple> userMaps = DbUtils.getMapsForUser(user);
         assertTrue(userMaps.stream().map(m -> m.get(maps).getId()).collect(Collectors.toList()).contains(mapId));
         assertFalse(userMaps.stream().map(m -> m.get(maps).getId()).collect(Collectors.toList()).contains(adminMapId));
+
+        //admin should see user private folder
+//      FolderResource.folderIsPublic(folders, f, advancedAdminUser)
+        try {
+            FolderResource.getFolderForUser(user, adminFolderId);
+            fail();
+        } catch (ForbiddenException ex) {
+            assertTrue(true);
+        }
+        assertNotNull(FolderResource.getFolderForUser(adminUser, adminFolderId));
+
 
         //admin should see user private map
         List<Tuple> adminMaps = DbUtils.getMapsForUser(adminUser);

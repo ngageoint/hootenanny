@@ -917,7 +917,7 @@ public class MapResource {
         if(user != null && !m.isVisibleTo(user)) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this map").build());
         }
-        if(user != null && userDesiresModify && !m.getUserId().equals(user.getId())) {
+        if(user != null && userDesiresModify && !m.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user)) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the map to modify it").build());
         }
         return m;

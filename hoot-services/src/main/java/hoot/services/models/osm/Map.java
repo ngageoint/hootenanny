@@ -683,9 +683,6 @@ public class Map extends Maps {
     }
 
     public boolean isVisibleTo(Users user) {
-        //short circuit: if user is admin they see everything
-        if (UserResource.adminUserCheck(user)) return true;
-
         Tuple t = createQuery()
             .select(maps.userId, maps.displayName, folderMapMappings.folderId, folders.publicCol)
             .from(maps)
@@ -702,6 +699,9 @@ public class Map extends Maps {
         this.setPublicCol(isPublic);
         this.setUserId(ownerId);
         this.setDisplayName(t.get(maps.displayName));
+
+        //short circuit: if user is admin they see everything
+        if (UserResource.adminUserCheck(user)) return true;
 
         // Owned by the current user, or has no folder -or- at root, or in public folder:
         return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic.booleanValue() == true);
