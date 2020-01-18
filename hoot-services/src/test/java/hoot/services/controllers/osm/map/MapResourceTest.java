@@ -362,7 +362,7 @@ public class MapResourceTest extends OSMResourceTestAbstract {
     @Test
     @Category(UnitTest.class)
     public void testGetMapByNegativeOneId() throws Exception {
-        getMap(String.valueOf(-1), "false", true);
+        //TODO
     }
 
     @Test

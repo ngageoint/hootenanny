@@ -351,6 +351,7 @@ public class UserResource {
     }
 
     public static boolean userPrivilegeCheck(Users user, String priv) {
+        if (user == null) return false;
         Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
         return privileges != null && ("true").equals(privileges.get(priv));
     }
