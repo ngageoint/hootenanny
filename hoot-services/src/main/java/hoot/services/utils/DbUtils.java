@@ -702,6 +702,10 @@ NOT EXISTS
                 .fetchCount() == 1;
     }
 
+    public static Users getUser(Long id) {
+        return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
+    }
+
     /**
      * Returns the record ID associated with the record request input string for
      * the given DAO type. First attempts to parse the request string as a

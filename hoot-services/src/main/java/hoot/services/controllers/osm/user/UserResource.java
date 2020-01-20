@@ -347,6 +347,7 @@ public class UserResource {
      * @return true if user has admin privileges, else false
      */
     public static boolean adminUserCheck(Users user) {
+        if (user == null) return false;
         Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
         return privileges != null && ("true").equals(privileges.get("admin"));
     }
