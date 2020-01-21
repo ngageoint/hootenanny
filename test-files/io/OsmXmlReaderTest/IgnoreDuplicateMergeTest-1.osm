@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='93' visible='true' version='1' lat='38.854932126188054' lon='-104.89790503334821' />
+  <node id='91' visible='true' version='1' lat='38.85495241856606' lon='-104.8987388916486' />
+  <node id='89' visible='true' version='1' lat='38.85405413708911' lon='-104.90243160996913' />
+  <node id='87' visible='true' version='1' lat='38.85412989620596' lon='-104.90230653122407' />
+  <node id='85' visible='true' version='1' lat='38.85433192012303' lon='-104.90178768605938' />
+  <node id='83' visible='true' version='1' lat='38.854820743476886' lon='-104.90080790255647' />
+  <node id='81' visible='true' version='1' lat='38.85492896959543' lon='-104.90052531724356' />
+  <node id='77' visible='true' version='1' lat='38.854907324384904' lon='-104.89618230526239' />
+  <node id='75' visible='true' version='1' lat='38.85490191308125' lon='-104.89643941157165' />
+  <node id='73' visible='true' version='1' lat='38.85486042640616' lon='-104.89685865699488' />
+  <node id='71' visible='true' version='1' lat='38.85471973228434' lon='-104.89732191160624' />
+  <node id='69' visible='true' version='1' lat='38.85460429074575' lon='-104.89777590112531' />
+  <node id='67' visible='true' version='1' lat='38.854429324306594' lon='-104.89806543525738' />
+  <node id='65' visible='true' version='1' lat='38.85423271202119' lon='-104.89831096020139' />
+  <node id='63' visible='true' version='1' lat='38.854176794666444' lon='-104.89870704289406' />
+  <node id='61' visible='true' version='1' lat='38.854133503780936' lon='-104.89889002846552' />
+  <node id='59' visible='true' version='1' lat='38.85395853618365' lon='-104.89891550746917' />
+  <node id='57' visible='true' version='1' lat='38.85372043525673' lon='-104.89872325680547' />
+  <node id='55' visible='true' version='1' lat='38.85361942250148' lon='-104.89870704289406' />
+  <node id='53' visible='true' version='1' lat='38.85355087805014' lon='-104.89883212163912' />
+  <node id='51' visible='true' version='1' lat='38.85356891607005' lon='-104.8990568001256' />
+  <node id='49' visible='true' version='1' lat='38.8535166057997' lon='-104.8992698972468' />
+  <node id='47' visible='true' version='1' lat='38.8533470481072' lon='-104.89936718071519' />
+  <node id='45' visible='true' version='1' lat='38.8533001490996' lon='-104.8994528828183' />
+  <node id='43' visible='true' version='1' lat='38.853242427201664' lon='-104.899686826397' />
+  <node id='41' visible='true' version='1' lat='38.85325834778415' lon='-104.89975429288518' />
+  <node id='39' visible='true' version='1' lat='38.85362484566662' lon='-104.8996934957528' />
+  <node id='37' visible='true' version='1' lat='38.85395255229987' lon='-104.89968403931628' />
+  <node id='35' visible='true' version='1' lat='38.85426184706307' lon='-104.89971713684409' />
+  <node id='33' visible='true' version='1' lat='38.85457850459384' lon='-104.89971713684409' />
+  <node id='31' visible='true' version='1' lat='38.854961437398885' lon='-104.89971240862585' />
+  <node id='23' visible='true' version='1' lat='38.85416700189076' lon='-104.89970698747904' />
+  <way id='801' visible='true' version='1'>
+    <nd ref='31' />
+    <nd ref='91' />
+    <nd ref='93' />
+    <tag k='highway' v='road' />
+    <tag k='note' v='1' />
+  </way>
+  <way id='797' visible='true' version='1'>
+    <nd ref='89' />
+    <nd ref='87' />
+    <nd ref='85' />
+    <nd ref='83' />
+    <nd ref='81' />
+    <nd ref='31' />
+    <nd ref='33' />
+    <nd ref='35' />
+    <nd ref='23' />
+    <nd ref='37' />
+    <nd ref='39' />
+    <nd ref='41' />
+    <nd ref='43' />
+    <nd ref='45' />
+    <nd ref='47' />
+    <nd ref='49' />
+    <nd ref='51' />
+    <nd ref='53' />
+    <nd ref='55' />
+    <nd ref='57' />
+    <nd ref='59' />
+    <nd ref='61' />
+    <nd ref='63' />
+    <nd ref='65' />
+    <nd ref='67' />
+    <nd ref='69' />
+    <nd ref='71' />
+    <nd ref='73' />
+    <nd ref='75' />
+    <nd ref='77' />
+    <tag k='highway' v='road' />
+    <tag k='note' v='0' />
+  </way>
+</osm>
