@@ -36,10 +36,6 @@ public class ReviewBookmarksGetResponse {
 
     public ReviewBookmarksGetResponse() {}
 
-    public ReviewBookmarksGetResponse(List<ReviewBookmarks> reviewBookmarks) {
-        this.reviewBookmarks = reviewBookmarks;
-    }
-
     public List<ReviewBookmarks> getReviewBookmarks() {
         return this.reviewBookmarks;
     }
