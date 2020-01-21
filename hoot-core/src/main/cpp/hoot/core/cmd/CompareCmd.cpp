@@ -105,6 +105,7 @@ public:
     graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
     graph.setIterations(1000);
     graph.setPixelSize(10);
+    graph.setMaxThreads(ConfigOptions().getGraphComparatorMaxThreads());
     graph.compareMaps();
     double thisConfidence = graph.getConfidenceInterval();
     double thisMean = graph.getMeanScore();

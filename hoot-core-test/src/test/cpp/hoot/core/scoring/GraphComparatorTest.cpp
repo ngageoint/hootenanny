@@ -68,37 +68,37 @@ public:
 
   void runTest()
   {
-      OsmXmlReader reader;
+    OsmXmlReader reader;
 
-      OsmMapPtr map(new OsmMap());
-      reader.read(_inputPath + "ToyTestA.osm", map);
+    OsmMapPtr map(new OsmMap());
+    reader.read(_inputPath + "ToyTestA.osm", map);
 
-      OsmMapPtr map2(new OsmMap());
-      reader.read(_inputPath + "ToyTestB.osm", map2);
+    OsmMapPtr map2(new OsmMap());
+    reader.read(_inputPath + "ToyTestB.osm", map2);
 
-      const WayMap& w1 = map->getWays();
-      for (WayMap::const_iterator it = w1.begin(); it != w1.end(); ++it)
-      {
-        WayPtr w = map->getWay(it->second->getId());
-        w->setTag("highway", "road");
-      }
+    const WayMap& w1 = map->getWays();
+    for (WayMap::const_iterator it = w1.begin(); it != w1.end(); ++it)
+    {
+      WayPtr w = map->getWay(it->second->getId());
+      w->setTag("highway", "road");
+    }
 
-      const WayMap& w2 = map2->getWays();
-      for (WayMap::const_iterator it = w2.begin(); it != w2.end(); ++it)
-      {
-        WayPtr w = map2->getWay(it->second->getId());
-        w->setTag("highway", "road");
-      }
+    const WayMap& w2 = map2->getWays();
+    for (WayMap::const_iterator it = w2.begin(); it != w2.end(); ++it)
+    {
+      WayPtr w = map2->getWay(it->second->getId());
+      w->setTag("highway", "road");
+    }
 
-      GraphComparator uut(map, map2);
-      uut.setIterations(3);
-      uut.setMaxThreads(2);
-      uut.setPixelSize(10);
-      uut.compareMaps();
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973744272810634, uut.getMeanScore(), 0.00001);
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00177888445763033, uut.getConfidenceInterval(), 0.00001);
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973924616144161, uut.getMedianScore(), 0.00001);
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00187302021970233, uut.getStandardDeviation(), 0.00001);
+    GraphComparator uut(map, map2);
+    uut.setIterations(3);
+    uut.setMaxThreads(2);
+    uut.setPixelSize(10);
+    uut.compareMaps();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973744272810634, uut.getMeanScore(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00177888445763033, uut.getConfidenceInterval(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.973924616144161, uut.getMedianScore(), 0.00001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.00187302021970233, uut.getStandardDeviation(), 0.00001);
   }
 };
 

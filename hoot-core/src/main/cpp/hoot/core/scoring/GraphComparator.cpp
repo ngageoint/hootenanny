@@ -73,7 +73,7 @@ GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
       _ci(-1.0),
       _s(-1.0),
       _debugImages(false),
-      _maxThreads(10)
+      _maxThreads(1)
 {
   _init();
 }
