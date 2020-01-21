@@ -222,6 +222,10 @@ bool PoiPolygonMatchCreator::_containsMatch(
     ConstMatchPtr match = *matchItr;
     if (match->getType() != MatchType::Miss)
     {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
       assert(match->getMatchPairs().size() == 1);
       std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
       if ((matchElementIds.first == elementId1 && matchElementIds.second == elementId2) ||
@@ -245,13 +249,16 @@ int PoiPolygonMatchCreator::_numMatchesContainingElement(
     ConstMatchPtr match = *matchItr;
     if (match->getType() != MatchType::Miss)
     {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
       assert(match->getMatchPairs().size() == 1);
       std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
       if (matchElementIds.first == elementId || matchElementIds.second == elementId)
       {
         numMatchesContainingId++;
-      }
-    }
+      }    }
   }
   return numMatchesContainingId;
 }
@@ -272,6 +279,10 @@ QMultiMap<ElementId, ConstMatchPtr> PoiPolygonMatchCreator::_indexMatchesById(
     //LOG_VART(match);
     if (match->getType() != MatchType::Miss)
     {
+      if (match->getMatchPairs().size() != 1)
+      {
+        LOG_VART(match->getMatchPairs().size());
+      }
       assert(match->getMatchPairs().size() == 1);
       std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
       if (processPois)
@@ -319,7 +330,8 @@ QMap<ElementId, QList<ConstMatchPtr>> PoiPolygonMatchCreator::_getOverlappingMat
     //LOG_VART(matches.size());
     if (matches.size() > 1)
     {
-      LOG_TRACE("Found overlapping matches: " << matches);
+      //LOG_TRACE("Found overlapping matches: " << matches);
+      LOG_TRACE("Found overlapping matches of size: " << matches.size());
       overlappingMatches[*idItr] = matches;
     }
   }
@@ -350,82 +362,90 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
     for (QList<ConstMatchPtr>::const_iterator matchesItr2 = matchesWithSharedId.begin();
          matchesItr2 != matchesWithSharedId.end(); ++matchesItr2)
     {
-      ConstMatchPtr match = *matchesItr2;
-      LOG_VART(match);
+      ConstMatchPtr overlappingMatch = *matchesItr2;
+      LOG_VART(overlappingMatch->getMatchName());
+      LOG_VART(overlappingMatch);
 
-      std::pair<ElementId, ElementId> matchElementIds = *(match->getMatchPairs()).begin();
-      ElementId comparisonElementId;
-      if (matchElementIds.first == sharedElementId)
+      if (overlappingMatch->getMatchName() == PoiPolygonMatch::getPoiPolygonMatchName())
       {
-        comparisonElementId = matchElementIds.second;
-      }
-      else
-      {
-        comparisonElementId = matchElementIds.first;
-      }
-      LOG_VART(comparisonElementId);
+        std::pair<ElementId, ElementId> matchElementIds =
+          *(overlappingMatch->getMatchPairs()).begin();
+        ElementId comparisonElementId;
+        if (matchElementIds.first == sharedElementId)
+        {
+          comparisonElementId = matchElementIds.second;
+        }
+        else
+        {
+          comparisonElementId = matchElementIds.first;
+        }
+        LOG_VART(comparisonElementId);
 
-      int pointCount = 0;
-      if (sharedElementId.getType() == ElementType::Node)
-      {
-        pointCount++;
-      }
-      if (comparisonElementId.getType() == ElementType::Node)
-      {
-        pointCount++;
-      }
-      if (pointCount != 1)
-      {
-        throw IllegalArgumentException("POI/Polygon match does not contain exactly one POI.");
-      }
+        int pointCount = 0;
+        if (sharedElementId.getType() == ElementType::Node)
+        {
+          pointCount++;
+        }
+        if (comparisonElementId.getType() == ElementType::Node)
+        {
+          pointCount++;
+        }
+        if (pointCount != 1)
+        {
+          throw IllegalArgumentException(
+            "POI/Polygon match does not contain exactly one POI: " + overlappingMatch->toString());
+        }
 
-      int polyCount = 0;
-      if (sharedElementId.getType() == ElementType::Way ||
-          sharedElementId.getType() == ElementType::Relation)
-      {
-        polyCount++;
-      }
-      if (comparisonElementId.getType() == ElementType::Way ||
-          comparisonElementId.getType() == ElementType::Relation)
-      {
-        polyCount++;
-      }
-       if (polyCount != 1)
-      {
-        throw IllegalArgumentException("POI/Polygon match does not contain exactly one Polygon.");
-      }
+        int polyCount = 0;
+        if (sharedElementId.getType() == ElementType::Way ||
+            sharedElementId.getType() == ElementType::Relation)
+        {
+          polyCount++;
+        }
+        if (comparisonElementId.getType() == ElementType::Way ||
+            comparisonElementId.getType() == ElementType::Relation)
+        {
+          polyCount++;
+        }
+        if (polyCount != 1)
+        {
+          throw IllegalArgumentException(
+            "POI/Polygon match does not contain exactly one Polygon: " +
+            overlappingMatch->toString());
+        }
 
-      ConstElementPtr comparisonElement = map->getElement(comparisonElementId);
+        ConstElementPtr comparisonElement = map->getElement(comparisonElementId);
 
-      ConstNodePtr point;
-      bool sharedWasPoint = false;
-      if (sharedElementId.getType() == ElementType::Node)
-      {
-        point = std::dynamic_pointer_cast<const Node>(sharedElement);
-        sharedWasPoint = true;
-      }
-      else
-      {
-        point = std::dynamic_pointer_cast<const Node>(comparisonElement);
-      }
+        ConstNodePtr point;
+        bool sharedWasPoint = false;
+        if (sharedElementId.getType() == ElementType::Node)
+        {
+          point = std::dynamic_pointer_cast<const Node>(sharedElement);
+          sharedWasPoint = true;
+        }
+        else
+        {
+          point = std::dynamic_pointer_cast<const Node>(comparisonElement);
+        }
 
-      double distance = DBL_MAX;
-      if (sharedWasPoint)
-      {
-        distance = _infoCache->getDistance(comparisonElement, point);
-      }
-      else
-      {
-        distance = _infoCache->getDistance(sharedElement, point);
-      }
-      LOG_VART(distance);
-      if (distance != -1.0 && distance < smallestDistance)
-      {
-        smallestDistance = distance;
-        LOG_TRACE(
-          "smallest distance: " << smallestDistance << ", " << sharedElementId << ";" <<
-          comparisonElementId);
-        closestMatch = match;
+        double distance = DBL_MAX;
+        if (sharedWasPoint)
+        {
+          distance = _infoCache->getDistance(comparisonElement, point);
+        }
+        else
+        {
+          distance = _infoCache->getDistance(sharedElement, point);
+        }
+        LOG_VART(distance);
+        if (distance != -1.0 && distance < smallestDistance)
+        {
+          smallestDistance = distance;
+          LOG_TRACE(
+            "smallest distance: " << smallestDistance << ", " << sharedElementId << ";" <<
+            comparisonElementId);
+          closestMatch = overlappingMatch;
+        }
       }
     }
     LOG_TRACE("Keeping closest match: " << closestMatch << "...");
@@ -434,7 +454,7 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
          matchItr != matchesWithSharedId.end(); ++matchItr)
     {
       ConstMatchPtr match = *matchItr;
-      if (match != closestMatch)
+      if (/*closestMatch &&*/ match != closestMatch)
       {
         matchesToRemove.append(match);
       }
