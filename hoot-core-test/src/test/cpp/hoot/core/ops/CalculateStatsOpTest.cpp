@@ -149,7 +149,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       0.0,
       calcStatsOp->getSingleStat(
-        "Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js"));
+        "Features Conflatable by: hoot::ScriptMatchCreator,Poi.js"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
@@ -410,7 +410,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       0.0,
       calcStatsOp->getSingleStat(
-        "Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js"));
+        "Features Conflatable by: hoot::ScriptMatchCreator,Poi.js"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));

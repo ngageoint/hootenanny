@@ -63,7 +63,7 @@
         }
     },
     "Pois": {
-        "matcher": "hoot::ScriptMatchCreator,PoiGeneric.js",
+        "matcher": "hoot::ScriptMatchCreator,Poi.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
             "poi.ignore.type.if.name.present": "Ignore type if name present"
@@ -110,7 +110,7 @@
         "members": {}
     },
     "Waterways": {
-        "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
+        "matcher": "hoot::ScriptMatchCreator,River.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
             "search.radius.waterway": "Waterway search radius"

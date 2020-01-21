@@ -42,7 +42,7 @@ class MatchClassification;
 /**
  * Note that we don't currently use a Random Forest model (.rf file) with POI to POI conflation.
  * We only used the generated .arff file to feed the features used by Generic Conflation with
- * PoiGeneric.js.
+ * Poi.js.
  */
 class PoiRfClassifier
 {

@@ -48,7 +48,7 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 {
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
@@ -164,7 +164,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(QByteArray check
 
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
   for (int i = 0; i < ids.size(); i++)
   {

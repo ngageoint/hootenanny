@@ -1,8 +1,8 @@
 
-poi = hoot.require("MultiaryPoiGenericRules");
+poi = hoot.require("MultiaryPoiRules");
 
 // poor man's inheritance. Is there a better practice in JS?
-// use all the functions/parameters as defined in PoiGeneric, then we will override later.
+// use all the functions/parameters as defined in Poi.js, then we will override later.
 Object.keys(poi).forEach(function(key) {
     exports[key] = poi[key];
 });

@@ -78,7 +78,7 @@ public:
     std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0.6, 0.6, 0.6));
 
     ScriptMatchCreator smc;
-    smc.setArguments(QStringList() << "LineStringGenericTest.js");
+    smc.setArguments(QStringList() << "LineTest.js");
     vector<ConstMatchPtr> matches;
     smc.createMatches(map, matches, mt);
     HOOT_STR_EQUALS(2, matches.size());

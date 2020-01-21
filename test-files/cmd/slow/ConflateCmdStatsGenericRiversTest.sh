@@ -7,7 +7,7 @@ mkdir -p $OUT_DIR
 STATS_OUT=$OUT_DIR/generic-rivers-out
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-hoot conflate -C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D "match.creators=hoot::ScriptMatchCreator,LinearWaterway.js" -D "merger.creators=hoot::ScriptMergerCreator" -D writer.include.debug.tags=true test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $STATS_OUT.osm --stats > $STATS_OUT
+hoot conflate -C Testing.conf -C UnifyingAlgorithm.conf -C ReferenceConflation.conf -D "match.creators=hoot::ScriptMatchCreator,River.js" -D "merger.creators=hoot::ScriptMergerCreator" -D writer.include.debug.tags=true test-files/conflate/generic/rivers/Haiti_CNIGS_Rivers_REF1-cropped-2.osm test-files/conflate/generic/rivers/Haiti_osm_waterway_ss_REF2-cropped-2.osm $STATS_OUT.osm --stats > $STATS_OUT
 
 hoot diff $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm || diff $STATS_OUT.osm $IN_DIR/generic-rivers-out.osm
 

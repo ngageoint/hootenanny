@@ -1,1 +1,1 @@
-Tests a simple case conflating 1:2 roads using the LineStringGenericTest.js rules.
+Tests a simple case conflating 1:2 roads using the Line.js rules.

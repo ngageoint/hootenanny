@@ -63,7 +63,7 @@ public:
   void runIsCandidateTest()
   {
     ScriptMatchCreator uut;
-    uut.setArguments(QStringList() << "LineStringGenericTest.js");
+    uut.setArguments(QStringList() << "LineTest.js");
 
     ConfigOptions co;
     conf().set(co.getUuidHelperRepeatableKey(), true);

@@ -142,15 +142,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
-  //ConfigOptions conf(_settings);
-
-//  const QStringList matchCreators;
-//  if (matchCreators.contains("hoot::ScriptMatchCreator,PointGeneric.js") ||
-//      matchCreators.contains("hoot::ScriptMatchCreator,LineStringGeneric.js") ||
-//      matchCreators.contains("hoot::ScriptMatchCreator,PolygonGeneric.js"))
-//  {
-//    throw IllegalArgumentException("TODO");
-//  }
 
   _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 

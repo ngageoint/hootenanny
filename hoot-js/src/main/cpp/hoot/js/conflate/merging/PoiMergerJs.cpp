@@ -56,7 +56,7 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
   std::shared_ptr<PluginContext> script(new PluginContext());
   v8::HandleScope handleScope(current);
   v8::Context::Scope context_scope(script->getContext(current));
-  script->loadScript(ConfPath::search("PoiGeneric.js", "rules"), "plugin");
+  script->loadScript(ConfPath::search("Poi.js", "rules"), "plugin");
   v8::Handle<v8::Object> global = script->getContext(current)->Global();
   if (global->Has(String::NewFromUtf8(current, "plugin")) == false)
   {
