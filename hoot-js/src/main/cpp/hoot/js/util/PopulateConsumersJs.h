@@ -151,7 +151,7 @@ public:
     // we expect the child crits to be configured separately outside of the parent visitor.
     MultipleCriterionConsumerVisitor* multipleCritVis =
       dynamic_cast<MultipleCriterionConsumerVisitor*>(consumer);
-    LOG_VARD(multipleCritVis == 0);
+    LOG_VART(multipleCritVis == 0);
     if (multipleCritVis != 0)
     {
       multipleCritVis->setConfigureChildren(false);
