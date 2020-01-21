@@ -9,6 +9,7 @@ Object.keys(poi).forEach(function(key) {
 
 exports.description = "Matches three or more POIs";
 exports.experimental = true;
+exports.geometryType = "point";
 
 // this matcher will never cause a conflict. However, another matcher may conflict with us.
 exports.neverCausesConflict = function() { return true; }

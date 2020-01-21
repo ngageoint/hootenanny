@@ -10,6 +10,7 @@ exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "Polygon";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
+exports.geometryType = "polygon";
 
 var overlapExtractor = 
   new hoot.SmallerOverlapExtractor({ "convert.require.area.for.polygon": "false" });

@@ -10,6 +10,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
 exports.baseFeatureType = "Point";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
+exports.geometryType = "point";
 
 function distance(e1, e2) 
 {

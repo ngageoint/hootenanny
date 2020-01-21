@@ -9,6 +9,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
+exports.geometryType = "polygon";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 

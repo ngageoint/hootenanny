@@ -620,8 +620,23 @@ void ScriptMatchCreator::createMatches(
   LOG_INFO(
     "Looking for matches with: " << className() << ";" << scriptFileInfo.fileName() << "...");
   LOG_VARD(*threshold);
-  // TODO: Can we filter the element types we iterate over here this based on the script being run?
-  map->visitRo(v);
+  LOG_VARD(GeometryTypeCriterion::typeToString(scriptInfo.geometryType));
+  switch (scriptInfo.geometryType)
+  {
+    case GeometryTypeCriterion::GeometryType::Point:
+      map->visitNodesRo(v);
+      break;
+    case GeometryTypeCriterion::GeometryType::Line:
+      map->visitWaysRo(v);
+      map->visitRelationsRo(v);
+      break;
+    case GeometryTypeCriterion::GeometryType::Polygon:
+      map->visitWaysRo(v);
+      map->visitRelationsRo(v);
+      break;
+    default:
+      throw IllegalArgumentException("Invalid geometry type.");
+  }
   // total match count inaccurate here
 //  LOG_INFO(
 //    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
@@ -735,6 +750,13 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   {
     Handle<Value> value = ToLocal(&plugin)->Get(featureTypeStr);
     result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
+  }
+  Handle<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType");
+  // TODO: should we fail here if not present?
+  if (ToLocal(&plugin)->Has(geometryTypeStr))
+  {
+    Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);
+    result.geometryType = GeometryTypeCriterion::typeFromString(toCpp<QString>(value));
   }
 
   QFileInfo fi(path);

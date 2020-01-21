@@ -71,6 +71,14 @@ public:
    * @return a geometry type string
    */
   static QString typeToString(const GeometryType& geometryType);
+
+  /**
+   * TODO
+   *
+   * @param geometryTypeStr
+   * @return
+   */
+  static GeometryType typeFromString(const QString& geometryTypeStr);
 };
 
 }

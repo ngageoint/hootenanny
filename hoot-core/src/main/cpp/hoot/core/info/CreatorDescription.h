@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // Standard
 #include <string>
@@ -81,6 +81,7 @@ public:
   std::string className;
   QString description;
   BaseFeatureType baseFeatureType;
+  GeometryTypeCriterion::GeometryType geometryType;
 
   static QString baseFeatureTypeToString(BaseFeatureType t);
 

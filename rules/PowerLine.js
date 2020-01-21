@@ -9,6 +9,7 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold"));
 exports.matchCandidateCriterion = "hoot::PowerLineCriterion"; // See #3047
+exports.geometryType = "line";
 
 var sublineMatcher =
   new hoot.MaximalSublineStringMatcher(

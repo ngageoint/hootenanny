@@ -13,6 +13,7 @@ exports.missThreshold = parseFloat(hoot.get("poi.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("poi.review.threshold"));
 exports.searchRadius = -1.0;
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
+exports.geometryType = "point";
 
 var soundexExtractor = new hoot.NameExtractor(
     new hoot.Soundex());

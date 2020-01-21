@@ -70,4 +70,26 @@ QString GeometryTypeCriterion::typeToString(const GeometryType& geometryType)
   }
 }
 
+GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
+  const QString& geometryTypeStr)
+{
+  const QString compareVal = geometryTypeStr.toLower();
+  if (compareVal == "point")
+  {
+    return GeometryType::Point;
+  }
+  else if (compareVal == "line")
+  {
+    return GeometryType::Line;
+  }
+  else if (compareVal == "polygon")
+  {
+    return GeometryType::Polygon;
+  }
+  else
+  {
+    throw IllegalArgumentException("Invalid geometry type string: " + geometryTypeStr);
+  }
+}
+
 }

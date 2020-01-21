@@ -7,6 +7,7 @@ exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 exports.baseFeatureType = "Line";
+exports.geometryType = "line";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();

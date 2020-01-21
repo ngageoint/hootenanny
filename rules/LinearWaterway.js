@@ -3,6 +3,7 @@
 exports.description = "Matches linear waterways";
 exports.experimental = false;
 exports.baseFeatureType = "Waterway";
+exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("waterway.match.threshold"));
