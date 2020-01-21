@@ -37,6 +37,8 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
 
+#ifdef HOOT_HAVE_SERVICES
+
 namespace hoot
 {
 
@@ -105,5 +107,7 @@ private:
 };
 
 }
+
+#endif // HOOT_HAVE_SERVICES
 
 #endif // SERVICESDBTESTUTILS_H

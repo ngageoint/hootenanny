@@ -62,6 +62,8 @@ public:
   }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbTest, "slow");
+#endif  // HOOT_HAVE_SERVICES
 
 }

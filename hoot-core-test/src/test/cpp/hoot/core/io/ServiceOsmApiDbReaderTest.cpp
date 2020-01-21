@@ -433,7 +433,9 @@ public:
   }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbReaderTest, "slow");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbReaderTest, "serial");
+#endif  // HOOT_HAVE_SERVICES
 
 }

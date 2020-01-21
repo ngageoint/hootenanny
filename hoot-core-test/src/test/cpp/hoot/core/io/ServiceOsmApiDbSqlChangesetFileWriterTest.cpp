@@ -76,7 +76,9 @@ public:
   }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetFileWriterTest, "quick");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbSqlChangesetFileWriterTest, "serial");
+#endif  // HOOT_HAVE_SERVICES
 
 }

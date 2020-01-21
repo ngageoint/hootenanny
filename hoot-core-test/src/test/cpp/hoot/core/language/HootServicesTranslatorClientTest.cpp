@@ -142,7 +142,9 @@ private:
   }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HootServicesTranslatorClientTest, "quick");
+#endif  // HOOT_HAVE_SERVICES
 
 }
 

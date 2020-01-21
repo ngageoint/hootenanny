@@ -553,6 +553,8 @@ private:
   QString _testName;
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceHootApiDbWriterTest, "slow");
+#endif  // HOOT_HAVE_SERVICES
 
 }

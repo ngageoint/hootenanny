@@ -661,7 +661,9 @@ public:
   }
 };
 
+#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkInserterTest, "slow");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServiceOsmApiDbBulkInserterTest, "serial");
+#endif  // HOOT_HAVE_SERVICES
 
 }

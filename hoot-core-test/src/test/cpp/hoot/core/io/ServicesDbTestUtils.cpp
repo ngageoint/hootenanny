@@ -46,6 +46,8 @@
 // Tgs
 #include <tgs/StreamUtils.h>
 
+#ifdef HOOT_HAVE_SERVICES
+
 using namespace std;
 using namespace Tgs;
 
@@ -364,3 +366,4 @@ std::shared_ptr<HootNetworkCookieJar> ServicesDbTestUtils::getTestSessionCookie(
 
 }
 
+#endif  // HOOT_HAVE_SERVICES
