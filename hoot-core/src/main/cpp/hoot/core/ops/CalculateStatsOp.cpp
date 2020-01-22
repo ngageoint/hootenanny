@@ -360,9 +360,6 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     QStringList featureTypesToSkip;
     // Unknown does not get us a usable element criterion, so skip it
     featureTypesToSkip.append("unknown");
-    // TODO: explain
-    featureTypesToSkip.append("point");
-    featureTypesToSkip.append("line");
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            conflatableFeatureCounts.begin();
          it != conflatableFeatureCounts.end(); ++it)
@@ -685,6 +682,12 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   LOG_VARD(poisMergedIntoPolys);
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);
+
+  ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(criterion.get());
+  if (mapConsumer != 0)
+  {
+    mapConsumer->setOsmMap(_constMap.get());
+  }
 
   double totalFeatures = 0.0;
   totalFeatures =
