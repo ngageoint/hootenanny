@@ -47,7 +47,8 @@ public:
   {
     Point = 0,
     Line,
-    Polygon
+    Polygon,
+    Unknown
   };
 
   static std::string className() { return "hoot::GeometryTypeCriterion"; }

@@ -66,7 +66,7 @@ QString GeometryTypeCriterion::typeToString(const GeometryType& geometryType)
     case GeometryType::Polygon:
       return "polygon";
     default:
-      throw IllegalArgumentException("Invalid geometry type.");
+      return "unknown";
   }
 }
 
@@ -88,7 +88,7 @@ GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
   }
   else
   {
-    throw IllegalArgumentException("Invalid geometry type string: " + geometryTypeStr);
+    throw GeometryType::Unknown;
   }
 }
 

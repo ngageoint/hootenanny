@@ -1,7 +1,7 @@
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Matches points";
+exports.description = "Matches generic points";
 exports.experimental = false;
 exports.matchThreshold = parseFloat(hoot.get("generic.point.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.point.miss.threshold"));
@@ -85,6 +85,7 @@ exports.matchScore = function(map, e1, e2)
 
   var error1 = e1.getCircularError();
   var error2 = e2.getCircularError();
+  // could use EuclideanDistanceExtractor here instead
   var distanceBetweenFeatures = distance(e1, e2);
   var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
   var geometryMatch = false;

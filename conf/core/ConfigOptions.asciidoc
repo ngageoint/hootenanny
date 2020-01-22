@@ -1256,6 +1256,40 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== generic.point.polygon.match.threshold
+
+* Data Type: double
+* Default Value: `${conflate.match.threshold.default}`
+
+The threshold at which a match is called a match for generic points conflated with polygons.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.polygon.miss.threshold
+
+* Data Type: double
+* Default Value: `${conflate.miss.threshold.default}`
+
+The threshold at which a miss is called a miss for generic points conflated with polygons.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.polygon.review.threshold
+
+* Data Type: double
+* Default Value: `${conflate.review.threshold.default}`
+
+The threshold at which a review is called a review for generic points conflated with polygons. See
+`conflate.review.threshold.default`.
+
+See also:
+
+ * _Estimate Pairwise Relationships_, <<hootalgo>>
+
 === generic.polygon.match.threshold
 
 * Data Type: double
@@ -2170,6 +2204,7 @@ into Hootenanny.
 ** `hoot::ScriptMatchCreator,Point.js`
 ** `hoot::ScriptMatchCreator,Line.js`
 ** `hoot::ScriptMatchCreator,Polygon.js`
+** `hoot::ScriptMatchCreator,PointPolygon.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.
@@ -2261,6 +2296,7 @@ matching ways.  Larger values may increase runtime performance but decrease conf
 ** `hoot::HighwayMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::PoiPolygonMergerCreator`
+** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
 ** `hoot::ScriptMergerCreator`
@@ -4025,6 +4061,14 @@ The search radius to use when conflating generic lines.  See `search.radius.defa
 * Default Value: `${search.radius.default}`
 
 The search radius to use when conflating generic points.  See `search.radius.default`.
+
+=== search.radius.generic.point.polygon
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius to use when conflating generic points with generic polygons.  See
+`search.radius.default`.
 
 === search.radius.generic.polygon
 

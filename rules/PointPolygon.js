@@ -1,21 +1,19 @@
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Matches points";
+exports.description = "Matches generic points with polygons";
 exports.experimental = false;
-exports.matchThreshold = parseFloat(hoot.get("generic.point.match.threshold"));
-exports.missThreshold = parseFloat(hoot.get("generic.point.miss.threshold"));
-exports.reviewThreshold = parseFloat(hoot.get("generic.point.review.threshold"));
-exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point"));
+exports.matchThreshold = parseFloat(hoot.get("generic.point.polygon.match.threshold"));
+exports.missThreshold = parseFloat(hoot.get("generic.point.polygon.miss.threshold"));
+exports.reviewThreshold = parseFloat(hoot.get("generic.point.polygon.review.threshold"));
+exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
-exports.baseFeatureType = "Point";
+//exports.baseFeatureType = ""; // TODO: not sure what to use here
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+//exports.geometryType = "";
 
-function distance(e1, e2) 
-{
-  return Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) +
-         Math.pow(e1.getY() - e2.getY(), 2));
-}
+var distanceExtractor = 
+  new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });
 
 /**
  * Returns true if e is a candidate for a match. Implementing this method is
@@ -27,7 +25,7 @@ function distance(e1, e2)
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isPoint(map, e);
+  return (isPoint(map, e) /*|| isPolygon(e)*/) && !isSpecificallyConflatable(map, e);
 };
 
 /**
@@ -61,33 +59,7 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("same statuses: miss");
     return result;
   }
-    
-  // TODO: Do we want to add the concept of a review for either tags or geometry?
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-
-  var error1 = e1.getCircularError();
-  var error2 = e2.getCircularError();
-  var distanceBetweenFeatures = distance(e1, e2);
-  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
-  var geometryMatch = false;
-  if (distanceBetweenFeatures <= searchRadius)
-  {
-    geometryMatch = true;
-  }
-
-  var featureMatch = tagScorePassesThreshold && geometryMatch;
-  if (featureMatch)
-  {
-    var result = { match: 1.0 };
-  }
-
-  hoot.trace("***GENERIC POINT MATCH DETAIL***");
   hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
   if (e1.getTags().get("note"))
   {
@@ -98,11 +70,35 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
+
+  var typeScore = getTypeScore(map, e1, e2);
+  var typeScorePassesThreshold = false;
+  if (typeScore >= exports.tagThreshold)
+  {
+    typeScorePassesThreshold = true;
+  }
   hoot.trace("typeScore: " + typeScore);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
-  hoot.trace("geometryMatch: " + geometryMatch);
+
+  var error1 = e1.getCircularError();
+  var error2 = e2.getCircularError();
+  var distanceBetweenFeatures = distanceExtractor.extract(map, e1, e2);
+  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
+  var geometryMatch = false;
+  if (distanceBetweenFeatures <= searchRadius)
+  {
+    geometryMatch = true;
+  }
+  hoot.trace("searchRadius: " + searchRadius);
   hoot.trace("distanceBetweenFeatures: " + distanceBetweenFeatures);
-  hoot.trace("***END POINT MATCH DETAIL***");
+  hoot.trace("geometryMatch: " + geometryMatch);
+
+  var featureMatch = typeScorePassesThreshold && geometryMatch;
+  if (featureMatch)
+  {
+    var result = { match: 1.0 };
+  }
+  hoot.trace("featureMatch: " + featureMatch);
 
   return result;
 };
@@ -114,15 +110,43 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
+  hoot.trace("e1: " + e1.getId() + ", " + e1.getTags().get("name"));
+  hoot.trace("e2: " + e2.getId() + ", " + e2.getTags().get("name"));
+
   // replace instances of e2 with e1 and merge tags
-  mergeElements(map, e1, e2);
-  e1.setStatusString("conflated");
+  
+  var keeper;
+  var toReplace;
+  if (isPolygon(e1))
+  {
+    keeper = e1;
+    toReplace = e2;
+  }
+  else
+  {
+    keeper = e2;
+    toReplace = e1;
+  }
+  hoot.trace("keeper: " + keeper.getId() + ", " + keeper.getTags().get("name"));
+  hoot.trace("toReplace: " + toReplace.getId() + ", " + toReplace.getTags().get("name"));
+
+  mergeElements(map, keeper, toReplace);
+
+  keeper.setStatusString("conflated");
   if (exports.writeDebugTags == "true")
   {
     // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
-    e1.setTag("hoot:matchedBy", exports.baseFeatureType);
+    keeper.setTag("hoot:matchedBy", "PointPolygon");
+    hoot.trace("keeper: " + keeper.getId() + ", " + keeper.getTags().get("hoot:matchedBy"));
   }
-  return e1;
+
+  return keeper;
+};
+
+exports.getMatchFeatureDetails = function(map, e1, e2)
+{
+  var featureDetails = [];
+  return featureDetails;
 };
 
 

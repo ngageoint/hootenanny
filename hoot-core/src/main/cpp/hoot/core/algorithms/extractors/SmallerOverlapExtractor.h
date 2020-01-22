@@ -67,6 +67,9 @@ public:
   virtual QString getDescription() const
   { return "Determines the overlap between two features focusing on the building with more overlap"; }
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings& conf);
 
 private:

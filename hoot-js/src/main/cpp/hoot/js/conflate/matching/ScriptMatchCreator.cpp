@@ -40,6 +40,8 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
 
 #include <hoot/js/conflate/matching/ScriptMatch.h>
 #include <hoot/js/elements/OsmMapJs.h>
@@ -147,6 +149,9 @@ public:
     LOG_VART(env);
 
     // find other nearby candidates
+    LOG_TRACE(
+      "Finding neighbors for: " << e->getElementId() << " during conflation: " << _scriptPath <<
+      "...");
     set<ElementId> neighbors =
       SpatialIndexer::findNeighbors(*env, getIndex(), _indexToEid, getMap());
     LOG_VART(neighbors);
@@ -154,13 +159,32 @@ public:
 
     _elementsEvaluated++;
 
+    // TODO: move outside method
+    const bool isPointPolyConflation = _scriptPath.contains("PointPolygon.js");
+    std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+    std::shared_ptr<NonConflatableCriterion> notConflatableCrit(new NonConflatableCriterion());
+    std::shared_ptr<ChainCriterion> pointPolyCrit(new ChainCriterion(polyCrit, notConflatableCrit));
+
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
       LOG_VART(e2->getElementId());
-      LOG_VART(isCorrectOrder(e, e2));
-      LOG_VART(isMatchCandidate(e2));
-      if (isCorrectOrder(e, e2) && isMatchCandidate(e2))
+
+      // TODO: explain
+      bool attemptToMatch = false;
+      if (!isPointPolyConflation)
+      {
+        LOG_VART(isCorrectOrder(e, e2));
+        LOG_VART(isMatchCandidate(e2));
+        attemptToMatch = isCorrectOrder(e, e2) && isMatchCandidate(e2);
+      }
+      else
+      {
+        attemptToMatch = pointPolyCrit->isSatisfied(e2);
+      }
+      LOG_VART(attemptToMatch);
+
+      if (attemptToMatch)
       {
         // score each candidate and push it on the result vector
         std::shared_ptr<ScriptMatch> m(new ScriptMatch(_script, plugin, map, mapJs, from, *it, _mt));
@@ -272,6 +296,7 @@ public:
       }
     }
 
+    //LOG_VART(result);
     return result;
   }
 
@@ -344,21 +369,37 @@ public:
       // conflation. This approach over-indexes a bit and will likely slow things down, but should
       // give the same results. An option in the future would be to support an "isIndexedFeature" or
       // similar function to speed the operation back up again.
-      std::function<bool (ConstElementPtr)> f =
-        std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
-      std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
+      // TODO: hack - explain
+      if (!_scriptPath.contains("PointPolygon.js"))
+      {
+        std::function<bool (ConstElementPtr)> f =
+          std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);
+        std::shared_ptr<ArbitraryCriterion> pC(new ArbitraryCriterion(f));
 
-      // Instantiate our visitor
-      SpatialIndexer v(_index,
-                       _indexToEid,
-                       pC,
-                       std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
-                       getMap());
+        SpatialIndexer v(_index,
+                         _indexToEid,
+                         pC,
+                         std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
+                         getMap());
+        // TODO: This can be filtered down with geometry type too.
+        getMap()->visitRo(v);
+        v.finalizeIndex();
+      }
+      else
+      {
+        std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+        std::shared_ptr<NonConflatableCriterion> notConflatableCrit(new NonConflatableCriterion());
+        std::shared_ptr<ChainCriterion> crit(new ChainCriterion(polyCrit, notConflatableCrit));
 
-      // Do the visiting
-      getMap()->visitRo(v);
-      v.finalizeIndex();
-
+        SpatialIndexer v(_index,
+                         _indexToEid,
+                         crit,
+                         std::bind(&ScriptMatchVisitor::getSearchRadius, this, placeholders::_1),
+                         getMap());
+        getMap()->visitWaysRo(v);
+        getMap()->visitRelationsRo(v);
+        v.finalizeIndex();
+      }
       LOG_VART(_indexToEid.size());
     }
     return _index;
@@ -384,6 +425,11 @@ public:
    */
   bool isCorrectOrder(const ConstElementPtr& e1, const ConstElementPtr& e2)
   {
+    LOG_VART(e1->getStatus().getEnum());
+    LOG_VART(e2->getStatus().getEnum());
+    LOG_VART(e1->getElementId());
+    LOG_VART(e2->getElementId());
+
     if (e1->getStatus().getEnum() == e2->getStatus().getEnum())
     {
       return e1->getElementId() < e2->getElementId();
@@ -635,7 +681,10 @@ void ScriptMatchCreator::createMatches(
       map->visitRelationsRo(v);
       break;
     default:
-      throw IllegalArgumentException("Invalid geometry type.");
+      map->visitNodesRo(v);
+      map->visitWaysRo(v);
+      map->visitRelationsRo(v);
+      break;
   }
   // total match count inaccurate here
 //  LOG_INFO(
@@ -644,10 +693,16 @@ void ScriptMatchCreator::createMatches(
 //    " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
 //    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   // TODO: don't think the base feature type is populated yet either
+  QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
+  // TODO: hack
+  if (_scriptPath.contains("PointPolygon.js"))
+  {
+    matchType = "PointPolygon";
+  }
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
-    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
-    " match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+    matchType << " match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+    ".");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
@@ -752,7 +807,6 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
     result.baseFeatureType = CreatorDescription::stringToBaseFeatureType(toCpp<QString>(value));
   }
   Handle<String> geometryTypeStr = String::NewFromUtf8(current, "geometryType");
-  // TODO: should we fail here if not present?
   if (ToLocal(&plugin)->Has(geometryTypeStr))
   {
     Handle<Value> value = ToLocal(&plugin)->Get(geometryTypeStr);

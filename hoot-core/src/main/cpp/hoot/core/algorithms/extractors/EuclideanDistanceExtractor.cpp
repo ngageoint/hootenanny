@@ -42,10 +42,22 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, EuclideanDistanceExtractor)
 
-double EuclideanDistanceExtractor::distance(const OsmMap &map,
-  const std::shared_ptr<const Element>& target, const std::shared_ptr<const Element> &candidate) const
+EuclideanDistanceExtractor::EuclideanDistanceExtractor() :
+_requireAreaForPolygonConversion(true)
+{
+}
+
+void EuclideanDistanceExtractor::setConfiguration(const Settings& conf)
+{
+  _requireAreaForPolygonConversion = ConfigOptions(conf).getConvertRequireAreaForPolygon();
+}
+
+double EuclideanDistanceExtractor::distance(
+  const OsmMap &map, const std::shared_ptr<const Element>& target,
+  const std::shared_ptr<const Element> &candidate) const
 {
   ElementConverter ec(map.shared_from_this());
+  ec.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 

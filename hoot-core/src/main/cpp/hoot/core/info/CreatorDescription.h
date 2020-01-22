@@ -62,7 +62,9 @@ public:
     Area = 6,
     Railway = 7,
     PowerLine = 8,
-    Unknown = 9 // Unknown must always be last
+    Point = 9,
+    Line = 10,
+    Unknown = 11 // Unknown must always be last
   };
 
   enum FeatureCalcType

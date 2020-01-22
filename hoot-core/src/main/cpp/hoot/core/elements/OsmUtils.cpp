@@ -47,18 +47,27 @@
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/criterion/IdTagMatchesId.h>
+#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDateTime>
 #include <QRegExp>
+#include <QStringBuilder>
 
+// Std
 #include <float.h>
+
+// GEOS
+#include <geos/util/TopologyException.h>
 
 using namespace geos::geom;
 using namespace std;
 
 namespace hoot
 {
+
+int OsmUtils::_badGeomCount = 0;
 
 void OsmUtils::printNodes(const QString& nodeCollectionName,
                           const QList<std::shared_ptr<const Node>>& nodes)
@@ -735,6 +744,223 @@ bool OsmUtils::anyElementsHaveAnyKvp(const QStringList& kvps,
     elements.push_back(map->getElement(*it));
   }
   return anyElementsHaveAnyKvp(kvps, elements);
+}
+
+std::shared_ptr<geos::geom::Geometry> OsmUtils::_getGeometry(
+  const ConstElementPtr& element, ConstOsmMapPtr map)
+{
+  if (!element)
+  {
+    throw IllegalArgumentException("The input element is null.");
+  }
+
+  std::shared_ptr<geos::geom::Geometry> newGeom;
+  QString errorMsg =
+    "Feature passed to OsmUtils caused topology exception on conversion to a geometry: ";
+  try
+  {
+    newGeom = ElementConverter(map).convertToGeometry(element);
+  }
+  catch (const geos::util::TopologyException& e)
+  {
+    if (_badGeomCount <= Log::getWarnMessageLimit())
+    {
+      LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+  }
+  catch (const HootException& e)
+  {
+    if (_badGeomCount <= Log::getWarnMessageLimit())
+    {
+      LOG_TRACE(errorMsg << element->toString() << "\n" << e.what());
+      _badGeomCount++;
+    }
+  }
+  if (newGeom.get() &&
+      QString::fromStdString(newGeom->toString()).toUpper().contains("EMPTY"))
+  {
+    if (_badGeomCount <= Log::getWarnMessageLimit())
+    {
+      LOG_TRACE("Invalid element passed: " << newGeom->toString());
+      _badGeomCount++;
+    }
+    newGeom.reset();
+  }
+  return newGeom;
+}
+
+bool OsmUtils::elementContains(const ConstElementPtr& containingElement,
+                               const ConstElementPtr& containedElement, ConstOsmMapPtr map)
+{
+  if (!containingElement || !containedElement)
+  {
+    throw IllegalArgumentException("One of the input elements is null.");
+  }
+  if (containingElement->getElementType() != ElementType::Way &&
+      containingElement->getElementType() != ElementType::Relation)
+  {
+    throw IllegalArgumentException("One of the input elements is of the wrong type.");
+  }
+  LOG_VART(containedElement->getElementId());
+  LOG_VART(containingElement->getElementId());
+
+  std::shared_ptr<geos::geom::Geometry> containingElementGeom =
+    _getGeometry(containingElement, map);
+  std::shared_ptr<geos::geom::Geometry> containedElementGeom = _getGeometry(containedElement, map);
+  bool contains = false;
+  if (containingElementGeom && containedElementGeom)
+  {
+    contains = containingElementGeom->contains(containedElementGeom.get());
+    LOG_TRACE(
+      "Calculated contains: " << contains << " for containing element: " <<
+      containingElement->getElementId() <<
+      " and contained element: " << containedElement->getElementId() << ".");
+  }
+  else
+  {
+    LOG_TRACE(
+      "Unable to calculate contains for containing element: " <<
+      containingElement->getElementId() << " and contained element: " <<
+      containedElement->getElementId() << ".");
+  }
+  return contains;
+}
+
+bool OsmUtils::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
+{
+  if (!parent ||
+      (parent->getElementType() != ElementType::Way &&
+       parent->getElementType() != ElementType::Relation))
+  {
+    throw IllegalArgumentException("The parent element is null or of the wrong element type.");
+  }
+  if (parent->getElementType() != ElementType::Way && memberId.getType() != ElementType::Node)
+  {
+    throw IllegalArgumentException("The inputs are of the wrong element type.");
+  }
+  if (parent->getElementType() != ElementType::Relation &&
+      memberId.getType() == ElementType::Unknown)
+  {
+    throw IllegalArgumentException("The inputs are of the wrong element type.");
+  }
+
+  bool containsMember = false;
+  if (parent->getElementType() == ElementType::Way)
+  {
+    containsMember =
+      (std::dynamic_pointer_cast<const Way>(parent))->containsNodeId(memberId.getId());
+  }
+  else
+  {
+    containsMember =
+      (std::dynamic_pointer_cast<const Relation>(parent))->contains(memberId);
+  }
+  return containsMember;
+}
+
+bool OsmUtils::elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                                 ConstOsmMapPtr map)
+{
+  if (!element1 || !element2)
+  {
+    throw IllegalArgumentException("One of the input elements is null.");
+  }
+
+  std::shared_ptr<geos::geom::Geometry> geom1 = _getGeometry(element1, map);
+  std::shared_ptr<geos::geom::Geometry> geom2 = _getGeometry(element2, map);
+  bool intersects = false;
+  if (geom1 && geom2)
+  {
+    intersects = geom1->intersects(geom2.get());
+  }
+  else
+  {
+    LOG_TRACE(
+      "Unable to calculate intersects for: " << element1->getElementId() <<
+      " and: " << element2->getElementId() << ".");
+  }
+  return intersects;
+}
+
+double OsmUtils::getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                             ConstOsmMapPtr map)
+{
+  if (!element1 || !element2)
+  {
+    throw IllegalArgumentException("One of the input elements is null.");
+  }
+  LOG_VART(element1->getElementId());
+  LOG_VART(element2->getElementId());
+
+  double distance = -1.0;
+
+  std::shared_ptr<geos::geom::Geometry> element1Geom = _getGeometry(element1, map);
+  std::shared_ptr<geos::geom::Geometry> element2Geom = _getGeometry(element2, map);
+  if (element1Geom && element2Geom)
+  {
+    distance = element1Geom->distance(element2Geom.get());
+    LOG_TRACE(
+      "Calculated distance: " << distance << " for: " << element1->getElementId() <<
+      " and: " << element2->getElementId() << ".");
+  }
+  else
+  {
+    LOG_TRACE(
+      "Unable to calculate distance for: " << element1->getElementId() <<
+      " and: " << element2->getElementId() << ".");
+  }
+
+  return distance;
+}
+
+double OsmUtils::getArea(const ConstElementPtr& element, ConstOsmMapPtr map)
+{
+  if (!element)
+  {
+    throw IllegalArgumentException("The input element is null.");
+  }
+
+  std::shared_ptr<geos::geom::Geometry> geom = _getGeometry(element, map);
+  double area = -1.0;
+  if (geom)
+  {
+    area = geom->getArea();
+  }
+  else
+  {
+    LOG_TRACE("Unable to calculate area for: " << element->getElementId() << ".");
+  }
+  return area;
+}
+
+bool OsmUtils::hasCriterion(const ConstElementPtr& element, const QString& criterionClassName)
+{
+  if (!element || criterionClassName.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(
+      "The input element is null or the criterion class name is empty.");
+  }
+
+  return _getCrit(criterionClassName)->isSatisfied(element);
+}
+
+ElementCriterionPtr OsmUtils::_getCrit(const QString& criterionClassName)
+{
+  if (criterionClassName.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException("The criterion class name is empty.");
+  }
+
+  ElementCriterionPtr crit =
+    ElementCriterionPtr(
+      Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+  if (!crit)
+  {
+    throw IllegalArgumentException(
+      "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
+  }
+  return crit;
 }
 
 }
