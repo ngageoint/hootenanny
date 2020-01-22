@@ -74,10 +74,10 @@ public:
   static QString typeToString(const GeometryType& geometryType);
 
   /**
-   * TODO
+   * Converts a string representation of a geometry to a geometry type
    *
-   * @param geometryTypeStr
-   * @return
+   * @param geometryTypeStr string to convert
+   * @return a geometry type
    */
   static GeometryType typeFromString(const QString& geometryTypeStr);
 };

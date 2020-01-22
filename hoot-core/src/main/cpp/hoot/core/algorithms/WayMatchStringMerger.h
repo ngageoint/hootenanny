@@ -159,9 +159,9 @@ public:
   void setKeeperStatus(Status s);
 
   /**
-   * TODO
+   * Allows for appending tags to the elements being retained by this merger.
    *
-   * @param tags
+   * @param tags tags to append to existing element tags
    */
   void addKeeperTags(const Tags& tags);
 

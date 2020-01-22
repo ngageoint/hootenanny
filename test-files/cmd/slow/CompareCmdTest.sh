@@ -11,6 +11,7 @@ uut=$HOOT_HOME/test-files/ToyTestB.osm
 hoot compare -C Testing.conf $baseMap1 $baseMap2 $uut |\
            sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g" 
 
+# TODO: explain
 hoot compare -C Testing.conf -D graph.comparator.max.threads=2 $baseMap1 $baseMap2 $uut |\
            sed "s/ [0-9]\+\.[0-9]\+e\-[0-9]\+//g"   
 

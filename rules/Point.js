@@ -87,7 +87,7 @@ exports.matchScore = function(map, e1, e2)
   var error2 = e2.getCircularError();
   // could use EuclideanDistanceExtractor here instead
   var distanceBetweenFeatures = distance(e1, e2);
-  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
+  var searchRadius = Math.max(error1, error2);
   var geometryMatch = false;
   if (distanceBetweenFeatures <= searchRadius)
   {

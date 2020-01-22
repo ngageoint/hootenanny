@@ -846,7 +846,8 @@ crosses the bounds are tagged with a custom tag. Must be used in conjunction wit
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If true, an element must be classifiable as an area geometry in the Hootenanny schema in order to
+be converted to a GEOS polygon.
 
 === convert.ops
 
@@ -1172,7 +1173,8 @@ words will be silently ignored.
 * Data Type: double
 * Default Value: `0.8`
 
-TODO
+Tag similarity threshold (0.0 to 1.0) at or above which an element is considered to have similar
+tags when using generic geometry conflate matchers.
 
 === generic.line.match.threshold
 
@@ -4937,7 +4939,8 @@ writers.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If true, the 'hoot:matchedBy' tag will be added to element output when
+writer.include.debug.tags=true.
 
 === writer.precision
 

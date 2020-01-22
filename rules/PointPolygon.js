@@ -25,7 +25,8 @@ var distanceExtractor =
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return (isPoint(map, e) /*|| isPolygon(e)*/) && !isSpecificallyConflatable(map, e);
+  // TODO: explain
+  return isPoint(map, e)  && !isSpecificallyConflatable(map, e);
 };
 
 /**
@@ -83,7 +84,7 @@ exports.matchScore = function(map, e1, e2)
   var error1 = e1.getCircularError();
   var error2 = e2.getCircularError();
   var distanceBetweenFeatures = distanceExtractor.extract(map, e1, e2);
-  var searchRadius = Math.max(error1, error2);  // TODO: Is this right?
+  var searchRadius = Math.max(error1, error2);
   var geometryMatch = false;
   if (distanceBetweenFeatures <= searchRadius)
   {
@@ -115,6 +116,7 @@ exports.mergePair = function(map, e1, e2)
 
   // replace instances of e2 with e1 and merge tags
   
+  // TODO: explain
   var keeper;
   var toReplace;
   if (isPolygon(e1))

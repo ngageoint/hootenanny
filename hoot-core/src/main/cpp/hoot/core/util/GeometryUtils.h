@@ -154,10 +154,10 @@ public:
   static ElementId createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds);
 
   /**
-   * TODO
+   * Returns a string representation for a GEOS geometry type
    *
-   * @param geometryTypeId
-   * @return
+   * @param geometryTypeId the geometry type to convert
+   * @return a string
    */
   static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 };

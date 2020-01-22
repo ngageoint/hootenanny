@@ -98,6 +98,7 @@ public:
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(
     const std::shared_ptr<const Element>& e, bool throwError = true,
     const bool statsFlag = false) const;
+
   std::shared_ptr<geos::geom::Point> convertToGeometry(const ConstNodePtr& n) const;
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(const WayPtr& w) const;
   std::shared_ptr<geos::geom::Geometry> convertToGeometry(const ConstWayPtr& w, bool throwError,
@@ -111,11 +112,14 @@ public:
 
   /**
    * Return the geometry type of the specific element.
+   *
    * @param e
    * @param throwError If true an exception is thrown with an invalid geometry. If false a -1 is
    *  returned on error.
-   * @param statsFlag TODO
-   * @param requireAreaForPolygonConversion TODO
+   * @param statsFlag if true, this geometry type is being retrieved for the purpose of map
+   * statistics
+   * @param requireAreaForPolygonConversion if true, in order for the element being converted to
+   * become a polygon it must be classifiable in the schema as an area
    */
   static geos::geom::GeometryTypeId getGeometryType(const ConstElementPtr& e,
     bool throwError = true, const bool statsFlag = false,
@@ -130,7 +134,8 @@ protected:
 
   ConstElementProviderPtr                 _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;
-  // TODO
+  // if true, conversions to polys require that the source element be classifiable in the schema as
+  // an area
   bool _requireAreaForPolygonConversion;
 };
 

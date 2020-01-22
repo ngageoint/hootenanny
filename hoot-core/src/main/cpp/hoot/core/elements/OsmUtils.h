@@ -610,7 +610,7 @@ public:
    *
    * @param element1 the first element to measure distance from
    * @param element2 the second element to measure distance from
-   * @param map TODO
+   * @param map map owning the input elements
    * @return the distance between the two elements or -1.0 if the distance could not be calculated
    */
   static double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,
@@ -620,7 +620,7 @@ public:
    * Calculates the area of an element
    *
    * @param element the feature to calculate the area of
-   * @param map TODO
+   * @param map map owning the input element
    * @return the area of the feature or -1.0 if the area could not be calculated
    */
   static double getArea(const ConstElementPtr& element, ConstOsmMapPtr map);
@@ -630,7 +630,7 @@ public:
    *
    * @param containingElement the element to check for containing containedElement
    * @param containedElement the element to check if contained by containingElement
-   * @param map TODO
+   * @param map map owning the input elements
    * @return true if containingElement contains the containedElement geographicaly; false otherwise
    * or if the containment could not be calculated
    */
@@ -642,7 +642,7 @@ public:
    *
    * @param element1 the first element to examine
    * @param element2 the second element to examine
-   * @param map TODO
+   * @param map map owning the input elements
    * @return true if the two elements intersect; false otherwise or if the intersection could not
    * be calculated
    */

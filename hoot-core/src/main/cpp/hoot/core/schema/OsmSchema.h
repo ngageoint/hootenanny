@@ -281,16 +281,16 @@ public:
   std::vector<SchemaVertex> getAllTags();
 
   /**
-   * TODO
+   * Retrieves all possible tag keys from the schema
    *
-   * @return
+   * @return a collection of key strings
    */
   QSet<QString> getAllTagKeys();
 
   /**
-   * TODO
+   * Retrieves all possible tag keys from the schema that are associated with a type
    *
-   * @return
+   * @return a collection of key strings
    */
   QSet<QString> getAllTypeKeys();
 
@@ -418,11 +418,11 @@ public:
   double score(const QString& kvp, const Tags& tags);
 
   /**
-   * TODO
+   * Scores the type similarity between two sets of tags
    *
-   * @param tags1
-   * @param tags2
-   * @return
+   * @param tags1 the first set of tags to score
+   * @param tags2 the second set of tags to score
+   * @return a similarity score from 0.0 to 1.0
    */
   double scoreTypes(const Tags& tags1, const Tags& tags2);
 

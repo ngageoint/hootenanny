@@ -39,7 +39,8 @@ namespace hoot
 /**
  * Identifies elements in a list of IDs
  *
- * @todo We could probably replace this with ElementIdCriterion.
+ * @todo We could probably replace this with ElementIdCriterion. If not, rename it to
+ * ElementInIdCollectionCriterion.
  */
 class ElementInIdListCriterion : public ElementCriterion
 {
@@ -47,7 +48,6 @@ public:
 
   static std::string className() { return "hoot::ElementInIdListCriterion"; }
 
-  // TODO: rename class
   ElementInIdListCriterion() {}
   explicit ElementInIdListCriterion(const ElementType& elementType, const std::vector<long>& ids);
   ElementInIdListCriterion(const std::vector<ElementId>& ids);

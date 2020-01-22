@@ -79,7 +79,7 @@ private:
 
   ReviewMarker _reviewMarker;
 
-  // TODO
+  // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
   /**

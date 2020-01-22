@@ -64,7 +64,7 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // TODO: Do we need to be looking at tags too, since area is such a broad concept?
+  // Do we need to be looking at tags too, since area is such a broad concept?
 
   var smallerOverlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
   var overlap = new hoot.OverlapExtractor().extract(map, e1, e2);
