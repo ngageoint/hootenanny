@@ -145,10 +145,7 @@ public class MapResource {
     @Path("/layers")
     @Produces(MediaType.APPLICATION_JSON)
     public MapLayers getLayers(@Context HttpServletRequest request) {
-        Users user = null;
-        if(request != null) {
-            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-        }
+        Users user = Users.fromRequest(request);
 
         List<Tuple> mapLayerRecords = DbUtils.getMapsForUser(user);
 
@@ -429,7 +426,7 @@ public class MapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTileNodesCounts(@Context HttpServletRequest request, String params) {
         // Forward declarations
-        Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        Users user = Users.fromRequest(request);
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         String mapId = "";
         String bbox = "";
