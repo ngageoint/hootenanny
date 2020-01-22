@@ -130,6 +130,7 @@ protected:
 
   ConstElementProviderPtr                 _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;
+  // TODO
   bool _requireAreaForPolygonConversion;
 };
 

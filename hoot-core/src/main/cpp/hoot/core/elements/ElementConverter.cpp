@@ -72,7 +72,7 @@ int ElementConverter::logWarnCount = 0;
 ElementConverter::ElementConverter(const ConstElementProviderPtr& provider) :
 _constProvider(provider),
 _spatialReference(provider->getProjection()),
-_requireAreaForPolygonConversion(ConfigOptions().getConvertRequireAreaForPolygon())
+_requireAreaForPolygonConversion(true)
 {
 }
 
