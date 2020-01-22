@@ -153,7 +153,6 @@ public class JobResourceTest extends OSMResourceTestAbstract {
             jobStatus.setStatus(COMPLETE.ordinal());
             jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
             jobStatus.setPercentComplete(100);
-            jobStatus.setUserId(Users.TEST_USER.getId());
 
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             jobStatus.setStart(ts);
@@ -214,7 +213,6 @@ public class JobResourceTest extends OSMResourceTestAbstract {
         jobStatus.setStatus(FAILED.ordinal());
         jobStatus.setStatusDetail("JOB FAILED");
         jobStatus.setPercentComplete(0);
-        jobStatus.setUserId(Users.TEST_USER.getId());
 
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         jobStatus.setStart(ts);
