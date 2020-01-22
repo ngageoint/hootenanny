@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SERVICESDBTESTUTILS_H
 #define SERVICESDBTESTUTILS_H
@@ -36,6 +36,8 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/HootNetworkCookieJar.h>
+
+#ifdef HOOT_HAVE_SERVICES
 
 namespace hoot
 {
@@ -105,5 +107,7 @@ private:
 };
 
 }
+
+#endif // HOOT_HAVE_SERVICES
 
 #endif // SERVICESDBTESTUTILS_H

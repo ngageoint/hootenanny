@@ -475,8 +475,10 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
     capabilities.setPath(API_PATH_CAPABILITIES);
     request->networkRequest(capabilities);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
-    LOG_DEBUG("Capabilities: " << capabilities.toString(QUrl::RemoveUserInfo));
-    LOG_DEBUG("Response: " << responseXml);
+    QString printableUrl = capabilities.toString(QUrl::RemoveUserInfo);
+    HootNetworkRequest::removeIpFromUrlString(printableUrl, capabilities);
+    LOG_TRACE("Capabilities: " << printableUrl);
+    LOG_TRACE("Response: " << responseXml);
     _capabilities = _parseCapabilities(responseXml);
   }
   catch (const HootException& ex)
@@ -558,7 +560,7 @@ bool OsmApiWriter::_parsePermissions(const QString& permissions)
 {
   QXmlStreamReader reader(permissions);
 
-  LOG_DEBUG("Permissions: " << permissions);
+  LOG_TRACE("Permissions: " << permissions);
 
   while (!reader.atEnd() && !reader.hasError())
   {
