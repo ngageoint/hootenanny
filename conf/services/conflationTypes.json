@@ -37,7 +37,7 @@
         "matcher": "hoot::HighwayMatchCreator",
         "merger": "hoot::HighwayMergerCreator",
         "members": {
-            "search.radius.highway": "Highway search radius",
+            "search.radius.highway": "Highway search radius (meters)",
             "highway.merge.tags.only": "Merge road tags only"
         }
     },
