@@ -357,12 +357,18 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _addStat("Percentage of Total Features Unmatched",
              ((double)unconflatedFeatureCount / (double)featureCount) * 100.0);
 
+    QStringList featureTypesToSkip;
+    // Unknown does not get us a usable element criterion, so skip it
+    featureTypesToSkip.append("unknown");
+    // TODO: explain
+    featureTypesToSkip.append("point");
+    featureTypesToSkip.append("line");
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            conflatableFeatureCounts.begin();
          it != conflatableFeatureCounts.end(); ++it)
     {
-      // Unknown does not get us a usable element criterion, so skip it
-      if (hoot::CreatorDescription::Unknown != it.key())
+      const QString featureType = CreatorDescription::baseFeatureTypeToString(it.key());
+      if (!featureTypesToSkip.contains(featureType, Qt::CaseInsensitive))
       {
         _generateFeatureStats(it.key(), it.value(),
                               CreatorDescription::getFeatureCalcType(it.key()),
