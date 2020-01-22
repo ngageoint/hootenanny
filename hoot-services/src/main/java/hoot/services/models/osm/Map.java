@@ -704,7 +704,7 @@ public class Map extends Maps {
         if (UserResource.adminUserCheck(user)) return true;
 
         // Owned by the current user, or has no folder -or- at root, or in public folder:
-        return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic.booleanValue() == true);
+        return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic == true);
     }
 
     public static boolean mapExists(long id) {
