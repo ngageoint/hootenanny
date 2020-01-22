@@ -96,7 +96,7 @@ public class JobResource {
 
         if (jobStatus != null) {
             if (!jobStatus.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user)) {
-                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+                throw new ForbiddenException("HTTP"); /* This Parameter required, but will be cleared by ExceptionFilter */
             }
             response.setJobId(jobId);
             response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());

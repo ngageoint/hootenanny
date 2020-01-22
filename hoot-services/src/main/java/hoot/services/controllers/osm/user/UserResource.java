@@ -349,7 +349,7 @@ public class UserResource {
     public static boolean adminUserCheck(Users user) {
         if (user == null) return false;
         Map<String, String> privileges = PostgresUtils.postgresObjToHStore(user.getPrivileges());
-        return privileges != null && ("true").equals(privileges.get("admin"));
+        return ("true").equals(privileges.get("admin"));
     }
 
     private static Document writeResponse(User user) throws ParserConfigurationException {
