@@ -1,6 +1,5 @@
-
-/*
- * This generic conflation script supports conflation of POI data
+/**
+ * This script conflates POIs using Generic Conflation.
  */
 
 exports.description = "Matches POIs";

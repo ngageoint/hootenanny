@@ -1,3 +1,7 @@
+/**
+ * This script conflates all point features using Generic Conflation.
+ */
+
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);

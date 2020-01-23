@@ -1,3 +1,7 @@
+/**
+ * This script conflates power lines using Generic Conflation.
+ */
+
 "use strict";
 
 exports.description = "Matches power lines";

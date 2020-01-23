@@ -1,3 +1,7 @@
+/**
+ * This script conflates all points with all polygons using Generic Conflation.
+ */
+
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -8,9 +12,11 @@ exports.missThreshold = parseFloat(hoot.get("generic.point.polygon.miss.threshol
 exports.reviewThreshold = parseFloat(hoot.get("generic.point.polygon.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
-//exports.baseFeatureType = ""; // TODO: not sure what to use here
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
+//exports.baseFeatureType = ""; // 
 //exports.geometryType = "";
+// The baseFeatureType and geometryType vars don't work for Point/Polygon due to it conflating different geometry types.
+// Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
 
 var distanceExtractor = 
   new hoot.EuclideanDistanceExtractor({ "convert.require.area.for.polygon": "false" });
@@ -25,7 +31,8 @@ var distanceExtractor =
  */
 exports.isMatchCandidate = function(map, e)
 {
-  // TODO: explain
+  // We follow the same convention as POI/Polygon conflation here where all the match candidates are just points (not polys) and
+  // we find polygon neighbors to match with inside of ScriptMatchCreator.
   return isPoint(map, e)  && !isSpecificallyConflatable(map, e);
 };
 
@@ -116,7 +123,7 @@ exports.mergePair = function(map, e1, e2)
 
   // replace instances of e2 with e1 and merge tags
   
-  // TODO: explain
+  // We always want to keep the poly and lose the point geometry.
   var keeper;
   var toReplace;
   if (isPolygon(e1))

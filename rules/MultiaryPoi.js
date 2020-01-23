@@ -1,3 +1,6 @@
+/**
+ * This script conflates groups of three or more POIs using Generic Conflation.
+ */
 
 poi = hoot.require("MultiaryPoiRules");
 

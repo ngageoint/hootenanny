@@ -1,3 +1,7 @@
+/**
+ * This script conflates rivers using Generic Conflation.
+ */
+
 "use strict";
 
 exports.description = "Matches linear waterways";

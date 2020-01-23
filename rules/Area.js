@@ -1,3 +1,7 @@
+/**
+ * This script conflates non-building area polygons (e.g. parks, parking lots, etc.; area as defined by the schema) using Generic Conflation.
+ */
+
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);

@@ -1,18 +1,20 @@
 /**
- * This script conflates all linear features using Generic Conflation.
+ * This script was created to demonstrate the feasibility of using generic conflation to conflate linear roads and is no longer supported. The
+ * Unifying or Network Algorithms should be used for all road conflation
+ * 
+ * Note that there never were any tag checks, so it was conflating types of features present other than roads as well.
  */
 
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
-exports.description = "Matches generic lines";
+exports.description = "Matches lines";
 exports.experimental = false;
 exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
-exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
-exports.baseFeatureType = "Line";
+exports.baseFeatureType = "Highway";
 exports.geometryType = "line";
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
@@ -33,7 +35,7 @@ var sublineMatcher = new hoot.MaximalSublineStringMatcher({
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isLinear(e) && !isSpecificallyConflatable(map, e);
+  return isLinear(e);
 };
 
 /**
@@ -78,48 +80,28 @@ exports.matchScore = function(map, e1, e2)
     hoot.trace("e2 note: " + e2.getTags().get("note"));
   }
 
-  var typeScore = getTypeScore(map, e1, e2);
-  var typeScorePassesThreshold = false;
-  if (typeScore >= exports.tagThreshold)
-  {
-    typeScorePassesThreshold = true;
-  }
-  hoot.trace("typeScore: " + typeScore);
-  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
-
-  // extract the sublines needed for matching - Note that this was taken directly from Line.js.
+  // extract the sublines needed for matching
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  var distanceScore = -1.0;
-  var weightShapeDistanceScore = -1.0;
-  var lengthScore = -1.0;
-  var geometryMatch = false;
   if (sublines)
   {
     var m = sublines.map;
     var m1 = sublines.match1;
     var m2 = sublines.match2;
-    distanceScore = distanceScoreExtractor.extract(m, m1, m2);
-    weightShapeDistanceScore = weightedShapeDistanceExtractor.extract(m, m1, m2);
-    lengthScore = lengthScoreExtractor.extract(m, m1, m2);
+    var ds = distanceScoreExtractor.extract(m, m1, m2);
+    var ps = weightedShapeDistanceExtractor.extract(m, m1, m2);
+    var ls = lengthScoreExtractor.extract(m, m1, m2);
 
-    // not sure where this originally came from
-    if ((distanceScore * weightShapeDistanceScore * lengthScore) > 0.4)
+    hoot.trace("ds: " + ds);
+    hoot.trace("ps: " + ps);
+    hoot.trace("ls: " + ls);
+
+    if (ds * ps * ls > 0.4)
     {
-      geometryMatch = true;
+      result = { match: 1.0 };
     }
   }
-  hoot.trace("distanceScore: " + distanceScore);
-  hoot.trace("weightShapeDistanceScore: " + weightShapeDistanceScore);
-  hoot.trace("lengthScore: " + lengthScore);
-  hoot.trace("geometryMatch: " + geometryMatch);
 
-  var featureMatch = typeScorePassesThreshold && geometryMatch;
-  if (featureMatch)
-  {
-    result = { match: 1.0 };
-  }
-  hoot.trace("featureMatch: " + featureMatch);
-
+  hoot.trace("result: " + result);
   return result;
 };
 
@@ -144,11 +126,5 @@ exports.mergeSets = function(map, pairs, replaced)
   // merge method.
   var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
   return result;
-};
-
-exports.getMatchFeatureDetails = function(map, e1, e2)
-{
-  var featureDetails = [];
-  return featureDetails;
 };
 

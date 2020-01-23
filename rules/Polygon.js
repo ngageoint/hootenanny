@@ -1,3 +1,7 @@
+/**
+ * This script conflates all polygons using Generic Conflation.
+ */
+
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -79,8 +83,8 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("typeScore: " + typeScore);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
 
-  // These rules were derived by using training data in Weka with the
-  // REPTree model w/ maxDepth set to 3. 
+  // These geometry rules were derived by using training data in Weka with the
+  // REPTree model w/ maxDepth set to 3. Note: This was taken directly from Building.js
 
   var geometryMatch = false;
   var geometryReview = false;
@@ -139,12 +143,9 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-  //var newTags = mergeTags(e1, e2);
-  //e1.setTags(newTags);
-  //removeElement(map, e2);
-  //return e1;
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
+
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")
   {

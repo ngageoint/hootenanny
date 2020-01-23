@@ -1,3 +1,7 @@
+/**
+ * This script conflates railways using Generic Conflation.
+ */
+
 "use strict";
 
 exports.description = "Matches railways";

@@ -301,6 +301,10 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       .applyAndGetResult(map);
 }
 
+/**
+ * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm (so conflatable by everything besides: 
+ * Point.js, Line.js, Polygon.js, or PointPolygon.js).
+ */
 function isSpecificallyConflatable(map, e)
 {
   return hoot.OsmSchema.isSpecificallyConflatable(map, e);
@@ -328,7 +332,7 @@ function isHighway(e)
 }
 
 /**
- * TODO
+ * Returns true if the specified element is a polygon element.
  */
 function isPolygon(e)
 {
