@@ -603,7 +603,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType));
 
   TagMergerPtr tagMerger;
-  LOG_VARD(preserveTypes);
+  LOG_VART(preserveTypes);
   std::set<QString> overwriteExcludeTags;
   if (allAreBuildingParts)
   {

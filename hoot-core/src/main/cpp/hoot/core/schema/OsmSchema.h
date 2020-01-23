@@ -433,10 +433,10 @@ public:
   double scoreOneWay(const QString& kvp1, const QString& kvp2);
 
   /**
+   * Determines if a tag key corresponds to a type in the schema
    *
-   *
-   * @param key
-   * @return
+   * @param key tag key to examine
+   * @return true if the key corresponds to a type; false otherwise
    */
   bool isTypeKey(const QString& key);
 

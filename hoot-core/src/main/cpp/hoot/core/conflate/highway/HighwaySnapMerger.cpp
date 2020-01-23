@@ -645,7 +645,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       {
         r->getTags().set(MetadataTags::HootMultilineString(), "yes");
       }
-      LOG_DEBUG("Created scrap relation: " << r->getElementId());
+      LOG_TRACE("Created scrap relation: " << r->getElementId());
       scrap = r;
       map->addElement(r);
     }
