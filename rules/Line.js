@@ -11,7 +11,7 @@ exports.matchThreshold = parseFloat(hoot.get("generic.line.match.threshold"));
 exports.missThreshold = parseFloat(hoot.get("generic.line.miss.threshold"));
 exports.reviewThreshold = parseFloat(hoot.get("generic.line.review.threshold"));
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
-exports.tagThreshold = parseFloat(hoot.get("generic.conflate.tag.threshold"));
+exports.tagThreshold = parseFloat(hoot.get("generic.line.tag.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
 
