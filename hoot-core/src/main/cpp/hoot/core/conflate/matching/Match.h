@@ -79,6 +79,8 @@ public:
    * Since this is likely the same name returned over and over it is suggested you use a static
    * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
    * lots of duplicates).
+   *
+   * @todo Should this be static?
    */
   virtual QString getMatchName() const = 0;
 

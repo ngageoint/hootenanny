@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -57,6 +57,7 @@ import org.springframework.dao.DataAccessException;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.geo.BoundingBox;
 import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
@@ -699,8 +700,11 @@ public class Map extends Maps {
         this.setUserId(ownerId);
         this.setDisplayName(t.get(maps.displayName));
 
-        // Owned by the current user, or has no folder -or- at root, in public folder:
-        return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic.booleanValue() == true);
+        //short circuit: if user is admin they see everything
+        if (UserResource.adminUserCheck(user)) return true;
+
+        // Owned by the current user, or has no folder -or- at root, or in public folder:
+        return user.getId().equals(ownerId) || (folderId == null || folderId.equals(0L)) || (isPublic == null || isPublic == true);
     }
 
     public static boolean mapExists(long id) {
