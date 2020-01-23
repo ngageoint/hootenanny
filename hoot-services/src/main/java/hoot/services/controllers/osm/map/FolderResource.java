@@ -69,6 +69,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.FolderMapMappings;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.Users;
@@ -82,6 +83,10 @@ public class FolderResource {
     private static final Logger logger = LoggerFactory.getLogger(FolderResource.class);
 
     public static boolean folderIsPublic(List<Folders> folders, Folders f, Users user) {
+        // If the user is an admin
+        if(UserResource.adminUserCheck(user)) {
+            return true;
+        }
         // If its public & attached to root (0)
         if(f.isPublic() && f.getParentId().equals(0L)) {
             return true;
@@ -169,8 +174,8 @@ public class FolderResource {
                 .from(folderMapMappings)
                 .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
                 .where(folders.id.ne(0L));
-        if(user != null) {
-            // public or folder owned by current user
+        if (user != null && !UserResource.adminUserCheck(user)) {
+            // public or folder owned by current user or user is admin
             sql.where(folders.publicCol.isTrue().or(folders.userId.eq(user.getId())));
         }
         List<FolderMapMappings> links = sql.orderBy(folderMapMappings.folderId.asc()).fetch();
@@ -558,7 +563,8 @@ public class FolderResource {
         if(folder == null) {
             throw new NotFoundException();
         }
-        if(user == null || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
+
+        if(user == null || UserResource.adminUserCheck(user) || user.getId().equals(folder.getUserId()) || folder.isPublic()) {
             return folder;
         }
         throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this folder").build());
