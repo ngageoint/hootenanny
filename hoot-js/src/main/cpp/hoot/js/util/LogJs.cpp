@@ -126,19 +126,29 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
     }
 
     QString message = QString::fromUtf8(rMessage.str().data());
+    bool logMessage = true;
 
-//    int logLimit = ConfigOptions().getLogWarnMessageLimit();
-//    int messageCount = getLogCount(message);
+    if (Log::getInstance().getLevel() == Log::Warn)
+    {
+      const int logLimit = ConfigOptions().getLogWarnMessageLimit();
+      const int messageCount = getLogCount(message);
 
-//    if (messageCount == logLimit)
-//    {
-//      message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
-//    }
+      if (messageCount == logLimit)
+      {
+        message =
+          QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
+      }
 
-    //if (messageCount <= logLimit)
-    //{
-      Log::getInstance().log(level, message, script, /*functionName*/script, lineNumber);
-    //}
+      if (messageCount >= logLimit)
+      {
+        logMessage = false;
+      }
+    }
+
+    if (logMessage)
+    {
+      Log::getInstance().log(level, message, script, script, lineNumber);
+    }
   }
 
   args.GetReturnValue().SetUndefined();

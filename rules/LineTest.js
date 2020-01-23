@@ -1,3 +1,9 @@
+/**
+ * This is used by ScriptMatchTest. 
+ *
+ * TODO: Could we use Line.js instead?
+ */
+
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -36,8 +42,9 @@ exports.isMatchCandidate = function(map, e)
  * If this function returns false the conflation routines will attempt to 
  * pick the best subset of matches that do not conflict.
  */
-exports.isWholeGroup = function() {
-    return false;
+exports.isWholeGroup = function() 
+{
+  return false;
 };
 
 /**
@@ -49,31 +56,28 @@ exports.isWholeGroup = function() {
  * The scores should always sum to one. If they don't you will be taunted 
  * mercilessly and we'll normalize it anyway. :P
  */
-exports.matchScore = function(map, e1, e2) {
-    var result = { miss: 1.0 };
+exports.matchScore = function(map, e1, e2) 
+{
+  var result = { miss: 1.0 };
 
-    // extract the sublines needed for matching
-    var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  // extract the sublines needed for matching
+  var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
 
-    if (sublines)
+  if (sublines)
+  {
+    var m = sublines.map;
+    var m1 = sublines.match1;
+    var m2 = sublines.match2;
+    var angleHistogramValue = angleHistogramExtractor.extract(m, m1, m2);
+    var weightedShapeDistanceValue = weightedShapeDistanceExtractor.extract(m, m1, m2);
+
+    if (angleHistogramValue > 0.63 && weightedShapeDistanceValue > 0.9)
     {
-        var m = sublines.map;
-        var m1 = sublines.match1;
-        var m2 = sublines.match2;
-        var angleHistogramValue = 
-            angleHistogramExtractor.extract(m, m1, m2);
-        var weightedShapeDistanceValue = 
-            weightedShapeDistanceExtractor.extract(m, m1, m2);
-
-        if (angleHistogramValue > 0.63 && weightedShapeDistanceValue > 0.9)
-        {
-            //hoot.log("Found Match!", e1.getTags().get('note'),
-            //e2.getTags().get('note'));
-            result = { match: 1.0 };
-        }
+      result = { match: 1.0 };
     }
+  }
 
-    return result;
+  return result;
 };
 
 /**
@@ -93,9 +97,9 @@ exports.matchScore = function(map, e1, e2) {
  */
 exports.mergeSets = function(map, pairs, replaced) 
 {
-    // snap the ways in the second input to the first input. Use the default tag
-    // merge method.
-    var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
-    return result;
+  // snap the ways in the second input to the first input. Use the default tag
+  // merge method.
+  var result = snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
+  return result;
 };
 

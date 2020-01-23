@@ -113,7 +113,7 @@ private:
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::shared_ptr<MergerFactory> _mergerFactory;
-  Settings _settings;   // TOOD: why is this needed?
+  Settings _settings;   // Why is this needed?
   HashMap<ElementId, std::vector<MergerPtr>> _e2m;
   std::vector<ConstMatchPtr> _matches;
   std::vector<MergerPtr> _mergers;

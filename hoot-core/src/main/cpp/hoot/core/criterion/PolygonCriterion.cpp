@@ -62,31 +62,12 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   else if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-//    if (!way->isClosedArea())
-//    {
-//      LOG_TRACE("Way not closed area; crit unsatisfied.");
-//      return false;
-//    }
     if (way->isValidPolygon() && way->isClosedArea())
     {
       LOG_TRACE("Way is valid closed area; crit satisfied.");
       return true;
     }
   }
-
-//  const Tags& t = e->getTags();
-//  for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)
-//  {
-//    const QString kvp = OsmSchema::getInstance().toKvp(it.key(), it.value());
-//    const SchemaVertex& tv = OsmSchema::getInstance().getTagVertex(kvp);
-//    uint16_t g = tv.geometries;
-//    if (g & (OsmGeometries::ClosedWay | OsmGeometries::Area))
-//    {
-//      result = true;
-//      LOG_TRACE("Found closed way or area geometry from kvp: " << kvp << "; crit satisfied.");
-//      break;
-//    }
-//  }
 
   LOG_VART(result);
   return result;

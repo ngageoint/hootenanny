@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Log.h>
+
 // Qt
 #include <QString>
 
@@ -46,9 +47,6 @@ public:
 
   static std::string className() { return "hoot::ArbitraryCriterion"; }
 
-  // Do something like:
-  // std::function<bool (ConstElementPtr e)> f =
-  //  std::bind(&ScriptMatchVisitor::isMatchCandidate, this, std::placeholders::_1);
   explicit ArbitraryCriterion(std::function<bool (ConstElementPtr e)> f)
   {
     _f = f;
