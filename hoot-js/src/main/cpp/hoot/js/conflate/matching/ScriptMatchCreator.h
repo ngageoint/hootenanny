@@ -39,6 +39,8 @@ namespace hoot
 class ScriptMatchVisitor;
 
 /**
+ * Match creator for all generic conflation scripts
+ *
  * @sa ScriptMatch
  */
 class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
@@ -46,6 +48,8 @@ class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
 public:
 
   static std::string className() { return "hoot::ScriptMatchCreator"; }
+
+  static const QString POINT_POLYGON_SCRIPT_NAME;
 
   ScriptMatchCreator();
 

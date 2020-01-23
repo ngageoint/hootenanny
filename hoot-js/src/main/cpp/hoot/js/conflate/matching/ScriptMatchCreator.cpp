@@ -71,6 +71,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(MatchCreator, ScriptMatchCreator)
 
+const QString ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME = "PointPolygon.js";
+
 /**
  * Searches the specified map for any match potentials.
  */
@@ -166,7 +168,8 @@ public:
 
     _elementsEvaluated++;
 
-    const bool isPointPolyConflation = _scriptPath.contains("PointPolygon.js");
+    const bool isPointPolyConflation =
+      _scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME);
     for (set<ElementId>::const_iterator it = neighbors.begin(); it != neighbors.end(); ++it)
     {
       ConstElementPtr e2 = map->getElement(*it);
@@ -616,6 +619,8 @@ private:
   std::shared_ptr<ChainCriterion> _pointPolyCrit;
 };
 
+
+
 ScriptMatchCreator::ScriptMatchCreator()
 {
   _cachedScriptVisitor.reset();
@@ -711,24 +716,18 @@ void ScriptMatchCreator::createMatches(
       map->visitRo(v);
       break;
   }
-  // TODO: total match count inaccurate here
-//  LOG_INFO(
-//    "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
-//    CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType) <<
-//    " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
-//    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
-  // TODO: don't think the base feature type is populated yet either
+
   QString matchType = CreatorDescription::baseFeatureTypeToString(scriptInfo.baseFeatureType);
   // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
   // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
-  if (_scriptPath.contains("PointPolygon.js"))
+  if (_scriptPath.contains(POINT_POLYGON_SCRIPT_NAME))
   {
     matchType = "PointPolygon";
   }
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
-    matchType << " match candidates in: " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
-    ".");
+    matchType << " match candidates and " << StringUtils::formatLargeNumber(matches.size()) <<
+    " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 }
 
 vector<CreatorDescription> ScriptMatchCreator::getAllCreators() const
