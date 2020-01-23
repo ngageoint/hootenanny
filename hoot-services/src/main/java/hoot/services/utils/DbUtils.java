@@ -82,6 +82,7 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Maps;
@@ -286,7 +287,7 @@ public class DbUtils {
             .select(folders)
             .from(folders)
             .where(folders.id.ne(0L));
-        if(userId != null) {
+        if (userId != null && !UserResource.adminUserCheck(getUser(userId))) {
             sql.where(
                     folders.userId.eq(userId).or(folders.publicCol.isTrue())
             );
@@ -304,6 +305,36 @@ public class DbUtils {
                 .fetch();
 
         return childrenFolders;
+    }
+
+
+
+    public static List<Tuple> getMapsForUser(Users user) {
+
+        // return empty list if user is null
+        if(user == null) {
+            return Collections.emptyList();
+        }
+
+        SQLQuery<Tuple> q = createQuery()
+                .select(maps, folders.id, folders.publicCol)
+                .from(maps)
+                .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .orderBy(maps.displayName.asc());
+        // if user is not admin enforce visiblity rules
+        // admins can see everything
+        if (!UserResource.adminUserCheck(user)) {
+            BooleanExpression isVisible = maps.userId.eq(user.getId()) // Owned by the current user
+                    // or not in a folder
+                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
+                    // or in a public folder
+                    .or(folders.publicCol.isTrue()));
+                q.where(isVisible);
+        }
+        List<Tuple> mapLayerRecords = q.fetch();
+
+        return mapLayerRecords;
     }
 
 /*
@@ -700,6 +731,10 @@ NOT EXISTS
                 .from(users)
                 .where(users.id.eq(userId))
                 .fetchCount() == 1;
+    }
+
+    public static Users getUser(Long id) {
+        return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
     }
 
     /**
