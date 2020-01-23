@@ -78,7 +78,8 @@ public:
   virtual MatchMembers getMatchMembers() const override
   { return MatchMembers::Poi | MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const override { return _matchName; }
+  virtual QString getMatchName() const override { return getPoiPolygonMatchName(); }
+  static QString getPoiPolygonMatchName() { return _matchName; }
 
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
