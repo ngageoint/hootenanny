@@ -87,7 +87,7 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("typeScore: " + typeScore);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
 
-  // extract the sublines needed for matching - Note that this was taken directly from Line.js.
+  // extract the sublines needed for matching - Note that this was taken directly from Highway.js.
   var sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   var distanceScore = -1.0;
   var weightShapeDistanceScore = -1.0;

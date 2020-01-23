@@ -84,7 +84,7 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
 
   // These geometry rules were derived by using training data in Weka with the
-  // REPTree model w/ maxDepth set to 3. Note: This was taken directly from Building.js
+  // REPTree model w/ maxDepth set to 3. Note: This was taken directly from Building.js.
 
   var geometryMatch = false;
   var geometryReview = false;

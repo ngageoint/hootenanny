@@ -88,6 +88,7 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("typeScore: " + typeScore);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
 
+  // This is a simple check to see if the two features are within the worst CE of each other.
   var error1 = e1.getCircularError();
   var error2 = e2.getCircularError();
   var distanceBetweenFeatures = distanceExtractor.extract(map, e1, e2);

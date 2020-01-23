@@ -89,7 +89,7 @@ exports.matchScore = function(map, e1, e2)
 
   var error1 = e1.getCircularError();
   var error2 = e2.getCircularError();
-  // could use EuclideanDistanceExtractor here instead
+  // This is a simple check to see if the two points are within the worst CE of each other; could use EuclideanDistanceExtractor here instead
   var distanceBetweenFeatures = distance(e1, e2);
   var searchRadius = Math.max(error1, error2);
   var geometryMatch = false;
