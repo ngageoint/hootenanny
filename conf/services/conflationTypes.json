@@ -130,7 +130,7 @@
         "members": {
             "search.radius.waterway": "River search radius"
         }
-    }
+    },
     "Roads": {
         "matcher": "hoot::HighwayMatchCreator",
         "merger": "hoot::HighwayMergerCreator",
