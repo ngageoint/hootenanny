@@ -70,6 +70,8 @@ public:
 private:
 
   std::shared_ptr<OsmMap> _map;
+
+  int _taskStatusUpdateInterval;
 };
 
 }
