@@ -359,7 +359,7 @@
         <tag k="security:classification" v="UNCLASSIFIED"/>
         <tag k="source:imagery" v="Unknown"/>
         <tag k="alt_name" v="highway2"/>
-        <tag k="note" v="A"/>
+        <tag k="note" v="A;B"/>
         <tag k="hoot:id" v="-88652743"/>
         <tag k="length" v="86433.3"/>
         <tag k="error:circular" v="15"/>
