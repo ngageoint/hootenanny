@@ -429,16 +429,11 @@ public class ReviewBookmarkResource {
      * @return all the creators that have a review bookmark
      */
     private static List<String> getUsers() {
-        SQLQuery<Long> query = createQuery()
-                .selectDistinct(reviewBookmarks.createdBy)
-                .from(reviewBookmarks);
-
-        List<Long> userIds = query.fetch();
-
         SQLQuery<String> userNamesQuery = createQuery()
                 .select(QUsers.users.displayName)
-                .from(QUsers.users)
-                .where(QUsers.users.id.in(userIds))
+                .from(reviewBookmarks)
+                .leftJoin(QUsers.users).on(QUsers.users.id.eq(reviewBookmarks.createdBy))
+                .groupBy(QUsers.users.displayName)
                 .orderBy(QUsers.users.displayName.asc());
 
         return userNamesQuery.fetch();
@@ -449,17 +444,11 @@ public class ReviewBookmarkResource {
      * @return all the layer names that have a review bookmark
      */
     private static List<String> getLayers() {
-        // get unique map ids
-        SQLQuery<Long> query = createQuery()
-                .selectDistinct(reviewBookmarks.mapId)
-                .from(reviewBookmarks);
-
-        List<Long> layersIds = query.fetch();
-
         SQLQuery<String> layerNamesQuery = createQuery()
-                .selectDistinct(QMaps.maps.displayName)
-                .from(QMaps.maps)
-                .where(QMaps.maps.id.in(layersIds))
+                .select(QMaps.maps.displayName)
+                .from(reviewBookmarks)
+                .leftJoin(QMaps.maps).on(QMaps.maps.id.eq(reviewBookmarks.mapId))
+                .groupBy(QMaps.maps.displayName)
                 .orderBy(QMaps.maps.displayName.asc());
 
         return layerNamesQuery.fetch();
