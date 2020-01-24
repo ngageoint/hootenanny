@@ -312,6 +312,7 @@ public class DbUtilsTest {
         long userId = MapUtils.insertUser();
         long mapIdOld = insertMap(userId);
         long mapIdNew = insertMap(userId);
+        long mapIdNoLastAccessed = insertMap(userId, new Timestamp(1571457600000L));
 
         Map<String, String> tagsOld = new HashMap<>();
         tagsOld.put("lastAccessed", "2019-10-24T17:03:51.125Z");
@@ -325,6 +326,7 @@ public class DbUtilsTest {
         DbUtils.updateMapsTableTags(tagsOld, mapIdOld);
         DbUtils.updateMapsTableTags(tagsNew, mapIdNew);
 
+
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1);
         Timestamp ts = new Timestamp(cal.getTime().getTime());
@@ -332,15 +334,18 @@ public class DbUtilsTest {
 
         List<Long> oldMapIds = oldMaps.stream().map(m -> m.getId()).collect(Collectors.toList());
         assertTrue(oldMapIds.contains(mapIdOld));
+        assertTrue(oldMapIds.contains(mapIdNoLastAccessed));
         assertFalse(oldMapIds.contains(mapIdNew));
 
         Map<String, Long> staleMapSummary = DbUtils.getStaleMapsSummary(ts);
-        assertTrue(staleMapSummary.get(userId + "::MapUtils::insertUser()") == 1);
+        assertTrue(staleMapSummary.get(userId + "::MapUtils::insertUser()") == 2);
 
         DbUtils.deleteMapRelatedTablesByMapId(mapIdOld);
         DbUtils.deleteMap(mapIdOld);
         DbUtils.deleteMapRelatedTablesByMapId(mapIdNew);
         DbUtils.deleteMap(mapIdNew);
+        DbUtils.deleteMapRelatedTablesByMapId(mapIdNoLastAccessed);
+        DbUtils.deleteMap(mapIdNoLastAccessed);
         MapUtils.deleteUser(userId);
     }
 }

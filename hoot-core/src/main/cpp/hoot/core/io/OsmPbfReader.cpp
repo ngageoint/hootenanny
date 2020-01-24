@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmPbfReader.h"
@@ -130,6 +130,7 @@ OsmPbfReader::~OsmPbfReader()
 
 void OsmPbfReader::setConfiguration(const Settings &conf)
 {
+  PartialOsmMapReader::setConfiguration(conf);
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();

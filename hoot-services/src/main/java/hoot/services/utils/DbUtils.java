@@ -27,6 +27,7 @@
 package hoot.services.utils;
 
 
+import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -34,6 +35,7 @@ import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.models.db.QUsers.users;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,6 +82,7 @@ import com.querydsl.sql.types.EnumAsObjectType;
 
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.CommandResult;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.Folders;
 import hoot.services.models.db.JobStatus;
 import hoot.services.models.db.Maps;
@@ -284,7 +287,7 @@ public class DbUtils {
             .select(folders)
             .from(folders)
             .where(folders.id.ne(0L));
-        if(userId != null) {
+        if (userId != null && !UserResource.adminUserCheck(getUser(userId))) {
             sql.where(
                     folders.userId.eq(userId).or(folders.publicCol.isTrue())
             );
@@ -302,6 +305,36 @@ public class DbUtils {
                 .fetch();
 
         return childrenFolders;
+    }
+
+
+
+    public static List<Tuple> getMapsForUser(Users user) {
+
+        // return empty list if user is null
+        if(user == null) {
+            return Collections.emptyList();
+        }
+
+        SQLQuery<Tuple> q = createQuery()
+                .select(maps, folders.id, folders.publicCol)
+                .from(maps)
+                .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .orderBy(maps.displayName.asc());
+        // if user is not admin enforce visiblity rules
+        // admins can see everything
+        if (!UserResource.adminUserCheck(user)) {
+            BooleanExpression isVisible = maps.userId.eq(user.getId()) // Owned by the current user
+                    // or not in a folder
+                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
+                    // or in a public folder
+                    .or(folders.publicCol.isTrue()));
+                q.where(isVisible);
+        }
+        List<Tuple> mapLayerRecords = q.fetch();
+
+        return mapLayerRecords;
     }
 
 /*
@@ -631,7 +664,7 @@ NOT EXISTS
  */
 
     private static BooleanExpression getStale(Timestamp ts) {
-        return (Expressions.stringTemplate("tags->'lastAccessed'").isNotNull().and(maps.createdAt.lt(ts)))
+        return (Expressions.stringTemplate("tags->'lastAccessed'").isNull().and(maps.createdAt.lt(ts)))
                 .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
     }
 
@@ -698,6 +731,10 @@ NOT EXISTS
                 .from(users)
                 .where(users.id.eq(userId))
                 .fetchCount() == 1;
+    }
+
+    public static Users getUser(Long id) {
+        return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
     }
 
     /**
@@ -820,6 +857,29 @@ NOT EXISTS
             // If it has a parent, make the parent stale too
             if(parentId != null) {
                 setStale(parentId);
+            }
+        }
+    }
+
+    // Sets the specified job to a status detail of conflicts
+    // if a diff-error.osc file is present in the job workspace
+    public static void checkConflicted(String jobId) {
+        File workDir = new File(CHANGESETS_FOLDER, jobId);
+        File diffError = new File(workDir, "diff-error.osc");
+        if (diffError.exists()) {
+            // Find the job
+            JobStatus job = createQuery()
+                    .select(jobStatus)
+                    .from(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .fetchFirst();
+
+            if(job != null) {
+                createQuery()
+                    .update(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .set(jobStatus.statusDetail, "CONFLICTS")
+                    .execute();
             }
         }
     }

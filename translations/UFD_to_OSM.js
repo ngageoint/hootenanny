@@ -3371,6 +3371,9 @@ ufd = {
             }
         }
 
+        // HWT=22 appears in some data and means "Not Applicable"
+        if (attrs.HWT == '22') delete attrs.HWT;
+
     }, // End of applyToOsmPreProcessing
 
     applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
@@ -3670,7 +3673,6 @@ function initialize()
         // Debug:
        // translate.dumpOne2OneLookup(ufd.lookup);
     }
-
 }
 
 

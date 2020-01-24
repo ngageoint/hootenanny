@@ -26,6 +26,7 @@
  */
 package hoot.services.utils;
 
+import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QUsers.users;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -35,7 +36,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
@@ -46,6 +49,7 @@ import hoot.services.models.db.QCurrentRelationMembers;
 import hoot.services.models.db.QCurrentRelations;
 import hoot.services.models.db.QCurrentWayNodes;
 import hoot.services.models.db.QCurrentWays;
+import hoot.services.models.db.Users;
 
 
 public final class MapUtils {
@@ -158,17 +162,20 @@ public final class MapUtils {
     }
 
     public static long insertMap(long userId) {
+        return insertMap(userId, new Timestamp(Calendar.getInstance().getTimeInMillis()));
+    }
+
+    public static long insertMap(long userId, Timestamp ts) {
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('maps_id_seq')"))
                 .from()
                 .fetchOne();
 
         if (newId != null) {
-            Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
 
             createQuery().insert(maps)
             .columns(maps.id, maps.createdAt, maps.displayName, maps.publicCol, maps.userId)
-            .values(newId, now, "map-with-id-" + newId, true, userId)
+            .values(newId, ts, "map-with-id-" + newId, true, userId)
             .execute();
         }
 
@@ -178,6 +185,22 @@ public final class MapUtils {
     }
 
     public static long insertUser() {
+        return insertUser(false, false);
+    }
+    public static long insertAdvancedUser() {
+        return insertUser(true, false);
+    }
+    public static long insertAdminUser() {
+        return insertUser(false, true);
+    }
+    public static long insertAdvancedAdminUser() {
+        return insertUser(true, true);
+    }
+    public static long insertUser(boolean advanced, boolean admin) {
+        Map<String,String> privs = new HashMap<>();
+        privs.put("advanced", String.valueOf(advanced));
+        privs.put("admin", String.valueOf(admin));
+
         Long newId = createQuery()
                 .select(Expressions.numberTemplate(Long.class, "nextval('users_id_seq')"))
                 .from()
@@ -190,15 +213,20 @@ public final class MapUtils {
         long rowsAffected = createQuery().insert(users)
                 .columns(users.id, users.displayName, users.email, users.provider_access_key,
                         users.provider_access_token, users.hootservices_created_at,
-                        users.hootservices_last_authorize, users.provider_created_at)
+                        users.hootservices_last_authorize, users.provider_created_at, users.privileges)
                 .values(newId, newId + "::MapUtils::insertUser()", newId + "@hootenanny.test", "provider_access_key",
                         "provider_access_token",
-                        Expressions.currentTimestamp(), Expressions.currentTimestamp(), Expressions.currentTimestamp())
+                        Expressions.currentTimestamp(), Expressions.currentTimestamp(), Expressions.currentTimestamp(),
+                        privs)
                 .execute();
 
         assert rowsAffected == 1 : "failed to insert test user";
 
         return newId;
+    }
+
+    public static Users getUser(Long id) {
+        return createQuery().select(users).from(users).where(users.id.eq(id)).fetchFirst();
     }
 
     public static void deleteUser(long userId) {
@@ -216,6 +244,21 @@ public final class MapUtils {
         createQuery().delete(users).where(users.displayName.like("%::MapUtils::insertUser()")).execute();
     }
 
+    public static long addPrivateFolder(String name, long userId) {
+        Long newId = createQuery()
+                .select(Expressions.numberTemplate(Long.class, "nextval('folders_id_seq')"))
+                .from()
+                .fetchOne();
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+
+        createQuery()
+                .insert(folders).columns(folders.id, folders.createdAt, folders.displayName, folders.publicCol, folders.userId, folders.parentId)
+                .values(newId, now, name, false, userId, 0).execute();
+
+        return newId;
+    }
 
     private static void createTable(String createTblSql, Connection conn) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(createTblSql)) {

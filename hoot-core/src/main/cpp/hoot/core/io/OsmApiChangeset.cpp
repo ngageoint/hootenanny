@@ -1224,7 +1224,7 @@ bool XmlChangeset::matchesChangesetClosedFailure(const QString& hint)
 {
   //  Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC
   QRegularExpression reg(
-        "Changeset conflict: The changeset ([0-9]+) was closed.*",
+        ".*The changeset ([0-9]+) was closed.*",
         QRegularExpression::CaseInsensitiveOption);
   QRegularExpressionMatch match = reg.match(hint);
   return match.hasMatch();

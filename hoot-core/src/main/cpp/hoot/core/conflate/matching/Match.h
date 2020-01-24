@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_H
 #define MATCH_H
@@ -79,6 +79,8 @@ public:
    * Since this is likely the same name returned over and over it is suggested you use a static
    * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
    * lots of duplicates).
+   *
+   * @todo Should this be static?
    */
   virtual QString getMatchName() const = 0;
 
@@ -140,6 +142,14 @@ public:
   virtual MatchType getType() const;
 
   virtual QString getDescription() const = 0;
+
+  /**
+   * Determines if this matches equals another match
+   *
+   * @param other the match being compared with
+   * @return true if this matches matches the comparision match; false otherwise
+   */
+  bool operator==(const Match& other) const;
 
 protected:
 
