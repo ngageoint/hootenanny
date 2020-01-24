@@ -52,7 +52,7 @@ notice = """/*
 """
 
 def escapeString(s):
-    return s.replace("\n", "").replace("\"", "\\\"");
+    return s.replace("\n", "\\n").replace("\"", "\\\"");
 
 def stripDefaultValue(s):
     m = re.search("\\* Default Value: `(.*)`", s)
