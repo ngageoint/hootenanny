@@ -43,10 +43,11 @@ namespace hoot
 {
 
 SqlBulkInsert::SqlBulkInsert(QSqlDatabase& db, const QString &tableName,
-  const QStringList &columns) :
+  const QStringList &columns, bool ignoreConflict) :
     _db(db),
     _tableName(tableName),
-    _columns(columns)
+    _columns(columns),
+    _ignoreConflict(ignoreConflict)
 {
   _time = 0;
   _true = "TRUE";
@@ -139,6 +140,11 @@ void SqlBulkInsert::flush()
 
       sql.append(closeParen);
     }
+
+    //  ON CONFLICT DO NOTHING simply ignores each inserted row that violates an
+    //  arbiter constraint or index
+    if (_ignoreConflict)
+      sql.append(" ON CONFLICT DO NOTHING");
 
     LOG_VART(sql);
     QSqlQuery q(_db);

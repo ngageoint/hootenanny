@@ -64,9 +64,10 @@ namespace hoot
 int HootApiDb::logWarnCount = 0;
 
 HootApiDb::HootApiDb() :
-_precision(ConfigOptions().getWriterPrecision()),
-_createIndexesOnClose(true),
-_flushOnClose(true)
+  _ignoreInsertConflicts(ConfigOptions().getMapMergeIgnoreDuplicateIds()),
+  _precision(ConfigOptions().getWriterPrecision()),
+  _createIndexesOnClose(true),
+  _flushOnClose(true)
 {
   _init();
 }
@@ -803,7 +804,7 @@ bool HootApiDb::insertNode(const long id, const double lat, const double lon, co
     columns << "id" << "latitude" << "longitude" << "changeset_id" << "timestamp" <<
                "tile" << "version" << "tags";
 
-    _nodeBulkInsert.reset(new SqlBulkInsert(_db, getCurrentNodesTableName(mapId), columns));
+    _nodeBulkInsert.reset(new SqlBulkInsert(_db, getCurrentNodesTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;
@@ -899,7 +900,7 @@ bool HootApiDb::insertRelation(const long relationId, const Tags &tags)
     QStringList columns;
     columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
-    _relationBulkInsert.reset(new SqlBulkInsert(_db, getCurrentRelationsTableName(mapId), columns));
+    _relationBulkInsert.reset(new SqlBulkInsert(_db, getCurrentRelationsTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;
@@ -2250,7 +2251,7 @@ bool HootApiDb::insertWay(const long wayId, const Tags &tags)
     QStringList columns;
     columns << "id" << "changeset_id" << "timestamp" << "version" << "tags";
 
-    _wayBulkInsert.reset(new SqlBulkInsert(_db, getCurrentWaysTableName(mapId), columns));
+    _wayBulkInsert.reset(new SqlBulkInsert(_db, getCurrentWaysTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;
@@ -2294,7 +2295,7 @@ void HootApiDb::insertWayNodes(long wayId, const vector<long>& nodeIds)
     QStringList columns;
     columns << "way_id" << "node_id" << "sequence_id";
 
-    _wayNodeBulkInsert.reset(new SqlBulkInsert(_db, getCurrentWayNodesTableName(mapId), columns));
+    _wayNodeBulkInsert.reset(new SqlBulkInsert(_db, getCurrentWayNodesTableName(mapId), columns, _ignoreInsertConflicts));
   }
 
   QList<QVariant> v;

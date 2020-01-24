@@ -629,6 +629,9 @@ private:
   std::shared_ptr<QSqlQuery> _getJobStatusResourceId;
   std::shared_ptr<QSqlQuery> _updateIdSequence;
 
+  /** Ignore any insertion conflicts and continue with the rest */
+  bool _ignoreInsertConflicts;
+
   std::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;
   double _nodesInsertElapsed;
