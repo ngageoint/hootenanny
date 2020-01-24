@@ -11,8 +11,7 @@ hoot version --debug
 export HOOT_TEST_DIFF=--diff
 # Run all of the tests - from the "test-all" target
 echo "Running core glacial tests..."
-#bin/HootTest $HOOT_TEST_DIFF --glacial --parallel
-bin/HootTest --trace -D map.comparator.print.full.mismatch.elements.on.map.size.diff=true -D log.class.filter="ScriptMatchCreator;PointPolygon.js" --diff --glacial '--include=.*geometry-generic.*'
+bin/HootTest $HOOT_TEST_DIFF --glacial --parallel
 
 echo "Running translation tests..."
 make -sj`nproc` translations-test
