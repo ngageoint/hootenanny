@@ -111,7 +111,7 @@ public:
    */
   void convert(const QString& input, const QString& output);
 
-  void setTranslation(const QString& translation) { _translation = translation; }
+  void setTranslation(const QString& translation);
   void setShapeFileColumns(const QStringList& columns) { _shapeFileColumns = columns; }
   void setOgrFeatureReadLimit(const int limit) { _ogrFeatureReadLimit = limit; }
   void setConvertOps(const QStringList& ops) { _convertOps = ops; }
