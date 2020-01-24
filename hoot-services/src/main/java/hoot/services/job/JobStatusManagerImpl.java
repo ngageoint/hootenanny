@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.job;
 
@@ -44,8 +44,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+
 import hoot.services.command.Command;
 import hoot.services.command.ExternalCommand;
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.models.db.CommandStatus;
 import hoot.services.utils.DbUtils;
 
@@ -216,10 +219,18 @@ public class JobStatusManagerImpl implements JobStatusManager {
     @Override
     public hoot.services.models.db.JobStatus getJobStatusObj(String jobId, Long userId) {
         try {
-            return createQuery().select(jobStatus).from(jobStatus).where(jobStatus.jobId.eq(jobId).and(
-                        jobStatus.userId.eq(userId).or(jobStatus.status.eq(RUNNING.ordinal()))
-                    )
-                ).fetchOne();
+            BooleanExpression isVisible = jobStatus.jobId.eq(jobId);
+
+            // if user is not admin enforce visiblity rules
+            // admins can see everything
+            if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
+                isVisible = isVisible.and(
+                        jobStatus.userId.eq(userId)
+                        .or(jobStatus.status.eq(RUNNING.ordinal()))
+                    );
+            }
+
+            return createQuery().select(jobStatus).from(jobStatus).where(isVisible).fetchOne();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch job status.", jobId, e);
@@ -231,9 +242,16 @@ public class JobStatusManagerImpl implements JobStatusManager {
     @Override
     public List<CommandStatus> getCommandDetail(String jobId, Long userId) {
         try {
-            return createQuery().select(commandStatus).from(commandStatus, jobStatus).where(jobStatus.jobId.eq(jobId)
-                    .and(jobStatus.userId.eq(userId)
-                    .and(jobStatus.jobId.eq(commandStatus.jobId)))).fetch();
+            BooleanExpression isVisible = jobStatus.jobId.eq(jobId)
+                    .and(jobStatus.jobId.eq(commandStatus.jobId));
+
+            // if user is not admin enforce visiblity rules
+            // admins can see everything
+            if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
+                isVisible = isVisible.and(jobStatus.userId.eq(userId));
+            }
+
+            return createQuery().select(commandStatus).from(commandStatus, jobStatus).where(isVisible).fetch();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch command status(es) for job with ID = {}", jobId, e);

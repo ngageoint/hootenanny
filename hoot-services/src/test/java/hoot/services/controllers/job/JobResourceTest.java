@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -153,7 +153,6 @@ public class JobResourceTest extends OSMResourceTestAbstract {
             jobStatus.setStatus(COMPLETE.ordinal());
             jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
             jobStatus.setPercentComplete(100);
-            jobStatus.setUserId(Users.TEST_USER.getId());
 
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             jobStatus.setStart(ts);
@@ -214,7 +213,6 @@ public class JobResourceTest extends OSMResourceTestAbstract {
         jobStatus.setStatus(FAILED.ordinal());
         jobStatus.setStatusDetail("JOB FAILED");
         jobStatus.setPercentComplete(0);
-        jobStatus.setUserId(Users.TEST_USER.getId());
 
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         jobStatus.setStart(ts);

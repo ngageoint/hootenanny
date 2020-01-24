@@ -26,7 +26,6 @@
  */
 package hoot.services.controllers.osm.map;
 
-import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.utils.DbUtils.createQuery;
@@ -86,7 +85,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.sql.SQLQuery;
 
 import hoot.services.command.Command;
 import hoot.services.command.InternalCommand;
@@ -147,27 +145,9 @@ public class MapResource {
     @Path("/layers")
     @Produces(MediaType.APPLICATION_JSON)
     public MapLayers getLayers(@Context HttpServletRequest request) {
-        Users user = null;
-        if(request != null) {
-            user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
-        }
+        Users user = Users.fromRequest(request);
 
-        SQLQuery<Tuple> q = createQuery()
-            .select(maps, folders.id, folders.publicCol)
-            .from(maps)
-            .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
-            .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
-            .orderBy(maps.displayName.asc());
-        if(user != null) {
-            q.where(
-                // Owned by the current user
-                maps.userId.eq(user.getId()).or(
-                    // or not in a folder // or in a public folder.
-                    folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)).or(folders.publicCol.isTrue())
-                )
-            );
-        }
-        List<Tuple> mapLayerRecords = q.fetch();
+        List<Tuple> mapLayerRecords = DbUtils.getMapsForUser(user);
 
         // The query above is only a rough filter, we need to make sure
         // that the folder is recursively visible to the user based on folder
@@ -446,7 +426,7 @@ public class MapResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTileNodesCounts(@Context HttpServletRequest request, String params) {
         // Forward declarations
-        Users user = (Users) request.getAttribute(hoot.services.HootUserRequestFilter.HOOT_USER_ATTRIBUTE);
+        Users user = Users.fromRequest(request);
         java.util.Map<String, Object> ret = new HashMap<String, Object>();
         String mapId = "";
         String bbox = "";
@@ -934,7 +914,7 @@ public class MapResource {
         if(user != null && !m.isVisibleTo(user)) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You do not have access to this map").build());
         }
-        if(user != null && userDesiresModify && !m.getUserId().equals(user.getId())) {
+        if(user != null && userDesiresModify && !m.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user)) {
             throw new ForbiddenException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("You must own the map to modify it").build());
         }
         return m;

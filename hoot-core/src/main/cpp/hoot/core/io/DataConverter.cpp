@@ -178,13 +178,33 @@ _printLengthMax(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
+void DataConverter::setTranslation(const QString& translation)
+{
+  QFileInfo fileInfo(translation);
+  if (!fileInfo.exists())
+  {
+    throw IllegalArgumentException("Translation file does not exist: " + translation);
+  }
+  else if (!translation.endsWith(".js") && !translation.endsWith(".py"))
+  {
+    throw IllegalArgumentException("Invalid translation file format: " + translation);
+  }
+
+  _translation = translation;
+}
+
 void DataConverter::setConfiguration(const Settings& conf)
 {
+  // The ordering of these setters matter to DataConvertTest.
   ConfigOptions config = ConfigOptions(conf);
   setConvertOps(config.getConvertOps());
   setOgrFeatureReadLimit(config.getOgrReaderLimit());
   setShapeFileColumns(config.getShapeFileWriterCols());
-  setTranslation(config.getSchemaTranslationScript());
+  const QString translation = config.getSchemaTranslationScript();
+  if (!translation.isEmpty())
+  {
+    setTranslation(config.getSchemaTranslationScript());
+  }
   _translationDirection = config.getSchemaTranslationDirection().trimmed().toLower();
   LOG_VARD(_convertOps);
 }
