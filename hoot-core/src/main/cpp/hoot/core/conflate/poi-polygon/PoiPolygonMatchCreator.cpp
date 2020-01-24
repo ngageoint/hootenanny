@@ -448,17 +448,21 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
         }
       }
     }
-    LOG_TRACE("Keeping closest match: " << closestMatch << "...");
 
-    for (QList<ConstMatchPtr>::const_iterator matchItr = matchesWithSharedId.begin();
-         matchItr != matchesWithSharedId.end(); ++matchItr)
+    if (closestMatch)
     {
-      ConstMatchPtr match = *matchItr;
-      if (/*closestMatch &&*/ match != closestMatch)
+      LOG_TRACE("Keeping closest match: " << closestMatch << "...");
+      for (QList<ConstMatchPtr>::const_iterator matchItr = matchesWithSharedId.begin();
+           matchItr != matchesWithSharedId.end(); ++matchItr)
       {
-        matchesToRemove.append(match);
+        ConstMatchPtr match = *matchItr;
+        if (match != closestMatch)
+        {
+          matchesToRemove.append(match);
+        }
       }
     }
+
     LOG_VART(matchesToRemove.size());
   }
   LOG_DEBUG("Removing " <<  StringUtils::formatLargeNumber(matchesToRemove.size()) << " matches.");
