@@ -128,9 +128,9 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
      * (width or height) in decimal degrees
      */
     public static int adaptiveAlpha(Double d) {
-        int exp = 4 + exponent(d); //follows table here https://en.wikipedia.org/wiki/Decimal_degrees
+        int exp = 5 + exponent(d); //follows table here https://en.wikipedia.org/wiki/Decimal_degrees
         //to provide an alpha distance one order of magnitude less than the extent of the dataset
 
-        return (int)Math.pow(10, exp);
+        return (int) Math.max(100, Math.pow(10, exp));
     }
 }
