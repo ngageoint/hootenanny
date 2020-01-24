@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.job;
 
@@ -50,6 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import hoot.services.controllers.osm.user.UserResource;
 import hoot.services.job.JobStatus;
 import hoot.services.job.JobStatusManager;
 import hoot.services.models.db.CommandStatus;
@@ -94,8 +95,8 @@ public class JobResource {
         hoot.services.models.db.JobStatus jobStatus = jobStatusManager.getJobStatusObj(jobId);
 
         if (jobStatus != null) {
-            if (!jobStatus.getUserId().equals(user.getId())) {
-                throw new ForbiddenException("HTTP" /* This Parameter required, but will be cleared by ExceptionFilter */);
+            if (!jobStatus.getUserId().equals(user.getId()) && !UserResource.adminUserCheck(user)) {
+                throw new ForbiddenException("HTTP"); /* This Parameter required, but will be cleared by ExceptionFilter */
             }
             response.setJobId(jobId);
             response.setStatus(JobStatus.fromInteger(jobStatus.getStatus()).toString());
