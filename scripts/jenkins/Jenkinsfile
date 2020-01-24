@@ -125,7 +125,7 @@ pipeline {
         stage("Core Tests") {
             when { expression { return params.Core_tests } }
             steps {
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --trace -D map.comparator.print.full.mismatch.elements.on.map.size.diff=true -D log.class.filter=PointPolygon.js --single /home/vagrant/hoot/test-files/cases/hoot-js/geometry-generic-1'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; source ./SetupEnv.sh; hoot version --debug; bin/HootTest --diff --glacial --parallel'"
             }
         }
         stage("Services Tests") {
