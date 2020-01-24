@@ -881,20 +881,20 @@ public class GrailResource {
 //        File connectedWayOSMFile = new File(params.getWorkDir(), "unconnected_ways.osm");
 //        if (connectedWayOSMFile.exists()) { connectedWayOSMFile.delete(); }
 
-        GrailParams connectedWaysParams = new GrailParams(params);
+//        GrailParams connectedWaysParams = new GrailParams(params);
 //        connectedWaysParams.setOutput(connectedWayOSMFile.getAbsolutePath());
 //        connectedWaysParams.setInput1(connectedWayOSMFile.getAbsolutePath());
-        connectedWaysParams.setApplyTags(false); //overwrite dataset
+//        connectedWaysParams.setApplyTags(false); //overwrite dataset
 
-        try {
-            workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
-        } catch (UnavailableException exc) {
-            throw new UnavailableException("The Rails port API is offline.");
-        }
+//        try {
+//            workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
+//        } catch (UnavailableException exc) {
+//            throw new UnavailableException("The Rails port API is offline.");
+//        }
 
         // Write the data to the hoot db
-        ExternalCommand addConnectedWays = grailCommandFactory.build(jobId, connectedWaysParams, "info", PushToDbCommand.class, this.getClass());
-        workflow.add(addConnectedWays);
+//        ExternalCommand addConnectedWays = grailCommandFactory.build(jobId, connectedWaysParams, "info", PushToDbCommand.class, this.getClass());
+//        workflow.add(addConnectedWays);
 
 
 
