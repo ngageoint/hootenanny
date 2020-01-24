@@ -383,7 +383,7 @@ public:
       // Point/Polygon conflation behaves diferently than all other generic scripts in that it
       // conflates geometries of different types. This class wasn't really originally designed to
       // handle that, so we add a logic path here to accommodate Point/Polygon.
-      if (!_scriptPath.contains("PointPolygon.js"))
+      if (!_scriptPath.contains(ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME))
       {
         std::function<bool (ConstElementPtr)> f =
           std::bind(&ScriptMatchVisitor::isMatchCandidate, this, placeholders::_1);

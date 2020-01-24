@@ -2204,6 +2204,15 @@ A setting of -1 is useful for tests where you do not have granular enough loggin
 A list of map operations to be applied to a map for cleaning purposes, in order.
 'hoot info --operators' displays information about the available transforms.
 
+=== map.comparator.print.full.mismatch.elements.on.map.size.diff
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, when comparing maps with the Compare command it will print out the details for all elements
+identified as different between the two maps when there is a size difference (up to a default
+limit). This is useful in debugging remote test errors. TODO: set this back to false
+
 === map.merge.ignore.duplicate.ids
 
 * Data Type: bool

@@ -32,6 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/util/ConfigOptions.h>
 
 // Standard
 #include <iomanip>
@@ -333,17 +334,36 @@ void MapComparator::_printIdDiff(
     idsIn2AndNotIn1Limited = idsIn2AndNotIn1;
   }
 
+  //map.comparator.print.full.mismatch.elements.on.map.size.diff
+  const bool printFullElements =
+    ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
   if (idsIn1AndNotIn2Limited.size() > 0)
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
       idsIn1AndNotIn2Limited);
+    if (printFullElements)
+    {
+      for (QSet<long>::const_iterator it = idsIn1AndNotIn2Limited.begin();
+           it != idsIn1AndNotIn2Limited.end(); ++it)
+      {
+        LOG_WARN(map1->getElement(ElementId(elementType, *it)));
+      }
+    }
   }
   if (idsIn2AndNotIn1Limited.size() > 0)
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<
       idsIn2AndNotIn1Limited);
+    if (printFullElements)
+    {
+      for (QSet<long>::const_iterator it = idsIn2AndNotIn1Limited.begin();
+           it != idsIn2AndNotIn1Limited.end(); ++it)
+      {
+        LOG_WARN(map2->getElement(ElementId(elementType, *it)));
+      }
+    }
   }
 }
 
