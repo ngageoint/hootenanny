@@ -261,6 +261,7 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
 
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 {
+  //cout << t->getName() << endl;
   if (name == t->getName())
   {
     return t;
@@ -287,6 +288,7 @@ CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
 {
   for (size_t i = 0; i < vTests.size(); i++)
   {
+    //cout << vTests[i]->getName() << endl;
     if (name == vTests[i]->getName())
     {
       return vTests[i].get();
