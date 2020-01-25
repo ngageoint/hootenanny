@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCH_H
 #define HIGHWAYMATCH_H
@@ -54,6 +54,8 @@ public:
 
   static std::string className() { return "hoot::HighwayMatch"; }
 
+  static const QString MATCH_NAME;
+
   HighwayMatch();
   HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
                const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
@@ -67,7 +69,7 @@ public:
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
   virtual QString getMatchName() const override { return getHighwayMatchName(); }
-  static QString getHighwayMatchName() { return _matchName; }
+  static QString getHighwayMatchName() { return MATCH_NAME; }
 
   virtual double getProbability() const override;
 
@@ -101,7 +103,6 @@ private:
   WaySublineMatchString _sublineMatch;
   mutable QHash<ElementId, bool> _conflicts;
   QString _explainText;
-  static QString _matchName;
   static QString _noMatchingSubline;
 
   double _calculateExpertProbability(const ConstOsmMapPtr& map) const;

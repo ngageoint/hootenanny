@@ -232,6 +232,7 @@ double PoiPolygonTypeScoreExtractor::_getTagScore(ConstElementPtr poi,
     polyTagList.removeAll(excludeKvp);
   }
 
+  // Can this be replaced with OsmSchema::score(const Tags& tags1, const Tags& tags2)?
   for (int i = 0; i < poiTagList.size(); i++)
   {
     const QString poiKvp = poiTagList.at(i).toLower();

@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AngleHistogramExtractor.h"
 
@@ -34,7 +34,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/extractors/Histogram.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/OsmMap.h>
 
 using namespace geos::geom;
 using namespace std;

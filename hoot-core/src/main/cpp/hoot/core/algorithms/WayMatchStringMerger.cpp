@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayMatchStringMerger.h"
 
@@ -408,6 +408,16 @@ void WayMatchStringMerger::setKeeperStatus(Status s)
   {
     // set the new status.
     sm->getNewWay1()->setStatus(s);
+  }
+}
+
+void WayMatchStringMerger::addKeeperTags(const Tags& tags)
+{
+  // go through all the way mappings
+  foreach (SublineMappingPtr sm, _sublineMappingOrder)
+  {
+    // set the new status.
+    sm->getNewWay1()->addTags(tags);
   }
 }
 

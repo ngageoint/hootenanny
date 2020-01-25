@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NonConflatableCriterion.h"
 
@@ -40,6 +40,11 @@ NonConflatableCriterion::NonConflatableCriterion()
 {
 }
 
+NonConflatableCriterion::NonConflatableCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
 bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   const QMap<QString, ElementCriterionPtr> conflatableCriteria =
@@ -47,13 +52,26 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
        itr != conflatableCriteria.end(); ++itr)
   {
-    if (itr.value()->isSatisfied(e))
+    ElementCriterionPtr crit = itr.value();
+
+    if (_map)
+    {
+      ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
+      if (mapConsumer != 0)
+      {
+        mapConsumer->setOsmMap(_map.get());
+      }
+    }
+
+    if (crit->isSatisfied(e))
     {
       // It is something we can conflate.
+      LOG_TRACE("Element: " << e->getElementId() << " is conflatable with: " << itr.key());
       return false;
     }
   }
   // It is not something we can conflate
+  LOG_TRACE("Element: " << e->getElementId() << " is not conflatable.");
   return true;
 }
 

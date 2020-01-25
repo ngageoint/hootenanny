@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CREATOR_DESCRIPTON_H
@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // Standard
 #include <string>
@@ -62,7 +62,9 @@ public:
     Area = 6,
     Railway = 7,
     PowerLine = 8,
-    Unknown = 9 // Unknown must always be last
+    Point = 9,
+    Line = 10,
+    Unknown = 11 // Unknown must always be last
   };
 
   enum FeatureCalcType
@@ -81,6 +83,7 @@ public:
   std::string className;
   QString description;
   BaseFeatureType baseFeatureType;
+  GeometryTypeCriterion::GeometryType geometryType;
 
   static QString baseFeatureTypeToString(BaseFeatureType t);
 

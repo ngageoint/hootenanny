@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmSchemaJs.h"
 
@@ -31,6 +31,7 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/ElementJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
@@ -40,6 +41,10 @@
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/HasNameCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/js/elements/TagsJs.h>
 
 using namespace v8;
 
@@ -76,6 +81,10 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isAncestor)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isArea"),
               FunctionTemplate::New(current, isArea)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPolygon"),
+              FunctionTemplate::New(current, isPolygon)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isPoint"),
+              FunctionTemplate::New(current, isPoint)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isBuilding"),
               FunctionTemplate::New(current, isBuilding)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isLinear"),
@@ -90,20 +99,23 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, isPoi)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isRailway"),
               FunctionTemplate::New(current, isRailway)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLinearHighway"),
-              FunctionTemplate::New(current, isLinearHighway)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isHighway"),
+              FunctionTemplate::New(current, isHighway)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "score"),
               FunctionTemplate::New(current, score)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "scoreTypes"),
+              FunctionTemplate::New(current, scoreTypes)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "scoreOneWay"),
               FunctionTemplate::New(current, scoreOneWay)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "hasName"),
               FunctionTemplate::New(current, hasName)->GetFunction());
+  schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
+              FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
-
   args.GetReturnValue().Set(toV8(OsmSchema::getInstance().getAllTags()));
 }
 
@@ -172,9 +184,23 @@ void OsmSchemaJs::isArea(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, AreaCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(
+    Boolean::New(current, AreaCriterion(mapJs->getConstMap()).isSatisfied(e)));
+}
+
+void OsmSchemaJs::isPoint(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, PointCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
@@ -187,14 +213,26 @@ void OsmSchemaJs::isLinear(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, LinearCriterion().isSatisfied(e)));
 }
 
-void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+void OsmSchemaJs::isPolygon(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
-  args.GetReturnValue().Set(Boolean::New(current, BuildingCriterion().isSatisfied(e)));
+  args.GetReturnValue().Set(Boolean::New(current, PolygonCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isBuilding(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, BuildingCriterion(mapJs->getConstMap()).isSatisfied(e)));
 }
 
 void OsmSchemaJs::isLinearWaterway(const FunctionCallbackInfo<Value>& args)
@@ -248,6 +286,28 @@ void OsmSchemaJs::isRailway(const FunctionCallbackInfo<Value>& args)
   args.GetReturnValue().Set(Boolean::New(current, RailwayCriterion().isSatisfied(e)));
 }
 
+void OsmSchemaJs::isHighway(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
+}
+
+void OsmSchemaJs::isSpecificallyConflatable(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(
+    Boolean::New(current, !NonConflatableCriterion(mapJs->getConstMap()).isSatisfied(e)));
+}
+
 void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -256,16 +316,6 @@ void OsmSchemaJs::hasName(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
 
   args.GetReturnValue().Set(Boolean::New(current, HasNameCriterion().isSatisfied(e)));
-}
-
-void OsmSchemaJs::isLinearHighway(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(Boolean::New(current, HighwayCriterion().isSatisfied(e)));
 }
 
 void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)
@@ -277,6 +327,18 @@ void OsmSchemaJs::score(const FunctionCallbackInfo<Value>& args)
   QString kvp2 = toCpp<QString>(args[1]);
 
   args.GetReturnValue().Set(Number::New(current, OsmSchema::getInstance().score(kvp1, kvp2)));
+}
+
+void OsmSchemaJs::scoreTypes(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  Tags tags1 = toCpp<Tags>(args[0]);
+  Tags tags2 = toCpp<Tags>(args[1]);
+
+  args.GetReturnValue().Set(
+    Number::New(current, OsmSchema::getInstance().scoreTypes(tags1, tags2)));
 }
 
 void OsmSchemaJs::scoreOneWay(const FunctionCallbackInfo<Value>& args)

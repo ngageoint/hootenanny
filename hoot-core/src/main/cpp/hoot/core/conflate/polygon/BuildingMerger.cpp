@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMerger.h"
 
@@ -53,6 +53,7 @@
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 using namespace std;
 
@@ -228,6 +229,11 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
 
   keeper->setTags(_getMergedTags(e1, e2));
   keeper->setStatus(Status::Conflated);
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
+  {
+    keeper->setTag(MetadataTags::HootMatchedBy(), BuildingMatch::MATCH_NAME);
+  }
 
   LOG_TRACE("BuildingMerger: keeper\n" << OsmUtils::getElementDetailString(keeper, map));
   LOG_TRACE("BuildingMerger: scrap\n" << OsmUtils::getElementDetailString(scrap, map));
@@ -597,7 +603,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       WorstCircularErrorVisitor::getWorstCircularError(constituentBuildings), relationType));
 
   TagMergerPtr tagMerger;
-  LOG_VARD(preserveTypes);
+  LOG_VART(preserveTypes);
   std::set<QString> overwriteExcludeTags;
   if (allAreBuildingParts)
   {

@@ -106,7 +106,7 @@ hoot info --match-creators | grep "HighwayMatchCreator"
 echo ""
 echo "Listing a script match creator..."
 echo ""
-hoot info --match-creators | grep "ScriptMatchCreator,PoiGeneric.js"
+hoot info --match-creators | grep "ScriptMatchCreator,Poi.js"
 echo ""
 
 # MERGER CREATORS

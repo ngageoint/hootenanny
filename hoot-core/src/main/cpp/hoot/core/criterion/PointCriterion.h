@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef POINT_CRITERION_H
@@ -43,13 +43,15 @@ namespace hoot
 class PointCriterion : public GeometryTypeCriterion, public ConstOsmMapConsumer
 {
 public:
+
   static std::string className() { return "hoot::PointCriterion"; }
 
   PointCriterion();
+  PointCriterion(ConstOsmMapPtr map);
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PointCriterion()); }
+  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PointCriterion(_map)); }
 
   virtual QString getDescription() const { return "Identifies point features"; }
 
@@ -61,9 +63,9 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
-
 private:
 
+  ConstOsmMapPtr _map;
   WayNodeCriterion _wayNodeCrit;
 };
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
@@ -61,9 +61,9 @@ Match()
 {
 }
 
-ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script, const Persistent<Object>& plugin,
-  const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj, const ElementId& eid1,
-  const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
+ScriptMatch::ScriptMatch(const std::shared_ptr<PluginContext>& script,
+  const Persistent<Object>& plugin, const ConstOsmMapPtr& map, const v8::Handle<Object>& mapObj,
+  const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt) :
   Match(mt),
   _eid1(eid1),
   _eid2(eid2),
@@ -378,7 +378,8 @@ Handle<Value> ScriptMatch::_callGetMatchFeatureDetails(const ConstOsmMapPtr& map
 
   if (func.IsEmpty() || func->IsFunction() == false)
   {
-    throw IllegalArgumentException("getMatchFeatureDetails must be a valid function.");
+    throw IllegalArgumentException(
+      "getMatchFeatureDetails must be a valid function for match from: " + _matchName);
   }
 
   Handle<Object> mapObj = OsmMapJs::create(map);
@@ -451,7 +452,7 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
 QString ScriptMatch::toString() const
 {
   stringstream ss;
-  ss << "ScriptMatch: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
+  ss << _matchName << "Match: " << _eid1 << ", " << _eid2 << " p: " << _p.toString();
   return QString::fromStdString(ss.str());
 }
 

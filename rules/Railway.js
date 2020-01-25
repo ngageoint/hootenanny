@@ -1,8 +1,13 @@
+/**
+ * This script conflates railways using Generic Conflation.
+ */
+
 "use strict";
 
 exports.description = "Matches railways";
 exports.experimental = false;
 exports.baseFeatureType = "Railway";
+exports.geometryType = "line";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.matchThreshold = parseFloat(hoot.get("railway.match.threshold"));
@@ -124,10 +129,9 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergeSets = function(map, pairs, replaced)
 {
-  hoot.trace("Merging elements.");
   // snap the ways in the second input to the first input. Use the default tag
   // merge method.
-  return snapWays(sublineMatcher, map, pairs, replaced);
+  return snapWays(sublineMatcher, map, pairs, replaced, exports.baseFeatureType);
 };
 
 exports.getMatchFeatureDetails = function(map, e1, e2)

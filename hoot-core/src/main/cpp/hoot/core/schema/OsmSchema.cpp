@@ -60,6 +60,7 @@
 #include <QHash>
 #include <QSet>
 #include <QDir>
+#include <QStringBuilder>
 
 // Standard
 #include <iostream>
@@ -186,7 +187,7 @@ private:
   const TagGraph _graph;
 };
 
-OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList &s)
+OsmSchemaCategory OsmSchemaCategory::fromStringList(const QStringList& s)
 {
   OsmSchemaCategory result;
   for (int i = 0; i < s.size(); i++)
@@ -282,7 +283,6 @@ public:
     EdgeId e2 = add_edge(vid2, vid1, associatedWith, _graph).first;
     return pair<EdgeId, EdgeId>(e1, e2);
   }
-
 
   QString average(QString kvp1, double w1, QString kvp2, double w2, double& score)
   {
@@ -479,6 +479,32 @@ public:
       result.insert(it.key());
     }\
     return result;
+  }
+
+  QSet<QString> getAllTypeKeys()
+  {
+    QSet<QString> typeTagKeys;
+
+    QSet<QString> allTagKeysTemp = OsmSchema::getInstance().getAllTagKeys();
+    // not completely sure what should be in this list; would be nice to have access to isMetadata
+    // here
+    allTagKeysTemp.remove(MetadataTags::Ref1());
+    allTagKeysTemp.remove(MetadataTags::Ref2());
+    allTagKeysTemp.remove("uuid");
+    allTagKeysTemp.remove("name");
+    allTagKeysTemp.remove("ele");
+    for (QSet<QString>::const_iterator it = allTagKeysTemp.begin(); it != allTagKeysTemp.end();
+         ++it)
+    {
+      const QString tagKey = *it;
+      //address tags aren't really type tags
+      if (!tagKey.startsWith("addr:"))
+      {
+        typeTagKeys.insert(tagKey);
+      }
+    }
+
+    return typeTagKeys;
   }
 
   vector<SchemaVertex> getAssociatedTags(QString name)
@@ -1436,8 +1462,19 @@ QSet<QString> OsmSchema::getAllTagKeys()
   if (_allTagKeysCache.isEmpty())
   {
     _allTagKeysCache = d->getAllTagKeys();
+    //LOG_VART(_allTagKeysCache);
   }
   return _allTagKeysCache;
+}
+
+QSet<QString> OsmSchema::getAllTypeKeys()
+{
+  if (_allTypeKeysCache.isEmpty())
+  {
+    _allTypeKeysCache = d->getAllTypeKeys();
+    //LOG_VART(_allTypeKeysCache);
+  }
+  return _allTypeKeysCache;
 }
 
 bool OsmSchema::hasTagKey(const QString& key)
@@ -1793,6 +1830,54 @@ double OsmSchema::score(const QString& kvp, const Tags& tags)
   return maxScore;
 }
 
+double OsmSchema::scoreTypes(const Tags& tags1, const Tags& tags2)
+{
+  double maxScore = 0.0;
+  for (Tags::const_iterator tags1Itr = tags1.begin(); tags1Itr != tags1.end(); ++tags1Itr)
+  {
+    const QString key1 = tags1Itr.key().trimmed();
+    const QString val1 = tags1Itr.value().trimmed();
+    const QString kvp1 = toKvp(key1, val1);
+    LOG_VART(key1);
+    LOG_VART(val1);
+    LOG_VART(kvp1);
+    LOG_VART(isMetaData(key1, val1));
+    LOG_VART(isTypeKey(key1));
+    if (!key1.isEmpty() && !val1.isEmpty() && !isMetaData(key1, val1) &&
+        (isTypeKey(key1) || isTypeKey(kvp1)))
+    {
+      for (Tags::const_iterator tags2Itr = tags2.begin(); tags2Itr != tags2.end(); ++tags2Itr)
+      {
+        const QString key2 = tags2Itr.key().trimmed();
+        const QString val2 = tags2Itr.value().trimmed();
+        const QString kvp2 = toKvp(key2, val2);
+        LOG_VART(key2);
+        LOG_VART(val2);
+        LOG_VART(kvp2);
+        LOG_VART(isMetaData(key2, val2));
+        LOG_VART(isTypeKey(key2));
+        if (!key2.isEmpty() && !val2.isEmpty() && !isMetaData(key2, val2) &&
+            (isTypeKey(key2) || isTypeKey(kvp2)))
+        {
+          const double score = OsmSchema::getInstance().score(kvp1, kvp2);
+          LOG_VART(score);
+          if (score > maxScore)
+          {
+            maxScore = score;
+          }
+        }
+      }
+    }
+  }
+  LOG_VART(maxScore);
+  return maxScore;
+}
+
+bool OsmSchema::isTypeKey(const QString& key)
+{
+  return getAllTypeKeys().contains(key);
+}
+
 double OsmSchema::scoreOneWay(const QString& kvp1, const QString& kvp2)
 {
   return d->score(kvp1, kvp2);
@@ -1816,7 +1901,7 @@ QString OsmSchema::toKvp(const QString& key, const QString& value)
   }
   else
   {
-    return key + "=" + value;
+    return key % "=" % value;
   }
 }
 

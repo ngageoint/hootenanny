@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwaySnapMerger.h"
 
@@ -71,7 +71,8 @@ HOOT_FACTORY_REGISTER(Merger, HighwaySnapMerger)
 int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger() :
-HighwayMergerAbstract()
+HighwayMergerAbstract(),
+_matchedBy(HighwayMatch::MATCH_NAME)
 {
 }
 
@@ -80,7 +81,8 @@ HighwaySnapMerger::HighwaySnapMerger(
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations(false),
-_sublineMatcher(sublineMatcher)
+_sublineMatcher(sublineMatcher),
+_matchedBy(HighwayMatch::MATCH_NAME)
 {
   _pairs = pairs;
 }
@@ -248,6 +250,11 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   Tags newTags = TagMergerFactory::mergeTags(e1->getTags(), e2->getTags(), ElementType::Way);
   e1Match->setTags(newTags);
   e1Match->setStatus(Status::Conflated);
+  ConfigOptions conf;
+  if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
+  {
+    e1Match->setTag(MetadataTags::HootMatchedBy(), _matchedBy);
+  }
 
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementId());
@@ -638,7 +645,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
       {
         r->getTags().set(MetadataTags::HootMultilineString(), "yes");
       }
-      LOG_DEBUG("Created scrap relation: " << r->getElementId());
+      LOG_TRACE("Created scrap relation: " << r->getElementId());
       scrap = r;
       map->addElement(r);
     }
