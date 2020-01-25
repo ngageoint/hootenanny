@@ -1318,9 +1318,9 @@
                 "description":"List of MatchCreators to use during conflation. This can modify what features will be conflated (e.g. buildings, roads, etc.).",
                 "name":"Match Creator",
                 "required":"true",
-                "defaultvalue":"hoot::ScriptMatchCreator,LinearWaterway.js",
+                "defaultvalue":"hoot::ScriptMatchCreator,River.js",
                 "override":{
-                    "defaultvalue":"hoot::ScriptMatchCreator,LinearWaterway.js"
+                    "defaultvalue":"hoot::ScriptMatchCreator,River.js"
                 },
                 "hoot_key":"match.creators"
             },
