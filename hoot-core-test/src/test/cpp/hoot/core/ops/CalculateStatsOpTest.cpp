@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -80,7 +80,7 @@ public:
   void runStatsNumTest()
   {
     std::shared_ptr<CalculateStatsOp> calcStatsOp = _calcStats(_inputPath + "all-data-types.osm");
-    CPPUNIT_ASSERT_EQUAL(172, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(193, calcStatsOp->getStats().size());
   }
 
   void runStatsTest()
@@ -133,7 +133,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       61.29, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(
@@ -149,7 +149,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       0.0,
       calcStatsOp->getSingleStat(
-        "Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js"));
+        "Features Conflatable by: hoot::ScriptMatchCreator,Poi.js"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));
@@ -394,7 +394,7 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       62.07, calcStatsOp->getSingleStat("Percentage of Total Features Unmatched"), 1e-1);
 
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Match Creators"));
+    CPPUNIT_ASSERT_EQUAL(12.0, calcStatsOp->getSingleStat("Match Creators"));
     //we're parsing a conflated output map here, so all conflatable counts are equal to zero;
     //counts for PoiPolygon are broken up by type in addition to being shown as total
     CPPUNIT_ASSERT_EQUAL(
@@ -410,7 +410,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       0.0,
       calcStatsOp->getSingleStat(
-        "Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js"));
+        "Features Conflatable by: hoot::ScriptMatchCreator,Poi.js"));
 
     CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflatable POIs"));

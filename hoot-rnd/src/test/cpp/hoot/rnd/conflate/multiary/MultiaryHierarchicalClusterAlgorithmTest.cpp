@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -92,7 +92,7 @@ public:
     // have to do this or getInstance will re-register the default match creators.
     MatchFactory& matchFactory = MatchFactory::getInstance();
     matchFactory.reset();
-    matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+    matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
     MergerCreatorPtr mergerCreator(
       Factory::getInstance().constructObject<MergerCreator>(

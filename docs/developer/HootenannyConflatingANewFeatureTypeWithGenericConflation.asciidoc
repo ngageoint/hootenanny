@@ -33,7 +33,7 @@ is similar to the file provided with Hootenanny for conflating rivers,
 ----------------
 {
   "log.identical.message.limit": "999999",
-  "match.creators" : "hoot::ScriptMatchCreator,LinearWaterway.js",
+  "match.creators" : "hoot::ScriptMatchCreator,River.js",
   "merger.creators" : "hoot::ScriptMergerCreator",
 }
 ----------------
@@ -42,7 +42,7 @@ Creating a configuration file will save you time typing in the same settings ove
 invoking commands while experimenting with different settings as you develop your conflation model
 for the new feature type.  Of note from this example are: +match.creators+ and +merger.creators+.
 +match.creators+ uses the ScriptMatchCreator, taking advantage of the generic conflation framework
-and also specifies a conflation rules file, "LinearWaterway.js", which will be discussed in a later
+and also specifies a conflation rules file, "River.js", which will be discussed in a later
 section.  +merger.creators+ specifies the ScriptMergerCreator, which is also part of the generic
 conflation framework.  "log.identical.message.limit" is included here only, so you can see all of the script match
 log messages for debugging purposes.
@@ -214,7 +214,7 @@ function isLinearWaterway(e)
 }
 -------------
 * rules file - Finally, reference your schema related method from your rules file so that the generic
-conflation can identify the correct features to conflate.  Example from rules/LinearWaterway.js:
+conflation can identify the correct features to conflate.  Example from rules/River.js:
 ------------
 /**
  * Returns true if e is a candidate for a match. Implementing this method is

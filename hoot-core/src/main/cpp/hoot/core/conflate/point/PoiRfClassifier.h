@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIRFCLASSIFIER_H
 #define POIRFCLASSIFIER_H
@@ -42,7 +42,7 @@ class MatchClassification;
 /**
  * Note that we don't currently use a Random Forest model (.rf file) with POI to POI conflation.
  * We only used the generated .arff file to feed the features used by Generic Conflation with
- * PoiGeneric.js.
+ * Poi.js.
  */
 class PoiRfClassifier
 {

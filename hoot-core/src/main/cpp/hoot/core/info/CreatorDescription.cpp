@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CreatorDescription.h"
@@ -38,6 +38,8 @@
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
@@ -86,6 +88,10 @@ QString CreatorDescription::baseFeatureTypeToString(BaseFeatureType t)
       return "Railway";
     case PowerLine:
       return "Power Line";
+    case Point:
+      return "Point";
+    case Line:
+      return "Line";
     default:
       return "Unknown";
   }
@@ -112,6 +118,10 @@ CreatorDescription::BaseFeatureType CreatorDescription::stringToBaseFeatureType(
     return Railway;
   else if (0 == s.compare("powerline"))
     return PowerLine;
+  else if (0 == s.compare("point"))
+    return Point;
+  else if (0 == s.compare("line"))
+    return Line;
   else
     return Unknown;
 }
@@ -137,6 +147,10 @@ CreatorDescription::FeatureCalcType CreatorDescription::getFeatureCalcType (Base
     case Railway:
       return CalcTypeLength;
     case PowerLine:
+      return CalcTypeLength;
+    case Point:
+      return CalcTypeNone;
+    case Line:
       return CalcTypeLength;
     default:
       return CalcTypeNone;
@@ -165,6 +179,10 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
       return ElementCriterionPtr(new RailwayCriterion());
     case PowerLine:
       return ElementCriterionPtr(new PowerLineCriterion());
+    case Point:
+      return ElementCriterionPtr(new PointCriterion());
+    case Line:
+      return ElementCriterionPtr(new LinearCriterion());
     default:
       return ElementCriterionPtr();
   }

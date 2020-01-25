@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ComparatorTagDifferencer.h"
 
@@ -38,6 +38,7 @@ HOOT_FACTORY_REGISTER(TagDifferencer, ComparatorTagDifferencer)
 double ComparatorTagDifferencer::diff(const ConstOsmMapPtr &/*map*/, const ConstElementPtr& e1,
   const ConstElementPtr &e2) const
 {
+  LOG_VART(TagComparator::getInstance().compareTags(e1->getTags(), e2->getTags()));
   return 1 - TagComparator::getInstance().compareTags(e1->getTags(), e2->getTags());
 }
 

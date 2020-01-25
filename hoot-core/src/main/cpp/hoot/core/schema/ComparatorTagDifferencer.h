@@ -33,7 +33,7 @@ namespace hoot
 {
 
 /**
- * A fascade for the TagComparator compareTags method. See TagComparator for details.
+ * A facade for the TagComparator compareTags method. See TagComparator for details.
  */
 class ComparatorTagDifferencer : public TagDifferencer
 {

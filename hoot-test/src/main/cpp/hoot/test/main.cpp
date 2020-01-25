@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GDAL
@@ -261,6 +261,7 @@ void includeExcludeTests(const QStringList& args, vector<CppUnit::Test*>& vTests
 
 CppUnit::Test* findTest(CppUnit::Test* t, std::string name)
 {
+  //cout << t->getName() << endl;
   if (name == t->getName())
   {
     return t;
@@ -287,6 +288,7 @@ CppUnit::Test* findTest(std::vector<TestPtr> vTests, std::string name)
 {
   for (size_t i = 0; i < vTests.size(); i++)
   {
+    //cout << vTests[i]->getName() << endl;
     if (name == vTests[i]->getName())
     {
       return vTests[i].get();

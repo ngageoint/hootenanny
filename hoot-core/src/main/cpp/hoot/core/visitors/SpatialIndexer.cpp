@@ -84,14 +84,17 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
   LOG_VART(e->getElementId());
   if (!_criterion || _criterion->isSatisfied(e))
   {
-    LOG_VART(e->getElementId());
+    LOG_TRACE("is satisfied: " << e->getElementId());
+
     _fids.push_back((int)_indexToEid.size());
     _indexToEid.push_back(e->getElementId());
 
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
+    LOG_VART(searchRadius);
     std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
     env->expandBy(searchRadius);
+    LOG_VART(env);
     b.setBounds(0, env->getMinX(), env->getMaxX());
     b.setBounds(1, env->getMinY(), env->getMaxY());
 
@@ -109,6 +112,7 @@ set<ElementId> SpatialIndexer::findNeighbors(
   LOG_TRACE("Finding neighbors within env: " << env << "...");
   LOG_VART(indexToEid.size());
   LOG_VART(index.get());
+  LOG_VART(pMap->size());
 
   vector<double> min(2), max(2);
   min[0] = env.getMinX();
