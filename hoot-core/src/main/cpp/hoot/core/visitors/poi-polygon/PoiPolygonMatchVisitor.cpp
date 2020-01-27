@@ -249,11 +249,10 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     std::shared_ptr<PoiPolygonPolyCriterion> crit(new PoiPolygonPolyCriterion());
 
     SpatialIndexer v(_polyIndex,
-                           _polyIndexToEid,
-                           crit,
-                           std::bind(
-                             &PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
-                           _getMap());
+                     _polyIndexToEid,
+                     crit,
+                     std::bind(&PoiPolygonMatchVisitor::_getSearchRadius, this, placeholders::_1),
+                     _getMap());
     _getMap()->visitWaysRo(v);
     _getMap()->visitRelationsRo(v);
     v.finalizeIndex();

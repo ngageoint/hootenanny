@@ -134,7 +134,7 @@ _crit(crit)
   LOG_VART(_eids);
 }
 
-void CopyMapSubsetOp::apply(OsmMapPtr &map)
+void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   map->setProjection(_from->getProjection());
   AddAllVisitor v(_from, map);

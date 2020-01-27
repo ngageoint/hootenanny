@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMATCH_H
 #define SCRIPTMATCH_H
@@ -85,7 +85,8 @@ public:
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
 
-  virtual QString getDescription() const override { return "Matches elements with Generic Conflation"; }
+  virtual QString getDescription() const override
+  { return "Matches elements with Generic Conflation"; }
 
 private:
 

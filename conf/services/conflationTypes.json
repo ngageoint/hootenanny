@@ -33,18 +33,12 @@
             "snap.unconnected.ways.existing.way.node.tolerance": "Maximum distance, in meters, to allow snapping unconnected roads to existing road nodes"
         }
     },
-    "Roads": {
-        "matcher": "hoot::HighwayMatchCreator",
-        "merger": "hoot::HighwayMergerCreator",
+    "Areas": {
+        "matcher": "hoot::ScriptMatchCreator,Area.js",
+        "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.highway": "Highway search radius (meters)",
-            "highway.merge.tags.only": "Merge road tags only"
+            "search.radius.area": "Area search radius"
         }
-    },
-    "RoadsNetwork": {
-        "matcher": "hoot::NetworkMatchCreator",
-        "merger": "hoot::NetworkMergerCreator",
-        "members": {}
     },
     "Buildings": {
         "matcher": "hoot::BuildingMatchCreator",
@@ -62,8 +56,36 @@
             "building.review.matches.other.than.one.to.one": "Review matches that are not one to one"
         }
     },
+    "Generic Lines": {
+        "matcher": "hoot::ScriptMatchCreator,Line.js",
+        "merger": "hoot::ScriptMergerCreator",
+        "members": {
+            "generic.line.tag.threshold": "Tag similarity for generic lines not conflatable by any specific conflation routine"
+        }
+    },
+    "Generic Points": {
+        "matcher": "hoot::ScriptMatchCreator,Point.js",
+        "merger": "hoot::ScriptMergerCreator",
+        "members": {
+            "generic.point.tag.threshold": "Tag similarity for generic points not conflatable by any specific conflation routine"
+        }
+    },
+    "Generic Point/Polygon": {
+        "matcher": "hoot::ScriptMatchCreator,PointPolygon.js",
+        "merger": "hoot::ScriptMergerCreator",
+        "members": {
+            "generic.point.polygon.tag.threshold": "Tag similarity for generic pairs of points and polygons not conflatable by any specific conflation routine"
+        }
+    },
+    "Generic Polygons": {
+        "matcher": "hoot::ScriptMatchCreator,Polygon.js",
+        "merger": "hoot::ScriptMergerCreator",
+        "members": {
+            "generic.polygon.tag.threshold": "Tag similarity for generic polygons not conflatable by any specific conflation routine"
+        }
+    },
     "Pois": {
-        "matcher": "hoot::ScriptMatchCreator,PoiGeneric.js",
+        "matcher": "hoot::ScriptMatchCreator,Poi.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
             "poi.ignore.type.if.name.present": "Ignore type if name present"
@@ -90,12 +112,10 @@
             "poi.polygon.type.score.threshold": "Type score threshold"
         }
     },
-    "Areas": {
-        "matcher": "hoot::ScriptMatchCreator,Area.js",
+    "Powerlines": {
+        "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
         "merger": "hoot::ScriptMergerCreator",
-        "members": {
-            "search.radius.area": "Area search radius"
-        }
+        "members": {}
     },
     "Railways": {
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
@@ -104,16 +124,24 @@
             "search.radius.railway": "Railway search radius"
         }
     },
-    "Powerlines": {
-        "matcher": "hoot::ScriptMatchCreator,PowerLine.js",
-        "merger": "hoot::ScriptMergerCreator",
-        "members": {}
-    },
-    "Waterways": {
-        "matcher": "hoot::ScriptMatchCreator,LinearWaterway.js",
+    "Rivers": {
+        "matcher": "hoot::ScriptMatchCreator,River.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.waterway": "Waterway search radius"
+            "search.radius.waterway": "River search radius"
         }
+    },
+    "Roads": {
+        "matcher": "hoot::HighwayMatchCreator",
+        "merger": "hoot::HighwayMergerCreator",
+        "members": {
+            "search.radius.highway": "Highway search radius (meters)",
+            "highway.merge.tags.only": "Merge road tags only"
+        }
+    },
+    "RoadsNetwork": {
+        "matcher": "hoot::NetworkMatchCreator",
+        "merger": "hoot::NetworkMergerCreator",
+        "members": {}
     }
 }

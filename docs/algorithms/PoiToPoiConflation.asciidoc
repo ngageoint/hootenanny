@@ -35,7 +35,7 @@ The POI to POI conflation code uses the Hootenanny JavaScript
 interface (See _JavaScript Overview_ in <<hootuser>> for details). The script is
 only a few hundred lines of code and primarily contains the business logic for
 conflating POIs. The code can be found and modified in the Hootenanny source
-tree under `rules/PoiGeneric.js`.
+tree under `rules/Poi.js`.
 
 The conflation flow is similar to the other conflation operations and happens in
 a single pass of the data with other Unifying routines. The high level steps
@@ -88,7 +88,7 @@ they come from two different inputs.
 
 The search radius is determined by the elements circular error (`error:circular`
 tag) and customizable search radii that are defined on a per tag basis. The
-search radii are defined in the `PoiGeneric.js` source file and can be modified
+search radii are defined in the `Poi.js` source file and can be modified
 there for custom use cases. Some example search radii are below:
 
 * `historic` - 200m

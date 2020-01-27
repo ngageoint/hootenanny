@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -49,6 +49,8 @@ class DataConverterTest : public HootTestFixture
   CPPUNIT_TEST(runColumnsNotOsmToShpTest2);
   CPPUNIT_TEST(runBothTranslationAndColumnsTest);
   CPPUNIT_TEST(runFeatureLimitNonOgrInputsTest);
+  CPPUNIT_TEST(runTranslationFileDoesntExistTest);
+  CPPUNIT_TEST(runInvalidTranslationFileFormatTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -141,7 +143,8 @@ public:
     try
     {
       DataConverter converter;
-      converter.setTranslation("MyTranslation.js");
+      // any file with a supported translation file that's known to exist
+      converter.setTranslation("translations/GeoNames.js");
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
@@ -177,6 +180,41 @@ public:
 
     CPPUNIT_ASSERT(
       exceptionMsg.contains("Read limit may only be specified when converting OGR inputs"));
+  }
+
+  void runTranslationFileDoesntExistTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      DataConverter converter;
+      converter.setTranslation("MyTranslation.js");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VART(exceptionMsg);
+
+    CPPUNIT_ASSERT(exceptionMsg.contains("Translation file does not exist: MyTranslation.js"));
+  }
+
+  void runInvalidTranslationFileFormatTest()
+  {
+    QString exceptionMsg("");
+    try
+    {
+      DataConverter converter;
+      converter.setTranslation("test-files/DcGisRoads.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    LOG_VART(exceptionMsg);
+
+    CPPUNIT_ASSERT(exceptionMsg.contains(
+      "Invalid translation file format: test-files/DcGisRoads.osm"));
   }
 };
 

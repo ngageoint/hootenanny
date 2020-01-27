@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HighwayCriterion.h"
 
@@ -41,10 +41,18 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
   LOG_VART(element->getElementId());
+
+  const ElementType type = element->getElementType();
+
+  if (type == ElementType::Node)
+  {
+    return false;
+  }
+
   //LOG_VART(element);
   bool result = false;
   const Tags& tags = element->getTags();
-  const ElementType type = element->getElementType();
+
   Tags::const_iterator it = tags.find("highway");
 
   // Is it a legit highway?

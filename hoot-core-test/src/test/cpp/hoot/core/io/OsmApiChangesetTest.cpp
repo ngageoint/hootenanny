@@ -294,7 +294,6 @@ public:
     for (int i = 0; i < (int)ids.size(); ++i)
       CPPUNIT_ASSERT_EQUAL(expected_ids[i], ids[i]);
 
-
     //  Test relation failure with empty string
     id = 0;
     id2 = 0;
@@ -305,6 +304,11 @@ public:
     CPPUNIT_ASSERT_EQUAL(0L, id);
     CPPUNIT_ASSERT_EQUAL(0L, id2);
     CPPUNIT_ASSERT_EQUAL(ElementType::Unknown, type);
+
+    //  Test changeset closed
+    hint = "Changeset conflict: The changeset 49514404 was closed at 2020-01-23 20:11:10 UTC";
+    found = changeset.matchesChangesetClosedFailure(hint);
+    CPPUNIT_ASSERT_EQUAL(true, found);
   }
 
   void runXmlChangesetSplitDeleteTest()

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMSCHEMA_JS_H
 #define OSMSCHEMA_JS_H
@@ -56,6 +56,7 @@ private:
   static void isAncestor(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void score(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void scoreTypes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void scoreOneWay(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Even thoughthe logic for some of these methods have been moved from OsmSchema to criterion,
@@ -63,14 +64,21 @@ private:
 
   // TODO: All of these methods can go away if #3047 is completed.
   static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isBuilding(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinear(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void isLinearHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isLinearWaterway(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPowerLine(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMetaData(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoi(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isRailway(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isHighway(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  /**
+   * See description in rules/HootLib.js isSpecificallyConflatable method
+   */
+  static void isSpecificallyConflatable(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
 };

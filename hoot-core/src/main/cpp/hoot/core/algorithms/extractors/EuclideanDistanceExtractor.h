@@ -22,19 +22,24 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EUCLIDEANDISTANCEEXTRACTOR_H
 #define EUCLIDEANDISTANCEEXTRACTOR_H
 
+// Hoot
 #include <hoot/core/algorithms/extractors/AbstractDistanceExtractor.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
 
-class EuclideanDistanceExtractor : public AbstractDistanceExtractor
+class EuclideanDistanceExtractor : public AbstractDistanceExtractor, public Configurable
 {
 public:
+
+  EuclideanDistanceExtractor();
+
   static std::string className() { return "hoot::EuclideanDistanceExtractor"; }
 
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
@@ -44,6 +49,15 @@ public:
 
   virtual QString getDescription() const
   { return "Calculates the Euclidean distance between two features"; }
+
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
+private:
+
+  bool _requireAreaForPolygonConversion;
 };
 
 }

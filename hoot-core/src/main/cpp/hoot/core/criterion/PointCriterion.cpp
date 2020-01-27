@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PointCriterion.h"
@@ -40,8 +40,15 @@ PointCriterion::PointCriterion()
 {
 }
 
+PointCriterion::PointCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+  _wayNodeCrit.setOsmMap(map.get());
+}
+
 void PointCriterion::setOsmMap(const OsmMap* map)
 {
+  _map = map->shared_from_this();
   _wayNodeCrit.setOsmMap(map);
 }
 

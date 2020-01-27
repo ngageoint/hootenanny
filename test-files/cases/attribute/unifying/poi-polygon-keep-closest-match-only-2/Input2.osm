@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="15.334793" minlon="38.933898" maxlat="15.33621" maxlon="38.936078"/>
+    <node visible="true" id="-19926765" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356600000000007" lon="38.9353610000000003"/>
+    <node visible="true" id="-19926764" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3351550000000003" lon="38.9352360000000033"/>
+    <node visible="true" id="-19926763" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3351600000000001" lon="38.9354950000000031"/>
+    <node visible="true" id="-19926762" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356580000000005" lon="38.9355400000000031"/>
+    <node visible="true" id="-19926761" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360330000000005" lon="38.9355400000000031"/>
+    <node visible="true" id="-19926760" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3351209999999991" lon="38.9354939999999985"/>
+    <node visible="true" id="-19926759" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360339999999997" lon="38.9353240000000014"/>
+    <node visible="true" id="-19926758" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3351220000000001" lon="38.9355890000000002"/>
+    <node visible="true" id="-19926757" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352210000000007" lon="38.9351950000000002"/>
+    <node visible="true" id="-19926756" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352240000000002" lon="38.9351350000000025"/>
+    <node visible="true" id="-19926755" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3351159999999993" lon="38.9351369999999974"/>
+    <node visible="true" id="-19926754" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356600000000007" lon="38.9353270000000009"/>
+    <node visible="true" id="-19926753" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3351170000000003" lon="38.9352390000000028"/>
+    <node visible="true" id="-19926751" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3354459999999992" lon="38.9355660000000015"/>
+    <node visible="true" id="-19926750" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361260000000001" lon="38.9339659999999981"/>
+    <node visible="true" id="-19926748" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355829999999997" lon="38.9355660000000015"/>
+    <node visible="true" id="-19926747" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361280000000004" lon="38.9339470000000034"/>
+    <node visible="true" id="-19926746" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361230000000006" lon="38.9339289999999991"/>
+    <node visible="true" id="-19926745" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361120000000000" lon="38.9339129999999969"/>
+    <node visible="true" id="-19926744" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352120000000003" lon="38.9355880000000028"/>
+    <node visible="true" id="-19926743" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360920000000007" lon="38.9340049999999991"/>
+    <node visible="true" id="-19926742" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352679999999992" lon="38.9355869999999982"/>
+    <node visible="true" id="-19926741" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352649999999997" lon="38.9353880000000032"/>
+    <node visible="true" id="-19926740" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361070000000002" lon="38.9339969999999980"/>
+    <node visible="true" id="-19926738" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361190000000001" lon="38.9339840000000024"/>
+    <node visible="true" id="-19926737" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3354379999999999" lon="38.9353839999999991"/>
+    <node visible="true" id="-19926736" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3359240000000003" lon="38.9353240000000014"/>
+    <node visible="true" id="-19926735" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355999999999995" lon="38.9341349999999977"/>
+    <node visible="true" id="-19926734" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356619999999992" lon="38.9348919999999978">
+        <tag k="addr:housenumber" v="9"/>
+        <tag k="addr:street" v="175-4 Street Asmara Eritrea"/>
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Bristol Pension"/>
+        <tag k="tourism" v="hotel"/>
+    </node>
+    <node visible="true" id="-19926733" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3359210000000008" lon="38.9351810000000000"/>
+    <node visible="true" id="-19926731" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3357150000000004" lon="38.9351849999999970"/>
+    <node visible="true" id="-19926730" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3357119999999991" lon="38.9351270000000014"/>
+    <node visible="true" id="-19926729" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355610000000002" lon="38.9346859999999992"/>
+    <node visible="true" id="-19926728" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356019999999997" lon="38.9342040000000011"/>
+    <node visible="true" id="-19926727" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356030000000008" lon="38.9342359999999985"/>
+    <node visible="true" id="-19926726" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355589999999999" lon="38.9345270000000028"/>
+    <node visible="true" id="-19926725" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355210000000000" lon="38.9342380000000006"/>
+    <node visible="true" id="-19926724" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356770000000004" lon="38.9345250000000007"/>
+    <node visible="true" id="-19926723" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355180000000004" lon="38.9341379999999972"/>
+    <node visible="true" id="-19926722" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355789999999992" lon="38.9352220000000031"/>
+    <node visible="true" id="-19926721" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3362010000000009" lon="38.9351839999999996"/>
+    <node visible="true" id="-19926720" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3362040000000004" lon="38.9353229999999968"/>
+    <node visible="true" id="-19926719" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355770000000007" lon="38.9351300000000009"/>
+    <node visible="true" id="-19926718" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3354669999999995" lon="38.9351309999999984"/>
+    <node visible="true" id="-19926717" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3354669999999995" lon="38.9351899999999986"/>
+    <node visible="true" id="-19926716" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361319999999992" lon="38.9351119999999966"/>
+    <node visible="true" id="-19926715" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355809999999995" lon="38.9354310000000012"/>
+    <node visible="true" id="-19926714" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361640000000001" lon="38.9351219999999998"/>
+    <node visible="true" id="-19926713" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355370000000004" lon="38.9354310000000012"/>
+    <node visible="true" id="-19926712" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361760000000000" lon="38.9351419999999990"/>
+    <node visible="true" id="-19926711" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355320000000006" lon="38.9352239999999981"/>
+    <node visible="true" id="-19926710" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361970000000003" lon="38.9351369999999974"/>
+    <node visible="true" id="-19926709" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3350480000000005" lon="38.9344699999999975"/>
+    <node visible="true" id="-19926708" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3350410000000004" lon="38.9342180000000013"/>
+    <node visible="true" id="-19926706" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3358260000000008" lon="38.9360780000000020"/>
+    <node visible="true" id="-19926705" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352120000000003" lon="38.9358799999999974"/>
+    <node visible="true" id="-19926703" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3362099999999995" lon="38.9360769999999974"/>
+    <node visible="true" id="-19926702" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3362079999999992" lon="38.9356319999999982"/>
+    <node visible="true" id="-19926701" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3356800000000000" lon="38.9346839999999972"/>
+    <node visible="true" id="-19926700" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3352129999999995" lon="38.9357200000000034"/>
+    <node visible="true" id="-19926698" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3357440000000000" lon="38.9357240000000004"/>
+    <node visible="true" id="-19926697" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3361040000000006" lon="38.9356349999999978"/>
+    <node visible="true" id="-19926695" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3357430000000008" lon="38.9358840000000015"/>
+    <node visible="true" id="-19926694" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3358170000000005" lon="38.9356420000000014"/>
+    <node visible="true" id="-19926693" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3358249999999998" lon="38.9359490000000008"/>
+    <node visible="true" id="-19926692" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3359340000000000" lon="38.9344779999999986">
+        <tag k="building" v="office"/>
+        <tag k="name" v="EriTel Corporation Office"/>
+    </node>
+    <node visible="true" id="-19926691" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3355160000000001" lon="38.9358829999999969"/>
+    <node visible="true" id="-19926690" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360299999999992" lon="38.9339209999999980"/>
+    <node visible="true" id="-19926689" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360230000000008" lon="38.9339370000000002"/>
+    <node visible="true" id="-19926688" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360210000000006" lon="38.9339540000000000"/>
+    <node visible="true" id="-19926687" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360240000000001" lon="38.9339709999999997"/>
+    <node visible="true" id="-19926686" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360970000000005" lon="38.9339020000000033"/>
+    <node visible="true" id="-19926685" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360789999999998" lon="38.9338979999999992"/>
+    <node visible="true" id="-19926683" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360599999999998" lon="38.9338989999999967"/>
+    <node visible="true" id="-19926682" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360430000000001" lon="38.9339069999999978"/>
+    <node visible="true" id="-19926681" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3347929999999995" lon="38.9344520000000003"/>
+    <node visible="true" id="-19926680" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3347999999999995" lon="38.9347050000000010"/>
+    <node visible="true" id="-19926679" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3350530000000003" lon="38.9346969999999999"/>
+    <node visible="true" id="-19926678" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3350519999999992" lon="38.9346379999999996"/>
+    <node visible="true" id="-19926677" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360319999999994" lon="38.9339870000000019"/>
+    <node visible="true" id="-19926676" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360439999999993" lon="38.9339990000000000"/>
+    <node visible="true" id="-19926675" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360590000000006" lon="38.9340059999999966"/>
+    <node visible="true" id="-19926674" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3347929999999995" lon="38.9342189999999988"/>
+    <node visible="true" id="-19926673" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3360760000000003" lon="38.9340079999999986"/>
+    <way visible="true" id="-19926752" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926748"/>
+        <nd ref="-19926751"/>
+        <nd ref="-19926737"/>
+        <nd ref="-19926741"/>
+        <nd ref="-19926742"/>
+        <nd ref="-19926744"/>
+        <nd ref="-19926758"/>
+        <nd ref="-19926760"/>
+        <nd ref="-19926763"/>
+        <nd ref="-19926764"/>
+        <nd ref="-19926753"/>
+        <nd ref="-19926755"/>
+        <nd ref="-19926756"/>
+        <nd ref="-19926757"/>
+        <nd ref="-19926717"/>
+        <nd ref="-19926718"/>
+        <nd ref="-19926719"/>
+        <nd ref="-19926722"/>
+        <nd ref="-19926711"/>
+        <nd ref="-19926713"/>
+        <nd ref="-19926715"/>
+        <nd ref="-19926748"/>
+        <tag k="width" v="48.6"/>
+        <tag k="angle" v="89.1"/>
+        <tag k="addr:city" v="أسمرة"/>
+        <tag k="building" v="yes"/>
+        <tag k="office" v="yes"/>
+        <tag k="feature_area" v="1636.9"/>
+        <tag k="name" v="Ministry of Education, Maekel Branch وزارة التربية والتعليم، فرع المنطقة المركزية"/>
+        <tag k="name:ar" v="وزارة التربية والتعليم، فرع المنطقة المركزية"/>
+        <tag k="name:en" v="Ministry of Education, Maekel Branch"/>
+        <tag k="length" v="51.5"/>
+    </way>
+    <way visible="true" id="-19926749" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926702"/>
+        <nd ref="-19926703"/>
+        <nd ref="-19926706"/>
+        <nd ref="-19926693"/>
+        <nd ref="-19926694"/>
+        <nd ref="-19926697"/>
+        <nd ref="-19926702"/>
+        <tag k="width" v="43.5"/>
+        <tag k="angle" v="89.7"/>
+        <tag k="addr:city" v="Asmara"/>
+        <tag k="addr:street" v="Harnet Avenue شارع هيمت"/>
+        <tag k="building" v="yes"/>
+        <tag k="office" v="government"/>
+        <tag k="feature_area" v="2028.1"/>
+        <tag k="name" v="Ministry of Education وزارة التربية والتعليم"/>
+        <tag k="name:ar" v="وزارة التربية والتعليم"/>
+        <tag k="name:en" v="Ministry of Education"/>
+        <tag k="length" v="47.8"/>
+    </way>
+    <way visible="true" id="-19926739" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926724"/>
+        <nd ref="-19926726"/>
+        <nd ref="-19926729"/>
+        <nd ref="-19926701"/>
+        <nd ref="-19926724"/>
+        <tag k="width" v="13.2"/>
+        <tag k="angle" v="359.1"/>
+        <tag k="addr:housenumber" v="9"/>
+        <tag k="addr:city" v="Asmara"/>
+        <tag k="addr:street" v="175-4 Street"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="224.4"/>
+        <tag k="name" v="Bristol Pension"/>
+        <tag k="length" v="17.1"/>
+    </way>
+    <way visible="true" id="-19926732" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926735"/>
+        <nd ref="-19926723"/>
+        <nd ref="-19926725"/>
+        <nd ref="-19926727"/>
+        <nd ref="-19926728"/>
+        <nd ref="-19926735"/>
+        <tag k="width" v="9.1"/>
+        <tag k="angle" v="88.2"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="98.2"/>
+        <tag k="cuisine" v="pizza"/>
+        <tag k="length" v="10.8"/>
+    </way>
+    <way visible="true" id="-19926707" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926708"/>
+        <nd ref="-19926709"/>
+        <nd ref="-19926678"/>
+        <nd ref="-19926679"/>
+        <nd ref="-19926680"/>
+        <nd ref="-19926681"/>
+        <nd ref="-19926674"/>
+        <nd ref="-19926708"/>
+        <tag k="width" v="28.3"/>
+        <tag k="angle" v="268.4"/>
+        <tag k="addr:city" v="أسمرة"/>
+        <tag k="amenity" v="cinema"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="1452.0"/>
+        <tag k="name" v="Odeon أوديون"/>
+        <tag k="start_date" v="1937"/>
+        <tag k="name:ar" v="أوديون"/>
+        <tag k="name:en" v="Odeon"/>
+        <tag k="length" v="52.2"/>
+    </way>
+    <way visible="true" id="-19926704" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926705"/>
+        <nd ref="-19926691"/>
+        <nd ref="-19926695"/>
+        <nd ref="-19926698"/>
+        <nd ref="-19926700"/>
+        <nd ref="-19926705"/>
+        <tag k="width" v="17.3"/>
+        <tag k="angle" v="180.4"/>
+        <tag k="building" v="school"/>
+        <tag k="feature_area" v="1014.1"/>
+        <tag k="name" v="Principe Italian School"/>
+        <tag k="length" v="59.1"/>
+    </way>
+    <way visible="true" id="-19926699" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926720"/>
+        <nd ref="-19926721"/>
+        <nd ref="-19926710"/>
+        <nd ref="-19926712"/>
+        <nd ref="-19926714"/>
+        <nd ref="-19926716"/>
+        <nd ref="-19926730"/>
+        <nd ref="-19926731"/>
+        <nd ref="-19926733"/>
+        <nd ref="-19926736"/>
+        <nd ref="-19926759"/>
+        <nd ref="-19926720"/>
+        <tag k="width" v="22.8"/>
+        <tag k="angle" v="358.9"/>
+        <tag k="addr:city" v="أسمرة"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="830.2"/>
+        <tag k="name" v="EriTel إريتل"/>
+        <tag k="name:ar" v="إريتل"/>
+        <tag k="name:en" v="EriTel"/>
+        <tag k="length" v="54.4"/>
+    </way>
+    <way visible="true" id="-19926696" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926759"/>
+        <nd ref="-19926761"/>
+        <nd ref="-19926762"/>
+        <nd ref="-19926765"/>
+        <nd ref="-19926754"/>
+        <nd ref="-19926759"/>
+        <tag k="width" v="23.2"/>
+        <tag k="angle" v="180.0"/>
+        <tag k="addr:city" v="أسمرة"/>
+        <tag k="amenity" v="cinema"/>
+        <tag k="addr:street" v="شارع الحرية"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="956.2"/>
+        <tag k="name" v="ሲነማ ኣስመራ"/>
+        <tag k="name:ar" v="سينما أسمرة"/>
+        <tag k="name:en" v="Cinema Asmara"/>
+        <tag k="note" v="Old opera theatre"/>
+        <tag k="length" v="41.9"/>
+    </way>
+    <way visible="true" id="-19926684" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19926673"/>
+        <nd ref="-19926675"/>
+        <nd ref="-19926676"/>
+        <nd ref="-19926677"/>
+        <nd ref="-19926687"/>
+        <nd ref="-19926688"/>
+        <nd ref="-19926689"/>
+        <nd ref="-19926690"/>
+        <nd ref="-19926682"/>
+        <nd ref="-19926683"/>
+        <nd ref="-19926685"/>
+        <nd ref="-19926686"/>
+        <nd ref="-19926745"/>
+        <nd ref="-19926746"/>
+        <nd ref="-19926747"/>
+        <nd ref="-19926750"/>
+        <nd ref="-19926738"/>
+        <nd ref="-19926740"/>
+        <nd ref="-19926743"/>
+        <nd ref="-19926673"/>
+        <tag k="width" v="11.8"/>
+        <tag k="angle" v="96.2"/>
+        <tag k="addr:city" v="أسمرة"/>
+        <tag k="building" v="yes"/>
+        <tag k="feature_area" v="109.6"/>
+        <tag k="length" v="11.8"/>
+    </way>
+</osm>
