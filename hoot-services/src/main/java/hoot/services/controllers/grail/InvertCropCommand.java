@@ -26,8 +26,6 @@
  */
 package hoot.services.controllers.grail;
 
-import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,8 +33,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import hoot.services.command.CommandResult;
 
 
 /**
@@ -49,41 +45,27 @@ class InvertCropCommand extends GrailCommand {
         super(jobId, params);
 
         logger.info("Params: " + params);
+//        hoot convert -D ="" -D crop.bounds="12.145647,10.732035,12.14712,10.733718" -D crop.invert=true
+        //-D  -D element.criterion.negate=true reference.osm negate.osm
 
         List<String> options = new LinkedList<>();
-        options.add("hootapi.db.writer.overwrite.map=" + params.getApplyTags());
-        options.add("hootapi.db.writer.remap.ids=false");
-        options.add("job.id=" + jobId);
-        options.add("api.db.email=" + params.getUser().getEmail());
+        options.add("convert.ops=hoot::MapCropper;hoot::RemoveElementsVisitor");
+        options.add("remove.elements.visitor.element.criteria=hoot::NodeCriterion");
+        options.add("element.criterion.negate=true");
+        options.add("crop.bounds=" + params.getBounds());
+        options.add("crop.invert=true");
 
         List<String> hootOptions = toHootOptions(options);
-
-        String dbName = HOOTAPI_DB_URL + "/" + params.getOutput();
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("DB_NAME", dbName);
         substitutionMap.put("INPUT", params.getInput1());
+        substitutionMap.put("OUTPUT", params.getInput1());
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${DB_NAME}";
+        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
 
-    @Override
-    public CommandResult execute() {
-        CommandResult commandResult = super.execute();
-
-//        if (params.getWorkDir() != null) {
-//            try {
-//                FileUtils.forceDelete(params.getWorkDir());
-//            }
-//            catch (IOException ioe) {
-//                logger.error("Error deleting folder: {} ", params.getWorkDir().getAbsolutePath(), ioe);
-//            }
-//        }
-
-        return commandResult;
-    }
 }
