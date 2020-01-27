@@ -95,6 +95,7 @@ public:
     uut.setJosmValidatorsInclude(validators);
 
     validators.clear();
+    // exclude overrides include
     validators.append("UntaggedWay");
     uut.setJosmValidatorsExclude(validators);
 

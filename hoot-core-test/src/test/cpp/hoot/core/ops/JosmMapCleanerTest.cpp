@@ -124,7 +124,7 @@ public:
 
   void runCleanNoDetailTagsTest()
   {
-    const QString testName = "runCleanNoDebugTagsTest";
+    const QString testName = "runCleanNoDetailTagsTest";
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "/runCleanTest-in.osm");
     LOG_VARD(map->size());
