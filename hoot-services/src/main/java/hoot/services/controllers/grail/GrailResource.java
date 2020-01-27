@@ -859,8 +859,21 @@ public class GrailResource {
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setApplyTags(true); //overwrite dataset
         // Write the data to the hoot db
-        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
-        workflow.add(importRailsPort);
+//        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
+//        workflow.add(importRailsPort);
+
+        GrailParams connectedWaysParams = new GrailParams(params);
+        // Do an invert crop of this data to get nodes outside bounds
+
+
+        //read node ids
+        //pull connected ways
+        //pull entire ways
+        //remove cropfile
+
+        // merge reference and ways osm files
+
+        // load into db
 
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
@@ -878,12 +891,10 @@ public class GrailResource {
 
 
         // Add connected ways outside bbox
-//        File connectedWayOSMFile = new File(params.getWorkDir(), "unconnected_ways.osm");
-//        if (connectedWayOSMFile.exists()) { connectedWayOSMFile.delete(); }
 
 //        GrailParams connectedWaysParams = new GrailParams(params);
-//        connectedWaysParams.setOutput(connectedWayOSMFile.getAbsolutePath());
-//        connectedWaysParams.setInput1(connectedWayOSMFile.getAbsolutePath());
+//        connectedWaysParams.setOutput(params.getWorkDir().getAbsolutePath());
+//        connectedWaysParams.setInput1(params.getWorkDir().getAbsolutePath());
 //        connectedWaysParams.setApplyTags(false); //overwrite dataset
 
 //        try {
