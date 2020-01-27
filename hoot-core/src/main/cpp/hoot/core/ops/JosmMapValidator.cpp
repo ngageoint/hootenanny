@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/jni/JniConversion.h>
+#include <hoot/core/jni/JniUtils.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -112,7 +113,7 @@ QString JosmMapValidator::_validate(const QStringList& validators, const QString
       JniConversion::toJavaString(_javaEnv, map),
       false,
       true);
-  JniConversion::checkForErrors(_javaEnv, "validateFromMapString");
+  JniUtils::checkForErrors(_javaEnv, "validateFromMapString");
   return JniConversion::fromJavaString(_javaEnv, validatedMapJavaStr);
 }
 
@@ -134,7 +135,7 @@ void JosmMapValidator::_validate(
     JniConversion::toJavaString(_javaEnv, outputMapPath),
     false,
     true);
-  JniConversion::checkForErrors(_javaEnv, "validateFromMapFile");
+  JniUtils::checkForErrors(_javaEnv, "validateFromMapFile");
 }
 
 }

@@ -210,7 +210,6 @@ public class JosmUtils
     {
       stringWriter.getBuffer().setLength(0);
       osmWriter.setWithBody(true);
-      //osmWriter.setChangeset(changeset);
       osmWriter.header();
       primitives.forEach(o -> o.accept(osmWriter));
       osmWriter.footer();

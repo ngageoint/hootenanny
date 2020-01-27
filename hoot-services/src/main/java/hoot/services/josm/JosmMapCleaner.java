@@ -54,7 +54,6 @@ public class JosmMapCleaner
   public JosmMapCleaner(boolean addTags) throws Exception
   {
     this.addTags = addTags;
-    //Logging.trace("addTags: " + this.addTags);
   }
 
   /**
@@ -77,11 +76,14 @@ public class JosmMapCleaner
   {
     return deletedElementIds;
   }
+
   public int getNumDeletedElements()
   {
     return deletedElementIds.size();
   }
+
   public int getNumElementsCleaned() { return numElementsCleaned; }
+
   public int getNumFailedCleaningOperations()
   {
     return failedCleaningOps.size();
@@ -117,7 +119,7 @@ public class JosmMapCleaner
    */
   public int clean(TestError validationError) throws Exception
   {
-    //Logging.info("Cleaning element(s) with JOSM...");
+    Logging.info("Cleaning element(s) with JOSM...");
     long startTime = System.currentTimeMillis();
 
     Collection<? extends OsmPrimitive> elementGroupWithError = validationError.getPrimitives();

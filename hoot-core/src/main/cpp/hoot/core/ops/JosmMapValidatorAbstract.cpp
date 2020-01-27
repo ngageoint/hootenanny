@@ -32,6 +32,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/jni/JniConversion.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/jni/JniUtils.h>
 
 namespace hoot
 {
@@ -87,7 +88,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
           _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
         // logLevel
         JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()));
-  JniConversion::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
+  JniUtils::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
 
   LOG_DEBUG("JOSM implementation initialized.");
@@ -244,7 +245,7 @@ int JosmMapValidatorAbstract::_getNumValidationErrors()
       _josmInterface,
       // Java sig: int getNumValidationErrors()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumValidationErrors", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumValidationErrors");
+  JniUtils::checkForErrors(_javaEnv, "getNumValidationErrors");
   return numValidationErrors;
 }
 
@@ -255,7 +256,7 @@ int JosmMapValidatorAbstract::_getNumFailingValidators()
       _josmInterface,
       // Java sig: int getNumFailingValidators()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailingValidators", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumFailingValidators");
+  JniUtils::checkForErrors(_javaEnv, "getNumFailingValidators");
   return numFailingValidators;
 }
 
@@ -267,7 +268,7 @@ QMap<QString, int> JosmMapValidatorAbstract::_getValidationErrorCountsByType()
       // Java sig: Map<String, Integer> getValidationErrorCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorCountsByType", "()Ljava/util/Map;"));
-  JniConversion::checkForErrors(_javaEnv, "getValidationErrorCountsByType");
+  JniUtils::checkForErrors(_javaEnv, "getValidationErrorCountsByType");
   return JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorCountsByTypeJavaMap);
 }
 

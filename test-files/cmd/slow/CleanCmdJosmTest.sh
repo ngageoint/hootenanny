@@ -6,7 +6,7 @@ mkdir -p $OUTPUT_DIR
 LOG_LEVEL=--warn
 
 inputfile=test-files/ops/JosmMapCleanerTest/runCleanTest-in.osm
-comparefile=test-files/ops/JosmMapCleanerTest/runCleanNoDebugTagsTest-out.osm
+comparefile=test-files/ops/JosmMapCleanerTest/runCleanNoDetailTagsTest-out.osm
 
 outputfile1=$OUTPUT_DIR/out1.osm
 hoot clean $LOG_LEVEL -C Testing.conf -D map.cleaner.transforms="hoot::JosmMapCleaner" -D josm.validators.include="UntaggedWay;UnclosedWays;DuplicatedWayNodes" $inputfile $outputfile1

@@ -32,6 +32,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/jni/JniConversion.h>
+#include <hoot/core/jni/JniUtils.h>
 
 // Qt
 #include <QTemporaryFile>
@@ -133,7 +134,7 @@ QString JosmMapCleaner::_clean(
       JniConversion::toJavaString(_javaEnv, map),
       true,
       addDetailTags);
-  JniConversion::checkForErrors(_javaEnv, "cleanFromMapString");
+  JniUtils::checkForErrors(_javaEnv, "cleanFromMapString");
   return JniConversion::fromJavaString(_javaEnv, cleanedMapResultStr);
 }
 
@@ -155,7 +156,7 @@ void JosmMapCleaner::_clean(
     JniConversion::toJavaString(_javaEnv, outputMapPath),
     true,
     addDetailTags);
-  JniConversion::checkForErrors(_javaEnv, "cleanFromMapFile");
+  JniUtils::checkForErrors(_javaEnv, "cleanFromMapFile");
 }
 
 void JosmMapCleaner::_getStats()
@@ -200,7 +201,7 @@ int JosmMapCleaner::_getNumElementsCleaned()
       _josmInterface,
       // Java sig: int getNumElementsCleaned()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumElementsCleaned", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumElementsCleaned");
+  JniUtils::checkForErrors(_javaEnv, "getNumElementsCleaned");
   return numCleaned;
 }
 
@@ -211,7 +212,7 @@ QSet<ElementId> JosmMapCleaner::_getDeletedElementIds()
       _josmInterface,
       // Java sig: Set<String> getDeletedElementIds()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getDeletedElementIds", "()Ljava/util/Set;"));
-  JniConversion::checkForErrors(_javaEnv, "getDeletedElementIds");
+  JniUtils::checkForErrors(_javaEnv, "getDeletedElementIds");
   return
     _elementIdStringsToElementIds(
       JniConversion::fromJavaStringSet(_javaEnv, deletedElementIdsJavaSet));
@@ -225,8 +226,8 @@ QMap<QString, int> JosmMapCleaner::_getValidationErrorFixCountsByType()
       // Java sig: Map<String, Integer> getValidationErrorFixCountsByType()
       _javaEnv->GetMethodID(
         _josmInterfaceClass, "getValidationErrorFixCountsByType", "()Ljava/util/Map;"));
-  JniConversion::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
-  JniConversion::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
+  JniUtils::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
+  JniUtils::checkForErrors(_javaEnv, "getValidationErrorFixCountsByType");
   return JniConversion::fromJavaStringIntMap(_javaEnv, validationErrorFixCountsByTypeJavaMap);
 }
 
@@ -237,7 +238,7 @@ int JosmMapCleaner::_getNumFailedCleaningOperations()
       _josmInterface,
       // Java sig: int getNumFailedCleaningOperations()
       _javaEnv->GetMethodID(_josmInterfaceClass, "getNumFailedCleaningOperations", "()I"));
-  JniConversion::checkForErrors(_javaEnv, "getNumFailedCleaningOperations");
+  JniUtils::checkForErrors(_javaEnv, "getNumFailedCleaningOperations");
   return numFailedCleaningOperations;
 }
 

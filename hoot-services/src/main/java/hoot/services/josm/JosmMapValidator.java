@@ -258,11 +258,11 @@ public class JosmMapValidator
     List<String> validators, String elementsFileInputPath, String elementsFileOutputPath,
     boolean cleanValidated, boolean addTags) throws Exception
   {
-   clear();
-   this.cleanValidated = cleanValidated;
-   Logging.trace("cleanValidated: " + this.cleanValidated);
-   this.addTags = addTags;
-   Logging.trace("addTags: " + this.addTags);
+    clear();
+    this.cleanValidated = cleanValidated;
+    Logging.trace("cleanValidated: " + this.cleanValidated);
+    this.addTags = addTags;
+    Logging.trace("addTags: " + this.addTags);
 
     DataSet map =
       parseAndValidate(validators, new FileInputStream(new File(elementsFileInputPath)));
@@ -386,7 +386,8 @@ public class JosmMapValidator
 
       // NOTE: Unlike hoot core's logging, JOSM's will still execute any code in the logging
       // statement despite the log level and simply not log the statement. So, you definitely don't
-      // want anything like this making its way into a production environment.
+      // want anything like this making its way into a production environment that wil cause
+      // performance issues.
       //Logging.trace(
       // "input elements: " + JosmUtils.elementsToString(inputDataset.allPrimitives()));
     }
