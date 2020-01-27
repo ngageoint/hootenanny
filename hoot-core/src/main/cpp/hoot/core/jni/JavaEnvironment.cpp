@@ -31,6 +31,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/HootException.h>
 
+// Std
+#include <string.h>
+
 namespace hoot
 {
 
@@ -66,29 +69,29 @@ void JavaEnvironment::_initVm()
   const int numOptions = 5;
   JavaVMOption options[numOptions];
 
-  options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
-//  const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(",");
-//  options[0].optionString = (char*)classPathStr.toStdString().c_str();
-//  LOG_VART(options[0].optionString);
+  const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(";");
+  options[0].optionString = strdup(classPathStr.toStdString().c_str());
+  LOG_VART(options[0].optionString);
 
-  options[1].optionString = (char*)"-Xms2g";
-//  const QString minMemorySizeStr = "-Xms" + ConfigOptions().getJniInitialMemory();
-//  options[1].optionString = (char*)minMemorySizeStr.toStdString().c_str();
-//  LOG_VART(options[1].optionString);
+  const QString minMemorySizeStr = "-Xms" + ConfigOptions().getJniInitialMemory();
+  options[1].optionString = strdup(minMemorySizeStr.toStdString().c_str());
+  LOG_VART(options[1].optionString);
 
-  options[2].optionString = (char*)"-Xmx8g";
-//  const QString maxMemorySizeStr = "-Xms" + ConfigOptions().getJniMaxMemory();
-//  options[2].optionString = (char*)maxMemorySizeStr.toStdString().c_str();
-//  LOG_VART(options[2].optionString);
+  const QString maxMemorySizeStr = "-Xms" + ConfigOptions().getJniMaxMemory();
+  options[2].optionString = strdup(maxMemorySizeStr.toStdString().c_str());
+  LOG_VART(options[2].optionString);
 
-  options[3].optionString = (char*)"-XX:MaxPermSize=2g";
-//  const QString maxPermMemorySizeStr = "-XX:MaxPermSize=" + ConfigOptions().getJniInitialMemory();
-//  options[3].optionString = (char*)maxPermMemorySizeStr.toStdString().c_str();
-//  LOG_VART(options[3].optionString);
+  const QString maxPermMemorySizeStr = "-XX:MaxPermSize=" + ConfigOptions().getJniInitialMemory();
+  options[3].optionString = strdup(maxPermMemorySizeStr.toStdString().c_str());
+  LOG_VART(options[3].optionString);
 
-  options[4].optionString = (char*)"-Djava.awt.headless=true";
+  const QString headlessStr = "-Djava.awt.headless=true";
+  options[4].optionString = strdup(headlessStr.toStdString().c_str());
+  LOG_VART(options[4].optionString);
 
-  //options[5].optionString = (char*)"-verbose:jni";
+//  const QString verboseStr = "-verbose:jni";
+//  options[5].optionString = strdup(verboseStr.toStdString().c_str());
+//  LOG_VART(options[5].optionString);
 
   vm_args.version = JNI_VERSION_1_8;
   vm_args.nOptions = numOptions;

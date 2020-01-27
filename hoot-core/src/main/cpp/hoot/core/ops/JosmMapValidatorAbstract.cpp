@@ -73,6 +73,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
 
   LOG_VART(_josmInterfaceName);
   jstring interfaceJavaStr = JniConversion::toJavaString(_javaEnv, _josmInterfaceName);
+  //LOG_VART(interfaceJavaStr);
   jboolean isCopy;
   const char* interfaceChars = _javaEnv->GetStringUTFChars(interfaceJavaStr, &isCopy);
   LOG_VART(interfaceChars);
