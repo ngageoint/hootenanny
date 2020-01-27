@@ -37,7 +37,7 @@
         "matcher": "hoot::ScriptMatchCreator,Area.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.area": "Area search radius (meters)"
+            "search.radius.area": "Area search radius (m)"
         }
     },
     "Buildings": {
@@ -60,28 +60,32 @@
         "matcher": "hoot::ScriptMatchCreator,Line.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "generic.line.tag.threshold": "Tag similarity for generic lines not conflatable by any specific conflation routine"
+            "generic.line.tag.threshold": "Tag similarity for generic lines not conflatable by any specific conflation routine",
+            "search.radius.generic.line": "Generic line search radius (m)"
         }
     },
     "Generic Points": {
         "matcher": "hoot::ScriptMatchCreator,Point.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "generic.point.tag.threshold": "Tag similarity for generic points not conflatable by any specific conflation routine"
+            "generic.point.tag.threshold": "Tag similarity for generic points not conflatable by any specific conflation routine",
+            "search.radius.generic.point": "Generic point search radius (m)"
         }
     },
     "Generic Point/Polygon": {
         "matcher": "hoot::ScriptMatchCreator,PointPolygon.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "generic.point.polygon.tag.threshold": "Tag similarity for generic pairs of points and polygons not conflatable by any specific conflation routine"
+            "generic.point.polygon.tag.threshold": "Tag similarity for generic pairs of points and polygons not conflatable by any specific conflation routine",
+            "search.radius.generic.point.polygon": "Generic point/polygon search radius (m)"
         }
     },
     "Generic Polygons": {
         "matcher": "hoot::ScriptMatchCreator,Polygon.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "generic.polygon.tag.threshold": "Tag similarity for generic polygons not conflatable by any specific conflation routine"
+            "generic.polygon.tag.threshold": "Tag similarity for generic polygons not conflatable by any specific conflation routine",
+            "search.radius.generic.polygon": "Generic polygon search radius (m)"
         }
     },
     "Pois": {
@@ -95,7 +99,7 @@
         "matcher": "hoot::PoiPolygonMatchCreator",
         "merger": "hoot::PoiPolygonMergerCreator",
         "members": {
-	    "poi.polygon.additional.search.distance": "Additional search radius (meters) to look for matches",
+	    "poi.polygon.additional.search.distance": "Additional search radius (m) to look for matches",
             "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and POI to Polygon matches",
             "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Merge many to one matches",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
@@ -121,21 +125,21 @@
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.railway": "Railway search radius (meters)"
+            "search.radius.railway": "Railway search radius (m)"
         }
     },
     "Rivers": {
         "matcher": "hoot::ScriptMatchCreator,River.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.waterway": "River search radius (meters)"
+            "search.radius.waterway": "River search radius (m)"
         }
     },
     "Roads": {
         "matcher": "hoot::HighwayMatchCreator",
         "merger": "hoot::HighwayMergerCreator",
         "members": {
-            "search.radius.highway": "Highway search radius (meters)",
+            "search.radius.highway": "Highway search radius (m)",
             "highway.merge.tags.only": "Merge road tags only"
         }
     },

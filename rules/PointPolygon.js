@@ -15,6 +15,7 @@ exports.tagThreshold = parseFloat(hoot.get("generic.point.polygon.tag.threshold"
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
 //exports.baseFeatureType = ""; // 
 //exports.geometryType = "";
+//exports.matchCandidateCriterion = "";
 // The baseFeatureType and geometryType vars don't work for Point/Polygon due to it conflating different geometry types.
 // Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
 

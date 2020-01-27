@@ -14,6 +14,7 @@ exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
 exports.tagThreshold = parseFloat(hoot.get("generic.line.tag.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
+exports.matchCandidateCriterion = "hoot::LineCriterion"; // See #3047
 
 var angleHistogramExtractor = new hoot.AngleHistogramExtractor();
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
