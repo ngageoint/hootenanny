@@ -29,6 +29,7 @@ package hoot.services.controllers.grail;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -58,10 +59,6 @@ import org.xml.sax.SAXException;
 import hoot.services.HootProperties;
 import hoot.services.command.CommandResult;
 import hoot.services.command.InternalCommand;
-import hoot.services.geo.BoundingBox;
-import hoot.services.models.db.CurrentNodes;
-import hoot.services.models.osm.Map;
-import hoot.services.utils.DbUtils;
 
 
 /**
@@ -102,22 +99,50 @@ class PullConnectedWaysCommand implements InternalCommand {
     private void getConnectedWays() {
         String url = "";
         try {
-            BoundingBox boundingBox = new BoundingBox(params.getBounds());
+//            BoundingBox boundingBox = new BoundingBox(params.getBounds());
+//
+//            Long mapId = DbUtils.getMapIdByJobId(jobId);
+//            Map theMap = new Map(mapId);
+//            //Get the nodes in the dataset outside the bbox
+//            List<CurrentNodes> nodes = theMap.retrieveNodesOutsideBounds(boundingBox);
 
-            Long mapId = DbUtils.getMapIdByJobId(jobId);
-            Map theMap = new Map(mapId);
-            //Get the nodes in the dataset outside the bbox
-            List<CurrentNodes> nodes = theMap.retrieveNodesOutsideBounds(boundingBox);
+            //Read the crop.osm file for node ids
+            List<Long> nodes = new ArrayList<>();
+            InputStream is = new FileInputStream(new File(params.getOutput()));
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder;
+            try {
+                builder = builderFactory.newDocumentBuilder();
+                Document xmlDocument;
+                xmlDocument = builder.parse(is);
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                String expression = "/osm/node/@id";
+                NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+                int length = nodeList.getLength();
+                for( int i=0; i<length; i++) {
+                    Attr attr = (Attr) nodeList.item(i);
+                    nodes.add(Long.parseLong(attr.getValue()));
+                }
+            } catch (ParserConfigurationException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (SAXException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (XPathExpressionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
 
             //Get the ways for those nodes
             //http://localhost:3000/api/0.6/node/6096481776/ways
             List<Long> wayIds = new ArrayList<>();
-            for (CurrentNodes n : nodes) {
-                url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n.getId() + "/ways");
+            for (Long n : nodes) {
+                url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
                 URLConnection conn = new URL(url).openConnection();
-                InputStream is = conn.getInputStream();
-                DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder;
+                is = conn.getInputStream();
                 try {
                     builder = builderFactory.newDocumentBuilder();
                     Document xmlDocument;
@@ -155,6 +180,8 @@ class PullConnectedWaysCommand implements InternalCommand {
 
             }
 
+            //delete the crop.osm file
+            new File(params.getOutput()).delete();
             //params.setInput1(String.join(" ", inputs));
 //            java.util.Map<String, String> addTags = new HashMap<>();
 //            addTags.put("connectedWays", String.join(" ", inputs));

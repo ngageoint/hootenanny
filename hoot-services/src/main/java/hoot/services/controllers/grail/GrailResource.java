@@ -856,24 +856,32 @@ public class GrailResource {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
-        params.setInput1(referenceOSMFile.getAbsolutePath());
-        params.setApplyTags(true); //overwrite dataset
-        // Write the data to the hoot db
-//        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
-//        workflow.add(importRailsPort);
+//        params.setInput1(referenceOSMFile.getAbsolutePath());
+//        params.setApplyTags(true); //overwrite dataset
 
         GrailParams connectedWaysParams = new GrailParams(params);
+        connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
+        File cropFile = new File(params.getWorkDir(), "crop.osm");
+        connectedWaysParams.setOutput(cropFile.getAbsolutePath());
         // Do an invert crop of this data to get nodes outside bounds
+        workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
 
         //read node ids
         //pull connected ways
         //pull entire ways
         //remove cropfile
+        workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
         // merge reference and ways osm files
+        File mergeFile = new File(params.getWorkDir(), "merge.osm");
+        connectedWaysParams.setOutput(mergeFile.getAbsolutePath());
+        workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
-        // load into db
+        // Write the data to the hoot db
+        connectedWaysParams.setInput1(mergeFile.getAbsolutePath());
+        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, connectedWaysParams, "info", PushToDbCommand.class, this.getClass());
+        workflow.add(importRailsPort);
 
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();

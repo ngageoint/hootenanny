@@ -26,10 +26,14 @@
  */
 package hoot.services.controllers.grail;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,27 +42,34 @@ import org.slf4j.LoggerFactory;
 /**
  * Used for pushing OSM data to the database
  */
-class InvertCropCommand extends GrailCommand {
-    private static final Logger logger = LoggerFactory.getLogger(InvertCropCommand.class);
+class MergeOsmFilesCommand extends GrailCommand {
+    private static final Logger logger = LoggerFactory.getLogger(MergeOsmFilesCommand.class);
 
-    InvertCropCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+    private static final FilenameFilter filter = new FilenameFilter() {
+        @Override
+        public boolean accept(File f, String name) {
+            // We want to find only .osm files
+            return name.endsWith(".osm");
+        }
+    };
+
+    MergeOsmFilesCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
 
         logger.info("Params: " + params);
 
+        //Get list of osm files in work dir
+        File workDir = params.getWorkDir();
+        File[] osmfiles = workDir.listFiles(filter);
+        List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
         List<String> options = new LinkedList<>();
-        options.add("convert.ops=hoot::MapCropper;hoot::RemoveElementsVisitor");
-        options.add("remove.elements.visitor.element.criteria=hoot::NodeCriterion");
-        options.add("element.criterion.negate=true");
-        options.add("crop.bounds=" + params.getBounds());
-        options.add("crop.invert=true");
 
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("INPUT", params.getInput1());
+        substitutionMap.put("INPUT", String.join(" ", filePaths));
         substitutionMap.put("OUTPUT", params.getOutput());
 
         String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
