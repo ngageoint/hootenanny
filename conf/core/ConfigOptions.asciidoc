@@ -1168,38 +1168,6 @@ Absolute file path to dictionaries of English words. The first file found will b
 dictionary of English words and used by some algorithms. If the files are not found then the English
 words will be silently ignored.
 
-=== generic.line.tag.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
-
-=== generic.point.tag.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
-
-=== generic.point.polygon.tag.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
-conflatable by specific Hootenanny conflation routines is considered to have similar tags.
-
-=== generic.polygon.tag.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-Tag similarity threshold (0.0 to 1.0) at or above which an polygon element not conflatable by
-specific Hootenanny conflation routines is considered to have similar tags.
-
 === generic.line.match.threshold
 
 * Data Type: double
@@ -1248,6 +1216,14 @@ See also:
 
 The way subline matcher to use when determining matching sublines with generic line conflation.
 
+=== generic.line.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
+specific Hootenanny conflation routines is considered to have similar tags.
+
 === generic.point.match.threshold
 
 * Data Type: double
@@ -1281,6 +1257,14 @@ The threshold at which a review is called a review for generic points. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.point.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
+specific Hootenanny conflation routines is considered to have similar tags.
 
 === generic.point.polygon.match.threshold
 
@@ -1316,6 +1300,14 @@ See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
 
+=== generic.point.polygon.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
+conflatable by specific Hootenanny conflation routines is considered to have similar tags.
+
 === generic.polygon.match.threshold
 
 * Data Type: double
@@ -1349,6 +1341,14 @@ The threshold at which a review is called a review for generic polygons. See
 See also:
 
  * _Estimate Pairwise Relationships_, <<hootalgo>>
+
+=== generic.polygon.tag.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an polygon element not conflatable by
+specific Hootenanny conflation routines is considered to have similar tags.
 
 === geometry.modifier.rules.file
 
