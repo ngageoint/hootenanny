@@ -37,7 +37,7 @@
         "matcher": "hoot::ScriptMatchCreator,Area.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.area": "Area search radius"
+            "search.radius.area": "Area search radius (meters)"
         }
     },
     "Buildings": {
@@ -95,7 +95,7 @@
         "matcher": "hoot::PoiPolygonMatchCreator",
         "merger": "hoot::PoiPolygonMergerCreator",
         "members": {
-	    "poi.polygon.additional.search.distance": "Additional search radius (m) to look for matches",
+	    "poi.polygon.additional.search.distance": "Additional search radius (meters) to look for matches",
             "poi.polygon.allow.cross.conflation.merging": "Allow merging of Building and POI to Polygon matches",
             "poi.polygon.auto.merge.many.poi.to.one.poly.matches": "Merge many to one matches",
             "poi.polygon.disable.same.source.conflation": "Disable same source conflation",
@@ -121,14 +121,14 @@
         "matcher": "hoot::ScriptMatchCreator,Railway.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.railway": "Railway search radius"
+            "search.radius.railway": "Railway search radius (meters)"
         }
     },
     "Rivers": {
         "matcher": "hoot::ScriptMatchCreator,River.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "search.radius.waterway": "River search radius"
+            "search.radius.waterway": "River search radius (meters)"
         }
     },
     "Roads": {
