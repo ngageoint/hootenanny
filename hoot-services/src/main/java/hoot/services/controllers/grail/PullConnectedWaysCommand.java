@@ -35,7 +35,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -157,9 +156,9 @@ class PullConnectedWaysCommand implements InternalCommand {
             }
 
             //params.setInput1(String.join(" ", inputs));
-            java.util.Map<String, String> addTags = new HashMap<>();
-            addTags.put("connectedWays", String.join(" ", inputs));
-            DbUtils.updateJobsTableTags(addTags, jobId);
+//            java.util.Map<String, String> addTags = new HashMap<>();
+//            addTags.put("connectedWays", String.join(" ", inputs));
+//            DbUtils.updateJobsTableTags(addTags, jobId);
         }
         catch (IOException ex) {
             String msg = "Failure to pull connected ways from the API [" + url + "]" + ex.getMessage();
