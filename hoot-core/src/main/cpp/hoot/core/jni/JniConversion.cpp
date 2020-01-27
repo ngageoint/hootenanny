@@ -50,30 +50,6 @@ QString JniConversion::fromJavaString(JNIEnv* javaEnv, jstring javaStr)
   return result;
 }
 
-void JniConversion::fromJavaByteArray(JNIEnv* jenv, jobject obj, QByteArray& result)
-{
-  jbyteArray javaByteArray = static_cast<jbyteArray>(obj);
-
-  jboolean copy;
-  jbyte* javaRawBytes = jenv->GetByteArrayElements(javaByteArray, &copy);
-
-  jlong len = jenv->GetArrayLength(javaByteArray);
-  result.insert(0, (const char*)javaRawBytes, len);
-
-  // Do this to avoid a memory leak.
-  jenv->ReleaseByteArrayElements(javaByteArray, javaRawBytes, JNI_ABORT);
-}
-
-jbyteArray JniConversion::toJavaByteArray(JNIEnv* jenv, const QByteArray& from)
-{
-  jbyteArray result = jenv->NewByteArray(from.size());
-
-  jsize length = from.size();
-  jenv->SetByteArrayRegion(result, 0, length, (const jbyte*)from.data());
-
-  return result;
-}
-
 jobject JniConversion::toJavaStringList(JNIEnv* javaEnv, const QStringList& cppStrList)
 {
   LOG_TRACE("Converting to java string list...");

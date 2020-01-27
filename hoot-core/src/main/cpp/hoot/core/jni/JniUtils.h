@@ -51,7 +51,6 @@ public:
    *
    * @param javaEnv Java environment invoking the call
    * @param operationName descriptive name of the call for logging purposes
-   * @todo This probably belongs in its own class, like JniUtils.
    */
   static void checkForErrors(JNIEnv* javaEnv, const QString& operationName);
 };
