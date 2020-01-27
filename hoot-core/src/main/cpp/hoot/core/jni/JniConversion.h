@@ -114,15 +114,6 @@ public:
    * @return a Qt map
    */
   static QMap<QString, int> fromJavaStringIntMap(JNIEnv* javaEnv, jobject javaMap);
-
-  /**
-   * Check a JNI call for errors
-   *
-   * @param javaEnv Java environment invoking the call
-   * @param operationName descriptive name of the call for logging purposes
-   * @todo This probably belongs in its own class, like JniUtils.
-   */
-  static void checkForErrors(JNIEnv* javaEnv, const QString& operationName);
 };
 
 }
