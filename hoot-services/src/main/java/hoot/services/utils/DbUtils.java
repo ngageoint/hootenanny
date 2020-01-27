@@ -457,14 +457,6 @@ NOT EXISTS
                 .execute();
     }
 
-    public static long updateJobsTableTags(Map<String, String> tags, String jobId) {
-        return createQuery(jobId).update(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .set(Collections.singletonList(jobStatus.tags),
-                        Collections.singletonList(Expressions.stringTemplate("COALESCE(tags, '') || {0}::hstore", tags)))
-                .execute();
-    }
-
     public static boolean grailEligible(long inputId) {
         Map<String, String> tags = getMapsTableTags(inputId);
         String grailReference = tags.get("grailReference");

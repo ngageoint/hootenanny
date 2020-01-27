@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
 
@@ -138,29 +138,6 @@ public class ZCurveRangerTest {
         in = new LongBox(new long[] { 1, 0 }, new long[] { 2, 7 });
         ranger.setSlop(1);
         r = ranger.decomposeRange(in, 1);
-        Assert.assertEquals("[1 : 6, 9 : 14, 33 : 38, 41 : 46]", r.toString());
-    }
-
-    @Test
-    @Category(UnitTest.class)
-    public void testDecomposeWhollyContainedRange() {
-        ZValue zv = new ZValue(2, 4, new double[] { 0, 1 }, new double[] { 0, 1 });
-        ZCurveRanger ranger = new ZCurveRanger(zv);
-
-        List<Range> r;
-        LongBox in;
-
-        in = new LongBox(new long[] { 2, 0 }, new long[] { 5, 3 });
-        r = ranger.decomposeRange(in, 0, true);
-        Assert.assertEquals("[4 : 27]", r.toString());
-
-        in = new LongBox(new long[] { 1, 0 }, new long[] { 2, 7 });
-        r = ranger.decomposeRange(in, 1, true);
-        Assert.assertEquals("[1 : 14, 33 : 46]", r.toString());
-
-        in = new LongBox(new long[] { 1, 0 }, new long[] { 2, 7 });
-        ranger.setSlop(1);
-        r = ranger.decomposeRange(in, 1, true);
         Assert.assertEquals("[1 : 6, 9 : 14, 33 : 38, 41 : 46]", r.toString());
     }
 
