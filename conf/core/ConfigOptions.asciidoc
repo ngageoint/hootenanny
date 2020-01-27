@@ -1858,7 +1858,7 @@ code using JNI.
 === jni.initial.memory
 
 * Data Type: string
-* Default Value: `256m`
+* Default Value: `2g`
 
 JVM -Xms setting to use with JNI to configure the initial amount of memory available to the JVM.
 
@@ -1877,6 +1877,14 @@ JVM -Xmx setting to use with JNI to configure the maximum amount of memory avail
 This option allows for passing in a job ID for the currently executing command. This is useful when
 trying to track multiple commands across a single job. When the Hootenanny API database is used
 for job output storage, the ID will be stored in the job status table of the associated map.
+
+=== josm.map.validator.java.implementation
+
+* Data Type: string
+* Default Value: `hoot/services/josm/JosmMapValidator`
+
+File path relative to Hootenanny root directory without file extension to Java class to use as the
+JOSM Java map valdidator/cleaner implementation.
 
 === josm.max.elements.for.map.string
 

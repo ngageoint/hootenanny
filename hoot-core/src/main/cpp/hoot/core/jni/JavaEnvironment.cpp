@@ -66,21 +66,30 @@ void JavaEnvironment::_initVm()
   const int numOptions = 5;
   JavaVMOption options[numOptions];
 
-  // Due to classpath loading issues on the Java end, now copying the josm jar to one to be used by
-  // hoot, adding hoot validator classes to it, and then using that jar to call JNI against. This
-  // isn't a great long term solution but good enough for testing now. Also, the fact that I can't
-  // set the string from a config setting is INSANE...will figure that out too (string copying
-  // issues likely).
-
-  // TODO: read this from jni.class.path list
-  // TODO: use jni.initial.memory and jni.max.memory
-
   options[0].optionString = (char*)"-Djava.class.path=/home/vagrant/hoot/tmp/hoot-josm.jar";
-  options[1].optionString = (char*)"-Xms2048m";
-  options[2].optionString = (char*)"-Xmx8192m";
-  options[3].optionString = (char*)"-XX:MaxPermSize=2048m";
+//  const QString classPathStr = "-Djava.class.path=" + ConfigOptions().getJniClassPath().join(",");
+//  options[0].optionString = (char*)classPathStr.toStdString().c_str();
+//  LOG_VART(options[0].optionString);
+
+  options[1].optionString = (char*)"-Xms2g";
+//  const QString minMemorySizeStr = "-Xms" + ConfigOptions().getJniInitialMemory();
+//  options[1].optionString = (char*)minMemorySizeStr.toStdString().c_str();
+//  LOG_VART(options[1].optionString);
+
+  options[2].optionString = (char*)"-Xmx8g";
+//  const QString maxMemorySizeStr = "-Xms" + ConfigOptions().getJniMaxMemory();
+//  options[2].optionString = (char*)maxMemorySizeStr.toStdString().c_str();
+//  LOG_VART(options[2].optionString);
+
+  options[3].optionString = (char*)"-XX:MaxPermSize=2g";
+//  const QString maxPermMemorySizeStr = "-XX:MaxPermSize=" + ConfigOptions().getJniInitialMemory();
+//  options[3].optionString = (char*)maxPermMemorySizeStr.toStdString().c_str();
+//  LOG_VART(options[3].optionString);
+
   options[4].optionString = (char*)"-Djava.awt.headless=true";
-  //options[1].optionString = (char*)"-verbose:jni";
+
+  //options[5].optionString = (char*)"-verbose:jni";
+
   vm_args.version = JNI_VERSION_1_8;
   vm_args.nOptions = numOptions;
   vm_args.options = options;

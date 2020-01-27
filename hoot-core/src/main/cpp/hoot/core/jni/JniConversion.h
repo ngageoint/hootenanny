@@ -70,6 +70,24 @@ public:
   static QString fromJavaString(JNIEnv* javaEnv, jstring javaStr);
 
   /**
+   * TODO
+   *
+   * @param jenv
+   * @param obj
+   * @param result
+   */
+  static void fromJavaByteArray(JNIEnv* jenv, jobject obj, QByteArray& result);
+
+  /**
+   * TODO
+   *
+   * @param jenv
+   * @param from
+   * @return
+   */
+  static jbyteArray toJavaByteArray(JNIEnv* jenv, const QByteArray& from);
+
+  /**
    * Converts a Qt string list to a Java string list
    *
    * @param javaEnv the associated JNI environment

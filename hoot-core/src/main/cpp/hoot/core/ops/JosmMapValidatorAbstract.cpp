@@ -44,10 +44,12 @@ _josmInterfaceInitialized(false),
 _numValidationErrors(0),
 _numFailingValidators(0)
 {
+  _josmInterfaceName = ConfigOptions().getJosmMapValidatorJavaImplementation();
 }
 
 JosmMapValidatorAbstract::~JosmMapValidatorAbstract()
 {
+  // See related note in _initJosmImplementation.
   //if (_javaEnv != 0 && _josmInterface != 0)
   //{
     // We have a memory leak if this doesn't happen.
@@ -69,13 +71,15 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
 {
   LOG_DEBUG("Initializing JOSM implementation...");
 
-  // TODO: change back
-  _josmInterfaceClass =
-    _javaEnv->FindClass(/*_josmInterfaceName.toStdString().c_str()*/
-                        "hoot/services/josm/JosmMapValidator");
-  // Using the same constructor signature for both validation and cleaning works since both Java
-  // implementations use it. If the signatures change, then this logic will need to be moved down
-  // to the child classes.
+  LOG_VART(_josmInterfaceName);
+  jstring interfaceJavaStr = JniConversion::toJavaString(_javaEnv, _josmInterfaceName);
+  jboolean isCopy;
+  const char* interfaceChars = _javaEnv->GetStringUTFChars(interfaceJavaStr, &isCopy);
+  LOG_VART(interfaceChars);
+  _josmInterfaceClass = _javaEnv->FindClass(interfaceChars);
+  LOG_VART(_josmInterfaceClass == 0);
+  _javaEnv->ReleaseStringUTFChars(interfaceJavaStr, interfaceChars);
+
   _josmInterface =
     // Thought it would be best to grab this as a global ref, since its possible it could be garbage
     // collected at any time. Then it can be cleaned up in the destructor. However, that's causing
@@ -88,6 +92,7 @@ void JosmMapValidatorAbstract::_initJosmImplementation()
           _josmInterfaceClass, "<init>", "(Ljava/lang/String;)V"),
         // logLevel
         JniConversion::toJavaString(_javaEnv, Log::getInstance().getLevelAsString()));
+  LOG_VART(_josmInterface == 0);
   JniUtils::checkForErrors(_javaEnv, _josmInterfaceName + " constructor");
   _josmInterfaceInitialized = true;
 

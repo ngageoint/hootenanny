@@ -45,9 +45,6 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, JosmMapValidator)
 JosmMapValidator::JosmMapValidator() :
 JosmMapValidatorAbstract()
 {
-  LOG_DEBUG("test6");
-  // Don't see this changing any time soon, so not making it configurable until necessary
-  _josmInterfaceName = "hoot/services/josm/JosmMapValidator";
 }
 
 OsmMapPtr JosmMapValidator::_getUpdatedMap(OsmMapPtr& inputMap)

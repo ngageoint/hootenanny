@@ -48,8 +48,6 @@ _addDetailTags(false),
 _numElementsCleaned(0),
 _numFailedCleaningOperations(0)
 {
-  // Don't see this changing any time soon, so not making it configurable until necessary
-  _josmInterfaceName = "hoot/services/josm/JosmMapCleaner";
 }
 
 void JosmMapCleaner::setConfiguration(const Settings& conf)
