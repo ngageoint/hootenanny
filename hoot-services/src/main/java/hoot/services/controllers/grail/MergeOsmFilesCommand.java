@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,14 +61,9 @@ class MergeOsmFilesCommand extends GrailCommand {
         super(jobId, params);
         logger.info("Params: " + params);
 
-        List<String> options = new LinkedList<>();
-
-        List<String> hootOptions = toHootOptions(options);
-
         this.caller = caller;
 
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
-        substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("OUTPUT", params.getOutput());
     }
 
@@ -80,9 +74,18 @@ class MergeOsmFilesCommand extends GrailCommand {
         File[] osmfiles = workDir.listFiles(filter);
         List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
-        substitutionMap.put("INPUT", String.join(" ", filePaths));
+        String command = "hoot convert --${DEBUG_LEVEL}";
 
-        String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
+        for (int i=0; i<filePaths.size(); i++) {
+            String input = "INPUT" + i;
+            substitutionMap.put(input, filePaths.get(i));
+            command += " ${" + input + "}";
+        }
+
+        filePaths.stream().forEach(f -> {
+
+        });
+        command += " ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller);
 
