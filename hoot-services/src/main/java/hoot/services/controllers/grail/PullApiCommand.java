@@ -100,6 +100,8 @@ class PullApiCommand implements InternalCommand {
             BoundingBox boundingBox = new BoundingBox(params.getBounds());
             //buffer the reference data bounding box
             //to include neighboring data that may be snapped to
+// Disable this for now as pulling a buffered extent does not guarantee that
+// connected ways will be present in the output
 //            boundingBox.adjust(Double.parseDouble(CHANGESET_DERIVE_BUFFER));
 
             double bboxArea = boundingBox.getArea();

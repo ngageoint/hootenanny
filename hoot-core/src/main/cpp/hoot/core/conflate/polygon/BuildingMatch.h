@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCH_H
 #define BUILDINGMATCH_H
@@ -49,6 +49,8 @@ public:
 
   static std::string className() { return "hoot::BuildingMatch"; }
 
+  static const QString MATCH_NAME;
+
   BuildingMatch();
   BuildingMatch(const ConstMatchThresholdPtr& mt);
   BuildingMatch(const ConstOsmMapPtr& map, const std::shared_ptr<const BuildingRfClassifier>& rf,
@@ -60,7 +62,7 @@ public:
 
   virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const override { return _matchName; }
+  virtual QString getMatchName() const override { return MATCH_NAME; }
 
   virtual double getProbability() const override;
 
@@ -86,7 +88,6 @@ private:
   friend class PoiPolygonMergerCreatorTest;
 
   ElementId _eid1, _eid2;
-  static QString _matchName;
   MatchClassification _p;
   std::shared_ptr<const BuildingRfClassifier> _rf;
   QString _explainText;

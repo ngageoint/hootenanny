@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmMapIndex.h"
@@ -434,7 +434,7 @@ std::shared_ptr<NodeToWayMap> OsmMapIndex::getNodeToWayMap() const
 {
   if (_nodeToWayMap == 0)
   {
-    LOG_TRACE("Initializing node to way map...");
+    LOG_TRACE("Initializing node to way map with map of size: " << _map.size() << "...");
     _nodeToWayMap.reset(new NodeToWayMap(_map));
   }
   return _nodeToWayMap;

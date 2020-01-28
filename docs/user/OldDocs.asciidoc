@@ -43,8 +43,8 @@ POI Conflation_. For more details on the POI to POI conflation algorithm, see <<
 
 There are a number of configurable distance thresholds that can be specified if
 you are comfortable making changes to JavaScript. Please see
-`$HOOT_HOME/rules/PoiGeneric.js` to modify the tables found in the script. Any
-changes made to `PoiGeneric.js` will apply to all jobs launched in the user
+`$HOOT_HOME/rules/Poi.js` to modify the tables found in the script. Any
+changes made to `Poi.js` will apply to all jobs launched in the user
 interface as well as command line.
 
 To enable or change the POI conflation approach please see the following

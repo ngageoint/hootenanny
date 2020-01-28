@@ -1,3 +1,7 @@
+/**
+ * This script conflates non-building area polygons (e.g. parks, parking lots, etc.; area as defined by the schema) using Generic Conflation.
+ */
+
 "use strict";
 
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
@@ -8,6 +12,8 @@ exports.reviewThreshold = parseFloat(hoot.get("generic.polygon.review.threshold"
 exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
+exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
+exports.geometryType = "polygon";
 
 var sublineMatcher = new hoot.MaximalSublineStringMatcher();
 
@@ -28,7 +34,7 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isArea(e) && !isBuilding(e);
+  return isArea(map, e) && !isBuilding(map, e);
 };
 
 /**
@@ -62,13 +68,16 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
+  // Do we need to be looking at tags too, since area is such a broad concept?
+
   var smallerOverlap = new hoot.SmallerOverlapExtractor().extract(map, e1, e2);
   var overlap = new hoot.OverlapExtractor().extract(map, e1, e2);
   var bufferedOverlap = new hoot.BufferedOverlapExtractor().extract(map, e1, e2);
   var edgeDist = new hoot.EdgeDistanceExtractor().extract(map, e1, e2);
   var angleHist = new hoot.AngleHistogramExtractor().extract(map, e1, e2);
 
-  //This was derived against only one dataset, so obviously needs more refinement.
+  // This geometry matching model was derived against only one dataset using Weka, so may need more refinement.
+
   if (bufferedOverlap < 0.57)
   {
     if (overlap >= 0.18 && edgeDist >= 0.99)
@@ -110,7 +119,11 @@ exports.mergePair = function(map, e1, e2)
   // replace instances of e2 with e1 and merge tags
   mergeElements(map, e1, e2);
   e1.setStatusString("conflated");
-
+  if (exports.writeMatchedBy == "true")
+  {
+    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    e1.setTag("hoot:matchedBy", exports.baseFeatureType);
+  }
   return e1;
 };
 

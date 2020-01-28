@@ -36,8 +36,10 @@ translate = {
         var lookup = {};
 
         one2one.forEach( function(item) {
-            if (item[2]) // Make sure it isn't 'undefined'
-        {
+            // Taking this out to keep the 'undefined' values so that they get found then dropped during the transtion
+            // Trying to figure out why they were being dropped.
+            // if (item[2]) // Make sure it isn't 'undefined'
+            // {
                 if (!(item[0] in lookup)) lookup[item[0]] = {};
 
                 if (!(lookup[item[0]][item[1]]))
@@ -54,7 +56,7 @@ translate = {
                             }
                         }
                 }
-            }
+            // }
         } );
 
         return lookup;
@@ -268,6 +270,12 @@ translate = {
                         outList[row[0]] = row[1];
                         // Debug
                         // print('Fuzzy: ' + key);
+                        delete inList[key];
+                    }
+                    else
+                    {
+                        // Debug
+                        // print('UsedUndef:' + key + ' = ' + inList[key]);
                         delete inList[key];
                     }
                 }

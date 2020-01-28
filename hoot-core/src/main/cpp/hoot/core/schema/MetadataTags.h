@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -89,6 +89,7 @@ public:
   inline static const QString HootMatchOrder()          { return "hoot:match:order"; }
   inline static const QString HootMatchP()              { return "hoot:match:p"; }
   inline static const QString HootMatchScore()          { return "hoot:match:score"; }
+  inline static const QString HootMatchedBy()           { return "hoot:matchedBy"; }
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 

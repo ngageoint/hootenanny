@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDB_H
 #define HOOTAPIDB_H
@@ -628,6 +628,9 @@ private:
   std::shared_ptr<QSqlQuery> _deleteJobById;
   std::shared_ptr<QSqlQuery> _getJobStatusResourceId;
   std::shared_ptr<QSqlQuery> _updateIdSequence;
+
+  /** Ignore any insertion conflicts and continue with the rest */
+  bool _ignoreInsertConflicts;
 
   std::shared_ptr<BulkInsert> _nodeBulkInsert;
   long _nodesPerBulkInsert;

@@ -53,7 +53,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Match, PoiPolygonMatch)
 
-QString PoiPolygonMatch::_matchName = "POI to Polygon";
+const QString PoiPolygonMatch::MATCH_NAME = "POI to Polygon";
 std::shared_ptr<ToEnglishTranslator> PoiPolygonMatch::_translator;
 
 long PoiPolygonMatch::matchesProcessed = 0;

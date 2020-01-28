@@ -44,6 +44,9 @@
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/ElementInIdListCriterion.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 
 // standard
 #include <algorithm>

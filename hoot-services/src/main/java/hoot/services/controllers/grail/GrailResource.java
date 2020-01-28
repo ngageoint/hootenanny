@@ -873,7 +873,6 @@ public class GrailResource {
         File mergeFile = new File(params.getWorkDir(), "merge.osm");
         mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
         workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
-
         // Write the data to the hoot db
         GrailParams pushParams = new GrailParams(params);
         pushParams.setInput1(mergeFile.getAbsolutePath());

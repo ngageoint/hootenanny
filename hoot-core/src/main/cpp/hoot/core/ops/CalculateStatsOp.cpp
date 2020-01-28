@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateStatsOp.h"
 
@@ -357,12 +357,15 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _addStat("Percentage of Total Features Unmatched",
              ((double)unconflatedFeatureCount / (double)featureCount) * 100.0);
 
+    QStringList featureTypesToSkip;
+    // Unknown does not get us a usable element criterion, so skip it
+    featureTypesToSkip.append("unknown");
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            conflatableFeatureCounts.begin();
          it != conflatableFeatureCounts.end(); ++it)
     {
-      // Unknown does not get us a usable element criterion, so skip it
-      if (hoot::CreatorDescription::Unknown != it.key())
+      const QString featureType = CreatorDescription::baseFeatureTypeToString(it.key());
+      if (!featureTypesToSkip.contains(featureType, Qt::CaseInsensitive))
       {
         _generateFeatureStats(it.key(), it.value(),
                               CreatorDescription::getFeatureCalcType(it.key()),
@@ -679,6 +682,12 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   LOG_VARD(poisMergedIntoPolys);
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);
+
+  ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(criterion.get());
+  if (mapConsumer != 0)
+  {
+    mapConsumer->setOsmMap(_constMap.get());
+  }
 
   double totalFeatures = 0.0;
   totalFeatures =

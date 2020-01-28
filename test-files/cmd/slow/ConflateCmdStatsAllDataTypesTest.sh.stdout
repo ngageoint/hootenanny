@@ -1,3 +1,9 @@
+21:07:57.398 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
+21:07:57.402 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:07:57.402 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:07:57.408 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:07:57.408 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 168 elements from input in: 00:00.
+21:07:57.408 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
+21:07:57.409 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:07:57.409 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:07:57.416 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:07:57.416 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 168 elements from input in: 00:00.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	17	
@@ -41,13 +47,13 @@ Percentage of Total Features Conflatable	96	90.90909090909091	0
 Untagged Features	0	0	0	
 Total Unconflatable Features	1	2	0	
 Percentage of Total Features Unconflatable	4	9.090909090909092	0	
-Match Creators	8	8	8	
+Match Creators	12	12	12	
 Features Conflatable by: hoot::BuildingMatchCreator	10	8	0	
 Features Conflatable by: hoot::HighwayMatchCreator	4	4	0	
 Polygons Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
 POIs Conflatable by: hoot::PoiPolygonMatchCreator	10	8	0	
 Features Conflatable by: hoot::PoiPolygonMatchCreator	20	16	0	
-Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric.js	11	10		
+Features Conflatable by: hoot::ScriptMatchCreator,Poi.js	11	10		
 Total Conflated Features	0	0	13	
 Percentage of Total Features Conflated	0	0	38.23529411764706	
 Total Features Marked for Review	0	0	11	
@@ -140,13 +146,33 @@ Meters of Power Line Processed by Conflation	0	0	0
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
+Points	11	10	16	
+Conflatable Points	0	0	0	
+Conflated Points	0	0	5	
+Points Marked for Review	0	0	11	
+Point Reviews to be Made	0	0	8	
+Unmatched Points	11	10	11	
+Percentage of Points Conflated	0	0	31.25	
+Percentage of Points Marked for Review	0	0	68.75	
+Percentage of Unmatched Points	100	100	68.75	
+Lines	4	4	5	
+Conflatable Lines	0	0	0	
+Conflated Lines	0	0	4	
+Lines Marked for Review	0	0	0	
+Line Reviews to be Made	0	0	0	
+Unmatched Lines	4	4	1	
+Meters of Line Processed by Conflation	0	0	1193.108944807581	
+Percentage of Lines Conflated	0	0	80	
+Percentage of Lines Marked for Review	0	0	0	
+Percentage of Unmatched Lines	100	100	20	
 Translated Populated Tags	169	143	231	
+Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-13	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.65957446808511	
-Calculate Stats for Input 1 Time (sec)				10.02566695213318
-Calculate Stats for Input 2 Time (sec)				1.499000072479248
-Apply Pre-Conflate Ops Time (sec)				0.008193016052246094
-Apply Post-Conflate Ops Time (sec)				0.003217935562133789
-Calculate Stats for Output Time (sec)				1.516556024551392
+Calculate Stats for Input 1 Time (sec)				8.929630041122437
+Calculate Stats for Input 2 Time (sec)				1.945335865020752
+Apply Pre-Conflate Ops Time (sec)				0.01140999794006348
+Apply Post-Conflate Ops Time (sec)				0.003863096237182617
+Calculate Stats for Output Time (sec)				2.189542055130005
 
-22:40:29.435 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:15 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+21:07:56.830 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:15 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

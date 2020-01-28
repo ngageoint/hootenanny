@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -95,7 +95,7 @@ public:
     fp.close();
 
     // check for consistency with previous versions.
-    HOOT_FILE_EQUALS( _inputPath + "Buildings.arff",
+    HOOT_FILE_EQUALS(_inputPath + "Buildings.arff",
                      _outputPath + "Buildings.arff");
   }
 

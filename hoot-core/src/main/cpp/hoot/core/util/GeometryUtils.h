@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYUTILS_H
@@ -152,6 +152,14 @@ public:
    * @return ElementId of the way created
    */
   static ElementId createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds);
+
+  /**
+   * Returns a string representation for a GEOS geometry type
+   *
+   * @param geometryTypeId the geometry type to convert
+   * @return a string
+   */
+  static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 };
 
 }

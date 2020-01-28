@@ -22,10 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.review;
 
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
+import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -34,17 +37,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -57,7 +64,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.sql.SQLQuery;
 
+import hoot.services.controllers.osm.user.UserResource;
+import hoot.services.models.db.QMaps;
+import hoot.services.models.db.QUsers;
 import hoot.services.models.db.ReviewBookmarks;
+import hoot.services.models.db.Users;
+import hoot.services.utils.DbUtils;
 import hoot.services.utils.PostgresUtils;
 
 
@@ -74,10 +86,10 @@ public class ReviewBookmarkResource {
 
     /**
      * To create or update review bookmark
-     * 
+     *
      * POST hoot-services/job/review/bookmarks/save * { "mapId":1,
      * "relationId":3, "detail": {"k1":"v1","l3":"v3"}, "userId":-1 }
-     * 
+     *
      * @param request
      *            ReviewBookmarkSaveRequest class
      * @return json containing created/updated bookmark id
@@ -125,13 +137,13 @@ public class ReviewBookmarkResource {
 
     /**
      * To retrieve review bookmark
-     * 
+     *
      * GET hoot-services/job/review/bookmarks/get?mapId=1&relationId=2 * {
      * "reviewBookmarks": [ { "createdAt": 1453229299354, "createdBy": -1,
      * "detail": { "type": "hstore", "value": ""k1"=>"v1", "l3"=>"v3"" }, "id":
      * 2, "lastModifiedAt": null, "lastModifiedBy": null, "mapId": 1,
      * "relationId": 2 } ] }
-     * 
+     *
      * @param bookmarkId
      *            bookmark id
      * @param mapId
@@ -215,82 +227,64 @@ public class ReviewBookmarkResource {
 
     /**
      * To retrieve all review bookmarks
-     * 
+     *
      * GET
      * hoot-services/job/review/bookmarks/getall?orderBy=createdAt&asc=false&
      * limit=2&offset=1 * { "reviewBookmarks": [ { "createdAt": 1453229299354,
      * "createdBy": -1, "detail": { "type": "hstore", "value": ""k1"=>"v1", "
      * l3"=>"v3"" }, "id": 2, "lastModifiedAt": null, "lastModifiedBy": null,
      * "mapId": 1, "relationId": 2 } ] }
-     * 
+     *
      * @param orderByCol
      *            order by column [createdAt | createdBy | id | lastModifiedAt |
      *            lastModifiedBy | mapId | relationId]
-     * @param asc
-     *            is ascending [true | false]
      * @param limitSize
      *            Limit count for paging
      * @param offset
      *            offset index for paging
-     * @param filterByCreatedVal
-     *            ?
-     * @param filterByLayerVal
-     *            ?     *
+     * @param creatorFilter
+     *            id of creator user to filter by
+     * @param layerNameFilter
+     *            id of layer to filter by
      * @return json containing list of review bookmarks
      */
     @GET
     @Path("/getall")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReviewBookmarksGetResponse getAllReviewBookmarks(@QueryParam("orderBy") String orderByCol,
-                                                            @QueryParam("asc") String asc,
-                                                            @QueryParam("limit") String limitSize,
-                                                            @QueryParam("offset") String offset,
-                                                            @QueryParam("filterby") String filterBy,
-                                                            @QueryParam("filterbyval") String filterByVal,
-                                                            @QueryParam("createFilterVal") String filterByCreatedVal,
-                                                            @QueryParam("layerFilterVal") String filterByLayerVal) {
-        ReviewBookmarksGetResponse response = new ReviewBookmarksGetResponse();
+    public JSONObject getAllReviewBookmarks(@Context HttpServletRequest request,
+            @QueryParam("limit") String limitSize,
+            @QueryParam("orderBy") @DefaultValue("") String orderByCol,
+            @QueryParam("creatorFilter") String creatorFilter,
+            @QueryParam("layerNameFilter") String layerNameFilter,
+            @QueryParam("offset") @DefaultValue("0") String offset) {
+
+        Users user = Users.fromRequest(request);
+        long userId = user.getId();
+        JSONObject response = new JSONObject();
 
         try {
-            boolean isAsc = true;
-            if (asc != null) {
-                isAsc = (asc.equalsIgnoreCase("true"));
-            }
-
             long limit = -1;
-
-            if (limitSize != null) {
+            if (limitSize != null && !limitSize.equals("")) {
                 limit = Long.parseLong(limitSize);
             }
 
             long offsetCnt = -1;
-            if (offset != null) {
+            if (offset != null && !offset.equals("")) {
                 offsetCnt = Long.parseLong(offset);
             }
 
-            Long[] creatorArray = null;
-            if(filterByCreatedVal != null){
-                String[] cA = filterByCreatedVal.split(",");
-                if(cA.length > 0){
-                    creatorArray = new Long[cA.length];
-                    for(int i = 0; i < creatorArray.length; i++){
-                        creatorArray[i] = Long.valueOf(cA[i]);
-                    }
-                }
+            long creatorId = -1;
+            if(creatorFilter != null && !creatorFilter.equals("")){
+                creatorId = Long.parseLong(creatorFilter);
             }
 
-            Long[] layerArray = null;
-            if(filterByLayerVal != null){
-                String[] lA = filterByLayerVal.split(",");
-                if(lA.length > 0){
-                    layerArray = new Long[lA.length];
-                    for(int i = 0; i < layerArray.length; i++){
-                        layerArray[i] = Long.valueOf(lA[i]);
-                    }
-                }
+            long layerId = -1;
+            if(layerNameFilter != null && !layerNameFilter.equals("")) {
+                layerId = Long.parseLong(layerNameFilter);
             }
 
-            List<ReviewBookmarks> reviewBookmarks = retrieveAll(orderByCol, isAsc, limit, offsetCnt, creatorArray, layerArray);
+            SQLQuery<ReviewBookmarks> getQuery = retrieveAll(userId, orderByCol, limit, offsetCnt, creatorId, layerId);
+            List<ReviewBookmarks> reviewBookmarks = getQuery.fetch();
 
             for (ReviewBookmarks reviewBookmark : reviewBookmarks) {
                 Object oDetail = reviewBookmark.getDetail();
@@ -303,8 +297,16 @@ public class ReviewBookmarkResource {
 
                 reviewBookmark.setDetail(json);
             }
+            response.put("reviewBookmarks", reviewBookmarks);
 
-            response.setReviewBookmarks(reviewBookmarks);
+            SQLQuery filteredBookmarkQuery = retrieveAll(userId, orderByCol, -1, -1, creatorId, layerId);
+            response.put("totalCount", filteredBookmarkQuery.fetchCount());
+
+            List<String> creators = getUsers();
+            response.put("creators", creators);
+
+            List<String> layers = getLayers(userId);
+            response.put("layerNames", layers);
         }
         catch (Exception ex) {
             String msg = "Error getting review bookmark: " + " (" + ex.getMessage() + ")";
@@ -316,9 +318,9 @@ public class ReviewBookmarkResource {
 
     /**
      * To retrieve review bookmarks stat
-     * 
+     *
      * GET hoot-services/job/review/bookmarks/stat
-     * 
+     *
      * @return json stat info
      */
     @GET
@@ -341,10 +343,10 @@ public class ReviewBookmarkResource {
 
     /**
      * To delete review bookmark
-     * 
+     *
      * DELETE hoot-services/job/review/bookmarks/delete { "mapId":397,
      * "relationId":3 }
-     * 
+     *
      * @param bookmarkId
      *            id of the bookmark to delete
      * @return json containing total numbers of deleted
@@ -399,33 +401,45 @@ public class ReviewBookmarkResource {
      *
      * @param orderByCol
      *            - order by column to sort
-     * @param isAsc
-     *            - is order by asc | desc
      * @param limit
      *            - limit for numbers of returned results
      * @param offset
      *            - offset row for paging
      * @return - list of Review tags
      */
-    private static List<ReviewBookmarks> retrieveAll(String orderByCol, boolean isAsc, long limit,
-            long offset, Long[] creatorArray, Long[] layerArray) {
-        SQLQuery<ReviewBookmarks> query = createQuery().query().select(reviewBookmarks).from(reviewBookmarks);
+    private static SQLQuery<ReviewBookmarks> retrieveAll(long userId, String orderByCol, long limit, long offset, long creator, long layer) {
+        SQLQuery<ReviewBookmarks> query = createQuery()
+                .select(reviewBookmarks)
+                .from(reviewBookmarks)
+                .leftJoin(QMaps.maps).on(QMaps.maps.id.eq(reviewBookmarks.mapId));
 
-        if ((creatorArray != null) && (layerArray != null)) {
-            query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray)
-                    .and(reviewBookmarks.mapId.in((Number[]) layerArray)));
+        if ((creator != -1) && (layer != -1)) {
+            query.where(reviewBookmarks.createdBy.eq(creator)
+                    .and(reviewBookmarks.mapId.eq(layer)));
         }
-        else if ((creatorArray != null) && (layerArray == null)) {
-            query.where(reviewBookmarks.createdBy.in((Number[]) creatorArray));
+        else if (creator != -1) {
+            query.where(reviewBookmarks.createdBy.eq(creator));
         }
-        else if ((creatorArray == null) && (layerArray != null)) {
-            query.where(reviewBookmarks.mapId.in((Number[]) layerArray));
+        else if (layer != -1) {
+            query.where(reviewBookmarks.mapId.eq(layer));
         }
         else {
             query.from(reviewBookmarks);
         }
 
-        query.orderBy(getSpecifier(orderByCol, isAsc));
+        // adds on to where clause a check to see if current user is able to see the maps associated with the bookmarks
+        if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
+            query.leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                    .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId));
+
+            BooleanExpression isVisible = maps.userId.eq(userId) // Owned by the current user
+                .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)) // or not in a folder
+                .or(folders.publicCol.isTrue())); // or in a public folder
+
+            query.where(isVisible);
+        }
+
+        query.orderBy(getSpecifier(orderByCol, true));
 
         if (limit > -1) {
             query.limit(limit);
@@ -435,7 +449,48 @@ public class ReviewBookmarkResource {
             query.offset(offset);
         }
 
-        return query.fetch();
+        return query;
+    }
+
+    /**
+     * Retrieves all the creators that have a review bookmark
+     * @return all the creators that have a review bookmark
+     */
+    private static List<String> getUsers() {
+        SQLQuery<String> userNamesQuery = createQuery()
+                .select(QUsers.users.displayName)
+                .from(reviewBookmarks)
+                .leftJoin(QUsers.users).on(QUsers.users.id.eq(reviewBookmarks.createdBy))
+                .groupBy(QUsers.users.displayName)
+                .orderBy(QUsers.users.displayName.asc());
+
+        return userNamesQuery.fetch();
+    }
+
+    /**
+     * Retrieves all the layer names that have a review bookmark and that the specified user can access
+     * @return all the layer names that have a review bookmark
+     */
+    private static List<String> getLayers(long userId) {
+        SQLQuery<String> layerNamesQuery = createQuery()
+                .select(maps.displayName)
+                .from(reviewBookmarks)
+                .leftJoin(maps).on(maps.id.eq(reviewBookmarks.mapId))
+                .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .groupBy(maps.displayName)
+                .orderBy(maps.displayName.asc());
+
+        // Current user should only be able to see another users bookmarks if they created the map or the map is public
+        if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
+            BooleanExpression isVisible = maps.userId.eq(userId) // Owned by the current user
+                .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)) // or not in a folder
+                .or(folders.publicCol.isTrue())); // or in a public folder
+
+            layerNamesQuery.where(isVisible);
+        }
+
+        return layerNamesQuery.fetch();
     }
 
     /**

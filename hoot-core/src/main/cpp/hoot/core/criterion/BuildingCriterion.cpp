@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingCriterion.h"
 
@@ -86,10 +86,10 @@ bool BuildingCriterion::isSatisfied(const ConstElementPtr& e) const
   if ((e->getElementType() != ElementType::Node) &&
       (OsmSchema::getInstance().hasCategory(e->getTags(), "building") == true))
   {
-    // If a map was set, then we assume the parent is to be checked as well.  This is a little
+    // If a map was set, then we assume the parent is to be checked as well. This is a little
     // messy but reflects how the logic worked before moving OsmSchema feature type method logic
-    // out to criterion.  Another option could be to make two separate criteria, one that checks
-    // the parent and one that doesn't.
+    // out to criterion. We may still want to rethink allowing a null map. Another option could be
+    // to make two separate criteria, one that checks the parent and one that doesn't.
     LOG_VART(_map.get());
     if (!_map || isParentABuilding(e->getElementId()) == false)
     {
