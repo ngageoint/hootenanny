@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo;
 
@@ -414,20 +414,20 @@ public class BoundingBox {
      *            values shrink it
      */
     public void adjust(double margin) {
-        if ((minLon - (margin * -1)) >= (LON_LIMIT * -1)) {
-            minLon -= (margin * -1);
+        if ((minLon - margin) >= (LON_LIMIT * -1)) {
+            minLon -= margin;
         }
 
-        if ((minLat - (margin * -1)) >= (LAT_LIMIT * -1)) {
-            minLat -= (margin * -1);
+        if ((minLat - margin) >= (LAT_LIMIT * -1)) {
+            minLat -= margin;
         }
 
-        if ((maxLon + (margin * -1)) <= LON_LIMIT) {
-            maxLon += (margin * -1);
+        if ((maxLon + margin) <= LON_LIMIT) {
+            maxLon += margin;
         }
 
-        if ((maxLat + (margin * -1)) <= LAT_LIMIT) {
-            maxLat += (margin * -1);
+        if ((maxLat + margin) <= LAT_LIMIT) {
+            maxLat += margin;
         }
     }
 

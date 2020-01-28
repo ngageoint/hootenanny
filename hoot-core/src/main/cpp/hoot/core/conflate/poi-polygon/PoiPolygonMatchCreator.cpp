@@ -114,7 +114,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
     LOG_INFO(
       "Discarded " << StringUtils::formatLargeNumber(numMatchesRemoved) <<
       " non-closest  " << StringUtils::formatLargeNumber(startingMatchCount) <<
-      " total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
+      " / total matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
   }
 
   if (conf().getBool(ConfigOptions::getPoiPolygonPrintMatchDistanceTruthKey()))
@@ -170,6 +170,8 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnly(
   std::vector<ConstMatchPtr>& matches, const ConstOsmMapPtr& map)
 {
+  LOG_INFO("Discarding non-closest matches...");
+
   const bool debug = false; // leave this false by default
   const ElementId testElementId1 = ElementId(ElementType::Node, -1893344);
   const ElementId testElementId2 = ElementId(ElementType::Way, -276936);
@@ -448,17 +450,21 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
         }
       }
     }
-    LOG_TRACE("Keeping closest match: " << closestMatch << "...");
 
-    for (QList<ConstMatchPtr>::const_iterator matchItr = matchesWithSharedId.begin();
-         matchItr != matchesWithSharedId.end(); ++matchItr)
+    if (closestMatch)
     {
-      ConstMatchPtr match = *matchItr;
-      if (/*closestMatch &&*/ match != closestMatch)
+      LOG_TRACE("Keeping closest match: " << closestMatch << "...");
+      for (QList<ConstMatchPtr>::const_iterator matchItr = matchesWithSharedId.begin();
+           matchItr != matchesWithSharedId.end(); ++matchItr)
       {
-        matchesToRemove.append(match);
+        ConstMatchPtr match = *matchItr;
+        if (match != closestMatch)
+        {
+          matchesToRemove.append(match);
+        }
       }
     }
+
     LOG_VART(matchesToRemove.size());
   }
   LOG_DEBUG("Removing " <<  StringUtils::formatLargeNumber(matchesToRemove.size()) << " matches.");
@@ -486,7 +492,7 @@ int PoiPolygonMatchCreator::_retainClosestDistanceMatchesOnlyByType(
     matchTypeStr = "POI";
   }
   const int startingMatchesSize = matches.size();
-  LOG_INFO(
+  LOG_DEBUG(
     "Discarding non-closest " << matchTypeStr << " matches (out of " <<
     StringUtils::formatLargeNumber(matches.size()) << " remaining)...");
 

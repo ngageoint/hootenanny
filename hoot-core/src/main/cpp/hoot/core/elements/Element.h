@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_H
 #define ELEMENT_H
@@ -124,6 +124,7 @@ public:
   void removeTag(QString k) { _getElementData().getTags().remove(k); }
   void setTags(const Tags& tags) { _getElementData().setTags(tags); }
   void setTag(QString k, QString v) { _getElementData().setTag(k, v); }
+  void addTags(const Tags& tags) { _getElementData().addTags(tags); }
 
   bool getVisible() const { return _getElementData().getVisible(); }
   void setVisible(bool visible) { _getElementData().setVisible(visible); }

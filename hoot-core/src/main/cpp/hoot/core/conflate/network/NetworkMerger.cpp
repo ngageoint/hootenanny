@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMerger.h"
 
@@ -132,6 +132,12 @@ void NetworkMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId
 
     // set the status on all keeper ways to conflated.
     merger->setKeeperStatus(Status::Conflated);
+    ConfigOptions conf;
+    if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())
+    {
+      Tags tagsToAdd(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
+      merger->addKeeperTags(tagsToAdd);
+    }
 
     LOG_DEBUG("Parsing scrap nodes...");
     // go through all the nodes in the scrap

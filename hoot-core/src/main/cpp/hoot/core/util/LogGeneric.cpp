@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "Log.h"
@@ -111,18 +111,32 @@ bool Log::notFiltered(const string& prettyFunction)
     return true;
   }
 
-  // split arguments from function call name
-  QStringList nameParts = QString::fromStdString(prettyFunction).split("(");
-  if (nameParts.length() < 1) return true;
+  const QString prettyFunctionQt = QString::fromStdString(prettyFunction);
+  if (!prettyFunctionQt.endsWith(".js"))    // call from C++
+  {
+    // split arguments from function call name
+    QStringList nameParts = prettyFunctionQt.split("(");
+    if (nameParts.length() < 1) return true;
 
-  // split class name from function name
-  nameParts = nameParts[0].split("::");
-  int listLen = nameParts.length();
+    // split class name from function name
+    nameParts = nameParts[0].split("::");
+    const int listLen = nameParts.length();
 
-  // Is there any way we can throw here if the class name isn't recognized, so we don't wonder
-  // why a typo caused us not to get the logging we thought we were going to get?
+    // Is there any way we can throw here if the class name isn't recognized, so we don't wonder
+    // why a typo caused us not to get the logging we thought we were going to get?
 
-  return (listLen > 1 && _classFilter.contains(nameParts[listLen - 2]));
+    return (listLen > 1 && _classFilter.contains(nameParts[listLen - 2]));
+  }
+  else  // call from a JS generic conflate script
+  {
+    // split arguments from script path
+    const QStringList nameParts = prettyFunctionQt.split("/");
+    if (nameParts.length() < 1) return true;
+
+    const QString scriptName = nameParts[nameParts.size() - 1];
+
+    return _classFilter.contains(scriptName);
+  }
 }
 
 void Log::setLevel(WarningLevel l)

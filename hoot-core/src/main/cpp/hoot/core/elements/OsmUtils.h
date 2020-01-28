@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSM_UTILS_H
@@ -36,6 +36,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 
 // GEOS
+#include <geos/geom/Geometry.h>
 #include <geos/geom/Coordinate.h>
 
 // Qt
@@ -603,6 +604,77 @@ public:
    * @return true if all the hoot:id tag values match the owning element's ID; false otherwise
    */
   static bool allIdTagsMatchIds(const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the distance between two elements
+   *
+   * @param element1 the first element to measure distance from
+   * @param element2 the second element to measure distance from
+   * @param map map owning the input elements
+   * @return the distance between the two elements or -1.0 if the distance could not be calculated
+   */
+  static double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                            ConstOsmMapPtr map);
+
+  /**
+   * Calculates the area of an element
+   *
+   * @param element the feature to calculate the area of
+   * @param map map owning the input element
+   * @return the area of the feature or -1.0 if the area could not be calculated
+   */
+  static double getArea(const ConstElementPtr& element, ConstOsmMapPtr map);
+
+  /**
+   * Determines if an element contains another element geographically
+   *
+   * @param containingElement the element to check for containing containedElement
+   * @param containedElement the element to check if contained by containingElement
+   * @param map map owning the input elements
+   * @return true if containingElement contains the containedElement geographicaly; false otherwise
+   * or if the containment could not be calculated
+   */
+  static bool elementContains(const ConstElementPtr& containingElement,
+                              const ConstElementPtr& containedElement, ConstOsmMapPtr map);
+
+  /**
+   * Determines if an element intersects another element; backed by a cache
+   *
+   * @param element1 the first element to examine
+   * @param element2 the second element to examine
+   * @param map map owning the input elements
+   * @return true if the two elements intersect; false otherwise or if the intersection could not
+   * be calculated
+   */
+  static bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2,
+                                ConstOsmMapPtr map);
+
+  /**
+   * Determines if an element has a given criterion; backed by a cache
+   *
+   * @param element the element to examine
+   * @param criterionClassName class name of the ElementCriterion to determine membership of
+   * @return true if the element has the criterion; false otherwise
+   * @throws if the criterion class name is invalid
+   */
+  static bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
+
+  /**
+   * Determines if one element a child of another; e.g. way node or relation memeber
+   *
+   * @param parent the parent element
+   * @param memberId the element ID of the child
+   * @return true if parent has the element with memberId as a child; false otherwise
+   */
+  static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
+
+private:
+
+  static int _badGeomCount;
+
+  static std::shared_ptr<geos::geom::Geometry> _getGeometry(
+    const ConstElementPtr& element, ConstOsmMapPtr map);
+  static ElementCriterionPtr _getCrit(const QString& criterionClassName);
 };
 
 }

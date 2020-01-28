@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LogJs.h"
 
@@ -109,9 +109,11 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
     if (stack->GetFrameCount() >= 1)
     {
       lineNumber = frame->GetLineNumber();
-      script = toString(frame->GetScriptName());
+      script = toString(frame->GetScriptName()).replace("\"", "");
       functionName = toString(frame->GetFunctionName());
     }
+    LOG_VARD(script);
+    LOG_VARD(functionName);
 
     std::stringstream rMessage;
     for (int i = 0; i < args.Length(); i++)
@@ -124,18 +126,28 @@ void LogJs::log(const FunctionCallbackInfo<Value>& args, Log::WarningLevel level
     }
 
     QString message = QString::fromUtf8(rMessage.str().data());
+    bool logMessage = true;
 
-    int logLimit = ConfigOptions().getLogWarnMessageLimit();
-    int messageCount = getLogCount(message);
-
-    if (messageCount == logLimit)
+    if (Log::getInstance().getLevel() == Log::Warn)
     {
-      message = QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
+      const int logLimit = ConfigOptions().getLogWarnMessageLimit();
+      const int messageCount = getLogCount(message);
+
+      if (messageCount == logLimit)
+      {
+        message =
+          QString("Received %1 of the same message. Silencing: ").arg(messageCount) + message;
+      }
+
+      if (messageCount >= logLimit)
+      {
+        logMessage = false;
+      }
     }
 
-    if (messageCount <= logLimit)
+    if (logMessage)
     {
-      Log::getInstance().log(level, message, script, functionName, lineNumber);
+      Log::getInstance().log(level, message, script, script, lineNumber);
     }
   }
 

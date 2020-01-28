@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -87,7 +87,7 @@ public:
     // have to do this or getInstance will re-register the default match creators.
     MatchFactory& factory = MatchFactory::getInstance();
     factory.reset();
-    factory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+    factory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
     std::shared_ptr<MatchCreator> matchCreator = factory.getCreators()[0];
 

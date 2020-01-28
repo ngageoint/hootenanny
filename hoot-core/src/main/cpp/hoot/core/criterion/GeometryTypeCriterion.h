@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEOMETRY_TYPE_CRITERION_H
 #define GEOMETRY_TYPE_CRITERION_H
@@ -47,7 +47,8 @@ public:
   {
     Point = 0,
     Line,
-    Polygon
+    Polygon,
+    Unknown
   };
 
   static std::string className() { return "hoot::GeometryTypeCriterion"; }
@@ -71,6 +72,14 @@ public:
    * @return a geometry type string
    */
   static QString typeToString(const GeometryType& geometryType);
+
+  /**
+   * Converts a string representation of a geometry to a geometry type
+   *
+   * @param geometryTypeStr string to convert
+   * @return a geometry type
+   */
+  static GeometryType typeFromString(const QString& geometryTypeStr);
 };
 
 }

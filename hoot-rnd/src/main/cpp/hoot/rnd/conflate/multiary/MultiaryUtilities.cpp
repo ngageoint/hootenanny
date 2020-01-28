@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryUtilities.h"
 
@@ -48,7 +48,7 @@ void MultiaryUtilities::conflate(OsmMapPtr map)
 {
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
   MergerFactory::getInstance().reset();
   std::shared_ptr<MergerFactory> mergerFactory(new MergerFactory());
@@ -164,7 +164,7 @@ QList<hoot::MultiarySimpleMatch> MultiaryUtilities::findMatches(QByteArray check
 
   MatchFactory& matchFactory = MatchFactory::getInstance();
   matchFactory.reset();
-  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoiGeneric.js");
+  matchFactory.registerCreator("hoot::ScriptMatchCreator,MultiaryPoi.js");
 
   for (int i = 0; i < ids.size(); i++)
   {

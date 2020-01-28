@@ -20,7 +20,7 @@
  */
 function testAdd(v1, v2)
 {
-    return v1 + v2;
+  return v1 + v2;
 }
 
 /**
@@ -28,7 +28,7 @@ function testAdd(v1, v2)
  */
 function createUuid()
 {
-    return hoot.UuidHelper.createUuid();
+  return hoot.UuidHelper.createUuid();
 }
 
 /**
@@ -36,7 +36,7 @@ function createUuid()
  */
 function getHootConfig(e)
 {
-    return hoot.get(e);
+  return hoot.get(e);
 }
 
 /**
@@ -150,6 +150,16 @@ function getTagDistance(commonKvp, t1, t2) {
 }
 
 /**
+ * TODO
+ */
+function getTypeScore(map, e1, e2)
+{
+  //var differ = new hoot.ComparatorTagDifferencer();
+  //return differ.diff(map, e1, e2);
+  return hoot.OsmSchema.scoreTypes(e1.getTags(), e2.getTags());
+}
+
+/**
  * Wrapper for logWarn for backward compatibility.
  */
 function logWarn(e)
@@ -237,16 +247,16 @@ function calculatePercentOverlap(map, e1, e2)
  */
 function mergeElements(map, e1, e2) 
 {
-    // merge tags from e2 into e1 using default tag merging
-    var newTags = mergeTags(e1, e2);
-    e1.setTags(newTags);
+  // merge tags from e2 into e1 using default tag merging
+  var newTags = mergeTags(e1, e2);
+  e1.setTags(newTags);
 
-    new hoot.ReplaceElementOp(e2, e1).apply(map);
-    // remove the tags on e2 just in case we can't delete it.
-    e2.setTags(new hoot.Tags());
-    // try to delete e2. This may silently fail if it is still part of another
-    // element. Failure in this case isn't necessarily bad.
-    new hoot.RecursiveElementRemover(e2).apply(map);
+  new hoot.ReplaceElementOp(e2, e1).apply(map);
+  // remove the tags on e2 just in case we can't delete it.
+  e2.setTags(new hoot.Tags());
+  // try to delete e2. This may silently fail if it is still part of another
+  // element. Failure in this case isn't necessarily bad.
+  new hoot.RecursiveElementRemover(e2).apply(map);
 }
 
 /**
@@ -266,9 +276,9 @@ function removeElement(map, e)
  * Snaps the ways in the second input to the first input. The replaced array will
  * be updated appropriately to reflect the elements that were replaced.
  */
-function snapWays(sublineMatcher, map, pairs, replaced)
+function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 {
-  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced);
+  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
 }
 
 /**
@@ -291,6 +301,15 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
       .applyAndGetResult(map);
 }
 
+/**
+ * Returns true if the feature is conflatable by any geometry non-generic conflation algorithm (so conflatable by everything besides: 
+ * Point.js, Line.js, Polygon.js, or PointPolygon.js).
+ */
+function isSpecificallyConflatable(map, e)
+{
+  return hoot.OsmSchema.isSpecificallyConflatable(map, e);
+}
+
 // TODO: All of these is* methods can go away if #3047 is completed.
 
 /**
@@ -302,17 +321,38 @@ function calculateSearchRadiusUsingRubberSheeting(map, rubberSheetRef, rubberShe
  * See the OSM wiki for more information:
  * http://wiki.openstreetmap.org/wiki/Key:area
  */
-function isArea(e)
+function isArea(map, e)
 {
-  return hoot.OsmSchema.isArea(e);
+  return hoot.OsmSchema.isArea(map, e);
+}
+
+function isHighway(e)
+{
+  return hoot.OsmSchema.isHighway(e);
+}
+
+/**
+ * Returns true if the specified element is a polygon element.
+ */
+function isPolygon(e)
+{
+  return hoot.OsmSchema.isPolygon(e);
+}
+
+/**
+ * Returns true if the specified element is a point element.
+ */
+function isPoint(map, e)
+{
+  return hoot.OsmSchema.isPoint(map, e);
 }
 
 /**
  * Returns true if the specified element is a building.
  */
-function isBuilding(e)
+function isBuilding(map, e)
 {
-  return hoot.OsmSchema.isBuilding(e);
+  return hoot.OsmSchema.isBuilding(map, e);
 }
 
 /**

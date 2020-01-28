@@ -1,9 +1,9 @@
 ****Quick Stats****
-19:36:22.093 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...test-files/conflate/unified/AllDataTypesA.osm...
-19:36:22.155 INFO   .../hoot/core/io/OsmXmlReader.cpp( 411) 	Reporting missing elements...
-19:36:22.157 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 131 elements from input in: 00:00.
-19:36:22.272 INFO   .../core/ops/CalculateStatsOp.cpp( 196) Calculating map statistics...
-19:36:22.277 INFO   ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/cmd/slow/StatsFileTest/StatsAllDataTypesA.txt
+21:08:47.293 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...test-files/conflate/unified/AllDataTypesA.osm...
+21:08:47.302 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:08:47.302 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 131 elements from input in: 00:00.
+21:08:47.335 INFO   .../core/ops/CalculateStatsOp.cpp( 196) Calculating map statistics...
+21:08:47.336 INFO   ...oot/core/io/MapStatsWriter.cpp( 118) Writing stats to file: test-output/cmd/slow/StatsFileTest/StatsAllDataTypesA.txt
 Nodes	117
 Ways	14
 Relations	0
@@ -14,30 +14,30 @@ Maximum Way ID	-1559687
 Minimum Relation ID	9.223372036854776e+18
 Maximum Relation ID	-9.223372036854776e+18
 ****JSON Stats****
-19:36:24.407 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...test-files/conflate/unified/AllDataTypesA.osm...
-19:36:24.471 INFO   .../hoot/core/io/OsmXmlReader.cpp( 411) 	Reporting missing elements...
-19:36:24.473 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 131 elements from input in: 00:00.
-19:36:24.605 INFO   .../core/ops/CalculateStatsOp.cpp( 196) Calculating map statistics...
-19:36:45.117 INFO   .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
-19:36:45.122 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-19:36:45.128 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-19:36:45.131 INFO   ...grant/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
-19:36:45.133 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-19:36:45.135 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-19:36:45.137 INFO   ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: -1"
-19:36:46.347 INFO   ...JavaScriptSchemaTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js...
-19:36:49.988 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...test-files/conflate/unified/AllDataTypesB.osm...
-19:36:49.994 INFO   .../hoot/core/io/OsmXmlReader.cpp( 783) Read 0 elements from input.        19:36:49.994 INFO   .../hoot/core/io/OsmXmlReader.cpp( 783) Read 0 elements from input.        19:36:49.994 INFO   .../hoot/core/io/OsmXmlReader.cpp( 783) Read 0 elements from input.        19:36:49.994 INFO   .../hoot/core/io/OsmXmlReader.cpp( 783) Read 0 elements from input.        19:36:50.002 INFO   .../hoot/core/io/OsmXmlReader.cpp( 411) 	Reporting missing elements...
-19:36:50.002 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 128 elements from input in: 00:00.
-19:36:50.107 INFO   .../core/ops/CalculateStatsOp.cpp( 196) Calculating map statistics...
-19:36:50.128 INFO   .../hoot/rules/LinearWaterway.js"(  32) "Calculating search radius for waterway conflation..."
-19:36:50.130 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-19:36:50.132 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-19:36:50.133 INFO   ...grant/hoot/rules/PowerLine.js"(  36) "Calculating search radius for power line conflation..."
-19:36:50.135 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
-19:36:50.136 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
-19:36:50.137 INFO   ...vagrant/hoot/rules/Railway.js"(  39) "Using specified search radius for railway conflation: -1"
-19:36:51.125 INFO   ...JavaScriptSchemaTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/TDSv61.js...
+21:08:47.630 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...test-files/conflate/unified/AllDataTypesA.osm...
+21:08:47.637 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:08:47.637 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 131 elements from input in: 00:00.
+21:08:47.669 INFO   .../core/ops/CalculateStatsOp.cpp( 196) Calculating map statistics...
+21:08:54.341 INFO   /ramdisk/hoot/rules/PowerLine.js(  36) "Calculating search radius for power line conflation..."
+21:08:54.342 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:08:54.343 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:08:54.344 INFO   /ramdisk/hoot/rules/Railway.js(  40) "Using specified search radius for railway conflation: -1"
+21:08:54.344 INFO   /ramdisk/hoot/rules/River.js(  32) "Calculating search radius for waterway conflation..."
+21:08:54.345 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:08:54.346 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:08:54.973 INFO   ...JavaScriptSchemaTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js...
+21:08:56.293 INFO   ...ore/io/OsmMapReaderFactory.cpp( 169) Loading map from ...test-files/conflate/unified/AllDataTypesB.osm...
+21:08:56.295 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:56.295 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:56.295 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:56.295 INFO   .../hoot/core/io/OsmXmlReader.cpp( 861) Read 0 elements from input.        21:08:56.297 INFO   .../hoot/core/io/OsmXmlReader.cpp( 464) 	Reporting missing elements...
+21:08:56.297 INFO   ...ore/io/OsmMapReaderFactory.cpp( 201) Read 128 elements from input in: 00:00.
+21:08:56.327 INFO   .../core/ops/CalculateStatsOp.cpp( 196) Calculating map statistics...
+21:08:56.333 INFO   /ramdisk/hoot/rules/PowerLine.js(  36) "Calculating search radius for power line conflation..."
+21:08:56.334 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:08:56.335 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:08:56.335 INFO   /ramdisk/hoot/rules/Railway.js(  40) "Using specified search radius for railway conflation: -1"
+21:08:56.336 INFO   /ramdisk/hoot/rules/River.js(  32) "Calculating search radius for waterway conflation..."
+21:08:56.337 INFO   ...ops/SearchRadiusCalculator.cpp(  76) Removing invalid and previously conflated data for search radius calculation...
+21:08:56.337 INFO   ...ops/SearchRadiusCalculator.cpp( 135) Unable to automatically calculate search radius.  All input features have been filtered out. Using default search radius value = 15
+21:08:56.839 INFO   ...JavaScriptSchemaTranslator.cpp( 239) Loading translation script: /ramdisk/hoot/translations/TDSv61.js...
 {
     "Nodes":
     [
@@ -331,8 +331,8 @@ Maximum Relation ID	-9.223372036854776e+18
     ],
     "Match Creators":
     [
-        "8",
-        "8"
+        "12",
+        "12"
     ],
     "Features Conflatable by: hoot::BuildingMatchCreator":
     [
@@ -344,7 +344,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "4",
         "4"
     ],
-    "Features Conflatable by: hoot::ScriptMatchCreator,PoiGeneric":
+    "Features Conflatable by: hoot::ScriptMatchCreator,Poi":
     {
         "js":
         [
@@ -826,6 +826,101 @@ Maximum Relation ID	-9.223372036854776e+18
     [
         "0",
         "0"
+    ],
+    "Points":
+    [
+        "11",
+        "10"
+    ],
+    "Conflatable Points":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Points":
+    [
+        "0",
+        "0"
+    ],
+    "Points Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Point Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Points":
+    [
+        "11",
+        "10"
+    ],
+    "Percentage of Points Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Points Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Points":
+    [
+        "100",
+        "100"
+    ],
+    "Lines":
+    [
+        "4",
+        "4"
+    ],
+    "Conflatable Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Conflated Lines":
+    [
+        "0",
+        "0"
+    ],
+    "Lines Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Line Reviews to be Made":
+    [
+        "0",
+        "0"
+    ],
+    "Unmatched Lines":
+    [
+        "4",
+        "4"
+    ],
+    "Meters of Line Processed by Conflation":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Lines Conflated":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Lines Marked for Review":
+    [
+        "0",
+        "0"
+    ],
+    "Percentage of Unmatched Lines":
+    [
+        "100",
+        "100"
     ],
     "Longest Tag":
     [

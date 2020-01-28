@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiCriterion.h"
 
@@ -39,7 +39,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, PoiCriterion)
 
 bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  LOG_VART(e);
+  LOG_VART(e->getElementId());
 
   bool result = false;
 

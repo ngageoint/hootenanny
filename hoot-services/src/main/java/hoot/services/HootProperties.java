@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
@@ -56,6 +56,8 @@ public final class HootProperties {
     public static final String HORIZONTAL_CONFLATION_PATH;
     public static final String NETWORK_CONFLATION_PATH;
     public static final String IMPORT_OPTIONS;
+    public static final String CHANGESET_OPTIONS;
+    public static final String CHANGESET_OPTION_KEYS;
     public static final String CONFIG_OPTIONS;
     public static final String DOC_NAME;
     public static final String RPT_STORE_PATH;
@@ -211,6 +213,8 @@ public final class HootProperties {
         HORIZONTAL_CONFLATION_PATH = getProperty("horizontalConf");
         NETWORK_CONFLATION_PATH = getProperty("networkConf");
         IMPORT_OPTIONS = getProperty("importOptions");
+        CHANGESET_OPTION_KEYS = getProperty("changesetOptionKeys");
+        CHANGESET_OPTIONS = getProperty("changesetOptions");
         CONFIG_OPTIONS = getProperty("configJsonPath");
         DOC_NAME = getProperty("documentName");
         JS_HEADER_SCRIPT_PATH = getProperty("dummyjsHeaderScriptPath");

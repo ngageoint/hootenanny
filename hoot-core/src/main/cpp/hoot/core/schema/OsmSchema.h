@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef OSMSCHEMA_H
@@ -280,7 +280,19 @@ public:
 
   std::vector<SchemaVertex> getAllTags();
 
+  /**
+   * Retrieves all possible tag keys from the schema
+   *
+   * @return a collection of key strings
+   */
   QSet<QString> getAllTagKeys();
+
+  /**
+   * Retrieves all possible tag keys from the schema that are associated with a type
+   *
+   * @return a collection of key strings
+   */
+  QSet<QString> getAllTypeKeys();
 
   bool hasTagKey(const QString& key);
 
@@ -406,10 +418,27 @@ public:
   double score(const QString& kvp, const Tags& tags);
 
   /**
+   * Scores the type similarity between two sets of tags
+   *
+   * @param tags1 the first set of tags to score
+   * @param tags2 the second set of tags to score
+   * @return a similarity score from 0.0 to 1.0
+   */
+  double scoreTypes(const Tags& tags1, const Tags& tags2);
+
+  /**
    * @brief scoreOneWay Returns a oneway score. E.g. highway=primary is similar to highway=road,
    *  but a highway=road isn't necessarily similar to a highway=primary (so it gets a low score).
    */
   double scoreOneWay(const QString& kvp1, const QString& kvp2);
+
+  /**
+   * Determines if a tag key corresponds to a type in the schema
+   *
+   * @param key tag key to examine
+   * @return true if the key corresponds to a type; false otherwise
+   */
+  bool isTypeKey(const QString& key);
 
   /**
    * Sets the cost when traversing up the tree to a parent node. This is useful for strict score
@@ -473,6 +502,7 @@ private:
   QHash<QString, bool> _metadataKey;
 
   QSet<QString> _allTagKeysCache;
+  QSet<QString> _allTypeKeysCache;
 };
 
 }

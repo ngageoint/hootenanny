@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PLUGINCONTEXT_H
 #define PLUGINCONTEXT_H
@@ -57,7 +57,8 @@ public:
    * @param name - Name of the function
    * @param args - List of arguments to the function. Converted using "toValue"
    */
-  v8::Local<v8::Value> call(v8::Handle<v8::Object> obj, QString name, QList<QVariant> args = QList<QVariant>());
+  v8::Local<v8::Value> call(
+    v8::Handle<v8::Object> obj, QString name, QList<QVariant> args = QList<QVariant>());
 
   v8::Local<v8::Value> eval(QString e);
 
@@ -72,7 +73,8 @@ public:
 
   v8::Local<v8::Object> loadScript(QString filename, QString loadInto = "");
 
-  v8::Local<v8::Object> loadText(QString text, QString loadInto = "", QString scriptName = "<Unknown>");
+  v8::Local<v8::Object> loadText(
+    QString text, QString loadInto = "", QString scriptName = "<Unknown>");
 
   /**
    * Returns the specified key. If defaultValue is not UNSPECIFIED_DEFAULT then it will be used if

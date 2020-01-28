@@ -132,7 +132,7 @@ pipeline {
             when { expression { return params.Services_tests } }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` translations-test'"
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; make -sj`nproc` services-test-all'"
             }
         }
         stage("UI Hoot 1 Tests") {

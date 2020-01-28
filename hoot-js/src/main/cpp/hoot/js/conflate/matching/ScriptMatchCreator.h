@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMATCHCREATOR_H
 #define SCRIPTMATCHCREATOR_H
@@ -39,6 +39,8 @@ namespace hoot
 class ScriptMatchVisitor;
 
 /**
+ * Match creator for all generic conflation scripts
+ *
  * @sa ScriptMatch
  */
 class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
@@ -46,6 +48,8 @@ class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
 public:
 
   static std::string className() { return "hoot::ScriptMatchCreator"; }
+
+  static const QString POINT_POLYGON_SCRIPT_NAME;
 
   ScriptMatchCreator();
 

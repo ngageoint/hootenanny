@@ -58,10 +58,10 @@ public:
   static std::string className() { return "hoot::CreateIndexVisitor"; }
 
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
-                                std::deque<ElementId>& indexToEid,
-                                const std::shared_ptr<ElementCriterion>& criterion,
-                                std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
-                                ConstOsmMapPtr pMap);
+                          std::deque<ElementId>& indexToEid,
+                          const std::shared_ptr<ElementCriterion>& criterion,
+                          std::function<Meters (const ConstElementPtr& e)> getSearchRadius,
+                          ConstOsmMapPtr pMap);
 
   void addCriterion(const ElementCriterionPtr& e);
 
