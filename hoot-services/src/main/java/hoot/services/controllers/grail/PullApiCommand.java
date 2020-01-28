@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -98,6 +98,12 @@ class PullApiCommand implements InternalCommand {
         String url = "";
         try {
             BoundingBox boundingBox = new BoundingBox(params.getBounds());
+            //buffer the reference data bounding box
+            //to include neighboring data that may be snapped to
+// Disable this for now as pulling a buffered extent does not guarantee that
+// connected ways will be present in the output
+//            boundingBox.adjust(Double.parseDouble(CHANGESET_DERIVE_BUFFER));
+
             double bboxArea = boundingBox.getArea();
 
             double maxBboxArea = params.getMaxBBoxSize();

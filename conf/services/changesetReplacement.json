@@ -1,0 +1,6 @@
+{
+    "strictBounds": "--strict-bounds",
+    "fullReplacement": "--full-replacement",
+    "disableWaySnapping": "--disable-way-snapping",
+    "disableConflation": "--disable-conflation"
+}
