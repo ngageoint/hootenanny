@@ -587,10 +587,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   // have height tags. This behavior is debatable...
   if (!allAreBuildingParts &&
       OsmUtils::anyElementsHaveAnyTagKey(threeDBuildingKeys, constituentBuildings))
-  {  
+  {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN(
+      // used to actually log a warning for this but seem excessive...still going to limit it like
+      // a warning, though.
+      LOG_DEBUG(
         "Merging building group where some buildings have 3D tags and others do not. A " <<
         "multipolygon relation will be created instead of a building relation. Buildings: " <<
         OsmUtils::elementsToElementIds(constituentBuildings));
