@@ -429,9 +429,14 @@ public class ReviewBookmarkResource {
 
         // adds on to where clause a check to see if current user is able to see the maps associated with the bookmarks
         if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
-            query.where(
-                    QMaps.maps.userId.eq(userId).or(QMaps.maps.publicCol.isTrue())
-            );
+            query.leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                    .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId));
+
+            BooleanExpression isVisible = maps.userId.eq(userId) // Owned by the current user
+                .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)) // or not in a folder
+                .or(folders.publicCol.isTrue())); // or in a public folder
+
+            query.where(isVisible);
         }
 
         query.orderBy(getSpecifier(orderByCol, true));
@@ -479,10 +484,8 @@ public class ReviewBookmarkResource {
         // Current user should only be able to see another users bookmarks if they created the map or the map is public
         if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
             BooleanExpression isVisible = maps.userId.eq(userId) // Owned by the current user
-                    // or not in a folder
-                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
-                    // or in a public folder
-                    .or(folders.publicCol.isTrue()));
+                .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L)) // or not in a folder
+                .or(folders.publicCol.isTrue())); // or in a public folder
 
             layerNamesQuery.where(isVisible);
         }
