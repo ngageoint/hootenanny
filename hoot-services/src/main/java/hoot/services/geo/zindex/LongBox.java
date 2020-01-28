@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.geo.zindex;
 
@@ -113,16 +113,6 @@ final class LongBox {
         for (int i = 0; i < getMin().length; i++) {
             result = result && (b.getMin()[i] <= getMax()[i]);
             result = result && (b.getMax()[i] >= getMin()[i]);
-        }
-
-        return result;
-    }
-
-    public boolean whollyContains(LongBox b) {
-        boolean result = true;
-        for (int i = 0; i < getMin().length; i++) {
-            result = result && (b.getMin()[i] >= getMin()[i]);
-            result = result && (b.getMax()[i] <= getMax()[i]);
         }
 
         return result;

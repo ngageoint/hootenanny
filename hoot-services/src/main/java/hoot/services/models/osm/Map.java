@@ -62,7 +62,6 @@ import hoot.services.geo.BoundingBox;
 import hoot.services.geo.zindex.Range;
 import hoot.services.geo.zindex.ZCurveRanger;
 import hoot.services.geo.zindex.ZValue;
-import hoot.services.models.db.CurrentNodes;
 import hoot.services.models.db.Maps;
 import hoot.services.models.db.QChangesets;
 import hoot.services.models.db.QCurrentRelationMembers;
@@ -117,18 +116,6 @@ public class Map extends Maps {
     }
 
     /*
-     * Retrieves all ranges of quad tiles that fall within the bounds
-     */
-    private static List<Range> getWhollyContainedTileRanges(BoundingBox bounds) {
-        int queryDimensions = Integer.parseInt(MAP_QUERY_DIMENSIONS);
-        ZCurveRanger ranger = new ZCurveRanger(new ZValue(queryDimensions, 16,
-                // use y, x ordering here
-                new double[] { -1 * BoundingBox.LAT_LIMIT, -1 * BoundingBox.LON_LIMIT }, new double[] {
-                        BoundingBox.LAT_LIMIT, BoundingBox.LON_LIMIT }));
-        return ranger.decomposeWhollyContainedRange(bounds.toZIndexBox(), 1);
-    }
-
-    /*
      * Returns the SQL where condition for the calculated tile ranges
      */
     private static BooleanExpression getTileWhereCondition(List<Range> tileIdRanges) {
@@ -146,38 +133,12 @@ public class Map extends Maps {
     }
 
     /*
-     * Returns the SQL where condition for outside the calculated tile ranges
-     */
-    private static BooleanExpression getOutsideTileWhereCondition(List<Range> tileIdRanges) {
-        List<BooleanExpression> tileConditions = new ArrayList<>();
-        for (Range range : tileIdRanges) {
-            tileConditions.add(currentNodes.tile.lt(range.getMin()).and(currentNodes.tile.gt(range.getMax())));
-        }
-
-        BooleanExpression combinedTileCondition = null;
-        for (BooleanExpression tileCondition : tileConditions) {
-            combinedTileCondition = (combinedTileCondition == null) ? tileCondition : combinedTileCondition.and(tileCondition);
-        }
-
-        return combinedTileCondition;
-    }
-
-    /*
      * Returns the geospatial where condition to apply with the tile conditions
      * to ensure nodes that fall outside the bounding box are not returned
      */
     private static BooleanExpression getGeospatialWhereCondition(BoundingBox bounds) {
         return currentNodes.longitude.goe(bounds.getMinLon()).and(currentNodes.latitude.goe(bounds.getMinLat()))
                 .and(currentNodes.longitude.loe(bounds.getMaxLon())).and(currentNodes.latitude.loe(bounds.getMaxLat()));
-    }
-
-    /*
-     * Returns the geospatial where condition to apply with the tile conditions
-     * to ensure only nodes that fall outside the bounding box are returned
-     */
-    private static BooleanExpression getOutsideGeospatialWhereCondition(BoundingBox bounds) {
-        return currentNodes.longitude.notBetween(bounds.getMinLon(), bounds.getMaxLon())
-                .and(currentNodes.latitude.notBetween(bounds.getMinLat(), bounds.getMaxLat()));
     }
 
     /*
@@ -235,43 +196,18 @@ public class Map extends Maps {
         return new JSONObject(ret);
     }
 
-    public List<CurrentNodes> retrieveNodesOutsideBounds(BoundingBox bounds) {
-        List<CurrentNodes> outsideBoundsNodeResults = new ArrayList<>();
-
-        // get the wholly contained tile ranges for the nodes
-//        List<Range> tileIdRanges = getWhollyContainedTileRanges(bounds);
-//        if (!tileIdRanges.isEmpty()) {
-//            BooleanExpression combinedGeospatialCondition = getOutsideTileWhereCondition(tileIdRanges).and(
-//                    getOutsideGeospatialWhereCondition(bounds));
-
-            outsideBoundsNodeResults = createQuery(getId())
-                    .select(currentNodes)
-                    .from(currentNodes)
-                    .where(getOutsideGeospatialWhereCondition(bounds).and(currentNodes.visible.eq(true)))
-                    .fetch();
-
-//        }
-
-        return outsideBoundsNodeResults;
-    }
-
     public long getNodesCount(BoundingBox bounds) {
         long count = 0;
-        if (bounds != null) {
-            // get the intersecting tile ranges for the nodes
-            List<Range> tileIdRanges = getTileRanges(bounds);
-            if (!tileIdRanges.isEmpty()) {
-                BooleanExpression combinedGeospatialCondition =
-                        getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
 
-                count = createQuery(getId())
-                        .from(currentNodes)
-                        .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
-                        .fetchCount();
-            }
-        } else {
+        // get the intersecting tile ranges for the nodes
+        List<Range> tileIdRanges = getTileRanges(bounds);
+        if (!tileIdRanges.isEmpty()) {
+            BooleanExpression combinedGeospatialCondition =
+                    getTileWhereCondition(tileIdRanges).and(getGeospatialWhereCondition(bounds));
+
             count = createQuery(getId())
                     .from(currentNodes)
+                    .where(combinedGeospatialCondition.and(currentNodes.visible.eq(true)))
                     .fetchCount();
         }
 
