@@ -38,12 +38,17 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hoot.services.command.CommandResult;
+
 
 /**
  * Used for pushing OSM data to the database
  */
 class MergeOsmFilesCommand extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(MergeOsmFilesCommand.class);
+
+    private final Map<String, Object> substitutionMap = new HashMap<>();
+    private final Class<?> caller;
 
     private static final FilenameFilter filter = new FilenameFilter() {
         @Override
@@ -55,26 +60,34 @@ class MergeOsmFilesCommand extends GrailCommand {
 
     MergeOsmFilesCommand(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
-
         logger.info("Params: " + params);
 
-        //Get list of osm files in work dir
-        File workDir = params.getWorkDir();
-        File[] osmfiles = workDir.listFiles(filter);
-        List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
         List<String> options = new LinkedList<>();
 
         List<String> hootOptions = toHootOptions(options);
 
-        Map<String, Object> substitutionMap = new HashMap<>();
+        this.caller = caller;
+
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
-        substitutionMap.put("INPUT", String.join(" ", filePaths));
         substitutionMap.put("OUTPUT", params.getOutput());
+    }
+
+    @Override
+    public CommandResult execute() {
+        //Get list of osm files in work dir
+        File workDir = params.getWorkDir();
+        File[] osmfiles = workDir.listFiles(filter);
+        List<String> filePaths = Arrays.asList(osmfiles).stream().map(File::getAbsolutePath).collect(Collectors.toList());
+
+        substitutionMap.put("INPUT", String.join(" ", filePaths));
 
         String command = "hoot convert --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUT} ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller);
-    }
 
+        CommandResult commandResult = super.execute();
+
+        return commandResult;
+    }
 }

@@ -96,81 +96,59 @@ class PullConnectedWaysCommand implements InternalCommand {
         return commandResult;
     }
 
+    public static List<Long> getOsmXpath(InputStream is, String expression) {
+        List<Long> nodeIds = new ArrayList<>();
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = builderFactory.newDocumentBuilder();
+            Document xmlDocument;
+            xmlDocument = builder.parse(is);
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+            int length = nodeList.getLength();
+            for( int i=0; i<length; i++) {
+                Attr attr = (Attr) nodeList.item(i);
+                Long id = Long.parseLong(attr.getValue());
+                if (id >= 0) nodeIds.add(id);
+            }
+        } catch (ParserConfigurationException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (XPathExpressionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return nodeIds;
+    }
     private void getConnectedWays() {
         String url = "";
         try {
-//            BoundingBox boundingBox = new BoundingBox(params.getBounds());
-//
-//            Long mapId = DbUtils.getMapIdByJobId(jobId);
-//            Map theMap = new Map(mapId);
-//            //Get the nodes in the dataset outside the bbox
-//            List<CurrentNodes> nodes = theMap.retrieveNodesOutsideBounds(boundingBox);
-
             //Read the crop.osm file for node ids
-            List<Long> nodes = new ArrayList<>();
             InputStream is = new FileInputStream(new File(params.getOutput()));
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder;
-            try {
-                builder = builderFactory.newDocumentBuilder();
-                Document xmlDocument;
-                xmlDocument = builder.parse(is);
-                XPath xPath = XPathFactory.newInstance().newXPath();
-                String expression = "/osm/node/@id";
-                NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
-                int length = nodeList.getLength();
-                for( int i=0; i<length; i++) {
-                    Attr attr = (Attr) nodeList.item(i);
-                    nodes.add(Long.parseLong(attr.getValue()));
-                }
-            } catch (ParserConfigurationException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (SAXException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (XPathExpressionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-
+            List<Long> nodeIds = getOsmXpath(is, "/osm/node/@id");
 
             //Get the ways for those nodes
             //http://localhost:3000/api/0.6/node/6096481776/ways
-            List<Long> wayIds = new ArrayList<>();
-            for (Long n : nodes) {
+            List<Long> allWayIds = new ArrayList<>();
+            for (Long n : nodeIds) {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/node/" + n + "/ways");
                 URLConnection conn = new URL(url).openConnection();
                 is = conn.getInputStream();
-                try {
-                    builder = builderFactory.newDocumentBuilder();
-                    Document xmlDocument;
-                    xmlDocument = builder.parse(is);
-                    XPath xPath = XPathFactory.newInstance().newXPath();
-                    String expression = "/osm/way/@id";
-                    NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
-                    int length = nodeList.getLength();
-                    for( int i=0; i<length; i++) {
-                        Attr attr = (Attr) nodeList.item(i);
-                        wayIds.add(Long.parseLong(attr.getValue()));
-                    }
-                } catch (ParserConfigurationException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (SAXException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (XPathExpressionException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                List<Long> wayIds = getOsmXpath(is, "/osm/way/@id");
+                allWayIds.addAll(wayIds);
             }
 
             //Get the full ways
             //http://localhost:3000/api/0.6/way/649672297/full
             List<String> inputs = new ArrayList<>();
-            for (Long id : wayIds) {
+            for (Long id : allWayIds) {
                 url = replaceSensitiveData(params.getPullUrl()).replace("/map", "/way/" + id + "/full");
 
                 File outputFile = new File(params.getWorkDir(), id + ".osm");
@@ -181,7 +159,7 @@ class PullConnectedWaysCommand implements InternalCommand {
             }
 
             //delete the crop.osm file
-            new File(params.getOutput()).delete();
+//            new File(params.getOutput()).delete();
             //params.setInput1(String.join(" ", inputs));
 //            java.util.Map<String, String> addTags = new HashMap<>();
 //            addTags.put("connectedWays", String.join(" ", inputs));
