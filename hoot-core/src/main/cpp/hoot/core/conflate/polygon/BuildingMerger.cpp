@@ -593,7 +593,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
       LOG_WARN(
         "Merging building group where some buildings have 3D tags and others do not. A " <<
         "multipolygon relation will be created instead of a building relation. Buildings: " <<
-        OsmUtils::elementsToElementIds(constituentBuildings, map));
+        OsmUtils::elementsToElementIds(constituentBuildings));
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
@@ -679,7 +679,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     // allAreBuildingParts = building relation
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
-  LOG_VARD(suppressBuildingTagOnConstituents);
+  LOG_VART(suppressBuildingTagOnConstituents);
   for (Tags::const_iterator it = relationTags.begin(); it != relationTags.end(); ++it)
   {
     // Remove any tags in the parent relation from each of the constituent buildings.

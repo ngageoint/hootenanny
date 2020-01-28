@@ -35,7 +35,7 @@ namespace hoot
 
 /**
  * This is used to preserve types when merging multiple elements into one. e.g. merging multiple
- * POIs into a multi-use building It keeps the most specific type when multiple types with the same
+ * POIs into a multi-use building. It keeps the most specific type when multiple types with the same
  * key are encountered. In the case where duplicated types have the same level of specificity, the
  * duplicated types are arbitrarily placed in an "alt_types" tag.
  */
