@@ -856,9 +856,6 @@ public class GrailResource {
             throw new UnavailableException("The Rails port API is offline.");
         }
 
-//        params.setInput1(referenceOSMFile.getAbsolutePath());
-//        params.setApplyTags(true); //overwrite dataset
-
         GrailParams connectedWaysParams = new GrailParams(params);
         connectedWaysParams.setInput1(referenceOSMFile.getAbsolutePath());
         File cropFile = new File(params.getWorkDir(), "crop.osm");
@@ -874,13 +871,14 @@ public class GrailResource {
         workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
 
         // merge reference and ways osm files
+        GrailParams mergeOsmParams = new GrailParams(params);
         File mergeFile = new File(params.getWorkDir(), "merge.osm");
-        connectedWaysParams.setOutput(mergeFile.getAbsolutePath());
-        workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", MergeOsmFilesCommand.class, this.getClass()));
+        mergeOsmParams.setOutput(mergeFile.getAbsolutePath());
+        workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
         // Write the data to the hoot db
-        connectedWaysParams.setInput1(mergeFile.getAbsolutePath());
-        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, connectedWaysParams, "info", PushToDbCommand.class, this.getClass());
+        mergeOsmParams.setInput1(mergeFile.getAbsolutePath());
+        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, mergeOsmParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
         // Set map tags marking dataset as eligible for derive changeset
@@ -893,30 +891,6 @@ public class GrailResource {
         // Move the data to the folder
         InternalCommand setFolder = updateParentCommandFactory.build(jobId, parentFolderId, params.getOutput(), user, this.getClass());
         workflow.add(setFolder);
-
-
-
-
-
-        // Add connected ways outside bbox
-
-//        GrailParams connectedWaysParams = new GrailParams(params);
-//        connectedWaysParams.setOutput(params.getWorkDir().getAbsolutePath());
-//        connectedWaysParams.setInput1(params.getWorkDir().getAbsolutePath());
-//        connectedWaysParams.setApplyTags(false); //overwrite dataset
-
-//        try {
-//            workflow.add(getConnectedWaysApiCommand(jobId, connectedWaysParams));
-//        } catch (UnavailableException exc) {
-//            throw new UnavailableException("The Rails port API is offline.");
-//        }
-
-        // Write the data to the hoot db
-//        ExternalCommand addConnectedWays = grailCommandFactory.build(jobId, connectedWaysParams, "info", PushToDbCommand.class, this.getClass());
-//        workflow.add(addConnectedWays);
-
-
-
 
         return workflow;
     }
