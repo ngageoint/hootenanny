@@ -26,7 +26,9 @@
  */
 package hoot.services.controllers.review;
 
+import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
+import static hoot.services.models.db.QMaps.maps;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.utils.DbUtils.createQuery;
 
@@ -49,6 +51,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -465,17 +468,23 @@ public class ReviewBookmarkResource {
      */
     private static List<String> getLayers(long userId) {
         SQLQuery<String> layerNamesQuery = createQuery()
-                .select(QMaps.maps.displayName)
+                .select(maps.displayName)
                 .from(reviewBookmarks)
-                .leftJoin(QMaps.maps).on(QMaps.maps.id.eq(reviewBookmarks.mapId))
-                .groupBy(QMaps.maps.displayName)
-                .orderBy(QMaps.maps.displayName.asc());
+                .leftJoin(maps).on(maps.id.eq(reviewBookmarks.mapId))
+                .leftJoin(folderMapMappings).on(folderMapMappings.mapId.eq(maps.id))
+                .leftJoin(folders).on(folders.id.eq(folderMapMappings.folderId))
+                .groupBy(maps.displayName)
+                .orderBy(maps.displayName.asc());
 
         // Current user should only be able to see another users bookmarks if they created the map or the map is public
         if (!UserResource.adminUserCheck(DbUtils.getUser(userId))) {
-            layerNamesQuery.where(
-                    QMaps.maps.userId.eq(userId).or(QMaps.maps.publicCol.isTrue())
-            );
+            BooleanExpression isVisible = maps.userId.eq(userId) // Owned by the current user
+                    // or not in a folder
+                    .or(folderMapMappings.id.isNull().or(folderMapMappings.folderId.eq(0L))
+                    // or in a public folder
+                    .or(folders.publicCol.isTrue()));
+
+            layerNamesQuery.where(isVisible);
         }
 
         return layerNamesQuery.fetch();
