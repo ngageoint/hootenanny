@@ -27,6 +27,7 @@
 package hoot.services.controllers.grail;
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
+import static hoot.services.HootProperties.CHANGESET_OPTIONS;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_LABEL;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
@@ -45,6 +46,7 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -87,6 +89,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -240,7 +243,7 @@ public class GrailResource {
         workflow.add(getPublicOverpassCommand(jobId, getOverpassParams));
 
         // Run the differential conflate command.
-        GrailParams params = new GrailParams();
+        GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
         params.setInput1(referenceOSMFile.getAbsolutePath());
         params.setInput2(secondaryOSMFile.getAbsolutePath());
@@ -843,7 +846,6 @@ public class GrailResource {
         }
 
         params.setInput1(referenceOSMFile.getAbsolutePath());
-
         // Write the data to the hoot db
         ExternalCommand importRailsPort = grailCommandFactory.build(jobId, params, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
@@ -988,6 +990,22 @@ public class GrailResource {
         }
 
         return statCounts;
+    }
+
+    @GET
+    @Path("/getChangesetOptions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOptions() {
+        JSONObject template;
+        JSONParser parser = new JSONParser();
+        try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, CHANGESET_OPTIONS))) {
+            template = (JSONObject) parser.parse(fileReader);
+        }
+        catch (Exception e) {
+            String msg = "Error getting changeset options!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+        return Response.ok(template).build();
     }
 
 }

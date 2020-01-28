@@ -127,6 +127,12 @@ advOptHoot2Override=conf/services/conflationHoot2Ops.json
 # Advanced options hoot2 import Options
 importOptions=conf/services/importHoot2Ops.json
 
+# Advanced options hoot2 changeset Options
+changesetOptions=conf/services/changesetReplacementOps.json
+
+# Advanced options hoot2 changeset Option keys
+changesetOptionKeys=conf/services/changesetReplacement.json
+
 # Advanced options reference override
 advOptRefOverride=conf/services/conflationRefOps.json
 

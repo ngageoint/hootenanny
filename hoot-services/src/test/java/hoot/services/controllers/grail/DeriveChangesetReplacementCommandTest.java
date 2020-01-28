@@ -82,39 +82,39 @@ public class DeriveChangesetReplacementCommandTest {
 
         delta = 134.5;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(1000000, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(10000000, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 13.45;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(100000, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(1000000, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 1.345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(10000, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(100000, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 0.1345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(1000, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(10000, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 0.01345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(100, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(1000, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 0.001345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(10, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(100, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 0.0001345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(1, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(100, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 0.00001345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(0, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(100, alpha, "Adaptive alpha distance doesn't match");
 
         delta = 0.000001345;
         alpha = DeriveChangesetReplacementCommand.adaptiveAlpha(delta);
-        Assert.equals(0, alpha, "Adaptive alpha distance doesn't match");
+        Assert.equals(100, alpha, "Adaptive alpha distance doesn't match");
 
     }
 
