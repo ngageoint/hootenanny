@@ -28,11 +28,13 @@ package hoot.services.controllers.grail;
 
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +53,7 @@ class PushToDbCommand extends GrailCommand {
         logger.info("Params: " + params);
 
         List<String> options = new LinkedList<>();
-        options.add("hootapi.db.writer.overwrite.map=" + params.getApplyTags());
+        options.add("hootapi.db.writer.overwrite.map=true");
         options.add("hootapi.db.writer.remap.ids=false");
         options.add("job.id=" + jobId);
         options.add("api.db.email=" + params.getUser().getEmail());
@@ -75,14 +77,14 @@ class PushToDbCommand extends GrailCommand {
     public CommandResult execute() {
         CommandResult commandResult = super.execute();
 
-//        if (params.getWorkDir() != null) {
-//            try {
-//                FileUtils.forceDelete(params.getWorkDir());
-//            }
-//            catch (IOException ioe) {
-//                logger.error("Error deleting folder: {} ", params.getWorkDir().getAbsolutePath(), ioe);
-//            }
-//        }
+        if (params.getWorkDir() != null) {
+            try {
+                FileUtils.forceDelete(params.getWorkDir());
+            }
+            catch (IOException ioe) {
+                logger.error("Error deleting folder: {} ", params.getWorkDir().getAbsolutePath(), ioe);
+            }
+        }
 
         return commandResult;
     }

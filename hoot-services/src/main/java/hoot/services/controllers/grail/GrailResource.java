@@ -617,7 +617,6 @@ public class GrailResource {
         GrailParams params = new GrailParams(reqParams);
         params.setUser(user);
         params.setPullUrl(PUBLIC_OVERPASS_URL);
-        params.setApplyTags(false); //overwrite dataset
 
         String url;
         try {
@@ -863,7 +862,6 @@ public class GrailResource {
         // Do an invert crop of this data to get nodes outside bounds
         workflow.add(grailCommandFactory.build(jobId, connectedWaysParams, "info", InvertCropCommand.class, this.getClass()));
 
-
         //read node ids
         //pull connected ways
         //pull entire ways
@@ -877,8 +875,9 @@ public class GrailResource {
         workflow.add(grailCommandFactory.build(jobId, mergeOsmParams, "info", MergeOsmFilesCommand.class, this.getClass()));
 
         // Write the data to the hoot db
-        mergeOsmParams.setInput1(mergeFile.getAbsolutePath());
-        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, mergeOsmParams, "info", PushToDbCommand.class, this.getClass());
+        GrailParams pushParams = new GrailParams(params);
+        pushParams.setInput1(mergeFile.getAbsolutePath());
+        ExternalCommand importRailsPort = grailCommandFactory.build(jobId, pushParams, "info", PushToDbCommand.class, this.getClass());
         workflow.add(importRailsPort);
 
         // Set map tags marking dataset as eligible for derive changeset

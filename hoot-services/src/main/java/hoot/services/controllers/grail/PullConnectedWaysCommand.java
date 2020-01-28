@@ -163,7 +163,7 @@ class PullConnectedWaysCommand implements InternalCommand {
             }
 
             //delete the crop.osm file
-//            new File(params.getOutput()).delete();
+            new File(params.getOutput()).delete();
         }
         catch (IOException ex) {
             String msg = "Failure to pull connected ways from the API [" + url + "]" + ex.getMessage();
