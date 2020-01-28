@@ -738,16 +738,6 @@
           <version>${guava.version}</version>
         </dependency>
 
-       <!-- josm -->
-
-        <dependency>
-          <groupId>org.openstreetmap.josm</groupId>
-          <artifactId>me-josm</artifactId>
-          <version>4.4.6</version>
-          <!-- artifactId>josm-tested</artifactId>
-          <version>15553</version -->
-        </dependency>
-
         <!-- test -->
 
         <!-- JUnit is the core testing framework -->

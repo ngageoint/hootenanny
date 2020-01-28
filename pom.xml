@@ -35,26 +35,6 @@
         <updatePolicy>always</updatePolicy>
       </snapshots>
     </repository -->
-    <!-- repository>
-      <id>xwiki.org-cache</id>
-      <url>http://maven.xwiki.org/externals</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>deegree-repo</id>
-      <url>http://repo.deegree.org/content/groups/public/</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository -->
   </repositories>
   <build>
     <defaultGoal>install</defaultGoal>
